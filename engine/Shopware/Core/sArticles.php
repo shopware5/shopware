@@ -32,7 +32,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Product;
 use Shopware\Components\QueryAliasMapper;
 
 /**
- * Deprecated Shopware Class that handle articles
+ * Shopware Class that handle articles
  *
  * @category  Shopware
  * @package   Shopware\Core\Class

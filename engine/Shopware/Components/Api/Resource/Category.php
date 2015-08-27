@@ -154,7 +154,7 @@ class Category extends Resource
             throw new ApiException\NotFoundException("Category by id $id not found");
         }
 
-        $params = $this->prepareCategoryData($params, $category);
+        $params = $this->prepareCategoryData($params);
         $category->fromArray($params);
 
         $violations = $this->getManager()->validate($category);
@@ -194,7 +194,7 @@ class Category extends Resource
         return $category;
     }
 
-    private function prepareCategoryData($params, $category = null)
+    private function prepareCategoryData($params)
     {
         if (!isset($params['name'])) {
             throw new ApiException\CustomValidationException("A name is required");

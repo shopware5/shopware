@@ -73,13 +73,13 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
      */
     protected function isConfirmed()
     {
-        if (empty($this->request()->sConfirmation)) {
+        if (empty($this->Request()->sConfirmation)) {
             return false;
         }
 
         $getVote = Shopware()->Db()->fetchRow(
             "SELECT * FROM s_core_optin WHERE hash = ?",
-            array($this->request()->sConfirmation)
+            array($this->Request()->sConfirmation)
         );
 
         if (empty($getVote["data"])) {
@@ -90,7 +90,7 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
 
         Shopware()->Db()->query(
             "DELETE FROM s_core_optin WHERE hash = ?",
-            array($this->request()->sConfirmation)
+            array($this->Request()->sConfirmation)
         );
 
         return true;
@@ -124,7 +124,7 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
     {
         $this->View()->voteConfirmed = $this->isConfirmed();
 
-        if (isset($this->request()->sUnsubscribe)) {
+        if (isset($this->Request()->sUnsubscribe)) {
             $this->View()->sUnsubscribe = true;
         } else {
             $this->View()->sUnsubscribe = false;
@@ -141,7 +141,7 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
             $this->View()->sStatus = Shopware()->Modules()->Admin()->sNewsletterSubscription(Shopware()->System()->_POST["newsletter"], true);
 
             $session = $this->container->get('session');
-            if($session->offsetExists('sNewsletter')) {
+            if ($session->offsetExists('sNewsletter')) {
                 $session->offsetSet('sNewsletter', false);
             }
 
@@ -250,7 +250,7 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
             AND id=?
             AND customergroup IN ($customergroups)
         ";
-        $content = Shopware()->Db()->fetchRow($sql, array($context->getShop()->getId(), $this->request()->sID));
+        $content = Shopware()->Db()->fetchRow($sql, array($context->getShop()->getId(), $this->Request()->sID));
         if (!empty($content)) {
             // todo@all Hash-Building in rework phase berücksichtigen
             $license = "";

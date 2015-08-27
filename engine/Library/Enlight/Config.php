@@ -484,6 +484,4 @@ class Enlight_Config extends Enlight_Config_BaseConfig implements ArrayAccess
     {
         return $this->_sectionSeparator;
     }
-
-
 }

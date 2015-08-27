@@ -21,7 +21,6 @@
  * @author     $Author$
  */
 use Doctrine\Common\Collections\ArrayCollection;
-
 use Enlight\Event\SubscriberInterface;
 
 /**

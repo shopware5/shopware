@@ -1868,7 +1868,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             $this->getManager()->getConnection()->commit();
             $this->getManager()->clear();
         } catch (\Exception $e) {
-            $this->getManager()->getConnection()->rollback();
+            $this->getManager()->getConnection()->rollBack();
             $this->getManager()->close();
             echo json_encode(array(
                 'success' => false,
@@ -2451,7 +2451,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
 
             $this->getManager()->getConnection()->commit();
         } catch (\Exception $e) {
-            $this->getManager()->getConnection()->rollback();
+            $this->getManager()->getConnection()->rollBack();
 
             if ($e instanceof Shopware\Components\Api\Exception\ValidationException) {
                 $messages = array();
@@ -3030,7 +3030,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         }
 
         if (!empty($errors)) {
-            $this->getManager()->getConnection()->rollback();
+            $this->getManager()->getConnection()->rollBack();
             $message = implode("<br>\n", $errors);
             echo json_encode(array(
                 'success' => false,

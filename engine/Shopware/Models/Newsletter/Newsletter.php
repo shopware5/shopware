@@ -27,7 +27,6 @@ namespace   Shopware\Models\Newsletter;
 use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Shopware newsletter model represents a newsletter.
@@ -192,7 +191,7 @@ class Newsletter extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Newsletter\date $date
+     * @param \DateTime $date
      */
     public function setDate($date)
     {
@@ -200,7 +199,7 @@ class Newsletter extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Newsletter\date
+     * @return \DateTime
      */
     public function getDate()
     {

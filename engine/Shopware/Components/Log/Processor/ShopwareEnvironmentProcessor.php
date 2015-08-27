@@ -111,8 +111,8 @@ class ShopwareEnvironmentProcessor
     /**
      * Recursively searches for an unwanted key, and unsets every instance of it
      *
-     * @param $array nested array to search
-     * @param $unwantedKey unwanted key
+     * @param $array array nested array to search
+     * @param $unwantedKey string unwanted key
      */
     private function recursiveUnset(&$array, $unwantedKey)
     {

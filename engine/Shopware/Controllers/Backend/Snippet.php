@@ -434,7 +434,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
             $headers = $this->readXmlRow(current($snippets));
         } else {
             $snippets = new Shopware_Components_CsvIterator($filePath, ';');
-            $headers = $snippets->getHeader();
+            $headers = $snippets->GetHeader();
         }
 
         if (empty($headers) || !in_array('namespace', $headers) || !in_array('name', $headers)) {
@@ -598,12 +598,12 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
 
             echo  "REPLACE INTO `s_core_snippets` (`namespace`, `name`, `value`, `localeID`, `shopID`,`created`, `updated`, `dirty`) VALUES \r\n";
             foreach ($result->fetchAll() as $row) {
-                $value = Shopware()->DB()->quote($row['value']);
+                $value = Shopware()->Db()->quote($row['value']);
                 $value = str_replace("\n", "\\n", $value);
 
                 $rows[] = sprintf("(%s, %s, %s, '%s', '%s', '%s', NOW(), %d)",
-                      Shopware()->DB()->quote($row['namespace']),
-                      Shopware()->DB()->quote($row['name']),
+                      Shopware()->Db()->quote($row['namespace']),
+                      Shopware()->Db()->quote($row['name']),
                       $value,
                       (int) $row['localeID'],
                       (int) $row['shopID'],

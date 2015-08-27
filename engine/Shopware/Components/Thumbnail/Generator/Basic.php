@@ -171,7 +171,7 @@ class Basic implements GeneratorInterface
             $dstHeight = $srcHeight;
             $factor = 1;
         } else {
-             //Get the destination size
+            //Get the destination size
             $dstWidth  = round($srcWidth * $factor);
             $dstHeight = round($srcHeight * $factor);
         }

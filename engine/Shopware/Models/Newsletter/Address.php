@@ -132,7 +132,7 @@ class Address extends LazyFetchModelEntity
     /**
      * Sets the default value for the added column
      */
-    function __construct()
+    public function __construct()
     {
         $this->added = new \DateTime();
     }

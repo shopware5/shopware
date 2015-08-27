@@ -25,7 +25,6 @@
 use Shopware\Models\Blog\Blog as Blog;
 use Shopware\Models\Blog\Tag as Tag;
 use Shopware\Models\Blog\Media as Media;
-use Doctrine\ORM\AbstractQuery;
 
 /**
  * Shopware Backend Controller for the Blog Module

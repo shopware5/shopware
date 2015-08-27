@@ -25,10 +25,8 @@
 namespace Shopware\Components\Thumbnail;
 
 use Shopware\Components\Thumbnail\Generator\GeneratorInterface;
-use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Media\Media;
 use Shopware\Models\Media\Settings;
-use Symfony\Component\Config\Definition\Exception\Exception;
 
 /**
  * Shopware Thumbnail Manager

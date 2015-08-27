@@ -24,6 +24,7 @@
 
 namespace   Shopware\Models\Customer;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Components\Model\LazyFetchModelEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
@@ -303,7 +304,7 @@ class Customer extends LazyFetchModelEntity
      * The orders property is the inverse side of the association between customer and orders.
      * The association is joined over the customer id field and the userID field of the order.
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var ArrayCollection
      * @ORM\OneToMany(targetEntity="Shopware\Models\Order\Order", mappedBy="customer")
      */
     protected $orders;
@@ -346,14 +347,14 @@ class Customer extends LazyFetchModelEntity
     protected $notifications;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection $paymentInstances
+     * @var ArrayCollection $paymentInstances
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Payment\PaymentInstance", mappedBy="customer")
      */
     protected $paymentInstances;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection $paymentData
+     * @var ArrayCollection $paymentData
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Customer\PaymentData", mappedBy="customer", orphanRemoval=true, cascade={"persist"})
      */
@@ -364,12 +365,12 @@ class Customer extends LazyFetchModelEntity
      */
     public function __construct()
     {
-        $this->orders     = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->orders     = new ArrayCollection();
         $this->firstLogin = new \DateTime();
         $this->lastLogin  = new \DateTime();
-        $this->notifications = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->paymentInstances = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->paymentData = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->notifications = new ArrayCollection();
+        $this->paymentInstances = new ArrayCollection();
+        $this->paymentData = new ArrayCollection();
     }
 
     /**
@@ -866,7 +867,7 @@ class Customer extends LazyFetchModelEntity
      * the Customer.orders property (INVERSE SIDE) and the Order.customer (OWNING SIDE) property.
      * The order data is joined over the s_order.userID field.
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return ArrayCollection
      */
     public function getOrders()
     {
@@ -879,7 +880,7 @@ class Customer extends LazyFetchModelEntity
      * the Customer.orders property (INVERSE SIDE) and the Order.customer (OWNING SIDE) property.
      * The order data is joined over the s_order.userID field.
      *
-     * @param \Doctrine\Common\Collections\ArrayCollection|array|null $orders
+     * @param ArrayCollection|array|null $orders
      * @return \Shopware\Models\Customer\Customer
      */
     public function setOrders($orders)
@@ -1054,7 +1055,7 @@ class Customer extends LazyFetchModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection $paymentInstances
+     * @param ArrayCollection $paymentInstances
      */
     public function setPaymentInstances($paymentInstances)
     {
@@ -1062,7 +1063,7 @@ class Customer extends LazyFetchModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return ArrayCollection
      */
     public function getPaymentInstances()
     {
@@ -1070,7 +1071,7 @@ class Customer extends LazyFetchModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection $paymentData
+     * @param ArrayCollection $paymentData
      */
     public function setPaymentData($paymentData)
     {
@@ -1078,7 +1079,7 @@ class Customer extends LazyFetchModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return ArrayCollection
      */
     public function getPaymentData()
     {

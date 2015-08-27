@@ -222,10 +222,10 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     {
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(array('components', 'fields'))
-                ->from('Shopware\Models\Emotion\Library\Component', 'components')
-                ->leftJoin('components.fields', 'fields')
-                ->orderBy('components.id', 'ASC')
-                ->addOrderBy('fields.position', 'ASC');
+            ->from('Shopware\Models\Emotion\Library\Component', 'components')
+            ->leftJoin('components.fields', 'fields')
+            ->orderBy('components.id', 'ASC')
+            ->addOrderBy('fields.position', 'ASC');
 
         $components = $builder->getQuery()->getArrayResult();
         $this->View()->assign(array(
@@ -253,9 +253,9 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
                 $emotion = Shopware()->Models()->find('Shopware\Models\Emotion\Emotion', $id);
                 if (!$emotion) {
                     $this->View()->assign(array(
-                        'success' => false,
-                        'data' => $this->Request()->getParams(),
-                        'message' => $namespace->get('no_valid_id', 'No valid emotion id passed.'))
+                            'success' => false,
+                            'data' => $this->Request()->getParams(),
+                            'message' => $namespace->get('no_valid_id', 'No valid emotion id passed.'))
                     );
                     return;
                 }
@@ -694,11 +694,11 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     {
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(array('grids'))
-                ->from('Shopware\Models\Emotion\Grid', 'grids');
+            ->from('Shopware\Models\Emotion\Grid', 'grids');
 
         if ($offset !== null  && $limit !== null) {
             $builder->setFirstResult($offset)
-                    ->setMaxResults($limit);
+                ->setMaxResults($limit);
         }
 
         return $builder;
@@ -845,9 +845,9 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     {
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(array('grid'))
-                ->from('Shopware\Models\Emotion\Grid', 'grid')
-                ->where('grid.id = :id')
-                ->setParameter('id', $id);
+            ->from('Shopware\Models\Emotion\Grid', 'grid')
+            ->where('grid.id = :id')
+            ->setParameter('id', $id);
 
         return $builder->getQuery()->getOneOrNullResult(
             \Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY
@@ -1096,11 +1096,11 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     {
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(array('templates'))
-                ->from('Shopware\Models\Emotion\Template', 'templates');
+            ->from('Shopware\Models\Emotion\Template', 'templates');
 
         if ($offset !== null  && $limit !== null) {
             $builder->setFirstResult($offset)
-                    ->setMaxResults($limit);
+                ->setMaxResults($limit);
         }
 
         return $builder;
@@ -1246,9 +1246,9 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     {
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(array('template'))
-                ->from('Shopware\Models\Emotion\Template', 'template')
-                ->where('template.id = :id')
-                ->setParameter('id', $id);
+            ->from('Shopware\Models\Emotion\Template', 'template')
+            ->where('template.id = :id')
+            ->setParameter('id', $id);
 
         return $builder->getQuery()->getOneOrNullResult(
             \Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY

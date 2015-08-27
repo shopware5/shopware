@@ -28,7 +28,6 @@ use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\EventManager;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
-use Doctrine\ORM\Proxy\Autoloader;
 use Shopware\Components\Model\Configuration;
 use Shopware\Components\Model\LazyFetchModelEntity;
 use Shopware\Components\Model\ModelManager;
@@ -61,7 +60,7 @@ class Models
         EventManager $eventManager,
         Configuration $config,
         \Enlight_Loader $loader,
-        \Pdo $db,
+        \PDO $db,
         $kernelRootDir,
         // annotation driver is not really used here but has to be loaded first
         AnnotationDriver $modelAnnotation

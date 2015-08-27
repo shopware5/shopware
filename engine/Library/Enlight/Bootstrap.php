@@ -34,6 +34,4 @@
  */
 abstract class Enlight_Bootstrap extends Enlight_Class implements Enlight_Hook
 {
-
-
 }

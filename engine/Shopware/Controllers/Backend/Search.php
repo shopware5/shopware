@@ -49,7 +49,7 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
         if (!empty($ids)) {
             $ids = json_decode($ids, true);
             $this->addIdsCondition($builder, $ids);
-        } else if (!empty($id)) {
+        } elseif (!empty($id)) {
             $this->addIdsCondition($builder, [$id]);
         } else {
             if (!empty($term)) {

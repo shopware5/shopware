@@ -273,7 +273,6 @@ class SearchTermQueryBuilder implements SearchTermQueryBuilderInterface
     {
         $searchTermMatchQueries = [];
         foreach ($searchTerms as $searchTerm) {
-
             $searchKeywordIds = [];
             foreach ($keywords as $keyword) {
                 if ($keyword->getTerm() == $searchTerm) {

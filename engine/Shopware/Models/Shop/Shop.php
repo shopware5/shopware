@@ -672,7 +672,6 @@ class Shop extends ModelEntity
 
     /**
      * @param \Enlight_Bootstrap $bootstrap
-     * @deprecated
      * @return Shop
      */
     public function registerResources(\Enlight_Bootstrap $bootstrap)

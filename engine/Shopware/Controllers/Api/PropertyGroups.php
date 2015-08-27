@@ -25,7 +25,7 @@
 class Shopware_Controllers_Api_PropertyGroups extends Shopware_Controllers_Api_Rest
 {
     /**
-     * @var Shopware\Components\Api\Resource\Property
+     * @var Shopware\Components\Api\Resource\PropertyGroup
      */
     protected $resource = null;
 

@@ -127,8 +127,8 @@ class Notification extends LazyFetchModelEntity
     /**
      * Set date
      *
-     * @param datetime $date
-     * @return SArticlesNotification
+     * @param \DateTime $date
+     * @return Notification
      */
     public function setDate($date)
     {
@@ -139,7 +139,7 @@ class Notification extends LazyFetchModelEntity
     /**
      * Get date
      *
-     * @return datetime
+     * @return \DateTime
      */
     public function getDate()
     {
@@ -150,7 +150,7 @@ class Notification extends LazyFetchModelEntity
      * Set send
      *
      * @param integer $send
-     * @return SArticlesNotification
+     * @return Notification
      */
     public function setSend($send)
     {
@@ -172,7 +172,7 @@ class Notification extends LazyFetchModelEntity
      * Set language
      *
      * @param string $language
-     * @return SArticlesNotification
+     * @return Notification
      */
     public function setLanguage($language)
     {
@@ -194,7 +194,7 @@ class Notification extends LazyFetchModelEntity
      * Set shopLink
      *
      * @param string $shopLink
-     * @return SArticlesNotification
+     * @return Notification
      */
     public function setShopLink($shopLink)
     {

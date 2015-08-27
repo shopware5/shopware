@@ -27,7 +27,7 @@ use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Category;
 
 /**
- * Deprecated Shopware Class that handles categories
+ * Shopware Class that handles categories
  *
  * @category  Shopware
  * @package   Shopware\Core

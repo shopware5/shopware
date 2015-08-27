@@ -99,7 +99,6 @@ class Enlight_Components_Snippet_Resource extends Smarty_Internal_Resource_Exten
         }
 
         if (!empty($params['tag'])) {
-
             $params['tag'] = strtolower($params['tag']);
 
             $attr = '';

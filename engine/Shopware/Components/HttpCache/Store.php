@@ -94,7 +94,7 @@ class Store extends BaseStore
             }
 
             // skip .gitkeep
-            if ($file->getFileName() === '.gitkeep') {
+            if ($file->getFilename() === '.gitkeep') {
                 continue;
             }
 

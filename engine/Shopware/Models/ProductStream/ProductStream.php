@@ -3,8 +3,7 @@
 namespace Shopware\Models\ProductStream;
 
 use Shopware\Components\Model\ModelEntity;
-use Doctrine\ORM\Mapping AS ORM;
-use Shopware\Models\Shop\Shop;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="s_product_streams")

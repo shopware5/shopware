@@ -59,8 +59,7 @@ class Enlight_Controller_Response_ResponseTestCase
                                $domain = null,
                                $secure = false,
                                $httpOnly = false
-    )
-    {
+    ) {
         $this->_cookies[$name] = array(
             'value' => $value,
             'expire' => $expire,

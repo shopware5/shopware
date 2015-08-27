@@ -626,7 +626,7 @@ class Backup
 
         $zip = new \ZipArchive();
 
-        if ($zip->open($zipPath, \ZIPARCHIVE::CREATE) !== true) {
+        if ($zip->open($zipPath, \ZipArchive::CREATE) !== true) {
             throw new \RuntimeException("Could not open {$zipPath}, please check the permissions. ");
         }
 

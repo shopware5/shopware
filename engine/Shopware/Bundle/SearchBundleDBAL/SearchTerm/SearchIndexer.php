@@ -153,7 +153,7 @@ class SearchIndexer implements SearchIndexerInterface
                 // Build array from columns fieldIDs and fields
                 $fields = array_combine(explode(', ', $table["fieldIDs"]), explode(', ', $table["fields"]));
                 $keywords = [];
-                $sql_index = [];
+                $sqlIndex = [];
 
                 // Go through every row of result
                 foreach ($getTableKeywords as $currentRow => $row) {
@@ -171,7 +171,7 @@ class SearchIndexer implements SearchIndexerInterface
                         }
 
                         // SQL-queries to fill s_search_index
-                        $sql_index[] = 'SELECT sk.id as keywordID, ' . $row['id'] . ' as elementID, ' . $fieldID . ' as fieldID '
+                        $sqlIndex[] = 'SELECT sk.id as keywordID, ' . $row['id'] . ' as elementID, ' . $fieldID . ' as fieldID '
                             . 'FROM s_search_keywords sk '
                             . 'WHERE sk.keyword IN (' . implode(', ', $field_keywords) . ')';
                     }
@@ -193,19 +193,19 @@ class SearchIndexer implements SearchIndexerInterface
                         $keywords = [];
 
                         // Update index
-                        $sql_index = implode("\n\nUNION ALL\n\n", $sql_index);
-                        $sql_index = "INSERT IGNORE INTO s_search_index (keywordID, elementID, fieldID)\n\n" . $sql_index;
+                        $sqlIndex = implode("\n\nUNION ALL\n\n", $sqlIndex);
+                        $sqlIndex = "INSERT IGNORE INTO s_search_index (keywordID, elementID, fieldID)\n\n" . $sqlIndex;
 
-                        $this->connection->executeUpdate($sql_index);
-                        $sql_index = [];
+                        $this->connection->executeUpdate($sqlIndex);
+                        $sqlIndex = [];
                     }
                 }
             }
         }
 
-        $this->cleanUpIndex();
+        $this->cleanupIndex();
 
-        $this->cleanUpKeywords();
+        $this->cleanupKeywords();
     }
 
     /**

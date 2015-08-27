@@ -116,10 +116,6 @@ class Shopware_Components_Convert_Xml
         }
 
         $xml_array   = array();
-        $parents     = array();
-        $opened_tags = array();
-        $arr         = array();
-
         $current = &$xml_array;
 
         foreach ($xml_values as $data) {

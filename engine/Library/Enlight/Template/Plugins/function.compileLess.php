@@ -31,7 +31,7 @@
 function smarty_function_compileLess($params, $template)
 {
     $time = $params['timestamp'];
-	$output = $params['output'];
+    $output = $params['output'];
 
     /**@var $pathResolver \Shopware\Components\Theme\PathResolver*/
     $pathResolver = Shopware()->Container()->get('theme_path_resolver');
@@ -52,7 +52,7 @@ function smarty_function_compileLess($params, $template)
     $url = $pathResolver->formatPathToUrl($file, $shop, $secure);
 
     if (!$settings->getForceCompile() && file_exists($file)) {
-	    // see: http://stackoverflow.com/a/9473886
+        // see: http://stackoverflow.com/a/9473886
         $template->assign($output, [$url]);
         return;
     }

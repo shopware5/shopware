@@ -24,8 +24,6 @@
 
 namespace Shopware\Components;
 
-use Shopware\Components\DependencyInjection\Container;
-
 /**
  * @category  Shopware
  * @package   Shopware\Components

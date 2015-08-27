@@ -558,7 +558,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
     /**
      * Copies translations from a configurator template into a variant
-     * @param $template The configurator template
+     * @param $template array The configurator template
      * @param $detail \Shopware\Models\Article\Detail Variant
      */
     protected function copyConfigurationTemplateTranslations($template, $detail)
@@ -613,7 +613,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             $this->duplicateArticleImages($articleId, $newArticleId);
             $this->duplicateArticleProperties($articleId, $newArticleId);
             $this->duplicateArticleDownloads($articleId, $newArticleId);
-            $setId = $this->duplicateArticleConfigurator($articleId, $newArticleId);
+            $setId = $this->duplicateArticleConfigurator($articleId);
 
             $sql= "UPDATE s_articles, s_articles_details SET main_detail_id = s_articles_details.id
                     WHERE s_articles_details.articleID = s_articles.id

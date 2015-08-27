@@ -74,10 +74,10 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
      */
     public function columnConfigAction()
     {
-        $resource = $this->Request()->getParam('resource');
+        $resourceName = $this->Request()->getParam('resource');
 
         /** @var \Shopware\Components\MultiEdit\Resource\ResourceInterface $resource */
-        $resource = $this->container->get('multi_edit.' . $resource);
+        $resource = $this->container->get('multi_edit.' . $resourceName);
         $data = $resource->getColumnConfig();
 
         $this->View()->assign(array(

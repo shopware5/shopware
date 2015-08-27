@@ -268,7 +268,6 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
         }
 
         return $this->response;
-
     }
 
     /**

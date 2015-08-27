@@ -534,7 +534,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     {
         if ($this->Request()->isPost()) {
             if (!$this->Request()->getParam('sAddPremium')) {
-                $this->View()->sBasketInfo = Shopware()->Snippets()->getSnippet()->get(
+                $this->View()->sBasketInfo = Shopware()->Snippets()->getNamespace()->get(
                     'CheckoutSelectPremiumVariant',
                     'Please select an option to place the required premium to the cart',
                     true
@@ -800,9 +800,9 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
      * Used in ajax add cart action
      * Check availability of product and return info / error - messages
      *
-     * @param unknown_type $orderNumber article order number
-     * @param unknown_type $quantity quantity
-     * @return unknown
+     * @param string $orderNumber article order number
+     * @param integer $quantity quantity
+     * @return string|null
      */
     public function getInstockInfo($orderNumber, $quantity)
     {

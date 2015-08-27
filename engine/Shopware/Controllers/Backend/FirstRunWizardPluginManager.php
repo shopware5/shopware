@@ -1,5 +1,6 @@
 <?php
 
+use Shopware\Bundle\PluginInstallerBundle\Struct\PluginStruct;
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Bundle\PluginInstallerBundle\Service\AccountManagerService;
 use Shopware\Bundle\PluginInstallerBundle\Struct\LocaleStruct;

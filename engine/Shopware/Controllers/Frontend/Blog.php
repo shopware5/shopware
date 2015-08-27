@@ -446,7 +446,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
                     $context = array('sConfirmLink' => $link, 'sArticle' => array('title' => $blogArticleData["title"]));
                     $mail = Shopware()->TemplateMail()->createMail('sOPTINVOTE', $context);
                     $mail->addTo($this->Request()->getParam('eMail'));
-                    $mail->Send();
+                    $mail->send();
                 } else {
                     //save comment
                     $commentData = $this->Request()->getPost();
@@ -591,11 +591,13 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
     {
         foreach ($filterData as $key => $dateData) {
             $filterData[$key]["link"] = $this->blogBaseUrl . Shopware()->Modules()->Core()->sBuildLink(
-                array("sPage" => 1, $requestParameterName => urlencode($dateData[$requestParameterValue])), false);
+                array("sPage" => 1, $requestParameterName => urlencode($dateData[$requestParameterValue]))
+            );
         }
         if ($addRemoveProperty) {
             $filterData[] = array("removeProperty" => 1, "link" => $this->blogBaseUrl . Shopware()->Modules()->Core()->sBuildLink(
-                array("sPage" => 1, $requestParameterName => '')), false);
+                array("sPage" => 1, $requestParameterName => ''))
+            );
         }
         return $filterData;
     }

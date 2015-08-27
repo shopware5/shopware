@@ -340,8 +340,7 @@ class Service
             $themes = array_merge(
                 $themes,
                 $this->getConfigSets(
-                    $template->getParent(),
-                    $namespace
+                    $template->getParent()
                 )
             );
         }

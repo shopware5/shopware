@@ -143,11 +143,11 @@ class Compiler
             $lessFiles = array_merge($lessFiles, $definition->getFiles());
         }
 
-        $js = array_map(function($file) use ($rootDir) {
+        $js = array_map(function ($file) use ($rootDir) {
             return ltrim(str_replace($this->rootDir, '', $file), '/');
         }, $js);
 
-        $lessFiles = array_map(function($file) use ($rootDir) {
+        $lessFiles = array_map(function ($file) use ($rootDir) {
             return ltrim(str_replace($this->rootDir, '', $file), '/');
         }, $lessFiles);
 

@@ -687,7 +687,7 @@ class Detail extends ModelEntity
     /**
      * Get releaseDate
      *
-     * @return \Date
+     * @return \DateTime
      */
     public function getReleaseDate()
     {

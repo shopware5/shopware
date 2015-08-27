@@ -22,7 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-use DoctrineExtensions\Paginate\Paginate;
 use Symfony\Component\HttpFoundation\File\UploadedFile as UploadedFile;
 use Shopware\Models\Media\Album as Album;
 use Shopware\Models\Media\Settings as Settings;
@@ -1005,7 +1004,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
 
         //try to remove the media and the uploaded files.
         try {
-            foreach($mediaList as $media) {
+            foreach ($mediaList as $media) {
                 Shopware()->Models()->remove($media);
             }
             Shopware()->Models()->flush();

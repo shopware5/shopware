@@ -269,8 +269,6 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
         if (isset($data['blog_entry_selection']) && $data['blog_entry_selection']) {
             $category = $data['blog_entry_selection'];
-        } else {
-            $category = $category;
         }
 
         // If the blog element is already set but didn't have any thumbnail size, we need to set it here...

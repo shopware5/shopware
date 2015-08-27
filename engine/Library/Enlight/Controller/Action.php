@@ -83,8 +83,7 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
      */
     public function __construct(Enlight_Controller_Request_Request $request,
                                 Enlight_Controller_Response_Response $response
-    )
-    {
+    ) {
         $this->setRequest($request)->setResponse($response);
 
         $this->controller_name = $this->Front()->Dispatcher()->getFullControllerName($this->Request());

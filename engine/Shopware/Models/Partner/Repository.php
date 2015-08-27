@@ -332,7 +332,7 @@ class Repository extends ModelRepository
                 ->andWhere($alias.'.status NOT IN(\'4\', \'-1\')')
                 ->andWhere($alias.'.partnerId = partner.idCode');
         if ($monthlyAmount) {
-            $builder->andwhere('DATE_FORMAT(CURRENT_DATE(),\'%m\') = DATE_FORMAT('.$alias.'.orderTime,\'%m\')');
+            $builder->andWhere('DATE_FORMAT(CURRENT_DATE(),\'%m\') = DATE_FORMAT('.$alias.'.orderTime,\'%m\')');
         }
         return $builder->getDQL();
     }

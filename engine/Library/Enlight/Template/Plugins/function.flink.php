@@ -37,7 +37,6 @@ function smarty_function_flink($params, $template)
 
     // check if we got an URI or a local link
     if (!empty($file) && strpos($file, '/') !== 0 && strpos($file, '://') === false) {
-
         $useIncludePath = $template->smarty->getUseIncludePath();
 
         // try to find the file on the filesystem

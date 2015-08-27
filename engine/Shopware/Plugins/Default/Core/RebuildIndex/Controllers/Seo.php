@@ -78,7 +78,7 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
         $category = $this->SeoIndex()->countCategories($shopId);
         $article = $this->SeoIndex()->countArticles($shopId);
         $blog = $this->SeoIndex()->countBlogs($shopId);
-        $emotion = $this->SeoIndex()->countEmotions($shopId);
+        $emotion = $this->SeoIndex()->countEmotions();
         $content = $this->SeoIndex()->countContent($shopId);
         $static = $this->SeoIndex()->countStatic($shopId);
         $supplier = $this->SeoIndex()->countSuppliers($shopId);

@@ -26,8 +26,6 @@ namespace Shopware\Models\Property;
 
 use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
-use Shopware\Models\Property\Value;
-use Shopware\Models\Property\Option;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**

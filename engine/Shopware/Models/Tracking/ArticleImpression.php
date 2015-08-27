@@ -55,7 +55,7 @@ class ArticleImpression extends ModelEntity
     private $id;
 
     /**
-     * @var \Date $date
+     * @var \DateTime $date
      *
      * @ORM\Column(name="date", type="date", nullable=false)
      */
@@ -139,7 +139,7 @@ class ArticleImpression extends ModelEntity
     /**
      * get the date
      *
-     * @return \Date
+     * @return \DateTime
      */
     public function getDate()
     {

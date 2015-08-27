@@ -107,7 +107,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
             $outOfStock = $this->getOutOfStockProducts($orderModel);
 
             if (!empty($outOfStock)) {
-                $numbers = array_map(function(\Shopware\Models\Article\Detail $variant) {
+                $numbers = array_map(function (\Shopware\Models\Article\Detail $variant) {
                     return $variant->getNumber();
                 }, $outOfStock);
 

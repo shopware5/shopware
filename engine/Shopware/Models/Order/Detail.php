@@ -140,7 +140,7 @@ class Detail extends ModelEntity
     private $shippedGroup = 0;
 
     /**
-     * @var date $releaseDate
+     * @var \DateTime $releaseDate
      *
      * @ORM\Column(name="releasedate", type="date", nullable=true)
      */
@@ -391,7 +391,7 @@ class Detail extends ModelEntity
     /**
      * Set releaseDate
      *
-     * @param date $releaseDate
+     * @param \DateTime $releaseDate
      * @return Detail
      */
     public function setReleaseDate($releaseDate)
@@ -403,7 +403,7 @@ class Detail extends ModelEntity
     /**
      * Get releaseDate
      *
-     * @return date
+     * @return \DateTime
      */
     public function getReleaseDate()
     {
@@ -457,7 +457,7 @@ class Detail extends ModelEntity
     /**
      * Set config
      *
-     * @param text $config
+     * @param string $config
      * @return Detail
      */
     public function setConfig($config)
@@ -469,7 +469,7 @@ class Detail extends ModelEntity
     /**
      * Get config
      *
-     * @return text
+     * @return string
      */
     public function getConfig()
     {

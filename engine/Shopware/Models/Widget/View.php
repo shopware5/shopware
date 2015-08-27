@@ -83,7 +83,7 @@ class View extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Config\Widget
+     * @return Widget
      */
     public function getWidget()
     {
@@ -91,7 +91,7 @@ class View extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Config\Widget $widget
+     * @param Widget $widget
      */
     public function setWidget($widget)
     {

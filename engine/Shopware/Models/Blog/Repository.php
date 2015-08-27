@@ -431,7 +431,7 @@ class Repository extends ModelRepository
      */
     public function getBlogCommentsById($blogId, $filter, $order, $offset, $limit)
     {
-        $builder = $this->getBlogCommentsByIdBuilder($blogId, $filter, $order, $offset, $limit);
+        $builder = $this->getBlogCommentsByIdBuilder($blogId, $filter, $order);
         if (!empty($offset)) {
             $builder->setFirstResult($offset);
         }

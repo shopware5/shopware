@@ -392,7 +392,7 @@ class CacheManager
 
         /** @var $entry \SplFileInfo */
         foreach ($iterator as $entry) {
-            if ($entry->getFileName() === '.gitkeep') {
+            if ($entry->getFilename() === '.gitkeep') {
                 continue;
             }
 

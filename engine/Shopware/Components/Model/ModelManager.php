@@ -221,7 +221,7 @@ class ModelManager extends EntityManager
     {
         $pagination = $this->createPaginator($query);
 
-        return $pagination->count($query);
+        return $pagination->count();
     }
 
     /**

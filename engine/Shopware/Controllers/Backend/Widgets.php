@@ -710,10 +710,10 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         $mail->FromName = $compiler->compileString($fromName);
         $mail->Subject = $compiler->compileString($subject);
         $mail->Body = $compiler->compileString($content);
-        $mail->ClearAddresses();
-        $mail->AddAddress($toMail, "");
+        $mail->clearRecipients();
+        $mail->addTo($toMail);
 
-        if (!$mail->Send()) {
+        if (!$mail->send()) {
             $this->View()->assign(array('success' => false, 'message' => 'The mail could not be sent.'));
             return false;
         } else {

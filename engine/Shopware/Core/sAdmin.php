@@ -26,7 +26,7 @@ use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Components\Validator\EmailValidatorInterface;
 
 /**
- * Deprecated Shopware Class that handles several
+ * Shopware Class that handles several
  * functions around customer / order related things
  */
 class sAdmin
@@ -2303,15 +2303,13 @@ class sAdmin
                 $pagesStructure["numbers"][$i]["markup"] = ($i == $destinationPage);
                 $pagesStructure["numbers"][$i]["value"] = $i;
                 $pagesStructure["numbers"][$i]["link"] = $baseFile . $this->moduleManager->Core()->sBuildLink(
-                    $additionalParams + array("sPage" => $i),
-                    false
+                    $additionalParams + array("sPage" => $i)
                 );
             }
             // Previous page
             if ($destinationPage != 1) {
                 $pagesStructure["previous"] = $baseFile . $this->moduleManager->Core()->sBuildLink(
-                    $additionalParams + array("sPage" => $destinationPage - 1),
-                    false
+                    $additionalParams + array("sPage" => $destinationPage - 1)
                 );
             } else {
                 $pagesStructure["previous"] = null;
@@ -3849,7 +3847,7 @@ class sAdmin
         if (empty($country)) {
             return false;
         }
-        $payment = $this->sGetPaymentmean($basket['paymentID']);
+        $payment = $this->sGetPaymentMean($basket['paymentID']);
         if (empty($payment)) {
             return false;
         }

@@ -414,34 +414,6 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
     }
 
     /**
-     * Internal helper function to save the dynamic attributes of an site.
-     * @param $site
-     * @param $attributeData
-     * @return mixed
-     */
-    private function saveSiteAttributes($site, $attributeData)
-    {
-        if (empty($attributeData)) {
-            return;
-        }
-        if ($site->getId() > 0) {
-            $result = $this->getSiteRepository()
-                ->getAttributesQuery($site->getId())
-                ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
-            if (empty($result)) {
-                $attributes = new \Shopware\Models\Attribute\Site();
-            } else {
-                $attributes = $result;
-            }
-        } else {
-            $attributes = new \Shopware\Models\Attribute\Site();
-        }
-        $attributes->fromArray($attributeData);
-        $attributes->setSite($site);
-        $this->getManager()->persist($attributes);
-    }
-
-    /**
      * builds an array containing all groups to be displayed in the itemSelectorField
      */
     public function getGroupsAction()

@@ -24,7 +24,6 @@
 
 namespace Shopware\Components\DependencyInjection\Bridge;
 
-use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Shopware\Components\Model\Configuration;

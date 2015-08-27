@@ -518,7 +518,7 @@ class LegacyStructConverter
                 'retinaSource' => $retina,
                 'sourceSet' => $thumbnail->getSourceSet($imageDir),
                 'maxWidth' => $thumbnail->getMaxWidth(),
-                'maxHeight' => $thumbnail->getmaxHeight()
+                'maxHeight' => $thumbnail->getMaxHeight()
             ];
         }
 

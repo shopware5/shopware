@@ -355,7 +355,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
         WHERE od.orderID=?
         ORDER BY od.id ASC
         ", array($this->_id)), ArrayObject::ARRAY_AS_PROPS);
-        
+
         foreach ($this->_positions as $position) {
             $position["attributes"] = Shopware()->Db()->fetchRow("
             SELECT * FROM s_order_details_attributes WHERE detailID = ?
@@ -510,7 +510,6 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
             if ($position["amount"] <= 0) {
                 $this->_discount += $position["amount"];
             }
-            $position["price"] = $position["price"];
         }
     }
 

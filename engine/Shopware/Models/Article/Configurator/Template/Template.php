@@ -254,7 +254,7 @@ class Template extends ModelEntity
      * Set number
      *
      * @param string $number
-     * @return Detail
+     * @return Template
      */
     public function setNumber($number)
     {
@@ -366,7 +366,7 @@ class Template extends ModelEntity
      * Set stockMin
      *
      * @param integer $stockMin
-     * @return Detail
+     * @return Template
      */
     public function setStockMin($stockMin)
     {
@@ -608,7 +608,7 @@ class Template extends ModelEntity
     /**
      * Get releaseDate
      *
-     * @return \Date
+     * @return \DateTime
      */
     public function getReleaseDate()
     {

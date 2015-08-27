@@ -635,7 +635,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         if (empty($this->post['payment'])) {
             return array(
                 'sErrorFlag' => array('payment'),
-                'sErrorMessages' => array(Shopware()->Snippets()->getSnippet()->get('sErrorBillingAdress')),
+                'sErrorMessages' => array(Shopware()->Snippets()->getNamespace()->get('sErrorBillingAdress')),
             );
         }
         $this->admin->sSYSTEM->_POST['sPayment'] = $this->post['payment'];
