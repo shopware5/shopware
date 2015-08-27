@@ -229,11 +229,11 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
     {
         foreach ($shippingCosts as $i => $shippingCost) {
             if (!is_null($shippingCost['bindTimeFrom'])) {
-                $shippingCosts[$i]['bindTimeFrom'] = date("HH:mm", $shippingCost['bindTimeFrom']);
+                $shippingCosts[$i]['bindTimeFrom'] = gmdate("H:i", $shippingCost['bindTimeFrom']);
             }
 
             if (!is_null($shippingCost['bindTimeTo'])) {
-                $shippingCosts[$i]['bindTimeTo'] = date("HH:mm", $shippingCost['bindTimeTo']);
+                $shippingCosts[$i]['bindTimeTo'] = gmdate("H:i", $shippingCost['bindTimeTo']);
             }
         }
 
