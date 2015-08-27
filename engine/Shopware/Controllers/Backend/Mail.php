@@ -31,12 +31,6 @@ use Shopware\Models\Mail\Attachment;
 class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_ExtJs
 {
     /**
-     * Entity Manager
-     * @var null
-     */
-    protected $manager = null;
-
-    /**
      * @var \Shopware\Models\Mail\Repository
      */
     protected $repository = null;
