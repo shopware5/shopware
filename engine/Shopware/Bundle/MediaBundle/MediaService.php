@@ -24,6 +24,8 @@
 
 namespace Shopware\Bundle\MediaBundle;
 
+use Shopware\Components\DependencyInjection\Container;
+
 class MediaService implements MediaServiceInterface
 {
     /**
@@ -37,13 +39,20 @@ class MediaService implements MediaServiceInterface
     private $normalizer;
 
     /**
+     * @var Container
+     */
+    private $container;
+
+    /**
      * @param MediaBackendInterface $backend
      * @param MediaPathNormalizer $normalizer
+     * @param Container $container
      */
-    public function __construct(MediaBackendInterface $backend, MediaPathNormalizer $normalizer)
+    public function __construct(MediaBackendInterface $backend, MediaPathNormalizer $normalizer, Container $container)
     {
         $this->backend = $backend;
         $this->normalizer = $normalizer;
+        $this->container = $container;
     }
 
     /**
@@ -70,7 +79,7 @@ class MediaService implements MediaServiceInterface
 
         $mediaUrl = $this->backend->getMediaUrl();
         if (!$mediaUrl) {
-            $mediaUrl = Shopware()->Front()->Router()->assemble(['controller' => 'index', 'module' => 'frontend']);
+            $mediaUrl = ($this->container->get('front')->Request()->isSecure() ? 'https' : 'http') . '://' . $this->container->get('front')->Request()->getHttpHost() . $this->container->get('front')->Request()->getBasePath() . "/";
         }
 
         return $mediaUrl . $path;

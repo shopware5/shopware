@@ -24,6 +24,8 @@
 
 namespace Shopware\Bundle\MediaBundle;
 
+use Symfony\Component\Console\Output\OutputInterface;
+
 class MediaMigration
 {
     /**
@@ -34,11 +36,10 @@ class MediaMigration
     /**
      * @var array
      */
-    private $validExtensions = [
-        'jpg' => 1,
-        'jpeg' => 1,
-        'gif' => 1,
-        'png' => 1
+    private $counter = [
+        'migrated' => 0,
+        'skipped' => 0,
+        'moved' => 0
     ];
 
     /**
@@ -54,13 +55,24 @@ class MediaMigration
      *
      * @param MediaBackendInterface $fromFilesystem
      * @param MediaBackendInterface $toFileSystem
+     * @param OutputInterface $output
      * @throws \Exception
      */
-    public function migrate(MediaBackendInterface $fromFilesystem, MediaBackendInterface $toFileSystem)
+    public function migrate(MediaBackendInterface $fromFilesystem, MediaBackendInterface $toFileSystem, OutputInterface $output)
     {
         foreach ($this->iterateOldMediaFiles($fromFilesystem) as $path) {
-            $this->migrateFile($path, $fromFilesystem, $toFileSystem);
+            $this->migrateFile($path, $fromFilesystem, $toFileSystem, $output);
         }
+
+        $status = join('. ', array_map(
+            function ($v, $k) {
+                return $v." ".$k;
+            }, 
+            $this->counter,
+            array_keys($this->counter)
+        ));
+
+        $output->writeln("Job done. ".$status);
     }
 
     /**
@@ -69,27 +81,31 @@ class MediaMigration
      * @param $path
      * @param MediaBackendInterface $fromFilesystem
      * @param MediaBackendInterface $toFileSystem
+     * @param OutputInterface $output
      * @throws \Exception
      */
-    public function migrateFile($path, MediaBackendInterface $fromFilesystem, MediaBackendInterface $toFileSystem)
+    private function migrateFile($path, MediaBackendInterface $fromFilesystem, MediaBackendInterface $toFileSystem, OutputInterface $output)
     {
         // Default legacy migration hooked into getRealPath()
         if ($fromFilesystem->getAdapterType() === 'local') {
             if (!$fromFilesystem->isRealPathFormat($path)) {
-                print "Migrate: ".$path.PHP_EOL;
+                $this->counter['migrated']++;
+                $output->writeln("Migrate: ".$path);
                 $fromFilesystem->has($path);
             }
         }
 
         // file already exists
         if ($toFileSystem->has($path)) {
-            print "SKIP: ".$path.PHP_EOL;
+            $this->counter['skipped']++;
+            $output->writeln("SKIP: ".$path);
             return;
         }
 
         // migrate filesystem and name
         if ($fromFilesystem->has($path)) {
-            echo "Move: ".$path.PHP_EOL;
+            $this->counter['moved']++;
+            $output->writeln("Move: ".$path);
             $success = $this->write($toFileSystem, $path, $fromFilesystem->read($path));
             if ($success) {
                 $fromFilesystem->delete($path);
@@ -121,10 +137,6 @@ class MediaMigration
                 continue;
             }
             if ($item['type'] != 'dir') {
-                if (!isset($item['extension']) || !isset($this->validExtensions[$item['extension']])) {
-                    continue;
-                }
-
                 $files[] = $normalized;
             } elseif ($item['type'] == 'dir') {
                 $files = array_merge($files, $this->iterateOldMediaFiles($fromFileSystem, $normalized));

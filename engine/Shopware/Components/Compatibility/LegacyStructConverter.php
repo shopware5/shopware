@@ -24,6 +24,7 @@
 
 namespace Shopware\Components\Compatibility;
 
+use Shopware\Bundle\MediaBundle\MediaService;
 use Shopware\Bundle\SearchBundle;
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
@@ -51,18 +52,26 @@ class LegacyStructConverter
     private $eventManager;
 
     /**
+     * @var MediaService
+     */
+    private $mediaService;
+
+    /**
      * @param \Shopware_Components_Config $config
      * @param ContextService $contextService
      * @param \Enlight_Event_EventManager $eventManager
+     * @param MediaService $mediaService
      */
     public function __construct(
         \Shopware_Components_Config $config,
         ContextService $contextService,
-        \Enlight_Event_EventManager $eventManager
+        \Enlight_Event_EventManager $eventManager,
+        MediaService $mediaService
     ) {
         $this->config = $config;
         $this->contextService = $contextService;
         $this->eventManager = $eventManager;
+        $this->mediaService = $mediaService;
     }
 
     /**
@@ -373,7 +382,7 @@ class LegacyStructConverter
             $data['sDownloads'][] = array(
                 'id' => $download->getId(),
                 'description' => $download->getDescription(),
-                'filename' => $this->contextService->getShopContext()->getBaseUrl() . $this->config->get('articleFiles') . "/" . $download->getFile(),
+                'filename' => $this->mediaService->getUrl($download->getFile()),
                 'size' => $download->getSize()
             );
         }
@@ -494,11 +503,10 @@ class LegacyStructConverter
 
     private function getSourceSet($thumbnail)
     {
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
         if ($thumbnail->getRetinaSource() !== null) {
-            return sprintf('%s, %s 2x', $mediaService->getUrl($thumbnail->getSource()), $mediaService->getUrl($thumbnail->getRetinaSource()));
+            return sprintf('%s, %s 2x', $this->mediaService->getUrl($thumbnail->getSource()), $this->mediaService->getUrl($thumbnail->getRetinaSource()));
         } else {
-            return $mediaService->getUrl($thumbnail->getSource());
+            return $this->mediaService->getUrl($thumbnail->getSource());
         }
     }
 
@@ -512,17 +520,15 @@ class LegacyStructConverter
             return [];
         }
 
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
-
         $thumbnails = [];
 
         foreach ($media->getThumbnails() as $thumbnail) {
             $retina = null;
             if ($thumbnail->hasRetinaSource()) {
-                $retina = $mediaService->getUrl($thumbnail->getRetinaSource());
+                $retina = $this->mediaService->getUrl($thumbnail->getRetinaSource());
             }
             $thumbnails[] = [
-                'source' => $mediaService->getUrl($thumbnail->getSource()),
+                'source' => $this->mediaService->getUrl($thumbnail->getSource()),
                 'retinaSource' => $retina,
                 'sourceSet' => $this->getSourceSet($thumbnail),
                 'maxWidth' => $thumbnail->getMaxWidth(),
@@ -930,8 +936,6 @@ class LegacyStructConverter
             $createDate = $product->getCreatedAt()->format('Y-m-d');
         }
 
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
-
         $data = array(
             'articleID' => $product->getId(),
             'articleDetailsID' => $product->getVariantId(),
@@ -987,7 +991,7 @@ class LegacyStructConverter
                 $data,
                 array(
                     'supplierName' => $product->getManufacturer()->getName(),
-                    'supplierImg' => $mediaService->getUrl($product->getManufacturer()->getCoverFile()),
+                    'supplierImg' => $this->mediaService->getUrl($product->getManufacturer()->getCoverFile()),
                     'supplierID' => $product->getManufacturer()->getId(),
                     'supplierDescription' => $product->getManufacturer()->getDescription(),
                 )
