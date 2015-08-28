@@ -879,8 +879,9 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $criteria->offset($offset)
                  ->limit($limit);
 
-        $streamRepo = new \Shopware\Components\ProductStreamRepository($this->get('dbal_connection'));
-        $streamRepo->prepareCriteria($criteria, $productStreamId);
+        /** @var \Shopware\Components\ProductStream\RepositoryInterface $streamRepository */
+        $streamRepository = $this->get('shopware_product_stream.repository');
+        $streamRepository->prepareCriteria($criteria, $productStreamId);
 
         /** @var $result ProductSearchResult */
         $result = Shopware()->Container()->get('shopware_search.product_search')->search($criteria, $context);

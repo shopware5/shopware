@@ -28,6 +28,7 @@ use Shopware\Bundle\SearchBundle\Condition\CustomerGroupCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
 use Shopware\Bundle\StoreFrontBundle\Struct\ProductContext;
+use Shopware\Components\ProductStream\RepositoryInterface;
 
 class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Backend_Application
 {
@@ -43,8 +44,8 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
 
         $criteria = new Criteria();
 
-        $streamRepo = new \Shopware\Components\ProductStreamRepository($this->get('dbal_connection'));
-
+        /** @var RepositoryInterface $streamRepo */
+        $streamRepo = $this->get('shopware_product_stream.repository');
         $sorting = $streamRepo->unserialize($sorting);
 
         foreach ($sorting as $sort) {

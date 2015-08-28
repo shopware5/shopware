@@ -22,15 +22,16 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components;
+namespace Shopware\Components\ProductStream;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\SearchBundle\Condition\OrdernumberCondition;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\SortingInterface;
+use Shopware\Components\ReflectionHelper;
 
-class ProductStreamRepository
+class Repository implements RepositoryInterface
 {
     /**
      * @var Connection
