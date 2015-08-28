@@ -21,6 +21,7 @@
         <service id="shopware_media.media_service" class="Shopware\Bundle\MediaBundle\MediaService">
             <argument type="service" id="shopware_media.backend" />
             <argument type="service" id="shopware_media.path_normalizer" />
+            <argument type="service" id="service_container" />
         </service>
 
         <service id="shopware_media.media_migration" class="Shopware\Bundle\MediaBundle\MediaMigration">

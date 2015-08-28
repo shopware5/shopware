@@ -62,6 +62,6 @@ class ImageMigrateCommand extends ShopwareCommand
         $toFileSystem = $filesystemFactory->factory($to);
 
         $mediaMigration = Shopware()->Container()->get('shopware_media.media_migration');
-        $mediaMigration->migrate($fromFileSystem, $toFileSystem);
+        $mediaMigration->migrate($fromFileSystem, $toFileSystem, $output);
     }
 }
