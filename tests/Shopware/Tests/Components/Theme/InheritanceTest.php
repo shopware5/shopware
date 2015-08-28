@@ -31,7 +31,8 @@ class Shopware_Tests_Components_Theme_InheritanceTest extends Shopware_Tests_Com
             Shopware()->Container()->get('models'),
             $this->getUtilClass(),
             Shopware()->Container()->get('theme_path_resolver'),
-            Shopware()->Container()->get('events')
+            Shopware()->Container()->get('events'),
+            Shopware()->Container()->get('shopware_media.media_service')
         );
 
         $hierarchy = $inheritance->buildInheritances($custom);
@@ -104,7 +105,8 @@ class Shopware_Tests_Components_Theme_InheritanceTest extends Shopware_Tests_Com
             $this->getEntityManager(),
             $util,
             $pathResolver,
-            $this->getEventManager()
+            $this->getEventManager(),
+            Shopware()->Container()->get('shopware_media.media_service')
         );
 
         $files = $inheritance->getTemplateJavascriptFiles($template);

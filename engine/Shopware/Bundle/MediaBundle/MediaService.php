@@ -79,7 +79,13 @@ class MediaService implements MediaServiceInterface
 
         $mediaUrl = $this->backend->getMediaUrl();
         if (!$mediaUrl) {
-            $mediaUrl = ($this->container->get('front')->Request()->isSecure() ? 'https' : 'http') . '://' . $this->container->get('front')->Request()->getHttpHost() . $this->container->get('front')->Request()->getBasePath() . "/";
+            $request = $this->container->get('front')->Request();
+
+            if ($request && $request->getHttpHost() && $request->getBasePath()) {
+                $mediaUrl = ($request->isSecure() ? 'https' : 'http') . '://' . $request->getHttpHost() . $request->getBasePath() . "/";
+            } else {
+                $mediaUrl = $this->container->get('front')->Router()->assemble(['controller' => 'index', 'module' => 'frontend']);
+            }
         }
 
         return $mediaUrl . $path;
