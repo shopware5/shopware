@@ -172,12 +172,13 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         $context = $this->get('shopware_storefront.context_service')->getShopContext();
 
         if ($categoryContent['streamId']) {
-            /**@var $criteria Criteria*/
-            $criteria = $this->get('shopware_search.store_front_criteria_factory')
-                ->createProductStreamCriteria($this->Request(), $context);
+            /** @var \Shopware\Components\ProductStream\CriteriaFactoryInterface $factory */
+            $factory = $this->get('shopware_product_stream.criteria_factory');
+            $criteria = $factory->createCriteria($this->Request(), $context);
 
-            $streamRepo = new \Shopware\Components\ProductStreamRepository($this->get('dbal_connection'));
-            $streamRepo->prepareCriteria($criteria, $categoryContent['streamId']);
+            /** @var \Shopware\Components\ProductStream\RepositoryInterface $streamRepository */
+            $streamRepository = $this->get('shopware_product_stream.repository');
+            $streamRepository->prepareCriteria($criteria, $categoryContent['streamId']);
         } else {
             /**@var $criteria Criteria*/
             $criteria = $this->get('shopware_search.store_front_criteria_factory')
