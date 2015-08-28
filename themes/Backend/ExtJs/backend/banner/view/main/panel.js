@@ -155,7 +155,7 @@ Ext.define('Shopware.apps.Banner.view.main.Panel', {
         return [
             '<tpl for=".">',
                 '<div class="thumb-wrap" id="{literal}{id}{/literal}">',
-                    '<div class="thumb"><img src="{link file=""}{literal}{image}{/literal}" title="{literal}{description}{/literal}"></div>',
+                    '<div class="thumb"><img src="{literal}{image}{/literal}" title="{literal}{description}{/literal}"></div>',
                     '<span class="x-editable">{literal}{description}{/literal}</span>',
                 '</div>',
             '</tpl>',

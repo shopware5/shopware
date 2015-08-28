@@ -192,7 +192,7 @@ Ext.define('Shopware.apps.Article.view.image.List', {
 
                     // If the type is image, then show the image
                     '<div class="thumb">',
-                        '<div class="inner-thumb"><img src="','{link file=""}','{literal}{thumbnail}{/literal}','" /></div>',
+                        '<div class="inner-thumb"><img src="{literal}{thumbnail}{/literal}" /></div>',
                         '<tpl if="main===1">',
                             '<div class="preview"><span>' + me.snippets.mainImage  + '</span></div>',
                         '</tpl>',

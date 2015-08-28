@@ -27,6 +27,7 @@ namespace Shopware\Bundle\MediaBundle\Subscriber;
 use Doctrine\Common\Collections\ArrayCollection;
 use Enlight\Event\SubscriberInterface;
 use Shopware\Bundle\MediaBundle\Commands\MediaCleanupCommand;
+use Shopware\Bundle\MediaBundle\Commands\ImageMigrateCommand;
 
 class ServiceSubscriber implements SubscriberInterface
 {
@@ -47,7 +48,8 @@ class ServiceSubscriber implements SubscriberInterface
     public function addCommands()
     {
         return new ArrayCollection([
-            new MediaCleanupCommand()
+            new MediaCleanupCommand(),
+            new ImageMigrateCommand()
         ]);
     }
 

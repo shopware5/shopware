@@ -492,6 +492,16 @@ class LegacyStructConverter
         return $data;
     }
 
+    private function getSourceSet($thumbnail)
+    {
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        if ($thumbnail->getRetinaSource() !== null) {
+            return sprintf('%s, %s 2x', $mediaService->getUrl($thumbnail->getSource()), $mediaService->getUrl($thumbnail->getRetinaSource()));
+        } else {
+            return $mediaService->getUrl($thumbnail->getSource());
+        }
+    }
+
     /**
      * @param StoreFrontBundle\Struct\Media $media
      * @return array
@@ -502,21 +512,19 @@ class LegacyStructConverter
             return [];
         }
 
-        //now we get the configured image and thumbnail dir.
-        $imageDir = $this->contextService->getShopContext()->getBaseUrl() . '/media/image/';
-        $imageDir = str_replace('/media/image/', '/', $imageDir);
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
 
         $thumbnails = [];
 
         foreach ($media->getThumbnails() as $thumbnail) {
             $retina = null;
             if ($thumbnail->hasRetinaSource()) {
-                $retina = $imageDir . $thumbnail->getRetinaSource();
+                $retina = $mediaService->getUrl($thumbnail->getRetinaSource());
             }
             $thumbnails[] = [
-                'source' => $imageDir . $thumbnail->getSource(),
+                'source' => $mediaService->getUrl($thumbnail->getSource()),
                 'retinaSource' => $retina,
-                'sourceSet' => $thumbnail->getSourceSet($imageDir),
+                'sourceSet' => $this->getSourceSet($thumbnail),
                 'maxWidth' => $thumbnail->getMaxWidth(),
                 'maxHeight' => $thumbnail->getMaxHeight()
             ];
@@ -525,7 +533,7 @@ class LegacyStructConverter
         $data = array(
             'id' => $media->getId(),
             'position' => 1,
-            'source' => $imageDir . $media->getFile(),
+            'source' => $media->getFile(),
             'description' => $media->getName(),
             'extension' => $media->getExtension(),
             'main' => $media->isPreview(),
@@ -922,6 +930,8 @@ class LegacyStructConverter
             $createDate = $product->getCreatedAt()->format('Y-m-d');
         }
 
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+
         $data = array(
             'articleID' => $product->getId(),
             'articleDetailsID' => $product->getVariantId(),
@@ -977,7 +987,7 @@ class LegacyStructConverter
                 $data,
                 array(
                     'supplierName' => $product->getManufacturer()->getName(),
-                    'supplierImg' => $product->getManufacturer()->getCoverFile(),
+                    'supplierImg' => $mediaService->getUrl($product->getManufacturer()->getCoverFile()),
                     'supplierID' => $product->getManufacturer()->getId(),
                     'supplierDescription' => $product->getManufacturer()->getDescription(),
                 )

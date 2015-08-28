@@ -319,10 +319,9 @@ Ext.define('Shopware.apps.Supplier.view.main.Edit', {
      */
     getLogo : function() {
         var me = this,
-            path = '{link file=""}',
             imageUrl = me.record.get('image'),
             image = Ext.create('Ext.Img', {
-                    src         : path+imageUrl,
+                    src         : imageUrl,
                     maxWidth    : 120,
                     width       : 120,
                     maxHeight   : 80,

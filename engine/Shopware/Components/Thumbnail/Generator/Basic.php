@@ -24,6 +24,8 @@
 
 namespace Shopware\Components\Thumbnail\Generator;
 
+use Shopware\Bundle\MediaBundle\MediaServiceInterface;
+
 /**
  * Shopware Basic Thumbnail Generator
  *
@@ -49,12 +51,19 @@ class Basic implements GeneratorInterface
     private $fixGdImageBlur;
 
     /**
-     * @param $config \Shopware_Components_Config
+     * @var MediaServiceInterface
      */
-    public function __construct($config)
+    private $mediaService;
+
+    /**
+     * @param $config \Shopware_Components_Config
+     * @param MediaServiceInterface $mediaService
+     */
+    public function __construct($config, MediaServiceInterface $mediaService)
     {
         $this->config = $config;
         $this->fixGdImageBlur = $this->config->get('thumbnailNoiseFilter');
+        $this->mediaService = $mediaService;
     }
 
     /**
@@ -62,11 +71,12 @@ class Basic implements GeneratorInterface
      */
     public function createThumbnail($imagePath, $destination, $maxWidth, $maxHeight, $keepProportions = false, $quality = 90)
     {
-        if (!file_exists($imagePath)) {
+        if (!$this->mediaService->has($imagePath)) {
             throw new \Exception("File not found: " . $imagePath);
         }
 
-        $image = $this->createImageResource($imagePath);
+        $content = $this->mediaService->read($imagePath);
+        $image = $this->createImageResource($content, $imagePath);
 
         // Determines the width and height of the original image
         $originalSize = $this->getOriginalImageSize($image);
@@ -117,14 +127,14 @@ class Basic implements GeneratorInterface
      * the given path and calls the right creation
      * method for the image extension
      *
-     * @param string $path
+     * @param string $fileContent
      * @return resource
      * @throws \RuntimeException
      */
-    private function createImageResource($path)
+    private function createImageResource($fileContent, $imagePath)
     {
-        if (!$image = @imagecreatefromstring(file_get_contents($path))) {
-            throw new \RuntimeException(sprintf("Image is not in a recognized format (%s)", $path));
+        if (!$image = @imagecreatefromstring($fileContent)) {
+            throw new \RuntimeException(sprintf("Image is not in a recognized format (%s)", $imagePath));
         }
 
         return $image;
@@ -252,17 +262,23 @@ class Basic implements GeneratorInterface
      */
     private function saveImage($destination, $newImage, $quality)
     {
+        ob_start();
         // saves the image information into a specific file extension
         switch (strtolower($this->getImageExtension($destination))) {
             case 'png':
-                imagepng($newImage, $destination);
+                imagepng($newImage);
                 break;
             case 'gif':
-                imagegif($newImage, $destination);
+                imagegif($newImage);
                 break;
             default:
-                imagejpeg($newImage, $destination, $quality);
+                imagejpeg($newImage, null, $quality);
                 break;
         }
+
+        $content = ob_get_contents();
+        ob_end_clean();
+
+        $this->mediaService->write($destination, $content);
     }
 }

@@ -1846,6 +1846,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     public function getArticleImages($articleId)
     {
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(array( 'images', 'imageAttribute', 'imageMapping', 'mappingRule', 'ruleOption'))
                 ->from('Shopware\Models\Article\Image', 'images')
@@ -1859,7 +1860,14 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                 ->orderBy('images.position')
                 ->setParameters(array('articleId' => $articleId));
 
-        return $builder->getQuery()->getArrayResult();
+        $result = $builder->getQuery()->getArrayResult();
+
+        foreach ($result as &$item) {
+            $item['original'] = $mediaService->getUrl('media/image/' . $item['path'] . '.' . $item['extension']);
+            $item['thumbnail'] = $mediaService->getUrl('media/image/thumbnail/' . $item['path'] . '_140x140.' . $item['extension']);
+        }
+
+        return $result;
     }
 
     /**

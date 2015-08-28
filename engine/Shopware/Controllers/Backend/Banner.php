@@ -188,6 +188,7 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
     {
         $cnt   = 0;
         $nodes = null;
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
 
         foreach ($banners as $banner) {
             // we have to split the datetime to date and time
@@ -200,6 +201,9 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
                 $banner['validToDate'] = $banner['validTo']->format('d.m.Y');
                 $banner['validToTime'] = $banner['validTo']->format('H:i');
             }
+
+            $banner['image'] = $mediaService->getUrl($banner['image']);
+
             $nodes[$cnt++] = $banner;
         }
         return $nodes;
@@ -318,6 +322,8 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
 
         // set new image and extension if necessary
         if (!empty($mediaManagerData)) {
+            $pathNormalizer = Shopware()->Container()->get('shopware_media.path_normalizer');
+            $mediaManagerData = $pathNormalizer->get($mediaManagerData);
             $bannerModel->setImage($mediaManagerData);
         }
 

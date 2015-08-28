@@ -103,6 +103,15 @@ class TestKernel extends \Shopware\Kernel
         $shop = $repository->getActiveDefault();
         $shop->registerResources($shopwareBootstrap);
 
+        // correct router context for url building
+        $kernel->container->get('router')->setContext(
+            new \Shopware\Components\Routing\Context(
+                Shopware()->Shop()->getHost(),
+                Shopware()->Shop()->getBasePath(),
+                Shopware()->Shop()->getSecure()
+            )
+        );
+
         $_SERVER['HTTP_HOST'] = $shop->getHost();
     }
 }

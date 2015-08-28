@@ -423,6 +423,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $categoryName = $builder->getQuery()->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
         $data["categoryName"] = $categoryName["name"];
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
 
         // Second get category image per random, if configured
         if ($data["image_type"] != "selected_image") {
@@ -461,6 +462,11 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             }
         }
 
+        // @deprecated since 5.1 will be removed in 5.2
+        if (!is_array($data['image'])) {
+            $data['image'] = $mediaService->getUrl($data['image']);
+        }
+
         return $data;
     }
 
@@ -497,6 +503,8 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
      */
     private function getBannerMappingLinks($data, $category, $element)
     {
+        $mediaService = $this->get('shopware_media.media_service');
+
         if (!empty($data['link'])) {
             preg_match('/^([a-z]*:\/\/|shopware\.php|mailto:)/i', $data['link'], $matches);
 
@@ -507,8 +515,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
         // Get image size of the banner
         if (isset($data['file']) && !empty($data['file'])) {
-            $fullPath = $this->get('kernel')->getRootDir() . '/' . $data['file'];
-            list($bannerWidth, $bannerHeight) = getimagesize($fullPath);
+            list($bannerWidth, $bannerHeight) = getimagesize($mediaService->getUrl($data['file']));
 
             $data['fileInfo'] = array(
                 'width' => $bannerWidth,
@@ -542,6 +549,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             }
         }
 
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
         $mediaId = Shopware()->Db()->fetchOne("SELECT id FROM s_media WHERE path = ?", [$data['file']]);
         if ($mediaId) {
             $context = $this->get('shopware_storefront.context_service')->getShopContext();
@@ -552,6 +560,9 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
                 $mediaData = [];
             }
             $data = array_merge($mediaData, $data);
+
+            // @deprecated since 5.1 will be removed in 5.2
+            $data['file'] = $mediaService->getUrl($data['file']);
         }
 
         $data['bannerMapping'] = $mappings;
@@ -577,6 +588,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         if ($data["manufacturer_type"] == "manufacturers_by_cat") {
             $data["values"] = Shopware()->Modules()->Articles()->sGetAffectedSuppliers($data["manufacturer_category"], 12);
         } else {
+            $mediaService = Shopware()->Container()->get('shopware_media.media_service');
             $selectedManufacturers = $data["selected_manufacturers"];
             $manufacturers = array();
 
@@ -596,6 +608,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             foreach ($manufacturers as $manufacturer) {
                 foreach ($data["values"] as $value) {
                     if ($value["id"] == $manufacturer) {
+                        $value['image'] = $mediaService->getUrl($value['image']);
                         $temporaryValues[] = $value;
                     }
                 }
@@ -635,6 +648,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $mediaIds = array_column($data['values'], 'mediaId');
         $context = $this->get('shopware_storefront.context_service')->getShopContext();
         $media = $this->get('shopware_storefront.media_service')->getList($mediaIds, $context);
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
 
         foreach ($data["values"] as &$value) {
             if (!empty($value['link'])) {
@@ -655,6 +669,8 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
             $fullPath = $this->get('kernel')->getRootDir() . '/' . $value['path'];
             list($bannerWidth, $bannerHeight) = getimagesize($fullPath);
+
+            $value['path'] = $mediaService->getUrl($value['path']);
 
             $value['fileInfo'] = array(
                 'width' => $bannerWidth,

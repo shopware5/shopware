@@ -185,7 +185,7 @@ Ext.define('Shopware.apps.Article.view.image.Info', {
                     '<div class="thumb">',
                         '<div class="inner-thumb"><img src="',
                             '<tpl if="original">',
-                                '{link file=""}','{literal}{original}{/literal}',
+                                '{literal}{original}{/literal}',
                             '</tpl>',
                         '" /></div>',
                     '</div>',

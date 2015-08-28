@@ -12,6 +12,7 @@ class CoverTest extends TestCase
 {
     public function testProductWithOneImage()
     {
+        $this->resetContext();
         $number = 'Cover-Test';
         $context = $this->getContext();
         $data = $this->getProduct($number, $context, null, 1);
@@ -24,6 +25,7 @@ class CoverTest extends TestCase
 
     public function testProductWithMultipleImages()
     {
+        $this->resetContext();
         $number = 'Cover-Test-Multiple';
         $context = $this->getContext();
         $this->helper->createArticle(
@@ -37,6 +39,7 @@ class CoverTest extends TestCase
 
     public function testProductList()
     {
+        $this->resetContext();
         $number = 'Cover-Test-Listing';
         $context = $this->getContext();
 
@@ -86,6 +89,7 @@ class CoverTest extends TestCase
      */
     public function testVariantImages()
     {
+        $this->resetContext();
         $number = 'Variant-Cover-Test';
         $context = $this->getContext();
 
@@ -119,6 +123,7 @@ class CoverTest extends TestCase
      */
     public function testForceMainImage()
     {
+        $this->resetContext();
         $number = 'Force-Main-Cover-Test';
         $context = $this->getContext();
         $data = $this->getVariantImageProduct($number, $context);
@@ -169,6 +174,7 @@ class CoverTest extends TestCase
      */
     public function testFallbackImage()
     {
+        $this->resetContext();
         $number = 'Force-Main-Cover-Test';
         $context = $this->getContext();
 
@@ -241,5 +247,16 @@ class CoverTest extends TestCase
         $data['variants'][1]['images'] = array($this->helper->getImageData('bienen_teaser.jpg'));
 
         return $data;
+    }
+
+    private function resetContext() {
+        // correct router context for url building
+        Shopware()->Container()->get('router')->setContext(
+            new \Shopware\Components\Routing\Context(
+                'localhost',
+                Shopware()->Shop()->getBasePath(),
+                Shopware()->Shop()->getSecure()
+            )
+        );
     }
 }

@@ -481,6 +481,12 @@ class LegacyListingSubscriber implements SubscriberInterface
 
         $request = $this->get('front')->Request();
 
+        // @deprecated since 5.1 will be removed in 5.2
+        if ($activeSupplier['image']) {
+            $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+            $activeSupplier['image'] = $mediaService->getUrl($activeSupplier['image']);
+        }
+
         if ($request->getParam('action') == 'manufacturer') {
             $activeSupplier['link'] = null;
         } else {

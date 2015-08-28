@@ -53,15 +53,18 @@ class Shopware_Tests_Components_Api_MediaTest extends Shopware_Tests_Components_
         copy($source, $dest);
 
         $data['file'] = $dest;
-        $path = Shopware()->DocPath('media_image') . '/test-bild-used.jpg';
-        unlink($path);
+        $path = Shopware()->DocPath('media_image') . 'test-bild-used.jpg';
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        if ($mediaService->has($path)) {
+            $mediaService->delete($path);
+        }
 
         $media = $this->resource->create($data);
-        $this->assertFileExists($path);
+        $this->assertTrue($mediaService->has($path));
 
         //check if the thumbnails are generated
-        $path = Shopware()->DocPath('media_image_thumbnail') . '/test-bild-used_140x140.jpg';
-        $this->assertFileExists($path);
+        $path = Shopware()->DocPath('media_image_thumbnail') . 'test-bild-used_140x140.jpg';
+        $this->assertTrue($mediaService->has($path));
     }
 
     public function testUploadNameWithOver50Characters()
@@ -78,14 +81,15 @@ class Shopware_Tests_Components_Api_MediaTest extends Shopware_Tests_Components_
         $media = $this->resource->create($data);
 
         $pathPicture = Shopware()->DocPath('media_image') . $media->getFileName();
-        $this->assertFileExists($pathPicture);
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $this->assertTrue($mediaService->has($pathPicture));
 
         //check if the thumbnails are generated
         $path = Shopware()->DocPath('media_image_thumbnail') . $media->getName() . '_140x140.jpg';
-        $this->assertFileExists($path);
+        $this->assertTrue($mediaService->has($path));
 
-        unlink(Shopware()->DocPath('media_image') . $media->getFileName());
-        unlink($path);
+        $mediaService->delete(Shopware()->DocPath('media_image') . $media->getFileName());
+        $mediaService->delete($path);
     }
 
 

@@ -24,6 +24,8 @@
 
 namespace Shopware\Components\Thumbnail;
 
+use Shopware\Bundle\MediaBundle\MediaServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\Core\MediaService;
 use Shopware\Components\Thumbnail\Generator\GeneratorInterface;
 use Shopware\Models\Media\Media;
 use Shopware\Models\Media\Settings;
@@ -60,18 +62,25 @@ class Manager
     protected $eventManager;
 
     /**
+     * @var MediaServiceInterface
+     */
+    private $mediaService;
+
+    /**
      * The constructor for the thumbnail manager.
      * Expects a passed generator and the media/destination directory
      *
      * @param GeneratorInterface $generator
      * @param String $rootDir - the full path to the shopware directory e.g. /var/www/shopware/
      * @param \Enlight_Event_EventManager $eventManager
+     * @param MediaServiceInterface $mediaService
      */
-    public function __construct(GeneratorInterface $generator, $rootDir, \Enlight_Event_EventManager $eventManager)
+    public function __construct(GeneratorInterface $generator, $rootDir, \Enlight_Event_EventManager $eventManager, MediaServiceInterface $mediaService)
     {
         $this->generator = $generator;
         $this->rootDir = $rootDir;
         $this->eventManager = $eventManager;
+        $this->mediaService = $mediaService;
     }
 
     /**
@@ -92,10 +101,6 @@ class Manager
             throw new \Exception("File is not an image.");
         }
 
-        if (!is_writable($this->getThumbnailDir($media))) {
-            throw new \Exception("Thumbnail directory is not writable");
-        }
-
         if (empty($thumbnailSizes)) {
             $thumbnailSizes = $this->getThumbnailSizesFromMedia($media);
             $thumbnailSizes = array_merge($thumbnailSizes, $media->getDefaultThumbnails());
@@ -114,7 +119,7 @@ class Manager
 
         $thumbnailSizes = $this->uniformThumbnailSizes($thumbnailSizes);
 
-        $imagePath = $this->rootDir . '/' . $media->getPath();
+        $imagePath = $media->getPath();
 
         $parameters = array(
             'path' => $imagePath,
@@ -249,7 +254,7 @@ class Manager
      */
     protected function getThumbnailDir($media)
     {
-        return $this->rootDir . '/media/' . strtolower($media->getType()) . '/thumbnail/';
+        return '/media/' . strtolower($media->getType()) . '/thumbnail/';
     }
 
     /**
@@ -324,8 +329,8 @@ class Manager
         foreach ($thumbnails as $thumbnail) {
             $thumbnailPath = $this->rootDir . '/' . $thumbnail;
 
-            if (file_exists($thumbnailPath)) {
-                unlink($thumbnailPath);
+            if ($this->mediaService->has($thumbnailPath)) {
+                $this->mediaService->delete($thumbnailPath);
             }
         }
     }

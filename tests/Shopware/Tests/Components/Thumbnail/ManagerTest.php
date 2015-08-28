@@ -46,21 +46,24 @@ class Shopware_Tests_Components_Thumbnail_ManagerTest extends \PHPUnit_Framework
         );
 
         $manager->createMediaThumbnail($media, $sizes);
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
 
         $thumbnailDir = Shopware()->DocPath('media_' . strtolower($media->getType()) . '_thumbnail');
 
         $path = $thumbnailDir . $media->getName();
-        $this->assertFileExists($path . '_100x110.jpg');
-        $this->assertFileExists($path . '_120x130.jpg');
-        $this->assertFileExists($path . '_140x140.jpg');
-        $this->assertFileExists($path . '_150x160.jpg');
+        $this->assertTrue($mediaService->has($path . '_100x110.jpg'));
+        $this->assertTrue($mediaService->has($path . '_120x130.jpg'));
+        $this->assertTrue($mediaService->has($path . '_140x140.jpg'));
+        $this->assertTrue($mediaService->has($path . '_150x160.jpg'));
     }
 
     private function getMediaModel()
     {
         $media = new \Shopware\Models\Media\Media();
 
-        $imagePath = __DIR__ . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR . 'sw_icon.png';
+        $sourcePath = __DIR__ . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR . 'sw_icon.png';
+        $imagePath = __DIR__ . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR . 'sw_icon_copy.png';
+        copy($sourcePath, $imagePath);
 
         $file = new \Symfony\Component\HttpFoundation\File\File($imagePath);
 
@@ -91,12 +94,13 @@ class Shopware_Tests_Components_Thumbnail_ManagerTest extends \PHPUnit_Framework
         $manager->createMediaThumbnail($media);
 
         $thumbnailDir = Shopware()->DocPath('media_' . strtolower($media->getType()) . '_thumbnail');
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
 
         $path = $thumbnailDir . $media->getName();
 
         foreach ($sizes as $size) {
-            $this->assertFileExists($path . '_' . $size . '.jpg');
-            $this->assertFileExists($path . '_' . $size . '.png');
+            $this->assertTrue($mediaService->has($path . '_' . $size . '.jpg'));
+            $this->assertTrue($mediaService->has($path . '_' . $size . '.png'));
         }
     }
 
@@ -123,14 +127,17 @@ class Shopware_Tests_Components_Thumbnail_ManagerTest extends \PHPUnit_Framework
         $manager->createMediaThumbnail($media, array(), true);
 
         $thumbnailDir = Shopware()->DocPath('media_' . strtolower($media->getType()) . '_thumbnail');
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
 
         $path = $thumbnailDir . $media->getName();
 
         foreach ($sizes as $key => $size) {
-            $this->assertFileExists($path . '_' . $size . '.jpg');
-            $this->assertFileExists($path . '_' . $size . '.png');
+            $this->assertTrue($mediaService->has($path . '_' . $size . '.jpg'));
+            $this->assertTrue($mediaService->has($path . '_' . $size . '.png'));
 
-            list($width, $height) = getimagesize($path . '_' . $size . '.jpg');
+            $image = imagecreatefromstring($mediaService->read($path . '_' . $size . '.jpg'));
+            $width = imagesx($image);
+            $height = imagesy($image);
 
             $this->assertSame($proportionalSizes[$key], $width . 'x' . $height);
         }
@@ -144,19 +151,19 @@ class Shopware_Tests_Components_Thumbnail_ManagerTest extends \PHPUnit_Framework
     {
         $media = new \Shopware\Models\Media\Media();
 
-        $imagePath = __DIR__ . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR . 'sw_icon.png';
+        $sourcePath = __DIR__ . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR . 'sw_icon.png';
+        $imagePath = __DIR__ . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR . 'sw_icon_copy.png';
+        copy($sourcePath, $imagePath);
 
         $file = new \Symfony\Component\HttpFoundation\File\File($imagePath);
 
         $media->setFile($file);
         $media->setPath(str_replace(Shopware()->DocPath(), '', $imagePath));
 
+        unlink($file->getRealPath());
+
         $manager = Shopware()->Container()->get('thumbnail_manager');
         $manager->createMediaThumbnail($media);
-
-        $thumbnailDir = Shopware()->DocPath('media_' . strtolower($media->getType()) . '_thumbnail');
-        $path = $thumbnailDir . $media->getName();
-        $this->assertFileExists($path . '_140x140.jpg');
     }
 
     /**
@@ -183,12 +190,13 @@ class Shopware_Tests_Components_Thumbnail_ManagerTest extends \PHPUnit_Framework
         $manager->createMediaThumbnail($media, array($defaultSize));
 
         $thumbnailDir = Shopware()->DocPath('media_' . strtolower($media->getType()) . '_thumbnail');
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
         $path = $thumbnailDir . $media->getName();
 
-        $this->assertFileExists($path . '_' . $defaultSize . '.' . $media->getExtension());
+        $this->assertTrue($mediaService->has($path . '_' . $defaultSize . '.' . $media->getExtension()));
 
         $manager->removeMediaThumbnails($media);
 
-        $this->assertFileNotExists($path . '_' . $defaultSize . '.' . $media->getExtension());
+        $this->assertFalse($mediaService->has($path . '_' . $defaultSize . '.' . $media->getExtension()));
     }
 }

@@ -15,6 +15,16 @@ if (!is_array($customConfig)) {
 return array_replace_recursive([
     'custom' => [],
     'trustedproxies' => [],
+    'cdn' => [
+        'backend' => 'local',
+        'adapters' => [
+            'local' => [
+                'type' => 'local',
+                'mediaUrl' => '',
+                'path' => realpath(__DIR__ . '/../../../')
+            ]
+        ]
+    ],
     'snippet' => [
         'readFromDb' => true,
         'writeToDb' => true,

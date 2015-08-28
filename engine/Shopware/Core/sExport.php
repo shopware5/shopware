@@ -586,12 +586,14 @@ class sExport
             return "";
         }
 
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+
         // get the image directory
-        $imageDir = 'http://' . $this->shop->getHost() . $this->shop->getBasePath() . '/media/image/';
+        $imageDir = 'media/image/';
 
         // if no imageSize was set, return the full image
         if (null === $imageSize) {
-            return $imageDir . $hash;
+            return $mediaService->getUrl($imageDir . $hash);
         }
 
         // get filename and extension in order to insert thumbnail size later
@@ -611,7 +613,7 @@ class sExport
         }
 
         if (isset($sizes[$imageSize])) {
-            return $thumbDir . $fileName . '_' . $sizes[(int) $imageSize] . '.' . $extension;
+            return $mediaService->getUrl($thumbDir . $fileName . '_' . $sizes[(int) $imageSize] . '.' . $extension);
         }
 
         return "";

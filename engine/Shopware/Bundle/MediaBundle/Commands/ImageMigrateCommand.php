@@ -24,8 +24,8 @@
 
 namespace Shopware\Bundle\MediaBundle\Commands;
 
-use Doctrine\ORM\ORMException;
 use Shopware\Commands\ShopwareCommand;
+use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -35,7 +35,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @package   Shopware\Components\Console\Commands
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class MediaCleanupCommand extends ShopwareCommand
+class ImageMigrateCommand extends ShopwareCommand
 {
     /**
      * {@inheritdoc}
@@ -43,10 +43,10 @@ class MediaCleanupCommand extends ShopwareCommand
     protected function configure()
     {
         $this
-            ->setName('sw:media:cleanup')
-            ->setHelp("The <info>%command.name%</info> collects unused media and deletes them.")
-            ->setDescription("Collect unused media move them to trash.")
-            ->addOption('delete', false, InputOption::VALUE_NONE, "Delete unused media.");
+            ->setName('sw:media:migrate')
+            ->setDescription('Migrate images to new structure')
+            ->addOption('from', null, InputOption::VALUE_OPTIONAL)
+            ->addOption('to', null, InputOption::VALUE_OPTIONAL);
     }
 
     /**
@@ -54,51 +54,14 @@ class MediaCleanupCommand extends ShopwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $verb = "Moved";
-        $total = $this->handleMove();
+        $from = $input->getOption('from') ?: 'local';
+        $to = $input->getOption('to') ?: 'local';
 
-        if ($input->getOption('delete')) {
-            $verb = "Deleted";
-            $total = $this->handleCleanup();
-        }
+        $filesystemFactory = Shopware()->Container()->get('shopware_media.backend_factory');
+        $fromFileSystem = $filesystemFactory->factory($from);
+        $toFileSystem = $filesystemFactory->factory($to);
 
-        $output->writeln("Cleanup: ".$verb." $total items.");
-    }
-
-
-    /**
-     * Handles cleaning process and returns the number of deleted media objects
-     *
-     * @return int
-     */
-    private function handleCleanup()
-    {
-        $album = Shopware()->Models()->find('Shopware\Models\Media\Album', -13);
-        $mediaList = $album->getMedia();
-        $total = count($mediaList);
-
-        try {
-            foreach ($mediaList as $media) {
-                Shopware()->Models()->remove($media);
-            }
-            Shopware()->Models()->flush();
-        } catch (ORMException $e) {
-            $total = 0;
-        }
-
-        return $total;
-    }
-
-    /**
-     * @return int
-     */
-    private function handleMove()
-    {
-        $gc = $this->getContainer()->get('shopware_media.garbage_collector');
-        $gc->run();
-
-        $total = (int)$gc->getCount();
-
-        return $total;
+        $mediaMigration = Shopware()->Container()->get('shopware_media.media_migration');
+        $mediaMigration->migrate($fromFileSystem, $toFileSystem);
     }
 }

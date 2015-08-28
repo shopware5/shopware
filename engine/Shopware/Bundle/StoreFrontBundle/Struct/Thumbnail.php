@@ -90,7 +90,9 @@ class Thumbnail extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @param $imageDir
+     * @deprecated deprecated since version 5.1, please build the sourceSet in a hydrator or view
+     *
+     * @param string $imageDir
      * @return string
      */
     public function getSourceSet($imageDir)

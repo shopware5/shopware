@@ -90,6 +90,10 @@ class GarbageCollector
         $this->connection->exec($sql);
     }
 
+    /**
+     * @return bool|string
+     * @throws \Doctrine\DBAL\DBALException
+     */
     public function getCount()
     {
         $query = $this->connection->query("SELECT count(*) AS cnt FROM `s_media` WHERE albumID = -13");
