@@ -1,7 +1,9 @@
 module.exports = function (grunt) {
-    grunt.option.init({
-        shopId: 1
-    });
+    if (typeof grunt.option('shopId') == "undefined") {
+        grunt.option.init({
+            shopId: 1
+        });
+    }
 
     var file = '../web/cache/config_' + grunt.option('shopId') + '.json',
         config = grunt.file.readJSON(file),
