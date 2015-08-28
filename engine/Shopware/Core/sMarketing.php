@@ -248,6 +248,7 @@ class sMarketing
 
         $images = array_column($getBanners, 'image');
         $pathNormalizer = Shopware()->Container()->get('shopware_media.path_normalizer');
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
 
         array_walk($images, function(&$image) use ($pathNormalizer) {
             $image = $pathNormalizer->get($image);
@@ -289,6 +290,9 @@ class sMarketing
                 );
                 $getAffectedBanners["link"] = Shopware()->Front()->Router()->assemble($query);
             }
+
+            // @deprecated since 5.1 will be removed in 5.2
+            $getAffectedBanners['img'] = $mediaService->getUrl($getAffectedBanners['img']);
         }
         if ($limit == 1) {
             $getBanners = $getBanners[0];
@@ -304,8 +308,9 @@ class sMarketing
      */
     private function getMediaByPath($media, $path)
     {
+        $pathNormalizer = Shopware()->Container()->get('shopware_media.path_normalizer');
         foreach ($media as $single) {
-            if ($single->getFile() == $path) {
+            if ($pathNormalizer->get($single->getFile()) == $path) {
                 return $single;
             }
         }
