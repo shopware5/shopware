@@ -147,6 +147,10 @@ $app->map('/applyMigrations', function () use ($app, $container) {
     $container->get('controller.batch')->applyMigrations();
 })->via('GET', 'POST')->name('applyMigrations');
 
+$app->map('/synchronizeThemes', function () use ($container) {
+    $container->get('controller.batch')->synchronizeThemes();
+})->via('GET', 'POST')->name('synchronizeThemes');
+
 $app->map('/importSnippets', function () use ($container) {
     $container->get('controller.batch')->importSnippets();
 })->via('GET', 'POST')->name('importSnippets');

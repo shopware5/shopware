@@ -11,6 +11,10 @@
             counterText: shopwareTranslations.counterTextMigrations
         },
         {
+            requestUrl: 'synchronizeThemes',
+            counterText: shopwareTranslations.counterTextThemes
+        },
+        {
             requestUrl: 'importSnippets',
             counterText: shopwareTranslations.counterTextSnippets,
             finalFcnt: function() {
