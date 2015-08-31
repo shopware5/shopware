@@ -50,7 +50,7 @@ class DummyPluginFinder
 
         foreach ($types as $type) {
             foreach (new \DirectoryIterator($pluginPath . '/' . $type) as $dir) {
-                if (!$dir->isDir() || $dir->isDot()) {
+                if (!$dir->isDir() || $dir->isDot() || preg_match('/.AppleDouble/' , $dir )) {
                     continue;
                 }
 
