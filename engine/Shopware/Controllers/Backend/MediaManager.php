@@ -393,8 +393,14 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         }
 
         $data = $builder->getQuery()->getArrayResult();
+        $data = $data[0];
 
-        $this->View()->assign(array('success' => true, 'data' => $data[0]));
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        if ($data['path']) {
+            $data['path'] = $mediaService->getUrl($data['path']);
+        }
+
+        $this->View()->assign(array('success' => true, 'data' => $data));
     }
 
     /**

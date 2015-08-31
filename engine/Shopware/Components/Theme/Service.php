@@ -25,6 +25,7 @@ namespace Shopware\Components\Theme;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\AbstractQuery;
+use Shopware\Bundle\MediaBundle\MediaPathNormalizerInterface;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Shop as Shop;
 use Shopware\Models\Theme\Settings;
@@ -60,18 +61,26 @@ class Service
     private $util;
 
     /**
+     * @var MediaPathNormalizerInterface
+     */
+    private $pathNormalizer;
+
+    /**
      * @param ModelManager $entityManager
      * @param \Shopware_Components_Snippet_Manager $snippets
      * @param Util $util
+     * @param MediaPathNormalizerInterface $pathNormalizer
      */
     public function __construct(
         ModelManager $entityManager,
         \Shopware_Components_Snippet_Manager $snippets,
-        Util $util
+        Util $util,
+        MediaPathNormalizerInterface $pathNormalizer
     ) {
         $this->entityManager = $entityManager;
         $this->snippets = $snippets;
         $this->util = $util;
+        $this->pathNormalizer = $pathNormalizer;
     }
 
     /**
@@ -410,6 +419,10 @@ class Service
                 'Shopware\Models\Shop\Shop',
                 $data['shopId']
             );
+
+            if ($element->getType() === 'theme-media-selection') {
+                $data['value'] = $this->pathNormalizer->get($data['value']);
+            }
 
             $value->setShop($shop);
             $value->setElement($element);

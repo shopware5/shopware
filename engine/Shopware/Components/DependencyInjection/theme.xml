@@ -18,6 +18,7 @@
             <argument type="service" id="models" />
             <argument type="service" id="snippets" />
             <argument type="service" id="theme_util" />
+            <argument type="service" id="shopware_media.path_normalizer" />
         </service>
 
         <service id="theme_config_loader" class="Shopware\Components\Theme\EventListener\ConfigLoader">
@@ -52,6 +53,7 @@
             <argument type="service" id="theme_util" />
             <argument type="service" id="theme_path_resolver" />
             <argument type="service" id="events" />
+            <argument type="service" id="shopware_media.media_service" />
         </service>
 
         <service id="theme_util" class="Shopware\Components\Theme\Util">

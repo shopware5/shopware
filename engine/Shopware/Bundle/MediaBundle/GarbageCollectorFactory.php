@@ -76,6 +76,7 @@ class GarbageCollectorFactory
             new MediaPosition('s_filter_values', 'media_id', 'id'),
             new MediaPosition('s_emotion_element_value', 'value', 'path'),
             new MediaPosition('s_emotion', 'landingpage_teaser', 'path'),
+            new MediaPosition('s_articles_downloads', 'filename', 'path'),
             new MediaPosition('s_articles_supplier', 'img', 'path')
         ]);
     }
