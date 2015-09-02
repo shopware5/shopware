@@ -62,7 +62,14 @@
              *
              * @type {String}
              */
-            'itemHoverClass': 'is--hovered'
+            'itemHoverClass': 'is--hovered',
+
+            /**
+             * Menu open on hover delay in milliseconds
+             *
+             * @type {Number}
+             */
+            'hoverDelay': 0
         },
 
         /**
@@ -200,7 +207,13 @@
 
             $el.addClass(opts.itemHoverClass);
 
-            me.onMouseEnter(event);
+            if (!opts.hoverDelay || me._shouldPrevent) {
+                me.onMouseEnter(event);
+            } else if (!me.hoverDelayTimeoutId) {
+                me.hoverDelayTimeoutId = window.setTimeout(function () {
+                    this.onMouseEnter(event);
+                }.bind(me), opts.hoverDelay);
+            }
         },
 
         /**
@@ -242,6 +255,11 @@
 
             if (pluginEl === target || $.contains(me.$el[0], target) || me._$listItems.has(target).length) {
                 return;
+            }
+
+            if (me.hoverDelayTimeoutId) {
+                window.clearTimeout(me.hoverDelayTimeoutId);
+                delete me.hoverDelayTimeoutId;
             }
 
             me.closeMenu();
