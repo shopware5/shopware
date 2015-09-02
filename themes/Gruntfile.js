@@ -32,6 +32,14 @@ module.exports = function (grunt) {
     }
 
     grunt.initConfig({
+        notify: {
+          watch: {
+            options: {
+              title: 'Task complete',
+               message: 'Less files were compiled'
+            }
+          }
+        },
         uglify: {
             production: {
                 options: {
@@ -74,7 +82,7 @@ module.exports = function (grunt) {
                     '../engine/Shopware/Plugins/**/*.less',
                     '../themes/Frontend/**/*.less'
                 ],
-                tasks: ['less:development']
+                tasks: ['less:development', 'notify:watch]
             },
             js: {
                 files: [
@@ -105,7 +113,8 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-notify');
 
     grunt.registerTask('production', [ 'jshint', 'less:production', 'uglify:production' ]);
-    grunt.registerTask('default', [ 'less:development', 'uglify:development', 'watch' ]);
+    grunt.registerTask('default', [ 'less:development', 'uglify:development', 'watch', 'notify' ]);
 };
