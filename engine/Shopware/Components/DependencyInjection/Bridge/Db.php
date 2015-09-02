@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -43,6 +43,8 @@ class Db
 
         // Reset sql_mode "STRICT_TRANS_TABLES" that will be default in MySQL 5.6
         $db->exec("SET @@session.sql_mode = ''");
+
+        \Zend_Db_Table_Abstract::setDefaultAdapter($db);
 
         return $db;
     }

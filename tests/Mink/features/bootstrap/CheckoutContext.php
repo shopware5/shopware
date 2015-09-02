@@ -1,25 +1,13 @@
 <?php
 
-use Behat\Behat\Context\Step;
+namespace Shopware\Tests\Mink;
+
+use Shopware\Tests\Mink\Page\Emotion\CheckoutCart;
+use Shopware\Tests\Mink\Element\Emotion\CartPosition;
 use Behat\Gherkin\Node\TableNode;
-require_once 'SubContext.php';
 
 class CheckoutContext extends SubContext
 {
-    /**
-     * @Given /^the total sum should be "([^"]*)"$/
-     * @Given /^the total sum should be "([^"]*)" when shipping costs are "([^"]*)"$/
-     * @Given /^the total sum should be "([^"]*)" when shipping costs are "([^"]*)" and VAT is:$/
-     */
-    public function theSumsShouldBe($sum, $shippingCosts = null, TableNode $vat = null)
-    {
-        if(isset($vat)) {
-            $vat = $vat->getHash();
-        }
-
-        $this->getPage('CheckoutCart')->checkSums($sum, $shippingCosts, $vat);
-    }
-
     /**
      * @When /^I add the voucher "(?P<code>[^"]*)" to my basket$/
      */
@@ -49,64 +37,65 @@ class CheckoutContext extends SubContext
      */
     public function iRemoveTheArticleOnPosition($position)
     {
-        $this->getPage('CheckoutCart')->removeArticle($position);
+        /** @var CheckoutCart $page */
+        $page = $this->getPage('CheckoutCart');
+
+        /** @var CartPosition $cartPosition */
+        $cartPosition = $this->getMultipleElement($page, 'CartPosition', $position);
+        $page->removeProduct($cartPosition);
     }
 
     /**
-     * @Given /^I log in as "(?P<email>[^"]*)" with password "(?P<password>[^"]*)" on checkout$/
+     * @Given /^my finished order should look like this:$/
      */
-    public function iLogInAsWithPasswordOnCheckout($email, $password)
+    public function myFinishedOrderShouldLookLikeThis(TableNode $positions)
     {
-        $this->getPage('CheckoutConfirm')->login($email, $password);
+        $orderNumber = $this->getPage('CheckoutConfirm')->getOrderNumber();
+        $values = $positions->getHash();
+
+        /** @var \Shopware\Tests\Mink\Page\Emotion\Account $page */
+        $page = $this->getPage('Account');
+        $language = Helper::getCurrentLanguage($page);
+
+        $page->open();
+        Helper::clickNamedLink($page, 'myOrdersLink', $language);
+
+        /** @var \Shopware\Tests\Mink\Element\Emotion\AccountOrder $order */
+        $order = $this->getMultipleElement($page, 'AccountOrder');
+        $page->checkOrder($order, $orderNumber, $values);
     }
 
     /**
-     * @Then /^I change my billing address on confirm page:$/
+     * @Given /^the aggregations should look like this:$/
      */
-    public function iChangeMyBillingAddressOnConfirmPage(TableNode $fieldValues)
+    public function theAggregationsShouldLookLikeThis(TableNode $aggregations)
     {
-        $values = $fieldValues->getHash();
-
-        $this->getPage('CheckoutConfirm')->changeBilling($values);
+        $aggregations = $aggregations->getHash();
+        $this->getPage('CheckoutCart')->checkAggregation($aggregations);
     }
 
     /**
-     * @Then /^I change my shipping address on confirm page:$/
+     * @When /^I proceed to order confirmation$/
      */
-    public function iChangeMyShippingAddressOnConfirmPage(TableNode $fieldValues)
+    public function iProceedToOrderConfirmation()
     {
-        $values = $fieldValues->getHash();
-
-        $this->getPage('CheckoutConfirm')->changeShipping($values);
+        $this->getPage('CheckoutCart')->proceedToOrderConfirmation();
     }
 
     /**
-     * @When /^I change my payment method to "([^"]*)"$/
+     * @Given /^I proceed to order confirmation with email "([^"]*)" and password "([^"]*)"$/
      */
-    public function iChangeMyPaymentMethodTo($value)
+    public function iProceedToOrderConfirmationWithEmailAndPassword($email, $password)
     {
-        $this->getPage('CheckoutConfirm')->changePayment($value);
+        $this->getPage('CheckoutCart')->proceedToOrderConfirmationWithLogin($email, $password);
     }
 
     /**
-     * @When /^I change my payment method to debit using account of "(?P<name>[^"]*)" \(no\. "(?P<account>\d+)"\) of bank "(?P<bank>[^"]*)" \(code "(?P<code>\d+)"\)$/
+     * @Given /^I proceed to checkout as:$/
      */
-    public function iChangeMyPaymentMethodToDebitUsingAccountOfNoOfBankCode($name, $kto, $bank, $blz)
+    public function iProceedToCheckoutAs(TableNode $table)
     {
-        $data = array('kontonr' => $kto,
-                      'blz' => $blz,
-                      'bank' => $bank,
-                      'bank2' => $name);
-
-        $this->getPage('CheckoutConfirm')->changePayment(2, $data);
-    }
-
-    /**
-     * @When /^I change my delivery to "([^"]*)"$/
-     */
-    public function iChangeMyDeliveryTo($value)
-    {
-        $this->getPage('CheckoutConfirm')->changeDelivery($value);
+        $this->getPage('CheckoutCart')->proceedToOrderConfirmationWithRegistration($table->getHash());
     }
 
     /**
@@ -115,5 +104,45 @@ class CheckoutContext extends SubContext
     public function iProceedToCheckout()
     {
         $this->getPage('CheckoutConfirm')->proceedToCheckout();
+    }
+
+    /**
+     * @When /^I change the shipping method to (?P<shippingId>\d+)$/
+     */
+    public function iChangeTheShippingMethodTo($shipping)
+    {
+        $data = array(
+            array(
+                'field' => 'sDispatch',
+                'value' => $shipping
+            )
+        );
+
+        $this->getPage('CheckoutConfirm')->changeShippingMethod($data);
+    }
+
+    /**
+     * @Given /^the cart contains the following products:$/
+     */
+    public function theCartContainsTheFollowingProducts(TableNode $items)
+    {
+        /** @var CheckoutCart $page */
+        $page = $this->getPage('CheckoutCart');
+        $page->fillCartWithProducts($items->getHash());
+        $page->open();
+        $this->theCartShouldContainTheFollowingProducts($items);
+    }
+
+    /**
+     * @Then /^the cart should contain the following products:$/
+     */
+    public function theCartShouldContainTheFollowingProducts(TableNode $items)
+    {
+        /** @var CheckoutCart $page */
+        $page = $this->getPage('CheckoutCart');
+
+        /** @var CartPosition $cartPositions */
+        $cartPositions = $this->getMultipleElement($page, 'CartPosition');
+        $page->checkCartProducts($cartPositions, $items->getHash());
     }
 }

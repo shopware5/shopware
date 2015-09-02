@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -116,7 +116,7 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
         $sql = "
             SELECT userID as id,
             IF(b.company != '', b.company, CONCAT(b.firstname, ' ', b.lastname)) as name,
-            CONCAT(street, ' ', streetnumber, ' ', zipcode, ' ', city) as description
+            CONCAT(street, ' ', zipcode, ' ', city) as description
             FROM s_user_billingaddress b, s_user u
             WHERE (
                 email LIKE $search

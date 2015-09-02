@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2013 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -261,6 +261,20 @@ class Shopware_Tests_Components_Api_VariantTest extends Shopware_Tests_Component
     }
 
     /**
+     * @depends testCreateShouldBeSuccessful
+     */
+    public function testGetListShouldBeSuccessful()
+    {
+        $result = $this->resource->getList();
+
+        $this->assertArrayHasKey('data', $result);
+        $this->assertArrayHasKey('total', $result);
+
+        $this->assertGreaterThanOrEqual(1, $result['total']);
+        $this->assertGreaterThanOrEqual(1, $result['data']);
+    }
+
+    /**
      * @depends testGetOneShouldBeSuccessful
      * @param $article\Shopware\Models\Article\Article
      */
@@ -508,7 +522,7 @@ class Shopware_Tests_Components_Api_VariantTest extends Shopware_Tests_Component
                 }
             }
 
-            $this->assertCount(6, $media->getThumbnails());
+            $this->assertCount(4, $media->getThumbnails());
             foreach ($media->getThumbnails() as $thumbnail) {
                 $this->assertFileExists(Shopware()->OldPath() . $thumbnail);
             }

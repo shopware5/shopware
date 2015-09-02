@@ -1,13 +1,13 @@
-<?php $app->render('header.php', array('tab' => 'done')) ?>
+<?php $app->render('_header.php', ['tab' => 'done']) ?>
 
-<div id="start">
-    <div class="alert alert-success">
-        <?php echo $language["done_info"];?>
-    </div>
+<h2><?= $language["done_title"];?></h2>
 
-    <div class="alert alert-error">
-        <?php echo $language["done_delete"];?>
-    </div>
+<div class="alert alert-success">
+    <?= $language["done_info"];?>
 </div>
 
-<?php $app->render('footer.php') ?>
+<div class="alert alert-error">
+    <?= $language["done_delete"];?>
+</div>
+
+<?php $app->render('_footer.php') ?>

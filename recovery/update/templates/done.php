@@ -1,14 +1,14 @@
-<?php $app->render('header.php', array('tab' => 'done')) ?>
+<?php $app->render('_header.php', ['tab' => 'done']) ?>
 
-<div id="start">
-    <h4 class="alert alert-success">
-        <?php echo $language["done_info"];?>
-    </h4>
+<h2><?= $language["done_title"];?></h2>
 
-	<p>
-        <a class="big-button" href="<?php echo $app->urlFor('redirect', array('target' => 'frontend')); ?>" ><?php echo $language["done_frontend"];?></a>
-        <a class="big-button" href="<?php echo $app->urlFor('redirect', array('target' => 'backend')); ?>"><?php echo $language["done_backend"];?></a>
-	</p>
+<div class="alert alert-success">
+    <?= $language["done_info"];?>
 </div>
 
-<?php $app->render('footer.php') ?>
+<div class="actions clearfix">
+    <a class="btn btn-primary is--left" href="<?= $app->urlFor('redirect', ['target' => 'frontend']); ?>" ><?= $language["done_frontend"];?></a>
+    <a class="btn btn-primary is--right" href="<?= $app->urlFor('redirect', ['target' => 'backend']); ?>"><?= $language["done_backend"];?></a>
+</div>
+
+<?php $app->render('_footer.php') ?>

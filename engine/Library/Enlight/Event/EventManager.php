@@ -316,7 +316,7 @@ class Enlight_Event_EventManager extends Enlight_Class
      * @param null            $eventArgs
      *
      * @throws Enlight_Event_Exception
-     * @return Enlight_Event_EventArgs|null
+     * @return ArrayCollection|null
      */
     public function collect($event, ArrayCollection $collection, $eventArgs = null)
     {

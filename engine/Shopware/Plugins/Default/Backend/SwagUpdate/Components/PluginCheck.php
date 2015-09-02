@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -24,6 +24,8 @@
 
 namespace ShopwarePlugins\SwagUpdate\Components;
 
+use Doctrine\DBAL\Connection;
+use Shopware\Bundle\PluginInstallerBundle\Context\PluginsByTechnicalNameRequest;
 use Shopware\Components\DependencyInjection\Container;
 
 /**
@@ -31,7 +33,7 @@ use Shopware\Components\DependencyInjection\Container;
  * @package   ShopwarePlugins\SwagUpdate\Components;
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-Class PluginCheck
+class PluginCheck
 {
     /**
      * @var \Shopware\Components\DependencyInjection\Container
@@ -47,20 +49,15 @@ Class PluginCheck
     }
 
     /**
-     * Internal helper function to get the passed shopware version as a numeric value with four positions.
-     *
-     * @param version
-     * @return string
+     * @return null|string
      */
-    private function getNumericShopwareVersion($version)
+    private function getLocale()
     {
-        $paths = explode('.', $version);
-        $paths = array_map('intval', $paths);
-        if (count($paths) === 3) {
-            $paths[] = 0;
+        try {
+            return $this->container->get('Auth')->getIdentity()->locale->getLocale();
+        } catch (\Exception $e) {
+            return null;
         }
-
-        return (int) implode('', $paths);
     }
 
     /**
@@ -71,54 +68,35 @@ Class PluginCheck
      */
     public function checkInstalledPluginsAvailableForNewVersion($version)
     {
-        $version = $this->getNumericShopwareVersion($version);
+        $service = $this->container->get('shopware_plugininstaller.plugin_service_store_production');
+        $installedPlugins = $this->getUserInstalledPlugins();
+        $technicalNames = array_column($installedPlugins, 'name');
+        $locale = $this->getLocale();
 
-        $results = array();
-        $communityStore = $this->getCommunityStore();
+        $request = new PluginsByTechnicalNameRequest($locale, \Shopware::VERSION, $technicalNames);
+        $storePlugins = $service->getPlugins($request);
+
+        $request = new PluginsByTechnicalNameRequest($locale, $version, $technicalNames);
+        $updatesAvailable = $service->getPlugins($request);
+
         try {
-            $plugins = $this->queryInstalledPluginsAvailableForNewVersion($version);
-            if (empty($plugins)) {
-                return array();
-            }
+            $results = [];
+            foreach ($installedPlugins as $plugin) {
+                $key         = strtolower($plugin['name']);
+                $name        = $plugin['label'];
+                $inStore     = array_key_exists($key, $storePlugins);
+                $available   = array_key_exists($key, $updatesAvailable);
+                $updatable   = $available && $plugin['version'] < $updatesAvailable[$key]->getVersion();
+                $description = $this->getPluginStateDescription($inStore, $available);
 
-            // Build array with plugin info and the plugin's name as key
-            $pluginInfos = array();
-            $response = $communityStore->getPluginInfos(array_keys($plugins));
-            foreach ($response as $productModel) {
-                foreach ($productModel->getPluginNames() as $name) {
-                    $pluginInfos[$name] = $productModel;
-                }
-            }
-
-            foreach ($plugins as $name => $available) {
-                $inStore = false;
-                $link    = '';
-                // Check if a links is available
-                if (isset($pluginInfos[$name])) {
-                    $inStore = true;
-                    $productModel = $pluginInfos[$name];
-                    $link = $productModel->getStoreUrl();
-                }
-
-                if ($inStore) {
-                    if ($available) {
-                        $description = $this->getSnippetNamespace()->get('controller/plugin_compatible', 'The author of the plugin marked the plugin as compatible.');
-                    } else {
-                        $description = $this->getSnippetNamespace()->get('controller/plugin_not_compatible', 'The author of the plugin did not mark the plugin as compatible with the shopware version');
-                    }
-                } else {
-                    $description = $this->getSnippetNamespace()->get('controller/plugin_not_in_store', 'The plugin is not available in the store.');
-                }
-
-                $results[] = array(
+                $results[] = [
                     'inStore'    => $inStore,
                     'name'       => $name,
                     'message'    => $description,
-                    'link'       => $link,
-                    'success'    => $available,
+                    'updatable'  => $updatable,
                     'id'         => sprintf('plugin_incompatible-%s', $name),
                     'errorLevel' => ($available) ? Validation::REQUIREMENT_VALID : Validation::REQUIREMENT_WARNING
-                );
+                ];
             }
         } catch (\Exception $e) {
             $results[] = array(
@@ -144,57 +122,24 @@ Class PluginCheck
     }
 
     /**
-     * Queries the communityStore for plugins which have explicitly
-     * been marked as compatible with the checked SW-Version
-     *
-     * @param $version
-     * @return array
-     */
-    private function queryInstalledPluginsAvailableForNewVersion($version)
-    {
-        $plugins = $this->getUserInstalledPlugins();
-
-        if (empty($plugins)) {
-            return array();
-        }
-
-        $communityStore = $this->getCommunityStore();
-        $plugins = $communityStore->getPluginsAvailableFor($plugins, $version);
-
-        return $plugins;
-    }
-
-    /**
-     * @return \ShopwarePlugins\SwagUpdate\Components\CommunityStore
-     */
-    public function getCommunityStore()
-    {
-        $productService = $this->getProductService();
-        $communityStore = new \ShopwarePlugins\SwagUpdate\Components\CommunityStore($productService);
-
-        return $communityStore;
-    }
-
-    /**
      * Returns a list of all plugins installed by the user
      *
      * @return array
      */
     private function getUserInstalledPlugins()
     {
-        $builder = $this->container->get('models')->createQueryBuilder();
-        $builder->select(array('plugin.name'))
-                ->from('Shopware\Models\Plugin\Plugin', 'plugin', 'plugin.name')
-                ->where('plugin.name != :pluginManager')
-                ->andWhere('plugin.source != :source')
-                ->andWhere('plugin.name != :storeApi')
-                ->setParameter('pluginManager', 'PluginManager')
-                ->setParameter('storeApi', 'StoreApi')
-                ->setParameter('source', 'Default');
+        $query = $this->container->get('dbal_connection')->createQueryBuilder();
+        $query->select(['plugin.name', 'plugin.label', 'plugin.version'])
+            ->from('s_core_plugins', 'plugin')
+            ->where('plugin.name NOT IN (:names)')
+            ->andWhere('plugin.source != :source')
+            ->setParameter(':source', 'Default')
+            ->setParameter(':names', ['PluginManager', 'StoreApi'], Connection::PARAM_STR_ARRAY);
 
-        $plugins = array_keys($builder->getQuery()->getArrayResult());
+        /**@var $statement \PDOStatement*/
+        $statement = $query->execute();
 
-        return $plugins;
+        return $statement->fetchAll(\PDO::FETCH_ASSOC);
     }
 
 
@@ -209,21 +154,19 @@ Class PluginCheck
     }
 
     /**
-     * Get and setup ProductService Component
-     *
-     * This method also does the setup like autoloading.
-     *
-     * @return \Shopware_StoreApi_Core_Service_Product
+     * @param bool $inStore
+     * @param bool $available
+     * @return string
      */
-    private function getProductService()
+    private function getPluginStateDescription($inStore, $available)
     {
-        /** @var $communityStore CommunityStore */
-        $communityStore = $this->container->get('CommunityStore');
-
-        $storeApi = $communityStore->getApi();
-
-        $productService = $storeApi->getProductService();
-
-        return $productService;
+        switch (true) {
+            case ($inStore && $available):
+                return $this->getSnippetNamespace()->get('controller/plugin_compatible', 'The author of the plugin marked the plugin as compatible.');
+            case ($inStore && !$available):
+                return $this->getSnippetNamespace()->get('controller/plugin_not_compatible', 'The author of the plugin did not mark the plugin as compatible with the shopware version');
+            default:
+                return $this->getSnippetNamespace()->get('controller/plugin_not_in_store', 'The plugin is not available in the store.');
+        }
     }
 }

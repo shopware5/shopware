@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -22,8 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Models\Mail\Mail,
-    Shopware\Models\Mail\Attachment;
+use Shopware\Models\Mail\Mail;
+use Shopware\Models\Mail\Attachment;
+
 /**
  * Backend Controller for the mail backend module
  */
@@ -246,6 +247,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
 
         $mail = new Mail();
         $params['attribute'] = $params['attribute'][0];
+        $params['dirty'] = 1;
         $mail->fromArray($params);
 
         try {
@@ -261,8 +263,6 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
 
         $this->View()->assign(array('success' => true, 'data' => $data));
     }
-
-
 
     /**
      * Updates mail
@@ -285,6 +285,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
 
         $params = $this->Request()->getParams();
         $params['attribute'] = $params['attribute'][0];
+        $params['dirty'] = 1;
 
         $mail->fromArray($params);
 
@@ -656,7 +657,6 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
 
         $childNodes = array();
         foreach ($attachments as $attachment) {
-
             if ($attachment->getShopId() !== null) {
                 continue;
             }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -377,18 +377,42 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
             $result->getData(),
             array(
                 array(
-                    'datum'             => '2013-06-01',
-                    'totalImpressions'  => 300,
-                    'totalImpressions1' => 300,
-                    'totalVisits'       => 10,
-                    'totalVisits1'      => 10,
+                    'datum'               => '2013-06-01',
+                    'desktopImpressions'  => 300,
+                    'tabletImpressions'   => 0,
+                    'mobileImpressions'   => 0,
+                    'totalImpressions'    => 300,
+                    'desktopVisits'       => 10,
+                    'tabletVisits'        => 0,
+                    'mobileVisits'        => 0,
+                    'totalVisits'         => 10,
+                    'desktopImpressions1' => 300,
+                    'tabletImpressions1'  => 0,
+                    'mobileImpressions1'  => 0,
+                    'totalImpressions1'   => 300,
+                    'desktopVisits1'      => 10,
+                    'tabletVisits1'       => 0,
+                    'mobileVisits1'       => 0,
+                    'totalVisits1'        => 10
                 ),
                 array(
-                    'datum'             => '2013-06-15',
-                    'totalImpressions'  => 500,
-                    'totalImpressions1' => 500,
-                    'totalVisits'       => 20,
-                    'totalVisits1'      => 20
+                    'datum'               => '2013-06-15',
+                    'desktopImpressions'  => 500,
+                    'tabletImpressions'   => 0,
+                    'mobileImpressions'   => 0,
+                    'totalImpressions'    => 500,
+                    'desktopVisits'       => 20,
+                    'tabletVisits'        => 0,
+                    'mobileVisits'        => 0,
+                    'totalVisits'         => 20,
+                    'desktopImpressions1' => 500,
+                    'tabletImpressions1'  => 0,
+                    'mobileImpressions1'  => 0,
+                    'totalImpressions1'   => 500,
+                    'desktopVisits1'      => 20,
+                    'tabletVisits1'       => 0,
+                    'mobileVisits1'       => 0,
+                    'totalVisits1'        => 20
                 )
             )
         );
@@ -518,10 +542,13 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
             $result->getData(),
             array(
                 array(
-                    'articleId'         => $this->articleId,
-                    'articleName'       => 'PHPUNIT ARTICLE',
-                    'totalImpressions'  => 10,
-                    'totalImpressions1' => 10
+                    'articleId'          => $this->articleId,
+                    'articleName'        => 'PHPUNIT ARTICLE',
+                    'totalImpressions'   => 10,
+                    'totalImpressions1'  => 10,
+                    'desktopImpressions' => 10,
+                    'tabletImpressions'  => 0,
+                    'mobileImpressions'  => 0
                 )
             )
         );
@@ -759,7 +786,8 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
                 array(
                     'countRequests' => 1,
                     'searchterm'    => 'phpunit search term',
-                    'countResults'  => 10
+                    'countResults'  => 10,
+                    'shop'          => null
                 )
             )
         );

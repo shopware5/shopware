@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,7 +23,9 @@
  */
 
 namespace Shopware\Models\Blog;
-use Shopware\Components\Model\ModelRepository, Doctrine\ORM\Query;
+
+use Shopware\Components\Model\ModelRepository;
+use Doctrine\ORM\Query;
 
 /**
  *
@@ -76,17 +78,19 @@ class Repository extends ModelRepository
             'media',
             'mappingMedia',
             'tags',
+            'attribute',
             'comments'
         ))
         ->leftJoin('blog.tags', 'tags')
         ->leftJoin('blog.author', 'author')
-        ->leftJoin('blog.media', 'mappingMedia' , \Doctrine\ORM\Query\Expr\Join::WITH, 'mappingMedia.preview = 1')
+        ->leftJoin('blog.media', 'mappingMedia', \Doctrine\ORM\Query\Expr\Join::WITH, 'mappingMedia.preview = 1')
         ->leftJoin('mappingMedia.media', 'media')
+        ->leftJoin('blog.attribute', 'attribute')
         ->leftJoin('blog.comments', 'comments', \Doctrine\ORM\Query\Expr\Join::WITH, 'comments.active = 1')
         ->where('blog.active = 1')
         ->andWhere('blog.displayDate < :now')
         ->setParameter("now", new \DateTime())
-        ->orderBy("blog.displayDate","DESC");
+        ->orderBy("blog.displayDate", "DESC");
 
 
         if (!empty($blogCategoryIds)) {
@@ -119,7 +123,6 @@ class Repository extends ModelRepository
      */
     public function getAverageVoteQueryBuilder($blogId)
     {
-
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array(
             'AVG(comment.points) as avgVote',
@@ -127,7 +130,7 @@ class Repository extends ModelRepository
         ->from('Shopware\Models\Blog\Comment', 'comment')
         ->where("comment.active = 1")
         ->andWhere("comment.blogId = :blogId")
-        ->setParameter("blogId",$blogId);
+        ->setParameter("blogId", $blogId);
 
         return $builder;
     }
@@ -151,14 +154,13 @@ class Repository extends ModelRepository
      */
     public function getTagsByBlogIdBuilder($blogId)
     {
-
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array(
             'tags',
         ))
         ->from('Shopware\Models\Blog\Tag', 'tags')
         ->andWhere("tags.blogId = :blogId")
-        ->setParameter("blogId",$blogId);
+        ->setParameter("blogId", $blogId);
 
         return $builder;
     }
@@ -186,7 +188,7 @@ class Repository extends ModelRepository
     {
         $builder = $this->getFilterQueryBuilder($categoryIds, $filter);
         $builder->select(array(
-            'DATE_FORMAT(blog.displayDate,\'%Y-%m-%d\') as dateFormatDate',
+            'DATE_FORMAT(blog.displayDate,\'%Y-%m\') as dateFormatDate',
             'COUNT(DISTINCT blog.id) as dateCount'
         ));
         $builder->groupBy("dateFormatDate");
@@ -326,7 +328,7 @@ class Repository extends ModelRepository
                 'COUNT(comments) as numberOfComments'
             ))
             ->from($this->getEntityName(), 'blog')
-            ->leftJoin('blog.comments', 'comments' , \Doctrine\ORM\Query\Expr\Join::WITH, 'comments.active != 1')
+            ->leftJoin('blog.comments', 'comments', \Doctrine\ORM\Query\Expr\Join::WITH, 'comments.active != 1')
             ->groupBy("blog.id");
 
         if (!empty($blogCategoryIds)) {

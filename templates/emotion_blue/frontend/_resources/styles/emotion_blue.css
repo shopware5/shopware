@@ -1,19 +1,19 @@
 /**
 	Shopware 4 Template Colors
 	http://shopware.de
-	
+
 	@package		_emotion
 	@subpackage		css
 	@category		design
-	@version		v1 
+	@version		v1
 	@author			sa/Shopware AG <info@shopware.ag>
-	@copyright		Copyright (c) 2012 Shopware AG (http://www.shopware.de)
-	
+	@copyright		Copyright (c) Shopware AG (http://www.shopware.de)
+
 	This stylesheets contains all color hexcodes which are used in
 	the default template.
-	
+
 	MAIN COLORS
-	
+
 	Borders: 		#c7c7c7
 	Backgrounds:	#f5f5f5
 	Highlights: 	#009ee0
@@ -34,10 +34,9 @@ div.ico_new, div.ico_tipp, div.ico_esd {color: #fff;}
 input.text {background: #fff; border-color: #bbb;}
 div#article_details p.red {color:#264409}
 
-#trustedShopsLogo, #paypalLogo, #paypalLogo_noborder {border-color: #dfdfdf;background-color: #f5f5f5;}
-#trustedShopsLogo .inner_container, #paypalLogo .inner_container, #paypalLogo_noborder .inner_container {border-color:#dfdfdf;background: #fff;}
-#trustedShopsLogo p, #paypalLogo p, #paypalLogo_noborder p {color: #777;}
-.trustedshops_form {border-color:#dfdfdf;}
+#paypalLogo, #paypalLogo_noborder {border-color: #dfdfdf;background-color: #f5f5f5;}
+#paypalLogo .inner_container, #paypalLogo_noborder .inner_container {border-color:#dfdfdf;background: #fff;}
+#paypalLogo p, #paypalLogo_noborder p {color: #777;}
 
 /* Lines */
 hr.line {color: #009ee0;background-color: #009ee0; border-color: #009ee0}
@@ -77,7 +76,7 @@ a.link {color:#666}
 #mainNavigation ul li.dropactive:hover ul.dropdown li:hover li:hover a {color: #fff;background-color: #009ee0;}
 #mainNavigation ul li.dropactive:hover ul.dropdown li:hover li:hover li a {color: #009ee0;background-color: #fff;}
 #mainNavigation ul li.dropactive:hover ul.dropdown li:hover li:hover li:hover a {background-color: #009ee0;color:#fff;}
-#mainNavigation ul li.dropactive:hover ul.dropdown li li:hover a {color: #fff;} 
+#mainNavigation ul li.dropactive:hover ul.dropdown li li:hover a {color: #fff;}
 #mainNavigation ul li.dropactive:hover li:hover a {color: #fff;background-color: #009ee0;}
 #mainNavigation li:hover ul.dropdown, #mainNavigation li:hover ul.droplevel {background-color: #000; border: none;}
 #mainNavigation ul li.dropactive:hover ul.droplevel {background-color: #000;border-color: #000;}
@@ -122,7 +121,7 @@ div#breadcrumb .sep {color:#ccc}
 #content #left ul li.active ul.submenu ul, #content #left ul li.active ul.submenu ul.submenu ul.submenu {border-color: #f2f2f2;}
 #content #left ul#servicenav {border-color: #dfdfdf; }
 #content #left ul#servicenav li.heading {color: #636363;border-left-color:#dfdfdf;border-bottom-color:#dfdfdf;}
-#content #left ul#servicenav li a {color:#7f7f7f} 
+#content #left ul#servicenav li a {color:#7f7f7f}
 #content #left ul li.active li.active li .level3 li.active a {color: #009ee0;}
 
 /*	SIDEBAR RIGHT
@@ -150,7 +149,7 @@ div.supplier ul li.image {background-color: #fff;}
 .blogentry .post_metadata span {border-color:#e6e6e6;}
 #center .teaser_small h1, #content .orders h1, #content .downloads h1, #content #ticket h1 {color: #009ee0;}
 #content .cat_text .inner_container, #content .register .supplier_register .inner_container {border-color: #dfdfdf;}
-#content .cat_text h1, #content .custom h1, #content .supplier_register h1 {color: #000;} 
+#content .cat_text h1, #content .custom h1, #content .supplier_register h1 {color: #000;}
 #supplierfilter, .notice {border-color: #009ee0;background-color: #fff;}
 .notice, .notice a {color:#333;}
 
@@ -354,7 +353,7 @@ div.orderdata_box div, #newsletterfrm, #frmRegister {background-color: #f7f7f7;}
 /*	ENTRIES
 	------------------------ */
 #listing-blog .blogbox, #content .blogbox, .contentdetail, .newsletter_entry, .newsletter_detail, .newsletter_detail .newsletter_content {border-color: #dfdfdf;}
-#content .listing_box, #content .listing_box h2.headingbox_nobg {border-color: #dfdfdf;} 
+#content .listing_box, #content .listing_box h2.headingbox_nobg {border-color: #dfdfdf;}
 .listing_box .blogbox p {color: #555;}
 .blogbox h2, .contentlisting_box h2, .contentdetail h2, .newsletter_entry h2, .newsletter_detail h2 {color: #262626;}
 .blogbox .post_metadata {color: #A8A7A7;}
@@ -428,7 +427,7 @@ li.searchresult ul li {border-color:#dfdfdf}
 li.searchresult ul li:hover {background-color:#f3f3f3}
 li.searchresult_supplier {background-color: #f1f1f1;border-bottom-color:#777;}
 li.searchresult_supplier h2 {color: #888}
-li.searchresult_supplier a.resultlink {border-color: #999;background-color: #fff;} 
+li.searchresult_supplier a.resultlink {border-color: #999;background-color: #fff;}
 li.searchresult_supplier a.searchthumb {border-color: #999}
 .searchresult .active {background-color:#e9e9e9;}
 
@@ -475,7 +474,7 @@ div#left div.searchbox h3 {color: #758E00}
 
 /*	SITEMAP
 	------------------------ */
-ul#categories_s li {border-color: #fff;} 
+ul#categories_s li {border-color: #fff;}
 ul#categories_s, ul#categories_s a.active {background-color: #009ee0;}
 ul#categories_s a.active {color: #fff;}
 ul#categories_s ul {border-color: #fff;}
@@ -502,7 +501,7 @@ ul#categories_s ul ul ul a.active {background-color: #fff;color: #000;}
 #content .inner .liveshopping_container .liveshopping_right .live_price_normal .bottom, #content .inner .liveshopping_container .liveshopping_right .live_price_normal .bottom strong {color: #f5f5f5}
 #content .liveshopping_container .liveshopping_middle .quantity .liveprice_container_up div.right, #content .liveshopping_container .liveshopping_middle .quantity .liveprice_container_down div.right,
 #content .liveshopping_container .liveshopping_middle .middle,
-#content .liveshopping_container .liveshopping_middle .middle strong, 
+#content .liveshopping_container .liveshopping_middle .middle strong,
 #content .liveshopping_detail .live_price_normal .bottom .price {color: #fff;}
 .liveshopping_detail .time_bars .time_processbar_container, .liveshopping_container .time_bars .time_processbar_container, .liveshopping_container .time_bars .instock_processbar_container, .liveshopping_detail .time_bars .instock_processbar_container {border-color: #ccc;}
 .liveshopping_detail .time_bars .time_processbar_container div, .liveshopping_container .time_bars .time_processbar_container div, .liveshopping_container .time_bars .instock_processbar_container div, .liveshopping_detail .instock_processbar_container div {background-color: #fff}
@@ -534,10 +533,10 @@ ul#categories_s ul ul ul a.active {background-color: #fff;color: #000;}
 #mainNavigation,
 .listing_actions a.on, .listing_actions.bottom a.on {border-color: #005376;}
 
-.artbox .actions a.more, 
-div#notes .table_row .action a.basket, 
-.blogbox a.more_info:hover, 
-.content_listing a.more_info:hover, 
+.artbox .actions a.more,
+div#notes .table_row .action a.basket,
+.blogbox a.more_info:hover,
+.content_listing a.more_info:hover,
 .bt_allsupplier:hover,
 #buybox #basketButton {text-shadow: 0 1px 1px #005376;}
 
@@ -611,7 +610,7 @@ div#searchresults ul.searchresult li.active a h3,
 #content .headingbox_dark,
 .ajaxSlider .slide_navigation a.active,
 #content .topseller-slider .article_box:hover a.title,
-#content .ajaxSlider .article_box .title:hover, 
+#content .ajaxSlider .article_box .title:hover,
 .modal .ajaxSlider .article_box .title:hover,
 #basket .cart .table_row .box .box_cart_info,
 #basket .cart .shipping h2,
@@ -619,12 +618,12 @@ div#searchresults ul.searchresult li.active a h3,
 #supplierfilter, .notice,
 #supplierfilter_top a.close:hover,
 #supplierfilter_top .supplier-desc a,
-#center .teaser_small h1, 
-#content .orders h1, 
-#content .register h1, 
-#content .downloads h1, 
-#content #ticket h1, 
-#content .cat_text h1, 
+#center .teaser_small h1,
+#content .orders h1,
+#content .register h1,
+#content .downloads h1,
+#content #ticket h1,
+#content .cat_text h1,
 #content .supplier_register h1,
 #content #right_account h2,
 #right_account .adminbox li a:hover,
@@ -648,7 +647,7 @@ a:hover,
 	color: #009ee0;
 }
 
-.menu_top .article_overview a 
+.menu_top .article_overview a
 .my_options .service span:hover,
 #shopnavi .ajax_basket_container:hover,
 #shopnavi .ajax_basket_container.active .ajax_basket,
@@ -661,7 +660,7 @@ a:hover,
 #buybox a,
 #buybox .modal_open a:hover,
 #detail #detail_menu li a:hover, #detail #detail_menu li a:hover span,
-#content .ajaxSlider .article_box .title:hover, 
+#content .ajaxSlider .article_box .title:hover,
 .modal .ajaxSlider .article_box .title:hover,
 .table .table_premium .body .article .name a:hover,
 .my_options a:hover span,
@@ -699,15 +698,15 @@ div#searchcontainer .inner_searchcontainer form#searchform.active input#searchfi
 
 .button-right {background-image: url(../images/buttons/button_right-large.png);}
 
-#basketButton, 
-.button_tablefoot, 
-#registerbutton, 
+#basketButton,
+.button_tablefoot,
+#registerbutton,
 #buybox #basketButton {background-image: url(../images/buttons/bg_basketbutton.png);}
 
-.artbox .actions a.more, 
-div#notes .table_row .action a.basket, 
-.blogbox a.more_info:hover, 
-.content_listing a.more_info:hover, 
+.artbox .actions a.more,
+div#notes .table_row .action a.basket,
+.blogbox a.more_info:hover,
+.content_listing a.more_info:hover,
 .bt_allsupplier:hover,
 .small_right {background-image: url(../images/buttons/button_right-small.png);}
 
@@ -745,14 +744,14 @@ a.link:hover,
 .article_back a {background-image: url(../images/icons/ico_listing-prev-active.png);}
 
 .ctl_checkout .modal .close,
-div.ajax_login_form .heading .modal_close, 
-.modal .heading .modal_close, 
-.ajax_compare_container .heading .modal_close, 
-.ajax_compare_max_container .heading .modalClose, 
+div.ajax_login_form .heading .modal_close,
+.modal .heading .modal_close,
+.ajax_compare_container .heading .modal_close,
+.ajax_compare_max_container .heading .modalClose,
 .ajax_modal_custom .heading .modalClose {background-image: url(../images/icons/ico_modal-close.png);}
 
 #content #left .filter_search .searchbox li a:hover,
-.fuzzy .category_filter .categories ul li:hover, 
+.fuzzy .category_filter .categories ul li:hover,
 .fuzzy .category_filter .active:hover,
 #content #left .filter_properties .supplier_filter ul li.active {background-image: url(../images/icons/ico_search_active.png);}
 
@@ -761,4 +760,9 @@ div#notes .table_row a.zoom_picture {background-image: url(../images/icons/ico_z
 #shopnavi .quantity {background-image: url(../images/quantity_bg.png);}
 
 .listing_actions .list-settings .table-view, .listing_actions .list-settings .list-view {background-image: url(../images/icons/ico_view.png);}
-.small {background: url(../../../../_default/frontend/_resources/images/buttons/button_middle-small.png) repeat-x center center;}
+.small {background: url(../../../../_emotion/frontend/_resources/images/buttons/button_middle-small.png) repeat-x center center;}
+
+#buybox .configurator--variant .option--input:checked ~ label {
+    color: #009ee0;
+    border-color: #009ee0;
+}

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2013 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -59,8 +59,7 @@ class Shopware_Tests_Components_Api_PropertyGroupTest extends Shopware_Tests_Com
             "name" => "Eigenschaft1",
             'position' => 1,
             'comparable' => 1,
-            'sortmode' => 2
-
+            'sortmode' => 0
         );
 
         $group = $this->resource->create($testData);

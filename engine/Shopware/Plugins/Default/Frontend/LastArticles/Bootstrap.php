@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -127,13 +127,6 @@ class Shopware_Plugins_Frontend_LastArticles_Bootstrap extends Shopware_Componen
         }
 
         $config = $this->Config();
-
-        if ($request->getControllerName() == 'detail'
-            && !Shopware()->Session()->Bot
-            && Shopware()->Shop()->getTemplate()->getVersion() == 1
-        ) {
-            $this->setLastArticleById($view->sArticle["articleID"]);
-        }
 
         if (rand(0, 100) === 0) {
             $time = $config->time > 0 ? (int) $config->time : 15;

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -103,5 +103,4 @@ class Shopware_Controllers_Api_Rest extends Enlight_Controller_Action
 
         $this->View()->assign(array('success' => true, 'data' => $result));
     }
-
 }

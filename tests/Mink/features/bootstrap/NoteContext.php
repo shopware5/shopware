@@ -1,26 +1,21 @@
 <?php
 
-use Behat\Behat\Context\Step;
+namespace Shopware\Tests\Mink;
+
+use Shopware\Tests\Mink\Page\Emotion\Note;
+
+use Shopware\Tests\Mink\Element\Emotion\NotePosition;
 use Behat\Gherkin\Node\TableNode;
-require_once 'SubContext.php';
 
 class NoteContext extends SubContext
 {
     /**
-     * @Given /^I am on my note$/
-     * @When /^I go to my note$/
-     */
-    public function iAmOnMyNote()
-    {
-        $this->getPage('Note')->open();
-    }
-
-    /**
+     * @When /^I remove the article from my note$/
      * @When /^I remove the article on position (?P<num>\d+) of my note$/
      */
-    public function iRemoveTheArticleOnPositionOfMyNote($position)
+    public function iRemoveTheArticleOnPositionOfMyNote($position = 1)
     {
-        $this->getPage('Note')->removeArticle($position);
+        $this->clickActionLink($position, 'remove');
     }
 
     /**
@@ -28,7 +23,7 @@ class NoteContext extends SubContext
      */
     public function iPutTheArticleOnPositionOfMyNoteInTheBasket($position)
     {
-        $this->getPage('Note')->buyArticle($position);
+        $this->clickActionLink($position, 'order');
     }
 
     /**
@@ -36,7 +31,7 @@ class NoteContext extends SubContext
      */
     public function iCompareTheArticleOnPositionOfMyNote($position)
     {
-        $this->getPage('Note')->compareArticle($position);
+        $this->clickActionLink($position, 'compare');
     }
 
     /**
@@ -44,25 +39,43 @@ class NoteContext extends SubContext
      */
     public function iVisitTheDetailPageOfTheArticleOnPositionOfMyNote($position)
     {
-        $this->getPage('Note')->visitArticleDetails($position);
+        $this->clickActionLink($position, 'details');
+    }
+
+    private function clickActionLink($position, $name)
+    {
+        /** @var Note $page */
+        $page = $this->getPage('Note');
+        $language = Helper::getCurrentLanguage($page);
+
+        /** @var NotePosition $notePosition */
+        $notePosition = $this->getMultipleElement($page, 'NotePosition', $position);
+        Helper::clickNamedLink($notePosition, $name, $language);
     }
 
     /**
-     * @Then /^My note should look like this:$/
+     * @Given /^the note contains the following products:$/
      */
-    public function myNoteShouldLookLikeThis(TableNode $articles)
+    public function theNoteContainsTheFollowingProducts(TableNode $items)
     {
-        $articles = $articles->getHash();
-
-        $this->getPage('Note')->checkList($articles);
+        /** @var Note $page */
+        $page = $this->getPage('Note');
+        $page->open();
+        $page->fillNoteWithProducts($items->getHash());
+        $this->theNoteShouldContainTheFollowingProducts($items);
     }
 
     /**
-     * @Then /^My note should be empty$/
-     * @Then /^My note should contain (?P<num>\d+) articles$/
+     * @Then /^the note should contain the following products:$/
      */
-    public function myNoteShouldBeEmpty($count = 0)
+    public function theNoteShouldContainTheFollowingProducts(TableNode $items)
     {
-        $this->getPage('Note')->countArticles($count);
+        /** @var Note $page */
+        $page = $this->getPage('Note');
+
+        /** @var NotePosition $cartPosition */
+        $notePositions = $this->getMultipleElement($page, 'NotePosition');
+
+        $page->checkNoteProducts($notePositions, $items->getHash());
     }
 }

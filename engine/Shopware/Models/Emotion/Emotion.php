@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,8 +23,9 @@
  */
 
 namespace   Shopware\Models\Emotion;
-use         Shopware\Components\Model\ModelEntity,
-            Doctrine\ORM\Mapping AS ORM;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  *
@@ -71,6 +72,13 @@ class Emotion extends ModelEntity
     private $id;
 
     /**
+     * @var integer $id
+     *
+     * @ORM\Column(name="parent_id", type="integer", nullable=true)
+     */
+    private $parentId = null;
+
+    /**
      * Is this emotion active
      *
      * @var integer $active
@@ -106,6 +114,27 @@ class Emotion extends ModelEntity
     private $containerWidth;
 
     /**
+     * @var integer $position
+     *
+     * @ORM\Column(name="position", type="integer", nullable=false)
+     */
+    private $position = 1;
+
+    /**
+     * @var integer $device
+     *
+     * @ORM\Column(name="device", type="string", length=255, nullable=true)
+     */
+    private $device;
+
+    /**
+     * @var integer $fullscreen
+     *
+     * @ORM\Column(name="fullscreen", type="integer", nullable=false)
+     */
+    private $fullscreen;
+
+    /**
      * With the $validFrom and $validTo property you can define
      * a date range in which the emotion will be displayed.
      *
@@ -122,13 +151,12 @@ class Emotion extends ModelEntity
      */
     private $isLandingPage;
 
-
     /**
-    * @var integer $landingPageBlock
-    *
-    * @ORM\Column(name="landingpage_block", type="string", length=255, nullable=false)
-    */
-   private $landingPageBlock;
+     * @var integer $landingPageBlock
+     *
+     * @ORM\Column(name="landingpage_block", type="string", length=255, nullable=false)
+     */
+    private $landingPageBlock;
 
     /**
      * @var string $landingPageTeaser
@@ -178,6 +206,12 @@ class Emotion extends ModelEntity
      * @ORM\Column(name="modified", type="datetime", nullable=false)
      */
     private $modified;
+
+    /**
+     * @var int
+     * @ORM\Column(name="rows", type="integer", nullable=false)
+     */
+    private $rows;
 
     /**
      * Contains the assigned \Shopware\Models\Category\Category
@@ -256,6 +290,15 @@ class Emotion extends ModelEntity
      * @ORM\JoinColumn(name="template_id", referencedColumnName="id")
      */
     protected $template;
+
+    /**
+     * Contains the responsive mode of the emotion.
+     *
+     * @var string $mode
+     *
+     * @ORM\Column(name="mode", type="string", length=255, nullable=false)
+     */
+    private $mode;
 
     /**
      * Class constructor.
@@ -630,5 +673,137 @@ class Emotion extends ModelEntity
     public function setTemplate($template)
     {
         $this->template = $template;
+    }
+
+    /**
+     * @param int $device
+     */
+    public function setDevice($device)
+    {
+        $this->device = $device;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDevice()
+    {
+        return $this->device;
+    }
+
+    /**
+     * @param int $fullscreen
+     */
+    public function setFullscreen($fullscreen)
+    {
+        $this->fullscreen = $fullscreen;
+    }
+
+    /**
+     * @return int
+     */
+    public function getFullscreen()
+    {
+        return $this->fullscreen;
+    }
+
+    /**
+     * @param $rows
+     */
+    public function setRows($rows)
+    {
+        $this->rows = $rows;
+    }
+
+    /**
+     * @return int
+     */
+    public function getRows()
+    {
+        return $this->rows;
+    }
+
+    public function __clone()
+    {
+        $this->id = null;
+
+        $categories = array();
+        foreach ($this->getCategories() as $category) {
+            $categories[] = $category;
+        }
+
+        $elements = array();
+        /**@var $element Element*/
+        foreach ($this->getElements() as $element) {
+            $newElement = clone $element;
+            $newElement->setEmotion($this);
+
+            if ($newElement->getData()) {
+                /**@var $data Data*/
+                foreach ($newElement->getData() as $data) {
+                    $data->setEmotion($this);
+                }
+            }
+
+            $elements[] = $newElement;
+        }
+
+        if ($attribute = $this->getAttribute()) {
+            /** @var Shopware\Models\Attribute\Emotion $newAttribute */
+            $newAttribute = clone $attribute;
+            $newAttribute->setEmotion($this);
+            $this->attribute = $newAttribute;
+        }
+
+        $this->elements = $elements;
+        $this->categories = $categories;
+    }
+
+    /*
+     * @param string $responsiveMode
+     */
+    public function setMode($mode)
+    {
+        $this->mode = $mode;
+    }
+
+    /*
+     * @return string
+     */
+    public function getMode()
+    {
+        return $this->mode;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPosition()
+    {
+        return $this->position;
+    }
+
+    /**
+     * @param int $position
+     */
+    public function setPosition($position)
+    {
+        $this->position = $position;
+    }
+
+    /**
+     * @return int
+     */
+    public function getParentId()
+    {
+        return $this->parentId;
+    }
+
+    /**
+     * @param int $parentId
+     */
+    public function setParentId($parentId)
+    {
+        $this->parentId = $parentId;
     }
 }

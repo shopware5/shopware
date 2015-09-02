@@ -1,7 +1,7 @@
 <?php
 class Migrations_Migration305 Extends Shopware\Components\Migrations\AbstractMigration
 {
-    public function up()
+    public function up($modus)
     {
         $sql = <<<'EOD'
             ALTER TABLE  `s_export` ADD  `cache_refreshed` DATETIME NULL DEFAULT NULL ;

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -167,6 +167,16 @@ class Shopware_Plugins_Core_ErrorHandler_Bootstrap extends Shopware_Components_P
      */
     public function errorHandler($errno, $errstr, $errfile, $errline, $errcontext)
     {
+        // Ignore suppressed errors/warnings
+        if (error_reporting() === 0) {
+            return;
+        }
+
+        // Ignore access to not initialized variables in smarty templates
+        if ($errno === E_NOTICE && stripos($errfile, '/cache/') !== false && stripos($errfile, '/templates/') !== false) {
+            return;
+        }
+
         if ($this->_errorLog) {
             $hash_id = md5($errno . $errstr . $errfile . $errline);
             if (!isset($this->_errorList[$hash_id])) {

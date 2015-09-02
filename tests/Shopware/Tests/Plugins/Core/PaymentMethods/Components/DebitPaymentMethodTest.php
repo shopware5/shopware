@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -143,7 +143,7 @@ class Shopware_Tests_Plugins_Core_PaymentMethods_DebitPaymentMethod extends Enli
         $this->assertNull($paymentInstance->getIban());
         $this->assertEquals($addressData['firstName'], $paymentInstance->getFirstName());
         $this->assertEquals($addressData['lastName'], $paymentInstance->getLastName());
-        $this->assertEquals($addressData['street'] . ' ' . $addressData['streetNumber'], $paymentInstance->getAddress());
+        $this->assertEquals($addressData['street'], $paymentInstance->getAddress());
         $this->assertEquals($addressData['zipCode'], $paymentInstance->getZipCode());
         $this->assertEquals($addressData['city'], $paymentInstance->getCity());
         $this->assertNotNull($paymentInstance->getAmount());

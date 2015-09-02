@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -179,12 +179,6 @@ class Plugin extends ModelEntity
     private $capabilityEnable = true;
 
     /**
-     * @var boolean $capabilityDummy
-     * @ORM\Column(name="capability_dummy", type="boolean")
-     */
-    private $capabilityDummy = false;
-
-    /**
      * INVERSE SIDE
      * @var \Shopware\Models\Config\Form[]|ArrayCollection $configForms
      * @ORM\OneToMany(targetEntity="\Shopware\Models\Config\Form", mappedBy="plugin", cascade={"all"})
@@ -244,6 +238,12 @@ class Plugin extends ModelEntity
     protected $emotionComponents;
 
     /**
+     * @var boolean $capabilitySecureUninstall
+     * @ORM\Column(name="capability_secure_uninstall", type="boolean")
+     */
+    private $capabilitySecureUninstall = false;
+
+    /**
      * Class constructor.
      */
     public function __construct()
@@ -256,22 +256,6 @@ class Plugin extends ModelEntity
         $this->templates = new ArrayCollection();
         $this->licenses = new ArrayCollection();
         $this->widgets = new ArrayCollection();
-    }
-
-    /**
-     * @return bool
-     */
-    public function isDummy()
-    {
-        return (bool)$this->capabilityDummy;
-    }
-
-    /**
-     * Disables dummy capability
-     */
-    public function disableDummy()
-    {
-        $this->capabilityDummy = false;
     }
 
     /**
@@ -680,5 +664,37 @@ class Plugin extends ModelEntity
     public function setWidgets($widgets)
     {
         $this->widgets = $widgets;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function hasCapabilitySecureUninstall()
+    {
+        return $this->capabilitySecureUninstall;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function hasCapabilityEnable()
+    {
+        return $this->capabilityEnable;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function hasCapabilityInstall()
+    {
+        return $this->capabilityInstall;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function hasCapabilityUpdate()
+    {
+        return $this->capabilityUpdate;
     }
 }

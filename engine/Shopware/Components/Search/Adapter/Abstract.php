@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,9 +23,10 @@
  */
 
 /**
+ * @deprecated Use \Shopware\Bundle\SearchBundle\ProductNumberSearch, will be removed in SW 5.1
  */
 abstract class Shopware_Components_Search_Adapter_Abstract
 {
-    abstract public function search ($term,array $config);
+    abstract public function search($term, array $config);
     abstract public function getResult();
 }

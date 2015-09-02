@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -28,6 +28,10 @@ use Slim\Http\Request;
 
 class Utils
 {
+    /**
+     * @param  string $file
+     * @return bool
+     */
     public static function check($file)
     {
         if (file_exists($file)) {
@@ -48,7 +52,7 @@ class Utils
      */
     public static function getPaths($xmlPath)
     {
-        $paths = array();
+        $paths = [];
         $xml = simplexml_load_file($xmlPath);
 
         foreach ($xml->files->file as $entry) {
@@ -66,14 +70,14 @@ class Utils
      */
     public static function checkPaths($paths, $basePath)
     {
-        $results = array();
+        $results = [];
         foreach ($paths as $path) {
             $name   = $basePath . '/' . $path;
             $result = file_exists($name) && is_readable($name) && is_writeable($name);
-            $results[] = array(
+            $results[] = [
                 'name'   => $path,
                 'result' => $result,
-            );
+            ];
         }
 
         return $results;
@@ -145,13 +149,13 @@ class Utils
     }
 
     /**
-     * @param \Slim\Http\Request $request
-     * @param string $lang
+     * @param  \Slim\Http\Request $request
+     * @param  string             $lang
      * @return string
      */
     public static function getLanguage(Request $request, $lang = null)
     {
-        $allowedLanguages = array("de", "en");
+        $allowedLanguages = ["de", "en"];
         $selectedLanguage = "de";
 
         if ($lang && in_array($lang, $allowedLanguages)) {
@@ -188,10 +192,6 @@ class Utils
     {
         if (file_exists($shopPath . '/config.php')) {
             $config = require $shopPath . '/config.php';
-        } elseif (file_exists($shopPath . '/config.update.php')) {
-            $config = require $shopPath . '/config.update.php';
-        } elseif (file_exists($shopPath . '/engine/Shopware/Configs/Custom.php')) {
-            $config = require $shopPath . '/engine/Shopware/Configs/Custom.php';
         } else {
             die('Could not find shopware config');
         }
@@ -201,7 +201,7 @@ class Utils
             $dbConfig['host'] = 'localhost';
         }
 
-        $dsn = array();
+        $dsn = [];
         $dsn[] = 'host=' . $dbConfig['host'];
         $dsn[] = 'dbname=' . $dbConfig['dbname'];
 
@@ -219,7 +219,7 @@ class Utils
                 $dsn,
                 $dbConfig['username'],
                 $dbConfig['password'],
-                array(\PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'UTF8'")
+                [\PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'UTF8'"]
             );
             $conn->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
             $conn->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC);
@@ -228,7 +228,32 @@ class Utils
             exit(1);
         }
 
+        self::setNonStrictSQLMode($conn);
+        self::checkSQLMode($conn);
+
         return $conn;
+    }
+
+    /**
+     * @param $conn
+     */
+    protected static function setNonStrictSQLMode(\PDO $conn)
+    {
+        $conn->exec("SET @@session.sql_mode = ''");
+    }
+
+    /**
+     * @param  \PDO              $conn
+     * @throws \RuntimeException
+     */
+    private static function checkSQLMode(\PDO $conn)
+    {
+        $sql = "SELECT @@SESSION.sql_mode;";
+        $result = $conn->query($sql)->fetchColumn(0);
+
+        if (strpos($result, 'STRICT_TRANS_TABLES') !== false || strpos($result, 'STRICT_ALL_TABLES') !== false) {
+            throw new \RuntimeException("Database error!: The MySQL strict mode is active ($result). Please consult your hosting provider to solve this problem.");
+        }
     }
 
     /**
@@ -238,7 +263,7 @@ class Utils
      */
     public static function cleanPath($dir)
     {
-        $errorFiles = array();
+        $errorFiles = [];
 
         if (is_file($dir)) {
             try {

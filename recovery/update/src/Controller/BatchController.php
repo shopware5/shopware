@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -28,6 +28,7 @@ use Gaufrette\Filesystem;
 
 use Shopware\Components\Migrations\Manager;
 
+use Shopware\Recovery\Common\Utils;
 use Shopware\Recovery\Update\Steps\ResultMapper;
 use Shopware\Recovery\Update\DependencyInjection\Container;
 use Shopware\Recovery\Update\PathBuilder;
@@ -36,7 +37,7 @@ use Shopware\Recovery\Update\Steps\FinishResult;
 use Shopware\Recovery\Update\Steps\MigrationStep;
 use Shopware\Recovery\Update\Steps\SnippetStep;
 use Shopware\Recovery\Update\Steps\UnpackStep;
-
+use Shopware\Recovery\Update\Steps\ValidResult;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -115,6 +116,7 @@ class BatchController
     {
         // Manual updates do not contain files to overwrite
         if (UPDATE_IS_MANUAL) {
+            Utils::clearOpcodeCache();
             $this->toJson(200, $this->resultMapper->toExtJs(new FinishResult(0, 0)));
             return;
         }
@@ -139,6 +141,10 @@ class BatchController
         $step = new UnpackStep($localFilesytem, $remoteFilesystem, $pathBuilder, $debug);
 
         $result = $step->run($offset, $total);
+
+        if ($result instanceof ValidResult) {
+            Utils::clearOpcodeCache();
+        }
 
         $this->toJson(200, $this->resultMapper->toExtJs($result));
     }

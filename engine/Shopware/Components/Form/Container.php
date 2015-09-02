@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -26,6 +26,7 @@ namespace Shopware\Components\Form;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Components\Form\Interfaces\Container as ContainerInterface;
+use Shopware\Components\Form\Interfaces\Element;
 
 /**
  * Class Container
@@ -63,11 +64,10 @@ class Container extends Base implements ContainerInterface
         return $this->attributes;
     }
 
-
     /**
      * Initials the elements collection.
      */
-    function __construct()
+    public function __construct()
     {
         $this->elements = new ArrayCollection();
     }
@@ -90,9 +90,11 @@ class Container extends Base implements ContainerInterface
 
     /**
      * @param $element
+     * @return $this
      */
-    public function addElement(Base $element)
+    public function addElement(Element $element)
     {
         $this->elements->add($element);
+        return $this;
     }
 }

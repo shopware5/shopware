@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -74,108 +74,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->systemModule = Shopware()->System();
         $this->systemModule->sCurrency = Shopware()->Db()->fetchRow('SELECT * FROM s_core_currencies WHERE currency LIKE "EUR"');
         $this->systemModule->sSESSION_ID = null;
-        $this->systemModule->sLanguage = 1;
         $this->session->offsetSet('sessionId', null);
-    }
-
-    /**
-     * @covers sAdmin::sValidateVat
-     */
-    public function testsValidateVat()
-    {
-        // Test that null sVATCHECKENDABLED causes empty array return
-        $this->config->offsetSet('sVATCHECKENDABLED', null);
-        $this->assertEmpty($this->module->sValidateVat());
-        $this->config->offsetSet('sVATCHECKENDABLED', true);
-
-        // Test that null sVATCHECKREQUIRED causes empty array return
-        $this->config->offsetSet('sVATCHECKREQUIRED', false);
-        $this->assertEmpty($this->module->sValidateVat());
-        $this->config->offsetSet('sVATCHECKREQUIRED', true);
-
-        // Test that no tax id returns matching error
-        $result = $this->module->sValidateVat();
-        $this->assertCount(1, $result);
-        $this->assertContains(
-            $this->snippetManager->getNamespace('frontend/account/internalMessages')
-                ->get('VatFailureEmpty', 'Please enter a vat id')
-            , $result
-        );
-
-        // Test that wrong tax id returns matching error
-        $this->front->Request()->setPost('ustid', -1);
-        $result = $this->module->sValidateVat();
-        $this->assertCount(1, $result);
-        $this->assertContains(
-            $this->snippetManager->getNamespace('frontend/account/internalMessages')
-                ->get('VatFailureInvalid', 'The vat id entered is invalid')
-            , $result
-        );
-
-        // Test that no country id returns matching error
-        $this->front->Request()->setPost('ustid', 'DE123456789');
-        $result = $this->module->sValidateVat();
-        $this->assertCount(1, $result);
-        $this->assertContains(
-            sprintf($this->snippetManager->getNamespace('frontend/account/internalMessages')
-                    ->get(
-                        'VatFailureErrorField',
-                        'The field %s does not match to the vat id entered'
-                    ),
-                'Land'
-            ),
-            $result
-        );
-
-        // Test basic validation is ok
-        $this->front->Request()->setPost('country', '2');
-        $this->assertCount(0, $this->module->sValidateVat());
-
-        // Test that non-matching VAT prefix and country id returns error
-        $this->front->Request()->setPost('country', '18');
-        $result = $this->module->sValidateVat();
-        $this->assertCount(1, $result);
-        $this->assertContains(
-            sprintf($this->snippetManager->getNamespace('frontend/account/internalMessages')
-                    ->get(
-                        'VatFailureErrorField',
-                        'The field %s does not match to the vat id entered'
-                    ),
-                'Land'
-            ),
-            $result
-        );
-    }
-
-    /**
-     * @group knownFailing
-     * @covers sAdmin::sValidateVat
-     * @ticket SW-8169
-     */
-    public function testsValidateVatWithGermanVatId()
-    {
-        // Posted number is fake
-        // Validation should fail
-        $this->front->Request()->setPost('country', '2');
-        $this->front->Request()->setPost('ustid', 'DE123456789');
-        $this->config->offsetSet('sVATCHECKADVANCEDNUMBER', 'DE813028812');
-        $this->assertCount(1, $this->module->sValidateVat());
-    }
-
-    /**
-     * @group knownFailing
-     * @covers sAdmin::sValidateVat
-     * @ticket SW-8168
-     */
-    public function testsValidateVatWithForeignShopVatId()
-    {
-        // Both vat numbers are valid
-        // http://services.amazon.de/service/nutzungsbedingungen.html
-        // Validation should return true
-        $this->front->Request()->setPost('country', '18');
-        $this->front->Request()->setPost('ustid', 'LU19647148');
-        $this->config->offsetSet('sVATCHECKADVANCEDNUMBER', 'LU20260743');
-        $this->assertCount(0, $this->module->sValidateVat());
     }
 
     /**
@@ -184,7 +83,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
     public function testsGetPaymentMeanById()
     {
         // Fetching non-existing payment means returns null
-        $this->assertNull($this->module->sGetPaymentMeanById(0));
+        $this->assertEmpty($this->module->sGetPaymentMeanById(0));
 
         // Fetching existing inactive payment means returns the data array
         $sepaData = $this->module->sGetPaymentMeanById(6);
@@ -256,7 +155,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             $this->assertArrayHasKey('surchargestring', $paymentMean);
             $this->assertArrayHasKey('active', $paymentMean);
             $this->assertArrayHasKey('esdactive', $paymentMean);
-            $this->assertContains($paymentMean['id'], array(2, 3, 5));
+            $this->assertContains($paymentMean['id'], array(3, 5, 6));
         }
     }
 
@@ -277,7 +176,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
 
                 $validationResult = $paymentClass->validate(Shopware()->Front()->Request());
                 $this->assertTrue(is_array($validationResult));
-                if(count($validationResult)) {
+                if (count($validationResult)) {
                     $this->assertArrayHasKey('sErrorFlag', $validationResult);
                     $this->assertArrayHasKey('sErrorMessages', $validationResult);
                 }
@@ -311,7 +210,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $result['checkPayment']);
         $this->assertCount(2, $result['checkPayment']);
         $this->assertInternalType('array', $result['paymentData']);
-        $this->assertCount(19, $result['paymentData']);
+        $this->assertCount(20, $result['paymentData']);
         $this->assertInternalType('boolean', $result['sProcessed']);
         $this->assertTrue($result['sProcessed']);
         $this->assertInternalType('object', $result['sPaymentObject']);
@@ -333,7 +232,6 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             'firstname' => 'TestFirstName',
             'lastname' => 'TestLastName',
             'street' => 'TestStreet',
-            'streetnumber' => 'TestStreetNumber',
             'zipcode' => 'TestZip',
             'city' => 'TestCity',
             'phone' => 'TestPhone',
@@ -460,19 +358,17 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('hash', $shippingDetails);
         $this->assertArrayHasKey('hash', $billingDetails);
 
-        $this->assertEquals($shippingDetails, $this->module->sGetPreviousAddresses('shipping', $shippingDetails['hash']));
-        $this->assertEquals($billingDetails, $this->module->sGetPreviousAddresses('billing', $billingDetails['hash']));
+        $shippingDetailsWithHash = $this->module->sGetPreviousAddresses('shipping', $shippingDetails['hash']);
+        $billingDetailsWithHash = $this->module->sGetPreviousAddresses('billing', $billingDetails['hash']);
 
-        foreach(array($shippingDetails, $billingDetails) as $details) {
+        foreach (array($shippingDetails, $billingDetails, $billingDetailsWithHash, $shippingDetailsWithHash) as $details) {
             $this->assertInternalType('array', $details);
-            $this->assertCount(13, $details);
             $this->assertArrayHasKey('company', $details);
             $this->assertArrayHasKey('department', $details);
             $this->assertArrayHasKey('salutation', $details);
             $this->assertArrayHasKey('firstname', $details);
             $this->assertArrayHasKey('lastname', $details);
             $this->assertArrayHasKey('street', $details);
-            $this->assertArrayHasKey('streetnumber', $details);
             $this->assertArrayHasKey('zipcode', $details);
             $this->assertArrayHasKey('city', $details);
             $this->assertArrayHasKey('country', $details);
@@ -485,8 +381,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             $this->assertEquals('mr', $details['salutation']);
             $this->assertEquals('Max', $details['firstname']);
             $this->assertEquals('Mustermann', $details['lastname']);
-            $this->assertEquals('Mustermannstraße', $details['street']);
-            $this->assertEquals('92', $details['streetnumber']);
+            $this->assertEquals('Mustermannstraße 92', $details['street']);
             $this->assertEquals('48624', $details['zipcode']);
             $this->assertEquals('Schöppingen', $details['city']);
             $this->assertEquals('2', $details['country']);
@@ -517,7 +412,6 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             'firstname' => 'Testfirstname',
             'lastname' => 'Testlastname',
             'street' => 'Teststreet',
-            'streetnumber' => 'Teststreetnumber',
             'zipcode' => 'Testzipcode',
             'city' => 'Testcity',
             'country' => '2',
@@ -661,19 +555,6 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('sErrorMessages', $result);
         $this->assertCount(0, $result['sErrorFlag']);
         $this->assertCount(0, $result['sErrorMessages']);
-
-        // Test that using vat id will trigger aux function to validate it
-        $this->config->offsetSet('sVATCHECKENDABLED', true);
-        $testRuleSet['ustid'] = array('required' => 1);
-        $this->front->Request()->setPost('ustid', '12345');
-        $result = $this->module->sValidateStep2($testRuleSet);
-        $this->assertInternalType('array', $result);
-        $this->assertArrayHasKey('sErrorFlag', $result);
-        $this->assertArrayHasKey('sErrorMessages', $result);
-        $this->assertCount(1, $result['sErrorFlag']);
-        $this->assertCount(1, $result['sErrorMessages']);
-        $this->assertContains('VatFailureInvalid', $result['sErrorFlag']);
-        $this->assertContains('VatFailureErrorInfo', $result['sErrorFlag']);
     }
 
     /**
@@ -732,7 +613,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('sErrorMessages', $result);
         $this->assertCount(1, $result['sErrorMessages']);
         $this->assertContains(
-            'Bitte w&auml;hlen Sie ein Passwort welches aus mindestens {config name="MinPassword"} Zeichen besteht.',
+            'Bitte w&auml;hlen Sie ein Passwort, welches aus mindestens {config name="MinPassword"} Zeichen besteht.',
             $result['sErrorMessages']
         );
         $this->assertCount(2, $result['sErrorFlag']);
@@ -1101,17 +982,30 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             'objectkey' => 1,
             'objectlanguage' => 2,
             'objecttype' => 'config_countries',
-            'objectdata' => 'a:2:{i:2;a:2:{s:6:"active";s:1:"1";s:11:"countryname";s:7:"Germany";}i:5;a:2:{s:6:"active";s:1:"1";s:11:"countryname";s:7:"Belgium";}}'
+            'objectdata' => serialize(
+                array(
+                    2 => array(
+                        'active' => '1',
+                        'countryname' => 'Germany',
+                    ),
+                    5 => array(
+                        'active' => '1',
+                        'countryname' => 'Belgium',
+                    )
+                )
+            )
         );
 
-        if($existingData) {
+        if ($existingData) {
             Shopware()->Db()->update('s_core_translations', $demoData, 'id = '.$existingData['id']);
         } else {
             Shopware()->Db()->insert('s_core_translations', $demoData);
         }
 
         // Test loading all data, should return the test data
-        $this->systemModule->sLanguage = 2;
+        $shopId = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext()->getShop()->getId();
+        Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext()->getShop()->setId(2);
+
         $result = $this->module->sGetCountryTranslation();
         $this->assertCount(2, $result);
         $this->assertArrayHasKey(2, $result);
@@ -1138,11 +1032,13 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('randomValue', $result['randomField']);
 
         // If backup data exists, restore it
-        if($existingData) {
+        if ($existingData) {
             $existingDataId = $existingData['id'];
             unset($existingData['id']);
             Shopware()->Db()->update('s_core_translations', $existingData, 'id = '.$existingDataId);
         }
+
+        Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext()->getShop()->setId($shopId);
     }
 
     /**
@@ -1160,17 +1056,32 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             'objectkey' => 1,
             'objectlanguage' => 2,
             'objecttype' => 'config_dispatch',
-            'objectdata' => 'a:2:{i:9;a:3:{s:13:"dispatch_name";s:17:"Standard shipping";s:20:"dispatch_description";s:29:"Standard shipping description";s:20:"dispatch_status_link";s:18:"http://www.dhl.com";}i:10;a:3:{s:13:"dispatch_name";s:18:"Shipping by weight";s:20:"dispatch_description";s:30:"Shipping by weight description";s:20:"dispatch_status_link";s:3:"url";}}'
+            'objectdata' => serialize(
+                array(
+                    9 => array(
+                        'dispatch_name' => 'Standard shipping',
+                        'dispatch_description' => 'Standard shipping description',
+                        'dispatch_status_link' => 'http://www.dhl.com',
+                    ),
+                    10 => array(
+                        'dispatch_name' => 'Shipping by weight',
+                        'dispatch_description' => 'Shipping by weight description',
+                        'dispatch_status_link' => 'url',
+                    ),
+                )
+            )
         );
 
-        if($existingData) {
+        if ($existingData) {
             Shopware()->Db()->update('s_core_translations', $demoData, 'id = '.$existingData['id']);
         } else {
             Shopware()->Db()->insert('s_core_translations', $demoData);
         }
 
         // Test loading all data, should return the test data
-        $this->module->sSYSTEM->sLanguage = 2;
+        $shopId = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext()->getShop()->getId();
+        Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext()->getShop()->setId(2);
+
         $result = $this->module->sGetDispatchTranslation();
         $this->assertCount(2, $result);
         $this->assertArrayHasKey(9, $result);
@@ -1203,11 +1114,13 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('randomValue', $result['randomField']);
 
         // If backup data exists, restore it
-        if($existingData) {
+        if ($existingData) {
             $existingDataId = $existingData['id'];
             unset($existingData['id']);
             Shopware()->Db()->update('s_core_translations', $existingData, 'id = '.$existingDataId);
         }
+
+        Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext()->getShop()->setId($shopId);
     }
 
     /**
@@ -1225,17 +1138,41 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             'objectkey' => 1,
             'objectlanguage' => 2,
             'objecttype' => 'config_payment',
-            'objectdata' => 'a:5:{i:4;a:2:{s:11:"description";s:7:"Invoice";s:21:"additionalDescription";s:141:"Payment by invoice. Shopware provides automatic invoicing for all customers on orders after the first, in order to avoid defaults on payment.";}i:2;a:2:{s:11:"description";s:5:"Debit";s:21:"additionalDescription";s:15:"Additional text";}i:3;a:2:{s:11:"description";s:16:"Cash on delivery";s:21:"additionalDescription";s:25:"(including 2.00 Euro VAT)";}i:5;a:2:{s:11:"description";s:15:"Paid in advance";s:21:"additionalDescription";s:57:"The goods are delivered directly upon receipt of payment.";}i:6;a:1:{s:21:"additionalDescription";s:17:"SEPA direct debit";}}'
+            'objectdata' => serialize(
+                array(
+                    4 => array(
+                        'description' => 'Invoice',
+                        'additionalDescription' => 'Payment by invoice. Shopware provides automatic invoicing for all customers on orders after the first, in order to avoid defaults on payment.',
+                    ),
+                    2 => array(
+                        'description' => 'Debit',
+                        'additionalDescription' => 'Additional text',
+                    ),
+                    3 => array(
+                        'description' => 'Cash on delivery',
+                        'additionalDescription' => '(including 2.00 Euro VAT)',
+                    ),
+                    5 => array(
+                        'description' => 'Paid in advance',
+                        'additionalDescription' => 'The goods are delivered directly upon receipt of payment.',
+                    ),
+                    6 => array(
+                        'additionalDescription' => 'SEPA direct debit',
+                    ),
+                )
+            )
         );
 
-        if($existingData) {
+        if ($existingData) {
             Shopware()->Db()->update('s_core_translations', $demoData, 'id = '.$existingData['id']);
         } else {
             Shopware()->Db()->insert('s_core_translations', $demoData);
         }
 
         // Test loading all data, should return the test data
-        $this->module->sSYSTEM->sLanguage = 2;
+        $shopId = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext()->getShop()->getId();
+        Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext()->getShop()->setId(2);
+
         $result = $this->module->sGetPaymentTranslation();
         $this->assertCount(5, $result);
         $this->assertArrayHasKey(2, $result);
@@ -1269,11 +1206,13 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('randomValue', $result['randomField']);
 
         // If backup data exists, restore it
-        if($existingData) {
+        if ($existingData) {
             $existingDataId = $existingData['id'];
             unset($existingData['id']);
             Shopware()->Db()->update('s_core_translations', $existingData, 'id = '.$existingDataId);
         }
+
+        Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext()->getShop()->setId($shopId);
     }
 
     /**
@@ -1291,10 +1230,19 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             'objectkey' => 1,
             'objectlanguage' => 1,
             'objecttype' => 'config_country_states',
-            'objectdata' => 'a:2:{i:24;a:1:{s:4:"name";s:10:"California";}i:23;a:1:{s:4:"name";s:18:"Arkansas (english)";}}'
+            'objectdata' => serialize(
+                array(
+                    24 => array(
+                        'name' => 'California',
+                    ),
+                    23 => array(
+                        'name' => 'Arkansas (english)',
+                    ),
+                )
+            )
         );
 
-        if($existingData) {
+        if ($existingData) {
             Shopware()->Db()->update('s_core_translations', $demoData, 'id = '.$existingData['id']);
         } else {
             Shopware()->Db()->insert('s_core_translations', $demoData);
@@ -1316,21 +1264,20 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('California', $result[24]['name']);
 
         // Create a stub of a Shop for fallback.
-        $stub = $this->getMockBuilder('\Shopware\Models\Shop\Shop')
-            ->setMethods(array('getId'))
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $stub->expects($this->any())
-            ->method('getId')
-            ->will($this->returnValue(10000));
-        Shopware()->Shop()->setFallback($stub);
+        $shopFallbackId = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext()->getShop()->getFallbackId();
+        Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext()->getShop()->setFallbackId(10000);
 
         Shopware()->Db()->insert('s_core_translations', array(
             'objectkey' => 1,
             'objectlanguage' => 10000,
             'objecttype' => 'config_country_states',
-            'objectdata' => 'a:1:{i:2;a:1:{s:4:"name";s:13:"asdfasfdasdfa";}}'
+            'objectdata' => serialize(
+                array(
+                    2 => array(
+                        'name' => 'asdfasfdasdfa',
+                    ),
+                )
+            )
         ));
 
         // Test with fallback
@@ -1347,12 +1294,14 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('California', $result[24]['name']);
 
         // If backup data exists, restore it
-        if($existingData) {
+        if ($existingData) {
             $existingDataId = $existingData['id'];
             unset($existingData['id']);
             Shopware()->Db()->update('s_core_translations', $existingData, 'id = '.$existingDataId);
         }
         Shopware()->Db()->delete('s_core_translations', 'objectlanguage = 10000');
+
+        Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext()->getShop()->setFallbackId($shopFallbackId);
     }
 
     /**
@@ -1390,21 +1339,37 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             'objectkey' => 1,
             'objectlanguage' => 1,
             'objecttype' => 'config_countries',
-            'objectdata' => 'a:1:{i:2;a:2:{s:6:"active";s:1:"1";s:11:"countryname";s:7:"Germany";}}'
+            'objectdata' => serialize(
+                array(
+                    2 => array(
+                        'active' => '1',
+                        'countryname' => 'Germany',
+                    ),
+                )
+            )
         );
         $demoStateData = array(
             'objectkey' => 1,
             'objectlanguage' => 1,
             'objecttype' => 'config_country_states',
-            'objectdata' => 'a:2:{i:2;a:1:{s:4:"name";s:3:"111";}i:3;a:1:{s:4:"name";s:3:"222";}}'
+            'objectdata' => serialize(
+                array(
+                    2 => array(
+                        'name' => '111',
+                    ),
+                    3 => array(
+                        'name' => '222',
+                    ),
+                )
+            )
         );
 
-        if($existingCountryData) {
+        if ($existingCountryData) {
             Shopware()->Db()->update('s_core_translations', $demoCountryData, 'id = '.$existingCountryData['id']);
         } else {
             Shopware()->Db()->insert('s_core_translations', $demoCountryData);
         }
-        if($existingStateData) {
+        if ($existingStateData) {
             Shopware()->Db()->update('s_core_translations', $demoStateData, 'id = '.$existingStateData['id']);
         } else {
             Shopware()->Db()->insert('s_core_translations', $demoStateData);
@@ -1468,17 +1433,17 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->assertContains('111', array_column($country['states'], 'name'));
 
         // If backup data exists, restore it
-        if($existingCountryData) {
+        if ($existingCountryData) {
             $existingCountryDataId = $existingCountryData['id'];
             unset($existingCountryData['id']);
             Shopware()->Db()->update('s_core_translations', $existingCountryData, 'id = '.$existingCountryDataId);
         }
-        if($existingStateData) {
+        if ($existingStateData) {
             $existingStateDataId = $existingStateData['id'];
             unset($existingStateData['id']);
             Shopware()->Db()->update('s_core_translations', $existingStateData, 'id = '.$existingStateDataId);
         }
-        if($existingGermanyData) {
+        if ($existingGermanyData) {
             $existingGermanyDataId = $existingGermanyData['id'];
             unset($existingGermanyData['id']);
             Shopware()->Db()->update('s_core_countries', $existingGermanyData, 'id = '.$existingGermanyDataId);
@@ -1495,7 +1460,6 @@ class sAdminTest extends PHPUnit_Framework_TestCase
     public function testsSaveRegisterMainDataWithEmptyData()
     {
         $this->module->sSaveRegisterMainData(array());
-
     }
 
     /**
@@ -1564,7 +1528,6 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             'firstname' => 'Testfirstname',
             'lastname' => 'Testlastname',
             'street' => 'Teststreet',
-            'streetnumber' => 'Teststreetnumber',
             'zipcode' => 'Testzipcode',
             'city' => 'Testcity',
             'phone' => 'Testphone',
@@ -1602,7 +1565,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $testData['countryID'] = $testData['country'];
         unset($testData['country']);
         $testData['birthday'] = mktime(
-            0,0,0,
+            0, 0, 0,
             (int) $testData['birthmonth'],
             (int) $testData['birthday'],
             (int) $testData['birthyear']
@@ -1642,7 +1605,6 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             'firstname' => 'Testfirstname',
             'lastname' => 'Testlastname',
             'street' => 'Teststreet',
-            'streetnumber' => 'Teststreetnumber',
             'zipcode' => 'Testzipcode',
             'city' => 'Testcity',
             'country' => '2',
@@ -1762,7 +1724,6 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                 'firstname' => 'testfirstname',
                 'lastname' => 'testlastname',
                 'street' => 'teststreet',
-                'streetnumber' => 'teststreetnumber',
                 'zipcode' => 'testzipcode',
                 'city' => 'testcity',
                 'country' => 'testcountry'
@@ -1830,7 +1791,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             'partnerID' => '',
             'temporaryID' => '',
             'referer' => '',
-            'cleareddate' => NULL,
+            'cleareddate' => null,
             'trackingcode' => '',
             'language' => '2',
             'dispatchID' => '9',
@@ -1960,7 +1921,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             'partnerID' => '',
             'temporaryID' => '',
             'referer' => '',
-            'cleareddate' => NULL,
+            'cleareddate' => null,
             'trackingcode' => '',
             'language' => '2',
             'dispatchID' => '9',
@@ -2141,10 +2102,10 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                 'customerBillingId' => $customer->getBilling()->getId(),
                 'text1' => 'Freitext1',
                 'text2' => 'Freitext2',
-                'text3' => NULL,
-                'text4' => NULL,
-                'text5' => NULL,
-                'text6' => NULL,
+                'text3' => null,
+                'text4' => null,
+                'text5' => null,
+                'text6' => null,
                 'id' => $customer->getBilling()->getId(),
                 'userID' => $customer->getId(),
                 'company' => '',
@@ -2153,16 +2114,17 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                 'customernumber' => $customer->getBilling()->getNumber(),
                 'firstname' => 'Max',
                 'lastname' => 'Mustermann',
-                'street' => '',
-                'streetnumber' => '',
+                'street' => 'Kraftweg, 22',
                 'zipcode' => '12345',
                 'city' => '',
                 'phone' => '',
                 'fax' => '',
                 'countryID' => '2',
-                'stateID' => NULL,
+                'stateID' => null,
                 'ustid' => '',
                 'birthday' => '1986-12-20',
+                'additional_address_line1' => 'IT-Department',
+                'additional_address_line2' => 'Second Floor'
             ),
             'additional' => array(
                 'country' => array(
@@ -2180,7 +2142,8 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                     'active' => '1',
                     'iso3' => 'DEU',
                     'display_state_in_registration' => '0',
-                    'force_state_in_registration' => '0'
+                    'force_state_in_registration' => '0',
+                    'countryarea' => 'deutschland'
                 ),
                 'state' => array(),
                 'user' => array(
@@ -2203,28 +2166,28 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                     'language' => '1',
                     'subshopID' => '1',
                     'referer' => '',
-                    'pricegroupID' => NULL,
+                    'pricegroupID' => null,
                     'internalcomment' => '',
                     'failedlogins' => '0',
-                    'lockeduntil' => NULL,
+                    'lockeduntil' => null,
                 ),
                 'countryShipping' => array(
-                    'id' => '2',
-                    'countryname' => 'Germany',
-                    'countryiso' => 'DE',
-                    'areaID' => '1',
-                    'countryen' => 'GERMANY',
-                    'position' => '1',
+                    'id' => '4',
+                    'countryname' => 'Australien',
+                    'countryiso' => 'AU',
+                    'areaID' => '2',
+                    'countryen' => 'AUSTRALIA',
+                    'position' => '10',
                     'notice' => '',
                     'shippingfree' => '0',
                     'taxfree' => '0',
                     'taxfree_ustid' => '0',
                     'taxfree_ustid_checked' => '0',
                     'active' => '1',
-                    'iso3' => 'DEU',
+                    'iso3' => 'AUS',
                     'display_state_in_registration' => '0',
                     'force_state_in_registration' => '0',
-                    'countryarea' => 'deutschland'
+                    'countryarea' => 'welt'
                 ),
                 'stateShipping' => array(),
                 'payment' => array(
@@ -2242,21 +2205,22 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                     'position' => '1',
                     'active' => '1',
                     'esdactive' => '0',
+                    'mobile_inactive' => '0',
                     'embediframe' => '',
                     'hideprospect' => '0',
-                    'action' => NULL,
-                    'pluginID' => NULL,
-                    'source' => NULL,
+                    'action' => null,
+                    'pluginID' => null,
+                    'source' => null,
                 ),
             ),
             'shippingaddress' => array(
                 'customerShippingId' => $customer->getShipping()->getId(),
                 'text1' => 'Freitext1',
                 'text2' => 'Freitext2',
-                'text3' => NULL,
-                'text4' => NULL,
-                'text5' => NULL,
-                'text6' => NULL,
+                'text3' => null,
+                'text4' => null,
+                'text5' => null,
+                'text6' => null,
                 'id' => $customer->getShipping()->getId(),
                 'userID' => $customer->getId(),
                 'company' => 'Widgets Inc.',
@@ -2265,11 +2229,12 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                 'firstname' => 'Max',
                 'lastname' => 'Mustermann',
                 'street' => 'Merkel Strasse, 10',
-                'streetnumber' => '',
-                'zipcode' => '',
+                'zipcode' => '98765',
                 'city' => '',
-                'countryID' => '0',
-                'stateID' => NULL,
+                'countryID' => '4',
+                'stateID' => null,
+                'additional_address_line1' => 'Sales-Department',
+                'additional_address_line2' => 'Third Floor'
             ),
         );
 
@@ -2285,19 +2250,28 @@ class sAdminTest extends PHPUnit_Framework_TestCase
      * @covers sAdmin::sRiskCUSTOMERGROUPIS
      * @covers sAdmin::sRiskCUSTOMERGROUPISNOT
      * @covers sAdmin::sRiskZIPCODE
+     * @covers sAdmin::sRiskBILLINGZIPCODE
      * @covers sAdmin::sRiskZONEIS
+     * @covers sAdmin::sRiskBILLINGZONEIS
      * @covers sAdmin::sRiskZONEISNOT
+     * @covers sAdmin::sRiskBILLINGZONEISNOT
      * @covers sAdmin::sRiskLANDIS
+     * @covers sAdmin::sRiskBILLINGLANDIS
      * @covers sAdmin::sRiskLANDISNOT
+     * @covers sAdmin::sRiskBILLINGLANDISNOT
      * @covers sAdmin::sRiskNEWCUSTOMER
      * @covers sAdmin::sRiskORDERPOSITIONSMORE
      * @covers sAdmin::sRiskATTRIS
      * @covers sAdmin::sRiskATTRISNOT
+     * @covers sAdmin::sRiskDUNNINGLEVELONE
+     * @covers sAdmin::sRiskDUNNINGLEVELTWO
+     * @covers sAdmin::sRiskDUNNINGLEVELTHREE
      * @covers sAdmin::sRiskINKASSO
      * @covers sAdmin::sRiskLASTORDERLESS
      * @covers sAdmin::sRiskARTICLESFROM
      * @covers sAdmin::sRiskLASTORDERSLESS
      * @covers sAdmin::sRiskPREGSTREET
+     * @covers sAdmin::sRiskBILLINGPREGSTREET
      * @covers sAdmin::sRiskDIFFER
      * @covers sAdmin::sRiskCUSTOMERNR
      * @covers sAdmin::sRiskLASTNAME
@@ -2338,7 +2312,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             'partnerID' => '',
             'temporaryID' => '',
             'referer' => '',
-            'cleareddate' => NULL,
+            'cleareddate' => null,
             'cleared' => 16,
             'trackingcode' => '',
             'language' => '2',
@@ -2409,9 +2383,22 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             array(
                 'paymentID' => 2,
                 'rule1' => 'ZIPCODE',
+                'value1' => '98765'
+            )
+        );
+        $this->assertTrue($this->module->sManageRisks(2, $basket, $user));
+        Shopware()->Db()->delete('s_core_rulesets', 'id >= '.$firstTestRuleId);
+
+        // sRiskBILLINGZIPCODE
+        Shopware()->Db()->insert(
+            's_core_rulesets',
+            array(
+                'paymentID' => 2,
+                'rule1' => 'BILLINGZIPCODE',
                 'value1' => '12345'
             )
         );
+
         $this->assertTrue($this->module->sManageRisks(2, $basket, $user));
         Shopware()->Db()->delete('s_core_rulesets', 'id >= '.$firstTestRuleId);
 
@@ -2446,8 +2433,23 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             array(
                 'paymentID' => 2,
                 'rule1' => 'LANDIS',
-                'value1' => 'DE',
+                'value1' => 'AU',
                 'rule2' => 'LANDISNOT',
+                'value2' => 'UK'
+            )
+        );
+        $this->assertTrue($this->module->sManageRisks(2, $basket, $user));
+        Shopware()->Db()->delete('s_core_rulesets', 'id >= '.$firstTestRuleId);
+
+        // sRiskBILLINGLANDIS
+        // sRiskBILLINGLANDISNOT
+        Shopware()->Db()->insert(
+            's_core_rulesets',
+            array(
+                'paymentID' => 2,
+                'rule1' => 'BILLINGLANDIS',
+                'value1' => 'DE',
+                'rule2' => 'BILLINGLANDISNOT',
                 'value2' => 'UK'
             )
         );
@@ -2503,6 +2505,39 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                 'paymentID' => 2,
                 'rule1' => 'ATTRISNOT',
                 'value1' => '17|null'
+            )
+        );
+        $this->assertFalse($this->module->sManageRisks(2, $fullBasket, $user));
+        Shopware()->Db()->delete('s_core_rulesets', 'id >= '.$firstTestRuleId);
+
+        // sRiskDUNNINGLEVELONE
+        Shopware()->Db()->insert(
+            's_core_rulesets',
+            array(
+                'paymentID' => 2,
+                'rule1' => 'DUNNINGLEVELONE'
+            )
+        );
+        $this->assertFalse($this->module->sManageRisks(2, $fullBasket, $user));
+        Shopware()->Db()->delete('s_core_rulesets', 'id >= '.$firstTestRuleId);
+
+        // sRiskDUNNINGLEVELTWO
+        Shopware()->Db()->insert(
+            's_core_rulesets',
+            array(
+                'paymentID' => 2,
+                'rule1' => 'DUNNINGLEVELTWO'
+            )
+        );
+        $this->assertFalse($this->module->sManageRisks(2, $fullBasket, $user));
+        Shopware()->Db()->delete('s_core_rulesets', 'id >= '.$firstTestRuleId);
+
+        // sRiskDUNNINGLEVELTHREE
+        Shopware()->Db()->insert(
+            's_core_rulesets',
+            array(
+                'paymentID' => 2,
+                'rule1' => 'DUNNINGLEVELTHREE'
             )
         );
         $this->assertFalse($this->module->sManageRisks(2, $fullBasket, $user));
@@ -2597,6 +2632,18 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             array(
                 'paymentID' => 2,
                 'rule1' => 'PREGSTREET',
+                'value1' => 'Google'
+            )
+        );
+        $this->assertFalse($this->module->sManageRisks(2, $fullBasket, $user));
+        Shopware()->Db()->delete('s_core_rulesets', 'id >= '.$firstTestRuleId);
+
+        // sRiskPREGBILLINGSTREET
+        Shopware()->Db()->insert(
+            's_core_rulesets',
+            array(
+                'paymentID' => 2,
+                'rule1' => 'PREGBILLINGSTREET',
                 'value1' => 'Google'
             )
         );
@@ -2774,7 +2821,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             array(
                 'code' => 5,
                 'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
-                        ->get('ErrorFillIn','Please fill in all red fields'),
+                        ->get('ErrorFillIn', 'Please fill in all red fields'),
                 'sErrorFlag' => array('newsletter' => true)
             ),
             $result
@@ -2881,7 +2928,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             array(
                 'code' => 2,
                 'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
-                        ->get('NewsletterFailureAlreadyRegistered','You already receive our newsletter')
+                        ->get('NewsletterFailureAlreadyRegistered', 'You already receive our newsletter')
             ),
             $result
         );
@@ -2893,7 +2940,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             array(
                 'code' => 2,
                 'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
-                        ->get('NewsletterFailureAlreadyRegistered','You already receive our newsletter')
+                        ->get('NewsletterFailureAlreadyRegistered', 'You already receive our newsletter')
             ),
             $result
         );
@@ -3015,32 +3062,33 @@ class sAdminTest extends PHPUnit_Framework_TestCase
 
         // Valid country returns valid data
         $result = $this->module->sGetPaymentmean(
-            Shopware()->Db()->fetchOne('SELECT id FROM s_core_paymentmeans WHERE name = "debit"')
+            Shopware()->Db()->fetchOne('SELECT id FROM s_core_paymentmeans WHERE name = "prepayment"')
         );
 
         $this->assertEquals(
             array(
-                'id' => '2',
-                'name' => 'debit',
-                'description' => 'Lastschrift',
-                'template' => 'debit.tpl',
-                'class' => 'debit.php',
-                'table' => 's_user_debit',
+                'id' => '5',
+                'name' => 'prepayment',
+                'description' => 'Vorkasse',
+                'template' => 'prepayment.tpl',
+                'class' => 'prepayment.php',
+                'table' => '',
                 'hide' => '0',
-                'additionaldescription' => 'Zusatztext',
-                'debit_percent' => '-10',
+                'additionaldescription' => 'Sie zahlen einfach vorab und erhalten die Ware bequem und günstig bei Zahlungseingang nach Hause geliefert.',
+                'debit_percent' => '0',
                 'surcharge' => '0',
                 'surchargestring' => '',
-                'position' => '4',
+                'position' => '1',
                 'active' => '1',
                 'esdactive' => '0',
+                'mobile_inactive' => '0',
                 'embediframe' => '',
                 'hideprospect' => '0',
-                'action' => '',
-                'pluginID' => NULL,
-                'source' => NULL,
+                'action' => null,
+                'pluginID' => null,
+                'source' => null,
                 'country_surcharge' =>
-                    array (
+                    array(
                     ),
             ),
             $result
@@ -3133,7 +3181,6 @@ class sAdminTest extends PHPUnit_Framework_TestCase
 
         $result = $this->module->sGetPremiumDispatchSurcharge($fullBasket);
         $this->assertEquals(0, $result);
-
     }
 
     /**
@@ -3201,7 +3248,10 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                     'text2' => 'Freitext2',
                 ),
                 "zipcode"   => '12345',
-                "countryId" => '2'
+                "street"    => 'Kraftweg, 22',
+                "countryId" => '2',
+                "additionalAddressLine1" => 'IT-Department',
+                "additionalAddressLine2" => 'Second Floor',
             ),
 
             "shipping" => array(
@@ -3209,11 +3259,15 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                 "company"    => "Widgets Inc.",
                 "firstName"  => "Max",
                 "lastName"   => "Mustermann",
+                "zipcode"     => "98765",
                 "street"     => "Merkel Strasse, 10",
+                "countryId"  => '4',
                 "attribute"  => array(
                     'text1'  => 'Freitext1',
                     'text2'  => 'Freitext2',
                 ),
+                "additionalAddressLine1" => 'Sales-Department',
+                "additionalAddressLine2" => 'Third Floor',
             ),
 
             "debit" => array(
@@ -3238,11 +3292,11 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $billingId = Shopware()->Db()->fetchOne('SELECT id FROM s_user_billingaddress WHERE userID = ?', array($customer->getId()));
         $shippingId = Shopware()->Db()->fetchOne('SELECT id FROM s_user_shippingaddress WHERE userID = ?', array($customer->getId()));
 
-        if($billingId) {
+        if ($billingId) {
             Shopware()->Db()->delete('s_user_billingaddress_attributes', 'billingID = '.$billingId);
             Shopware()->Db()->delete('s_user_billingaddress', 'id = '.$billingId);
         }
-        if($shippingId) {
+        if ($shippingId) {
             Shopware()->Db()->delete('s_user_shippingaddress_attributes', 'shippingID = '.$shippingId);
             Shopware()->Db()->delete('s_user_shippingaddress', 'id = '.$shippingId);
         }

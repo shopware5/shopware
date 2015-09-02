@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -41,7 +41,8 @@ class Shopware_Plugins_Frontend_Payment_Bootstrap extends Shopware_Components_Pl
         ';
         try {
             Shopware()->Db()->exec($sql);
-        } catch (Exception $e) { }
+        } catch (Exception $e) {
+        }
 
         $event = $this->createEvent(
             'Enlight_Bootstrap_InitResource_Payments',

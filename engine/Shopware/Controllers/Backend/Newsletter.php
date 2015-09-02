@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -238,10 +238,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
             $mail->setSubject($subject);
             $mail->clearRecipients();
             $mail->addTo($user['email']);
-            /**
-             * SW-44 Check if mail-address is valid
-             */
-            $validator = new Zend_Validate_EmailAddress();
+            $validator = $this->container->get('validator.email');
             if (!$validator->isValid($user['email'])) {
                 echo "Skipped invalid email\n";
                 // SW-4526
@@ -363,10 +360,10 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
         }
 
         $this->Response()->setHeader('Content-Type', 'image/gif');
-        $bild = imagecreate (1, 1);
+        $bild = imagecreate(1, 1);
         $white = imagecolorallocate($bild, 255, 255, 255);
         imagefill($bild, 1, 1, $white);
-        imagegif ($bild);
+        imagegif($bild);
         imagedestroy($bild);
     }
 
@@ -374,8 +371,10 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
      * Init mailing method
      *
      * Initializes the mailing using the mailing id.
+     * @param int|null $mailingID
+     * @return array|null
      */
-    public function initMailing($mailingID=null)
+    public function initMailing($mailingID = null)
     {
         $mailing = $this->getMailing($mailingID);
         if (empty($mailing)) {
@@ -383,11 +382,13 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
         }
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
         $shop = $repository->getActiveById($mailing['languageID']);
-        $shop->registerResources(Shopware()->Bootstrap());
 
         $this->Request()
             ->setHttpHost($shop->getHost())
+            ->setBasePath($shop->getBasePath())
             ->setBaseUrl($shop->getBasePath());
+
+        $shop->registerResources(Shopware()->Bootstrap());
 
         Shopware()->Session()->sUserGroup = $mailing['customergroup'];
         $sql = 'SELECT * FROM s_core_customergroups WHERE groupkey=?';
@@ -522,7 +523,9 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
         $sql = 'SELECT groups, languageID FROM s_campaigns_mailings WHERE id=?';
         $mailing = Shopware()->Db()->fetchRow($sql, array($id));
 
-        if(empty($mailing)) return false;
+        if (empty($mailing)) {
+            return false;
+        }
 
         $mailing['groups'] = unserialize($mailing['groups']);
 
@@ -610,7 +613,6 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
      */
     public function getMailingUserByEmail($email)
     {
-
         $select = '
             cm.email, cm.email as newsletter, cg.name as `group`,
             IFNULL(ub.salutation, nd.salutation) as salutation,
@@ -618,7 +620,6 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
             IFNULL(ub.firstname, nd.firstname) as firstname,
             IFNULL(ub.lastname, nd.lastname) as lastname,
             IFNULL(ub.street, nd.street) as street,
-            IFNULL(ub.streetnumber, nd.streetnumber) as streetnumber,
             IFNULL(ub.zipcode, nd.zipcode) as zipcode,
             IFNULL(ub.city, nd.city) as city,
             customer,
@@ -690,7 +691,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
      */
     public function outputFilter($source)
     {
-        $source = preg_replace('#(src|background)="([^:"./][^:"]+)"#Umsi','$1="../../campaigns/$2"', $source);
+        $source = preg_replace('#(src|background)="([^:"./][^:"]+)"#Umsi', '$1="../../campaigns/$2"', $source);
         $callback = array(Shopware()->Plugins()->Core()->PostFilter(),'rewriteSrc');
         $source = preg_replace_callback('#<(link|img|script|input|a|form|iframe|td)[^<>]*(href|src|action|background)="([^"]*)".*>#Umsi', $callback, $source);
         return $source;
@@ -705,8 +706,8 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
     public function altFilter($source)
     {
         $source = preg_replace('#<a.+href="(.*)".*>#Umsi', '$1', $source);
-        $source = str_replace(array('<br />', '</p>', '&nbsp;'), array("\n","\n", ' '), $source);
-        $source = trim(strip_tags(preg_replace('/<(head|title|style|script)[^>]*>.*?<\/\\1>/s','',$source)));
+        $source = str_replace(array('<br />', '</p>', '&nbsp;'), array("\n", "\n", ' '), $source);
+        $source = trim(strip_tags(preg_replace('/<(head|title|style|script)[^>]*>.*?<\/\\1>/s', '', $source)));
         $source = html_entity_decode($source);
         return $source;
     }

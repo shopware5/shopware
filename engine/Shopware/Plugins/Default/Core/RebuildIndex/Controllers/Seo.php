@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -80,7 +80,7 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
         $blog = $this->SeoIndex()->countBlogs($shopId);
         $emotion = $this->SeoIndex()->countEmotions($shopId);
         $content = $this->SeoIndex()->countContent($shopId);
-        $statistic = $this->SeoIndex()->countStatic($shopId);
+        $static = $this->SeoIndex()->countStatic($shopId);
         $supplier = $this->SeoIndex()->countSuppliers($shopId);
 
         $this->View()->assign(array(
@@ -90,7 +90,7 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
                 'article' => $article,
                 'blog' => $blog,
                 'emotion' => $emotion,
-                'statistic' => $statistic,
+                'static' => $static,
                 'content' => $content,
                 'supplier' => $supplier
             ))
@@ -102,7 +102,6 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
      */
     public function seoStaticAction()
     {
-
         $shopId = (int) $this->Request()->getParam('shopId', 1);
         @set_time_limit(1200);
 
@@ -122,7 +121,6 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
      */
     public function seoCategoryAction()
     {
-
         @set_time_limit(1200);
         $offset = $this->Request()->getParam('offset');
         $limit = $this->Request()->getParam('limit', 50);
@@ -214,6 +212,16 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
             $shop->getId(),
             '1900-01-01'
         ));
+
+        $articles = $this->RewriteTable()->mapArticleTranslationObjectData($articles);
+
+        $articles = $this->get('events')->filter(
+            'Shopware_Controllers_Backend_Seo_seoArticle_filterArticles',
+            $articles,
+            array(
+                'shop' => $shop->getId()
+            )
+        );
 
         foreach ($articles as $article) {
             $data->assign('sArticle', $article);

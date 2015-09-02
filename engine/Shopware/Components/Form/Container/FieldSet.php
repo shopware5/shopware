@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -38,6 +38,17 @@ class FieldSet extends BaseContainer
     protected $title;
 
     /**
+     * @param string $name
+     * @param string $title
+     */
+    public function __construct($name, $title)
+    {
+        $this->title = $title;
+        $this->name = $name;
+        parent::__construct();
+    }
+
+    /**
      * @param string $title
      */
     public function setTitle($title)
@@ -52,5 +63,4 @@ class FieldSet extends BaseContainer
     {
         return $this->title;
     }
-
 }

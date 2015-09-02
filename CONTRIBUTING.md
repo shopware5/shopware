@@ -1,29 +1,30 @@
 # Get involved
 
-Shopware is available under dual license (AGPL v3 and proprietary license). If you want to contribute code (features or bugfixes) you have to create a pull request that considers a valid license information. You can either contribute your code under New BSD or MIT license.
+Shopware is available under dual license (AGPL v3 and proprietary license). If you want to contribute code (features or bugfixes), you have to create a pull request and include valid license information. You can either contribute your code under New BSD or MIT license.
 
-If you want to contribute to the backend part of Shopware and you got in touch with `ExtJS`-based code these parts must be licensed under GPL V3, this is due to the license terms of Sencha Inc.
+If you want to contribute to the backend part of Shopware, and your changes affect or are based on ExtJS code, they must be licensed under GPL V3, as per license requirements from Sencha Inc.
 
-If you are not sure, how to contribute code under right license and right way you can contact us under <info@shopware.de>. Further you can conclude a contribution aggreement with us to get more safety around your code submits.
+If you are not sure which license to use, or want more details about available licensing or the contribution agreements we offer, you can contact us at <contact@shopware.com>.
 
 
 # Pull Requests
-When creating a pull requests you should mention
 
- * *why* you are changing it
- * *what* you are changing
- * if this will *break* something
+When creating a pull requests you should mention:
 
-Generally the pull request should be english (title as well as description).
+ * *Why* you are changing it
+ * *What* you are changing
+ * If this will *break* something
 
-When coding and committing, please
+Pull request should be English (title, description and code comments, if applicable).
 
- * have your commit messages in english
- * have them short and descriptive
- * don't fix things which are related to other issues / pull requests
- * mention you changes in the UPGRADE.md
- * provide a test
- * follow the coding standards
+When coding and committing, please:
+
+ * Write your commit messages in English
+ * Have them short and descriptive
+ * Don't fix things which are related to other issues / pull requests
+ * Mention you changes in the UPGRADE.md
+ * Provide a test
+ * Follow the coding standards
 
 
 # Coding standards
@@ -35,34 +36,36 @@ standards.
 
 To start contributing, just fork the repository and clone your fork to your local machine:
 
-    git clone git@github.com:[YOUR USERNAME]/shopware-4.git
+    git clone git@github.com:[YOUR USERNAME]/shopware.git
 
 After having done this, configure the upstream remote:
 
-    cd shopware-4
-    git remote add upstream git://github.com/ShopwareAG/shopware-4.git
+    cd shopware
+    git remote add upstream git://github.com/shopware/shopware.git
     git config branch.master.remote upstream
 
-To keep your master up-to-date:
+To keep your master up to date:
 
     git checkout master
     git pull --rebase
     php build/ApplyDeltas.php
+    php bin/console sw:snippets:to:db
 
 Checkout a new topic-branch and you're ready to start hacking and contributing to Shopware:
 
     git checkout -b feature/your-cool-feature
 
-If you're done hacking, filling bugs or building fancy new features push your changes to your forked repo:
+If you're done hacking, filling bugs or building fancy new features, push your changes to your forked repo:
 
     git push origin feature/your-cool-feature
 
 
-... and send us a pull request with your changes. We'll verify the pull request and merge it with the `master` Branch.
+... and send us a pull request with your changes. We'll verify the pull request and merge it with the main branch.
 
 # Running Tests
+
 ## Database
-For mosts tests a configured database connection is required.
+For most tests a configured database connection is required.
 
 ## Running the tests
 The tests are located in the `tests/Shopware/` directory

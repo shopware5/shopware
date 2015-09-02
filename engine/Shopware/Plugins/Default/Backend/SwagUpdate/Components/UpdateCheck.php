@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -114,8 +114,14 @@ class UpdateCheck
         $client->setParameterGet('channel', $this->channel);
         $client->setParameterGet($params);
 
-        $response = $client->request();
-        $body     = $response->getBody();
+        try {
+            $response = $client->request();
+        } catch (\Zend_Http_Client_Exception $e) {
+            // Do not show exception to user if request times out
+            return null;
+        }
+
+        $body = $response->getBody();
 
         $verified = false;
         if (!empty($this->publicKey) && $this->verifySignature) {

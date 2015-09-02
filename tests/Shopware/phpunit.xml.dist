@@ -18,7 +18,6 @@
 
     <filter>
         <whitelist>
-            <directory suffix=".php">../../engine/core/</directory>
             <directory suffix=".php">../../engine/Shopware/</directory>
             <exclude>
                 <directory>../../engine/Shopware/Plugins/Community</directory>

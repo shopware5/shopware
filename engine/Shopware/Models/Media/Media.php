@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,10 +23,12 @@
  */
 
 namespace   Shopware\Models\Media;
-use         Shopware\Components\Model\ModelEntity,
-            Doctrine\ORM\Mapping AS ORM,
-            Symfony\Component\HttpFoundation\File\UploadedFile,
-            Symfony\Component\Validator\Constraints as Assert;
+
+use Doctrine\Common\Collections\ArrayCollection;
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * In Shopware all media resources are represented in the media model.
@@ -188,6 +190,12 @@ class Media extends ModelEntity
     private $thumbnails;
 
     /**
+     * Contains the high dpi thumbnails paths.
+     * @var array
+     */
+    private $highDpiThumbnails;
+
+    /**
      * INVERSE SIDE
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Media", mappedBy="media", orphanRemoval=true, cascade={"persist"})
      * @var \Shopware\Models\Attribute\Media
@@ -207,6 +215,12 @@ class Media extends ModelEntity
      * @ORM\OneToMany(targetEntity="Shopware\Models\Blog\Media", mappedBy="media", orphanRemoval=true, cascade={"persist"})
      */
     protected $blogMedia;
+
+    /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Property\Value", mappedBy="media")
+     */
+    protected $properties;
 
     /****************************************************************
      *                  Property Getter & Setter                    *
@@ -476,6 +490,18 @@ class Media extends ModelEntity
     }
 
     /**
+     * Returns the high dpi thumbnail paths in an array
+     * @return array
+     */
+    public function getHighDpiThumbnails()
+    {
+        if (empty($this->highDpiThumbnails)) {
+            $this->highDpiThumbnails = $this->loadThumbnails(true);
+        }
+        return $this->highDpiThumbnails;
+    }
+
+    /**
      * Returns the thumbnail paths of already generated thumbnails
      *
      * @return array
@@ -563,14 +589,14 @@ class Media extends ModelEntity
         }
     }
 
-	/**
-	 * Model event function, which called when the model is loaded.
-	 * @ORM\PostLoad
-	 */
-	public function onLoad()
-	{
-		$this->thumbnails = $this->loadThumbnails();
-	}
+    /**
+     * Model event function, which called when the model is loaded.
+     * @ORM\PostLoad
+     */
+    public function onLoad()
+    {
+        $this->thumbnails = $this->loadThumbnails();
+    }
 
     /**
      * Internal helper function which updates all associated data which has the image path as own property.
@@ -618,7 +644,6 @@ class Media extends ModelEntity
         if ($settings !== null) {
             $this->removeAlbumThumbnails($settings->getThumbnailSize(), $this->getFileName());
         }
-
     }
 
     /****************************************************************
@@ -700,8 +725,16 @@ class Media extends ModelEntity
                 unlink($names['jpg']);
             }
 
+            if (file_exists($names['jpgHD'])) {
+                unlink($names['jpgHD']);
+            }
+
             if (file_exists($names['original'])) {
                 unlink($names['original']);
+            }
+
+            if (file_exists($names['originalHD'])) {
+                unlink($names['originalHD']);
             }
         }
     }
@@ -745,11 +778,7 @@ class Media extends ModelEntity
                  */
                 $this->path = str_replace('\\', '/', $this->path);
             }
-            try {
-                $this->file->move($this->getUploadDir(), $this->getFileName());
-            } catch (\Exception $e) {
-                return $e;
-            }
+            $this->file->move($this->getUploadDir(), $this->getFileName());
         }
         unlink($this->file->getPathname());
         unlink($this->file);
@@ -767,10 +796,10 @@ class Media extends ModelEntity
             return;
         }
 
-	    /** @var \Shopware\Components\Thumbnail\Manager $generator */
-	    $generator = Shopware()->Container()->get('thumbnail_manager');
+        /** @var \Shopware\Components\Thumbnail\Manager $generator */
+        $generator = Shopware()->Container()->get('thumbnail_manager');
 
-	    $generator->createMediaThumbnail($this, $this->defaultThumbnails);
+        $generator->createMediaThumbnail($this, $this->defaultThumbnails, true);
     }
 
     /**
@@ -796,79 +825,101 @@ class Media extends ModelEntity
                 unlink($names['jpg']);
             }
 
+            if (file_exists($names['jpgHD'])) {
+                unlink($names['jpgHD']);
+            }
+
             if (file_exists($names['original'])) {
                 unlink($names['original']);
             }
 
+            if (file_exists($names['originalHD'])) {
+                unlink($names['originalHD']);
+            }
         }
     }
 
 
     /**
      * Loads the thumbnails paths via the configured thumbnail sizes.
+     * @param bool $highDpi - If true, loads high dpi thumbnails instead
      * @return array
      */
-    public function loadThumbnails()
+    public function loadThumbnails($highDpi = false)
     {
-	    $thumbnails = $this->getThumbnailFilePaths();
+        $thumbnails = $this->getThumbnailFilePaths($highDpi);
 
-        if(!file_exists(Shopware()->OldPath() . $this->getPath())){
+        if (!file_exists(Shopware()->OldPath() . $this->getPath())) {
             return $thumbnails;
         }
 
-	    foreach($thumbnails as $size => $thumbnail) {
-		    $size = explode('x', $size);
+        foreach ($thumbnails as $size => $thumbnail) {
+            $size = explode('x', $size);
 
-		    $path = Shopware()->OldPath() . $thumbnail;
-		    if (!file_exists($path)) {
-                $this->createThumbnail($size[0], $size[1]);
-		    }
-	    }
+            $path = Shopware()->OldPath() . $thumbnail;
+            if (!file_exists($path)) {
+                try {
+                    $this->createThumbnail($size[0], $size[1]);
+                } catch (\Exception $e) {
+                    // Ignore for now
+                    // Exception might be thrown when thumbnails can not
+                    // be generated due to invalid image files
+                }
+            }
+        }
 
-	    return $thumbnails;
+        return $thumbnails;
     }
 
-	/**
-	 * Returns an array of all thumbnail paths the media object can have
-	 *
-	 * @return array
-	 */
-	public function getThumbnailFilePaths()
-	{
-		if ($this->type !== self::TYPE_IMAGE) {
-			return array();
-		}
-		$sizes = array();
+    /**
+     * Returns an array of all thumbnail paths the media object can have
+     *
+     * @param bool $highDpi - If true, returns the file path for the high dpi thumbnails instead
+     * @return array
+     */
+    public function getThumbnailFilePaths($highDpi = false)
+    {
+        if ($this->type !== self::TYPE_IMAGE) {
+            return array();
+        }
+        $sizes = array();
 
-		//concat default sizes
-		foreach ($this->defaultThumbnails as $size) {
-			if (count($size) === 1) {
-				$sizes[] = $size . 'x' . $size;
-			} else {
-				$sizes[] = $size[0] . 'x' . $size[1];
-			}
-		}
+        //concat default sizes
+        foreach ($this->defaultThumbnails as $size) {
+            if (count($size) === 1) {
+                $sizes[] = $size . 'x' . $size;
+            } else {
+                $sizes[] = $size[0] . 'x' . $size[1];
+            }
+        }
 
-		//Check if the album has loaded correctly.
-		if ($this->album !== null && $this->album->getSettings() !== null && $this->album->getSettings()->getCreateThumbnails() === 1) {
-			$sizes = array_merge($this->album->getSettings()->getThumbnailSize(), $sizes);
-			$sizes = array_unique($sizes);
-		}
-		$thumbnails = array();
+        //Check if the album has loaded correctly.
+        if ($this->album !== null && $this->album->getSettings() !== null && $this->album->getSettings()->getCreateThumbnails() === 1) {
+            $sizes = array_merge($this->album->getSettings()->getThumbnailSize(), $sizes);
+            $sizes = array_unique($sizes);
+        }
+        $thumbnails = array();
+        $suffix = $highDpi ? '@2x' : '';
 
-		//iterate thumbnail sizes
-		foreach ($sizes as $size) {
-			if (strpos($size, 'x') === false) {
-				$size = $size . 'x' . $size;
-			}
-			$path = $this->getThumbnailDir() . str_replace('.' . $this->extension, '_' . $size . '.' . $this->extension, $this->getFileName());
-			$path = str_replace(Shopware()->OldPath(), '', $path);
-			if (DIRECTORY_SEPARATOR !== '/') {
-				$path = str_replace(DIRECTORY_SEPARATOR, '/', $path);
-			}
-			$thumbnails[$size] = $path;
-		}
+        //iterate thumbnail sizes
+        foreach ($sizes as $size) {
+            if (strpos($size, 'x') === false) {
+                $size = $size . 'x' . $size;
+            }
 
+            $fileName = str_replace(
+                '.' . $this->extension,
+                '_' . $size . $suffix . '.' . $this->extension,
+                $this->getFileName()
+            );
+
+            $path = $this->getThumbnailDir() . $fileName;
+            $path = str_replace(Shopware()->OldPath(), '', $path);
+            if (DIRECTORY_SEPARATOR !== '/') {
+                $path = str_replace(DIRECTORY_SEPARATOR, '/', $path);
+            }
+            $thumbnails[$size] = $path;
+        }
 
         return $thumbnails;
     }
@@ -900,24 +951,25 @@ class Media extends ModelEntity
      */
     private function createThumbnail($width, $height)
     {
-	    //create only thumbnails for image media
-	    if ($this->type !== self::TYPE_IMAGE) {
-		    return;
-	    }
+        //create only thumbnails for image media
+        if ($this->type !== self::TYPE_IMAGE) {
+            return;
+        }
 
-	    /** @var \Shopware\Components\Thumbnail\Manager $generator */
-	    $manager = Shopware()->Container()->get('thumbnail_manager');
+        /** @var \Shopware\Components\Thumbnail\Manager $manager */
+        $manager = Shopware()->Container()->get('thumbnail_manager');
 
-	    $newSize = array(
-		    'width' => $width,
-		    'height' => $height
-	    );
+        $newSize = array(
+            'width' => $width,
+            'height' => $height
+        );
 
         $manager->createMediaThumbnail($this, array($newSize), true);
     }
 
     /**
      * Create the new names for the jpg file and the file with the original extension
+     * Also returns high dpi paths
      * @param $suffix
      * @param $fileName
      * @return array
@@ -925,11 +977,32 @@ class Media extends ModelEntity
     private function getThumbnailNames($suffix, $fileName)
     {
         $jpgName = str_replace('.' . $this->extension, '_' . $suffix . '.jpg', $fileName);
+        $jpgHDName = str_replace('.' . $this->extension, '_' . $suffix . '@2x.jpg', $fileName);
         $originalName = str_replace('.' . $this->extension, '_' . $suffix . '.' . $this->extension, $fileName);
+        $originalHDName = str_replace('.' . $this->extension, '_' . $suffix . '@2x.' . $this->extension, $fileName);
+
         return array(
             'jpg' => $this->getThumbnailDir() . $jpgName,
-            'original' => $this->getThumbnailDir() . $originalName
+            'jpgHD' => $this->getThumbnailDir() . $jpgHDName,
+            'original' => $this->getThumbnailDir() . $originalName,
+            'originalHD' => $this->getThumbnailDir() . $originalHDName
         );
+    }
+
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getProperties()
+    {
+        return $this->properties;
+    }
+
+    /**
+     * @param \Doctrine\Common\Collections\ArrayCollection $properties
+     */
+    public function setProperties($properties)
+    {
+        $this->properties = $properties;
     }
 
     /**
@@ -1001,7 +1074,6 @@ class Media extends ModelEntity
             $fileInfo  = pathinfo($this->file->getClientOriginalName());
             $extension = $fileInfo['extension'];
             $name      = $fileInfo['filename'];
-
         } else {
             $extension = $this->file->guessExtension();
             $name      = $this->file->getBasename();

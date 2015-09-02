@@ -1,7 +1,7 @@
 <?php
 class Migrations_Migration132 Extends Shopware\Components\Migrations\AbstractMigration
 {
-    public function up()
+    public function up($modus)
     {
         $sql = <<<'EOD'
 DELETE FROM s_core_subscribes

@@ -7,7 +7,6 @@
         <column>company</column>
         <column>contact</column>
         <column>street</column>
-        <column>streetnumber</column>
         <column>zipcode</column>
         <column>city</column>
         <column>phone</column>
@@ -27,8 +26,7 @@
             <value>2012-06-14</value>
             <value>Kraftwerk</value>
             <value>Simpson</value>
-            <value>Evergreen Terrace</value>
-            <value>742</value>
+            <value>Evergreen Terrace 742</value>
             <value>1337</value>
             <value>Springfield</value>
             <value>(939) 555-0113</value>

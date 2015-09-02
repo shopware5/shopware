@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -114,7 +114,7 @@ class FeedbackCollector
             ORDER BY s_core_shops.default DESC;'
         );
         $mainLanguage = array_shift($shopLanguages);
-        array_walk($shopLanguages, function(&$item){
+        array_walk($shopLanguages, function (&$item) {
             $item = $item['locale'];
         });
 

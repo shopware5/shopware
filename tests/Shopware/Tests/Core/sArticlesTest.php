@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2013 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 /**
  * Shopware SwagAboCommerce Plugin - Bootstrap
  *
@@ -29,7 +28,7 @@
  * @package   Shopware\Plugins\SwagAboCommerce
  * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
-class sArticlesTest extends PHPUnit_Framework_TestCase
+class sArticlesTest extends Enlight_Components_Test_Controller_TestCase
 {
     protected function assertsArticlesState($sArticles, $categoryId, $translationId, $customerGroupId)
     {
@@ -61,6 +60,73 @@ class sArticlesTest extends PHPUnit_Framework_TestCase
         $sArticles = new sArticles($category, $translationId, $customerGroupId);
 
         $this->assertsArticlesState($sArticles, $categoryId, $translationId, $customerGroupId);
+    }
+
+    /**
+     * @ticket SW-4709
+     */
+    public function testGetAffectedSuppliers()
+    {
+        $this->dispatch('/');
+        $suppliers = Shopware()->Modules()->Articles()->sGetAffectedSuppliers(
+            Shopware()->Config()->BlogCategory
+        );
+
+        $this->assertNotNull($suppliers);
+    }
+
+
+    /**
+     * Checks if price group is taken into account correctly
+     * @ticket SW-4887
+     */
+    public function testPriceGroupForMainVariant()
+    {
+        // Add price group
+        $sql = "
+        UPDATE s_articles SET pricegroupActive = 1 WHERE id = 2;
+        INSERT INTO s_core_pricegroups_discounts (`groupID`, `customergroupID`, `discount`, `discountstart`) VALUES (1, 1, 5, 1);
+        ";
+
+        Shopware()->Db()->query($sql);
+
+        $this->dispatch("/");
+
+        Shopware()->Container()->get('shopware_storefront.context_service')->initializeProductContext();
+
+        $correctPrice = "18,99";
+        $article = Shopware()->Modules()->Articles()->sGetArticleById(
+            2
+        );
+        $this->assertEquals($correctPrice, $article["price"]);
+
+        // delete price group
+        $sql = "
+        UPDATE s_articles SET pricegroupActive = 0 WHERE id = 2;
+        DELETE FROM s_core_pricegroups_discounts WHERE `customergroupID` = 1 AND `discount` = 5;
+        ";
+        Shopware()->Db()->query($sql);
+    }
+
+    /**
+     * @ticket SW-5391
+     */
+    public function testsGetPromotionByIdWithNonExistingArticle()
+    {
+        $result = Shopware()->Modules()->Articles()->sGetPromotionById('fix', 0, 9999999);
+
+        // a query to a not existing article should return 'false' and not throw an exception
+        $this->assertFalse($result);
+    }
+
+    private function assertArrayKeys($array, $expectedKeys)
+    {
+        $keys = array_keys($array);
+        $this->assertCount(count($expectedKeys), $keys, 'Array count do not match!');
+
+        foreach($expectedKeys as $expectedKey) {
+            $this->assertEquals($expectedKey['value'], $keys[$expectedKey['index']], $expectedKey['message']);
+        }
     }
 }
 

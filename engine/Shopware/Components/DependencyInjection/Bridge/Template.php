@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,15 +32,15 @@ namespace Shopware\Components\DependencyInjection\Bridge;
 class Template
 {
     /**
-     * @param \Enlight_Event_EventManager           $eventManager
-     * @param \Shopware_Components_Snippet_Manager  $snippetManager
-     * @param array                                 $options
+     * @param \Enlight_Event_EventManager $eventManager
+     * @param \Enlight_Components_Snippet_Resource $snippetResource
+     * @param array $templateConfig
      * @return \Enlight_Template_Manager
      */
     public function factory(
         \Enlight_Event_EventManager $eventManager,
-        \Shopware_Components_Snippet_Manager $snippetManager,
-        array $options
+        \Enlight_Components_Snippet_Resource $snippetResource,
+        array $templateConfig
     ) {
 
         /** @var $template \Enlight_Template_Manager */
@@ -50,20 +50,10 @@ class Template
         $template->setCacheDir(Shopware()->AppPath('Cache_Templates'));
         $template->setTemplateDir(Shopware()->AppPath('Views'));
 
-        $template->setOptions($options);
+        $template->setOptions($templateConfig);
         $template->setEventManager($eventManager);
 
-        $template->setTemplateDir(array(
-            'custom'      => '_local',
-            'local'       => '_local',
-            'emotion'     => '_default',
-            'default'     => '_default',
-            'base'        => 'templates',
-            'include_dir' => '.',
-        ));
-
-        $resource = new \Enlight_Components_Snippet_Resource($snippetManager);
-        $template->registerResource('snippet', $resource);
+        $template->registerResource('snippet', $snippetResource);
         $template->setDefaultResourceType('snippet');
 
         return $template;

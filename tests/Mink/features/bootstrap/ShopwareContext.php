@@ -1,20 +1,13 @@
 <?php
 
-use Behat\Behat\Context\Step;
-use Behat\Gherkin\Node\TableNode;
+namespace Shopware\Tests\Mink;
 
-require_once 'SubContext.php';
+use Shopware\Tests\Mink\Page\Emotion\Homepage;
+use Behat\Gherkin\Node\TableNode;
+use Shopware\Tests\Mink\Element\Emotion\CompareColumn;
 
 class ShopwareContext extends SubContext
 {
-    /**
-     * @Given /^I am on the frontpage$/
-     */
-    public function iAmOnTheFrontpage()
-    {
-        $this->getPage('Homepage')->open();
-    }
-
     /**
      * @When /^I search for "(?P<searchTerm>[^"]*)"$/
      */
@@ -32,47 +25,241 @@ class ShopwareContext extends SubContext
     }
 
     /**
-     * @Given /^I should see a banner "(?P<image>[^"]*)"$/
+     * @Then /^I should see the no results message for keyword "([^"]*)"$/
      */
-    public function iShouldSeeABanner($image)
+    public function iShouldSeeTheNoResultsMessageForKeyword($keyword)
     {
-        $this->getPage('Homepage')->checkBanner($image);
+        $this->getPage('Homepage')->receiveNoResultsMessageForKeyword($keyword);
     }
 
     /**
-     * @Given /^I should see a banner "(?P<image>[^"]*)" to "(?P<link>[^"]*)"$/
+     * @When /^I change the currency to "(?P<currency>[^"]*)"$/
      */
-    public function iShouldSeeABannerTo($image, $link)
+    public function iChangeTheCurrencyTo($currency)
     {
-        $this->getPage('Homepage')->checkBanner($image, $link);
+        $this->getPage('Homepage')->changeCurrency($currency);
     }
 
     /**
-     * @Given /^I should see a banner "(?P<image>[^"]*)" with mapping:$/
+     * @Then /^the comparison should contain the following products:$/
+     */
+    public function theComparisonShouldContainTheFollowingProducts(TableNode $items)
+    {
+        /** @var Homepage $page */
+        $page = $this->getPage('Homepage');
+
+        /** @var CompareColumn $compareColumns */
+        $compareColumns = $this->getMultipleElement($page, 'CompareColumn');
+
+        $page->checkComparisonProducts($compareColumns, $items->getHash());
+    }
+
+    /**
+     * @Then /^the cart should contain (?P<quantity>\d+) articles with a value of "(?P<amount>[^"]*)"$/
+     */
+    public function theCartShouldContainArticlesWithAValueOf($quantity, $amount)
+    {
+        $this->getElement('HeaderCart')->checkCart($quantity, $amount);
+    }
+
+    /**
+     * @When /^I subscribe to the newsletter with "(?P<email>[^"]*)"$/
+     * @When /^I subscribe to the newsletter with "(?P<email>[^"]*)" :$/
+     */
+    public function iSubscribeToTheNewsletterWith($email, TableNode $additionalData = null)
+    {
+        $pageInfo = Helper::getPageInfo($this->getSession(), array('controller'));
+        $pageName = ucfirst($pageInfo['controller']);
+        $data = array(
+            array(
+                'field' => 'newsletter',
+                'value' => $email
+            )
+        );
+
+        if ($pageName === 'Index') {
+            $pageName = 'Homepage';
+        }
+        elseif (($pageName === 'Newsletter') && ($additionalData)) {
+            $data = array_merge($data, $additionalData->getHash());
+        }
+
+        /** @var Homepage|\Shopware\Tests\Mink\Page\Emotion\Newsletter $page */
+        $page = $this->getPage($pageName);
+        $page->subscribeNewsletter($data);
+    }
+
+    /**
+     * @When /^I unsubscribe the newsletter$/
+     * @When /^I unsubscribe the newsletter with "(?P<email>[^"]*)"$/
+     */
+    public function iUnsubscribeTheNewsletter($email = null)
+    {
+        $data = array();
+
+        if ($email) {
+            $data = array(
+                array(
+                    'field' => 'newsletter',
+                    'value' => $email
+                )
+            );
+        }
+
+        $this->getPage('Newsletter')->unsubscribeNewsletter($data);
+    }
+
+    /**
+     * @When /^I click the link in my latest email$/
+     * @When /^I click the links in my latest (\d+) emails$/
+     */
+    public function iConfirmTheLinkInTheEmail($limit = 1)
+    {
+        $sql = 'SELECT hash FROM s_core_optin ORDER BY id DESC LIMIT ' . $limit;
+        $hashes = $this->getContainer()->get('db')->fetchAll($sql);
+
+        $session = $this->getSession();
+        $link = $session->getCurrentUrl();
+        $query = parse_url($link, PHP_URL_QUERY);
+        $anchor = strpos($link, "#");
+
+        if($anchor) {
+            $link = substr($link, 0, $anchor);
+        }
+
+        //Blogartikel-Bewertung
+        if(empty($query)) {
+            $mask = '%s/sConfirmation/%s';
+        }
+        else {
+            parse_str($query, $args);
+
+            switch($args['action']) {
+                //Artikel-Benachrichtigungen
+                case 'notify':
+                    $mask = '%sConfirm&sNotificationConfirmation=%s&sNotify=1';
+                    break;
+
+                //Artikel-Bewertungen
+                default:
+                    $mask = '%s&sConfirmation=%s';
+                    break;
+            }
+        }
+
+        foreach ($hashes as $optin) {
+            $confirmationLink = sprintf($mask, $link, $optin['hash']);
+            $session->visit($confirmationLink);
+        }
+    }
+
+    /**
+     * @When /^I enable the config "([^"]*)"$/
+     */
+    public function iEnableTheConfig($configName)
+    {
+        $this->theConfigValueOfIs($configName, true);
+    }
+
+    /**
+     * @When /^I disable the config "([^"]*)"$/
+     */
+    public function iDisableTheConfig($configName)
+    {
+        $this->theConfigValueOfIs($configName, false);
+    }
+
+    /**
+     * @When /^the config value of "([^"]*)" is (\d+)$/
+     */
+    public function theConfigValueOfIsNumeric($configName, $value)
+    {
+        $this->theConfigValueOfIs($configName, intval($value));
+    }
+
+    /**
+     * @When /^the config value of "([^"]*)" is "([^"]*)"$/
+     */
+    public function theConfigValueOfIs($configName, $value)
+    {
+        /** @var FeatureContext $featureContext */
+        $featureContext = $this->getMainContext();
+        $featureContext->changeConfigValue($configName, $value);
+    }
+
+    /**
+     * @Given /^I should see a banner with image "(?P<image>[^"]*)"$/
+     * @Given /^I should see a banner with image "(?P<image>[^"]*)" to "(?P<link>[^"]*)"$/
+     */
+    public function iShouldSeeABanner($image, $link = null)
+    {
+        $this->iShouldSeeABannerOnPositionWithImage(1, $image, $link);
+    }
+
+    /**
+     * @Given /^I should see a banner on position (\d+) with image "([^"]*)"$/
+     * @Given /^I should see a banner on position (\d+) with image "([^"]*)" to "([^"]*)"$/
+     */
+    public function iShouldSeeABannerOnPositionWithImage($position, $image, $link = null)
+    {
+        /** @var Homepage $page */
+        $page = $this->getPage('Homepage');
+
+        /** @var \Shopware\Tests\Mink\Element\Emotion\Banner $banner */
+        $banner = $this->getMultipleElement($page, 'Banner', $position);
+        $page->checkLinkedBanner($banner, $image, $link);
+    }
+
+    /**
+     * @Given /^I should see a banner with image "(?P<image>[^"]*)" and mapping:$/
      */
     public function iShouldSeeABannerWithMapping($image, TableNode $mapping)
     {
+        $this->iShouldSeeABannerOnPositionWithImageAndMapping(1, $image, $mapping);
+    }
+
+    /**
+     * @Given /^I should see a banner on position (\d+) with image "([^"]*)" and mapping:$/
+     */
+    public function iShouldSeeABannerOnPositionWithImageAndMapping($position, $image, TableNode $mapping)
+    {
+        /** @var Homepage $page */
+        $page = $this->getPage('Homepage');
+
+        /** @var \Shopware\Tests\Mink\Element\Emotion\Banner $banner */
+        $banner = $this->getMultipleElement($page, 'Banner', $position);
         $mapping = $mapping->getHash();
 
-        $this->getPage('Homepage')->checkBanner($image, $mapping);
+        $page->checkMappedBanner($banner, $image, $mapping);
+    }
+
+
+    /**
+     * @Given /^the product box on position (\d+) should have the following properties:$/
+     */
+    public function iShouldSeeAnArticle($position, TableNode $data)
+    {
+        /** @var Homepage $page */
+        $page = $this->getPage('Homepage');
+
+        /** @var \Shopware\Tests\Mink\Element\Emotion\Article $article */
+        $article = $this->getMultipleElement($page, 'Article', $position);
+
+        $page->checkArticle($article, $data->getHash());
     }
 
     /**
-     * @Given /^I should see an article:$/
+     * @Given /^the category teaser on position (\d+) for "(?P<name>[^"]*)" should have the image "(?P<image>[^"]*)" and link to "(?P<link>[^"]*)"$/
      */
-    public function iShouldSeeAnArticle(TableNode $data)
+    public function iShouldSeeACategoryTeaserWithImageTo($position, $name, $image, $link)
     {
-        $data = $data->getHash();
+        /** @var Homepage $page */
+        $page = $this->getPage('Homepage');
 
-        $this->getPage('Homepage')->checkArticle($data);
-    }
+        /** @var \Shopware\Tests\Mink\Element\Emotion\CategoryTeaser $teaser */
+        $teaser = $this->getMultipleElement($page, 'CategoryTeaser', $position);
 
-    /**
-     * @Given /^I should see a categorie teaser "(?P<title>[^"]*)" with image "(?P<image>[^"]*)" to "(?P<link>[^"]*)"$/
-     */
-    public function iShouldSeeACategorieTeaserWithImageTo($title, $image, $link)
-    {
-        $this->getPage('Homepage')->checkCategoryTeaser($title, $image, $link);
+        $page->checkCategoryTeaser($teaser, $name, $image, $link);
     }
 
     /**
@@ -80,19 +267,29 @@ class ShopwareContext extends SubContext
      */
     public function iShouldSeeSomeBlogArticles(TableNode $articles)
     {
+        /** @var Homepage $page */
+        $page = $this->getPage('Homepage');
+
+        /** @var \Shopware\Tests\Mink\Element\Emotion\BannerSlider $slider */
+        $blogArticle = $this->getMultipleElement($page, 'BlogArticle', 1);
+
         $articles = $articles->getHash();
 
-        $this->getPage('Homepage')->checkBlogArticles($articles);
+        $page->checkBlogArticles($blogArticle, $articles);
     }
 
     /**
      * @Then /^I should see a banner slider:$/
      */
-    public function iShouldSeeABannerSlider(TableNode $articles)
+    public function iShouldSeeABannerSlider(TableNode $slides)
     {
-        $articles = $articles->getHash();
+        /** @var Homepage $page */
+        $page = $this->getPage('Homepage');
 
-        $this->getPage('Homepage')->checkSlider('banner', $articles);
+        /** @var \Shopware\Tests\Mink\Element\Emotion\BannerSlider $slider */
+        $slider = $this->getMultipleElement($page, 'BannerSlider', 1);
+
+        $page->checkSlider($slider, $slides->getHash());
     }
 
     /**
@@ -100,17 +297,27 @@ class ShopwareContext extends SubContext
      */
     public function iShouldSeeAYoutubeVideo($code)
     {
-        $this->getPage('Homepage')->checkYoutubeVideo($code);
+        /** @var Homepage $page */
+        $page = $this->getPage('Homepage');
+
+        /** @var \Shopware\Tests\Mink\Element\Emotion\Youtube $slider */
+        $youtube = $this->getMultipleElement($page, 'YouTube', 1);
+
+        $page->checkYoutubeVideo($youtube, $code);
     }
 
     /**
      * @Then /^I should see a manufacturer slider:$/
      */
-    public function iShouldSeeAManufacturerSlider(TableNode $articles)
+    public function iShouldSeeAManufacturerSlider(TableNode $manufacturers)
     {
-        $articles = $articles->getHash();
+        /** @var Homepage $page */
+        $page = $this->getPage('Homepage');
 
-        $this->getPage('Homepage')->checkSlider('manufacturer', $articles);
+        /** @var \Shopware\Tests\Mink\Element\Emotion\ManufacturerSlider $slider */
+        $slider = $this->getMultipleElement($page, 'ManufacturerSlider', 1);
+
+        $page->checkSlider($slider, $manufacturers->getHash());
     }
 
     /**
@@ -118,49 +325,14 @@ class ShopwareContext extends SubContext
      */
     public function iShouldSeeAnArticleSlider(TableNode $articles)
     {
-        $articles = $articles->getHash();
+        /** @var Homepage $page */
+        $page = $this->getPage('Homepage');
 
-        $this->getPage('Homepage')->checkSlider('article', $articles);
-    }
+        /** @var \Shopware\Tests\Mink\Element\Emotion\ManufacturerSlider $slider */
+        $slider = $this->getMultipleElement($page, 'ArticleSlider', 1);
 
-    /**
-     * @Then /^The comparison should look like this:$/
-     */
-    public function theComparisonShouldLookLikeThis(TableNode $articles)
-    {
-        $articles = $articles->getHash();
+        $products = Helper::floatArray($articles->getHash(), ['price']);
 
-        $this->getPage('Homepage')->checkComparison($articles);
-    }
-
-    /**
-     * @Given /^the "(?P<name>[^"]*)" plugin is enabled$/
-     */
-    public function thePluginIsEnabled($name)
-    {
-        /** @var \Shopware\Components\Plugin\Manager $pluginManager */
-        $pluginManager = $this->getContainer()->get('shopware.plugin_Manager');
-        $pluginManager->refreshPluginList();
-
-        $plugin = $pluginManager->getPluginByName($name);
-        $pluginManager->installPlugin($plugin);
-        $pluginManager->activatePlugin($plugin);
-    }
-
-    /**
-     * @Given /^the articles from "(?P<name>[^"]*)" have tax id (?P<num>\d+)$/
-     */
-    public function theArticlesFromHaveTaxId($supplier, $taxId)
-    {
-        $taxId = intval($taxId);
-
-        $sql = sprintf(
-            'UPDATE s_articles SET taxID = %d WHERE supplierID =
-                    (SELECT id FROM s_articles_supplier WHERE name = "%s")',
-            $taxId,
-            $supplier
-        );
-        $this->getContainer()->get('db')->exec($sql);
+        $page->checkSlider($slider, $products);
     }
 }
-

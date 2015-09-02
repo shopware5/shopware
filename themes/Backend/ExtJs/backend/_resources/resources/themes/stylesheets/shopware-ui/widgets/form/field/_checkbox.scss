@@ -1,0 +1,78 @@
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ *
+ * @category   Shopware
+ * @package    Shopware_Styling
+ * @subpackage Checkbox
+ * @version    $Id$
+ * @author shopware AG
+ */
+
+/** Checkbox group styling */
+table[id^=checkboxgroup] td.#{$prefix}form-item-body {
+	@include reset-border-radius;
+	background: transparent;
+	padding: 0;
+}
+
+/** Remove the padding on the left and right side of the element */
+table[id^=checkboxfield] {
+	td.#{$prefix}form-item-body {
+		padding: 2px 0;
+
+        .#{$prefix}form-cb-label {
+            color: $font-color;
+            position: relative;
+            top: -2px;
+            font-size: 11px;
+        }
+	}
+}
+
+/** Checkbox style - Normal state */
+td.#{$prefix}form-item-body .#{$prefix}form-checkbox {
+	@include border-radius(3px);
+	@include single-transition(all, 200ms, ease-in);
+	@include user-select(none);
+	width: 20px;
+	height: 20px;
+	border: 2px solid #dfe3e6;
+	padding: 0;
+}
+
+/** Checkbox style - Disabled style */
+td.#{$prefix}form-item-body .#{$prefix}form-checkbox,
+td.#{$prefix}form-item-body .#{$prefix}item-disabled .#{$prefix}form-checkbox:hover {
+	background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAS1BMVEXQ1dm1vsSwub+yu8GzvMK3v8XP1djc4OPg5Obh5ObCyc3m6evy8/T09fb19vfK0NT+/v7////N0tbM0tbx8vPX29/U2dzd4OPe4uXKxjZBAAAASElEQVR42s3OtxHAIBQE0QOE/3in/itVwjCUoBdutADj4tkEZ4BU2tjNaCXhPIW4BfIOiXI5MiXUWC6x/je0fq/3hjHXe6w5PjeRD3lVqdV7AAAAAElFTkSuQmCC") no-repeat;
+}
+
+/** Checkbox style - Hover state */
+td.#{$prefix}form-item-body .#{$prefix}form-checkbox:hover {
+	background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAs0lEQVQoke2SvQ4BURSEZ869a69dPytR4S10KpUH1qiIUucVtpBIJEQiCNY9OpW7bG/q78tkkuFsnS82OBSRiCFBEJ+i0G7tOe55O805zG79DC4WY81nHFBwf+V8Z+0d0aCDdquZOkchGWhQzRq6OsKKiIvj1LkkcSH67dRsISSMETFSTgMgSaGEVoYilei/8Kug0GpCYvT8UO+96hfz8tC6eDvpF8ttij0iW5S/w4kfZacXskc1LR0trAsAAAAASUVORK5CYII=") no-repeat;
+}
+
+/** Checkbox style - Checked state */
+td.#{$prefix}form-item-body .#{$prefix}form-cb-checked .#{$prefix}form-checkbox,
+.#{$prefix}form-cb-checked .#{$prefix}form-checkbox {
+	background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAsVBMVEWfzOx+uOJztON0teR1tuV7uOXB0t/c4OPg5Obh5OZ+vuzm6evy8/T09fb19veDwvD+/v7///+FxPHo7O68x8/5+vs3YoE9ZoOGpLkMUIGvw9L8/f2rucPR3OQTWo4+fanW3uQKQWlTfJrx9Pc7eKQPY5++0+Ntl7UOXpgkc6wQa61Ojr3x9fgqfLgSecMSdr7M3uu81eddncu70uPu8/eKxfDp8PWk0fGPyvSPzfqQzvu5Pc3CAAAAgklEQVR42lXORxaCQBBF0QIkCE3DxyzmnDGR3P/CnNRpmje8o0dkmFaHs0yDyHZcr8t5rmOTH4hQcqEIfIpEDFUsIkokuF4fkEkDg+GoDePJVEE6SzFfLKFgtd5sd/tDAziezpcrNLjdH9lTB7yyN1qAz1cDjiEv9PUip7Kqf6q6Kv9wdxS+SwyDlwAAAABJRU5ErkJggg==") no-repeat !important;
+	border-color: #afd9f7 !important;
+}

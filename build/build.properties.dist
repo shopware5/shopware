@@ -18,8 +18,14 @@ sql.dir   = ${basedir}/_sql
 cache.dir = ${basedir}/cache
 app.dir   = ${basedir}/engine/Shopware
 
+karma.config = ${basedir}/themes/Frontend/Responsive/karma.conf.js
+
 script.mysql    = mysql
 script.phpunit  = ${basedir}/vendor/bin/phpunit
 script.behat    = ${basedir}/vendor/bin/behat
+script.karma    = karma
+
+script.server.start = ${build.dir}/server/start_server
+script.server.stop  = ${build.dir}/server/stop_server
 
 demo.data = ${sql.dir}/demo/latest.sql

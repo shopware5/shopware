@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -25,8 +25,11 @@
 namespace Shopware\Recovery\Update\Command;
 
 use Shopware\Components\Migrations\Manager as MigrationManager;
-use Shopware\Recovery\Common\Dump;
+use Shopware\Recovery\Common\DumpIterator;
+use Shopware\Recovery\Common\IOHelper;
+use Shopware\Recovery\Update\CleanupFilesFinder;
 use Shopware\Recovery\Update\DependencyInjection\Container;
+use Shopware\Recovery\Update\DummyPluginFinder;
 use Shopware\Recovery\Update\FilesystemFactory;
 use Shopware\Recovery\Update\PathBuilder;
 use Shopware\Recovery\Update\Steps\ErrorResult;
@@ -36,27 +39,21 @@ use Shopware\Recovery\Update\Steps\UnpackStep;
 use Shopware\Recovery\Update\Steps\ValidResult;
 use Shopware\Recovery\Update\Utils;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Helper\DialogHelper;
-use Symfony\Component\Console\Helper\ProgressHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\Question;
 
 class UpdateCommand extends Command
 {
     /**
-     * @var InputInterface
-     */
-    private $input;
-
-    /**
-     * @var OutputInterface
-     */
-    private $output;
-
-    /**
      * @var Container
      */
     private $container;
+
+    /**
+     * @var IOHelper
+     */
+    private $IOHelper;
 
     /**
      * {@inheritdoc}
@@ -64,6 +61,7 @@ class UpdateCommand extends Command
     protected function configure()
     {
         $this->setName('update');
+        $this->setDescription('Updates shopware');
     }
 
     /**
@@ -71,138 +69,54 @@ class UpdateCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->input     = $input;
-        $this->output    = $output;
         $this->container = $this->getApplication()->getContainer();
+        $this->container->setParameter('update.config', []);
+
+        $this->IOHelper = $ioService = new IOHelper(
+            $input,
+            $output,
+            $this->getHelper('question')
+        );
 
         if (!is_dir(UPDATE_FILES_PATH) && !is_dir(UPDATE_ASSET_PATH)) {
-            $this->output->writeln("No update files found.");
+            $ioService->writeln("No update files found.");
+
             return 1;
         }
 
-        $this->container->setParameter('update.config', array());
+        $version = $this->container->get('shopware.version');
+
+        if ($ioService->isInteractive()) {
+            $ioService->cls();
+            $ioService->printBanner();
+            $ioService->writeln("<info>Welcome to the Shopware updater </info>");
+            $ioService->writeln(sprintf("Shopware Version %s", $version));
+            $ioService->writeln("");
+            $ioService->ask('Press return to start the update.');
+            $ioService->cls();
+        }
 
         $this->unpackFiles();
         $this->migrateDatabase();
         $this->importSnippets();
         $this->cleanup();
+        $this->writeLockFile();
+
+        $ioService->cls();
+        $ioService->writeln("");
+        $ioService->writeln("");
+        $ioService->writeln("<info>The update has been finished succesfuly.</info>");
+        $ioService->writeln("Your shop is currently in maintenance mode.");
+        $ioService->writeln(sprintf("Please delete <question>%s</question> to finish the update.", UPDATE_ASSET_PATH));
+        $ioService->writeln("");
     }
 
-    private function cleanup()
+    private function unpackFiles()
     {
-        $this->output->writeln("Cleanup old files, clearing caches...");
-
-        $cleanupFile = UPDATE_ASSET_PATH . '/cleanup.php';
-        if (!is_file($cleanupFile)) {
-            return;
-        }
-
-        $rawList = require $cleanupFile;
-        $cleanupList = array();
-
-        foreach ($rawList as $path) {
-            $realpath = SW_PATH.'/'.$path;
-            if (file_exists($realpath)) {
-                $cleanupList[] = $path;
-            }
-        }
-
-        foreach ($cleanupList as $path) {
-            Utils::cleanPath(SW_PATH.'/'.$path);
-        }
-
-        $directoriesToDelete = array(
-            'cache/proxies/'                   => false,
-            'cache/doctrine/filecache/'	       => false,
-            'cache/doctrine/proxies/'	       => false,
-            'cache/doctrine/attributes/'       => false,
-            'cache/general/'                   => false,
-            'cache/templates/'                 => false,
-            'engine/Library/Mpdf/tmp'          => false,
-            'engine/Library/Mpdf/ttfontdata'   => false,
-        );
-
-        foreach ($directoriesToDelete as $directory => $deleteDirecory) {
-            $filePath = SW_PATH . '/' . $directory;
-            Utils::deleteDir($filePath, $deleteDirecory);
-        }
-    }
-
-    private function migrateDatabase()
-    {
-        $this->output->writeln("Apply database migrations...");
-
-        if (!is_dir(UPDATE_ASSET_PATH . '/migrations/')) {
-            $this->output->writeln("skipped...");
-            return 1;
-        }
-
-        /** @var MigrationManager $migrationManager */
-        $manager = $this->container->get('migration.manager');
-
-        $currentVersion = $manager->getCurrentVersion();
-
-        $versions = $manager->getMigrationsForVersion($currentVersion);
-
-        /** @var ProgressHelper $progress */
-        $progress = $this->getHelperSet()->get('progress');
-        $progress->start($this->output, count($versions));
-
-        $step = new MigrationStep($manager);
-        $offset = 0;
-        do {
-            $progress->setCurrent($offset);
-            $result = $step->run($offset);
-            if ($result instanceof ErrorResult) {
-                throw new \Exception($result->getMessage(), 0, $result->getException());
-            }
-
-            $offset = $result->getOffset();
-            $progress->setCurrent($offset);
-        } while ($result instanceof ValidResult);
-        $progress->finish();
-    }
-
-    public function importSnippets()
-    {
-        $this->output->writeln("Import snippets...");
-
-        /** @var Dump $dump */
-        $dump = $this->container->get('dump');
-
-        if (!$dump) {
-            $this->output->writeln("skipped...");
-            return 1;
-        }
-
-        /** @var \PDO $conn */
-        $conn = $this->container->get('db');
-
-        $this->output->writeln("Importing snippets");
-        $snippetStep = new SnippetStep($conn, $dump);
-
-        /** @var ProgressHelper $progress */
-        $progress = $this->getHelperSet()->get('progress');
-        $progress->start($this->output, $dump->count());
-
-        $offset = 0;
-        do {
-            $progress->setCurrent($offset);
-            $result = $snippetStep->run($offset);
-            if ($result instanceof ErrorResult) {
-                throw new \Exception($result->getMessage(), 0, $result->getException());
-            }
-            $offset = $result->getOffset();
-            $progress->setCurrent($offset);
-        } while ($result instanceof ValidResult);
-        $progress->finish();
-    }
-
-    public function unpackFiles()
-    {
-        $this->output->writeln("Replace system files...");
+        $this->IOHelper->writeln("Replace system files...");
         if (!is_dir(UPDATE_FILES_PATH)) {
-            $this->output->writeln("skipped...");
+            $this->IOHelper->writeln("skipped...");
+
             return;
         }
 
@@ -227,5 +141,122 @@ class UpdateCommand extends Command
             $offset = $result->getOffset();
             $total  = $result->getTotal();
         } while ($result instanceof ValidResult);
+    }
+
+    private function migrateDatabase()
+    {
+        $this->IOHelper->writeln("Apply database migrations...");
+
+        if (!is_dir(UPDATE_ASSET_PATH . '/migrations/')) {
+            $this->IOHelper->writeln("skipped...");
+
+            return 1;
+        }
+
+        /** @var MigrationManager $manager */
+        $manager = $this->container->get('migration.manager');
+
+        $currentVersion = $manager->getCurrentVersion();
+
+        $versions = $manager->getMigrationsForVersion($currentVersion);
+
+        $progress = $this->IOHelper->createProgressBar(count($versions));
+        $progress->start();
+
+        $step = new MigrationStep($manager);
+        $offset = 0;
+        do {
+            $progress->setCurrent($offset);
+            $result = $step->run($offset);
+            if ($result instanceof ErrorResult) {
+                throw new \Exception($result->getMessage(), 0, $result->getException());
+            }
+
+            $offset = $result->getOffset();
+            $progress->setCurrent($offset);
+        } while ($result instanceof ValidResult);
+        $progress->finish();
+        $this->IOHelper->writeln("");
+    }
+
+    private function importSnippets()
+    {
+        $this->IOHelper->writeln("Import snippets...");
+
+        /** @var DumpIterator $dump */
+        $dump = $this->container->get('dump');
+
+        if (!$dump) {
+            $this->IOHelper->writeln("skipped...");
+
+            return 1;
+        }
+
+        /** @var \PDO $conn */
+        $conn = $this->container->get('db');
+        $snippetStep = new SnippetStep($conn, $dump);
+
+        $progress = $this->IOHelper->createProgressBar($dump->count());
+        $progress->start();
+
+        $offset = 0;
+        do {
+            $progress->setCurrent($offset);
+            $result = $snippetStep->run($offset);
+            if ($result instanceof ErrorResult) {
+                throw new \Exception($result->getMessage(), 0, $result->getException());
+            }
+            $offset = $result->getOffset();
+            $progress->setCurrent($offset);
+        } while ($result instanceof ValidResult);
+        $progress->finish();
+        $this->IOHelper->writeln("");
+    }
+
+    private function cleanup()
+    {
+        $this->IOHelper->writeln("Cleanup old files, clearing caches...");
+
+        $this->deleteDummyPlugins();
+        $this->cleanupFiles();
+        $this->cleanupCache();
+    }
+
+    private function deleteDummyPlugins()
+    {
+        /** @var DummyPluginFinder $pluginFinder */
+        $pluginFinder = $this->container->get('dummy.plugin.finder');
+        foreach ($pluginFinder->getDummyPlugins() as $plugin) {
+            Utils::cleanPath($plugin);
+        }
+    }
+
+    private function cleanupFiles()
+    {
+        /** @var CleanupFilesFinder $cleanupFilesFinder */
+        $cleanupFilesFinder = $this->container->get('cleanup.files.finder');
+        foreach ($cleanupFilesFinder->getCleanupFiles() as $path) {
+            Utils::cleanPath($path);
+        }
+    }
+
+    private function cleanupCache()
+    {
+        $cachePath = SW_PATH . '/' . 'cache';
+        foreach (new \DirectoryIterator($cachePath) as $cacheDirectory) {
+            if ($cacheDirectory->isDot() || !$cacheDirectory->isDir()) {
+                continue;
+            }
+            Utils::deleteDir($cacheDirectory->getPathname(), true);
+        }
+    }
+
+    private function writeLockFile()
+    {
+        if (is_dir(SW_PATH . '/recovery/install')) {
+            /** @var \Shopware\Recovery\Common\SystemLocker $systemLocker */
+            $systemLocker = $this->container->get('system.locker');
+            $systemLocker();
+        }
     }
 }

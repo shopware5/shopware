@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 /**
  * @covers \Shopware\Components\LegacyRequestWrapper\PostWrapper
  */
@@ -33,7 +32,6 @@ class Shopware_Tests_Components_LegacyRequestWrapper_PostWrapperTest extends Enl
         'Basket',
         'Categories',
         'cms',
-        'Configurator',
         'Core',
         'Export',
         'Marketing',

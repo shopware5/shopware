@@ -1,0 +1,211 @@
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ *
+ * @category   Shopware
+ * @package    Shopware_Styling
+ * @subpackage Tab
+ * @version    $Id$
+ * @author shopware AG
+ */
+
+/** Tabbar Styling - Default */
+.#{$prefix}tab-bar {
+    background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+        svg-color-stop(#f7f7f7, 0%, 1),
+        svg-color-stop(#e5e6e9, 100%, 1)
+    )) center center no-repeat transparent;
+	border-color: $font-color;
+
+	.#{$prefix}tab-bar-body {
+		height: 33px !important;
+		padding: 9px 5px 3px;
+	}
+}
+
+/** Tabbar Styling - Plain */
+.#{$prefix}tab-bar-default-plain {
+	background: transparent;
+
+	.#{$prefix}box-inner {
+		height: 33px !important;
+	}
+
+	.#{$prefix}tab-bar-body {
+		padding-top: 10px;
+	}
+
+	.#{$prefix}tab-default-top {
+		top: 0px !important;
+	}
+}
+.#{$prefix}ie9 .#{$prefix}tab-bar-default-plain {
+    filter: none;
+}
+
+/** Tabbar strip */
+.#{$prefix}tab-bar-top .#{$prefix}tab-bar-strip {
+	background: #1681d3;
+    border: 0 none;
+	top: 31px;
+}
+
+.#{$prefix}tab-bar-strip-default-plain {
+	height: 3px !important;
+}
+
+/** Tabs */
+/** Tab Styling - Default */
+.#{$prefix}nlg .#{$prefix}tab-default-top, .#{$prefix}tab-default-top {
+	@include border-radius(5px 5px 0 0);
+    -webkit-box-shadow: transparent 0 0 0 !important;
+    -moz-box-shadow: transparent 0 0 0 !important;
+    -ms-box-shadow: transparent 0 0 0 !important;
+    box-shadow: transparent 0 0 0 !important;
+    border: 0 none !important;
+    background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+        svg-color-stop(rgba(178,193,203,1), 0%, 1),
+        svg-color-stop(rgba(127,152,169,1), 100%, 1)
+    )) center center no-repeat transparent !important;
+    border-color: #8896a6;
+	margin: 0 5px;
+
+	button .#{$prefix}tab-inner {
+        font-weight: normal;
+        padding-top: 1px;
+		color: #fff;
+		text-shadow: 0 1px 0 #8190a3;
+		margin: 0 !important; /** Fixes the alignment of the text in FF */
+	}
+
+	/** Tab Styling - Hover */
+	&:hover {
+        background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+            svg-color-stop(rgba(198,209,217,1), 0%, 1),
+            svg-color-stop(rgba(147,168,183,1), 100%, 1)
+        )) center center no-repeat transparent !important;
+    }
+}
+
+/** Tab Styling - Active */
+.#{$prefix}nlg .#{$prefix}tab-top-active, .#{$prefix}tab-top-active {
+    filter: none;
+    border: 0 none !important;
+    background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+        svg-color-stop(rgba(46,181,249,1), 0%, 1),
+        svg-color-stop(rgba(22,129,211,1), 100%, 1)
+    )) center center no-repeat transparent !important;
+
+    &:hover {
+        background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+            svg-color-stop(rgba(46,181,249,1), 0%, 1),
+            svg-color-stop(rgba(22,129,211,1), 100%, 1)
+        )) center center no-repeat transparent !important;
+    }
+
+	button .#{$prefix}tab-inner {
+		color: #fff;
+		text-shadow: 0 1px 0 #0941e2;
+	}
+}
+
+/** Tab Styling - Disable */
+.#{$prefix}nlg .#{$prefix}tab-default-top-disabled, .#{$prefix}tab-default-top-disabled {
+    background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+        svg-color-stop(rgba(230,230,233,1), 0%, 1),
+        svg-color-stop(rgba(221,222,224,1), 100%, 1)
+    )) center center no-repeat !important;
+
+    /** Tab Styling - Disable - Hover */
+    &:hover {
+        background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+            svg-color-stop(rgba(230,230,233,1), 0%, 1),
+            svg-color-stop(rgba(221,222,224,1), 100%, 1)
+        )) center center no-repeat transparent !important;
+    }
+
+	button {
+		color: #8596a2 !important;
+	}
+
+	.#{$prefix}tab-inner {
+		color: #8596a2 !important;
+		text-shadow: 0 1px 0 #fff !important;
+	}
+
+}
+
+/** Safari specific */
+.#{$prefix}safari {
+    .#{$prefix}tab-inner {
+        font-weight: 700 !important;
+    }
+}
+
+/** IE specific */
+.#{$prefix}ie.#{$prefix}nlg, #{$prefix}nlg {
+    .#{$prefix}tab-default-top {
+        background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+            svg-color-stop(rgba(178,193,203,1), 0%, 1),
+            svg-color-stop(rgba(127,152,169,1), 100%, 1)
+        )) center center no-repeat transparent;
+
+        /** Tab Styling - Hover */
+        &:hover {
+            background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+                svg-color-stop(rgba(198,209,217,1), 0%, 1),
+                svg-color-stop(rgba(147,168,183,1), 100%, 1)
+            )) center center no-repeat transparent;
+        }
+    }
+
+    .#{$prefix}tab-top-active {
+        background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+            svg-color-stop(rgba(46,181,249,1), 0%, 1),
+            svg-color-stop(rgba(22,129,211,1), 100%, 1)
+        )) center center no-repeat transparent;
+
+        &:hover {
+            background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+                svg-color-stop(rgba(46,181,249,1), 0%, 1),
+                svg-color-stop(rgba(22,129,211,1), 100%, 1)
+            )) center center no-repeat transparent;
+        }
+    }
+
+    .#{$prefix}tab-default-top-disabled {
+        background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+            svg-color-stop(rgba(230,230,233,1), 0%, 1),
+            svg-color-stop(rgba(221,222,224,1), 100%, 1)
+        )) center center no-repeat transparent !important;
+
+        &:hover {
+            background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+                svg-color-stop(rgba(230,230,233,1), 0%, 1),
+                svg-color-stop(rgba(221,222,224,1), 100%, 1)
+            )) center center no-repeat transparent !important;
+        }
+    }
+}
+
+.#{$prefix}tabpanel-child .#{$prefix}panel-body-default {
+	background: transparent;
+}

@@ -1,0 +1,97 @@
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ *
+ * @category   Shopware
+ * @package    Shopware_Styling
+ * @subpackage RowEditing
+ * @version    $Id$
+ * @author shopware AG
+ */
+
+/** Grid with row editor */
+.#{$prefix}grid-row-editor {
+
+	/** Reset  */
+	td.#{$prefix}form-item-body {
+		@include reset-border-radius;
+		padding: 0;
+		background: transparent;
+	}
+
+    .#{$prefix}search-article-live {
+        top: 4px !important;
+
+        .#{$prefix}search-article-live-field,
+        .#{$prefix}search-article-live-field tbody,
+        .#{$prefix}search-article-live-field tbody tr {
+            display: block !important;
+        }
+
+        .#{$prefix}search-article-live-field tbody tr .#{$prefix}form-item-body {
+            width: 100% !important;
+        }
+    }
+
+    /** Display field */
+    .#{$prefix}form-display-field {
+        display: none;
+    }
+
+
+    /** Combobox */
+    table[id^=combobox] {
+        .#{$prefix}form-trigger {
+            height: 19px !important;
+        }
+        table.#{$prefix}form-trigger-wrap .#{$prefix}form-trigger {
+            background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAAWCAIAAACt/zAoAAAACXBIWXMAAAsTAAALEwEAmpwYAAABDUlEQVQ4y2P5/OXruw8fGUgB/xkYfvz8ycLBzi4sKMBAIvj37x8LCwszExM7qToZGRlZQLb/J1UjAxMTRCcD6VoZGFgYyLMUopMcfVCd5NtJgU7yXfsPWWjewsUz5y1iY2dnYmZhZGD4+/fv718/I4IDCnKzCNiZGBfLw8u/fP1Wdk5OIPfXjx++bo5ZKfG///z5/fsPis5/GM4NDvBl5+Jav2M/kO3n7pwcHfrr959fv38TFZ8+rk5MjExfvn1PigwGWvXr1y8s/vyHI4g8nO3Z2ViBVv34+YvkWMGqZ2BTwr9/5Kf4/4zYigxGGImcKxhhbLBOYOAyYpH8D2ajeeU/sp2iwoKkOvXP378A2Y+BxWSrsmwAAAAASUVORK5CYII=") no-repeat scroll 0 -2px transparent
+        }
+        .#{$prefix}form-trigger-wrap-focus .#{$prefix}form-trigger {
+            background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAAWCAIAAACt/zAoAAAACXBIWXMAAAsTAAALEwEAmpwYAAABCklEQVQ4y2P5/OXruw8fGUgB/xkYfvz8ycLBzi4iJMhAIvj79y8LCwszEJGq8////yxA6t///6TqZGJkBOv8R7pOZrDOvyRrZGABI3LsZIDq/E+uzr/k20m2zj+oOqeu2Nq1Yh8jBy8jCxsDI+P/P7/+//ic7mVelRqK6dp/yEIZYZ7sghKdex4xcgmAIv3HpxxrieZou68//3z58ZuAP+OcDRi5hbtPfGZgYMywl2/21wTq+fT9N1EhFGUm85/x2Zff/1p81T//+P3h6y/C/oSDcGNJAS62j99/v/vyE8hlBOcSVJ1//+EKwDeff9AmPv/8+0euzr9k2/mXbDvJ9qeFiiip2v78/QsAyRmDrWsfg0MAAAAASUVORK5CYII=") no-repeat scroll 0 -2px transparent !important
+        }
+        table.#{$prefix}form-trigger-wrap .#{$prefix}form-trigger:hover {
+            background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAAWCAIAAACt/zAoAAAACXBIWXMAAAsTAAALEwEAmpwYAAABCklEQVQ4y2P5/OXruw8fGUgB/xkYfvz8ycLBzi4iJMhAIvj79y8LCwszEJGq8////yxA6t///6TqZGJkBOv8R7pOZrDOvyRrZGABI3LsZIDq/E+uzr/k20m2zj+oOqeu2Nq1Yh8jBy8jCxsDI+P/P7/+//ic7mVelRqK6dp/yEIZYZ7sghKdex4xcgmAIv3HpxxrieZou68//3z58ZuAP+OcDRi5hbtPfGZgYMywl2/21wTq+fT9N1EhFGUm85/x2Zff/1p81T//+P3h6y/C/oSDcGNJAS62j99/v/vyE8hlBOcSVJ1//+EKwDeff9AmPv/8+0euzr9k2/mXbDvJ9qeFiiip2v78/QsAyRmDrWsfg0MAAAAASUVORK5CYII=") no-repeat scroll 0 -2px transparent
+        }
+    }
+
+    /** Numberfield */
+    table.#{$prefix}form-trigger-wrap {
+
+		.#{$prefix}form-spinner-up, .#{$prefix}form-spinner-down {
+			width: 20px !important;
+			height: 10px !important;
+			background-position: 0 0 !important;
+		}
+
+		/** Numberfield Button Up - Normal state */
+		.#{$prefix}form-spinner-up {
+			height: 9px !important;
+			background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAAMCAIAAAAPshHVAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAvUlEQVQoU2P4/OXrwyfPSEIPnjy7cfc+w+/ff75++04q+vT5C8P/////kQVAOv+SDoC6QDp/4wDTZ89t6+rFKgXV+fPXL0w0a/4iC2cvSxfv7olTMGWhOr//+ImGZs1f7OQX7heb7heX4RwQ2T91BpoCqE60cJs2a56Vm693VHJYehEQ+USn2rj7d/dPRlYD1QmMUjT08yfIPWgA6Ei4AqjOD58+k4qgOt++/0Aqgup8/fb963fvQSTRCKgLAI9icJeR+wD8AAAAAElFTkSuQmCC") no-repeat;
+		}
+
+		/** Numberfield Button Down - Normal state */
+		.#{$prefix}form-spinner-down {
+			background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAAKCAIAAADZ6/LIAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAqUlEQVQoU2P4////X9IBUBcDEP8mHUB1/vz1i1QE1fn9x09kNHXGbF0zG2NbZ1MHdzMHd2NbFz1z27buPmQ1UJ1fv31HQwuWrnQPifOLTQcij9D4qbMXAJX9+v0brgCq8/OXr5ho+brNYelFQDRnySqIj5BloTo/fPqMFS1fv2XusjVABT9+/kKTgup8+/4DLvT1+/fvP35gikN1vnn3gVQE1UkG+P3nDwDe4we5hEuNyQAAAABJRU5ErkJggg==") no-repeat;
+		}
+	}
+
+}

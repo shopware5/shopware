@@ -4,7 +4,7 @@
 ._*
 .Spotlight-V100
 .Trashes
-Icon?
+./Icon?
 ehthumbs.db
 Thumbs.db
 
@@ -28,14 +28,21 @@ Thumbs.db
 
 # Userconfigurations
 /config.php
-/engine/Shopware/Configs/Custom.php
+/config_*.php
 
 # Caches/Proxies
-/tests/Shopware/TempFiles/
-/cache/
+/tests/Shopware/TempFiles/*
+!/tests/Shopware/TempFiles/.gitkeep
+/cache/*
+!/cache/.htaccess
+!/cache/clear_cache.sh
+/web/cache/*
+!/web/cache/.gitkeep
 
 # Log files
-/logs/
+/logs/*
+!/logs/.htaccess
+
 
 # User provided content
 /media/archive/
@@ -46,8 +53,12 @@ Thumbs.db
 /media/unknown/
 /media/video/
 
-/files/documents/
-/files/downloads/
+/files/documents/*
+!/files/documents/.htaccess
+/files/downloads/*
+!/files/downloads/.gitkeep
 
 # Snippet exports
 /snippetsExport/
+
+!**/.gitkeep

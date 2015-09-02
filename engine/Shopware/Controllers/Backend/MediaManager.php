@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -27,6 +27,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile as UploadedFile;
 use Shopware\Models\Media\Album as Album;
 use Shopware\Models\Media\Settings as Settings;
 use Shopware\Models\Media\Media as Media;
+
 /**
  * Shopware MediaManager Controller
  *
@@ -106,7 +107,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
 
     /**
      * Returns a JSON string containing all media albums.
-     * Unlike the other Shopware 4 backend controller actions, this action uses the standard method "find".
+     * Unlike the other Shopware backend controller actions, this action uses the standard method "find".
      * The "find" method provides an automatic recursive call to determine the sub-albums with them,
      * so that the sub-albums not to be loaded on demand.
      *
@@ -239,15 +240,15 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
 
         $mediaList = $query->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
-        /** @var $media \Shopware\Models\Media\Media */
-        foreach($mediaList as &$media){
-            if($media['type'] !== Media::TYPE_IMAGE){
+        /** @var $media Media */
+        foreach ($mediaList as &$media) {
+            if ($media['type'] !== Media::TYPE_IMAGE) {
                 continue;
             }
 
             $thumbnails = $this->getMediaThumbnailPaths($media);
 
-            if(!empty($thumbnails) && file_exists(Shopware()->OldPath() . $thumbnails['140x140'])){
+            if (!empty($thumbnails) && file_exists(Shopware()->OldPath() . $thumbnails['140x140'])) {
                 $size = getimagesize($media['path']);
                 $media['thumbnail'] = $thumbnails['140x140'];
                 $media['width'] = $size[0];
@@ -553,7 +554,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         $albumId = !empty($params['albumID']) ? $params['albumID'] : -10;
         $album = Shopware()->Models()->find('Shopware\Models\Media\Album', $albumId);
 
-        if(!$album){
+        if (!$album) {
             $this->View()->assign(array('success' => false, 'message' => 'Invalid album id passed'));
             return;
         }
@@ -577,7 +578,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             Shopware()->Models()->flush();
             $data = $this->getMedia($media->getId())->getQuery()->getArrayResult();
 
-            if($media->getType() === Media::TYPE_IMAGE){
+            if ($media->getType() === Media::TYPE_IMAGE) {
                 $manager = Shopware()->Container()->get('thumbnail_manager');
                 $manager->createMediaThumbnail($media, array(), true);
             }
@@ -634,7 +635,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             $this->getManager()->flush($album->getSettings());
 
             $this->View()->assign(array('success' => true));
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             $this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
         }
     }
@@ -657,7 +658,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             $settings->setAlbum($album);
         }
         // validate album name
-        if(empty($data['text'])){
+        if (empty($data['text'])) {
             throw new Exception('No valid album name passed!');
         }
         $data['name'] = $data['text'];
@@ -689,12 +690,16 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             }
         }
 
-        if(isset($data['iconCls']) && !empty($data['iconCls'])) {
+        if (isset($data['iconCls']) && !empty($data['iconCls'])) {
             $icon = $data['iconCls'];
         }
 
+        $thumbnailHighDpi = (isset($data['thumbnailHighDpi']) && $data['thumbnailHighDpi']);
+        $thumbnailQuality = $data['thumbnailQuality'] ? : 90;
+        $thumbnailHighDpiQuality = $data['thumbnailHighDpiQuality'] ? : 70;
+
         $albumId = $album->getId();
-        if(empty($albumId) && $data['parent'] !== null) {
+        if (empty($albumId) && $data['parent'] !== null) {
             /** @var Settings $parentSettings */
             $parentSettings = $data['parent']->getSettings();
 
@@ -704,6 +709,9 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
 
         $settings->setCreateThumbnails($createThumbnails);
         $settings->setThumbnailSize(empty($thumbnailSizes) ? '' : $thumbnailSizes);
+        $settings->setThumbnailHighDpi($thumbnailHighDpi);
+        $settings->setThumbnailQuality($thumbnailQuality);
+        $settings->setThumbnailHighDpiQuality($thumbnailHighDpiQuality);
         $settings->setIcon($icon);
 
         $data['settings'] = $settings;
@@ -781,7 +789,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
 
         $media->setAttribute($params['attribute'][0]);
         //check if the album id passed and is valid
-        if (isset($params['newAlbumID']) && !empty($params['newAlbumID'])){
+        if (isset($params['newAlbumID']) && !empty($params['newAlbumID'])) {
             $media->setAlbumId($params['newAlbumID']);
         }
 
@@ -830,7 +838,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
 
     /**
      * Converts the album properties into tree node properties.
-     * If the album has sub-albums, the children iterate recursive.
+     * If the album has sub-albums, iterates the children recursively.
      *
      * @param Shopware\Models\Media\Album $album
      * @return array
@@ -867,6 +875,9 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         if (!empty($settings) && $settings !== null) {
             $node["iconCls"] = $settings["icon"];
             $node["createThumbnails"] = $settings["createThumbnails"];
+            $node["thumbnailHighDpi"] = $settings["thumbnailHighDpi"];
+            $node["thumbnailQuality"] = $settings["thumbnailQuality"];
+            $node["thumbnailHighDpiQuality"] = $settings["thumbnailHighDpiQuality"];
             $thumbnails = explode(";", $settings["thumbnailSize"]);
             $node["thumbnailSize"] = array();
             $count = count($thumbnails);
@@ -892,74 +903,6 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
     }
 
     /**
-     * Checks if the position changed and update the position of the old and new level.
-     * If the parent changed the old and next level must updated.
-     *  OldLevel =>  from OldPosition to MAX -1          <br>
-     *  NewLevel =>  from newPosition to MAX +1
-     *
-     * @param Shopware\Models\Media\Album $album
-     * @param $newPosition
-     * @param $newParent
-     */
-    private function changePosition(Album $album, $newPosition, $newParent)
-    {
-        //position or level not changed?
-        if ($album->getParent() && $newParent == $album->getParent()->getId() && $newPosition == $album->getPosition()) {
-            return;
-        }
-
-        //0 can not be used, because Doctrine would otherwise check if the album with the id 0 exists.
-        $newParent = ($newParent == 0) ? null : $newParent;
-
-        //moved up or down? down => -1 / up = +1
-        $step = ($newPosition < $album->getPosition()) ? 1 : -1;
-
-        //Start and end values ​​determined.
-        $fromPosition = ($step == 1) ? $newPosition - 1 : $album->getPosition();
-        $toPosition = ($step == 1) ? $album->getPosition() : $newPosition + 1;
-
-        //same parent? Then change only the position of the current album level.
-        if ($newParent == $album->getParent()->getId()) {
-            $this->changePositionBetween($fromPosition, $toPosition, $step, $album->getParent()->getId());
-        } else {
-            //change the position of the old level
-            $this->changePositionBetween($album->getPosition(), 99999, -1, $album->getParent()->getId());
-
-            //change the position of the new level
-            $this->changePositionBetween($newPosition - 1, 99999, +1, $newParent);
-        }
-    }
-
-    /**
-     * Change the position of the album between the fromPosition and the toPosition parameters with the passed step parameter.
-     * <code>
-     * Example:
-     *  => fromPosition = 3
-     *  => toPosition   = 6
-     *  => step         = +1
-     * Increase the albums position of the albums on position 4,5 with +1
-     * </code>
-     *
-     * @param $fromPosition
-     * @param $toPosition
-     * @param $step
-     * @param $parentId
-     */
-    private function changePositionBetween($fromPosition, $toPosition, $step, $parentId)
-    {
-        $parentId = ($parentId == 0) ? null : $parentId;
-
-        //if the parent id is NULL the IS NULL operator has to be used
-        if ($parentId === null) {
-            $sql = "UPDATE s_media_album SET position = position + ? WHERE parentID IS NULL AND position > ? AND position < ?";
-            Shopware()->Db()->query($sql, array($step, $fromPosition, $toPosition));
-        } else {
-            $sql = "UPDATE s_media_album SET position = position + ? WHERE parentID = ? AND position > ? AND position < ?";
-            Shopware()->Db()->query($sql, array($step, $parentId, $fromPosition, $toPosition));
-        }
-    }
-
-    /**
      * Helper method to prefix properties
      *
      * @param array $properties
@@ -977,58 +920,75 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         return $properties;
     }
 
-	/**
-	 * This method creates thumbnails based on the request.
-	 */
-	public function createThumbnailsAction()
-	{
-		$offset = $this->Request()->getParam('offset');
-		$limit = $this->Request()->getParam('limit');
-		$albumId = $this->Request()->getParam('albumId');
+    /**
+     * This method creates thumbnails based on the request.
+     */
+    public function createThumbnailsAction()
+    {
+        $offset  = $this->Request()->getParam('offset');
+        $limit   = $this->Request()->getParam('limit');
+        $albumId = $this->Request()->getParam('albumId');
 
-		$builder = Shopware()->Models()->createQueryBuilder();
+        $medias = $this->getMediaForAlbumId($albumId, $offset, $limit);
 
-		$builder->select(array('media'))
-				->from('Shopware\Models\Media\Media', 'media')
-				->where('media.albumId = :albumId')
-				->setFirstResult($offset)
-				->setMaxResults($limit)
-				->setParameter('albumId', $albumId);
+        $settings = $this->getAlbumSettings($albumId);
+        $thumbnailSizes = $settings->getThumbnailSize();
 
-		$medias = $builder->getQuery()->getResult();
+        if (empty($thumbnailSizes) || empty($thumbnailSizes[0])) {
+            $this->View()->assign(array('success' => false));
+            return;
+        }
 
-		$builder->select(array('settings'))
-				->from('Shopware\Models\Media\Settings', 'settings')
-				->where('settings.albumId = :albumId')
-				->setParameter('albumId', $albumId);
+        /** @var $manager Shopware\Components\Thumbnail\Manager **/
+        $manager = $this->get('thumbnail_manager');
 
-		$settings = $builder->getQuery()->getSingleResult();
+        $fails = array();
+        foreach ($medias as $media) {
+            try {
+                $manager->createMediaThumbnail($media, $thumbnailSizes, true);
+            } catch (Exception $e) {
+                $fails[] = $e->getMessage();
+            }
+        }
 
-		$thumbnailSizes = $settings->getThumbnailSize();
+        $this->View()->assign(array('success' => true, 'total' => count($medias) * count($thumbnailSizes), 'fails' => $fails));
+    }
 
-		if(empty($thumbnailSizes) || empty($thumbnailSizes[0])){
-			$this->View()->assign(array('success' => false));
-			return;
-		}
+    /**
+     * @param integer $albumId
+     * @return Settings
+     */
+    private function getAlbumSettings($albumId)
+    {
+        $builder = $this->getModelManager()->createQueryBuilder();
 
-		/** @var $generator Shopware\Components\Thumbnail\Manager **/
-		$manager = Shopware()->Container()->get('thumbnail_manager');
+        $builder
+            ->select(array('settings'))
+            ->from('Shopware\Models\Media\Settings', 'settings')
+            ->where('settings.albumId = :albumId')
+            ->setParameter('albumId', $albumId);
 
-		try {
-			foreach($medias as $media){
-                $defaultSizes = $media->getDefaultThumbnails();
-                $defaultSizes = $defaultSizes[0];
-                $defaultSize = $defaultSizes[0] . 'x' . $defaultSizes[1];
+        return $builder->getQuery()->getOneOrNullResult();
+    }
 
-                $thumbnailSizes[] = $defaultSize;
+    /**
+     * @param integer $albumId
+     * @param integer $offset
+     * @param integer $limit
+     * @return Media[]
+     */
+    private function getMediaForAlbumId($albumId, $offset, $limit)
+    {
+        $builder = $this->getModelManager()->createQueryBuilder();
 
-				$manager->createMediaThumbnail($media, array_unique($thumbnailSizes), true);
-			}
-		} catch(Exception $e) {
-			$this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
-			return;
-		}
+        $builder
+            ->select(array('media'))
+            ->from('Shopware\Models\Media\Media', 'media')
+            ->where('media.albumId = :albumId')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->setParameter('albumId', $albumId);
 
-		$this->View()->assign(array('success' => true, 'total' => count($medias) * count($thumbnailSizes)));
-	}
+        return $builder->getQuery()->getResult();
+    }
 }

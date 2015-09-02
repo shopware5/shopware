@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,7 +23,9 @@
  */
 
 namespace   Shopware\Models\Order;
-use         Shopware\Components\Model\ModelRepository;
+
+use Shopware\Components\Model\ModelRepository;
+
 /**
  * Repository for the order model (Shopware\Models\Order\Order).
  *
@@ -128,7 +130,6 @@ class Repository extends ModelRepository
         }
 
         return $builder;
-
     }
 
     /**
@@ -260,6 +261,7 @@ class Repository extends ModelRepository
                 'payment',
                 'billing',
                 'billingCountry',
+                'billingState',
                 'shop',
                 'dispatch',
                 'paymentStatus',
@@ -276,6 +278,7 @@ class Repository extends ModelRepository
                 ->leftJoin('orders.customer', 'customer')
                 ->leftJoin('orders.details', 'details')
                 ->leftJoin('billing.country', 'billingCountry')
+                ->leftJoin('billing.state', 'billingState')
                 ->leftJoin('orders.shop', 'shop')
                 ->leftJoin('orders.dispatch', 'dispatch')
                 ->leftJoin('billing.attribute', 'billingAttribute')
@@ -316,6 +319,7 @@ class Repository extends ModelRepository
                 'shipping',
                 'shippingAttribute',
                 'shippingCountry',
+                'shippingState',
                 'subShop',
                 'locale'
             ));
@@ -329,13 +333,14 @@ class Repository extends ModelRepository
                 ->leftJoin('customer.debit', 'debit')
                 ->leftJoin('orders.paymentInstances', 'paymentInstances')
                 ->leftJoin('orders.shipping', 'shipping')
+                ->leftJoin('shipping.state', 'shippingState')
                 ->leftJoin('shipping.attribute', 'shippingAttribute')
                 ->leftJoin('shipping.country', 'shippingCountry')
                 ->leftJoin('orders.languageSubShop', 'subShop')
                 ->leftJoin('subShop.locale', 'locale');
 
         $builder->where('orders.number = :orderNumber');
-        $builder->setParameter('orderNumber',$orderNumber);
+        $builder->setParameter('orderNumber', $orderNumber);
         return $builder->getQuery();
     }
 
@@ -470,7 +475,7 @@ class Repository extends ModelRepository
                             )
                         );
                         $builder->setParameter(1,       $filter['value'] . '%');
-                        $builder->setParameter(2, '%' . $filter['value']      );
+                        $builder->setParameter(2, '%' . $filter['value']);
                         $builder->setParameter(3, '%' . $filter['value'] . '%');
                         break;
                     case "from":
@@ -532,7 +537,5 @@ class Repository extends ModelRepository
                        ->andWhere($builder->expr()->eq('codes.cashed', 0))
                        ->andWhere($builder->expr()->eq('voucher.modus', 1))
                        ->getQuery();
-
     }
-
 }

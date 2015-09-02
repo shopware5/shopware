@@ -1,6 +1,6 @@
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -33,6 +33,7 @@ Ext.define('Shopware.apps.SwagUpdate.model.Requirement', {
 
     proxy: {
         type: 'ajax',
+        timeout: 180000,
 
         api: {
             read: '{url controller="SwagUpdate" action="requirements"}'

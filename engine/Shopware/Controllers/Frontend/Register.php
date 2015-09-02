@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -80,7 +80,6 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         }
     }
 
-
     /**
      * Will be called when no action is supplied
      *
@@ -88,15 +87,31 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
      */
     public function indexAction()
     {
+        $sTarget = $this->Request()->getParam('sTarget', 'account');
+        $sTargetAction = $this->Request()->getParam('sTargetAction', 'index');
+        $this->View()->showNoAccount = $this->Request()->getParam('showNoAccount', false);
+        $this->View()->sEsd = Shopware()->Modules()->Basket()->sCheckForESD();
+        $this->View()->sTarget = $sTarget;
+        $this->View()->sTargetAction = $sTargetAction;
+
         if (!empty($this->session['sUserId'])) {
-            if ($this->request->getParam('sValidation')||!Shopware()->Modules()->Basket()->sCountBasket()) {
+            if ($this->request->getParam('sValidation') || !Shopware()->Modules()->Basket()->sCountBasket()) {
                 return $this->forward('index', 'account');
             } else {
-                return $this->forward('confirm', 'checkout');
+                // If using the new template, the 'GET' action will be handled
+                // in the Register controller (unified login/register page)
+                if (Shopware()->Shop()->getTemplate()->getVersion() >= 3 && empty($this->session['sRegisterFinished'])) {
+                    return $this->redirect(array(
+                        'controller' => $sTarget,
+                        'action' => $sTargetAction
+                    ));
+                } else {
+                    return $this->forward('confirm', 'checkout');
+                }
             }
         }
         $skipLogin = $this->request->getParam('skipLogin');
-        if ($skipLogin=="1") {
+        if ($skipLogin == "1") {
             $this->View()->skipLogin = $skipLogin;
         }
         $this->personalAction();
@@ -123,6 +138,20 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             }
             if (empty($this->error)) {
                 $this->saveRegister();
+
+                // If using the new template, we need to check the target page
+                // If its the checkout page, we need to stop by the shippingPayment page
+                if (Shopware()->Shop()->getTemplate()->getVersion() >= 3) {
+                    $sTarget = $this->Request()->getParam('sTarget', 'account');
+                    $sTargetAction = $this->Request()->getParam('sTargetAction', 'index');
+                    if ($sTarget == 'checkout' && $sTargetAction == 'confirm') {
+                        $sTargetAction = 'shippingPayment';
+                    }
+                    return $this->redirect(array(
+                        'action' => $sTargetAction,
+                        'controller' => $sTarget,
+                    ));
+                }
             }
         }
         $this->forward('index');
@@ -152,6 +181,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
     /**
      * Returns the personal information and validates it
      *
+     * @throws Enlight_Exception
      * @return void
      */
     public function personalAction()
@@ -163,17 +193,19 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             $this->View()->register->personal->form_data = new ArrayObject(array(), ArrayObject::ARRAY_AS_PROPS);
         }
 
-        if (!empty($this->session['sRegister']['auth']))
-        foreach ($this->session['sRegister']['auth'] as $key => $value) {
-            if (!isset($this->View()->register->personal->form_data->$key)) {
-                $this->View()->register->personal->form_data->$key = $value;
+        if (!empty($this->session['sRegister']['auth'])) {
+            foreach ($this->session['sRegister']['auth'] as $key => $value) {
+                if (!isset($this->View()->register->personal->form_data->$key)) {
+                    $this->View()->register->personal->form_data->$key = $value;
+                }
             }
         }
 
-        if (!empty($this->session['sRegister']['billing']))
-        foreach ($this->session['sRegister']['billing'] as $key => $value) {
-            if (!isset($this->View()->register->personal->form_data->$key)) {
-                $this->View()->register->personal->form_data->$key = $value;
+        if (!empty($this->session['sRegister']['billing'])) {
+            foreach ($this->session['sRegister']['billing'] as $key => $value) {
+                if (!isset($this->View()->register->personal->form_data->$key)) {
+                    $this->View()->register->personal->form_data->$key = $value;
+                }
             }
         }
 
@@ -181,9 +213,9 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             // For new b2bessentials plugin (replacement for customergroup module), do validation of this parameter
             $sValidation = $this->request->getParam('sValidation');
             // Simply check if this customergroup is valid
-            if (Shopware()->Db()->fetchOne("SELECT id FROM s_core_customergroups WHERE `groupkey` = ? ",array($sValidation))) {
+            if (Shopware()->Db()->fetchOne("SELECT id FROM s_core_customergroups WHERE `groupkey` = ? ", array($sValidation))) {
                 // New event to do further validations in b2b customergroup plugin
-                if (!Enlight()->Events()->notifyUntil('Shopware_Controllers_Frontend_Register_CustomerGroupRegister', array('subject'=>$this,'sValidation'=>$sValidation))) {
+                if (!Enlight()->Events()->notifyUntil('Shopware_Controllers_Frontend_Register_CustomerGroupRegister', array('subject'=>$this, 'sValidation'=>$sValidation))) {
                     $this->View()->register->personal->form_data->sValidation = $sValidation;
                 }
             } else {
@@ -236,15 +268,22 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
 
         $this->View()->register->billing->country_list = $getCountryList;
 
-        if(!empty($this->session['sRegister']['billing']))
-        foreach ($this->session['sRegister']['billing'] as $key => $value) {
-            if (!isset($this->View()->register->billing->form_data->$key)) {
-                $this->View()->register->billing->form_data->$key = $value;
+        if (!empty($this->session['sRegister']['billing'])) {
+            foreach ($this->session['sRegister']['billing'] as $key => $value) {
+                if (!isset($this->View()->register->billing->form_data->$key)) {
+                    $this->View()->register->billing->form_data->$key = $value;
+                }
             }
         }
 
-        if (!empty($this->session['sCountry'])&&empty($this->View()->register->billing->form_data->country)) {
+        // setting the country and the states from the session
+        if (!empty($this->session['sCountry']) && empty($this->View()->register->billing->form_data->country)) {
             $this->View()->register->billing->form_data->country = $this->session['sCountry'];
+        }
+
+        $countryStateName = "country_state_" . $this->View()->register->billing->form_data->country;
+        if (!empty($this->session['sState']) && empty($this->View()->register->billing->form_data->$countryStateName)) {
+            $this->View()->register->billing->form_data->$countryStateName = $this->session['sState'];
         }
     }
 
@@ -259,10 +298,9 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             $this->View()->register->billing = new ArrayObject(array(), ArrayObject::ARRAY_AS_PROPS);
         }
         if (!empty($this->post['billing'])) {
-
             $this->View()->register->billing->form_data = new ArrayObject($this->post['billing'], ArrayObject::ARRAY_AS_PROPS);
             if (!empty($this->View()->register->billing->form_data['ustid'])) {
-                $this->View()->register->billing->form_data['ustid'] = preg_replace('#[^0-9A-Z\+\*\.]#','',strtoupper($this->View()->register->billing->form_data['ustid']));
+                $this->View()->register->billing->form_data['ustid'] = preg_replace('#[^0-9A-Z\+\*\.]#', '', strtoupper($this->View()->register->billing->form_data['ustid']));
             }
         }
 
@@ -290,9 +328,10 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         }
 
         $this->View()->register->shipping->country_list = $this->admin->sGetCountryList();
-        if(!empty($this->session['sRegister']['shipping']))
-        foreach ($this->session['sRegister']['shipping'] as $key => $value) {
-            $this->View()->register->shipping->form_data[$key] = $value;
+        if (!empty($this->session['sRegister']['shipping'])) {
+            foreach ($this->session['sRegister']['shipping'] as $key => $value) {
+                $this->View()->register->shipping->form_data[$key] = $value;
+            }
         }
     }
 
@@ -330,18 +369,20 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             $this->View()->register->payment = new ArrayObject(array(), ArrayObject::ARRAY_AS_PROPS);
         }
 
-        if(!isset($this->View()->register->payment->form_data))
-        if (!empty($this->session['sPayment'])) {
-            $this->View()->register->payment->form_data = array('payment'=>$this->session['sPayment']);
-        } else {
-            $this->View()->register->payment->form_data = array('payment'=>Shopware()->Config()->get('DefaultPayment'));
+        if (!isset($this->View()->register->payment->form_data)) {
+            if (!empty($this->session['sPayment'])) {
+                $this->View()->register->payment->form_data = array('payment'=>$this->session['sPayment']);
+            } else {
+                $this->View()->register->payment->form_data = array('payment'=>Shopware()->Config()->get('DefaultPayment'));
+            }
         }
 
         $this->View()->register->payment->payment_means = $this->admin->sGetPaymentMeans();
 
-        if(!empty($this->session['sRegister']['shipping']))
-        foreach ($this->session['sRegister']['shipping'] as $key => $value) {
-            $this->View()->form_data->register['shipping'][$key] = $value;
+        if (!empty($this->session['sRegister']['shipping'])) {
+            foreach ($this->session['sRegister']['shipping'] as $key => $value) {
+                $this->View()->form_data->register['shipping'][$key] = $value;
+            }
         }
     }
 
@@ -385,12 +426,18 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             $result = $checkData;
         }
 
+        $requirePhone = (bool) (Shopware()->Config()->get('showPhoneNumberField')
+            && Shopware()->Config()->get('requirePhoneField'));
+
+        $requireBirthday = (bool) (Shopware()->Config()->get('showBirthdayField')
+            && Shopware()->Config()->get('requireBirthdayField'));
+
         $rules = array(
             'customer_type'=>array('required'=>0),
             'salutation'=>array('required'=>1),
             'firstname'=>array('required'=>1),
             'lastname'=>array('required'=>1),
-            'phone'=>array('required'=> intval(Shopware()->Config()->get('requirePhoneField'))),
+            'phone'=>array('required'=> $requirePhone),
             'fax'=>array('required'=>0),
             'text1'=>array('required'=>0),
             'text2'=>array('required'=>0),
@@ -399,9 +446,9 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             'text5'=>array('required'=>0),
             'text6'=>array('required'=>0),
             'sValidation'=>array('required'=>0),
-            'birthyear'=>array('required'=>0),
-            'birthmonth'=>array('required'=>0),
-            'birthday'=>array('required'=>0),
+            'birthyear'=>array('required'=> $requireBirthday),
+            'birthmonth'=>array('required'=> $requireBirthday),
+            'birthday'=>array('required'=> $requireBirthday),
             'dpacheckbox'=>array('required'=>(Shopware()->Config()->get('ACTDPRCHECK'))?1:0)
         );
         $rules = Enlight()->Events()->filter('Shopware_Controllers_Frontend_Register_validatePersonal_FilterRules', $rules, array('subject'=>$this));
@@ -423,25 +470,33 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
     public function validateBilling()
     {
         $countryData = $this->admin->sGetCountryList();
-        $countryIds = array_column($countryData, 'id');
+        $countryIds = array();
+
+        foreach ($countryData as $key => $country) {
+            $countryIds[$key] = $country['id'];
+        }
 
         $rules = array(
-            'company'=>array('required'=>0),
-            'street'=>array('required'=>1),
-            'streetnumber'=>array('required'=>1),
-            'zipcode'=>array('required'=>1),
-            'city'=>array('required'=>1),
-            'country'=>array(
+            'company'       => array('required' => 0),
+            'street'        => array('required' => 1),
+            'zipcode'       => array('required' => 1),
+            'city'          => array('required' => 1),
+            'country'       => array(
                 'required' => 1,
                 'in' => $countryIds
             ),
-            'department'=>array('required'=>0),
-            'shippingAddress'=>array('required'=>0),
+            'department'    => array('required' => 0),
+            'shippingAddress' => array('required' => 0),
+            'additional_address_line1' => array(
+                'required' => (Shopware()->Config()->requireAdditionAddressLine1 && Shopware()->Config()->showAdditionAddressLine1) ? 1 : 0
+            ),
+            'additional_address_line2' => array(
+                'required' => (Shopware()->Config()->requireAdditionAddressLine2 && Shopware()->Config()->showAdditionAddressLine2) ? 1 : 0
+            )
         );
 
         // Check if state selection is required
         if (!empty($this->post["billing"]["country"])) {
-
             $stateSelectionRequired = Shopware()->Db()->fetchRow(
                 "SELECT display_state_in_registration, force_state_in_registration
                 FROM s_core_countries WHERE id = ?",
@@ -498,24 +553,33 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
     public function validateShipping()
     {
         $countryData = $this->admin->sGetCountryList();
-        $countryIds = array_column($countryData, 'id');
+        $countryIds = array();
+
+        foreach ($countryData as $key => $country) {
+            $countryIds[$key] = $country['id'];
+        }
 
         $rules = array(
-            'salutation'=>array('required'=>1),
-            'company'=>array('required'=>0),
-            'firstname'=>array('required'=>1),
-            'lastname'=>array('required'=>1),
-            'street'=>array('required'=>1),
-            'streetnumber'=>array('required'=>1),
-            'zipcode'=>array('required'=>1),
-            'city'=>array('required'=>1),
-            'department'=>array('required'=>0),
-            'text1'=>array('required'=>0),
-            'text2'=>array('required'=>0),
-            'text3'=>array('required'=>0),
-            'text4'=>array('required'=>0),
-            'text5'=>array('required'=>0),
-            'text6'=>array('required'=>0)
+            'salutation'    => array('required' => 1),
+            'company'       => array('required' => 0),
+            'firstname'     => array('required' => 1),
+            'lastname'      => array('required' => 1),
+            'street'        => array('required' => 1),
+            'zipcode'       => array('required' => 1),
+            'city'          => array('required' => 1),
+            'department'    => array('required' => 0),
+            'text1'         => array('required' => 0),
+            'text2'         => array('required' => 0),
+            'text3'         => array('required' => 0),
+            'text4'         => array('required' => 0),
+            'text5'         => array('required' => 0),
+            'text6'         => array('required' => 0),
+            'additional_address_line1' => array(
+                'required' => (Shopware()->Config()->requireAdditionAddressLine1 && Shopware()->Config()->showAdditionAddressLine1) ? 1 : 0
+            ),
+            'additional_address_line2' => array(
+                'required' => (Shopware()->Config()->requireAdditionAddressLine2 && Shopware()->Config()->showAdditionAddressLine2) ? 1 : 0
+            )
         );
 
         if (Shopware()->Config()->get('sCOUNTRYSHIPPING')) {
@@ -594,11 +658,9 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
     {
         $error_flags = array();
         $error_messages = array();
-        $validator = new Zend_Validate_EmailAddress();
-        $validator->getHostnameValidator()->setValidateTld(false);
+        $validator = $this->container->get('validator.email');
 
         if (empty($this->post['personal']['email'])) {
-
         } elseif (!$validator->isValid($this->post['personal']['email'])) {
             $error_messages[] = Shopware()->Snippets()->getNamespace("frontend")->get('RegisterAjaxEmailNotValid', 'Please enter a valid mail address.', true);
             $error_flags['email'] = true;
@@ -638,7 +700,6 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         $error_flags = array();
 
         if (empty($this->post['personal']['password'])) {
-
         } elseif (strlen(utf8_decode($this->post['personal']['password'])) < Shopware()->Config()->get('MinPassword')) {
             $error_messages[] = Shopware()->Snippets()->getNamespace("frontend")->get(
                 'RegisterPasswordLength',
@@ -677,18 +738,17 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
     public function ajaxValidateBillingAction()
     {
         $rules = array(
-            'salutation'=>array('required'=>1),
-            'company'=>array('required'=>0),
-            'firstname'=>array('required'=>1),
-            'lastname'=>array('required'=>1),
-            'street'=>array('required'=>1),
-            'streetnumber'=>array('required'=>1),
-            'zipcode'=>array('required'=>1),
-            'city'=>array('required'=>1),
-            'country'=>array('required'=>1),
-            'department'=>array('required'=>0),
+            'salutation'    => array('required' => 1),
+            'company'       => array('required' => 0),
+            'firstname'     => array('required' => 1),
+            'lastname'      => array('required' => 1),
+            'street'        => array('required' => 1),
+            'zipcode'       => array('required' => 1),
+            'city'          => array('required' => 1),
+            'country'       => array('required' => 1),
+            'department'    => array('required' => 0),
         );
-        if (!empty($this->post['personal']['customer_type'])&&$this->post['personal']['customer_type']=='business') {
+        if (!empty($this->post['personal']['customer_type']) && $this->post['personal']['customer_type'] == 'business') {
             $rules['company']['required'] = 1;
         }
         $this->admin->sSYSTEM->_POST = array_merge($this->post['personal'], $this->post['billing']);
@@ -707,6 +767,12 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             $error_flags[$field] = !empty($checkData['sErrorFlag'][$field]);
         }
 
-        echo Zend_Json::encode(array('success'=>empty($error_messages), 'error_flags'=>$error_flags, 'error_messages'=>$error_messages));
+        echo Zend_Json::encode(
+            array(
+                'success' => empty($error_messages),
+                'error_flags' => $error_flags,
+                'error_messages' => $error_messages
+            )
+        );
     }
 }

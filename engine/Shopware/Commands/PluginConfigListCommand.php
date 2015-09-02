@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -71,7 +71,7 @@ EOF
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         /** @var Manager $pluginManager */
-        $pluginManager  = $this->container->get('shopware.plugin_manager');
+        $pluginManager  = $this->container->get('shopware_plugininstaller.plugin_manager');
         $pluginName = $input->getArgument('plugin');
 
         try {

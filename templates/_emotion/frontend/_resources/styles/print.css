@@ -1,11 +1,9 @@
 /*
 	Shopware 3.5 Template
 	http://shopware.de
-	
-	Copyright (c) 2011 Shopware AG
-	
-	@author    : stp/Shopware AG
-	@date      : 25-05-2011
+
+	Copyright (c) Shopware AG
+
 	@package   : template
 	@subpackage: css
 */
@@ -27,10 +25,10 @@
 	.hide {display:none;}
 	/*a:link, a:visited {background:transparent;font-weight:700;text-decoration:underline;}*/
 	.container_20 {border: 0 none; padding: 0; margin: 0;width: 650px;}
-	
+
 	/*	HIDE ELEMENTS
 		------------------------ */
-	div#topbar, div#header, div#topseller, div#mainNavigation, div#search, div#footer, div#shopnavi, div#compareContainerAjax, hr.line, hr.smallline, div.viewlast, div#tagcloud, a.more_info, div#left, div#right, div.listing_actions, div#bewertungen, div.menu_top, div.similar, ul#menu_right, ul.ui-tabs-nav, div.mousetrap, div#buybox form, div#stepbox, div.table_row.grid_20 a.delete, div.table_row.grid_20 a.zoom_picture, div.table_premium.grid_20, div#addwithnumber, div.buttons, .artbox .actions, #searchcontainer, .trustedshops_form, #finish_right, .shopware_footer, #content .inner .teaser .button-right,
+	div#topbar, div#header, div#topseller, div#mainNavigation, div#search, div#footer, div#shopnavi, div#compareContainerAjax, hr.line, hr.smallline, div.viewlast, div#tagcloud, a.more_info, div#left, div#right, div.listing_actions, div#bewertungen, div.menu_top, div.similar, ul#menu_right, ul.ui-tabs-nav, div.mousetrap, div#buybox form, div#stepbox, div.table_row.grid_20 a.delete, div.table_row.grid_20 a.zoom_picture, div.table_premium.grid_20, div#addwithnumber, div.buttons, .artbox .actions, #searchcontainer, #finish_right, .shopware_footer, #content .inner .teaser .button-right,
 	#detail #detailbox #detailbox_middle,
 	#buybox .basketform,
 	#content .horizontal_slider,
@@ -40,13 +38,13 @@
 	#description a.link,
 	#content .finish .teaser,
 	#content .finish h2.headingbox {display:none;}
-	
+
 	/*	GENERAL LAYOUT
 		------------------------ */
-		
+
 	#wrapper {margin-left: -15px; width: 100% !important;}
 	#buybox {float: none !important; margin-left: 0 !important;}
-	
+
 	#detail .right, #detail .left {float: none; width: 300px;}
 	#detail .right {margin-left: 350px;}
 
@@ -71,7 +69,7 @@
 	#content #finished .table .table_foot {
 		margin-left: 150px !important;
 	}
-	
+
 	#logo {margin-left: 0;}
 	#logo a {font-size: 1.8em;font-weight: bold;}
 	div.teaser_small {margin-top:15px;}
@@ -79,24 +77,24 @@
 	div#breadcrumb {height: 50px;margin-left: 0}
 	div#shopware {text-align: center;margin-top:-30px}
 	div.listing_box h1 {font-size: 2.2em}
-	
+
 	/*	LISTING
 		------------------------ */
 	a.artbox_thumb {width: 105px; height: 105px; display: block;}
 	.artbox {padding: 10px 0;}
 	.price .pseudo {text-decoration: line-through;}
 	.price .price {font-weight: bold; font-size: 1.4em}
-	
+
 	/*	ARTICLE DETAIL
 		------------------------ */
 	div#img div.wrapper img {height: 255px; width: 255px;display: block;}
 	div#bewertungen a.link {padding-bottom: 20px;}
 	div.article_details_price strong {font-weight:bold;font-size: 1.6em}
-	
+
 	/*	BASKET
 		------------------------ */
 	.table {width: 100%;}
-	
+
 	.table .table_head, .table .table_row, .table .table_foot, .table .table_premium {margin: 0 !important; width: 100%;}
 	.table .table_head {height:15px;border: 1px solid;font-weight: 700;padding: 10px 0;}
 	.table .table_row, .table .table_foot {height: 120px;border: 1px solid; border-top: 0 none;padding: 10px 0 0 0px;}
@@ -125,7 +123,7 @@
 	.table .grid_3 {width: 13%}
 	.table .grid_2 {width: 8%}
 	.table .grid_1 {width: 3%}
-	
+
 	.table .push_20 {left: 100%}
 	.table .push_19 {left: 95%}
 	.table .push_18 {left: 90%}
@@ -146,6 +144,6 @@
 	.table .push_3 {left: 15%}
 	.table .push_2 {left: 10%}
 	.table .push_1 {left: 5%}
-	
-	#content .inner .teaser .button-right {behavior: url(.) !important;}
+
+	#content .inner .teaser .button-right {behavior: url() !important;}
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -40,8 +40,8 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
     public function getCampaignsRepository()
     {
         if ($this->campaignsRepository === null) {
-                 $this->campaignsRepository = Shopware()->Models()->getRepository('Shopware\Models\Newsletter\Newsletter');
-             }
+            $this->campaignsRepository = Shopware()->Models()->getRepository('Shopware\Models\Newsletter\Newsletter');
+        }
 
         return $this->campaignsRepository;
     }
@@ -121,7 +121,6 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
         Shopware()->Models()->flush();
 
         $this->View()->assign(array('success' => true, 'data' => Shopware()->Models()->toArray($model)));
-
     }
 
     /**
@@ -183,7 +182,6 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
             'total' => count($data)
         ));
         return;
-
     }
 
     /**
@@ -387,7 +385,6 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
         );
 
         $this->View()->assign(array('success' => true, 'data' => $data));
-
     }
 
     /**
@@ -414,11 +411,11 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
             return;
         }
 
+        //copies the id into the request params
         $containers = $model->getContainers();
         foreach ($containers as $container) {
-            Shopware()->Models()->remove($container);
+            $data['containers'][0]['id'] = $container->getId();
         }
-        Shopware()->Models()->flush();
 
 
         // Flatten the newsletter->containers->text field: Each container as only one text-field
@@ -444,8 +441,6 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
         Shopware()->Models()->flush();
 
         $this->View()->assign(array('success' => true, 'data' => $model->toArray));
-
-
     }
 
 
@@ -477,7 +472,6 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
         Shopware()->Models()->flush();
 
         $this->View()->assign(array('success' => true));
-
     }
 
     /**
@@ -504,7 +498,6 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
         Shopware()->Models()->flush();
 
         $this->View()->assign(array('success' => true));
-
     }
 
     /**
@@ -559,8 +552,6 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
             'data' => $result,
             'total' => $totalResult,
         ));
-
-
     }
 
     /**
@@ -658,7 +649,6 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
             if ($revenue !== null) {
                 $result[$key]['revenue'] = $revenue;
             }
-
         }
 
         $this->View()->assign(array(
@@ -666,7 +656,6 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
             'data' => $result,
             'total' => $totalResult,
         ));
-
     }
 
     /**
@@ -716,5 +705,4 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
 
         return $flattenedGroup;
     }
-
 }

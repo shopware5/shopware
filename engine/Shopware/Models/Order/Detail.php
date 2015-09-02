@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,8 +23,9 @@
  */
 
 namespace Shopware\Models\Order;
-use       Shopware\Components\Model\ModelEntity,
-          Doctrine\ORM\Mapping AS ORM;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Shopware order detail model represents a single detail data of an order .
@@ -554,7 +555,6 @@ class Detail extends ModelEntity
      */
     public function beforeInsert()
     {
-
     }
 
     /**
@@ -634,7 +634,6 @@ class Detail extends ModelEntity
                 $oldArticle->setInStock($oldArticle->getInStock() + $oldQuantity);
                 Shopware()->Models()->persist($oldArticle);
             }
-
         } elseif ($article instanceof \Shopware\Models\Article\Detail) {
             $article->setInStock($article->getInStock() + $quantityDiff);
             Shopware()->Models()->persist($article);

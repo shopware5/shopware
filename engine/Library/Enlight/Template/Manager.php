@@ -123,13 +123,55 @@ class Enlight_Template_Manager extends Smarty
      */
     public function setTemplateDir($template_dir)
     {
-        foreach ((array) $template_dir as $k => $v) {
+        $template_dir = (array) $template_dir;
+
+        foreach ($template_dir as $k => $v) {
             $template_dir[$k] = $this->resolveTemplateDir($v, $k);
             if ($template_dir[$k] === false) {
                 unset($template_dir[$k]);
             }
         }
-        return parent::setTemplateDir($template_dir);
+
+        /**
+         * Filter all directories which includes the new shopware themes.
+         */
+        $themeDirectories = array_filter($template_dir, function($themeDir) {
+            return (stripos($themeDir, '/Themes/Frontend/'));
+        });
+
+        /**
+         * If no shopware theme assigned, we have to use the passed inheritance
+         */
+        if (empty($themeDirectories)) {
+            return parent::setTemplateDir($template_dir);
+        }
+
+        /**
+         * Select the plugin directories and the bare theme which used
+         * as base theme for all extensions
+         */
+        $pluginDirs = array_diff($template_dir, $themeDirectories);
+        $bareDir = array_pop($themeDirectories);
+
+        /**
+         * Recreate the inheritance with the theme directories on the first level,
+         * the plugin directories on the second level and the bare theme as
+         * third level.
+         *
+         * This allows to override plugin templates with the different customer themes
+         * like responsive.
+         */
+        $inheritance = array_merge(
+            $themeDirectories,
+            $pluginDirs,
+            [$bareDir]
+        );
+
+        $inheritance = $this->enforceEndingSlash($inheritance);
+        $inheritance = array_map('realpath', $inheritance);
+        $inheritance = array_filter($inheritance);
+        $inheritance = array_unique($inheritance);
+        return parent::setTemplateDir($inheritance);
     }
 
     /**
@@ -192,5 +234,17 @@ class Enlight_Template_Manager extends Smarty
         //Enlight_Template_Manager_AddTemplateDir
         $this->eventManager = $eventManager;
         return $this;
+    }
+
+    /**
+     * @param string[] $inheritance
+     * @return string[]
+     */
+    private function enforceEndingSlash($inheritance)
+    {
+        return array_map(function ($dir) {
+            $dir = rtrim($dir, '/') . '/';
+            return $dir;
+        }, $inheritance);
     }
 }

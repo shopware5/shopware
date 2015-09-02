@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -24,13 +24,17 @@
 
 namespace Shopware\Recovery\Update\Console;
 
-use Pimple;
 use Shopware\Recovery\Common\DependencyInjection\ContainerInterface;
 use Shopware\Recovery\Update\Command\UpdateCommand;
 use Shopware\Recovery\Update\DependencyInjection\Container;
 use Symfony\Component\Console\Application as BaseApplication;
-use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 
+/**
+ * @category  Shopware
+ * @package   Shopware\Recovery\Update\Console
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
+ */
 class Application extends BaseApplication
 {
     /**
@@ -43,10 +47,18 @@ class Application extends BaseApplication
      */
     public function __construct($env)
     {
+        $this->registerErrorHandler();
+
         parent::__construct('Shopware Update', '1.0.0');
 
         $config = require __DIR__ . '/../../config/config.php';
-        $this->container = new Container(new \Pimple(), $config);
+        $this->container = new Container(new \Pimple\Container(), $config);
+
+        $this->getDefinition()->addOption(new InputOption('--env', '-e', InputOption::VALUE_REQUIRED, 'The Environment name.', $env));
+
+        $command = new UpdateCommand();
+        $this->add($command);
+        $this->setDefaultCommand($command->getName());
     }
 
     /**
@@ -57,45 +69,15 @@ class Application extends BaseApplication
         return $this->container;
     }
 
-    /**
-     * Gets the name of the command based on input.
-     *
-     * @param InputInterface $input The input interface
-     *
-     * @return string The command name
-     */
-    protected function getCommandName(InputInterface $input)
+    private function registerErrorHandler()
     {
-        // This should return the name of your command.
-        return 'update';
-    }
+        set_error_handler(function ($errno, $errstr, $errfile, $errline, array $errcontext) {
+            // error was suppressed with the @-operator
+            if (0 === error_reporting()) {
+                return false;
+            }
 
-    /**
-     * Gets the default commands that should always be available.
-     *
-     * @return array An array of default Command instances
-     */
-    protected function getDefaultCommands()
-    {
-        // Keep the core default commands to have the HelpCommand
-        // which is used when using the --help option
-        $defaultCommands = parent::getDefaultCommands();
-
-        $defaultCommands[] = new UpdateCommand();
-
-        return $defaultCommands;
-    }
-
-    /**
-     * Overridden so that the application doesn't expect the command
-     * name to be the first argument.
-     */
-    public function getDefinition()
-    {
-        $inputDefinition = parent::getDefinition();
-        // clear out the normal first argument, which is the command name
-        $inputDefinition->setArguments();
-
-        return $inputDefinition;
+            throw new \ErrorException($errstr, 0, $errno, $errfile, $errline);
+        });
     }
 }

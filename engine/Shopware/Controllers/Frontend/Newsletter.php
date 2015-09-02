@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -105,8 +105,10 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
     protected function getCustomerGroups()
     {
         $customergroups = array('EK');
-        if (!empty(Shopware()->System()->sSubShop['defaultcustomergroup'])) {
-            $customergroups[] = Shopware()->System()->sSubShop['defaultcustomergroup'];
+
+        $defaultCustomerGroupKey = Shopware()->Shop()->getCustomerGroup()->getKey();
+        if (!empty($defaultCustomerGroupKey)) {
+            $customergroups[] = $defaultCustomerGroupKey;
         }
         if (!empty(Shopware()->System()->sUSERGROUPDATA['groupkey'])) {
             $customergroups[] = Shopware()->System()->sUSERGROUPDATA['groupkey'];
@@ -137,21 +139,24 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
         if (Shopware()->System()->_POST["subscribeToNewsletter"] != 1) {
             // Unsubscribe user
             $this->View()->sStatus = Shopware()->Modules()->Admin()->sNewsletterSubscription(Shopware()->System()->_POST["newsletter"], true);
+
+            $session = $this->container->get('session');
+            if($session->offsetExists('sNewsletter')) {
+                $session->offsetSet('sNewsletter', false);
+            }
+
             return;
         }
 
         if (empty(Shopware()->Config()->sOPTINNEWSLETTER) || $this->View()->voteConfirmed) {
-
             $this->View()->sStatus = Shopware()->Modules()->Admin()->sNewsletterSubscription(Shopware()->System()->_POST["newsletter"], false);
             if ($this->View()->sStatus['code'] == 3) {
                 // Send mail to subscriber
                 $this->sendMail(Shopware()->System()->_POST["newsletter"], 'sNEWSLETTERCONFIRMATION');
             }
         } else {
-
             $this->View()->sStatus = Shopware()->Modules()->Admin()->sNewsletterSubscription(Shopware()->System()->_POST["newsletter"], false);
             if ($this->View()->sStatus["code"] == 3) {
-
                 Shopware()->Modules()->Admin()->sNewsletterSubscription(Shopware()->System()->_POST["newsletter"], true);
                 $hash = md5(uniqid(rand()));
                 $data = serialize(Shopware()->System()->_POST->toArray());
@@ -180,6 +185,7 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
     {
         $customergroups = $this->getCustomerGroups();
         $customergroups = Shopware()->Db()->quote($customergroups);
+        $context = $this->container->get('shopware_storefront.context_service')->getShopContext();
 
         $page = (int) $this->Request()->getQuery('sPage', 1);
         $perPage = (int) Shopware()->Config()->get('contentPerPage', 12);
@@ -195,18 +201,18 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
             ORDER BY `id` DESC
         ";
         $sql = Shopware()->Db()->limit($sql, $perPage, $perPage * ($page - 1));
-        $result = Shopware()->Db()->query($sql, array(Shopware()->System()->sLanguage));
+        $result = Shopware()->Db()->query($sql, array($context->getShop()->getId()));
+
+        //$count has to be set before calling Router::assemble() because it removes the FOUND_ROWS()
+        $sql = 'SELECT FOUND_ROWS() as count_' . md5($sql);
+        $count = Shopware()->Db()->fetchOne($sql);
+        $count = ceil($count / $perPage);
 
         $content = array();
         while ($row = $result->fetch()) {
             $row['link'] = $this->Front()->Router()->assemble(array('action' => 'detail', 'sID' => $row['id']));
             $content[] = $row;
         }
-
-        $sql = 'SELECT FOUND_ROWS() as count_' . md5($sql);
-        $count = Shopware()->Db()->fetchOne($sql);
-
-        $count = ceil($count / $perPage);
 
         $pages = array();
         for ($i = 1; $i <= $count; $i++) {
@@ -232,6 +238,7 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
     {
         $customergroups = $this->getCustomerGroups();
         $customergroups = Shopware()->Db()->quote($customergroups);
+        $context = $this->container->get('shopware_storefront.context_service')->getShopContext();
 
         $sql = "
             SELECT id, IF(datum='00-00-0000','',datum) as `date`, subject as description, sendermail, sendername
@@ -243,9 +250,8 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
             AND id=?
             AND customergroup IN ($customergroups)
         ";
-        $content = Shopware()->Db()->fetchRow($sql, array(Shopware()->System()->sLanguage, $this->request()->sID));
+        $content = Shopware()->Db()->fetchRow($sql, array($context->getShop()->getId(), $this->request()->sID));
         if (!empty($content)) {
-           // ($license = Shopware()->License()->getLicense('sCORE')) || ($license = Shopware()->License()->getLicense('sCOMMUNITY'));
             // todo@all Hash-Building in rework phase berücksichtigen
             $license = "";
             $content['hash'] = array($content['id'], $license);

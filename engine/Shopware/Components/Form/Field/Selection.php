@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -42,9 +42,9 @@ class Selection extends Field
     /**
      * Requires to set a name for the field
      * @param $name
-     * @param $store
+     * @param  array[] $store [['text' => 'displayText', 'value'  => 10], ...]
      */
-    function __construct($name, $store)
+    public function __construct($name, $store)
     {
         $this->name = $name;
         $this->store = $store;
@@ -80,6 +80,4 @@ class Selection extends Field
             ));
         }
     }
-
-
 }

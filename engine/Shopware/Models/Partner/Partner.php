@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,7 +23,9 @@
  */
 
 namespace Shopware\Models\Partner;
-use Shopware\Components\Model\ModelEntity, Doctrine\ORM\Mapping AS ORM;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Standard Export Model Entity
@@ -77,13 +79,6 @@ class Partner extends ModelEntity
      * @ORM\Column(name="street", type="string", length=255, nullable=false)
      */
     private $street;
-
-    /**
-     * @var string $streetNumber
-     *
-     * @ORM\Column(name="streetNumber", type="string", length=35, nullable=false)
-     */
-    private $streetNumber;
 
     /**
      * @var string $zipCode
@@ -200,7 +195,6 @@ class Partner extends ModelEntity
      */
     public function setIdCode($idCode)
     {
-
         $this->idCode = $idCode;
 
         return $this;
@@ -213,7 +207,6 @@ class Partner extends ModelEntity
      */
     public function getIdCode()
     {
-
         return $this->idCode;
     }
 
@@ -240,7 +233,6 @@ class Partner extends ModelEntity
      */
     public function getDate()
     {
-
         return $this->date;
     }
 
@@ -252,7 +244,6 @@ class Partner extends ModelEntity
      */
     public function setCompany($company)
     {
-
         $this->company = $company;
 
         return $this;
@@ -265,7 +256,6 @@ class Partner extends ModelEntity
      */
     public function getCompany()
     {
-
         return $this->company;
     }
 
@@ -277,7 +267,6 @@ class Partner extends ModelEntity
      */
     public function setContact($contact)
     {
-
         $this->contact = $contact;
 
         return $this;
@@ -289,9 +278,7 @@ class Partner extends ModelEntity
      * @return string
      */
     public function getContact()
-
     {
-
         return $this->contact;
     }
 
@@ -303,7 +290,6 @@ class Partner extends ModelEntity
      */
     public function setStreet($street)
     {
-
         $this->street = $street;
 
         return $this;
@@ -316,33 +302,7 @@ class Partner extends ModelEntity
      */
     public function getStreet()
     {
-
         return $this->street;
-    }
-
-    /**
-     * Set streetNumber
-     *
-     * @param string $streetNumber
-     * @return Partner
-     */
-    public function setStreetNumber($streetNumber)
-    {
-
-        $this->streetNumber = $streetNumber;
-
-        return $this;
-    }
-
-    /**
-     * Get streetNumber
-     *
-     * @return string
-     */
-    public function getStreetNumber()
-    {
-
-        return $this->streetNumber;
     }
 
     /**
@@ -353,7 +313,6 @@ class Partner extends ModelEntity
      */
     public function setZipCode($zipCode)
     {
-
         $this->zipCode = $zipCode;
 
         return $this;
@@ -366,7 +325,6 @@ class Partner extends ModelEntity
      */
     public function getZipCode()
     {
-
         return $this->zipCode;
     }
 
@@ -378,7 +336,6 @@ class Partner extends ModelEntity
      */
     public function setCity($city)
     {
-
         $this->city = $city;
 
         return $this;
@@ -391,7 +348,6 @@ class Partner extends ModelEntity
      */
     public function getCity()
     {
-
         return $this->city;
     }
 
@@ -403,7 +359,6 @@ class Partner extends ModelEntity
      */
     public function setPhone($phone)
     {
-
         $this->phone = $phone;
 
         return $this;
@@ -416,7 +371,6 @@ class Partner extends ModelEntity
      */
     public function getPhone()
     {
-
         return $this->phone;
     }
 
@@ -428,7 +382,6 @@ class Partner extends ModelEntity
      */
     public function setFax($fax)
     {
-
         $this->fax = $fax;
 
         return $this;
@@ -441,7 +394,6 @@ class Partner extends ModelEntity
      */
     public function getFax()
     {
-
         return $this->fax;
     }
 
@@ -453,7 +405,6 @@ class Partner extends ModelEntity
      */
     public function setCountryName($countryName)
     {
-
         $this->countryName = $countryName;
 
         return $this;
@@ -466,7 +417,6 @@ class Partner extends ModelEntity
      */
     public function getCountryName()
     {
-
         return $this->countryName;
     }
 
@@ -478,7 +428,6 @@ class Partner extends ModelEntity
      */
     public function setEmail($email)
     {
-
         $this->email = $email;
 
         return $this;
@@ -491,7 +440,6 @@ class Partner extends ModelEntity
      */
     public function getEmail()
     {
-
         return $this->email;
     }
 
@@ -503,7 +451,6 @@ class Partner extends ModelEntity
      */
     public function setWeb($web)
     {
-
         $this->web = $web;
 
         return $this;
@@ -516,7 +463,6 @@ class Partner extends ModelEntity
      */
     public function getWeb()
     {
-
         return $this->web;
     }
 
@@ -528,7 +474,6 @@ class Partner extends ModelEntity
      */
     public function setProfile($profile)
     {
-
         $this->profile = $profile;
 
         return $this;
@@ -552,7 +497,6 @@ class Partner extends ModelEntity
      */
     public function setFix($fix)
     {
-
         $this->fix = $fix;
 
         return $this;
@@ -565,7 +509,6 @@ class Partner extends ModelEntity
      */
     public function getFix()
     {
-
         return $this->fix;
     }
 
@@ -577,7 +520,6 @@ class Partner extends ModelEntity
      */
     public function setPercent($percent)
     {
-
         $this->percent = $percent;
 
         return $this;
@@ -590,7 +532,6 @@ class Partner extends ModelEntity
      */
     public function getPercent()
     {
-
         return $this->percent;
     }
 
@@ -602,7 +543,6 @@ class Partner extends ModelEntity
      */
     public function setCookieLifeTime($cookieLifeTime)
     {
-
         $this->cookieLifeTime = $cookieLifeTime;
 
         return $this;
@@ -615,7 +555,6 @@ class Partner extends ModelEntity
      */
     public function getCookieLifeTime()
     {
-
         return $this->cookieLifeTime;
     }
 
@@ -627,7 +566,6 @@ class Partner extends ModelEntity
      */
     public function setActive($active)
     {
-
         $this->active = $active;
 
         return $this;
@@ -640,7 +578,6 @@ class Partner extends ModelEntity
      */
     public function getActive()
     {
-
         return $this->active;
     }
 

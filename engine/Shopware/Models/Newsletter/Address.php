@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,8 +23,9 @@
  */
 
 namespace   Shopware\Models\Newsletter;
-use         Shopware\Components\Model\LazyFetchModelEntity,
-            Doctrine\ORM\Mapping AS ORM;
+
+use Shopware\Components\Model\LazyFetchModelEntity;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Shopware Address model represents a mail address.
@@ -119,6 +120,22 @@ class Address extends LazyFetchModelEntity
      * @ORM\Column(name="lastread", type="integer", length=11, nullable=false)
      */
     private $lastReadId = 0;
+
+    /**
+     * The Double-Opt-In date
+     *
+     * @var \DateTime $added
+     * @ORM\Column(name="added", type="datetime", nullable=true)
+     */
+    private $added;
+
+    /**
+     * Sets the default value for the added column
+     */
+    function __construct()
+    {
+        $this->added = new \DateTime();
+    }
 
     /**
      * @return int
@@ -232,5 +249,21 @@ class Address extends LazyFetchModelEntity
     public function getCustomer()
     {
         return $this->fetchLazy($this->customer, array('email' => $this->email));
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getAdded()
+    {
+        return $this->added;
+    }
+
+    /**
+     * @param \DateTime $added
+     */
+    public function setAdded($added)
+    {
+        $this->added = $added;
     }
 }

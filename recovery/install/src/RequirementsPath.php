@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -39,27 +39,17 @@ namespace Shopware\Recovery\Install;
  * @package   Shopware\Recovery\Update
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class RequirementsPath implements \IteratorAggregate, \Countable
+class RequirementsPath
 {
-    /**
-     * @var
-     */
-    protected $list;
-
-    /**
-     * @var bool
-     */
-    protected $fatalError = false;
-
     /**
      * @var string
      */
     private $basePath;
 
     /**
-     * @var string
+     * @var array
      */
-    private $sourceFile;
+    private $files;
 
     /**
      * @param string $basePath
@@ -69,32 +59,44 @@ class RequirementsPath implements \IteratorAggregate, \Countable
     {
         $this->basePath = rtrim($basePath, '/') . '/';
         $this->sourceFile = $sourceFile;
+
+        $this->files = $this->readList($sourceFile);
+    }
+
+    public function addFile($file)
+    {
+        $this->files[] = $file;
     }
 
     /**
-     * @param bool $fatalError
+     * @param string $sourceFile
+     * @return string[]
      */
-    public function setFatalError($fatalError)
+    private function readList($sourceFile)
     {
-        $this->fatalError = (bool) $fatalError;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getFatalError()
-    {
-        return $this->fatalError;
-    }
-
-    /**
-     * Checks all requirements
-     */
-    protected function checkAll()
-    {
-        foreach ($this->list->file as $requirement) {
-            $requirement->existsAndWriteable = $this->checkExits($requirement->name);
+        $xml = simplexml_load_file($sourceFile);
+        $list = [];
+        foreach ($xml->files->file as $file) {
+            $list[] = (string) $file->name;
         }
+
+        return $list;
+    }
+
+    /**
+     * @return RequirementsPathResult
+     */
+    public function check()
+    {
+        $result = [];
+
+        foreach ($this->files as $file) {
+            $entry['name'] = $file;
+            $entry['existsAndWriteable'] = $this->checkExits($file);
+            $result[] = $entry;
+        }
+
+        return new RequirementsPathResult($result);
     }
 
     /**
@@ -103,69 +105,10 @@ class RequirementsPath implements \IteratorAggregate, \Countable
      * @param  string $name
      * @return bool
      */
-    protected function checkExits($name)
+    private function checkExits($name)
     {
         $name = $this->basePath . $name;
 
         return (file_exists($name) && is_readable($name) && is_writeable($name));
-    }
-
-    /**
-     * Returns the check list
-     *
-     * @return \Iterator
-     */
-    public function getList()
-    {
-        if ($this->list === null) {
-            $this->list = simplexml_load_file($this->sourceFile);
-            $this->list = $this->list->files;
-            $this->checkAll();
-        }
-
-        return $this->list;
-    }
-
-    /**
-     * Returns the check list
-     *
-     * @return \Iterator
-     */
-    public function getIterator()
-    {
-        return $this->getList();
-    }
-
-    /**
-     * Returns the check list
-     *
-     * @return array
-     */
-    public function toArray()
-    {
-        $list = array();
-        $getList = $this->getList();
-        foreach ($getList->file as $requirement) {
-            $listResult = array();
-
-            $listResult["name"] = (string) $requirement->name;
-            $listResult["existsAndWriteable"] = (string) $requirement->existsAndWriteable;
-            if (empty($listResult["existsAndWriteable"])) {
-                $this->setFatalError(true);
-            }
-            $list[] = $listResult;
-        }
-
-        return $list;
-    }
-
-    /**
-     * Counts the check list
-     *
-     * @return int
-     */
-    public function count()
-    {
-        return $this->getList()->count();
     }
 }

@@ -119,4 +119,12 @@ class Enlight_Controller_Response_ResponseTestCase
         }
         return $default;
     }
+
+    /**
+     * @return null
+     */
+    public function unsetExceptions()
+    {
+        $this->_exceptions = array();
+    }
 }

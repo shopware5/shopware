@@ -1,5 +1,3 @@
-{extends file='parent:frontend/index/search.tpl'}
-
 {* Search container *}
 {block name='frontend_index_search_container'}
 <div id="searchcontainer" class="grid_20">

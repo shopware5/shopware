@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -24,6 +24,13 @@
 
 use Psr\Log\LoggerInterface;
 use Shopware\Components\Random;
+use ShopwarePlugins\SwagUpdate\Components\Checks\IonCubeLoaderCheck;
+use ShopwarePlugins\SwagUpdate\Components\Checks\LicenseCheck;
+use ShopwarePlugins\SwagUpdate\Components\Checks\MySQLVersionCheck;
+use ShopwarePlugins\SwagUpdate\Components\Checks\PHPExtensionCheck;
+use ShopwarePlugins\SwagUpdate\Components\Checks\PHPVersionCheck;
+use ShopwarePlugins\SwagUpdate\Components\Checks\RegexCheck;
+use ShopwarePlugins\SwagUpdate\Components\Checks\WritableCheck;
 use ShopwarePlugins\SwagUpdate\Components\ExtJsResultMapper;
 use ShopwarePlugins\SwagUpdate\Components\FeedbackCollector;
 use ShopwarePlugins\SwagUpdate\Components\Steps\DownloadStep;
@@ -107,7 +114,19 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
         $userLang = $this->getUserLanguage($user);
 
         $namespace = $this->get('snippets')->getNamespace('backend/swag_update/main');
-        $validation = new Validation($namespace, $userLang);
+
+        $fileSystem = new \ShopwarePlugins\SwagUpdate\Components\FileSystem();
+        $conn = $this->get('dbal_connection');
+        $checks = array(
+            new RegexCheck($namespace, $userLang),
+            new MySQLVersionCheck($conn, $namespace),
+            new PHPVersionCheck($namespace),
+            new PHPExtensionCheck($namespace),
+            new WritableCheck($fileSystem, $namespace),
+            new IonCubeLoaderCheck($namespace),
+            new LicenseCheck($conn, $this->container->getParameter('shopware.store.apiEndpoint'), $this->getShopwareVersion(), $namespace)
+        );
+        $validation = new Validation($namespace, $checks);
 
         $this->View()->assign(array(
             'success' => true,
@@ -135,7 +154,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
     /**
      * $this->View()->assign(array(
      *     'success' => false,
-     *     'error' => 'Their are some problems. SORRY!!'
+     *     'error' => 'There are some problems. SORRY!!'
      * ));
      *
      * $this->View()->assign(array(
@@ -394,11 +413,12 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
         rewind($fp2);
 
         $same = true;
-        while (!feof($fp1) && !feof($fp2))
+        while (!feof($fp1) && !feof($fp2)) {
             if (fread($fp1, $blockSize) !== fread($fp2, $blockSize)) {
                 $same = false;
                 break;
             }
+        }
 
         if (feof($fp1) !== feof($fp2)) {
             $same = false;
@@ -428,7 +448,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
 
         $shop = $this->get('models')->getRepository('Shopware\Models\Shop\Shop')->findOneBy(array('default' => true));
 
-        $pluginManager  = $this->container->get('shopware.plugin_manager');
+        $pluginManager  = $this->container->get('shopware_plugininstaller.plugin_manager');
         $plugin = $pluginManager->getPluginByName('SwagUpdate');
         $pluginManager->saveConfigElement($plugin, 'update-unique-id', $uniqueid, $shop);
 

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -22,12 +22,13 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Models\Order\Order as Order,
-    Shopware\Models\Order\Billing as Billing,
-    Shopware\Models\Order\Shipping as Shipping,
-    Shopware\Models\Order\Detail as Detail,
-    Shopware\Models\Order\Document\Document as Document,
-    Doctrine\Common\Collections\ArrayCollection as ArrayCollection;
+use Shopware\Models\Order\Order as Order;
+use Shopware\Models\Order\Billing as Billing;
+use Shopware\Models\Order\Shipping as Shipping;
+use Shopware\Models\Order\Detail as Detail;
+use Shopware\Models\Order\Document\Document as Document;
+use Doctrine\Common\Collections\ArrayCollection as ArrayCollection;
+
 /**
  * Backend Controller for the order backend module.
  *
@@ -167,7 +168,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
      */
     protected function initAcl()
     {
-//        /** @var $namespace Enlight_Components_Snippet_Namespace */
+        //        /** @var $namespace Enlight_Components_Snippet_Namespace */
 //        $namespace = Shopware()->Snippets()->getNamespace('backend/customer');
 //        $this->setAclResourceName('customer');
 //        $this->addAclPermission('getListAction','read', $namespace->get('no_list_rights', 'You do not have sufficient rights to view the list of customers.'));
@@ -188,7 +189,6 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             'success' => true,
             'data' => $orderStatus
         ));
-
     }
 
     /**
@@ -199,7 +199,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
      */
     public function preDispatch()
     {
-        if (!in_array($this->Request()->getActionName(), array('index', 'load', 'skeleton', 'extends','orderPdf'))) {
+        if (!in_array($this->Request()->getActionName(), array('index', 'load', 'skeleton', 'extends', 'orderPdf', 'mergeDocuments'))) {
             $this->Front()->Plugins()->Json()->setRenderer();
         }
     }
@@ -244,8 +244,6 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
                 ->andWhere($builder->expr()->in('orders.id', $orderIds))
                 ->setParameter(':type', $docType);
         return $builder->getQuery();
-
-
     }
 
     /**
@@ -305,7 +303,6 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             )
         ));
         return;
-
     }
 
     /**
@@ -363,7 +360,6 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             $orders = $paginator->getIterator()->getArrayCopy();
 
             foreach ($orders as $key => &$order) {
-
                 $additionalOrderDataQuery = $this->getRepository()->getBackendAdditionalOrderDataQuery($order['number']);
                 $additionalOrderData = $additionalOrderDataQuery->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
@@ -437,23 +433,6 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             'ids' => $ids,
             'totalResult' => $totalResult
         );
-    }
-    /**
-     * The getStatisticAction function selects the sales for each payment method.
-     * It is used for the order module statistic chart.
-     * @return Array
-     */
-    public function getStatisticAction()
-    {
-        //todo@dr: add grouping for the order status
-        $sql= "SELECT s_core_paymentmeans.description as description, SUM(`invoice_amount` / `currencyFactor`)  as value
-        FROM s_order, s_core_paymentmeans
-        WHERE s_order.paymentID = s_core_paymentmeans.id
-        GROUP BY paymentID";
-
-        $data = Shopware()->Db()->fetchAll($sql);
-
-        $this->View()->assign(array('success' => true, 'data' => $data));
     }
 
     /**
@@ -689,10 +668,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             //Performs all of the collected actions.
             $this->getManager()->flush();
 
-            $this->View()->assign(array(
-                'success' => true,
-                'data' => $this->Request()->getParams())
-            );
+            $this->View()->assign(['success' => true]);
         } catch (Exception $e) {
             $this->View()->assign(array(
                 'success' => false,
@@ -1003,6 +979,9 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     {
         $data = $this->Request()->getParam('data', null);
 
+        // Disable Smarty rendering
+        $this->Front()->Plugins()->ViewRenderer()->setNoRender();
+
         if ($data === null) {
             $this->View()->assign(array(
                 'success' => false,
@@ -1021,7 +1000,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             return;
         }
 
-        $files = Array();
+        $files = array();
         $query = $this->getOrderDocumentsQuery($data->orders, $data->docType);
         $models = $query->getResult();
         foreach ($models as $model) {
@@ -1045,7 +1024,6 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $pdf = new FPDI();
 
         foreach ($paths as $path) {
-
             $numPages = $pdf->setSourceFile($path);
             for ($i=1;$i<=$numPages;$i++) {
                 $template = $pdf->ImportPage($i);
@@ -1056,6 +1034,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         }
 
         $hash = md5(uniqid(rand()));
+
         $pdf->Output($hash.'.pdf', "D");
     }
 
@@ -1166,7 +1145,6 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             ));
             return;
         }
-
     }
 
     /**
@@ -1249,7 +1227,9 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         );
         $document->render();
 
-        if ($renderer == "html") exit; // Debu//g-Mode
+        if ($renderer == "html") {
+            exit;
+        } // Debu//g-Mode
 
         return true;
     }
@@ -1277,7 +1257,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             $response = $this->Response();
             $response->setHeader('Cache-Control', 'public');
             $response->setHeader('Content-Description', 'File Transfer');
-            $response->setHeader('Content-disposition', 'attachment; filename='.$orderId.".pdf" );
+            $response->setHeader('Content-disposition', 'attachment; filename='.$orderId.".pdf");
             $response->setHeader('Content-Type', 'application/pdf');
             $response->setHeader('Content-Transfer-Encoding', 'binary');
             $response->setHeader('Content-Length', filesize($file));
@@ -1292,7 +1272,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         }
 
         //removes the global PostDispatch Event to prevent assignments to the view that destroyed the pdf
-        Enlight_Application::Instance()->Events()->removeListener(new Enlight_Event_EventHandler('Enlight_Controller_Action_PostDispatch',''));
+        Enlight_Application::Instance()->Events()->removeListener(new Enlight_Event_EventHandler('Enlight_Controller_Action_PostDispatch', ''));
     }
 
     /**
@@ -1369,7 +1349,6 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
                     } elseif ($unit) {
                         $data['unit'] = $unit->getName();
                     }
-
                 }
 
                 $articleTranslation = array();
@@ -1471,6 +1450,10 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $data['billing']['attribute'] = $data['billingAttribute'][0];
         $data['shipping']['attribute'] = $data['shippingAttribute'][0];
 
+        //unset calculated values
+        unset($data['invoiceAmountNet']);
+        unset($data['invoiceAmountEuro']);
+
         //at least we return the prepared associated data.
         return $data;
     }
@@ -1489,6 +1472,14 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
                 $data['country'] = $countryModel;
             }
             unset($data['countryId']);
+        }
+
+        if (isset($data['stateId']) && !empty($data['stateId'])) {
+            $stateModel = Shopware()->Models()->find('Shopware\Models\Country\State', $data['stateId']);
+            if ($stateModel) {
+                $data['state'] = $stateModel;
+            }
+            unset($data['stateId']);
         }
 
         return $data;
@@ -1535,5 +1526,4 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             );
         }
     }
-
 }

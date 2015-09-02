@@ -1,4 +1,4 @@
-# Shopware 4 mink testsuite
+# Shopware 5 mink testsuite
 
 ## Usage
 Install shopware with dev requirements: `php composer.phar install --dev`.
@@ -22,4 +22,18 @@ $ ./behat features/search.feature
 To append unimplemented snippets to a context
 ```
 $ ./behat features/search.feature --append-snippets
+```
+
+### Run Javascript Tests
+
+## PhantomJS
+
+```
+$ phantomjs --webdriver=4444
+```
+
+## Selenium
+
+```
+$ java -jar selenium-server-standalone.jar
 ```

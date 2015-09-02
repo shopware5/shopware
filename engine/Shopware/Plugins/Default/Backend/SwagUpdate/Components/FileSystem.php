@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -31,6 +31,13 @@ namespace ShopwarePlugins\SwagUpdate\Components;
  */
 class FileSystem
 {
+    /**
+     * @var string[]
+     */
+    private $VCSDirs = array(
+        '.git',
+        '.svn',
+    );
 
     /**
      * @param  string $directory
@@ -76,7 +83,12 @@ class FileSystem
                 continue;
             }
 
-            if ($fixPermission &&  !$fileInfo->isWritable()) {
+            // skip VCS dirs
+            if (in_array($fileInfo->getBasename(), $this->VCSDirs, true)) {
+                continue;
+            }
+
+            if ($fixPermission && !$fileInfo->isWritable()) {
                 $this->fixDirectoryPermission($fileInfo);
             }
 

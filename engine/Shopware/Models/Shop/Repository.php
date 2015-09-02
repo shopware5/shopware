@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,6 +23,7 @@
  */
 
 namespace Shopware\Models\Shop;
+
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Components\Model\ModelRepository;
 
@@ -79,10 +80,10 @@ class Repository extends ModelRepository
     /**
      * Returns a builder-object in order to get all shops
      *
-     * @param null $filter
-     * @param null $order
-     * @param null $offset
-     * @param null $limit
+     * @param array $filter
+     * @param array $order
+     * @param int $offset
+     * @param int $limit
      * @return \Doctrine\ORM\Query
      */
     public function getBaseListQuery($filter = null, $order = null, $offset = null, $limit = null)
@@ -96,11 +97,44 @@ class Repository extends ModelRepository
     }
 
     /**
+     * Returns a query object for all shops with themes.
+     *
+     * @param array $filter
+     * @param array $order
+     * @param int $offset
+     * @param int $limit
+     * @return \Doctrine\ORM\Query
+     */
+    public function getShopsWithThemes($filter = null, $order = null, $offset = null, $limit = null)
+    {
+        $builder = $this->createQueryBuilder('shop');
+
+        $builder->select(array('shop', 'template'))
+            ->innerJoin('shop.template', 'template')
+            ->where('template.version >= 3')
+            ->andWhere('shop.main IS NULL')
+            ->andWhere('shop.active = 1');
+
+        if ($filter) {
+            $builder->addFilter($filter);
+        }
+        if ($order !== null) {
+            $builder->addOrderBy($order);
+        }
+        if ($limit !== null) {
+            $builder->setFirstResult($offset)
+                ->setMaxResults($limit);
+        }
+
+        return $builder->getQuery();
+    }
+
+    /**
      * Helper method to create the query builder for the "getBaseListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param null $filter
-     * @param null $order
+     * @param array $filter
+     * @param array $order
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getBaseListQueryBuilder($filter = null, $order = null)
@@ -303,7 +337,7 @@ class Repository extends ModelRepository
     }
 
     /**
-     * @param \Enlight_Controller_Request_RequestHttp $request
+     * @param \Enlight_Controller_Request_Request $request
      * @return \Shopware\Models\Shop\Shop
      */
     public function getActiveByRequest($request)
@@ -367,7 +401,6 @@ class Repository extends ModelRepository
             $shop->setSecureHost($main->getSecureHost());
             $shop->setSecureBasePath($main->getSecureBasePath());
             $shop->setBasePath($shop->getBasePath() ?: $main->getBasePath());
-            $shop->setBaseUrl($shop->getBaseUrl() ?: $main->getBaseUrl());
             $shop->setTemplate($main->getTemplate());
             $shop->setCurrencies($main->getCurrencies());
             $shop->setChildren($main->getChildren());
@@ -434,6 +467,19 @@ class Repository extends ModelRepository
                 if (!$shop || $currentShop->getSecureBaseUrl() > $shop->getSecureBaseUrl()) {
                     $shop = $currentShop;
                 }
+            } elseif (!$shop && $currentShop->getBasePath() . '/' == $requestPath) {
+                /*
+                 * If no shop was found, use the one which basePath equals the requestPath
+                 *
+                 * This is mainly for shops with virtual aliases, which are requested on the baseBath instead
+                 * of the virtual alias.
+                 *
+                 * f.e. basePath: www.subshop1.com      virtual alias: /subshop1
+                 *      if you navigate to www.subshop1.com you would have been redirected
+                 *      to the main shop on www.mainshop.com. Now you get to your subshop.
+                 *
+                 */
+                $shop = $currentShop;
             }
         }
 

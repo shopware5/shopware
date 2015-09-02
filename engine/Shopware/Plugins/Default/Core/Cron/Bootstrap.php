@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -31,14 +31,6 @@ class Shopware_Plugins_Core_Cron_Bootstrap extends Shopware_Components_Plugin_Bo
         $this->subscribeEvent(
             'Enlight_Controller_Dispatcher_ControllerPath_Backend_Cron',
             'onGetControllerPath'
-        );
-        $this->subscribeEvent(
-            'Enlight_Controller_Front_AfterSendResponse',
-            'onAfterSendResponse'
-        );
-        $this->subscribeEvent(
-            'Enlight_Bootstrap_InitResource_Cron',
-            'onInitResourceCron'
         );
 
         $this->createForm();
@@ -100,27 +92,10 @@ class Shopware_Plugins_Core_Cron_Bootstrap extends Shopware_Components_Plugin_Bo
         return $this->Path() . 'Cron.php';
     }
 
-    public function onAfterSendResponse(Enlight_Event_EventArgs $args)
-    {
-        //Shopware()->Cron()->runCronJobs();
-    }
-
-    public function onInitResourceCron(Enlight_Event_EventArgs $args)
-    {
-        $eventManager = $this->Application()->Events();
-        $adapter = new Enlight_Components_Cron_Adapter_DbTable(array(
-            'name' => 's_crontab'
-        ));
-        $manager = new Enlight_Components_Cron_Manager(
-            $adapter, $eventManager, 'Shopware_Components_Cron_CronJob'
-        );
-        return $manager;
-    }
-
     /**
      * Secure cron actions according to system settings
      *
-     * @param Enlight_Controller_Request_RequestHttp $request
+     * @param Enlight_Controller_Request_Request $request
      * @return bool If cron action is authorized
      */
     public function authorizeCronAction($request)
@@ -137,7 +112,7 @@ class Shopware_Plugins_Core_Cron_Bootstrap extends Shopware_Components_Plugin_Bo
         $cronSecureByAccount = Shopware()->Config()->get('cronSecureByAccount');
 
         // No security policy specified, accept all requests
-        if (empty($cronSecureAllowedKey) && empty($cronSecureAllowedIp) && !$cronSecureByAccount)   {
+        if (empty($cronSecureAllowedKey) && empty($cronSecureAllowedIp) && !$cronSecureByAccount) {
             return true;
         }
 
@@ -145,7 +120,7 @@ class Shopware_Plugins_Core_Cron_Bootstrap extends Shopware_Components_Plugin_Bo
         if (!empty($cronSecureAllowedKey)) {
             $urlKey = $request->getParam('key');
 
-            if (strcmp($cronSecureAllowedKey, $urlKey) == 0 ) {
+            if (strcmp($cronSecureAllowedKey, $urlKey) == 0) {
                 return true;
             }
         }
@@ -161,7 +136,7 @@ class Shopware_Plugins_Core_Cron_Bootstrap extends Shopware_Components_Plugin_Bo
 
         // Validate user auth
         if ($cronSecureByAccount) {
-            if (Shopware()->Auth()->hasIdentity() === true ) {
+            if (Shopware()->Auth()->hasIdentity() === true) {
                 return true;
             }
         }

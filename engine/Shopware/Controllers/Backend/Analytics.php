@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -38,7 +38,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     );
 
     protected $shopFields = array(
-        'amount', 'count', 'totalImpressions', 'totalVisits', 'orderCount', 'visitors', 
+        'amount', 'count', 'totalImpressions', 'totalVisits', 'orderCount', 'visitors',
     );
 
     /**
@@ -91,7 +91,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     {
         parent::init();
         $currency = Shopware()->Db()->fetchRow(
-            'SELECT templatechar as sign, (symbol_position < 32) currencyAtEnd
+            'SELECT templatechar as sign, (symbol_position = 16) currencyAtEnd
             FROM s_core_currencies
             WHERE standard = 1'
         );
@@ -154,7 +154,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             'c.currency',
             'c.name AS currencyName',
             'c.templateChar AS currencyChar',
-            '(c.symbol_position < 32) currencyAtEnd'
+            '(c.symbol_position = 16) currencyAtEnd'
         ))
             ->from('s_core_shops', 's')
             ->leftJoin('s', 's_core_currencies', 'c', 's.currency_id = c.id')
@@ -225,16 +225,25 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
         $data = array_merge_recursive($turnover, $visitors);
         $data = array_merge_recursive($data, $registrations);
+        $data = $this->prepareOverviewData($data);
 
-        foreach($data as $date => &$row) {
+        krsort($data);
+
+        foreach ($data as $date => &$row) {
             $row['date'] = strtotime($date);
             $row['conversion'] = round($row['orderCount'] / $row['visits'] * 100, 2);
+        }
+
+        //sets the correct limit
+        $limit = 25;
+        if (strtolower($this->format) == 'csv') {
+            $limit = count($data);
         }
 
         $splice = array_splice(
             array_values($data),
             $this->Request()->getParam('start', 0),
-            $this->Request()->getParam('limit', 25)
+            $this->Request()->getParam('limit', $limit)
         );
 
         $this->send($splice, count($data));
@@ -259,7 +268,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         $orders = array_map('reset', $orders->getData());
         $data = array_merge_recursive($orders, $visitors);
 
-        foreach($data as $date => &$row) {
+        foreach ($data as $date => &$row) {
             $row['date'] = strtotime($date);
             $orders = $row['orderCount'];
             $visitors = $row['visits'];
@@ -343,7 +352,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         }
 
         // Sort the multidimensional array
-        usort($referrer, function($a,$b) {
+        usort($referrer, function ($a, $b) {
             return $a['turnover'] < $b['turnover'];
         });
 
@@ -441,7 +450,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         $customers = array();
         $users = array();
 
-        foreach($result->getData() as $row) {
+        foreach ($result->getData() as $row) {
             $week = $row['orderTime'];
             $customers[$week]['orderCount']++;
             $customers[$week]['week'] = $week;
@@ -450,7 +459,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $customers[$week]['registration'] = (int) $customers[$week]['registration'];
             $users[$week] = (array) $users[$week];
 
-            switch(strtolower($row['salutation'])) {
+            switch (strtolower($row['salutation'])) {
                 case "mr":
                     $customers[$week]['male']++;
                     break;
@@ -667,6 +676,23 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         );
     }
 
+    /**
+     * Returns the sales amount grouped per device type
+     */
+    public function getDeviceAction()
+    {
+        $result = $this->getRepository()->getProductAmountPerDevice(
+            $this->getFromDate(),
+            $this->getToDate(),
+            $this->getSelectedShopIds()
+        );
+
+        $this->send(
+            $this->formatOrderAnalyticsData($result->getData()),
+            $result->getTotalCount()
+        );
+    }
+
     public function getSearchTermsAction()
     {
         $result = $this->getRepository()->getSearchTerms(
@@ -679,7 +705,8 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
                     'property' => 'countRequests',
                     'direction' => 'DESC'
                 )
-            ))
+            )),
+            $this->getSelectedShopIds()
         );
 
         $this->send(
@@ -799,8 +826,8 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     private function formatCsvData($data)
     {
         if ($fields = $this->getDateFields($data[0])) {
-            foreach($data as &$row) {
-                foreach($fields as $field) {
+            foreach ($data as &$row) {
+                foreach ($fields as $field) {
                     if (array_key_exists($field, $row)) {
                         $row[$field] = date('Y-m-d H:i:s', $row[$field]);
                     }
@@ -811,7 +838,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         if ($fields = $this->getShopFields($data[0])) {
             $shopNames = $this->getShopNames();
 
-            foreach($fields as $field => $shopId) {
+            foreach ($fields as $field => $shopId) {
                 $suffix = substr($field, 0, strlen($fields) - strlen($shopId));
                 $data = $this->switchArrayKeys($data, $shopNames[$shopId] . ' (' . $suffix . ')', $field);
             }
@@ -849,9 +876,9 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     {
         $ids = $this->getSelectedShopIds();
         $fields = array();
-        foreach(array_keys($data) as $key) {
+        foreach (array_keys($data) as $key) {
             if (in_array($key, $this->shopFields)) {
-                foreach($ids as $id) {
+                foreach ($ids as $id) {
                     if (array_key_exists($key . $id, $data)) {
                         $fields[$key . $id] = $id;
                     }
@@ -864,7 +891,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     protected function getDateFields($data)
     {
         $fields = array();
-        foreach(array_keys($data) as $key) {
+        foreach (array_keys($data) as $key) {
             if (in_array($key, $this->dateFields)) {
                 $fields[] = $key;
             }
@@ -874,7 +901,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
     private function isTimestamp($input)
     {
-        if (strlen($input) != 11)  {
+        if (strlen($input) != 11) {
             return false;
         }
 
@@ -882,7 +909,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             return true;
         }
 
-        if  (is_string($input)) {
+        if (is_string($input)) {
             return ctype_digit($input);
         }
 
@@ -983,5 +1010,52 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         $toDate = $toDate->sub(new DateInterval('PT1S'));
 
         return $toDate;
+    }
+
+    /**
+     * fills empty array elements for the csv export
+     *
+     * @param Array $data
+     * @return Array
+     */
+    private function prepareOverviewData($data)
+    {
+        foreach ($data as &$row) {
+            if (!isset($row['orderCount'])) {
+                $row = $this->insertArrayAtPosition(array('orderCount' => 0), $row, 0);
+            }
+            if (!isset($row['turnover'])) {
+                $row = $this->insertArrayAtPosition(array('turnover' => 0), $row, 1);
+            }
+            if (!isset($row['clicks'])) {
+                $row = $this->insertArrayAtPosition(array('clicks' => 0), $row, 2);
+            }
+            if (!isset($row['visits'])) {
+                $row = $this->insertArrayAtPosition(array('visits' => 0), $row, 3);
+            }
+            if (!isset($row['registrations'])) {
+                $row = $this->insertArrayAtPosition(array('registrations' => 0), $row, 4);
+            }
+            if (!isset($row['customers'])) {
+                $row = $this->insertArrayAtPosition(array('customers' => 0), $row, 5);
+            }
+        }
+
+        return $data;
+    }
+
+    /**
+     * helper method which allows to insert an array element with a key
+     *
+     * @param Array $insertValue
+     * @param Array $array
+     * @param int $position
+     * @return array
+     */
+    private function insertArrayAtPosition($insertValue, $array, $position)
+    {
+        return array_slice($array, 0, $position, true) +
+                $insertValue +
+                array_slice($array, 3, count($array) - 1, true);
     }
 }

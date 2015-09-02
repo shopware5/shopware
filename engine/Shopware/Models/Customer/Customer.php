@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,9 +23,10 @@
  */
 
 namespace   Shopware\Models\Customer;
-use         Shopware\Components\Model\LazyFetchModelEntity,
-            Symfony\Component\Validator\Constraints as Assert,
-            Doctrine\ORM\Mapping AS ORM;
+
+use Shopware\Components\Model\LazyFetchModelEntity;
+use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  *
@@ -39,7 +40,7 @@ use         Shopware\Components\Model\LazyFetchModelEntity,
  *   - Shipping =>  Shopware\Models\Customer\Shipping   [1:1] [s_user_shippingaddress]
  *   - Debit    =>  Shopware\Models\Customer\Debit      [1:1] [s_user_debit]
  *   - Group    =>  Shopware\Models\Customer\Group      [n:1] [s_core_customergroups]
- *   - Shop     =>  Shopware\Models\Shop\Shop           [n:1] [s_core_multilanguage]
+ *   - Shop     =>  Shopware\Models\Shop\Shop           [n:1] [s_core_shops]
  *   - Orders   =>  Shopware\Models\Order\Order         [1:n] [s_order]
  * </code>
  * The s_user table has the follows indices:
@@ -137,7 +138,7 @@ class Customer extends LazyFetchModelEntity
      * Contains the customer email address which is used to send the order confirmation mail
      * or the newsletter.
      * @var string $email
-     * @Assert\Email
+     * @Assert\Email(strict=true)
      * @Assert\NotBlank
      * @ORM\Column(name="email", type="string", length=70, nullable=false)
      */

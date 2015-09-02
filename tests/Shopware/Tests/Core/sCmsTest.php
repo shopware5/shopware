@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -21,7 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-class sCmsTest extends PHPUnit_Framework_TestCase
+class sCmsTest extends Enlight_Components_Test_Controller_TestCase
 {
     /**
      * @var sCms
@@ -30,6 +30,7 @@ class sCmsTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        $this->Front()->setRequest($this->Request());
         $this->module = Shopware()->Modules()->Cms();
     }
 

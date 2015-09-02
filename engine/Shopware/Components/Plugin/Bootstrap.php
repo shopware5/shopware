@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -158,6 +158,20 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     }
 
     /**
+     * Secure uninstall plugin method
+     *
+     * @return bool
+     */
+    public function secureUninstall()
+    {
+        if (empty($this->info->capabilities['secureUninstall']) || empty($this->info->capabilities['install'])) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Update plugin method
      *
      * @param string $version
@@ -206,7 +220,19 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      */
     final public function Path()
     {
-        return $this->info->path;
+        $return = '';
+
+        if ($this->info instanceof Enlight_Config) {
+            $return = $this->info->path;
+        } else {
+            $reflection = new \ReflectionClass($this);
+
+            if ($fileName = $reflection->getFileName()) {
+                $return = dirname($fileName) . DIRECTORY_SEPARATOR;
+            }
+        }
+
+        return $return;
     }
 
     /**
@@ -334,23 +360,8 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
         if (!isset($options['label'])) {
             return null;
         }
-        if (isset($options['parent'])
-            && $options['parent'] instanceof \Shopware\Models\Menu\Menu
-        ) {
-            $parentId = $options['parent']->getId();
-        } else {
-            $parentId = null;
-            unset($options['parent']);
-        }
-        $item = $this->Menu()->findOneBy(
-            array(
-                'label' => $options['label'],
-                'parentId' => $parentId
-            )
-        );
-        if ($item === null) {
-            $item = new Shopware\Models\Menu\Menu();
-        }
+
+        $item = new Shopware\Models\Menu\Menu();
         $item->fromArray($options);
         $plugin = $this->Plugin();
         $plugin->getMenuItems()->add($item);
@@ -503,9 +514,9 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      * Helper function to register a plugin controller.
      *
      * If the default event listener is used for the registration of a plugin controller, the following requirements must be fulfilled:
-     *  1. The plugin directory must contain a 'Controller' subdirectory.
-     *  2. The "Controllers" directory must contain a subdirectory which corresponds to the module (Frontend, Backend, Widgets or API)
-     *  3. The controller must be filed in the module directory.
+     *  1. The plugin directory must contain a 'Controllers' subdirectory.
+     *  2. The 'Controllers' directory must contain a subdirectory which corresponds to the module (Frontend, Backend, Widgets or API)
+     *  3. The controller must be filed in this module directory.
      *  4. The controller file must have the same name as the controller class.
      *
      * If all the requirements are fulfilled, the controller is registered automatically.
@@ -606,7 +617,6 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
         }
 
         return $path;
-
     }
 
     /**
@@ -618,7 +628,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
             'install' => true,
             'update' => true,
             'enable' => true,
-            'dummy' => false
+            'secureUninstall' => false
         );
     }
 
@@ -693,7 +703,6 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      */
     public function deleteForm()
     {
-
     }
 
     /**
@@ -701,7 +710,6 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      */
     public function deleteConfig()
     {
-
     }
 
     /**
@@ -771,8 +779,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
         $next = null,
         $start = null,
         $end = null
-    )
-    {
+    ) {
         $this->createCronJob($name, $action, $interval, $active);
     }
 
@@ -905,7 +912,16 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
             'xtype' => 'emotion-components-base'
         ), $options);
 
-        $component = new Component();
+        $component = Shopware()->Models()->getRepository('Shopware\Models\Emotion\Library\Component')->findOneBy(
+            array(
+                'name' => $options['name'],
+                'pluginId' => $this->getId()
+            )
+        );
+        if (!$component) {
+            $component = new Component();
+        }
+
         $component->fromArray($config);
 
         $component->setPluginId($this->getId());
@@ -917,9 +933,9 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
         //register post dispatch of backend and widgets emotion controller to load the template extensions of the plugin
         $this->subscribeEvent('Enlight_Controller_Action_PostDispatchSecure_Widgets_Emotion', 'extendsEmotionTemplates');
         $this->subscribeEvent('Enlight_Controller_Action_PostDispatchSecure_Backend_Emotion', 'extendsEmotionTemplates');
-
         return $component;
     }
+
 
     /**
      * Event listener of the post dispatch event of the backend and widgets emotion controller
@@ -931,14 +947,17 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     {
         /**@var $view Enlight_View_Default*/
         $view = $args->getSubject()->View();
-        $view->addTemplateDir($this->Path() . '/Views/emotion_components/');
+
+        if (file_exists($this->Path() . '/Views/emotion_components/')) {
+            $view->addTemplateDir($this->Path() . '/Views/emotion_components/');
+        }
 
         if ($args->getSubject()->Request()->getModuleName() !== 'backend') {
             return;
         }
 
-        $backendPath = $this->Path() . '/Views/emotion_components/backend/';
-        if (!file_exists($backendPath)) {
+        $backendPath = $this->getExistingBackendEmotionPath();
+        if ($backendPath === false) {
             return;
         }
 
@@ -948,6 +967,25 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
             $path = 'backend/' . $file[0];
             $view->extendsBlock('backend/Emotion/app', '{include file="'. $path .'"}', 'append');
         }
+    }
+
+    /**
+     * @return bool|string
+     */
+    private function getExistingBackendEmotionPath()
+    {
+        $backendPath = $this->Path() . '/Views/emotion_components/backend/';
+
+        if (file_exists($backendPath)) {
+            return $backendPath;
+        }
+
+        $backendPath = $this->Path() . '/Views/backend/emotion_components/';
+        if (file_exists($backendPath)) {
+            return $backendPath;
+        }
+
+        return false;
     }
 
     /**
@@ -1063,5 +1101,167 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
                 }
             }
         }
+    }
+
+    /**
+     * @param string $route
+     * @param int $time
+     * @param array $invalidateTags
+     * @return bool
+     */
+    protected function addHttpCacheRoute($route, $time, $invalidateTags = [])
+    {
+        /**@var $writer \Shopware\Components\ConfigWriter*/
+        $writer = $this->get('config_writer');
+
+        $value = $writer->get('cacheControllers', 'HttpCache');
+        if (empty($value)) {
+            return false;
+        }
+
+        $value = $this->explodeHttpCacheRoutes($value);
+        $value = $this->addOrUpdateHttpCacheRoute($route, $time, $value);
+        $value = $this->implodeHttpCacheRoutes($value);
+        $writer->save('cacheControllers', $value, 'HttpCache');
+
+        if (empty($invalidateTags)) {
+            return true;
+        }
+
+        $value = $writer->get('noCacheControllers', 'HttpCache');
+        $value = $this->explodeHttpCacheRoutes($value);
+        foreach ($invalidateTags as $tag) {
+            $value = $this->addNoCacheTag($route, strtolower($tag), $value);
+        }
+        $value = $this->implodeHttpCacheRoutes($value);
+        $writer->save('noCacheControllers', $value, 'HttpCache');
+
+        return true;
+    }
+
+    /**
+     * @param string $route
+     * @return bool
+     */
+    protected function removeHttpCacheRoute($route)
+    {
+        /**@var $writer \Shopware\Components\ConfigWriter*/
+        $writer = $this->get('config_writer');
+
+        //remove cached controller
+        $value = $writer->get('cacheControllers', 'HttpCache');
+        if (empty($value)) {
+            return false;
+        }
+
+        $value = $this->explodeHttpCacheRoutes($value);
+        $new = array_filter($value, function ($row) use ($route) {
+            return ($row['route'] != $route);
+        });
+
+        $new = $this->implodeHttpCacheRoutes($new);
+        $writer->save('cacheControllers', $new, 'HttpCache');
+
+        //remove no cache tags
+        $value = $writer->get('noCacheControllers', 'HttpCache');
+        $value = $this->explodeHttpCacheRoutes($value);
+        $new = array_filter($value, function ($row) use ($route) {
+            return ($row['route'] != $route);
+        });
+
+        $new = $this->implodeHttpCacheRoutes($new);
+        $writer->save('noCacheControllers', $new, 'HttpCache');
+
+        return true;
+    }
+
+    /**
+     * @param  string $value
+     * @return array
+     */
+    private function explodeHttpCacheRoutes($value)
+    {
+        $value = explode("\n", $value);
+
+        $value = array_map(function ($row) {
+            $row = explode(' ', $row);
+            if (empty($row[0])) {
+                return null;
+            }
+            return ['route' => $row[0], 'time' => $row[1]];
+        }, $value);
+
+        $value = array_filter($value);
+        return $value;
+    }
+
+    /**
+     * @param string $route
+     * @param int $time
+     * @param array $value
+     * @return array
+     */
+    private function addOrUpdateHttpCacheRoute($route, $time, $value)
+    {
+        $exist = false;
+        foreach ($value as &$row) {
+            if ($row['route'] != $route) {
+                continue;
+            }
+
+            $exist = true;
+            if ($row['time'] == (int) $time) {
+                continue;
+            }
+
+            $row['time'] = $time;
+        }
+
+        if ($exist == false) {
+            $value[] = ['route' => $route, 'time' => $time];
+        }
+
+        return $value;
+    }
+
+    /**
+     * @param string $route
+     * @param string $tag
+     * @param array $value
+     * @return array
+     */
+    private function addNoCacheTag($route, $tag, $value)
+    {
+        $exist = false;
+        foreach ($value as $row) {
+            if ($row['route'] != $route) {
+                continue;
+            }
+
+            if ($row['time'] != $tag) {
+                continue;
+            }
+
+            $exist = true;
+        }
+
+        if ($exist == false) {
+            $value[] = ['route' => $route, 'time' => $tag];
+        }
+
+        return $value;
+    }
+
+    /**
+     * @param array $value
+     * @return string
+     */
+    private function implodeHttpCacheRoutes($value)
+    {
+        $value = array_map(function ($row) {
+            return implode(' ', $row);
+        }, $value);
+
+        return implode("\n", $value);
     }
 }

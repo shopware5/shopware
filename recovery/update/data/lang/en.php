@@ -1,6 +1,6 @@
 <?php
-return array(
-    'title'         => "Shopware 4 - Update Script",
+return [
+    'title'         => "Shopware 5 - Update Script",
     'meta_text'     => '<strong>Shopware update:</strong>',
 
     'tab_start'     => "Start update",
@@ -27,8 +27,6 @@ return array(
     'step2_header_files'         => "File & directory permissions",
     'step2_files_info'           => "The following files and directories must exist and be writable",
     'step2_files_delete_info'    => "The following directories have to be <strong>deleted</strong>",
-    'step2_tablefiles_colcheck'  => 'Check', // Check
-    'step2_tablefiles_colstatus' => 'Status', // Status
     'step2_error'                => 'Some system requirements are not met',
     'step2_php_info'             => "Your server must meet the following requirements in order to run Shopware",
     'step2_system_colcheck'      => 'Check',
@@ -52,4 +50,4 @@ return array(
     'done_delete'   => 'Your shop is currently in maintenance mode.<br/>Please delete the updater (/update-assets) from your server via FTP.',
     'done_frontend' => 'Open shop frontend',
     'done_backend'  => 'Open shop backend',
-);
+];

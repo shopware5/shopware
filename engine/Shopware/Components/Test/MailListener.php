@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -80,20 +80,6 @@ class Shopware_Components_Test_MailListener implements PHPUnit_Framework_TestLis
         $mail->setSubject('PHPUnit test "' . $name . '" failed.');
         $mail->setBodyText($message);
 
-        if($test instanceof Enlight_Components_Test_Selenium_TestCase
-          && $e instanceof PHPUnit_Framework_ExpectationFailedException
-          && $screenshot = $test->getFullScreenshot()) {
-            $filename = basename($test->getFullScreenshotUrl());
-            /** @var $test Enlight_Components_Test_Selenium_TestCase */
-            $mail->createAttachment(
-                $screenshot,
-                Zend_Mime::TYPE_OCTETSTREAM,
-                Zend_Mime::DISPOSITION_ATTACHMENT,
-                Zend_Mime::ENCODING_BASE64,
-                $filename
-            );
-        }
-
         $mail->send($this->mailTransport);
     }
 
@@ -119,7 +105,6 @@ class Shopware_Components_Test_MailListener implements PHPUnit_Framework_TestLis
      */
     public function addIncompleteTest(PHPUnit_Framework_Test $test, Exception $e, $time)
     {
-
     }
 
     /**
@@ -132,7 +117,6 @@ class Shopware_Components_Test_MailListener implements PHPUnit_Framework_TestLis
      */
     public function addSkippedTest(PHPUnit_Framework_Test $test, Exception $e, $time)
     {
-
     }
 
     /**
@@ -143,7 +127,6 @@ class Shopware_Components_Test_MailListener implements PHPUnit_Framework_TestLis
      */
     public function startTestSuite(PHPUnit_Framework_TestSuite $suite)
     {
-
     }
 
     /**
@@ -154,7 +137,6 @@ class Shopware_Components_Test_MailListener implements PHPUnit_Framework_TestLis
      */
     public function endTestSuite(PHPUnit_Framework_TestSuite $suite)
     {
-
     }
 
     /**
@@ -164,7 +146,6 @@ class Shopware_Components_Test_MailListener implements PHPUnit_Framework_TestLis
      */
     public function startTest(PHPUnit_Framework_Test $test)
     {
-
     }
 
     /**
@@ -175,6 +156,5 @@ class Shopware_Components_Test_MailListener implements PHPUnit_Framework_TestLis
      */
     public function endTest(PHPUnit_Framework_Test $test, $time)
     {
-
     }
 }

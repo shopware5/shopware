@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2013 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -28,10 +28,10 @@
  * The Enlight_Components_Adodb is an interface for the zend db adapter
  * to have an easy way to get adodb sql syntax for an sql expression.
  *
- * @deprecated Superseded by Enlight_Components_Db
+ * @deprecated Superseded by Enlight_Components_Db, will be removed in SW 5.1
  * @category  Shopware
  * @package   Enlight\Component\Adodb
- * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Enlight_Components_Adodb extends Enlight_Class
 {

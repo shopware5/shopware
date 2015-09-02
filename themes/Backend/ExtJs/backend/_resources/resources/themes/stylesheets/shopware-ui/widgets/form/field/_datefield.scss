@@ -1,0 +1,48 @@
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ *
+ * @category   Shopware
+ * @package    Shopware_Styling
+ * @subpackage Forms
+ * @version    $Id$
+ * @author shopware AG
+ */
+table.#{$prefix}form-trigger-wrap {
+
+	/** Date field - Normal state */
+	.#{$prefix}form-date-trigger {
+		background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAAWCAMAAAAVQ1dNAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAMlQTFRFYHeHbH6LcXyJeY2ae46bfZCdgZOggpSghpejh5iki5umkaGswcrQxc3Tx8/VydHXy9LX09fb19ve2N3f3OHk3+Tn4OTm4eTm4kc+5VFI51pS6GJb6Wtk6mNb6mRc6uzu6u3u625m6+7v7O7v7O7w7Xdw7vDx7/Hy8PLz8e/u8fP08u/u8vP08/T18/X29PX29fb39vf39/T09/j5+Pn5+ff3+fr6+vv7++Hf+/n5+/v7+/v8+/z8/PLx/Pz8/Pz9/f39/v7+////3Voc6AAAAMpJREFUGBkFwTFOw0AQAMC5y6JYDuEHIAE1FSXvp+IBNEgI0fGAJLZzu8y0lz8AQI246wAAI/Y3AAAt1NfO/v53YX//PdRTD6Ou8nRO8rQWYxeyGD8wfiCFUQDAEOrvDQDeH4TMAIBMofBxmfppcplfKSGVbdr6tJm2InWFYx1v63isW5SQ0rL23dqtN0kKZbPM5z6fzZeNEoarw3Jol4NlvjKENDwCDFIo5w5AKqF2nwDQSshHACCFbKBaNUUrYbSiFa0A4RkAYP0HBoVpSPwxepYAAAAASUVORK5CYII=") no-repeat;
+	}
+
+	/** Date field - Hover state */
+	.#{$prefix}form-date-trigger:hover, .#{$prefix}form-date-trigger:active {
+		background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAAWCAMAAAAVQ1dNAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAMlQTFRFYHeHan2KcXyJdIqZe46bfZCdgZOggpSghpejh5iki5umkaGswcrQxc3Tx8/Vx9vqydHXy9LXy93rz+Dt09fb0+Pu19ve1+Xw2N3f2ufx3OHk3urz3+Tn4OTm4eTm4kc+4uz05VFI5e7151pS6GJb6PD26Wtk6mNb6mRc625m6/L47Xdw7/T58e/u8fb68u/u8vP08/T19Pj79fb39vn89/T0+Pv9+ff3++Hf+/n5+/v8+/z8+/z9/PLx/Pz8/f39/f7+/v7+////uPZedwAAAMNJREFUGBkFwTFKA1EYBsDJ5iesBoKwiFh6BLH0/FaWHkFBUlhF17gv+z1nNo9fAIDe6uoWAGCtcQQA6CUfZXt3XNnefXb9fiiX3mRuK5lb57IrS8gRcoRlVxIAIErenwHgZVIuKQDIRQlez+Mwj87XT0SJaGMbxmZsIQYNU5+mPk19QlNW3Wk51XKy/HRWJZq//dz2s/1vI0oTh/kwfB/Mh9CUiAeAECXOAwARJds3ANhEyQ0AEKUDACgrAIDyBADw9w9ReGc1FFfH9wAAAABJRU5ErkJggg==") no-repeat;
+	}
+}
+
+.#{$prefix}form-trigger-wrap-focus {
+
+	/** Date field style - Focus state */
+	.#{$prefix}form-date-trigger, .#{$prefix}form-date-trigger:hover, .#{$prefix}form-date-trigger:active {
+		background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAAWCAMAAAAVQ1dNAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAMlQTFRFYHeHan2KcXyJdIqZe46bfZCdgZOggpSghpejh5iki5umkaGswcrQxc3Tx8/Vx9vqydHXy9LXy93rz+Dt09fb0+Pu19ve1+Xw2N3f2ufx3OHk3urz3+Tn4OTm4eTm4kc+4uz05VFI5e7151pS6GJb6PD26Wtk6mNb6mRc625m6/L47Xdw7/T58e/u8fb68u/u8vP08/T19Pj79fb39vn89/T0+Pv9+ff3++Hf+/n5+/v8+/z8+/z9/PLx/Pz8/f39/f7+/v7+////uPZedwAAAMNJREFUGBkFwTFKA1EYBsDJ5iesBoKwiFh6BLH0/FaWHkFBUlhF17gv+z1nNo9fAIDe6uoWAGCtcQQA6CUfZXt3XNnefXb9fiiX3mRuK5lb57IrS8gRcoRlVxIAIErenwHgZVIuKQDIRQlez+Mwj87XT0SJaGMbxmZsIQYNU5+mPk19QlNW3Wk51XKy/HRWJZq//dz2s/1vI0oTh/kwfB/Mh9CUiAeAECXOAwARJds3ANhEyQ0AEKUDACgrAIDyBADw9w9ReGc1FFfH9wAAAABJRU5ErkJggg==") no-repeat !important;
+	}
+}

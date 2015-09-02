@@ -1,40 +1,36 @@
-<?php $app->render('header.php', array('tab' => 'dbmigration')) ?>
+<?php $app->render('_header.php', ['tab' => 'dbmigration']) ?>
 
-<div id="start">
-    <div class="page-header">
-        <h2><?php echo $language["migration_header"];?></h2>
-    </div>
+<h2><?= $language["migration_header"];?></h2>
 
-    <div style="display: none;" class="alert alert-error">
-        &nbsp;
-    </div>
-
-    <div class="progress-container">
-        <div class="progress progress-info progress-striped">
-            <div class="bar" style="width: 0%"></div>
-        </div>
-
-        <div class="counter-text hidden">
-            <strong class="counter-numbers">&nbsp;</strong>
-            <p class="counter-content">
-                &nbsp;
-            </p>
-        </div>
-
-        <div class="progress-text">
-            <?php echo $language["migration_progress_text"];?>
-        </div>
-
-        <div class="progress-actions actions clearfix">
-            <input type="submit" id="start-ajax" class="right primary" value="<?php echo $language["start"];?>" />
-        </div>
-    </div>
-
-    <form action="<?php echo $app->urlFor('cleanup'); ?>" method="get">
-        <div class="actions clearfix">
-            <input type="submit" class="right primary invisible" id="forward-button" value="<?php echo $language["forward"];?>"" />
-        </div>
-    </form>
+<div style="display: none;" class="alert alert-error">
+    &nbsp;
 </div>
 
-<?php $app->render('footer.php') ?>
+<div class="progress-container">
+    <div class="progress">
+        <div class="progress-bar"></div>
+    </div>
+
+    <div class="counter-text is--hidden">
+        <strong class="counter-numbers">&nbsp;</strong>
+        <p class="counter-content">
+            &nbsp;
+        </p>
+    </div>
+
+    <div class="progress-text is--hidden">
+        <?= $language["migration_progress_text"];?>
+    </div>
+
+    <div class="progress-actions actions clearfix">
+        <input type="submit" id="start-ajax" class="btn btn-primary btn-arrow-right is--right" value="<?= $language["start"];?>" />
+    </div>
+</div>
+
+<form action="<?= $app->urlFor('cleanup'); ?>" method="get">
+    <div class="actions clearfix">
+        <input type="submit" class="btn btn-primary btn-arrow-right is--right is--hidden" id="forward-button" value="<?= $language["forward"];?>"" />
+    </div>
+</form>
+
+<?php $app->render('_footer.php') ?>

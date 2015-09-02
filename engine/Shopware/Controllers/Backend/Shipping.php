@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,7 +32,7 @@
  */
 class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend_ExtJs
 {
-     /**
+    /**
      * Returns the shopware model manager
      *
      * @return Shopware\Components\Model\ModelManager
@@ -122,7 +122,7 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
         if (!isset($params['shippingFree']) || $params['shippingFree'] === "" || $params['shippingFree'] === "0") {
             $params['shippingFree'] = null;
         } else {
-            $params['shippingFree'] = floatval(str_replace(',' , '.', $params['shippingFree']));
+            $params['shippingFree'] = floatval(str_replace(',', '.', $params['shippingFree']));
         }
 
         $params['payments']        = new \Doctrine\Common\Collections\ArrayCollection();
@@ -220,6 +220,25 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
         $this->View()->assign(array('success' => true, 'data' => $params));
     }
 
+    /**
+     * Extends the database data with additional data for easier usage
+     * @param array $shippingCosts
+     * @return array
+     */
+    private function convertShippingCostsDates(array $shippingCosts)
+    {
+        foreach ($shippingCosts as $i => $shippingCost) {
+            if (!is_null($shippingCost['bindTimeFrom'])) {
+                $shippingCosts[$i]['bindTimeFrom'] = gmdate("H:i", $shippingCost['bindTimeFrom']);
+            }
+
+            if (!is_null($shippingCost['bindTimeTo'])) {
+                $shippingCosts[$i]['bindTimeTo'] = gmdate("H:i", $shippingCost['bindTimeTo']);
+            }
+        }
+
+        return $shippingCosts;
+    }
 
     /**
      * Returns all Shipping Costs
@@ -238,6 +257,10 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
             $filter = $filter[0]['value'];
         }
 
+        if ($dispatchID === null) {
+            $dispatchID = $this->Request()->getParam('id', null);
+        }
+
         $query = $this->getRepository()->getShippingCostsQuery($dispatchID, $filter, $sort, $limit, $offset);
         $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
@@ -245,29 +268,37 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
         //returns the total count of the query
         $totalResult = $paginator->count();
         $shippingCosts = $paginator->getIterator()->getArrayCopy();
+        $shippingCosts = $this->convertShippingCostsDates($shippingCosts);
 
-        $shippingCostsResult = array();
-        foreach ($shippingCosts as $shippingCost) {
+        $this->View()->assign(array('success' => true, 'data' => $shippingCosts, 'total' => $totalResult));
+    }
 
-            if (!is_null($shippingCost['bindTimeFrom'])) {
-                $date = new Zend_Date();
-                $date->setMinute(0);
-                $date->setHour(0);
-                $date->setSecond(0);
-                $shippingCost['bindTimeFrom'] = $date->addSecond($shippingCost['bindTimeFrom'])->toString("HH:mm");
-            }
+    /**
+     * Returns all Shipping Costs with basic data
+     *
+     * @return array
+     */
+    public function getListAction()
+    {
+        $limit      = $this->Request()->getParam('limit', 20);
+        $offset     = $this->Request()->getParam('start', 0);
+        $sort       = $this->Request()->getParam('sort', array(array('property' => 'dispatch.name', 'direction' => 'ASC')));
 
-            if (!is_null($shippingCost['bindTimeTo'])) {
-                $date = new Zend_Date();
-                $date->setMinute(0);
-                $date->setHour(0);
-                $date->setSecond(0);
-                $shippingCost['bindTimeTo'] = $date->addSecond($shippingCost['bindTimeTo'])->toString("HH:mm");
-            }
-            $shippingCostsResult[]  = $shippingCost;
+        $filter = $this->Request()->getParam('filter', null);
+        if (is_array($filter) && isset($filter[0]['value'])) {
+            $filter = $filter[0]['value'];
         }
 
-        $this->View()->assign(array('success' => true, 'data' => $shippingCostsResult, 'total' => $totalResult));
+        $query = $this->getRepository()->getListQuery($filter, $sort, $limit, $offset);
+        $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+
+        $paginator = $this->getModelManager()->createPaginator($query);
+        //returns the total count of the query
+        $totalResult = $paginator->count();
+        $shippingCosts = $paginator->getIterator()->getArrayCopy();
+        $shippingCosts = $this->convertShippingCostsDates($shippingCosts);
+
+        $this->View()->assign(array('success' => true, 'data' => $shippingCosts, 'total' => $totalResult));
     }
 
     /**

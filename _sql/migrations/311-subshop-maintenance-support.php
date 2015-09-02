@@ -1,7 +1,7 @@
 <?php
 class Migrations_Migration311 Extends Shopware\Components\Migrations\AbstractMigration
 {
-    public function up()
+    public function up($modus)
     {
         $sql = <<<'EOD'
 UPDATE s_core_config_elements SET scope = 1 WHERE name = 'setoffline' OR name = 'offlineip';

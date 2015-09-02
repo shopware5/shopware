@@ -1,8 +1,11 @@
 <?php
 
-use Behat\Behat\Context\Step;
+namespace Shopware\Tests\Mink;
+
+use Shopware\Tests\Mink\Page\Emotion\Listing;
+use Shopware\Tests\Mink\Element\Emotion\FilterGroup;
+use Shopware\Tests\Mink\Element\Emotion\ArticleBox;
 use Behat\Gherkin\Node\TableNode;
-require_once 'SubContext.php';
 
 class ListingContext extends SubContext
 {
@@ -18,14 +21,29 @@ class ListingContext extends SubContext
     }
 
     /**
-     * @Then /^The price of the article on position (?P<num>\d+) should be "([^"]*)"$/
+     * @Given /^I am on the listing page for category (?P<categoryId>\d+)$/
+     * @Given /^I am on the listing page for category (?P<categoryId>\d+) on page (?P<page>\d+)$/
      */
-    public function thePriceOfTheArticleOnPositionShouldBe($position, $price)
+    public function iAmOnTheListingPageForCategoryOnPage($categoryId, $page = null)
     {
-        $this->getPage('Listing')->checkPrice($position, $price);
+        $params = array(
+            array(
+                'parameter' => 'sCategory',
+                'value'=> $categoryId
+            )
+        );
+
+        if ($page) {
+            $params[] = array(
+                'parameter' => 'sPage',
+                'value'=> $page
+            );
+        }
+
+        $this->getPage('Listing')->openListing($params, false);
     }
 
-    /**
+        /**
      * @When /^I set the filter to:$/
      * @When /^I reset all filters$/
      */
@@ -33,19 +51,108 @@ class ListingContext extends SubContext
     {
         $properties = array();
 
-        if($filter)
-        {
+        if ($filter) {
             $properties = $filter->getHash();
         }
 
-        $this->getPage('Listing')->filter($properties);
+        /** @var Listing $page */
+        $page = $this->getPage('Listing');
+
+        /** @var FilterGroup $filterGroups */
+        $filterGroups = $this->getMultipleElement($page, 'FilterGroup');
+        $page->filter($filterGroups, $properties);
     }
 
     /**
-     * @Then /^I should see (?P<num>\d+) articles$/
+     * @Then /^the articles should be shown in a table-view$/
      */
-    public function iShouldSeeArticles($count)
+    public function theArticlesShouldBeShownInATableView()
     {
-        $this->getPage('Listing')->countArticles($count);
+        $this->getPage('Listing')->checkView('viewTable');
+    }
+
+    /**
+     * @Then /^the articles should be shown in a list-view$/
+     */
+    public function theArticlesShouldBeShownInAListView()
+    {
+        $this->getPage('Listing')->checkView('viewList');
+    }
+
+    /**
+     * @Then /^the article on position (?P<num>\d+) should have this properties:$/
+     */
+    public function theArticleOnPositionShouldHaveThisProperties($position, TableNode $properties)
+    {
+        /** @var Listing $page */
+        $page = $this->getPage('Listing');
+
+        /** @var ArticleBox $articleBox */
+        $articleBox = $this->getMultipleElement($page, 'ArticleBox', $position);
+        $properties = Helper::convertTableHashToArray($properties->getHash());
+        $page->checkArticleBox($articleBox, $properties);
+    }
+
+    /**
+     * @When /^I order the article on position (?P<position>\d+)$/
+     */
+    public function iOrderTheArticleOnPosition($position)
+    {
+        /** @var Listing $page */
+        $page = $this->getPage('Listing');
+        $language = Helper::getCurrentLanguage($page);
+
+        /** @var ArticleBox $articleBox */
+        $articleBox = $this->getMultipleElement($page, 'ArticleBox', $position);
+        Helper::clickNamedLink($articleBox, 'order', $language);
+    }
+
+    /**
+     * @When /^I browse to "([^"]*)" page$/
+     * @When /^I browse to "([^"]*)" page (\d+) times$/
+     */
+    public function iBrowseTimesToPage($direction, $steps = 1)
+    {
+        $this->getElement('Paging')->moveDirection($direction, $steps);
+    }
+
+    /**
+     * @Then /^I should not be able to browse to "([^"]*)" page$/
+     */
+    public function iShouldNotBeAbleToBrowseToPage($direction)
+    {
+        $this->getElement('Paging')->noElement($direction);
+    }
+
+    /**
+     * @When /^I browse to page (\d+)$/
+     */
+    public function iBrowseToPage($page)
+    {
+        $this->getElement('Paging')->moveToPage($page);
+    }
+
+    /**
+     * @Given /^I should not be able to browse to page (\d+)$/
+     */
+    public function iShouldNotBeAbleToBrowseToPage2($page)
+    {
+        $this->getElement('Paging')->noElement($page);
+    }
+
+    /**
+     * @Then /^I should see the article "([^"]*)" in listing$/
+     */
+    public function iShouldSeeTheArticleInListing($name)
+    {
+        $this->getPage('Listing')->checkListing($name);
+    }
+
+    /**
+     * @Given /^I should not see the article "([^"]*)" in listing$/
+     */
+    public function iShouldNotSeeTheArticleInListing($name)
+    {
+        $this->getPage('Listing')->checkListing($name, true);
     }
 }

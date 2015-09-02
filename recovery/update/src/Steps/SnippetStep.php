@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -24,14 +24,14 @@
 
 namespace Shopware\Recovery\Update\Steps;
 
-use Shopware\Recovery\Common\Dump;
+use Shopware\Recovery\Common\DumpIterator;
 
 class SnippetStep
 {
     private $conn;
     private $dumper;
 
-    public function __construct(\PDO $connection, Dump $dumper)
+    public function __construct(\PDO $connection, DumpIterator $dumper)
     {
         $this->conn = $connection;
         $this->dumper = $dumper;
@@ -54,7 +54,7 @@ class SnippetStep
         $dump->seek($offset);
 
         $startTime = microtime(true);
-        $sql = array();
+        $sql = [];
         $count = 0;
         while ($dump->valid() && ++$count) {
             $current = trim($dump->current());
@@ -68,9 +68,9 @@ class SnippetStep
             if ($count % 50 === 0) {
                 try {
                     $conn->exec(implode(";\n", $sql));
-                    $sql = array();
+                    $sql = [];
                 } catch (\PDOException $e) {
-                    return new ErrorResult($e->getMessage(), $e, array('query' => $sql));
+                    return new ErrorResult($e->getMessage(), $e, ['query' => $sql]);
                 }
             }
 
@@ -84,7 +84,7 @@ class SnippetStep
             try {
                 $conn->exec(implode(";\n", $sql));
             } catch (\PDOException $e) {
-                return new ErrorResult("second" . $e->getMessage(), $e, array('query' => $sql));
+                return new ErrorResult("second" . $e->getMessage(), $e, ['query' => $sql]);
             }
         }
 

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2013 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -22,13 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-/**
- * Shopware SwagAboCommerce Plugin - Bootstrap
- *
- * @category  Shopware
- * @package   Shopware\Plugins\SwagAboCommerce
- * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
- */
 class sOrderTest extends PHPUnit_Framework_TestCase
 {
     /**
@@ -201,45 +194,6 @@ class sOrderTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($updated['sales'], $detail['sales'] + 10);
         $this->assertEquals($updated['instock'], $detail['instock'] - 10);
-    }
-
-    public function testRefreshLastStockArticle()
-    {
-        $data = $this->getSimpleArticleData();
-        $data['mainDetail']['inStock'] = 0;
-
-        $config = $this->invokeMethod(
-            $this->module,
-            'getConfig'
-        );
-
-        $config->offsetSet('deactivatenoinstock', true);
-
-        $this->invokeMethod(
-            $this->module,
-            'setConfig',
-            array(
-                $config
-            )
-        );
-
-        $article = $this->getArticleResource()->create($data);
-
-        $this->invokeMethod(
-            $this->module,
-            'refreshLastStockArticle',
-            array(
-                $article->getMainDetail()->getNumber(),
-                $article->getId(),
-                true
-            )
-        );
-
-        /**@var $article \Shopware\Models\Article\Article */
-        $article = Shopware()->Models()->find('Shopware\Models\Article\Article', $article->getId());
-
-        $this->assertFalse((bool)$article->getActive());
-        $this->assertFalse((bool)$article->getMainDetail()->getActive());
     }
 
     public function testGetOrderDetailsForMail()
@@ -1116,8 +1070,7 @@ class sOrderTest extends PHPUnit_Framework_TestCase
                 'customernumber' => '20001',
                 'firstname' => 'Max',
                 'lastname' => 'Mustermann',
-                'street' => 'Musterstr.',
-                'streetnumber' => '55',
+                'street' => 'Musterstr. 55',
                 'zipcode' => '55555',
                 'city' => 'Musterhausen',
                 'countryID' => '2',
@@ -1216,8 +1169,7 @@ class sOrderTest extends PHPUnit_Framework_TestCase
                 'salutation' => 'mr',
                 'firstname' => 'Max',
                 'lastname' => 'Mustermann',
-                'street' => 'MustermannstraÃŸe',
-                'streetnumber' => '92',
+                'street' => 'MustermannstraÃŸe 92',
                 'zipcode' => '48624',
                 'city' => 'SchÃ¶ppingen',
                 'countryID' => '2',

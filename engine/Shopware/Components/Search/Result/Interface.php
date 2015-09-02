@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -24,6 +24,7 @@
 
 /**
  * Interface that define the minimum of methods a shopware search result object must contain
+ * @deprecated Use \Shopware\Bundle\SearchBundle\ProductNumberSearch, will be removed in SW 5.1
  */
 interface Shopware_Components_Search_Result_Interface
 {

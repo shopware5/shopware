@@ -56,8 +56,8 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
     protected $dispatcher;
 
     /**
-     * @var Enlight_Controller_Request_RequestHttp contains an instance of the
-     * Enlight_Controller_Request_RequestHttp. Used for the routing,
+     * @var Enlight_Controller_Request_Request contains an instance of the
+     * Enlight_Controller_Request_Request. Used for the routing,
      * the different events which will be notified in the dispatch function and for the
      * dispatch itself.
      */
@@ -75,11 +75,6 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
      * flag is set to false, the exceptions is set in the response instance.
      */
     protected $throwExceptions;
-
-    /**
-     * @var bool Flag whether the response object should be returned in the dispatch.
-     */
-    protected $returnResponse;
 
     /**
      * @var array Contains all invoked params. The invoked params can be set by the setParam/s function and
@@ -118,9 +113,6 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
      *  - Enlight_Controller_Front_PreDispatch  => before the dispatch<br>
      *  - Enlight_Controller_Front_PostDispatch => after the dispatch<br><br>
      * When everything is dispatched the Enlight_Controller_Front_DispatchLoopShutdown event will be notified.
-     * At last the response is sent. As well as the dispatch, two events are notified:
-     *  - Enlight_Controller_Front_SendResponse      => before the response is sent<br>
-     *  - Enlight_Controller_Front_AfterSendResponse => after the response is sent
      *
      * @throws  Exception
      * @return  Enlight_Controller_Response_ResponseHttp
@@ -188,6 +180,13 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
                 'Enlight_Controller_Front_RouteShutdown',
                 $eventArgs
             );
+
+            /**
+             * Early exit the dispatch if we have a redirect
+             */
+            if ($this->response->isRedirect()) {
+                return $this->response;
+            }
 
             /**
              * Notify plugins of dispatch loop startup
@@ -268,22 +267,8 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
             $this->response->setException($e);
         }
 
-        if ($this->returnResponse()) {
-            return $this->response;
-        }
+        return $this->response;
 
-        if (!$this->eventManager->notifyUntil(
-            'Enlight_Controller_Front_SendResponse', $eventArgs
-        )) {
-            $this->Response()->sendResponse();
-        }
-
-        $this->eventManager->notify(
-            'Enlight_Controller_Front_AfterSendResponse',
-            $eventArgs
-        );
-
-        return 0;
     }
 
     /**
@@ -384,25 +369,6 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
     }
 
     /**
-     * Sets the return response flag
-     * Returns the value of the return response flag
-     *
-     * @param   null $flag
-     * @return  bool|Enlight_Controller_Front
-     */
-    public function returnResponse($flag = null)
-    {
-        if (true === $flag) {
-            $this->returnResponse = true;
-            return $this;
-        } elseif (false === $flag) {
-            $this->returnResponse = false;
-            return $this;
-        }
-        return $this->returnResponse;
-    }
-
-    /**
      * Getter method for the plugin property.
      *
      * @return Enlight_Plugin_Namespace_Loader
@@ -428,7 +394,7 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
     /**
      * Returns the request instance.
      *
-     * @return  Enlight_Controller_Request_RequestHttp
+     * @return  Enlight_Controller_Request_Request
      */
     public function Request()
     {

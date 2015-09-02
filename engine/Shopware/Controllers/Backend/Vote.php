@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -69,12 +69,16 @@ class Shopware_Controllers_Backend_Vote extends Shopware_Controllers_Backend_Ext
      * Index action for the controller
      * @return void|string
      */
-    public function indexAction() { }
+    public function indexAction()
+    {
+    }
 
     /**
      * Load action for the script renderer.
      */
-    public function loadAction() { }
+    public function loadAction()
+    {
+    }
 
 
     /**
@@ -133,7 +137,7 @@ class Shopware_Controllers_Backend_Vote extends Shopware_Controllers_Backend_Ext
                     $date = get_object_vars($voteModel->getAnswerDate());
 
                     //to prevent resetting an already set datum
-                    if (substr($date['date'],0,4) =="0000") {
+                    if (substr($date['date'], 0, 4) =="0000") {
                         //Set the datum of the answer manually
                         $voteModel->setAnswerDate($values['answer_datum']);
                     }
@@ -162,7 +166,7 @@ class Shopware_Controllers_Backend_Vote extends Shopware_Controllers_Backend_Ext
                 $date = get_object_vars($voteModel->getAnswerDate());
 
                 //to prevent resetting an already set datum
-                if (substr($date['date'],0,4) =="0000") {
+                if (substr($date['date'], 0, 4) =="0000") {
                     //Set the datum of the answer manually
                     $voteModel->setAnswerDate($params['answer_datum']);
                 }
@@ -196,7 +200,6 @@ class Shopware_Controllers_Backend_Vote extends Shopware_Controllers_Backend_Ext
     public function deleteVoteAction()
     {
         try {
-
             $params = $this->Request()->getParams();
             unset($params['module']);
             unset($params['controller']);

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -27,14 +27,14 @@ namespace Shopware\Components\LegacyRequestWrapper;
 class CookieWrapper implements \ArrayAccess
 {
     /**
-     * @var \Enlight_Controller_Request_RequestHttp
+     * @var \Enlight_Controller_Request_Request
      */
     private $request;
 
     /**
-     * @param \Enlight_Controller_Request_RequestHttp $request The request object
+     * @param \Enlight_Controller_Request_Request $request The request object
      */
-    public function __construct(\Enlight_Controller_Request_RequestHttp $request)
+    public function __construct(\Enlight_Controller_Request_Request $request)
     {
         $this->request = $request;
     }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -274,10 +274,8 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
         // Collecting form data
         if (!empty($tmpId)) {
             $id             = (int) $tmpId;
-            $liveShoppingId = (int) $this->Request()->get('liveshoppingId');
         } else {
             $createMode     = true;
-            $liveShoppingId = 0;
         }
         unset($tmpId);
         // Check if we are allowed to create a new db entry
@@ -294,8 +292,7 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
         }
 
         $params = $this->Request()->getParams();
-        // If we received a liveShoppingId, we add this to the model, otherwise the id will be 0
-        $params['liveShoppingId'] = $liveShoppingId;
+
         // build a single from date instead of two parts
         $params['validFrom'] = $this->prepareDateAndTime($this->Request()->get('validFromDate'), $this->Request()->get('validFromTime'));
         // build a single till date instead of two dates

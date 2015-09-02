@@ -1,7 +1,7 @@
 <?php
 class Migrations_Migration313 Extends Shopware\Components\Migrations\AbstractMigration
 {
-    public function up()
+    public function up($modus)
     {
         $this->addSql('
             ALTER TABLE `s_order_details`

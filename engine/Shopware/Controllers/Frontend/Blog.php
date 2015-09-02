@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -179,6 +179,15 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         //returns the blog article data
         $blogArticles = $paginator->getIterator()->getArrayCopy();
 
+        $mediaIds = array_map(function ($blogArticle) {
+            if (isset($blogArticle['media']) && $blogArticle['media'][0]['mediaId']) {
+                return $blogArticle['media'][0]['mediaId'];
+            }
+        }, $blogArticles);
+
+        $context = $this->get('shopware_storefront.context_service')->getShopContext();
+        $medias = $this->get('shopware_storefront.media_service')->getList($mediaIds, $context);
+
         foreach ($blogArticles as $key => $blogArticle) {
             //adding number of comments to the blog article
             $blogArticles[$key]["numberOfComments"] = count($blogArticle["comments"]);
@@ -193,12 +202,24 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
             $blogArticles[$key]["sVoteAverage"] = $avgVoteQuery->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_SINGLE_SCALAR);
 
             //adding thumbnails to the blog article
-            if (!empty($blogArticle["media"][0]['mediaId'])) {
-                /**@var $mediaModel \Shopware\Models\Media\Media*/
-                $mediaModel = Shopware()->Models()->find('Shopware\Models\Media\Media', $blogArticle["media"][0]['mediaId']);
-                if ($mediaModel != null) {
-                    $blogArticles[$key]["preview"]["thumbNails"] = array_values($mediaModel->getThumbnails());
-                }
+            if (empty($blogArticle["media"][0]['mediaId'])) {
+                continue;
+            }
+
+            $mediaId = $blogArticle["media"][0]['mediaId'];
+
+            if (!isset($medias[$mediaId])) {
+                continue;
+            }
+            
+            /**@var $media \Shopware\Bundle\StoreFrontBundle\Struct\Media*/
+            $media = $medias[$mediaId];
+            $media = $this->get('legacy_struct_converter')->convertMediaStruct($media);
+
+            if (Shopware()->Shop()->getTemplate()->getVersion() < 3) {
+                $blogArticles[$key]["preview"]["thumbNails"] = array_column($media['thumbnails'], 'source');
+            } else {
+                $blogArticles[$key]['media'] = $media;
             }
         }
 
@@ -209,6 +230,16 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
             $this->View()->loadTemplate('frontend/blog/' . $type . '.tpl');
         }
 
+        /**@var $repository \Shopware\Models\Emotion\Repository*/
+        $repository = Shopware()->Models()->getRepository('Shopware\Models\Emotion\Emotion');
+        $query = $repository->getCampaignByCategoryQuery($categoryId);
+        $campaignsResult = $query->getArrayResult();
+        $campaigns = array();
+        foreach ($campaignsResult as $campaign) {
+            $campaign['categoryId'] = $categoryId;
+            $campaigns[$campaign['landingPageBlock']][] = $campaign;
+        }
+
         $categoryContent = Shopware()->Modules()->Categories()->sGetCategoryContent($categoryId);
         $assigningData = array(
             'sBanner' => Shopware()->Modules()->Marketing()->sBanner($categoryId),
@@ -216,11 +247,13 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
             'sCategoryContent' => $categoryContent,
             'sNumberArticles' => $totalResult,
             'sPage' => $sPage,
+            'sPerPage' => $sPerPage,
             'sFilterDate' => $this->getDateFilterData($blogCategoryIds, $filter),
             'sFilterAuthor' => $this->getAuthorFilterData($blogCategoryIds, $filter),
             'sFilterTags' => $this->getTagsFilterData($blogCategoryIds, $filter),
             'sCategoryInfo' => $categoryContent,
-            'sBlogArticles' => $blogArticles
+            'sBlogArticles' => $blogArticles,
+            'campaigns' => $campaigns
         );
 
         $this->View()->assign(array_merge($assigningData, $this->getPagerData($totalResult, $sLimitEnd, $sPage, $categoryId)));
@@ -273,7 +306,6 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         $this->View()->userLoggedIn = !empty(Shopware()->Session()->sUserId);
         if (!empty(Shopware()->Session()->sUserId) && empty($this->Request()->name)
                 && $this->Request()->getParam('__cache') === null) {
-
             $userData = Shopware()->Modules()->Admin()->sGetUserData();
             $this->View()->sFormData = array(
                 'eMail' => $userData['additional']['user']['email'],
@@ -281,27 +313,26 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
             );
         }
 
+        $mediaIds = array_column($blogArticleData["media"], 'mediaId');
+        $context = $this->get('shopware_storefront.context_service')->getShopContext();
+        $mediaStructs = $this->get('shopware_storefront.media_service')->getList($mediaIds, $context);
+
         //adding thumbnails to the blog article
         foreach ($blogArticleData["media"] as &$media) {
-            if (!$media["preview"]) {
-                /**@var $mediaModel \Shopware\Models\Media\Media*/
-                $mediaModel = Shopware()->Models()->find('Shopware\Models\Media\Media', $media['mediaId']);
-                if ($mediaModel !== null) {
-                    $media["thumbNails"] = array_values($mediaModel->getThumbnails());
-                }
-            } else {
-                $blogArticleData["preview"] = $media;
-                /**@var $mediaModel \Shopware\Models\Media\Media*/
-                $mediaModel = Shopware()->Models()->find('Shopware\Models\Media\Media', $media['mediaId']);
-                if ($mediaModel !== null) {
-                    $blogArticleData["preview"]["thumbNails"] = array_values($mediaModel->getThumbnails());
-                }
+            $mediaId = $media['mediaId'];
+            $mediaData = $this->get('legacy_struct_converter')->convertMediaStruct($mediaStructs[$mediaId]);
+            if ($media['preview']) {
+                $blogArticleData["preview"] = $mediaData;
             }
+            $media = array_merge($media, $mediaData);
         }
 
         //add sRelatedArticles
         foreach ($blogArticleData["assignedArticles"] as &$assignedArticle) {
-            $blogArticleData["sRelatedArticles"][] = Shopware()->Modules()->Articles()->sGetPromotionById('fix', 0, (int) $assignedArticle['id']);
+            $product = Shopware()->Modules()->Articles()->sGetPromotionById('fix', 0, (int) $assignedArticle['id']);
+            if ($product) {
+                $blogArticleData["sRelatedArticles"][] = $product;
+            }
         }
 
         //adding average vote data to the blog article
@@ -349,6 +380,8 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
             $blogArticleQuery = $this->getRepository()->getDetailQuery($blogArticleId);
             $blogArticleData = $blogArticleQuery->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
+            $this->View()->sAction = $this->Request()->getActionName();
+
             if ($hash = $this->Request()->sConfirmation) {
                 //customer confirmed the link in the mail
                 $commentConfirmQuery = $this->getCommentConfirmRepository()->getConfirmationByHashQuery($hash);
@@ -363,7 +396,6 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
 
                     $this->sSaveComment($commentData, $blogArticleId);
 
-                    $this->View()->sAction = $this->Request()->getActionName();
                     return $this->forward('detail');
                 }
             }
@@ -380,6 +412,10 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
                 $sErrorFlag['comment'] = true;
             }
 
+            if (empty($this->Request()->points)) {
+                $sErrorFlag['points'] = true;
+            }
+
             if (!empty(Shopware()->Config()->CaptchaColor)) {
                 $captcha = str_replace(' ', '', strtolower($this->Request()->sCaptcha));
                 $rand = $this->Request()->getPost('sRand');
@@ -387,8 +423,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
                     $sErrorFlag['sCaptcha'] = true;
                 }
             }
-            $validator = new Zend_Validate_EmailAddress();
-            $validator->getHostnameValidator()->setValidateTld(false);
+            $validator = $this->container->get('validator.email');
             if (!empty(Shopware()->Config()->sOPTINVOTE) && (empty($this->Request()->eMail) || !$validator->isValid($this->Request()->eMail))) {
                 $sErrorFlag['eMail'] = true;
             }
@@ -417,8 +452,6 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
                     $commentData = $this->Request()->getPost();
                     $this->sSaveComment($commentData, $blogArticleId);
                 }
-
-                $this->View()->sAction = $this->Request()->getActionName();
             } else {
                 $this->View()->sFormData = Shopware()->System()->_POST->toArray();
                 $this->View()->sErrorFlag = $sErrorFlag;

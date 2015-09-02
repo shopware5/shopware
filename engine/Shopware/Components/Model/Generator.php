@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -24,6 +24,8 @@
 
 namespace Shopware\Components\Model;
 
+use Doctrine\DBAL\Schema\AbstractSchemaManager;
+
 class Generator
 {
     /**
@@ -41,8 +43,8 @@ class Generator
      */
     const SHOPWARE_LICENCE = '
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -156,7 +158,7 @@ class %className% extends ModelEntity
 
     /**
      * Contains the schema manager which is used to get the database definition
-     * @var \Doctrine\DBAL\Schema\AbstractSchemaManager
+     * @var AbstractSchemaManager
      */
     protected $schemaManager = null;
 
@@ -178,13 +180,16 @@ class %className% extends ModelEntity
      */
     protected $modelPath = '';
 
-
     /**
+     * @param AbstractSchemaManager $schemaManager
+     * @param string $path
      * @param string $modelPath
      */
-    public function setModelPath($modelPath)
+    public function __construct(AbstractSchemaManager $schemaManager, $path, $modelPath)
     {
-        $this->modelPath = $modelPath;
+        $this->schemaManager = $schemaManager;
+        $this->path          = $path;
+        $this->modelPath     = $modelPath;
     }
 
     /**
@@ -196,14 +201,6 @@ class %className% extends ModelEntity
     }
 
     /**
-     * @param string $path
-     */
-    public function setPath($path)
-    {
-        $this->path = $path;
-    }
-
-    /**
      * @return string
      */
     public function getPath()
@@ -212,15 +209,7 @@ class %className% extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\DBAL\Schema\AbstractSchemaManager $schemaManager
-     */
-    public function setSchemaManager($schemaManager)
-    {
-        $this->schemaManager = $schemaManager;
-    }
-
-    /**
-     * @return \Doctrine\DBAL\Schema\AbstractSchemaManager
+     * @return AbstractSchemaManager
      */
     public function getSchemaManager()
     {
@@ -283,15 +272,16 @@ class %className% extends ModelEntity
             if (!empty($tableNames) && !in_array($table->getName(), $tableNames)) {
                 continue;
             }
-            if (strpos($table->getName(), '_attributes') === false) {
+
+            if (!$this->stringEndsWith($table->getName(), '_attributes')) {
                 continue;
             }
+
             $sourceCode = $this->generateModel($table);
             $result = $this->createModelFile($table, $sourceCode);
             if ($result === false) {
                 $errors[] = $table->getName();
             }
-
         }
 
         return array('success' => empty($errors), 'errors' => $errors);
@@ -458,7 +448,7 @@ class %className% extends ModelEntity
         $columns = array();
         /**@var $column \Doctrine\DBAL\Schema\Column*/
         foreach ($table->getColumns() as $column) {
-            $columns[] = $this->getColumnProperty($table,$column);
+            $columns[] = $this->getColumnProperty($table, $column);
         }
         return $columns;
     }
@@ -680,7 +670,6 @@ class %className% extends ModelEntity
             $functions[] = $this->getColumnFunctions($table, $column);
         }
         return $functions;
-
     }
 
     /**
@@ -764,6 +753,9 @@ class %className% extends ModelEntity
             //preg match for the model class name!
             $matches = array();
             preg_match('/class\s+([a-zA-Z0-9_]+)/', $content, $matches);
+            if (count($matches) === 0) {
+                continue;
+            }
             $className = $matches[1];
 
             //preg match for the model namespace!
@@ -792,4 +784,20 @@ class %className% extends ModelEntity
         return $classes;
     }
 
+    /**
+     * Checks if given string in $haystack end the with string in $needle
+     *
+     * @param string $haystack
+     * @param string $needle
+     * @return bool
+     */
+    private function stringEndsWith($haystack, $needle)
+    {
+        $length = strlen($needle);
+        if ($length == 0) {
+            return true;
+        }
+
+        return (substr($haystack, -$length) === $needle);
+    }
 }

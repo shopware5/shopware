@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -38,7 +38,7 @@ abstract class Shopware_Controllers_Frontend_Payment extends Enlight_Controller_
      */
     public function getPaymentShortName()
     {
-        if(($user = $this->getUser()) !== null
+        if (($user = $this->getUser()) !== null
                 && !empty($user['additional']['payment']['name'])) {
             return $user['additional']['payment']['name'];
         } else {
@@ -110,6 +110,7 @@ abstract class Shopware_Controllers_Frontend_Payment extends Enlight_Controller_
             $order->dispatchId = Shopware()->Session()->sDispatch;
             $order->sNet = empty($user['additional']['charge_vat']);
             $order->uniqueID = $paymentUniqueId;
+            $order->deviceType = $this->Request()->getDeviceType();
             $orderNumber = $order->sSaveOrder();
         }
 

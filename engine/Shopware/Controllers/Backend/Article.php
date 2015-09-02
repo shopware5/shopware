@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -77,7 +77,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     /**
      * @var \Shopware\Components\Model\ModelRepository
      */
-    protected $configuratorPriceSurchargeRepository = null;
+    protected $configuratorPriceVariationRepository = null;
 
     /**
      * @var \Shopware\Components\Model\ModelRepository
@@ -106,10 +106,10 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
     public function initAcl()
     {
-        $this->addAclPermission("loadStores","read","Insufficient Permissions");
-        $this->addAclPermission("duplicateArticle","save","Insufficient Permissions");
-        $this->addAclPermission("save","save","Insufficient Permissions");
-        $this->addAclPermission("delete","delete","Insufficient Permissions");
+        $this->addAclPermission("loadStores", "read", "Insufficient Permissions");
+        $this->addAclPermission("duplicateArticle", "save", "Insufficient Permissions");
+        $this->addAclPermission("save", "save", "Insufficient Permissions");
+        $this->addAclPermission("delete", "delete", "Insufficient Permissions");
     }
     /**
      * Disable template engine for all actions
@@ -189,7 +189,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     /**
      * Internal helper function to get access to the article repository.
      *
-     * @return Shopware\Models\Article\Repository
+     * @return Shopware\Models\Customer\Repository
      */
     protected function getCustomerRepository()
     {
@@ -224,19 +224,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         }
 
         return $this->categoryRepository;
-    }
-
-    /**
-     * Helper function to get access to the configuratorPriceSurcharge repository.
-     * @return \Shopware\Components\Model\ModelRepository
-     */
-    protected function getConfiguratorPriceSurchargeRepository()
-    {
-        if ($this->configuratorPriceSurchargeRepository === null) {
-            $this->configuratorPriceSurchargeRepository = Shopware()->Models()->getRepository('Shopware\Models\Article\Configurator\PriceSurcharge');
-        }
-
-        return $this->configuratorPriceSurchargeRepository;
     }
 
     /**
@@ -411,7 +398,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             $data = $this->Request()->getParams();
             $articleId = (int) $data['articleId'];
             if (empty($articleId)) {
-                $this->View()->assign(array('success' => false,'noId' => true));
+                $this->View()->assign(array('success' => false, 'noId' => true));
 
                 return;
             }
@@ -428,6 +415,9 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                     Shopware()->Models()->persist($variant);
                 }
                 Shopware()->Models()->flush();
+                if ($data['translations']) {
+                    $this->overrideVariantTranslations($articleId, $variants);
+                }
             }
             $this->View()->assign(array('success' => true));
         } catch (Exception $e) {
@@ -541,6 +531,49 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     }
 
     /**
+     * Replaces the variant's translations with the article's.
+     * @param $articleId
+     * @param $variants array
+     */
+    protected function overrideVariantTranslations($articleId, $variants)
+    {
+        $coreTranslations = $this->getTranslationComponent()->readBatch(null, 'article', $articleId);
+
+        foreach ($variants as $variant) {
+            $this->getTranslationComponent()->delete(null, 'variant', $variant->getId());
+
+            foreach ($coreTranslations as &$coreTranslation) {
+                unset($coreTranslation['objectdata']['metaTitle']);
+                unset($coreTranslation['objectdata']['name']);
+                unset($coreTranslation['objectdata']['description']);
+                unset($coreTranslation['objectdata']['descriptionLong']);
+                unset($coreTranslation['objectdata']['keywords']);
+                $coreTranslation['objectkey'] = $variant->getId();
+                $coreTranslation['objecttype'] = 'variant';
+            }
+
+            $this->getTranslationComponent()->writeBatch($coreTranslations);
+        }
+    }
+
+    /**
+     * Copies translations from a configurator template into a variant
+     * @param $template The configurator template
+     * @param $detail \Shopware\Models\Article\Detail Variant
+     */
+    protected function copyConfigurationTemplateTranslations($template, $detail)
+    {
+        $templateTranslations = $this->getTranslationComponent()->readBatch(null, 'configuratorTemplate', $template['id']);
+
+        foreach ($templateTranslations as &$templateTranslation) {
+            $templateTranslation['objectkey'] = $detail->getId();
+            $templateTranslation['objecttype'] = 'variant';
+        }
+
+        $this->getTranslationComponent()->writeBatch($templateTranslations);
+    }
+
+    /**
      * Event listener function of the article backend module. Fired when the user clicks the "duplicate article" button
      * on the detail page to duplicate the whole article configuration for a new article.
      */
@@ -574,6 +607,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             $this->duplicateArticleCustomerGroups($articleId, $newArticleId);
             $this->duplicateArticleRelated($articleId, $newArticleId);
             $this->duplicateArticleSimilar($articleId, $newArticleId);
+            $this->duplicateArticleTranslations($articleId, $newArticleId);
             $this->duplicateArticleDetails($articleId, $newArticleId, $mailDetailId);
             $this->duplicateArticleLinks($articleId, $newArticleId);
             $this->duplicateArticleImages($articleId, $newArticleId);
@@ -719,6 +753,23 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     }
 
     /**
+     * Internal helper function to duplicate the article translations from the passed article
+     * to the new article.
+     * @param $articleId
+     * @param $newArticleId
+     */
+    protected function duplicateArticleTranslations($articleId, $newArticleId)
+    {
+        $coreTranslations = $this->getTranslationComponent()->readBatch(null, 'article', $articleId);
+
+        foreach ($coreTranslations as &$coreTranslation) {
+            $coreTranslation['objectkey'] = $newArticleId;
+        }
+
+        $this->getTranslationComponent()->writeBatch($coreTranslations);
+    }
+
+    /**
      * Internal helper function to duplicate the download configuration from the passed article
      * to the new article.
      * @param integer $articleId
@@ -787,7 +838,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             if (!empty($data['mediaId'])) {
                 $data['media'] = Shopware()->Models()->find('\Shopware\Models\Media\Media', $data['mediaId']);
                 if (!$data['media']) {
-                     unset($data['media']);
+                    unset($data['media']);
                 }
             }
 
@@ -870,7 +921,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             }
             $data['prices'] = $prices;
 
-            // unset configuratorOptions and images. These are variantspecific and are going to be recreated later
+            // unset configuratorOptions and images. These are variant specific and are going to be recreated later
             unset($data['images']);
             unset($data['configuratorOptions']);
 
@@ -888,11 +939,13 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
             $detail->fromArray($data);
             Shopware()->Models()->persist($detail);
+            if ($detail->getAttribute()) {
+                Shopware()->Models()->persist($detail->getAttribute());
+            }
         }
         Shopware()->Models()->flush();
 
         $this->increaseAutoNumber($newArticleData['autoNumber'], $number);
-
     }
 
     /**
@@ -937,9 +990,9 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                 WHERE source.configurator_set_id = ?";
         Shopware()->Db()->query($sql, array($newSetId, $oldSetId));
 
-        $sql= "INSERT INTO s_article_configurator_price_surcharges
-                SELECT NULL, ?, parent_id, child_id, surcharge
-                FROM s_article_configurator_price_surcharges as source
+        $sql= "INSERT INTO s_article_configurator_price_variations
+                SELECT NULL, ?, variation, options, is_gross
+                FROM s_article_configurator_price_variations as source
                 WHERE source.configurator_set_id = ?";
         Shopware()->Db()->query($sql, array($newSetId, $oldSetId));
 
@@ -1196,7 +1249,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             if ($mainDetail->getId() !== $detail->getId()) {
                 $this->swapDetailTranslations($detail, $mainDetail);
             }
-
         }
 
         return $detail;
@@ -1213,11 +1265,19 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $articleId = $oldMainDetail->getArticle()->getId();
 
         // Get available translations for the old mainDetail (stored on the article)
-        $sql = "SELECT objectlanguage, objectdata FROM s_core_translations WHERE objecttype='article' AND objectkey=?";
+        $sql = "
+            SELECT objectlanguage, objectdata
+            FROM s_core_translations
+            WHERE objecttype = 'article' AND objectkey = ?
+        ";
         $oldTranslations = Shopware()->Db()->fetchAssoc($sql, array($articleId));
 
         // Get available translations for the new mainDetail (stored for the detail)
-        $sql = "SELECT objectlanguage, objectdata FROM s_core_translations WHERE objecttype='variant' AND objectkey=?";
+        $sql = "
+            SELECT objectlanguage, objectdata
+            FROM s_core_translations
+            WHERE objecttype='variant' AND objectkey = ?
+        ";
         $newTranslations = Shopware()->Db()->fetchAssoc($sql, array($newMainDetail->getId()));
 
         // We need to determine which of the old article translations can be used for the translation of the
@@ -1244,13 +1304,18 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                 $newData,
                 false
             );
-
         }
 
         // Save the new mainDetail translations as article translations
         foreach ($newTranslations as $language => $values) {
             $data = unserialize($values['objectdata']);
             $newData = array_intersect_key($data, $translatedFields);
+            // We need to check and include old translations, as an article
+            // translation is a superset of a variant translation
+            if ($oldValues = $oldTranslations[$language]) {
+                $oldData = unserialize($oldValues['objectdata']);
+                $newData = array_merge($oldData, $newData);
+            }
             $this->getTranslationComponent()->write(
                 $language,
                 'article',
@@ -1321,55 +1386,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     }
 
     /**
-     * Event listener function of the article backend module. Fired when the user saves or updates
-     * an article configurator price surcharge in the dependency window.
-     */
-    public function saveConfiguratorPriceSurchargeAction()
-    {
-        try {
-            $data = $this->Request()->getParams();
-            if (!empty($data['id']) && $data['id'] > 0) {
-                $priceSurcharge = $this->getConfiguratorPriceSurchargeRepository()->find($data['id']);
-            } else {
-                $priceSurcharge = new \Shopware\Models\Article\Configurator\PriceSurcharge();
-            }
-
-            $data['parentOption'] = $this->getConfiguratorOptionRepository()->find($data['parentId']);
-
-            if (!empty($data['childId']) && $data['childId'] > 0) {
-                $data['childOption'] = $this->getConfiguratorOptionRepository()->find($data['childId']);
-            } else {
-                $data['childOption'] = null;
-            }
-            $data['configuratorSet'] = $this->getConfiguratorSetRepository()->find($data['configuratorSetId']);
-
-            $priceSurcharge->fromArray($data);
-            Shopware()->Models()->persist($priceSurcharge);
-            Shopware()->Models()->flush();
-
-            $builder = Shopware()->Models()->createQueryBuilder();
-            $data = $builder->select(array('priceSurcharge', 'priceSurchargesParent', 'priceSurchargesChild'))
-                    ->from('Shopware\Models\Article\Configurator\PriceSurcharge', 'priceSurcharge')
-                    ->leftJoin('priceSurcharge.parentOption', 'priceSurchargesParent')
-                    ->leftJoin('priceSurcharge.childOption', 'priceSurchargesChild')
-                    ->where('priceSurcharge.id = ?1')
-                    ->setParameter(1, $priceSurcharge->getId())
-                    ->getQuery()
-                    ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-
-            $this->View()->assign(array(
-                'success' => true,
-                'data' => $data
-            ));
-        } catch (Exception $e) {
-            $this->View()->assign(array(
-                'success' => false,
-                'message' => $e->getMessage()
-            ));
-        }
-    }
-
-    /**
      * Event listener function of the article backend module. Fired when the user clicks the delete
      * button in the dependency window to delete a dependency.
      */
@@ -1386,32 +1402,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                 return;
             }
             $model = Shopware()->Models()->find('Shopware\Models\Article\Configurator\Dependency', $id);
-            Shopware()->Models()->remove($model);
-            Shopware()->Models()->flush();
-            $this->View()->assign(array(
-                'success' => true
-            ));
-        } catch (Exception $e) {
-            $this->View()->assign(array(
-                'success' => false,
-                'message' => $e->getMessage()
-            ));
-        }
-    }
-
-    public function deleteConfiguratorPriceSurchargeAction()
-    {
-        try {
-            $id = (int) $this->Request()->getParam('id');
-            if (empty($id)) {
-                $this->View()->assign(array(
-                    'success' => false,
-                    'message' => 'No valid surcharge id passed'
-                ));
-
-                return;
-            }
-            $model = Shopware()->Models()->find('Shopware\Models\Article\Configurator\PriceSurcharge', $id);
             Shopware()->Models()->remove($model);
             Shopware()->Models()->flush();
             $this->View()->assign(array(
@@ -1477,9 +1467,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $configuratorGroups = $this->getRepository()->getConfiguratorGroupsQuery()->getArrayResult();
         $attributeFields = $this->getAttributeFields();
 
-        $priceSurcharges = null;
-        $dependencies = null;
-        $configuratorSet = null;
         if (!empty($id)) {
             $article = $this->getArticle($id);
         } else {
@@ -1499,10 +1486,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                 'properties' => $properties,
                 'priceGroups' => $priceGroups,
                 'article' => $article,
-                'configuratorSet' => $configuratorSet,
                 'configuratorGroups' => $configuratorGroups,
-                'priceSurcharges' => $priceSurcharges,
-                'dependencies' => $dependencies,
                 'settings' => array()
             )
         ));
@@ -1579,9 +1563,9 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                 'filterValues.value AS value',
                 'filterOptions.id AS optionId'))
             ->from('s_filter_values', 'filterValues')
-            ->innerJoin('filterValues', 's_filter_options', 'filterOptions', 'filterValues.optionID = filterOptions.id' )
-            ->innerJoin('filterOptions', 's_filter_relations', 'filterRelations', 'filterOptions.id = filterRelations.optionID' )
-            ->innerJoin('filterRelations', 's_filter', 'filter', 'filter.id = filterRelations.groupID AND (filter.id = :propertyGroupId)' )
+            ->innerJoin('filterValues', 's_filter_options', 'filterOptions', 'filterValues.optionID = filterOptions.id')
+            ->innerJoin('filterOptions', 's_filter_relations', 'filterRelations', 'filterOptions.id = filterRelations.optionID')
+            ->innerJoin('filterRelations', 's_filter', 'filter', 'filter.id = filterRelations.groupID AND (filter.id = :propertyGroupId)')
             ->setParameter('propertyGroupId', $propertyGroupId);
 
         if (!empty($searchValue)) {
@@ -1610,7 +1594,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     public function setPropertyListAction()
     {
-        if(!$this->Request()->isPost()) {
+        if (!$this->Request()->isPost()) {
             //don't save the property list on a get request. This will only occur when there is an ext js problem
             return;
         }
@@ -1940,23 +1924,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         return $this->getRepository()
                     ->getConfiguratorDependenciesQuery($configuratorSetId)
                     ->getArrayResult();
-
-    }
-
-    /**
-     * Used for the article backend module to load the article data into
-     * the module. This function selects only some fragments for the whole article
-     * data. The full article data stack is defined in the
-     * Shopware_Controller_Backend_Article::getArticle function
-     *
-     * @param $configuratorSetId
-     * @return array
-     */
-    public function getArticlePriceSurcharges($configuratorSetId)
-    {
-        return $this->getRepository()
-                    ->getConfiguratorPriceSurchargesQuery($configuratorSetId)
-                    ->getArrayResult();
     }
 
     /**
@@ -2027,11 +1994,9 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $data[0]['configuratorSet'] = $this->getArticleConfiguratorSet($id);
 
         $data[0]['dependencies'] = array();
-        $data[0]['priceSurcharges'] = array();
 
         if (!empty($data[0]['configuratorSetId'])) {
             $data[0]['dependencies'] = $this->getArticleDependencies($data[0]['configuratorSetId']);
-            $data[0]['priceSurcharges'] = $this->getArticlePriceSurcharges($data[0]['configuratorSetId']);
         }
 
         $data[0]['configuratorTemplate'] = $this->getArticleConfiguratorTemplate($id, $tax);
@@ -2229,7 +2194,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     protected function prepareGeneratorData($groups, $offset, $limit)
     {
-
         //we have to iterate all passed groups to check the activated options.
         $activeGroups = array();
         //we need a second array with all group ids to iterate them easily in the sql generation
@@ -2291,15 +2255,15 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $selectSql = array();
 
         //we have remove the first group id, but we need the first id in the select, from and where path.
-        $selectSql[] = sprintf($selectTemplate, $firstId,$firstId,$firstId,$firstId,$firstId,$firstId,$firstId,$firstId,$firstId,$firstId,$firstId,$firstId);
-        $groupSql[] = sprintf($fromTemplate, $firstId,$firstId,$firstId,$firstId);
-        $whereSql = sprintf($whereTemplate, $firstId,$firstId,$firstId, implode(',', $first['options']));
+        $selectSql[] = sprintf($selectTemplate, $firstId, $firstId, $firstId, $firstId, $firstId, $firstId, $firstId, $firstId, $firstId, $firstId, $firstId, $firstId);
+        $groupSql[] = sprintf($fromTemplate, $firstId, $firstId, $firstId, $firstId);
+        $whereSql = sprintf($whereTemplate, $firstId, $firstId, $firstId, implode(',', $first['options']));
 
         //now we iterate all other groups, and create a select sql path and a cross join sql path.
         foreach ($activeGroups as $group) {
             $groupId = $group['id'];
-            $selectSql[] = sprintf($selectTemplate, $groupId,$groupId,$groupId,$groupId,$groupId,$groupId,$groupId,$groupId,$groupId,$groupId,$groupId,$groupId);
-            $groupSql[] = sprintf($joinTemplate, $groupId,$groupId,$groupId,$groupId,implode(',', $group['options']),$groupId,$groupId,$groupId);
+            $selectSql[] = sprintf($selectTemplate, $groupId, $groupId, $groupId, $groupId, $groupId, $groupId, $groupId, $groupId, $groupId, $groupId, $groupId, $groupId);
+            $groupSql[] = sprintf($joinTemplate, $groupId, $groupId, $groupId, $groupId, implode(',', $group['options']), $groupId, $groupId, $groupId);
         }
 
         //concat the sql statement
@@ -2376,7 +2340,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
             $configuratorSet = $article->getConfiguratorSet();
             $dependencies = $this->getRepository()->getConfiguratorDependenciesQuery($configuratorSet->getId())->getArrayResult();
-            $priceSurcharges = $this->getRepository()->getConfiguratorPriceSurchargesQuery($configuratorSet->getId())->getArrayResult();
+            $priceVariations = $this->getRepository()->getConfiguratorPriceVariationsQuery($configuratorSet->getId())->getArrayResult();
 
             if (empty($generatorData)) {
                 return;
@@ -2394,7 +2358,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
             //iterate all selected variants to insert them into the database
             foreach ($variants as $variant) {
-                $variantData = $this->prepareVariantData($variant, $detailData, $counter, $dependencies, $priceSurcharges, $allOptions, $originals, $article, $mergeType);
+                $variantData = $this->prepareVariantData($variant, $detailData, $counter, $dependencies, $priceVariations, $allOptions, $originals, $article, $mergeType);
                 if ($variantData === false) {
                     continue;
                 }
@@ -2412,10 +2376,12 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
                 $detail->fromArray($data);
                 $detail->setArticle($article);
+                Shopware()->Models()->flush();
+
+                $this->copyConfigurationTemplateTranslations($detailData, $detail);
                 $offset++;
             }
 
-            Shopware()->Models()->flush();
             Shopware()->Models()->clear();
 
             $article = $this->getRepository()->find($articleId);
@@ -2483,15 +2449,14 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                     ->getQuery()
                     ->execute();
         }
-
     }
 
 
     /**
      * Helper function to prepare the variant data for a new article detail.
-     * Iterates all passed price surcharges and dependencies to check if the current variant
-     * has configurator options which defined in the dependencies or in the price surcharges.
-     * The used price surcharge options will be added to each variant price row.
+     * Iterates all passed price variations and dependencies to check if the current variant
+     * has configurator options which defined in the dependencies or in the price variations.
+     * The used price variation options will be added to each variant price row.
      * If the variant has configurator options which defined as dependency row,
      * the variant won't be created. The function will return false and
      * the foreach queue in the "createConfiguratorVariantsAction" will be continue.
@@ -2500,7 +2465,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * @param $detailData
      * @param $counter
      * @param $dependencies
-     * @param $priceSurcharges
+     * @param $priceVariations
      * @param $allOptions
      * @param $originals
      * @param $article \Shopware\Models\Article\Article
@@ -2508,7 +2473,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      *
      * @return array|bool
      */
-    protected function prepareVariantData($variant, $detailData, &$counter, $dependencies, $priceSurcharges, $allOptions, $originals, $article, $mergeType)
+    protected function prepareVariantData($variant, $detailData, &$counter, $dependencies, $priceVariations, $allOptions, $originals, $article, $mergeType)
     {
         $name = '';
         $optionsModels= array();
@@ -2524,15 +2489,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
             $optionsModels[] = $allOptions[$optionId];
             $name[] = $variant['o' . $id . 'Name'];
-        }
-
-        $optionPriceSurcharges = array();
-        foreach ($priceSurcharges as $surcharge) {
-            if (in_array($surcharge['parentId'], $optionIds) && empty($surcharge['childId'])) {
-                $optionPriceSurcharges[] = $surcharge;
-            } elseif (in_array($surcharge['parentId'], $optionIds) && !empty($surcharge['childId']) && in_array($surcharge['childId'], $optionIds)) {
-                $optionPriceSurcharges[] = $surcharge;
-            }
         }
 
         $abortVariant = false;
@@ -2555,7 +2511,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
         //create the new variant data
         $variantData = array(
-            'additionalText' => implode(' / ', $name),
             'active' => 1,
             'configuratorOptions' => $optionsModels
         );
@@ -2571,25 +2526,50 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             } while ($this->orderNumberExist($variantData['number']));
         }
 
-        //we have to check the defined price surcharges for the article configurator set,
-        //to add the defined surcharges to the variant prices with the corresponding configurator options
-        if (!empty($optionPriceSurcharges)) {
-            $fullPriceSurcharge = 0;
-            foreach ($optionPriceSurcharges as $priceSurcharge) {
-                $fullPriceSurcharge += $priceSurcharge['surcharge'];
-            }
-
-            $prices = $detailData['prices'];
-            $newPrices = array();
-
-            foreach ($prices as $priceData) {
-                $priceData['price'] += $fullPriceSurcharge;
-                $newPrices[] = $priceData;
-            }
-            $variantData['prices'] = $newPrices;
+        $prices = $this->prepareVariantPrice($detailData, $priceVariations, $optionIds, $tax);
+        if ($prices) {
+            $variantData['prices'] = $prices;
         }
 
         return $variantData;
+    }
+
+    /**
+     * Prepares variant prices according to the price variation rules
+     * Returns prices array
+     *
+     * @param array $detailData
+     * @param array $priceVariations
+     * @param array $optionIds
+     * @param \Shopware\Models\Tax\Tax $tax
+     * @return array
+     */
+    protected function prepareVariantPrice($detailData, $priceVariations, $optionIds, $tax)
+    {
+        $totalPriceVariationValue = 0;
+        foreach ($priceVariations as $priceVariation) {
+            $priceVariation['options'] = explode('|', trim($priceVariation['options'], '|'));
+
+            $optionsDiff = array_diff($priceVariation['options'], $optionIds);
+            if (!empty($optionsDiff)) {
+                continue;
+            }
+
+            $priceVariationValue = $priceVariation['variation'];
+            if ($priceVariation['isGross'] == 1) {
+                $taxValue = (float)$tax->getTax();
+                $priceVariationValue /= ($taxValue + 100) / 100;
+            }
+
+            $totalPriceVariationValue += $priceVariationValue;
+        }
+
+        foreach ($detailData['prices'] as $key => &$configuratorPrice) {
+            $calculatedPrice = $configuratorPrice['price'] + $totalPriceVariationValue;
+            $configuratorPrice['price'] = max($calculatedPrice, 0.01);
+        }
+
+        return $detailData['prices'];
     }
 
     /**
@@ -2618,19 +2598,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         return $returnValue;
     }
 
-    protected function getSurchargeByOptionId($optionId, $priceSurcharges)
-    {
-        $returnValue = array();
-        foreach ($priceSurcharges as $priceSurcharge) {
-            if ($priceSurcharge['parentId'] == $optionId) {
-                $returnValue = $priceSurcharge;
-                break;
-            }
-        }
-
-        return $returnValue;
-    }
-
     /**
      * Helper function for the variant generation. Returns the article main detail data which used as base configuration for
      * the generated article variants.
@@ -2648,7 +2615,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             $detailData = $this->getRepository()
                     ->getConfiguratorTemplateByArticleIdQuery($article->getId())
                     ->getArrayResult();
-
         }
 
         return $detailData[0];
@@ -2691,6 +2657,30 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
         Shopware()->Models()->persist($template);
         Shopware()->Models()->flush();
+
+        $this->createConfiguratorTemplateTranslations($template);
+    }
+
+    /**
+     * Copies all translations from an article into the respective configurator template
+     *
+     * @param \Shopware\Models\Article\Configurator\Template\Template $template
+     */
+    protected function createConfiguratorTemplateTranslations(\Shopware\Models\Article\Configurator\Template\Template $template)
+    {
+        $articleTranslations = $this->getTranslationComponent()->readBatch(null, 'article', $template->getArticle()->getId());
+
+        foreach ($articleTranslations as &$articleTranslation) {
+            unset($articleTranslation['objectdata']['metaTitle']);
+            unset($articleTranslation['objectdata']['name']);
+            unset($articleTranslation['objectdata']['description']);
+            unset($articleTranslation['objectdata']['descriptionLong']);
+            unset($articleTranslation['objectdata']['keywords']);
+            $articleTranslation['objectkey'] = $template->getId();
+            $articleTranslation['objecttype'] = 'configuratorTemplate';
+        }
+
+        $this->getTranslationComponent()->writeBatch($articleTranslations);
     }
 
     /**
@@ -3251,6 +3241,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             $this->removeArticleEsd($article->getId());
             $this->removeAttributes($article->getId());
             $this->removeArticleDetails($article);
+            $this->removeArticleTranslations($article);
 
             Shopware()->Models()->remove($article);
             Shopware()->Models()->flush();
@@ -3311,9 +3302,24 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             $sql= "DELETE FROM s_article_configurator_option_relations WHERE article_id = ?";
             Shopware()->Db()->query($sql, array($detail['id']));
 
+            $query = $this->getRepository()->getRemoveVariantTranslationsQuery($detail['id']);
+            $query->execute();
+
             $query = $this->getRepository()->getRemoveDetailQuery($detail['id']);
             $query->execute();
         }
+    }
+
+    /**
+     * @param $article \Shopware\Models\Article\Article
+     */
+    protected function removeArticleTranslations($article)
+    {
+        $query = $this->getRepository()->getRemoveArticleTranslationsQuery($article->getId());
+        $query->execute();
+
+        $sql= "DELETE FROM s_articles_translations WHERE articleID = ?";
+        $this->container->get('dbal_connection')->executeQuery($sql, array($article->getId()));
     }
 
     /**
@@ -3561,11 +3567,42 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         //returns the customer data
         $result = $paginator->getIterator()->getArrayCopy();
 
+        //inserts esd attributes into the result
+        $result = $this->getEsdListingAttributes($result);
+
         $this->View()->assign(array(
             'data' => $result,
             'total' => $totalResult,
             'success' => true
         ));
+    }
+
+    /**
+     * Helper method which selects esd attributes and maps them into the esd listing array
+     *
+     * @param array $esdAttributesList
+     * @return array
+     */
+    private function getEsdListingAttributes($esdAttributesList)
+    {
+        $ids = array_column($esdAttributesList, 'id');
+
+        $query = $this->getManager()->createQueryBuilder();
+        $query->select('attribute')
+                ->from('Shopware\Models\Attribute\ArticleEsd', 'attribute', 'attribute.articleEsdId')
+                ->where('attribute.articleEsdId IN (:ids)')
+                ->setParameter('ids', $ids, \Doctrine\DBAL\Connection::PARAM_INT_ARRAY);
+
+        $esdAttributes = $query->getQuery()->getArrayResult();
+
+        foreach ($esdAttributesList as &$row) {
+            $row['attribute'] = [];
+            if (isset($esdAttributes[$row['id']])) {
+                $row['attribute'] = $esdAttributes[$row['id']];
+            }
+        }
+
+        return $esdAttributesList;
     }
 
     /**
@@ -4157,7 +4194,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         } else {
             return $result;
         }
-
     }
 
     /**
@@ -4313,8 +4349,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             array(
                 'module' => 'frontend',
                 'controller' => 'detail',
-                'sArticle' => $articleId,
-                'appendSession' => true
+                'sArticle' => $articleId
             )
         );
 

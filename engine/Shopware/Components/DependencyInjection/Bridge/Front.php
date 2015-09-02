@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -55,9 +55,13 @@ class Front
         /** @var $front \Enlight_Controller_Front */
         $front = \Enlight_Class::Instance('Enlight_Controller_Front', array($eventManager));
 
+        $front->setDispatcher($container->get('Dispatcher'));
+
         $front->Dispatcher()->addModuleDirectory(
             Shopware()->AppPath('Controllers')
         );
+
+        $front->setRouter($container->get('Router'));
 
         $front->setParams($options);
 

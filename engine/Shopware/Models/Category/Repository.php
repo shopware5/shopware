@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -658,6 +658,41 @@ class Repository extends ModelRepository
         ));
         $builder->having('childrenCount > 0 OR blog = 1');
         $builder->addSelect('(' . $subQuery->getDQL() . ') as childrenCount');
+
+        return $builder;
+    }
+
+    /**
+     * Returns the \Doctrine\ORM\Query to select the informations of an category and its children by category id
+     * @param integer $categoryId
+     * @return Query
+     * @deprecated Removed with SW 5.1 - Please use the shopware_storefront.category_service service for frontend usages
+     */
+    public function getCategoryByIdQuery($categoryId)
+    {
+        $builder = $this->getCategoryQueryBuilder()
+            ->where('category.id = :categoryId')
+            ->setParameters(array('categoryId' => $categoryId));
+
+        return $builder->getQuery();
+    }
+
+    /**
+     * Helper function to create the query builder for the "getCategoryByIdQuery" function.
+     * This function can be hooked to modify the query builder of the query object.
+     * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
+     * @deprecated Removed with SW 5.1 - Please use the shopware_storefront.category_service service for frontend usages
+     */
+    public function getCategoryQueryBuilder()
+    {
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder->select(array('category', 'attribute', 'media', 'children', 'childrenAttribute', 'childrenMedia'))
+            ->from('Shopware\Models\Category\Category', 'category')
+            ->leftJoin('category.attribute', 'attribute')
+            ->leftJoin('category.media', 'media')
+            ->leftJoin('category.children', 'children')
+            ->leftJoin('children.attribute', 'childrenAttribute')
+            ->leftJoin('children.media', 'childrenMedia');
 
         return $builder;
     }

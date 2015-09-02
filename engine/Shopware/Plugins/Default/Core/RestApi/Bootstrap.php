@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -30,7 +30,7 @@
 class Shopware_Plugins_Core_RestApi_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
     /**
-     * @var Enlight_Controller_Request_RequestHttp
+     * @var Enlight_Controller_Request_Request
      */
     protected $request;
 
@@ -54,6 +54,18 @@ class Shopware_Plugins_Core_RestApi_Bootstrap extends Shopware_Components_Plugin
         $this->subscribeEvent('Enlight_Bootstrap_InitResource_Auth', 'onInitResourceAuth');
 
         return true;
+    }
+
+    /**
+     * @return array
+     */
+    public function getCapabilities()
+    {
+        return array(
+            'install' => false,
+            'enable' => false,
+            'update' => true
+        );
     }
 
     /**
@@ -107,7 +119,7 @@ class Shopware_Plugins_Core_RestApi_Bootstrap extends Shopware_Components_Plugin
         $result = $auth->authenticate();
 
         if (!$result->isValid()) {
-            $request->setControllerName('index');
+            $request->setControllerName('error');
             $request->setActionName('noauth');
 
             return;
@@ -136,7 +148,7 @@ class Shopware_Plugins_Core_RestApi_Bootstrap extends Shopware_Components_Plugin
         } catch (Zend_Json_Exception $e) {
             $response->setHttpResponseCode(400);
 
-            $request->setControllerName('index');
+            $request->setControllerName('error');
             $request->setActionName('invalid');
 
             return;
@@ -164,7 +176,7 @@ class Shopware_Plugins_Core_RestApi_Bootstrap extends Shopware_Components_Plugin
 
         $adapter = new Zend_Auth_Adapter_Http(array(
             'accept_schemes'  => 'digest',
-            'realm'           => 'Shopware4 REST-API',
+            'realm'           => 'Shopware REST-API',
             'digest_domains'  => '/',
             'nonce_timeout'  => 3600,
         ));

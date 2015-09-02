@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,8 +23,9 @@
  */
 
 namespace Shopware\Models\ProductFeed;
-use Shopware\Components\Model\ModelEntity,
-    Doctrine\ORM\Mapping AS ORM;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Shopware product feed model represents a single feed.
@@ -255,6 +256,13 @@ class ProductFeed extends ModelEntity
      * @ORM\Column(name="variant_export", type="integer", nullable=false)
      */
     private $variantExport = 1;
+
+    /**
+     * @var integer $dirty
+     *
+     * @ORM\Column(name="dirty", type="boolean")
+     */
+    protected $dirty = false;
 
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
@@ -1042,5 +1050,21 @@ class ProductFeed extends ModelEntity
     public function getCacheRefreshed()
     {
         return $this->cacheRefreshed;
+    }
+
+    /**
+     * @param bool $dirty
+     */
+    public function setDirty($dirty)
+    {
+        $this->dirty = $dirty;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDirty()
+    {
+        return $this->dirty;
     }
 }

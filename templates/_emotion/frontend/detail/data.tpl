@@ -158,10 +158,10 @@
 
 	{* Caching instock status *}
 	{if !$sView}
-		<input id='instock_{$sArticle.ordernumber}'type='hidden' value='{$sArticle.instock}' />
+		<input id='instock_{$sArticle.ordernumber}' type='hidden' value='{$sArticle.instock}' />
 	{/if}
 
-	{if $sArticle.sBlockPrices && (!$sArticle.sConfigurator || $sArticle.pricegroupActive) && $sArticle.sConfiguratorSettings.type!=2}
+	{if $sArticle.sBlockPrices && (!$sArticle.sConfigurator || $sArticle.pricegroupActive)}
 		{foreach from=$sArticle.sBlockPrices item=row key=key}
 			{if $row.from=="1"}
 				<input id='price_{$sArticle.ordernumber}'type='hidden' value='{$row.price|replace:",":"."}' />
@@ -192,12 +192,14 @@
 
 	{block name="frontend_detail_data_delivery"}
 		{* Delivery informations *}
-		{include file="frontend/plugins/index/delivery_informations.tpl" sArticle=$sArticle}
+		{if ($sArticle.sConfiguratorSettings.type != 1 && $sArticle.sConfiguratorSettings.type != 2) || $activeConfiguratorSelection == true}
+            {include file="frontend/plugins/index/delivery_informations.tpl" sArticle=$sArticle}
+        {/if}
 	{/block}
 
 	{if !$sArticle.liveshoppingData.valid_to_ts}
 		{* Graduated prices *}
-        {if $sArticle.sBlockPrices && ($sArticle.sConfiguratorSettings.type!=2 || $sArticle.pricegroupActive) && !$sArticle.liveshoppingData.valid_to_ts}
+		{if $sArticle.sBlockPrices && !$sArticle.liveshoppingData.valid_to_ts}
 
             {* Include block prices *}
             {block name="frontend_detail_data_block_price_include"}
@@ -229,70 +231,66 @@
                 </div>
                 {/block}
             {/if}
-
-
 		{else}
-            {if $sArticle.sConfiguratorSettings.type!=2}
-                {* Pseudo price *}
-                <div class='article_details_bottom'>
-                    {if $sArticle.purchaseunit}
-                        {* Article price *}
-                        {block name='frontend_detail_data_price'}
-                        <div class='article_details_price_unit'>
+			{* Pseudo price *}
+			<div class='article_details_bottom'>
+				{if $sArticle.purchaseunit}
+					{* Article price *}
+					{block name='frontend_detail_data_price'}
+					<div class='article_details_price_unit'>
 
-                            <span>
-                                <strong>{se name="DetailDataInfoContent"}{/se}</strong> {$sArticle.purchaseunit} {$sArticle.sUnit.description}
-                            {if $sArticle.purchaseunit != $sArticle.referenceunit}
-                                <span class="smallsize">
-                                    {if $sArticle.referenceunit}
-                                        ({$sArticle.referenceprice|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s} / {$sArticle.referenceunit} {$sArticle.sUnit.description})
-                                    {/if}
-                                </span>
-                            {/if}
+						<span>
+							<strong>{se name="DetailDataInfoContent"}{/se}</strong> {$sArticle.purchaseunit} {$sArticle.sUnit.description}
+						{if $sArticle.purchaseunit != $sArticle.referenceunit}
+							<span class="smallsize">
+								{if $sArticle.referenceunit}
+									({$sArticle.referenceprice|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s} / {$sArticle.referenceunit} {$sArticle.sUnit.description})
+								{/if}
+							</span>
+						{/if}
 
-                            </span>
+						</span>
 
-                        </div>
-                        {/block}
-                    {/if}
+					</div>
+					{/block}
+				{/if}
 
-                    <div {if $sArticle.pseudoprice} class='article_details_price2'>{else} class='article_details_price'>{/if}
-                        {block name='frontend_detail_data_pseudo_price'}
-                        {if $sArticle.pseudoprice}
-                        {* if $sArticle.sVariants || $sArticle.priceStartingFrom*}
-                        <div class="PseudoPrice{if $sArticle.sVariants} displaynone{/if}">
-                            <em>{s name="reducedPrice" namespace="frontend/listing/box_article"}{/s} {$sArticle.pseudoprice|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}</em>
-                            {if $sArticle.pseudopricePercent.float}
-                                <span>
-                                    ({$sArticle.pseudopricePercent.float} % {se name="DetailDataInfoSavePercent"}{/se})
-                                </span>
-                            {/if}
-                        </div>
-                        {*/if*}
-                        {/if}
-                        {/block}
+				<div {if $sArticle.has_pseudoprice} class='article_details_price2'>{else} class='article_details_price'>{/if}
+					{block name='frontend_detail_data_pseudo_price'}
+					{if $sArticle.has_pseudoprice}
+					{* if $sArticle.sVariants || $sArticle.priceStartingFrom*}
+					<div class="PseudoPrice{if $sArticle.sVariants} displaynone{/if}">
+						<em>{s name="reducedPrice" namespace="frontend/listing/box_article"}{/s} {$sArticle.pseudoprice|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}</em>
+						{if $sArticle.pseudopricePercent.float}
+							<span>
+								({$sArticle.pseudopricePercent.float|number}% {se name="DetailDataInfoSavePercent"}{/se})
+							</span>
+						{/if}
+					</div>
+					{*/if*}
+					{/if}
+					{/block}
 
-                        {* Article price configurator *}
-                        {block name='frontend_detail_data_price_configurator'}
-                        <strong {if $sArticle.priceStartingFrom && $sView} class="starting_price"{/if}>
-                            {if $sArticle.priceStartingFrom && !$sArticle.sConfigurator && $sView}
-                                <span id="DetailDataInfoFrom">{se name="DetailDataInfoFrom"}{/se}</span>
-                                {$sArticle.priceStartingFrom|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}
-                            {else}
-                                {$sArticle.price|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}
-                            {/if}
-                        </strong>
-                        {/block}
-                    </div>
+					{* Article price configurator *}
+					{block name='frontend_detail_data_price_configurator'}
+					<strong {if $sArticle.priceStartingFrom && $sView} class="starting_price"{/if}>
+						{if $sArticle.priceStartingFrom && !$sArticle.sConfigurator && $sView}
+							<span id="DetailDataInfoFrom">{se name="DetailDataInfoFrom"}{/se}</span>
+							{$sArticle.priceStartingFrom|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}
+						{else}
+							{$sArticle.price|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}
+						{/if}
+					</strong>
+					{/block}
+				</div>
 
-                    {* Article price *}
-                    {block name='frontend_detail_data_price_info'}
-                    <p class="tax_attention modal_open">
-                        {s name="DetailDataPriceInfo"}{/s}
-                    </p>
-                    {/block}
-                </div>
-            {/if}
+				{* Article price *}
+				{block name='frontend_detail_data_price_info'}
+				<p class="tax_attention modal_open">
+					{s name="DetailDataPriceInfo"}{/s}
+				</p>
+				{/block}
+			</div>
 		{/if}
 	{/if}
 

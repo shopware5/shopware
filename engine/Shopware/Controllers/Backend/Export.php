@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -42,7 +42,6 @@ class Shopware_Controllers_Backend_Export extends Enlight_Controller_Action
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
         Shopware()->Plugins()->Controller()->ViewRenderer()->setNoRender();
         $this->Front()->setParam('disableOutputBuffering', true);
-        $this->Front()->returnResponse(true);
     }
 
     /**
@@ -59,7 +58,6 @@ class Shopware_Controllers_Backend_Export extends Enlight_Controller_Action
         $export->sSYSTEM = Shopware()->System();
         $export->sFeedID = (int) $this->Request()->feedID;
         $export->sHash = $this->Request()->hash;
-        $export->sDB = Shopware()->Adodb();
 
         $export->sInitSettings();
 
@@ -86,7 +84,9 @@ class Shopware_Controllers_Backend_Export extends Enlight_Controller_Action
          */
         $productFeed = Shopware()->Models()->ProductFeed()->find((int) $this->Request()->feedID);
         $fileName = $productFeed->getHash() . '_' . $productFeed->getFileName();
-        $dirName = Shopware()->DocPath() . 'cache/productexport/';
+
+        $dirName = $this->container->getParameter('kernel.cache_dir');
+        $dirName .= '/productexport/';
         if (!file_exists($dirName)) {
             mkdir($dirName, 0777);
         }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -61,11 +61,24 @@ class GenerateProductFeedCommand extends ShopwareCommand
         );
         $activeFeeds = $productFeedRepository->getActiveListQuery()->getResult();
 
+        $cacheDir = $this->container->getParameter('kernel.cache_dir');
+        $cacheDir .= '/productexport/';
+
+        if (!is_dir($cacheDir)) {
+            if (false === @mkdir($cacheDir, 0777, true)) {
+                throw new \RuntimeException(sprintf("Unable to create the %s directory (%s)\n", "Productexport", $cacheDir));
+            }
+        } elseif (!is_writable($cacheDir)) {
+            throw new \RuntimeException(sprintf("Unable to write in the %s directory (%s)\n", "Productexport", $cacheDir));
+        }
+
         /** @var $export \sExport */
         $export = $this->container->get('modules')->Export();
         $export->sSYSTEM = $this->container->get('system');
-        $export->sDB = Shopware()->AdoDb();
         $sSmarty = $this->container->get('template');
+
+        // prevent notices to clutter generated files
+        $this->registerErrorHandler($output);
 
         foreach ($activeFeeds as $feedModel) {
             /** @var $feedModel ProductFeed */
@@ -81,7 +94,9 @@ class GenerateProductFeedCommand extends ShopwareCommand
             $export->sInitSmarty();
 
             $fileName = $feedModel->getHash() . '_' . $feedModel->getFileName();
-            $handleResource = fopen(Shopware()->DocPath() . 'cache/productexport/' . $fileName, 'w');
+
+            $feedCachePath = $cacheDir . '/' . $fileName;
+            $handleResource = fopen($feedCachePath, 'w');
             $export->executeExport($handleResource);
         }
 

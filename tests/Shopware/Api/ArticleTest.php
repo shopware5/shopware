@@ -216,6 +216,51 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit_Framework_TestCase
                             'price' => 400,
                         ),
                     )
+                ),
+                array(
+                    'number' => 'swTEST.variant.' . uniqid(),
+                    'inStock' => 17,
+                    // create a new unit
+                    'unit' => array(
+                        'unit' => 'xyz',
+                        'name' => 'newUnit'
+                    ),
+
+                    'attribute' => array(
+                        'attr3' => 'Freitext3',
+                        'attr4' => 'Freitext4',
+                    ),
+
+                    'configuratorOptions' => array(
+                        array(
+                            'option' => 'Grün',
+                            'group' => 'Farbe'
+                        ),
+                        array(
+                            'option' => 'XL',
+                            'group' => 'Größe'
+                        )
+
+                    ),
+
+                    'minPurchase' => 5,
+                    'purchaseSteps' => 2,
+                    'purchaseSteps' => 2,
+
+                    'prices' => array(
+                        array(
+                            'customerGroupKey' => 'H',
+                            'from' => 1,
+                            'to' => 20,
+                            'price' => 500,
+                        ),
+                        array(
+                            'customerGroupKey' => 'H',
+                            'from' => 21,
+                            'to' => '-',
+                            'price' => 400,
+                        ),
+                    )
 
                 )
             ),
@@ -436,6 +481,78 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit_Framework_TestCase
 
     /**
      * @depends testPostArticlesShouldBeSuccessful
+     * @param $id
+     * @throws Zend_Http_Client_Exception
+     * @throws Zend_Json_Exception
+     */
+    public function testChangeVariantArticleMainVariantShouldBeSuccessful($id)
+    {
+        $response = $this->getHttpClient()
+            ->setUri($this->apiBaseUrl . '/articles/' . $id)
+            ->request('GET');
+
+        $this->assertEquals('application/json', $response->getHeader('Content-Type'));
+        $this->assertEquals(null, $response->getHeader('Set-Cookie'));
+        $this->assertEquals(200, $response->getStatus());
+
+        $result = $response->getBody();
+        $result = Zend_Json::decode($result);
+
+        $variantNumbers = array_map(function ($item) { return $item['number']; }, $result['data']['details']);
+
+        $oldMain = $result['data']['mainDetail']['number'];
+
+        foreach ($variantNumbers as $variantNumber) {
+            $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/articles/' . $id);
+
+            $testData = array(
+                'variants' => array(
+                    array(
+                        "number" => $variantNumber,
+                        "isMain" => true
+                    )
+                )
+            );
+            $requestData = Zend_Json::encode($testData);
+
+            $client->setRawData($requestData, 'application/json; charset=UTF-8');
+            $response = $client->request('PUT');
+            $this->assertEquals('application/json', $response->getHeader('Content-Type'));
+            $this->assertEquals(null, $response->getHeader('Set-Cookie'));
+            $this->assertEquals(200, $response->getStatus());
+            $result = $response->getBody();
+            $result = Zend_Json::decode($result);
+            $this->assertArrayHasKey('success', $result);
+            $this->assertTrue($result['success']);
+
+
+            $response = $this->getHttpClient()
+                ->setUri($this->apiBaseUrl . '/articles/' . $id)
+                ->request('GET');
+            $this->assertEquals('application/json', $response->getHeader('Content-Type'));
+            $this->assertEquals(null, $response->getHeader('Set-Cookie'));
+            $this->assertEquals(200, $response->getStatus());
+            $result = $response->getBody();
+            $result = Zend_Json::decode($result);
+
+            $this->assertEquals($variantNumber, $result['data']['mainDetail']['number']);
+
+            foreach ($result['data']['details'] as $variantData) {
+                if ($variantData['number'] == $oldMain) {
+                    $this->assertEquals(2, $variantData['kind']);
+                }
+            }
+
+            $oldMain = $result['data']['mainDetail']['number'];
+        }
+    }
+
+    /**
+     * @depends testPostArticlesShouldBeSuccessful
+     * @param $id
+     * @return
+     * @throws Zend_Http_Client_Exception
+     * @throws Zend_Json_Exception
      */
     public function testDeleteArticlesShouldBeSuccessful($id)
     {

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -22,6 +22,13 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Bundle\SearchBundle\FacetResultInterface;
+use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
+use Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactoryInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+
 /**
  * Listing controller
  *
@@ -32,188 +39,322 @@
 class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 {
     /**
-     * Translation handler.
-     * @var Shopware_Components_Translation
+     * Listing of all manufacturer products.
+     * Templates extends from the normal listing template.
      */
-    private $translator;
+    public function manufacturerAction()
+    {
+        $manufacturerId = $this->Request()->getParam('sSupplier', null);
+
+        /**@var $context ShopContextInterface*/
+        $context = $this->get('shopware_storefront.context_service')->getShopContext();
+
+        if (!$this->Request()->getParam('sCategory')) {
+            $this->Request()->setParam('sCategory', $context->getShop()->getCategory()->getId());
+        }
+
+        /**@var $criteria Criteria*/
+        $criteria = $this->get('shopware_search.store_front_criteria_factory')
+            ->createListingCriteria($this->Request(), $context);
+
+        if ($criteria->hasCondition('manufacturer')) {
+            $condition = $criteria->getCondition('manufacturer');
+            $criteria->removeCondition('manufacturer');
+            $criteria->addBaseCondition($condition);
+        }
+
+        $categoryArticles = Shopware()->Modules()->Articles()->sGetArticlesByCategory(
+            $context->getShop()->getCategory()->getId(),
+            $criteria
+        );
+
+        /**@var $manufacturer Manufacturer*/
+        $manufacturer = $this->get('shopware_storefront.manufacturer_service')->get(
+            $manufacturerId,
+            $this->get('shopware_storefront.context_service')->getShopContext()
+        );
+
+        $facets = array();
+        foreach ($categoryArticles['facets'] as $facet) {
+            if (!$facet instanceof FacetResultInterface || $facet->getFacetName() == 'manufacturer') {
+                continue;
+            }
+            $facets[] = $facet;
+        }
+
+        $categoryArticles['facets'] = $facets;
+
+        $this->View()->assign($categoryArticles);
+        $this->View()->assign('showListing', true);
+        $this->View()->assign('manufacturer', $manufacturer);
+        $this->View()->assign('ajaxCountUrlParams', [
+            'sSupplier' => $manufacturerId,
+            'sCategory' => $context->getShop()->getCategory()->getId()
+        ]);
+        
+        $this->View()->assign('sCategoryContent', $this->getSeoDataOfManufacturer($manufacturer));
+    }
 
     /**
      * Index action method
      */
     public function indexAction()
     {
-        $supplierId = $this->Request()->getParam('sSupplier');
+        $requestCategoryId = $this->Request()->getParam('sCategory');
 
-        $categoryId = $this->Request()->getParam('sCategory');
-        $categoryContent = Shopware()->Modules()->Categories()->sGetCategoryContent($categoryId);
+        if ($requestCategoryId && !$this->isValidCategoryPath($requestCategoryId)) {
+            throw new Enlight_Controller_Exception(
+                'Listing category missing, non-existent or invalid for the current shop',
+                404
+            );
+        }
+
+        $categoryContent = Shopware()->Modules()->Categories()->sGetCategoryContent($requestCategoryId);
+
         $categoryId = $categoryContent['id'];
-
         Shopware()->System()->_GET['sCategory'] = $categoryId;
+
+        // fetch devices on responsive template or load full emotions for older templates.
+        $templateVersion = Shopware()->Shop()->getTemplate()->getVersion();
+        $emotionConfiguration = $this->getEmotionConfiguration($templateVersion, $categoryId);
+
+        $location = $this->getRedirectLocation($categoryContent, $emotionConfiguration['hasEmotion']);
+        if ($location) {
+            return $this->redirect($location, array('code' => 301));
+        }
+
+        //check for seo information about the current manufacturer
+        $seoSupplier = $this->get('config')->get('seoSupplier');
+        $manufacturerId = $this->Request()->getParam('sSupplier', false);
+
+        //old manufacturer listing
+        if ($seoSupplier === true && $categoryContent['parentId'] == 1 && $manufacturerId) {
+
+            /**@var $manufacturer Manufacturer*/
+            $manufacturer = $this->get('shopware_storefront.manufacturer_service')->get(
+                $manufacturerId,
+                $this->get('shopware_storefront.context_service')->getShopContext()
+            );
+
+            $manufacturerContent = $this->getSeoDataOfManufacturer($manufacturer);
+
+            $categoryContent = array_merge($categoryContent, $manufacturerContent);
+        } elseif (!$requestCategoryId) {
+            throw new Enlight_Controller_Exception(
+                'Listing category missing, non-existent or invalid for the current shop',
+                404
+            );
+        }
+
+        $viewAssignments = array(
+            'sBanner' => Shopware()->Modules()->Marketing()->sBanner($categoryId),
+            'sBreadcrumb' => $this->getBreadcrumb($categoryId),
+            'sCategoryInfo' => $categoryContent,
+            'sCategoryContent' => $categoryContent,
+            'campaigns' => $this->getCampaigns($categoryId),
+            'activeFilterGroup' => $this->request->getQuery('sFilterGroup'),
+            'hasEscapedFragment' => $this->Request()->has('_escaped_fragment_'),
+            'ajaxCountUrlParams' => ['sCategory' => $categoryContent['id']]
+        );
+
+        $viewAssignments = array_merge($viewAssignments, $emotionConfiguration);
+
+        if (!$viewAssignments['showListing'] && $templateVersion < 3) {
+            $this->View()->assign($viewAssignments);
+            return;
+        }
+
+        $context = $this->get('shopware_storefront.context_service')->getShopContext();
+
+        /**@var $criteria Criteria*/
+        $criteria = $this->get('shopware_search.store_front_criteria_factory')
+            ->createListingCriteria($this->Request(), $context);
+
+        if ($categoryContent['hideFilter']) {
+            $criteria->resetFacets();
+        }
+
+        if ($this->Request()->getParam('action') == 'manufacturer' && $criteria->hasCondition('manufacturer')) {
+            $condition = $criteria->getCondition('manufacturer');
+            $criteria->removeCondition('manufacturer');
+            $criteria->addBaseCondition($condition);
+        }
+
+        $categoryArticles = Shopware()->Modules()->Articles()->sGetArticlesByCategory(
+            $categoryId,
+            $criteria
+        );
+
+        $template = $this->getCategoryTemplate($categoryContent, $categoryArticles);
+        $categoryContent = array_merge($categoryContent, $template);
+
+        if ($this->Request()->getParam('sRss') || $this->Request()->getParam('sAtom')) {
+            $this->Response()->setHeader('Content-Type', 'text/xml');
+            $type = $this->Request()->getParam('sRss') ? 'rss' : 'atom';
+            $this->View()->loadTemplate('frontend/listing/' . $type . '.tpl');
+        } elseif (!empty($categoryContent['template']) && empty($categoryContent['layout'])) {
+            $this->view->loadTemplate('frontend/listing/' . $categoryContent['template']);
+        }
+
+        $viewAssignments['sCategoryContent'] = $categoryContent;
+
+        $this->View()->assign($viewAssignments);
+        $this->View()->assign($categoryArticles);
+    }
+
+    private function getRedirectLocation($categoryContent, $hasEmotion)
+    {
+        $location = false;
+
+        $checkRedirect = (
+            ($hasEmotion && $this->Request()->getParam('sPage'))
+            ||
+            (!$hasEmotion)
+        );
 
         if (!empty($categoryContent['external'])) {
             $location = $categoryContent['external'];
         } elseif (empty($categoryContent)) {
             $location = array('controller' => 'index');
-        } elseif (Shopware()->Config()->categoryDetailLink && $categoryContent['articleCount'] == 1) {
-            /**@var $repository \Shopware\Models\Category\Repository*/
-            $repository = Shopware()->Models()->getRepository('Shopware\Models\Category\Category');
-            $articleId = $repository->getActiveArticleIdByCategoryId($categoryContent['id']);
-            if (!empty($articleId)) {
-                $location = array(
-                    'sViewport' => 'detail',
-                    'sArticle' => $articleId
-                );
+        } elseif ($this->isShopsBaseCategoryPage($categoryContent['id'])) {
+            $location = array('controller' => 'index');
+        } elseif ($this->get('config')->get('categoryDetailLink') && $checkRedirect) {
+            /**@var $context ShopContextInterface*/
+            $context = $this->get('shopware_storefront.context_service')->getShopContext();
+
+            /**@var $factory StoreFrontCriteriaFactoryInterface*/
+            $factory = $this->get('shopware_search.store_front_criteria_factory');
+            $criteria = $factory->createListingCriteria($this->Request(), $context);
+
+            $criteria->resetFacets()
+                ->resetConditions()
+                ->resetSorting()
+                ->offset(0)
+                ->limit(1);
+
+            /**@var $result ProductNumberSearchResult*/
+            $result = $this->get('shopware_search.product_number_search')->search($criteria, $context);
+
+            if ($result->getTotalCount() == 1) {
+                /**@var $first \Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct*/
+                $first = array_shift($result->getProducts());
+                $location = ['controller' => 'detail', 'sArticle' => $first->getId()];
             }
         }
-        if (isset($location)) {
-            return $this->redirect($location, array('code' => 301));
+
+        return $location;
+    }
+
+
+    /**
+     * Converts the provided manufacturer to the category seo data structure.
+     * Result can be merged with "sCategoryContent" to override relevant seo category data with
+     * manufacturer data.
+     *
+     * @param Manufacturer $manufacturer
+     * @return array
+     */
+    private function getSeoDataOfManufacturer(Manufacturer $manufacturer)
+    {
+        $content = array();
+
+        $content['metaDescription'] = $manufacturer->getMetaDescription();
+        $content['metaKeywords'] = $manufacturer->getMetaKeywords();
+
+        $canonicalParams = array(
+            'sViewport' => 'listing',
+            'sAction'   => 'manufacturer',
+            'sSupplier' => $manufacturer->getId(),
+        );
+
+        $content['canonicalParams'] = $canonicalParams;
+        
+        $path = $this->Front()->Router()->assemble($canonicalParams);
+
+        if ($path) {
+            /** @deprecated */
+            $content['sSelfCanonical'] = $path;
         }
 
-        if (Shopware()->Config()->get('seoSupplier') === true && $categoryContent['parentId'] == 1 && $this->Request()->getParam('sSupplier', false)) {
-            $supplier = Shopware()->Models()->getRepository('Shopware\Models\Article\Supplier')->find($this->Request()->getParam('sSupplier'));
-
-            $supplierName = $supplier->getName();
-            $supplierTitle = $supplier->getMetaTitle();
-            $categoryContent['metaDescription'] = $supplier->getMetaDescription();
-            $categoryContent['metaKeywords'] = $supplier->getMetaKeywords();
-            if (!Shopware()->Shop()->getDefault()) {
-                $translation = $this->getTranslator()->read(Shopware()->Shop()->getId(), 'supplier', $supplier->getId());
-                if (array_key_exists('metaTitle', $translation)) {
-                    $supplierTitle = $translation['metaTitle'];
-                }
-                if (array_key_exists('metaDescription', $translation)) {
-                    $categoryContent['metaDescription'] = $translation['metaDescription'];
-                }
-                if (array_key_exists('metaKeywords', $translation)) {
-                    $categoryContent['metaKeywords'] = $translation['metaKeywords'];
-                }
-            }
-            $path = $this->Front()->Router()->assemble(array(
-                'sViewport' => 'supplier',
-                'sSupplier' => $supplier->getId(),
-            ));
-            if ($path) {
-                $categoryContent['sSelfCanonical'] = $path;
-            }
-            if (!empty($supplierTitle)) {
-                $categoryContent['title'] = $supplierTitle.' | '.Shopware()->Shop()->getName();
-            } elseif (!empty($supplierName)) {
-                $categoryContent['title'] = $supplierName;
-            }
-            $categoryContent['canonicalTitle'] = $supplierName;
+        if ($manufacturer->getMetaTitle()) {
+            $content['title'] = $manufacturer->getMetaTitle() . ' | ' . $this->get('config')->get('shopname');
+        } elseif ($manufacturer->getName()) {
+            $content['title'] = $manufacturer->getName();
         }
 
-        /**@var $repository \Shopware\Models\Emotion\Repository*/
+        $content['canonicalTitle'] = $manufacturer->getName();
+
+        return $content;
+    }
+
+    /**
+     * @param $categoryId
+     * @return array
+     */
+    private function getCampaigns($categoryId)
+    {
+        /**@var $repository \Shopware\Models\Emotion\Repository */
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Emotion\Emotion');
-        $query = $repository->getCampaignByCategoryQuery($categoryId);
-        $campaignsResult = $query->getArrayResult();
+
+        $campaignsResult = $repository->getCampaignByCategoryQuery($categoryId)
+            ->getArrayResult();
+
         $campaigns = array();
         foreach ($campaignsResult as $campaign) {
             $campaign['categoryId'] = $categoryId;
             $campaigns[$campaign['landingPageBlock']][] = $campaign;
         }
+        return $campaigns;
+    }
 
-        $showListing = true;
-        $hasEmotion = false;
-        $viewAssignments = array(
-            'sBanner' => Shopware()->Modules()->Marketing()->sBanner($categoryId),
-            'sBreadcrumb' => $this->getBreadcrumb($categoryId),
-            'sCategoryContent' => $categoryContent,
-            'campaigns' => $campaigns,
-            'sCategoryInfo' => $categoryContent
-        );
-
-        if (!$this->Request()->getQuery('sSupplier')
-            && !$this->Request()->getQuery('sPage')
-            && !$this->Request()->getQuery('sFilterProperties')
-            && !$this->Request()->getParam('sRss')
-            && !$this->Request()->getParam('sAtom')
+    /**
+     * Returns a single emotion definition for the provided category id.
+     *
+     * @param $categoryId
+     * @return array|mixed
+     */
+    private function getCategoryEmotion($categoryId)
+    {
+        if ($this->Request()->getQuery('sSupplier')
+            || $this->Request()->getQuery('sPage')
+            || $this->Request()->getQuery('sFilterProperties')
+            || $this->Request()->getParam('sRss')
+            || $this->Request()->getParam('sAtom')
         ) {
-            // Check if is a emotion grid is active for this category
-            $emotion = Shopware()->Db()->fetchRow("
-                SELECT e.id, e.show_listing
-                FROM s_emotion_categories ec, s_emotion e
-                WHERE ec.category_id = ?
-                AND e.id = ec.emotion_id
-                AND e.is_landingpage = 0
-                AND e.active = 1
-                AND (e.valid_to >= NOW() OR e.valid_to IS NULL)
-            ", array($categoryId));
-            $hasEmotion = !empty($emotion['id']);
-            $showListing = !$hasEmotion || !empty($emotion['show_listing']);
-
-            /**
-             * @deprecated
-             */
-            if (empty($hasEmotion) && Shopware()->Shop()->getTemplate()->getVersion() == 1) {
-                $offers = Shopware()->Modules()->Articles()->sGetPromotions($categoryId);
-                $viewAssignments['sOffers'] = $offers;
-                if (!empty($offers)) {
-                    $showListing = false;
-                }
-            }
+            return array();
         }
 
-        $viewAssignments['showListing'] = $showListing;
-        $viewAssignments['hasEmotion'] = $hasEmotion;
-        //assign the variables here for the emotion view
-        $this->View()->assign($viewAssignments);
-        if (!$showListing) {
-            return;
+        $data = Shopware()->Models()->getRepository('Shopware\Models\Emotion\Emotion')
+            ->getCategoryBaseEmotionsQuery($categoryId)->getArrayResult();
+
+        if (empty($data)) {
+            return array();
         }
+        
+        return array(
+            'id' => $data[0]['id'],
+            'showListing' => $data[0]['showListing']
+        );
+    }
 
-        $categoryArticles = Shopware()->Modules()->Articles()->sGetArticlesByCategory($categoryId);
-
-        if(empty($categoryContent['noViewSelect'])
+    private function getCategoryTemplate($categoryContent, $categoryArticles)
+    {
+        $template = array();
+        if (empty($categoryContent['noViewSelect'])
             && !empty($categoryArticles['sTemplate'])
             && !empty($categoryContent['layout'])) {
             if ($categoryArticles['sTemplate'] == 'table') {
                 if ($categoryContent['layout'] == '1col') {
-                    $categoryContent['layout'] = '3col';
-                    $categoryContent['template'] = 'article_listing_3col.tpl';
+                    $template['layout'] = '3col';
+                    $template['template'] = 'article_listing_3col.tpl';
                 }
             } else {
-                $categoryContent['layout'] = '1col';
-                $categoryContent['template'] = 'article_listing_1col.tpl';
+                $template['layout'] = '1col';
+                $template['template'] = 'article_listing_1col.tpl';
             }
         }
 
-        $newTemplateLoaded = false;
-        if ($this->Request()->getParam('sRss') || $this->Request()->getParam('sAtom')) {
-            $this->Response()->setHeader('Content-Type', 'text/xml');
-            $type = $this->Request()->getParam('sRss') ? 'rss' : 'atom';
-
-            $this->View()->loadTemplate('frontend/listing/' . $type . '.tpl');
-            $newTemplateLoaded = true;
-
-        } elseif (!empty($categoryContent['template']) && empty($categoryContent['layout'])) {
-            $this->view->loadTemplate('frontend/listing/' . $categoryContent['template']);
-            $newTemplateLoaded = true;
-        }
-
-        if ($newTemplateLoaded) {
-            //assign it again because load template was called
-            $this->View()->assign($viewAssignments);
-        }
-
-        $this->View()->assign($categoryArticles);
-
-        $this->View()->assign(array(
-            'sSuppliers' => Shopware()->Modules()->Articles()->sGetAffectedSuppliers($categoryId),
-            'sCategoryContent' => $categoryContent
-        ));
-
-        if (empty($categoryContent["hideFilter"]) && $this->displayFiltersInListing()) {
-            $articleProperties = Shopware()->Modules()->Articles()->sGetCategoryProperties($categoryId, $supplierId, null);
-        }
-
-        if (!empty($articleProperties['filterOptions'])) {
-            $this->View()->assign(array(
-                'activeFilterGroup' => $this->request->getQuery('sFilterGroup'),
-                'sPropertiesOptionsOnly' => $articleProperties['filterOptions']['optionsOnly'] ?: array(),
-                'sPropertiesGrouped' => $articleProperties['filterOptions']['grouped'] ?: array()
-            ));
-        }
+        return $template;
     }
 
     /**
@@ -238,14 +379,75 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
     }
 
     /**
-     * @return \Shopware_Components_Translation
+     * Checks if the provided $categoryId is in the current shop's category tree
+     *
+     * @param int $categoryId
+     * @return bool
      */
-    private function getTranslator()
+    private function isValidCategoryPath($categoryId)
     {
-        if (null === $this->translator) {
-            $this->translator = new Shopware_Components_Translation();
+        $defaultShopCategoryId = Shopware()->Shop()->getCategory()->getId();
+
+        /**@var $repository \Shopware\Models\Category\Repository*/
+        $categoryRepository = Shopware()->Models()->getRepository('Shopware\Models\Category\Category');
+        $categoryPath = $categoryRepository->getPathById($categoryId);
+
+        if (!in_array($defaultShopCategoryId, array_keys($categoryPath))) {
+            $this->Request()->setQuery('sCategory', $defaultShopCategoryId);
+            $this->Response()->setHttpResponseCode(404);
+            return false;
         }
 
-        return $this->translator;
+        return true;
+    }
+
+    /**
+     * Helper function used in the listing action to detect if
+     * the user is trying to open the page matching the shop's root category
+     *
+     * @param $categoryId
+     * @return bool
+     */
+    private function isShopsBaseCategoryPage($categoryId)
+    {
+        $defaultShopCategoryId = Shopware()->Shop()->getCategory()->getId();
+
+        $queryParamsWhiteList = array('controller', 'action', 'sCategory', 'sViewport', 'rewriteUrl', 'module');
+        $queryParamsNames = array_keys($this->Request()->getParams());
+        $paramsDiff = array_diff($queryParamsNames, $queryParamsWhiteList);
+        
+        return ($defaultShopCategoryId == $categoryId && !$paramsDiff);
+    }
+
+    /**
+     * @param int $templateVersion
+     * @param int $categoryId
+     * @return array
+     */
+    protected function getEmotionConfiguration($templateVersion, $categoryId)
+    {
+        if ($templateVersion < 3) {
+            $emotion = $this->getCategoryEmotion($categoryId);
+
+            return [
+                'hasEmotion' => !empty($emotion),
+                'showListing' => (empty($emotion) || !empty($emotion['showListing']))
+            ];
+        }
+
+        if ($this->Request()->getParam('sPage')) {
+            return [
+                'hasEmotion'  => false,
+                'showListing' => true
+            ];
+        }
+
+        $emotions = $this->get('emotion_device_configuration')->get($categoryId);
+
+        return [
+            'emotions' => $emotions,
+            'hasEmotion' => !empty($emotions),
+            'showListing' => empty($emotions) || (bool)max(array_column($emotions, 'showListing'))
+        ];
     }
 }

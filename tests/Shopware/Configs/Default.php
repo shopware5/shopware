@@ -2,7 +2,6 @@
 return array_merge($this->loadConfig($this->AppPath() . 'Configs/Default.php'), array(
      'front' => array(
         'throwExceptions' => true,
-        'returnResponse' => true,
         'disableOutputBuffering' => false,
         'showException' => true,
     ),
@@ -22,16 +21,11 @@ return array_merge($this->loadConfig($this->AppPath() . 'Configs/Default.php'), 
     'mail' => array(
         'type' => 'file',
         'path' => $this->TestPath('TempFiles'),
-        'callback' => create_function('$transport', 'return
-            "ShopwareMail_" . sha1($transport->body) .
-            "_" . str_replace("@", "[at]", $transport->recipients).".eml";
-        ')
     ),
     'phpSettings' => array(
         'error_reporting' => E_ALL & ~E_NOTICE & ~E_STRICT,
         'display_errors' => 1,
         'date.timezone' => 'Europe/Berlin',
-        'zend.ze1_compatibility_mode' => 0,
         'max_execution_time' => 0
     )
 ));

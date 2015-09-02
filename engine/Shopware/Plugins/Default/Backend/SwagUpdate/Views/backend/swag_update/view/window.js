@@ -1,6 +1,6 @@
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -50,9 +50,16 @@ Ext.define('Shopware.apps.SwagUpdate.view.Window', {
     initComponent:function () {
         var me = this;
 
-        me.items = [ me.createTabPanel(), me.createBackupContainer() ];
+        me.items = [
+            me.createTabPanel(),
+            /*{if {acl_is_allowed privilege=update resource=swagupdate}}*/
+            me.createBackupContainer()
+            /*{/if}*/
+        ];
 
+        /*{if {acl_is_allowed privilege=update resource=swagupdate}}*/
         me.dockedItems = [ me.createToolbar() ];
+        /*{/if}*/
 
         me.callParent(arguments);
     },

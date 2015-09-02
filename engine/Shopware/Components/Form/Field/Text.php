@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -36,7 +36,7 @@ class Text extends Field
      * Requires to set a name for the field
      * @param $name
      */
-    function __construct($name)
+    public function __construct($name)
     {
         $this->name = $name;
     }

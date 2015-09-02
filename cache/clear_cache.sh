@@ -1,19 +1,18 @@
 #!/bin/bash
 DIR="$(cd "$(dirname "$0")" && pwd)"
 
-echo $DIR
-
-echo "Clearing regular caches"
-rm -rf $DIR/html/*
-rm -rf $DIR/general/*
-rm -rf $DIR/templates/*
-rm -rf $DIR/proxies/*
-rm -rf $DIR/doctrine/filecache/*
-rm -rf $DIR/doctrine/proxies/*
-rm -rf $DIR/mpdf/tmp/*
-rm -rf $DIR/mpdf/ttfontdata/*
-
-if [[ $1 = "-f" ]] || [[ $1 = "--force" ]]; then
-    echo "Clearing attributes"
-    rm -rf $DIR/doctrine/attributes/*
+## Guard against empty $DIR
+if [[ "$DIR" != */cache ]]; then
+    echo "Could not detect working directory."
+    exit 1
 fi
+
+echo "Clearing caches"
+mkdir $DIR/delete
+find $DIR -mindepth 1 -maxdepth 1 -type d ! -name delete -print0 | xargs -0 mv -t $DIR/delete/
+rm -Rf $DIR/delete/
+rm -f $DIR/../web/cache/*.js > /dev/null
+rm -f $DIR/../web/cache/*.css
+rm -f $DIR/../web/cache/*.txt
+
+$DIR/../bin/console sw:generate:attributes

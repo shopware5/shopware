@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -45,6 +45,7 @@ class Requirements implements \IteratorAggregate, \Countable
      * @var string
      */
     private $sourceFile;
+    private $containsWarnings;
 
     /**
      * @param string $sourceFile
@@ -61,13 +62,14 @@ class Requirements implements \IteratorAggregate, \Countable
     {
         foreach ($this->list as $requirement) {
             $name = (string) $requirement->name;
-            $version = $this->check($name);
+            $value = $this->getRuntimeValue($name);
+
             $requirement->result = $this->compare(
                 $name,
-                $version,
+                $value,
                 (string) $requirement->required
             );
-            $requirement->version = $version;
+            $requirement->version = $value;
         }
     }
 
@@ -83,6 +85,7 @@ class Requirements implements \IteratorAggregate, \Countable
             if (is_object($xml_object->requirements) == true) {
                 $this->list = $xml_object->requirement;
             }
+
             $this->checkAll();
         }
 
@@ -92,12 +95,12 @@ class Requirements implements \IteratorAggregate, \Countable
     /**
      * Checks a requirement
      *
-     * @param  string    $name
-     * @return bool|null
+     * @param  string                   $name
+     * @return bool|string|integer|null
      */
-    protected function check($name)
+    protected function getRuntimeValue($name)
     {
-        $m = 'check' . str_replace(' ', '', ucwords(str_replace(array('_', '.'), ' ', $name)));
+        $m = 'check' . str_replace(' ', '', ucwords(str_replace(['_', '.'], ' ', $name)));
         if (method_exists($this, $m)) {
             return $this->$m();
         } elseif (extension_loaded($name)) {
@@ -106,9 +109,9 @@ class Requirements implements \IteratorAggregate, \Countable
         } elseif (function_exists($name)) {
             return true;
         } elseif (($value = ini_get($name)) !== null) {
-            if (strtolower($value) == 'off' || $value == 0) {
+            if (strtolower($value) == 'off' || (is_numeric($value) && $value == 0)) {
                 return false;
-            } elseif (strtolower($value) == 'on' || $value == 1) {
+            } elseif (strtolower($value) == 'on' || (is_numeric($value) && $value == 1)) {
                 return true;
             } else {
                 return $value;
@@ -122,23 +125,23 @@ class Requirements implements \IteratorAggregate, \Countable
      * Compares the requirement with the version
      *
      * @param  string $name
-     * @param  string $version
-     * @param  string $required
+     * @param  string $value
+     * @param  string $requiredValue
      * @return bool
      */
-    protected function compare($name, $version, $required)
+    protected function compare($name, $value, $requiredValue)
     {
-        $m = 'compare' . str_replace(' ', '', ucwords(str_replace(array('_', '.'), ' ', $name)));
+        $m = 'compare' . str_replace(' ', '', ucwords(str_replace(['_', '.'], ' ', $name)));
         if (method_exists($this, $m)) {
-            return $this->$m($version, $required);
-        } elseif (preg_match('#^[0-9]+[A-Z]$#', $required)) {
-            return $this->decodePhpSize($required) <= $this->decodePhpSize($version);
-        } elseif (preg_match('#^[0-9]+ [A-Z]+$#i', $required)) {
-            return $this->decodeSize($required) <= $this->decodeSize($version);
-        } elseif (preg_match('#^[0-9][0-9\.]+$#', $required)) {
-            return version_compare($required, $version, '<=');
+            return $this->$m($value, $requiredValue);
+        } elseif (preg_match('#^[0-9]+[A-Z]$#', $requiredValue)) {
+            return $this->decodePhpSize($requiredValue) <= $this->decodePhpSize($value);
+        } elseif (preg_match('#^[0-9]+ [A-Z]+$#i', $requiredValue)) {
+            return $this->decodeSize($requiredValue) <= $this->decodeSize($value);
+        } elseif (preg_match('#^[0-9][0-9\.]+$#', $requiredValue)) {
+            return version_compare($requiredValue, $value, '<=');
         } else {
-            return $required == $version;
+            return $requiredValue == $value;
         }
     }
 
@@ -162,15 +165,12 @@ class Requirements implements \IteratorAggregate, \Countable
         if (!extension_loaded('ionCube Loader')) {
             return false;
         }
-        ob_start();
-        phpinfo(1);
-        $s = ob_get_contents();
-        ob_end_clean();
-        if (preg_match('/ionCube&nbsp;PHP&nbsp;Loader&nbsp;v([0-9.]+)/', $s, $match)) {
-            return $match[1];
+
+        if (!function_exists('ioncube_loader_version')) {
+            return false;
         }
 
-        return false;
+        return ioncube_loader_version();
     }
 
     /**
@@ -301,22 +301,6 @@ class Requirements implements \IteratorAggregate, \Countable
     }
 
     /**
-     * Checks the magic quotes config
-     *
-     * @return bool|string
-     */
-    public function checkMagicQuotes()
-    {
-        if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
-            return true;
-        } elseif (function_exists('get_magic_quotes_runtime') && get_magic_quotes_runtime()) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
      * Checks the disk free space
      *
      * @return bool|string
@@ -324,7 +308,10 @@ class Requirements implements \IteratorAggregate, \Countable
     public function checkDiskFreeSpace()
     {
         if (function_exists('disk_free_space')) {
-            return $this->encodeSize(disk_free_space(__DIR__));
+            // Prevent Warning: disk_free_space() [function.disk-free-space]: Value too large for defined data type
+            $freeSpace = @disk_free_space(__DIR__);
+
+            return $this->encodeSize($freeSpace);
         } else {
             return false;
         }
@@ -352,13 +339,9 @@ class Requirements implements \IteratorAggregate, \Countable
      */
     public function checkIncludePath()
     {
-        if (function_exists('set_include_path')) {
-            $old = set_include_path(get_include_path() . PATH_SEPARATOR . __DIR__ . DIRECTORY_SEPARATOR);
+        $old = set_include_path(get_include_path() . PATH_SEPARATOR . __DIR__ . DIRECTORY_SEPARATOR);
 
-            return $old && get_include_path() != $old;
-        } else {
-            return false;
-        }
+        return $old && get_include_path() != $old;
     }
 
     /**
@@ -389,8 +372,10 @@ class Requirements implements \IteratorAggregate, \Countable
         $last = strtolower($val[strlen($val) - 1]);
         $val = (float) $val;
         switch ($last) {
+            /** @noinspection PhpMissingBreakStatementInspection */
             case 'g':
                 $val *= 1024;
+            /** @noinspection PhpMissingBreakStatementInspection */
             case 'm':
                 $val *= 1024;
             case 'k':
@@ -412,6 +397,7 @@ class Requirements implements \IteratorAggregate, \Countable
         list($val, $last) = explode(' ', $val);
         $val = (float) $val;
         switch (strtoupper($last)) {
+            /** @noinspection PhpMissingBreakStatementInspection */
             case 'TB':
                 $val *= 1024;
             case 'GB':
@@ -435,7 +421,7 @@ class Requirements implements \IteratorAggregate, \Countable
      */
     public static function encodeSize($bytes)
     {
-        $types = array('B', 'KB', 'MB', 'GB', 'TB');
+        $types = ['B', 'KB', 'MB', 'GB', 'TB'];
         for ($i = 0; $bytes >= 1024 && $i < (count($types) - 1); $bytes /= 1024, $i++) ;
 
         return (round($bytes, 2) . ' ' . $types[$i]);
@@ -448,22 +434,41 @@ class Requirements implements \IteratorAggregate, \Countable
      */
     public function toArray()
     {
-        $list = array();
+        $list = [];
+
         foreach ($this->getList() as $requirement) {
-            $listResult = array();
-            $listResult['name'] = (string) $requirement->name;
-            $listResult['notice'] = (string) $requirement->notice;
-            $listResult['required'] = (string) $requirement->required;
-            $listResult['version'] = (string) $requirement->version;
-            $listResult['result'] = (bool) (string) $requirement->result;
-            $listResult['error'] = (bool) $requirement->error;
-            if (!$listResult['result'] && $listResult['error']) {
+            $result = [];
+            $result['name']     = (string) $requirement->name;
+            $result['group']     = (string) $requirement->group;
+            $result['notice']   = (string) $requirement->notice;
+            $result['required'] = (string) $requirement->required;
+            $result['version']  = (string) $requirement->version;
+            $result['result']   = (bool) (string) $requirement->result;
+            $result['error']    = (bool) $requirement->error;
+
+            if (!$result['result'] && $result['error']) {
+                $result['status'] = 'error';
                 $this->setFatalError(true);
+            } elseif (!$result['result']) {
+                $this->setContainsWarnings(true);
+                $result['status'] = 'warning';
+            } else {
+                $result['status'] = 'ok';
             }
-            $list[] = $listResult;
+
+            unset($result['result']);
+            unset($result['error']);
+
+            $list[] = $result;
+//            $list[$result['group']][] = $result;
         }
 
         return $list;
+    }
+
+    public function setContainsWarnings($containsWarnings)
+    {
+        $this->containsWarnings = $containsWarnings;
     }
 
     /**
@@ -490,5 +495,13 @@ class Requirements implements \IteratorAggregate, \Countable
     public function getFatalError()
     {
         return $this->fatalError;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getContainsWarnings()
+    {
+        return $this->containsWarnings;
     }
 }

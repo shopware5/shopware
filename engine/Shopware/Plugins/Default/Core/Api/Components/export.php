@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -36,6 +36,7 @@
  * ?>
  * </code>
  *
+ * @deprecated Will be removed in SW 5.1
  * @author      shopware AG
  * @package     Shopware 3.5.0
  * @subpackage  API-Export
@@ -81,12 +82,15 @@ class sShopwareExport
         foreach ($articles as $articledetailID=>$article) {
             $articleID = $article["articleID"];
             if ($article["kind"]==1) {
-                if(!empty($articledetails[$articleID]))
-                    $article = array_merge($article,$articledetails[$articleID]);
-                if(!empty($articlecategories[$articleID]))
+                if (!empty($articledetails[$articleID])) {
+                    $article = array_merge($article, $articledetails[$articleID]);
+                }
+                if (!empty($articlecategories[$articleID])) {
                     $article["categories"] = $articlecategories[$articleID];
-                if(!empty($articleimages[$articleID]))
+                }
+                if (!empty($articleimages[$articleID])) {
                     $article["images"] = $articleimages[$articleID];
+                }
             }
             $article["prices"] = $articleprices[$articledetailID];
             $tmp[$articledetailID] = $article;
@@ -96,10 +100,10 @@ class sShopwareExport
     }
 
     /**
-     * Export aller gespeicherten Artikel (Nur Stammdaten)
+     * Export of all stored items (only master data)
      *
      * @access public
-     * @return array Array mit allen Artikeln
+     * @return array Array with all articles
      */
     public function sArticles()
     {
@@ -135,7 +139,7 @@ class sShopwareExport
                 a.laststock,
                 d.suppliernumber,
                 d.additionaltext,
-                d.impressions,
+                COALESCE(sai.impressions, 0) as impressions,
                 d.sales,
                 a.active,
                 d.kind,
@@ -183,18 +187,26 @@ class sShopwareExport
             LEFT JOIN s_article_configurator_sets acs
             ON a.configurator_set_id = acs.id
 
+            LEFT JOIN
+            (
+              SELECT articleId AS id, SUM(s.impressions) AS impressions
+              FROM s_statistics_article_impression s
+              GROUP BY articleId
+            ) sai ON sai.id = a.id
+
             WHERE
             a.mode = 0
             ORDER BY a.id, d.kind
         ";
 
         $result = $this->sDB->Execute($sql);
-        if(!$result)
+        if (!$result) {
             return false;
+        }
         $rows = array();
         while ($row = $result->FetchRow()) {
-               $row['name'] = htmlspecialchars_decode($row['name']);
-               $row['supplier'] = htmlspecialchars_decode($row['supplier']);
+            $row['name'] = htmlspecialchars_decode($row['name']);
+            $row['supplier'] = htmlspecialchars_decode($row['supplier']);
             for ($i=1;$i<=20;$i++) {
                 $row["attr"][$i] = $row["attr$i"];
                 unset($row["attr$i"]);
@@ -220,32 +232,38 @@ class sShopwareExport
      */
     public function sArticlesDetails($article_details)
     {
-        if(!empty($article_details['articleID']))
+        if (!empty($article_details['articleID'])) {
             $article_details['articleIDs'][] = $article_details['articleID'];
+        }
         if (!empty($article_details['articleIDs'])&&is_array($article_details['articleIDs'])) {
-            $article_details['articleIDs'] = array_map("intval",$article_details['articleIDs']);
-            $article_details['where'] = "(`articleID`=".implode(" OR `articleID`=",$article_details['articleIDs']).")";
+            $article_details['articleIDs'] = array_map("intval", $article_details['articleIDs']);
+            $article_details['where'] = "(`articleID`=".implode(" OR `articleID`=", $article_details['articleIDs']).")";
             // as we need to join over s_article_details in SW4 in order to get the ordernumber,
             // we also need to prevent 'articleID' from being ambiguous
-            $article_details['where_reference'] = "(`ref`.`articleID`=".implode(" OR `ref`.`articleID`=",$article_details['articleIDs']).")";
+            $article_details['where_reference'] = "(`ref`.`articleID`=".implode(" OR `ref`.`articleID`=", $article_details['articleIDs']).")";
         }
-        if(empty($article_details['where']))
+        if (empty($article_details['where'])) {
             return false;
+        }
         // Downloads
         $sql = "SELECT `description`, `filename` as link, `size`, `articleID` FROM `s_articles_downloads` WHERE {$article_details['where']}";
-        if(($result = $this->sDB->Execute($sql))===false)
+        if (($result = $this->sDB->Execute($sql))===false) {
             return false;
+        }
         while ($row = $result->FetchRow()) {
-            $id = $row["articleID"]; unset($row["articleID"]);
+            $id = $row["articleID"];
+            unset($row["articleID"]);
             $row["name"] =  basename($row["link"]);
             $rows[$id]["downloads"][] = $row;
         }
         // Informations (links)
         $sql = "SELECT `description` ,`link` ,`target`, `articleID` FROM `s_articles_information` WHERE {$article_details['where']}";
-        if(($result = $this->sDB->Execute($sql))===false)
+        if (($result = $this->sDB->Execute($sql))===false) {
             return false;
+        }
         while ($row = $result->FetchRow()) {
-            $id = $row["articleID"]; unset($row["articleID"]);
+            $id = $row["articleID"];
+            unset($row["articleID"]);
             $rows[$id]["information"][] = $row;
         }
         // Related articles
@@ -253,8 +271,9 @@ class sShopwareExport
                 FROM `s_articles_relationships` ref
                 LEFT JOIN s_articles_details ad ON ad.articleID=ref.relatedarticle
                 WHERE {$article_details['where_reference']}";
-        if(($result = $this->sDB->Execute($sql))===false)
+        if (($result = $this->sDB->Execute($sql))===false) {
             return false;
+        }
         while ($row = $result->FetchRow()) {
             $rows[$row["articleID"]]["relationships"][] = $row["relatedarticle"];
             $rows[$row["articleID"]]["crossellings"][] = $row["relatedarticle"];
@@ -264,8 +283,9 @@ class sShopwareExport
         FROM `s_articles_similar` ref
         LEFT JOIN s_articles_details ad ON ad.articleID=ref.relatedarticle
         WHERE {$article_details['where_reference']}";
-        if(($result = $this->sDB->Execute($sql))===false)
+        if (($result = $this->sDB->Execute($sql))===false) {
             return false;
+        }
         while ($row = $result->FetchRow()) {
             $rows[$row["articleID"]]["similars"][] = $row["relatedarticle"];
         }
@@ -286,11 +306,12 @@ class sShopwareExport
      */
     public function sArticlePrices($article_prices)
     {
-        if(!empty($article_prices['articledetailsID']))
+        if (!empty($article_prices['articledetailsID'])) {
             $article_prices['articledetailsIDs'][] = $article_prices['articledetailsID'];
+        }
         if (!empty($article_prices['articledetailsIDs'])&&is_array($article_prices['articledetailsIDs'])) {
-            $article_prices['articledetailsIDs'] = array_map("intval",$article_prices['articledetailsIDs']);
-            $article_prices['where'] = "(`articledetailsID`=".implode(" OR `articledetailsID`=",$article_prices['articledetailsIDs']).")";
+            $article_prices['articledetailsIDs'] = array_map("intval", $article_prices['articledetailsIDs']);
+            $article_prices['where'] = "(`articledetailsID`=".implode(" OR `articledetailsID`=", $article_prices['articledetailsIDs']).")";
         }
         $sql = "
             SELECT
@@ -323,8 +344,9 @@ class sShopwareExport
         ";
 
         $result = $this->sDB->Execute($sql);
-        if(!$result)
+        if (!$result) {
             return false;
+        }
         $rows = array();
         while ($row = $result->FetchRow()) {
             $rows[$row["articledetailsID"]][] = $row;
@@ -346,12 +368,14 @@ class sShopwareExport
      */
     public function sArticleImages($article_images)
     {
-        if(!empty($article_images['articleID']))
+        if (!empty($article_images['articleID'])) {
             $article_images['articleIDs'][] = $article_images['articleID'];
+        }
         if (!empty($article_images['articleIDs'])&&is_array($article_images['articleIDs'])) {
-            foreach ($article_images['articleIDs'] as &$articleID)
+            foreach ($article_images['articleIDs'] as &$articleID) {
                 $articleID = (int) $articleID;
-            $article_images['where'] = "`articleID` IN (".implode(",",$article_images['articleIDs']).")";
+            }
+            $article_images['where'] = "`articleID` IN (".implode(",", $article_images['articleIDs']).")";
         }
         //need to join over s_media to get the path
         $sql = "
@@ -361,11 +385,14 @@ class sShopwareExport
             ORDER BY articleID, main, position, id
         ";
         $result = $this->sDB->Execute($sql);
-        if(!$result)
+        if (!$result) {
             return false;
+        }
         $rows = array();
         while ($row = $result->FetchRow()) {
-            if(empty($row["extension"])) $row["extension"] = 'jpg';
+            if (empty($row["extension"])) {
+                $row["extension"] = 'jpg';
+            }
             $row["link"] = "http://".Shopware()->Config()->Basepath."/".$row["path"];
             $rows[$row["articleID"]][] = $row;
         }
@@ -386,16 +413,18 @@ class sShopwareExport
      */
     public function sArticleCategories($article_categories)
     {
-        if(!empty($article_categories['articleID']))
+        if (!empty($article_categories['articleID'])) {
             $article_categories['articleIDs'][] = $article_categories['articleID'];
+        }
         if (!empty($article_categories['articleIDs'])&&is_array($article_categories['articleIDs'])) {
-            $article_categories['articleIDs'] = array_map("intval",$article_categories['articleIDs']);
-            $article_categories['where'] = "(`articleID`=".implode(" OR `articleID`=",$article_categories['articleIDs']).")";
+            $article_categories['articleIDs'] = array_map("intval", $article_categories['articleIDs']);
+            $article_categories['where'] = "(`articleID`=".implode(" OR `articleID`=", $article_categories['articleIDs']).")";
         }
         $sql = "SELECT DISTINCT `articleID`, `categoryID` FROM `s_articles_categories_ro` WHERE {$article_categories['where']}";
 
-        if(!$result = $this->sDB->Execute($sql))
+        if (!$result = $this->sDB->Execute($sql)) {
             return false;
+        }
         while ($row = $result->FetchRow()) {
             $rows[$row["articleID"]][] = $row["categoryID"];
         }
@@ -410,7 +439,7 @@ class sShopwareExport
      * @access public
      * @return array Array mit Ergebnisdatens�tzen
      */
-    public function sCategories ($categories = array(), $parentID = 1)
+    public function sCategories($categories = array(), $parentID = 1)
     {
         $sql = "
             SELECT DISTINCT id as categoryID, parent as parentID, s_categories.*
@@ -418,12 +447,13 @@ class sShopwareExport
             WHERE parent=$parentID
             AND id!=parent
         ";
-        if(!($result = $this->sDB->Execute($sql)))
+        if (!($result = $this->sDB->Execute($sql))) {
             return false;
+        }
         while ($row = $result->FetchRow()) {
-            unset($row['id'],$row['parent']);
+            unset($row['id'], $row['parent']);
             $categories[$row["categoryID"]] = $row;
-            $categories += array_diff_key($this->sCategories($categories, $row["categoryID"]),$categories);
+            $categories += array_diff_key($this->sCategories($categories, $row["categoryID"]), $categories);
         }
         return $categories;
     }
@@ -446,20 +476,23 @@ class sShopwareExport
      */
     public function sGetOpenOrders()
     {
-        $orders = $this->sGetOrders (array("where"=>"status=0"));
+        $orders = $this->sGetOrders(array("where"=>"status=0"));
         $orderIDs = array_keys($orders);
-        if(empty($orders))
+        if (empty($orders)) {
             return false;
+        }
         $customers = $this->sOrderCustomers(array("orderIDs"=> $orderIDs));
-        if(empty($customers))
+        if (empty($customers)) {
             return false;
+        }
         $details = $this->sOrderDetails(array("orderIDs"=> $orderIDs));
-        if(empty($details))
+        if (empty($details)) {
             return false;
+        }
         $open_order = array();
         foreach ($orderIDs as $orderID) {
             $customers[$orderID]["paymentID"] = $orders[$orderID]["paymentID"];
-            $open_orders[$orderID] = array_merge($orders[$orderID],$customers[$orderID]);
+            $open_orders[$orderID] = array_merge($orders[$orderID], $customers[$orderID]);
             $open_orders[$orderID]['details'] = $details[$orderID];
         }
         return $open_orders;
@@ -476,26 +509,31 @@ class sShopwareExport
      */
     public function sUpdateOrderStatus($order)
     {
-        if(isset($order['status']))
+        if (isset($order['status'])) {
             $order['status'] = intval($order['status']);
-        else
+        } else {
             $order['status'] = 1;
+        }
         if (!empty($order['where'])&&!is_array($order['where'])) {
             $order['where'] = array($order['where']);
         } else {
             $order['where'] = array();
         }
-        if(!empty($order['orderID']))
+        if (!empty($order['orderID'])) {
             $order['orderIDs'] = array($order['orderID']);
+        }
         if (!empty($order['orderIDs'])&&is_array($order['orderIDs'])) {
-            foreach ($order['orderIDs'] as &$orderID) $orderID = (int) $orderID;
-            $order['where'] = "`id` IN (".implode(",",$order['orderIDs']).")\n";
+            foreach ($order['orderIDs'] as &$orderID) {
+                $orderID = (int) $orderID;
+            }
+            $order['where'] = "`id` IN (".implode(",", $order['orderIDs']).")\n";
         }
 
-        if(isset($order['comment']))
-            $upset = ", comment=".$this->sDB->qstr((string) $order['comment']);
-        else
+        if (isset($order['comment'])) {
+            $upset = ", comment=".Shopware()->Db()->quote((string) $order['comment']);
+        } else {
             $upset = "";
+        }
         $sql = "
             UPDATE s_order
             SET
@@ -503,8 +541,9 @@ class sShopwareExport
             WHERE {$order['where']} AND status!=-1
         ";
 
-        if($this->sDB->Execute($sql)===false)
+        if ($this->sDB->Execute($sql)===false) {
             return false;
+        }
         return true;
     }
 
@@ -519,10 +558,11 @@ class sShopwareExport
      */
     public function sGetOrders($order = null)
     {
-        if(!empty($order['orderID']))
+        if (!empty($order['orderID'])) {
             $order['orderIDs'] = array($order['orderID']);
+        }
         if (!empty($order['orderIDs'])&&is_array($order['orderIDs'])) {
-            $order['where'] = '`o`.`id` IN ('.implode(',',$order['orderIDs']).')';
+            $order['where'] = '`o`.`id` IN ('.implode(',', $order['orderIDs']).')';
         }
         if (empty($order['where'])) {
             $sql_where = '';
@@ -586,10 +626,12 @@ class sShopwareExport
         ";
 
         $rows = $this->sDB->GetAssoc($sql);
-        if(empty($rows)||!is_array($rows)||!count($rows))
+        if (empty($rows)||!is_array($rows)||!count($rows)) {
             return false;
-        foreach ($rows as $row)
+        }
+        foreach ($rows as $row) {
             $orders[intval($row['orderID'])] = $row;
+        }
         return $orders;
     }
     /**
@@ -603,11 +645,12 @@ class sShopwareExport
      */
     public function sOrderDetails($order)
     {
-        if(!empty($order['orderID']))
+        if (!empty($order['orderID'])) {
             $order['orderIDs'][] = $order['orderID'];
+        }
         if (!empty($order['orderIDs'])&&is_array($order['orderIDs'])) {
-            $order['orderIDs'] = array_map("intval",$order['orderIDs']);
-            $order['where'] = "`d`.`orderID`=".implode(" OR `d`.`orderID`=",$order['orderIDs'])."";
+            $order['orderIDs'] = array_map("intval", $order['orderIDs']);
+            $order['where'] = "`d`.`orderID`=".implode(" OR `d`.`orderID`=", $order['orderIDs'])."";
         }
         if (empty($order['where'])) {
             return false;
@@ -646,15 +689,17 @@ class sShopwareExport
         "; // Fix #5830 backported from github
 
         $rows = $this->sDB->GetAll($sql);
-        if(empty($rows)||!is_array($rows))
+        if (empty($rows)||!is_array($rows)) {
             return false;
+        }
         $orderdetails = array();
         foreach ($rows as $row) {
             $orderdetails[$row['orderID']][$row['orderdetailsID']] = $row;
         }
-        if(isset($order['orderID']))
+        if (isset($order['orderID'])) {
             return current($orderdetails);
-        return 	$orderdetails;
+        }
+        return    $orderdetails;
     }
     /**
      * Gibt die Kundendaten f�r angegebene Bestellung(en) zur�ck
@@ -666,17 +711,19 @@ class sShopwareExport
      */
     public function sOrderCustomers($order)
     {
-        if (empty($order['orderIDs'])||!is_array($order['orderIDs']))
+        if (empty($order['orderIDs'])||!is_array($order['orderIDs'])) {
             $order['orderIDs'] = array();
+        }
         if (!empty($order['orderID'])) {
             $order['orderIDs'][] = $order['orderID'];
         }
-        $order['orderIDs'] = array_map("intval",$order['orderIDs']);
+        $order['orderIDs'] = array_map("intval", $order['orderIDs']);
 
-        if(!count($order['orderIDs']))
+        if (!count($order['orderIDs'])) {
             return false;
+        }
 
-        $where = "`b`.`orderID`=".implode(" OR `b`.`orderID`=",$order['orderIDs'])."\n";
+        $where = "`b`.`orderID`=".implode(" OR `b`.`orderID`=", $order['orderIDs'])."\n";
         $sql = "
             SELECT
                 `b`.`company` AS `billing_company`,
@@ -686,7 +733,6 @@ class sShopwareExport
                 `b`.`firstname` AS `billing_firstname`,
                 `b`.`lastname` AS `billing_lastname`,
                 `b`.`street` AS `billing_street`,
-                `b`.`streetnumber` AS `billing_streetnumber`,
                 `b`.`zipcode` AS `billing_zipcode`,
                 `b`.`city` AS `billing_city`,
                 `b`.`phone` AS `phone`,
@@ -713,7 +759,6 @@ class sShopwareExport
                 `s`.`firstname` AS `shipping_firstname`,
                 `s`.`lastname` AS `shipping_lastname`,
                 `s`.`street` AS `shipping_street`,
-                `s`.`streetnumber` AS `shipping_streetnumber`,
                 `s`.`zipcode` AS `shipping_zipcode`,
                 `s`.`city` AS `shipping_city`,
                 `s`.`stateID` AS `shipping_stateID`,
@@ -759,12 +804,14 @@ class sShopwareExport
         ";  // Fix #5830 backported from github
 
         $rows = $this->sDB->GetAll($sql);
-        if(empty($rows)||!is_array($rows)||!count($rows))
+        if (empty($rows)||!is_array($rows)||!count($rows)) {
             return false;
+        }
         $customers = array();
-        foreach ($rows as $row)
+        foreach ($rows as $row) {
             $customers[intval($row['orderID'])] = $row;
-        return 	$customers;
+        }
+        return    $customers;
     }
     /**
      * Vergabe von Kundennummern
@@ -776,16 +823,19 @@ class sShopwareExport
      */
     public function sSetCustomernumber($userID, $customernumber)
     {
-        if(empty($userID)||empty($customernumber))
+        if (empty($userID)||empty($customernumber)) {
             return false;
-        $customernumber = $this->sDB->qstr((string) $customernumber);
+        }
+        $customernumber = Shopware()->Db()->quote((string) $customernumber);
         $userID = intval($userID);
         $sql = "UPDATE s_user_billingaddress SET customernumber=$customernumber	WHERE userID=$userID";
-        if($this->sDB->Execute($sql)===false)
+        if ($this->sDB->Execute($sql)===false) {
             return false;
+        }
         $sql = "UPDATE s_order_billingaddress SET customernumber=$customernumber WHERE userID=$userID";
-        if($this->sDB->Execute($sql)===false)
+        if ($this->sDB->Execute($sql)===false) {
             return false;
+        }
         return true;
     }
 
@@ -798,22 +848,25 @@ class sShopwareExport
      */
     public function sSetTrackingID($order, $trackingcode)
     {
-        if(is_string($order))
+        if (is_string($order)) {
             $order = array('ordernumber'=>$order);
-        elseif(is_int($order))
+        } elseif (is_int($order)) {
             $order = array('orderID'=>$order);
-        elseif(!is_array($order))
+        } elseif (!is_array($order)) {
             return false;
-        if(!empty($order['orderID']))
-            $where = "id=".$this->sDB->qstr((int) $order['orderID']);
-        elseif(!empty($order['ordernumber']))
-            $where = "ordernumber=".$this->sDB->qstr((string) $order['ordernumber']);
-        else
+        }
+        if (!empty($order['orderID'])) {
+            $where = "id=".Shopware()->Db()->quote((int) $order['orderID']);
+        } elseif (!empty($order['ordernumber'])) {
+            $where = "ordernumber=".Shopware()->Db()->quote((string) $order['ordernumber']);
+        } else {
             return false;
-        $trackingcode = $this->sDB->qstr((string) $trackingcode);
+        }
+        $trackingcode = Shopware()->Db()->quote((string) $trackingcode);
         $sql = "UPDATE s_order SET trackingcode=$trackingcode WHERE $where";
-        if($this->sDB->Execute($sql)===false)
+        if ($this->sDB->Execute($sql)===false) {
             return false;
+        }
         return true;
     }
     /**
@@ -824,15 +877,16 @@ class sShopwareExport
      * @access public
      * @return array Gibt die Kategorien in einer Baumstruktur zur�ck
      */
-    public function sCategoryTree ($categorie_mask = array(), $parentID = 1, $rek=true)
+    public function sCategoryTree($categorie_mask = array(), $parentID = 1, $rek=true)
     {
-        if(empty($categorie_mask)||!is_array($categorie_mask))
+        if (empty($categorie_mask)||!is_array($categorie_mask)) {
             $categorie_mask = array(
                 "childs"=>"childs",
                 "id"=>"id",
                 "parent"=>"parent",
                 "description" => "description"
             );
+        }
 
         $sql = "
             SELECT id as categoryID, parent as parentID, s_categories.*
@@ -843,13 +897,17 @@ class sShopwareExport
         $ret = array();
         foreach ($rows as $row) {
             $tmp = array();
-            foreach ($categorie_mask as $key=>$value)
-                if(isset($row[$key]))
+            foreach ($categorie_mask as $key=>$value) {
+                if (isset($row[$key])) {
                     $tmp[$value] = $row[$key];
-            if(!empty($rek))
-                $childs = $this->sCategoryTree ($categorie_mask, $row["categoryID"]);
-            if(!empty($childs))
+                }
+            }
+            if (!empty($rek)) {
+                $childs = $this->sCategoryTree($categorie_mask, $row["categoryID"]);
+            }
+            if (!empty($childs)) {
                 $tmp[$categorie_mask["childs"]] = $childs;
+            }
             $ret[$row["categoryID"]] = $tmp;
         }
         return $ret;
@@ -886,29 +944,29 @@ class sShopwareExport
     {
         $ret = array();
         $sql = "SELECT id, tax, description FROM `s_core_tax`";
-        $ret["tax"] = $this->sDB->GetAssoc($sql,false,$force_array=true);
+        $ret["tax"] = $this->sDB->GetAssoc($sql, false, $force_array=true);
         $sql = "SELECT id, description FROM `s_core_states` WHERE `group` = 'state' ORDER BY position";
-        $ret["order_states"] = $this->sDB->GetAssoc($sql,false,$force_array=true);
+        $ret["order_states"] = $this->sDB->GetAssoc($sql, false, $force_array=true);
         $sql = "SELECT id, description FROM `s_core_states` WHERE `group` = 'payment' ORDER BY position";
-        $ret["payment_states"] = $this->sDB->GetAssoc($sql,false,$force_array=true);
+        $ret["payment_states"] = $this->sDB->GetAssoc($sql, false, $force_array=true);
         $sql = "
             SELECT `id`, `name`, `description`, `debit_percent`, `surcharge`, `position`, `active`, `esdactive` as `esd`
             FROM `s_core_paymentmeans`
             ORDER BY `position`
         ";
-        $ret["payment_means"] = $this->sDB->GetAssoc($sql,false,$force_array=true);
+        $ret["payment_means"] = $this->sDB->GetAssoc($sql, false, $force_array=true);
         $sql = "SELECT id ,unit ,description FROM `s_core_units`";
-        $ret["units"] = $this->sDB->GetAssoc($sql,false,$force_array=true);
+        $ret["units"] = $this->sDB->GetAssoc($sql, false, $force_array=true);
         $sql = "
             SELECT `groupkey`, `description`, `tax`, `taxinput`, `minimumorder`, `minimumordersurcharge`
             FROM `s_core_customergroups`
             WHERE `mode`=0
         ";
-        $ret["customer_groups"] = $this->sDB->GetAssoc($sql,false,$force_array=true);
+        $ret["customer_groups"] = $this->sDB->GetAssoc($sql, false, $force_array=true);
 
         // Did not add the new field `description` here, in order not to brake the id=>name scheme
         $sql = "SELECT `id`, `name` FROM `s_articles_supplier`";
-        $ret["manufacturers"] = $this->sDB->GetAssoc($sql,false,$force_array=true);
+        $ret["manufacturers"] = $this->sDB->GetAssoc($sql, false, $force_array=true);
 
         return $ret;
     }
@@ -922,14 +980,14 @@ class sShopwareExport
      */
     public function sRoundPrice($price = 0)
     {
-        $money_str = explode(".",$price);
+        $money_str = explode(".", $price);
         if (!empty($money_str[1])) {
-            $money_str[1] = substr($money_str[1],0, 3);
+            $money_str[1] = substr($money_str[1], 0, 3);
             $money_str = $money_str[0].".".$money_str[1];
         } else {
             $money_str = $money_str[0];
         }
-        return round($money_str,2);
+        return round($money_str, 2);
     }
 
     /**
@@ -939,13 +997,15 @@ class sShopwareExport
      */
     public function sCustomers($user=0)
     {
-        if(!empty($user)&&is_int($user))
+        if (!empty($user)&&is_int($user)) {
             $user['userID'] = $user;
-        if(!empty($user['userID']))
+        }
+        if (!empty($user['userID'])) {
             $user['userIDs'] = array($user['userID']);
+        }
         if (!empty($user['userIDs'])||is_array($user['userIDs'])) {
-            $user['userIDs'] = array_map("intval",$user['userIDs']);
-            $where = "WHERE `u`.`id`=".implode(" OR `u`.`id`=",$user['userIDs'])."\n";
+            $user['userIDs'] = array_map("intval", $user['userIDs']);
+            $where = "WHERE `u`.`id`=".implode(" OR `u`.`id`=", $user['userIDs'])."\n";
         } else {
             $where = "";
         }
@@ -961,7 +1021,6 @@ class sShopwareExport
                     `b`.`firstname` AS `billing_firstname`,
                     `b`.`lastname` AS `billing_lastname`,
                     `b`.`street` AS `billing_street`,
-                    `b`.`streetnumber` AS `billing_streetnumber`,
                     `b`.`zipcode` AS `billing_zipcode`,
                     `b`.`city` AS `billing_city`,
                     `b`.`phone` AS `billing_phoney`,
@@ -981,7 +1040,6 @@ class sShopwareExport
                     `s`.`firstname` AS `shipping_firstname`,
                     `s`.`lastname` AS `shipping_lastname`,
                     `s`.`street` AS `shipping_street`,
-                    `s`.`streetnumber` AS `shipping_streetnumber`,
                     `s`.`zipcode` AS `shipping_zipcode`,
                     `s`.`city` AS `shipping_city`,
                     `s`.`countryID` AS `shipping_countryID`,
@@ -1025,8 +1083,7 @@ class sShopwareExport
         if (!empty($user['userID'])) {
             return $this->sDB->GetRow($sql);
         } else {
-            return $this->sDB->GetAssoc($sql,false,$force_array=true);
+            return $this->sDB->GetAssoc($sql, false, $force_array=true);
         }
     }
 }
-?>

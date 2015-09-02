@@ -1,87 +1,112 @@
 <?php
+return [
+    'menuitem_language-selection'      => 'Start',
+    'menuitem_requirements'            => 'System requirements',
+    'menuitem_database-configuration'  => 'Database configuration',
+    'menuitem_database-import'         => 'Database creation',
+    'menuitem_edition'                 => 'Shopware Edition',
+    'menuitem_configuration'           => 'Configuration',
+    'menuitem_finish'                  => 'Finish',
+    'menuitem_license'                 => 'License agreement',
 
-/** Installer locale - en_GB */
-return array(
-    'locale' => 'en_GB',
-    'meta_text'     => '<strong>Shopware version:</strong> ___VERSION___',
-    "start_install" => "Start install",
-    "system_requirements" => "System requirements",
-    "configure_db" => "Database configuration",
-    "import_db" => "Database import",
-    "licence" => "License",
-    "configuration" => "Configuration",
-    "done" => "Done",
-    "thank_you_message" => "Congratulations and thank you for choosing Shopware 4. This installer will perform the installation and basic configuration. Afterwards, you can start setting up your shop. Note: If you proceed with the English variant of installation assistant, Shopware will be installed with the English language package.",
-    "select_language" => "Select language",
-    "select_language_choose" => "Please choose",
-    "select_language_de" => "Deutsch",
-    "select_language_en" => "English",
-    "your_name" => "Your name",
-    "back" => "Back",
-    "forward" => "Forward",
-    "check_system_requirements" => "Check system requirements",
-    'system_requirements_header' => "System requirements",
-    // Step 2 # New #
-    'step2_header_files' => "File & directory permissions",    // File & directory permissions
-    'step2_files_info' => "The following files and directories must exist and be writable",   // The following files and directories must exist and be writable
-    'step2_tablefiles_colcheck' => 'Check', // Check
-    'step2_tablefiles_colstatus' => 'Status', // Status
-    'step2_error' => 'Some system requirements have not been met.', //Some system requirements are not met
-    'step2_php_info' => "Your server must meet the following requirements in order to run Shopware.", // Your server must meet the following requirements in order to run shopware
-    'step2_system_colcheck' => 'Check',  // Check
-    'step2_system_colrequired' => 'Required',   // Required
-    'step2_system_colfound' => 'Found',  // Found
-    'step2_system_colstatus' => 'Status', // Status
-    // Step 3
-    'step3_header' => 'Configure database', // Database
-    'step3_field_host' => 'Database host:', // Database host:
-    'step3_field_port' => 'Database port:', // Database port:
-    'step3_field_socket' => 'Database socket (optional):', // Database socket:
-    'step3_field_user' => 'Database user:', // Database user
-    'step3_field_password' => 'Database password:', // Database password
-    'step3_field_database' => 'Database name:', // Database
-    'step3_info' => 'Enter your database connection - if you are not sure what data must be entered here, please contact your hosting provider.', // Enter your database connection - if you are not sure what data must be entered here, please contact your provider.
-    'step_3_loading' => 'Importing database...',
-    // Step 4
-    'step4_header'      => 'Database import', // Database import
-    'step4_skip_import' => 'Skip database import', // Skip database import
-    // Step 5
-    'step5_header' => 'Choose your license', // Choose your license
-    'step5_ce' => 'Shopware Community Edition (License: AGPL)', // Shopware Community Edition (License: AGPL)
-    'step5_pe' => 'Shopware Professional Edition (License: Commercial / License key required)', // Shopware Professional Edition (License: Commercial / License key required)
-    'step5_ee' => 'Shopware Enterprise Basic Edition (License: Commercial / License key required)', // Shopware Enterprise Basic Edition (License: Commercial / License key required)
-    'step5_ec' => 'Shopware Enterprise Premium Edition (License: Commercial / License key required)', //  Shopware Enterprise Premium Edition (License: Commercial / License key required)
-    'step5_license' => 'License key', // License-Key:
-    'step5_info' => 'If you have purchased a commercial Shopware version, select the appropriate edition in the list. Then enter the license key that you received upon purchasing.', //  If you have purchased a commercial shopware version, select the appropriate edition in the list. Then, enter the license key that you received after the purchase.
-    'step5_license_error' => 'It is required that you enter a valid to install a commercial shopware edition.',
+    'version_text' => '<strong>Version:</strong>',
+    'back'         => 'Back',
+    'forward'      => 'Forward',
+    'start'        => 'Start',
 
-    // Step 6
-    'step6_header' => 'Shop configuration',   // Shop configuration
-    'step6_sconfig_header' => 'Frontend configuration',   // Frontend configuration
-    'step6_sconfig_name' => 'Shop name:',   // Shop name
-    'step6_sconfig_name_info' => 'Please enter the name of your shop',   //  Please enter the title of your shop
-    'step6_sconfig_mail' => 'Your email address:',   // Your mail address
-    'step6_sconfig_mail_info' => 'Please enter your email address', // Please enter your email-address
-    'step6_sconfig_domain' => 'Shop domain:', // Shop domain
-    'step6_sconfig_language' => 'Default shop  language:', // Shop default language
-    'step6_sconfig_currency' => 'Default shop currency:', // Shop default currency
-    'step6_admin_title' => 'Configure admin user', // Configure admin user
-    'step6_admin_login' => 'Admin login:', // Admin login
-    'step6_admin_mail' => 'Admin email:', // Admin email
-    'step6_admin_name' => 'Admin name:', // Admin name
-    'step6_admin_language' => 'Admin backend language:', // Admin backend language
-    'step6_admin_language_de' => 'German', // German
-    'step6_admin_language_en' => 'English', // English
-    'step6_admin_password' => 'Admin password (default: demo):', // Admin password
-    'step6_admin_password_repeat' => 'Repeat admin password (default: demo):', // Admin password repeat
-    // Step 7
-    'step7_title' => 'Finished', // Finished
-    'step7_info' => 'The installation has been completed successfully.', // The installation was finished successful
-    'step7_frontend' => 'Open shop frontend', // Open shop frontend
-    'step7_backend' => 'Open shop backend', // Open shop backend
+    'select_language_de' => 'Deutsch',
+    'select_language_en' => 'English',
+    'select_language_nl' => 'Nederlands',
 
-    'migration_progress_text'           => 'Please start the database import by clicking the "Start" button.<br> <strong>Any existing Shopware tables may be removed.</strong>',
-    'migration_counter_text_migrations' => 'Database import in progress',
-    'migration_update_success'          => 'Database import complete',
-    "start"                             => "Start",
-);
+    'language-selection_header'          => 'Start installation',
+    'language-selection_select_language' => 'Choose installer language',
+    'language-selection_info_message'    => 'This language selection applies only to the installation assistant. Once you finish installing Shopware, you will be able to configure multiple shop in different languages.',
+    'language-selection_welcome_message' => <<<EOT
+<p>
+    You are only a few clicks away from being part of the big Shopware community,
+    which consists of over 30000 online merchants worldwide.
+</p>
+<p>
+    Our Support team is available to answer your questions at any time.
+    Please contact us via telephone <a href="tel:+492555928850">(+49) 2555 92 8850</a> or via email <a href="mailto:info@shopware.com">info@shopware.com</a>.
+</p>
+EOT
+    ,
+
+    'requirements_header'               => 'System requirements',
+    'requirements_header_files'         => 'File & directory permissions',
+    'requirements_header_system'        => 'System requirements',
+    'requirements_files_info'           => 'The following files and directories must exist and be writable',
+    'requirements_tablefiles_colcheck'  => 'Check',
+    'requirements_tablefiles_colstatus' => 'Status',
+    'requirements_error'                => 'Some system requirements have not been met.',
+    'requirements_php_info'             => 'Your server must meet the following requirements in order to run Shopware.',
+    'requirements_system_colcheck'      => 'Check',
+    'requirements_system_colrequired'   => 'Required',
+    'requirements_system_colfound'      => 'Found',
+    'requirements_system_colstatus'     => 'Status',
+
+    'license_agreement_header'   => 'License agreement (EULA)',
+    'license_agreement_info'     => 'The Shopware Community Edition is AGPL licensed, whereas parts of the plugins and the theme are MIT licensed.',
+    'license_agreement_error'    => 'You have to agree to our license',
+    'license_agreement_checkbox' => 'I agree to the above terms and conditions',
+
+    'database-configuration_header'         => 'Database configuration',
+    'database-configuration_field_host'     => 'Database host:',
+    'database-configuration_field_port'     => 'Database port:',
+    'database-configuration_field_socket'   => 'Database socket (optional):',
+    'database-configuration_field_user'     => 'Database user:',
+    'database-configuration_field_password' => 'Database password:',
+    'database-configuration_field_database' => 'Database name:',
+    'database-configuration_info'           => 'Enter your database connection - if you are not sure what data must be entered here, please contact your hosting provider.',
+
+    'database-import_header'            => 'Database creation',
+    'database-import_skip_import'       => 'Skip database creation',
+    'database-import_progress_text'     => 'Please start the database creation process by clicking the "Start" button <br> <strong>Existing Shopware tables will be deleted.</strong>',
+    'migration_counter_text_migrations' => 'Creating database structure',
+    'migration_counter_text_snippets'   => 'Update snippets',
+    'migration_update_success'          => 'Process complete',
+
+    'edition_header'        => 'Choose your license',
+    'edition_ce'            => 'Shopware Community Edition (License: AGPL)',
+    'edition_cm'            => 'Shopware Commercial Version (License: Commercial / License key required) e.g. Professional, Professional Plus, Enterprise',
+    'edition_license'       => 'License key:',
+    'edition_info'          => 'If you have purchased a commercial Shopware version, select the appropriate edition in the list. Then enter the license key that you received upon purchasing.',
+    'edition_license_error' => 'It is required that you enter a valid to install a commercial shopware edition.',
+
+    'configuration_header'                  => 'Shop configuration',
+    'configuration_sconfig_header'          => 'Frontend configuration',
+    'configuration_sconfig_name'            => 'Shop name:',
+    'configuration_sconfig_name_info'       => 'Please enter the name of your shop',
+    'configuration_sconfig_mail'            => 'Your email address:',
+    'configuration_sconfig_mail_info'       => 'Please enter your email address used for outgoing email',
+    'configuration_sconfig_domain'          => 'Shop domain:',
+    'configuration_sconfig_language'        => 'Default shop language:',
+    'configuration_sconfig_currency'        => 'Default shop currency:',
+    'configuration_sconfig_currency_info'   => 'Currency used by default when defining article prices',
+    'configuration_admin_currency_eur'      => 'Euro',
+    'configuration_admin_currency_usd'      => 'Dollar (US)',
+    'configuration_admin_currency_gbp'      => 'Pound (GB)',
+    'configuration_admin_title'             => 'Configure admin user',
+    'configuration_admin_username'          => 'Admin login:',
+    'configuration_admin_mail'              => 'Admin email:',
+    'configuration_admin_name'              => 'Admin name:',
+    'configuration_admin_language'          => 'Admin backend language:',
+    'configuration_admin_language_de'       => 'German',
+    'configuration_admin_language_en'       => 'English',
+    'configuration_admin_password'          => 'Admin password:',
+
+    'finish_header'   => 'Finished',
+    'finish_info'     => 'The installation has been completed successfully.',
+    'finish_frontend' => 'Open shop frontend',
+    'finish_backend'  => 'Open shop backend',
+    'finish_message'  => '
+<p>
+    Welcome to Shopware.
+</p>
+<p>
+    We are happy to welcome you to our Community.
+    Shopware is successfully installed and ready to use.
+</p>
+',
+];

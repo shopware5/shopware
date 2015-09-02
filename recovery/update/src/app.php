@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,15 +23,15 @@
  */
 
 use Shopware\Recovery\Update\DependencyInjection\Container;
+use Shopware\Recovery\Update\PluginCheck;
 use Shopware\Recovery\Update\Utils;
 
 date_default_timezone_set('Europe/Berlin');
-
 ini_set('display_errors', 1);
 error_reporting(-1);
 
 $config = require __DIR__ . '/../config/config.php';
-$container = new Container(new Pimple(), $config);
+$container = new Container(new \Pimple\Container(), $config);
 
 /** @var \Slim\Slim $app */
 $app = $container->get('app');
@@ -65,6 +65,7 @@ $app->hook('slim.before.dispatch', function () use ($app, $container) {
 
     $clientIp = Utils::getRealIpAddr();
 
+    $app->view()->set('version', $container->get('shopware.version'));
     $app->view()->set('app', $app);
     $app->view()->set('clientIp', $clientIp);
     $app->view()->set('baseUrl', $baseUrl);
@@ -96,13 +97,13 @@ $app->error(function (Exception $e) use ($app) {
     }
 
     $response = $app->response();
-    $data = array(
+    $data = [
         'code'    => $e->getCode(),
         'message' => $e->getMessage(),
         'file'    => $e->getFile(),
         'line'    => $e->getLine(),
         'trace'   => $e->getTraceAsString(),
-    );
+    ];
     $response['Content-Type'] = 'application/json';
     $response->body(json_encode($data));
 });
@@ -120,89 +121,23 @@ $app->map('/', function () use ($app) {
 
     if (!UPDATE_IS_MANUAL) {
         $app->redirect($app->urlFor("checks"));
+
         return;
     }
 })->via('GET', 'POST')->name("welcome");
 
 // Check file & directory permissions
 $app->map('/checks', function () use ($app, $container) {
-    $paths = Utils::getPaths(SW_PATH . "/engine/Shopware/Components/Check/Data/Path.xml");
-
-    clearstatcache();
-    $systemCheckPathResults = Utils::checkPaths($paths, SW_PATH);
-
-    foreach ($systemCheckPathResults as $value) {
-        if (!$value['result']) {
-            $fileName = SW_PATH . '/' . $value['name'];
-            @mkdir($fileName, 0777, true);
-            @chmod($fileName, 0777);
-        }
-    }
-
-    clearstatcache();
-    $systemCheckPathResults = Utils::checkPaths($paths, SW_PATH);
-
-    $hasErrors = false;
-    foreach ($systemCheckPathResults as $value) {
-        if (!$value['result']) {
-            $hasErrors = true;
-        }
-    }
-
-    $directoriesToDelete = array(
-        'cache/proxies/'                   => false,
-        'cache/doctrine/filecache/'	       => false,
-        'cache/doctrine/proxies/'	       => false,
-        'cache/doctrine/attributes/'       => false,
-        'cache/general/'                   => false,
-        'cache/templates/'                 => false,
-        'engine/Library/Mpdf/tmp'          => false,
-        'engine/Library/Mpdf/ttfontdata'   => false,
-    );
-
-    if (function_exists('apc_clear_cache')) {
-        apc_clear_cache();
-        apc_clear_cache('user');
-    }
-
-    $results = array();
-    foreach ($directoriesToDelete as $directory => $deleteDirecory) {
-        $result = true;
-        $filePath = SW_PATH . '/' . $directory;
-
-        Utils::deleteDir($filePath, $deleteDirecory);
-        if ($deleteDirecory && is_dir($filePath)) {
-            $result = false;
-            $hasErrors = true;
-        }
-
-        if ($deleteDirecory) {
-            $results[$directory] = $result;
-        }
-    }
-
-    if (!$hasErrors && $app->request()->get("action")) {
-        // No errors and submitted form - proceed with next-step
-        $app->redirect($app->urlFor("dbmigration"));
-    }
-
-    if (!$hasErrors && $app->request()->get("force") !== "1") {
-        // No errors, skip page except if force parameter is set
-        $app->redirect($app->urlFor("dbmigration"));
-    }
-
-    $isSkippableCheck = $app->config('skippable.check');
-    if ($isSkippableCheck && $app->request()->get("force") !== "1") {
-        // No errors, skip page except if force parameter is set
-        $app->redirect($app->urlFor("dbmigration"));
-    }
-
-    $app->render('checks.php', array(
-        'systemCheckResultsWritePermissions' => $systemCheckPathResults,
-        'filesToDelete'                      => $results,
-        'error'                              => $hasErrors,
-    ));
+    $container->get('controller.requirements')->checkRequirements();
 })->via('GET', 'POST')->name("checks");
+
+$app->map('/plugin-checks', function () use ($app, $container) {
+    /** @var PluginCheck $pluginCheck */
+    $pluginCheck = $container->get('plugin.check');
+    $plugins = $pluginCheck->checkPlugins();
+
+    $app->render('plugins.php', ['plugins' => $plugins]);
+})->via('GET', 'POST')->name("plugin-checks");
 
 $app->map('/dbmigration', function () use ($app) {
     $app->render('dbmigration.php');
@@ -212,70 +147,25 @@ $app->map('/applyMigrations', function () use ($app, $container) {
     $container->get('controller.batch')->applyMigrations();
 })->via('GET', 'POST')->name('applyMigrations');
 
-$app->map('/importSnippets', function () use ($app, $container) {
+$app->map('/importSnippets', function () use ($container) {
     $container->get('controller.batch')->importSnippets();
 })->via('GET', 'POST')->name('importSnippets');
 
-$app->map('/unpack', function () use ($app, $container) {
+$app->map('/unpack', function () use ($container) {
     $container->get('controller.batch')->unpack();
 })->via('GET', 'POST')->name("unpack");
 
-$app->map('/cleanup', function () use ($app) {
-    $_SESSION['DB_DONE'] = true;
-
-    $cleanupFile = UPDATE_ASSET_PATH . '/cleanup.php';
-    if (!is_file($cleanupFile)) {
-        $_SESSION['CLEANUP_DONE'] = true;
-
-        $url = $app->urlFor('done');
-        $app->response()->redirect($url);
-
-        return;
-    }
-
-    $rawList = require $cleanupFile;
-    $cleanupList = array();
-
-    foreach ($rawList as $path) {
-        $realpath = SW_PATH.'/'.$path;
-        if (file_exists($realpath)) {
-            $cleanupList[] = $path;
-        }
-    }
-
-    if (count($cleanupList) == 0) {
-        $_SESSION['CLEANUP_DONE'] = true;
-        $url = $app->urlFor('done');
-        $app->response()->redirect($url);
-    }
-
-    if ($app->request()->isPost()) {
-        $result = array();
-        foreach ($cleanupList as $path) {
-            $result = array_merge($result, Utils::cleanPath(SW_PATH.'/'.$path));
-        }
-
-        if (count($result) == 0) {
-            $_SESSION['CLEANUP_DONE'] = true;
-
-            $url = $app->urlFor('done');
-            $app->response()->redirect($url);
-        } else {
-            $result = array_map(
-                function ($path) {
-                    return substr($path, strlen(realpath(__DIR__.'/../../../'))+1);
-                },
-                $result
-            );
-            $app->render('cleanup.php', array('cleanupList' => $result, 'error' => true));
-        }
-
-    } else {
-        $app->render('cleanup.php', array('cleanupList' => $cleanupList, 'error' => false ));
-    }
+$app->map('/cleanup', function () use ($container) {
+    $container->get('controller.cleanup')->cleanupOldFiles();
 })->via('GET', 'POST')->name('cleanup');
 
-$app->map('/done', function () use ($app) {
+$app->map('/done', function () use ($app, $container) {
+    if (is_dir(SW_PATH.'/recovery/install')) {
+        /** @var \Shopware\Recovery\Common\SystemLocker $systemLocker */
+        $systemLocker = $container->get('system.locker');
+        $systemLocker();
+    }
+
     if (UPDATE_IS_MANUAL) {
         $app->render('done_manual.php');
     } else {

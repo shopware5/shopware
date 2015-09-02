@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -67,7 +67,6 @@ EOF
         set_error_handler(function ($errno, $errstr) {
             if ($errno === E_RECOVERABLE_ERROR
                     && stripos($errstr, 'Argument 1 passed to Shopware\Models\Menu\Repository::findOneBy() must be of the type array') === 0) {
-
                 return true;
             }
 
@@ -75,7 +74,7 @@ EOF
         });
 
         /** @var Manager $pluginManager */
-        $pluginManager  = $this->container->get('shopware.plugin_manager');
+        $pluginManager  = $this->container->get('shopware_plugininstaller.plugin_manager');
         $pluginName = $input->getArgument('plugin');
 
         try {

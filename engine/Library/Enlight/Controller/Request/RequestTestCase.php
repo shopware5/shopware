@@ -43,6 +43,22 @@ class Enlight_Controller_Request_RequestTestCase
     protected $_serverParams = array();
 
     /**
+     * @var string[]
+     */
+    private $validDeviceTypes = [
+        'desktop',
+        'tablet',
+        'mobile',
+    ];
+
+    /**
+     * See: getDeviceType()
+     *
+     * @var string
+     */
+    private $deviceType = 'desktop';
+
+    /**
      * Set GET values method
      *
      * @param  string|array $spec
@@ -85,7 +101,7 @@ class Enlight_Controller_Request_RequestTestCase
      * Set SERVER remote address
      *
      * @param string $address
-     * @return Enlight_Controller_Request_RequestHttp
+     * @return Enlight_Controller_Request_Request
      */
     public function setRemoteAddress($address)
     {
@@ -178,11 +194,50 @@ class Enlight_Controller_Request_RequestTestCase
      * Sets the request URI scheme
      *
      * @param $value
-     * @return Enlight_Controller_Request_RequestHttp
+     * @return Enlight_Controller_Request_Request
      */
     public function setSecure($value = true)
     {
         $_SERVER['HTTPS'] = $value ? 'on' : null;
         return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getModuleName()
+    {
+        if (parent::getModuleName() === null) {
+            return null;
+        }
+
+        return strtolower(trim(parent::getModuleName()));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getClientIp($checkProxy = false)
+    {
+        return parent::getClientIp($checkProxy);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDeviceType()
+    {
+        return $this->deviceType;
+    }
+
+    /**
+     * Sets the current device type
+     * @param string $deviceType
+     */
+    public function setDeviceType($deviceType)
+    {
+        $deviceType = strtolower($deviceType);
+
+        $this->deviceType = (in_array($deviceType, $this->validDeviceTypes)) ? $deviceType : 'desktop';
     }
 }

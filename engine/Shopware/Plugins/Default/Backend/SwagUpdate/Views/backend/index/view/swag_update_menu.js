@@ -1,6 +1,6 @@
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,11 +32,14 @@ Ext.define('Shopware.apps.Index.view.SwagUpdateMenu', {
     initComponent: function() {
         var me = this, result;
 
+        /*{if {acl_is_allowed privilege=read resource=swagupdate}}*/
         me.on('menu-created', function(items) {
             window.setTimeout(function() {
                 me.performVersionCheck();
             }, 500);
         });
+        /*{/if}*/
+
         result = me.callParent(arguments);
 
         return result;
@@ -103,7 +106,9 @@ Ext.define('Shopware.apps.Index.view.SwagUpdateMenu', {
                     },
 
                     onCloseButton: function() {
+                        /*{if {acl_is_allowed privilege=skipUpdate resource=swagupdate}}*/
                         Ext.MessageBox.confirm('{s name="skip_update"}Aktualisierung überspingen{/s}', '{s name="skip_update_question"}Möchten Sie die Meldungen für diese Aktualisierung dauerhaft deaktivieren?{/s}', skipUpdate);
+                        /*{/if}*/
                     }
                 });
 

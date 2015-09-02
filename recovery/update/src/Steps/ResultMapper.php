@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -35,28 +35,28 @@ class ResultMapper
     public function toExtJs($result)
     {
         if ($result instanceof ValidResult) {
-            return array(
+            return [
                 'valid'   => true,
                 'offset'  => $result->getOffset(),
                 'total'   => $result->getTotal(),
                 'success' => true,
-            );
+            ];
         }
 
         if ($result instanceof FinishResult) {
-            return array(
+            return [
                 'valid'   => false,
                 'offset'  => $result->getOffset(),
                 'total'   => $result->getTotal(),
                 'success' => true
-            );
+            ];
         }
 
         if ($result instanceof ErrorResult) {
-            return array(
+            return [
                 'valid'    => false,
                 'errorMsg' => $result->getMessage(),
-            );
+            ];
         }
 
         throw new \Exception(sprintf("Result type %s can not be mapped.", get_class($result)));

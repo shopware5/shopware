@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2013 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -25,11 +25,12 @@
 namespace Shopware\Components;
 
 use Shopware\Components\DependencyInjection\Container;
+use Shopware\Components\Theme\PathResolver;
 
 /**
  * @category  Shopware
  * @package   Shopware\Components\CacheManager
- * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class CacheManager
 {
@@ -64,6 +65,11 @@ class CacheManager
     private $events;
 
     /**
+     * @var PathResolver
+     */
+    private $themePathResolver;
+
+    /**
      * @param Container $container
      */
     public function __construct(Container $container)
@@ -75,6 +81,7 @@ class CacheManager
         $this->db       = $container->get('db');
         $this->config   = $container->get('config');
         $this->events   = $container->get('events');
+        $this->themePathResolver = $container->get('theme_path_resolver');
     }
 
     /**
@@ -90,8 +97,11 @@ class CacheManager
      */
     public function clearHttpCache()
     {
-        $cacheDir = $this->container->getParameter('shopware.httpCache.cache_dir');
-        $this->clearDirectory($cacheDir);
+        if ($this->container->getParameter('shopware.httpCache.enabled')) {
+            $this->clearDirectory(
+                $this->container->getParameter('shopware.httpCache.cache_dir')
+            );
+        }
 
         // Fire event to let Plugin-Implementation clear cache
         $this->events->notify('Shopware_Plugins_HttpCache_ClearCache');
@@ -110,6 +120,14 @@ class CacheManager
         if ($cacheDir != $compileDir) {
             $this->clearDirectory($cacheDir);
         }
+    }
+
+    /**
+     * Clear theme cache
+     */
+    public function clearThemeCache()
+    {
+        $this->clearDirectory($this->themePathResolver->getCacheDirectory());
     }
 
     /**
@@ -160,10 +178,18 @@ class CacheManager
      */
     public function clearConfigCache()
     {
-        $this->cache->clean(\Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG, array(
-            'Shopware_Config',
-            'Shopware_Plugin'
-        ));
+        $capabilities = $this->cache->getBackend()->getCapabilities();
+        if (!empty($capabilities['tags'])) {
+            $this->cache->clean(
+                \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG,
+                array(
+                    'Shopware_Config',
+                    'Shopware_Plugin'
+                )
+            );
+        } else {
+            $this->cache->clean();
+        }
     }
 
     /**
@@ -203,9 +229,14 @@ class CacheManager
      */
     public function getHttpCacheInfo($request = null)
     {
-        $cacheDir = $this->container->getParameter('shopware.httpCache.cache_dir');
+        if ($this->container->getParameter('shopware.httpCache.enabled')) {
+            $this->getDirectoryInfo(
+                $this->container->getParameter('shopware.httpCache.cache_dir')
+            );
+        } else {
+            $info = array();
+        }
 
-        $info = $this->getDirectoryInfo($cacheDir);
         $info['name'] = 'Http-Reverse-Proxy';
 
         if ($request && $request->getHeader('Surrogate-Capability')) {
@@ -226,7 +257,7 @@ class CacheManager
     {
         $cacheConfig = $this->container->getParameter('shopware.cache');
 
-        if ($cacheConfig['backend'] == 'apc' && extension_loaded('apc')) {
+        if ($this->cache->getBackend() instanceof \Zend_Cache_Backend_Apc) {
             $apcInfo = apc_cache_info('user');
             $info['files'] = $apcInfo['num_entries'];
             $info['size'] = $this->encodeSize($apcInfo['mem_size']);
@@ -240,13 +271,17 @@ class CacheManager
         }
 
         $info['name'] = 'Shopware configuration';
-        $info['backend'] = empty($cacheConfig['backend']) ? 'File' : $cacheConfig['backend'];
+
+        $backend = get_class($this->cache->getBackend());
+        $backend = str_replace('Zend_Cache_Backend_', '', $backend);
+
+        $info['backend'] = $backend;
 
         return $info;
     }
 
     /**
-     * Returns cache information
+     * Returns template cache information
      *
      * @return array
      */
@@ -254,7 +289,21 @@ class CacheManager
     {
         $dir = $this->container->getParameter('shopware.template.compileDir');
         $info = $this->getDirectoryInfo($dir);
-        $info['name'] = 'Smarty templates';
+        $info['name'] = 'Shopware templates';
+
+        return $info;
+    }
+
+    /**
+     * Returns template cache information
+     *
+     * @return array
+     */
+    public function getThemeCacheInfo()
+    {
+        $dir = $this->container->get('theme_path_resolver')->getCacheDirectory();
+        $info = $this->getDirectoryInfo($dir);
+        $info['name'] = 'Shopware theme';
 
         return $info;
     }
@@ -347,6 +396,10 @@ class CacheManager
                 continue;
             }
 
+            if (!$entry->isFile()) {
+                continue;
+            }
+
             $info['size'] += $entry->getSize();
             $info['files']++;
         }
@@ -378,6 +431,9 @@ class CacheManager
             if ($path->isDir()) {
                 rmdir($path->__toString());
             } else {
+                if (!$path->isFile()) {
+                    continue;
+                }
                 unlink($path->__toString());
             }
         }

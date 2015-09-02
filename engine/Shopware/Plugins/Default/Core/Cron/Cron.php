@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -46,16 +46,7 @@ class Shopware_Controllers_Backend_Cron extends Enlight_Controller_Action
         $cronManager = Shopware()->Cron();
 
         set_time_limit(0);
-
         while (($job = $cronManager->getNextJob()) !== null) {
-
-            // Fix cron action name
-            $action = $job->getAction();
-            if (strpos($action, 'Shopware_') !== 0) {
-                $action = str_replace(' ', '', ucwords(str_replace('_', ' ', $job->getAction())));
-                $job->setAction('Shopware_CronJob_' . $action);
-            }
-
             echo "Processing " . $job->getName() . "\n";
             $cronManager->runJob($job);
         }

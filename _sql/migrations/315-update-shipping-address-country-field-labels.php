@@ -1,7 +1,7 @@
 <?php
 class Migrations_Migration315 Extends Shopware\Components\Migrations\AbstractMigration
 {
-    public function up()
+    public function up($modus)
     {
         $sql = <<<'EOD'
             SET @elementId = (SELECT id FROM s_core_config_elements WHERE name = 'countryshipping' LIMIT 1);

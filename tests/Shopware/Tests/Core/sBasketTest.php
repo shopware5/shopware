@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -21,7 +21,6 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-
 class sBasketTest extends PHPUnit_Framework_TestCase
 {
     /**
@@ -58,7 +57,6 @@ class sBasketTest extends PHPUnit_Framework_TestCase
 
         Shopware()->Front()->setRequest(new Enlight_Controller_Request_RequestHttp());
 
-        $this->module->sSYSTEM->sLanguage = 2;
         $this->snippetManager = Shopware()->Snippets();
         $this->db = Shopware()->Db();
         $this->module = Shopware()->Modules()->Basket();
@@ -122,7 +120,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
         // Check that basket is valid
         $inStockArticle = $this->db->fetchRow(
             'SELECT * FROM s_articles_details detail
-            LEFT JOIN s_articles article
+            INNER JOIN s_articles article
               ON article.id = detail.articleID
             WHERE detail.instock > 2
             AND detail.active = 1
@@ -154,7 +152,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
         // Check that basket is invalid
         $outStockArticle = $this->db->fetchRow(
             'SELECT * FROM s_articles_details detail
-            LEFT JOIN s_articles article
+            INNER JOIN s_articles article
               ON article.id = detail.articleID
             WHERE detail.instock > 2
             AND detail.active = 1
@@ -194,7 +192,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
         // Check that basket is valid
         $ignoreStockArticle = $this->db->fetchRow(
             'SELECT * FROM s_articles_details detail
-            LEFT JOIN s_articles article
+            INNER JOIN s_articles article
               ON article.id = detail.articleID
             WHERE detail.active = 1
             AND article.laststock = 0
@@ -251,7 +249,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
             'SELECT detail.articleID AS articleID, detail.ordernumber AS ordernumber,
               article.supplierID AS supplierID
             FROM s_articles_details detail
-            LEFT JOIN s_articles article
+            INNER JOIN s_articles article
               ON article.id = detail.articleID
             WHERE detail.active = 1
             AND detail.ordernumber IS NOT NULL
@@ -261,7 +259,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
             'SELECT detail.articleID AS articleID, detail.ordernumber AS ordernumber,
               article.supplierID AS supplierID
             FROM s_articles_details detail
-            LEFT JOIN s_articles article
+            INNER JOIN s_articles article
               ON article.id = detail.articleID
             WHERE detail.active = 1
             AND supplierID <> ?
@@ -395,7 +393,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
 
         $normalArticle = $this->db->fetchRow(
             'SELECT * FROM s_articles_details detail
-            LEFT JOIN s_articles article
+            INNER JOIN s_articles article
               ON article.id = detail.articleID
             WHERE detail.active = 1
             AND detail.articleId NOT IN (
@@ -407,7 +405,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
         $premiumArticleOne = $this->db->fetchRow(
             'SELECT article.id, detail.ordernumber
             FROM s_articles_details detail
-            LEFT JOIN s_articles article
+            INNER JOIN s_articles article
               ON article.id = detail.articleID
             WHERE detail.active = 1
             AND detail.ordernumber NOT IN (
@@ -418,7 +416,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
         $premiumArticleTwo = $this->db->fetchRow(
             'SELECT article.id, detail.ordernumber
             FROM s_articles_details detail
-            LEFT JOIN s_articles article
+            INNER JOIN s_articles article
               ON article.id = detail.articleID
             WHERE detail.active = 1
             AND detail.ordernumber IN (
@@ -548,7 +546,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
 
         $randomArticle = $this->db->fetchRow(
             'SELECT * FROM s_articles_details detail
-            LEFT JOIN s_articles article
+            INNER JOIN s_articles article
               ON article.id = detail.articleID
             WHERE detail.active = 1
             ORDER BY RAND() LIMIT 1'
@@ -659,7 +657,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
         // Add one article to the basket with enough value to use discount
         $randomArticle = $this->db->fetchRow(
             'SELECT * FROM s_articles_details detail
-            LEFT JOIN s_articles article
+            INNER JOIN s_articles article
               ON article.id = detail.articleID
             WHERE detail.active = 1
             ORDER BY RAND() LIMIT 1'
@@ -794,7 +792,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
         // Add one article to the basket with enough value to use discount
         $randomArticle = $this->db->fetchRow(
             'SELECT * FROM s_articles_details detail
-            LEFT JOIN s_articles article
+            INNER JOIN s_articles article
               ON article.id = detail.articleID
             WHERE detail.active = 1
             ORDER BY RAND() LIMIT 1'
@@ -889,7 +887,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
         // Add one article to the basket with enough value to use discount
         $randomArticle = $this->db->fetchRow(
             'SELECT * FROM s_articles_details detail
-            LEFT JOIN s_articles article
+            INNER JOIN s_articles article
               ON article.id = detail.articleID
             WHERE detail.active = 1
             ORDER BY RAND() LIMIT 1'
@@ -905,8 +903,9 @@ class sBasketTest extends PHPUnit_Framework_TestCase
             )
         );
 
-        // Change current subshop, test and expect success
-        $this->module->sSYSTEM->sSubShop["id"] = 3;
+        // Change current subshop id, test and expect success
+        Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext()->getShop()->setId(3);
+
         $previousAmount = $this->module->sGetAmount();
         // Test with one-time code, success
         $this->assertTrue($this->module->sAddVoucher($voucherData['vouchercode']));
@@ -992,7 +991,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
         // Add one article to the basket with enough value to use discount
         $randomArticle = $this->db->fetchRow(
             'SELECT * FROM s_articles_details detail
-            LEFT JOIN s_articles article
+            INNER JOIN s_articles article
               ON article.id = detail.articleID
             WHERE detail.active = 1
             ORDER BY RAND() LIMIT 1'
@@ -1009,7 +1008,8 @@ class sBasketTest extends PHPUnit_Framework_TestCase
         );
 
         // Change current subshop, test and expect success
-        $this->module->sSYSTEM->sSubShop["id"] = 3;
+        Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext()->getShop()->setId(3);
+
         $previousAmount = $this->module->sGetAmount();
         // Test with one-time code, success
         $this->assertTrue($this->module->sAddVoucher($voucherOneData['vouchercode']));
@@ -1085,7 +1085,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
         // Add one article to the basket with enough value to use discount
         $randomArticle = $this->db->fetchRow(
             'SELECT * FROM s_articles_details detail
-            LEFT JOIN s_articles article
+            INNER JOIN s_articles article
               ON article.id = detail.articleID
             WHERE detail.active = 1
             ORDER BY RAND() LIMIT 1'
@@ -1147,7 +1147,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
     {
         $randomArticles = $this->db->fetchAll(
             'SELECT * FROM s_articles_details detail
-            LEFT JOIN s_articles article
+            INNER JOIN s_articles article
               ON article.id = detail.articleID
             WHERE detail.active = 1
             ORDER BY RAND() LIMIT 2'
@@ -1235,14 +1235,14 @@ class sBasketTest extends PHPUnit_Framework_TestCase
     {
         $randomArticleOne = $this->db->fetchRow(
             'SELECT * FROM s_articles_details detail
-            LEFT JOIN s_articles article
+            INNER JOIN s_articles article
               ON article.id = detail.articleID
             WHERE detail.active = 1
             ORDER BY RAND() LIMIT 1'
         );
         $randomArticleTwo = $this->db->fetchRow(
             'SELECT * FROM s_articles_details detail
-            LEFT JOIN s_articles article
+            INNER JOIN s_articles article
               ON article.id = detail.articleID
             WHERE detail.active = 1
             AND supplierID <> ?
@@ -1341,7 +1341,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
     {
         $randomArticles = $this->db->fetchAll(
             'SELECT * FROM s_articles_details detail
-            LEFT JOIN s_articles article
+            INNER JOIN s_articles article
               ON article.id = detail.articleID
             WHERE detail.active = 1
             ORDER BY RAND() LIMIT 2'
@@ -1438,7 +1438,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
         // Add one article to the basket with enough value to use discount
         $randomArticle = $this->db->fetchRow(
             'SELECT * FROM s_articles_details detail
-            LEFT JOIN s_articles article
+            INNER JOIN s_articles article
               ON article.id = detail.articleID
             WHERE detail.active = 1
             ORDER BY RAND() LIMIT 1'
@@ -1503,7 +1503,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
         // Add one article to the basket with value lower that minimumordersurcharge
         $randomArticle = $this->db->fetchRow(
             'SELECT * FROM s_articles_details detail
-            LEFT JOIN s_articles article
+            INNER JOIN s_articles article
               ON article.id = detail.articleID
             WHERE detail.active = 1
             ORDER BY RAND() LIMIT 1'
@@ -1598,7 +1598,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
         // Add one article to the basket with low amount
         $randomArticle = $this->db->fetchRow(
             'SELECT * FROM s_articles_details detail
-            LEFT JOIN s_articles article
+            INNER JOIN s_articles article
               ON article.id = detail.articleID
             WHERE detail.active = 1
             ORDER BY RAND() LIMIT 1'
@@ -1664,7 +1664,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
         // Add one article to the basket with low amount
         $randomArticle = $this->db->fetchRow(
             'SELECT * FROM s_articles_details detail
-            LEFT JOIN s_articles article
+            INNER JOIN s_articles article
               ON article.id = detail.articleID
             WHERE detail.active = 1
             ORDER BY RAND() LIMIT 1'
@@ -1711,9 +1711,6 @@ class sBasketTest extends PHPUnit_Framework_TestCase
             'useragent',
             'config',
             'currencyFactor',
-            'liveshoppingID',
-            'bundleID',
-            'bundle_join_ordernumber',
             'packunit',
             'minpurchase',
             'taxID',
@@ -1745,7 +1742,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
             'linkNote',
             'tax',
         );
-        
+
         $result = $this->module->sGetBasket();
         $this->assertEquals($keys, array_keys($result));
         $this->assertGreaterThanOrEqual(1, count($result['content']));
@@ -1772,10 +1769,11 @@ class sBasketTest extends PHPUnit_Framework_TestCase
         $randomArticle = $this->db->fetchRow(
             'SELECT detail.id, detail.articleID, article.name, detail.ordernumber
             FROM s_articles_details detail
-            LEFT JOIN s_articles article
+            INNER JOIN s_articles article
               ON article.id = detail.articleID
             WHERE detail.active = 1
             AND ordernumber IS NOT NULL
+            AND article.name IS NOT NULL
             ORDER BY RAND() LIMIT 1'
         );
 
@@ -1838,7 +1836,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
         $randomArticleTwo = $this->db->fetchRow(
             'SELECT detail.articleID, article.name, detail.ordernumber
             FROM s_articles_details detail
-            LEFT JOIN s_articles article
+            INNER JOIN s_articles article
               ON article.id = detail.articleID
             WHERE detail.active = 1
             AND detail.id <> ?
@@ -1872,7 +1870,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
         // Get random article that's not in the basket
         $randomNotPresentArticleId = $this->db->fetchOne(
             'SELECT detail.id FROM s_articles_details detail
-            LEFT JOIN s_articles article
+            INNER JOIN s_articles article
               ON article.id = detail.articleID
             WHERE detail.active = 1
             AND detail.id NOT IN (?)
@@ -1922,7 +1920,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
         $randomArticle = $this->db->fetchRow(
             'SELECT detail.articleID, detail.ordernumber
             FROM s_articles_details detail
-            LEFT JOIN s_articles article
+            INNER JOIN s_articles article
               ON article.id = detail.articleID
             WHERE detail.active = 1
             ORDER BY RAND() LIMIT 1'
@@ -1973,17 +1971,17 @@ class sBasketTest extends PHPUnit_Framework_TestCase
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
 
         // Get random non-esd article and add it to the basket
-        $randomNoESDArticle = $this->db->fetchRow(
-            'SELECT detail.ordernumber
+        $randomNoESDArticle = $this->db->fetchRow('
+            SELECT detail.ordernumber
             FROM s_articles_details detail
-            LEFT JOIN s_articles article
+            INNER JOIN s_articles article
               ON article.id = detail.articleID
             LEFT JOIN s_articles_esd esd
               ON esd.articledetailsID = detail.id
             WHERE detail.active = 1
-            AND esd.id IS NULL
-            ORDER BY RAND() LIMIT 1'
-        );
+            AND esd.id IS NULL LIMIT 1
+        ');
+
         $this->assertGreaterThan(0, $this->module->sAddArticle($randomNoESDArticle['ordernumber'], 1));
 
         $this->assertFalse($this->module->sCheckForESD());
@@ -1991,9 +1989,9 @@ class sBasketTest extends PHPUnit_Framework_TestCase
         // Get random esd article
         $randomESDArticle = $this->db->fetchRow(
             'SELECT detail.* FROM s_articles_details detail
-            LEFT JOIN s_articles article
+            INNER JOIN s_articles article
               ON article.id = detail.articleID
-            LEFT JOIN s_articles_esd esd
+            INNER JOIN s_articles_esd esd
               ON esd.articledetailsID = detail.id
             WHERE esd.id IS NOT NULL
             ORDER BY RAND() LIMIT 1'
@@ -2045,7 +2043,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
         // Get random article and add it to the basket
         $randomArticle = $this->db->fetchRow(
             'SELECT detail.* FROM s_articles_details detail
-            LEFT JOIN s_articles article
+            INNER JOIN s_articles article
               ON article.id = detail.articleID
             LEFT JOIN s_articles_avoid_customergroups avoid
               ON avoid.articleID = article.id
@@ -2121,7 +2119,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
         // Get random article with stock controll and add it to the basket
         $randomArticleOne = $this->db->fetchRow(
             'SELECT detail.* FROM s_articles_details detail
-            LEFT JOIN s_articles article
+            INNER JOIN s_articles article
               ON article.id = detail.articleID
             LEFT JOIN s_articles_avoid_customergroups avoid
               ON avoid.articleID = article.id
@@ -2165,7 +2163,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
         // Get random article and add it to the basket
         $randomArticleTwo = $this->db->fetchRow(
             'SELECT detail.* FROM s_articles_details detail
-            LEFT JOIN s_articles article
+            INNER JOIN s_articles article
               ON article.id = detail.articleID
             WHERE detail.active = 1
             AND laststock = 0

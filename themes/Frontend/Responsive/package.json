@@ -1,0 +1,26 @@
+{
+  "name": "SwagResponsiveTheme",
+  "version": "1.0.0",
+  "description": "A responsive theme for Shopware",
+  "keywords": [
+    "responsive",
+    "theme",
+    "shopware"
+  ],
+  "private": true,
+  "author": "shopware AG <info@shopware.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shopware/shopware"
+  },
+  "bugs": {
+    "url": "http://jira.shopware.de/"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "bower": "latest",
+    "grunt": "^0.4.5",
+    "grunt-bower-task": "^0.4.0",
+    "grunt-contrib-clean": "^0.6.0"
+  }
+}

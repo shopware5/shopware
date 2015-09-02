@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -168,7 +168,7 @@ class QueryBuilder extends BaseQueryBuilder
                 continue;
             }
 
-            $parameterKey = str_replace(array('.'), array('_') , $exprKey) . uniqid();
+            $parameterKey = str_replace(array('.'), array('_'), $exprKey) . uniqid();
             if (isset($this->alias) && strpos($exprKey, '.') === false) {
                 $exprKey = $this->alias . '.' . $exprKey;
             }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,15 +32,15 @@ namespace Shopware\Recovery\Common\DependencyInjection;
 abstract class Container implements ContainerInterface
 {
     /**
-     * @var \Pimple
+     * @var \Pimple\Container
      */
     protected $pimple;
 
     /**
-     * @param \Pimple $pimple
-     * @param array   $config
+     * @param \Pimple\Container $pimple
+     * @param array             $config
      */
-    public function __construct(\Pimple $pimple, $config)
+    public function __construct(\Pimple\Container $pimple, $config)
     {
         $this->pimple = $pimple;
         $this->pimple['config'] = $config;
@@ -49,9 +49,9 @@ abstract class Container implements ContainerInterface
     }
 
     /**
-     * @param \Pimple $pimple
+     * @param \Pimple\Container $pimple
      */
-    abstract public function setup(\Pimple $pimple);
+    abstract public function setup(\Pimple\Container $pimple);
 
     /**
      * Sets a service.

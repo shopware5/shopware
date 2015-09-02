@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -99,7 +99,7 @@ abstract class Adapter implements SeekableIterator, Countable
         if (!$this->valid()) {
             return false;
         }
-        $result = array($this->key(), $this->current());
+        $result = [$this->key(), $this->current()];
         $this->next();
 
         return $result;

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -22,40 +22,53 @@
  * our trademarks remain entirely with us.
  */
 
-
 namespace Shopware\Recovery\Update\DependencyInjection;
 
 use Shopware\Components\Migrations\Manager as MigrationManager;
 use Shopware\Recovery\Common\DependencyInjection\Container as BaseContainer;
-use Shopware\Recovery\Common\Dump;
+use Shopware\Recovery\Common\DumpIterator;
+use Shopware\Recovery\Common\HttpClient\CurlClient;
+use Shopware\Recovery\Common\SystemLocker;
+use Shopware\Recovery\Update\CleanupFilesFinder;
 use Shopware\Recovery\Update\Controller\BatchController;
+use Shopware\Recovery\Update\Controller\CleanupController;
+use Shopware\Recovery\Update\Controller\RequirementsController;
+use Shopware\Recovery\Update\DummyPluginFinder;
 use Shopware\Recovery\Update\FilesystemFactory;
 use Shopware\Recovery\Update\PathBuilder;
+use Shopware\Recovery\Update\PluginCheck;
+use Shopware\Recovery\Update\StoreApi;
 use Shopware\Recovery\Update\Utils;
 
 class Container extends BaseContainer
 {
     /**
-     * @param \Pimple $pimple
+     * @param \Pimple\Container $container
      */
-    public function setup(\Pimple $pimple)
+    public function setup(\Pimple\Container $container)
     {
         $me = $this;
 
-        $pimple['db'] = function () use ($me) {
+        $container['shopware.version'] = function () use ($me) {
+            $version = trim(file_get_contents(UPDATE_ASSET_PATH . '/version'));
+
+            return $version;
+        };
+
+        $container['db'] = function () use ($me) {
             $conn = Utils::getConnection(SW_PATH);
 
             return $conn;
         };
 
-        $pimple['filesystem.factory'] = function () use ($me) {
+        $container['filesystem.factory'] = function () use ($me) {
             $updateConfig = $me->getParameter('update.config');
-            $ftp = (isset($updateConfig['ftp_credentials'])) ? $updateConfig['ftp_credentials'] : array();
+            $ftp = (isset($updateConfig['ftp_credentials'])) ? $updateConfig['ftp_credentials'] : [];
 
             return new FilesystemFactory(SW_PATH, $ftp);
         };
 
-        $pimple['path.builder'] = function () use ($me) {
+        $container['path.builder'] = function () use ($me) {
             $baseDir   = SW_PATH;
             $updateDir = UPDATE_FILES_PATH;
             $backupDir = SW_PATH . '/files/backup';
@@ -63,7 +76,7 @@ class Container extends BaseContainer
             return new PathBuilder($baseDir, $updateDir, $backupDir);
         };
 
-        $pimple['migration.manager'] = function () use ($me) {
+        $container['migration.manager'] = function () use ($me) {
             $migrationPath = UPDATE_ASSET_PATH . '/migrations/';
             $db = $me->get('db');
 
@@ -72,7 +85,7 @@ class Container extends BaseContainer
             return $migrationManger;
         };
 
-        $pimple['dump'] = function () use ($me) {
+        $container['dump'] = function () use ($me) {
             $snippetsSql = UPDATE_ASSET_PATH . '/snippets.sql';
             $snippetsSql = file_exists($snippetsSql) ? $snippetsSql :null;
 
@@ -80,10 +93,10 @@ class Container extends BaseContainer
                 return null;
             }
 
-            return new Dump($snippetsSql);
+            return new DumpIterator($snippetsSql);
         };
 
-        $pimple['app'] = function () use ($me) {
+        $container['app'] = function () use ($me) {
             $slimOptions = $me->getParameter('slim');
             $slim = new \Slim\Slim($slimOptions);
 
@@ -93,11 +106,63 @@ class Container extends BaseContainer
             return $slim;
         };
 
-       $pimple['controller.batch'] = function () use ($me) {
+        $container['http-client'] = function () {
+            return new CurlClient();
+        };
+
+        $container['store.api'] = function () use ($me) {
+            return new StoreApi(
+                $me->get('http-client'),
+                $me->getParameter('storeapi.endpoint')
+            );
+        };
+
+        $container['plugin.check'] = function () use ($me) {
+            return new PluginCheck(
+                $me->get('store.api'),
+                $me->get('db'),
+                $me->get('shopware.version')
+            );
+        };
+
+        $container['dummy.plugin.finder'] = function () {
+            return new DummyPluginFinder(SW_PATH);
+        };
+
+        $container['cleanup.files.finder'] = function () {
+            return new CleanupFilesFinder(SW_PATH);
+        };
+
+        $container['system.locker'] = function () {
+            return new SystemLocker(
+                SW_PATH . '/recovery/install/data/install.lock'
+            );
+        };
+
+        $container['controller.batch'] = function () use ($me) {
             return new BatchController(
                 $me->get('slim.request'),
                 $me->get('slim.response'),
                 $me
+            );
+        };
+
+        $container['controller.requirements'] = function () use ($me) {
+            return new RequirementsController(
+                $me->get('slim.request'),
+                $me->get('slim.response'),
+                $me,
+                $me->get('app')
+            );
+        };
+
+        $container['controller.cleanup'] = function () use ($me) {
+            return new CleanupController(
+                $me->get('slim.request'),
+                $me->get('slim.response'),
+                $me->get('dummy.plugin.finder'),
+                $me->get('cleanup.files.finder'),
+                $me->get('app')
             );
         };
     }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,8 +23,9 @@
  */
 
 namespace   Shopware\Models\Banner;
-use         Shopware\Components\Model\ModelEntity,
-            Doctrine\ORM\Mapping AS ORM;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Banner Model
@@ -138,15 +139,6 @@ class Banner extends ModelEntity
      * @ORM\Column(name="extension", type="string", length=25, nullable=false)
      */
     private $extension;
-
-    /**
-     * The id which links the banner to a live shopping event.
-     *
-     * @var integer $liveShoppingId
-     * @deprecated
-     * @ORM\Column(name="liveshoppingID", type="integer", nullable=false)
-     */
-    private $liveShoppingId;
 
     /**
      * INVERSE SIDE
@@ -383,28 +375,6 @@ class Banner extends ModelEntity
     }
 
     /**
-     * Set the live shopping ID
-     *
-     * @param integer $liveShoppingId
-     * @return Banner
-     */
-    public function setLiveShoppingId($liveShoppingId)
-    {
-        $this->liveShoppingId = (int) $liveShoppingId;
-        return $this;
-    }
-
-    /**
-     * Returns the live shopping ID
-     *
-     * @return integer
-     */
-    public function getLiveShoppingId()
-    {
-        return $this->liveShoppingId;
-    }
-
-    /**
      * @return \Shopware\Models\Attribute\Banner
      */
     public function getAttribute()
@@ -420,5 +390,4 @@ class Banner extends ModelEntity
     {
         return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\Banner', 'attribute', 'banner');
     }
-
 }

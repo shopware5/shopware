@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-class sCategoriesTest extends PHPUnit_Framework_TestCase
+class sCategoriesTest extends Enlight_Components_Test_Controller_TestCase
 {
     /**
      * @var sCategories
@@ -67,29 +67,14 @@ class sCategoriesTest extends PHPUnit_Framework_TestCase
         }
     }
 
-    /**
-     * @covers sCategories::sGetMainCategories
-     */
-    public function testsGetMainCategories()
-    {
-        $this->assertEquals(
-            $this->module->sGetMainCategories(),
-            $this->module->sGetCategories(Shopware()->Shop()->get('parentID'))
-        );
-
-        $this->assertNotEquals(
-            $this->module->sGetMainCategories(),
-            $this->module->sGetCategories(5)
-        );
-    }
 
     /**
      * @covers sCategories::sGetCategoryIdByArticleId
      */
     public function testsGetCategoryIdByArticleId()
     {
-        // Known value
-        $this->assertEquals(21, $this->module->sGetCategoryIdByArticleId(2));
+        //first category which assigned to the product 2
+        $this->assertEquals(14, $this->module->sGetCategoryIdByArticleId(2));
 
         // Check that searching in default category or with null is the same
         $this->assertEquals(
@@ -103,9 +88,9 @@ class sCategoriesTest extends PHPUnit_Framework_TestCase
             $this->module->sGetCategoryIdByArticleId(2, 39)
         );
 
-        // Check that searching in subtrees gives different the same results
+        // provide own parent id to filter returned category id
         $this->assertEquals(
-            $this->module->sGetCategoryIdByArticleId(2, Shopware()->Shop()->get('parentID')),
+            21,
             $this->module->sGetCategoryIdByArticleId(2, 10)
         );
 
@@ -197,6 +182,9 @@ class sCategoriesTest extends PHPUnit_Framework_TestCase
      */
     public function testsGetCategoryContent()
     {
+        // Call dispatch as we need the Router to be available inside sCore
+        $this->dispatch('/');
+        
         // Default arguments should work
         $this->assertEquals(
             $this->module->sGetCategoryContent(null),
@@ -212,7 +200,7 @@ class sCategoriesTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('description', $categoryArray);
         $this->assertArrayHasKey('template', $categoryArray);
         $this->assertArrayHasKey('sSelf', $categoryArray);
-        $this->assertArrayHasKey('sSelfCanonical', $categoryArray);
+        $this->assertArrayHasKey('canonicalParams', $categoryArray);
         $this->assertArrayHasKey('atomFeed', $categoryArray);
         $this->assertArrayHasKey('layout', $categoryArray);
 
@@ -236,12 +224,60 @@ class sCategoriesTest extends PHPUnit_Framework_TestCase
         $this->assertCount(0, $this->module->sGetCategoryPath(21, 39));
     }
 
+    /**
+     * Test the sGetWholeCategoryTree method.
+     * This should now only return children when all parents are active
+     * @ticket SW-5098
+     */
+    public function testGetWholeCategoryTree()
+    {
+        //set Category "Tees und Zubehör" to inactive so the childs should not be displayed
+        $sql= "UPDATE `s_categories` SET `active` = '0' WHERE `id` =11";
+        Shopware()->Db()->exec($sql);
+
+        $allCategories = $this->module->sGetWholeCategoryTree(3,3);
+
+        //get "Genusswelten" this category should not have the inactive category "Tees and Zubehör" as subcategory
+        $category = $this->getCategoryById($allCategories, 5);
+        //search for Tees und Zubehör
+        $result = $this->getCategoryById($category["sub"],11);
+        $this->assertEmpty($result);
+
+
+        //if the parent category is inactive the child's should not be displayed
+        //category = "Genusswelten" the active child "Tees" and "Tees und Zubehör" should not be return because the father ist inactive
+        $result = $this->getCategoryById($category["sub"],12);
+        $this->assertEmpty($result);
+
+        $result = $this->getCategoryById($category["sub"],13);
+        $this->assertEmpty($result);
+
+        //set Category "Tees und Zubehör" to inactive so the childs should not be displayed
+        $sql= "UPDATE `s_categories` SET `active` = '1' WHERE `id` = 11";
+        Shopware()->Db()->exec($sql);
+    }
+
+    /**
+     * Returns a category by the category id
+     *
+     * @param $allCategories
+     * @param $categoryId
+     * @return category
+     */
+    private function getCategoryById($allCategories, $categoryId) {
+
+        foreach ($allCategories as $category) {
+            if($category["id"] == $categoryId) {
+                return $category;
+            }
+        }
+        return null;
+    }
+
     private function validateCategory($categoryArray, $subcategoriesIndex = null)
     {
         $this->assertArrayHasKey('id', $categoryArray);
-        $this->assertArrayHasKey('parentId', $categoryArray);
         $this->assertArrayHasKey('name', $categoryArray);
-        $this->assertArrayHasKey('position', $categoryArray);
         $this->assertArrayHasKey('active', $categoryArray);
         $this->assertArrayHasKey('description', $categoryArray);
         $this->assertArrayHasKey('link', $categoryArray);

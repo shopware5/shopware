@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -24,6 +24,7 @@
 
 namespace Shopware\Recovery\Update\Steps;
 
+use Shopware\Components\Migrations\AbstractMigration;
 use Shopware\Components\Migrations\Manager;
 
 class MigrationStep
@@ -65,21 +66,21 @@ class MigrationStep
         }
 
         try {
-            $this->migrationManager->apply($migration);
+            $this->migrationManager->apply($migration, AbstractMigration::MODUS_UPDATE);
         } catch (\Exception $e) {
             $reflection = new \ReflectionClass(get_class($migration));
             $classFile = $reflection->getFileName();
 
-            return new ErrorResult($e->getMessage(), $e,  array(
+            return new ErrorResult($e->getMessage(), $e,  [
                 'deltaFile'    => $classFile,
                 'deltaVersion' => $migration->getVersion(),
                 'deltaLabel'   => $migration->getLabel()
-            ));
+            ]);
         }
 
-        return new ValidResult($offset+1, $totalCount, array(
+        return new ValidResult($offset+1, $totalCount, [
             'deltaVersion' => $migration->getVersion(),
             'deltaLabel'   => $migration->getLabel()
-        ));
+        ]);
     }
 }

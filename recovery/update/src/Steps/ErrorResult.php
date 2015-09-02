@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -46,7 +46,7 @@ class ErrorResult
      * @param \Exception $exception
      * @param array      $args
      */
-    public function __construct($message, \Exception $exception = null, $args = array())
+    public function __construct($message, \Exception $exception = null, $args = [])
     {
         $this->message   = $message;
         $this->exception = $exception;

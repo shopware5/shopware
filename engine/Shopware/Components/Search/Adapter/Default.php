@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -28,6 +28,7 @@
  * @category  Shopware
  * @package   Shopware\Components\Search\Adapter
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
+ * @deprecated Use \Shopware\Bundle\SearchBundle\ProductNumberSearch, will be removed in SW 5.1
  */
 class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Search_Adapter_Abstract
 {
@@ -187,10 +188,16 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
     protected $requestResultsPerPage;
 
     /**
-     * Id of main category of current shop object
+     * Id of language of current shop
      * @var int
      */
     protected $requestShopLanguageId;
+
+    /**
+     * Id of language fallback of current shop
+     * @var int
+     */
+    protected $requestShopLanguageFallbackId;
 
     /**
      * Has the current shop object translations
@@ -331,11 +338,11 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
     protected function initConfigurationDeprecatedPriceFilter($oldConfiguration)
     {
         if (!empty($oldConfiguration["sFUZZYSEARCHSELECTPERPAGE"])) {
-            $this->configSearchSelectPerPage = preg_split('/[^0-9]/', (string) $oldConfiguration["sFUZZYSEARCHSELECTPERPAGE"], -1, PREG_SPLIT_NO_EMPTY);
+            $this->configSearchSelectPerPage = preg_split('/[^0-9]/', (string)$oldConfiguration["sFUZZYSEARCHSELECTPERPAGE"], -1, PREG_SPLIT_NO_EMPTY);
         }
 
         if (!empty($oldConfiguration["sFUZZYSEARCHPRICEFILTER"])) {
-            $sPriceFilter = preg_split('/[^0-9]/', (string) $oldConfiguration["sFUZZYSEARCHPRICEFILTER"], -1, PREG_SPLIT_NO_EMPTY);
+            $sPriceFilter = preg_split('/[^0-9]/', (string)$oldConfiguration["sFUZZYSEARCHPRICEFILTER"], -1, PREG_SPLIT_NO_EMPTY);
             $tmp = array();
             $last = 0;
             foreach ($sPriceFilter as $key => $price) {
@@ -352,7 +359,7 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
      */
     public function validateCache($configuration = array(), $force = false)
     {
-        $interval = (empty($this->configSearchCache) || $this->configSearchCache < 360) ? 86400 : (int) $this->configSearchCache;
+        $interval = (empty($this->configSearchCache) || $this->configSearchCache < 360) ? 86400 : (int)$this->configSearchCache;
         $sql = '
             SELECT NOW() as current, cf.value as last,
             (SELECT 1 FROM s_search_index LIMIT 1) as not_force
@@ -403,7 +410,6 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
      */
     public function searchMatchingKeywords($term)
     {
-
         $id = 'Shopware_Modules_Search_' . $term;
         $cache = $this->cache;
 
@@ -435,15 +441,22 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
 
             $relevance = 0;
 
-            if ($term1 === $term2) { // Terms are similar
+            if ($term1 === $term2) {
+                // Terms are similar
+
                 $relevance = $this->configSearchExactMatchFactor;
-            } elseif (strpos($term1, $term2) !== false) { // Check for sub term matching
-                if (strlen($term1) < 4)
+            } elseif (strpos($term1, $term2) !== false) {
+                // Check for sub term matching
+
+                if (strlen($term1) < 4) {
                     $relevance = $this->configSearchMatchFactor;
-                elseif (strlen($term1) - strlen($term2) <= 1) //ipod === ipods
+                } elseif (strlen($term1) - strlen($term2) <= 1) {
+                    //ipod === ipods
                     $relevance = $this->configSearchExactMatchFactor;
-                elseif ((round(strlen($term2) / strlen($term1), 2) * 100) >= $this->configSearchPartNameDistance) //digital == digi
+                } elseif ((round(strlen($term2) / strlen($term1), 2) * 100) >= $this->configSearchPartNameDistance) {
+                    //digital == digi
                     $relevance = $this->configSearchPatternMatchFactor;
+                }
             }
 
             if (!empty($relevance)) {
@@ -511,7 +524,23 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
         return '
                 LEFT JOIN s_articles_translations AS at
                 ON a.id=at.articleID
-                AND at.languageID=' . (int) $shopId . '
+                AND at.languageID=' . (int)$shopId . '
+               ';
+    }
+
+    /**
+     * Add a second translation table as join in query
+     * Used to handle fallback language
+     *
+     * @param int $fallbackId
+     * @return string
+     */
+    public function getSearchTranslationFallbackSql(int $fallbackId)
+    {
+        return '
+                LEFT JOIN s_articles_translations AS fat
+                ON a.id=fat.articleID
+                AND fat.languageID=' . (int) $fallbackId . '
                ';
     }
 
@@ -584,7 +613,6 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
         static $tables;
 
         if (empty($tables)) {
-
             $tables = $this->database->fetchAll("
                 SELECT STRAIGHT_JOIN
                     st.id as tableID,
@@ -722,13 +750,14 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
         // Strip out search results that does not have much relevance
         if (!empty($this->configSearchMinDistanceOnTop)) {
             $minimumRelevance = $max_relevance / 100 * $this->configSearchMinDistanceOnTop;
-            if (!empty($minimumRelevance))
-                $sqlWhere .= ' AND relevance>=' . (int) $minimumRelevance;
+            if (!empty($minimumRelevance)) {
+                $sqlWhere .= ' AND relevance>=' . (int)$minimumRelevance;
+            }
         }
 
         // Filter search results for supplier
         if (!empty($this->requestFilter["supplier"])) {
-            $sqlWhere .= ' AND a.supplierID=' . (int) $this->requestFilter["supplier"];
+            $sqlWhere .= ' AND a.supplierID=' . (int)$this->requestFilter["supplier"];
         }
         return $sqlWhere;
     }
@@ -752,8 +781,8 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
                 }
             }
 
-            $sqlHaving .= ' HAVING price>=' . (float) $filterPrice['start'];
-            $sqlHaving .= ' AND price<' . (float) $filterPrice['end'];
+            $sqlHaving .= ' HAVING price>=' . (float)$filterPrice['start'];
+            $sqlHaving .= ' AND price<' . (float)$filterPrice['end'];
         }
         return $sqlHaving;
     }
@@ -864,7 +893,7 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
         // Find keywords matching term
         $this->searchFindKeywords($term);
 
-        // Get sql part to support multilanguage environments
+        // Get sql part to support multi language environments
         $sqlTranslationTableStatement = null;
         $sqlNameField = 'a.name';
         $sqlDescriptionField = 'IF(TRIM(a.description)!=\'\',a.description,a.description_long)';
@@ -872,8 +901,14 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
         // Shop has possibly translations
         if ($this->requestShopHasTranslations == true) {
             $sqlTranslationTableStatement = $this->getSearchTranslationSql($this->requestShopLanguageId);
-            $sqlNameField = 'IF(at.name IS NULL OR at.name=\'\',a.name,at.name)';
-            $sqlDescriptionField = 'IF(at.description_long IS NULL OR at.description_long=\'\',IF(TRIM(a.description)!=\'\',a.description,a.description_long),IF(TRIM(at.description)=\'\',at.description_long,at.description))';
+            if ($this->requestShopLanguageFallbackId) {
+                $sqlTranslationTableStatement .= $this->getSearchTranslationFallbackSql($this->requestShopLanguageFallbackId);
+                $sqlNameField = 'IF(at.name > \'\', at.name, IF(fat.name > \'\', fat.name, a.name))';
+                $sqlDescriptionField = 'IF(at.description_long > \'\', IF(TRIM(at.description)=\'\',at.description_long,at.description), IF(fat.description_long > \'\', IF(TRIM(fat.description)=\'\',fat.description_long,fat.description), IF(TRIM(a.description)!=\'\',a.description,a.description_long)))';
+            } else {
+                $sqlNameField = 'IF(at.name > \'\', at.name, a.name)';
+                $sqlDescriptionField = 'IF(at.description_long > \'\', IF(TRIM(at.description)=\'\',at.description_long,at.description), IF(TRIM(a.description)!=\'\',a.description,a.description_long))';
+            }
         }
 
         // Get sql part for selecting keywords in search query
@@ -916,9 +951,9 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
         // Filter search results for category
 
         if (!empty($this->requestFilter["category"])) {
-            $this->getResult()->setCurrentCategoryFilter((int) $this->requestFilter["category"]);
+            $this->getResult()->setCurrentCategoryFilter((int)$this->requestFilter["category"]);
         } else {
-            $this->getResult()->setCurrentCategoryFilter((int) $this->requestRestrictSearchResultsToCategory);
+            $this->getResult()->setCurrentCategoryFilter((int)$this->requestRestrictSearchResultsToCategory);
         }
 
         // Build final sql query and execute
@@ -937,13 +972,14 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
         $traceSearch = Shopware()->Config()->get('traceSearch', true);
         if (empty($this->requestSuggestSearch) && $traceSearch) {
             $sql = '
-              INSERT INTO s_statistics_search (datum, searchterm, results)
-                VALUES (NOW(), ?, ?)
+              INSERT INTO s_statistics_search (datum, searchterm, results, shop_id)
+                VALUES (NOW(), ?, ?, ?)
             ';
             Shopware()->Db()->query($sql, array(
-                $term,
-                empty($searchResultsFinal) ? 0 : count($searchResultsFinal)
-            ));
+                    $term,
+                    empty($searchResultsFinal) ? 0 : count($searchResultsFinal),
+                    Shopware()->Shop()->getId()
+                ));
         }
 
         // If no results return false
@@ -1046,10 +1082,11 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
         foreach ($filterPrice as $key => $filter) {
             foreach ($searchResult as $article) {
                 if ($article['price'] >= $filter['start'] && $article['price'] < $filter['end']) {
-                    if (isset($searchResultPriceFilters[$key]))
+                    if (isset($searchResultPriceFilters[$key])) {
                         $searchResultPriceFilters[$key]++;
-                    else
+                    } else {
                         $searchResultPriceFilters[$key] = 1;
+                    }
                 }
             }
         }
@@ -1188,7 +1225,9 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
                 // Build sql query to fetch values from this table
                 $sql = 'SELECT ' . $table['elementID'] . ' as id, ' . $table['fields'] . ' FROM ' . $table['table'];
                 // If any where condition is set, add to query
-                if (!empty($table['where'])) $sql .= 'WHERE ' . $table['where'];
+                if (!empty($table['where'])) {
+                    $sql .= 'WHERE ' . $table['where'];
+                }
 
                 // Get all fields & values from current table
 
@@ -1285,9 +1324,13 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
         // Parse string into array
         $wordsTmp = preg_split('/ /', $string, -1, PREG_SPLIT_NO_EMPTY);
 
-        if (count($wordsTmp)) $words = array_unique($wordsTmp);
-        elseif (!empty($string)) $words = array($string);
-        else return array();
+        if (count($wordsTmp)) {
+            $words = array_unique($wordsTmp);
+        } elseif (!empty($string)) {
+            $words = array($string);
+        } else {
+            return array();
+        }
 
         // Check if any keyword is on blacklist
         $words = $this->filterBadWordsFromString($words);
@@ -1306,9 +1349,13 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
     {
         static $badWords;
 
-        if (!isset($badWords)) $badWords = preg_split("#[\s,;]+#msi", $this->configSearchBadWords, -1, PREG_SPLIT_NO_EMPTY);
+        if (!isset($badWords)) {
+            $badWords = preg_split("#[\s,;]+#msi", $this->configSearchBadWords, -1, PREG_SPLIT_NO_EMPTY);
+        }
 
-        if (in_array((string) $word, $badWords)) return false;
+        if (in_array((string)$word, $badWords)) {
+            return false;
+        }
         return true;
     }
 
@@ -1320,12 +1367,16 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
      */
     public function filterBadWordsFromString(array $words)
     {
-        if (!count($words) || !is_array($words)) return false;
+        if (!count($words) || !is_array($words)) {
+            return false;
+        }
 
         $result = array();
 
         foreach ($words as $word) {
-            if ($this->filterBadWordFromString($word)) $result[] = $word;
+            if ($this->filterBadWordFromString($word)) {
+                $result[] = $word;
+            }
         }
 
         return $result;
@@ -1340,8 +1391,12 @@ class Shopware_Components_Search_Adapter_Default extends Shopware_Components_Sea
 
         $sql_join = '';
         foreach ($tables as $table) {
-            if (empty($table["foreign_key"])) continue;
-            if (empty($table['referenz_table'])) $table['referenz_table'] = 's_articles';
+            if (empty($table["foreign_key"])) {
+                continue;
+            }
+            if (empty($table['referenz_table'])) {
+                $table['referenz_table'] = 's_articles';
+            }
             $sql_join .= "
                 LEFT JOIN {$table['referenz_table']} t{$table['tableID']}
                 ON si.elementID=t{$table['tableID']}.{$table['foreign_key']}

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Tests_Models_ShopRepositoryTest extends PHPUnit_Framework_TestCase
+class Shopware_Tests_Models_ShopRepositoryTest extends Enlight_Components_Test_Controller_TestCase
 {
     /**
      * Ensures that getActiveByRequest() returns the correct shop
@@ -122,10 +122,11 @@ class Shopware_Tests_Models_ShopRepositoryTest extends PHPUnit_Framework_TestCas
     /**
      * helper method to call the getActiveByRequest Method with different params
      *
-     * @param $request
-     * @param $repository
+     * @param \Enlight_Controller_Request_Request $request
+     * @param \Shopware\Models\Shop\Repository $repository
      * @param $url
      * @param $shopName
+     * @param bool $secure
      * @internal param $mainShop
      */
     public function callGetActiveShopByRequest(Enlight_Controller_Request_Request $request, \Shopware\Models\Shop\Repository $repository, $url, $shopName, $secure = false)
@@ -137,5 +138,65 @@ class Shopware_Tests_Models_ShopRepositoryTest extends PHPUnit_Framework_TestCas
 
         $this->assertNotNull($shop);
         $this->assertEquals($shopName, $shop->getName());
+    }
+
+    public function getMultiShopLocationTestData()
+    {
+        return array(
+            array('test.in', 'fr.test.in'),
+            array('test.in', 'nl.test.in'),
+            array('2test.in', '2fr.test.in'),
+            array('2test.in', '2nl.test.in')
+        );
+    }
+
+    /**
+     * @dataProvider getMultiShopLocationTestData
+     * @ticket SW-4858
+     */
+    public function testMultiShopLocation($host, $alias)
+    {
+        Shopware()->Bootstrap()
+            ->resetResource('Template');
+
+        // Create test shops
+        $sql = "
+            INSERT IGNORE INTO `s_core_shops` (
+              `id`, `main_id`, `name`, `title`, `position`,
+              `host`, `base_path`, `base_url`, `hosts`,
+              `secure`, `secure_host`, `secure_base_path`,
+              `template_id`, `document_template_id`, `category_id`,
+              `locale_id`, `currency_id`, `customer_group_id`,
+              `fallback_id`, `customer_scope`, `default`, `active`
+            ) VALUES (
+              10, NULL, 'Testshop 2', 'Testshop 2', 0,
+              '2test.in', NULL, NULL, '2fr.test.in\\n2nl.test.in\\n',
+              0, NULL, NULL,
+              11, 11, 11, 2, 1, 1, 2, 0, 0, 1
+            ), (
+              11, NULL, 'Testshop 1', 'Testshop 1', 0,
+              'test.in', NULL, NULL, 'fr.test.in\\nnl.test.in\\n',
+              0, NULL, NULL,
+              11, 11, 11, 2, 1, 1, 2, 0, 0, 1
+            );
+        ";
+        Shopware()->Db()->exec($sql);
+
+        $request = $this->Request();
+        $repository = 'Shopware\Models\Shop\Shop';
+        /** @var $repository \Shopware\Models\Shop\Repository */
+        $repository = Shopware()->Models()->getRepository($repository);
+
+        $this->Request()->setHttpHost($alias);
+        $shop = $repository->getActiveByRequest($request);
+
+        $this->assertNotNull($shop);
+        $this->assertEquals($host, $shop->getHost());
+
+        // Delete test shops
+        $sql = "
+            DELETE FROM s_core_shops WHERE id IN (10, 11);
+        ";
+        Shopware()->Db()->exec($sql);
     }
 }

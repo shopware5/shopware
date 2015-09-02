@@ -1,6 +1,6 @@
 <?php
 
-use Behat\Behat\Context\Step;
+namespace Shopware\Tests\Mink;
 
 class FormContext extends SubContext
 {

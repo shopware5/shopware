@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -104,6 +104,8 @@ class Download
     private function verifyHash($partFile, $hash)
     {
         if (sha1_file($partFile->getPathname()) !== $hash) {
+            // try to delete invalid file so a valid one can be downloaded
+            @unlink($partFile->getPathname());
             throw new \Exception("Hash mismatch");
         }
 
@@ -111,12 +113,12 @@ class Download
     }
 
     /**
-     * @param \SplFileObject $partFile
-     * @param string         $destinationUri
+     * @param string partFilePath
+     * @param string $destinationUri
      */
-    private function moveFile(\SplFileObject $partFile, $destinationUri)
+    private function moveFile($partFilePath, $destinationUri)
     {
-        rename($partFile->getPathname(), $destinationUri);
+        rename($partFilePath, $destinationUri);
     }
 
     /**
@@ -143,11 +145,11 @@ class Download
         $size = $partFile->getSize();
         if ($size >= $totalSize) {
             $this->verifyHash($partFile, $hash);
-            $this->moveFile($partFile, $destinationUri);
-
-            # close local file
+            # close local file connections before move for windows
+            $partFilePath = $partFile->getPathname();
             fclose($destination);
             unset($partFile);
+            $this->moveFile($partFilePath, $destinationUri);
 
             return 0;
         }
@@ -159,11 +161,11 @@ class Download
 
         curl_setopt($ch, CURLOPT_RANGE, $range);
         curl_setopt($ch, CURLOPT_URL, $sourceUri);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, false );
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, false);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_BINARYTRANSFER, true );
+        curl_setopt($ch, CURLOPT_BINARYTRANSFER, true);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-        curl_setopt($ch, CURLOPT_NOPROGRESS, FALSE);
+        curl_setopt($ch, CURLOPT_NOPROGRESS, false);
 
         $me = $this;
         curl_setopt($ch, CURLOPT_PROGRESSFUNCTION, function ($ch, $dltotal, $dlnow) use ($me, $size) {
@@ -208,9 +210,14 @@ class Download
 
         clearstatcache(false, $partFile->getPathname());
         $size = $partFile->getSize();
+
         if ($size >= $totalSize) {
             $this->verifyHash($partFile, $hash);
-            $this->moveFile($partFile, $destinationUri);
+            # close local file connections before move for windows
+            $partFilePath = $partFile->getPathname();
+            fclose($destination);
+            unset($partFile);
+            $this->moveFile($partFilePath, $destinationUri);
         }
 
         // close local file

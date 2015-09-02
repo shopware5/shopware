@@ -117,4 +117,12 @@ class Enlight_Controller_Response_ResponseHttp
         $this->sendCookies();
         return parent::sendHeaders();
     }
+
+    /**
+     * @return null
+     */
+    public function unsetExceptions()
+    {
+        $this->_exceptions = array();
+    }
 }

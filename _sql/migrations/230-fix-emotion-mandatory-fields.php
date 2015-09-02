@@ -1,7 +1,7 @@
 <?php
 class Migrations_Migration230 Extends Shopware\Components\Migrations\AbstractMigration
 {
-    public function up()
+    public function up($modus)
     {
         $sql = <<<'EOD'
 SET @parent = (SELECT id FROM `s_library_component` WHERE `x_type`='emotion-components-category-teaser' AND template = 'component_category_teaser' AND pluginID IS NULL LIMIT 1);
