@@ -207,7 +207,7 @@
 
             $el.addClass(opts.itemHoverClass);
 
-            if (me._shouldPrevent) {
+            if (!opts.hoverDelay || me._shouldPrevent) {
                 me.onMouseEnter(event);
             } else if (!me.hoverDelayTimeoutId) {
                 me.hoverDelayTimeoutId = window.setTimeout(function () {
