@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Shopware\Models\Customer\Customer;
 
 /**
  * Account controller
@@ -46,7 +47,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
     public function preDispatch()
     {
         $this->View()->setScope(Enlight_Template_Manager::SCOPE_PARENT);
-        if (!in_array($this->Request()->getActionName(), array('login', 'logout', 'password', 'ajax_login', 'ajax_logout'))
+        if (!in_array($this->Request()->getActionName(), array('login', 'logout', 'password', 'ajax_login', 'ajax_logout', 'resetPassword'))
             && !$this->admin->sCheckUser()) {
             // If using the new template, the 'GET' action will be handled
             // in the Register controller (unified login/register page)
@@ -809,7 +810,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         $this->View()->sTarget = $this->Request()->getParam('sTarget');
 
         if ($this->Request()->isPost()) {
-            $checkUser = $this->sendPassword($this->Request()->getParam('email'));
+            $checkUser = $this->sendResetPasswordConfirmationMail($this->Request()->getParam('email'));
             if (!empty($checkUser['sErrorMessages'])) {
                 $this->View()->sFormData = $this->Request()->getPost();
                 $this->View()->sErrorFlag = $checkUser['sErrorFlag'];
@@ -821,12 +822,11 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
     }
 
     /**
-     * Send new password by email address
-     *
+     * Send a mail asking the customer, if he actually wants to reset his password
      * @param string $email
      * @return array
      */
-    public function sendPassword($email)
+    public function sendResetPasswordConfirmationMail($email)
     {
         $snippets = Shopware()->Snippets()->getNamespace('frontend/account/password');
 
@@ -839,26 +839,188 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
             return array('sErrorMessages' => array($snippets->get('ErrorForgotMailUnknown')));
         }
 
-        $password = \Shopware\Components\Random::getAlphanumericString(
-            (int) Shopware()->Config()->get('minpassword', 6)
-        );
-
-        $encoderName = Shopware()->PasswordEncoder()->getDefaultPasswordEncoderName();
-        $hash     = Shopware()->PasswordEncoder()->encodePassword($password, $encoderName);
-
-        $sql = "UPDATE s_user SET password=?, encoder=?, failedlogins=4, lockeduntil='lockeduntil' WHERE id=?";
-        Shopware()->Db()->query($sql, array($hash, $encoderName, $userID));
+        $hash = \Shopware\Components\Random::getAlphanumericString(32);
 
         $context = array(
-            'sMail'     => $email,
-            'sPassword' => $password,
+            'sUrlReset' => $this->Front()->Router()->assemble(array('controller' => 'account', 'action'=>'resetPassword', 'hash'=>$hash)),
+            'sUrl'      => $this->Front()->Router()->assemble(array('controller' => 'account', 'action'=>'resetPassword')),
+            'sKey'      => $hash
         );
 
-        $mail = Shopware()->TemplateMail()->createMail('sPASSWORD', $context);
+        // Send mail
+        $mail = Shopware()->TemplateMail()->createMail('sCONFIRMPASSWORDCHANGE', $context);
         $mail->addTo($email);
         $mail->send();
 
-        return array('sSuccess' => true);
+        // Add the hash to the optin table
+        $sql = "INSERT INTO `s_core_optin` (`type`, `datum`, `hash`, `data`) VALUES ('password', NOW(), ?, ?)";
+        Shopware()->Db()->query($sql, array($hash, $userID));
+    }
+
+    /**
+     * Shows the reset password form and triggers password reset on submit
+     */
+    public function resetPasswordAction()
+    {
+        $hash = $this->Request()->getParam('hash', null);
+        $newPassword = $this->Request()->getParam('password', null);
+        $passwordConfirmation = $this->Request()->getParam('passwordConfirmation', null);
+
+        $this->View()->hash = $hash;
+
+        if (!$this->Request()->isPost()) {
+            return;
+        }
+
+        list($errors, $errorMessages) = $this->validatePasswordResetForm($hash, $newPassword, $passwordConfirmation);
+
+        if (empty($errors)) {
+            try {
+                $customerModel = $this->resetPassword($hash, $newPassword);
+            } catch(\Exception $e) {
+                $errorMessages[] = $e->getMessage();
+            }
+        }
+
+        if (!empty($errorMessages)) {
+            $this->View()->sErrorFlag = $errors;
+            $this->View()->sErrorMessages = $errorMessages;
+            return;
+        }
+
+        // Perform a login for the user and redirect him to his account
+        $this->admin->sSYSTEM->_POST['email'] = $customerModel->getEmail();
+        $this->admin->sLogin();
+
+        if (!$target = $this->Request()->getParam('sTarget')) {
+            $target = 'account';
+        }
+
+        $this->redirect(array(
+            'controller' => $target,
+            'action' => 'index',
+            'success' => 'resetPassword'
+        ));
+    }
+
+    /**
+     * Validates the data of the password reset form
+     * @param string $hash
+     * @param string $newPassword
+     * @param string $passwordConfirmation
+     * @return array
+     */
+    public function validatePasswordResetForm($hash, $newPassword, $passwordConfirmation)
+    {
+        $errors = array();
+        $errorMessages = array();
+        $resetPasswordNamespace = $this->container->get('snippets')->getNamespace('frontend/account/reset_password');
+        $frontendNamespace = $this->container->get('snippets')->getNamespace('frontend');
+
+        if (empty($hash)) {
+            $errors['hash'] = true;
+            $errorMessages[] = $resetPasswordNamespace->get(
+                'PasswordResetNewLinkError',
+                'Confirmation link not found. Note that the confirmation link is only valid for 2 hours. After that you have to request a new confirmation link.'
+            );
+        }
+
+        if ($newPassword !== $passwordConfirmation) {
+            $errors['password'] = true;
+            $errors['passwordConfirmation'] = true;
+            $errorMessages[] = $frontendNamespace->get(
+                'RegisterPasswordNotEqual',
+                'The passwords do not match.'
+            );
+        }
+
+        if (!$newPassword
+            || strlen(trim($newPassword)) == 0
+            || !$passwordConfirmation
+            || (strlen($newPassword) < Shopware()->Config()->sMINPASSWORD)
+        ){
+            $errorMessages[] = $this->View()->fetch('string:'.$frontendNamespace->get(
+                'RegisterPasswordLength',
+                'Your password should contain at least {config name=\"MinPassword\"} characters'
+            ));
+            $errors['password'] = true;
+            $errors['passwordConfirmation'] = true;
+        }
+
+        return array($errors, $errorMessages);
+    }
+
+    /**
+     * Performs a password reset based on a given s_core_optin hash
+     * @param string $hash
+     * @param string $password
+     * @return Customer
+     * @throws Exception
+     */
+    public function resetPassword($hash, $password)
+    {
+        $resetPasswordNamespace = $this->container->get('snippets')->getNamespace('frontend/account/reset_password');
+
+        $em = $this->get('models');
+
+        $this->deleteExpiredOptInItems();
+
+        /** @var $confirmModel \Shopware\Models\CommentConfirm\CommentConfirm */
+        $confirmModel = $em->getRepository('Shopware\Models\CommentConfirm\CommentConfirm')
+            ->findOneBy(array('hash' => $hash, 'type' => 'password'));
+
+        if (!$confirmModel) {
+            throw new Exception(
+                $resetPasswordNamespace->get(
+                    'PasswordResetNewLinkError',
+                    'Confirmation link not found. Please check the spelling. Note that the confirmation link is only valid for 2 hours. After that you have to require a new confirmation link.'
+                )
+            );
+        }
+
+        /** @var $customer Customer */
+        $customer = $em->find('Shopware\Models\Customer\Customer', $confirmModel->getData());
+        if (!$customer) {
+            throw new Exception($resetPasswordNamespace->get(
+                sprintf('PasswordResetNewMissingId', $confirmModel->getData()),
+                sprintf('Could not find the user with the ID "%s".', $confirmModel->getData())
+            ));
+        }
+
+        // Generate the new password
+        /** @var \Shopware\Components\Password\Manager $passwordEncoder */
+        $passwordEncoder = $this->get('PasswordEncoder');
+
+        $encoderName = $passwordEncoder->getDefaultPasswordEncoderName();
+        $password = $passwordEncoder->encodePassword($password, $encoderName);
+
+        $conn = $this->get('dbal_connection');
+        $conn->executeUpdate(
+            'UPDATE s_user SET password = ?, encoder = ? WHERE id = ?',
+            [$password, $encoderName, $customer->getId()]
+        );
+
+        // Delete the confirm model
+        $em->remove($confirmModel);
+        $em->flush();
+
+        return $customer;
+    }
+
+    /**
+     * Delete old expired password-hashes after two hours
+     */
+    private function deleteExpiredOptInItems()
+    {
+        /** @var \Doctrine\DBAL\Connection $connection */
+        $connection = $this->get('dbal_connection');
+
+        $date = new \DateTime('-2 hours');
+
+        $connection->executeUpdate(
+            'DELETE FROM s_core_optin WHERE datum <= :minDate AND type = "password"',
+            ['minDate' => $date]
+        );
     }
 
     /**

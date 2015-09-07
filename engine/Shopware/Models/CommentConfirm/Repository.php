@@ -28,20 +28,17 @@ use Shopware\Components\Model\ModelRepository;
 use Doctrine\ORM\Query;
 
 /**
- *
  * Repository for the CommentConfirm model (Shopware\Models\CommentConfirm\CommentConfirm).
  * <br>
  * The CommentConfirm model repository is responsible to manage all data's in s_core_optin
  * This repository can be used to work with the saved optin data.
- *
  */
 class Repository extends ModelRepository
 {
-
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select the blog article for the detail page
      *
-     * @param $hash
+     * @param string $hash
      * @return \Doctrine\ORM\Query
      */
     public function getConfirmationByHashQuery($hash)
@@ -54,7 +51,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getConfirmationByIdQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $hash
+     * @param string $hash
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getConfirmationByHashBuilder($hash)
