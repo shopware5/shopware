@@ -87,7 +87,11 @@ class ProductMapping implements MappingInterface
                 'manufacturerNumber' => ['type' => 'string', 'index' => 'not_analyzed'],
 
                 //language fields
-                'name' => $this->fieldMapping->getLanguageField($shop),
+                'name' => array_merge_recursive(
+                    $this->fieldMapping->getLanguageField($shop),
+                    ['fields' => ['raw' => ['type' => 'string', 'index' => 'not_analyzed']]]
+                ),
+
                 'shortDescription' => $this->fieldMapping->getLanguageField($shop),
                 'longDescription' => $this->fieldMapping->getLanguageField($shop),
                 'additional' => $this->fieldMapping->getLanguageField($shop),
