@@ -15,8 +15,7 @@
             <input name="sSepaBic"
                    type="text"
                    id="bic"
-                   placeholder="{s namespace='frontend/plugins/payment/sepa' name='PaymentSepaLabelBic'}{/s}
-                   {if {config name=sepaRequireBic}}{s name="RequiredField" namespace="frontend/register/index"}{/s}{/if}"
+                   placeholder="{s namespace='frontend/plugins/payment/sepa' name='PaymentSepaLabelBic'}{/s}{if {config name=sepaRequireBic}}{s name="RequiredField" namespace="frontend/register/index"}{/s}{/if}"
                    value="{$form_data.sSepaBic|escape}"
                    class="{if {config name=sepaRequireBic}}is--required {/if}{if $error_flags.sSepaBic} has--error{/if}"
                    {if $payment_mean.id == $form_data.payment && {config name=sepaRequireBic}}required="required" aria-required="true"{/if} />
