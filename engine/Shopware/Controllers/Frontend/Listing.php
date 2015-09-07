@@ -276,12 +276,8 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             $content['sSelfCanonical'] = $path;
         }
 
-        if ($manufacturer->getMetaTitle()) {
-            $content['title'] = $manufacturer->getMetaTitle() . ' | ' . $this->get('config')->get('shopname');
-        } elseif ($manufacturer->getName()) {
-            $content['title'] = $manufacturer->getName();
-        }
-
+        $content['metaTitle'] = $manufacturer->getMetaTitle();
+        $content['title'] = $manufacturer->getName();
         $content['canonicalTitle'] = $manufacturer->getName();
 
         return $content;
