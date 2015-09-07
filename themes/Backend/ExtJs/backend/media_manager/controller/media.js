@@ -164,11 +164,15 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
      * @param field
      */
     onMediaUpload: function(field) {
-        var fileField = field.getEl().down('input[type=file]').dom;
         var me = this,
+            fileField = field.getEl().down('input[type=file]').dom,
             mediaView = me.getMediaView();
 
         field.reset();
+
+        // Fire afterrender event after reset
+        // to trigger custom dom manipulation.
+        field.fireEvent('afterrender', field);
 
         mediaView.mediaDropZone.iterateFiles(fileField.files);
     },
