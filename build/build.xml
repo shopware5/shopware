@@ -40,11 +40,11 @@
             <handler type="secure"/>
         </input>
 
-        <input message="Please enter app.host:"
+        <input message="Please enter app.host (Hostname e.g. example.com):"
                addproperty="user.app.host"
                defaultvalue="${app.host}" />
 
-        <input message="Please enter app.path:"
+        <input message="Please enter app.path (e.g. /shopware. Leave blank if installed in document root):"
                addproperty="user.app.path"
                defaultvalue="${app.path}" />
 
