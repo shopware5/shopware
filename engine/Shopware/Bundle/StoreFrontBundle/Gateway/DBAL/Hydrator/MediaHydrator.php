@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 
+use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\MediaBundle\MediaService;
 use Shopware\Components\Thumbnail\Manager;
@@ -45,21 +46,29 @@ class MediaHydrator extends Hydrator
      * @var Manager
      */
     private $thumbnailManager;
+
     /**
      * @var MediaService
      */
     private $mediaService;
 
     /**
+     * @var Connection
+     */
+    private $database;
+
+    /**
      * @param AttributeHydrator $attributeHydrator
      * @param \Shopware\Components\Thumbnail\Manager $thumbnailManager
      * @param MediaService $mediaService
+     * @param Connection $database
      */
-    public function __construct(AttributeHydrator $attributeHydrator, Manager $thumbnailManager, MediaService $mediaService)
+    public function __construct(AttributeHydrator $attributeHydrator, Manager $thumbnailManager, MediaService $mediaService, Connection $database)
     {
         $this->attributeHydrator = $attributeHydrator;
         $this->thumbnailManager = $thumbnailManager;
         $this->mediaService = $mediaService;
+        $this->database = $database;
     }
 
     /**
@@ -92,6 +101,36 @@ class MediaHydrator extends Hydrator
 
         if (isset($data['__media_path'])) {
             $media->setFile($this->mediaService->getUrl($data['__media_path']));
+        }
+
+        /**
+         * Live Migration to add width/height to images
+         */
+        if ($media->getType() == Struct\Media::TYPE_IMAGE && $this->mediaService->has($data['__media_path'])) {
+            if (array_key_exists('__media_width', $data) && array_key_exists('__media_height', $data)) {
+                if ($data['__media_width'] === null || $data['__media_height'] === null) {
+                    list($width, $height) = getimagesizefromstring($this->mediaService->read($data['__media_path']));
+                    $this->database->executeUpdate(
+                        'UPDATE s_media SET width = :width, height = :height WHERE id = :id',
+                        [
+                            ':width' => $width,
+                            ':height' => $height,
+                            ':id' => $data['__media_id']
+                        ]
+                    );
+
+                    $data['__media_width'] = $width;
+                    $data['__media_height'] = $height;
+                }
+            }
+        }
+
+        if (isset($data['__media_width'])) {
+            $media->setWidth((int) $data['__media_width']);
+        }
+
+        if (isset($data['__media_height'])) {
+            $media->setHeight((int) $data['__media_height']);
         }
 
         if ($media->getType() == Struct\Media::TYPE_IMAGE

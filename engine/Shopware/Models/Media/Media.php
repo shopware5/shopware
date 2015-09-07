@@ -1191,6 +1191,20 @@ class Media extends ModelEntity
     private $fileSize;
 
     /**
+    * Width of the file in px if it's an image
+    * @var integer $width
+    * @ORM\Column(name="width", type="integer", nullable=true)
+    */
+    private $width;
+
+    /**
+    * Height of the file in px if it's an image
+    * @var integer $height
+    * @ORM\Column(name="height", type="integer", nullable=true)
+    */
+    private $height;
+
+    /**
      * Assigned album association. Is automatically loaded when the standard functions "find" ... be used,
      * or if the Query Builder is specified with the association.
      * @var \Shopware\Models\Media\Album
@@ -2031,6 +2045,38 @@ class Media extends ModelEntity
     public function setProperties($properties)
     {
         $this->properties = $properties;
+    }
+
+    /**
+     * @return int
+     */
+    public function getWidth()
+    {
+        return $this->width;
+    }
+
+    /**
+     * @param int $width
+     */
+    public function setWidth($width)
+    {
+        $this->width = $width;
+    }
+
+    /**
+     * @return int
+     */
+    public function getHeight()
+    {
+        return $this->height;
+    }
+
+    /**
+     * @param int $height
+     */
+    public function setHeight($height)
+    {
+        $this->height = $height;
     }
 
     /**

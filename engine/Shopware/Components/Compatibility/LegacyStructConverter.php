@@ -544,6 +544,8 @@ class LegacyStructConverter
             'extension' => $media->getExtension(),
             'main' => $media->isPreview(),
             'parentId' => null,
+            'width' => $media->getWidth(),
+            'height' => $media->getHeight(),
             'thumbnails' => $thumbnails
         );
 
