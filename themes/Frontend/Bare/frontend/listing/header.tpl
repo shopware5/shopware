@@ -4,15 +4,23 @@
 {block name="frontend_index_header_meta_keywords"}{if $sCategoryContent.metaKeywords}{$sCategoryContent.metaKeywords}{/if}{/block}
 
 {block name='frontend_index_header_meta_tags_opengraph'}
+
+    {$description = "{s name='IndexMetaDescriptionStandard'}{/s}"}
+    {if $sCategoryContent.cmstext}
+        {$description = "{$sCategoryContent.cmstext|strip_tags|truncate:240|escape:'htmlall'}"}
+    {elseif $sCategoryContent.metadescription}
+        {$description = "{$sCategoryContent.metadescription|strip_tags|escape:'htmlall'}"}
+    {/if}
+
     <meta property="og:type" content="product" />
     <meta property="og:site_name" content="{config name=sShopname}" />
     <meta property="og:title" content="{$sCategoryContent.name|escape:'htmlall'}" />
-    <meta property="og:description" content="{$sCategoryContent.cmstext|strip_tags|truncate:240|escape:'htmlall'}" />
+    <meta property="og:description" content="{$description}" />
 
     <meta name="twitter:card" content="product" />
     <meta name="twitter:site" content="{config name=sShopname}" />
     <meta name="twitter:title" content="{$sCategoryContent.name|escape:'htmlall'}" />
-    <meta name="twitter:description" content="{$sCategoryContent.cmstext|strip_tags|truncate:240|escape:'htmlall'}" />
+    <meta name="twitter:description" content="{$description}" />
 
     {* Images *}
     {if $sCategoryContent.media.path}
@@ -31,13 +39,13 @@
 {/block}
 
 {* Description *}
-{block name="frontend_index_header_meta_description"}{if $sCategoryContent.metadescription}{$sCategoryContent.metadescription|strip_tags|escape}{/if}{/block}
+{block name="frontend_index_header_meta_description"}{if $sCategoryContent.metadescription}{$sCategoryContent.metadescription|strip_tags|escape}{else}{s name="IndexMetaDescriptionStandard"}{/s}{/if}{/block}
 
 {* Canonical link *}
 {block name='frontend_index_header_canonical'}
     {* Count of available product pages *}
     {$pages = ceil($sNumberArticles / $criteria->getLimit())}
-    
+
     {if {config name=seoIndexPaginationLinks} && $showListing && $pages > 1}
         {* Previous rel tag *}
         {if $sPage > 1}
