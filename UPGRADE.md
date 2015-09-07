@@ -1,7 +1,12 @@
 # Shopware Upgrade Information
 In this document you will find a changelog of the important changes related to the code base of Shopware.
 
-## 5.1.0
+## 5.1.0 RC2
+* Update ongr/elasticsearch-dsl to version 1.0.0-RC1
+* Update elasticsearch/elasticsearch to version 2.0.0
+    * See: https://www.elastic.co/guide/en/elasticsearch/reference/2.0/breaking-changes-2.0.html
+
+## 5.1.0 RC1
 * Removed unused classes `Shopware_Components_Test_MailListener` and `Shopware_Components_Test_TicketListener`
 * Removed unused snippets in `snippets/backend/article/view/main.ini`:
     * `detail/sidebar/options/article_options`
