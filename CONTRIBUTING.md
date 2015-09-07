@@ -22,7 +22,7 @@ When coding and committing, please:
  * Write your commit messages in English
  * Have them short and descriptive
  * Don't fix things which are related to other issues / pull requests
- * Mention you changes in the UPGRADE.md
+ * Mention your changes in the UPGRADE.md
  * Provide a test
  * Follow the coding standards
 
