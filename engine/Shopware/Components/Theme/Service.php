@@ -23,7 +23,7 @@
  */
 namespace Shopware\Components\Theme;
 
-use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Bundle\MediaBundle\MediaPathNormalizerInterface;
 use Shopware\Components\Model\ModelManager;
@@ -546,11 +546,11 @@ class Service
      * Helper function which checks if the element name is already exists in the
      * passed collection of config elements.
      *
-     * @param \Doctrine\Common\Collections\ArrayCollection $collection
-     * @param $name
+     * @param Collection $collection
+     * @param string $name
      * @return Shop\TemplateConfig\Element
      */
-    private function getElementByName(ArrayCollection $collection, $name)
+    private function getElementByName(Collection $collection, $name)
     {
         /**@var $element Shop\TemplateConfig\Element */
         foreach ($collection as $element) {
@@ -566,11 +566,11 @@ class Service
      * value collection.
      * If no shop value exist, the function creates a new value object.
      *
-     * @param ArrayCollection $collection
-     * @param $shopId
+     * @param Collection $collection
+     * @param int $shopId
      * @return Shop\TemplateConfig\Value
      */
-    private function getElementShopValue(ArrayCollection $collection, $shopId)
+    private function getElementShopValue(Collection $collection, $shopId)
     {
         /**@var $value Shop\TemplateConfig\Value */
         foreach ($collection as $value) {
