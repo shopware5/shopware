@@ -165,5 +165,26 @@ class Container extends BaseContainer
                 $me->get('app')
             );
         };
+
+        $container['shopware.container'] = function () use ($me) {
+            require_once SW_PATH . '/autoload.php';
+
+            $kernel = new \Shopware\Kernel('production', false);
+            $kernel->boot();
+
+            $container = $kernel->getContainer();
+            $container->get('models')->generateAttributeModels();
+
+            return $container;
+        };
+
+        $container['shopware.theme_installer'] = function ($c) {
+            $shopwareContainer = $c['shopware.container'];
+
+            /** @var $themeInstaller \Shopware\Components\Theme\Installer */
+            $themeInstaller = $shopwareContainer->get('theme_installer');
+
+            return $themeInstaller;
+        };
     }
 }
