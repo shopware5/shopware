@@ -24,15 +24,15 @@
 
 namespace Shopware\Bundle\MediaBundle;
 
+use League\Flysystem\Filesystem;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Class MediaMigration
+ * @package Shopware\Bundle\MediaBundle
+ */
 class MediaMigration
 {
-    /**
-     * @var MediaPathNormalizer
-     */
-    private $mediaPathNormalizer;
-
     /**
      * @var array
      */
@@ -43,31 +43,25 @@ class MediaMigration
     ];
 
     /**
-     * @param MediaPathNormalizer $mediaPathNormalizer
-     */
-    public function __construct(MediaPathNormalizer $mediaPathNormalizer)
-    {
-        $this->mediaPathNormalizer = $mediaPathNormalizer;
-    }
-
-    /**
      * Batch migration
      *
-     * @param MediaBackendInterface $fromFilesystem
-     * @param MediaBackendInterface $toFileSystem
+     * @param MediaServiceInterface $fromFilesystem
+     * @param MediaServiceInterface $toFileSystem
      * @param OutputInterface $output
      * @throws \Exception
      */
-    public function migrate(MediaBackendInterface $fromFilesystem, MediaBackendInterface $toFileSystem, OutputInterface $output)
+    public function migrate(MediaServiceInterface $fromFilesystem, MediaServiceInterface $toFileSystem, OutputInterface $output)
     {
-        foreach ($this->iterateOldMediaFiles($fromFilesystem) as $path) {
+        $output->writeln("Searching for all media files in your filesystem. This might take some time, depending on the number of media files you have.");
+
+        foreach ($fromFilesystem->listFiles('media') as $path) {
             $this->migrateFile($path, $fromFilesystem, $toFileSystem, $output);
         }
 
         $status = join('. ', array_map(
             function ($v, $k) {
                 return $v." ".$k;
-            }, 
+            },
             $this->counter,
             array_keys($this->counter)
         ));
@@ -78,20 +72,21 @@ class MediaMigration
     /**
      * Migrate a single file
      *
-     * @param $path
-     * @param MediaBackendInterface $fromFilesystem
-     * @param MediaBackendInterface $toFileSystem
+     * @param string $path
+     * @param MediaServiceInterface $fromFilesystem
+     * @param MediaServiceInterface $toFileSystem
      * @param OutputInterface $output
      * @throws \Exception
      */
-    private function migrateFile($path, MediaBackendInterface $fromFilesystem, MediaBackendInterface $toFileSystem, OutputInterface $output)
+    private function migrateFile($path, MediaServiceInterface $fromFilesystem, MediaServiceInterface $toFileSystem, OutputInterface $output)
     {
-        // Default legacy migration hooked into getRealPath()
+        // only do migration if it's on the local filesystem since could take a long time
+        // to read and write all the files
         if ($fromFilesystem->getAdapterType() === 'local') {
-            if (!$fromFilesystem->isRealPathFormat($path)) {
+            if (!$fromFilesystem->isEncoded($path)) {
                 $this->counter['migrated']++;
                 $output->writeln("Migrate: ".$path);
-                $fromFilesystem->has($path);
+                $fromFilesystem->migrateFile($path);
             }
         }
 
@@ -102,11 +97,11 @@ class MediaMigration
             return;
         }
 
-        // migrate filesystem and name
+        // move file to new filesystem and remove the old one
         if ($fromFilesystem->has($path)) {
             $this->counter['moved']++;
             $output->writeln("Move: ".$path);
-            $success = $this->write($toFileSystem, $path, $fromFilesystem->read($path));
+            $success = $this->writeStream($toFileSystem, $path, $fromFilesystem->readStream($path));
             if ($success) {
                 $fromFilesystem->delete($path);
             }
@@ -118,42 +113,15 @@ class MediaMigration
     }
 
     /**
-     * File collector with some filtering
-     *  - no dot files
-     *  - only media files
-     *
-     * @param MediaBackendInterface $fromFileSystem
+     * @param MediaServiceInterface $toFileSystem
      * @param string $path
-     * @return \Generator
-     */
-    private function iterateOldMediaFiles(MediaBackendInterface $fromFileSystem, $path = 'media')
-    {
-        $files = [];
-        foreach ($fromFileSystem->listContents($path) as $item) {
-            $normalized = substr($item['path'], strpos($item['path'], 'media'));
-            $isMediaFile = strstr($item['path'], 'media') !== false && strstr($normalized, '/.') === false;
-
-            if (!$isMediaFile) {
-                continue;
-            }
-            if ($item['type'] != 'dir') {
-                $files[] = $normalized;
-            } elseif ($item['type'] == 'dir') {
-                $files = array_merge($files, $this->iterateOldMediaFiles($fromFileSystem, $normalized));
-            }
-        }
-
-        return $files;
-    }
-
-    /**
-     * @param MediaBackendInterface $toFileSystem
-     * @param string $path
-     * @param string $contents
+     * @param resource $contents
      * @return boolean
      */
-    private function write($toFileSystem, $path, $contents)
+    private function writeStream(MediaServiceInterface $toFileSystem, $path, $contents)
     {
+        $path = $toFileSystem->encode($path);
+
         $dirString = '';
         $dirs = explode('/', dirname($path));
         foreach ($dirs as $dir) {
@@ -161,7 +129,7 @@ class MediaMigration
             $toFileSystem->createDir($dirString);
         }
 
-        $toFileSystem->write($path, $contents);
+        $toFileSystem->writeStream($path, $contents);
 
         return $toFileSystem->has($path);
     }

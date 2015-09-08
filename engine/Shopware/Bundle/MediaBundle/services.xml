@@ -6,37 +6,36 @@
 
     <services>
         <service id="shopware_media.service_subscriber" class="Shopware\Bundle\MediaBundle\Subscriber\ServiceSubscriber">
+            <argument type="service" id="service_container" />
             <tag name="shopware.event_subscriber" />
         </service>
+
+        <service id="shopware_media.media_migration" class="Shopware\Bundle\MediaBundle\MediaMigration" />
 
         <service id="shopware_media.garbage_collector_factory" class="Shopware\Bundle\MediaBundle\GarbageCollectorFactory">
             <argument type="service" id="events"/>
             <argument type="service" id="dbal_connection" />
         </service>
-
         <service id="shopware_media.garbage_collector" class="Shopware\Bundle\MediaBundle\GarbageCollector">
             <factory service="shopware_media.garbage_collector_factory" method="factory" />
         </service>
 
         <service id="shopware_media.media_service" class="Shopware\Bundle\MediaBundle\MediaService">
-            <argument type="service" id="shopware_media.backend" />
-            <argument type="service" id="shopware_media.path_normalizer" />
+            <factory service="shopware_media.media_service_factory" method="factory" />
+            <argument>%shopware.cdn.backend%</argument>
+        </service>
+        <service id="shopware_media.media_service_factory" class="Shopware\Bundle\MediaBundle\MediaServiceFactory">
             <argument type="service" id="service_container" />
-        </service>
-
-        <service id="shopware_media.media_migration" class="Shopware\Bundle\MediaBundle\MediaMigration">
-            <argument type="service" id="shopware_media.path_normalizer" />
-        </service>
-
-        <service id="shopware_media.backend_factory" class="Shopware\Bundle\MediaBundle\MediaBackendFactory">
             <argument>%shopware.cdn%</argument>
         </service>
 
-        <service id="shopware_media.backend" class="Shopware\Bundle\MediaBundle\MediaBackendInterface">
-            <factory service="shopware_media.backend_factory" method="factory" />
-            <argument>%shopware.cdn.backend%</argument>
+        <service id="shopware_media.strategy_factory" class="Shopware\Bundle\MediaBundle\Strategy\StrategyFactory">
+            <argument>%shopware.cdn%</argument>
+        </service>
+        <service id="shopware_media.strategy" class="Shopware\Bundle\MediaBundle\Strategy\StrategyInterface">
+            <factory service="shopware_media.strategy_factory" method="factory" />
+            <argument>%shopware.cdn.strategy%</argument>
         </service>
 
-        <service id="shopware_media.path_normalizer" class="Shopware\Bundle\MediaBundle\MediaPathNormalizer" />
     </services>
 </container>

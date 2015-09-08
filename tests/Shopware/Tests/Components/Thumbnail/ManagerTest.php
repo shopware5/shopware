@@ -32,6 +32,7 @@ class Shopware_Tests_Components_Thumbnail_ManagerTest extends \PHPUnit_Framework
     public function testThumbnailGeneration()
     {
         $manager = Shopware()->Container()->get('thumbnail_manager');
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
 
         $media = $this->getMediaModel();
 
@@ -46,7 +47,6 @@ class Shopware_Tests_Components_Thumbnail_ManagerTest extends \PHPUnit_Framework
         );
 
         $manager->createMediaThumbnail($media, $sizes);
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
 
         $thumbnailDir = Shopware()->DocPath('media_' . strtolower($media->getType()) . '_thumbnail');
 
@@ -55,17 +55,20 @@ class Shopware_Tests_Components_Thumbnail_ManagerTest extends \PHPUnit_Framework
         $this->assertTrue($mediaService->has($path . '_120x130.jpg'));
         $this->assertTrue($mediaService->has($path . '_140x140.jpg'));
         $this->assertTrue($mediaService->has($path . '_150x160.jpg'));
+
+        $mediaService->delete($media->getPath());
     }
 
     private function getMediaModel()
     {
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
         $media = new \Shopware\Models\Media\Media();
 
         $sourcePath = __DIR__ . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR . 'sw_icon.png';
-        $imagePath = __DIR__ . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR . 'sw_icon_copy.png';
-        copy($sourcePath, $imagePath);
+        $imagePath = 'media/unknown/sw_icon.png';
+        $mediaService->write($imagePath, file_get_contents($sourcePath));
 
-        $file = new \Symfony\Component\HttpFoundation\File\File($imagePath);
+        $file = new \Symfony\Component\HttpFoundation\File\File($sourcePath);
 
         $media->setFile($file);
         $media->setAlbumId(-10);
@@ -198,5 +201,9 @@ class Shopware_Tests_Components_Thumbnail_ManagerTest extends \PHPUnit_Framework
         $manager->removeMediaThumbnails($media);
 
         $this->assertFalse($mediaService->has($path . '_' . $defaultSize . '.' . $media->getExtension()));
+
+        $mediaService->delete($media->getPath());
+
+        $this->assertFalse($mediaService->has($media->getPath()));
     }
 }

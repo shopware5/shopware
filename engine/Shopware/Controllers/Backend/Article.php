@@ -3252,10 +3252,10 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     protected function prepareDownloadAssociatedData($data)
     {
-        $pathNormalizer = Shopware()->Container()->get('shopware_media.path_normalizer');
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
         foreach ($data['downloads'] as &$downloadData) {
             $downloadData['attribute'] = $downloadData['attribute'][0];
-            $downloadData['file'] = $pathNormalizer->get($downloadData['file']);
+            $downloadData['file'] = $mediaService->normalize($downloadData['file']);
         }
 
         return $data;

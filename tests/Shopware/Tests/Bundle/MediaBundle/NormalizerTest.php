@@ -4,16 +4,16 @@ class TermHelperTest extends Enlight_Components_Test_TestCase
 {
     public function testNormalizer()
     {
-        /** @var \Shopware\Bundle\MediaBundle\MediaPathNormalizer $normalizer */
-        $normalizer = Shopware()->Container()->get('shopware_media.path_normalizer');
+        /** @var \Shopware\Bundle\MediaBundle\MediaService $mediaService */
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
 
-        $result = $normalizer->get('/media/image/Einkaufstasche.jpg');
+        $result = $mediaService->normalize('/media/image/Einkaufstasche.jpg');
         $this->assertEquals('media/image/Einkaufstasche.jpg', $result);
 
-        $result = $normalizer->get('http://shopware.com/subfolder/shop/media/image/Einkaufstasche.jpg');
+        $result = $mediaService->normalize('http://shopware.com/subfolder/shop/media/image/Einkaufstasche.jpg');
         $this->assertEquals('media/image/Einkaufstasche.jpg', $result);
 
-        $result = $normalizer->get('/var/www/web1/shopware/media/image/Einkaufstasche.jpg');
+        $result = $mediaService->normalize('/var/www/web1/shopware/media/image/Einkaufstasche.jpg');
         $this->assertEquals('media/image/Einkaufstasche.jpg', $result);
     }
 }

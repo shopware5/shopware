@@ -1978,9 +1978,9 @@ class Media extends ModelEntity
      */
     private function getThumbnailDir()
     {
-        $normalizer = Shopware()->Container()->get('shopware_media.path_normalizer');
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
         $path = $this->getUploadDir() . 'thumbnail' . DIRECTORY_SEPARATOR;
-        $path = $normalizer->get($path);
+        $path = $mediaService->normalize($path);
 
         return $path;
     }

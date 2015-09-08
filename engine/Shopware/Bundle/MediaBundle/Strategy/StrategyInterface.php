@@ -22,9 +22,13 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\MediaBundle;
+namespace Shopware\Bundle\MediaBundle\Strategy;
 
-interface MediaPathNormalizerInterface
+/**
+ * Interface StrategyInterface
+ * @package Shopware\Bundle\MediaBundle\Strategy
+ */
+interface StrategyInterface
 {
     /**
      * Cleans the shopware media path
@@ -35,5 +39,21 @@ interface MediaPathNormalizerInterface
      * @param string $path
      * @return string
      */
-    public function get($path);
+    public function normalize($path);
+
+    /**
+     * Builds the path on the filesystem
+     *
+     * @param string $path
+     * @return string
+     */
+    public function encode($path);
+
+    /**
+     * Checks if the provided path matches the algorithm format
+     *
+     * @param string $path
+     * @return bool
+     */
+    public function isEncoded($path);
 }

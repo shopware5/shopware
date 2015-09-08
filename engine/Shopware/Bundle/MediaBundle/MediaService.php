@@ -24,19 +24,20 @@
 
 namespace Shopware\Bundle\MediaBundle;
 
+use League\Flysystem\FilesystemInterface;
+use Shopware\Bundle\MediaBundle\Strategy\StrategyInterface;
 use Shopware\Components\DependencyInjection\Container;
 
+/**
+ * Class MediaService
+ * @package Shopware\Bundle\MediaBundle
+ */
 class MediaService implements MediaServiceInterface
 {
     /**
-     * @var MediaBackendInterface
+     * @var FilesystemInterface
      */
-    private $backend;
-
-    /**
-     * @var MediaPathNormalizer
-     */
-    private $normalizer;
+    private $filesystem;
 
     /**
      * @var Container
@@ -44,15 +45,39 @@ class MediaService implements MediaServiceInterface
     private $container;
 
     /**
-     * @param MediaBackendInterface $backend
-     * @param MediaPathNormalizer $normalizer
-     * @param Container $container
+     * @var StrategyInterface
      */
-    public function __construct(MediaBackendInterface $backend, MediaPathNormalizer $normalizer, Container $container)
+    private $strategy;
+
+    /**
+     * @var string
+     */
+    private $mediaUrl;
+
+    /**
+     * @var array
+     */
+    private $config;
+
+    /**
+     * @param FilesystemInterface $filesystem
+     * @param StrategyInterface $strategy
+     * @param Container $container
+     * @param array $config
+     * @throws \Exception
+     */
+    public function __construct(FilesystemInterface $filesystem, StrategyInterface $strategy, Container $container, array $config)
     {
-        $this->backend = $backend;
-        $this->normalizer = $normalizer;
+        $this->filesystem = $filesystem;
         $this->container = $container;
+        $this->strategy = $strategy;
+        $this->config = $config;
+
+        if (!isset($config['mediaUrl'])) {
+            throw new \Exception(sprintf("Please provide a 'mediaUrl' in your %s adapter.", $config['type']));
+        }
+
+        $this->mediaUrl = $config['mediaUrl'] ?: $this->createFallbackMediaUrl();
     }
 
     /**
@@ -60,9 +85,21 @@ class MediaService implements MediaServiceInterface
      */
     public function read($path)
     {
-        $path = $this->normalizer->get($path);
+        $this->migrateFile($path);
+        $path = $this->strategy->encode($path);
 
-        return $this->backend->read($path);
+        return $this->filesystem->read($path);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function readStream($path)
+    {
+        $this->migrateFile($path);
+        $path = $this->strategy->encode($path);
+
+        return $this->filesystem->readStream($path);
     }
 
     /**
@@ -70,35 +107,42 @@ class MediaService implements MediaServiceInterface
      */
     public function getUrl($path)
     {
-        if ($this->backend->isRealPathFormat($path)) {
+        if ($this->strategy->isEncoded($path)) {
             return $path;
         }
 
-        $path = $this->normalizer->get($path);
-        $path = $this->backend->toUrlPath($path);
+        $this->migrateFile($path);
+        $path = $this->strategy->encode($path);
 
-        $mediaUrl = $this->backend->getMediaUrl();
-        if (!$mediaUrl) {
-            $request = $this->container->get('front')->Request();
-
-            if ($request && $request->getHttpHost() && $request->getBasePath()) {
-                $mediaUrl = ($request->isSecure() ? 'https' : 'http') . '://' . $request->getHttpHost() . $request->getBasePath() . "/";
-            } else {
-                $mediaUrl = $this->container->get('front')->Router()->assemble(['controller' => 'index', 'module' => 'frontend']);
-            }
-        }
-
-        return $mediaUrl . $path;
+        return $this->mediaUrl . $path;
     }
 
     /**
      * @inheritdoc
      */
-    public function write($path, $contents)
+    public function write($path, $contents, $append = false)
     {
-        $path = $this->normalizer->get($path);
+        $path = $this->strategy->encode($path);
 
-        return $this->backend->write($path, $contents);
+        if ($append === false && $this->filesystem->has($path)) {
+            $this->filesystem->delete($path);
+        }
+
+        $this->filesystem->put($path, $contents);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function writeStream($path, $resource, $append = false)
+    {
+        $path = $this->strategy->encode($path);
+
+        if ($append === false && $this->filesystem->has($path)) {
+            $this->filesystem->delete($path);
+        }
+
+        $this->filesystem->putStream($path, $resource);
     }
 
     /**
@@ -106,9 +150,10 @@ class MediaService implements MediaServiceInterface
      */
     public function has($path)
     {
-        $path = $this->normalizer->get($path);
+        $this->migrateFile($path);
+        $path = $this->strategy->encode($path);
 
-        return $this->backend->has($path);
+        return $this->filesystem->has($path);
     }
 
     /**
@@ -116,9 +161,9 @@ class MediaService implements MediaServiceInterface
      */
     public function delete($path)
     {
-        $path = $this->normalizer->get($path);
+        $path = $this->strategy->encode($path);
 
-        return $this->backend->delete($path);
+        return $this->filesystem->delete($path);
     }
 
     /**
@@ -126,9 +171,10 @@ class MediaService implements MediaServiceInterface
      */
     public function getSize($path)
     {
-        $path = $this->normalizer->get($path);
+        $this->migrateFile($path);
+        $path = $this->strategy->encode($path);
 
-        return $this->backend->getSize($path);
+        return $this->filesystem->getSize($path);
     }
 
     /**
@@ -136,9 +182,104 @@ class MediaService implements MediaServiceInterface
      */
     public function rename($path, $newPath)
     {
-        $path = $this->normalizer->get($path);
-        $newPath = $this->normalizer->get($newPath);
+        $this->migrateFile($path);
+        $path = $this->strategy->encode($path);
+        $newPath = $this->strategy->encode($newPath);
 
-        return $this->backend->rename($path, $newPath);
+        return $this->filesystem->rename($path, $newPath);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function normalize($path)
+    {
+        return $this->strategy->normalize($path);
+    }
+
+    /**
+     * Generates a mediaUrl based on the request or router
+     *
+     * @return string
+     * @throws \Exception
+     */
+    private function createFallbackMediaUrl()
+    {
+        $request = $this->container->get('front')->Request();
+
+        if ($request && $request->getHttpHost() && $request->getBasePath()) {
+            return ($request->isSecure() ? 'https' : 'http') . '://' . $request->getHttpHost() . $request->getBasePath() . "/";
+        } else {
+            return $this->container->get('front')->Router()->assemble(['controller' => 'index', 'module' => 'frontend']);
+        }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getAdapterType()
+    {
+        return $this->config['type'];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function listFiles($directory = '')
+    {
+        $files = [];
+        foreach($this->filesystem->listContents($directory, true) as $file) {
+            if ($file['type'] == 'dir' || strstr($file['path'], '/.') !== false) {
+                continue;
+            }
+
+            $files[] = $file['path'];
+        }
+
+        return $files;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function createDir($dirname)
+    {
+        return $this->filesystem->createDir($dirname);
+    }
+
+    /**
+     * Migrates a file to the new strategy if it's not present
+     *
+     * @internal
+     * @param $path
+     * @return void
+     */
+    public function migrateFile($path)
+    {
+        if ($this->getAdapterType() !== 'local' || $this->isEncoded($path)) {
+            return;
+        }
+
+        $encodedPath = $this->strategy->encode($path);
+
+        if ($this->filesystem->has($path) && !$this->filesystem->has($encodedPath)) {
+            $this->filesystem->rename($path, $encodedPath);
+        }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function encode($path)
+    {
+        return $this->strategy->encode($path);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function isEncoded($path)
+    {
+        return $this->strategy->isEncoded($path);
     }
 }

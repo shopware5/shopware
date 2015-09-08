@@ -73,15 +73,18 @@ class MediaCleanupCommand extends ShopwareCommand
      */
     private function handleCleanup()
     {
-        $album = Shopware()->Models()->find('Shopware\Models\Media\Album', -13);
+        /** @var \Shopware\Components\Model\ModelManager $em */
+        $em = $this->getContainer('models');
+
+        $album = $em->find('Shopware\Models\Media\Album', -13);
         $mediaList = $album->getMedia();
         $total = count($mediaList);
 
         try {
             foreach ($mediaList as $media) {
-                Shopware()->Models()->remove($media);
+                $em->remove($media);
             }
-            Shopware()->Models()->flush();
+            $em->flush();
         } catch (ORMException $e) {
             $total = 0;
         }

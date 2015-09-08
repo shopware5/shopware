@@ -28,6 +28,7 @@ use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Events;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
+use Shopware\Components\DependencyInjection\Container;
 
 /**
  * @category  Shopware
@@ -37,16 +38,16 @@ use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 class MediaSubscriber implements EventSubscriber
 {
     /**
-     * @var MediaServiceInterface
+     * @var Container
      */
-    private $mediaService;
+    private $container;
 
     /**
-     * @param MediaServiceInterface $mediaService
+     * @param Container $container
      */
-    public function __construct(MediaServiceInterface $mediaService)
+    public function __construct($container)
     {
-        $this->mediaService = $mediaService;
+        $this->container = $container;
     }
 
     /**
@@ -80,8 +81,10 @@ class MediaSubscriber implements EventSubscriber
             return;
         }
 
-        if ((!$media->getHeight() || !$media->getWidth()) && $this->mediaService->has($media->getPath())) {
-            list($width, $height) = getimagesizefromstring($this->mediaService->read($media->getPath()));
+        $mediaService = $this->container->get('shopware_media.media_service');
+
+        if ((!$media->getHeight() || !$media->getWidth()) && $mediaService->has($media->getPath())) {
+            list($width, $height) = getimagesizefromstring($mediaService->read($media->getPath()));
 
             if ($media->getId()) {
                 $eventArgs->getEntityManager()->getConnection()->executeUpdate(
