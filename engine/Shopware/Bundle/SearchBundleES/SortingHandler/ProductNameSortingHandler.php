@@ -53,7 +53,7 @@ class ProductNameSortingHandler implements HandlerInterface
     ) {
         /** @var ProductNameSorting $criteriaPart */
         $search->addSort(
-            new FieldSort('name', strtolower($criteriaPart->getDirection()))
+            new FieldSort('name.raw', strtolower($criteriaPart->getDirection()))
         );
     }
 }
