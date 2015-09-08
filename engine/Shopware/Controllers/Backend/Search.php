@@ -113,7 +113,8 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
         switch ($entity) {
             case 'Shopware\Models\Article\Article':
                 $query->select(['entity.id', 'entity.name', 'mainDetail.number'])
-                    ->innerJoin('entity.mainDetail', 'mainDetail');
+                    ->innerJoin('entity.mainDetail', 'mainDetail')
+                    ->leftJoin('entity.details', 'details');
                 break;
 
             case 'Shopware\Models\Property\Value':
@@ -152,9 +153,48 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
             $field = 'entity.' . $field;
             $where[] = $field . ' LIKE :search';
         }
+
+        foreach ($this->getCustomSearchConditions($entity) as $condition) {
+            $where[] = $condition;
+        }
+
         $where = implode(' OR ', $where);
         $query->andWhere('('.$where.')');
         $query->setParameter('search', '%' . $term . '%');
+    }
+
+    /**
+     * Gets custom search conditions
+     *
+     * @param string $entity
+     * @return array
+     */
+    private function getCustomSearchConditions($entity)
+    {
+        $where = [];
+        switch ($entity) {
+            case 'Shopware\Models\Article\Article':
+                $where[] = $this->createCustomFieldToSearchTermCondition('details', 'number');
+                break;
+            default:
+                breaK;
+        }
+
+        return $where;
+    }
+
+    /**
+     * Creates a custom search term condition
+     *
+     * @param string $entity
+     * @param string $column
+     * @return string
+     */
+    private function createCustomFieldToSearchTermCondition($entity, $column)
+    {
+        $field = $entity . '.' . $column;
+        $where = $field . ' LIKE :search';
+        return $where;
     }
 
     /**
