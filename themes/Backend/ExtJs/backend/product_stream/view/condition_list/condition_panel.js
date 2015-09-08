@@ -49,8 +49,8 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.ConditionPanel', {
         me.callParent(arguments);
     },
 
-    loadPreview: function(conditions) {
-        this.fireEvent('load-preview', conditions);
+    loadPreview: function() {
+        this.fireEvent('load-preview');
     },
 
     validateConditions: function() {

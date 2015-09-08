@@ -41,7 +41,10 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.PreviewGrid', {
         me.pagingbar = Ext.create('Ext.toolbar.Paging', {
             store: me.store,
             dock: 'bottom',
-            displayInfo: true
+            displayInfo: true,
+            doRefresh: function() {
+                me.fireEvent('load-preview');
+            }
         });
         me.toolbar = me.createToolbar();
 

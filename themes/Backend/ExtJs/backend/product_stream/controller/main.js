@@ -52,6 +52,9 @@ Ext.define('Shopware.apps.ProductStream.controller.Main', {
             'product-stream-condition-panel': {
                 'load-preview': me.loadPreview
             },
+            'product-stream-preview-grid': {
+                'load-preview': me.loadPreview
+            },
             'product-stream-detail-window': {
                 'save-condition-stream': me.saveConditionStream
             },
