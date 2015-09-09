@@ -502,7 +502,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
                     if (params.registerDomain !== false) {
                         me.submitShopwareDomainRequest(params, callback);
                     } else {
-                        me.destroyLogin();
+                        me.destroyLogin(me.loginMask);
                         callback(response);
                     }
                 }
