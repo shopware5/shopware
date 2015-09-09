@@ -37,10 +37,10 @@ abstract class BasePaymentMethod
     /**
      * Validates the input received from the client
      *
-     * @param \Enlight_Controller_Request_Request $request The Request object
+     * @param array $paymentData
      * @return array List of fields containing errors
      */
-    abstract public function validate(\Enlight_Controller_Request_Request $request);
+    abstract public function validate($paymentData);
 
     /**
      * Called when the customer edits his payment data.

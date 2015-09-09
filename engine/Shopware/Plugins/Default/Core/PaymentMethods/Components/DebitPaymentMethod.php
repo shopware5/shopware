@@ -39,7 +39,7 @@ class DebitPaymentMethod extends GenericPaymentMethod
     /**
      * @inheritdoc
      */
-    public function validate(\Enlight_Controller_Request_Request $request)
+    public function validate($paymentData)
     {
         $sErrorFlag = array();
         $fields = array(
@@ -50,7 +50,7 @@ class DebitPaymentMethod extends GenericPaymentMethod
         );
 
         foreach ($fields as $field) {
-            $value = $request->getParam($field, '');
+            $value = $paymentData[$field] ? : '';
             $value = trim($value);
 
             if (empty($value)) {
