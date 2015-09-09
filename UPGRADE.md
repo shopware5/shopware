@@ -5,6 +5,7 @@ In this document you will find a changelog of the important changes related to t
 * Update ongr/elasticsearch-dsl to version 1.0.0-RC1
 * Update elasticsearch/elasticsearch to version 2.0.0
     * See: https://www.elastic.co/guide/en/elasticsearch/reference/2.0/breaking-changes-2.0.html
+* Added new Smarty block `frontend_index_header_javascript_tracking` for tracking codes which are required to be included into the "head" section of the document
 
 ## 5.1.0 RC1
 * Removed unused classes `Shopware_Components_Test_MailListener` and `Shopware_Components_Test_TicketListener`
