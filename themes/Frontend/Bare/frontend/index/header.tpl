@@ -99,4 +99,7 @@
 
 {* Block for IE specific stylesheets - @deprecated due to the stylesheets are now merged *}
 {block name="frontend_index_header_css_ie"}{/block}
+
+{* Block for tracking codes which are required to include in the `head` section of the document *}
+{block name="frontend_index_header_javascript_tracking"}{/block}
 </head>
