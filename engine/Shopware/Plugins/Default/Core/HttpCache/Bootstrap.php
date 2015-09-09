@@ -356,9 +356,9 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
     /**
      * Do http caching jobs
      *
-     * @param \Enlight_Controller_EventArgs $args
+     * @param Enlight_Controller_ActionEventArgs $args
      */
-    public function onPreDispatch(\Enlight_Controller_EventArgs $args)
+    public function onPreDispatch(\Enlight_Controller_ActionEventArgs $args)
     {
         $this->action   = $args->getSubject();
         $this->request  = $args->getRequest();
@@ -379,9 +379,9 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
     /**
      * On post dispatch we try to find affected articleIds displayed during this request
      *
-     * @param \Enlight_Controller_EventArgs $args
+     * @param \Enlight_Controller_ActionEventArgs $args
      */
-    public function onPostDispatch(\Enlight_Controller_EventArgs $args)
+    public function onPostDispatch(\Enlight_Controller_ActionEventArgs $args)
     {
         $view = $args->getSubject()->View();
 
@@ -409,6 +409,8 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
         $this->registerEsiRenderer();
 
         $this->addSurrogateControl($this->response);
+
+        $this->addContextCookie($this->response);
 
         $this->setNoCacheCookie();
 
@@ -565,10 +567,6 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
         if (isset($this->autoNoCacheControllers[$controllerName])) {
             $noCacheTag = $this->autoNoCacheControllers[$controllerName];
             $this->setNoCacheTag($noCacheTag);
-        }
-
-        if (Shopware()->Shop()->get('defaultcustomergroup') != Shopware()->System()->sUSERGROUP) {
-            $this->setNoCacheTag('price');
         }
 
         if ($controllerName == 'frontend/checkout' || $controllerName == 'frontend/note') {
@@ -1080,5 +1078,22 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
         $controllerName = strtolower($request->getModuleName() . '/' . $request->getControllerName());
 
         return $controllerName;
+    }
+
+    /**
+     * Add context cookie
+     *
+     * @param Enlight_Controller_Response_ResponseHttp $response
+     * @throws Exception
+     */
+    private function addContextCookie(Response $response)
+    {
+        $productContext = $this->get('shopware_storefront.context_service')->getProductContext();
+
+        $userContext = sha1(json_encode($productContext));
+        $response->setCookie(
+            'x-cache-context-hash',
+            $userContext
+        );
     }
 }

@@ -77,7 +77,7 @@ class AppCache extends HttpCache
         $this->options = array_merge(array(
             'purge_allowed_ips' => array('127.0.0.1', '::1'),
             'debug'             => false,
-            'cache_cookies'     => array('shop', 'currency'),
+            'cache_cookies'     => array('x-cache-context-hash'),
         ), $options);
 
         parent::__construct(

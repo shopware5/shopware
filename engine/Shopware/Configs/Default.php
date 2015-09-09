@@ -66,7 +66,7 @@ return array_replace_recursive([
         'stale_while_revalidate' => 2,
         'stale_if_error' => false,
         'cache_dir' => $this->getCacheDir().'/html',
-        'cache_cookies' => ['shop', 'currency'],
+        'cache_cookies' => ['x-cache-context-hash'],
     ],
     'session' => [
         'name' => 'SHOPWARESID',
