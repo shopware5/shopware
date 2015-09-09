@@ -88,6 +88,7 @@ In this document you will find a changelog of the important changes related to t
     * Defining a snippet value in multiple lines is deprecated.
     * All snippet values that don't pass the validation should be refactored.
 * The method `getSeoArticleQuery` in `sRewriteTable.php` was changed to select the translations for the article attributes.
+* The order of the Smarty blocks `frontend_index_header_javascript_jquery_lib` and `frontend_index_header_javascript_jquery` for JavaScript inclusions have been slightly changed due to a new feature in the StateManager. The StateManager can now queue plugins for initialization which brings a performance boost. 
 
 ## 5.0.1
 * Create `sw:theme:dump:configuration` command to generate watch files for theme compiling
