@@ -80,8 +80,8 @@ class CacheKeywordFinder implements KeywordFinderInterface
         $keywords = $this->keywordFinder->getKeywordsOfTerm($term);
 
         $this->cache->save(
-            $keywords,
             $id,
+            $keywords,
             $this->config->get('cachesearch')
         );
 
