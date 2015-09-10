@@ -58,9 +58,6 @@ Ext.define('Shopware.apps.Theme.view.list.Theme', {
         me.dropZone = Ext.create('Shopware.app.FileUpload', {
             requestURL: '{url controller="Theme" action="upload"}',
             enablePreviewImage: false,
-            snippets: {
-                messageTitle: ''
-            },
             showInput: false,
             dropZoneText: '{s name=drop_zone}Upload single theme using drag+drop (zip){/s}'
         });
@@ -120,7 +117,7 @@ Ext.define('Shopware.apps.Theme.view.list.Theme', {
                     var me = this,
                         snippets = {
                             'shopware5': '{s name=designed_for_shopware5}Designed for Shopware 5{/s}',
-                            'shopware4': '{s name=designed_for_shopware4}Designed for Shopware 5{/s}'
+                            'shopware4': '{s name=designed_for_shopware4}Designed for Shopware 4{/s}'
                         };
 
                     if(values.length <= 0) {
