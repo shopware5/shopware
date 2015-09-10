@@ -22,6 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
 use Shopware\Components\Model\ModelManager;
 use Enlight_Controller_Request_Request as Request;
 use Enlight_Controller_Response_ResponseHttp as Response;
@@ -410,7 +411,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
 
         $this->addSurrogateControl($this->response);
 
-        $this->addContextCookie($this->response);
+        $this->addContextCookie($this->request, $this->response);
 
         $this->setNoCacheCookie();
 
@@ -1083,17 +1084,36 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
     /**
      * Add context cookie
      *
-     * @param Enlight_Controller_Response_ResponseHttp $response
-     * @throws Exception
+     * @param Request $request
+     * @param Response $response
      */
-    private function addContextCookie(Response $response)
+    private function addContextCookie(Request $request, Response $response)
     {
-        $productContext = $this->get('shopware_storefront.context_service')->getProductContext();
+        /** @var $session Enlight_Components_Session_Namespace */
+        $session = $this->get('session');
 
-        $userContext = sha1(json_encode($productContext));
-        $response->setCookie(
-            'x-cache-context-hash',
-            $userContext
-        );
+        if ($session->offsetGet('sCountry')) {
+            /** @var ProductContextInterface $productContext */
+            $productContext = $this->get('shopware_storefront.context_service')->getProductContext();
+            $taxRules = $productContext->getTaxRules();
+            $userContext = sha1(json_encode($taxRules));
+            $response->setCookie(
+                'x-cache-context-hash',
+                $userContext,
+                0,
+                $request->getBasePath() . '/',
+                ($request->getHttpHost() == 'localhost') ? null : $request->getHttpHost()
+            );
+        } else {
+            if ($request->getCookie('x-cache-context-hash')) {
+                $response->setCookie(
+                    'x-cache-context-hash',
+                    null,
+                    strtotime('-1 Year', time()),
+                    $request->getBasePath() . '/',
+                    ($request->getHttpHost() == 'localhost') ? null : $request->getHttpHost()
+                );
+            }
+        }
     }
 }
