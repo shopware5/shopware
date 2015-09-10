@@ -48,6 +48,8 @@ To keep your master up to date:
 
     git checkout master
     git pull --rebase
+    php composer.phar self-update
+    php composer.phar install
     php build/ApplyDeltas.php
     php bin/console sw:snippets:to:db
 
