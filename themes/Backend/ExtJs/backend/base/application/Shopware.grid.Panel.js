@@ -208,6 +208,12 @@ Ext.define('Shopware.grid.Panel', {
     searchFieldText: '{s name="grid_panel/search_field_text"}Search ...{/s}',
 
     /**
+     * Contains the text for the { @link createPageSizes } method.
+     * @type { String }
+     */
+    pagingItemText: '{s name="grid_panel/paging_toolbar/item_text"}items{/s}',
+
+    /**
      * Get the reference to the class from which this object was instantiated. Note that unlike self, this.statics()
      * is scope-independent and it always returns the class from which it was called, regardless of what
      * this points to during run-time.
@@ -1546,7 +1552,7 @@ Ext.define('Shopware.grid.Panel', {
             labelWidth: 110,
             queryMode: 'local',
             value: value,
-            width: 200,
+            width: 220,
             store: Ext.create('Ext.data.Store', {
                 fields: [ 'value', 'name' ],
                 data: me.createPageSizes()
@@ -1584,7 +1590,7 @@ Ext.define('Shopware.grid.Panel', {
 
         for (var i = 1; i <= 10; i++) {
             var count = i * 20;
-            data.push({ value: count, name: count + ' items' });
+            data.push({ value: count, name: count + ' ' + me.pagingItemText });
         }
 
         me.fireEvent(me.eventAlias + '-after-create-page-sizes', me, data);
