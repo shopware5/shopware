@@ -437,7 +437,7 @@ class Inheritance
                 $row['value'] = '"' . $row['value'] . '"';
             }
 
-            if ($row['type'] === 'theme-media-selection' && $row['value'] !== $row['defaultValue']) {
+            if ($row['type'] === 'theme-media-selection' && $row['value'] !== $row['defaultValue'] && strpos($row['value'], "media/image") !== false) {
                 $row['value'] = $this->mediaService->getUrl($row['value']);
             }
         }
