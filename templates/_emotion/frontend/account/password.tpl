@@ -17,10 +17,10 @@
 	{if $sSuccess}
 		{block name='frontend_account_password_success'}
 	    <div class="success">
-	    	<strong>{se name="PasswordInfoSuccess"}{/se}</strong>	
+	    	<strong>{s name="PasswordInfoSuccess"}{/s}</strong>
 	    </div>
 	    <p>
-	   		<a href="javascript:history.back();" class="button-left large"><span>{se name="LoginBack"}{/se}</span></a>
+	   		<a href="{url controller='account' action='password'}" class="button-left large"><span>{s name="LoginBack"}{/s}</span></a>
 	    </p>
 	    {/block}
 	{else}
@@ -28,18 +28,18 @@
 	{* Recover password form *}
 	{block name='frontend_account_password_form'}
 	<form name="frmRegister" method="post" action="{url action=password}">	    
-		<h2 class="headingbox_dark largesize">{se name="PasswordHeader"}{/se}</h2>
+		<h2 class="headingbox_dark largesize">{s name="PasswordHeader"}{/s}</h2>
 	    <div class="outer">
 	        <fieldset>
 	            <p>
-	                <label>{se name="PasswordLabelMail"}{/se}</label>
+	                <label>{s name="PasswordLabelMail"}{/s}</label>
 	                <input name="email" type="text" id="txtmail" class="text" /><br />
 	            </p>
-	            <p class="description">{se name="PasswordText"}{/se}</p>
+	            <p class="description">{s name="PasswordText"}{/s}</p>
 	        </fieldset>
 	        
 	        <p class="buttons">
-	            <a href="javascript:history.back();" class="button-left large">{se name="PasswordLinkBack"}{/se}</a>
+	            <a href="{url controller='account'}" class="button-left large">{s name="PasswordLinkBack"}{/s}</a>
 	            <input type="submit" class="button-right large" value="{s name="PasswordSendAction"}Passwort anfordern{/s}" />
 	            <div class="clear">&nbsp;</div>
 	        </p>
