@@ -1019,7 +1019,8 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
 
         $connection->executeUpdate(
             'DELETE FROM s_core_optin WHERE datum <= :minDate AND type = "password"',
-            ['minDate' => $date]
+            ['minDate' => $date],
+            ['minDate' => "datetime"]
         );
     }
 
