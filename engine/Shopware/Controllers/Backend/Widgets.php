@@ -437,7 +437,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
 
         $this->View()->assign(
             array(
-                'success' => !!count($result),
+                'success' => !empty($result),
                 'data' => $result
             )
         );
