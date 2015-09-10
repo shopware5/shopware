@@ -6,6 +6,9 @@ In this document you will find a changelog of the important changes related to t
 * Fixed jsonrenderer for backend order batchprocessing
 * `sOrder::sManageEsdOrder` is deprecated, use `sOrder::handleESDOrder` instead.
 * `ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod::validate()` and respective implementations now expect an array as argument instead of a request object 
+* Added new `x-cache-context-hash` caching cookie. 
+    * If you are using an HTTP cache (ie. varnish), you need to reconfigure it.
+    * If your `config.php` includes a custom value for `cache_cookies`, you consider adding `x-cache-context-hash` to it 
 
 ## 5.0.3
 * The variant API resource now supports the getList method. It will return all variants with prices and attributes. You can optionally calculate the gross price by using the "considerTaxInput" parameter.
@@ -89,7 +92,6 @@ In this document you will find a changelog of the important changes related to t
     * Defining a snippet value in multiple lines is deprecated.
     * All snippet values that don't pass the validation should be refactored.
 * The method `getSeoArticleQuery` in `sRewriteTable.php` was changed to select the translations for the article attributes.
-* The order of the Smarty blocks `frontend_index_header_javascript_jquery_lib` and `frontend_index_header_javascript_jquery` for JavaScript inclusions have been slightly changed due to a new feature in the StateManager. The StateManager can now queue plugins for initialization which brings a performance boost. 
 
 ## 5.0.1
 * Create `sw:theme:dump:configuration` command to generate watch files for theme compiling
