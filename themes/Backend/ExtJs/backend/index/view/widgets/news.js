@@ -41,6 +41,7 @@ Ext.define('Shopware.apps.Index.view.widgets.News', {
      * @object
      */
     snippets: {
+        offlineMsg: "{s name=news/offline_msg}We can't establish a connection to the Shopware server. Please check your connection and try again later.{/s}",
         headers: {
             pubDate: '{s name=news/headers/date}Date{/s}',
             title: '{s name=news/headers/title}Title{/s}'
@@ -60,7 +61,7 @@ Ext.define('Shopware.apps.Index.view.widgets.News', {
 
         me.newsStore = Ext.create('Shopware.apps.Index.store.NewsLocal');
 
-        me.items = [{
+        me.grid = Ext.create('Ext.grid.Panel', {
             border: 0,
             store: me.newsStore,
             xtype: 'grid',
@@ -75,7 +76,9 @@ Ext.define('Shopware.apps.Index.view.widgets.News', {
                     view.store.sync();
                 }
             }
-        }];
+        });
+
+        me.items = [ me.grid ];
 
         me.tools = [{
             type: 'refresh',
@@ -135,7 +138,12 @@ Ext.define('Shopware.apps.Index.view.widgets.News', {
         var me = this,
             remoteStore = Ext.create('Shopware.apps.Index.store.News');
 
-        remoteStore.load(function(records) {
+        remoteStore.load(function(records, operation, success) {
+            if (!success) {
+                me.showOfflineMessage();
+                return;
+            }
+
             me.newsStore.remove(me.newsStore.getRange());
             me.newsStore.sync();
 
@@ -145,6 +153,30 @@ Ext.define('Shopware.apps.Index.view.widgets.News', {
             });
 
             me.newsStore.sync();
+        });
+    },
+
+    /**
+     * Shows in offline message instead of the `Ext.grid.Panel` to inform the shop owner that we can't establish a
+     * connection to the shopware server.
+     */
+    showOfflineMessage: function() {
+        var me = this;
+
+        me.removeAll();
+
+        me.add({
+            xtype: 'container',
+            html: '<div style="display: table-cell; vertical-align: middle;">' + me.snippets.offlineMsg + '</div>',
+            style: {
+                fontWeight: 'bold',
+                textAlign: 'center',
+                color: '#fff',
+                textShadow: '1px 1px 1px rgba(0, 0, 0, 0.2)',
+                fontSize: '15px',
+                lineHeight: '23px',
+                display: 'table'
+            }
         });
     },
 
