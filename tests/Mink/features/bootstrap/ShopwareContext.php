@@ -115,11 +115,23 @@ class ShopwareContext extends SubContext
      */
     public function iConfirmTheLinkInTheEmail($limit = 1)
     {
-        $sql = 'SELECT hash FROM s_core_optin ORDER BY id DESC LIMIT ' . $limit;
+        $sql = 'SELECT `type`, `hash` FROM `s_core_optin` ORDER BY `id` DESC LIMIT ' . $limit;
         $hashes = $this->getContainer()->get('db')->fetchAll($sql);
 
         $session = $this->getSession();
         $link = $session->getCurrentUrl();
+
+        foreach ($hashes as $optin) {
+            if ($optin['type'] === 'password') {
+                $mask = '%saccount/resetPassword/hash/%s';
+                $link = $this->getPage('Homepage')->getShopUrl();
+
+                $confirmationLink = sprintf($mask, $link, $optin['hash']);
+                $session->visit($confirmationLink);
+                return;
+            }
+        }
+
         $query = parse_url($link, PHP_URL_QUERY);
         $anchor = strpos($link, "#");
 
