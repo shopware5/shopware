@@ -111,7 +111,7 @@ class Shopware_Tests_Plugins_Core_PaymentMethods_DebitPaymentMethod extends Enli
         ];
 
         $validationResult = self::$debitPaymentMethod->validate($data);
-        $this->assertTrue($validationResult);
+        $this->assertEmpty($validationResult);
     }
 
     public function testCreatePaymentInstanceWithNoPaymentData()

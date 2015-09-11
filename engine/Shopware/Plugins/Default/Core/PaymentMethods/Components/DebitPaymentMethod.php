@@ -67,7 +67,7 @@ class DebitPaymentMethod extends GenericPaymentMethod
                 "sErrorMessages" => $sErrorMessages
             );
         } else {
-            return true;
+            return array();
         }
     }
 
