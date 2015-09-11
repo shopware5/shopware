@@ -768,26 +768,9 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      *
      * @return bool
      */
-    protected function assertVersionGreaterThan($requiredVersion)
-    {
-        return $this->assertMinimumVersion($requiredVersion);
-    }
-
-    /**
-     * Legacy alias with typo for assertVersionGreaterThan.
-     *
-     * Check if a given version is greater or equal to
-     * the currently installed shopware version.
-     *
-     * @deprecated 4.1.3 Use assertMinimumVersion instead
-     *
-     * @param  $requiredVersion string Format: 3.5.4 or 3.5.4.21111
-     *
-     * @return bool
-     */
     protected function assertVersionGreaterThen($requiredVersion)
     {
-        return $this->assertVersionGreaterThan($requiredVersion);
+        return $this->assertMinimumVersion($requiredVersion);
     }
 
     /**
