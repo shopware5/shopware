@@ -762,7 +762,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      * Check if a given version is greater or equal to
      * the currently installed shopware version.
      *
-     * @deprectated 4.1.3 Use assertMinimumVersion instead
+     * @deprecated 4.1.3 Use assertMinimumVersion instead
      *
      * @param  $requiredVersion string Format: 3.5.4 or 3.5.4.21111
      *
