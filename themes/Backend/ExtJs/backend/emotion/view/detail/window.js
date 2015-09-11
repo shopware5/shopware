@@ -327,13 +327,11 @@ Ext.define('Shopware.apps.Emotion.view.detail.Window', {
 
     enableTabs: function () {
         var me = this,
-            tabs = me.tabPanel.items,
-            len = tabs.length,
-            i = 0;
+            tabs = me.tabPanel.items;
 
-        for (; i < len; i++) {
-            tabs[i].setDisabled(false);
-        }
+        tabs.each(function(item) {
+            item.setDisabled(false);
+        });
     }
 });
 //{/block}
