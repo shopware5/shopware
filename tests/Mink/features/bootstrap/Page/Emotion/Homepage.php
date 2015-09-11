@@ -338,4 +338,9 @@ class Homepage extends Page implements HelperSelectorInterface
 
         Helper::throwException($message);
     }
+
+    public function getShopUrl()
+    {
+        return $this->getUrl();
+    }
 }

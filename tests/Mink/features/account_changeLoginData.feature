@@ -113,25 +113,33 @@ Feature: Successful changes of login data
 
     @forgot @login
     Scenario: I can request a new password, if I forgot it
-        When  I log in successful as "Max Mustermann" with email "test@example.com" and password "shopware"
-        And   I log me out
-        And   I follow "Mein Konto"
-        And   I follow "Passwort vergessen?"
+        When  I follow "Passwort vergessen?"
 
-        Then  I should see "Passwort vergessen? Hier können Sie ein neues Passwort anfordern"
-        And   I should see "Wir senden Ihnen ein neues, zufällig generiertes Passwort. Dieses können Sie dann im Kundenbereich ändern."
+        Then  I should see "Passwort vergessen?"
+        And   I should see "Wir senden Ihnen eine Bestätigungsmail. Klicken Sie auf den darin enthaltenen Link, um Ihr Passwort zu ändern."
 
         When  I fill in "email" with "test@example.info"
-        And   I press "Passwort anfordern"
+        And   I press "E-Mail senden"
         Then  I should see "Diese E-Mail-Adresse ist uns nicht bekannt"
 
         When  I fill in "email" with "test@example.com"
-        And   I press "Passwort anfordern"
-        Then  I should see "Ihr neues Passwort wurde Ihnen zugeschickt"
+        And   I press "E-Mail senden"
+        Then  I should see "Wir haben Ihnen eine Bestätigungsmail gesendet."
 
         When  I follow "Mein Konto"
+        And   I log in successful as "Max Mustermann" with email "test@example.com" and password "shopware"
+        And   I log me out
+        And   I click the link in my latest email
+
+        Then  I should see "Wenn Sie das Passwort für Ihr Konto vergessen haben, können Sie hier ein neues definieren. Wenn Sie das neue Passwort speichern, wird Ihr altes Passwort ungültig."
+
+        When  I fill in "password" with "shopware5"
+        And   I fill in "passwordConfirmation" with "shopware5"
+        And   I press "Passwort ändern"
+        Then  I should see "Ihr Passwort wurde erfolgreich geändert."
+        And   I should be on the page "Account"
+
+        When  I log me out
+        And   I go to the page "Account"
         And   I log in with email "test@example.com" and password "shopware"
         Then  I should see "Ihre Zugangsdaten konnten keinem Benutzer zugeordnet werden"
-
-        When  I log in with email "test@example.com" and password "shopware"
-        Then  I should see "Zu viele fehlgeschlagene Versuche. Ihr Account wurde vorübergehend deaktivert - bitte probieren Sie es in einigen Minuten erneut!"
