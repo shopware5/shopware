@@ -116,6 +116,11 @@ class Shopware_Components_Auth_Adapter_Default extends Enlight_Components_Auth_A
             }
 
             Enlight_Components_Session::regenerateId();
+
+            // close and restart session to make sure the db session handler writes updates.
+            session_write_close();
+            session_start();
+
             $this->setSessionId(Enlight_Components_Session::getId());
 
             $this->updateExpiry();
