@@ -437,7 +437,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
 
         $this->View()->assign(
             array(
-                'success' => true,
+                'success' => !empty($result),
                 'data' => $result
             )
         );
@@ -750,7 +750,15 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         }
 
         $result = [];
-        $xml = new \SimpleXMLElement(file_get_contents('https://' . $lang . '.shopware.com/news/?sRss=1'));
+        try {
+            $xml = new \SimpleXMLElement(file_get_contents('https://' . $lang . '.shopware.com/news/?sRss=1', false, stream_context_create([
+                'http' => [
+                    'timeout' => 20
+                ]
+            ])));
+        } catch(Exception $e) {
+            return $result;
+        }
 
         /**
          * @var \SimpleXMLElement $news
