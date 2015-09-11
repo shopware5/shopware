@@ -262,8 +262,7 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
             if (!empty(Shopware()->Config()->sOPTINVOTE)
                 && !$voteConfirmed && empty(Shopware()->Session()->sUserId)
             ) {
-                $hash = md5(uniqid(rand()));
-
+                $hash = \Shopware\Components\Random::getAlphanumericString(32);
                 $sql = '
                     INSERT INTO s_core_optin (datum, hash, data)
                     VALUES (NOW(), ?, ?)

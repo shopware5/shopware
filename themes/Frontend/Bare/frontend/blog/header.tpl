@@ -1,7 +1,17 @@
 {extends file='frontend/index/header.tpl'}
 
 {* Title *}
-{block name='frontend_index_header_title'}{if $sArticle.metaTitle}{$sArticle.metaTitle} | {config name=sShopname}{else}{$smarty.block.parent}{/if}{/block}
+{block name='frontend_index_header_title'}{strip}
+    {if $sArticle.metaTitle}
+        {$sArticle.metaTitle} | {config name=sShopname}
+    {elseif $sCategoryContent.metaTitle}
+        {$sCategoryContent.metaTitle}
+    {elseif $sCategoryContent.title}
+        {$sCategoryContent.title}
+    {else}
+        {$smarty.block.parent}
+    {/if}
+{/strip}{/block}
 
 {block name='frontend_index_header_meta_tags_opengraph'}
     {if $sArticle}

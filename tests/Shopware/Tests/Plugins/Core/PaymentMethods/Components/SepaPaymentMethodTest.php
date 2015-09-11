@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use ShopwarePlugin\PaymentMethods\Components\SepaPaymentMethod;
 
 /**
  * @category  Shopware
@@ -30,6 +31,9 @@
 
 class Shopware_Tests_Plugins_Core_PaymentMethods_SepaPaymentMethod extends Enlight_Components_Test_Plugin_TestCase
 {
+    /**
+     * @var SepaPaymentMethod
+     */
     protected static $sepaPaymentMethod;
 
     protected static $sepaStatus;
@@ -57,7 +61,7 @@ class Shopware_Tests_Plugins_Core_PaymentMethods_SepaPaymentMethod extends Enlig
         $sepaPaymentMean->setActive(true);
         Shopware()->Models()->flush($sepaPaymentMean);
 
-        self::$sepaPaymentMethod = new \ShopwarePlugin\PaymentMethods\Components\SepaPaymentMethod();
+        self::$sepaPaymentMethod = new SepaPaymentMethod();
     }
 
     public static function tearDownAfterClass()
@@ -87,9 +91,7 @@ class Shopware_Tests_Plugins_Core_PaymentMethods_SepaPaymentMethod extends Enlig
 
     public function testValidateEmptyGet()
     {
-        $this->Request()->setMethod('GET');
-
-        $validationResult = self::$sepaPaymentMethod->validate($this->Request());
+        $validationResult = self::$sepaPaymentMethod->validate([]);
         $this->assertTrue(is_array($validationResult));
         if (count($validationResult)) {
             $this->assertArrayHasKey('sErrorFlag', $validationResult);
@@ -102,14 +104,13 @@ class Shopware_Tests_Plugins_Core_PaymentMethods_SepaPaymentMethod extends Enlig
 
     public function testValidateFaultyIban()
     {
-        $this->Request()->setMethod('POST');
-        $this->Request()->setQuery(array(
+        $data = [
             "sSepaIban" => "Some Invalid Iban",
             "sSepaBic" => "Some Valid Bic",
             "sSepaBankName" => "Some Valid Bank Name"
-        ));
+        ];
 
-        $validationResult = self::$sepaPaymentMethod->validate($this->Request());
+        $validationResult = self::$sepaPaymentMethod->validate($data);
         $this->assertTrue(is_array($validationResult));
         if (count($validationResult)) {
             $this->assertArrayHasKey('sErrorFlag', $validationResult);
@@ -123,14 +124,13 @@ class Shopware_Tests_Plugins_Core_PaymentMethods_SepaPaymentMethod extends Enlig
 
     public function testValidateCorrectData()
     {
-        $this->Request()->setMethod('POST');
-        $this->Request()->setQuery(array(
+        $data = [
             "sSepaIban" => "AL47 2121 1009 0000 0002 3569 8741",
             "sSepaBic" => "Some Valid Bic",
             "sSepaBankName" => "Some Valid Bank Name"
-        ));
+        ];
 
-        $validationResult = self::$sepaPaymentMethod->validate($this->Request());
+        $validationResult = self::$sepaPaymentMethod->validate($data);
         $this->assertTrue(is_array($validationResult));
         $this->assertCount(0, $validationResult);
     }

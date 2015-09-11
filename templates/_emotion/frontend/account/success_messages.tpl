@@ -15,6 +15,8 @@
 			{s name='sMailConfirmation' namespace='frontend'}{/s}
 		{elseif $sSuccessAction == 'deletenewsletter'}
 			{s name='NewsletterMailDeleted' namespace='frontend/account/internalMessages'}{/s}
+		{elseif $sSuccessAction == 'resetPassword'}
+			{s name='PasswordResetNewSuccess' namespace='frontend/account/reset_password'}{/s}
 		{/if}
 	</div>
 {/if}

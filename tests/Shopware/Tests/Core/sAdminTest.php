@@ -174,7 +174,8 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                 $this->assertInstanceOf('ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod', $paymentClass);
                 Shopware()->Front()->setRequest(new Enlight_Controller_Request_RequestHttp());
 
-                $validationResult = $paymentClass->validate(Shopware()->Front()->Request());
+                $requestData = Shopware()->Front()->Request()->getParams();
+                $validationResult = $paymentClass->validate($requestData);
                 $this->assertTrue(is_array($validationResult));
                 if (count($validationResult)) {
                     $this->assertArrayHasKey('sErrorFlag', $validationResult);

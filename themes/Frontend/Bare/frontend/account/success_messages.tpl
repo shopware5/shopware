@@ -14,6 +14,8 @@
 		{$successText="{s name='sMailConfirmation' namespace='frontend'}{/s}"}
 	{elseif $sSuccessAction == 'deletenewsletter'}
 		{$successText="{s name='NewsletterMailDeleted' namespace='frontend/account/internalMessages'}{/s}"}
+	{elseif $sSuccessAction == 'resetPassword'}
+		{$successText="{s name='PasswordResetNewSuccess' namespace='frontend/account/reset_password'}{/s}"}
 	{/if}
 
 	<div class="account--success">

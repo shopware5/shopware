@@ -14,7 +14,7 @@
 {block name='frontend_index_header_canonical'}
     {* Count of available blog pages *}
     {$pages = ceil($sNumberArticles / $sPerPage)}
-    
+
     {if {config name=seoIndexPaginationLinks} && $pages > 1}
         {include file="frontend/listing/header_seo_pagination.tpl"}
     {elseif $pages > 1}

@@ -476,7 +476,7 @@ class sOrderTest extends PHPUnit_Framework_TestCase
         $this->assertNull($order);
     }
 
-    public function testSManageEsdOrder()
+    public function testHandleESDOrder()
     {
         $config = $this->invokeMethod(
             $this->module,
@@ -510,7 +510,7 @@ class sOrderTest extends PHPUnit_Framework_TestCase
                 array($esdArticle["id"])
             );
 
-            $this->module->sManageEsdOrder($basketRow, 1234, 4567);
+            $basketRow = $this->module->handleESDOrder($basketRow, 1234, 4567);
 
             if (!$esdArticle['id']) {
                 // Not ESD, ensure nothing happened

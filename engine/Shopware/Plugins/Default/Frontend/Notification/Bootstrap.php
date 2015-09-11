@@ -153,7 +153,7 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
                 if (empty($AlreadyNotified)) {
                     $action->View()->NotifyAlreadyRegistered = false;
 
-                    $hash = md5(uniqid(rand()));
+                    $hash = \Shopware\Components\Random::getAlphanumericString(32);
                     $link = $action->Front()->Router()->assemble(array(
                         'sViewport' => 'detail',
                         'sArticle' => $id,

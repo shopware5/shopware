@@ -22,7 +22,7 @@ When coding and committing, please:
  * Write your commit messages in English
  * Have them short and descriptive
  * Don't fix things which are related to other issues / pull requests
- * Mention you changes in the UPGRADE.md
+ * Mention your changes in the UPGRADE.md
  * Provide a test
  * Follow the coding standards
 
@@ -77,3 +77,10 @@ If you want to test a single component, add its path after the phpunit command, 
 
     vendor/bin/phpunit -c tests/Shopware tests/Shopware/Tests/Components/Api/
 
+# Documentation
+
+Developer documentation for Shopware is available [here](https://developers.shopware.com/). You can also contribute to the documentation project by submitting your pull requests to our [Devdocs Github project](https://github.com/shopware/devdocs)
+ 
+# Translations
+
+Shopware translations are done by the community and can be installed from the plugin store. If you wish to improve Shopware's translations, you can do so in our [Crowdin project page](https://crowdin.com/project/shopware). 

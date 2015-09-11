@@ -457,7 +457,8 @@ class sAdmin
             // Include management class and check input data
             if (!empty($paymentData['class'])) {
                 $sPaymentObject = $this->sInitiatePaymentClass($paymentData);
-                $checkPayment = $sPaymentObject->validate($this->front->Request());
+                $requestData = $this->front->Request()->getParams();
+                $checkPayment = $sPaymentObject->validate($requestData);
             }
             return array(
                 "checkPayment" => $checkPayment,

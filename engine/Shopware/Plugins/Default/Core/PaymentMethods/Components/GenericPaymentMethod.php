@@ -38,7 +38,7 @@ class GenericPaymentMethod extends BasePaymentMethod
     /**
      * @inheritdoc
      */
-    public function validate(\Enlight_Controller_Request_Request $request)
+    public function validate($paymentData)
     {
         return array();
     }

@@ -155,7 +155,14 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 
         $this->View()->sCountry = $this->getSelectedCountry();
         $this->View()->sState = $this->getSelectedState();
-        $this->View()->sPayment = $this->getSelectedPayment();
+
+        $payment = $this->getSelectedPayment();
+        if (array_key_exists('validation', $payment) && !empty($payment['validation'])) {
+            $this->onPaymentMethodValidationFail();
+            return;
+        }
+
+        $this->View()->sPayment = $payment;
 
         $userData = $this->View()->sUserData;
         $userData["additional"]["payment"] = $this->View()->sPayment;
@@ -1250,6 +1257,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         $paymentClass = $this->admin->sInitiatePaymentClass($payment);
         if ($payment && $paymentClass instanceof \ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod) {
             $data = $paymentClass->getCurrentPaymentDataAsArray(Shopware()->Session()->sUserId);
+            $payment['validation'] = $paymentClass->validate($data);
             if (!empty($data)) {
                 $payment['data'] = $data;
             }
@@ -1556,5 +1564,25 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         }
 
         return false;
+    }
+
+    /**
+     * Handles payment method validation fail on checkout
+     * Redirects the user to the payment edit page
+     */
+    private function onPaymentMethodValidationFail()
+    {
+        if (Shopware()->Shop()->getTemplate()->getVersion() >= 3) {
+            $target = array('controller' => 'checkout', 'action' => 'shippingPayment');
+        } else {
+            $target = array(
+                'controller' => 'account',
+                'action' => 'payment',
+                'sTarget' => 'checkout',
+                'sTargetAction' => 'confirm'
+            );
+        }
+
+        $this->redirect($target);
     }
 }

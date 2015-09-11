@@ -410,6 +410,24 @@ It allows the user to directly see and change the important information of their
     }
 }
 
+.account--password-new {
+    .unitize(margin-top, 10);
+
+    .password-new--input {
+        .unitize(margin-bottom, 15);
+        width: 100%;
+    }
+
+    .password-new--helptext {
+        margin-bottom: 0;
+    }
+
+    .password-new--submit {
+        display: block;
+        width: 100%;
+    }
+}
+
 @media screen and(min-width: @phoneLandscapeViewportWidth ) {
     .account--password-reset {
         .unitize(margin-top, 10);
@@ -426,6 +444,11 @@ It allows the user to directly see and change the important information of their
                 .unitize-margin(0, 10, 0, 0);
             }
         }
+    }
+
+    .account--password-new .password-new--submit {
+        display: inline-block;
+        width: auto;
     }
 
     .account--logout .logout-back-to-shop {
@@ -445,6 +468,14 @@ It allows the user to directly see and change the important information of their
 
     .account--password-reset {
         .unitize-margin(20, 0, 0, 0);
+    }
+
+    .account--password-new {
+        .unitize(margin-top, 20);
+
+        .password-new--input {
+            .unitize-width(320);
+        }
     }
 
     .account--menu {
@@ -822,6 +853,10 @@ It allows the user to directly see and change the important information of their
 
     .account--password-reset {
         .unitize-margin(45, 0, 0, 0);
+    }
+
+    .account--password-new {
+        .unitize(margin-top, 45);
     }
 
     // Account error message margin

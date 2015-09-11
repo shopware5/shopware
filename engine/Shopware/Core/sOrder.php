@@ -239,7 +239,26 @@ class sOrder
 
     /**
      * Check each basket row for instant downloads
-     * @access public
+     * @param $basketRow
+     * @param $orderID
+     * @param $orderDetailsID
+     * @return array
+     */
+    public function handleESDOrder($basketRow, $orderID, $orderDetailsID)
+    {
+        $this->sManageEsdOrder($basketRow, $orderID, $orderDetailsID);
+
+        return $basketRow;
+    }
+
+    /**
+     * @deprecated since SW 5.0.4, will be removed in SW 5.2, use handleESDOrder() instead
+     *
+     * @param $basketRow
+     * @param $orderID
+     * @param $orderdetailsID
+     * @throws Enlight_Exception
+     * @throws Zend_Db_Adapter_Exception
      */
     public function sManageEsdOrder(&$basketRow, $orderID, $orderdetailsID)
     {
@@ -720,7 +739,7 @@ class sOrder
             // For esd-articles, assign serial number if needed
             // Check if this article is esd-only (check in variants, too -> later)
             if ($basketRow["esdarticle"]) {
-                $this->sManageEsdOrder($basketRow, $orderID, $orderdetailsID);
+                $basketRow = $this->handleESDOrder($basketRow, $orderID, $orderdetailsID);
 
                 // Add assignedSerials to basketcontent
                 if (!empty($basketRow['assignedSerials'])) {
