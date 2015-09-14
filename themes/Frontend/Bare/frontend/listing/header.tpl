@@ -1,7 +1,7 @@
 {extends file='frontend/index/header.tpl'}
 
 {* Keywords *}
-{block name="frontend_index_header_meta_keywords"}{if $sCategoryContent.metaKeywords}{$sCategoryContent.metaKeywords}{/if}{/block}
+{block name="frontend_index_header_title"}{if $sCategoryContent.metaKeywords}{$sCategoryContent.metaKeywords}{/if}{/block}
 
 {block name='frontend_index_header_meta_tags_opengraph'}
 
