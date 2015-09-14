@@ -26,7 +26,7 @@
         </ul>
     {/function}
 
-    <div class="advanced-menu" data-advanced-menu="true">
+    <div class="advanced-menu" data-advanced-menu="true" data-hoverDelay="{$hoverDelay}">
         {block name="frontend_plugins_advanced_menu"}
             {foreach $sAdvancedMenu as $mainCategory}
                 {if !$mainCategory.active || $mainCategory.hidetop}

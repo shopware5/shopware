@@ -18,6 +18,7 @@ In this document you will find a changelog of the important changes related to t
         * `engine/Shopware/Plugins/Default/Frontend/Notification/Bootstrap.php`
     * Added new `reset_password.tpl` in Emotion and Bare
     * Removed `sendPassword` method in `engine/Shopware/Controllers/Frontend/Account.php`
+* Added AdvancedMenu feature to configure menu opening delay on mouse hover
 
 ## 5.0.3
 * The variant API resource now supports the getList method. It will return all variants with prices and attributes. You can optionally calculate the gross price by using the "considerTaxInput" parameter.
