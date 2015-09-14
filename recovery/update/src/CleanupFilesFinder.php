@@ -44,16 +44,15 @@ class CleanupFilesFinder
      */
     public function getCleanupFiles()
     {
-        $cleanupFile = UPDATE_ASSET_PATH . '/cleanup.php';
+        $cleanupFile = UPDATE_ASSET_PATH . '/cleanup.txt';
         if (!is_file($cleanupFile)) {
             return [];
         }
 
-        $rawList = require $cleanupFile;
+        $lines = file($cleanupFile, \FILE_IGNORE_NEW_LINES);
 
         $cleanupList = [];
-
-        foreach ($rawList as $path) {
+        foreach ($lines as $path) {
             $realpath = $this->shopwarePath.'/'.$path;
             if (file_exists($realpath)) {
                 $cleanupList[] = $realpath;

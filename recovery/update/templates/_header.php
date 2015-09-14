@@ -26,7 +26,6 @@
             'counterTextUnpack':     '<?= $language['migration_counter_text_unpack']; ?>',
             'counterTextMigrations': '<?= $language['migration_counter_text_migrations']; ?>',
             'counterTextSnippets':   '<?= $language['migration_counter_text_snippets']; ?>',
-            'counterTextThemes':     '<?= $language['migration_counter_text_themes']; ?>',
             'updateSuccess':         '<?= $language['migration_update_success']; ?>'
         }
     </script>

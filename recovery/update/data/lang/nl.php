@@ -38,7 +38,6 @@ return [
     'migration_header'                  => 'Database Update uitvoeren',
     'migration_counter_text_migrations' => 'Database Update word uitgevoerd',
     'migration_counter_text_snippets'   => 'Tekstblokken worden geactualiseerd',
-    'migration_counter_text_themes'     => 'Themes synchroniseren',
     'migration_counter_text_unpack'     => 'Bestanden worden uitgepakt',
     'migration_update_success'          => 'De update werd succesvol uitgevoerd',
 

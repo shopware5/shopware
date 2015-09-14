@@ -147,10 +147,6 @@ $app->map('/applyMigrations', function () use ($app, $container) {
     $container->get('controller.batch')->applyMigrations();
 })->via('GET', 'POST')->name('applyMigrations');
 
-$app->map('/synchronizeThemes', function () use ($container) {
-    $container->get('controller.batch')->synchronizeThemes();
-})->via('GET', 'POST')->name('synchronizeThemes');
-
 $app->map('/importSnippets', function () use ($container) {
     $container->get('controller.batch')->importSnippets();
 })->via('GET', 'POST')->name('importSnippets');
@@ -164,6 +160,10 @@ $app->map('/cleanup', function () use ($container) {
 })->via('GET', 'POST')->name('cleanup');
 
 $app->map('/done', function () use ($app, $container) {
+    /** @var \Shopware\Components\Theme\Installer $themeService */
+    $themeService = $container->get('shopware.theme_installer');
+    $themeService->synchronize();
+
     if (is_dir(SW_PATH.'/recovery/install')) {
         /** @var \Shopware\Recovery\Common\SystemLocker $systemLocker */
         $systemLocker = $container->get('system.locker');
