@@ -545,6 +545,8 @@ class FieldHelper
             'media.type as __media_type',
             'media.extension as __media_extension',
             'media.file_size as __media_file_size',
+            'media.width as __media_width',
+            'media.height as __media_height',
             'media.userID as __media_userID',
             'media.created as __media_created',
             'mediaSettings.id as __mediaSettings_id',

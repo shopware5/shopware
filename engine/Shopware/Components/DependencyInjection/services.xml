@@ -254,6 +254,11 @@
             <argument type="service" id="service_container" />
         </service>
 
+        <service id="MediaSubscriber" class="Shopware\Models\Media\MediaSubscriber" public="false">
+            <tag name="doctrine.event_subscriber" />
+            <argument type="service" id="shopware_media.media_service" />
+        </service>
+
         <service id="thumbnail_generator_basic" class="Shopware\Components\Thumbnail\Generator\Basic">
             <argument type="service" id="config" />
             <argument type="service" id="shopware_media.media_service" />

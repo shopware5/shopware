@@ -238,7 +238,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         $totalResult = $paginator->count();
 
         $mediaList = $query->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaService = $this->get('shopware_media.media_service');
 
         /** @var $media Media */
         foreach ($mediaList as &$media) {
@@ -255,10 +255,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             $media['path'] = $mediaService->getUrl($media['path']);
 
             if (!empty($thumbnails) && $mediaService->has($thumbnails['140x140'])) {
-                $size = getimagesize($media['path']);
                 $media['thumbnail'] = $mediaService->getUrl($thumbnails['140x140']);
-                $media['width'] = $size[0];
-                $media['height'] = $size[1];
             }
         }
 

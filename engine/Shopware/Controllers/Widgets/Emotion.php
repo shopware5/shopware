@@ -503,24 +503,12 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
      */
     private function getBannerMappingLinks($data, $category, $element)
     {
-        $mediaService = $this->get('shopware_media.media_service');
-
         if (!empty($data['link'])) {
             preg_match('/^([a-z]*:\/\/|shopware\.php|mailto:)/i', $data['link'], $matches);
 
             if (empty($matches) && substr($data['link'], 0, 1) === '/') {
                 $data['link'] = $this->Request()->getBaseUrl() . $data['link'];
             }
-        }
-
-        // Get image size of the banner
-        if (isset($data['file']) && !empty($data['file'])) {
-            list($bannerWidth, $bannerHeight) = getimagesize($mediaService->getUrl($data['file']));
-
-            $data['fileInfo'] = array(
-                'width' => $bannerWidth,
-                'height' => $bannerHeight
-            );
         }
 
         $mappings = $data['bannerMapping'];
@@ -560,6 +548,11 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
                 $mediaData = [];
             }
             $data = array_merge($mediaData, $data);
+
+            $data['fileInfo'] = array(
+                'width' => $mediaData['width'],
+                'height' => $mediaData['height']
+            );
 
             // @deprecated since 5.1 will be removed in 5.2
             $data['file'] = $mediaService->getUrl($data['file']);
@@ -666,15 +659,10 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
             $single = $this->get('legacy_struct_converter')->convertMediaStruct($single);
             $value = array_merge($value, $single);
-
-            $fullPath = $this->get('kernel')->getRootDir() . '/' . $value['path'];
-            list($bannerWidth, $bannerHeight) = getimagesize($fullPath);
-
             $value['path'] = $mediaService->getUrl($value['path']);
-
             $value['fileInfo'] = array(
-                'width' => $bannerWidth,
-                'height' => $bannerHeight
+                'width' => $value['width'],
+                'height' => $value['height']
             );
         }
 
