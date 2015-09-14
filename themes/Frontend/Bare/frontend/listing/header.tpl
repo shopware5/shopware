@@ -24,7 +24,7 @@
 
     {* Images *}
     {if $sCategoryContent.media.path}
-        {$metaImage = {link file="{$sCategoryContent.media.path}" fullPath}}
+        {$metaImage = {$sCategoryContent.media.path}}
     {else}
         {foreach $sArticles as $sArticle}
             {if $sArticle@first}
