@@ -4,7 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "8fb55e4f667ba22df13aff0fa03f7927",
+    "hash": "5ab74a72195209c9199fed5ca572f608",
+    "content-hash": "f61f92b9f6b01bdda6ec8f2448908f55",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1123,16 +1124,16 @@
         },
         {
             "name": "ongr/elasticsearch-dsl",
-            "version": "v1.0.0-RC1",
+            "version": "v1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ongr-io/ElasticsearchDSL.git",
-                "reference": "d21fa929831d140758545ad35358d3ea48666c31"
+                "reference": "8a4cccdb5061fcb4f412399bb9e384104a69b5c2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ongr-io/ElasticsearchDSL/zipball/d21fa929831d140758545ad35358d3ea48666c31",
-                "reference": "d21fa929831d140758545ad35358d3ea48666c31",
+                "url": "https://api.github.com/repos/ongr-io/ElasticsearchDSL/zipball/8a4cccdb5061fcb4f412399bb9e384104a69b5c2",
+                "reference": "8a4cccdb5061fcb4f412399bb9e384104a69b5c2",
                 "shasum": ""
             },
             "require": {
@@ -1163,7 +1164,7 @@
             ],
             "description": "Elasticsearch DSL library",
             "homepage": "http://ongr.io",
-            "time": "2015-09-07 06:34:46"
+            "time": "2015-09-14 06:59:56"
         },
         {
             "name": "oyejorge/less.php",
@@ -1406,12 +1407,12 @@
             "version": "v2.7.3",
             "source": {
                 "type": "git",
-                "url": "https://github.com/symfony/Console.git",
+                "url": "git@github.com:symfony/Console.git",
                 "reference": "d6cf02fe73634c96677e428f840704bfbcaec29e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Console/zipball/d6cf02fe73634c96677e428f840704bfbcaec29e",
+                "url": "https://api.github.com/repos/symfony/Console/zipball/c0bc26eabd880b1e9362471a0e2a30b492d043a9",
                 "reference": "d6cf02fe73634c96677e428f840704bfbcaec29e",
                 "shasum": ""
             },
@@ -4040,9 +4041,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "ongr/elasticsearch-dsl": 5
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
