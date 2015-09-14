@@ -195,7 +195,7 @@ Ext.define('Shopware.apps.ProductStream.controller.Main', {
         var currencyCombo = me.getCurrencyCombo();
         var customerGroupCombo = me.getCustomerGroupCombo();
 
-        if (!conditions) {
+        if (!conditions || Object.getOwnPropertyNames(conditions).length === 0) {
             if (!conditionPanel.validateConditions()) {
                 return;
             }
