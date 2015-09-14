@@ -5,6 +5,8 @@ In this document you will find a changelog of the important changes related to t
 * Update ongr/elasticsearch-dsl to version 1.0.0-RC1
 * Update elasticsearch/elasticsearch to version 2.0.0
     * See: https://www.elastic.co/guide/en/elasticsearch/reference/2.0/breaking-changes-2.0.html
+* The MediaBackend and PathNormalizer have been moved into the MediaService
+* The media live migration is now enabled by default
 * Added new Smarty block `frontend_index_header_javascript_tracking` for tracking codes which are required to be included into the "head" section of the document
 
 ## 5.1.0 RC1
@@ -191,20 +193,6 @@ In this document you will find a changelog of the important changes related to t
 ## 5.0.4
 * Change file extension of `Shopware_Components_Convert_Excel::generateXML` to .xls
 * Fixed jsonrenderer for backend order batchprocessing
-* `sOrder::sManageEsdOrder` is deprecated, use `sOrder::handleESDOrder` instead.
-* `ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod::validate()` and respective implementations now expect an array as argument instead of a request object
-* Added new `x-cache-context-hash` caching cookie.
-    * If you are using an HTTP cache (ie. varnish), you need to reconfigure it.
-    * If your `config.php` includes a custom value for `cache_cookies`, you consider adding `x-cache-context-hash` to it
-* The forgot password functionality does no longer send the new password via email. It now sends a confirmation email to manually set a new password.
-    * `sPASSWORD` email template has been removed
-    * `sCONFIRMPASSWORDCHANGE` email template has been added
-    * Changed `md5` encryption to `\Shopware\Components\Random::getAlphanumericString()` in:
-        * `engine/Shopware/Controllers/Frontend/Detail.php`
-        * `engine/Shopware/Controllers/Frontend/Newsletter.php`
-        * `engine/Shopware/Plugins/Default/Frontend/Notification/Bootstrap.php`
-    * Added new `reset_password.tpl` in Emotion and Bare
-    * Removed `sendPassword` method in `engine/Shopware/Controllers/Frontend/Account.php`
 
 
 ## 5.0.3

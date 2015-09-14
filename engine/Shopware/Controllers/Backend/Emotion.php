@@ -414,7 +414,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     private function fillElements($emotion, $data)
     {
         $elements= array();
-        $pathNormalizer = Shopware()->Container()->get('shopware_media.path_normalizer');
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
 
         foreach ($data['elements'] as $elementData) {
             $element = new \Shopware\Models\Emotion\Element();
@@ -436,7 +436,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
 
                         if (is_array($item['value'])) {
                             foreach($item['value'] as &$val) {
-                                $val['path'] = $pathNormalizer->get($val['path']);
+                                $val['path'] = $mediaService->normalize($val['path']);
                             }
                         }
 
@@ -449,7 +449,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
                 }
 
                 if ($field->getName() == 'file' || $field->getName() == 'image') {
-                    $value = $pathNormalizer->get($value);
+                    $value = $mediaService->normalize($value);
                 }
 
                 $model->setValue($value);

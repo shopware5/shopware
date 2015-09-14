@@ -322,8 +322,8 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
 
         // set new image and extension if necessary
         if (!empty($mediaManagerData)) {
-            $pathNormalizer = Shopware()->Container()->get('shopware_media.path_normalizer');
-            $mediaManagerData = $pathNormalizer->get($mediaManagerData);
+            $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+            $mediaManagerData = $mediaService->normalize($mediaManagerData);
             $bannerModel->setImage($mediaManagerData);
         }
 

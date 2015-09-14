@@ -57,11 +57,11 @@ class ImageMigrateCommand extends ShopwareCommand
         $from = $input->getOption('from') ?: 'local';
         $to = $input->getOption('to') ?: 'local';
 
-        $filesystemFactory = Shopware()->Container()->get('shopware_media.backend_factory');
+        $filesystemFactory = $this->getContainer()->get('shopware_media.media_service_factory');
         $fromFileSystem = $filesystemFactory->factory($from);
         $toFileSystem = $filesystemFactory->factory($to);
 
-        $mediaMigration = Shopware()->Container()->get('shopware_media.media_migration');
+        $mediaMigration = $this->getContainer()->get('shopware_media.media_migration');
         $mediaMigration->migrate($fromFileSystem, $toFileSystem, $output);
     }
 }

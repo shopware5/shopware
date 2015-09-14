@@ -17,11 +17,26 @@ return array_replace_recursive([
     'trustedproxies' => [],
     'cdn' => [
         'backend' => 'local',
+        'strategy' => 'md5',
         'adapters' => [
             'local' => [
                 'type' => 'local',
                 'mediaUrl' => '',
+
                 'path' => realpath(__DIR__ . '/../../../')
+            ],
+            'ftp' => [
+                'type' => 'ftp',
+                'mediaUrl' => '',
+
+                'host' => '',
+                'username' => '',
+                'password' => '',
+                'port' => 21,
+                'root' => '/',
+                'passive' => true,
+                'ssl' => false,
+                'timeout' => 30
             ]
         ]
     ],

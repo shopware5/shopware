@@ -22,26 +22,30 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\MediaBundle;
+namespace Shopware\Bundle\MediaBundle\Strategy;
 
-class MediaPathNormalizer implements MediaPathNormalizerInterface
+/**
+ * Class StrategyFactory
+ * @package Shopware\Bundle\MediaBundle\Strategy
+ */
+class StrategyFactory
 {
     /**
-     * @inheritdoc
+     * Return a new storage strategy instance based on the configured strategy type
+     *
+     * @param string $strategy
+     * @return StrategyInterface
+     * @throws \Exception
      */
-    public function get($path)
+    public function factory($strategy)
     {
-        // remove filesystem directories
-        $path = str_replace(Shopware()->DocPath(), '', $path);
-        $path = str_replace("//", "/", $path);
-
-        // remove everything before /media/...
-        preg_match("/.*((media\/(?:archive|image|music|pdf|temp|unknown|video)(?:\/thumbnail)?).*\/(.*))/", $path, $matches);
-
-        if (!empty($matches)) {
-            return $matches[2] . "/" .$matches[3];
+        switch ($strategy) {
+            case 'md5':
+                return new Md5Strategy();
+            case 'plain':
+                return new PlainStrategy();
+            default:
+                throw new \Exception(sprintf("Unsupported strategy '%s'.", $strategy));
         }
-
-        return $path;
     }
 }

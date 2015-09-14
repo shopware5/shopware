@@ -28,6 +28,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\MediaBundle\Struct\MediaPosition;
 
+/**
+ * Class GarbageCollectorFactory
+ * @package Shopware\Bundle\MediaBundle
+ */
 class GarbageCollectorFactory
 {
     /**

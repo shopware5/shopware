@@ -247,11 +247,10 @@ class sMarketing
 
 
         $images = array_column($getBanners, 'image');
-        $pathNormalizer = Shopware()->Container()->get('shopware_media.path_normalizer');
         $mediaService = Shopware()->Container()->get('shopware_media.media_service');
 
-        array_walk($images, function(&$image) use ($pathNormalizer) {
-            $image = $pathNormalizer->get($image);
+        array_walk($images, function(&$image) use ($mediaService) {
+            $image = $mediaService->normalize($image);
         });
 
         $mediaIds = $this->getMediaIdsOfPath($images);
@@ -308,9 +307,9 @@ class sMarketing
      */
     private function getMediaByPath($media, $path)
     {
-        $pathNormalizer = Shopware()->Container()->get('shopware_media.path_normalizer');
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
         foreach ($media as $single) {
-            if ($pathNormalizer->get($single->getFile()) == $path) {
+            if ($mediaService->normalize($single->getFile()) == $path) {
                 return $single;
             }
         }

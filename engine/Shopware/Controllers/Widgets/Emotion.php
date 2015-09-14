@@ -503,6 +503,8 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
      */
     private function getBannerMappingLinks($data, $category, $element)
     {
+        $mediaService = $this->get('shopware_media.media_service');
+
         if (!empty($data['link'])) {
             preg_match('/^([a-z]*:\/\/|shopware\.php|mailto:)/i', $data['link'], $matches);
 
@@ -658,6 +660,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             $single = $media[$value['mediaId']];
 
             $single = $this->get('legacy_struct_converter')->convertMediaStruct($single);
+
             $value = array_merge($value, $single);
             $value['path'] = $mediaService->getUrl($value['path']);
             $value['fileInfo'] = array(
