@@ -307,9 +307,8 @@ class sMarketing
      */
     private function getMediaByPath($media, $path)
     {
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
         foreach ($media as $single) {
-            if ($mediaService->normalize($single->getFile()) == $path) {
+            if ($single->getFile() == $path) {
                 return $single;
             }
         }
