@@ -10,7 +10,7 @@ Ext.define('Shopware.apps.PluginManager.view.list.Window', {
     height: '90%',
     width: 1283,
 
-    title: '{s name="title"}{/s}',
+    title: '{s name="title"}Plugin Manager{/s}',
 
     initComponent: function() {
         var me = this;

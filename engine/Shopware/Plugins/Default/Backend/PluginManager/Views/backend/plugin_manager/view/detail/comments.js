@@ -33,15 +33,15 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Comments', {
         items.push({
             xtype: 'component',
             cls: 'headline',
-            html: '{s name="customer_rating_for"}{/s} ' + me.plugin.get('label')
+            html: '{s name="customer_rating_for"}Customer rating for{/s} ' + me.plugin.get('label')
         });
 
         items.push({
             xtype: 'component',
             cls: 'rating-average',
-            html:  '<div class="label">{s name="rating_average"}{/s}</div>' +
+            html:  '<div class="label">{s name="rating_average"}Average customer rating:{/s}</div>' +
                     '<div class="store-plugin-rating star' + me.plugin.get('rating') + '">&nbsp;</div>' +
-                    '<div class="suffix">('+ me.commentCount +' {s name="rating"}{/s})</div>'
+                    '<div class="suffix">('+ me.commentCount +' {s name="rating"}customer reviews{/s})</div>'
         });
 
         if (me.plugin['getCommentsStore']) {
@@ -72,7 +72,7 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Comments', {
                 html: '&nbsp'
             }, {
                 cls: 'comment-name',
-                html: '{s name="rating_author"}{/s}: ' + comment.get('author')
+                html: '{s name="rating_author"}From{/s}: ' + comment.get('author')
             }, {
                 cls: 'comment-date',
                 html: Ext.util.Format.date(date) + ' ' + Ext.util.Format.date(date, timeFormat)

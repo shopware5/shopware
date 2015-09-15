@@ -13,9 +13,9 @@ Ext.define('Shopware.apps.PluginManager.view.list.HomePage', {
         me.content = Ext.create('Ext.container.Container', {
             padding: '30 0 0',
             items: [
-                { xtype: 'component', cls: 'headline', html: '{s name="store_newcomer"}{/s}' },
+                { xtype: 'component', cls: 'headline', html: '{s name="store_newcomer"}New in the store{/s}' },
                 me.createNewcomerListing(),
-                { xtype: 'component', cls: 'headline', html: '{s name="ready_for_integration"}{/s}' },
+                { xtype: 'component', cls: 'headline', html: '{s name="ready_for_integration"}Ready for integration{/s}' },
                 me.createDummyListing()
             ]
         });
@@ -55,7 +55,7 @@ Ext.define('Shopware.apps.PluginManager.view.list.HomePage', {
 
         me.newcomerStore.on('load', function() {
             var moreLink = Ext.create('PluginManager.container.Container', {
-                html: '<div class="button">{s name="display_all_newcomer"}{/s}</div>',
+                html: '<div class="button">{s name="display_all_newcomer"}Display all new{/s}</div>',
                 cls: 'more-link',
                 handler: function() {
                     me.fireEvent('display-newcomer');

@@ -33,7 +33,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Main', {
                 }
 
                 if (!Shopware.app.Application.sbpAvailable) {
-                    Shopware.Notification.createGrowlMessage('', '{s name="sbp_not_available"}{/s}');
+                    Shopware.Notification.createGrowlMessage('', '{s name="sbp_not_available"}Shopware store not available, store features disabled.{/s}');
                 }
                 me.mainWindow = me.getView('list.Window').create();
                 me.mainWindow.show();

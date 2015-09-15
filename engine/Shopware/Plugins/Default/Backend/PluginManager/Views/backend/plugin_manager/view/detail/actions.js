@@ -28,7 +28,7 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Actions', {
 
         if (me.plugin.allowUpdate()) {
             button = Ext.create('PluginManager.container.Container', {
-                html: '{s name="install_update"}{/s} (v ' + me.plugin.get('availableVersion') + ')',
+                html: '{s name="install_update"}Install update{/s} (v ' + me.plugin.get('availableVersion') + ')',
                 cls: 'plugin-manager-action-button primary',
                 handler: function() {
                     me.updatePluginEvent(me.plugin);
@@ -39,7 +39,7 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Actions', {
 
         if (me.plugin.allowDummyUpdate()) {
             button = Ext.create('PluginManager.container.Container', {
-                html: '{s name="install"}{/s}',
+                html: '{s name="install"}Install{/s}',
                 cls: 'plugin-manager-action-button primary',
                 handler: function() {
                     me.updateDummyPluginEvent(me.plugin);
@@ -50,7 +50,7 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Actions', {
 
         if (me.plugin.allowInstall()) {
             button = Ext.create('PluginManager.container.Container', {
-                html: '{s name="install"}{/s}',
+                html: '{s name="install"}Install{/s}',
                 cls: 'plugin-manager-action-button primary',
                 handler: function() {
                     me.installPluginEvent(me.plugin);
@@ -61,7 +61,7 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Actions', {
 
         if (me.plugin.allowActivate()) {
             button = Ext.create('PluginManager.container.Container', {
-                html: '{s name="activate"}{/s}',
+                html: '{s name="activate"}Activate{/s}',
                 cls: 'plugin-manager-action-button primary',
                 handler: function() {
                     me.activatePluginEvent(me.plugin);
@@ -73,7 +73,7 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Actions', {
 
         if (me.plugin.allowReinstall()) {
             button = Ext.create('PluginManager.container.Container', {
-                html: '{s name="reinstall"}{/s}',
+                html: '{s name="reinstall"}Reinstall{/s}',
                 cls: 'plugin-manager-action-button',
                 handler: function() {
                     me.reinstallPluginEvent(me.plugin);
@@ -84,7 +84,7 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Actions', {
 
         if (me.plugin.allowUninstall()) {
             button = Ext.create('PluginManager.container.Container', {
-                html: '{s name="uninstall"}{/s}',
+                html: '{s name="uninstall"}Uninstall{/s}',
                 cls: 'plugin-manager-action-button',
                 handler: function() {
                     me.uninstallPluginEvent(me.plugin);
@@ -95,7 +95,7 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Actions', {
 
         if (me.plugin.allowDeactivate()) {
             button = Ext.create('PluginManager.container.Container', {
-                html: '{s name="deactivate"}{/s}',
+                html: '{s name="deactivate"}Deactivate{/s}',
                 cls: 'plugin-manager-action-button',
                 handler: function() {
                     me.deactivatePluginEvent(me.plugin);
@@ -106,7 +106,7 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Actions', {
 
         if (me.plugin.allowDelete()) {
             button = Ext.create('PluginManager.container.Container', {
-                html: '{s name="delete"}{/s}',
+                html: '{s name="delete"}Delete{/s}',
                 cls: 'plugin-manager-action-button',
                 handler: function() {
                     me.deletePluginEvent(me.plugin);

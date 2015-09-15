@@ -45,7 +45,7 @@ Ext.define('Shopware.apps.PluginManager.view.account.Checkout', {
             inputValue: true,
             cls: 'gtc',
             uncheckedValue: false,
-            boxLabel: '{s name="gtc_accept"}{/s}',
+            boxLabel: '{s name="gtc_accept"}I have read and agree with the <a href="https://www.shopware.com/general-terms-conditions" target="_blank">GTC</a> of your shop.{/s}',
             value: false,
             listeners: {
                 change: function() {
@@ -67,7 +67,7 @@ Ext.define('Shopware.apps.PluginManager.view.account.Checkout', {
     createHeadline: function() {
         return Ext.create('Ext.Component', {
             cls: 'headline',
-            html: '{s name="finish_order"}{/s}',
+            html: '{s name="finish_order"}Complete order{/s}',
             height: 65,
             margin: '0 0 5'
         });
@@ -81,7 +81,7 @@ Ext.define('Shopware.apps.PluginManager.view.account.Checkout', {
         me.billingAddress = Ext.create('Ext.container.Container', {
             cls: 'booking-container billing-address',
             flex: 1,
-            html: '<div class="headline">{s name="billing_address"}{/s}</div>' +
+            html: '<div class="headline">{s name="billing_address"}Billing address{/s}</div>' +
                   '<div>' + address.get('firstName') + ' ' + address.get('lastName') + '</div>' +
                   '<div>' + address.get('street')  + '</div>' +
                   '<div>' + address.get('zipCode') + ' ' + address.get('city') + '</div>' +
@@ -92,13 +92,13 @@ Ext.define('Shopware.apps.PluginManager.view.account.Checkout', {
             cls: 'booking-container licence-domain',
             flex: 1,
             margin: '0 20',
-            html: '<div class="headline">{s name="licence_domain"}{/s}</div>' +
-                  '<div class="content">{s name="licence_domain_notice"}{/s}</div>' +
+            html: '<div class="headline">{s name="licence_domain"}License domain{/s}</div>' +
+                  '<div class="content">{s name="licence_domain_notice"}Your purchase will be registered for the following domain{/s}</div>' +
                   '<div class="domain">' + me.basket.get('licenceDomain') + '</div>'
         });
 
         var bookingDomainHeadline = Ext.create('Ext.Component', {
-            html: '<div class="headline">{s name="booking_domain"}{/s}</div>'
+            html: '<div class="headline">{s name="booking_domain"}Domain booking{/s}</div>'
         });
 
         me.bookingDomainAmount = Ext.create('Ext.Component', {
@@ -141,7 +141,7 @@ Ext.define('Shopware.apps.PluginManager.view.account.Checkout', {
 
         me.chargeDomainButton = Ext.create('PluginManager.container.Container', {
             cls: 'plugin-manager-action-button primary charge-amount',
-            html: '<a href="https://account.shopware.com/#/accountCharging" target="_blank">{s name="charge_amount"}{/s}</a>'
+            html: '<a href="https://account.shopware.com/#/accountCharging" target="_blank">{s name="charge_amount"}Charge amount{/s}</a>'
         });
 
         me.bookingDomain = Ext.create('Ext.container.Container', {
@@ -180,8 +180,8 @@ Ext.define('Shopware.apps.PluginManager.view.account.Checkout', {
         var header = Ext.create('Ext.Component', {
             cls: 'position-header',
             height: 30,
-            html: '<div class="name-header">{s name="product"}{/s}</div>' +
-            '<div class="price-header">{s name="price"}{/s}</div>'
+            html: '<div class="name-header">{s name="product"}Article{/s}</div>' +
+            '<div class="price-header">{s name="price"}Price{/s}</div>'
         });
 
         positions.push(header);
@@ -202,7 +202,7 @@ Ext.define('Shopware.apps.PluginManager.view.account.Checkout', {
                 cls: 'plugin-data',
                 width: 500,
                 html: '<div class="name">' + plugin.get('label') + '</div>' +
-                '<div class="number">{s name="product_number"}{/s}'+ plugin.get('code') + '</div>' +
+                '<div class="number">{s name="product_number"}Article nr.:{/s}'+ plugin.get('code') + '</div>' +
                 '<div class="type">'+ type +'</div>'
             });
 
@@ -237,20 +237,20 @@ Ext.define('Shopware.apps.PluginManager.view.account.Checkout', {
 
         var total = Ext.create('Ext.Component', {
             cls: 'amount',
-            html: '<div class="label">{s name="total_amount"}{/s}</div>' +
+            html: '<div class="label">{s name="total_amount"}Total amount{/s}</div>' +
                   '<div class="value">'+ me.formatPrice(me.basket.get('grossPrice')) +'</div>'
         });
         items.push(total);
 
         var net = Ext.create('Ext.Component', {
             cls: 'amount-net',
-            html: '<div class="label">{s name="total_amount_without_tax"}{/s}</div>' +
+            html: '<div class="label">{s name="total_amount_without_tax"}Total amount excl. VAT:{/s}</div>' +
                   '<div class="value">'+ me.formatPrice(me.basket.get('netPrice')) +'</div>'
         });
 
         var tax =  Ext.create('Ext.Component', {
             cls: 'tax',
-            html: '<div class="label">{s name="tax_rate_label"}{/s} '+ me.basket.get('taxRate') +'% {s name="tax_value_label"}{/s}</div>' +
+            html: '<div class="label">{s name="tax_rate_label"}plus{/s} '+ me.basket.get('taxRate') +'% {s name="tax_value_label"}VAT:{/s}</div>' +
                   '<div class="value">'+ me.formatPrice(me.basket.get('taxPrice')) +'</div>'
         });
 
@@ -280,7 +280,7 @@ Ext.define('Shopware.apps.PluginManager.view.account.Checkout', {
         var me = this;
 
         var cancelButton = Ext.create('PluginManager.container.Container', {
-            html: '{s name="cancel"}{/s}',
+            html: '{s name="cancel"}Cancel{/s}',
             cls: 'plugin-manager-action-button cancel',
             handler: function() {
                 me.destroy();
@@ -288,7 +288,7 @@ Ext.define('Shopware.apps.PluginManager.view.account.Checkout', {
         });
 
         me.applyButton = Ext.create('PluginManager.container.Container', {
-            html: '{s name="purchase_button"}{/s}',
+            html: '{s name="purchase_button"}Complete payment{/s}',
             cls: 'plugin-manager-action-button primary buy',
             disabled: true,
             handler: function() {
