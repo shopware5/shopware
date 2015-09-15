@@ -926,7 +926,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
 
         $elementModel = new Shopware\Models\Document\Element();
         $elementModel->setName('Logo');
-        $elementModel->setValue('<p><img src="http://www.shopware.de/logo/logo.png " alt="" /></p>');
+        $elementModel->setValue('<p><img src="http://www.shopware.de/logo/logo.png" alt="" /></p>');
         $elementModel->setStyle('height: 20mm; width: 90mm; margin-bottom:5mm;');
         $elementModel->setDocument($model);
         $elementCollection->add($elementModel);
