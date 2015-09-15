@@ -38,7 +38,6 @@ return [
     'migration_header'                  => 'Database migration',
     'migration_counter_text_migrations' => 'Database migration in progress',
     'migration_counter_text_snippets'   => 'Update snippets',
-    'migration_counter_text_themes'     => 'Synchronize themes',
     'migration_counter_text_unpack'     => 'Update files',
     'migration_update_success'          => 'Update complete',
 

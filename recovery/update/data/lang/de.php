@@ -38,7 +38,6 @@ return [
     'migration_header'                  => 'Datenbank Update durchführen',
     'migration_counter_text_migrations' => 'Datenbank-Update wird durchgeführt',
     'migration_counter_text_snippets'   => 'Textbausteine werden aktualisiert',
-    'migration_counter_text_themes'     => 'Themes synchronisieren',
     'migration_counter_text_unpack'     => 'Dateien werden überschrieben',
     'migration_update_success'          => 'Das Update wurde erfolgreich durchgeführt',
 

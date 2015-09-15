@@ -109,16 +109,6 @@ class BatchController
         $this->toJson(200, $this->resultMapper->toExtJs($result));
     }
 
-    public function synchronizeThemes()
-    {
-        /** @var \Shopware\Components\Theme\Installer $themeService */
-        $themeService = $this->container->get('shopware.theme_installer');
-        $themeService->synchronize();
-
-        $result = new FinishResult(0, 0);
-        $this->toJson(200, $this->resultMapper->toExtJs($result));
-    }
-
     /**
      * @throws \RuntimeException
      */
