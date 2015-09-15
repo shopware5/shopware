@@ -1218,7 +1218,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
 
     /**
      * Fires when the user want to open a generated order document from the backend order module.
-     * @return Returns the created pdf file with an echo.
+     * Returns the created pdf file with an echo.
      */
     public function openPdfAction()
     {
@@ -1231,7 +1231,13 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
                     'data' => $this->Request()->getParams(),
                     'message' => 'File not exist'
                 ));
+                return;
             }
+
+            // Disable Smarty rendering
+            $this->Front()->Plugins()->ViewRenderer()->setNoRender();
+            $this->Front()->Plugins()->Json()->setRenderer(false);
+
             $orderModel = Shopware()->Models()->getRepository('Shopware\Models\Order\Document\Document')->findBy(array("hash"=>$this->Request()->getParam('id')));
             $orderModel = Shopware()->Models()->toArray($orderModel);
             $orderId = $orderModel[0]["documentId"];
@@ -1243,18 +1249,20 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             $response->setHeader('Content-Type', 'application/pdf');
             $response->setHeader('Content-Transfer-Encoding', 'binary');
             $response->setHeader('Content-Length', filesize($file));
+
             echo readfile($file);
         } catch (Exception $e) {
+            $this->Front()->Plugins()->ViewRenderer()->setNoRender(false);
+            $this->Front()->Plugins()->Json()->setRenderer();
+
             $this->View()->assign(array(
                'success' => false,
                'data' => $this->Request()->getParams(),
                'message' => $e->getMessage()
             ));
+
             return;
         }
-
-        //removes the global PostDispatch Event to prevent assignments to the view that destroyed the pdf
-        Enlight_Application::Instance()->Events()->removeListener(new Enlight_Event_EventHandler('Enlight_Controller_Action_PostDispatch', ''));
     }
 
     /**

@@ -386,30 +386,34 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
     {
         $id = $this->_typID;
 
-        $this->_document = new ArrayObject(Shopware()->Db()->fetchRow("
-        SELECT * FROM s_core_documents WHERE id = ?
-        ", array($id), ArrayObject::ARRAY_AS_PROPS));
-
+        $this->_document = new ArrayObject(
+            Shopware()->Db()->fetchRow(
+                "SELECT * FROM s_core_documents WHERE id = ?",
+                array($id),
+                \PDO::FETCH_ASSOC
+            )
+        );
 
         // Load Containers
-        $this->_document->containers = new ArrayObject(Shopware()->Db()->fetchAll("
-        SELECT * FROM s_core_documents_box WHERE documentID = ?
-        ", array($id), ArrayObject::ARRAY_AS_PROPS));
+        $containers = Shopware()->Db()->fetchAll(
+            "SELECT * FROM s_core_documents_box WHERE documentID = ?",
+            array($id),
+            \PDO::FETCH_ASSOC
+        );
 
         $translation = $this->translationComponent->read($this->_order->order->language, 'documents', 1);
-
-        foreach ($this->_document->containers as $key => $container) {
+        $this->_document->containers = new ArrayObject();
+        foreach ($containers as $key => $container) {
             if (!is_numeric($key)) {
                 continue;
             }
             if (!empty($translation[$id][$container["name"]."_Value"])) {
-                $this->_document->containers[$key]["value"] = $translation[$id][$container["name"]."_Value"];
+                $containers[$key]["value"] = $translation[$id][$container["name"]."_Value"];
             }
             if (!empty($translation[$id][$container["name"]."_Style"])) {
-                $this->_document->containers[$key]["style"] = $translation[$id][$container["name"]."_Style"];
+                $containers[$key]["style"] = $translation[$id][$container["name"]."_Style"];
             }
-            $this->_document->containers[$container["name"]] = $this->_document->containers[$key];
-            unset($this->_document->containers[$key]);
+            $this->_document->containers->offsetSet($container["name"], $containers[$key]);
         }
     }
 
