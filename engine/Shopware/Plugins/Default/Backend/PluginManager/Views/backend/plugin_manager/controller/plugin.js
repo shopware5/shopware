@@ -13,9 +13,9 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
     },
 
     snippets: {
-        'licencePluginDownloadInstall':  '{s name="licence_plugin_download_and_install"}{/s}',
-        'licencePluginDownloadActivate': '{s name="licence_plugin_install_and_activate"}{/s}',
-        'licencePluginActivate':         '{s name="licence_plugin_activate"}{/s}',
+        'licencePluginDownloadInstall':  '{s name="licence_plugin_download_and_install"}The Shopware License Manager plugin is needed to install this plugin, but is currently not present in your system. <br><br><strong>Do you want to download and install the Shopware License Manager plugin?<strong>{/s}',
+        'licencePluginDownloadActivate': '{s name="licence_plugin_install_and_activate"}The Shopware License Manager plugin is needed to install this plugin, but is currently not installed on your system. <br><br><strong>Do you want to install the Shopware License Manager plugin?<strong>{/s}',
+        'licencePluginActivate':         '{s name="licence_plugin_activate"}The Shopware License Manager plugin is needed to install this plugin, but is currently not active on your system. <br><br>Do you want to activate the Shopware License Manager plugin?<strong>{/s}',
 
         newRegistrationForm: {
             successTitle: '{s name=newRegistrationForm/successTitle}Shopware ID registration{/s}',
@@ -97,7 +97,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
                 }
 
                 if (result.success) {
-                    Shopware.Notification.createGrowlMessage('', '{s name="plugin_file_uploaded"}{/s}');
+                    Shopware.Notification.createGrowlMessage('', '{s name="plugin_file_uploaded"}Plugin uploaded{/s}');
                     if (Ext.isFunction(callback)) {
                         callback();
                     }
@@ -128,7 +128,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
 
         me.authenticateForUpdate(plugin, function() {
             me.startPluginDownload(plugin, function() {
-                me.displayLoadingMask(plugin, '{s name=execute_update}{/s}');
+                me.displayLoadingMask(plugin, '{s name=execute_update}Plugin is being updated{/s}');
                 me.executePluginUpdate(plugin, function() {
 
                     Shopware.app.Application.fireEvent('load-update-listing', function() {
@@ -155,7 +155,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
     startPluginDownload: function(plugin, callback) {
         var me = this;
 
-        me.displayLoadingMask(plugin, '{s name="initial_download"}{/s}');
+        me.displayLoadingMask(plugin, '{s name="initial_download"}Initial plugin download{/s}');
 
         me.sendAjaxRequest(
             '{url controller=PluginManager action=metaDownload}',
@@ -182,7 +182,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
 
         me.checkout(plugin, price, function(basket) {
 
-            me.displayLoadingMask(plugin, '{s name="order_is_being_executed"}{/s}');
+            me.displayLoadingMask(plugin, '{s name="order_is_being_executed"}Order is being processed{/s}');
 
             me.sendAjaxRequest(
                 '{url controller="PluginManager" action="purchasePlugin"}',
@@ -209,7 +209,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
     importPluginLicence: function(plugin, callback) {
         var me = this;
 
-        me.displayLoadingMask(plugin, '{s name="licence_is_being_imported"}{/s}');
+        me.displayLoadingMask(plugin, '{s name="licence_is_being_imported"}Plugin license is being imported{/s}');
 
         me.sendAjaxRequest(
             '{url controller="PluginManager" action="importPluginLicence"}',
@@ -221,7 +221,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
     importLicenceKey: function(licence, callback) {
         var me = this;
 
-        me.displayLoadingMask(licence, '{s name="licence_is_being_imported"}{/s}');
+        me.displayLoadingMask(licence, '{s name="licence_is_being_imported"}Plugin license is being imported{/s}');
 
         if (!licence.get('licenseKey')) {
             me.hideLoadingMask();
@@ -233,7 +233,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
 
             me.checkLicencePlugin(licence, function () {
 
-                me.displayLoadingMask(licence, '{s name="licence_is_being_imported"}{/s}');
+                me.displayLoadingMask(licence, '{s name="licence_is_being_imported"}Plugin license is being imported{/s}');
 
                 me.sendAjaxRequest(
                     '{url controller="PluginManager" action="importLicenceKey"}',
@@ -263,7 +263,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
     checkout: function(plugin, price, callback) {
         var me = this;
 
-        me.displayLoadingMask(plugin, '{s name="open_basket"}{/s}');
+        me.displayLoadingMask(plugin, '{s name="open_basket"}Preparing order process{/s}');
         me.checkIonCube(plugin, function() {
 
             me.checkLicencePlugin(plugin, function() {
@@ -333,7 +333,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
                 switch(response.state) {
                     case 'download':
                         me.confirmMessage(
-                            '{s name="licence_plugin_required_title"}{/s}',
+                            '{s name="licence_plugin_required_title"}License plugin required{/s}',
                             me.snippets.licencePluginDownloadInstall,
                             function() {
                                 me.updateDummyPlugin(licence, function () {
@@ -347,7 +347,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
 
                     case 'install':
                         me.confirmMessage(
-                            '{s name="licence_plugin_required_title"}{/s}',
+                            '{s name="licence_plugin_required_title"}License plugin required{/s}',
                             me.snippets.licencePluginDownloadActivate,
                             function() {
                                 me.installPlugin(licence, function() {
@@ -360,7 +360,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
 
                     case 'activate':
                         me.confirmMessage(
-                            '{s name="licence_plugin_required_title"}{/s}',
+                            '{s name="licence_plugin_required_title"}License plugin required{/s}',
                             me.snippets.licencePluginActivate,
                             function() {
                                 me.activatePlugin(licence, callback);
@@ -390,8 +390,8 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
 
                 if (response.success === false) {
                     Ext.Msg.alert(
-                        '{s name="ion_cube_required_title"}{/s}',
-                        '{s name="ion_cube_required_text"}{/s}'
+                        '{s name="ion_cube_required_title"}Encrypted plugins{/s}',
+                        '{s name="ion_cube_required_text"}The requested plugin is encrypted. You need the Ioncube Loader Extension to download the plugin{/s}'
                     );
 
                     return;
@@ -608,7 +608,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
     installPlugin: function(plugin, callback) {
         var me = this;
 
-        me.displayLoadingMask(plugin, '{s name="plugin_is_being_installed"}{/s}');
+        me.displayLoadingMask(plugin, '{s name="plugin_is_being_installed"}Plugin is being installed{/s}');
 
         me.sendAjaxRequest(
             '{url controller=PluginInstaller action=installPlugin}',
@@ -626,7 +626,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
         if (plugin.allowSecureUninstall()) {
             me.confirmMessage(
                 '',
-                '{s name="uninstall_remove_data"}{/s}',
+                '{s name="uninstall_remove_data"}The plugin will be uninstalled. Do you also like to remove the saved data of the plugin?{/s}',
                 function() {
                     me.doUninstall(plugin, callback);
                 },
@@ -643,7 +643,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
     doUninstall: function(plugin, callback) {
         var me = this;
 
-        me.displayLoadingMask(plugin, '{s name="plugin_is_being_uninstalled"}{/s}');
+        me.displayLoadingMask(plugin, '{s name="plugin_is_being_uninstalled"}Plugin is being uninstalled{/s}');
 
         me.sendAjaxRequest(
             '{url controller=PluginInstaller action=uninstallPlugin}',
@@ -673,7 +673,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
     secureUninstallPlugin: function(plugin, callback) {
         var me = this;
 
-        me.displayLoadingMask(plugin, '{s name="plugin_is_being_uninstalled"}{/s}');
+        me.displayLoadingMask(plugin, '{s name="plugin_is_being_uninstalled"}Plugin is being uninstalled{/s}');
 
         me.sendAjaxRequest(
             '{url controller=PluginInstaller action=secureUninstallPlugin}',
@@ -689,10 +689,10 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
         var me = this;
 
         me.confirmMessage(
-            '{s name="delete_plugin_title"}{/s}',
-            '{s name="delete_plugin_confirm"}{/s} ' + plugin.get('label'),
+            '{s name="delete_plugin_title"}Delete plugin{/s}',
+            '{s name="delete_plugin_confirm"}Are you sure you want to delete the plugin:{/s} ' + plugin.get('label'),
             function() {
-                me.displayLoadingMask(plugin, '{s name="plugin_is_being_deleted"}{/s}');
+                me.displayLoadingMask(plugin, '{s name="plugin_is_being_deleted"}Plugin is being deleted{/s}');
                 me.sendAjaxRequest(
                     '{url controller=PluginInstaller action=deletePlugin}',
                     { technicalName: plugin.get('technicalName') },
@@ -705,7 +705,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
     activatePlugin: function(plugin, callback) {
         var me = this;
 
-        me.displayLoadingMask(plugin, '{s name="plugin_is_being_activated"}{/s}');
+        me.displayLoadingMask(plugin, '{s name="plugin_is_being_activated"}Plugin is being activated{/s}');
 
         me.sendAjaxRequest(
             '{url controller=PluginInstaller action=activatePlugin}',
@@ -720,7 +720,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
     deactivatePlugin: function(plugin, callback) {
         var me = this;
 
-        me.displayLoadingMask(plugin, '{s name="plugin_is_being_deactivated"}{/s}');
+        me.displayLoadingMask(plugin, '{s name="plugin_is_being_deactivated"}Plugin is being deactivated{/s}');
 
         me.sendAjaxRequest(
             '{url controller=PluginInstaller action=deactivatePlugin}',
@@ -753,7 +753,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
         var me = this;
 
         var message = Ext.String.format(
-            '{s name=clear_cache}{/s}',
+            '{s name=clear_cache}This plugin needs a new initialisation in the following caches: [0]Clear cache?{/s}',
             caches.join(', ') + '<br><br>'
         );
 
@@ -762,7 +762,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
             message,
             function() {
                 if (plugin) {
-                    me.displayLoadingMask(plugin, '{s name="cache_process"}{/s}');
+                    me.displayLoadingMask(plugin, '{s name="cache_process"}Cache will be cleared{/s}');
                 }
 
                 var params = {};

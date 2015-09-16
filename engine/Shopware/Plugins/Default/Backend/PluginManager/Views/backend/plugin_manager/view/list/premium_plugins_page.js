@@ -108,7 +108,7 @@ Ext.define('Shopware.apps.PluginManager.view.list.PremiumPluginsPage', {
                     case record.allowUpdate():
                         return Ext.create('PluginManager.container.Container', {
                             cls: 'button update',
-                            html: '{s name="update_plugin"}{/s}',
+                            html: '{s name="update_plugin"}Update{/s}',
                             handler: function() {
                                 me.updatePluginEvent(record);
                             }
@@ -117,7 +117,7 @@ Ext.define('Shopware.apps.PluginManager.view.list.PremiumPluginsPage', {
                     case record.allowInstall():
                         return Ext.create('PluginManager.container.Container', {
                             cls: 'button install',
-                            html: '{s name="install"}{/s}',
+                            html: '{s name="install"}Install{/s}',
                             handler: function() {
                                 me.registerConfigRequiredEvent(record);
                                 me.installPluginEvent(record);
@@ -127,7 +127,7 @@ Ext.define('Shopware.apps.PluginManager.view.list.PremiumPluginsPage', {
                     case record.allowActivate():
                         return Ext.create('PluginManager.container.Container', {
                             cls: 'button activate',
-                            html: '{s name="activate"}{/s}',
+                            html: '{s name="activate"}Activate{/s}',
                             handler: function() {
                                 me.activatePluginEvent(record);
                             }
@@ -136,7 +136,7 @@ Ext.define('Shopware.apps.PluginManager.view.list.PremiumPluginsPage', {
                     case record.allowConfigure():
                         return Ext.create('PluginManager.container.Container', {
                             cls: 'button configure',
-                            html: '{s name="configure"}{/s}',
+                            html: '{s name="configure"}Configure{/s}',
                             handler: handlerCallback
                         });
 
@@ -144,7 +144,7 @@ Ext.define('Shopware.apps.PluginManager.view.list.PremiumPluginsPage', {
                     case record.isLocalPlugin():
                         return Ext.create('PluginManager.container.Container', {
                             cls: 'button locale',
-                            html: '{s name="open"}{/s}',
+                            html: '{s name="open"}Open{/s}',
                             handler: handlerCallback
                         });
                 }

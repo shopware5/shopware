@@ -13,25 +13,25 @@ Ext.define('Shopware.apps.PluginManager.view.list.LicencePage', {
             editColumn: false,
             columns: {
                 label: {
-                    header: '{s name="plugin_name"}{/s}'
+                    header: '{s name="plugin_name"}Plugin name{/s}'
                 },
                 shop: {
-                    header: '{s name="shop"}{/s}'
+                    header: '{s name="shop"}Shop{/s}'
                 },
                 creationDate: {
-                    header: '{s name="creation_date"}{/s}',
+                    header: '{s name="creation_date"}Created on{/s}',
                     renderer: this.dateRenderer
                 },
                 expirationDate: {
-                    header: '{s name="valid_to"}{/s}',
+                    header: '{s name="valid_to"}Valid until{/s}',
                     renderer: this.dateRenderer
                 },
                 priceColumn: {
-                    header: '{s name="version"}{/s}',
+                    header: '{s name="version"}Version{/s}',
                     renderer: this.priceRenderer
                 },
                 binaryVersion: {
-                    header: '{s name="binary_version"}{/s}'
+                    header: '{s name="binary_version"}Binary version{/s}'
                 }
             }
         };
@@ -57,7 +57,7 @@ Ext.define('Shopware.apps.PluginManager.view.list.LicencePage', {
 
         me.downloadButton = Ext.create('Ext.button.Button', {
             iconCls: 'sprite-inbox-download',
-            text: '{s name="download_selected_plugins"}{/s}',
+            text: '{s name="download_selected_plugins"}Download selected plugins{/s}',
             disabled: true,
             handler: function() {
                 var selModel = me.getSelectionModel();
@@ -75,7 +75,7 @@ Ext.define('Shopware.apps.PluginManager.view.list.LicencePage', {
 
         me.importLicenceButton = Ext.create('Ext.button.Button', {
             iconCls: 'sprite-key',
-            text: '{s name="import_selected_licences"}{/s}',
+            text: '{s name="import_selected_licences"}Import selected licenses{/s}',
             disabled: true,
             handler: function() {
                 var selModel = me.getSelectionModel();
@@ -143,7 +143,7 @@ Ext.define('Shopware.apps.PluginManager.view.list.LicencePage', {
 
         items.push({
             iconCls: 'sprite-key',
-            tooltip: '{s name="import_licence"}{/s}',
+            tooltip: '{s name="import_licence"}Import license{/s}',
             getClass: function(value, metaData, record) {
                 if (!record.get('licenseKey')) {
                     return Ext.baseCSSPrefix + 'hidden';
@@ -162,7 +162,7 @@ Ext.define('Shopware.apps.PluginManager.view.list.LicencePage', {
 
         items.push({
             iconCls: 'sprite-inbox-download',
-            tooltip: '{s name="download_plugin"}{/s}',
+            tooltip: '{s name="download_plugin"}Download plugin{/s}',
             handler: function (view, rowIndex, colIndex, item, opts, record) {
                 Shopware.app.Application.fireEvent(
                     'download-plugin-licence',

@@ -256,7 +256,7 @@ Ext.define('Shopware.apps.PluginManager.view.PluginHelper', {
 
         return Ext.create('Shopware.apps.PluginManager.view.components.DownloadWindow', {
             headline: plugin.get('label'),
-            description: '{s name="execute_plugin_download"}{/s}',
+            description: '{s name="execute_plugin_download"}Plugin is being downloaded{/s}',
             download: download,
             icon: icon,
             callback: callback
@@ -357,19 +357,19 @@ Ext.define('Shopware.apps.PluginManager.view.PluginHelper', {
 
     getTextForPriceType: function(type) {
         if (type == 'buy') {
-            return '{s name="buy_version"}{/s}';
+            return '{s name="buy_version"}Purchase version{/s}';
         }
 
         if (type == 'rent') {
-            return '{s name="rent_version"}{/s}';
+            return '{s name="rent_version"}Rent version{/s}';
         }
 
         if (type == 'test') {
-            return '{s name="test_version"}{/s}'
+            return '{s name="test_version"}Test version{/s}'
         }
 
         if (type == 'free') {
-            return '{s name="free_version"}{/s}';
+            return '{s name="free_version"}Free version{/s}';
         }
 
         return null;

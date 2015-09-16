@@ -77,9 +77,9 @@ Ext.define('Shopware.apps.PluginManager.view.list.StoreListingPage', {
         me.sortStore = Ext.create('Ext.data.Store', {
             fields: [ 'key', 'name' ],
             data: [
-                { key: 'release', name: '{s name="sort_release_date"}{/s}' },
-                { key: 'popularity', name: '{s name="sort_popularity"}{/s}' },
-                { key: 'description', name: '{s name="sort_description"}{/s}' }
+                { key: 'release', name: '{s name="sort_release_date"}Release date{/s}' },
+                { key: 'popularity', name: '{s name="sort_popularity"}Popularity{/s}' },
+                { key: 'description', name: '{s name="sort_description"}Description{/s}' }
             ]
         });
 
@@ -92,7 +92,7 @@ Ext.define('Shopware.apps.PluginManager.view.list.StoreListingPage', {
             value: 'release',
             forceSelection: true,
             editable: false,
-            fieldLabel: '{s name="sorting"}{/s}',
+            fieldLabel: '{s name="sorting"}Sort by{/s}',
             margin: '0 0 0 10',
             listeners: {
                 expand: function() {
@@ -113,7 +113,7 @@ Ext.define('Shopware.apps.PluginManager.view.list.StoreListingPage', {
         var me = this;
 
         me.certifiedField = Ext.create('Ext.form.field.Checkbox', {
-            fieldLabel: '{s name="certified_filter"}{/s}',
+            fieldLabel: '{s name="certified_filter"}Only certified{/s}',
             inputValue: true,
             labelWidth: 130,
             uncheckedValue: false,
@@ -137,11 +137,11 @@ Ext.define('Shopware.apps.PluginManager.view.list.StoreListingPage', {
         me.priceStore = Ext.create('Ext.data.Store', {
             fields: ['key', 'name'],
             data: [
-                { key: 'all', name: '{s name="filter_price_all"}{/s}' },
-                { key: 'buy', name: '{s name="filter_price_buy"}{/s}' },
-                { key: 'rent', name: '{s name="filter_price_rent"}{/s}' },
-                { key: 'test', name: '{s name="filter_price_test"}{/s}' },
-                { key: 'free', name: '{s name="filter_price_free"}{/s}' }
+                { key: 'all', name: '{s name="filter_price_all"}All{/s}' },
+                { key: 'buy', name: '{s name="filter_price_buy"}Buy{/s}' },
+                { key: 'rent', name: '{s name="filter_price_rent"}Rent{/s}' },
+                { key: 'test', name: '{s name="filter_price_test"}Test{/s}' },
+                { key: 'free', name: '{s name="filter_price_free"}Free{/s}' }
             ]
         });
 
@@ -152,7 +152,7 @@ Ext.define('Shopware.apps.PluginManager.view.list.StoreListingPage', {
             displayField: 'name',
             valueField: 'key',
             value: 'all',
-            fieldLabel: '{s name="filter_price"}{/s}',
+            fieldLabel: '{s name="filter_price"}Purchase type{/s}',
             margin: '0 15 0 0',
             listeners: {
                 expand: function() {

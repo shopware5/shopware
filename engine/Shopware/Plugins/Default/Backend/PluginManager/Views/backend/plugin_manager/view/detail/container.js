@@ -99,7 +99,7 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Container', {
         var me = this;
 
         me.boughtMessage = Shopware.Notification.createBlockMessage(
-            '{s name="plugin_bought_message"}{/s}',
+            '{s name="plugin_bought_message"}The plugin was successfully purchased and is now ready for installation{/s}',
             'success'
         );
 
@@ -175,7 +175,7 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Container', {
             items: ['->', {
                 xtype: 'button',
                 cls: 'primary save-button',
-                text: '{s name="save"}{/s}',
+                text: '{s name="save"}Save{/s}',
                 handler: function() {
                     Shopware.app.Application.fireEvent(
                         'save-plugin-configuration',
@@ -225,7 +225,7 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Container', {
 
         me.descriptionContainer.add({
             xtype: 'component',
-            html: '<h1 class="store-plugin-detail-description-headline">{s name="product_information"}{/s} <span class="plugin-name">' + plugin.get('label') + '</span></h1>' + plugin.get('description')
+            html: '<h1 class="store-plugin-detail-description-headline">{s name="product_information"}Product information{/s} <span class="plugin-name">' + plugin.get('label') + '</span></h1>' + plugin.get('description')
         });
     },
 
@@ -249,7 +249,7 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Container', {
             var image = '{link file="themes/Backend/ExtJs/backend/_resources/resources/themes/images/shopware-ui/plugin_manager/advanced_feature_icon.png"}';
             content = Ext.create('Ext.container.Container', {
                 html: '<img src="' + image + '">' +
-                      '<span class="advanced-feature-notice">{s name="advanced_feature_notice"}{/s}</span>',
+                      '<span class="advanced-feature-notice">{s name="advanced_feature_notice"}Advanced features are part of the professional and enterprise editions{/s}</span>',
                 cls: 'advanced-feature-container'
             });
             me.metaDataContainer.add(content);
@@ -264,7 +264,7 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Container', {
             me.metaDataContainer.add({
                 xtype: 'component',
                 cls: 'store-plugin-detail-star-description',
-                html: '* {s name="vat_info"}{/s}'
+                html: '* {s name="vat_info"}All prices excl. VAT{/s}'
             });
         }
     },
@@ -412,7 +412,7 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Container', {
         var me = this;
 
         me.configurationContainer = Ext.create('Ext.container.Container', {
-            title: '{s name="configuration"}{/s}',
+            title: '{s name="configuration"}Configuration{/s}',
             cls: 'store-plugin-detail-configuration-container',
             flex: 1,
             layout: {
@@ -422,7 +422,7 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Container', {
         });
 
         me.changelogContainer = Ext.create('Ext.container.Container', {
-            title: '{s name="changelog"}{/s}',
+            title: '{s name="changelog"}Change log{/s}',
             cls: 'store-plugin-detail-changelog-container',
             flex: 1,
             layout: {
@@ -432,7 +432,7 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Container', {
         });
 
         me.installationManualContainer = Ext.create('Ext.container.Container', {
-            title: '{s name="installation_manual"}{/s}',
+            title: '{s name="installation_manual"}Installation manual{/s}',
             cls: 'store-plugin-detail-installation-manual-container',
             flex: 1,
             layout: {
@@ -442,7 +442,7 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Container', {
         });
 
         me.descriptionContainer = Ext.create('Ext.container.Container', {
-            title: '{s name="description"}{/s}',
+            title: '{s name="description"}Description{/s}',
             cls: 'plugin-description-container',
             flex: 1,
             layout: {
@@ -452,14 +452,14 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Container', {
         });
 
         me.localDescriptionContainer = Ext.create('Ext.container.Container', {
-            title: '{s name="local_description"}{/s}',
+            title: '{s name="local_description"}Plugin description{/s}',
             cls: 'plugin-local-description-container',
             flex: 1,
             layout: { type: 'vbox', align: 'stretch' }
         });
 
         me.commentContainer = Ext.create('Ext.container.Container', {
-            title: '{s name="comments"}{/s}',
+            title: '{s name="comments"}Comments{/s}',
             flex: 1,
             layout: {
                 type: 'vbox',
