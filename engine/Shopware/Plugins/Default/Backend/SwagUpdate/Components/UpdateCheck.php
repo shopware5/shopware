@@ -130,7 +130,11 @@ class UpdateCheck
             $verified = true;
         }
 
-        $json = \Zend_Json::decode($body, true);
+        if ($body != '') {
+            $json = \Zend_Json::decode($body, true);
+        } else {
+            $json = null;
+        }
         $json['signagure_verified'] = $verified;
 
         if ($response->getStatus() == '404') {

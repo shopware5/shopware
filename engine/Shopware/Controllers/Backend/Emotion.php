@@ -192,7 +192,11 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
                 $value = '';
                 switch (strtolower($entry['valueType'])) {
                     case "json":
-                        $value = Zend_Json::decode($entry['value']);
+                        if ($entry['value'] != '') {
+                            $value = Zend_Json::decode($entry['value']);
+                        } else {
+                            $value = null;
+                        }
                         break;
                     case "string":
                     default:
