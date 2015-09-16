@@ -1518,6 +1518,15 @@ class sOrder
         $shop = $repository->getActiveById($shopId);
         $shop->registerResources(Shopware()->Bootstrap());
 
+        $order['status_description'] = Shopware()->Snippets()->getNamespace('backend/static/order_status')->get(
+            $order['status_name'],
+            $order['status_description']
+        );
+        $order['cleared_description'] = Shopware()->Snippets()->getNamespace('backend/static/payment_status')->get(
+            $order['cleared_name'],
+            $order['cleared_description']
+        );
+
         /* @var $mailModel \Shopware\Models\Mail\Mail */
         $mailModel = Shopware()->Models()->getRepository('Shopware\Models\Mail\Mail')->findOneBy(
             array('name' => $templateName)
@@ -1759,7 +1768,9 @@ SELECT
     o.subshopID,
     o.dispatchID,
     cu.id as currencyID,
+    `c`.`name` as `cleared_name`,
     `c`.`description` as `cleared_description`,
+    `s`.`name` as `status_name`,
     `s`.`description` as `status_description`,
     `p`.`description` as `payment_description`,
     `d`.`name` 		  as `dispatch_description`,
