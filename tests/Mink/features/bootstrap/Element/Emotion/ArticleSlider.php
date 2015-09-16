@@ -24,8 +24,7 @@ class ArticleSlider extends SliderElement implements \Shopware\Tests\Mink\Helper
     protected $selector = array('css' => 'div.emotion-element > div.article-slider-element');
 
     /**
-     * Returns an array of all css selectors of the element/page
-     * @return array
+     * @inheritdoc
      */
     public function getCssSelectors()
     {

@@ -13,31 +13,47 @@ class Form extends Page implements HelperSelectorInterface
     protected $path = 'shopware.php?sViewport=ticket&sFid={formId}';
 
     /**
-     * Returns an array of all css selectors of the element/page
-     * @return array
+     * @inheritdoc
      */
     public function getCssSelectors()
     {
-        return array(
+        return [
             'captchaPlaceholder' => 'div.captcha-placeholder',
             'captchaImage' => 'div.captcha-placeholder img',
             'captchaHidden' => 'div.captcha-placeholder input'
-        );
+        ];
     }
 
     /**
-     * Returns an array of all named selectors of the element/page
-     * @return array
+     * @inheritdoc
      */
     public function getNamedSelectors()
     {
-        return array();
+        return [];
     }
 
+    /**
+     * Verify if we're on an expected page. Throw an exception if not.
+     * @throws \Exception
+     */
+    public function verifyPage()
+    {
+        $info = Helper::getPageInfo($this->getSession(), ['controller']);
+
+        if($info['controller'] === 'forms') {
+            return;
+        }
+
+        $message = ['You are not on a form page!', 'Current URL: ' . $this->getSession()->getCurrentUrl()];
+        Helper::throwException($message);
+    }
+
+    /**
+     * @throws \Exception
+     */
     public function checkCaptcha()
     {
-        $locators = array('captchaPlaceholder', 'captchaImage', 'captchaHidden');
-        $element = Helper::findElements($this, $locators);
+        $element = Helper::findElements($this, ['captchaPlaceholder', 'captchaImage', 'captchaHidden']);
 
         $captchaPlaceholder = $element['captchaPlaceholder']->getAttribute('data-src');
         $captchaImage = $element['captchaImage']->getAttribute('src');

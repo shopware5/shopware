@@ -9,7 +9,7 @@ class SitemapContext extends SubContext
      */
     public function iAmOnTheSitemapXml()
     {
-        $this->getPage('Sitemap')->open(array('xml' => '.xml'));
+        $this->getPage('Sitemap')->open(['xml' => '.xml']);
     }
 
     /**
@@ -27,7 +27,7 @@ class SitemapContext extends SubContext
      */
     public function iShouldSeeTheGroupWithLink($name, $link, \Behat\Gherkin\Node\TableNode $entries = null)
     {
-        $links = array();
+        $links = [];
 
         if($entries) {
             $links = $entries->getHash();

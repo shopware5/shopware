@@ -19,8 +19,7 @@ class FilterGroup extends MultipleElement
     protected $selector = array('css' => 'div.filter_properties > div > div:not(.slideContainer)');
 
     /**
-     * Returns an array of all css selectors of the element/page
-     * @return string[]
+     * @inheritdoc
      */
     public function getCssSelectors()
     {

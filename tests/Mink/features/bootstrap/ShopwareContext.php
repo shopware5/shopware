@@ -68,14 +68,14 @@ class ShopwareContext extends SubContext
      */
     public function iSubscribeToTheNewsletterWith($email, TableNode $additionalData = null)
     {
-        $pageInfo = Helper::getPageInfo($this->getSession(), array('controller'));
+        $pageInfo = Helper::getPageInfo($this->getSession(), ['controller']);
         $pageName = ucfirst($pageInfo['controller']);
-        $data = array(
-            array(
+        $data = [
+            [
                 'field' => 'newsletter',
                 'value' => $email
-            )
-        );
+            ]
+        ];
 
         if ($pageName === 'Index') {
             $pageName = 'Homepage';
@@ -95,15 +95,15 @@ class ShopwareContext extends SubContext
      */
     public function iUnsubscribeTheNewsletter($email = null)
     {
-        $data = array();
+        $data = [];
 
         if ($email) {
-            $data = array(
-                array(
+            $data = [
+                [
                     'field' => 'newsletter',
                     'value' => $email
-                )
-            );
+                ]
+            ];
         }
 
         $this->getPage('Newsletter')->unsubscribeNewsletter($data);
@@ -183,13 +183,6 @@ class ShopwareContext extends SubContext
 
     /**
      * @When /^the config value of "([^"]*)" is (\d+)$/
-     */
-    public function theConfigValueOfIsNumeric($configName, $value)
-    {
-        $this->theConfigValueOfIs($configName, intval($value));
-    }
-
-    /**
      * @When /^the config value of "([^"]*)" is "([^"]*)"$/
      */
     public function theConfigValueOfIs($configName, $value)

@@ -19,8 +19,7 @@ class Banner extends \Shopware\Tests\Mink\Element\Emotion\Banner
     protected $selector = ['css' => 'div.emotion--banner'];
 
     /**
-     * Returns an array of all css selectors of the element/page
-     * @return array
+     * @inheritdoc
      */
     public function getCssSelectors()
     {

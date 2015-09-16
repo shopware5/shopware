@@ -44,9 +44,6 @@ class SliderElement extends MultipleElement
     public function getSlides(array $properties)
     {
         $elements = Helper::findAllOfElements($this, ['slide']);
-
-        //var_dump(count($elements['slide']));
-
         $slides = [];
 
         /** @var NodeElement $slide */

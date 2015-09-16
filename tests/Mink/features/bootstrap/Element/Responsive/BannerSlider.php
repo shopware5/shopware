@@ -20,8 +20,7 @@ class BannerSlider extends \Shopware\Tests\Mink\Element\Emotion\BannerSlider
     protected $selector = ['css' => 'div.emotion--banner-slider'];
 
     /**
-     * Returns an array of all css selectors of the element/page
-     * @return array
+     * @inheritdoc
      */
     public function getCssSelectors()
     {

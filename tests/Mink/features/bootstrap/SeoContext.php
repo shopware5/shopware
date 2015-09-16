@@ -2,90 +2,47 @@
 
 namespace Shopware\Tests\Mink;
 
+use Shopware\Tests\Mink\Page\Emotion\GenericPage;
+
 class SeoContext extends SubContext
 {
     /**
-     * @Then /^I should see canonical link "(?P<path>[^"]*)"$/
-     * @Then /^I should see canonical link "(?P<path>[^"]*)" and page (?P<page>\d+)$/
-     */
-    public function iShouldSeeCanonicalLinkWithQuery($path, $page = null)
-    {
-        if ($page) {
-            $params = array(
-                'p' => $page
-            );
-        } else {
-            $params = null;
-        }
-
-        $this->getPage('GenericPage')->checkCanonical($path, $params);
-    }
-
-    /**
-     * @Then /^I should not see canonical link$/
-     */
-    public function iShouldNotSeeCanonicalLinkWithQuery()
-    {
-        $this->getPage('GenericPage')->checkCanonical();
-    }
-
-    /**
-     * @Given /^I should not see pagination metas$/
+     * @Then /^I should not see pagination metas$/
      */
     public function iShouldNotSeePaginationMetas()
     {
-        $this->getPage('GenericPage')->checkPaginationPrev();
-        $this->getPage('GenericPage')->checkPaginationNext();
+        /** @var GenericPage $page */
+        $page = $this->getPage('GenericPage');
+        $page->checkLink('prev');
+        $page->checkLink('next');
     }
 
     /**
-     * @Given /^I should see prev page meta with link "(?P<path>[^"]*)"$/
-     * @Given /^I should see prev page meta with link "(?P<path>[^"]*)" and page (?P<page>\d+)$/
+     * @Then /^I should see (canonical) link "(?P<path>[^"]*)"$/
+     * @Then /^I should see (canonical) link "(?P<path>[^"]*)" and page (?P<page>\d+)$/
+     * @Then /^I should see (prev|next) page meta with link "(?P<path>[^"]*)"$/
+     * @Then /^I should see (prev|next) page meta with link "(?P<path>[^"]*)" and page (?P<page>\d+)$/
      */
-    public function iShouldSeePrevPageMetaWithLinkAndPage($path, $page)
+    public function iShouldSeePageMetaWithLinkAndPage($locator, $path, $page = null)
     {
         if ($page) {
-            $params = array(
+            $params = [
                 'p' => $page
-            );
+            ];
         } else {
             $params = null;
         }
 
-        $this->getPage('GenericPage')->checkPaginationPrev($path, $params);
+        $this->getPage('GenericPage')->checkLink($locator, $path, $params);
     }
 
     /**
-     * @Given /^I should see next page meta with link "(?P<path>[^"]*)"$/
-     * @Given /^I should see next page meta with link "(?P<path>[^"]*)" and page (?P<page>\d+)$/
+     * @Then /^I should not see (canonical) link$/
+     * @Then /^I should not see (prev|next) page meta$/
      */
-    public function iShouldSeeNextPageMetaWithLinkAndPage($path, $page)
+    public function iShouldNotSeePageMeta($locator)
     {
-        if ($page) {
-            $params = array(
-                'p' => $page
-            );
-        } else {
-            $params = null;
-        }
-
-        $this->getPage('GenericPage')->checkPaginationNext($path, $params);
-    }
-
-    /**
-     * @Given /^I should not see prev page meta$/
-     */
-    public function iShouldNotSeePrevPageMeta()
-    {
-        $this->getPage('GenericPage')->checkPaginationPrev();
-    }
-
-    /**
-     * @Given /^I should not see next page meta$/
-     */
-    public function iShouldNotSeeNextPageMeta()
-    {
-        $this->getPage('GenericPage')->checkPaginationNext();
+        $this->getPage('GenericPage')->checkLink($locator);
     }
 
 
@@ -95,7 +52,7 @@ class SeoContext extends SubContext
      */
     public function iShouldRobotsMeta($metaOne, $metaTwo = null)
     {
-        $metas = array($metaOne);
+        $metas = [$metaOne];
 
         if ($metaTwo) {
             $metas[] = $metaTwo;

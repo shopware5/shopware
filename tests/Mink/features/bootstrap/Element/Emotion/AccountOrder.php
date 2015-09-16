@@ -21,8 +21,7 @@ class AccountOrder extends MultipleElement
     protected $selector = ['css' => 'div.orderoverview_active > .table > .table_row'];
 
     /**
-     * Returns an array of all css selectors of the element/page
-     * @return string[]
+     * @inheritdoc
      */
     public function getCssSelectors()
     {
@@ -41,8 +40,7 @@ class AccountOrder extends MultipleElement
     }
 
     /**
-     * Returns the order date
-     * @return string
+     * @inheritdoc
      */
     public function getDateProperty()
     {
