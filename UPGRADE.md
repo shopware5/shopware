@@ -9,6 +9,7 @@ In this document you will find a changelog of the important changes related to t
 * The media live migration is now enabled by default
 * Added new Smarty block `frontend_index_header_javascript_tracking` for tracking codes which are required to be included into the "head" section of the document
 * Upgraded mPDF to version 6.0
+* Removed `Zend_Json_Server` related classes
 
 ## 5.1.0 RC1
 * Removed unused classes `Shopware_Components_Test_MailListener` and `Shopware_Components_Test_TicketListener`

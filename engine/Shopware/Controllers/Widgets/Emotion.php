@@ -171,7 +171,11 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         foreach ($componentData as $entry) {
             switch (strtolower($entry['valueType'])) {
                 case "json":
-                    $value = Zend_Json::decode($entry['value']);
+                    if ($entry['value'] != '') {
+                        $value = Zend_Json::decode($entry['value']);
+                    } else {
+                        $value = null;
+                    }
                     break;
                 case "string":
                 default:

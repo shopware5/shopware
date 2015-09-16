@@ -27,9 +27,9 @@ use Doctrine\ORM\AbstractQuery;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Snippet\DatabaseHandler;
+use Shopware\Components\Theme;
 use Shopware\Models\Plugin\Plugin;
 use Shopware\Models\Shop as Shop;
-use Shopware\Components\Theme;
 
 /**
  * The Theme\Installer class handles the theme installation.
@@ -350,7 +350,12 @@ class Installer
 
         $data = array();
         if (file_exists($info)) {
-            $data = (array)\Zend_Json::decode(file_get_contents($info));
+            $fileContent = file_get_contents($info);
+            if ($fileContent != '') {
+                $data = (array)\Zend_Json::decode($fileContent);
+            } else {
+                $data = null;
+            }
         }
 
         $data['template'] = $directory->getFilename();
