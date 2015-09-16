@@ -19,7 +19,7 @@
     </target>
 
     <target name="build-continuous" depends="unit-shopware-continuous"/>
-    <target name="build-unit" depends="build-cache-dir, build-composer-install, build-config, build-database, build-generate-attributes, build-snippets-deploy, build-theme-initialize, build-install-lock-file, build-disable-firstrunwizard" />
+    <target name="build-unit" depends="build-cache-dir, build-composer-install, build-config, build-database, build-generate-attributes, build-snippets-deploy, build-theme-initialize, build-install-lock-file, build-disable-firstrunwizard, add-git-hooks" />
     <target name="test-unit" depends="unit-shopware"/>
 
     <target name="configure" description="Set up build-variables">
@@ -181,6 +181,19 @@
         <exec executable="php" dir="${basedir}/bin" failonerror="true">
             <arg line="console sw:firstrunwizard:disable"/>
         </exec>
+    </target>
+
+    <target name="add-git-hooks">
+        <copy todir="${basedir}/.git/hooks" overwrite="false">
+            <fileset dir="${build.dir}/gitHooks">
+                <include name="*"/>
+            </fileset>
+        </copy>
+        <chmod dir="${basedir}/.git/hooks/" perm="ugo+rx" includes="*">
+            <fileset dir="${basedir}/.git/hooks">
+                <include name="**/*"/>
+            </fileset>
+        </chmod>
     </target>
 
     <target name="build-install-lock-file">

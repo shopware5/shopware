@@ -51,7 +51,8 @@
         "behat/mink-selenium2-driver": "~1.2",
         "sensiolabs/behat-page-object-extension": "~1.0",
         "fabpot/goutte": "~1.0",
-        "symfony/dom-crawler": "~2.7"
+        "symfony/dom-crawler": "~2.7",
+        "fabpot/php-cs-fixer": "~1.10"
     },
     "autoload": {
         "psr-0": {

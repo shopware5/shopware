@@ -1,0 +1,112 @@
+#!/usr/bin/php
+<?php
+
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
+
+
+/**
+ * Shopware Code Style Validator
+ * Based on https://github.com/intaro/php-git-hooks
+ */
+
+require __DIR__ . '/../../vendor/autoload.php';
+
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Process\ProcessBuilder;
+
+class ShopwareCodeStyleValidator extends Application
+{
+    private $output;
+    private $input;
+
+    private $fixers = [
+        'visibility',
+        'linefeed',
+        'indentation',
+        'braces',
+        'controls_spaces',
+        'include',
+        'elseif',
+        'function_declaration',
+        'trailing_spaces',
+        'eof_ending'
+    ];
+
+    public function doRun(InputInterface $input, OutputInterface $output)
+    {
+        $this->input = $input;
+        $this->output = $output;
+
+        $output->writeln('<info>Checking code style</info>');
+
+        $fileList = $this->getCommittedFileList();
+        if (!$this->checkCodeStyle($fileList)) {
+            throw new Exception('Your commit does not comply with Shopware\'s coding standards. If you are ABSOLUTELY sure your code is correct, you can use \'git commit --no-verify\' to bypass this validation');
+        }
+
+        $output->writeln('<info>Code styling is correct</info>');
+    }
+
+    private function getCommittedFileList()
+    {
+        $fileList = array();
+
+        exec("git diff-index --cached --name-status HEAD | egrep '^(A|M)(.*)\.php$' | awk '{print $2;}'", $fileList);
+
+        return $fileList;
+    }
+
+    private function checkCodeStyle(array $files)
+    {
+        $success = true;
+
+        foreach ($files as $file) {
+            $processBuilder = new ProcessBuilder(array(
+                'php',
+                __DIR__ . '/../../vendor/bin/php-cs-fixer',
+                '--dry-run',
+                '--verbose',
+                'fix',
+                $file,
+                '--fixers='.implode(',', $this->fixers)
+            ));
+
+            $processBuilder->setWorkingDirectory(getcwd());
+            $phpCsFixer = $processBuilder->getProcess();
+            $phpCsFixer->run();
+
+            if (!$phpCsFixer->isSuccessful()) {
+                $this->output->writeln(sprintf('<error>%s</error>', trim($phpCsFixer->getOutput())));
+                $success = false;
+            }
+        }
+
+        return $success;
+    }
+}
+
+$console = new ShopwareCodeStyleValidator();
+$console->run();
