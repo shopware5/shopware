@@ -44,6 +44,8 @@ use ShopwarePlugins\SwagUpdate\Components\Steps\FinishResult;
 class Shopware_Controllers_Backend_PluginManager
     extends Shopware_Controllers_Backend_ExtJs
 {
+    const FALLBACK_LOCALE = 'en_GB';
+
     public function preDispatch()
     {
         if (strtolower($this->Request()->getActionName()) == 'index') {
@@ -143,7 +145,8 @@ class Shopware_Controllers_Backend_PluginManager
     public function getCategoriesAction()
     {
         $categories = $this->getCategoryService()->get(
-            $this->getLocale()
+            $this->getLocale(),
+            self::FALLBACK_LOCALE
         );
 
         $this->View()->assign([

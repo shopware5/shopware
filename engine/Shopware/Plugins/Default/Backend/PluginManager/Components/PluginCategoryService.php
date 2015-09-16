@@ -70,12 +70,16 @@ class PluginCategoryService
     }
 
     /**
-     * @param $locale
+     * Loads plugin category data and organizes it in tree format
+     * If no categories are found for the original locale, a fallback is used instead
+     *
+     * @param string $locale
+     * @param string $fallbackLocale
      * @return CategoryStruct[]
      */
-    public function get($locale)
+    public function get($locale, $fallbackLocale)
     {
-        $categories = $this->getCategories($locale);
+        $categories = $this->getCategories($locale, $fallbackLocale);
 
         $firstLevel = $categories[null];
 
@@ -156,28 +160,16 @@ class PluginCategoryService
 
     /**
      * Returns all categories, grouped by the parent id
-     * @param $locale
+     * @param string $locale
+     * @param string $fallbackLocale
      * @return array
      */
-    private function getCategories($locale)
+    private function getCategories($locale, $fallbackLocale)
     {
-        $query = $this->connection->createQueryBuilder();
-
-        $query->select([
-            'categories.parent_id',
-            'categories.name',
-            'categories.id as categoryId',
-            'categories.parent_id as parentId'
-        ]);
-
-        $query->from('s_core_plugin_categories', 'categories')
-            ->where('categories.locale = :locale')
-            ->setParameter(':locale', $locale);
-
-        /**@var $statement PDOStatement*/
-        $statement = $query->execute();
-
-        $data = $statement->fetchAll(\PDO::FETCH_GROUP);
+        $data = $this->getCategoryDataForLocale($locale);
+        if (empty($data)) {
+            $data = $this->getCategoryDataForLocale($fallbackLocale);
+        }
 
         $result = [];
         foreach ($data as $key => $grouped) {
@@ -191,5 +183,33 @@ class PluginCategoryService
         }
 
         return $result;
+    }
+
+    /**
+     * Loads category info from the database
+     * @param string $locale
+     * @return array
+     */
+    private function getCategoryDataForLocale($locale)
+    {
+        $query = $this->connection->createQueryBuilder();
+
+        $query->select(
+            [
+                'categories.parent_id',
+                'categories.name',
+                'categories.id as categoryId',
+                'categories.parent_id as parentId'
+            ]
+        );
+
+        $query->from('s_core_plugin_categories', 'categories')
+            ->where('categories.locale = :locale')
+            ->setParameter(':locale', $locale);
+
+        /**@var $statement PDOStatement */
+        $statement = $query->execute();
+
+        return $statement->fetchAll(\PDO::FETCH_GROUP);
     }
 }
