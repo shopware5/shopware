@@ -74,7 +74,7 @@ class MediaCleanupCommand extends ShopwareCommand
     private function handleCleanup()
     {
         /** @var \Shopware\Components\Model\ModelManager $em */
-        $em = $this->getContainer('models');
+        $em = $this->getContainer()->get('models');
 
         $album = $em->find('Shopware\Models\Media\Album', -13);
         $mediaList = $album->getMedia();
