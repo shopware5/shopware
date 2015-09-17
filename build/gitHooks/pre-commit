@@ -1,65 +1,74 @@
 #!/usr/bin/env php
 <?php
-
 /**
- * Shopware Pre commit hook
- * Based on https://github.com/intaro/php-git-hooks
+ * .git/hooks/pre-commit
+ *
+ * This pre-commit hooks will check for PHP errors (lint), and make sure the
+ * code is PSR-2 compliant.
+ *
+ * Dependecy: PHP-CS-Fixer (http://cs.sensiolabs.org/
  */
 
-require __DIR__ . '/../../vendor/autoload.php';
-
-use Symfony\Component\Console\Application;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Process\ProcessBuilder;
-
-class PreCommitChecks extends Application
+class PreCommitChecks
 {
     /**
-     * @var OutputInterface
+     * @var bool
      */
-    private $output;
-
-    /**
-     * @var InputInterface
-     */
-    private $input;
-
     private $error = false;
 
-    public function doRun(InputInterface $input, OutputInterface $output)
+    /**
+     * @return int
+     */
+    public function run()
     {
-        $this->input = $input;
-        $this->output = $output;
-
         $fileList = $this->getCommittedFileList();
 
         if ($this->isRebase()) {
-            $output->writeln('<info>Not on branch</info>');
+            echo 'Not on branch' . PHP_EOL;
             return (int) 0;
         }
+
         $this->stashTree();
 
-        $output->writeln('<info>Running PHP lint</info>');
+        echo 'Running PHP lint' . PHP_EOL;
         if (!$this->phpLint($fileList)) {
-            $output->writeln('<error>There are some PHP syntax errors!</error>');
+            echo 'There are some PHP syntax errors!' . PHP_EOL;
         }
 
-        $output->writeln('<info>Checking code style</info>');
-        if (!$this->checkCodeStyle($fileList)) {
-            $output->writeln("<error>Your commit does not comply with Shopware's coding standards.<error>");
+        if ($this->isPHPCSFixerAvailable()) {
+            echo 'Checking code style' . PHP_EOL;
+            if (!$this->checkCodeStyle($fileList)) {
+                echo "Your commit does not comply with Shopware's coding standards." . PHP_EOL;
+            }
+        } else {
+            echo "PHP-CS-Fixer is NOT installed. Please install globally (http://cs.sensiolabs.org/)." . PHP_EOL;
+            $this->error = true;
         }
 
         if ($this->error) {
-            $output->writeln("");
-            $output->writeln("<error>If you are ABSOLUTELY sure your code is correct, you can use 'git commit --no-verify' to bypass this validation<error></error>");
+            echo "If you are ABSOLUTELY sure your code is correct, you can use 'git commit --no-verify' to bypass this validation" . PHP_EOL;
         }
 
         $this->unstashTree();
 
-        return (int) $this->error;
+        exit((int) $this->error);
     }
 
+    /**
+     * @return bool
+     */
+    public function isPHPCSFixerAvailable()
+    {
+        $output = [];
+        $return = 0;
+        exec('command -v php-cs-fixer >/dev/null 2>&1', $output, $return);
+
+        return !(bool) $return;
+    }
+
+    /**
+     * @return string[]
+     */
     private function getCommittedFileList()
     {
         $output = [];
@@ -74,28 +83,22 @@ class PreCommitChecks extends Application
         return $fileList;
     }
 
+    /**
+     * @param string[] $files
+     * @return bool
+     */
     private function checkCodeStyle(array $files)
     {
         $succeed = true;
 
         foreach ($files as $file) {
-            $processBuilder = new ProcessBuilder([
-                'php',
-                __DIR__ . '/../../vendor/bin/php-cs-fixer',
-                '--dry-run',
-                '--verbose',
-                'fix',
-                $file,
-                '--level=psr2'
-            ]);
-
-            $processBuilder->setWorkingDirectory(getcwd());
-            $phpCsFixer = $processBuilder->getProcess();
-            $phpCsFixer->run();
-
-            if (!$phpCsFixer->isSuccessful()) {
-                $this->output->writeln(sprintf('<error>Code style error at %s</error>', $file));
-                $this->output->writeln(sprintf('<error>%s</error>', trim($phpCsFixer->getOutput())));
+            $output = [];
+            $return = null;
+            exec("php-cs-fixer fix -v --dry-run --level=psr2 " . escapeshellarg($file), $output, $return);
+            if ($return != 0) {
+                echo "Code style error at " . $file . ":" . PHP_EOL;
+                echo implode(PHP_EOL, $output) . PHP_EOL;
+                echo "   To fix, run: php-cs-fixer fix -v --level=psr2 " . escapeshellarg($file) . PHP_EOL;
                 $this->error = true;
                 $succeed = false;
             }
@@ -104,18 +107,21 @@ class PreCommitChecks extends Application
         return $succeed;
     }
 
-    private function phpLint($files)
+    /**
+     * @param string[] $files
+     * @return bool
+     */
+    private function phpLint(array $files)
     {
         $succeed = true;
 
         foreach ($files as $file) {
-            $processBuilder = new ProcessBuilder(array('php', '-l', $file));
-            $process = $processBuilder->getProcess();
-            $process->run();
-
-            if (!$process->isSuccessful()) {
-                $this->output->writeln(sprintf('<error>PHP syntax error at %s</error>', $file));
-                $this->output->writeln(sprintf('<error>%s</error>', trim($process->getErrorOutput())));
+            $output = [];
+            $return = 0;
+            exec("php -l " . escapeshellarg($file), $output, $return);
+            if ($return != 0) {
+                echo "PHP syntax error at " . $file . ":" . PHP_EOL;
+                echo implode(PHP_EOL, $output) . PHP_EOL;
                 $this->error = true;
                 $succeed = false;
             }
@@ -124,6 +130,9 @@ class PreCommitChecks extends Application
         return $succeed;
     }
 
+    /**
+     * @return bool
+     */
     private function isRebase()
     {
         $output = [];
@@ -131,18 +140,22 @@ class PreCommitChecks extends Application
         return (empty($output));
     }
 
+    /**
+     * Stash any changes to the working tree that are not going to be committed
+     */
     private function stashTree()
     {
-        // Stash any changes to the working tree that are not going to be committed
         exec("git stash -q --keep-index");
     }
 
+    /**
+     * Unstash changes to the working tree that we had stashed
+     */
     private function unstashTree()
     {
-        // Unstash changes to the working tree that we had stashed
         exec("git stash pop -q");
     }
 }
 
-$console = new PreCommitChecks();
-$console->run();
+$checks = new PreCommitChecks();
+$checks->run();
