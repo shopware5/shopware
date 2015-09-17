@@ -1,0 +1,161 @@
+#!/usr/bin/env php
+<?php
+
+/**
+ * Shopware Pre commit hook
+ * Based on https://github.com/intaro/php-git-hooks
+ */
+
+require __DIR__ . '/../../vendor/autoload.php';
+
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Process\ProcessBuilder;
+
+class PreCommitChecks extends Application
+{
+    /**
+     * @var OutputInterface
+     */
+    private $output;
+
+    /**
+     * @var InputInterface
+     */
+    private $input;
+
+    private $fixers = [
+        'visibility',
+        'linefeed',
+        'indentation',
+        'braces',
+        'controls_spaces',
+        'include',
+        'elseif',
+        'function_declaration',
+        'trailing_spaces',
+        'eof_ending'
+    ];
+
+    private $error = false;
+
+    public function doRun(InputInterface $input, OutputInterface $output)
+    {
+        $this->input = $input;
+        $this->output = $output;
+
+        $fileList = $this->getCommittedFileList();
+
+        if ($this->isRebase()) {
+            $output->writeln('<info>Not on branch</info>');
+            return (int) 0;
+        }
+        $this->stashTree();
+
+        $output->writeln('<info>Running PHP lint</info>');
+        if (!$this->phpLint($fileList)) {
+            $output->writeln('<error>There are some PHP syntax errors!</error>');
+        }
+
+        $output->writeln('<info>Checking code style</info>');
+        if (!$this->checkCodeStyle($fileList)) {
+            $output->writeln("<error>Your commit does not comply with Shopware's coding standards.<error>");
+        }
+
+        if ($this->error) {
+            $output->writeln("");
+            $output->writeln("<error>If you are ABSOLUTELY sure your code is correct, you can use 'git commit --no-verify' to bypass this validation<error></error>");
+        }
+
+        $this->unstashTree();
+
+        return (int) $this->error;
+    }
+
+    private function getCommittedFileList()
+    {
+        $output = [];
+        $return = 0;
+        exec('git rev-parse --verify HEAD 2> /dev/null', $output, $return);
+        // diff against HEAD or an empty tree object
+        $against = $return == 0 ? 'HEAD' : '4b825dc642cb6eb9a060e54bf8d69288fbee4904';
+
+        $fileList = [];
+        exec("git diff --cached --name-only --diff-filter=ACM {$against} | grep -e '\.php$'", $fileList);
+
+        return $fileList;
+    }
+
+    private function checkCodeStyle(array $files)
+    {
+        $succeed = true;
+
+        foreach ($files as $file) {
+            $processBuilder = new ProcessBuilder([
+                'php',
+                __DIR__ . '/../../vendor/bin/php-cs-fixer',
+                '--dry-run',
+                '--verbose',
+                'fix',
+                $file,
+                '--fixers='.implode(',', $this->fixers)
+            ]);
+
+            $processBuilder->setWorkingDirectory(getcwd());
+            $phpCsFixer = $processBuilder->getProcess();
+            $phpCsFixer->run();
+
+            if (!$phpCsFixer->isSuccessful()) {
+                $this->output->writeln(sprintf('<error>Code style error at %s</error>', $file));
+                $this->output->writeln(sprintf('<error>%s</error>', trim($phpCsFixer->getOutput())));
+                $this->error = true;
+                $succeed = false;
+            }
+        }
+
+        return $succeed;
+    }
+
+    private function phpLint($files)
+    {
+        $succeed = true;
+
+        foreach ($files as $file) {
+            $processBuilder = new ProcessBuilder(array('php', '-l', $file));
+            $process = $processBuilder->getProcess();
+            $process->run();
+
+            if (!$process->isSuccessful()) {
+                $this->output->writeln(sprintf('<error>PHP syntax error at %s</error>', $file));
+                $this->output->writeln(sprintf('<error>%s</error>', trim($process->getErrorOutput())));
+                $this->error = true;
+                $succeed = false;
+            }
+        }
+
+        return $succeed;
+    }
+
+    private function isRebase()
+    {
+        $output = [];
+        exec("git symbolic-ref --short -q HEAD", $output);
+        return (empty($output));
+    }
+
+    private function stashTree()
+    {
+        // Stash any changes to the working tree that are not going to be committed
+        exec("git stash -q --keep-index");
+    }
+
+    private function unstashTree()
+    {
+        // Unstash changes to the working tree that we had stashed
+        exec("git stash pop -q");
+    }
+}
+
+$console = new PreCommitChecks();
+$console->run();
