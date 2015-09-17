@@ -25,19 +25,6 @@ class PreCommitChecks extends Application
      */
     private $input;
 
-    private $fixers = [
-        'visibility',
-        'linefeed',
-        'indentation',
-        'braces',
-        'controls_spaces',
-        'include',
-        'elseif',
-        'function_declaration',
-        'trailing_spaces',
-        'eof_ending'
-    ];
-
     private $error = false;
 
     public function doRun(InputInterface $input, OutputInterface $output)
@@ -99,7 +86,7 @@ class PreCommitChecks extends Application
                 '--verbose',
                 'fix',
                 $file,
-                '--fixers='.implode(',', $this->fixers)
+                '--level=psr2'
             ]);
 
             $processBuilder->setWorkingDirectory(getcwd());
