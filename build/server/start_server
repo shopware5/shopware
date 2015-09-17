@@ -26,7 +26,7 @@ function main() {
         exit 1
     fi
 
-    local errorlog="${__DIR__}/../var/log/php-server.log"
+    local errorlog="${__DIR__}/../logs/php-server.log"
     local port=$(parse_port "${hostname}" "${DEFAULT_PORT}")
 
     ## Stop any privious running server
