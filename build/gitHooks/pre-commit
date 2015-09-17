@@ -1,32 +1,8 @@
-#!/usr/bin/php
+#!/usr/bin/env php
 <?php
 
 /**
- * Shopware 5
- * Copyright (c) shopware AG
- *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
- *
- * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * "Shopware" is a registered trademark of shopware AG.
- * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
- */
-
-
-/**
- * Shopware Code Style Validator
+ * Shopware Pre commit hook
  * Based on https://github.com/intaro/php-git-hooks
  */
 
@@ -37,9 +13,16 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\ProcessBuilder;
 
-class ShopwareCodeStyleValidator extends Application
+class PreCommitChecks extends Application
 {
+    /**
+     * @var OutputInterface
+     */
     private $output;
+
+    /**
+     * @var InputInterface
+     */
     private $input;
 
     private $fixers = [
@@ -55,36 +38,61 @@ class ShopwareCodeStyleValidator extends Application
         'eof_ending'
     ];
 
+    private $error = false;
+
     public function doRun(InputInterface $input, OutputInterface $output)
     {
         $this->input = $input;
         $this->output = $output;
 
-        $output->writeln('<info>Checking code style</info>');
-
         $fileList = $this->getCommittedFileList();
-        if (!$this->checkCodeStyle($fileList)) {
-            throw new Exception('Your commit does not comply with Shopware\'s coding standards. If you are ABSOLUTELY sure your code is correct, you can use \'git commit --no-verify\' to bypass this validation');
+
+        if ($this->isRebase()) {
+            $output->writeln('<info>Not on branch</info>');
+            return (int) 0;
+        }
+        $this->stashTree();
+
+        $output->writeln('<info>Running PHP lint</info>');
+        if (!$this->phpLint($fileList)) {
+            $output->writeln('<error>There are some PHP syntax errors!</error>');
         }
 
-        $output->writeln('<info>Code styling is correct</info>');
+        $output->writeln('<info>Checking code style</info>');
+        if (!$this->checkCodeStyle($fileList)) {
+            $output->writeln("<error>Your commit does not comply with Shopware's coding standards.<error>");
+        }
+
+        if ($this->error) {
+            $output->writeln("");
+            $output->writeln("<error>If you are ABSOLUTELY sure your code is correct, you can use 'git commit --no-verify' to bypass this validation<error></error>");
+        }
+
+        $this->unstashTree();
+
+        return (int) $this->error;
     }
 
     private function getCommittedFileList()
     {
-        $fileList = array();
+        $output = [];
+        $return = 0;
+        exec('git rev-parse --verify HEAD 2> /dev/null', $output, $return);
+        // diff against HEAD or an empty tree object
+        $against = $return == 0 ? 'HEAD' : '4b825dc642cb6eb9a060e54bf8d69288fbee4904';
 
-        exec("git diff-index --cached --name-status HEAD | egrep '^(A|M)(.*)\.php$' | awk '{print $2;}'", $fileList);
+        $fileList = [];
+        exec("git diff --cached --name-only --diff-filter=ACM {$against} | grep -e '\.php$'", $fileList);
 
         return $fileList;
     }
 
     private function checkCodeStyle(array $files)
     {
-        $success = true;
+        $succeed = true;
 
         foreach ($files as $file) {
-            $processBuilder = new ProcessBuilder(array(
+            $processBuilder = new ProcessBuilder([
                 'php',
                 __DIR__ . '/../../vendor/bin/php-cs-fixer',
                 '--dry-run',
@@ -92,21 +100,62 @@ class ShopwareCodeStyleValidator extends Application
                 'fix',
                 $file,
                 '--fixers='.implode(',', $this->fixers)
-            ));
+            ]);
 
             $processBuilder->setWorkingDirectory(getcwd());
             $phpCsFixer = $processBuilder->getProcess();
             $phpCsFixer->run();
 
             if (!$phpCsFixer->isSuccessful()) {
+                $this->output->writeln(sprintf('<error>Code style error at %s</error>', $file));
                 $this->output->writeln(sprintf('<error>%s</error>', trim($phpCsFixer->getOutput())));
-                $success = false;
+                $this->error = true;
+                $succeed = false;
             }
         }
 
-        return $success;
+        return $succeed;
+    }
+
+    private function phpLint($files)
+    {
+        $succeed = true;
+
+        foreach ($files as $file) {
+            $processBuilder = new ProcessBuilder(array('php', '-l', $file));
+            $process = $processBuilder->getProcess();
+            $process->run();
+
+            if (!$process->isSuccessful()) {
+                $this->output->writeln(sprintf('<error>PHP syntax error at %s</error>', $file));
+                $this->output->writeln(sprintf('<error>%s</error>', trim($process->getErrorOutput())));
+                $this->error = true;
+                $succeed = false;
+            }
+        }
+
+        return $succeed;
+    }
+
+    private function isRebase()
+    {
+        $output = [];
+        exec("git symbolic-ref --short -q HEAD", $output);
+        return (empty($output));
+    }
+
+    private function stashTree()
+    {
+        // Stash any changes to the working tree that are not going to be committed
+        exec("git stash -q --keep-index");
+    }
+
+    private function unstashTree()
+    {
+        // Unstash changes to the working tree that we had stashed
+        exec("git stash pop -q");
     }
 }
 
-$console = new ShopwareCodeStyleValidator();
+$console = new PreCommitChecks();
 $console->run();
