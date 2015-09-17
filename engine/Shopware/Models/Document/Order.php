@@ -163,6 +163,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
         $this->_id = $id;
 
         $this->_summaryNet = isset($config["summaryNet"]) ? $config["summaryNet"] : false;
+
         $this->_shippingCostsAsPosition = isset($config["shippingCostsAsPosition"]) ? $config["shippingCostsAsPosition"] : false;
 
         $this->getOrder();
@@ -280,8 +281,13 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
      */
     public function processOrder()
     {
-        // p.e. = 24.99 / 20.83 * 100 - 100 = 19.971195391 (approx. 20% VAT)
-        $approximateTaxRate = $this->_order["invoice_shipping"] / $this->_order["invoice_shipping_net"] * 100 - 100;
+        if ($this->_order["invoice_shipping_net"] > 0) {
+            // p.e. = 24.99 / 20.83 * 100 - 100 = 19.971195391 (approx. 20% VAT)
+            $approximateTaxRate = $this->_order["invoice_shipping"] / $this->_order["invoice_shipping_net"] * 100 - 100;
+        } else {
+            $approximateTaxRate = 0;
+        }
+
         $taxShipping = $this->getTaxRateByApproximateTaxRate(
             $approximateTaxRate,
             $this->_shipping["country"]["areaID"],
@@ -293,6 +299,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
         if (empty($taxShipping)) {
             $taxShipping = Shopware()->Config()->sTAXSHIPPING;
         }
+
         $taxShipping = (float) $taxShipping;
         if ($this->_order["taxfree"]) {
             $this->_amountNetto =  $this->_amountNetto + $this->_order["invoice_shipping"];
