@@ -31,7 +31,6 @@ use Shopware\Components\Model\ModelRepository;
  */
 class Repository extends ModelRepository
 {
-
     /**
      * Returns a builder-object in order to get all locales
      *

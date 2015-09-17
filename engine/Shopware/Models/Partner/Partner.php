@@ -35,7 +35,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Partner extends ModelEntity
 {
-
     /**
      * @var integer $id
      *

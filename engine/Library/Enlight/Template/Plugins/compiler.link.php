@@ -30,7 +30,6 @@
  */
 class Smarty_Compiler_Link extends Smarty_Internal_CompileBase
 {
-
     /**
      * Attribute definition: Overwrites base class.
      *

@@ -177,7 +177,7 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
                 $where[] = $this->createCustomFieldToSearchTermCondition('details', 'number');
                 break;
             default:
-                breaK;
+                break;
         }
 
         return $where;

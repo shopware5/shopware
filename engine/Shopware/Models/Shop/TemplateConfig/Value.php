@@ -34,7 +34,6 @@ use Shopware\Models\Shop\Shop;
  */
 class Value extends ModelEntity
 {
-
     /**
      * @var integer $id
      *

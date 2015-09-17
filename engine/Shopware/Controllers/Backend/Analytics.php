@@ -32,7 +32,6 @@ use Shopware\Models\Analytics\Repository;
  */
 class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backend_ExtJs
 {
-
     protected $dateFields = array(
         'date', 'displayDate',  'firstLogin', 'birthday', 'orderTime'
     );

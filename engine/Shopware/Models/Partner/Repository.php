@@ -38,7 +38,6 @@ use Doctrine\ORM\Query;
  */
 class Repository extends ModelRepository
 {
-
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select the partners for the backend list
      * @param null $order

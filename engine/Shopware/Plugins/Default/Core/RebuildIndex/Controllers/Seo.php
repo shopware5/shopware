@@ -29,7 +29,6 @@
  */
 class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJs
 {
-
     /**
      * Helper function to get the new seo index component with auto completion
      * @return Shopware_Components_SeoIndex

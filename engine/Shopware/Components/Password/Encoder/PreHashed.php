@@ -31,7 +31,6 @@ namespace Shopware\Components\Password\Encoder;
  */
 class PreHashed implements PasswordEncoderInterface
 {
-
     /**
      * @return string
      */

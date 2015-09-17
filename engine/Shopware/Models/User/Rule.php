@@ -36,7 +36,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Rule extends ModelEntity
 {
-
     /**
      * @var integer $id
      *

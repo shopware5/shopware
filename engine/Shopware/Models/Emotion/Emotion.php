@@ -59,7 +59,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Emotion extends ModelEntity
 {
-
     /**
      * Unique identifier field for the shopware emotion.
      *

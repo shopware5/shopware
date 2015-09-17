@@ -439,7 +439,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
                     case "json":
 
                         if (is_array($item['value'])) {
-                            foreach($item['value'] as &$val) {
+                            foreach ($item['value'] as &$val) {
                                 $val['path'] = $mediaService->normalize($val['path']);
                             }
                         }

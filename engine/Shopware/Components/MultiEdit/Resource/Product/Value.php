@@ -31,7 +31,6 @@ namespace Shopware\Components\MultiEdit\Resource\Product;
  */
 class Value
 {
-
     /**
      * @var DqlHelper
      */

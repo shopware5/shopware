@@ -31,7 +31,6 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
  */
 class Shopware_Controllers_Frontend_AjaxSearch extends Enlight_Controller_Action
 {
-
     /**
      * Array with search results
      * @var array

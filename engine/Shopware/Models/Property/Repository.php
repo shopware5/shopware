@@ -31,7 +31,6 @@ use Shopware\Components\Model\Query\SqlWalker;
  */
 class Repository extends ModelRepository
 {
-
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which allows you to get property relations
      * @param $filter

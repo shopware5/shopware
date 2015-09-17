@@ -6,7 +6,7 @@
  * This pre-commit hooks will check for PHP errors (lint), and make sure the
  * code is PSR-2 compliant.
  *
- * Dependecy: PHP-CS-Fixer (http://cs.sensiolabs.org/
+ * Dependecy: PHP-CS-Fixer (http://cs.sensiolabs.org/)
  */
 
 class PreCommitChecks

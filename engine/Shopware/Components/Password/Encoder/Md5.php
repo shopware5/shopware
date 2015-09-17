@@ -31,7 +31,6 @@ namespace Shopware\Components\Password\Encoder;
  */
 class Md5 implements PasswordEncoderInterface
 {
-
     /**
      * @return string
      */

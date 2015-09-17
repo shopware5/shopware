@@ -31,7 +31,6 @@ use Shopware\Components\Model\QueryBuilder;
  */
 class Repository extends ModelRepository
 {
-
     /**
      * Used for the article backend module to load the article data into
      * the module. This function selects only some fragments for the whole article

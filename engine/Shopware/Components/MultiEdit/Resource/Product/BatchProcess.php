@@ -31,7 +31,6 @@ namespace Shopware\Components\MultiEdit\Resource\Product;
  */
 class BatchProcess
 {
-
     /**
      * Reference to an instance of the DqlHelper
      *

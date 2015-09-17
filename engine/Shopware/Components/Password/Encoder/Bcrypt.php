@@ -31,7 +31,6 @@ namespace Shopware\Components\Password\Encoder;
  */
 class Bcrypt implements PasswordEncoderInterface
 {
-
     /**
      * @var array
      */

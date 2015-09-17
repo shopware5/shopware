@@ -31,7 +31,7 @@
  */
 class Shopware_Controllers_Backend_RiskManagement extends Shopware_Controllers_Backend_ExtJs
 {
-//    /**
+    //    /**
 //     * @var Shopware\Models\RiskManagement\Repository
 //     */
 //    private $repository;

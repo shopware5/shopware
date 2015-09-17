@@ -36,7 +36,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Document extends ModelEntity
 {
-
     /**
      * The id property is an identifier property which means
      * doctrine associations can be defined over this field

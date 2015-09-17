@@ -28,7 +28,6 @@
  */
 class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controllers_Backend_ExtJs
 {
-
     // Used to store a reference to the newsletter repository
     protected $campaignsRepository = null;
 

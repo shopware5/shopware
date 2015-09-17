@@ -249,7 +249,7 @@ class sMarketing
         $images = array_column($getBanners, 'image');
         $mediaService = Shopware()->Container()->get('shopware_media.media_service');
 
-        array_walk($images, function(&$image) use ($mediaService) {
+        array_walk($images, function (&$image) use ($mediaService) {
             $image = $mediaService->normalize($image);
         });
 

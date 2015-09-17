@@ -36,8 +36,6 @@ use Shopware\Models\Media\Media;
  */
 class Value extends ModelEntity
 {
-
-
     /**
      * @var integer $id
      *

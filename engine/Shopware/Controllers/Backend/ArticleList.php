@@ -29,7 +29,6 @@
  */
 class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Backend_ExtJs
 {
-
     /**
      * Reference to the SwagMultiEdit repository
      *

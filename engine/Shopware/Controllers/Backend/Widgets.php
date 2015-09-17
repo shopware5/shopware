@@ -756,7 +756,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
                     'timeout' => 20
                 ]
             ])));
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             return $result;
         }
 

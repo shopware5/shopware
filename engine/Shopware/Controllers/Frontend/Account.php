@@ -877,7 +877,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         if (empty($errors)) {
             try {
                 $customerModel = $this->resetPassword($hash, $newPassword);
-            } catch(\Exception $e) {
+            } catch (\Exception $e) {
                 $errorMessages[] = $e->getMessage();
             }
         }
@@ -938,7 +938,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
             || strlen(trim($newPassword)) == 0
             || !$passwordConfirmation
             || (strlen($newPassword) < Shopware()->Config()->sMINPASSWORD)
-        ){
+        ) {
             $errorMessages[] = $this->View()->fetch('string:'.$frontendNamespace->get(
                 'RegisterPasswordLength',
                 'Your password should contain at least {config name=\"MinPassword\"} characters'
