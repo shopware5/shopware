@@ -58,6 +58,13 @@ class MediaCleanupCommand extends ShopwareCommand
         $total = $this->handleMove();
 
         if ($input->getOption('delete')) {
+            if ($input->isInteractive()) {
+                $dialog = $this->getHelper('dialog');
+                if (!$dialog->askConfirmation($output, 'Are you sure you want to delete every file in the recycle bin? [y/N] ', false)) {
+                    return;
+                }
+            }
+
             $verb = "Deleted";
             $total = $this->handleCleanup();
         }

@@ -15,6 +15,7 @@
         <service id="shopware_media.garbage_collector_factory" class="Shopware\Bundle\MediaBundle\GarbageCollectorFactory">
             <argument type="service" id="events"/>
             <argument type="service" id="dbal_connection" />
+            <argument type="service" id="shopware_media.media_service" />
         </service>
         <service id="shopware_media.garbage_collector" class="Shopware\Bundle\MediaBundle\GarbageCollector">
             <factory service="shopware_media.garbage_collector_factory" method="factory" />
