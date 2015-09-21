@@ -13,10 +13,17 @@ class Sitemap extends Page
     protected $path = '/sitemap{xml}';
 
     /**
+     * @inheritdoc
+     */
+    public function open(array $urlParameters = ['xml' => ''])
+    {
+        return parent::open($urlParameters);
+    }
+
+    /**
      * @param SitemapGroup|string $group
      * @param string $link
      * @param array $sites
-     * @throws \Behat\Behat\Exception\PendingException
      * @throws \Exception
      */
     public function checkGroup($group, $link, array $sites)
@@ -102,6 +109,7 @@ class Sitemap extends Page
 
     /**
      * @param array $links
+     * @throws \Exception
      */
     public function checkXml(array $links)
     {

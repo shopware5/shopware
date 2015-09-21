@@ -24,14 +24,15 @@
 
 namespace Shopware\Behat\ShopwareExtension\Context;
 
-use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Behat\Behat\Context\Context;
+use Shopware\Kernel;
 
-interface KernelAwareInterface
+interface KernelAwareContext extends Context
 {
     /**
      * Sets Kernel instance.
      *
-     * @param HttpKernelInterface $kernel HttpKernel instance
+     * @param Kernel $kernel
      */
-    public function setKernel(HttpKernelInterface $kernel);
+    public function setKernel(Kernel $kernel);
 }

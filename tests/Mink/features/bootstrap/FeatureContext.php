@@ -2,30 +2,22 @@
 
 namespace Shopware\Tests\Mink;
 
-use Behat\Behat\Event\OutlineExampleEvent;
+use Behat\Behat\Hook\Scope\BeforeScenarioScope;
+use Behat\Behat\Hook\Scope\ScenarioScope;
+use Behat\Gherkin\Node\ScenarioInterface;
+use Behat\Testwork\Hook\Scope\BeforeSuiteScope;
+use Behat\Testwork\Suite\Suite;
+use Shopware\Kernel;
 use Behat\MinkExtension\Context\MinkContext;
-use Shopware\Behat\ShopwareExtension\Context\KernelAwareInterface;
+use Shopware\Behat\ShopwareExtension\Context\KernelAwareContext;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
-use Symfony\Component\HttpKernel\KernelInterface;
-use Behat\Behat\Event\SuiteEvent;
 
-class FeatureContext extends MinkContext implements KernelAwareInterface
+class FeatureContext extends MinkContext implements KernelAwareContext//, \Behat\Behat\Context\SnippetAcceptingContext
 {
     /**
-     * @var KernelInterface
+     * @var Kernel
      */
     protected $kernel;
-
-    /**
-     * @var KernelInterface
-     */
-    protected static $staticKernel;
-
-    /**
-     * @var string
-     */
-    protected static $template;
 
     /**
      * @var array
@@ -33,58 +25,131 @@ class FeatureContext extends MinkContext implements KernelAwareInterface
     protected $dirtyConfigElements;
 
     /**
+     * @var Suite
+     */
+    protected static $suite;
+
+    /**
+     * @var int
+     */
+    private static $scenarioIncrement;
+
+    /**
+     * @var int
+     */
+    private static $exampleIncrement;
+
+    /**
+     * @var int
+     */
+    private static $lastExampleLine;
+
+    /**
      * Initializes context.
      * Every scenario gets it's own context object.
      *
      * @param array $parameters context parameters (set them up through behat.yml)
      */
-    public function __construct(array $parameters)
+    public function __construct()
     {
-        if (!isset($parameters['template'])) {
+        if (!self::$suite->hasSetting('template')) {
             throw new \RuntimeException("Template not set. Please start testsuite using the --profile argument.");
         }
 
-        self::$template = $parameters['template'];
-        $this->dirtyConfigElements = [];
-
-        $this->useContext('transform', new TransformContext($parameters));
-        $this->useContext('shopware', new ShopwareContext($parameters));
-        $this->useContext('account', new AccountContext($parameters));
-        $this->useContext('checkout', new CheckoutContext($parameters));
-        $this->useContext('listing', new ListingContext($parameters));
-        $this->useContext('detail', new DetailContext($parameters));
-        $this->useContext('note', new NoteContext($parameters));
-        $this->useContext('form', new FormContext($parameters));
-        $this->useContext('blog', new BlogContext($parameters));
-        $this->useContext('sitemap', new SitemapContext($parameters));
-        $this->useContext('special', new SpecialContext($parameters));
-        $this->useContext('seo', new SeoContext($parameters));
-        $this->useContext('basicSettings', new BasicSettingsContext($parameters));
+        $this->registerErrorHandler();
+        $this->dirtyConfigElements = array();
     }
 
     /**
      * @BeforeSuite
      */
-    public static function prepare(SuiteEvent $event)
+    public static function setup(BeforeSuiteScope $scope)
     {
-        $em = self::$staticKernel->getContainer()->get('models');
+        self::$suite = $scope->getSuite();
+        self::$scenarioIncrement = 0;
+        self::$exampleIncrement = 0;
+        self::$lastExampleLine = 0;
+    }
+
+    /** @BeforeScenario */
+    public function before(BeforeScenarioScope $scope)
+    {
+        $this->increaseIncrements($scope->getScenario());
+
+        if ($this->isFirstScenario()) {
+            $this->prepare($this->getContainer());
+        }
+
+        if ($this->isFirstExample()) {
+            $this->reset($this->getContainer());
+        }
+    }
+
+    /**
+     * @param ScenarioInterface $scenario
+     */
+    private function increaseIncrements(ScenarioInterface $scenario)
+    {
+        if ($scenario->getNodeType() === 'Scenario') {
+            $this->increaseScenarioIncrement();
+            return;
+        }
+
+        if (self::$lastExampleLine !== $scenario->getLine() - 1) {
+            $this->increaseScenarioIncrement();
+        }
+
+        self::$exampleIncrement++;
+        self::$lastExampleLine = $scenario->getLine();
+    }
+
+    /**
+     *
+     */
+    private function increaseScenarioIncrement()
+    {
+        self::$scenarioIncrement++;
+        self::$exampleIncrement = 0;
+    }
+
+    /**
+     * @return bool
+     */
+    private function isFirstScenario() {
+        return ((self::$scenarioIncrement === 1) && $this->isFirstExample());
+    }
+
+    /**
+     * @return bool
+     */
+    private function isFirstExample() {
+        return (self::$exampleIncrement < 2);
+    }
+
+    /**
+     * @param ContainerInterface $container
+     * @throws \Exception
+     */
+    private function prepare(ContainerInterface $container)
+    {
+        $em = $container->get('models');
         $em->generateAttributeModels();
 
         //refresh s_core_templates
-        $last = error_reporting(0);
-        self::$staticKernel->getContainer()->get('theme_installer')->synchronize();
-        error_reporting($last);
+        $this->registerErrorHandler();
+        $container->get('theme_installer')->synchronize();
+        restore_error_handler();
 
         //get the template id
         $sql = sprintf(
             'SELECT id FROM `s_core_templates` WHERE template = "%s"',
-            self::$template
+            self::$suite->getSetting('template')
         );
 
-        $templateId = self::$staticKernel->getContainer()->get('db')->fetchOne($sql);
+        $templateId = $container->get('db')->fetchOne($sql);
         if (!$templateId) {
             throw new \RuntimeException(
-                sprintf("Unable to find template by name %s", self::$template)
+                sprintf("Unable to find template by name %s", self::$suite->getSetting('template'))
             );
         }
 
@@ -93,15 +158,15 @@ class FeatureContext extends MinkContext implements KernelAwareInterface
             UPDATE `s_core_shops` SET `template_id`= $templateId WHERE `id` = 1;
             UPDATE `s_core_paymentmeans` SET `active`= 1;
 EOD;
-        self::$staticKernel->getContainer()->get('db')->exec($sql);
+        $container->get('db')->exec($sql);
 
         /** @var \Shopware\Bundle\PluginInstallerBundle\Service\InstallerService $pluginManager */
-        $pluginManager = self::$staticKernel->getContainer()->get('shopware.plugin_manager');
+        $pluginManager = $container->get('shopware_plugininstaller.plugin_manager');
 
         // hack to prevent behat error handler kicking in.
-        $oldErrorReporting = error_reporting(0);
+        $this->registerErrorHandler();
         $pluginManager->refreshPluginList();
-        error_reporting($oldErrorReporting);
+        restore_error_handler();
 
         $plugin = $pluginManager->getPluginByName('Notification');
         $pluginManager->installPlugin($plugin);
@@ -112,14 +177,14 @@ EOD;
      * @param string $technicalName
      * @throws \Exception
      */
-    protected static function installPlugin($technicalName)
+    protected function installPlugin($technicalName)
     {
         /** @var \Shopware\Bundle\PluginInstallerBundle\Service\InstallerService $pluginManager */
-        $pluginManager = self::$staticKernel->getContainer()->get('shopware.plugin_manager');
+        $pluginManager = $this->getContainer()->get('shopware_plugininstaller.plugin_manager');
         $plugin = $pluginManager->getPluginByName($technicalName);
 
         if(!$plugin) {
-            $plugin = self::downloadPlugin($technicalName);
+            $plugin = $this->downloadPlugin($technicalName);
         }
 
         $pluginManager->installPlugin($plugin);
@@ -128,31 +193,31 @@ EOD;
 
     /**
      * @param string $technicalName
+     * @return null
      */
-    private static function downloadPlugin($technicalName)
+    private function downloadPlugin($technicalName)
     {
-
+        return null;
     }
 
     /**
      * @param string $technicalName
      * @throws \Exception
      */
-    protected static function deactivatePlugin($technicalName)
+    protected function deactivatePlugin($technicalName)
     {
         /** @var \Shopware\Bundle\PluginInstallerBundle\Service\InstallerService $pluginManager */
-        $pluginManager = self::$staticKernel->getContainer()->get('shopware.plugin_manager');
+        $pluginManager = $this->getContainer()->get('shopware_plugininstaller.plugin_manager');
         $plugin = $pluginManager->getPluginByName($technicalName);
         $pluginManager->deactivatePlugin($plugin);
     }
-
-    /** @BeforeScenario */
-    public function before($event)
+    
+    /**
+     * @param ContainerInterface $container
+     * @throws \Exception
+     */
+    private function reset(ContainerInterface $container)
     {
-        if ($event instanceof OutlineExampleEvent && $event->getIteration()) {
-            return;
-        }
-
         $password = md5('shopware');
 
         $sql = <<<"EOD"
@@ -162,7 +227,7 @@ EOD;
             TRUNCATE s_order_notes;
             TRUNCATE s_order_comparisons;
 EOD;
-        $this->getContainer()->get('db')->exec($sql);
+        $container->get('db')->exec($sql);
     }
 
     /**
@@ -178,7 +243,7 @@ EOD;
      */
     public function emotionJs()
     {
-        if (self::$template === 'Emotion') {
+        if (self::$suite->getSetting('template') === 'Emotion') {
             $this->getMink()->setDefaultSessionName('selenium2');
         }
     }
@@ -188,7 +253,7 @@ EOD;
      */
     public function responsiveJs()
     {
-        if (self::$template === 'Responsive') {
+        if (self::$suite->getSetting('template') === 'Responsive') {
             $this->getMink()->setDefaultSessionName('selenium2');
         }
     }
@@ -245,39 +310,24 @@ EOD;
     /**
      * @BeforeScenario @configChange
      */
-    public function clearCache(\Behat\Behat\Event\ScenarioEvent $event = null)
+    public function clearCache(ScenarioScope $scope = null)
     {
-        /** @var \Shopware\Components\CacheManager $cacheManager */
-        $cacheManager = $this->getContainer()->get('shopware.cache_manager');
-
-        $templateCache = $cacheManager->getTemplateCacheInfo();
-        if (!array_key_exists('message', $templateCache)) {
-            $cacheManager->clearHttpCache();
-            $cacheManager->clearTemplateCache();
-        }
-
-        $cacheManager->clearConfigCache();
-        $cacheManager->clearSearchCache();
-        $cacheManager->clearProxyCache();
-
-        if($event) {
-            sleep(5);
-        }
+        $clearCache = $this->getKernel()->getRootDir().'/cache/clear_cache.sh';
+        exec($clearCache);
     }
 
     /**
      * Sets Kernel instance.
      *
-     * @param HttpKernelInterface $kernel HttpKernel instance
+     * @param Kernel $kernel HttpKernel instance
      */
-    public function setKernel(HttpKernelInterface $kernel)
+    public function setKernel(Kernel $kernel)
     {
         $this->kernel = $kernel;
-        self::$staticKernel = $kernel;
     }
 
     /**
-     * @return \Shopware\Kernel
+     * @return Kernel
      */
     public function getKernel()
     {
@@ -292,5 +342,39 @@ EOD;
     public function getContainer()
     {
         return $this->kernel->getContainer();
+    }
+
+    public function registerErrorHandler()
+    {
+        error_reporting(-1);
+
+        $errorNameMap = array(
+            E_ERROR             => 'E_ERROR',
+            E_WARNING           => 'E_WARNING',
+            E_PARSE             => 'E_PARSE',
+            E_NOTICE            => 'E_NOTICE',
+            E_CORE_ERROR        => 'E_CORE_ERROR',
+            E_CORE_WARNING      => 'E_CORE_WARNING',
+            E_COMPILE_ERROR     => 'E_COMPILE_ERROR',
+            E_COMPILE_WARNING   => 'E_COMPILE_WARNING',
+            E_USER_ERROR        => 'E_USER_ERROR',
+            E_USER_WARNING      => 'E_USER_WARNING',
+            E_USER_NOTICE       => 'E_USER_NOTICE',
+            E_STRICT            => 'E_STRICT',
+            E_RECOVERABLE_ERROR => 'E_RECOVERABLE_ERROR',
+            E_DEPRECATED        => 'E_DEPRECATED',
+            E_USER_DEPRECATED   => 'E_USER_DEPRECATED',
+            E_ALL               => 'E_ALL',
+        );
+
+        set_error_handler(function ($errno, $errstr, $errfile, $errline) use ($errorNameMap) {
+            if ($errno === E_RECOVERABLE_ERROR) {
+                return true;
+            }
+            $errorName = isset($errorNameMap[$errno]) ? $errorNameMap[$errno] : $errno;
+            $message = sprintf("Error: %s, \nFile: %s\nLine: %s, Message:\n%s\n", $errorName, $errfile, $errline, $errstr);
+            // do not trigger internal
+            return true;
+        });
     }
 }

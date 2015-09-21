@@ -2,7 +2,7 @@
 
 namespace Shopware\Tests\Mink;
 
-use \Behat\Behat\Exception\PendingException;
+use \Behat\Behat\Tester\Exception\PendingException;
 use \SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use \SensioLabs\Behat\PageObjectExtension\PageObject\Element;
 use Shopware\Tests\Mink\Element\MultipleElement;

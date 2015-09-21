@@ -5,7 +5,7 @@ namespace Shopware\Tests\Mink\Element;
 use Behat\Mink\Element\NodeElement;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
 use Behat\Mink\Session;
-use SensioLabs\Behat\PageObjectExtension\Context\PageFactoryInterface;
+use SensioLabs\Behat\PageObjectExtension\PageObject\Factory;
 use Shopware\Tests\Mink\Helper;
 
 /**
@@ -22,11 +22,11 @@ abstract class MultipleElement extends Element implements \Countable, \Iterator,
     /**
      * Constructor
      * @param Session $session
-     * @param PageFactoryInterface $pageFactory
+     * @param Factory $factory
      */
-    public function __construct(Session $session, PageFactoryInterface $pageFactory)
+    public function __construct(Session $session, Factory $factory)
     {
-        parent::__construct($session, $pageFactory);
+        parent::__construct($session, $factory);
 
         $this->siblings = array();
     }

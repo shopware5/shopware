@@ -2,12 +2,24 @@
 
 namespace Shopware\Tests\Mink;
 
+use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Shopware\Tests\Mink\Page\Emotion\Homepage;
 use Behat\Gherkin\Node\TableNode;
 use Shopware\Tests\Mink\Element\Emotion\CompareColumn;
 
 class ShopwareContext extends SubContext
 {
+    /** @var  FeatureContext */
+    protected $featureContext;
+
+    /** @BeforeScenario */
+    public function gatherContexts(BeforeScenarioScope $scope)
+    {
+        $environment = $scope->getEnvironment();
+
+        $this->featureContext = $environment->getContext('Shopware\Tests\Mink\FeatureContext');
+    }
+
     /**
      * @When /^I search for "(?P<searchTerm>[^"]*)"$/
      */
@@ -187,9 +199,7 @@ class ShopwareContext extends SubContext
      */
     public function theConfigValueOfIs($configName, $value)
     {
-        /** @var FeatureContext $featureContext */
-        $featureContext = $this->getMainContext();
-        $featureContext->changeConfigValue($configName, $value);
+        $this->featureContext->changeConfigValue($configName, $value);
     }
 
     /**
