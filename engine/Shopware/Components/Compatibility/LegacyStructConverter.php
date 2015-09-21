@@ -225,7 +225,12 @@ class LegacyStructConverter
             $discPseudo = $cheapestPrice->getCalculatedPseudoPrice();
             $discPrice = $cheapestPrice->getCalculatedPrice();
 
-            $discount = round(($discPrice / $discPseudo * 100) - 100, 2) * -1;
+            if ($discPseudo != 0) {
+                $discount = round(($discPrice / $discPseudo * 100) - 100, 2) * -1;
+            } else {
+                $discount = 0;
+            }
+
             $promotion["pseudopricePercent"] = array(
                 "int" => round($discount, 0),
                 "float" => $discount
@@ -324,7 +329,12 @@ class LegacyStructConverter
             $discPseudo = $variantPrice->getCalculatedPseudoPrice();
             $discPrice = $variantPrice->getCalculatedPrice();
 
-            $discount = round(($discPrice / $discPseudo * 100) - 100, 2) * -1;
+            if ($discPseudo != 0) {
+                $discount = round(($discPrice / $discPseudo * 100) - 100, 2) * -1;
+            } else {
+                $discount = 0;
+            }
+
             $data["pseudopricePercent"] = array(
                 "int" => round($discount, 0),
                 "float" => $discount

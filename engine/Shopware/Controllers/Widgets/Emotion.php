@@ -141,7 +141,12 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $pages = $this->Request()->getParam("pages");
         $offset = (int) $this->Request()->getParam("start", $limit * ($pages-1));
         $max = $this->Request()->getParam("max");
-        $maxPages = round($max / $limit);
+
+        if ($limit != 0) {
+            $maxPages = round($max / $limit);
+        } else {
+            $maxPages = 0;
+        }
 
         $values = $this->getProductSliderData($category, $offset, $limit, $sort);
 
@@ -702,7 +707,11 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $values = array();
 
         $max = $data["article_slider_max_number"];
-        $maxPages = round($max / $perPage);
+        if ($perPage != 0) {
+            $maxPages = round($max / $perPage);
+        } else {
+            $maxPages = 0;
+        }
 
         switch ($data["article_slider_type"]) {
             case "product_stream":
@@ -801,7 +810,12 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $data = $this->mapData($result, $category);
 
         $count = $result->getTotalCount();
-        $pages = round($count / $limit);
+        if ($limit != 0) {
+            $pages = round($count / $limit);
+        } else {
+            $pages = 0;
+        }
+
 
         if ($pages == 0 && $count > 0) {
             $pages = 1;
@@ -883,7 +897,13 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $data = $this->mapData($result, $category);
 
         $count = $result->getTotalCount();
-        $pages = round($count / $limit);
+
+        if ($limit != 0) {
+            $pages = round($count / $limit);
+        } else {
+            $pages = 0;
+        }
+
         if ($pages == 0 && $count > 0) {
             $pages = 1;
         }
@@ -902,7 +922,11 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $offset = (int) $this->Request()->getParam("start", $limit * ($pages-1));
 
         $max = $this->Request()->getParam("max");
-        $maxPages = round($max / $limit);
+        if ($limit != 0) {
+            $maxPages = round($max / $limit);
+        } else {
+            $limit = 0;
+        }
 
         $values = $this->getProductStream($streamId, $offset, $limit);
 

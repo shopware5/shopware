@@ -331,7 +331,12 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
             $sql,
             array($timeBack, $timeBack, $timeBack, $timeBack, $timeBack)
         );
-        $fetchConversion = number_format($fetchConversion["countOrders"] / $fetchConversion["visitors"] * 100, 2);
+
+        if ($fetchConversion['visitors'] != 0) {
+            $fetchConversion = number_format($fetchConversion["countOrders"] / $fetchConversion["visitors"] * 100, 2);
+        } else {
+            $fetchConversion = number_format(0, 2);
+        }
 
         $namespace = Shopware()->Container()->get('snippets')->getNamespace('backend/widget/controller');
         $this->View()->assign(
@@ -485,7 +490,13 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
                 ENT_QUOTES,
                 "UTF-8"
             );
-            $amount = round(($order["invoice_amount"] / $order["currencyFactor"]), 2);
+
+            if ($order["currencyFactor"] != 0) {
+                $amount = round(($order["invoice_amount"] / $order["currencyFactor"]), 2);
+            } else {
+                $amount = 0;
+            }
+
             $order["amount"] = $amount;
             if (strlen($order["customer"]) > 25) {
                 $order["customer"] = substr($order["customer"], 0, 25) . "..";

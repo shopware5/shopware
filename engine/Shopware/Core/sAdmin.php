@@ -2209,8 +2209,12 @@ class sAdmin
             array('subject' => $this, 'id' => $userId)
         );
 
-        // Make Array with page-structure to render in template
-        $numberOfPages = ceil(count($getOrders) / $perPage);
+        if ($perPage != 0) {
+            // Make Array with page-structure to render in template
+            $numberOfPages = ceil(count($getOrders) / $perPage);
+        } else {
+            $numberOfPages = 0;
+        }
         $offset = ($destinationPage - 1) * $perPage;
         $orderData["orderData"] = array_slice($getOrders, $offset, $perPage, true);
         $orderData["numberOfPages"] = $numberOfPages;
@@ -2278,8 +2282,12 @@ class sAdmin
 
         $orderData["orderData"] = $getOrders;
 
-        // Make Array with page structure to render in template
-        $numberOfPages = ceil($foundOrdersCount / $limitEnd);
+        if ($limitEnd != 0) {
+            // Make Array with page structure to render in template
+            $numberOfPages = ceil($foundOrdersCount / $limitEnd);
+        } else {
+            $numberOfPages = 0;
+        }
         $orderData["numberOfPages"] = $numberOfPages;
 
         $orderData["pages"] = $this->getPagerStructure($destinationPage, $numberOfPages);

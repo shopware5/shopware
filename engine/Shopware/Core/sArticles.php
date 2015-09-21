@@ -1283,6 +1283,9 @@ class sArticles
 
         $price = floatval(str_replace(",", ".", $price));
 
+        if ($purchaseUnit == 0 || $referenceUnit == 0) {
+            return 0;
+        }
         return $price / $purchaseUnit * $referenceUnit;
     }
 

@@ -708,8 +708,12 @@ class sBasket
             $factor = 1;
         }
 
+        $basketValue = 0;
+        if ($factor != 0) {
+            $basketValue = $amount["totalAmount"] / $factor;
+        }
         // Check if the basket's value is above the voucher's
-        if (($amount["totalAmount"]/$factor) < $voucherDetails["minimumcharge"]) {
+        if ($basketValue < $voucherDetails["minimumcharge"]) {
             $sErrorMessages[] = str_replace(
                 "{sMinimumCharge}",
                 $voucherDetails["minimumcharge"],
@@ -2172,7 +2176,7 @@ class sBasket
 
             // If price per unit is not referring to 1, calculate base-price
             // Choose 1000, quantity refers to 500, calculate price / 1000 * 500 as reference
-            if ($getArticles[$key]["purchaseunit"] > 0) {
+            if ($getArticles[$key]["purchaseunit"] != 0) {
                 $getArticles[$key]["itemInfo"] = $getArticles[$key]["purchaseunit"] . " {$getUnitData["description"]} / " . $this->moduleManager->Articles()->sFormatPrice($getArticles[$key]["amount"] / $quantity * $getArticles[$key]["purchaseunit"]);
                 $getArticles[$key]["itemInfoArray"]["reference"] = $getArticles[$key]["purchaseunit"];
                 $getArticles[$key]["itemInfoArray"]["unit"] = $getUnitData;
@@ -2490,7 +2494,7 @@ class sBasket
         }
 
         // Recalculate price per item, if purchase unit is set
-        if ($queryAdditionalInfo["purchaseunit"] > 0) {
+        if ($queryAdditionalInfo["purchaseunit"] != 0) {
             $grossPrice = $grossPrice / $queryAdditionalInfo["purchaseunit"];
             $netPrice = $netPrice / $queryAdditionalInfo["purchaseunit"];
         }
