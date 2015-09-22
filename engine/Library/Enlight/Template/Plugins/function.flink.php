@@ -42,7 +42,13 @@ function smarty_function_flink($params, $template)
         // try to find the file on the filesystem
         foreach ($template->smarty->getTemplateDir() as $dir) {
             if (file_exists($dir . $file)) {
-                $file = realpath($dir) . DS . str_replace('/', DS, $file);
+                // fix unwanted resolving of symlinks, except for special paths like ./
+                if ($dir === './') {
+                    $file = realpath($dir) . DS . str_replace('/', DS, $file);
+                }
+                else {
+                    $file = $dir . DS . str_replace( '/', DS, $file );
+                }
                 break;
             }
             if ($useIncludePath) {
