@@ -184,6 +184,7 @@
     </target>
 
     <target name="install-git-hooks">
+        <mkdir dir="${basedir}/.git/hooks/"/>
         <symlink link="${basedir}/.git/hooks/pre-commit" resource="${build.dir}/gitHooks/pre-commit" overwrite="true"/>
     </target>
 
