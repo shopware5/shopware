@@ -182,6 +182,11 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
             $supplierModel->setImage($this->Request()->get('media-manager-selection'));
         }
 
+        // strip full qualified url
+        $mediaService = $this->get('shopware_media.media_service');
+        $supplierModel->setImage($mediaService->normalize($supplierModel->getImage()));
+
+
         // backend checks
         $name = $supplierModel->getName();
         if (empty($name)) {
