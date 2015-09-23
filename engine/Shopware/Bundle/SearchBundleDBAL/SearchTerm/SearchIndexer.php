@@ -138,7 +138,7 @@ class SearchIndexer implements SearchIndexerInterface
 
                 // If any where condition is set, add to query
                 if (!empty($table['where'])) {
-                    $sql .= 'WHERE ' . $table['where'];
+                    $sql .= ' WHERE ' . $table['where'];
                 }
 
                 // Get all fields & values from current table
