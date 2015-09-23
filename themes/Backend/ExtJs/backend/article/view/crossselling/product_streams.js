@@ -176,6 +176,8 @@ Ext.define('Shopware.apps.Article.view.crossselling.ProductStreams', {
 
         return me.streamAddButton = Ext.create('Ext.button.Button', {
             cls: 'small primary',
+            anchor: 'auto',
+            margin: '0 0 0 160',
             text: me.snippets.addStream,
             handler: function() {
                 me.fireEvent('addStream', me.streamForm, me.streamGrid, me.streamSelection);

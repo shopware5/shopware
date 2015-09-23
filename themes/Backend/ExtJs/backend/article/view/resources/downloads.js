@@ -183,9 +183,10 @@ Ext.define('Shopware.apps.Article.view.resources.Downloads', {
                 me.mediaSelection,
                 {
                     xtype: 'button',
-                    iconCls: 'sprite-chain-plus',
                     cls: 'small primary',
                     text: me.snippets.button,
+                    anchor: 'auto',
+                    margin: '0 0 0 160',
                     handler: function() {
                         me.fireEvent('addDownload', me.downloadGrid, me.downloadForm)
                     }

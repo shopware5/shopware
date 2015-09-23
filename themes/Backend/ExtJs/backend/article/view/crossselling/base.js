@@ -209,6 +209,8 @@ Ext.define('Shopware.apps.Article.view.crossselling.Base', {
         return Ext.create('Ext.button.Button', {
             cls: 'small primary',
             text: me.systemTexts.add,
+            anchor: 'auto',
+            margin: '0 0 0 160',
             handler: function() {
                 me.fireEvent(me.customEvents.addEvent, me.form, me.productGrid, me.productSearch);
             }
