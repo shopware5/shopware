@@ -1,6 +1,9 @@
 # Shopware Upgrade Information
 In this document you will find a changelog of the important changes related to the code base of Shopware.
 
+## 5.1.0 RC3
+* Activated media fallback by default so that old media paths get resolved to the new location
+
 ## 5.1.0 RC2
 * Update ongr/elasticsearch-dsl to version 1.0.0-RC1
 * Update elasticsearch/elasticsearch to version 2.0.0
