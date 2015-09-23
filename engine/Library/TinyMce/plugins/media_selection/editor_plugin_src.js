@@ -172,17 +172,14 @@
         _insertImage: function(record) {
             var me = this,
                 ed = me.ed,
-                settings = ed.settings, path,
                 args;
-
-            path = record.get('path');
 
             args = {
                 'class': me.imageCls,
                 width: record.get('width'),
                 height: record.get('height'),
                 alt: record.get('name'),
-                src: path
+                src: record.get('virtualPath')
             };
 
             ed.execCommand('mceInsertContent', false, tinymce.DOM.createHTML('img', args), { skip_undo : 1 });
