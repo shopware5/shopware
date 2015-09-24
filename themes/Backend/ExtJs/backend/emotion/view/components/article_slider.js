@@ -72,7 +72,7 @@ Ext.define('Shopware.apps.Emotion.view.components.ArticleSlider', {
 
         me.articleType = me.down('emotion-components-fields-article-slider-type');
         me.categoryFilter = me.down('emotion-components-fields-category-selection');
-        me.streamSelection = me.down('emotion-components-fields-product-stream-selection');
+        me.streamSelection = me.down('productstreamselection');
 
         me.streamSelection.allowBlank = true;
         me.streamSelection.hide();

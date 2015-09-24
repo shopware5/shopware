@@ -364,24 +364,9 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
             }
         });
 
-        me.streamStore =  Ext.create('Shopware.store.Search', {
-            fields: [ 'id', 'name', { name: 'formatted_name', convert: function (v, r) {
-                return r.get('id') + " | " + r.get('name');
-            }}],
-            pageSize: 15,
-            configure: function() {
-                return { entity: "Shopware\\Models\\ProductStream\\ProductStream" }
-            }
-        });
-
-        me.streamSelection = Ext.create('Shopware.form.field.Search', {
-            store: me.streamStore,
+        me.streamSelection = Ext.create('Shopware.form.field.ProductStreamSelection', {
             name: 'streamId',
-            displayField: 'formatted_name',
-            labelWidth:180,
-            valueField: 'id',
-            fieldLabel: me.snippets.defaultSettingsProductStream,
-            pageSize: me.streamStore.pageSize
+            labelWidth: 180
         });
 
         return [
