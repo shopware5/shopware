@@ -45,13 +45,20 @@ class GarbageCollectorFactory
     private $connection;
 
     /**
+     * @var MediaServiceInterface
+     */
+    private $mediaService;
+
+    /**
      * @param \Enlight_Event_EventManager $events
      * @param Connection $connection
+     * @param MediaServiceInterface $mediaService
      */
-    public function __construct(\Enlight_Event_EventManager $events, Connection $connection)
+    public function __construct(\Enlight_Event_EventManager $events, Connection $connection, MediaServiceInterface $mediaService)
     {
         $this->connection = $connection;
         $this->events = $events;
+        $this->mediaService = $mediaService;
     }
 
     /**
@@ -61,7 +68,7 @@ class GarbageCollectorFactory
     {
         $mediaPositions = $this->getMediaPositions();
 
-        return new GarbageCollector($mediaPositions, $this->connection);
+        return new GarbageCollector($mediaPositions, $this->connection, $this->mediaService);
     }
 
     /**
@@ -72,16 +79,27 @@ class GarbageCollectorFactory
     private function getDefaultMediaPositions()
     {
         return new ArrayCollection([
-            new MediaPosition('s_articles_img', 'media_id', 'id'),
-            new MediaPosition('s_categories', 'mediaID', 'id'),
+            new MediaPosition('s_articles_img', 'media_id'),
+            new MediaPosition('s_categories', 'mediaID'),
             new MediaPosition('s_emarketing_banners', 'img', 'path'),
-            new MediaPosition('s_blog_media', 'media_id', 'id'),
-            new MediaPosition('s_core_config_mails_attachments', 'mediaID', 'id'),
-            new MediaPosition('s_filter_values', 'media_id', 'id'),
+            new MediaPosition('s_blog_media', 'media_id'),
+            new MediaPosition('s_core_config_mails_attachments', 'mediaID'),
+            new MediaPosition('s_filter_values', 'media_id'),
             new MediaPosition('s_emotion_element_value', 'value', 'path'),
+            new MediaPosition('s_emotion_element_value', 'value', 'path', MediaPosition::PARSE_JSON),
+            new MediaPosition('s_emotion_element_value', 'value', 'path', MediaPosition::PARSE_HTML),
             new MediaPosition('s_emotion', 'landingpage_teaser', 'path'),
             new MediaPosition('s_articles_downloads', 'filename', 'path'),
-            new MediaPosition('s_articles_supplier', 'img', 'path')
+            new MediaPosition('s_articles_supplier', 'img', 'path'),
+            new MediaPosition('s_core_templates_config_values', 'value', 'path', MediaPosition::PARSE_SERIALIZE),
+            new MediaPosition('s_core_documents_box', 'value', 'path', MediaPosition::PARSE_HTML),
+            new MediaPosition('s_articles', 'description_long', 'path', MediaPosition::PARSE_HTML),
+            new MediaPosition('s_billing_template', 'value', 'path', MediaPosition::PARSE_HTML),
+            new MediaPosition('s_campaigns_html', 'html', 'path', MediaPosition::PARSE_HTML),
+            new MediaPosition('s_cms_static', 'html', 'path', MediaPosition::PARSE_HTML),
+            new MediaPosition('s_cms_support', 'text', 'path', MediaPosition::PARSE_HTML),
+            new MediaPosition('s_cms_support', 'text2', 'path', MediaPosition::PARSE_HTML),
+            new MediaPosition('s_core_config_mails', 'contentHTML', 'path', MediaPosition::PARSE_HTML)
         ]);
     }
 

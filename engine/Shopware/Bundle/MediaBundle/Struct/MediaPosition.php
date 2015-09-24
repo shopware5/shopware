@@ -30,48 +30,72 @@ namespace Shopware\Bundle\MediaBundle\Struct;
  */
 class MediaPosition
 {
-    /** @var string $tableName */
-    private $tableName;
-
-    /** @var string $columnName */
-    private $columnName;
-
-    /** @var string $type */
-    private $type;
+    /**
+     * Different table type values
+     */
+    const PARSE_PLAIN = 1;
+    const PARSE_JSON = 2;
+    const PARSE_SERIALIZE = 3;
+    const PARSE_HTML = 4;
 
     /**
-     * @param string $tableName
-     * @param string $columnName
-     * @param string $type 'id'|'path'
+     * @var string
      */
-    public function __construct($tableName, $columnName, $type = 'id')
+    private $sourceTable;
+
+    /**
+     * @var string
+     */
+    private $sourceColumn;
+
+    /**
+     * @var string
+     */
+    private $mediaColumn;
+
+    /**
+     * @param string $sourceTable The source table where images are used. e.g. s_articles_img
+     * @param string $sourceColumn The source column of the source table. e.g. media_id
+     * @param string $mediaColumn The matching column in the `s_media` table. Defaults to `id`.
+     * @param int $parseType Defines the parse type. e.g. plain, json, html, serialized data
+     */
+    public function __construct($sourceTable, $sourceColumn, $mediaColumn = 'id', $parseType = self::PARSE_PLAIN)
     {
-        $this->tableName = $tableName;
-        $this->columnName = $columnName;
-        $this->type = $type;
+        $this->sourceTable = $sourceTable;
+        $this->sourceColumn = $sourceColumn;
+        $this->mediaColumn = $mediaColumn;
+        $this->parseType = $parseType;
     }
 
     /**
-     * @return string
+     * @return string The source table where images are used. e.g. s_articles_img
      */
-    public function getTableName()
+    public function getSourceTable()
     {
-        return $this->tableName;
+        return $this->sourceTable;
     }
 
     /**
-     * @return string
+     * @return string The source column of the source table. e.g. media_id
      */
-    public function getColumnName()
+    public function getSourceColumn()
     {
-        return $this->columnName;
+        return $this->sourceColumn;
     }
 
     /**
-     * @return string
+     * @return string The matching column in the `s_media` table.
      */
-    public function getType()
+    public function getMediaColumn()
     {
-        return $this->type;
+        return $this->mediaColumn;
+    }
+
+    /**
+     * @return int Defines the parse type. e.g. plain, json, html, serialized data
+     */
+    public function getParseType()
+    {
+        return $this->parseType;
     }
 }
