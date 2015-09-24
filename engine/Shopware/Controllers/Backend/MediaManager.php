@@ -1031,4 +1031,23 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             $this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
         }
     }
+
+    /**
+     * Generates virtual paths to full qualified urls in batch
+     */
+    public function getMediaUrlsAction()
+    {
+        $mediaService = $this->get('shopware_media.media_service');
+        $input = $this->Request()->get('paths');
+        $output = [];
+
+        foreach ($input as $url) {
+            $output[] = $mediaService->getUrl($url);
+        }
+
+        $this->View()->assign([
+            'success' => count($input) > 0,
+            'data' => $output
+        ]);
+    }
 }

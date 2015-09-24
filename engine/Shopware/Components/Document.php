@@ -413,6 +413,10 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
             if (!empty($translation[$id][$container["name"]."_Style"])) {
                 $containers[$key]["style"] = $translation[$id][$container["name"]."_Style"];
             }
+
+            // parse smarty tags
+            $containers[$key]['value'] = $this->_template->fetch('string:'.$containers[$key]['value']);
+
             $this->_document->containers->offsetSet($container["name"], $containers[$key]);
         }
     }

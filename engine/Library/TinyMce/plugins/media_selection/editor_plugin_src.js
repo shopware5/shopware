@@ -45,6 +45,12 @@
          */
         audioCls: 'tinymce-editor-audio',
 
+        /**
+         * URL of the current location of the tinymce
+         * @string|null
+         */
+        url: null,
+
 
         /**
          * Initializes the plugin, this will be executed after the plugin has been created.
@@ -63,6 +69,7 @@
             var me = this;
 
             me.ed = ed;
+            me.url = url;
 
             // Register the command so that it can be invoked
             // by using tinyMCE.activeEditor.execCommand('mceMediaSelection');
@@ -96,7 +103,7 @@
                 title : 'Media Selection',
                 cls: 'tinymce-media-selection',
                 cmd : 'mceMediaSelection',
-                image : url + '/icons/inbox-image.png'
+                image : url + '/assets/inbox-image.png'
             });
         },
 
@@ -113,7 +120,7 @@
                 author : 'shopware AG - st.pohl',
                 authorurl : 'http://www.shopware.de',
                 infourl : 'http://wiki.shopware.de/',
-                version : '1.0.0'
+                version : '1.1.0'
             };
         },
 
@@ -174,15 +181,28 @@
                 ed = me.ed,
                 args;
 
+            function guid() {
+                function s4() {
+                    return Math.floor((1 + Math.random()) * 0x10000)
+                        .toString(16)
+                        .substring(1);
+                }
+                return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+                    s4() + '-' + s4() + s4() + s4();
+            }
+
             args = {
-                'class': me.imageCls,
-                width: record.get('width'),
-                height: record.get('height'),
-                alt: record.get('name'),
-                src: record.get('virtualPath')
+                'id': me.imageCls + '-' + guid(),
+                'class': me.imageCls + ' ' + me.imageCls + '-' + guid(),
+                'alt': record.get('name'),
+                'data-src': record.get('virtualPath'),
+                'src': me.url + '/assets/placeholder-image.png'
             };
 
             ed.execCommand('mceInsertContent', false, tinymce.DOM.createHTML('img', args), { skip_undo : 1 });
+
+            var evt = new Event('insertMedia');
+            document.dispatchEvent(evt);
 
             return true;
         },
