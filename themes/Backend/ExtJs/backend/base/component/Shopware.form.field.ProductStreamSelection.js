@@ -38,7 +38,7 @@ Ext.define('Shopware.form.field.ProductStreamSelection', {
 
     valueField: 'id',
 
-    displayField: 'formatted_name',
+    displayField: 'name',
 
     pageSize: 15,
 
@@ -77,6 +77,7 @@ Ext.define('Shopware.form.field.ProductStreamSelection', {
         me.callParent(arguments);
 
         me.on('expand', Ext.bind(me.loadStore, me));
+        me.on('blur', Ext.bind(me.checkValue, me));
     },
 
     /**
@@ -92,6 +93,20 @@ Ext.define('Shopware.form.field.ProductStreamSelection', {
                 me.select(record);
             }
         });
+    },
+
+    /**
+     * The field has to return an empty string instead of null
+     * so the field can be cleared for updating the record.
+     */
+    checkValue: function() {
+        var me = this,
+            value = me.getValue(),
+            fieldValue = me.inputEl.getValue();
+
+        if (value === null || fieldValue === null || !fieldValue.length) {
+            me.setValue('');
+        }
     },
 
     /**
@@ -133,7 +148,7 @@ Ext.define('Shopware.form.field.ProductStreamSelection', {
      */
     createPicker: function() {
         var me = this,
-                picker = me.callParent(arguments);
+            picker = me.callParent(arguments);
 
         Ext.apply(picker, {
             margin: '2px 0 0 -26px'
@@ -150,21 +165,15 @@ Ext.define('Shopware.form.field.ProductStreamSelection', {
      */
     createStore: function() {
         var me = this,
-            storeFields = [ 'id', 'name', 'description', {
-                name: 'formatted_name',
-                convert: function (v, r) {
-                        return r.get('id') + " | " + r.get('name');
-                    }
+            store = Ext.create('Shopware.store.Search', {
+                fields: ['id', 'name', 'description'],
+                pageSize: me.pageSize,
+                configure: function() {
+                    return { entity: "Shopware\\Models\\ProductStream\\ProductStream" }
                 }
-            ];
+            });
 
-        return Ext.create('Shopware.store.Search', {
-            fields: storeFields,
-            pageSize: me.pageSize,
-            configure: function() {
-                return { entity: "Shopware\\Models\\ProductStream\\ProductStream" }
-            }
-        });
+        return store;
     }
 });
 //{/block}

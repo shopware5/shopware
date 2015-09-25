@@ -11,7 +11,7 @@ class Migrations_Migration616 extends Shopware\Components\Migrations\AbstractMig
     {
         $sql = <<<'EOD'
 UPDATE `s_library_component_field`
-SET `x_type` = 'productstreamselection', `display_field` = 'formatted_name', `value_field` = 'id'
+SET `x_type` = 'productstreamselection', `display_field` = 'name', `value_field` = 'id'
 WHERE `name` = 'article_slider_stream';
 EOD;
         $this->addSql($sql);
