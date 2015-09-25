@@ -21,8 +21,8 @@
  * our trademarks remain entirely with us.
  *
  * @category   Shopware
- * @package    Emotion
- * @subpackage View
+ * @package    Base
+ * @subpackage Component
  * @version    $Id$
  * @author shopware AG
  */

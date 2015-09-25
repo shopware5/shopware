@@ -436,6 +436,9 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
         //reconfigure the category listing in the category tab
         mainWindow.down('container[name=category-tab] article-category-list').reconfigure(article.getCategory());
 
+        // reconfigure the stream listing in the crossselling tab
+        mainWindow.down('article-crossselling-tab grid[name=streams-listing]').reconfigure(article.getStreams());
+
         //reconfigure the seo category listing and the selection store of the listing
         var seoListing = mainWindow.down('container[name=category-tab] article-category-seo-list');
 
