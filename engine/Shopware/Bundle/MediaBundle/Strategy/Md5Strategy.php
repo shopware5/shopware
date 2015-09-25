@@ -75,7 +75,7 @@ class Md5Strategy implements StrategyInterface
      */
     public function isEncoded($path)
     {
-        return preg_match("/.*(media\/(?:archive|image|music|pdf|temp|unknown|video)(?:\/thumbnail)?\/(?:([0-9a-f]{2}\/[0-9a-f]{2}\/[0-9a-f]{2}\/)).*)/", $path);
+        return (bool) preg_match("/.*(media\/(?:archive|image|music|pdf|temp|unknown|video)(?:\/thumbnail)?\/(?:([0-9a-f]{2}\/[0-9a-f]{2}\/[0-9a-f]{2}\/)).*)/", $path);
     }
 
     /**
