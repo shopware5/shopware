@@ -74,6 +74,9 @@
         }
     },
     "config": {
-        "autoloader-suffix": "Shopware"
+        "autoloader-suffix": "Shopware",
+        "platform": {
+            "php": "5.4"
+        }
     }
 }
