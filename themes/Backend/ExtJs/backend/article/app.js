@@ -103,8 +103,7 @@ Ext.define('Shopware.apps.Article', {
         'crossselling.Base',
         'crossselling.ProductStreams',
         'resources.Links',
-        'resources.Downloads',
-        'components.fields.ProductStreamSelection'
+        'resources.Downloads'
     ],
 
     /**

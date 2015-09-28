@@ -164,6 +164,7 @@
 {include file='backend/base/component/Shopware.form.field.CodeMirror.js'}
 {include file='backend/base/component/Shopware.form.field.ArticleSearch.js'}
 {include file='backend/base/component/Shopware.form.field.PagingComboBox.js'}
+{include file='backend/base/component/Shopware.form.field.ProductStreamSelection.js'}
 {include file='backend/base/component/Shopware.container.Viewport.js'}
 {include file='backend/base/component/Shopware.DragAndDropSelector.js'}
 {include file='backend/base/component/Shopware.DataView.GooglePreview.js'}
