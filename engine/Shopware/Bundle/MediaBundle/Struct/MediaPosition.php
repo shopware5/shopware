@@ -54,6 +54,11 @@ class MediaPosition
     private $mediaColumn;
 
     /**
+     * @var int
+     */
+    private $parseType;
+
+    /**
      * @param string $sourceTable The source table where images are used. e.g. s_articles_img
      * @param string $sourceColumn The source column of the source table. e.g. media_id
      * @param string $mediaColumn The matching column in the `s_media` table. Defaults to `id`.
