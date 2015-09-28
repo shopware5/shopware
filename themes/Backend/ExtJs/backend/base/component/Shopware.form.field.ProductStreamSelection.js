@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{block name="backend/base/Shopware.form.field.ProductStreamSelection"}
+//{block name="backend/base/component/Shopware.form.field.ProductStreamSelection"}
 Ext.define('Shopware.form.field.ProductStreamSelection', {
 
     extend: 'Shopware.form.field.PagingComboBox',
