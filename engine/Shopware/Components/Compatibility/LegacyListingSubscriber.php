@@ -159,7 +159,7 @@ class LegacyListingSubscriber implements SubscriberInterface
         $view = $args->getSubject()->View();
 
         $totalCount = $view->getAssign('sNumberArticles');
-        $shortParameters = $view->getAssign('shortParameters');
+        $shortParameters = $view->getAssign('shortParameters') ? : [];
 
         $params = $this->getCategoryConfig($args->getSubject()->Request());
 
