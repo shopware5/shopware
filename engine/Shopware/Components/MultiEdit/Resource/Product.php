@@ -220,7 +220,7 @@ class Product implements ResourceInterface
 
                     $price = str_replace(',', '.', $field['value']);
                     if ($field['field'] != 'basePrice') {
-                        $price = $price / $tax;
+                        $price = ($tax != 0 ? $price / $tax : 0);
                     }
                     $setter = 'set'.ucfirst($field['field']);
                     $priceModel->$setter($price);

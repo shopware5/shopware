@@ -228,13 +228,15 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         $data = Shopware()->Db()->fetchAll($sql, $params);
 
         // Insert the percentage into each field manually
-        $sum = 0;
         if ($data !== null && isset($total)) {
-            for ($i=0;$i<count($data);$i++) {
-                $data[$i]['percent'] = round($data[$i]['number'] / $total * 100, 1);
+            for ($i = 0; $i < count($data); $i++) {
+                if ($total != 0) {
+                    $data[$i]['percent'] = round($data[$i]['number'] / $total * 100, 1);
+                } else {
+                    $data[$i]['percent'] = 0;
+                }
             }
         }
-
 
         $this->View()->assign([
             'success' => true,

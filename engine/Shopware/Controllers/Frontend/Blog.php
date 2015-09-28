@@ -506,7 +506,11 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
     protected function getPagerData($totalResult, $sLimitEnd, $sPage, $categoryId)
     {
         // How many pages in this category?
-        $numberPages = ceil($totalResult / $sLimitEnd);
+        if ($sLimitEnd != 0) {
+            $numberPages = ceil($totalResult / $sLimitEnd);
+        } else {
+            $numberPages = 0;
+        }
 
         // Make Array with page-structure to render in template
         $pages = array();

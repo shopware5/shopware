@@ -281,7 +281,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
      */
     public function processOrder()
     {
-        if ($this->_order["invoice_shipping_net"] > 0) {
+        if ($this->_order["invoice_shipping_net"] != 0) {
             // p.e. = 24.99 / 20.83 * 100 - 100 = 19.971195391 (approx. 20% VAT)
             $approximateTaxRate = $this->_order["invoice_shipping"] / $this->_order["invoice_shipping_net"] * 100 - 100;
         } else {

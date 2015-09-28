@@ -103,7 +103,7 @@ class Shopware_Controllers_Backend_Overview extends Shopware_Controllers_Backend
                     $order[$key] = 0;
                 }
             }
-            if (!empty($order['countOrders'])) {
+            if ($order['countOrders'] != 0) {
                 $order['averageOrders'] = $order['amount'] / $order['countOrders'];
             } else {
                 $order['averageOrders'] = 0;
@@ -111,6 +111,7 @@ class Shopware_Controllers_Backend_Overview extends Shopware_Controllers_Backend
             $order['amount'] = round($order['amount'], 2);
             $orders[] = $order;
         }
+
         $this->View()->assign(array(
             'success' => true,
             'data'    => $orders,

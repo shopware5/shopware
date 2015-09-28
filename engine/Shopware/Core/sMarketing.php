@@ -388,10 +388,10 @@ class sMarketing
                 $premiumFactor = Shopware()->Db()->fetchOne($sql, array($activeShopId));
             }
 
-            if ($premiumFactor == $activeFactor) {
-                $activeFactor = 1;
+            if ($premiumFactor != 0) {
+                $activeFactor = $activeFactor / $premiumFactor;
             } else {
-                $activeFactor = $activeFactor/$premiumFactor;
+                $activeFactor = 0;
             }
 
             $premium["startprice"] *= $activeFactor;
@@ -550,7 +550,13 @@ class sMarketing
             $name = trim($name, " -");
             $articles[$articleId]["articleID"] = $articleId;
             $articles[$articleId]["name"] = $name;
-            $articles[$articleId]["class"] = $class . round($pos / $anz * $steps);
+
+            if ($anz != 0) {
+                $articles[$articleId]["class"] = $class . round($pos / $anz * $steps);
+            } else {
+                $articles[$articleId]["class"] = $class . 0;
+            }
+
             $articles[$articleId]["link"] = $link . $articleId;
             $pos++;
         }
