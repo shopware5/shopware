@@ -452,7 +452,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
                         break;
                 }
 
-                if ($field->getName() == 'file' || $field->getName() == 'image') {
+                if ($field->getName() == 'file' || $field->getName() == 'image' || $field->getName() == 'fallback_picture') {
                     $value = $mediaService->normalize($value);
                 }
 

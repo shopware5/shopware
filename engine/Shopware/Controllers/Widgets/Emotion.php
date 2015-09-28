@@ -959,4 +959,28 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
         return $data;
     }
+
+    /**
+     * Convert media paths to full qualified paths
+     *
+     * @param array $data
+     * @param int $category
+     * @param array $element
+     * @return array
+     */
+    private function getHtml5Video($data, $category, $element)
+    {
+        $mediaFields = ['webm_video', 'ogg_video', 'h264_video', 'fallback_picture'];
+        $mediaService = $this->get('shopware_media.media_service');
+
+        foreach ($mediaFields as $field) {
+            if (!preg_match("/^media\/*/i", $data[$field])) {
+                continue;
+            }
+
+            $data[$field] = $mediaService->getUrl($data[$field]);
+        }
+
+        return $data;
+    }
 }
