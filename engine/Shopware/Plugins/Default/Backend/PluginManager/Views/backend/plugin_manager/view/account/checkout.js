@@ -45,7 +45,7 @@ Ext.define('Shopware.apps.PluginManager.view.account.Checkout', {
             inputValue: true,
             cls: 'gtc',
             uncheckedValue: false,
-            boxLabel: '{s name="gtc_accept"}I have read and agree with the <a href="https://www.shopware.com/general-terms-conditions" target="_blank">GTC</a> of your shop.{/s}',
+            boxLabel: '{s name="gtc_accept"}I have read and agree with the <a href="https://en.shopware.com/gtc" target="_blank">GTC</a> of your shop.{/s}',
             value: false,
             listeners: {
                 change: function() {
