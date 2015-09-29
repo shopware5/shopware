@@ -48,9 +48,12 @@ class AttributeSubscriber implements SubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            'Enlight_Controller_Front_RouteShutdown'        => ['onDispatchEvent', 100],
-            'Enlight_Controller_Front_PostDispatch'         => ['onDispatchEvent', 100],
-            'Enlight_Controller_Front_DispatchLoopShutdown' => ['onDispatchEvent', 100],
+            'Enlight_Controller_Front_RouteShutdown'          => ['onDispatchEvent', 100],
+            'Enlight_Controller_Front_PostDispatch'           => ['onDispatchEvent', 100],
+            'Enlight_Controller_Front_DispatchLoopShutdown'   => ['onDispatchEvent', 100],
+            'Enlight_Controller_Backend_RouteShutdown'        => ['onDispatchEvent', 100],
+            'Enlight_Controller_Backend_PostDispatch'         => ['onDispatchEvent', 100],
+            'Enlight_Controller_Backend_DispatchLoopShutdown' => ['onDispatchEvent', 100]
         ];
     }
 
@@ -87,7 +90,7 @@ class AttributeSubscriber implements SubscriberInterface
         $request = new \Enlight_Controller_Request_RequestHttp();
         $response = new \Enlight_Controller_Response_ResponseHttp();
 
-        if ($this->isModelException($exception)) {
+        if ($this->isModelException($exception) || ($exception->getPrevious() !== null && $this->isModelException($exception->getPrevious()))) {
             $generator = $this->container->get('models')->createModelGenerator();
             $result = $generator->generateAttributeModels();
             if ($result['success'] === true) {
