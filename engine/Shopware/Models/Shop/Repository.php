@@ -288,10 +288,6 @@ class Repository extends ModelRepository
         $builder->setParameter('shopId', $id);
         $shop = $builder->getQuery()->getOneOrNullResult();
 
-        if ($shop !== null) {
-            $this->fixActive($shop);
-        }
-
         return $shop;
     }
 
@@ -305,10 +301,6 @@ class Repository extends ModelRepository
         $builder = $this->getActiveQueryBuilder();
         $builder->where('shop.default = 1');
         $shop = $builder->getQuery()->getOneOrNullResult();
-
-        if ($shop !== null) {
-            $this->fixActive($shop);
-        }
 
         return $shop;
     }
@@ -365,10 +357,6 @@ class Repository extends ModelRepository
         /** @var $shops \Shopware\Models\Shop\Shop[] */
         $shops = $builder->getQuery()->getResult();
 
-        foreach ($shops as $currentShop) {
-            $this->fixActive($currentShop);
-        }
-
         //returns the right shop depending on the url
         $shop = $this->getShopByRequest($shops, $requestPath);
 
@@ -384,10 +372,6 @@ class Repository extends ModelRepository
 
         $shop = $builder->getQuery()->getOneOrNullResult();
 
-        if ($shop !== null) {
-            $this->fixActive($shop);
-        }
-
         return $shop;
     }
 
@@ -396,35 +380,7 @@ class Repository extends ModelRepository
      */
     protected function fixActive($shop)
     {
-        $this->getEntityManager()->detach($shop);
-        $main = $shop->getMain();
-        if ($main !== null) {
-            $this->getEntityManager()->detach($main);
-            $shop->setHost($main->getHost());
-            $shop->setSecure($main->getSecure());
-            $shop->setAlwaysSecure($main->getAlwaysSecure());
-            $shop->setSecureHost($main->getSecureHost());
-            $shop->setSecureBasePath($main->getSecureBasePath());
-            $shop->setBasePath($shop->getBasePath() ?: $main->getBasePath());
-            $shop->setTemplate($main->getTemplate());
-            $shop->setCurrencies($main->getCurrencies());
-            $shop->setChildren($main->getChildren());
-            $shop->setCustomerScope($main->getCustomerScope());
-        }
-        $shop->setBaseUrl($shop->getBaseUrl() ?: $shop->getBasePath());
-        if ($shop->getSecure()) {
-            $shop->setSecureHost($shop->getSecureHost()?: $shop->getHost());
-            $shop->setSecureBasePath($shop->getSecureBasePath()?: $shop->getBasePath());
-            $baseUrl = $shop->getSecureBasePath();
-            if ($shop->getBaseUrl() != $shop->getBasePath()) {
-                if (!$shop->getBasePath()) {
-                    $baseUrl .= $shop->getBaseUrl();
-                } elseif (strpos($shop->getBaseUrl(), $shop->getBasePath()) === 0) {
-                    $baseUrl .= substr($shop->getBaseUrl(), strlen($shop->getBasePath()));
-                }
-            }
-            $shop->setSecureBaseUrl($baseUrl);
-        }
+
     }
 
     /**
