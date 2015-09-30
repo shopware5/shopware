@@ -369,14 +369,14 @@ class Compiler
 
         $files = array_merge(
             $files,
-            $this->collectPluginJavascript($shop, $template)
+            $this->collectInheritanceJavascript($inheritances['custom'])
         );
 
         $files = array_merge(
             $files,
-            $this->collectInheritanceJavascript($inheritances['custom'])
+            $this->collectPluginJavascript($shop, $template)
         );
-
+        
         return $files;
     }
 
