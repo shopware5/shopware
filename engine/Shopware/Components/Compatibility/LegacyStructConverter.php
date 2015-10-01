@@ -549,7 +549,7 @@ class LegacyStructConverter
         $data = array(
             'id' => $media->getId(),
             'position' => 1,
-            'source' => $media->getFile(),//$this->mediaService->getUrl($media->getFile()),
+            'source' => $media->getFile(),
             'description' => $media->getName(),
             'extension' => $media->getExtension(),
             'main' => $media->isPreview(),
@@ -999,16 +999,18 @@ class LegacyStructConverter
         $data['attributes'] = $product->getAttributes();
 
         if ($product->getManufacturer()) {
-            $data = array_merge(
-                $data,
-                array(
-                    'supplierName' => $product->getManufacturer()->getName(),
-                    'supplierImg' => $this->mediaService->getUrl($product->getManufacturer()->getCoverFile()),
-                    'supplierID' => $product->getManufacturer()->getId(),
-                    'supplierDescription' => $product->getManufacturer()->getDescription(),
-                )
+            $manufacturer = array(
+                'supplierName' => $product->getManufacturer()->getName(),
+                'supplierImg' => $product->getManufacturer()->getCoverFile(),
+                'supplierID' => $product->getManufacturer()->getId(),
+                'supplierDescription' => $product->getManufacturer()->getDescription(),
             );
 
+            if (!empty($manufacturer['supplierImg'])) {
+                $manufacturer['supplierImg'] = $this->mediaService->getUrl($manufacturer['supplierImg']);
+            }
+
+            $data = array_merge($data, $manufacturer);
             $data['supplier_attributes'] = $product->getManufacturer()->getAttributes();
         }
 

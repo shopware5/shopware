@@ -107,6 +107,10 @@ class MediaService implements MediaServiceInterface
      */
     public function getUrl($path)
     {
+        if (empty($path)) {
+            return null;
+        }
+
         if ($this->strategy->isEncoded($path)) {
             return $path;
         }

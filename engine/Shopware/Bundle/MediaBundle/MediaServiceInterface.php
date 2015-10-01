@@ -34,7 +34,7 @@ interface MediaServiceInterface
      * Get media path including configured mediaUrl
      *
      * @param string $path
-     * @return string
+     * @return string|null
      */
     public function getUrl($path);
 
