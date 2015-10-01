@@ -333,10 +333,14 @@ class CategorySubscriber implements BaseEventSubscriber
     public function setPathForCategory(Category $category)
     {
         $parent = $category->getParent();
-        $parentId = $parent->getId();
+        
+        if(!empty($parent)) {
+            $parentId = $parent->getId();
+    
+            $parents = $this->getCategoryComponent()->getParentCategoryIds($parentId);
+            $path = implode('|', $parents);            
+        }
 
-        $parents = $this->getCategoryComponent()->getParentCategoryIds($parentId);
-        $path = implode('|', $parents);
         if (empty($path)) {
             $path = null;
         } else {
