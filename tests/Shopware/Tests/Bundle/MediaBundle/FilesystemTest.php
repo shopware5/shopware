@@ -78,6 +78,7 @@ class FilesystemTest extends \Enlight_Components_Test_TestCase
         $mediaUrl = $baseUrl . $this->mediaService->encode($file);
 
         $this->assertEquals($mediaUrl, $this->mediaService->getUrl($file));
+        $this->assertNull($this->mediaService->getUrl(''));
     }
 
     /**
