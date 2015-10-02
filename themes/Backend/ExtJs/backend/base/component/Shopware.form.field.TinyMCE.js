@@ -460,7 +460,7 @@ Ext.define('Shopware.form.field.TinyMCE',
             content,
             images;
 
-        if (typeof rawContent === 'undefined') {
+        if (typeof rawContent === 'undefined' || rawContent === null) {
             return rawContent;
         }
 
