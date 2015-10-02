@@ -882,6 +882,8 @@ class sExport
             $sql_add_group_by = "";
         }
 
+        $taxSql = $this->createTaxSql();
+
         $sql = "
             SELECT
                 a.id as `articleID`,
@@ -967,16 +969,15 @@ class sExport
 
             LEFT JOIN `s_core_units` as `u`
             ON d.unitID = u.id
-            LEFT JOIN `s_core_tax` as `t`
-            ON a.taxID = t.id
+            $taxSql
             LEFT JOIN `s_articles_supplier` as `s`
             ON a.supplierID = s.id
 
             LEFT JOIN s_core_pricegroups_discounts pd
-            ON a.pricegroupActive=1
-            AND	a.pricegroupID=groupID
-            AND customergroupID = 1
-            AND discountstart=1
+            ON a.pricegroupActive = 1
+            AND	a.pricegroupID = pd.groupID
+            AND pd.customergroupID = (SELECT sccu.id FROM `s_core_customergroups` as `sccu`  WHERE sccu.groupkey = '{$this->sCustomergroup["groupkey"]}')
+            AND pd.discountstart = 1
 
             LEFT JOIN s_articles_esd e ON e.articledetailsID=d.id
 
@@ -1026,6 +1027,35 @@ class sExport
         }
 
         return $sql;
+    }
+
+    private function createTaxSql()
+    {
+        $taxSql = "LEFT JOIN `s_core_tax` as `t` ON a.taxID = t.id";
+        $taxRule = $this->getTaxRule();
+        if (!empty($taxRule)) {
+            $taxSql = "LEFT JOIN `s_core_tax_rules` as `t` ON t.customer_groupID = (SELECT sccu.id FROM s_core_customergroups as sccu WHERE sccu.groupkey = '{$this->sCustomergroup["groupkey"]}')";
+            return $taxSql;
+        }
+        return $taxSql;
+    }
+
+    private function getTaxRule(){
+        $customerGroupId = Shopware()->Db()->fetchOne(
+            "SELECT cg.id FROM s_core_customergroups as cg WHERE cg.groupkey = ?",
+            array(
+                $this->sCustomergroup["groupkey"]
+            )
+        );
+
+        $taxRules = Shopware()->Db()->fetchRow(
+            "SELECT * FROM s_core_tax_rules as tr WHERE tr.customer_groupID = ?",
+            array(
+                $customerGroupId
+            )
+        );
+
+        return $taxRules;
     }
 
     /**
