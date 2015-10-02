@@ -591,8 +591,11 @@ class sBasket
               AND (
                 (valid_to >= now() AND valid_from <= now())
                 OR valid_to IS NULL
-              )',
-            array($voucherCode)
+              )
+              AND IF(subshopID != "",
+                        IF(subshopID = ?, 1, 0)
+                  , 1) = 1;',
+            array($voucherCode, $this->contextService->getShopContext()->getShop()->getId())
         ) ? : array();
 
         $userId = $this->session->get('sUserId');
