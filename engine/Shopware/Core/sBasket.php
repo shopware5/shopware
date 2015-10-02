@@ -656,12 +656,6 @@ class sBasket
 
         $restrictDiscount = !empty($voucherDetails["strict"]);
 
-        // If voucher is limited to a specific subshop, filter that and return on failure
-        $sErrorMessages = $this->filterSubShopVoucher($voucherDetails);
-        if (!empty($sErrorMessages)) {
-            return array("sErrorFlag" => true, "sErrorMessages" => $sErrorMessages);
-        }
-
         // Check if the basket already has a voucher, and break if it does
         $chkBasket = $this->db->fetchRow(
             'SELECT id
@@ -1798,28 +1792,6 @@ class sBasket
                 return $sErrorMessages;
             }
         }
-        return $sErrorMessages;
-    }
-
-    /**
-     * Filter voucher by subshop
-     *
-     * @param array $voucherDetails
-     * @return array Messages for detected errors
-     */
-    private function filterSubShopVoucher($voucherDetails)
-    {
-        $sErrorMessages = array();
-
-        if (!empty($voucherDetails["subshopID"])) {
-            if ($this->contextService->getShopContext()->getShop()->getId() != $voucherDetails["subshopID"]) {
-                $sErrorMessages[] = $this->snippetManager->getNamespace('frontend/basket/internalMessages')->get(
-                    'VoucherFailureNotFound',
-                    'Voucher could not be found or is not valid anymore'
-                );
-            }
-        }
-
         return $sErrorMessages;
     }
 
