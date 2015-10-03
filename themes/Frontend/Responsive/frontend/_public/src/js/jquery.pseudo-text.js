@@ -26,7 +26,7 @@
          */
         defaults: {
             /** @type {String} eventType - The event type which should be used to duplicate the content */
-            eventType: 'keydown'
+            eventType: 'keyup'
         },
 
         /**
