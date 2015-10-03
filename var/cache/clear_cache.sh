@@ -9,7 +9,7 @@ fi
 
 echo "Clearing caches"
 mkdir $DIR/delete
-find $DIR -mindepth 1 -maxdepth 1 -type d ! -name delete -print0 | xargs -0 mv -t $DIR/delete/
+find $DIR -mindepth 1 -maxdepth 1 -type d ! -name delete -print0 | xargs -I{} -0 mv {} $DIR/delete/
 
 rm -Rf $DIR/delete/
 
