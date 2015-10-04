@@ -268,10 +268,10 @@ class Category extends Resource
                     }
                 }
 
-                $categoryModel = new CategoryModel();
-                $this->getManager()->persist($categoryModel);
-                $categoryModel->setParent($parent);
-                $categoryModel->setName($categoryName);
+                $categoryModel = $this->create(array(
+                    'name' => $categoryName,
+                    'parentId' => $parentId
+                ));
             }
 
             $parentId = $categoryModel->getId();
