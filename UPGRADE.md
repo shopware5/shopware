@@ -1,6 +1,9 @@
 # Shopware Upgrade Information
 In this document you will find a changelog of the important changes related to the code base of Shopware.
 
+## 5.1.0
+* Added event `Shopware_Plugin_Collect_MediaXTypes` to collect media related x_type fields for which the value needs to be normalized
+
 ## 5.1.0 RC3
 * Activated media fallback by default so that old media paths get resolved to the new location
 
