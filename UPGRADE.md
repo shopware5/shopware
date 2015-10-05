@@ -398,6 +398,7 @@ In this document you will find a changelog of the important changes related to t
 
 ## 5.1.0 RC3
 * Activated media fallback by default so that old media paths get resolved to the new location
+* Remove timeouts from install/update/(secure) uninstall operations in plugin manager
 
 ## 5.1.0 RC2
 * Update ongr/elasticsearch-dsl to version 1.0.0-RC1
