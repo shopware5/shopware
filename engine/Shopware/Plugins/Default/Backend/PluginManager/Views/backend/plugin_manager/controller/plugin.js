@@ -157,7 +157,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
 
         me.authenticateForUpdate(plugin, function() {
             me.startPluginDownload(plugin, function() {
-                me.displayLoadingMask(plugin, '{s name=execute_update}Plugin is being updated{/s}');
+                me.displayLoadingMask(plugin, '{s name=execute_update}Plugin is being updated{/s}', false);
                 me.executePluginUpdate(plugin, function() {
 
                     Shopware.app.Application.fireEvent('load-update-listing', function() {
@@ -434,7 +434,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
 
     authenticateForUpdate: function(plugin, callback) {
         var me = this;
-        
+
         if (plugin.flaggedAsDummyPlugin()) {
             callback();
         } else {
@@ -450,10 +450,10 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
             { technicalName: plugin.get('technicalName') },
             function(response) {
                 me.handleCrudResponse(response, plugin);
-                if (typeof callback == 'function') {
-                    callback(response);
-                }
-            }
+                callback(response);
+            },
+            null,
+            300000
         );
     },
 
@@ -642,7 +642,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
     installPlugin: function(plugin, callback) {
         var me = this;
 
-        me.displayLoadingMask(plugin, '{s name="plugin_is_being_installed"}Plugin is being installed{/s}');
+        me.displayLoadingMask(plugin, '{s name="plugin_is_being_installed"}Plugin is being installed{/s}', false);
 
         me.sendAjaxRequest(
             '{url controller=PluginInstaller action=installPlugin}',
@@ -650,7 +650,9 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
             function(response) {
                 me.handleCrudResponse(response, plugin);
                 callback(response);
-            }
+            },
+            null,
+            300000
         );
     },
 
@@ -677,7 +679,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
     doUninstall: function(plugin, callback) {
         var me = this;
 
-        me.displayLoadingMask(plugin, '{s name="plugin_is_being_uninstalled"}Plugin is being uninstalled{/s}');
+        me.displayLoadingMask(plugin, '{s name="plugin_is_being_uninstalled"}Plugin is being uninstalled{/s}', false);
 
         me.sendAjaxRequest(
             '{url controller=PluginInstaller action=uninstallPlugin}',
@@ -685,7 +687,9 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
             function(response) {
                 me.handleCrudResponse(response, plugin);
                 callback(response);
-            }
+            },
+            null,
+            300000
         );
     },
 
@@ -707,7 +711,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
     secureUninstallPlugin: function(plugin, callback) {
         var me = this;
 
-        me.displayLoadingMask(plugin, '{s name="plugin_is_being_uninstalled"}Plugin is being uninstalled{/s}');
+        me.displayLoadingMask(plugin, '{s name="plugin_is_being_uninstalled"}Plugin is being uninstalled{/s}', false);
 
         me.sendAjaxRequest(
             '{url controller=PluginInstaller action=secureUninstallPlugin}',
@@ -715,7 +719,9 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
             function(response) {
                 me.handleCrudResponse(response, plugin);
                 callback(response);
-            }
+            },
+            null,
+            300000
         );
     },
 
