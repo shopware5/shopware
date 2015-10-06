@@ -22,6 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
+use Doctrine\Common\Collections\ArrayCollection;
+
 class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_ExtJs
 {
     /**
@@ -419,6 +421,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     {
         $elements= array();
         $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaFields = $this->getMediaXTypes();
 
         foreach ($data['elements'] as $elementData) {
             $element = new \Shopware\Models\Emotion\Element();
@@ -452,7 +455,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
                         break;
                 }
 
-                if ($field->getName() == 'file' || $field->getName() == 'image' || $field->getName() == 'fallback_picture') {
+                if (in_array($field->getXType(), $mediaFields)) {
                     $value = $mediaService->normalize($value);
                 }
 
@@ -1284,5 +1287,22 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         return $builder->getQuery()->getOneOrNullResult(
             \Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY
         );
+    }
+
+    /**
+     * Collects all media related x_types which needs to be normalized
+     *
+     * @return array
+     */
+    private function getMediaXTypes()
+    {
+        $mediaFields = new ArrayCollection([
+            'mediaselectionfield',
+            'mediatextfield'
+        ]);
+
+        $mediaFields = $this->get('events')->collect('Shopware_Plugin_Collect_MediaXTypes', $mediaFields);
+
+        return $mediaFields->toArray();
     }
 }
