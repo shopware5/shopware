@@ -19,8 +19,7 @@ class CompareColumn extends \Shopware\Tests\Mink\Element\Emotion\CompareColumn
     protected $selector = ['css' => 'ul.compare--group-list:not(.list--head)'];
 
     /**
-     * Returns an array of all css selectors of the element/page
-     * @return array
+     * @inheritdoc
      */
     public function getCssSelectors()
     {

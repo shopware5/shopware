@@ -21,8 +21,7 @@ class CategoryTeaser extends \Shopware\Tests\Mink\Element\Emotion\CategoryTeaser
     protected $selector = ['css' => 'div.emotion--category-teaser'];
 
     /**
-     * Returns an array of all css selectors of the element/page
-     * @return string[]
+     * @inheritdoc
      */
     public function getCssSelectors()
     {

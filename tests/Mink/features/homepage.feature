@@ -44,10 +44,10 @@ Feature: General functionality
             | total    | <total>    |
             | 19 %     | <vat>      |
 
-    Examples:
-        | currency | price_config | price_normal | price_base | price_config_detail | shipping | total     | vat      |
-        | USD      | 162,14       | 13.625,00    | 68,13      | 243,21 $            | 5,31     | 13.938,92 | 2.225,55 |
-        | EUR      | 119,00       | 10.000,00    | 50,00      | 178,50 €            | 3,90     | 10.230,40 | 1.633,42 |
+        Examples:
+            | currency | price_config | price_normal | price_base | price_config_detail | shipping | total     | vat      |
+            | USD      | 162,14       | 13.625,00    | 68,13      | 243,21 $            | 5,31     | 13.938,92 | 2.225,55 |
+            | EUR      | 119,00       | 10.000,00    | 50,00      | 178,50 €            | 3,90     | 10.230,40 | 1.633,42 |
 
     @configChange @maintenance
     Scenario: I can close the shop due to maintenance

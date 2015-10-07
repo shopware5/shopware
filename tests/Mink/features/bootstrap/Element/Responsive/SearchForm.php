@@ -17,8 +17,7 @@ class SearchForm extends \Shopware\Tests\Mink\Element\Emotion\SearchForm
     protected $selector = ['css' => 'form.main-search--form'];
 
     /**
-     * Returns an array of all css selectors of the element/page
-     * @return array
+     * @inheritdoc
      */
     public function getCssSelectors()
     {

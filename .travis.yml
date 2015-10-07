@@ -11,7 +11,7 @@ sudo: false
 
 cache:
    directories:
-     - $HOME/.composer/cache
+     - $HOME/.composer/cache/files
 
 script:
     - ant -f build/build.xml -Ddb.user=travis -Ddb.host=127.0.0.1 -Ddb.name=shopware build-continuous static-lint

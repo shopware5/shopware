@@ -20,8 +20,7 @@ class HeaderCart extends Element implements \Shopware\Tests\Mink\HelperSelectorI
     protected $selector = array('css' => 'div#shopnavi');
 
     /**
-     * Returns an array of all css selectors of the element/page
-     * @return array
+     * @inheritdoc
      */
     public function getCssSelectors()
     {
@@ -33,8 +32,7 @@ class HeaderCart extends Element implements \Shopware\Tests\Mink\HelperSelectorI
     }
 
     /**
-     * Returns an array of all named selectors of the element/page
-     * @return array
+     * @inheritdoc
      */
     public function getNamedSelectors()
     {

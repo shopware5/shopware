@@ -111,12 +111,12 @@ class CheckoutContext extends SubContext
      */
     public function iChangeTheShippingMethodTo($shipping)
     {
-        $data = array(
-            array(
+        $data = [
+            [
                 'field' => 'sDispatch',
                 'value' => $shipping
-            )
-        );
+            ]
+        ];
 
         $this->getPage('CheckoutConfirm')->changeShippingMethod($data);
     }

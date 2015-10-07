@@ -14,7 +14,7 @@ class BlogContext extends SubContext
      */
     public function iAmOnTheBlogCategory($categoryId)
     {
-        $this->getPage('Blog')->open(array('categoryId' => $categoryId));
+        $this->getPage('Blog')->open(['categoryId' => $categoryId]);
     }
 
     /**

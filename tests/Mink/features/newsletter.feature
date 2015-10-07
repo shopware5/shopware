@@ -4,7 +4,8 @@ Feature: Newsletter
     Scenario: Subscribe to and unsubscribe from newsletter
         Given I am on the homepage
         When  I subscribe to the newsletter with "test@example.de"
-        Then  I should see "Vielen Dank. Wir haben Ihre Adresse eingetragen."
+        Then  I should be on the page "Newsletter"
+        And   I should see "Vielen Dank. Wir haben Ihre Adresse eingetragen."
 
         When  I unsubscribe the newsletter
         Then  I should see "Ihre eMail-Adresse wurde gelöscht"
@@ -12,13 +13,13 @@ Feature: Newsletter
     Scenario: I can subscribe to the newsletter with additional data
         Given I am on the page "Newsletter"
         When  I subscribe to the newsletter with "test@example.de" :
-            | field      | value           |
-            | salutation | mr              |
-            | firstname  | Max             |
-            | lastname   | Mustermann      |
-            | street     | Musterstr. 55   |
-            | zipcode    | 55555           |
-            | city       | Musterhausen    |
+            | field      | value         |
+            | salutation | mr            |
+            | firstname  | Max           |
+            | lastname   | Mustermann    |
+            | street     | Musterstr. 55 |
+            | zipcode    | 55555         |
+            | city       | Musterhausen  |
         Then  I should see "Vielen Dank. Wir haben Ihre Adresse eingetragen."
 
         When  I unsubscribe the newsletter

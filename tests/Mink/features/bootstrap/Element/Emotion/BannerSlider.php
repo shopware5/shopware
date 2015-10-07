@@ -24,8 +24,7 @@ class BannerSlider extends SliderElement implements \Shopware\Tests\Mink\HelperS
     protected $selector = ['css' => 'div.emotion-element > div.banner-slider-element'];
 
     /**
-     * Returns an array of all css selectors of the element/page
-     * @return array
+     * @inheritdoc
      */
     public function getCssSelectors()
     {

@@ -15,21 +15,22 @@ class FeatureContext extends MinkContext implements KernelAwareInterface
     /**
      * @var KernelInterface
      */
-    private $kernel;
+    protected $kernel;
+
     /**
      * @var KernelInterface
      */
-    private static $statickernel;
+    protected static $staticKernel;
 
     /**
      * @var string
      */
-    private static $template;
+    protected static $template;
 
     /**
      * @var array
      */
-    private $dirtyConfigElements;
+    protected $dirtyConfigElements;
 
     /**
      * Initializes context.
@@ -44,8 +45,9 @@ class FeatureContext extends MinkContext implements KernelAwareInterface
         }
 
         self::$template = $parameters['template'];
-        $this->dirtyConfigElements = array();
+        $this->dirtyConfigElements = [];
 
+        $this->useContext('transform', new TransformContext($parameters));
         $this->useContext('shopware', new ShopwareContext($parameters));
         $this->useContext('account', new AccountContext($parameters));
         $this->useContext('checkout', new CheckoutContext($parameters));
@@ -65,12 +67,12 @@ class FeatureContext extends MinkContext implements KernelAwareInterface
      */
     public static function prepare(SuiteEvent $event)
     {
-        $em = self::$statickernel->getContainer()->get('models');
+        $em = self::$staticKernel->getContainer()->get('models');
         $em->generateAttributeModels();
 
         //refresh s_core_templates
         $last = error_reporting(0);
-        self::$statickernel->getContainer()->get('theme_installer')->synchronize();
+        self::$staticKernel->getContainer()->get('theme_installer')->synchronize();
         error_reporting($last);
 
         //get the template id
@@ -79,7 +81,7 @@ class FeatureContext extends MinkContext implements KernelAwareInterface
             self::$template
         );
 
-        $templateId = self::$statickernel->getContainer()->get('db')->fetchOne($sql);
+        $templateId = self::$staticKernel->getContainer()->get('db')->fetchOne($sql);
         if (!$templateId) {
             throw new \RuntimeException(
                 sprintf("Unable to find template by name %s", self::$template)
@@ -91,10 +93,10 @@ class FeatureContext extends MinkContext implements KernelAwareInterface
             UPDATE `s_core_shops` SET `template_id`= $templateId WHERE `id` = 1;
             UPDATE `s_core_paymentmeans` SET `active`= 1;
 EOD;
-        self::$statickernel->getContainer()->get('db')->exec($sql);
+        self::$staticKernel->getContainer()->get('db')->exec($sql);
 
         /** @var \Shopware\Bundle\PluginInstallerBundle\Service\InstallerService $pluginManager */
-        $pluginManager = self::$statickernel->getContainer()->get('shopware.plugin_manager');
+        $pluginManager = self::$staticKernel->getContainer()->get('shopware.plugin_manager');
 
         // hack to prevent behat error handler kicking in.
         $oldErrorReporting = error_reporting(0);
@@ -104,6 +106,44 @@ EOD;
         $plugin = $pluginManager->getPluginByName('Notification');
         $pluginManager->installPlugin($plugin);
         $pluginManager->activatePlugin($plugin);
+    }
+
+    /**
+     * @param string $technicalName
+     * @throws \Exception
+     */
+    protected static function installPlugin($technicalName)
+    {
+        /** @var \Shopware\Bundle\PluginInstallerBundle\Service\InstallerService $pluginManager */
+        $pluginManager = self::$staticKernel->getContainer()->get('shopware.plugin_manager');
+        $plugin = $pluginManager->getPluginByName($technicalName);
+
+        if(!$plugin) {
+            $plugin = self::downloadPlugin($technicalName);
+        }
+
+        $pluginManager->installPlugin($plugin);
+        $pluginManager->activatePlugin($plugin);
+    }
+
+    /**
+     * @param string $technicalName
+     */
+    private static function downloadPlugin($technicalName)
+    {
+
+    }
+
+    /**
+     * @param string $technicalName
+     * @throws \Exception
+     */
+    protected static function deactivatePlugin($technicalName)
+    {
+        /** @var \Shopware\Bundle\PluginInstallerBundle\Service\InstallerService $pluginManager */
+        $pluginManager = self::$staticKernel->getContainer()->get('shopware.plugin_manager');
+        $plugin = $pluginManager->getPluginByName($technicalName);
+        $pluginManager->deactivatePlugin($plugin);
     }
 
     /** @BeforeScenario */
@@ -193,7 +233,7 @@ EOD;
         }
 
         $dirtyElements = implode(',', $this->dirtyConfigElements);
-        $this->dirtyConfigElements = array();
+        $this->dirtyConfigElements = [];
 
         $sql = sprintf('DELETE FROM `s_core_config_values` WHERE `element_id` IN (%s)', $dirtyElements);
 
@@ -233,7 +273,7 @@ EOD;
     public function setKernel(HttpKernelInterface $kernel)
     {
         $this->kernel = $kernel;
-        self::$statickernel = $kernel;
+        self::$staticKernel = $kernel;
     }
 
     /**

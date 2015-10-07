@@ -26,18 +26,18 @@ class ListingContext extends SubContext
      */
     public function iAmOnTheListingPageForCategoryOnPage($categoryId, $page = null)
     {
-        $params = array(
-            array(
+        $params = [
+            [
                 'parameter' => 'sCategory',
                 'value'=> $categoryId
-            )
-        );
+            ]
+        ];
 
         if ($page) {
-            $params[] = array(
+            $params[] = [
                 'parameter' => 'sPage',
                 'value'=> $page
-            );
+            ];
         }
 
         $this->getPage('Listing')->openListing($params, false);
@@ -49,7 +49,7 @@ class ListingContext extends SubContext
      */
     public function iSetTheFilterTo(TableNode $filter = null)
     {
-        $properties = array();
+        $properties = [];
 
         if ($filter) {
             $properties = $filter->getHash();
@@ -108,8 +108,8 @@ class ListingContext extends SubContext
     }
 
     /**
-     * @When /^I browse to "([^"]*)" page$/
-     * @When /^I browse to "([^"]*)" page (\d+) times$/
+     * @When /^I browse to (previous|next) page$/
+     * @When /^I browse to (previous|next) page (\d+) times$/
      */
     public function iBrowseTimesToPage($direction, $steps = 1)
     {
@@ -117,7 +117,7 @@ class ListingContext extends SubContext
     }
 
     /**
-     * @Then /^I should not be able to browse to "([^"]*)" page$/
+     * @Then /^I should not be able to browse to (previous|next) page$/
      */
     public function iShouldNotBeAbleToBrowseToPage($direction)
     {

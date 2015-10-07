@@ -17,8 +17,7 @@ class ArticleBox extends \Shopware\Tests\Mink\Element\Emotion\ArticleBox
     protected $selector = ['css' => 'div.product--box.box--basic'];
 
     /**
-     * Returns an array of all css selectors of the element/page
-     * @return array
+     * @inheritdoc
      */
     public function getCssSelectors()
     {
@@ -29,8 +28,7 @@ class ArticleBox extends \Shopware\Tests\Mink\Element\Emotion\ArticleBox
     }
 
     /**
-     * Returns an array of all named selectors of the element/page
-     * @return array
+     * @inheritdoc
      */
     public function getNamedSelectors()
     {

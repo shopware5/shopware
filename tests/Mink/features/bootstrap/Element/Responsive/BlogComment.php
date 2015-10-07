@@ -17,8 +17,7 @@ class BlogComment extends \Shopware\Tests\Mink\Element\Emotion\BlogComment
     protected $selector = ['css' => 'ul.comments--list > li.list--entry'];
 
     /**
-     * Returns an array of all css selectors of the element/page
-     * @return string[]
+     * @inheritdoc
      */
     public function getCssSelectors()
     {

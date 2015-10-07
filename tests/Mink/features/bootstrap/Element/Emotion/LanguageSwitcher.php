@@ -18,6 +18,9 @@ class LanguageSwitcher extends Element
      */
     protected $selector = array('css' => 'div#topbar > div.topbar_lang select.lang_select');
 
+    /**
+     * TODO!!!
+     */
     public $cssLocators = [
         'languages' => 'option'
     ];
@@ -26,7 +29,6 @@ class LanguageSwitcher extends Element
      * Returns the current language
      * Use this only for asserts. If you only need the current language, use Helper::getCurrentLanguage().
      * @return string
-     * @deprecated
      */
     public function getCurrentLanguage()
     {

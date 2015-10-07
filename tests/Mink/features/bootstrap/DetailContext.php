@@ -3,6 +3,7 @@
 namespace Shopware\Tests\Mink;
 
 use Behat\Gherkin\Node\TableNode;
+use Shopware\Tests\Mink\Element\Emotion\ArticleEvaluation;
 
 class DetailContext extends SubContext
 {
@@ -12,7 +13,16 @@ class DetailContext extends SubContext
      */
     public function iAmOnTheDetailPageForArticle($articleId)
     {
-        $this->getPage('Detail')->open(array('articleId' => $articleId));
+        $this->getPage('Detail')->open(['articleId' => $articleId, 'number' => null]);
+    }
+
+    /**
+     * @Given /^I am on the detail page for variant "(?P<number>[^"]*)" of article (?P<articleId>\d+)$/
+     * @When /^I go to the detail page for variant "(?P<number>[^"]*)" of article (?P<articleId>\d+)$/
+     */
+    public function iAmOnTheDetailPageForVariantOfArticle($number, $articleId)
+    {
+        $this->getPage('Detail')->open(['articleId' => $articleId, 'number' => $number]);
     }
 
     /**
@@ -32,9 +42,8 @@ class DetailContext extends SubContext
         /** @var \Shopware\Tests\Mink\Page\Emotion\Detail $page */
         $page = $this->getPage('Detail');
 
-        /** @var \Shopware\Tests\Mink\Element\MultipleElement $notePositions */
+        /** @var ArticleEvaluation $articleEvaluations */
         $articleEvaluations = $this->getMultipleElement($page, 'ArticleEvaluation');
-
         $evaluations = $evaluations->getHash();
 
         $page->checkEvaluations($articleEvaluations, $average, $evaluations);

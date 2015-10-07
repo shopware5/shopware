@@ -20,10 +20,10 @@ Feature: Show Listing
             | Hersteller | <supplier> |
         Then  I should see <articles> elements of type "ArticleBox"
 
-    Examples:
-        | supplier             | articles |
-        | Sonnenschirm Versand | 5        |
-        | Teapavilion          | 23       |
+        Examples:
+            | supplier             | articles |
+            | Sonnenschirm Versand | 5        |
+            | Teapavilion          | 23       |
 
     @filter @noResponsive
     Scenario: I can filter the articles by custom filters
@@ -103,12 +103,12 @@ Feature: Show Listing
         When  I select "<to>" from "n"
         Then  I should see <to> elements of type "ArticleBox"
 
-    Examples:
-        | from | to |
-        | 12   | 24 |
-        | 24   | 36 |
-        | 36   | 48 |
-        | 48   | 12 |
+        Examples:
+            | from | to |
+            | 12   | 24 |
+            | 24   | 36 |
+            | 36   | 48 |
+            | 48   | 12 |
 
     @customergroups
     Scenario:
@@ -154,21 +154,21 @@ Feature: Show Listing
 
         Then  I should see <perPage> elements of type "ArticleBox"
 
-        When  I browse to "previous" page 3 times
-        Then  I should not be able to browse to "previous" page
+        When  I browse to previous page 3 times
+        Then  I should not be able to browse to previous page
 
-        When  I browse to "next" page <countNextPage> times
+        When  I browse to next page <countNextPage> times
         Then  I should see "iPadtasche mit Stiftmappe"
         And   I should see "Kickerball Kork"
 
         When  I browse to page <lastPage>
         Then  I should see <countLastPage> elements of type "ArticleBox"
-        And   I should not be able to browse to "next" page
+        And   I should not be able to browse to next page
         And   I should not be able to browse to page 1
 
-    Examples:
-        | perPage | countNextPage | lastPage | countLastPage |
-        | 12      | 6             | 8        | 12            |
-        | 24      | 3             | 8        | 24            |
-        | 36      | 2             | 6        | 16            |
-        | 48      | 1             | 5        | 4             |
+        Examples:
+            | perPage | countNextPage | lastPage | countLastPage |
+            | 12      | 6             | 8        | 12            |
+            | 24      | 3             | 8        | 24            |
+            | 36      | 2             | 6        | 16            |
+            | 48      | 1             | 5        | 4             |

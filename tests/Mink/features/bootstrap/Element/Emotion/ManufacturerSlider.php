@@ -22,8 +22,7 @@ class ManufacturerSlider extends SliderElement implements HelperSelectorInterfac
     protected $selector = array('css' => 'div.emotion-element > div.manufacturer-slider-element');
 
     /**
-     * Returns an array of all css selectors of the element/page
-     * @return string[]
+     * @inheritdoc
      */
     public function getCssSelectors()
     {

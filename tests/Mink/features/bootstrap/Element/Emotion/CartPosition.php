@@ -24,8 +24,7 @@ class CartPosition extends MultipleElement
     protected $selector = array('css' => 'div.table_row:not(.small_quantities):not(.noborder):not(.non):not(.shipping)');
 
     /**
-     * Returns an array of all css selectors of the element/page
-     * @return string[]
+     * @inheritdoc
      */
     public function getCssSelectors()
     {
@@ -41,8 +40,7 @@ class CartPosition extends MultipleElement
     }
 
     /**
-     * Returns an array of all named selectors of the element/page
-     * @return array
+     * @inheritdoc
      */
     public function getNamedSelectors()
     {

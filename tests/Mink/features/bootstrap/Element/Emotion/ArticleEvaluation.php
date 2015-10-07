@@ -17,8 +17,7 @@ class ArticleEvaluation extends BlogComment
     protected $selector = array('css' => 'div.comment_block:not(.answer)');
 
     /**
-     * Returns an array of all css selectors of the element/page
-     * @return string[]
+     * @inheritdoc
      */
     public function getCssSelectors()
     {

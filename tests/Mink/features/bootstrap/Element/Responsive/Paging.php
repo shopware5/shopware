@@ -16,6 +16,9 @@ class Paging extends \Shopware\Tests\Mink\Element\Emotion\Paging
      */
     protected $selector = ['css' => 'div.listing--paging'];
 
+    /**
+     * @inheritdoc
+     */
     public function getCssSelectors()
     {
         return [
