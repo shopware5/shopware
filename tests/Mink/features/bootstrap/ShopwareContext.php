@@ -91,8 +91,7 @@ class ShopwareContext extends SubContext
 
         if ($pageName === 'Index') {
             $pageName = 'Homepage';
-        }
-        elseif (($pageName === 'Newsletter') && ($additionalData)) {
+        } elseif (($pageName === 'Newsletter') && ($additionalData)) {
             $data = array_merge($data, $additionalData->getHash());
         }
 
@@ -147,18 +146,17 @@ class ShopwareContext extends SubContext
         $query = parse_url($link, PHP_URL_QUERY);
         $anchor = strpos($link, "#");
 
-        if($anchor) {
+        if ($anchor) {
             $link = substr($link, 0, $anchor);
         }
 
         //Blogartikel-Bewertung
-        if(empty($query)) {
+        if (empty($query)) {
             $mask = '%s/sConfirmation/%s';
-        }
-        else {
+        } else {
             parse_str($query, $args);
 
-            switch($args['action']) {
+            switch ($args['action']) {
                 //Artikel-Benachrichtigungen
                 case 'notify':
                     $mask = '%sConfirm&sNotificationConfirmation=%s&sNotify=1';

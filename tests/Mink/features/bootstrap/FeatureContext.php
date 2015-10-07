@@ -47,8 +47,6 @@ class FeatureContext extends MinkContext implements KernelAwareContext//, \Behat
     /**
      * Initializes context.
      * Every scenario gets it's own context object.
-     *
-     * @param array $parameters context parameters (set them up through behat.yml)
      */
     public function __construct()
     {
@@ -115,14 +113,16 @@ class FeatureContext extends MinkContext implements KernelAwareContext//, \Behat
     /**
      * @return bool
      */
-    private function isFirstScenario() {
+    private function isFirstScenario()
+    {
         return ((self::$scenarioIncrement === 1) && $this->isFirstExample());
     }
 
     /**
      * @return bool
      */
-    private function isFirstExample() {
+    private function isFirstExample()
+    {
         return (self::$exampleIncrement < 2);
     }
 
@@ -183,7 +183,7 @@ EOD;
         $pluginManager = $this->getContainer()->get('shopware_plugininstaller.plugin_manager');
         $plugin = $pluginManager->getPluginByName($technicalName);
 
-        if(!$plugin) {
+        if (!$plugin) {
             $plugin = $this->downloadPlugin($technicalName);
         }
 
@@ -211,7 +211,7 @@ EOD;
         $plugin = $pluginManager->getPluginByName($technicalName);
         $pluginManager->deactivatePlugin($plugin);
     }
-    
+
     /**
      * @param ContainerInterface $container
      * @throws \Exception
@@ -285,6 +285,9 @@ EOD;
         $configWriter->save($configName, $value, null, 1);
         $configWriter->save($configName, $value, null, 2);
 
+        $config = $this->getContainer()->get('config');
+        $config->offsetSet($configName, $value);
+
         $this->clearCache();
     }
 
@@ -293,7 +296,7 @@ EOD;
      */
     public function clearConfigValues()
     {
-        if(!$this->dirtyConfigElements) {
+        if (!$this->dirtyConfigElements) {
             return;
         }
 
@@ -312,8 +315,9 @@ EOD;
      */
     public function clearCache(ScenarioScope $scope = null)
     {
-        $clearCache = $this->getKernel()->getRootDir().'/cache/clear_cache.sh';
-        exec($clearCache);
+        $cacheManager = $this->getContainer()->get('shopware.cache_manager');
+        $cacheManager->clearConfigCache();
+        $cacheManager->clearTemplateCache();
     }
 
     /**

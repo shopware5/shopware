@@ -45,7 +45,7 @@ class Blog extends Page implements HelperSelectorInterface
     {
         $language = Helper::getCurrentLanguage($this);
 
-        if(Helper::hasNamedLink($this, 'rssFeed', $language) && Helper::hasNamedLink($this, 'atomFeed', $language)) {
+        if (Helper::hasNamedLink($this, 'rssFeed', $language) && Helper::hasNamedLink($this, 'atomFeed', $language)) {
             return;
         }
 
@@ -77,7 +77,7 @@ class Blog extends Page implements HelperSelectorInterface
         $comments = Helper::floatArray($comments, ['stars']);
         $result = Helper::assertElements($comments, $blogComments);
 
-        if($result === true) {
+        if ($result === true) {
             return;
         }
 

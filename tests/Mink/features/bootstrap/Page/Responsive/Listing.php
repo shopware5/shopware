@@ -27,21 +27,21 @@ class Listing extends \Shopware\Tests\Mink\Page\Emotion\Listing
      */
     public function verifyPage()
     {
-        if(Helper::hasNamedLink($this, 'moreProducts')) {
+        if (Helper::hasNamedLink($this, 'moreProducts')) {
             return;
         }
 
         $errors = [];
 
-        if(!$this->hasLink('Filtern')) {
+        if (!$this->hasLink('Filtern')) {
             $errors[] = '- There is no filter link!';
         }
 
-        if(!$this->hasSelect('o')) {
+        if (!$this->hasSelect('o')) {
             $errors[] = '- There is no order select!';
         }
 
-        if(!$errors) {
+        if (!$errors) {
             return;
         }
 
@@ -58,8 +58,8 @@ class Listing extends \Shopware\Tests\Mink\Page\Emotion\Listing
     {
         $elements = Helper::findAllOfElements($this, ['filterFilterProperties']);
         /** @var NodeElement $property */
-        foreach($elements['filterFilterProperties'] as $property) {
-            if($property->isChecked()) {
+        foreach ($elements['filterFilterProperties'] as $property) {
+            if ($property->isChecked()) {
                 $property->uncheck();
             }
         }

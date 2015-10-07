@@ -87,6 +87,6 @@ final class KernelAwareInitializer implements ContextInitializer, EventSubscribe
      */
     public function shutdownKernel()
     {
-//        $this->kernel->shutdown();
+        // $this->kernel->shutdown();
     }
 }

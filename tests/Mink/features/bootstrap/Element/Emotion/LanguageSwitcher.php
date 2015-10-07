@@ -54,5 +54,4 @@ class LanguageSwitcher extends Element
     {
         $this->selectOption($language);
     }
-
 }

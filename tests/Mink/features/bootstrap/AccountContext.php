@@ -57,7 +57,7 @@ class AccountContext extends SubContext
         $pageInfo = Helper::getPageInfo($this->getSession(), ['controller']);
         $pageName = ucfirst($pageInfo['controller']);
 
-        if($pageName === 'Checkout') {
+        if ($pageName === 'Checkout') {
             $pageName = 'CheckoutConfirm';
         }
 
@@ -76,7 +76,7 @@ class AccountContext extends SubContext
         $pageInfo = Helper::getPageInfo($this->getSession(), ['controller']);
         $pageName = ucfirst($pageInfo['controller']);
 
-        if($pageName === 'Checkout') {
+        if ($pageName === 'Checkout') {
             $pageName = 'CheckoutConfirm';
         }
 
@@ -112,7 +112,7 @@ class AccountContext extends SubContext
         $pageInfo = Helper::getPageInfo($this->getSession(), ['controller', 'action']);
         $pageName = ucfirst($pageInfo['controller']);
 
-        if($pageName === 'Checkout') {
+        if ($pageName === 'Checkout') {
             $pageName = ($pageInfo['action'] === 'shippingPayment') ? 'CheckoutCart' : 'CheckoutConfirm';
         }
 
@@ -125,7 +125,7 @@ class AccountContext extends SubContext
             ]
         ];
 
-        if($table) {
+        if ($table) {
             $data = array_merge($data, $table->getHash());
         }
 
@@ -155,5 +155,4 @@ class AccountContext extends SubContext
 
         $page->chooseAddress($addresses, $name);
     }
-
 }

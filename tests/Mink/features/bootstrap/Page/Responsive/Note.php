@@ -12,7 +12,7 @@ class Note extends \Shopware\Tests\Mink\Page\Emotion\Note
     public function checkNoteProducts(NotePosition $notePositions, array $items)
     {
         foreach ($items as &$item) {
-            if(array_key_exists('description', $item)) {
+            if (array_key_exists('description', $item)) {
                 unset($item['description']);
             }
         }

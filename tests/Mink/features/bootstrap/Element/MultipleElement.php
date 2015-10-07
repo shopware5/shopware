@@ -180,7 +180,7 @@ abstract class MultipleElement extends Element implements \Countable, \Iterator,
     {
         preg_match('/^get([A-Z]{1}[a-zA-Z]+)Property$/', $name, $property);
 
-        if(!$property) {
+        if (!$property) {
             parent::__call($name, $arguments);
         }
 

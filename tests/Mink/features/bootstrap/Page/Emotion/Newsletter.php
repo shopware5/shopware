@@ -40,39 +40,39 @@ class Newsletter extends Page implements HelperSelectorInterface
     {
         $errors = [];
 
-        if(!$this->hasSelect('subscribeToNewsletter')) {
+        if (!$this->hasSelect('subscribeToNewsletter')) {
             $errors[] = '- There is no newsletter subscription select!';
         }
 
-        if(!$this->hasField('newsletter')) {
+        if (!$this->hasField('newsletter')) {
             $errors[] = '- There is no email field!';
         }
 
-        if(!$this->hasSelect('salutation')) {
+        if (!$this->hasSelect('salutation')) {
             $errors[] = '- There is no salutation select!';
         }
 
-        if(!$this->hasField('firstname')) {
+        if (!$this->hasField('firstname')) {
             $errors[] = '- There is no firstname field!';
         }
 
-        if(!$this->hasField('lastname')) {
+        if (!$this->hasField('lastname')) {
             $errors[] = '- There is no lastname field!';
         }
 
-        if(!$this->hasField('street')) {
+        if (!$this->hasField('street')) {
             $errors[] = '- There is no street field!';
         }
 
-        if(!$this->hasField('zipcode')) {
+        if (!$this->hasField('zipcode')) {
             $errors[] = '- There is no zip code field!';
         }
 
-        if(!$this->hasField('city')) {
+        if (!$this->hasField('city')) {
             $errors[] = '- There is no city field!';
         }
 
-        if(!$errors) {
+        if (!$errors) {
             return;
         }
 

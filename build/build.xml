@@ -273,7 +273,7 @@
 
     <target name="mink-shopware-continuous">
         <exec executable="${script.behat}" dir="${test.dir}/Mink">
-            <env key="MINK_EXTENSION_PARAMS" value="base_url=http://${app.host}${app.path}"/>
+            <env key="BEHAT_PARAMS" value='{"extensions" : {"Behat\\MinkExtension" : {"base_url" : "http://${app.host}${app.path}"}}}'/>
             <arg value="--profile=emotion"/>
             <arg value="--format=pretty"/>
             <arg value="--out=std"/>
@@ -284,7 +284,7 @@
 
     <target name="mink-shopware-continuous-responsive">
         <exec executable="${script.behat}" dir="${test.dir}/Mink">
-            <env key="MINK_EXTENSION_PARAMS" value="base_url=http://${app.host}${app.path}"/>
+            <env key="BEHAT_PARAMS" value='{"extensions" : {"Behat\\MinkExtension" : {"base_url" : "http://${app.host}${app.path}"}}}'/>
             <arg value="--profile=responsive"/>
             <arg value="--format=pretty"/>
             <arg value="--out=std"/>

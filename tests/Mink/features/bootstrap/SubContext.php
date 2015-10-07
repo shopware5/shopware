@@ -81,7 +81,7 @@ class SubContext extends PageObjectContext implements KernelAwareContext
         $element = $this->getElement($elementName);
         $element->setParent($page);
 
-        if($instance > 1) {
+        if ($instance > 1) {
             $element = $element->setInstance($instance);
         }
 

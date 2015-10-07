@@ -205,7 +205,6 @@ class Helper
         }
 
         return $elements;
-
     }
 
     /**
@@ -330,10 +329,10 @@ Stacktrace:
 EOD
         ];
 
-        foreach($debug as $key => $call) {
+        foreach ($debug as $key => $call) {
             $next = $debug[$key + 1];
 
-            if(!isset($next['class'])) {
+            if (!isset($next['class'])) {
                 break;
             }
 

@@ -19,5 +19,4 @@ class FormContext extends SubContext
     {
         $this->getPage('Form')->checkCaptcha();
     }
-
 }

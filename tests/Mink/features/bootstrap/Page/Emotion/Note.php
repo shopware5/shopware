@@ -20,7 +20,7 @@ class Note extends Page
     {
         $info = Helper::getPageInfo($this->getSession(), ['controller']);
 
-        if($info['controller'] === 'note') {
+        if ($info['controller'] === 'note') {
             return;
         }
 
@@ -52,7 +52,7 @@ class Note extends Page
         Helper::assertElementCount($notePositions, count($items));
         $result = Helper::searchElements($items, $notePositions);
 
-        if($result !== true) {
+        if ($result !== true) {
             $messages = ['The following articles were not found:'];
             foreach ($result as $product) {
                 $messages[] = $product['number'] . ' - ' . $product['name'];

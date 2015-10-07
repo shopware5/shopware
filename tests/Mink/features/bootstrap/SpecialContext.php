@@ -2,6 +2,8 @@
 
 namespace Shopware\Tests\Mink;
 
+use Behat\Gherkin\Node\PyStringNode;
+use Behat\Mink\WebAssert;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use Shopware\Tests\Mink\Page\Emotion\Homepage;
 use Shopware\Tests\Mink\Element\MultipleElement;
@@ -88,7 +90,7 @@ class SpecialContext extends SubContext
             $element = $element->setInstance($position);
         }
 
-        if(empty($linkName)) {
+        if (empty($linkName)) {
             $element->click();
             return;
         }
@@ -101,9 +103,9 @@ class SpecialContext extends SubContext
     /**
      * @Given /^the "(?P<field>[^"]*)" field should contain:$/
      */
-    public function theFieldShouldContain($field, \Behat\Gherkin\Node\PyStringNode $string)
+    public function theFieldShouldContain($field, PyStringNode $string)
     {
-        $assert = new \Behat\Mink\WebAssert($this->getSession());
+        $assert = new WebAssert($this->getSession());
         $assert->fieldValueEquals($field, $string->getRaw());
     }
 }

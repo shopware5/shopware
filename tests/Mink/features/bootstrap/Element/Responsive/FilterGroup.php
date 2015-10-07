@@ -38,7 +38,7 @@ class FilterGroup extends \Shopware\Tests\Mink\Element\Emotion\FilterGroup
         /** @var NodeElement $propertyContainer */
         $propertyContainer = $elements['properties'];
 
-        if(!$propertyContainer->hasField($propertyName)) {
+        if (!$propertyContainer->hasField($propertyName)) {
             return false;
         }
 

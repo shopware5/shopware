@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -25,7 +25,6 @@
 namespace Shopware\Behat\ShopwareExtension\ServiceContainer;
 
 use Behat\Behat\Context\ServiceContainer\ContextExtension;
-use Shopware\Behat\ShopwareExtension\ServiceContainer\Driver\ShopwareFactory;
 use Behat\Testwork\EventDispatcher\ServiceContainer\EventDispatcherExtension;
 use Behat\Testwork\ServiceContainer\Extension as ExtensionInterface;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
@@ -84,13 +83,13 @@ class ShopwareExtension implements ExtensionInterface
                             ->defaultValue('Shopware\Kernel')
                         ->end()
                         ->scalarNode('env')
-                            ->defaultValue('test')
+                            ->defaultValue('production')
                         ->end()
                         ->booleanNode('debug')
                             ->beforeNormalization()
                                 ->ifString()->then($boolFilter)
                             ->end()
-                            ->defaultTrue()
+                            ->defaultFalse()
                         ->end()
                     ->end()
                 ->end()
@@ -130,7 +129,7 @@ class ShopwareExtension implements ExtensionInterface
         if ($bootstrapPath) {
             if (file_exists($bootstrap = $basePath . '/' . $bootstrapPath)) {
                 require_once($bootstrap);
-           } elseif (file_exists($bootstrapPath)) {
+            } elseif (file_exists($bootstrapPath)) {
                 require_once($bootstrapPath);
             }
         }
