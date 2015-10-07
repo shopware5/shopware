@@ -305,7 +305,6 @@ class Account extends Page implements HelperSelectorInterface
 
     /**
      * @param string $paymentMethod
-     * @throws \Behat\Behat\Exception\PendingException
      * @throws \Exception
      */
     public function checkPaymentMethod($paymentMethod)
@@ -336,8 +335,6 @@ class Account extends Page implements HelperSelectorInterface
      * @param AccountOrder $order
      * @param string $orderNumber
      * @param array $articles
-     * @throws \Behat\Behat\Exception\PendingException
-     * @throws \Exception
      */
     public function checkOrder(AccountOrder $order, $orderNumber, array $articles)
     {

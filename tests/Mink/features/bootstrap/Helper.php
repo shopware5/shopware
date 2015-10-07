@@ -2,7 +2,7 @@
 
 namespace Shopware\Tests\Mink;
 
-use \Behat\Behat\Exception\PendingException;
+use \Behat\Behat\Tester\Exception\PendingException;
 use \SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use \SensioLabs\Behat\PageObjectExtension\PageObject\Element;
 use Shopware\Tests\Mink\Element\MultipleElement;
@@ -205,7 +205,6 @@ class Helper
         }
 
         return $elements;
-
     }
 
     /**
@@ -330,10 +329,10 @@ Stacktrace:
 EOD
         ];
 
-        foreach($debug as $key => $call) {
+        foreach ($debug as $key => $call) {
             $next = $debug[$key + 1];
 
-            if(!isset($next['class'])) {
+            if (!isset($next['class'])) {
                 break;
             }
 

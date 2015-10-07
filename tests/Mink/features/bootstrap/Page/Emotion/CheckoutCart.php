@@ -64,7 +64,7 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
         $lang = Helper::getCurrentLanguage($this);
         $check = [];
 
-        foreach($aggregation as $property) {
+        foreach ($aggregation as $property) {
             $key = $this->getAggregationPosition($elements['aggregationLabels'], $property['label'], $lang);
 
             $check[$property['label']] = Helper::floatArray([
@@ -78,7 +78,7 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
 
         $result = Helper::checkArray($check);
 
-        if($result !== true) {
+        if ($result !== true) {
             $message = sprintf(
                 'The value of "%s" is "%s"! (should be "%s")',
                 $result,
@@ -100,12 +100,12 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
     {
         $labels = $this->getNamedSelectors();
 
-        if(strpos($key, '%') !== false) {
+        if (strpos($key, '%') !== false) {
             $taxRate = intval($key);
             return sprintf($labels['tax'][$language], $taxRate);
         }
 
-        if(isset($labels[$key][$language])) {
+        if (isset($labels[$key][$language])) {
             return $labels[$key][$language];
         }
 
@@ -137,7 +137,7 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
             }
 
             $key++;
-        } while($key <= $lastKey);
+        } while ($key <= $lastKey);
 
         $message = sprintf('Label "%s" does not exist on the page! ("%s")', $labelKey, $givenLabel);
         Helper::throwException($message);
@@ -174,7 +174,7 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
      */
     public function removeProduct(CartPosition $item, $language = '')
     {
-        if(empty($language)) {
+        if (empty($language)) {
             $language = Helper::getCurrentLanguage($this);
         }
 
@@ -200,7 +200,7 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
         $language = Helper::getCurrentLanguage($this);
 
         /** @var CartPosition $item */
-        foreach($items as $item) {
+        foreach ($items as $item) {
             $this->removeProduct($item, $language);
         }
     }
@@ -233,7 +233,7 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
         $items = Helper::floatArray($items, ['quantity', 'itemPrice', 'sum']);
         $result = Helper::assertElements($items, $cartPositions);
 
-        if($result !== true) {
+        if ($result !== true) {
             $messages = ['The following articles are wrong:'];
             foreach ($result as $product) {
                 $messages[] = sprintf(
@@ -259,9 +259,7 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
         try {
             $assert = new WebAssert($this->getSession());
             $assert->pageTextContains('1 Ihr Warenkorb 2 Ihre Adresse 3 Prüfen und Bestellen');
-        }
-        catch (ResponseTextException $e)
-        {
+        } catch (ResponseTextException $e) {
             $message = ['You are not on the cart!', 'Current URL: ' . $this->getSession()->getCurrentUrl()];
             Helper::throwException($message);
         }
@@ -276,7 +274,7 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
     {
         $language = Helper::getCurrentLanguage($this);
 
-        if($this->verifyPage($language)) {
+        if ($this->verifyPage($language)) {
             Helper::clickNamedLink($this, 'checkout', $language);
         }
 
@@ -292,12 +290,12 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
     {
         $language = Helper::getCurrentLanguage($this);
 
-        if($this->verifyPage($language)) {
+        if ($this->verifyPage($language)) {
             $locatorArray = $this->getNamedSelectors();
             $parent = Helper::getContentBlock($this);
             $link = $parent->findLink($locatorArray['checkout'][$language]);
 
-            if($this->getDriver() instanceof Selenium2Driver) {
+            if ($this->getDriver() instanceof Selenium2Driver) {
                 $this->getSession()->visit($link->getAttribute('href'));
             } else {
                 $link->click();
@@ -316,7 +314,7 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
     {
         $language = Helper::getCurrentLanguage($this);
 
-        if($this->verifyPage($language)) {
+        if ($this->verifyPage($language)) {
             Helper::clickNamedLink($this, 'checkout', $language);
         }
 

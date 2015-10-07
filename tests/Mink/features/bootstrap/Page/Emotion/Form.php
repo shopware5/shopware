@@ -40,7 +40,7 @@ class Form extends Page implements HelperSelectorInterface
     {
         $info = Helper::getPageInfo($this->getSession(), ['controller']);
 
-        if($info['controller'] === 'forms') {
+        if ($info['controller'] === 'forms') {
             return;
         }
 

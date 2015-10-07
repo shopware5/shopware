@@ -48,7 +48,7 @@ class Homepage extends Page implements HelperSelectorInterface
     {
         $info = Helper::getPageInfo($this->getSession(), ['controller']);
 
-        if($info['controller'] === 'index') {
+        if ($info['controller'] === 'index') {
             return;
         }
 

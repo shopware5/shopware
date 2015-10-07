@@ -4,7 +4,6 @@ namespace  Shopware\Tests\Mink\Page\Emotion;
 use Behat\Mink\Driver\GoutteDriver;
 use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Mink\Element\NodeElement;
-
 use Shopware\Tests\Mink\Element\Emotion\ArticleEvaluation;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use Shopware\Tests\Mink\Helper;
@@ -91,7 +90,7 @@ class Detail extends Page implements HelperSelectorInterface
         $evaluations = Helper::floatArray($evaluations, ['stars']);
         $result = Helper::assertElements($evaluations, $articleEvaluations);
 
-        if($result === true) {
+        if ($result === true) {
             return;
         }
 
@@ -170,7 +169,6 @@ class Detail extends Page implements HelperSelectorInterface
     /**
      * @param $configuratorOption
      * @param $configuratorGroup
-     * @throws \Behat\Behat\Exception\PendingException
      * @throws \Exception
      */
     public function canNotSelectConfiguratorOption($configuratorOption, $configuratorGroup)
@@ -229,7 +227,7 @@ class Detail extends Page implements HelperSelectorInterface
         $value = $parts[0];
         $unit = isset($parts[1]) ? ' '.$parts[1] : '';
 
-        if($optionText !== $min){
+        if ($optionText !== $min) {
             $errors[] = sprintf('The first option of "%s" is "%s"! (should be "%s")', $select, $optionText, $min);
         }
 
@@ -238,16 +236,16 @@ class Detail extends Page implements HelperSelectorInterface
             $optionText = $option->getText();
             $value += $graduation;
 
-            if($optionText !== $value.$unit){
+            if ($optionText !== $value.$unit) {
                 $errors[] = sprintf('There is the invalid option "%s" in "%s"! ("%s" expected)', $optionText, $select, $value.$unit);
             }
         }
 
-        if($optionText !== $max){
+        if ($optionText !== $max) {
             $errors[] = sprintf('The last option of "%s" is "%s"! (should be "%s")', $select, $value, $max);
         }
 
-        if(!empty($errors)) {
+        if (!empty($errors)) {
             Helper::throwException($errors);
         }
     }

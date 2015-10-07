@@ -43,7 +43,7 @@ class CheckoutConfirm extends Page implements \Shopware\Tests\Mink\HelperSelecto
     {
         $namedSelectors = $this->getNamedSelectors();
 
-        if(!$language) {
+        if (!$language) {
             $language = Helper::getCurrentLanguage($this);
         }
 
@@ -61,7 +61,7 @@ class CheckoutConfirm extends Page implements \Shopware\Tests\Mink\HelperSelecto
 
         $orderDetails = $elements['orderNumber']->getText();
 
-        preg_match("/\d+/",$orderDetails,$orderNumber);
+        preg_match("/\d+/", $orderDetails, $orderNumber);
         $orderNumber = intval($orderNumber[0]);
 
         return $orderNumber;
@@ -146,7 +146,7 @@ class CheckoutConfirm extends Page implements \Shopware\Tests\Mink\HelperSelecto
 
         $result = Helper::assertElementProperties($element, $properties);
 
-        if($result === true) {
+        if ($result === true) {
             return;
         }
 

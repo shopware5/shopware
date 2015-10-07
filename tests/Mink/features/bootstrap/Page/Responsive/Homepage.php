@@ -36,7 +36,7 @@ class Homepage extends \Shopware\Tests\Mink\Page\Emotion\Homepage
      */
     public function changeCurrency($currency)
     {
-        if(!$this->getDriver() instanceof Selenium2Driver) {
+        if (!$this->getDriver() instanceof Selenium2Driver) {
             Helper::throwException('Changing the currency in Responsive template requires Javascript!');
         }
 

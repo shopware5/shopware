@@ -93,7 +93,7 @@ class CheckoutCart extends \Shopware\Tests\Mink\Page\Emotion\CheckoutCart
     {
         $language = Helper::getCurrentLanguage($this);
 
-        if($this->verifyPage($language)) {
+        if ($this->verifyPage($language)) {
             Helper::clickNamedLink($this, 'checkout', $language);
         }
 

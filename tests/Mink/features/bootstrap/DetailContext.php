@@ -101,6 +101,4 @@ class DetailContext extends SubContext
     {
         $this->getPage('Detail')->submitNotification($email);
     }
-
-
 }
