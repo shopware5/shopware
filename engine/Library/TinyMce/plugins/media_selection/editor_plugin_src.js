@@ -181,19 +181,11 @@
                 ed = me.ed,
                 args;
 
-            function guid() {
-                function s4() {
-                    return Math.floor((1 + Math.random()) * 0x10000)
-                        .toString(16)
-                        .substring(1);
-                }
-                return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
-                    s4() + '-' + s4() + s4() + s4();
-            }
+            var uuid = Shopware.ModuleManager.uuidGenerator.generate();
 
             args = {
-                'id': me.imageCls + '-' + guid(),
-                'class': me.imageCls + ' ' + me.imageCls + '-' + guid(),
+                'id': me.imageCls + '-' + uuid,
+                'class': me.imageCls + ' ' + me.imageCls + '-' + uuid,
                 'alt': record.get('name'),
                 'data-src': record.get('virtualPath'),
                 'src': me.url + '/assets/placeholder-image.png'

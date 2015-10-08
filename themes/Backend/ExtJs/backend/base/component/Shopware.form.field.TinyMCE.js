@@ -420,6 +420,21 @@ Ext.define('Shopware.form.field.TinyMCE',
                 var src = img.getAttribute('data-src'),
                     id = img.getAttribute('id');
 
+                // update case
+                if (!id) {
+                    src = img.getAttribute('src');
+
+                    if (src && src.substr(0,5) != "media") {
+                        return;
+                    }
+                    
+                    id = 'tinymce-editor-image-' + Shopware.ModuleManager.uuidGenerator.generate();
+
+                    img.setAttribute('id', id);
+                    img.setAttribute('data-src', src);
+                    img.classList.add(id);
+                }
+
                 filteredImages.push({ src: src, id: id, image: img });
             }
         });
