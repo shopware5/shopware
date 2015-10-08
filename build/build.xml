@@ -99,8 +99,7 @@
     <target name="build-database" depends="build-database-foundation, build-database-apply-deltas, build-database-deploy-demodata" />
 
     <target name="build-database-foundation">
-        <concat destfile="${build.dir}/scripts/deploy.sql">
-
+        <concat encoding="UTF-8" outputencoding="UTF-8" destfile="${build.dir}/scripts/deploy.sql">
             <fileset file="${build.dir}/scripts/deploy.create.sql"/>
             <fileset file="${sql.dir}/install/latest.sql"/>
             <fileset file="${build.dir}/scripts/deploy.shopconfig.sql"/>
@@ -134,12 +133,12 @@
     </target>
 
     <target name="build-database-deploy-demodata">
-        <concat destfile="${build.dir}/scripts/demo.template.sql">
+        <concat encoding="UTF-8" outputencoding="UTF-8" destfile="${build.dir}/scripts/demo.template.sql">
             <fileset file="${demo.data}"/>
             <fileset file="${build.dir}/scripts/deploy.shopconfig.sql"/>
         </concat>
 
-        <copy file="${build.dir}/scripts/demo.template.sql" toFile="${build.dir}/scripts/demo.deploy.sql">
+        <copy encoding="UTF-8" outputencoding="UTF-8" file="${build.dir}/scripts/demo.template.sql" toFile="${build.dir}/scripts/demo.deploy.sql">
             <filterset>
                 <filter token="database" value="${db.name}"/>
                 <filter token="host" value="${app.host}"/>
@@ -197,6 +196,7 @@
     </target>
 
     <target name="build-cache-dir">
+        <mkdir dir="${cache.dir}/"/>
         <exec executable="chmod" os="Linux">
             <arg value="0777"/>
             <arg value="${cache.dir}/"/>

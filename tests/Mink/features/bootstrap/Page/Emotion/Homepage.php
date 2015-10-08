@@ -210,7 +210,6 @@ class Homepage extends Page implements HelperSelectorInterface
      * Checks an emotion blog element
      * @param BlogArticle $blogArticle
      * @param array $articles
-     * @throws \Behat\Behat\Exception\PendingException
      * @throws \Exception
      */
     public function checkBlogArticles(BlogArticle $blogArticle, $articles)

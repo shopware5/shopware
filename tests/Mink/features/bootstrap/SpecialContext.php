@@ -22,7 +22,7 @@ class SpecialContext extends SubContext
             $supplier
         );
 
-        $this->getContainer()->get('db')->exec($sql);
+        $this->getService('db')->exec($sql);
     }
 
     /**

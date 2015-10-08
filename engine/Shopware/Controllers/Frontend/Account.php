@@ -1015,12 +1015,8 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         /** @var \Doctrine\DBAL\Connection $connection */
         $connection = $this->get('dbal_connection');
 
-        $date = new \DateTime('-2 hours');
-
         $connection->executeUpdate(
-            'DELETE FROM s_core_optin WHERE datum <= :minDate AND type = "password"',
-            ['minDate' => $date],
-            ['minDate' => "datetime"]
+            'DELETE FROM s_core_optin WHERE datum <= (NOW() - INTERVAL 2 HOUR) AND type = "password"'
         );
     }
 

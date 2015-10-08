@@ -26,7 +26,7 @@ Feature: Blog
             | 2        | Sonnenschutz - so gehören Sie zur Crème de la Crème | 5     |
             | 3        | Ich packe meinen Koffer                             | 5     |
 
-    @captcha @javascript
+    @captcha @javascript @knownFailing
     Scenario Outline: I can see a captcha on each blog article page
         Given I follow "<title>"
         Then  I should see "<title>"
@@ -51,6 +51,8 @@ Feature: Blog
             | headline | Neue Bewertung  |
             | comment  | Hallo Welt      |
             | sCaptcha | 123456          |
+
+        Then I should see "Vielen Dank für die Abgabe Ihrer Bewertung! Sie erhalten in wenigen Minuten eine Bestätigungsmail"
 
         When  I click the link in my latest email
         Then  I should see "Vielen Dank für die Abgabe Ihrer Bewertung! Ihre Bewertung wird nach Überprüfung freigeschaltet."

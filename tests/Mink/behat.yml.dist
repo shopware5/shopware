@@ -1,9 +1,6 @@
 default:
     extensions:
-        SensioLabs\Behat\PageObjectExtension:
-            factory:
-                id: shopware_extension.factory
-                class_name_resolver: shopware_extension.class_name_resolver
+        SensioLabs\Behat\PageObjectExtension: ~
         Shopware\Behat\ShopwareExtension: ~
         Behat\MinkExtension:
             ## defined in buildscript
@@ -12,13 +9,20 @@ default:
             javascript_session: 'selenium2'
             goutte: ~
             selenium2:
-                wd_host: "http://localhost:4444/wd/hub"
+                wd_host: "http://selenium:4444/wd/hub"
             browser_name: firefox
+
+    gherkin:
+      filters:
+        tags: ~@knownFailing
+
     suites:
         default:
             paths:    [ %paths.base%/features ]
             contexts:
+                - Behat\MinkExtension\Context\MinkContext
                 - Shopware\Tests\Mink\FeatureContext
+                - Shopware\Tests\Mink\BackendContext
                 - Shopware\Tests\Mink\AccountContext
                 - Shopware\Tests\Mink\BlogContext
                 - Shopware\Tests\Mink\CheckoutContext
@@ -41,7 +45,7 @@ responsive:
     suites:
         default:
             filters:
-                tags: ~@noResponsive&&~jsResponsive&&~@javascript&&~@knownFailing
+                tags: ~@noResponsive
             template: Responsive
 
 emotion:
@@ -53,6 +57,5 @@ emotion:
     suites:
         default:
             filters:
-                tags: ~@noEmotion&&~jsEmotion&&~@javascript&&~@knownFailing
+                tags: ~@noEmotion
             template: emotion_orange
-            

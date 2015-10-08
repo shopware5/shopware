@@ -45,7 +45,7 @@ class BlogContext extends SubContext
     public function theShopOwnerActivateMyLatestComment()
     {
         $sql = 'UPDATE `s_blog_comments` SET `active`= 1 ORDER BY id DESC LIMIT 1';
-        $this->getContainer()->get('db')->exec($sql);
+        $this->getService('db')->exec($sql);
         $this->getSession()->reload();
     }
 

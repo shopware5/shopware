@@ -48,7 +48,6 @@ class Detail extends \Shopware\Tests\Mink\Page\Emotion\Detail
     /**
      * @param ArticleEvaluation $articleEvaluations
      * @param $average
-     * @throws \Behat\Behat\Exception\PendingException
      * @throws \Exception
      */
     protected function checkRating(ArticleEvaluation $articleEvaluations, $average)

@@ -127,7 +127,7 @@ class ShopwareContext extends SubContext
     public function iConfirmTheLinkInTheEmail($limit = 1)
     {
         $sql = 'SELECT `type`, `hash` FROM `s_core_optin` ORDER BY `id` DESC LIMIT ' . $limit;
-        $hashes = $this->getContainer()->get('db')->fetchAll($sql);
+        $hashes = $this->getService('db')->fetchAll($sql);
 
         $session = $this->getSession();
         $link = $session->getCurrentUrl();
