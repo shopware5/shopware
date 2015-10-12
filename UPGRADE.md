@@ -3,6 +3,7 @@ In this document you will find a changelog of the important changes related to t
 
 ## 5.1.0
 * Added event `Shopware_Plugin_Collect_MediaXTypes` to collect media related x_type fields for which the value needs to be normalized
+* Updated Behat to v3.0 and other related libraries
 
 ## 5.1.0 RC3
 * Activated media fallback by default so that old media paths get resolved to the new location
