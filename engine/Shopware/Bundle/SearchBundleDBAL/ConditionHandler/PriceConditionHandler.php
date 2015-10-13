@@ -77,12 +77,12 @@ class PriceConditionHandler implements ConditionHandlerInterface
             $query->andHaving($selection . ' BETWEEN :priceMin AND :priceMax');
             $query->setParameter(':priceMin', $condition->getMinPrice());
             $query->setParameter(':priceMax', $condition->getMaxPrice());
-        } elseif ($condition->getMinPrice() > 0) {
-            $query->andHaving($selection . ' >= :priceMin');
-            $query->setParameter(':priceMin', $condition->getMinPrice());
         } elseif ($condition->getMaxPrice() > 0) {
             $query->andHaving($selection . ' <= :priceMax');
             $query->setParameter(':priceMax', $condition->getMaxPrice());
+        } elseif ($condition->getMinPrice() > 0) {
+            $query->andHaving($selection . ' >= :priceMin');
+            $query->setParameter(':priceMin', $condition->getMinPrice());
         }
 
         return;

@@ -563,6 +563,9 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         }
 
         switch ($name) {
+            case 'tax':
+                $this->saveTaxRules($data, $model);
+                return;
             case 'customerGroup':
                 if (isset($data['discounts'])) {
                     $model->getDiscounts()->clear();
@@ -580,19 +583,6 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                 }
                 if (empty($data["mode"])) {
                     $data["discount"] = 0;
-                }
-                break;
-            case 'tax':
-                if (isset($data['rules'])) {
-                    $model->getRules()->clear();
-                    $rules = array();
-                    foreach ($data['rules'] as $ruleData) {
-                        $rule = new Shopware\Models\Tax\Rule();
-                        $rule->fromArray($ruleData);
-                        $rule->setGroup($model);
-                        $rules[] = $rule;
-                    }
-                    $data['rules'] = $rules;
                 }
                 break;
             case 'shop':
@@ -1085,5 +1075,31 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         }
 
         return true;
+    }
+
+    /**
+     * @param array $data
+     * @param \Shopware\Models\Tax\Tax $model
+     */
+    private function saveTaxRules(array $data, \Shopware\Models\Tax\Tax $model)
+    {
+        if (isset($data['rules'])) {
+            $model->getRules()->clear();
+            $rules = array();
+            foreach ($data['rules'] as $ruleData) {
+                $rule = new Shopware\Models\Tax\Rule();
+                $rule->fromArray($ruleData);
+                $rule->setGroup($model);
+                $rules[] = $rule;
+            }
+            $data['rules'] = $rules;
+
+            $model->fromArray($data);
+
+            $this->getModelManager()->persist($model);
+            $this->getModelManager()->flush();
+        }
+
+        $this->View()->assign(array('success' => true));
     }
 }
