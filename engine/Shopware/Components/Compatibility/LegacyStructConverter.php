@@ -523,8 +523,7 @@ class LegacyStructConverter
     private function getSourceSet($thumbnail)
     {
         if ($thumbnail->getRetinaSource() !== null) {
-            return sprintf('%s, %s 2x', $this->mediaService->getUrl($thumbnail->getSource()),
-                $this->mediaService->getUrl($thumbnail->getRetinaSource()));
+            return sprintf('%s, %s 2x', $this->mediaService->getUrl($thumbnail->getSource()), $this->mediaService->getUrl($thumbnail->getRetinaSource()));
         } else {
             return $this->mediaService->getUrl($thumbnail->getSource());
         }
@@ -614,7 +613,7 @@ class LegacyStructConverter
      */
     public function getSupplierListingLink(StoreFrontBundle\Struct\Product\Manufacturer $manufacturer)
     {
-        return 'controller=listing&action=manufacturer&sSupplier=' . (int)$manufacturer->getId();
+        return 'controller=listing&action=manufacturer&sSupplier=' . (int) $manufacturer->getId();
     }
 
     /**
@@ -665,20 +664,19 @@ class LegacyStructConverter
             foreach ($group->getOptions() as $option) {
                 /**@var $option StoreFrontBundle\Struct\Property\Option */
                 if ($option->getMedia()) {
-                    $mediaValues[$option->getId()] = array_merge(array('valueId' => $option->getId()),
-                        $this->convertMediaStruct($option->getMedia()));
+                    $mediaValues[$option->getId()] = array_merge(array('valueId' => $option->getId()), $this->convertMediaStruct($option->getMedia()));
                 }
             }
 
             $result[$group->getId()] = [
-                'id' => $group->getId(),
-                'optionID' => $group->getId(),
-                'name' => $group->getName(),
-                'groupID' => $set->getId(),
+                'id'        => $group->getId(),
+                'optionID'  => $group->getId(),
+                'name'      => $group->getName(),
+                'groupID'   => $set->getId(),
                 'groupName' => $set->getName(),
-                'value' => implode(', ', $values),
-                'values' => $values,
-                'media' => $mediaValues,
+                'value'     => implode(', ', $values),
+                'values'    => $values,
+                'media'     => $mediaValues,
             ];
         }
 
@@ -828,7 +826,7 @@ class LegacyStructConverter
             );
         }
 
-        $data['price'] = $data['priceStartingFrom'] ?: $this->sFormatPrice(
+        $data['price'] = $data['priceStartingFrom'] ? : $this->sFormatPrice(
             $variantPrice->getCalculatedPrice()
         );
 
