@@ -31,11 +31,13 @@ default color:`#000000` default opacity (alpha):`0.7`
     top: 0;
     z-index: @zindex-overlay;
     visibility: hidden;
+    pointer-events: none;
 
     &.is--open {
         .transition-delay(0);
         .opacity(1);
         visibility: visible;
+        pointer-events: auto;
     }
 
     &.is--closable {
