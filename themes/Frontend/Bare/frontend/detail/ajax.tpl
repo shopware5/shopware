@@ -20,3 +20,6 @@
 
 {* Hide footer *}
 {block name="frontend_index_footer"}{/block}
+
+{* Hide additional content before the actual content starts *}
+{block name="frontend_index_after_body"}{/block}
