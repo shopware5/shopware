@@ -185,6 +185,10 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             /** @var \Shopware\Components\ProductStream\RepositoryInterface $streamRepository */
             $streamRepository = $this->get('shopware_product_stream.repository');
             $streamRepository->prepareCriteria($criteria, $categoryContent['streamId']);
+
+            /** @var \Shopware\Components\ProductStream\FacetFilter $facetFilter */
+            $facetFilter = $this->get('shopware_product_stream.facet_filter');
+            $facetFilter->add($criteria);
         } else {
             /**@var $criteria Criteria*/
             $criteria = $this->get('shopware_search.store_front_criteria_factory')
@@ -218,6 +222,11 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         }
 
         $viewAssignments['sCategoryContent'] = $categoryContent;
+
+        /** @var \Shopware\Components\ProductStream\FacetFilter $facetFilter */
+        $facetFilter = $this->get('shopware_product_stream.facet_filter');
+        $facets = $facetFilter->filter($categoryArticles['facets'], $criteria);
+        $categoryArticles['facets'] = $facets;
 
         $this->View()->assign($viewAssignments);
         $this->View()->assign($categoryArticles);
@@ -270,7 +279,6 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 
         return $location;
     }
-
 
     /**
      * Converts the provided manufacturer to the category seo data structure.
