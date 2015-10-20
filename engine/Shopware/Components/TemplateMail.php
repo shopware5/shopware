@@ -235,10 +235,11 @@ class Shopware_Components_TemplateMail
                 continue;
             }
 
-            if (false === ($fileHandle = fopen($attachment->getPath(), 'r'))) {
+            $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+            if (!$mediaService->has($attachment->getPath())) {
                 Shopware()->Container()->get('corelogger')->error('Could not load file: ' . $attachment->getPath());
             } else {
-                $fileAttachment = $mail->createAttachment($fileHandle);
+                $fileAttachment = $mail->createAttachment($mediaService->read($attachment->getPath()));
                 $fileAttachment->filename = $attachment->getFileName();
             }
         }

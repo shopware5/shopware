@@ -452,7 +452,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
             $this->View()->assign(array('success' => false, 'message' => 'Value not found'));
         }
 
-        $compiler = new Shopware_Components_StringCompiler($this->View());
+        $compiler = new Shopware_Components_StringCompiler($this->View()->Engine());
 
         $shop = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop')->getActiveDefault();
         $shop->registerResources(Shopware()->Bootstrap());
