@@ -104,7 +104,8 @@
                         .addPlugin('*[data-image-slider="true"]', 'swImageSlider', { touchControls: true })
                         .addPlugin('.product--image-zoom', 'swImageZoom', 'xl')
                         .addPlugin('*[data-image-gallery="true"]', 'swImageGallery')
-                        .addPlugin('*[data-add-article="true"]', 'swAddArticle');
+                        .addPlugin('*[data-add-article="true"]', 'swAddArticle')
+                        .addPlugin('*[data-modalbox="true"]', 'swModalbox');
 
                     $.loadingIndicator.close();
 
