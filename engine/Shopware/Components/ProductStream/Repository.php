@@ -180,7 +180,7 @@ SQL;
         $conditions = $this->unserialize($serializedConditions);
         /** @var ConditionInterface $conditions */
         foreach ($conditions as $condition) {
-            $criteria->addCondition($condition);
+            $criteria->addBaseCondition($condition);
         }
     }
 }

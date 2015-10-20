@@ -117,4 +117,12 @@ class FacetResultGroup
     {
         return $this->template;
     }
+
+    /**
+     * @param \Shopware\Bundle\SearchBundle\FacetResultInterface[] $facetResults
+     */
+    public function setFacetResults(array $facetResults)
+    {
+        $this->facetResults = $facetResults;
+    }
 }
