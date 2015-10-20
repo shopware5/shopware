@@ -144,6 +144,10 @@ class ManufacturerFacetHandler implements FacetHandlerInterface
             $listItems[] = $listItem;
         }
 
+        usort($listItems, function (ValueListItem $a, ValueListItem $b) {
+            return strcasecmp($a->getLabel(), $b->getLabel());
+        });
+
         return new ValueListFacetResult(
             'manufacturer',
             !empty($activeIds),
