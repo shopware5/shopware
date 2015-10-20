@@ -31,6 +31,13 @@ namespace Shopware\Bundle\MediaBundle\Strategy;
 class Md5Strategy implements StrategyInterface
 {
     /**
+     * @var array
+     */
+    private $blacklist = [
+        '/ad/' => '/g0/'
+    ];
+
+    /**
      * {@inheritdoc}
      */
     public function normalize($path)
@@ -67,7 +74,29 @@ class Md5Strategy implements StrategyInterface
         $realPath = array_slice(str_split($md5hash, 2), 0, 3);
         $realPath = $pathElements[0] . "/" . $pathElements[1] . "/" . join("/", $realPath) . "/" . $pathInfo['basename'];
 
+        if (!$this->hasBlacklistParts($realPath)) {
+            return $realPath;
+        }
+
+        foreach ($this->blacklist as $key => $value) {
+            $realPath = str_replace($key, $value, $realPath);
+        }
+
         return $realPath;
+    }
+
+    /**
+     * @param string $path
+     * @return bool
+     */
+    private function hasBlacklistParts($path)
+    {
+        foreach ($this->blacklist as $key => $value) {
+            if (strpos($path, $key) !== false) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -75,6 +104,9 @@ class Md5Strategy implements StrategyInterface
      */
     public function isEncoded($path)
     {
+        if ($this->hasBlacklistParts($path)) {
+            return false;
+        }
         return (bool) preg_match("/.*(media\/(?:archive|image|music|pdf|temp|unknown|video)(?:\/thumbnail)?\/(?:([0-9a-f]{2}\/[0-9a-f]{2}\/[0-9a-f]{2}\/)).*)/", $path);
     }
 
