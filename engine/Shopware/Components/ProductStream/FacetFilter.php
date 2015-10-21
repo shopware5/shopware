@@ -38,7 +38,7 @@ use Shopware\Bundle\SearchBundle\FacetResultInterface;
  * Class FacetFilter
  * @package Shopware\Components\ProductStream
  */
-class FacetFilter
+class FacetFilter implements FacetFilterInterface
 {
     /**
      * @param Criteria $criteria
