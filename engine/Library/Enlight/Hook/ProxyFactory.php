@@ -51,6 +51,12 @@ class Enlight_Hook_ProxyFactory extends Enlight_Class
     protected $proxyDir;
 
     /**
+     * Chmod for proxy files
+     * @var int
+     */
+    protected $proxyFilePermissions = 0644;
+
+    /**
      * @var string extension of the hook files.
      */
     protected $fileExtension = '.php';
@@ -95,12 +101,14 @@ class <namespace>_<proxyClassName> extends <className> implements Enlight_Hook_P
      * @param  Enlight_Hook_HookManager $hookManager
      * @param  string                   $proxyNamespace
      * @param  string                   $proxyDir
+     * @param  int                      $proxyFilePermissions
      * @throws RuntimeException
      */
-    public function __construct($hookManager, $proxyNamespace, $proxyDir)
+    public function __construct($hookManager, $proxyNamespace, $proxyDir, $proxyFilePermissions = 644)
     {
         $this->hookManager = $hookManager;
         $this->proxyNamespace = $proxyNamespace;
+        $this->proxyFilePermissions = $proxyFilePermissions;
 
         if (!is_dir($proxyDir)) {
             if (false === @mkdir($proxyDir, 0777, true)) {
@@ -225,7 +233,7 @@ class <namespace>_<proxyClassName> extends <className> implements Enlight_Hook_P
             umask($oldMask);
             throw new Enlight_Exception('Unable to write file "' . $fileName . '"');
         }
-        chmod($fileName, 0644);
+        chmod($fileName, $this->proxyFilePermissions);
         umask($oldMask);
     }
 
