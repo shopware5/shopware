@@ -686,7 +686,7 @@ class sAdmin
                 (int) $postData['birthday'],
                 (int) $postData['birthyear']
             );
-            if ($postData['birthday'] != false) {
+            if ($postData['birthday'] !== false) {
                 $postData['birthday'] = date('Y-m-d', $postData['birthday']);
             } else {
                 $postData['birthday'] = '0000-00-00';
