@@ -2,6 +2,8 @@
 
 namespace Shopware\Tests\Mink;
 
+use Behat\Gherkin\Node\TableNode;
+
 class FormContext extends SubContext
 {
     /**
@@ -18,5 +20,13 @@ class FormContext extends SubContext
     public function iShouldSeeACaptcha()
     {
         $this->getPage('Form')->checkCaptcha();
+    }
+
+    /**
+     * @When I submit the inquiry form with:
+     */
+    public function iSubmitTheInquiryFormWith(TableNode $data)
+    {
+        $this->getPage('Form')->submitInquiryForm($data->getHash());
     }
 }

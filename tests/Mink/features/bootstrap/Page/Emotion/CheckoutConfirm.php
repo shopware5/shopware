@@ -1,6 +1,9 @@
 <?php
 namespace  Shopware\Tests\Mink\Page\Emotion;
 
+use Behat\Mink\Driver\Selenium2Driver;
+use Behat\Mink\Exception\ResponseTextException;
+use Behat\Mink\WebAssert;
 use Shopware\Tests\Mink\Element\Emotion\CheckoutPayment;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use Shopware\Tests\Mink\Helper;
@@ -37,18 +40,24 @@ class CheckoutConfirm extends Page implements \Shopware\Tests\Mink\HelperSelecto
     }
 
     /**
-     * @param string $language
+     * Verify if we're on an expected page. Throw an exception if not.
      */
-    public function verifyPage($language = '')
+    public function verifyPage()
     {
-        $namedSelectors = $this->getNamedSelectors();
-
-        if (!$language) {
-            $language = Helper::getCurrentLanguage($this);
+        if($this->getDriver() instanceof Selenium2Driver) {
+            $this->getSession()->wait(5000, '$("#sAGB").length > 0');
         }
 
-        $assert = new \Behat\Mink\WebAssert($this->getSession());
-        $assert->pageTextContains($namedSelectors['gtc'][$language]);
+        $namedSelectors = $this->getNamedSelectors();
+        $language = Helper::getCurrentLanguage();
+
+        try {
+            $assert = new WebAssert($this->getSession());
+            $assert->pageTextContains($namedSelectors['gtc'][$language]);
+        } catch (ResponseTextException $e) {
+            $message = ['You are not on the checkout confirmation page!', 'Current URL: ' . $this->getSession()->getCurrentUrl()];
+            Helper::throwException($message);
+        }
     }
 
     /**
@@ -78,51 +87,51 @@ class CheckoutConfirm extends Page implements \Shopware\Tests\Mink\HelperSelecto
 
     /**
      * Changes the payment method
-     * @param array   $data
+     * @param array $data
      */
-    public function changePaymentMethod($data = [])
+    public function changePaymentMethod(array $data = [])
     {
         $element = $this->getElement('CheckoutPayment');
-        $language = Helper::getCurrentLanguage($this);
-        Helper::clickNamedLink($element, 'changeButton', $language);
+        Helper::clickNamedLink($element, 'changeButton');
 
         $account = $this->getPage('Account');
         Helper::fillForm($account, 'paymentForm', $data);
-        Helper::pressNamedButton($account, 'changePaymentButton', $language);
+        Helper::pressNamedButton($account, 'changePaymentButton');
     }
 
     /**
+     * Changes the billing address
      * @param array $data
      */
-    public function changeBillingAddress($data = [])
+    public function changeBillingAddress(array $data = [])
     {
         $element = $this->getElement('CheckoutBilling');
-        $language = Helper::getCurrentLanguage($this);
-        Helper::clickNamedLink($element, 'changeButton', $language);
+        Helper::clickNamedLink($element, 'changeButton');
 
         $account = $this->getPage('Account');
         Helper::fillForm($account, 'billingForm', $data);
-        Helper::pressNamedButton($account, 'changeBillingButton', $language);
+        Helper::pressNamedButton($account, 'changeBillingButton');
     }
 
     /**
+     * Changes the shipping address
      * @param array $data
      */
-    public function changeShippingAddress($data = [])
+    public function changeShippingAddress(array $data = [])
     {
         $element = $this->getElement('CheckoutShipping');
-        $language = Helper::getCurrentLanguage($this);
-        Helper::clickNamedLink($element, 'changeButton', $language);
+        Helper::clickNamedLink($element, 'changeButton');
 
         $account = $this->getPage('Account');
         Helper::fillForm($account, 'shippingForm', $data);
-        Helper::pressNamedButton($account, 'changeShippingButton', $language);
+        Helper::pressNamedButton($account, 'changeShippingButton');
     }
 
     /**
+     * Changes the shipping method
      * @param array $data
      */
-    public function changeShippingMethod($data = [])
+    public function changeShippingMethod(array $data = [])
     {
         Helper::fillForm($this, 'deliveryForm', $data);
 
@@ -131,6 +140,7 @@ class CheckoutConfirm extends Page implements \Shopware\Tests\Mink\HelperSelecto
     }
 
     /**
+     * Checks the name of the current payment method
      * @param string $paymentMethod
      * @throws \Exception
      */

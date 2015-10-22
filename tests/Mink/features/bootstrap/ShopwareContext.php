@@ -201,6 +201,14 @@ class ShopwareContext extends SubContext
     }
 
     /**
+     * @When the emotion world has loaded
+     */
+    public function theEmotionWorldHasLoaded()
+    {
+        $this->getSession()->wait(5000, "$('.emotion--element').length > 0");
+    }
+
+    /**
      * @Given /^I should see a banner with image "(?P<image>[^"]*)"$/
      * @Given /^I should see a banner with image "(?P<image>[^"]*)" to "(?P<link>[^"]*)"$/
      */

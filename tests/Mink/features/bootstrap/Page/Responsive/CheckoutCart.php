@@ -91,13 +91,11 @@ class CheckoutCart extends \Shopware\Tests\Mink\Page\Emotion\CheckoutCart
      */
     public function proceedToOrderConfirmationWithLogin($eMail, $password)
     {
-        $language = Helper::getCurrentLanguage($this);
-
-        if ($this->verifyPage($language)) {
-            Helper::clickNamedLink($this, 'checkout', $language);
+        if ($this->verifyPage()) {
+            Helper::clickNamedLink($this, 'checkout');
         }
 
         $this->getPage('Account')->login($eMail, $password);
-        $this->getPage('CheckoutConfirm')->verifyPage($language);
+        $this->getPage('CheckoutConfirm')->verifyPage();
     }
 }

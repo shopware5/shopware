@@ -79,7 +79,7 @@ class ArticleSlider extends SliderElement implements \Shopware\Tests\Mink\Helper
         $names = [
             'imageTitle' => $slide->find('css', $selectors['slideImage'])->getAttribute('title'),
             'linkTitle' => $slide->find('css', $selectors['slideLink'])->getAttribute('title'),
-            'name' => $nameElement->getText(),
+            'name' => trim($nameElement->getHtml()),
             'nameTitle' => $nameElement->getAttribute('title'),
         ];
 
@@ -94,8 +94,8 @@ class ArticleSlider extends SliderElement implements \Shopware\Tests\Mink\Helper
     public function getPriceProperty(NodeElement $slide)
     {
         $selector = Helper::getRequiredSelector($this, 'slidePrice');
-        $price = $slide->find('css', $selector)->getText();
+        preg_match('(\d+,\d{2})', $slide->find('css', $selector)->getHtml(), $price);
 
-        return Helper::floatValue($price);
+        return Helper::floatValue(current($price));
     }
 }

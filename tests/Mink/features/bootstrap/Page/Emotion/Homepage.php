@@ -70,9 +70,8 @@ class Homepage extends Page implements HelperSelectorInterface
         ];
 
         $searchForm = $this->getElement('SearchForm');
-        $language = Helper::getCurrentLanguage($this);
         Helper::fillForm($searchForm, 'searchForm', $data);
-        Helper::pressNamedButton($searchForm, 'searchButton', $language);
+        Helper::pressNamedButton($searchForm, 'searchButton');
         $this->verifyResponse();
     }
 
@@ -92,6 +91,7 @@ class Homepage extends Page implements HelperSelectorInterface
         $searchForm = $this->getElement('SearchForm');
         Helper::fillForm($searchForm, 'searchForm', $data);
         $this->getSession()->wait(5000, "$('ul.searchresult').children().length > 0");
+        $this->getSession()->wait(500);
     }
 
     /**

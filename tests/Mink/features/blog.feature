@@ -26,7 +26,7 @@ Feature: Blog
             | 2        | Sonnenschutz - so gehören Sie zur Crème de la Crème | 5     |
             | 3        | Ich packe meinen Koffer                             | 5     |
 
-    @captcha @javascript @knownFailing
+    @captcha @javascript
     Scenario Outline: I can see a captcha on each blog article page
         Given I follow "<title>"
         Then  I should see "<title>"

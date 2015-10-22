@@ -20,7 +20,8 @@ class Form extends Page implements HelperSelectorInterface
         return [
             'captchaPlaceholder' => 'div.captcha-placeholder',
             'captchaImage' => 'div.captcha-placeholder img',
-            'captchaHidden' => 'div.captcha-placeholder input'
+            'captchaHidden' => 'div.captcha-placeholder input',
+            'inquiryForm' => 'form#support'
         ];
     }
 
@@ -29,7 +30,9 @@ class Form extends Page implements HelperSelectorInterface
      */
     public function getNamedSelectors()
     {
-        return [];
+        return [
+            'submitButton' => ['de' => 'Senden', 'en' => 'Send']
+        ];
     }
 
     /**
@@ -38,13 +41,23 @@ class Form extends Page implements HelperSelectorInterface
      */
     public function verifyPage()
     {
-        $info = Helper::getPageInfo($this->getSession(), ['controller']);
+        $errors = [];
 
-        if ($info['controller'] === 'forms') {
+        if(!$this->hasField("sCaptcha")) {
+            $errors[] = "- captcha input field not found!";
+        }
+
+        if(!Helper::hasNamedButton($this, 'submitButton')) {
+            $errors[] = "- submit button not found!";
+        }
+
+        if (!$errors) {
             return;
         }
 
-        $message = ['You are not on a form page!', 'Current URL: ' . $this->getSession()->getCurrentUrl()];
+        $message = ['You are not on a form page:'];
+        $message = array_merge($message, $errors);
+        $message[] = 'Current URL: ' . $this->getSession()->getCurrentUrl();
         Helper::throwException($message);
     }
 
@@ -66,5 +79,15 @@ class Form extends Page implements HelperSelectorInterface
             $message = 'There is no capture in this form!';
             Helper::throwException($message);
         }
+    }
+
+    /**
+     * Fills the fields of the inquiry form with $data and submits it
+     * @param array $data
+     */
+    public function submitInquiryForm(array $data)
+    {
+        Helper::fillForm($this, 'inquiryForm', $data);
+        Helper::pressNamedButton($this, 'submitButton');
     }
 }
