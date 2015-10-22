@@ -64,24 +64,32 @@ class CleanupController
     private $filesFinder;
 
     /**
+     * @var string
+     */
+    private $shopwarePath;
+
+    /**
      * @param Request $request
      * @param Response $response
      * @param DummyPluginFinder $pluginFinder
      * @param CleanupFilesFinder $filesFinder
      * @param Slim $app
+     * @param string $shopwarePath
      */
     public function __construct(
         Request $request,
         Response $response,
         DummyPluginFinder $pluginFinder,
         CleanupFilesFinder $filesFinder,
-        Slim $app
+        Slim $app,
+        $shopwarePath
     ) {
         $this->request      = $request;
         $this->response     = $response;
         $this->app          = $app;
         $this->pluginFinder = $pluginFinder;
         $this->filesFinder  = $filesFinder;
+        $this->shopwarePath = $shopwarePath;
     }
 
     public function cleanupOldFiles()
@@ -92,6 +100,8 @@ class CleanupController
             $this->pluginFinder->getDummyPlugins(),
             $this->filesFinder->getCleanupFiles()
         );
+
+        $this->cleanupMedia();
 
         if (count($cleanupList) == 0) {
             $_SESSION['CLEANUP_DONE'] = true;
@@ -125,6 +135,39 @@ class CleanupController
             );
 
             $this->app->render('cleanup.php', ['cleanupList' => $cleanupList, 'error' => false ]);
+        }
+    }
+
+    private function cleanupMedia()
+    {
+        $mediaPath = $this->shopwarePath . '/media/image';
+        $thumbnailPath = $this->shopwarePath . '/media/image/thumbnail';
+
+        $iterator = new \RecursiveIteratorIterator(
+            new \RecursiveRegexIterator(
+                new \RecursiveDirectoryIterator($mediaPath, \RecursiveDirectoryIterator::SKIP_DOTS),
+                '/ad/'
+            ),
+            \RecursiveIteratorIterator::LEAVES_ONLY
+        );
+
+        if (!file_exists($thumbnailPath)) {
+            mkdir($thumbnailPath);
+        }
+
+        /** @var \SplFileInfo $a */
+        foreach ($iterator as $a) {
+            $isThumbnail = preg_match('#_(\d)+x(\d)+\.#', $a->getFilename());
+
+            if (!$isThumbnail) {
+                $isThumbnail = preg_match('#_(\d)+x(\d)+@2x\.#', $a->getFilename());
+            }
+
+            if ($isThumbnail) {
+                rename($a->getPathname(), $thumbnailPath . "/" . $a->getFilename());
+            } else {
+                rename($a->getPathname(), $mediaPath . "/" . $a->getFilename());
+            }
         }
     }
 }
