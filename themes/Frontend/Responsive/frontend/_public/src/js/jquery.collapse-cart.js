@@ -1,4 +1,4 @@
-;jQuery(function ($) {
+;(function($, window) {
     'use strict';
 
     $.plugin('swCollapseCart', {
@@ -428,4 +428,4 @@
             me._destroy();
         }
     });
-});
+})(jQuery, window);

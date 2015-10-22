@@ -1,4 +1,4 @@
-;jQuery(function ($) {
+;(function($, window) {
     'use strict';
 
     /**
@@ -523,4 +523,4 @@
             $.publish('plugin/swInfiniteScrolling/onCloseLoadingIndicator', [ me ]);
         }
     });
-});
+})(jQuery, window);
