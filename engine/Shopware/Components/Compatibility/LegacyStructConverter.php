@@ -1017,9 +1017,9 @@ class LegacyStructConverter
         if ($product->hasAttribute('marketing')) {
             /**@var $marketing StoreFrontBundle\Struct\Product\MarketingAttribute */
             $marketing = $product->getAttribute('marketing');
-            $data['newArticle'] = $marketing->get('isNew');
-            $data['sUpcoming'] = $marketing->get('comingSoon');
-            $data['topseller'] = $marketing->get('isTopSeller');
+            $data['newArticle'] = $marketing->isNew();
+            $data['sUpcoming'] = $marketing->comingSoon();
+            $data['topseller'] = $marketing->isTopSeller();
         }
 
         $today = new \DateTime();
