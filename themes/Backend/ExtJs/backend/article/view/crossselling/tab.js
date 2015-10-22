@@ -31,7 +31,7 @@
  * Shopware UI - Article crosselling page
  */
 //{namespace name=backend/article/view/main}
-//{block name="backend/article/view/esd/panel"}
+//{block name="backend/article/view/crossselling/tab"}
 Ext.define('Shopware.apps.Article.view.crossselling.Tab', {
 
     /**
