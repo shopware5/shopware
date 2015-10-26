@@ -1,6 +1,10 @@
 # Shopware Upgrade Information
 In this document you will find a changelog of the important changes related to the code base of Shopware.
 
+## 5.1.1
+* Added new smarty block `frontend_detail_index_tabs_cross_selling` in the detail/ajax.tpl to prevent problems with custom themes
+* Renamed block `backend/order/view/detail/communication` in `backend/order/view/detail/configuration.js` to `backend/order/view/detail/configuration`. The name was duplicated in another file and was renamed to match the correct file.
+
 ## 5.1.0
 * Added event `Shopware_Plugin_Collect_MediaXTypes` to collect media related x_type fields for which the value needs to be normalized
 * Updated Behat to v3.0 and other related libraries
