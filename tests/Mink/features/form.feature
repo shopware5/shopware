@@ -43,7 +43,7 @@ Feature: forms
         And   I press "Senden"
         Then  I should see "Ihre Anfrage wurde versendet!"
 
-    @javascript
+    @javascript @knownFailing
     Scenario Outline: Each form has its captcha
         Given I am on form <formId>
         Then  I should see "<formTitle>"

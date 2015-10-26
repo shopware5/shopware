@@ -33,7 +33,8 @@ class Blog extends Page implements HelperSelectorInterface
         return [
             'rssFeed' => ['de' => 'RSS-Feed', 'en' => 'RSS-Feed'],
             'atomFeed' => ['de' => 'Atom-Feed', 'en' => 'Atom-Feed'],
-            'commentFormSubmit' => ['de' => 'Speichern', 'en' => 'Save']
+            'commentFormSubmit' => ['de' => 'Speichern', 'en' => 'Save'],
+            'writeCommentButton' => ['de' => 'Kommentar schreiben', 'en' => 'Write a comment']
         ];
     }
 
@@ -59,7 +60,16 @@ class Blog extends Page implements HelperSelectorInterface
      */
     public function writeComment(array $data)
     {
+        $writeCommentLink = $this->getSession()
+            ->getPage()
+            ->find("css", ".blog--comments-form a.btn--create-entry");
+
+        if ($writeCommentLink) {
+            $writeCommentLink->click();
+        }
+
         Helper::fillForm($this, 'commentForm', $data);
+
         Helper::pressNamedButton($this, 'commentFormSubmit');
     }
 

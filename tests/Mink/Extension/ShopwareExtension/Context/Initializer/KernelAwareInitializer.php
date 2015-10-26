@@ -57,8 +57,6 @@ final class KernelAwareInitializer implements ContextInitializer, EventSubscribe
         return array(
             ScenarioTested::BEFORE => array('bootKernel', 15),
             ExampleTested::BEFORE  => array('bootKernel', 15),
-            ScenarioTested::AFTER  => array('shutdownKernel', -15),
-            ExampleTested::AFTER   => array('shutdownKernel', -15),
         );
     }
 
@@ -80,13 +78,5 @@ final class KernelAwareInitializer implements ContextInitializer, EventSubscribe
     public function bootKernel()
     {
         $this->kernel->boot();
-    }
-
-    /**
-     * Stops HttpKernel after each scenario.
-     */
-    public function shutdownKernel()
-    {
-        // $this->kernel->shutdown();
     }
 }

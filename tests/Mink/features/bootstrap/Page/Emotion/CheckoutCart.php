@@ -94,7 +94,6 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
      * @param string $key
      * @param string $language
      * @return string
-     * @throws \Behat\Behat\Exception\PendingException
      */
     private function getLabel($key, $language)
     {

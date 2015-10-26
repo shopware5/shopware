@@ -133,7 +133,7 @@ Feature: Detail page
             | 208 | 500,00   | 1.000,01    | 50       |
             | 239 | 2.499,00 | 2.799,00    | 10,72    |
 
-    @javascript
+    @javascript @knownFailing
     Scenario: The customer evaluation form has a captcha
         Given I am on the detail page for article 167
         Then  I should see "Sonnenbrille Speed Eyes"

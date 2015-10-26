@@ -1,4 +1,4 @@
-@emotion @jsResponsive
+@emotion @javascript @noEmotion @knownFailing
 Feature: Emotion
 
     Background:

@@ -132,7 +132,6 @@ class CheckoutConfirm extends Page implements \Shopware\Tests\Mink\HelperSelecto
 
     /**
      * @param string $paymentMethod
-     * @throws \Behat\Behat\Exception\PendingException
      * @throws \Exception
      */
     public function checkPaymentMethod($paymentMethod)

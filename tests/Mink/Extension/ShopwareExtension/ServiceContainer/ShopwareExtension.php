@@ -107,8 +107,6 @@ class ShopwareExtension implements ExtensionInterface
     {
         $this->loadContextInitializer($container);
         $this->loadKernel($container, $config['kernel']);
-        $this->loadPageFactory($container);
-        $this->loadClassNameResolver($container);
     }
 
     /**
@@ -163,24 +161,5 @@ class ShopwareExtension implements ExtensionInterface
         $container->setDefinition(self::KERNEL_ID, $definition);
         $container->setParameter(self::KERNEL_ID . '.path', $config['path']);
         $container->setParameter(self::KERNEL_ID . '.bootstrap', $config['bootstrap']);
-    }
-
-    private function loadPageFactory(ContainerBuilder $container)
-    {
-        $definition = new Definition('Shopware\Behat\ShopwareExtension\Factory\ShopwareFactory', array(
-            new Reference('mink'),
-            new Reference('sensio_labs.page_object_extension.class_name_resolver'),
-            '%mink.parameters%'
-        ));
-        $container->setDefinition('shopware_extension.factory', $definition);
-    }
-
-    private function loadClassNameResolver(ContainerBuilder $container)
-    {
-        $definition = new Definition('Shopware\Behat\ShopwareExtension\NameResolver\ShopwareClassNameResolver', array(
-            '%sensio_labs.page_object_extension.namespaces.page%',
-            '%sensio_labs.page_object_extension.namespaces.element%'
-        ));
-        $container->setDefinition('shopware_extension.class_name_resolver', $definition);
     }
 }

@@ -22,37 +22,36 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Behat\ShopwareExtension\Factory;
+namespace Shopware\Tests\Mink;
 
-use Behat\Mink\Mink;
-use SensioLabs\Behat\PageObjectExtension\PageObject\Factory\DefaultFactory;
-use SensioLabs\Behat\PageObjectExtension\PageObject\Factory\ClassNameResolver;
-use SensioLabs\Behat\PageObjectExtension\PageObject\Factory;
+use Behat\Behat\Tester\Exception\PendingException;
 
-class ShopwareFactory extends DefaultFactory implements Factory
+class BackendContext extends SubContext
 {
-    /** @var \Behat\Mink\Mink  */
-    private $mink;
+    /**
+     * @Given /^I am logged in to the backend as an admin user$/
+     */
+    public function iAmLoggedInToTheBackendAsAnAdminUser()
+    {
+        $page = $this->getPage('Backend');
+        $page->open();
+
+        $page->login('demo', 'demo');
+    }
 
     /**
-     * @var ClassNameResolver
+     * @When /^I open the module "([^"]*)"$/
      */
-    private $classNameResolver;
-
-    public function __construct(Mink $mink, ClassNameResolver $classNameResolver, array $pageParameters)
+    public function iOpenTheModule($moduleName)
     {
-        $this->mink = $mink;
-        $this->classNameResolver = $classNameResolver;
-        parent::__construct($mink, $classNameResolver, $pageParameters);
+        $this->getPage('Backend')->openModule($moduleName);
     }
 
-    public function getSession()
+    /**
+     * @Then /^The module should open a window$/
+     */
+    public function theModuleShouldOpenAWindow()
     {
-        return $this->mink->getSession();
-    }
-
-    public function getClassNameResolver()
-    {
-        return $this->classNameResolver;
+        $this->getPage('Backend')->verifyModule();
     }
 }
