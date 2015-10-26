@@ -250,7 +250,7 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
         $search = trim(strip_tags(htmlspecialchars_decode(stripslashes($search))));
 
         //we have to strip the / otherwise broken urls would be created e.g. wrong pager urls
-        $search = str_replace("/", "", $search);
+        $search = str_replace("/", " ", $search);
 
         $criteria->addBaseCondition(new SearchTermCondition($search));
     }
