@@ -234,7 +234,7 @@ Ext.define('Shopware.apps.Article.controller.Media', {
         var mapping = Ext.create('Shopware.apps.Article.model.MediaMapping', {
             id: null,
             imageId: record.get('id')
-        })
+        });
 
         //now we create a store for the selected options to collect all rules.
         var ruleStore = Ext.create('Ext.data.Store', { model: 'Shopware.apps.Article.model.MediaMappingRule' });

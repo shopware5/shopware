@@ -442,11 +442,14 @@ Ext.define('Shopware.form.field.TinyMCE',
         return filteredImages;
     },
 
-    replaceImagePathsWithSmartyPlugin: function(values) {
+    replaceImagePathsWithSmartyPlugin: function(rawContent) {
         var me = this,
-            rawContent = values,
             tpl = "{ldelim}media path='[0]'{rdelim}",
             content, images, html;
+
+        if (!me.isValidContent(rawContent)) {
+            return rawContent;
+        }
 
         // Create a DOM using the content of the tinymce
         content = me.HTMLBlobToDomElements(rawContent);
@@ -471,11 +474,9 @@ Ext.define('Shopware.form.field.TinyMCE',
     },
 
     replaceSmartyPluginWithImagePaths: function(rawContent) {
-        var me = this,
-            content,
-            images;
+        var me = this, content, images;
 
-        if (typeof rawContent === 'undefined' || rawContent === null) {
+        if (!me.isValidContent(rawContent)) {
             return rawContent;
         }
 
@@ -493,12 +494,16 @@ Ext.define('Shopware.form.field.TinyMCE',
         return rawContent;
     },
 
-    replacePlaceholderWithImage: function(values) {
+    replacePlaceholderWithImage: function(rawContent) {
         var me = this,
             imagesToLoad = [],
-            content = me.HTMLBlobToDomElements(values),
-            params = '';
+            content, params = '';
 
+        if (!me.isValidContent(rawContent)) {
+            return rawContent;
+        }
+
+        content = me.HTMLBlobToDomElements(rawContent);
         imagesToLoad = me._findImagesInDOMContent(content);
 
         Ext.each(imagesToLoad, function(img) {
@@ -527,6 +532,10 @@ Ext.define('Shopware.form.field.TinyMCE',
                 me.tinymce.setContent(html);
             }
         });
+    },
+
+    isValidContent: function(content) {
+        return (Ext.isDefined(content) && content !== null && content.length && content.length > 0);
     },
 
     HTMLBlobToDomElements: function(html) {
