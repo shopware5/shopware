@@ -163,7 +163,7 @@ class PriceHelper implements PriceHelperInterface
             $graduation = "defaultPrice.to = 'beliebig'";
         }
 
-        $query->innerJoin(
+        $query->leftJoin(
             'product',
             's_articles_prices',
             'defaultPrice',
