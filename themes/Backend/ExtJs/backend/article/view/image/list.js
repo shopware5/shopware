@@ -263,7 +263,7 @@ Ext.define('Shopware.apps.Article.view.image.List', {
                             repairXY: Ext.fly(sourceEl).getXY(),
                             sourceStore: v.store,
                             draggedRecord: v.getRecord(sourceEl)
-                        }
+                        };
                         return result;
                     }
                 },

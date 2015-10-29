@@ -427,7 +427,7 @@ Ext.define('Shopware.apps.Article.view.variant.Configurator', {
                             repairXY: Ext.fly(sourceEl).getXY(),
                             sourceStore: v.store,
                             draggedRecord: v.getRecord(sourceEl)
-                        }
+                        };
                         return result;
                     }
                 },
@@ -714,7 +714,7 @@ Ext.define('Shopware.apps.Article.view.variant.Configurator', {
                             repairXY: Ext.fly(sourceEl).getXY(),
                             sourceStore: v.store,
                             draggedRecord: v.getRecord(sourceEl)
-                        }
+                        };
                         return result;
                     }
                 },
