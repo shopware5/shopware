@@ -44,11 +44,21 @@ class Manager
     protected $config;
 
     /**
-     * @param \Shopware_Components_Config $config
+     * @var \Enlight_Event_EventManager $eventManager
      */
-    public function __construct(\Shopware_Components_Config $config)
+    protected $eventManager;
+
+    /**
+     * @param \Shopware_Components_Config $config
+     * @param \Enlight_Event_EventManager $eventManager
+     */
+    public function __construct(
+        \Shopware_Components_Config $config,
+        \Enlight_Event_EventManager $eventManager
+    )
     {
         $this->config = $config;
+        $this->eventManager = $eventManager;
     }
 
     /**
