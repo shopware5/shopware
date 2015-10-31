@@ -126,6 +126,14 @@ class Manager
             }
         }
 
+        $encoderName = $this->eventManager->filter(
+            'Shopware_Components_Password_Manager_getDefaultPasswordEncoderName',
+            $encoderName,
+            array(
+                'subject'=> $this
+            )
+        );
+
         return $encoderName;
     }
 
