@@ -1,5 +1,6 @@
 module.exports = function (grunt) {
-    var file = '../web/cache/config_' + grunt.option('shopId') + '.json',
+    var shopId = grunt.option('shopId') || 1,
+        file = '../web/cache/config_' + shopId + '.json',
         config = grunt.file.readJSON(file),
         lessTargetFile = {},
         jsFiles = [],
