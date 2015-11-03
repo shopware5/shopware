@@ -615,25 +615,29 @@ class sBasket
             ) ? : array();
         } else {
             // If we don't have voucher details yet, need to check if its a one-time code
-            $voucherDetails = $this->db->fetchRow(
-                'SELECT s_emarketing_voucher_codes.id AS id, s_emarketing_voucher_codes.code AS vouchercode,
-                    description, numberofunits, customergroup, value, restrictarticles,
-                    minimumcharge, shippingfree, bindtosupplier, taxconfig, valid_from,
-                    valid_to, ordercode, modus, percental, strict, subshopID
-                FROM s_emarketing_vouchers, s_emarketing_voucher_codes
-                WHERE modus = 1
-                AND s_emarketing_vouchers.id = s_emarketing_voucher_codes.voucherID
-                AND LOWER(code) = ?
-                AND cashed != 1
-                AND (
-                      (s_emarketing_vouchers.valid_to >= now()
-                          AND s_emarketing_vouchers.valid_from <= now()
-                      )
-                      OR s_emarketing_vouchers.valid_to is NULL
-                )',
+            $voucherCodeDetails = $this->db->fetchRow(
+                'SELECT id, voucherID, code as vouchercode FROM s_emarketing_voucher_codes c WHERE c.code = ? AND c.cashed != 1 LIMIT 1;',
                 array($voucherCode)
             );
-            $individualCode = ($voucherDetails && $voucherDetails["description"]);
+
+            $individualCode = false;
+            if( $voucherCodeDetails && $voucherCodeDetails['voucherID'] ) {
+                $voucherDetails = $this->db->fetchRow(
+                    'SELECT description, numberofunits, customergroup, value, restrictarticles,
+                    minimumcharge, shippingfree, bindtosupplier, taxconfig, valid_from,
+                    valid_to, ordercode, modus, percental, strict, subshopID
+                    FROM s_emarketing_vouchers WHERE modus = 1 AND id = ? AND (
+                      (valid_to >= now()
+                          AND valid_from <= now()
+                      )
+                      OR valid_to is NULL
+                ) LIMIT 1',
+                    array((int)$voucherCodeDetails['voucherID'])
+                );
+                unset($voucherCodeDetails['voucherID']);
+                $voucherDetails = array_merge($voucherCodeDetails, $voucherDetails);
+                $individualCode = ($voucherDetails && $voucherDetails["description"]);
+            }
         }
 
         // Interrupt the operation if one of the following occurs:
