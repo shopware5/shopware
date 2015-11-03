@@ -91,6 +91,10 @@
             <tag name="shopware_search_es.search_handler" />
         </service>
 
+        <service id="shopware_search_es.is_available_condition_handler" class="Shopware\Bundle\SearchBundleES\ConditionHandler\IsAvailableConditionHandler">
+            <tag name="shopware_search_es.search_handler" />
+        </service>
+
         <service id="shopware_search_es.price_facet_handler" class="Shopware\Bundle\SearchBundleES\FacetHandler\PriceFacetHandler">
             <argument type="service" id="snippets" />
             <argument type="service" id="query_alias_mapper" />
