@@ -146,7 +146,7 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
         if (!empty($nodeName)) {
             $sites = $this->getSiteRepository()
                 ->getSitesByNodeNameQuery($nodeName)
-                ->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+                ->getResult();
 
             $nodes = array();
 
@@ -170,25 +170,33 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
     private function getSiteNode($idPrefix, $site)
     {
         //set icons
-        if ($site['link']) {
+        if ($site->getLink()) {
             $iconCls = 'sprite-chain-small';
         } else {
             $iconCls = 'sprite-blue-document-text';
         }
 
+        // get array values from model using getters
+        $ref = new ReflectionClass($site);
+        foreach ($ref->getMethods() as $m) {
+            $methodName = $m->getName();
+            if ($m->class == get_class($site) && strpos($methodName, 'get') === 0) {
+                $node[lcfirst(substr($methodName, 3))] = $site->$methodName();
+            }
+        }
+
         //build the structure
-        $node = $site;
-        $node['id'] = $idPrefix . $site['id'];
-        $node['text'] = $site['description'] . "(" . $site['id'] . ")";
-        $node['helperId'] = $site['id'];
+        $node['id'] = $idPrefix . $site->getId();
+        $node['text'] = $site->getDescription() . "(" . $site->getId() . ")";
+        $node['helperId'] = $site->getId();
         $node['iconCls'] = $iconCls;
         $node['leaf'] = true;
 
         //if the site has children, append them
-        if (count($site['children']) > 0) {
+        if ($site->getChildren()->count() > 0) {
             $children = array();
-            foreach ($site['children'] as $child) {
-                $children[] = $this->getSiteNode($idPrefix . $site['id'] . '_', $child);
+            foreach ($site->getChildren() as $child) {
+                $children[] = $this->getSiteNode($idPrefix . $site->getId() . '_', $child);
             }
             $node['nodes'] = $children;
             $node['leaf'] = false;
