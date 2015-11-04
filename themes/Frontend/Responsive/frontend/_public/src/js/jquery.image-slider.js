@@ -1769,7 +1769,7 @@
                 me._$arrowRight.toggleClass(opts.hiddenClass, !opts.loopSlides && index >= me._itemCount - 1);
             }
 
-            $.publish('plugin/imageSlider/onSlide', [ me, index, callback ]);
+            $.publish('plugin/swImageSlider/onSlide', [ me, index, callback ]);
         },
 
         /**
@@ -1799,7 +1799,7 @@
                 callback.call(me);
             }
 
-            $.publish('plugin/imageSlider/onResetTransformation', [ me, animate, callback ]);
+            $.publish('plugin/swImageSlider/onResetTransformation', [ me, animate, callback ]);
         },
 
         /**
@@ -1818,7 +1818,7 @@
 
             me.slide((newIndex >= itemCount && isLooping) ? 0 : Math.min(itemCount - 1, newIndex));
 
-            $.publish('plugin/imageSlider/onSlideNext', [ me, newIndex ]);
+            $.publish('plugin/swImageSlider/onSlideNext', [ me, newIndex ]);
         },
 
         /**
@@ -1837,7 +1837,7 @@
 
             me.slide((newIndex < 0 && isLooping) ? itemCount - 1 : Math.max(0, newIndex));
 
-            $.publish('plugin/imageSlider/onSlidePrev', [ me, newIndex ]);
+            $.publish('plugin/swImageSlider/onSlidePrev', [ me, newIndex ]);
         },
 
         /**
