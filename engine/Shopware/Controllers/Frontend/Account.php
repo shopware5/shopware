@@ -383,9 +383,9 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
                 'text4'         => array('required' => 0),
                 'text5'         => array('required' => 0),
                 'text6'         => array('required' => 0),
-                'birthyear'     => array('required' => 0),
-                'birthmonth'    => array('required' => 0),
-                'birthday'      => array('required' => 0),
+                'birthyear'     => array('required' => 0, 'date' => ['d' => 'birthday', 'm' => 'birthmonth', 'y' => 'birthyear']),
+                'birthmonth'    => array('required' => 0, 'date' => ['d' => 'birthday', 'm' => 'birthmonth', 'y' => 'birthyear']),
+                'birthday'      => array('required' => 0, 'date' => ['d' => 'birthday', 'm' => 'birthmonth', 'y' => 'birthyear']),
                 'additional_address_line1' => array(
                     'required' => (Shopware()->Config()->requireAdditionAddressLine1 && Shopware()->Config()->showAdditionAddressLine1) ? 1 : 0
                 ),
