@@ -101,7 +101,6 @@ class Cache extends Resource implements ContainerAwareInterface
             $this->getCacheInfo('http'),
             $this->getCacheInfo('template'),
             $this->getCacheInfo('proxy'),
-            $this->getCacheInfo('doctrine-file'),
             $this->getCacheInfo('doctrine-proxy')
         );
 
@@ -222,9 +221,6 @@ class Cache extends Resource implements ContainerAwareInterface
                 break;
             case 'doctrine-proxy':
                 $cacheInfo = $this->cacheManager->getDoctrineProxyCacheInfo();
-                break;
-            case 'doctrine-file':
-                $cacheInfo = $this->cacheManager->getDoctrineFileCacheInfo();
                 break;
             default:
                 throw new ApiException\NotFoundException("Cache {$cache} is not a valid cache id.");

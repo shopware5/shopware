@@ -3,6 +3,10 @@ In this document you will find a changelog of the important changes related to t
 
 ## 5.1.2
 * Added new smarty blocks `frontend_index_left_menu_entries` and `frontend_index_left_menu_container` to `index/sites-navigation.tpl`.
+* Removed usage of the deprecated `Doctrine\Common\Annotations\FileCacheReader`. Removed methods:
+    * `\Shopware\Components\CacheManager::getDoctrineFileCacheInfo()`
+    * `\Shopware\Components\Model\Configuration::setFileCacheDir()`
+    * `\Shopware\Components\Model\Configuration::getFileCacheDir()`
 
 ## 5.1.1
 * Added new smarty block `frontend_detail_index_tabs_cross_selling` in the detail/ajax.tpl to prevent problems with custom themes

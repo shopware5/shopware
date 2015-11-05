@@ -141,7 +141,6 @@ return array_replace_recursive([
     ],
     'model' => [
         'autoGenerateProxyClasses' => false,
-        'fileCacheDir' => $this->getCacheDir().'/doctrine/filecache',
         'attributeDir' => $this->getCacheDir().'/doctrine/attributes',
         'proxyDir'     => $this->getCacheDir().'/doctrine/proxies',
         'proxyNamespace' => $this->App() . '\Proxies',
