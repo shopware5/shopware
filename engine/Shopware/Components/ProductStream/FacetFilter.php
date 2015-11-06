@@ -41,26 +41,46 @@ use Shopware\Bundle\SearchBundle\FacetResultInterface;
 class FacetFilter implements FacetFilterInterface
 {
     /**
+     * @var \Shopware_Components_Config
+     */
+    private $config;
+
+    /**
+     * FacetFilter constructor.
+     * @param \Shopware_Components_Config $config
+     */
+    public function __construct(\Shopware_Components_Config $config)
+    {
+        $this->config = $config;
+    }
+
+
+    /**
      * @param Criteria $criteria
      */
     public function add(Criteria $criteria)
     {
-        $criteria->addFacet(new PriceFacet());
-        $criteria->addFacet(new PropertyFacet());
+        if ($this->config->get('displayFiltersInListings')) {
+            $criteria->addFacet(new PropertyFacet());
+        }
 
-        if (!$criteria->hasBaseCondition('immediate_delivery')) {
+        if ($this->config->get('showPriceFacet')) {
+            $criteria->addFacet(new PriceFacet());
+        }
+
+        if (!$criteria->hasBaseCondition('immediate_delivery') && $this->config->get('showImmediateDeliveryFacet')) {
             $criteria->addFacet(new ImmediateDeliveryFacet());
         }
 
-        if (!$criteria->hasBaseCondition('manufacturer')) {
+        if (!$criteria->hasBaseCondition('manufacturer') && $this->config->get('showSupplierInCategories')) {
             $criteria->addFacet(new ManufacturerFacet());
         }
 
-        if (!$criteria->hasBaseCondition('shipping_free')) {
+        if (!$criteria->hasBaseCondition('shipping_free') && $this->config->get('showShippingFreeFacet')) {
             $criteria->addFacet(new ShippingFreeFacet());
         }
 
-        if (!$criteria->hasBaseCondition('vote_average')) {
+        if (!$criteria->hasBaseCondition('vote_average') && $this->config->get('showVoteAverageFacet')) {
             $criteria->addFacet(new VoteAverageFacet());
         }
     }
