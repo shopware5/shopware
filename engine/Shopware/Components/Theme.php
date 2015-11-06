@@ -109,6 +109,11 @@ class Theme
     protected $css = array();
 
     /**
+     * @var bool
+     */
+    protected $injectBeforePlugins = false;
+
+    /**
      * Don't override this function. Used
      * from the backend template module
      * to get the template hierarchy
@@ -236,6 +241,14 @@ class Theme
      */
     public function createConfigSets(ArrayCollection $collection)
     {
+    }
+
+    /**
+     * @return boolean
+     */
+    public function injectBeforePlugins()
+    {
+        return $this->injectBeforePlugins;
     }
 
     /**
