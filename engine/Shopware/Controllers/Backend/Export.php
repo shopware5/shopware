@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Shopware\Components\CSRFWhitelistAware;
 
 /**
  * Export controller
@@ -30,7 +31,7 @@
  * The controller uses the base class sExport for all export relevant methods.
  * Sets a different header to return a downloadable export file.
  */
-class Shopware_Controllers_Backend_Export extends Enlight_Controller_Action
+class Shopware_Controllers_Backend_Export extends Enlight_Controller_Action implements CSRFWhitelistAware
 {
     /**
      * Init controller method
@@ -123,5 +124,17 @@ class Shopware_Controllers_Backend_Export extends Enlight_Controller_Action
 
         $this->Response()->sendHeaders();
         readfile($filePath);
+    }
+
+    /**
+     * Returns a list with actions which should not be validated for CSRF protection
+     *
+     * @return string[]
+     */
+    public function getWhitelistedCSRFActions()
+    {
+        return [
+            'index'
+        ];
     }
 }

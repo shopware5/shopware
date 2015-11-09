@@ -21,47 +21,44 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Components\CSRFWhitelistAware;
 
-/**
- */
-class Shopware_Controllers_Backend_Cron extends Enlight_Controller_Action implements CSRFWhitelistAware
+class Shopware_Controllers_Backend_CSRFToken extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
+    /**
+     * Loads auth and script renderer resource
+     */
     public function init()
     {
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
-        Shopware()->Plugins()->Controller()->ViewRenderer()->setNoRender();
-    }
-
-    public function indexAction()
-    {
-        if (!Shopware()->Plugins()->Core()->Cron()->authorizeCronAction($this->Request())) {
-            $this->Response()
-                ->clearHeaders()
-                ->setHttpResponseCode(403)
-                ->appendBody("Forbidden");
-            return;
-        }
-
-        /** @var $cronManager Enlight_Components_Cron_Manager */
-        $cronManager = Shopware()->Cron();
-
-        set_time_limit(0);
-        while (($job = $cronManager->getNextJob()) !== null) {
-            echo "Processing " . $job->getName() . "\n";
-            $cronManager->runJob($job);
-        }
+        $this->Front()->Plugins()->ViewRenderer()->setNoRender(true);
+        parent::init();
     }
 
     /**
-     * Returns a list with actions which should not be validated for CSRF protection
-     *
-     * @return string[]
+     * @inheritdoc
      */
     public function getWhitelistedCSRFActions()
     {
         return [
-            'index'
+            'generate'
         ];
+    }
+
+    /**
+     * Generates a token and fills the cookie and session
+     */
+    public function generateAction()
+    {
+        /** @var Enlight_Components_Session_Namespace $session */
+        $session = Shopware()->BackendSession();
+
+        if (!$token = $session->offsetGet('X-CSRF-Token')) {
+            $token = \Shopware\Components\Random::getAlphanumericString(30);
+            $session->offsetSet('X-CSRF-Token', $token);
+        }
+
+        $this->Response()->setHeader('X-CSRF-Token', $token);
     }
 }

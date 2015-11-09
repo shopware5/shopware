@@ -3,6 +3,10 @@ In this document you will find a changelog of the important changes related to t
 
 ## 5.2.0 DEV
 * Increased minimum required PHP version to PHP >= 5.5.9.
+* Added CSRF protection to the backend which is enabled by default.
+    * OptOut by implementing `CSRFWhitelistAware` interface
+    * Added `X-CSRF-Token` to every ajax request
+    * See: https://developers.shopware.com/developers-guide/csrf-protection/
 
 ## 5.1.2
 * Out-of-stock variants on the detail page are now selectable

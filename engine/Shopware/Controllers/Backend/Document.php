@@ -21,11 +21,12 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Shopware\Components\CSRFWhitelistAware;
 
 /**
  * Shopware document / pdf controller
  */
-class Shopware_Controllers_Backend_Document extends Enlight_Controller_Action
+class Shopware_Controllers_Backend_Document extends Enlight_Controller_Action implements CSRFWhitelistAware
 {
     /**
      * Generate pdf invoice
@@ -90,5 +91,17 @@ class Shopware_Controllers_Backend_Document extends Enlight_Controller_Action
             ";
             Shopware()->Db()->query($sqlDuplicate, array($targetID["id"], $id));
         }
+    }
+
+    /**
+     * Returns a list with actions which should not be validated for CSRF protection
+     *
+     * @return string[]
+     */
+    public function getWhitelistedCSRFActions()
+    {
+        return [
+            'index'
+        ];
     }
 }

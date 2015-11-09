@@ -22,6 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Models\Order\Order as Order;
 use Shopware\Models\Order\Billing as Billing;
 use Shopware\Models\Order\Shipping as Shipping;
@@ -35,7 +36,7 @@ use Doctrine\Common\Collections\ArrayCollection as ArrayCollection;
  * Displays all orders in an Ext.grid.Panel and allows to delete,
  * add and edit orders.
  */
-class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_ExtJs
+class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
     /**
      * Order repository. Declared for an fast access to the order repository.
@@ -185,6 +186,16 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         if (!in_array($this->Request()->getActionName(), array('index', 'load', 'skeleton', 'extends', 'orderPdf', 'mergeDocuments'))) {
             $this->Front()->Plugins()->Json()->setRenderer();
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getWhitelistedCSRFActions()
+    {
+        return [
+            'openPdf'
+        ];
     }
 
     /**

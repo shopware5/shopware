@@ -22,6 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Models\Shop\Shop;
 use Shopware\Models\Shop\Template;
 use Shopware\Models\Shop\TemplateConfig;
@@ -35,7 +36,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * @package   Shopware\Controllers\Backend
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Application
+class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Application implements CSRFWhitelistAware
 {
     /**
      * Model which handled through this controller
@@ -73,6 +74,16 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
         // configureSystem
         $this->addAclPermission('loadSettings', 'configureSystem', 'Insufficient Permissions');
         $this->addAclPermission('saveSettings', 'configureSystem', 'Insufficient Permissions');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getWhitelistedCSRFActions()
+    {
+        return [
+            'preview'
+        ];
     }
 
     /**

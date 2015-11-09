@@ -21,7 +21,9 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Doctrine\DBAL\Connection;
+use Shopware\Components\CSRFWhitelistAware;
 
 /**
  * Backend Controller for the Shopware global configured stores.
@@ -38,7 +40,7 @@ use Doctrine\DBAL\Connection;
  *  - Locales
  *  - User
  */
-class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_ExtJs
+class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
     /**
      * Initials the script renderer and handles the json request.
@@ -59,6 +61,16 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         } else {
             parent::init();
         }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getWhitelistedCSRFActions()
+    {
+        return [
+            'index'
+        ];
     }
 
    /**

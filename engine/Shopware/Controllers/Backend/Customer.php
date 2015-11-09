@@ -22,6 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Models\Customer\Customer as Customer;
 use Shopware\Models\Customer\Billing as Billing;
 use Shopware\Models\Customer\Shipping as Shipping;
@@ -36,7 +37,7 @@ use Shopware\Models\Customer\PaymentData;
  * add and edit customers. On the detail page the customer data displayed
  * and a list of all done orders shown.
  */
-class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend_ExtJs
+class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
     /**
      * Customer repository. Declared for an fast access to the customer repository.
@@ -125,6 +126,17 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
         }
         parent::init();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getWhitelistedCSRFActions()
+    {
+        return [
+            'performOrder',
+            'performOrderRedirect'
+        ];
     }
 
     /**
