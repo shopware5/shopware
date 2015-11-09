@@ -174,6 +174,13 @@ class Newsletter extends ModelEntity
     private $publish = false;
 
     /**
+     * Should the mail delivered in future?
+     * @var \DateTime $timedDelivery
+     * @ORM\Column(name="timed_delivery", type="datetime", nullable=true)
+     */
+    private $timedDelivery = null;
+
+    /**
      * INVERSE SIDE
      *
      * Inverse side of the mailing-container association
@@ -469,5 +476,21 @@ class Newsletter extends ModelEntity
     public function getAlreadySendTo()
     {
         return $this->alreadySendTo;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getTimedDelivery()
+    {
+        return $this->timedDelivery;
+    }
+
+    /**
+     * @param \DateTime $timedDelivery
+     */
+    public function setTimedDelivery($timedDelivery)
+    {
+        $this->timedDelivery = $timedDelivery;
     }
 }

@@ -45,7 +45,13 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Overview', {
             errorTitle: '{s name=deleteNewsletter/errorTitle}Error{/s}',
             errorMessage: '{s name=deleteNewsletter/errorMessage}An error occured while deleting the newsletter{/s}'
         },
-        growl: '{s name=title}Newsletter Manager{/s}'
+        growl: '{s name=title}Newsletter Manager{/s}',
+        grid: {
+            activated: '{s name=grid/activated}Newsletter activated{/s}',
+            activatedTitle: '{s name=grid/activated_title}Released{/s}',
+            deactivated: '{s name=grid/deactivated}Newsletter deactivated{/s}',
+            deactivatedTitle: '{s name=grid/deactivated_title}Deactivated{/s}'
+        }
     },
 
     refs:[
@@ -69,7 +75,8 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Overview', {
                 'startSendingNewsletter': me.onStartSendingNewsletter,
                 'deleteNewsletter': me.onDeleteNewsletter,
                 'duplicateNewsletter': me.onDuplicateNewsletter,
-                'searchNewsletter': me.onSearchNewsletter
+                'searchNewsletter': me.onSearchNewsletter,
+                'releaseNewsletter': me.onReleaseNewsletter
             }
         });
 
@@ -253,6 +260,36 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Overview', {
         form.loadRecord(settings);
 
 
+    },
+
+    /**
+     * If the user clicks on the active actioncolumn it will update the active flag
+     * @param record
+     * @param grid
+     */
+    onReleaseNewsletter: function(record, grid) {
+        var id = record.get('id'),
+            me = this;
+        //inverts and converts the active flag
+        var status = (record.get('status') > 0 ? 0 : 1);
+
+        Ext.Ajax.request({
+            url: '{url controller="newsletterManager" action="releaseNewsletter"}',
+            method: 'GET',
+            params : {
+                status: status,
+                id: id
+            },
+            success: function() {
+                record.set('status', status);
+                grid.getStore().reload();
+                if (status) {
+                    Shopware.Notification.createGrowlMessage(me.snippets.grid.activatedTitle, me.snippets.grid.activated);
+                } else {
+                    Shopware.Notification.createGrowlMessage(me.snippets.grid.deactivatedTitle, me.snippets.grid.deactivated);
+                }
+            }
+        });
     }
 
 });
