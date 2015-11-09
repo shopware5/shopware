@@ -440,9 +440,9 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             'phone'=>array('required'=> $requirePhone),
             'fax'=>array('required'=>0),
             'sValidation'=>array('required'=>0),
-            'birthyear'=>array('required'=> $requireBirthday),
-            'birthmonth'=>array('required'=> $requireBirthday),
-            'birthday'=>array('required'=> $requireBirthday),
+            'birthyear'=>array('required'=> $requireBirthday, 'date' => ['d' => 'birthday', 'm' => 'birthmonth', 'y' => 'birthyear']),
+            'birthmonth'=>array('required'=> $requireBirthday, 'date' => ['d' => 'birthday', 'm' => 'birthmonth', 'y' => 'birthyear']),
+            'birthday'=>array('required'=> $requireBirthday, 'date' => ['d' => 'birthday', 'm' => 'birthmonth', 'y' => 'birthyear']),
             'dpacheckbox'=>array('required'=>(Shopware()->Config()->get('ACTDPRCHECK'))?1:0)
         );
         $rules = Enlight()->Events()->filter('Shopware_Controllers_Frontend_Register_validatePersonal_FilterRules', $rules, array('subject'=>$this));

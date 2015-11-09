@@ -482,14 +482,21 @@ class sAdmin
 
         // Convert multiple birthday fields into a single value
         if (!empty($postData['birthmonth']) && !empty($postData['birthday']) && !empty($postData['birthyear'])) {
-            $postData['birthday'] = mktime(
-                0, 0, 0,
+            $isValidDate = checkdate(
                 (int) $postData['birthmonth'],
                 (int) $postData['birthday'],
                 (int) $postData['birthyear']
             );
-            if ($postData['birthday'] > 0) {
-                $postData['birthday'] = date('Y-m-d', $postData['birthday']);
+
+            if ($isValidDate) {
+                $timestamp = mktime(
+                    0, 0, 0,
+                    (int) $postData['birthmonth'],
+                    (int) $postData['birthday'],
+                    (int) $postData['birthyear']
+                );
+
+                $postData['birthday'] = date('Y-m-d', $timestamp);
             } else {
                 $postData['birthday'] = '0000-00-00';
             }
@@ -995,6 +1002,22 @@ class sAdmin
             if ($rules[$ruleKey]["in"] && !in_array($postData[$ruleKey], $rules[$ruleKey]["in"])) {
                 $sErrorFlag[$ruleKey] = true;
             }
+
+            if (!empty($rules[$ruleKey]['date'])
+                && !empty($rules[$ruleKey]['required'])
+            ) {
+                $isValidDate = checkdate(
+                    (int) $postData[$rules[$ruleKey]['date']['m']],
+                    (int) $postData[$rules[$ruleKey]['date']['d']],
+                    (int) $postData[$rules[$ruleKey]['date']['y']]
+                );
+
+                if (!$isValidDate) {
+                    $sErrorFlag[$ruleKey] = true;
+                    $sErrorMessages[] = $this->snippetManager->getNamespace('frontend/account/internalMessages')
+                        ->get('DateFailure', 'Please enter a valid birthday');
+                }
+            }
         }
 
         if (count($sErrorFlag)) {
@@ -1002,6 +1025,9 @@ class sAdmin
             $sErrorMessages[] = $this->snippetManager->getNamespace('frontend/account/internalMessages')
                 ->get('ErrorFillIn', 'Please fill in all red fields');
         }
+
+        // Remove redundant error messages
+        $sErrorMessages = array_unique($sErrorMessages);
 
         if (!$edit) {
             $register = $this->session->offsetGet('sRegister');
