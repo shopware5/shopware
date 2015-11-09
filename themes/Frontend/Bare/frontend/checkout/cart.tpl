@@ -2,7 +2,7 @@
 
 {* Title *}
 {block name='frontend_index_header_title'}
-    {s name="CartTitle"}{/s} | {config name=shopName}
+    {s name="CartTitle"}{/s} | {{config name=shopName}|escapeHtmlAttr}
 {/block}
 
 {* Hide breadcrumb *}

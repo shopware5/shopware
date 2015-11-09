@@ -1,7 +1,7 @@
 {extends file="frontend/index/header.tpl"}
 
 {* title *}
-{block name="frontend_index_header_title"}{if $sSupport.metaTitle}{$sSupport.metaTitle} | {config name=sShopname}{else}{$smarty.block.parent}{/if}{/block}
+{block name="frontend_index_header_title"}{if $sSupport.metaTitle}{$sSupport.metaTitle} | {{config name=sShopname}|escapeHtmlAttr}{else}{$smarty.block.parent}{/if}{/block}
 
 {* Keywords *}
 {block name="frontend_index_header_meta_keywords"}{if $sSupport.metaKeywords}{$sSupport.metaKeywords}{else}{$smarty.block.parent}{/if}{/block}
