@@ -10,6 +10,12 @@ In this document you will find a changelog of the important changes related to t
     * `\Shopware\Components\Model\Configuration::setFileCacheDir()`
     * `\Shopware\Components\Model\Configuration::getFileCacheDir()`
 * Added `timed_delivery` column in `s_campaigns_mailings` for automatic newsletter delivering.
+* Added new Smarty blocks to the `index/index.tpl` file
+    * `frontend_index_body_classes`
+    * `frontend_index_page_wrap`
+    * `frontend_index_header_navigation`
+    * `frontend_index_container_ajax_cart`
+    * `frontend_index_content_main`
 
 ## 5.1.1
 * Added new smarty block `frontend_detail_index_tabs_cross_selling` in the detail/ajax.tpl to prevent problems with custom themes
