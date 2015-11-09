@@ -100,11 +100,10 @@ class ListingContext extends SubContext
     {
         /** @var Listing $page */
         $page = $this->getPage('Listing');
-        $language = Helper::getCurrentLanguage($page);
 
         /** @var ArticleBox $articleBox */
         $articleBox = $this->getMultipleElement($page, 'ArticleBox', $position);
-        Helper::clickNamedLink($articleBox, 'order', $language);
+        Helper::clickNamedLink($articleBox, 'order');
     }
 
     /**

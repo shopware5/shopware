@@ -24,11 +24,10 @@ class BlogContext extends SubContext
     {
         /** @var Blog $page */
         $page = $this->getPage('Blog');
-        $language = Helper::getCurrentLanguage($page);
 
         /** @var BlogBox $blogBox */
         $blogBox = $this->getMultipleElement($page, 'BlogBox', $position);
-        Helper::clickNamedLink($blogBox, 'readMore', $language);
+        Helper::clickNamedLink($blogBox, 'readMore');
     }
 
     /**

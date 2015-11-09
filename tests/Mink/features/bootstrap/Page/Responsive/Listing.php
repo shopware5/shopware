@@ -16,7 +16,7 @@ class Listing extends \Shopware\Tests\Mink\Page\Emotion\Listing
             'viewTable' => 'a.action--link.link--table-view',
             'viewList' => 'a.action--link.link--list-view',
             'active' => '.is--active',
-            'filterFilterProperties' => 'div.filter--container > form li.filter-panel--option input[type=checkbox]',
+            'filterActiveProperties' => '.filter--active:not([data-filter-param=reset])',
             'filterShowResults' => 'div.filter--container > form > div.filter--actions > button[type=submit]',
             'listingBox' => 'div.listing--container'
         ];
@@ -56,15 +56,13 @@ class Listing extends \Shopware\Tests\Mink\Page\Emotion\Listing
      */
     protected function resetFilters()
     {
-        $elements = Helper::findAllOfElements($this, ['filterFilterProperties']);
-        /** @var NodeElement $property */
-        foreach ($elements['filterFilterProperties'] as $property) {
-            if ($property->isChecked()) {
-                $property->uncheck();
-            }
-        }
+        $elements = Helper::findAllOfElements($this, ['filterActiveProperties'], false);
+        $activeProperties = array_reverse($elements['filterActiveProperties']);
 
-        $this->pressShowResults();
+        /** @var NodeElement $property */
+        foreach ($activeProperties as $property) {
+            $property->click();
+        }
     }
 
     /**
@@ -73,8 +71,6 @@ class Listing extends \Shopware\Tests\Mink\Page\Emotion\Listing
     public function filter(FilterGroup $filterGroups, array $properties)
     {
         $this->clickLink('Filtern');
-        $this->getSession()->wait(5000, "$('ul.searchresult').children().length > 500");
-
         $this->resetFilters();
         $this->setFilters($filterGroups, $properties);
         $this->pressShowResults();
@@ -86,6 +82,7 @@ class Listing extends \Shopware\Tests\Mink\Page\Emotion\Listing
      */
     private function pressShowResults()
     {
+        $this->getSession()->wait(5000, "$('.filter--btn-apply:not(.is--loading):not([disabled=disabled])').length > 0");
         $elements = Helper::findElements($this, ['filterShowResults']);
         /** @var NodeElement $showResults */
         $showResults = $elements['filterShowResults'];

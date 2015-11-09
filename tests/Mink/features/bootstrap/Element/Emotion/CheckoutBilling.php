@@ -35,7 +35,7 @@ class CheckoutBilling extends Element implements \Shopware\Tests\Mink\HelperSele
     {
         return [
             'changeButton'  => ['de' => 'Ändern', 'en' => 'Change'],
-            'otherButton'  => ['de' => 'Andere', 'en' => 'Change']
+            'otherButton'  => ['de' => 'Andere', 'en' => 'Others']
         ];
     }
 }

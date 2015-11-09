@@ -19,9 +19,7 @@ class Blog extends \Shopware\Tests\Mink\Page\Emotion\Blog
     }
 
     /**
-     * @param BlogComment $blogComments
-     * @param $average
-     * @throws \Exception
+     * @inheritdoc
      */
     protected function checkRating(BlogComment $blogComments, $average)
     {

@@ -68,6 +68,7 @@ class SpecialContext extends SubContext
      */
     public function iFollowTheLinkOfTheElement($elementClass, $position = 1)
     {
+        $this->getSession()->wait(5000, "$('.emotion--element').length > 0");
         $this->iFollowTheLinkOfTheElementOnPosition(null, $elementClass, $position);
     }
 
@@ -95,9 +96,7 @@ class SpecialContext extends SubContext
             return;
         }
 
-        $language = Helper::getCurrentLanguage($this->getPage('Homepage'));
-        $selectors = $element->getNamedSelectors();
-        $element->clickLink($selectors[$linkName][$language]);
+        Helper::clickNamedLink($element, $linkName);
     }
 
     /**

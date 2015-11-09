@@ -35,7 +35,7 @@ class CheckoutShipping extends Element implements \Shopware\Tests\Mink\HelperSel
     {
         return [
             'changeButton'  => ['de' => 'Ändern', 'en' => 'Change'],
-            'otherButton'  => ['de' => 'Andere', 'en' => 'Change']
+            'otherButton'  => ['de' => 'Andere', 'en' => 'Others']
         ];
     }
 }

@@ -47,7 +47,7 @@ Feature: Show Listing
         When  I reset all filters
         Then  I should see 10 elements of type "ArticleBox"
 
-    @filter @noEmotion @javascript @knownFailing
+    @filter @noEmotion @javascript
     Scenario: I can filter the articles by custom filters
         Given I am on the listing page:
             | parameter | value |

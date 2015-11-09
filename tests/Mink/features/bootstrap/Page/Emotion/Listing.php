@@ -133,6 +133,7 @@ class Listing extends Page implements HelperSelectorInterface
         foreach ($properties as $property) {
             $found = false;
 
+            /** @var FilterGroup $filterGroup */
             foreach ($filterGroups as $filterGroup) {
                 $filterGroupName = rtrim($filterGroup->getText(), ' +');
 
@@ -209,6 +210,7 @@ class Listing extends Page implements HelperSelectorInterface
     }
 
     /**
+     * Checks the properties of a product box
      * @param ArticleBox $articleBox
      * @param array $properties
      * @throws \Exception

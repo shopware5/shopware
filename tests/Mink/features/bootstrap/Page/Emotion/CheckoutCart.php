@@ -1,6 +1,7 @@
 <?php
 namespace  Shopware\Tests\Mink\Page\Emotion;
 
+use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Mink\Exception\ResponseTextException;
 use Behat\Mink\WebAssert;
@@ -61,7 +62,7 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
     public function checkAggregation($aggregation)
     {
         $elements = Helper::findAllOfElements($this, ['aggregationLabels', 'aggregationValues']);
-        $lang = Helper::getCurrentLanguage($this);
+        $lang = Helper::getCurrentLanguage();
         $check = [];
 
         foreach ($aggregation as $property) {
@@ -169,15 +170,10 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
     /**
      * Remove a product from the cart
      * @param CartPosition $item
-     * @param string $language
      */
-    public function removeProduct(CartPosition $item, $language = '')
+    public function removeProduct(CartPosition $item)
     {
-        if (empty($language)) {
-            $language = Helper::getCurrentLanguage($this);
-        }
-
-        Helper::clickNamedLink($item, 'remove', $language);
+        Helper::clickNamedLink($item, 'remove');
     }
 
     /**
@@ -196,11 +192,9 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
      */
     public function emptyCart(CartPosition $items)
     {
-        $language = Helper::getCurrentLanguage($this);
-
         /** @var CartPosition $item */
         foreach ($items as $item) {
-            $this->removeProduct($item, $language);
+            $this->removeProduct($item);
         }
     }
 
@@ -249,11 +243,11 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
     }
 
     /**
-     * @param string $language
+     * Verify if we're on an expected page. Throw an exception if not.
      * @return bool
      * @throws \Exception
      */
-    public function verifyPage($language = '')
+    public function verifyPage()
     {
         try {
             $assert = new WebAssert($this->getSession());
@@ -263,7 +257,7 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
             Helper::throwException($message);
         }
 
-        return Helper::hasNamedLink($this, 'checkout', $language);
+        return Helper::hasNamedLink($this, 'checkout');
     }
 
     /**
@@ -271,13 +265,11 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
      */
     public function proceedToOrderConfirmation()
     {
-        $language = Helper::getCurrentLanguage($this);
-
-        if ($this->verifyPage($language)) {
-            Helper::clickNamedLink($this, 'checkout', $language);
+        if ($this->verifyPage()) {
+            Helper::clickNamedLink($this, 'checkout');
         }
 
-        $this->getPage('CheckoutConfirm')->verifyPage($language);
+        $this->getPage('CheckoutConfirm')->verifyPage();
     }
 
     /**
@@ -287,11 +279,10 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
      */
     public function proceedToOrderConfirmationWithLogin($eMail, $password)
     {
-        $language = Helper::getCurrentLanguage($this);
-
-        if ($this->verifyPage($language)) {
+        if ($this->verifyPage()) {
             $locatorArray = $this->getNamedSelectors();
             $parent = Helper::getContentBlock($this);
+            $language = Helper::getCurrentLanguage();
             $link = $parent->findLink($locatorArray['checkout'][$language]);
 
             if ($this->getDriver() instanceof Selenium2Driver) {
@@ -302,7 +293,7 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
         }
 
         $this->getPage('Account')->login($eMail, $password);
-        $this->getPage('CheckoutConfirm')->verifyPage($language);
+        $this->getPage('CheckoutConfirm')->verifyPage();
     }
 
     /**
@@ -311,10 +302,8 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
      */
     public function proceedToOrderConfirmationWithRegistration(array $data)
     {
-        $language = Helper::getCurrentLanguage($this);
-
-        if ($this->verifyPage($language)) {
-            Helper::clickNamedLink($this, 'checkout', $language);
+        if ($this->verifyPage()) {
+            Helper::clickNamedLink($this, 'checkout');
         }
 
         $this->getPage('Account')->register($data);

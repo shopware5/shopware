@@ -45,11 +45,10 @@ class NoteContext extends SubContext
     {
         /** @var Note $page */
         $page = $this->getPage('Note');
-        $language = Helper::getCurrentLanguage($page);
 
         /** @var NotePosition $notePosition */
         $notePosition = $this->getMultipleElement($page, 'NotePosition', $position);
-        Helper::clickNamedLink($notePosition, $name, $language);
+        Helper::clickNamedLink($notePosition, $name);
     }
 
     /**
