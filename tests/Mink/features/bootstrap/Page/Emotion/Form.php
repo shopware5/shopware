@@ -1,5 +1,5 @@
 <?php
-namespace  Shopware\Tests\Mink\Page\Emotion;
+namespace Shopware\Tests\Mink\Page\Emotion;
 
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use Shopware\Tests\Mink\Helper;
@@ -43,11 +43,11 @@ class Form extends Page implements HelperSelectorInterface
     {
         $errors = [];
 
-        if(!$this->hasField("sCaptcha")) {
+        if (!$this->hasField("sCaptcha")) {
             $errors[] = "- captcha input field not found!";
         }
 
-        if(!Helper::hasNamedButton($this, 'submitButton')) {
+        if (!Helper::hasNamedButton($this, 'submitButton')) {
             $errors[] = "- submit button not found!";
         }
 
@@ -62,21 +62,29 @@ class Form extends Page implements HelperSelectorInterface
     }
 
     /**
+     * Checks, whether a captcha exists and has loaded correctly
      * @throws \Exception
      */
     public function checkCaptcha()
     {
+        $placeholderSelector = Helper::getRequiredSelector($this, 'captchaPlaceholder');
+
+        if (!$this->getSession()->wait(5000, "$('$placeholderSelector').children().length > 0")) {
+            $message = 'The captcha was not loaded or does not exist!';
+            Helper::throwException($message);
+        }
+
         $element = Helper::findElements($this, ['captchaPlaceholder', 'captchaImage', 'captchaHidden']);
 
         $captchaPlaceholder = $element['captchaPlaceholder']->getAttribute('data-src');
         $captchaImage = $element['captchaImage']->getAttribute('src');
         $captchaHidden = $element['captchaHidden']->getValue();
 
-        if (($captchaPlaceholder !== '/shopware/widgets/Captcha/refreshCaptcha')
+        if ((strpos($captchaPlaceholder, '/widgets/Captcha/refreshCaptcha') === false)
             || (strpos($captchaImage, 'data:image/png;base64') === false)
             || (empty($captchaHidden))
         ) {
-            $message = 'There is no capture in this form!';
+            $message = 'The captcha was not loaded correctly!';
             Helper::throwException($message);
         }
     }
