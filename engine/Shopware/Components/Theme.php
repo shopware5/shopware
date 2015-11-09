@@ -109,6 +109,10 @@ class Theme
     protected $css = array();
 
     /**
+     * Defines if theme assets should be injected before or after plugin assets.
+     * This includes template directories for template inheritance and
+     * less and javascript files for the theme compiler.
+     *
      * @var bool
      */
     protected $injectBeforePlugins = false;
