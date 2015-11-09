@@ -16,7 +16,7 @@
     {* Meta opengraph tags *}
     {block name='frontend_index_header_meta_tags_opengraph'}
         <meta property="og:type" content="website" />
-        <meta property="og:site_name" content="My {{config name=sShopname}|escapeHtmlAttr}" />
+        <meta property="og:site_name" content="{{config name=sShopname}|escapeHtmlAttr}" />
         <meta property="og:title" content="{{config name=sShopname}|escapeHtmlAttr}" />
         <meta property="og:description" content="{s name='IndexMetaDescriptionStandard'}{/s}" />
         <meta property="og:image" content="{link file=$theme.desktopLogo fullPath}" />
