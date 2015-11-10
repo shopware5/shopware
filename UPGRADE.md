@@ -16,6 +16,10 @@ In this document you will find a changelog of the important changes related to t
     * `frontend_index_header_navigation`
     * `frontend_index_container_ajax_cart`
     * `frontend_index_content_main`
+* Removed `extendsTemplate()` method in the AdvancedMenu plugin. Now the template uses the normal `{extends}` action.
+* Moved template file of the AdvancedMenu plugin from the plugin directory to the normal index directory.
+* Moved content for the AdvancedMenu to separate include file.
+* Added new Smarty block for extending the complete AdvancedMenu template `frontend_plugins_advanced_menu_outer`.
 
 ## 5.1.1
 * Added new smarty block `frontend_detail_index_tabs_cross_selling` in the detail/ajax.tpl to prevent problems with custom themes
