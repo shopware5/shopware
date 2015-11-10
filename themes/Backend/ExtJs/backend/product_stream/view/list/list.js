@@ -108,5 +108,19 @@ Ext.define('Shopware.apps.ProductStream.view.list.List', {
         };
 
         return column;
+    },
+
+    createActionColumnItems: function() {
+        var me = this,
+            items = me.callParent(arguments);
+
+        items.push({
+            iconCls: 'sprite-duplicate-article',
+            handler: function (view, rowIndex, colIndex, item, opts, record) {
+                me.fireEvent(me.eventAlias + '-duplicate-item', me, record, rowIndex, colIndex, item, opts);
+            }
+        });
+
+        return items;
     }
 });
