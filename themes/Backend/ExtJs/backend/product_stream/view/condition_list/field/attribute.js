@@ -182,6 +182,8 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.field.Attribute', {
                 min: this.fromField.getValue(),
                 max: this.toField.getValue()
             }
+        } else if (value.operator == 'IN') {
+            value.value = value.value.split(",");
         }
 
         var result = {};
