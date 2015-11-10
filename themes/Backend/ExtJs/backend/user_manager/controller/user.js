@@ -150,33 +150,35 @@ Ext.define('Shopware.apps.UserManager.controller.User', {
             record.set('apiKey', '');
         }
 
-        formPnl.up('window').setLoading(true);
+        Shopware.app.Application.fireEvent('Shopware.ValidatePassword', function() {
 
-        record.save({
-            callback: function(record) {
-                formPnl.up('window').setLoading(false);
-                me.getStore('User').load();
-                formPnl.up('window').destroy();
-                Shopware.Notification.createGrowlMessage(
-                    '{s name=user/Success}Successful{/s}',
-                    Ext.String.format('{s name="user/editSuccessful"}User \'[0]\' was updated{/s}', formPnl.getForm().getValues().name),
-                    '{s name="user/userManager"}User Manager{/s}'
-                );
-                Ext.Ajax.request({
-                    url: '{url controller=login action=getLoginStatus}',
-                    success: function(response) {
-                        var json = Ext.decode(response.responseText);
-                        if(!json.success) {
+            formPnl.up('window').setLoading(true);
+
+            record.save({
+                callback: function (record) {
+                    formPnl.up('window').setLoading(false);
+                    me.getStore('User').load();
+                    formPnl.up('window').destroy();
+                    Shopware.Notification.createGrowlMessage(
+                            '{s name=user/Success}Successful{/s}',
+                            Ext.String.format('{s name="user/editSuccessful"}User \'[0]\' was updated{/s}', formPnl.getForm().getValues().name),
+                            '{s name="user/userManager"}User Manager{/s}'
+                    );
+                    Ext.Ajax.request({
+                        url: '{url controller=login action=getLoginStatus}',
+                        success: function (response) {
+                            var json = Ext.decode(response.responseText);
+                            if (!json.success) {
+                                window.location.href = '{url controller=index}';
+                            }
+                        },
+                        failure: function () {
                             window.location.href = '{url controller=index}';
                         }
-                    },
-                    failure: function() {
-                        window.location.href = '{url controller=index}';
-                    }
-                });
-            }
+                    });
+                }
+            });
         });
-
     },
 
     /**
@@ -204,14 +206,17 @@ Ext.define('Shopware.apps.UserManager.controller.User', {
         message = Ext.String.format('{s name="user/messageDeleteUser"}Are you sure you want to delete the user [0]?{/s}', record.data.username);
         Ext.MessageBox.confirm('{s name="user/titleDeleteUser"}Delete user{/s}', message, function (response){
             if (response !== 'yes') return false;
-            record.destroy({
-                success : function () {
-                    userStore.load();
-                    Shopware.Notification.createGrowlMessage('{s name=user/Success}Successful{/s}', '{s name="user/deletedSuccessfully"}User has been deleted{/s}', '{s name="user/userManager"}User Manager{/s}');
-                },
-                failure : function () {
-                    Shopware.Notification.createGrowlMessage('{s name=user/Error}Error{/s}', '{s name="user/deletedError"}An error has occurred while deleting the user{/s}', '{s name="user/userManager"}User Manager{/s}');
-                }
+
+            Shopware.app.Application.fireEvent('Shopware.ValidatePassword', function() {
+                record.destroy({
+                    success : function () {
+                        userStore.load();
+                        Shopware.Notification.createGrowlMessage('{s name=user/Success}Successful{/s}', '{s name="user/deletedSuccessfully"}User has been deleted{/s}', '{s name="user/userManager"}User Manager{/s}');
+                    },
+                    failure : function () {
+                        Shopware.Notification.createGrowlMessage('{s name=user/Error}Error{/s}', '{s name="user/deletedError"}An error has occurred while deleting the user{/s}', '{s name="user/userManager"}User Manager{/s}');
+                    }
+                });
             });
         });
     },
@@ -228,10 +233,13 @@ Ext.define('Shopware.apps.UserManager.controller.User', {
         if(records.length > 0) {
             Ext.MessageBox.confirm('{s name="user/titleDeleteUser"}Delete user{/s}', '{s name="user/messageDeleteMultipleUsers"}Are you sure you want delete these users?{/s}', function (response) {
                 if (response !== 'yes') return false;
-                me.deleteMultipleRecords(records, function() {
-                    userStore.load();
-                    Shopware.Notification.createGrowlMessage('{s name=user/Success}Successful{/s}', '{s name="user/multipleDeletedSuccessfully"}Users has been deleted{/s}', '{s name="user/userManager"}User Manager{/s}');
-                })
+
+                Shopware.app.Application.fireEvent('Shopware.ValidatePassword', function() {
+                    me.deleteMultipleRecords(records, function () {
+                        userStore.load();
+                        Shopware.Notification.createGrowlMessage('{s name=user/Success}Successful{/s}', '{s name="user/multipleDeletedSuccessfully"}Users has been deleted{/s}', '{s name="user/userManager"}User Manager{/s}');
+                    });
+                });
             });
         }
     },
