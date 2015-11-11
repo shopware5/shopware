@@ -254,6 +254,7 @@ class TestCase extends \Enlight_Components_Test_TestCase
             array_shift($context->getTaxRules()),
             $context->getCurrentCustomerGroup()
         );
+        $product['categories'] = [['id' => $context->getShop()->getCategory()->getId()]];
 
         if ($category) {
             $product['categories'] = array(
