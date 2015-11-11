@@ -643,7 +643,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
                     $category,
                     $customerGroupId,
                     0,
-                    $perPage,
+                    $max,
                     $data["article_slider_type"]
                 );
                 $values = $temp["values"];
