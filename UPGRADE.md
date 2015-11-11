@@ -21,6 +21,8 @@ In this document you will find a changelog of the important changes related to t
 * Moved content for the AdvancedMenu to separate include file.
 * Added new Smarty block for extending the complete AdvancedMenu template `frontend_plugins_advanced_menu_outer`.
 * Removed obsolete config options `displayFiltersOnDetailPage` and `propertySorting`
+* Removed duplicate content in `frontend/detail/data.tpl` for block prices
+* Marked unnecessary block `frontend_detail_data_price_info` as deprecated
 
 ## 5.1.1
 * Added new smarty block `frontend_detail_index_tabs_cross_selling` in the detail/ajax.tpl to prevent problems with custom themes
