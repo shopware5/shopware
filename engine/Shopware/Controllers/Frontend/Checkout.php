@@ -1273,7 +1273,8 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             return false;
         }
 
-        $payment = reset($paymentMethods);
+        $payment = $this->getDefaultPaymentMethod($paymentMethods);
+
         $this->session['sPaymentID'] = (int)$payment['id'];
         $this->front->Request()->setPost('sPayment', (int)$payment['id']);
         $this->admin->sUpdatePayment();
@@ -1584,5 +1585,30 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         }
 
         $this->redirect($target);
+    }
+
+    /**
+     * Selects the default payment method defined in the backend. If no payment method is defined,
+     * the first payment method of the provided list will be returned.
+     *
+     * @param array $paymentMethods
+     * @return array
+     */
+    private function getDefaultPaymentMethod(array $paymentMethods)
+    {
+        $payment = null;
+
+        foreach ($paymentMethods as $paymentMethod) {
+            if ($paymentMethod['id'] == Shopware()->Config()->offsetGet('defaultpayment')) {
+                $payment = $paymentMethod;
+                break;
+            }
+        }
+
+        if (!$payment) {
+            $payment = reset($paymentMethods);
+        }
+
+        return $payment;
     }
 }
