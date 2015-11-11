@@ -80,6 +80,7 @@ Ext.define('Shopware.apps.ArticleList.view.main.CategoryTree', {
                 {
                     xtype: 'checkbox',
                     boxLabel: '{s name=list/Variants}Show variants{/s}',
+                    name: 'displayVariants',
                     uncheckedValue: false,
                     inputValue: true,
                     listeners: {

@@ -21,6 +21,12 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Shopware\Bundle\StoreFrontBundle\Service\AdditionalTextServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
+use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
+use Shopware\Models\Shop\Repository;
+use Shopware\Models\Shop\Shop;
 
 /**
  * @category  Shopware
@@ -37,7 +43,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
     /**
      * Repository for the shop model
-     * @var \Shopware\Models\Shop\Repository
+     * @var Repository
      */
     protected $shopRepository = null;
 
@@ -3599,19 +3605,20 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
             $builder = $this->getManager()->createQueryBuilder();
 
-            $builder->select(array(
-                        'articleDetail.id as id',
-                        'article.name as name',
-                        'articleDetail.id as articleDetailId',
-                        'articleDetail.additionalText as additionalText',
-                        'article.id as articleId',
-                    ))
-                    ->from('Shopware\Models\Article\Detail', 'articleDetail')
-                    ->leftJoin('articleDetail.esd', 'esd')
-                    ->leftJoin('articleDetail.article', 'article')
-                    ->where('articleDetail.articleId = :articleId')
-                    ->andWhere('esd.id IS NULL')
-                    ->setParameter('articleId', $articleId);
+            $builder->select([
+                'articleDetail.id as id',
+                'article.name as name',
+                'articleDetail.id as articleDetailId',
+                'articleDetail.additionalText as additionalText',
+                'article.id as articleId',
+                'articleDetail.number'
+            ]);
+            $builder->from('Shopware\Models\Article\Detail', 'articleDetail')
+                ->leftJoin('articleDetail.esd', 'esd')
+                ->leftJoin('articleDetail.article', 'article')
+                ->where('articleDetail.articleId = :articleId')
+                ->andWhere('esd.id IS NULL')
+                ->setParameter('articleId', $articleId);
 
             $query = $builder->getQuery();
             $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
@@ -3623,11 +3630,9 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             //returns the customer data
             $result = $paginator->getIterator()->getArrayCopy();
 
-            foreach ($result as &$item) {
-                if (!empty($item['additionalText'])) {
-                    $item['name'] .= ' - ' . $item['additionalText'];
-                }
-            }
+            $products = $this->buildListProducts($result);
+            $products = $this->getAdditionalTexts($products);
+            $result = $this->assignAdditionalText($result, $products);
 
             $this->View()->assign(array(
                 'data' =>  $result,
@@ -3691,7 +3696,9 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             }
         }
 
-        return $esdAttributesList;
+        $products = $this->buildListProducts($esdAttributesList);
+        $products = $this->getAdditionalTexts($products);
+        return $this->assignAdditionalText($esdAttributesList, $products);
     }
 
     /**
@@ -4442,7 +4449,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             )
         );
 
-        /**@var $shop \Shopware\Models\Shop\Shop*/
+        /**@var $shop Shop*/
         $this->Response()->setCookie('shop', $shopId, 0, $shop->getBasePath());
         $this->redirect($url);
     }
@@ -4461,5 +4468,73 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         }
 
         return $fields;
+    }
+
+    /**
+     * @param ListProduct[] $products
+     * @return ListProduct[]
+     */
+    private function getAdditionalTexts($products)
+    {
+        /** @var Repository $shopRepo */
+        $shopRepo = $this->get('models')->getRepository('Shopware\Models\Shop\Shop');
+
+        /** @var Shop $shop */
+        $shop = $shopRepo->getActiveDefault();
+
+        /** @var ContextServiceInterface $contextService */
+        $contextService = $this->get('shopware_storefront.context_service');
+
+        $context = $contextService->createShopContext(
+            $shop->getId(),
+            $shop->getCurrency()->getId(),
+            ContextService::FALLBACK_CUSTOMER_GROUP
+        );
+
+        /** @var AdditionalTextServiceInterface $service */
+        $service = $this->get('shopware_storefront.additional_text_service');
+
+        return $service->buildAdditionalTextLists($products, $context);
+    }
+
+    /**
+     * @param array $result
+     * @return ListProduct[]
+     */
+    private function buildListProducts(array $result)
+    {
+        $products = [];
+        foreach ($result as $item) {
+            $number = $item['number'];
+
+            $product = new ListProduct(
+                $item['articleId'],
+                $item['articleDetailId'],
+                $item['number']
+            );
+            if ($item['additionalText']) {
+                $product->setAdditional($item['additionalText']);
+            }
+            $products[$number] = $product;
+        }
+        return $products;
+    }
+
+    /**
+     * @param array $data
+     * @param ListProduct[] $products
+     * @return array
+     */
+    private function assignAdditionalText(array $data, array $products)
+    {
+        foreach ($data as &$item) {
+            $number = $item['number'];
+            if (!isset($products[$number])) {
+                continue;
+            }
+            $product = $products[$number];
+            $item['additionalText'] = $product->getAdditional();
+        }
+        return $data;
     }
 }

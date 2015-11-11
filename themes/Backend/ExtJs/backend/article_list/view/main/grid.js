@@ -340,8 +340,14 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
      * @param value
      * @returns string
      */
-    boldColumnRenderer: function (value) {
-        return '<b>' + this.defaultColumnRenderer(value) + '</b>';
+    boldColumnRenderer: function (value, metaData, record) {
+        var result = value;
+        var checkbox = this.up('window').down('checkbox[name=displayVariants]');
+
+        if (checkbox.getValue() && record.get('Detail_additionalText')) {
+            result = value + ' - ' + record.get('Detail_additionalText');
+        }
+        return '<b>' + this.defaultColumnRenderer(result) + '</b>';
     },
 
     /**
@@ -577,7 +583,6 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
                         });
                         break;
                     default:
-                        console.log("Unknown column: ", column.type);
                         break;
                 }
                 break;

@@ -1966,6 +1966,7 @@ class Repository extends ModelRepository
             'COUNT(esdOrder.id) as downloads',
             'article.name as name',
             'articleDetail.id as articleDetailId',
+            'articleDetail.number',
             'articleDetail.additionalText as additionalText',
             'article.id as articleId',
         ]);
