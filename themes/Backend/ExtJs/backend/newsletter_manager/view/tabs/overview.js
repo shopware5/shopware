@@ -53,11 +53,13 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Overview', {
             revenue: '{s name=columns/revenue}Revenue{/s}',
             actions: '{s name=columns/actions}Actions{/s}',
             timedDelivery: '{s name=columns/timed_delivery}Timed delivery{/s}',
-            active: '{s name=columns/active}Released{/s}'
+            active: '{s name=columns/active}Released for cronjob{/s}'
         },
         error: {
-            active_title: '{s name=error/active_title}Error - can\'t toggle to active{/s}',
-            active_text: '{s name=error/active_title}A delivered newsletter can\'t be inactive.{/s}'
+            active_title: '{s name=error/active_title}Error - can\'t toggle to released{/s}',
+            active_text: '{s name=error/active_text}A delivered newsletter can\'t be unreleased.{/s}',
+            privilege_title: '{s name=error/privilege_title}Missing rights{/s}',
+            privilege_text: '{s name=error/privilege_text}You need write rules to change this field.{/s}'
         }
     },
 
@@ -231,28 +233,34 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Overview', {
                         }
                     },
                     handler: function(grid, rowIndex, colIndex, item, eOpts, record) {
-                        if (record.get('status') == 2) {
-                            Shopware.Notification.createGrowlMessage(me.snippets.error.active_title, me.snippets.error.active_text);
-                            return false;
-                        }
+                        /*{if {acl_is_allowed privilege=write}}*/
+                            if (record.get('status') == 2) {
+                                Shopware.Notification.createGrowlMessage(me.snippets.error.active_title, me.snippets.error.active_text);
+                                return false;
+                            }
 
-                        if (record.get('status') == 1) {
-                            Ext.Msg.show({
-                                title:'{s name=cancel_sending/title}Cancel sending{/s}',
-                                msg: '{s name=cancel_sending/msg}Do you want to cancel the sending of the newsletter?{/s}',
-                                buttons: Ext.Msg.YESNO,
-                                icon: Ext.Msg.QUESTION,
-                                fn: function(response) {
-                                    if(response == 'yes') {
-                                        me.fireEvent('releaseNewsletter', record, grid, rowIndex);
-                                    } else {
-                                        return false;
+                            if (record.get('status') == 1) {
+                                Ext.Msg.show({
+                                    title:'{s name=cancel_sending/title}Cancel sending{/s}',
+                                    msg: '{s name=cancel_sending/msg}Do you want to cancel the sending of the newsletter?{/s}',
+                                    buttons: Ext.Msg.YESNO,
+                                    icon: Ext.Msg.QUESTION,
+                                    fn: function(response) {
+                                        if(response == 'yes') {
+                                            me.fireEvent('releaseNewsletter', record, grid, rowIndex);
+                                        } else {
+                                            return false;
+                                        }
                                     }
-                                }
-                            });
-                        } else {
-                            me.fireEvent('releaseNewsletter', record, grid, rowIndex);
-                        }
+                                });
+                            } else {
+                                me.fireEvent('releaseNewsletter', record, grid, rowIndex);
+                            }
+                        /*{else}*/
+                            Shopware.Notification.createGrowlMessage(me.snippets.error.privilege_title, me.snippets.error.privilege_text);
+                        /*{/if}*/
+
+
                     }
                 }]
             },
