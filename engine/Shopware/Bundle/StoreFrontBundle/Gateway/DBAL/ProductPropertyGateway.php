@@ -182,6 +182,7 @@ class ProductPropertyGateway implements Gateway\ProductPropertyGatewayInterface
         $query->orderBy('filterArticles.articleID')
             ->addOrderBy('relations.position')
             ->addOrderBy('propertyGroup.name')
+            ->addOrderBy('sortRelevance+0')
             ->addOrderBy('sortRelevance')
             ->addOrderBy('propertyOption.id');
 
