@@ -591,6 +591,15 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
      */
     public function shippingPaymentAction()
     {
+        if (empty($this->View()->sUserLoggedIn)) {
+            return $this->forward(
+                'login',
+                'account',
+                null,
+                array('sTarget' => 'checkout', 'sTargetAction' => 'shippingPayment', 'showNoAccount' => true)
+            );
+        }
+
         // Load payment options, select option and details
         $this->View()->sPayments = $this->getPayments();
         $this->View()->sFormData = array('payment' => $this->View()->sUserData['additional']['user']['paymentID']);
