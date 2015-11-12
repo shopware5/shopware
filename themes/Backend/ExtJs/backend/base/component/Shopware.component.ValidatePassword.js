@@ -52,13 +52,12 @@ Ext.define('Shopware.component.ValidatePassword', {
      * provided as `successCallback` method. If the user closes this popup without entering a password, the
      * `abortCallback` method will be called.
      *
-     * @param {function} successCallback
-     * @param {function} abortCallback
-     * @param {boolean} isRetryAttempt
+     * @param { function } successCallback
+     * @param { function } abortCallback
+     * @param { boolean } isRetryAttempt
      */
     onPasswordValidation: function(successCallback, abortCallback, isRetryAttempt) {
-        var me = this,
-            passwordPrompt = new Ext.window.MessageBox(),
+        var passwordPrompt = new Ext.window.MessageBox(),
             displayText = '{s name=window/enterPassword}Please enter your password{/s}:',
             onFailure = function() {
                 Shopware.app.Application.fireEvent('Shopware.ValidatePassword', successCallback, abortCallback, true);
