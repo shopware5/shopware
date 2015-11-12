@@ -177,6 +177,7 @@
 {include file='backend/base/component/Shopware.global.ErrorReporter.js'}
 {include file='backend/base/component/Shopware.notification.ExpiredLicence.js'}
 {include file='backend/base/component/Shopware.notification.SubscriptionWarning.js'}
+{include file='backend/base/component/Shopware.component.ValidatePassword.js'}
 
 {include file='backend/base/component/Shopware.form.field.ColorField.js'}
 {include file='backend/base/component/Shopware.form.field.ColorSelection.js'}
