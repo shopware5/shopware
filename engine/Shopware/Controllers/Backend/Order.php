@@ -342,7 +342,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             //returns the customer data
             $orders = $paginator->getIterator()->getArrayCopy();
 
-            foreach ($orders as $key => &$order) {
+            foreach ($orders as $key => $order) {
                 $additionalOrderDataQuery = $this->getRepository()->getBackendAdditionalOrderDataQuery($order['number']);
                 $additionalOrderData = $additionalOrderDataQuery->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
