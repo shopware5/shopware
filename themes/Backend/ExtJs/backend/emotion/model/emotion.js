@@ -75,6 +75,7 @@ Ext.define('Shopware.apps.Emotion.model.Emotion', {
         { name: 'isLandingPage', type: 'boolean' },
         { name: 'link', type: 'string' },
         { name: 'landingPageTeaser', type: 'string' },
+        { name: 'seoTitle', type: 'string' },
         { name: 'seoKeywords', type: 'string' },
         { name: 'seoDescription', type: 'string' },
         { name: 'categoriesNames', type: 'string' },
