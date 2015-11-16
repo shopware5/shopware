@@ -1993,13 +1993,41 @@ class sBasket
     }
 
     /**
+     * Proxy to a cached version of self::getBasketArticlesUncached()
+     *
+     * Caches the result of self::getBasketArticlesUncached() in a
+     * static variable using a hash of the input paramter
+     * to invalidate the cache.
+     *
+     * @param array $getArticles
+     * @return array
+     */
+    private function getBasketArticles(array $getArticles)
+    {
+        static $cache;
+        static $cacheHash;
+
+        $hash = md5(serialize($getArticles));
+        if ($cache && $hash === $cacheHash) {
+            return $cache;
+        }
+
+        $result = $this->getBasketArticlesUncached($getArticles);
+
+        $cache = $result;
+        $cacheHash = $hash;
+
+        return $result;
+    }
+
+    /**
      * Loads relevant associated data for the provided articles
      * Used in sGetBasket
      *
      * @param $getArticles
      * @return array
      */
-    private function getBasketArticles($getArticles)
+    private function getBasketArticlesUncached($getArticles)
     {
         $totalAmount = 0;
         $discount = 0;
