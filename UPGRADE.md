@@ -4,6 +4,7 @@ In this document you will find a changelog of the important changes related to t
 ## 5.1.2
 * Out-of-stock variants on the detail page are now selectable
 * `ProductNumberService::getAvailableNumber()` now returns the provided product variant to allow deep linking of out-of-stock variants
+* Added new configuration property to shopware themes, to configure the inheritance position before or after plugins.
 * Added new smarty blocks `frontend_index_left_menu_entries` and `frontend_index_left_menu_container` to `index/sites-navigation.tpl`.
 * Removed usage of the deprecated `Doctrine\Common\Annotations\FileCacheReader`. Removed methods:
     * `\Shopware\Components\CacheManager::getDoctrineFileCacheInfo()`
