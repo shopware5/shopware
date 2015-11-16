@@ -2395,7 +2395,7 @@ class sBasket
             $quantity = $queryAdditionalInfo["maxpurchase"];
         }
 
-        if (!empty($queryAdditionalInfo["purchaseunit"])) {
+        if (empty($queryAdditionalInfo["purchaseunit"])) {
             $queryAdditionalInfo["purchaseunit"] = 1;
         }
 
