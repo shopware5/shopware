@@ -2685,14 +2685,8 @@ class sBasket
         );
 
         if ($article['configurator_set_id'] > 0) {
-            $product = new StoreFrontBundle\Struct\ListProduct(
-                (int) $article['articleID'],
-                (int) $article["articledetailsID"],
-                $article['ordernumber']
-            );
-            $product->setAdditional($article['additionaltext']);
-
-            $context = $this->contextService->getShopContext();
+            $context = $this->contextService->getProductContext();
+            $product = Shopware()->Container()->get('shopware_storefront.list_product_service')->get($article['ordernumber'], $context);
             $product = $this->additionalTextService->buildAdditionalText($product, $context);
             $article['additionaltext'] = $product->getAdditional();
         }
