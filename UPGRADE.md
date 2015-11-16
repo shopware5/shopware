@@ -21,6 +21,8 @@ In this document you will find a changelog of the important changes related to t
 * Moved content for the AdvancedMenu to separate include file.
 * Added new Smarty block for extending the complete AdvancedMenu template `frontend_plugins_advanced_menu_outer`.
 * Removed obsolete config options `displayFiltersOnDetailPage` and `propertySorting`
+* Add sub shop validation in \Shopware\Bundle\StoreFrontBundle\Service\Core\ListProductService
+* Add getProductsCategories function to \Shopware\Bundle\StoreFrontBundle\Service\CategoryServiceInterface and \Shopware\Bundle\StoreFrontBundle\Gateway\CategoryGatewayInterface which returns all categories of the provided products.
 * Removed duplicate content in `frontend/detail/data.tpl` for block prices
 * Marked unnecessary block `frontend_detail_data_price_info` as deprecated
 

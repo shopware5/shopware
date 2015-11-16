@@ -188,7 +188,8 @@ class Helper
         $marketingService = null,
         $eventManager = null,
         $voteService = null,
-        $config = null
+        $categoryService = null
+
     ) {
         if ($productGateway === null) {
             $productGateway = Shopware()->Container()->get('shopware_storefront.list_product_gateway');
@@ -214,8 +215,8 @@ class Helper
         if ($voteService === null) {
             $voteService = Shopware()->Container()->get('shopware_storefront.vote_service');
         }
-        if ($config === null) {
-            $config = Shopware()->Container()->get('config');
+        if ($categoryService === null) {
+            $categoryService = Shopware()->Container()->get('shopware_storefront.category_service');
         }
 
         $service = new StoreFrontBundle\Service\Core\ListProductService(
@@ -227,7 +228,7 @@ class Helper
             $marketingService,
             $voteService,
             $eventManager,
-            $config
+            $categoryService
         );
 
         return $service->getList($numbers, $context);
@@ -249,7 +250,6 @@ class Helper
         Group $customerGroup,
         $priceOffset = 0.00
     ) {
-
         if ($customerGroup instanceof Models\Customer\Group) {
             $struct = new Group();
             $struct->setId($customerGroup->getId());

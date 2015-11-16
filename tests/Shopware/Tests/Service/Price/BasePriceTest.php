@@ -23,6 +23,7 @@ class BasePriceTest extends TestCase
             'purchaseUnit' => 0.5,
             'referenceUnit' => 1
         ));
+        $data['categories'] = [['id' => $context->getShop()->getCategory()->getId()]];
 
         $this->helper->createArticle($data);
 
@@ -50,6 +51,7 @@ class BasePriceTest extends TestCase
             $context->getCurrentCustomerGroup()
         );
 
+        $data['categories'] = [['id' => $context->getShop()->getCategory()->getId()]];
         $data['mainDetail'] = array_merge($data['mainDetail'], array(
             'purchaseUnit' => 0.5,
             'referenceUnit' => 0.1
