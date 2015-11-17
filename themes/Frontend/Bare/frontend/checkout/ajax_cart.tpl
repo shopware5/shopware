@@ -72,7 +72,7 @@
                 {block name='frontend_checkout_ajax_cart_button_container_inner'}
                     {if !($sDispatchNoOrder && !$sDispatches)}
                         {block name='frontend_checkout_ajax_cart_open_checkout'}
-                            <a href="{url controller='checkout' action='confirm'}" class="btn is--primary button--checkout is--icon-right" title="{"{s name='AjaxCartLinkConfirm'}{/s}"|escape}">
+                            <a href="{if {config name=always_select_payment}}{url controller='checkout' action='shippingPayment'}{else}{url controller='checkout' action='confirm'}{/if}" class="btn is--primary button--checkout is--icon-right" title="{"{s name='AjaxCartLinkConfirm'}{/s}"|escape}">
                                 <i class="icon--arrow-right"></i>
                                 {s name='AjaxCartLinkConfirm'}{/s}
                             </a>

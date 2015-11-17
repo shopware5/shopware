@@ -27,6 +27,7 @@ In this document you will find a changelog of the important changes related to t
 * Removed duplicate content in `frontend/detail/data.tpl` for block prices
 * Marked unnecessary block `frontend_detail_data_price_info` as deprecated
 * Added seo title for landing pages
+* Added config option to force the selection of a payment method in checkout
 
 ## 5.1.1
 * Added new smarty block `frontend_detail_index_tabs_cross_selling` in the detail/ajax.tpl to prevent problems with custom themes
