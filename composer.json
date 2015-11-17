@@ -15,7 +15,7 @@
         "issues": "http://jira.shopware.de"
     },
     "require": {
-        "php": ">=5.4.0",
+        "php": ">=5.5.9",
         "ext-curl": "*",
         "ext-mbstring": "*",
         "ext-gd": "*",
@@ -77,7 +77,7 @@
     "config": {
         "autoloader-suffix": "Shopware",
         "platform": {
-            "php": "5.4"
+            "php": "5.5.9"
         }
     }
 }
