@@ -28,7 +28,14 @@ class PreCommitChecks
             return (int) 0;
         }
 
+        $beforeRef = $this->getRef();
         $this->stashTree();
+        $afterRef = $this->getRef();
+
+        if ($beforeRef == $afterRef) {
+            echo 'No Changes' . PHP_EOL;
+            return (int) 0;
+        }
 
         echo 'Running PHP lint' . PHP_EOL;
         if (!$this->phpLint($fileList)) {
@@ -131,6 +138,17 @@ class PreCommitChecks
     }
 
     /**
+     * @return string
+     */
+    private function getRef()
+    {
+        $output = [];
+        exec("git rev-parse --verify -q refs/stash", $output);
+        $output = implode(PHP_EOL, $output) . PHP_EOL;
+        return trim($output);
+    }
+
+    /**
      * @return bool
      */
     private function isRebase()
@@ -145,7 +163,7 @@ class PreCommitChecks
      */
     private function stashTree()
     {
-        exec("git stash -q --keep-index");
+        exec("git stash save --keep-index --include-untracked -q");
     }
 
     /**
@@ -153,7 +171,7 @@ class PreCommitChecks
      */
     private function unstashTree()
     {
-        exec("git stash pop -q");
+        exec("git stash pop -q --index");
     }
 }
 
