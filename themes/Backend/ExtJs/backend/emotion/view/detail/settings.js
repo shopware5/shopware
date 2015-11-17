@@ -109,12 +109,10 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
 
                     if(value) {
                         me.containerWidthField.setValue(1008);
-                        me.categoryNameField.hide().setDisabled(true);
                         me.categoryFieldSet.hide();
                         me.landingPageFieldSet.show();
                     } else {
                         me.containerWidthField.setValue(808);
-                        me.categoryNameField.show().setDisabled(false);
                         me.landingPageFieldSet.hide();
                         me.categoryFieldSet.show();
                     }
@@ -157,19 +155,6 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
     createCategoryFieldSet: function() {
         var me = this;
 
-        me.categoryNameField = Ext.create('Shopware.form.field.PagingComboBox', {
-            anchor: '100%',
-            name: 'categoryId',
-            emptyText: '{s name=settings/select_category_empty}Please select...{/s}',
-            allowBlank: false,
-            pageSize: 15,
-            fieldLabel: '{s name=settings/select_category_field}Select a category{/s}',
-            store: me.categoryPathStore,
-            valueField: 'id',
-            displayField: 'name',
-            labelWidth: me.defaults.labelWidth - 20
-        });
-
         me.listingCheckbox = Ext.create('Ext.form.field.Checkbox', {
             fieldLabel: '{s name=settings/listing}Listing{/s}',
             boxLabel: '{s name=settings/listing_box_label}Listing will be visible under the emotion{/s}',
@@ -184,7 +169,6 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             title: '{s name=settings/fieldset/category_settings}{/s}',
             margin: '20 0 0',
             items: [
-                me.categoryNameField,
                 me.listingCheckbox
             ]
         });
@@ -192,6 +176,18 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
 
     createGeneralFieldSet: function() {
         var me = this;
+
+        me.categories = Ext.create('Ext.ux.form.field.BoxSelect', {
+            anchor: '100%',
+            width: '100%',
+            name: 'categories',
+            fieldLabel: '{s name=settings/select_categories_field}Select categorie(s){/s}',
+            labelWidth: me.defaults.labelWidth - 20,
+            store: me.categoryPathStore,
+            valueField: 'id',
+            displayField: 'name',
+            value: me.getCategories()
+        });
 
         me.gridComboBox = Ext.create('Ext.form.field.ComboBox', {
             fieldLabel: '{s name=settings/select_grid_field}Select a grid{/s}',
@@ -319,7 +315,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
                     xtype: 'container',
                     columnWidth: 1,
                     layout: 'anchor',
-                    items: [ responsiveMode ]
+                    items: [ me.categories, responsiveMode ]
                 }, {
                     xtype: 'container',
                     columnWidth: .5,
@@ -487,17 +483,6 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             fieldLabel: '{s name=settings/seo_description}SEO description{/s}'
         });
 
-        me.categorySearchField = Ext.create('Ext.ux.form.field.BoxSelect', {
-            anchor: '100%',
-            width: '100%',
-            name: 'categories',
-            fieldLabel: '{s name=settings/select_categories_field}Select categorie(s){/s}',
-            store: me.categoryPathStore,
-            valueField: 'id',
-            displayField: 'name',
-            value: me.getCategories()
-        });
-
         var store = Ext.create('Ext.data.Store', {
             fields: ['display', 'value'],
             data: [{
@@ -531,7 +516,6 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
                 seoTitle,
                 seoKeywords,
                 seoDescription,
-                me.categorySearchField,
                 me.positionSelection
             ]
         });
