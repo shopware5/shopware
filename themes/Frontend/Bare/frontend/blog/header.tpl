@@ -5,7 +5,7 @@
     {if $sArticle.metaTitle}
         {$sArticle.metaTitle} | {{config name=sShopname}|escapeHtmlAttr}
     {elseif $sCategoryContent.metaTitle}
-        {$sCategoryContent.metaTitle}
+        {$sCategoryContent.metaTitle} | {{config name=sShopname}|escapeHtmlAttr}
     {elseif $sCategoryContent.title}
         {$sCategoryContent.title}
     {else}
