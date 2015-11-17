@@ -471,15 +471,20 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             name: 'landingPageTeaser'
         });
 
+        var seoTitle = Ext.create('Ext.form.field.Text', {
+            name: 'seoTitle',
+            fieldLabel: '{s name=settings/seo_title}SEO title{/s}'
+        });
+
         var seoKeywords = Ext.create('Ext.form.field.Text', {
             name: 'seoKeywords',
-            fieldLabel: '{s name=settings/seo_keywords}SEO-Keywords{/s}'
+            fieldLabel: '{s name=settings/seo_keywords}SEO keywords{/s}'
         });
 
         var seoDescription = Ext.create('Ext.form.field.TextArea', {
             maxLength:150,
             name: 'seoDescription',
-            fieldLabel: '{s name=settings/seo_description}SEO-Description{/s}'
+            fieldLabel: '{s name=settings/seo_description}SEO description{/s}'
         });
 
         me.categorySearchField = Ext.create('Ext.ux.form.field.BoxSelect', {
@@ -523,6 +528,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             items: [
                 displayField,
                 mediaSelection,
+                seoTitle,
                 seoKeywords,
                 seoDescription,
                 me.categorySearchField,

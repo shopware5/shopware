@@ -46,6 +46,7 @@ class Shopware_Controllers_Frontend_Campaign extends Enlight_Controller_Action
 
         $this->View()->assign([
             'sBreadcrumb'          => [['name' => $landingPage['name']]],
+            'seo_title'            => $landingPage['seo_title'],
             'seo_keywords'         => $landingPage['seo_keywords'],
             'seo_description'      => $landingPage['seo_description'],
             'landingPage'          => $landingPage,

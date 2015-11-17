@@ -165,6 +165,13 @@ class Emotion extends ModelEntity
     private $landingPageTeaser;
 
     /**
+     * @var string $seoTitle
+     *
+     * @ORM\Column(name="seo_title", type="string",length=255, nullable=false)
+     */
+    private $seoTitle;
+
+    /**
      * @var string $seoKeywords
      *
      * @ORM\Column(name="seo_keywords", type="string",length=255, nullable=false)
@@ -560,6 +567,22 @@ class Emotion extends ModelEntity
     public function getSeoDescription()
     {
         return $this->seoDescription;
+    }
+
+    /**
+     * @param string $seoTitle
+     */
+    public function setSeoTitle($seoTitle)
+    {
+        $this->seoTitle = $seoTitle;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSeoTitle()
+    {
+        return $this->seoTitle;
     }
 
     /**

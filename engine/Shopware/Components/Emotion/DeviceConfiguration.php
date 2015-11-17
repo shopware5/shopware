@@ -182,6 +182,7 @@ class DeviceConfiguration
             'emotion.id',
             'emotion.device as devices',
             'emotion.name',
+            'emotion.seo_title',
             'emotion.seo_keywords',
             'emotion.seo_description',
             'emotion.valid_from',
