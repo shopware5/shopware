@@ -19,23 +19,17 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    BetaFeedback
- * @subpackage Main
- * @version    $Id$
- * @author shopware AG
  */
 
-//{namespace name=backend/beta_feedback/view/main}
+//{namespace name=backend/feedback/view/main}
 
 /**
- * Shopware UI - Beta Feedback Main Controller
+ * Shopware UI - Feedback Main Controller
  *
- * This file contains the business logic for the Beta Feedback module.
+ * This file contains the business logic for the Feedback module.
  */
-//{block name="backend/beta_feedback/controller/main"}
-Ext.define('Shopware.apps.BetaFeedback.controller.Main', {
+//{block name="backend/feedback/controller/main"}
+Ext.define('Shopware.apps.Feedback.controller.Main', {
 
     /**
      * Extend from the standard ExtJS 4 controller
