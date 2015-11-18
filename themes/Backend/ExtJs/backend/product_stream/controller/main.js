@@ -291,6 +291,6 @@ Ext.define('Shopware.apps.ProductStream.controller.Main', {
                         }
                     }
                 });
-            }, this, false, record.get('name'));
+            }, this, false, '{s name=stream_duplicate_copy}Copy of {/s}' + record.get('name'));
     }
 });
