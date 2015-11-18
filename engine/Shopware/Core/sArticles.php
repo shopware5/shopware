@@ -1438,7 +1438,7 @@ class sArticles
     protected function getRandomArticle($mode, $category = 0)
     {
         $category = (int)$category;
-        $context = $this->contextService->getShopContext();
+        $context = $this->contextService->getProductContext();
         if (empty($category)) {
             $category = $context->getShop()->getCategory()->getId();
         }
