@@ -151,8 +151,9 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
             $nodes = array();
 
             foreach ($sites as $site) {
-                //call getSiteNode helper function to build the final array structure
-                $nodes[] = $this->getSiteNode($nodeName . '_', $site);
+                if($site["parentId"] == 0) {
+                    $nodes[] = $this->getSiteNode($nodeName . '_', $site, $sites);
+                }
             }
             return $nodes;
         } else {
@@ -164,10 +165,11 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
      * helper function to build the final array to be handed to the view
      *
      * @param $idPrefix
-     * @param Site $site
+     * @param array $site
+     * @param array $sites
      * @return array
      */
-    private function getSiteNode($idPrefix, $site)
+    private function getSiteNode($idPrefix, $site, $sites)
     {
         //set icons
         if ($site['link']) {
@@ -183,16 +185,20 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
         $node['helperId'] = $site['id'];
         $node['iconCls'] = $iconCls;
         $node['leaf'] = true;
+        $node['nodes'] = [];
 
-        //if the site has children, append them
-        if (count($site['children']) > 0) {
-            $children = array();
-            foreach ($site['children'] as $child) {
-                $children[] = $this->getSiteNode($idPrefix . $site['id'] . '_', $child);
+        // each the array to search the childeren
+        foreach($sites as $childeren) {
+            if($childeren["parentId"] == $site['id']) {
+                $node['nodes'][] = $this->getSiteNode($idPrefix . $site['id'] . '_', $childeren, $sites);
             }
-            $node['nodes'] = $children;
+        }
+
+        //if the site has children, set leaf to false
+        if (count($node['nodes']) > 0) {
             $node['leaf'] = false;
         }
+
         return $node;
     }
 
