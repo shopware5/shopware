@@ -297,7 +297,10 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Editor', {
             textStore, containerStore,
             settings = me.getSettings();
 
-        me.createTimedDeliveryDateTime(record);
+        //Preview & testmail mode does not have a delivery time
+        if (typeof record !== 'undefined') {
+            me.createTimedDeliveryDateTime(record);
+        }
 
         // Create model and store for the text-field (content)
         ctText = Ext.create('Shopware.apps.NewsletterManager.model.ContainerTypeText', {

@@ -283,7 +283,7 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Settings', {
             },
             {
                 xtype: 'checkbox',
-                fieldLabel: '{s name=ready_for_sending}Ready for sending:{/s}',
+                fieldLabel: '{s name=ready_for_sending}Release for sending:{/s}',
                 name: 'released',
                 inputValue: 1,
                 uncheckedValue: 0,
