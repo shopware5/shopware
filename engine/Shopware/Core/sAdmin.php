@@ -2592,6 +2592,18 @@ class sAdmin
      */
     public function executeRiskRule($rule, $user, $basket, $value)
     {
+        if ($event = $this->eventManager->notifyUntil(
+            'Shopware_Modules_Admin_Execute_Risk_Rule_' . $rule,
+            [
+                'rule' => $rule,
+                'user' => $user,
+                'basket' => $basket,
+                'value' => $value
+            ]
+        )) {
+            return $event->getReturn();
+        }
+
         return $this->$rule($user, $basket, $value);
     }
 
