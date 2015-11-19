@@ -14,7 +14,7 @@
     "url": "https://github.com/shopware/shopware"
   },
   "bugs": {
-    "url": "http://jira.shopware.de/"
+    "url": "https://issues.shopware.com"
   },
   "license": "MIT",
   "devDependencies": {

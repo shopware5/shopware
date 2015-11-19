@@ -19,40 +19,34 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    BetaFeedback
- * @subpackage Main
- * @version    $Id$
- * @author shopware AG
  */
 
-//{namespace name=backend/beta_feedback/view/main}
+//{namespace name=backend/feedback/view/main}
 
 /**
- * Shopware UI - Beta Feedback Main Window
+ * Shopware UI - Feedback Main Window
  *
  * This file contains the business logic for the User Manager module. The module
  * handles the whole administration of the backend users.
  */
-//{block name="backend/beta_feedback/view/main/window"}
-Ext.define('Shopware.apps.BetaFeedback.view.main.Window', {
+//{block name="backend/feedback/view/main/window"}
+Ext.define('Shopware.apps.Feedback.view.main.Window', {
     extend: 'Enlight.app.Window',
     title: '{s name=window/title}Feedback{/s}',
-    alias: 'widget.beta-feedback-main-window',
+    alias: 'widget.feedback-main-window',
     border: false,
     layout: 'fit',
     autoShow: true,
     height: '90%',
-    width: 800,
+    width: 1200,
     stateful: true,
-    stateId: 'beta-feedback-main-window',
+    stateId: 'feedback-main-window',
 
     /**
      * Property which represents the iframe "src"-URL
      * @string
      */
-    requestUrl: 'http://jira.shopware.de/jira/index/viewport',
+    requestUrl: 'https://issues.shopware.com/#/?embedded=1',
 
     /**
      * Initializes the component and builds up the main interface
