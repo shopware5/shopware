@@ -39,16 +39,22 @@ class PreCommitChecks
 
         echo 'Running PHP lint' . PHP_EOL;
         if (!$this->phpLint($fileList)) {
-            echo 'There are some PHP syntax errors!' . PHP_EOL;
+            echo 'ERROR: There are some PHP syntax errors!' . PHP_EOL;
         }
 
         if ($this->isPHPCSFixerAvailable()) {
             echo 'Checking code style' . PHP_EOL;
             if (!$this->checkCodeStyle($fileList)) {
-                echo "Your commit does not comply with Shopware's coding standards." . PHP_EOL;
+                echo "ERROR: Your commit does not comply with Shopware's coding standards." . PHP_EOL;
             }
         } else {
-            echo "PHP-CS-Fixer is NOT installed. Please install globally (http://cs.sensiolabs.org/)." . PHP_EOL;
+            echo "ERROR: PHP-CS-Fixer is NOT installed. Please install globally (http://cs.sensiolabs.org/)." . PHP_EOL;
+            $this->error = true;
+        }
+
+        echo "Checking for duplicate migration numbers." . PHP_EOL;
+        if (($duplicateMigrationId = $this->hasDuplicateMigrations()) !== false) {
+            echo "ERROR: You are using the migration number ".$duplicateMigrationId." multiple times." . PHP_EOL;
             $this->error = true;
         }
 
@@ -172,6 +178,21 @@ class PreCommitChecks
     private function unstashTree()
     {
         exec("git stash pop -q --index");
+    }
+
+    /**
+     * Check for duplicated migrations
+     *
+     * @return string|false
+     */
+    private function hasDuplicateMigrations()
+    {
+        exec('find ./_sql/migrations -type f | cut -d\/ -f4 | cut -d\- -f1 | sort | uniq -d', $output);
+        if (count($output)) {
+            return current($output);
+        }
+
+        return false;
     }
 }
 
