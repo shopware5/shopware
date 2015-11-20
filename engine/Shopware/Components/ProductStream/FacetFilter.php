@@ -25,6 +25,7 @@
 namespace Shopware\Components\ProductStream;
 
 use Shopware\Bundle\SearchBundle\Condition\PriceCondition;
+use Shopware\Bundle\SearchBundle\Condition\PropertyCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\Facet\ImmediateDeliveryFacet;
 use Shopware\Bundle\SearchBundle\Facet\ManufacturerFacet;
@@ -32,6 +33,10 @@ use Shopware\Bundle\SearchBundle\Facet\PriceFacet;
 use Shopware\Bundle\SearchBundle\Facet\PropertyFacet;
 use Shopware\Bundle\SearchBundle\Facet\ShippingFreeFacet;
 use Shopware\Bundle\SearchBundle\Facet\VoteAverageFacet;
+use Shopware\Bundle\SearchBundle\FacetResult\FacetResultGroup;
+use Shopware\Bundle\SearchBundle\FacetResult\RangeFacetResult;
+use Shopware\Bundle\SearchBundle\FacetResult\ValueListFacetResult;
+use Shopware\Bundle\SearchBundle\FacetResult\ValueListItem;
 use Shopware\Bundle\SearchBundle\FacetResultInterface;
 
 /**
@@ -133,6 +138,7 @@ class FacetFilter implements FacetFilterInterface
                 return $facet;
             }
         }
+
         return null;
     }
 
@@ -142,7 +148,7 @@ class FacetFilter implements FacetFilterInterface
      */
     private function switchActivePriceFilter(array $facets, Criteria $criteria)
     {
-        /** @var \Shopware\Bundle\SearchBundle\FacetResult\RangeFacetResult $facet */
+        /** @var RangeFacetResult $facet */
         $facet = $this->getFacetByName($facets, 'price');
         if (!$facet) {
             return;
@@ -165,11 +171,11 @@ class FacetFilter implements FacetFilterInterface
      */
     private function switchPriceFilterValues(array $facets, Criteria $criteria)
     {
-        /** @var \Shopware\Bundle\SearchBundle\FacetResult\RangeFacetResult $facet */
+        /** @var RangeFacetResult $facet */
         $facet = $this->getFacetByName($facets, 'price');
 
         if ($criteria->hasBaseCondition('price') && $facet) {
-            /** @var \Shopware\Bundle\SearchBundle\Condition\PriceCondition $condition */
+            /** @var PriceCondition $condition */
             $condition = $criteria->getBaseCondition('price');
 
             $facet->setMin($condition->getMinPrice());
@@ -183,35 +189,41 @@ class FacetFilter implements FacetFilterInterface
      */
     private function removeStreamPropertyConditions(array $facets, Criteria $criteria)
     {
-        /** @var \Shopware\Bundle\SearchBundle\Condition\PropertyCondition[] $conditions */
-        if ($conditions = $this->getBaseConditionsByClass('\Shopware\Bundle\SearchBundle\Condition\PropertyCondition', $criteria)) {
+        /** @var PropertyCondition[] $conditions */
+        $conditions = $this->getBaseConditionsByClass('\Shopware\Bundle\SearchBundle\Condition\PropertyCondition', $criteria);
+        if (!$conditions) {
+            return;
+        }
 
-            /** @var \Shopware\Bundle\SearchBundle\FacetResult\FacetResultGroup $facet */
-            $facet = $this->getFacetByName($facets, 'property');
+        /** @var FacetResultGroup $facet */
+        $facet = $this->getFacetByName($facets, 'property');
+        if ($facet === null) {
+            return;
+        }
 
-            $new = [];
-            /** @var \Shopware\Bundle\SearchBundle\FacetResult\ValueListFacetResult $propertyFacet */
-            foreach ($facet->getFacetResults() as $propertyFacet) {
-                $ids = array_map(
-                    function (\Shopware\Bundle\SearchBundle\FacetResult\ValueListItem $item) {
-                        return $item->getId();
-                    }, $propertyFacet->getValues()
-                );
 
-                $filtered = false;
-                foreach ($conditions as $condition) {
-                    $diff = array_diff($condition->getValueIds(), $ids);
-                    $filtered = count($condition->getValueIds()) !== count($diff);
+        $new = [];
+        /** @var ValueListFacetResult $propertyFacet */
+        foreach ($facet->getFacetResults() as $propertyFacet) {
+            $ids = array_map(
+                function (ValueListItem $item) {
+                    return $item->getId();
+                }, $propertyFacet->getValues()
+            );
 
-                    if ($filtered) {
-                        break;
-                    }
-                }
-                if (!$filtered) {
-                    $new[] = $propertyFacet;
+            $filtered = false;
+            foreach ($conditions as $condition) {
+                $diff = array_diff($condition->getValueIds(), $ids);
+                $filtered = count($condition->getValueIds()) !== count($diff);
+
+                if ($filtered) {
+                    break;
                 }
             }
-            $facet->setFacetResults($new);
+            if (!$filtered) {
+                $new[] = $propertyFacet;
+            }
         }
+        $facet->setFacetResults($new);
     }
 }
