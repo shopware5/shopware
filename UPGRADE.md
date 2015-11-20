@@ -31,6 +31,7 @@ In this document you will find a changelog of the important changes related to t
 * Deprecated table column `s_filter_values.value_numeric`
 * `\Shopware\Bundle\SearchBundleDBAL\PriceHelper::getSelection()` now requires a `ProductContext` instead of a `ShopContext`
 * Changed type of `\Shopware\Models\Article\Detail::$active` to `boolean` (was `integer`)
+* Emotions can be assigned to multiple categories. Author: Christiansen <t.christiansen@reply.de> via GitHub.
 
 ## 5.1.1
 * Added new smarty block `frontend_detail_index_tabs_cross_selling` in the detail/ajax.tpl to prevent problems with custom themes
