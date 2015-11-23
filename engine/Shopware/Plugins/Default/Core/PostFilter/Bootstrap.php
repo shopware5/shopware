@@ -294,8 +294,8 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
         Shopware()->Template()->loadPlugin('Smarty_Compiler_Media');
 
         $compiler = new Smarty_Compiler_Media();
-        $link = $compiler->parse($attributes);
+        $attributes = $compiler->parseAttributes($attributes);
 
-        return $link;
+        return $attributes['path'];
     }
 }
