@@ -2,6 +2,15 @@
 
 {block name="frontend_index_content_top"}{/block}
 
+{* Page title *}
+{block name='frontend_index_header_title'}{strip}
+    {if $sCategoryContent.metaTitle}
+        {$sCategoryContent.metaTitle} | {{config name=sShopname}|escapeHtmlAttr}
+    {else}
+        {$smarty.block.parent}
+    {/if}
+{/strip}{/block}
+
 {* Google optimized crawling *}
 {block name='frontend_index_header_meta_tags' append}
     {if $hasEmotion && !$hasEscapedFragment}
