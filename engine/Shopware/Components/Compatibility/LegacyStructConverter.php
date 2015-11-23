@@ -514,9 +514,9 @@ class LegacyStructConverter
     private function getSourceSet($thumbnail)
     {
         if ($thumbnail->getRetinaSource() !== null) {
-            return sprintf('%s, %s 2x', $this->mediaService->getUrl($thumbnail->getSource()), $this->mediaService->getUrl($thumbnail->getRetinaSource()));
+            return sprintf('%s, %s 2x', $thumbnail->getSource(), $thumbnail->getRetinaSource());
         } else {
-            return $this->mediaService->getUrl($thumbnail->getSource());
+            return $thumbnail->getSource();
         }
     }
 
@@ -534,11 +534,8 @@ class LegacyStructConverter
 
         foreach ($media->getThumbnails() as $thumbnail) {
             $retina = null;
-            if ($thumbnail->hasRetinaSource()) {
-                $retina = $this->mediaService->getUrl($thumbnail->getRetinaSource());
-            }
             $thumbnails[] = [
-                'source' => $this->mediaService->getUrl($thumbnail->getSource()),
+                'source' => $thumbnail->getSource(),
                 'retinaSource' => $retina,
                 'sourceSet' => $this->getSourceSet($thumbnail),
                 'maxWidth' => $thumbnail->getMaxWidth(),
