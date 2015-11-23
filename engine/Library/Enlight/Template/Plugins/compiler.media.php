@@ -39,15 +39,18 @@ class Smarty_Compiler_Media extends Smarty_Internal_CompileBase
     public $required_attributes = array('path');
 
     /**
-     * @param $path
-     * @return mixed
-     * @throws Exception
+     * @param array $attributes
+     * @return string
      */
-    private function getUrl($path)
+    public function parseAttributes(array $attributes)
     {
-        $path = trim($path, '"\'');
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
-        return $mediaService->getUrl($path);
+        if (!empty($attributes['path'])) {
+            $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+            $attributes['path'] = trim($attributes['path'], '"\'');
+            $attributes['path'] = $mediaService->getUrl($attributes['path']);
+        }
+
+        return $attributes;
     }
 
     /**
@@ -65,7 +68,8 @@ class Smarty_Compiler_Media extends Smarty_Internal_CompileBase
         }
 
         if (preg_match('/^([\'"]?)[a-zA-Z0-9\/\.\-\_]+(\\1)$/', $_attr['path'], $match)) {
-            return $this->getUrl($_attr['path']);
+            $_attr = $this->parseAttributes($_attr);
+            return $_attr['path'];
         }
 
         return '<?php '
