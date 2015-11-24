@@ -89,6 +89,16 @@ Ext.define('Shopware.apps.PluginManager.controller.Main', {
         var me = this,
             localListing = me.getLocalListing();
 
+        localListing.getStore().on('load', function(operation) {
+            try {
+                var data = operation.proxy.reader.rawData;
+                if (data.error) {
+                    Shopware.Notification.createGrowlMessage('', data.error);
+                }
+            } catch (e) {
+            }
+        });
+
         if (!Shopware.app.Application.sbpAvailable) {
             var navController = me.subApplication.getController('Navigation');
             navController.displayLocalPluginPage();
