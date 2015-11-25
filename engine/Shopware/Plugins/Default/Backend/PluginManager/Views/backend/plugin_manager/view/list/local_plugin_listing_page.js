@@ -71,25 +71,7 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
         me.callParent(arguments);
 
         Shopware.app.Application.on('plugin-reloaded', function(plugin) {
-            me.store.each(function(record, index) {
-                if (record && record.get('technicalName') == plugin.get('technicalName')) {
-                    me.store.remove(record);
-                }
-            });
-
-            if (plugin.get('id') > 0) {
-                plugin.set('groupingState', null);
-                plugin.dirty = false;
-                try {
-                    me.store.add(plugin);
-                } catch (e) {
-                    me.store.load();
-                }
-            }
-
-            me.store.sort();
-            me.store.group();
-            me.reconfigure(me.store);
+            me.store.load();
             me.hideLoadingMask();
         });
     },
