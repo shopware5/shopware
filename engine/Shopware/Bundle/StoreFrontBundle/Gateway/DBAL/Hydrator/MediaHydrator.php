@@ -195,8 +195,12 @@ class MediaHydrator extends Hydrator
                 $retina = null;
             }
 
+            if (!empty($retina)) {
+                $retina = $this->mediaService->getUrl($retina);
+            }
+
             $thumbnails[] = new Struct\Thumbnail(
-                $row['source'],
+                $this->mediaService->getUrl($row['source']),
                 $retina,
                 $row['maxWidth'],
                 $row['maxHeight']
