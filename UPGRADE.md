@@ -34,6 +34,8 @@ In this document you will find a changelog of the important changes related to t
 * Emotions can be assigned to multiple categories. Author: Christiansen <t.christiansen@reply.de> via GitHub.
 * Allow clearing caches after plugin update
 * Added Event `Shopware_Modules_Admin_Execute_Risk_Rule_[RuleName]` to provide checks for custom risk rules
+* Default media albums are now editable in their name. The negative ids are still compatible and fix for development checks and assignments.
+* Add constants for default album ids in \Shopware\Models\Media\Album
 
 ## 5.1.1
 * Added new smarty block `frontend_detail_index_tabs_cross_selling` in the detail/ajax.tpl to prevent problems with custom themes

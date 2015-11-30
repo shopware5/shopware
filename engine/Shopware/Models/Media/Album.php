@@ -55,6 +55,20 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Album extends ModelEntity
 {
+    const ALBUM_ARTICLE = -1;
+    const ALBUM_BANNER = -2;
+    const ALBUM_EMOTION = -3;
+    const ALBUM_PROMOTIONS = -4;
+    const ALBUM_NEWSLETTER = -5;
+    const ALBUM_FILES = -6;
+    const ALBUM_VIDEO = -7;
+    const ALBUM_MUSIC = -8;
+    const ALBUM_OTHER = -9;
+    const ALBUM_UNSORTED = -10;
+    const ALBUM_BLOG = -11;
+    const ALBUM_SUPPLIER = -12;
+    const ALBUM_GARBAGE = -13;
+
     /**
      * Unique identifier
      * @var integer $id
