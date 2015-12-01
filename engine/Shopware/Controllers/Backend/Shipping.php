@@ -116,6 +116,10 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
         $holidays                  = $params['holidays'];
         $countries                 = $params['countries'];
         $categories                = $params['categories'];
+        
+        if (isset($params['attribute'][0])) {
+            $params['attribute'] = $params['attribute'][0];
+        }
 
 
         if (!isset($params['shippingFree']) || $params['shippingFree'] === "" || $params['shippingFree'] === "0") {
