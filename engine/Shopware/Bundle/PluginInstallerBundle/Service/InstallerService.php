@@ -380,6 +380,13 @@ class InstallerService
                     $name = $dir->getFilename();
                     $plugin = $collection->get($name);
 
+                    if ($this->validateIonCube($file)) {
+                        throw new \Exception(sprintf(
+                            'Plugin %s is encrypted but ioncube Loader extension is not installed',
+                            $name
+                        ));
+                    }
+
                     if ($plugin === null) {
                         $plugin = $collection->initPlugin($name, new \Enlight_Config([
                             'source' => $source,
@@ -398,5 +405,20 @@ class InstallerService
             $this->em->remove($plugin);
         }
         $this->em->flush();
+    }
+
+    /**
+     * @param string $file
+     * @return bool
+     */
+    private function validateIonCube($file)
+    {
+        if (extension_loaded('ionCube Loader')) {
+            return false;
+        }
+
+        $content = file_get_contents($file);
+        $pos = strpos($content, 'if(!extension_loaded(\'ionCube Loader\')){$__oc=strtolower(');
+        return ($pos > 0);
     }
 }
