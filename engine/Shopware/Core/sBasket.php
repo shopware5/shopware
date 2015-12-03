@@ -1726,7 +1726,7 @@ class sBasket
             $sql = "
                 SELECT id
                 FROM s_emarketing_voucher_codes
-                WHERE id = :voucherId AND cashed = 0
+                WHERE id = :voucherId AND cashed != 1
             ";
 
             $result = $this->db->fetchRow($sql, array('voucherId' => $voucherData['voucherId']));
