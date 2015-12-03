@@ -114,6 +114,11 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         if ($skipLogin == "1") {
             $this->View()->skipLogin = $skipLogin;
         }
+
+        if ($this->Request()->has('sValidation')) {
+            $this->View()->assign('sValidation', $this->Request()->getParam('sValidation'));
+        }
+
         $this->personalAction();
         $this->billingAction();
         $this->shippingAction();
