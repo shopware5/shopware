@@ -29,6 +29,17 @@ In this document you will find a changelog of the important changes related to t
 * Add getProductsCategories function to \Shopware\Bundle\StoreFrontBundle\Service\CategoryServiceInterface and \Shopware\Bundle\StoreFrontBundle\Gateway\CategoryGatewayInterface which returns all categories of the provided products.
 * Removed duplicate content in `frontend/detail/data.tpl` for block prices
 * Marked unnecessary block `frontend_detail_data_price_info` as deprecated
+* Added seo title for landing pages
+* Added config option to force the selection of a payment method in checkout
+* Deprecated table column `s_filter_values.value_numeric`
+* `\Shopware\Bundle\SearchBundleDBAL\PriceHelper::getSelection()` now requires a `ProductContext` instead of a `ShopContext`
+* Changed type of `\Shopware\Models\Article\Detail::$active` to `boolean` (was `integer`)
+* Emotions can be assigned to multiple categories. Author: Christiansen <t.christiansen@reply.de> via GitHub.
+* Allow clearing caches after plugin update
+* Added Event `Shopware_Modules_Admin_Execute_Risk_Rule_[RuleName]` to provide checks for custom risk rules
+* Added sValidation parameter to the frontend/register/login.tpl url to redirect to same login page in case the login validation failed.
+* Default media albums are now editable in their name. The negative ids are still compatible and fix for development checks and assignments.
+* Add constants for default album ids in \Shopware\Models\Media\Album
 
 ## 5.1.1
 * Added new smarty block `frontend_detail_index_tabs_cross_selling` in the detail/ajax.tpl to prevent problems with custom themes

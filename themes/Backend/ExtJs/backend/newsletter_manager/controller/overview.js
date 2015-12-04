@@ -164,12 +164,6 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Overview', {
                     window.open(url);
                 }
             });
-
-//            Ext.Msg.show({
-//                 title:'{s name=cronjobUrl/title}Cronjob URL{/s}',
-//                 msg: Ext.String.format('{s name=cronjobUrl/message}In order to send the newsletters automatically you will have to execute the following URL via cronjob.<br/>{literal}{0}{/literal}{/s}', url),
-//                 buttons: Ext.Msg.OK
-//            });
         });
 
     },
@@ -231,9 +225,10 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Overview', {
 
         form.loadRecord(settings);
 
-
-        // TinyMCE will be loaded last - it hast some getDoc() us undefined issues
-        editor.loadRecord(settings);
+        //TinyMCE will be loaded last - it hast some getDoc() us undefined issues
+        setTimeout(function(){
+            editor.loadRecord(settings);
+        }, 500);
 
     },
 

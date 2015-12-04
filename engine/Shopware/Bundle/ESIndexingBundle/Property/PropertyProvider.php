@@ -93,6 +93,9 @@ class PropertyProvider implements PropertyProviderInterface
         foreach ($groupIds as $groupId) {
             $query->setParameter(':id', $groupId);
             $data = $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
+            if (empty($data)) {
+                continue;
+            }
             $result[$groupId] = $this->hydrateGroup($data);
         }
 

@@ -24,6 +24,6 @@
 /**
  * Empty controller due to the fact that we've no logic here. The Shopware_Controllers_Backend_ExtJs handles the rest.
  */
-class Shopware_Controllers_Backend_BetaFeedback extends Shopware_Controllers_Backend_ExtJs
+class Shopware_Controllers_Backend_Feedback extends Shopware_Controllers_Backend_ExtJs
 {
 }

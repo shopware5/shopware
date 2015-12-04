@@ -36,6 +36,11 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
      */
     stateId: 'multiedit-grid',
 
+    /**
+     * Variant active column
+     */
+    detailActiveColumn: null,
+
     snippets: {
         'Article_id': '{s name=columns/product/Article_id}Article_id{/s}',
         'Article_mainDetailId': '{s name=columns/product/Article_mainDetailId}Article_mainDetailId{/s}',
@@ -173,7 +178,21 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
         });
         me.plugins = me.rowEditing;
 
+        me.listeners = {
+            'afterrender': me.onAfterRender
+        };
+
         me.callParent(arguments);
+    },
+
+    onAfterRender: function() {
+        var me = this;
+        Ext.each(me.columns, function(col) {
+            if (col.dataIndex == 'Detail_active') {
+                me.detailActiveColumn = col;
+                window.setTimeout(function() { col.setVisible(false); }, 0);
+            }
+        });
     },
 
     setupStateManager: function () {
@@ -302,6 +321,10 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
                 columnDefinition.width = width;
             } else {
                 columnDefinition.flex = 1;
+            }
+
+            if (column.alias == 'Detail_active') {
+                columnDefinition.hidden = true;
             }
 
             columns.push(columnDefinition);
@@ -490,6 +513,7 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
             case 'Supplier_name':
                 return 110;
             case 'Article_active':
+            case 'Detail_active':
                 return 40;
             case 'Tax_name':
                 return 75;

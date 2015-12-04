@@ -85,11 +85,11 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
      */
     public function getProductsCategories(array $products, Struct\ShopContextInterface $context)
     {
-        $ids = array_map(function (Struct\BaseProduct $product) {
+        $productIds = array_map(function (Struct\BaseProduct $product) {
             return $product->getId();
         }, $products);
 
-        $mapping = $this->getMapping($ids);
+        $mapping = $this->getMapping($productIds);
 
         $ids = $this->getMappingIds($mapping);
 
@@ -166,7 +166,7 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
     {
         $query = $this->connection->createQueryBuilder();
 
-        $query->select(['mapping.articleID', 'GROUP_CONCAT(mapping.categoryID)']);
+        $query->select(['mapping.articleID', 'GROUP_CONCAT(DISTINCT mapping.categoryID)']);
 
         $query->from('s_articles_categories_ro', 'mapping')
             ->where('mapping.articleID IN (:ids)')

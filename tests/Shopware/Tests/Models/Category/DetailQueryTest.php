@@ -1316,6 +1316,7 @@ class Shopware_Tests_Models_Category_DetailQueryTest extends Enlight_Components_
                         'isLandingPage' => 0,
                         'landingPageBlock' => '',
                         'landingPageTeaser' => '',
+                        'seoTitle' => '',
                         'seoKeywords' => '',
                         'seoDescription' => '',
                         'validTo' => null,
@@ -2013,6 +2014,7 @@ class Shopware_Tests_Models_Category_DetailQueryTest extends Enlight_Components_
                         'isLandingPage' => 0,
                         'landingPageBlock' => '',
                         'landingPageTeaser' => '',
+                        'seoTitle' => '',
                         'seoKeywords' => '',
                         'seoDescription' => '',
                         'validTo' => null,
@@ -2332,6 +2334,7 @@ class Shopware_Tests_Models_Category_DetailQueryTest extends Enlight_Components_
                         'isLandingPage' => 0,
                         'landingPageBlock' => '',
                         'landingPageTeaser' => '',
+                        'seoTitle' => '',
                         'seoKeywords' => '',
                         'seoDescription' => '',
                         'validTo' => null,
@@ -2747,6 +2750,7 @@ class Shopware_Tests_Models_Category_DetailQueryTest extends Enlight_Components_
                         'isLandingPage' => 1,
                         'landingPageBlock' => 'leftMiddle',
                         'landingPageTeaser' => 'media/image/testbild.jpg',
+                        'seoTitle' => '',
                         'seoKeywords' => '',
                         'seoDescription' => '',
                         'validTo' => null,
@@ -2767,6 +2771,7 @@ class Shopware_Tests_Models_Category_DetailQueryTest extends Enlight_Components_
                         'isLandingPage' => 1,
                         'landingPageBlock' => 'leftMiddle',
                         'landingPageTeaser' => '',
+                        'seoTitle' => '',
                         'seoKeywords' => '',
                         'seoDescription' => '',
                         'validTo' => null,
@@ -2787,6 +2792,7 @@ class Shopware_Tests_Models_Category_DetailQueryTest extends Enlight_Components_
                         'isLandingPage' => 0,
                         'landingPageBlock' => '',
                         'landingPageTeaser' => '',
+                        'seoTitle' => '',
                         'seoKeywords' => '',
                         'seoDescription' => '',
                         'validTo' => null,
@@ -3136,6 +3142,7 @@ class Shopware_Tests_Models_Category_DetailQueryTest extends Enlight_Components_
                         'isLandingPage' => 0,
                         'landingPageBlock' => '',
                         'landingPageTeaser' => '',
+                        'seoTitle' => '',
                         'seoKeywords' => '',
                         'seoDescription' => '',
                         'validTo' => null,
@@ -3353,6 +3360,7 @@ class Shopware_Tests_Models_Category_DetailQueryTest extends Enlight_Components_
                         'isLandingPage' => 0,
                         'landingPageBlock' => '',
                         'landingPageTeaser' => '',
+                        'seoTitle' => '',
                         'seoKeywords' => '',
                         'seoDescription' => '',
                         'validTo' => null,
@@ -3630,6 +3638,7 @@ class Shopware_Tests_Models_Category_DetailQueryTest extends Enlight_Components_
                         'isLandingPage' => 0,
                         'landingPageBlock' => '',
                         'landingPageTeaser' => '',
+                        'seoTitle' => '',
                         'seoKeywords' => '',
                         'seoDescription' => '',
                         'validTo' => null,
@@ -5548,6 +5557,7 @@ class Shopware_Tests_Models_Category_DetailQueryTest extends Enlight_Components_
                         'isLandingPage' => 0,
                         'landingPageBlock' => '',
                         'landingPageTeaser' => '',
+                        'seoTitle' => '',
                         'seoKeywords' => '',
                         'seoDescription' => '',
                         'validTo' => null,
@@ -8412,15 +8422,17 @@ class Shopware_Tests_Models_Category_DetailQueryTest extends Enlight_Components_
     /**
      * @return Shopware\Models\Category\Repository
      */
-    protected function getRepo() {
+    protected function getRepo()
+    {
         if ($this->repo === null) {
             $this->repo = Shopware()->Models()->Category();
         }
         return $this->repo;
     }
 
-    public function testQuery() {
-        foreach($this->expected as $id => $expected) {
+    public function testQuery()
+    {
+        foreach ($this->expected as $id => $expected) {
             $query = $this->getRepo()->getDetailQuery($id);
             $data = $this->removeDates($query->getArrayResult());
             $this->assertEquals($expected, $data);
@@ -8457,17 +8469,18 @@ class Shopware_Tests_Models_Category_DetailQueryTest extends Enlight_Components_
         $this->assertEquals('Feinbrennerei Sasse', $supplierData["name"]);
     }
 
-    protected function removeDates($data) {
-        foreach($data as &$subCategory) {
+    protected function removeDates($data)
+    {
+        foreach ($data as &$subCategory) {
             unset($subCategory['changed']);
             unset($subCategory['descriptionLong']);
             unset($subCategory['cmsText']);
             unset($subCategory['added']);
-            foreach($subCategory['emotions'] as &$emotion) {
+            foreach ($subCategory['emotions'] as &$emotion) {
                 unset($emotion['createDate']);
                 unset($emotion['modified']);
             }
-            foreach($subCategory['articles'] as &$article) {
+            foreach ($subCategory['articles'] as &$article) {
                 unset($article['added']);
                 unset($article['changed']);
                 unset($article['descriptionLong']);
@@ -8477,5 +8490,4 @@ class Shopware_Tests_Models_Category_DetailQueryTest extends Enlight_Components_
         }
         return $data;
     }
-
 }

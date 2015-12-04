@@ -555,22 +555,13 @@ class sAdmin
             );
         }
 
-        //new attribute tables.
-        $data = array(
-            "text1" => $postData['text1'],
-            "text2" => $postData['text2'],
-            "text3" => $postData['text3'],
-            "text4" => $postData['text4'],
-            "text5" => $postData['text5'],
-            "text6" => $postData['text6'],
-        );
-
         $billingId = $this->db->fetchOne(
             'SELECT id FROM s_user_billingaddress WHERE userID = ?',
             array((int) $this->session->offsetGet('sUserId'))
         );
         $where = array(" billingID = " . $billingId);
 
+        $data = $this->filterBillingAttributeData($billingId, $postData);
         list($data, $where) = $this->eventManager->filter(
             'Shopware_Modules_Admin_UpdateBillingAttributes_FilterSql',
             array($data, $where),
@@ -581,7 +572,9 @@ class sAdmin
             )
         );
 
-        $this->db->update('s_user_billingaddress_attributes', $data, $where);
+        if (!empty($data)) {
+            $this->db->update('s_user_billingaddress_attributes', $data, $where);
+        }
         $this->front->Request()->setPost($postData);
 
         return true;
@@ -815,15 +808,8 @@ class sAdmin
         } else {
             $where = array('id='.(int) $shippingID);
             $this->db->update('s_user_shippingaddress', $updateData, $where);
+            $attributeData = $this->filterShippingAttributeData($shippingID, $postData);
 
-            $attributeData = array(
-                'text1' => $postData['text1'],
-                'text2' => $postData['text2'],
-                'text3' => $postData['text3'],
-                'text4' => $postData['text4'],
-                'text5' => $postData['text5'],
-                'text6' => $postData['text6']
-            );
             $where = array('shippingID='.(int) $shippingID);
             list($attributeData) = $this->eventManager->filter(
                 'Shopware_Modules_Admin_UpdateShippingAttributes_FilterSql',
@@ -834,7 +820,9 @@ class sAdmin
                     "user" => $postData
                 )
             );
-            $this->db->update('s_user_shippingaddress_attributes', $attributeData, $where);
+            if (!empty($attributeData)) {
+                $this->db->update('s_user_shippingaddress_attributes', $attributeData, $where);
+            }
         }
 
         if ($this->db->getErrorMessage()) {
@@ -2592,6 +2580,18 @@ class sAdmin
      */
     public function executeRiskRule($rule, $user, $basket, $value)
     {
+        if ($event = $this->eventManager->notifyUntil(
+            'Shopware_Modules_Admin_Execute_Risk_Rule_' . $rule,
+            [
+                'rule' => $rule,
+                'user' => $user,
+                'basket' => $basket,
+                'value' => $value
+            ]
+        )) {
+            return $event->getReturn();
+        }
+
         return $this->$rule($user, $basket, $value);
     }
 
@@ -4961,5 +4961,47 @@ AND
 SQL;
 
         $this->db->query($sql, array($userId));
+    }
+
+    /**
+     * @param int $billingId
+     * @param array $postData
+     * @return array
+     */
+    private function filterBillingAttributeData($billingId, $postData)
+    {
+        $data = $this->db->fetchRow("SELECT * FROM s_user_billingaddress_attributes WHERE billingID = ?", [$billingId]);
+        unset($data['id']);
+        unset($data['billingID']);
+        $allowedKeys = array_keys($data);
+
+        foreach ($postData as $key => $value) {
+            if (!in_array($key, $allowedKeys)) {
+                continue;
+            }
+            $data[$key] = $value;
+        }
+        return $data;
+    }
+
+    /**
+     * @param int $shippingId
+     * @param array $postData
+     * @return array
+     */
+    private function filterShippingAttributeData($shippingId, $postData)
+    {
+        $data = $this->db->fetchRow("SELECT * FROM s_user_shippingaddress_attributes WHERE shippingID = ?", [$shippingId]);
+        unset($data['id']);
+        unset($data['shippingID']);
+        $allowedKeys = array_keys($data);
+
+        foreach ($postData as $key => $value) {
+            if (!in_array($key, $allowedKeys)) {
+                continue;
+            }
+            $data[$key] = $value;
+        }
+        return $data;
     }
 }

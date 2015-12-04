@@ -5,7 +5,7 @@
 
 - **License**: Dual license AGPL v3 / Proprietary
 - **Github Repository**: <https://github.com/shopware/shopware>
-- **Issue Tracker**: <http://jira.shopware.de/jira>
+- **Issue Tracker**: <https://issues.shopware.com>
 
 ## Overview
 
@@ -85,7 +85,7 @@ For more information about contributing to Shopware, please see [CONTRIBUTING.md
 
 We've always had a sympathetic ear for our community, so please feel free to submit tickets with bug reports or feature requests. In order to have a single issue tracking tool, we've decided to close the GitHub issue panel in favor of our Jira issue tracker, which is directly connected to our development division.
 
-* [Shopware Jira ticket submit form](http://jira.shopware.de/jira)
+* [Shopware Jira ticket submit form](https://issues.shopware.com)
 
 # Copying / License
 

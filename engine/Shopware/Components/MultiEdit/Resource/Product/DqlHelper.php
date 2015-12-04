@@ -83,7 +83,6 @@ class DqlHelper
     protected $columnsNotToShowInGrid = array(
         'Tax_tax',
         'Detail_kind',
-        'Detail_active',
         'Detail_articleId',
         'Detail_unitId',
         'Article_template' ,
@@ -260,13 +259,14 @@ class DqlHelper
     public function getDefaultColumns()
     {
         return array(
-            0 => 'Detail_number',
-            1 => 'Article_name',
-            2 => 'Supplier_name',
-            3 => 'Article_active',
-            4 => 'Price_price',
-            5 => 'Tax_name',
-            6 => 'Detail_inStock'
+            'Detail_number',
+            'Article_name',
+            'Supplier_name',
+            'Article_active',
+            'Detail_active',
+            'Price_price',
+            'Tax_name',
+            'Detail_inStock'
         );
     }
 
