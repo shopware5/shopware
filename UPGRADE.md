@@ -7,6 +7,7 @@ In this document you will find a changelog of the important changes related to t
     * OptOut by implementing `CSRFWhitelistAware` interface
     * Added `X-CSRF-Token` to every ajax request
     * See: https://developers.shopware.com/developers-guide/csrf-protection/
+* Update Symfony Components to version 2.8 LTS
 
 ## 5.1.2
 * Out-of-stock variants on the detail page are now selectable

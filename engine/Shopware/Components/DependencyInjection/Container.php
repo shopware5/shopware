@@ -279,8 +279,13 @@ class Container extends BaseContainer
      * @param string $name
      * @return Container
      */
-    public function reset($name)
+    public function reset($name = null)
     {
+        if ($name === null) {
+            parent::reset();
+            return $this;
+        }
+
         $name = $this->getNormalizedId($name);
         if (isset($this->resourceList[$name])) {
             unset($this->resourceList[$name]);
