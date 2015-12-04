@@ -33,6 +33,11 @@
 class Shopware_Controllers_Backend_Export extends Enlight_Controller_Action
 {
     /**
+     * @var sExport
+     */
+    private $export;
+
+    /**
      * Init controller method
      *
      * Disables the authorization-checking and template renderer.
@@ -42,6 +47,7 @@ class Shopware_Controllers_Backend_Export extends Enlight_Controller_Action
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
         Shopware()->Plugins()->Controller()->ViewRenderer()->setNoRender();
         $this->Front()->setParam('disableOutputBuffering', true);
+        $this->export = Shopware()->Modules()->Export();
     }
 
     /**
@@ -51,66 +57,38 @@ class Shopware_Controllers_Backend_Export extends Enlight_Controller_Action
      */
     public function indexAction()
     {
-        /**
-         * initialize the base class sExport
-         */
-        $export = Shopware()->Modules()->Export();
-        $export->sSYSTEM = Shopware()->System();
-        $export->sFeedID = (int) $this->Request()->feedID;
-        $export->sHash = $this->Request()->hash;
+        $this->prepareExport();
+        $this->sendHeaders();
 
-        $export->sInitSettings();
+        $productFeed = Shopware()->Models()->getRepository('\Shopware\Models\ProductFeed\ProductFeed')->find((int) $this->Request()->feedID);
 
-        /**
-         * set feed specific options to the export and sets
-         * the right header
-         */
-        if (!empty($export->sSettings['encodingID']) && $export->sSettings['encodingID'] == 2) {
-            if (!empty($export->sSettings['formatID']) && $export->sSettings['formatID'] == 3) {
-                $this->Response()->setHeader('Content-Type', 'text/xml;charset=utf-8');
-            } else {
-                $this->Response()->setHeader('Content-Type', 'text/x-comma-separated-values;charset=utf-8');
-            }
-        } else {
-            if (!empty($export->sSettings['formatID']) && $export->sSettings['formatID'] == 3) {
-                $this->Response()->setHeader('Content-Type', 'text/xml;charset=iso-8859-1');
-            } else {
-                $this->Response()->setHeader('Content-Type', 'text/x-comma-separated-values;charset=iso-8859-1');
-            }
+        // Live generation
+        if ($productFeed->getInterval() === 0) {
+            $this->generateExport("php://output");
+            return;
         }
 
-        /**
-         * @var $productFeed \Shopware\Models\ProductFeed\ProductFeed
-         */
-        $productFeed = Shopware()->Models()->ProductFeed()->find((int) $this->Request()->feedID);
+        $directory = $this->createOutputDirectory();
         $fileName = $productFeed->getHash() . '_' . $productFeed->getFileName();
+        $filePath = $directory . $fileName;
 
-        $dirName = $this->container->getParameter('kernel.cache_dir');
-        $dirName .= '/productexport/';
-        if (!file_exists($dirName)) {
-            mkdir($dirName, 0777);
+        if ($productFeed->getInterval() === -1 && file_exists($filePath)) {
+            readfile($filePath);
+            return;
         }
-        $filePath = $dirName . $fileName;
 
-        if ($productFeed->getInterval() != -1) {
-            $lastRefresh = $productFeed->getCacheRefreshed();
-            $lastRefresh = $lastRefresh ? $lastRefresh->getTimestamp() : 0;
-            $now = new DateTime();
-            $now = $now->getTimestamp();
+        $diffInterval = time();
+        if ($productFeed->getCacheRefreshed()) {
+            $diffInterval = $diffInterval - $productFeed->getCacheRefreshed()->getTimestamp();
+        }
 
-            if ($now-$lastRefresh >= $productFeed->getInterval()) {
-                $cacheFileResource = fopen($filePath, 'w');
+        if ($diffInterval >= $productFeed->getInterval() || !file_exists($filePath)) {
+            $this->generateExport($filePath);
 
-                $export->sSmarty = $this->View()->Engine();
-                $export->sInitSmarty();
-
-                // Export the feed
-                $export->executeExport($cacheFileResource);
-
-                $productFeed->setCacheRefreshed('now');
-                Shopware()->Models()->persist($productFeed);
-                Shopware()->Models()->flush($productFeed);
-            }
+            // update last refresh
+            $productFeed->setCacheRefreshed('now');
+            Shopware()->Models()->persist($productFeed);
+            Shopware()->Models()->flush($productFeed);
         }
 
         if (!file_exists($filePath)) {
@@ -121,7 +99,83 @@ class Shopware_Controllers_Backend_Export extends Enlight_Controller_Action
             return;
         }
 
-        $this->Response()->sendHeaders();
         readfile($filePath);
+    }
+
+    /**
+     * @param string $output Path to output file
+     */
+    private function generateExport($output)
+    {
+        $outputHandle = fopen($output, 'w');
+
+        $this->export->sSmarty = $this->View()->Engine();
+        $this->export->sInitSmarty();
+
+        // Export the feed
+        $this->export->executeExport($outputHandle);
+    }
+
+    /**
+     * initialize the base class sExport
+     */
+    private function prepareExport()
+    {
+        $this->export->sSYSTEM = Shopware()->System();
+        $this->export->sFeedID = (int)$this->Request()->feedID;
+        $this->export->sHash = $this->Request()->hash;
+
+        $this->export->sInitSettings();
+    }
+
+    /**
+     * set feed specific options to the export and sets
+     * the right header
+     */
+    private function sendHeaders()
+    {
+        $encoding = $this->getExportEncoding();
+        $contentType = $this->getExportContentType();
+
+        $this->Response()->setHeader('Content-Type', $contentType . ";charset=" . $encoding);
+        $this->Response()->sendHeaders();
+    }
+
+    /**
+     * @return string
+     */
+    private function getExportEncoding()
+    {
+        if (!empty($this->export->sSettings['encodingID']) && $this->export->sSettings['encodingID'] == 2) {
+            return "utf-8";
+        }
+
+        return "iso-8859-1";
+    }
+
+    /**
+     * @return string
+     */
+    private function getExportContentType()
+    {
+        if (!empty($this->export->sSettings['formatID']) && $this->export->sSettings['formatID'] == 3) {
+            return "text/xml";
+        }
+
+        return "text/x-comma-separated-values";
+    }
+
+    /**
+     * @return string Path to new output directory
+     */
+    private function createOutputDirectory()
+    {
+        $dirName = $this->container->getParameter('kernel.cache_dir');
+        $dirName .= '/productexport/';
+        if (!file_exists($dirName)) {
+            mkdir($dirName, 0777);
+        }
+
+        return $dirName;
     }
 }
