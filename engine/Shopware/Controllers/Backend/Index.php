@@ -22,6 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\CSRFWhitelistAware;
+
 /**
  * Shopware Backend Controller
  *
@@ -29,7 +31,7 @@
  * @package   Shopware\Controllers\Backend
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action
+class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action implements CSRFWhitelistAware
 {
     /**
      * @var Shopware_Plugins_Backend_Auth_Bootstrap
@@ -44,6 +46,20 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action
         $this->auth = Shopware()->Plugins()->Backend()->Auth();
         $this->auth->setNoAuth();
         $this->Front()->Plugins()->ScriptRenderer()->setRender();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getWhitelistedCSRFActions()
+    {
+        return [
+            'index',
+            'auth',
+            'changeLocale',
+            'load',
+            'menu'
+        ];
     }
 
     /**

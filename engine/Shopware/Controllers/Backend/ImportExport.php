@@ -22,6 +22,11 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\CSRFWhitelistAware;
+use Shopware\Models\Newsletter\Address;
+use Shopware\Models\Newsletter\ContactData;
+use Shopware\Models\Newsletter\Group;
+
 /**
  * Backend Controller for the Import/Export backend module
  *
@@ -30,11 +35,7 @@
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 
-use Shopware\Models\Newsletter\Address;
-use Shopware\Models\Newsletter\ContactData;
-use Shopware\Models\Newsletter\Group;
-
-class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Backend_ExtJs
+class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
     /**
      * Inits ACL-Permissions
@@ -52,6 +53,25 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         $this->addAclPermission('exportOrders', 'export', 'Insufficient Permissions');
 
         $this->addAclPermission('import', 'import', 'Insufficient Permissions');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getWhitelistedCSRFActions()
+    {
+        return [
+            'exportCustomers',
+            'exportArticles',
+            'exportInStock',
+            'exportNotInStock',
+            'exportPrices',
+            'exportNewsletter',
+            'exportCategories',
+            'exportArticleImages',
+            'exportOrders',
+            'import'
+        ];
     }
 
     /**

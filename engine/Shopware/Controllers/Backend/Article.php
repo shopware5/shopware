@@ -28,12 +28,14 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Models\Shop\Repository;
 use Shopware\Models\Shop\Shop;
 
+use Shopware\Components\CSRFWhitelistAware;
+
 /**
  * @category  Shopware
  * @package   Shopware\Controllers\Backend
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_ExtJs
+class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
     /**
      * Repository for the article model.
@@ -125,6 +127,17 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         if (!in_array($this->Request()->getActionName(), array('index', 'load', 'validateNumber'))) {
             $this->Front()->Plugins()->Json()->setRenderer();
         }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getWhitelistedCSRFActions()
+    {
+        return [
+            'previewDetail',
+            'getEsdDownload'
+        ];
     }
 
     /**
