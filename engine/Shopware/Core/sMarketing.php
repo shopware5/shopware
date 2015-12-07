@@ -363,11 +363,10 @@ class sMarketing
             AND (p.subshopID = ? OR p.subshopID = 0)
             ORDER BY p.startprice ASC
         ";
-
-        $premiums = $this->db->fetchAll($sql, array($context->getShop()->getId()));
+        $activeShopId = $context->getShop()->getId();
+        $premiums = $this->db->fetchAll($sql, array($activeShopId));
 
         foreach ($premiums as &$premium) {
-            $activeShopId = Shopware()->Shop()->getId();
             $activeFactor = $this->sSYSTEM->sCurrency["factor"];
 
             if ($premium['subshopID'] === "0") {
