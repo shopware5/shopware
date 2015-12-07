@@ -41,7 +41,7 @@ class DatabaseFactory
      */
     public function createPDOConnection(DatabaseConnectionInformation $info)
     {
-        $conn = @new \PDO(
+        $conn = new \PDO(
             $this->buildDsn($info),
             $info->username,
             $info->password,
@@ -74,10 +74,6 @@ class DatabaseFactory
             if (!empty($info->port)) {
                 $connectionString .= 'port=' . $info->port . ';';
             }
-        }
-
-        if ($info->databaseName) {
-            $connectionString .= 'dbname=' . $info->databaseName . ';';
         }
 
         return 'mysql:' . $connectionString;

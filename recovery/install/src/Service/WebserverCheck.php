@@ -77,7 +77,7 @@ class WebserverCheck
         try {
             $response = $this->httpClient->get($pingUrl);
         } catch (ClientException $e) {
-            throw new \RuntimeException("Could not check webserver", $e->getCode(), $e);
+            throw new \RuntimeException("Could not check web server", $e->getCode(), $e);
         }
 
         if ($response->getCode() != 200) {
