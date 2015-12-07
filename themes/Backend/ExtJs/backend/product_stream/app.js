@@ -34,6 +34,7 @@ Ext.define('Shopware.apps.ProductStream', {
         'condition_list.condition.VoteAverage',
         'condition_list.condition.Sales',
         'condition_list.condition.SearchTerm',
+        'condition_list.condition.Closeout',
 
         'condition_list.field.Grid',
         'condition_list.field.Price',
