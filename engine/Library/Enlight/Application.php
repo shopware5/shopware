@@ -171,16 +171,6 @@ class Enlight_Application
     }
 
     /**
-     * Runs the application bootstrap class to load the specify application resources.
-     *
-     * @return mixed
-     */
-    public function run()
-    {
-        return $this->Bootstrap()->run();
-    }
-
-    /**
      * Returns directory separator
      *
      * @return string
@@ -449,37 +439,13 @@ class Enlight_Application
      */
     public function __call($name, $value = null)
     {
-        if (!$this->Bootstrap()->hasResource($name)) {
+        if (!$this->container->has($name)) {
             throw new Enlight_Exception(
                 'Method "' . get_class($this) . '::' . $name . '" not found failure',
                 Enlight_Exception::METHOD_NOT_FOUND
             );
         }
 
-        return $this->Bootstrap()->getResource($name);
-    }
-
-    /**
-     * Returns called resource
-     *
-     * Example: Enlight_Application::Db()
-     *
-     * @throws Enlight_Exception
-     * @param string $name
-     * @param array $value
-     * @deprecated 4.2
-     * @return mixed
-     */
-    public static function __callStatic($name, $value = null)
-    {
-        $enlight = self::Instance();
-        if (!$enlight->Bootstrap()->hasResource($name)) {
-            throw new Enlight_Exception(
-                'Method "' . get_called_class() . '::' . $name . '" not found failure',
-                Enlight_Exception::METHOD_NOT_FOUND
-            );
-        }
-
-        return $enlight->Bootstrap()->getResource($name);
+        return $this->container->get($name);
     }
 }

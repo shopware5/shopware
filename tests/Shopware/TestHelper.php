@@ -94,14 +94,16 @@ class TestKernel extends \Shopware\Kernel
         $kernel = new self('testing', true);
         $kernel->boot();
 
-        $shopwareBootstrap = $kernel->getShopware()->Bootstrap();
-        $shopwareBootstrap->Models()->generateAttributeModels();
-        $shopwareBootstrap->Plugins()->Core()->ErrorHandler()->registerErrorHandler(E_ALL | E_STRICT);
+        $container = $kernel->getContainer();
+
+        $container->get('models')->generateAttributeModels();
+        $container->get('plugins')->Core()->ErrorHandler()->registerErrorHandler(E_ALL | E_STRICT);
 
         /** @var $repository \Shopware\Models\Shop\Repository */
-        $repository = $shopwareBootstrap->Models()->getRepository('Shopware\Models\Shop\Shop');
+        $repository = $container->get('models')->getRepository('Shopware\Models\Shop\Shop');
+
         $shop = $repository->getActiveDefault();
-        $shop->registerResources($shopwareBootstrap);
+        $shop->registerResources();
 
         $_SERVER['HTTP_HOST'] = $shop->getHost();
     }

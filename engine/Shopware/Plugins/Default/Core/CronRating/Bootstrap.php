@@ -64,7 +64,7 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
             $shop = $repository->getActiveById($shopId);
             $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Currency');
             $shop->setCurrency($repository->find($order["currencyID"]));
-            $shop->registerResources(Shopware()->Bootstrap());
+            $shop->registerResources();
 
             foreach ($positions[$orderId] as &$position) {
                 $position["link"] = Shopware()->Router()->assemble(array(

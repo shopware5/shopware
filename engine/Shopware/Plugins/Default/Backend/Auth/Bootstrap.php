@@ -260,12 +260,12 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
      */
     protected function initLocale()
     {
-        $bootstrap = $this->Application()->Bootstrap();
+        $container = $this->Application()->Container();
 
         $locale = $this->getCurrentLocale();
-        $bootstrap->getResource('Locale')->setLocale($locale->toString());
-        $bootstrap->getResource('Snippets')->setLocale($locale);
-        $template = $bootstrap->getResource('Template');
+        $container->get('Locale')->setLocale($locale->toString());
+        $container->get('Snippets')->setLocale($locale);
+        $template = $container->get('Template');
         $baseHash = $this->request->getScheme() . '://'
                   . $this->request->getHttpHost()
                   . $this->request->getBaseUrl() . '?'
@@ -285,9 +285,9 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
      */
     public function registerAclPlugin($auth)
     {
-        $bootstrap = $this->Application()->Bootstrap();
+        $container = $this->Application()->Container();
         if ($this->acl === null) {
-            $this->acl = $bootstrap->getResource('Acl');
+            $this->acl = $container->get('Acl');
         }
         if ($auth->hasIdentity()) {
             $identity = $auth->getIdentity();
@@ -295,7 +295,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
         }
 
         /** @var $engine Enlight_Template_Manager */
-        $engine = $bootstrap->getResource('Template');
+        $engine = $container->get('Template');
         $engine->unregisterPlugin(
             Smarty::PLUGIN_FUNCTION,
             'acl_is_allowed'
@@ -396,8 +396,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
      */
     public function onInitResourceAuth(Enlight_Event_EventArgs $args)
     {
-        $bootstrap = $this->Application()->Bootstrap();
-        $bootstrap->loadResource('BackendSession');
+        Shopware()->Container()->load('BackendSession');
 
         $resource = Shopware_Components_Auth::getInstance();
         $adapter = new Shopware_Components_Auth_Adapter_Default();

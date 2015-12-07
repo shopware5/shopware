@@ -277,7 +277,7 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
     public function setFront(Enlight_Controller_Front $front = null)
     {
         if ($front === null) {
-            $front = Enlight_Application::Instance()->Bootstrap()->getResource('Front');
+            $front = Shopware()->Container()->get('Front');
         }
         $this->front = $front;
 

@@ -91,7 +91,6 @@
         <service id="front" class="Enlight_Controller_Front">
             <factory service="front_factory" method="factory" />
             <argument type="service" id="service_container"/>
-            <argument type="service" id="bootstrap"/>
             <argument type="service" id="events"/>
             <argument>%shopware.front%</argument>
         </service>

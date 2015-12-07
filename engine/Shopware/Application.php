@@ -113,7 +113,7 @@ class Shopware extends Enlight_Application
      */
     public function System()
     {
-        return $this->Bootstrap()->getResource('System');
+        return $this->container->get('System');
     }
 
     /**
@@ -123,7 +123,7 @@ class Shopware extends Enlight_Application
      */
     public function Front()
     {
-        return $this->Bootstrap()->getResource('Front');
+        return $this->container->get('Front');
     }
 
     /**
@@ -133,7 +133,7 @@ class Shopware extends Enlight_Application
      */
     public function Template()
     {
-        return $this->_bootstrap->getResource('Template');
+        return $this->container->get('Template');
     }
 
     /**
@@ -143,7 +143,7 @@ class Shopware extends Enlight_Application
      */
     public function Config()
     {
-        return $this->_bootstrap->getResource('Config');
+        return $this->container->get('Config');
     }
 
     /**
@@ -153,7 +153,7 @@ class Shopware extends Enlight_Application
      */
     public function Modules()
     {
-        return $this->_bootstrap->getResource('Modules');
+        return $this->container->get('Modules');
     }
 
     /**
@@ -163,7 +163,7 @@ class Shopware extends Enlight_Application
      */
     public function Shop()
     {
-        return $this->_bootstrap->getResource('Shop');
+        return $this->container->get('Shop');
     }
 
     /**
@@ -173,7 +173,7 @@ class Shopware extends Enlight_Application
      */
     public function Db()
     {
-        return $this->_bootstrap->getResource('Db');
+        return $this->container->get('Db');
     }
 
     /**
@@ -183,7 +183,7 @@ class Shopware extends Enlight_Application
      */
     public function Models()
     {
-        return $this->_bootstrap->getResource('Models');
+        return $this->container->get('Models');
     }
 
     /**
@@ -193,7 +193,7 @@ class Shopware extends Enlight_Application
      */
     public function Session()
     {
-        return $this->_bootstrap->getResource('Session');
+        return $this->container->get('Session');
     }
 
     /**
@@ -203,7 +203,7 @@ class Shopware extends Enlight_Application
      */
     public function Acl()
     {
-        return $this->_bootstrap->getResource('Acl');
+        return $this->container->get('Acl');
     }
 
     /**
@@ -213,7 +213,7 @@ class Shopware extends Enlight_Application
      */
     public function TemplateMail()
     {
-        return $this->_bootstrap->getResource('TemplateMail');
+        return $this->container->get('TemplateMail');
     }
 
     /**
@@ -223,7 +223,7 @@ class Shopware extends Enlight_Application
      */
     public function Plugins()
     {
-        return $this->_bootstrap->getResource('plugin_manager');
+        return $this->container->get('plugin_manager');
     }
 
     /**
@@ -233,7 +233,7 @@ class Shopware extends Enlight_Application
      */
     public function Snippets()
     {
-        return $this->_bootstrap->getResource('snippets');
+        return $this->container->get('snippets');
     }
 
     /**
@@ -243,7 +243,7 @@ class Shopware extends Enlight_Application
      */
     public function PasswordEncoder()
     {
-        return $this->_bootstrap->getResource('PasswordEncoder');
+        return $this->container->get('PasswordEncoder');
     }
 
     /**

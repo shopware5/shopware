@@ -79,7 +79,7 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
 
         $request = Shopware()->Front()->Request();
         $system = new sSystem($request);
-        Shopware()->Bootstrap()->registerResource('System', $system);
+        Shopware()->Container()->set('System', $system);
 
         $system->sMODULES = Shopware()->Modules();
         $system->sSMARTY = Shopware()->Template();
@@ -87,7 +87,7 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
         $system->sMailer = Shopware()->Mail();
 
 
-        if (Shopware()->Bootstrap()->issetResource('Session')) {
+        if (Shopware()->Container()->initialized('Session')) {
             $system->_SESSION = Shopware()->Session();
             $system->sSESSION_ID = Shopware()->SessionID();
             if ($request !== null && Shopware()->Session()->Bot === null) {
@@ -98,7 +98,7 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
             $system->sBotSession = Shopware()->Session()->Bot;
         }
 
-        if (Shopware()->Bootstrap()->issetResource('Shop')) {
+        if (Shopware()->Container()->initialized('Shop')) {
             $shop = Shopware()->Shop();
             $system->sCurrency = $shop->getCurrency()->toArray();
 
@@ -107,7 +107,7 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
             $config->defaultCustomerGroup = $system->sUSERGROUP;
         }
 
-        if (Shopware()->Bootstrap()->issetResource('Session')) {
+        if (Shopware()->Container()->initialized('Session')) {
             if (!empty(Shopware()->Session()->sUserGroup)
                     && Shopware()->Session()->sUserGroup != $system->sUSERGROUP) {
                 $system->sUSERGROUP = Shopware()->Session()->sUserGroup;
@@ -148,7 +148,7 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
     public static function onInitResourceModules(Enlight_Event_EventArgs $args)
     {
         $modules = new Shopware_Components_Modules();
-        Shopware()->Bootstrap()->registerResource('Modules', $modules);
+        Shopware()->Container()->set('Modules', $modules);
         $modules->setSystem(Shopware()->System());
 
         return $modules;

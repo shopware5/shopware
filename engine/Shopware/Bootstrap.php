@@ -84,12 +84,16 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      * Adds the given resource to the internal resource list and sets the STATUS_ASSIGNED status.
      * The given name will be used as identifier.
      *
+     * @deprecated since 5.2 will be removed in 5.3
+     *
      * @param string $name
      * @param mixed $resource
      * @return Enlight_Bootstrap
      */
     public function registerResource($name, $resource)
     {
+        throw new \Exception("old api" . __METHOD__);
+
         $this->container->set($name, $resource);
 
         return $this;
@@ -98,11 +102,15 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
     /**
      * Checks if the given resource name is already registered. If not the resource is loaded.
      *
+     * @deprecated since 5.2 will be removed in 5.3
+     *
      * @param string $name
      * @return bool
      */
     public function hasResource($name)
     {
+        throw new \Exception("old dapi" . __METHOD__);
+
         return $this->container->has($name);
     }
 
@@ -110,11 +118,15 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      * Checks if the given resource name is already registered.
      * Unlike as the hasResource method is, if the resource does not exist the resource will not even loaded.
      *
+     * @deprecated since 5.2 will be removed in 5.3
+     *
      * @param string $name
      * @return bool
      */
     public function issetResource($name)
     {
+        throw new \Exception("old api" . __METHOD__);
+
         return $this->container->initialized($name);
     }
 
@@ -123,11 +135,15 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      * load the resource automatically. In case the resource is not found the status STATUS_NOT_FOUND is
      * set and an Enlight_Exception is thrown.
      *
+     * @deprecated since 5.2 will be removed in 5.3
+     *
      * @param string $name
      * @return mixed
      */
     public function getResource($name)
     {
+        throw new \Exception("old api" . __METHOD__);
+
         return $this->container->get($name);
     }
 
@@ -142,11 +158,15 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      * Enlight sets the status STATUS_NOT_FOUND for the resource in the resource status list.
      * In case the resource successfully initialed the resource has the status STATUS_LOADED
      *
+     * @deprecated since 5.2 will be removed in 5.3
+     *
      * @param string $name
      * @return bool
      */
     public function loadResource($name)
     {
+        throw new \Exception("old api" . __METHOD__);
+
         return $this->container->load($name);
     }
 
@@ -154,11 +174,15 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      * If the given resource is set, the resource and the resource status are removed from the
      * list properties.
      *
+     * @deprecated since 5.2 will be removed in 5.3
+     *
      * @param string $name
      * @return Enlight_Bootstrap
      */
     public function resetResource($name)
     {
+        throw new \Exception("old api" . __METHOD__);
+
         $this->container->reset($name);
 
         return $this;
@@ -167,6 +191,8 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
     /**
      * Returns called resource
      *
+     * @deprecated since 5.2 will be removed in 5.3
+     *
      * @param string $name
      * @param array $arguments
      * @deprecated 4.2
@@ -174,6 +200,8 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      */
     public function __call($name, $arguments = null)
     {
+        throw new \Exception("old api" . __METHOD__);
+
         return $this->container->get($name);
     }
 }

@@ -28,6 +28,7 @@ use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Theme\Inheritance;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\DependencyInjection\Container;
 
 /**
  *
@@ -671,32 +672,35 @@ class Shop extends ModelEntity
     }
 
     /**
-     * @param \Enlight_Bootstrap $bootstrap
+     * @param null $bootstrap Deprecated since 5.2 will be removed in 5.3
      * @return Shop
      */
-    public function registerResources(\Enlight_Bootstrap $bootstrap)
+    public function registerResources($bootstrap = null)
     {
-        $bootstrap->registerResource('Shop', $this);
+        /** @var Container $container */
+        $container = Shopware()->Container();
+
+        $container->set('Shop', $this);
 
         /** @var $locale \Zend_Locale */
-        $locale = $bootstrap->getResource('Locale');
+        $locale = $container->get('Locale');
         $locale->setLocale($this->getLocale()->toString());
 
         /** @var $currency \Zend_Currency */
-        $currency = $bootstrap->getResource('Currency');
+        $currency = $container->get('Currency');
         $currency->setLocale($locale);
         $currency->setFormat($this->getCurrency()->toArray());
 
         /** @var $config \Shopware_Components_Config */
-        $config = $bootstrap->getResource('Config');
+        $config = $container->get('Config');
         $config->setShop($this);
 
         /** @var $snippets \Shopware_Components_Config */
-        $snippets = $bootstrap->getResource('Snippets');
+        $snippets = $container->get('Snippets');
         $snippets->setShop($this);
 
         /** @var $snippets \Enlight_Plugin_PluginManager */
-        $plugins = $bootstrap->getResource('Plugins');
+        $plugins = $container->get('Plugins');
 
         /** @var $pluginNamespace  \Shopware_Components_Plugin_Namespace */
         $pluginNamespace = null;
@@ -707,11 +711,11 @@ class Shop extends ModelEntity
             }
         }
 
-        Shopware()->Container()->get('shopware_storefront.context_service')->initializeShopContext();
+        $container->get('shopware_storefront.context_service')->initializeShopContext();
 
         if ($this->getTemplate() !== null) {
             /** @var $templateManager \Enlight_Template_Manager */
-            $templateManager = $bootstrap->getResource('Template');
+            $templateManager = $container->get('Template');
             $template = $this->getTemplate();
             $localeName = $this->getLocale()->toString();
 
@@ -741,7 +745,7 @@ class Shop extends ModelEntity
         }
 
         /** @var $templateMail \Shopware_Components_TemplateMail */
-        $templateMail = $bootstrap->getResource('TemplateMail');
+        $templateMail = $container->get('TemplateMail');
         $templateMail->setShop($this);
 
         return $this;

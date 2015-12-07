@@ -156,8 +156,7 @@ class Shopware_Tests_Models_ShopRepositoryTest extends Enlight_Components_Test_C
      */
     public function testMultiShopLocation($host, $alias)
     {
-        Shopware()->Bootstrap()
-            ->resetResource('Template');
+        Shopware()->Container()->reset('Template');
 
         // Create test shops
         $sql = "

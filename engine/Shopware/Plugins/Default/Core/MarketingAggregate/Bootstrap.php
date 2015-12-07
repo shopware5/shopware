@@ -226,7 +226,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
         );
 
         $similarShown = Enlight_Class::Instance('Shopware_Components_SimilarShown');
-        $this->Application()->Bootstrap()->registerResource('SimilarShown', $similarShown);
+        Shopware()->Container()->set('SimilarShown', $similarShown);
         return $similarShown;
     }
 
@@ -363,7 +363,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
         );
 
         $alsoBought = Enlight_Class::Instance('Shopware_Components_AlsoBought');
-        $this->Application()->Bootstrap()->registerResource('AlsoBought', $alsoBought);
+        Shopware()->Container()->set('AlsoBought', $alsoBought);
         return $alsoBought;
     }
 
@@ -428,7 +428,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
         );
 
         $topSeller = Enlight_Class::Instance('Shopware_Components_TopSeller');
-        $this->Application()->Bootstrap()->registerResource('TopSeller', $topSeller);
+        Shopware()->Container()->set('TopSeller', $topSeller);
 
         return $topSeller;
     }

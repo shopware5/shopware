@@ -33,11 +33,11 @@
  */
 function smarty_modifier_translate($value = null, $path = null, $locale = null)
 {
-    if (!Enlight_Application::Instance()->Bootstrap()->hasResource('Locale')) {
+    if (!Shopware()->Container()->has('Locale')) {
         return $value;
     }
     if ($locale === null) {
-        $locale = Enlight_Application::Instance()->Locale();
+        $locale = Shopware()->Container()->get('Locale');
     }
     if ($path == 'currency') {
         $path = 'nametocurrency';

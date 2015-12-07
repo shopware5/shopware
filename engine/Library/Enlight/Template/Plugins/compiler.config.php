@@ -55,7 +55,7 @@ class Smarty_Compiler_Config extends Smarty_Internal_CompileBase
     {
         $_attr = $this->getAttributes($compiler, $args);
 
-        if (!Enlight_Application::Instance()->Bootstrap()->hasResource('Config')) {
+        if (!Shopware()->Container()->has('Config')) {
             if (!isset($_attr['default'])) {
                 $_attr['default'] = 'null';
             }
