@@ -80,9 +80,6 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
      */
     public function viewAction()
     {
-        //Fix header for the case calling this action from frontend, otherwise the referer check would crash
-        $this->Request()->setHeader('referer', '/backend/newsletter/view');
-
         if ($this->Request()->getParam('id')) {
             $mailingID = (int) $this->Request()->getParam('id');
             if (!Shopware()->Auth()->hasIdentity()) {

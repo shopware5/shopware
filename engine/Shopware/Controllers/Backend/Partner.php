@@ -368,6 +368,11 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
 
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
         $shop = $repository->getActiveDefault();
+
+        if (!$shop instanceof \Shopware\Models\Shop\Shop) {
+            throw new Exception("Invalid shop provided.");
+        }
+
         $shop->registerResources(Shopware()->Bootstrap());
 
         $url = $this->Front()->Router()->assemble(array('module' => 'frontend', 'controller' => 'index'));

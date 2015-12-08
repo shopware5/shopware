@@ -27,7 +27,6 @@ use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Models\Shop\Repository;
 use Shopware\Models\Shop\Shop;
-
 use Shopware\Components\CSRFWhitelistAware;
 
 /**
@@ -4450,6 +4449,11 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
         $shop = $repository->getActiveById($shopId);
+
+        if (!$shop instanceof Shop) {
+            throw new Exception("Invalid shop provided.");
+        }
+
         $shop->registerResources(Shopware()->Bootstrap());
 
         Shopware()->Session()->Admin = true;

@@ -149,11 +149,8 @@ return array_replace_recursive([
     ],
     'backendsession' => [
         'name' => 'SHOPWAREBACKEND',
-        //        'gc_maxlifetime' => 60 * 90,
         'cookie_lifetime' => 0,
         'cookie_httponly' => 1,
-        'use_trans_sid' => false,
-        'referer_check' => true,
-        'client_check' => false // true or false (is not compatible with firebug)
+        'use_trans_sid' => false
     ],
 ], $customConfig);

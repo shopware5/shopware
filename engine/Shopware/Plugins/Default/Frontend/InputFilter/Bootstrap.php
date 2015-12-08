@@ -79,7 +79,7 @@ class Shopware_Plugins_Frontend_InputFilter_Bootstrap extends Shopware_Component
             && ($referer = $request->getHeader('Referer')) !== null
             && strpos($referer, 'http') === 0
         ) {
-            /** @var $shop Shopware_Models_Shop */
+            /** @var $shop \Shopware\Models\Shop\Shop */
             $shop = Shopware()->Shop();
             $validHosts = array(
                 $shop->getHost(),
