@@ -119,9 +119,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         $categoryId = $categoryContent['id'];
         Shopware()->System()->_GET['sCategory'] = $categoryId;
 
-        // fetch devices on responsive template or load full emotions for older templates.
-        $templateVersion = Shopware()->Shop()->getTemplate()->getVersion();
-        $emotionConfiguration = $this->getEmotionConfiguration($templateVersion, $categoryId);
+        $emotionConfiguration = $this->getEmotionConfiguration($categoryId);
 
         $location = $this->getRedirectLocation($categoryContent, $emotionConfiguration['hasEmotion']);
         if ($location) {
@@ -169,11 +167,6 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         );
 
         $viewAssignments = array_merge($viewAssignments, $emotionConfiguration);
-
-        if (!$viewAssignments['showListing'] && $templateVersion < 3) {
-            $this->View()->assign($viewAssignments);
-            return;
-        }
 
         $context = $this->get('shopware_storefront.context_service')->getProductContext();
 
@@ -454,17 +447,8 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
      * @param int $categoryId
      * @return array
      */
-    protected function getEmotionConfiguration($templateVersion, $categoryId)
+    protected function getEmotionConfiguration($categoryId)
     {
-        if ($templateVersion < 3) {
-            $emotion = $this->getCategoryEmotion($categoryId);
-
-            return [
-                'hasEmotion' => !empty($emotion),
-                'showListing' => (empty($emotion) || !empty($emotion['showListing']))
-            ];
-        }
-
         if ($this->Request()->getParam('sPage')) {
             return [
                 'hasEmotion'  => false,

@@ -65,11 +65,7 @@ class PathResolver
      */
     public function getDirectory(Shop\Template $template)
     {
-        if ($template->getVersion() < 3) {
-            return $this->getTemplateDirectory($template);
-        } else {
-            return $this->getThemeDirectory($template);
-        }
+        return $this->getThemeDirectory($template);
     }
 
     /**
@@ -90,15 +86,6 @@ class PathResolver
         DIRECTORY_SEPARATOR . ucfirst($source) .
         DIRECTORY_SEPARATOR . ucfirst($namespace) .
         DIRECTORY_SEPARATOR . ucfirst($name);
-    }
-
-    /**
-     * Returns the default templates directory.
-     * @return string
-     */
-    public function getDefaultTemplateDirectory()
-    {
-        return $this->rootDir . '/templates';
     }
 
     /**
@@ -347,19 +334,5 @@ class PathResolver
         } else {
             return $this->getFrontendThemeDirectory() . DIRECTORY_SEPARATOR . $theme->getTemplate();
         }
-    }
-
-    /**
-     * Returns the template directory of the passed shop template.
-     * To get this use the getDirectory function.
-     *
-     * @param Shop\Template $template
-     * @return string
-     */
-    private function getTemplateDirectory(Shop\Template $template)
-    {
-        return $this->templateManager->resolveTemplateDir(
-            $template->getTemplate()
-        );
     }
 }

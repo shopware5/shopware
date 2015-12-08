@@ -72,11 +72,7 @@ class Util
      */
     public function getPreviewImage(Shop\Template $template)
     {
-        if ($template->getVersion() < 3) {
-            return $this->getTemplateImage($template);
-        } else {
-            return $this->getThemeImage($template);
-        }
+        return $this->getThemeImage($template);
     }
 
     /**
@@ -143,29 +139,6 @@ class Util
         }
 
         return new $class();
-    }
-
-
-    /**
-     * Returns the preview image for the passed template.
-     *
-     * @param \Shopware\Models\Shop\Template $template
-     * @return null|string
-     */
-    private function getTemplateImage(Shop\Template $template)
-    {
-        $templateDir = $this->pathResolver->getDirectory(
-            $template
-        );
-
-        $thumbnail = $templateDir . '/preview_thb.png';
-
-        if (!file_exists($thumbnail)) {
-            return null;
-        }
-
-        $thumbnail = file_get_contents($thumbnail);
-        return 'data:image/png;base64,' . base64_encode($thumbnail);
     }
 
     /**

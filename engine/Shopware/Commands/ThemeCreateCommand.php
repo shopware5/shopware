@@ -123,16 +123,6 @@ EOF
             return 1;
         }
 
-        if ($parent->getVersion() < 3) {
-            $output->writeln(
-                sprintf(
-                    'Shop template by template name "%s" is not a Shopware 5 Theme!',
-                    $arguments['parent']
-                )
-            );
-            return 1;
-        }
-
         $arguments = array_merge($arguments, $this->dialog($input, $output));
 
         /** @var Generator $themeGenerator */

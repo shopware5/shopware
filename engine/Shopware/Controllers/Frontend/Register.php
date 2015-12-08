@@ -100,7 +100,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             } else {
                 // If using the new template, the 'GET' action will be handled
                 // in the Register controller (unified login/register page)
-                if (Shopware()->Shop()->getTemplate()->getVersion() >= 3 && empty($this->session['sRegisterFinished'])) {
+                if (empty($this->session['sRegisterFinished'])) {
                     return $this->redirect(array(
                         'controller' => $sTarget,
                         'action' => $sTargetAction
@@ -146,17 +146,15 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
 
                 // If using the new template, we need to check the target page
                 // If its the checkout page, we need to stop by the shippingPayment page
-                if (Shopware()->Shop()->getTemplate()->getVersion() >= 3) {
-                    $sTarget = $this->Request()->getParam('sTarget', 'account');
-                    $sTargetAction = $this->Request()->getParam('sTargetAction', 'index');
-                    if ($sTarget == 'checkout' && $sTargetAction == 'confirm') {
-                        $sTargetAction = 'shippingPayment';
-                    }
-                    return $this->redirect(array(
-                        'action' => $sTargetAction,
-                        'controller' => $sTarget,
-                    ));
+                $sTarget = $this->Request()->getParam('sTarget', 'account');
+                $sTargetAction = $this->Request()->getParam('sTargetAction', 'index');
+                if ($sTarget == 'checkout' && $sTargetAction == 'confirm') {
+                    $sTargetAction = 'shippingPayment';
                 }
+                return $this->redirect(array(
+                    'action' => $sTargetAction,
+                    'controller' => $sTarget,
+                ));
             }
         }
         $this->forward('index');

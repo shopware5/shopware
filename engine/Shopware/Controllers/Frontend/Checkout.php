@@ -461,11 +461,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         if ($this->Request()->getParam('sAddAccessories')) {
             $this->forward('addAccessories');
         } else {
-            if (Shopware()->Shop()->getTemplate()->getVersion() >= 3) {
-                $this->forward($this->Request()->getParam('sTargetAction', 'cart'));
-            } else {
-                $this->forward($this->Request()->getParam('sTargetAction', 'index'));
-            }
+            $this->forward($this->Request()->getParam('sTargetAction', 'cart'));
         }
     }
 
@@ -481,11 +477,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             $this->Request()->getParam('sAddAccessoriesQuantity')
         );
 
-        if (Shopware()->Shop()->getTemplate()->getVersion() >= 3) {
-            $this->forward($this->Request()->getParam('sTargetAction', 'cart'));
-        } else {
-            $this->forward($this->Request()->getParam('sTargetAction', 'index'));
-        }
+        $this->forward($this->Request()->getParam('sTargetAction', 'cart'));
     }
 
     /**
@@ -1478,18 +1470,16 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         $this->View()->sBasketQuantity = $quantity;
         $this->View()->sBasketAmount = empty($amount) ? 0 : array_shift($amount);
 
-        if (Shopware()->Shop()->getTemplate()->getVersion() >= 3) {
-            $this->Front()->Plugins()->ViewRenderer()->setNoRender();
+        $this->Front()->Plugins()->ViewRenderer()->setNoRender();
 
-            $this->Response()->setBody(
-                json_encode(
-                    [
-                        'amount' => Shopware()->Template()->fetch('frontend/checkout/ajax_amount.tpl'),
-                        'quantity' => $quantity
-                    ]
-                )
-            );
-        }
+        $this->Response()->setBody(
+            json_encode(
+                [
+                    'amount' => Shopware()->Template()->fetch('frontend/checkout/ajax_amount.tpl'),
+                    'quantity' => $quantity
+                ]
+            )
+        );
     }
 
     /**
@@ -1582,17 +1572,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
      */
     private function onPaymentMethodValidationFail()
     {
-        if (Shopware()->Shop()->getTemplate()->getVersion() >= 3) {
-            $target = array('controller' => 'checkout', 'action' => 'shippingPayment');
-        } else {
-            $target = array(
-                'controller' => 'account',
-                'action' => 'payment',
-                'sTarget' => 'checkout',
-                'sTargetAction' => 'confirm'
-            );
-        }
-
+        $target = array('controller' => 'checkout', 'action' => 'shippingPayment');
         $this->redirect($target);
     }
 

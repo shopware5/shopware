@@ -115,7 +115,6 @@ class Installer
     public function synchronize()
     {
         $this->synchronizeThemes();
-        $this->synchronizeTemplates();
     }
 
     /**
@@ -154,52 +153,6 @@ class Installer
         /**@var $theme Theme */
         foreach ($themes as $theme) {
             $this->configurator->synchronize($theme);
-        }
-    }
-
-    /**
-     * Iterates all Shopware 4 templates which
-     * stored in the /templates/ directory.
-     * Each template are stored as new Shopware\Models\Shop\Template.
-     */
-    private function synchronizeTemplates()
-    {
-        if (!is_dir($this->pathResolver->getDefaultTemplateDirectory())) {
-            return;
-        }
-
-        $directories = new \DirectoryIterator(
-            $this->pathResolver->getDefaultTemplateDirectory()
-        );
-
-        /**@var $directory \DirectoryIterator */
-        foreach ($directories as $directory) {
-            //check valid directory
-            if ($directory->isDot()
-                || !$directory->isDir()
-                || strpos($directory->getFilename(), '_') === 0
-            ) {
-                continue;
-            }
-
-            if (strpos($directory->getFilename(), 'emotion') === false) {
-                continue;
-            }
-
-            //draw template information over the directory
-            $data = $this->getTemplateDefinition($directory);
-
-            $template = $this->repository->findOneBy(array(
-                'template' => $data['template']
-            ));
-
-            if (!$template instanceof Shop\Template) {
-                $template = new Shop\Template();
-                $this->entityManager->persist($template);
-            }
-
-            $template->fromArray($data);
-            $this->entityManager->flush();
         }
     }
 
@@ -335,40 +288,6 @@ class Installer
             false,
             $namespace
         );
-    }
-
-    /**
-     * Helper function which returns the template information for
-     * the passed shopware 4 template directory.
-     *
-     * @param \DirectoryIterator $directory
-     * @return array Contains the template data
-     */
-    private function getTemplateDefinition(\DirectoryIterator $directory)
-    {
-        $info = $directory->getPathname() . '/info.json';
-
-        $data = array();
-        if (file_exists($info)) {
-            $fileContent = file_get_contents($info);
-            if ($fileContent != '') {
-                $data = (array)\Zend_Json::decode($fileContent);
-            } else {
-                $data = null;
-            }
-        }
-
-        $data['template'] = $directory->getFilename();
-
-        if (!isset($data['version'])) {
-            $data['version'] = strpos($directory->getFilename(), 'emotion_') !== 0 ? 1 : 2;
-        }
-
-        if (!isset($data['name'])) {
-            $data['name'] = ucwords(str_replace('_', ' ', $directory->getFilename()));
-        }
-
-        return $data;
     }
 
     /**

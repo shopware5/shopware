@@ -235,10 +235,8 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
         if (!empty($this->_subshop['doc_template_id'])) {
             $template = Shopware()->Container()->get('models')->find('Shopware\Models\Shop\Template', $this->_subshop['doc_template_id']);
 
-            if ($template->getVersion() >= 3) {
-                $inheritance = Shopware()->Container()->get('theme_inheritance')->getTemplateDirectories($template);
-                $this->_template->setTemplateDir($inheritance);
-            }
+            $inheritance = Shopware()->Container()->get('theme_inheritance')->getTemplateDirectories($template);
+            $this->_template->setTemplateDir($inheritance);
         }
 
         $data = $this->_template->fetch("documents/".$this->_document["template"], $this->_view);
