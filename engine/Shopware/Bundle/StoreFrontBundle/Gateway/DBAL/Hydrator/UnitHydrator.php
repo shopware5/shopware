@@ -62,13 +62,14 @@ class UnitHydrator extends Hydrator
      */
     private function getTranslation($data)
     {
-        if (!isset($data['__unit_translation'])
-            || empty($data['__unit_translation'])
-        ) {
-            $translation = [];
-        } else {
+        $translation = [];
+
+        if (isset($data['__unit_translation']) && !empty($data['__unit_translation'])) {
             $result = unserialize($data['__unit_translation']) ? : [];
-            $translation = $result[$data['__unit_id']] ? : [];
+
+            if (isset($result[$data['__unit_id']])) {
+                $translation = $result[$data['__unit_id']] ? : [];
+            }
         }
 
         if (isset($data['__unit_translation_fallback'])
