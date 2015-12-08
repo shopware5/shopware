@@ -108,12 +108,10 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
                 change: function(field, value) {
 
                     if(value) {
-                        me.containerWidthField.setValue(1008);
                         me.categoryFieldSet.hide();
                         me.ladingPageConfiguration.insert(0, me.categories);
                         me.landingPageFieldSet.show();
                     } else {
-                        me.containerWidthField.setValue(808);
                         me.landingPageFieldSet.hide();
                         me.categoryFieldSet.insert(0, me.categories);
                         me.categoryFieldSet.show();
@@ -216,16 +214,6 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             emptyText: '{s name=settings/fieldset/select_template_empty}Please select...{/s}',
             labelWidth: me.defaults.labelWidth - 20,
             anchor: '100%'
-        });
-
-        me.containerWidthField = Ext.create('Ext.form.field.Number', {
-            fieldLabel: '{s name=settings/fieldset/container_width}Container width{/s}',
-            name: 'containerWidth',
-            helpText: '{s name=settings/fieldset/container_width_info}Container width in pixel (px){/s}',
-            anchor: '100%',
-            width: '100%',
-            labelWidth: me.defaults.labelWidth - 20,
-            supportText: '{s name=settings/fieldset/container_width_support}{/s}'
         });
 
         me.positionNumberField = Ext.create('Ext.form.field.Number', {
@@ -335,7 +323,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
                     xtype: 'container',
                     columnWidth: 1,
                     layout: 'anchor',
-                    items: [ me.deviceComboGroup, me.fullscreenField, me.containerWidthField, me.positionNumberField ]
+                    items: [ me.deviceComboGroup, me.fullscreenField, me.positionNumberField ]
                 }
             ]
         });

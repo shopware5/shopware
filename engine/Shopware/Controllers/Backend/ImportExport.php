@@ -3249,7 +3249,6 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 c.template,
                 c.active,
                 c.blog,
-                c.showfiltergroups,
                 c.external,
                 c.hidefilter
                 $attributesSelect

@@ -162,15 +162,6 @@ class Category extends ModelEntity
     private $active = true;
 
     /**
-     * If this field is set the category page will uses this template
-     *
-     * @var string $template
-     *
-     * @ORM\Column(name="template", type="string", length=255, nullable=true)
-     */
-    private $template;
-
-    /**
      * @var string $productBoxLayout
      *
      * @ORM\Column(name="product_box_layout", type="string", length=50, nullable=true)
@@ -190,15 +181,6 @@ class Category extends ModelEntity
      * @ORM\Column(name="path", type="string", nullable=false)
      */
     private $path = '';
-
-    /**
-     * Flag shows if the category filterable
-     *
-     * @var integer $showFilterGroups
-     *
-     * @ORM\Column(name="showfiltergroups", type="boolean", nullable=false)
-     */
-    private $showFilterGroups = true;
 
     /**
      * Is this category based outside from the shop?
@@ -652,29 +634,6 @@ class Category extends ModelEntity
     }
 
     /**
-     * Set template
-     *
-     * @param string $template
-     * @return Category
-     */
-    public function setTemplate($template)
-    {
-        $this->template = $template;
-
-        return $this;
-    }
-
-    /**
-     * Get template
-     *
-     * @return string
-     */
-    public function getTemplate()
-    {
-        return $this->template;
-    }
-
-    /**
      * Set no view select
      *
      * @param bool $noViewSelect
@@ -738,29 +697,6 @@ class Category extends ModelEntity
     public function setBlog($blog)
     {
         $this->blog = $blog;
-    }
-
-    /**
-     * Set the flag if filter groups should be displayed
-     *
-     * @param boolean $showFilterGroups
-     * @return Category
-     */
-    public function setShowFilterGroups($showFilterGroups)
-    {
-        $this->showFilterGroups = (bool) $showFilterGroups;
-
-        return $this;
-    }
-
-    /**
-     * Get the flag if the filter groups should be displayed
-     *
-     * @return boolean
-     */
-    public function getShowFilterGroups()
-    {
-        return $this->showFilterGroups;
     }
 
     /**

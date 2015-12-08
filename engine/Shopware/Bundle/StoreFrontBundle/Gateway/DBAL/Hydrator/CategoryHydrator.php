@@ -124,20 +124,12 @@ class CategoryHydrator extends Hydrator
             $category->setCmsText($data['__category_cmstext']);
         }
 
-        if (isset($data['__category_template'])) {
-            $category->setTemplate($data['__category_template']);
-        }
-
         if (isset($data['__category_noviewselect'])) {
             $category->setAllowViewSelect((bool) !$data['__category_noviewselect']);
         }
 
         if (isset($data['__category_blog'])) {
             $category->setBlog((bool) $data['__category_blog']);
-        }
-
-        if (isset($data['__category_showfiltergroups'])) {
-            $category->setDisplayPropertySets((bool) $data['__category_showfiltergroups']);
         }
 
         if (isset($data['__category_external'])) {

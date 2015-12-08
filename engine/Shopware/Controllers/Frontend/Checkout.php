@@ -1336,20 +1336,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     }
 
     /**
-     * Ajax add article action
-     *
-     * This action will get redirected from the default addArticleAction
-     * when the request was an AJAX request.
-     *
-     * The json padding will be set so that the content type will get to
-     * 'text/javascript' so the template can be returned via jsonp
-     */
-    public function ajaxAddArticleAction()
-    {
-        Enlight()->Plugins()->Controller()->Json()->setPadding();
-    }
-
-    /**
      * Ajax add article cart action
      *
      * This action is a lightweight way to add an article by the passed

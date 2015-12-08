@@ -107,7 +107,6 @@ class Installer
     /**
      * Synchronize the file system themes
      * with the already installed themes which stored in the database.
-     * The function initials additionally the old shopware 3.5 templates.
      *
      * The synchronization are processed in the synchronizeThemes and
      * synchronizeTemplates function.

@@ -1009,16 +1009,6 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
     }
 
     /**
-     * Logout account by ajax request
-     */
-    public function ajaxLogoutAction()
-    {
-        Enlight()->Plugins()->Controller()->Json()->setPadding();
-        Shopware()->Session()->unsetAll();
-        $this->refreshBasket();
-    }
-
-    /**
      *
      */
     protected function refreshBasket()

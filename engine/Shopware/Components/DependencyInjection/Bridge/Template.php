@@ -50,10 +50,6 @@ class Template
         /** @var $template \Enlight_Template_Manager */
         $template = \Enlight_Class::Instance('Enlight_Template_Manager');
 
-        $template->setCompileDir(Shopware()->AppPath('Cache_Compiles'));
-        $template->setCacheDir(Shopware()->AppPath('Cache_Templates'));
-        $template->setTemplateDir(Shopware()->AppPath('Views'));
-
         $template->setOptions($templateConfig);
         $template->setEventManager($eventManager);
 

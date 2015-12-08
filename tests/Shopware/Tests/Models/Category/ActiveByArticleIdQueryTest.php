@@ -57,9 +57,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -76,9 +76,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -95,9 +95,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -114,9 +114,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -133,9 +133,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Genusswelten',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -152,9 +152,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Die besten Edelbrände',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -171,9 +171,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -190,9 +190,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -209,9 +209,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Beispiele',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -228,9 +228,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Eigenschaften und Filter',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -249,9 +249,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -268,9 +268,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -287,9 +287,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -306,9 +306,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -325,9 +325,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Beispiele',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -344,9 +344,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Versandkosteneinstellungen',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -365,9 +365,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -384,9 +384,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -403,9 +403,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -422,9 +422,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -441,9 +441,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Genusswelten',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -460,9 +460,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Die besten Edelbrände',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -479,9 +479,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -498,9 +498,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -517,9 +517,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Beispiele',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -536,9 +536,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Eigenschaften und Filter',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -557,9 +557,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -576,9 +576,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -595,9 +595,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -614,9 +614,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -633,9 +633,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Beispiele',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -652,9 +652,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Artikeldarstellung im Listing.',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -673,9 +673,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -692,9 +692,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -711,9 +711,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -730,9 +730,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -749,9 +749,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Das Plugin Artikelkonfigurator',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -768,9 +768,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Beispiele',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -789,9 +789,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -808,9 +808,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -827,9 +827,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -846,9 +846,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -865,9 +865,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Das Plugin Artikelkonfigurator',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -884,9 +884,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Beispiele',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -905,9 +905,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -924,9 +924,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -943,9 +943,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -962,9 +962,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -981,9 +981,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Beispiele',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1000,9 +1000,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Artikeldarstellung im Listing.',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1021,9 +1021,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1040,9 +1040,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1059,9 +1059,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Genusswelten',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1078,9 +1078,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Die besten Edelbrände',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1097,9 +1097,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1116,9 +1116,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1135,9 +1135,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Beispiele',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1154,9 +1154,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Eigenschaften und Filter',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1175,9 +1175,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1194,9 +1194,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1213,9 +1213,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Genusswelten',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1232,9 +1232,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Die besten Edelbrände',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1251,9 +1251,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1270,9 +1270,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1291,9 +1291,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1310,9 +1310,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1329,9 +1329,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1348,9 +1348,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1367,9 +1367,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Genusswelten',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1386,9 +1386,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Die besten Edelbrände',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1405,9 +1405,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1424,9 +1424,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1443,9 +1443,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Beispiele',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1462,9 +1462,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Eigenschaften und Filter',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1483,9 +1483,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1502,9 +1502,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1521,9 +1521,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1540,9 +1540,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Genusswelten',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1559,9 +1559,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tees und Zubehör',
                 'active' => true,
-                'template' => 'article_listing_3col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1578,9 +1578,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tees',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1597,9 +1597,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1616,9 +1616,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1637,9 +1637,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1656,9 +1656,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1675,9 +1675,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1694,9 +1694,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Genusswelten',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1713,9 +1713,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tees und Zubehör',
                 'active' => true,
-                'template' => 'article_listing_3col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1732,9 +1732,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tees',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1751,9 +1751,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1770,9 +1770,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1791,9 +1791,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1810,9 +1810,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1829,9 +1829,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1848,9 +1848,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Genusswelten',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1867,9 +1867,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tees und Zubehör',
                 'active' => true,
-                'template' => 'article_listing_3col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1886,9 +1886,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tees',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1905,9 +1905,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1924,9 +1924,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1945,9 +1945,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1964,9 +1964,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1983,9 +1983,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2002,9 +2002,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Genusswelten',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2021,9 +2021,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tees und Zubehör',
                 'active' => true,
-                'template' => 'article_listing_3col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2040,9 +2040,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tees',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2059,9 +2059,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2078,9 +2078,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2099,9 +2099,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2118,9 +2118,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2137,9 +2137,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2156,9 +2156,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Genusswelten',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2175,9 +2175,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tees und Zubehör',
                 'active' => true,
-                'template' => 'article_listing_3col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2194,9 +2194,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tees',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2213,9 +2213,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2232,9 +2232,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2253,9 +2253,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2272,9 +2272,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2291,9 +2291,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2310,9 +2310,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Genusswelten',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2329,9 +2329,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tees und Zubehör',
                 'active' => true,
-                'template' => 'article_listing_3col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2348,9 +2348,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tees',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2367,9 +2367,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2386,9 +2386,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2407,9 +2407,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2426,9 +2426,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2445,9 +2445,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2464,9 +2464,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Genusswelten',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2483,9 +2483,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tees und Zubehör',
                 'active' => true,
-                'template' => 'article_listing_3col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2502,9 +2502,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2521,9 +2521,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tee-Zubehör',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2540,9 +2540,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2561,9 +2561,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2580,9 +2580,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2599,9 +2599,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2618,9 +2618,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Genusswelten',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2637,9 +2637,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tees und Zubehör',
                 'active' => true,
-                'template' => 'article_listing_3col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2656,9 +2656,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2675,9 +2675,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tee-Zubehör',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2694,9 +2694,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2715,9 +2715,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2734,9 +2734,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2753,9 +2753,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2772,9 +2772,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Genusswelten',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2791,9 +2791,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tees und Zubehör',
                 'active' => true,
-                'template' => 'article_listing_3col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2810,9 +2810,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2829,9 +2829,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tee-Zubehör',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2848,9 +2848,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2869,9 +2869,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2888,9 +2888,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2907,9 +2907,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2926,9 +2926,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Genusswelten',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2945,9 +2945,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tees und Zubehör',
                 'active' => true,
-                'template' => 'article_listing_3col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2964,9 +2964,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2983,9 +2983,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tee-Zubehör',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3002,9 +3002,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3023,9 +3023,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Genusswelten',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3042,9 +3042,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tees und Zubehör',
                 'active' => true,
-                'template' => 'article_listing_3col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3061,9 +3061,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3080,9 +3080,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tee-Zubehör',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3101,9 +3101,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Genusswelten',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3120,9 +3120,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tees und Zubehör',
                 'active' => true,
-                'template' => 'article_listing_3col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3139,9 +3139,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3158,9 +3158,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tee-Zubehör',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3179,9 +3179,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Genusswelten',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3198,9 +3198,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tees und Zubehör',
                 'active' => true,
-                'template' => 'article_listing_3col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3217,9 +3217,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3236,9 +3236,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tee-Zubehör',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3257,9 +3257,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Genusswelten',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3276,9 +3276,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tees und Zubehör',
                 'active' => true,
-                'template' => 'article_listing_3col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3295,9 +3295,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3314,9 +3314,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tee-Zubehör',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3335,9 +3335,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3354,9 +3354,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3373,9 +3373,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3392,9 +3392,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Genusswelten',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3411,9 +3411,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tees und Zubehör',
                 'active' => true,
-                'template' => 'article_listing_3col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3430,9 +3430,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tees',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3449,9 +3449,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3468,9 +3468,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3489,9 +3489,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3508,9 +3508,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3527,9 +3527,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3546,9 +3546,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Genusswelten',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3565,9 +3565,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tees und Zubehör',
                 'active' => true,
-                'template' => 'article_listing_3col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3584,9 +3584,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tees',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3603,9 +3603,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3622,9 +3622,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3643,9 +3643,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3662,9 +3662,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3681,9 +3681,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3700,9 +3700,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Genusswelten',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3719,9 +3719,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tees und Zubehör',
                 'active' => true,
-                'template' => 'article_listing_3col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3738,9 +3738,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tees',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3757,9 +3757,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3776,9 +3776,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3797,9 +3797,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3816,9 +3816,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3835,9 +3835,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3854,9 +3854,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Genusswelten',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3873,9 +3873,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tees und Zubehör',
                 'active' => true,
-                'template' => 'article_listing_3col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3892,9 +3892,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tees',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3911,9 +3911,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3930,9 +3930,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3951,9 +3951,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3970,9 +3970,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3989,9 +3989,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4008,9 +4008,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Genusswelten',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4027,9 +4027,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tees und Zubehör',
                 'active' => true,
-                'template' => 'article_listing_3col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4046,9 +4046,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tees',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4065,9 +4065,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4084,9 +4084,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4105,9 +4105,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4124,9 +4124,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4143,9 +4143,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4162,9 +4162,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Genusswelten',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4181,9 +4181,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tees und Zubehör',
                 'active' => true,
-                'template' => 'article_listing_3col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4200,9 +4200,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tees',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4219,9 +4219,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4238,9 +4238,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4259,9 +4259,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Genusswelten',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4278,9 +4278,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Köstlichkeiten',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4297,9 +4297,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4318,9 +4318,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Genusswelten',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4337,9 +4337,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Köstlichkeiten',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4356,9 +4356,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4377,9 +4377,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4396,9 +4396,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4415,9 +4415,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Genusswelten',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4434,9 +4434,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Köstlichkeiten',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4453,9 +4453,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4472,9 +4472,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4493,9 +4493,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4512,9 +4512,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4531,9 +4531,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Genusswelten',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4550,9 +4550,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Köstlichkeiten',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4569,9 +4569,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4588,9 +4588,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4609,9 +4609,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4628,9 +4628,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4647,9 +4647,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Genusswelten',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4666,9 +4666,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Köstlichkeiten',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4685,9 +4685,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4704,9 +4704,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4725,9 +4725,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Genusswelten',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4744,9 +4744,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Köstlichkeiten',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4763,9 +4763,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4784,9 +4784,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4803,9 +4803,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4822,9 +4822,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Genusswelten',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4841,9 +4841,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Köstlichkeiten',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4860,9 +4860,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4879,9 +4879,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4900,9 +4900,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4919,9 +4919,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4938,9 +4938,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Genusswelten',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4957,9 +4957,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Köstlichkeiten',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4976,9 +4976,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4995,9 +4995,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5016,9 +5016,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Möbel',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5035,9 +5035,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5054,9 +5054,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Wohnwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5075,9 +5075,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5094,9 +5094,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5113,9 +5113,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Möbel',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5132,9 +5132,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5151,9 +5151,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Wohnwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5170,9 +5170,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5191,9 +5191,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Möbel',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5210,9 +5210,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5229,9 +5229,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Wohnwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5250,9 +5250,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Möbel',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5269,9 +5269,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5288,9 +5288,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Wohnwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5309,9 +5309,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5328,9 +5328,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5347,9 +5347,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Möbel',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5366,9 +5366,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5385,9 +5385,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Wohnwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5404,9 +5404,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5425,9 +5425,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Möbel',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5444,9 +5444,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5463,9 +5463,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Wohnwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5484,9 +5484,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5503,9 +5503,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5522,9 +5522,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Möbel',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5541,9 +5541,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5560,9 +5560,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Wohnwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5579,9 +5579,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5600,9 +5600,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Möbel',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5619,9 +5619,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5638,9 +5638,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Wohnwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5659,9 +5659,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Möbel',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5678,9 +5678,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5697,9 +5697,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Wohnwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5718,9 +5718,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Möbel',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5737,9 +5737,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5756,9 +5756,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Wohnwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5777,9 +5777,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5796,9 +5796,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5815,9 +5815,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Möbel',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5834,9 +5834,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5853,9 +5853,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Wohnwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5872,9 +5872,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5893,9 +5893,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Möbel',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5912,9 +5912,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5931,9 +5931,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Wohnwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5952,9 +5952,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Möbel',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5971,9 +5971,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5990,9 +5990,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Wohnwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6011,9 +6011,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6030,9 +6030,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6049,9 +6049,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Möbel',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6068,9 +6068,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6087,9 +6087,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Wohnwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6106,9 +6106,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6127,9 +6127,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6146,9 +6146,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Wohnwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6167,9 +6167,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Vielfältiges Zubehör für Ihre Küche',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6186,9 +6186,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6205,9 +6205,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Wohnwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6226,9 +6226,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6245,9 +6245,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6264,9 +6264,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Vielfältiges Zubehör für Ihre Küche',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6283,9 +6283,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6302,9 +6302,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Wohnwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6321,9 +6321,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6342,9 +6342,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Vielfältiges Zubehör für Ihre Küche',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6361,9 +6361,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6380,9 +6380,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Wohnwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6401,9 +6401,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6420,9 +6420,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6439,9 +6439,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Vielfältiges Zubehör für Ihre Küche',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6458,9 +6458,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6477,9 +6477,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Wohnwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6496,9 +6496,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6517,9 +6517,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Vielfältiges Zubehör für Ihre Küche',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6536,9 +6536,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6555,9 +6555,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Wohnwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6576,9 +6576,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Vielfältiges Zubehör für Ihre Küche',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6595,9 +6595,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6614,9 +6614,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Wohnwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6635,9 +6635,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Vielfältiges Zubehör für Ihre Küche',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6654,9 +6654,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6673,9 +6673,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Wohnwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6694,9 +6694,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Vielfältiges Zubehör für Ihre Küche',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6713,9 +6713,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6732,9 +6732,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Wohnwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6753,9 +6753,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Vielfältiges Zubehör für Ihre Küche',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6772,9 +6772,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6791,9 +6791,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Wohnwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6812,9 +6812,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Vielfältiges Zubehör für Ihre Küche',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6831,9 +6831,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6850,9 +6850,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Wohnwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6871,9 +6871,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6890,9 +6890,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6909,9 +6909,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Vielfältiges Zubehör für Ihre Küche',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6928,9 +6928,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6947,9 +6947,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Wohnwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6966,9 +6966,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6987,9 +6987,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Vielfältiges Zubehör für Ihre Küche',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7006,9 +7006,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7025,9 +7025,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Wohnwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7046,9 +7046,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Vielfältiges Zubehör für Ihre Küche',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7065,9 +7065,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7084,9 +7084,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Wohnwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7105,9 +7105,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Mit der richtigen Dekoration in eine Wohlfühlwelt',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7124,9 +7124,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7143,9 +7143,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Wohnwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7164,9 +7164,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Mit der richtigen Dekoration in eine Wohlfühlwelt',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7183,9 +7183,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7202,9 +7202,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Wohnwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7223,9 +7223,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Mit der richtigen Dekoration in eine Wohlfühlwelt',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7242,9 +7242,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7261,9 +7261,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Wohnwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7282,9 +7282,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7301,9 +7301,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7320,9 +7320,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7341,9 +7341,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Vielfältiges Zubehör für Ihre Küche',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7360,9 +7360,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7379,9 +7379,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Wohnwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7398,9 +7398,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7419,9 +7419,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7438,9 +7438,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7457,9 +7457,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Vielfältiges Zubehör für Ihre Küche',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7476,9 +7476,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7495,9 +7495,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Wohnwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7514,9 +7514,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7533,9 +7533,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7554,9 +7554,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7573,9 +7573,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7592,9 +7592,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7611,9 +7611,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7630,9 +7630,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7649,9 +7649,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7670,9 +7670,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7689,9 +7689,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7708,9 +7708,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7729,9 +7729,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7748,9 +7748,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7767,9 +7767,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7786,9 +7786,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7805,9 +7805,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7824,9 +7824,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7845,9 +7845,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7864,9 +7864,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7883,9 +7883,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7904,9 +7904,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7923,9 +7923,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7942,9 +7942,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7963,9 +7963,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7982,9 +7982,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8001,9 +8001,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8022,9 +8022,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8041,9 +8041,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8060,9 +8060,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8079,9 +8079,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8098,9 +8098,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8117,9 +8117,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8138,9 +8138,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8157,9 +8157,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8176,9 +8176,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8197,9 +8197,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8216,9 +8216,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Freizeitwelten',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8235,9 +8235,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8256,9 +8256,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8275,9 +8275,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Freizeitwelten',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8294,9 +8294,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8315,9 +8315,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8334,9 +8334,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Freizeitwelten',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8353,9 +8353,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8374,9 +8374,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8393,9 +8393,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8412,9 +8412,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8431,9 +8431,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Freizeitwelten',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8450,9 +8450,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8469,9 +8469,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8490,9 +8490,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8509,9 +8509,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8528,9 +8528,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8547,9 +8547,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Freizeitwelten',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8566,9 +8566,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8585,9 +8585,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8606,9 +8606,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8625,9 +8625,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Freizeitwelten',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8644,9 +8644,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8665,9 +8665,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8684,9 +8684,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Freizeitwelten',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8703,9 +8703,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8724,9 +8724,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8743,9 +8743,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Freizeitwelten',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8762,9 +8762,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8783,9 +8783,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8802,9 +8802,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8821,9 +8821,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8840,9 +8840,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8859,9 +8859,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Genusswelten',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8878,9 +8878,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Die besten Edelbrände',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8897,9 +8897,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8916,9 +8916,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8935,9 +8935,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Beispiele',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8954,9 +8954,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Eigenschaften und Filter',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8975,9 +8975,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8994,9 +8994,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Freizeitwelten',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9013,9 +9013,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9034,9 +9034,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9053,9 +9053,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9072,9 +9072,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9093,9 +9093,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9112,9 +9112,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9131,9 +9131,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9150,9 +9150,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9169,9 +9169,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9188,9 +9188,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9209,9 +9209,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9228,9 +9228,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9247,9 +9247,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9268,9 +9268,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9287,9 +9287,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9306,9 +9306,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9325,9 +9325,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9344,9 +9344,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9363,9 +9363,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9384,9 +9384,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9403,9 +9403,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9422,9 +9422,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Freizeitwelten',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9443,9 +9443,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9462,9 +9462,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9481,9 +9481,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Freizeitwelten',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9502,9 +9502,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9521,9 +9521,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9540,9 +9540,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Freizeitwelten',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9561,9 +9561,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9580,9 +9580,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9599,9 +9599,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Freizeitwelten',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9620,9 +9620,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9639,9 +9639,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9658,9 +9658,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Freizeitwelten',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9679,9 +9679,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9698,9 +9698,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9717,9 +9717,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9736,9 +9736,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9755,9 +9755,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Freizeitwelten',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9774,9 +9774,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9795,9 +9795,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9814,9 +9814,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9833,9 +9833,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9852,9 +9852,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9871,9 +9871,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Freizeitwelten',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9890,9 +9890,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9911,9 +9911,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9930,9 +9930,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9949,9 +9949,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9968,9 +9968,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9987,9 +9987,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Freizeitwelten',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -10006,9 +10006,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -10027,9 +10027,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -10046,9 +10046,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -10065,9 +10065,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -10084,9 +10084,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -10103,9 +10103,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -10122,9 +10122,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -10141,9 +10141,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Freizeitwelten',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -10160,9 +10160,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -10179,9 +10179,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -10198,9 +10198,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -10219,9 +10219,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -10238,9 +10238,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -10259,9 +10259,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -10278,9 +10278,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -10299,9 +10299,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -10318,9 +10318,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -10337,9 +10337,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -10356,9 +10356,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -10375,9 +10375,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -10394,9 +10394,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -10415,9 +10415,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -10434,9 +10434,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -10455,9 +10455,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -10474,9 +10474,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -10493,9 +10493,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -10514,9 +10514,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -10533,9 +10533,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -10552,9 +10552,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -10573,9 +10573,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -10592,9 +10592,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -10611,9 +10611,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -10630,9 +10630,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -10649,9 +10649,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -10668,9 +10668,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -10689,9 +10689,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -10708,9 +10708,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -10727,9 +10727,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -10748,9 +10748,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -10767,9 +10767,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -10786,9 +10786,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -10805,9 +10805,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -10824,9 +10824,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -10843,9 +10843,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -10864,9 +10864,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -10883,9 +10883,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -10902,9 +10902,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -10921,9 +10921,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -10940,9 +10940,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -10959,9 +10959,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -10980,9 +10980,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -10999,9 +10999,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -11018,9 +11018,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -11039,9 +11039,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -11058,9 +11058,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -11077,9 +11077,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -11098,9 +11098,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -11117,9 +11117,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -11136,9 +11136,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -11157,9 +11157,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -11176,9 +11176,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -11195,9 +11195,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -11214,9 +11214,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -11233,9 +11233,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -11252,9 +11252,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -11273,9 +11273,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -11292,9 +11292,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -11311,9 +11311,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -11332,9 +11332,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -11351,9 +11351,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -11370,9 +11370,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -11391,9 +11391,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -11410,9 +11410,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -11429,9 +11429,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -11450,9 +11450,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -11469,9 +11469,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -11488,9 +11488,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -11509,9 +11509,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -11528,9 +11528,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -11547,9 +11547,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -11566,9 +11566,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -11585,9 +11585,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -11604,9 +11604,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -11625,9 +11625,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -11644,9 +11644,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -11663,9 +11663,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -11684,9 +11684,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -11703,9 +11703,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -11722,9 +11722,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -11743,9 +11743,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -11762,9 +11762,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -11781,9 +11781,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -11800,9 +11800,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -11819,9 +11819,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -11838,9 +11838,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -11859,9 +11859,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -11878,9 +11878,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -11897,9 +11897,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -11916,9 +11916,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -11935,9 +11935,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Beispiele',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -11954,9 +11954,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Crossselling',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -11975,9 +11975,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -11994,9 +11994,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Freizeitwelten',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -12013,9 +12013,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -12034,9 +12034,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -12053,9 +12053,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -12072,9 +12072,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -12091,9 +12091,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -12110,9 +12110,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Beispiele',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -12129,9 +12129,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Crossselling',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -12150,9 +12150,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -12169,9 +12169,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -12188,9 +12188,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -12207,9 +12207,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -12226,9 +12226,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Beispiele',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -12245,9 +12245,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Artikeldarstellung im Listing.',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -12266,9 +12266,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -12285,9 +12285,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -12304,9 +12304,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -12323,9 +12323,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -12342,9 +12342,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Beispiele',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -12361,9 +12361,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Artikeldarstellung im Listing.',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -12382,9 +12382,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -12401,9 +12401,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -12420,9 +12420,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -12439,9 +12439,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -12458,9 +12458,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Beispiele',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -12477,9 +12477,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Artikeldarstellung im Listing.',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -12498,9 +12498,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -12517,9 +12517,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -12536,9 +12536,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -12555,9 +12555,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -12574,9 +12574,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Das Plugin Artikelkonfigurator',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -12593,9 +12593,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Beispiele',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -12614,9 +12614,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -12633,9 +12633,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -12652,9 +12652,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -12671,9 +12671,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -12690,9 +12690,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Das Plugin Artikelkonfigurator',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -12709,9 +12709,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Beispiele',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -12730,9 +12730,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -12749,9 +12749,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -12768,9 +12768,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -12787,9 +12787,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -12806,9 +12806,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Beispiele',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -12825,9 +12825,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Möglichkeiten der Preisgestaltung',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -12846,9 +12846,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -12865,9 +12865,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -12884,9 +12884,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -12903,9 +12903,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -12922,9 +12922,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Beispiele',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -12941,9 +12941,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Möglichkeiten der Preisgestaltung',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -12962,9 +12962,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -12981,9 +12981,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -13000,9 +13000,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -13019,9 +13019,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -13038,9 +13038,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Beispiele',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -13057,9 +13057,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Möglichkeiten der Preisgestaltung',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -13078,9 +13078,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -13097,9 +13097,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -13116,9 +13116,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -13135,9 +13135,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -13154,9 +13154,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Funktionen zur Kundenbindung',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -13173,9 +13173,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Beispiele',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -13194,9 +13194,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -13213,9 +13213,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -13232,9 +13232,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -13251,9 +13251,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -13270,9 +13270,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Funktionen zur Kundenbindung',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -13289,9 +13289,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Beispiele',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -13310,9 +13310,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -13329,9 +13329,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -13348,9 +13348,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -13367,9 +13367,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -13386,9 +13386,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -13405,9 +13405,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -13426,9 +13426,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -13445,9 +13445,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -13464,9 +13464,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -13485,9 +13485,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Mit der richtigen Dekoration in eine Wohlfühlwelt',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -13504,9 +13504,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -13523,9 +13523,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Wohnwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -13544,9 +13544,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Mit der richtigen Dekoration in eine Wohlfühlwelt',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -13563,9 +13563,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -13582,9 +13582,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Wohnwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -13603,9 +13603,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Mit der richtigen Dekoration in eine Wohlfühlwelt',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -13622,9 +13622,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -13641,9 +13641,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -13660,9 +13660,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -13679,9 +13679,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Wohnwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -13698,9 +13698,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -13719,9 +13719,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Mit der richtigen Dekoration in eine Wohlfühlwelt',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -13738,9 +13738,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -13757,9 +13757,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Wohnwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -13778,9 +13778,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Mit der richtigen Dekoration in eine Wohlfühlwelt',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -13797,9 +13797,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -13816,9 +13816,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -13835,9 +13835,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -13854,9 +13854,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Wohnwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -13873,9 +13873,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -13894,9 +13894,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Mit der richtigen Dekoration in eine Wohlfühlwelt',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -13913,9 +13913,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -13932,9 +13932,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Wohnwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -13953,9 +13953,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Mit der richtigen Dekoration in eine Wohlfühlwelt',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -13972,9 +13972,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -13991,9 +13991,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Wohnwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -14012,9 +14012,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Mit der richtigen Dekoration in eine Wohlfühlwelt',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -14031,9 +14031,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -14050,9 +14050,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Wohnwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -14071,9 +14071,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Mit der richtigen Dekoration in eine Wohlfühlwelt',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -14090,9 +14090,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -14109,9 +14109,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -14128,9 +14128,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -14147,9 +14147,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Wohnwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -14166,9 +14166,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -14187,9 +14187,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Mit der richtigen Dekoration in eine Wohlfühlwelt',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -14206,9 +14206,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -14225,9 +14225,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -14244,9 +14244,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -14263,9 +14263,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Wohnwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -14282,9 +14282,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -14303,9 +14303,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Mit der richtigen Dekoration in eine Wohlfühlwelt',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -14322,9 +14322,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -14341,9 +14341,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -14360,9 +14360,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -14379,9 +14379,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Wohnwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -14398,9 +14398,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -14419,9 +14419,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -14438,9 +14438,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -14457,9 +14457,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -14476,9 +14476,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -14495,9 +14495,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -14514,9 +14514,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -14535,9 +14535,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -14554,9 +14554,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -14573,9 +14573,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -14592,9 +14592,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Freizeitwelten',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -14611,9 +14611,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -14630,9 +14630,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -14651,9 +14651,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -14670,9 +14670,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -14689,9 +14689,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -14708,9 +14708,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Freizeitwelten',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -14727,9 +14727,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -14746,9 +14746,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -14767,9 +14767,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -14786,9 +14786,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -14805,9 +14805,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -14824,9 +14824,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Freizeitwelten',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -14843,9 +14843,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -14862,9 +14862,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -14883,9 +14883,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -14902,9 +14902,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -14921,9 +14921,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -14940,9 +14940,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Freizeitwelten',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -14959,9 +14959,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -14978,9 +14978,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -14999,9 +14999,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -15018,9 +15018,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Freizeitwelten',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -15037,9 +15037,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -15058,9 +15058,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -15077,9 +15077,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Freizeitwelten',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -15096,9 +15096,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -15117,9 +15117,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -15136,9 +15136,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -15155,9 +15155,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -15174,9 +15174,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -15193,9 +15193,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Funktionen zur Kundenbindung',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -15212,9 +15212,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Beispiele',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -15233,9 +15233,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -15252,9 +15252,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -15271,9 +15271,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -15290,9 +15290,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -15309,9 +15309,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Möbel',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -15328,9 +15328,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -15347,9 +15347,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Wohnwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -15366,9 +15366,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -15387,9 +15387,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -15406,9 +15406,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -15425,9 +15425,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Genusswelten',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -15444,9 +15444,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Die besten Edelbrände',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -15463,9 +15463,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -15482,9 +15482,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -15503,9 +15503,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -15522,9 +15522,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -15541,9 +15541,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -15560,9 +15560,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Genusswelten',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -15579,9 +15579,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tees und Zubehör',
                 'active' => true,
-                'template' => 'article_listing_3col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -15598,9 +15598,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tees',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -15617,9 +15617,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -15636,9 +15636,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -15657,9 +15657,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -15676,9 +15676,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -15695,9 +15695,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -15714,9 +15714,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -15733,9 +15733,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Genusswelten',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -15752,9 +15752,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Die besten Edelbrände',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -15771,9 +15771,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -15790,9 +15790,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -15809,9 +15809,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Beispiele',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -15828,9 +15828,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Eigenschaften und Filter',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -15849,9 +15849,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -15868,9 +15868,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -15887,9 +15887,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -15906,9 +15906,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Genusswelten',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -15925,9 +15925,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tees und Zubehör',
                 'active' => true,
-                'template' => 'article_listing_3col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -15944,9 +15944,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tees',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -15963,9 +15963,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -15982,9 +15982,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -16003,9 +16003,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -16022,9 +16022,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -16041,9 +16041,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -16060,9 +16060,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -16079,9 +16079,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Genusswelten',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -16098,9 +16098,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Die besten Edelbrände',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -16117,9 +16117,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -16136,9 +16136,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -16155,9 +16155,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Beispiele',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -16174,9 +16174,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Eigenschaften und Filter',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -16195,9 +16195,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -16214,9 +16214,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -16233,9 +16233,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Genusswelten',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -16252,9 +16252,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Die besten Edelbrände',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -16271,9 +16271,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -16290,9 +16290,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -16309,9 +16309,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Beispiele',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -16328,9 +16328,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Eigenschaften und Filter',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -16349,9 +16349,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -16368,9 +16368,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -16387,9 +16387,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Genusswelten',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -16406,9 +16406,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Die besten Edelbrände',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -16425,9 +16425,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -16444,9 +16444,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -16463,9 +16463,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Beispiele',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -16482,9 +16482,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Eigenschaften und Filter',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -16503,9 +16503,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -16522,9 +16522,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -16541,9 +16541,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Genusswelten',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -16560,9 +16560,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Die besten Edelbrände',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -16579,9 +16579,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -16598,9 +16598,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -16617,9 +16617,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Beispiele',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -16636,9 +16636,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Eigenschaften und Filter',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -16657,9 +16657,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -16676,9 +16676,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -16695,9 +16695,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -16714,9 +16714,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Genusswelten',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -16733,9 +16733,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tees und Zubehör',
                 'active' => true,
-                'template' => 'article_listing_3col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -16752,9 +16752,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -16771,9 +16771,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tee-Zubehör',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -16790,9 +16790,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -16811,9 +16811,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Möbel',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -16830,9 +16830,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -16849,9 +16849,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Wohnwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -16870,9 +16870,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Vielfältiges Zubehör für Ihre Küche',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -16889,9 +16889,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -16908,9 +16908,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Wohnwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -16927,9 +16927,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -16948,9 +16948,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Vielfältiges Zubehör für Ihre Küche',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -16967,9 +16967,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -16986,9 +16986,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Wohnwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -17005,9 +17005,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -17026,9 +17026,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -17045,9 +17045,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -17064,9 +17064,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -17085,9 +17085,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -17104,9 +17104,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -17123,9 +17123,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -17144,9 +17144,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -17163,9 +17163,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Freizeitwelten',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -17182,9 +17182,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -17203,9 +17203,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -17222,9 +17222,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -17241,9 +17241,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -17262,9 +17262,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -17281,9 +17281,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -17300,9 +17300,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -17319,9 +17319,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -17338,9 +17338,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Freizeitwelten',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -17357,9 +17357,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -17378,9 +17378,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -17397,9 +17397,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -17418,9 +17418,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -17437,9 +17437,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -17456,9 +17456,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -17477,9 +17477,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -17496,9 +17496,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -17515,9 +17515,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -17536,9 +17536,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -17555,9 +17555,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -17574,9 +17574,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -17595,9 +17595,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -17614,9 +17614,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -17633,9 +17633,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -17654,9 +17654,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -17673,9 +17673,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -17692,9 +17692,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -17713,9 +17713,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -17732,9 +17732,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -17751,9 +17751,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -17770,9 +17770,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -17789,9 +17789,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -17808,9 +17808,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -17829,9 +17829,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -17848,9 +17848,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -17867,9 +17867,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -17886,9 +17886,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -17905,9 +17905,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -17924,9 +17924,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -17945,9 +17945,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -17964,9 +17964,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -17983,9 +17983,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -18004,9 +18004,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -18023,9 +18023,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -18042,9 +18042,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -18061,9 +18061,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -18080,9 +18080,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -18099,9 +18099,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -18120,9 +18120,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -18139,9 +18139,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -18158,9 +18158,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -18177,9 +18177,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -18196,9 +18196,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Beispiele',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -18215,9 +18215,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Artikeldarstellung im Listing.',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -18236,9 +18236,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -18255,9 +18255,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -18274,9 +18274,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -18293,9 +18293,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -18312,9 +18312,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Beispiele',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -18331,9 +18331,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Möglichkeiten der Preisgestaltung',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -18352,9 +18352,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -18371,9 +18371,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -18390,9 +18390,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Vielfältiges Zubehör für Ihre Küche',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -18409,9 +18409,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -18428,9 +18428,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Wohnwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -18447,9 +18447,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -18468,9 +18468,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -18487,9 +18487,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -18506,9 +18506,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -18527,9 +18527,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -18546,9 +18546,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -18565,9 +18565,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -18586,9 +18586,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -18605,9 +18605,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -18624,9 +18624,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -18645,9 +18645,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -18664,9 +18664,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -18683,9 +18683,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -18702,9 +18702,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -18721,9 +18721,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -18740,9 +18740,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -18761,9 +18761,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -18780,9 +18780,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -18799,9 +18799,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -18818,9 +18818,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -18837,9 +18837,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Beispiele',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -18856,9 +18856,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Versandkosteneinstellungen',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -18877,9 +18877,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -18896,9 +18896,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -18915,9 +18915,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -18934,9 +18934,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -18953,9 +18953,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Beispiele',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -18972,9 +18972,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Versandkosteneinstellungen',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -18993,9 +18993,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -19012,9 +19012,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -19031,9 +19031,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -19050,9 +19050,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -19069,9 +19069,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Beispiele',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -19088,9 +19088,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Versandkosteneinstellungen',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -19109,9 +19109,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -19128,9 +19128,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -19147,9 +19147,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -19166,9 +19166,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -19185,9 +19185,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Beispiele',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -19204,9 +19204,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Zahlungsarten & Riskmanagement',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -19225,9 +19225,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -19244,9 +19244,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -19263,9 +19263,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -19282,9 +19282,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -19301,9 +19301,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Beispiele',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -19320,9 +19320,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Zahlungsarten & Riskmanagement',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -19341,9 +19341,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -19360,9 +19360,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -19379,9 +19379,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -19398,9 +19398,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -19417,9 +19417,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Beispiele',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -19436,9 +19436,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Zahlungsarten & Riskmanagement',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -19457,9 +19457,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -19476,9 +19476,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Beispiele',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -19495,9 +19495,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Kundengruppen',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -19539,9 +19539,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Genusswelten',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -19558,9 +19558,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => 'Köstlichkeiten',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -19577,9 +19577,9 @@ class Shopware_Tests_Models_Category_ActiveByArticleIdQueryTest extends Enlight_
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,

@@ -130,18 +130,10 @@ Ext.define('Shopware.apps.Theme.controller.List', {
      * Switches the shop template.
      */
     onAssignTheme: function () {
-        var me = this, shop, theme, activeTheme;
+        var me = this, shop, theme;
 
         shop = me.getSelectedShop();
         theme = me.getSelectedTheme();
-        activeTheme = me.getActiveTheme();
-
-        if (activeTheme && activeTheme.get('version') == 2 && theme.get('version') == 3) {
-            Shopware.Notification.createStickyGrowlMessage({
-                title: '{s name="application"}Theme manager{/s}',
-                text:  '{s name="theme_version_switch"}{/s}'
-            });
-        }
 
         // If preview mode is enabled, disable it
         if (me.previewWindow) {
