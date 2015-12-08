@@ -8,6 +8,7 @@ In this document you will find a changelog of the important changes related to t
     * Added `X-CSRF-Token` to every ajax request
     * See: https://developers.shopware.com/developers-guide/csrf-protection/
 * Update Symfony Components to version 2.8 LTS
+* Replace polyfill provided by `indigophp/hash-compat` with `symfony/polyfill-php56`
 
 ## 5.1.2
 * Out-of-stock variants on the detail page are now selectable
