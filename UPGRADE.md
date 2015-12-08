@@ -9,6 +9,7 @@ In this document you will find a changelog of the important changes related to t
     * See: https://developers.shopware.com/developers-guide/csrf-protection/
 * Update Symfony Components to version 2.8 LTS
 * Replace polyfill provided by `indigophp/hash-compat` with `symfony/polyfill-php56`
+* Added polyfill for `random_bytes()` and `random_int()` via `paragonie/random_compat`
 
 ## 5.1.2
 * Out-of-stock variants on the detail page are now selectable
