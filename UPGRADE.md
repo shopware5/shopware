@@ -10,6 +10,8 @@ In this document you will find a changelog of the important changes related to t
 * Update Symfony Components to version 2.8 LTS
 * Replace polyfill provided by `indigophp/hash-compat` with `symfony/polyfill-php56`
 * Added polyfill for `random_bytes()` and `random_int()` via `paragonie/random_compat`
+* Removed `client_check` and `referer_check` from the config in favor of the CSRF protection.
+* Removed session variables `__SW_REFERER` and `__SW_CLIENT`
 
 ## 5.1.2
 * Out-of-stock variants on the detail page are now selectable
