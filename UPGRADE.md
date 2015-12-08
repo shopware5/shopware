@@ -12,6 +12,7 @@ In this document you will find a changelog of the important changes related to t
 * Added polyfill for `random_bytes()` and `random_int()` via `paragonie/random_compat`
 * Removed `client_check` and `referer_check` from the config in favor of the CSRF protection.
 * Removed session variables `__SW_REFERER` and `__SW_CLIENT`
+* Added AdvancedMenu feature to configure menu opening delay on mouse hover
 
 ## 5.1.2
 * Out-of-stock variants on the detail page are now selectable
