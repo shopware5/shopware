@@ -26,6 +26,7 @@ namespace Shopware\Components\Api\Resource;
 
 use Shopware\Components\Api\Exception as ApiException;
 use Shopware\Models\Category\Category as CategoryModel;
+use Shopware\Models\Media\Media as MediaModel;
 
 /**
  * Category API Resource
@@ -59,15 +60,19 @@ class Category extends Resource
             throw new ApiException\ParameterMissingException();
         }
 
-        $filters = array(array('property' => 'id','expression' => '=','value' => $id));
-        $query = $this->getRepository()->getListQuery($filters, array(), 1);
+        $query = $this->getRepository()->getDetailQueryWithoutArticles($id);
 
         /** @var $category \Shopware\Models\Category\Category */
         $category = $query->getOneOrNullResult($this->getResultMode());
 
-
         if (!$category) {
             throw new ApiException\NotFoundException("Category by id $id not found");
+        }
+
+        if ($this->getResultMode() === Resource::HYDRATE_ARRAY) {
+            $category = $category[0] + $category;
+        } else {
+            $category = $category[0];
         }
 
         return $category;
@@ -108,9 +113,11 @@ class Category extends Resource
     {
         $this->checkPrivilege('create');
 
-        $params = $this->prepareCategoryData($params);
-
         $category = new \Shopware\Models\Category\Category();
+
+        $params = $this->prepareCategoryData($params);
+        $params = $this->prepareMediaData($params, $category);
+
         $category->fromArray($params);
 
         if (isset($params['id'])) {
@@ -155,6 +162,7 @@ class Category extends Resource
         }
 
         $params = $this->prepareCategoryData($params);
+        $params = $this->prepareMediaData($params, $category);
         $category->fromArray($params);
 
         $violations = $this->getManager()->validate($category);
@@ -283,5 +291,41 @@ class Category extends Resource
         }
 
         return $categoryModel;
+    }
+
+    /**
+     * @param array $data
+     * @param CategoryModel $categoryModel
+     * @return array
+     * @throws ApiException\CustomValidationException
+     */
+    private function prepareMediaData(array $data, CategoryModel $categoryModel)
+    {
+        if (!isset($data['media'])) {
+            return $data;
+        }
+
+        $media = null;
+
+        if (isset($data['media']['link'])) {
+            /**@var $media MediaModel */
+            $media = $this->getResource('media')->internalCreateMediaByFileLink(
+                $data['media']['link']
+            );
+        } elseif (!empty($data['media']['mediaId'])) {
+            $media = $this->getManager()->find(
+                'Shopware\Models\Media\Media',
+                (int) $data['media']['mediaId']
+            );
+
+            if (!($media instanceof MediaModel)) {
+                throw new ApiException\CustomValidationException(sprintf("Media by mediaId %s not found", $data['media']['mediaId']));
+            }
+        }
+
+        $categoryModel->setMedia($media);
+        unset($data['media']);
+
+        return $data;
     }
 }
