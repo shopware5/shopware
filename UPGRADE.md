@@ -34,6 +34,7 @@ In this document you will find a changelog of the important changes related to t
 * Replaced `bower` with `npm` to manage the frontend dependencies
     * The dependencies can now be installed using the command: `npm install && npm run build`
     * Removed the file `vendors/less/open-sans-fontface/open-sans.less`. It's now located under `public/src/less/_components/fonts.less`
+* Deprecated `Shopware_Bootstrap` and `Enlight_Bootstrap` commonly accesed by `Shopware()->Bootstrap()`.
 
 ## 5.1.2
 * Out-of-stock variants on the detail page are now selectable

@@ -55,18 +55,12 @@ class Shopware extends Enlight_Application
      */
     public function __construct($environment, array $options, Container $container)
     {
-        $this->container = $container;
-
         Shopware($this);
 
-        if ($this->oldPath === null) {
-            $this->oldPath = realpath(__DIR__ . '/../../') . DIRECTORY_SEPARATOR;
-        }
+        $this->container = $container;
+        $this->oldPath = realpath(__DIR__ . '/../../') . DIRECTORY_SEPARATOR;
 
         parent::__construct($environment, $options, $container);
-
-        $container->setBootstrap($this->Bootstrap());
-        $container->setApplication($this);
     }
 
     /**

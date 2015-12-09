@@ -79,6 +79,8 @@ class TestKernel extends \Shopware\Kernel
             $this->getConfig(),
             $this->container
         );
+
+        $this->container->setApplication($this->shopware);
     }
 
     protected function getConfigPath()

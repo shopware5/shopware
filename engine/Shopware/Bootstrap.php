@@ -22,8 +22,10 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\DependencyInjection\Container;
+
 /**
- * Shopware Application
+ * @deprecated since 5.2 will be removed in 5.3
  *
  * @category  Shopware
  * @package   Shopware\Bootstrap
@@ -32,52 +34,28 @@
 class Shopware_Bootstrap extends Enlight_Bootstrap
 {
     /**
-     * @var \Shopware\Components\DependencyInjection\Container
+     * @var Container
      */
     protected $container;
 
     /**
-     * Instance of the enlight application.
-     *
-     * @var Enlight_Application
+     * @param Container $container
      */
-    protected $application;
-
-    /**
-     * The class constructor sets the instance of the given enlight application into
-     * the internal $application property.
-     *
-     * @param Shopware $application
-     */
-    public function __construct(Shopware $application)
+    public function __construct(Container $container)
     {
-        $this->setApplication($application);
-        $this->container = $application->Container();
-
-        parent::__construct();
+        $this->container = $container;
     }
 
     /**
      * Returns the application instance.
      *
-     * @return Enlight_Application|Shopware
+     * @deprecated since 5.2 will be removed in 5.3
+     *
+     * @return Shopware
      */
     public function Application()
     {
-        return $this->application;
-    }
-
-    /**
-     * Sets the application instance into the internal $application property.
-     *
-     * @param  Enlight_Application $application
-     * @return Enlight_Bootstrap
-     */
-    public function setApplication(Enlight_Application $application)
-    {
-        $this->application = $application;
-
-        return $this;
+        return $this->container->get('application');
     }
 
     /**
@@ -92,8 +70,6 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      */
     public function registerResource($name, $resource)
     {
-        throw new \Exception("old api" . __METHOD__);
-
         $this->container->set($name, $resource);
 
         return $this;
@@ -109,8 +85,6 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      */
     public function hasResource($name)
     {
-        throw new \Exception("old dapi" . __METHOD__);
-
         return $this->container->has($name);
     }
 
@@ -125,8 +99,6 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      */
     public function issetResource($name)
     {
-        throw new \Exception("old api" . __METHOD__);
-
         return $this->container->initialized($name);
     }
 
@@ -142,8 +114,6 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      */
     public function getResource($name)
     {
-        throw new \Exception("old api" . __METHOD__);
-
         return $this->container->get($name);
     }
 
@@ -165,8 +135,6 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      */
     public function loadResource($name)
     {
-        throw new \Exception("old api" . __METHOD__);
-
         return $this->container->load($name);
     }
 
@@ -181,8 +149,6 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      */
     public function resetResource($name)
     {
-        throw new \Exception("old api" . __METHOD__);
-
         $this->container->reset($name);
 
         return $this;
@@ -200,8 +166,6 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      */
     public function __call($name, $arguments = null)
     {
-        throw new \Exception("old api" . __METHOD__);
-
         return $this->container->get($name);
     }
 }
