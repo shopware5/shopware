@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\SearchBundleDBAL\SearchTerm;
 
 use Doctrine\DBAL\Connection;
+use Shopware\Components\MemoryLimit;
 
 /**
  * @category  Shopware
@@ -111,7 +112,7 @@ class SearchIndexer implements SearchIndexerInterface
      */
     public function build()
     {
-        @ini_set("memory_limit", "512M");
+        MemoryLimit::setMinimumMemoryLimit(1024*1024*512);
         @set_time_limit(0);
 
         $this->setNextUpdateTimestamp();
