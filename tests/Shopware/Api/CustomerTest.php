@@ -178,9 +178,6 @@ class Shopware_Tests_Api_CustomerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests that a Post with debit info also creates a PaymentData instance
-     * Can be removed after s_user_debit is removed
-     *
      * @return int
      */
     public function testPostCustomersWithDebitShouldCreatePaymentData()
@@ -248,7 +245,6 @@ class Shopware_Tests_Api_CustomerTest extends PHPUnit_Framework_TestCase
 
         $customer = Shopware()->Models()->getRepository('Shopware\Models\Customer\Customer')->find($identifier);
         $paymentData = array_shift($customer->getPaymentData()->toArray());
-        $debitData = $customer->getDebit();
 
         $this->assertNotNull($paymentData);
         $this->assertEquals('Max Mustermann', $paymentData->getAccountHolder());
@@ -256,19 +252,10 @@ class Shopware_Tests_Api_CustomerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Fake Bank', $paymentData->getBankName());
         $this->assertEquals('55555555', $paymentData->getBankCode());
 
-        $this->assertNotNull($debitData);
-        $this->assertEquals('Max Mustermann', $debitData->getAccountHolder());
-        $this->assertEquals('Fake Account', $debitData->getAccount());
-        $this->assertEquals('Fake Bank', $debitData->getBankName());
-        $this->assertEquals('55555555', $debitData->getBankCode());
-
         $this->testDeleteCustomersShouldBeSuccessful($identifier);
     }
 
     /**
-     * Tests that a Post with payment data info for debit also creates debit data in s_user_debit
-     * Can be removed after s_user_debit is removed
-     *
      * @return int
      */
     public function testPostCustomersWithDebitPaymentDataShouldCreateDebitData()
@@ -339,19 +326,12 @@ class Shopware_Tests_Api_CustomerTest extends PHPUnit_Framework_TestCase
 
         $customer = Shopware()->Models()->getRepository('Shopware\Models\Customer\Customer')->find($identifier);
         $paymentData = array_shift($customer->getPaymentData()->toArray());
-        $debitData = $customer->getDebit();
 
         $this->assertNotNull($paymentData);
         $this->assertEquals('Max Mustermann', $paymentData->getAccountHolder());
         $this->assertEquals('Fake Account', $paymentData->getAccountNumber());
         $this->assertEquals('Fake Bank', $paymentData->getBankName());
         $this->assertEquals('55555555', $paymentData->getBankCode());
-
-        $this->assertNotNull($debitData);
-        $this->assertEquals('Max Mustermann', $debitData->getAccountHolder());
-        $this->assertEquals('Fake Account', $debitData->getAccount());
-        $this->assertEquals('Fake Bank', $debitData->getBankName());
-        $this->assertEquals('55555555', $debitData->getBankCode());
 
         $this->testDeleteCustomersShouldBeSuccessful($identifier);
     }

@@ -26,7 +26,6 @@ use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Models\Customer\Customer as Customer;
 use Shopware\Models\Customer\Billing as Billing;
 use Shopware\Models\Customer\Shipping as Shipping;
-use Shopware\Models\Customer\Debit as Debit;
 use Shopware\Models\Attribute\CustomerBilling as BillingAttributes;
 use Shopware\Models\Attribute\CustomerShipping as ShippingAttributes;
 use Shopware\Models\Customer\PaymentData;
@@ -614,20 +613,6 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             $paymentData->fromArray(array_shift($params['paymentData']));
         }
         unset($params['paymentData']);
-
-        /**
-         * Temporary support for deprecated s_user_debit table
-         * Can be removed after the table is removed
-         */
-        if ($paymentData && $paymentData->getPaymentMean()->getName() == 'debit') {
-            $debitData = array(
-                'account' => $paymentData->getAccountNumber(),
-                'accountHolder' => $paymentData->getAccountHolder(),
-                'bankName' => $paymentData->getBankName(),
-                'bankCode' => $paymentData->getBankCode()
-            );
-            $params['debit'] = $debitData;
-        }
 
         $attribute = $customer->getAttribute();
         if (empty($attribute) && empty($params['attribute'])) {

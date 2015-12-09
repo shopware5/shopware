@@ -131,14 +131,6 @@ class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components
         $this->assertEmpty($paymentData->getIban());
         $this->assertFalse($paymentData->getUseBillingData());
 
-        /** @var \Shopware\Models\Customer\Debit $debitData */
-        $debitData = $dummyData->getDebit();
-        $this->assertInstanceOf('\Shopware\Models\Customer\Debit', $debitData);
-        $this->assertEquals('Account Holder Name', $debitData->getAccountHolder());
-        $this->assertEquals('1234567890', $debitData->getAccount());
-        $this->assertEquals('2345678901', $debitData->getBankCode());
-        $this->assertEquals('Bank name', $debitData->getBankName());
-
         return $dummyData->getId();
     }
 
@@ -231,7 +223,7 @@ class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components
         $headerLocation = $response->getHeader("Location");
         $this->reset();
         $this->assertNotEmpty($headerLocation);
-        $newLocation = explode('/backend/',$headerLocation );
+        $newLocation = explode('/backend/', $headerLocation);
         $response = $this->dispatch('backend/'.$newLocation[1]);
 
         $cookie = $response->getFullCookie('session-1');
