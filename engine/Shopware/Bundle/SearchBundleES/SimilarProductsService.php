@@ -31,7 +31,7 @@ use ONGR\ElasticsearchDSL\Filter\NotFilter;
 use ONGR\ElasticsearchDSL\Filter\TermFilter;
 use ONGR\ElasticsearchDSL\Filter\TermsFilter;
 use ONGR\ElasticsearchDSL\Query\BoolQuery;
-use ONGR\ElasticsearchDSL\Query\FuzzyLikeThisFieldQuery;
+use ONGR\ElasticsearchDSL\Query\MultiMatchQuery;
 use ONGR\ElasticsearchDSL\Query\TermsQuery;
 use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\ESIndexingBundle\IndexFactoryInterface;
@@ -298,8 +298,8 @@ class SimilarProductsService implements SimilarProductsServiceInterface
         $categories = $this->getProductCategories($product);
 
         $queries = [
-            new FuzzyLikeThisFieldQuery('name', $product->getName(), ['boost' => 5]),
-            new TermsQuery('categoryIds', $categories)
+            new MultiMatchQuery(['name', 'keywords'], $product->getName(), ['boost' => 5]),
+            new TermsQuery('categoryIds', $categories, ['boost' => 0.2])
         ];
 
         $query = new BoolQuery();
