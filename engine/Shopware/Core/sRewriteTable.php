@@ -690,11 +690,48 @@ class sRewriteTable
     }
 
     /**
+     * Sets a memory limit if the current is lower.
+     *
+     * @param $minimumMemoryLimit
+     * @return bool
+     */
+    private function setMinimumMemoryLimit($minimumMemoryLimit) {
+        /**
+         * Converts PHP shorthand bytes values like '512M' to bytes
+         *
+         * @param $shorthandString
+         * @return int|string
+         */
+        function convertShorthandBytes($shorthandString) {
+            $shorthandString = trim($shorthandString);
+            $last = strtolower($shorthandString[strlen($shorthandString) - 1]);
+            switch ($last) {
+                case 'g':
+                    $shorthandString *= 1024;
+                case 'm':
+                    $shorthandString *= 1024;
+                case 'k':
+                    $shorthandString *= 1024;
+            }
+            return $shorthandString;
+        }
+
+        $current = convertShorthandBytes(@ini_get('memory_limit'));
+        $minimum = convertShorthandBytes($minimumMemoryLimit);
+        if ($current < $minimum) {
+            @ini_set('memory_limit', $minimumMemoryLimit);
+        }
+
+        return false;
+    }
+
+    /**
      * Sets up the environment for seo url calculation
      */
     public function baseSetup()
     {
-        @ini_set('memory_limit', '512M');
+        // We need to make sure not to override larger memory limits
+        $this->setMinimumMemoryLimit("512M");
         @set_time_limit(0);
 
         $keys = array_keys($this->template->registered_plugins['function']);
