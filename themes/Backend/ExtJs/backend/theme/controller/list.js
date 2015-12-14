@@ -67,28 +67,6 @@ Ext.define('Shopware.apps.Theme.controller.List', {
         });
 
         me.mainWindow = me.getView('list.Window').create({}).show();
-
-        Ext.Function.defer(function () {
-            me.checkActiveEmotionTemplates();
-        }, 1000);
-    },
-
-    checkActiveEmotionTemplates: function() {
-        var me = this;
-
-        Ext.Ajax.request({
-            url: '{url controller="Base" action="getShopsWithEmotionTemplates"}',
-            success: function(operation) {
-                var response = Ext.decode(operation.responseText);
-                if (response.data.length > 0) {
-                    var message = Ext.String.format('{s namespace="backend/index/controller/main" name="emotion_template_warning"}{/s}', response.data.join(','));
-                    var blockMessage = Shopware.Notification.createBlockMessage(message, 'notice');
-                    blockMessage.margin = 5;
-                    var listing = me.getListing();
-                    listing.insert(0, blockMessage);
-                }
-            }
-        });
     },
 
     onRefreshList: function() {
@@ -339,7 +317,7 @@ Ext.define('Shopware.apps.Theme.controller.List', {
 
     /**
      * Returns the active theme model
-     * 
+     *
      * @returns { Shopware.apps.Theme.model.Theme }
      */
     getActiveTheme: function() {
