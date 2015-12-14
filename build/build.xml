@@ -282,7 +282,6 @@
     <target name="mink-shopware-continuous-responsive">
         <exec executable="${script.behat}" dir="${test.dir}/Mink">
             <env key="BEHAT_PARAMS" value='{"extensions" : {"Behat\\MinkExtension" : {"base_url" : "http://${app.host}${app.path}"}}}'/>
-            <arg value="--profile=responsive"/>
             <arg value="--format=pretty"/>
             <arg value="--out=std"/>
             <arg value="--format=junit"/>

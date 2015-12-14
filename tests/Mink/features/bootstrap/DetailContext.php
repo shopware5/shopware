@@ -3,7 +3,7 @@
 namespace Shopware\Tests\Mink;
 
 use Behat\Gherkin\Node\TableNode;
-use Shopware\Tests\Mink\Element\Emotion\ArticleEvaluation;
+use Shopware\Tests\Mink\Element\ArticleEvaluation;
 
 class DetailContext extends SubContext
 {
@@ -39,7 +39,7 @@ class DetailContext extends SubContext
      */
     public function iShouldSeeAnAverageCustomerEvaluationOfFromFollowingEvaluations($average, TableNode $evaluations)
     {
-        /** @var \Shopware\Tests\Mink\Page\Emotion\Detail $page */
+        /** @var \Shopware\Tests\Mink\Page\Detail $page */
         $page = $this->getPage('Detail');
 
         /** @var ArticleEvaluation $articleEvaluations */

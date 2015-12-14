@@ -61,7 +61,7 @@ class AccountContext extends SubContext
             $pageName = 'CheckoutConfirm';
         }
 
-        /** @var \Shopware\Tests\Mink\Page\Emotion\Account|\Shopware\Tests\Mink\Page\Emotion\CheckoutConfirm $page */
+        /** @var \Shopware\Tests\Mink\Page\Account|\Shopware\Tests\Mink\Page\CheckoutConfirm $page */
         $page = $this->getPage($pageName);
         $data = $table->getHash();
 
@@ -80,7 +80,7 @@ class AccountContext extends SubContext
             $pageName = 'CheckoutConfirm';
         }
 
-        /** @var \Shopware\Tests\Mink\Page\Emotion\Account|\Shopware\Tests\Mink\Page\Emotion\CheckoutConfirm $page */
+        /** @var \Shopware\Tests\Mink\Page\Account|\Shopware\Tests\Mink\Page\CheckoutConfirm $page */
         $page = $this->getPage($pageName);
         $data = $table->getHash();
 
@@ -116,7 +116,7 @@ class AccountContext extends SubContext
             $pageName = ($pageInfo['action'] === 'shippingPayment') ? 'CheckoutCart' : 'CheckoutConfirm';
         }
 
-        /** @var \Shopware\Tests\Mink\Page\Emotion\Account|\Shopware\Tests\Mink\Page\Emotion\CheckoutConfirm $page */
+        /** @var \Shopware\Tests\Mink\Page\Account|\Shopware\Tests\Mink\Page\CheckoutConfirm $page */
         $page = $this->getPage($pageName);
         $data = [
             [
@@ -148,7 +148,7 @@ class AccountContext extends SubContext
      */
     public function iChooseTheAddress($name)
     {
-        /** @var \Shopware\Tests\Mink\Page\Emotion\Account $page */
+        /** @var \Shopware\Tests\Mink\Page\Account $page */
         $page = $this->getPage("Account");
 
         $addresses = $this->getMultipleElement($page, 'AddressBox');
