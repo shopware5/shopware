@@ -518,7 +518,7 @@ Ext.define('Shopware.apps.Article.view.detail.Properties', {
             }
         }
 
-        record = store.findRecord('id', rowId);
+        record = store.findRecord('id', rowId, 0, false, false, true );
         values = record.get('value');
 
         var newValues = [];
