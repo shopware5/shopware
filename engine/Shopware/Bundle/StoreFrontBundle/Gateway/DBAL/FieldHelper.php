@@ -607,7 +607,6 @@ class FieldHelper
             'propertyGroup.id as __propertyGroup_id',
             'propertyGroup.name as __propertyGroup_name',
             'propertyGroup.filterable as __propertyGroup_filterable',
-            'propertyGroup.default as __propertyGroup_default',
         ];
     }
 

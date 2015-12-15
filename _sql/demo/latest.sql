@@ -6706,12 +6706,12 @@ INSERT INTO `s_filter_articles` (`articleID`, `valueID`) VALUES
 
 TRUNCATE TABLE `s_filter_attributes`;
 TRUNCATE TABLE `s_filter_options`;
-INSERT INTO `s_filter_options` (`id`, `name`, `filterable`, `default`) VALUES
-(1, 'Alkoholgehalt', 1, ''),
-(2, 'Flaschengröße', 1, ''),
-(4, 'Farbe', 1, ''),
-(6, 'Geschmack', 1, ''),
-(7, 'Trinktemperatur', 1, '');
+INSERT INTO `s_filter_options` (`id`, `name`, `filterable`) VALUES
+(1, 'Alkoholgehalt', 1),
+(2, 'Flaschengröße', 1),
+(4, 'Farbe', 1),
+(6, 'Geschmack', 1),
+(7, 'Trinktemperatur', 1);
 
 TRUNCATE TABLE `s_filter_relations`;
 INSERT INTO `s_filter_relations` (`id`, `groupID`, `optionID`, `position`) VALUES
