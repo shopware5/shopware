@@ -42,7 +42,7 @@
                                 {/if}
 
                                 {strip}
-                                <div class="emotion--element column--{$itemCols} row--{$itemRows}"
+                                <div class="emotion--element column--{$itemCols} row--{$itemRows}{if $element.cssClass} {$element.cssClass}{/if}"
                                      style="padding-left: {$cellSpacing / 16}rem;
                                             padding-bottom: {$cellSpacing / 16}rem;
                                             height: {$itemHeight / 16}rem;

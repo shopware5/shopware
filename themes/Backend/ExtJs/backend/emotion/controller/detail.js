@@ -195,7 +195,8 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
             form = win.down('form'),
             data= [], fieldValue,
             fieldKeys = [],
-            fields = form.getForm().getFields();
+            fields = form.getForm().getFields(),
+            cssField;
 
         if(!form.getForm().isValid()) {
             Shopware.Notification.createGrowlMessage(win.title, '{s name=error/not_all_required_fields_filled}Please fill out all required fields to save the component settings.{/s}');
@@ -211,6 +212,12 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
                 data.push(me.getFieldData(field, record));
             }
         });
+
+        cssField = fields.findBy(function(item) {
+            return (item.cls && item.cls === 'css-field');
+        });
+
+        record.set('cssClass', cssField.getValue());
         record.set('data', data);
         win.destroy();
     },

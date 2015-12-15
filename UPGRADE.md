@@ -13,6 +13,9 @@ In this document you will find a changelog of the important changes related to t
 * Removed `client_check` and `referer_check` from the config in favor of the CSRF protection.
 * Removed session variables `__SW_REFERER` and `__SW_CLIENT`
 * Added AdvancedMenu feature to configure menu opening delay on mouse hover
+* Added the ability to add custom CSS classes to emotion elements in the backend.
+    * Multiple classnames can be added by separating them with whitespaces.
+    * Added new `css_class` column to the `s_emotion_elements` table.
 
 ## 5.1.2
 * Out-of-stock variants on the detail page are now selectable
