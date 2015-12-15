@@ -22,6 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Models\Customer\Customer as Customer;
 use Shopware\Models\Customer\Billing as Billing;
 use Shopware\Models\Customer\Shipping as Shipping;
@@ -36,7 +37,7 @@ use Shopware\Models\Customer\PaymentData;
  * add and edit customers. On the detail page the customer data displayed
  * and a list of all done orders shown.
  */
-class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend_ExtJs
+class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
     /**
      * Customer repository. Declared for an fast access to the customer repository.
@@ -125,6 +126,17 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
         }
         parent::init();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getWhitelistedCSRFActions()
+    {
+        return [
+            'performOrder',
+            'performOrderRedirect'
+        ];
     }
 
     /**
@@ -715,8 +727,12 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
     public function performOrderAction()
     {
         $userId = $this->Request()->getParam('id');
-        $sql = 'SELECT id, email, password, subshopID, language FROM s_user WHERE id = ?';
-        $user = Shopware()->Db()->fetchRow($sql, array($userId));
+        $user = $this->get('dbal_connection')->fetchAssoc(
+            'SELECT id, email, password, subshopID, language FROM s_user WHERE id = :userId',
+            [
+                ':userId' => $userId
+            ]
+        );
 
         if (empty($user['email'])) {
             return;
@@ -765,8 +781,12 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         $sessionId = $this->Request()->getQuery('sessionId');
         $hash      = $this->Request()->getQuery('hash');
 
-        $sql = 'SELECT password FROM s_user WHERE id = ?';
-        $userPasswordHash = Shopware()->Db()->fetchOne($sql, array($userId));
+        $userPasswordHash = $this->get('dbal_connection')->fetchColumn(
+            'SELECT password FROM s_user WHERE id = :userId',
+            [
+                ':userId' => $userId
+            ]
+        );
 
         //don't trust anyone without this information
         if (empty($shopId) || empty($sessionId) || empty($hash) || $hash !== $this->createPerformOrderRedirectHash($userPasswordHash)) {

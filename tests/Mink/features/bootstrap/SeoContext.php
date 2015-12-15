@@ -2,7 +2,7 @@
 
 namespace Shopware\Tests\Mink;
 
-use Shopware\Tests\Mink\Page\Emotion\GenericPage;
+use Shopware\Tests\Mink\Page\GenericPage;
 
 class SeoContext extends SubContext
 {

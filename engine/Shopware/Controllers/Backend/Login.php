@@ -22,10 +22,12 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\CSRFWhitelistAware;
+
 /**
  * Shopware Login Controller
  */
-class Shopware_Controllers_Backend_Login extends Shopware_Controllers_Backend_ExtJs
+class Shopware_Controllers_Backend_Login extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
     /**
      * Loads auth and script renderer resource
@@ -34,6 +36,19 @@ class Shopware_Controllers_Backend_Login extends Shopware_Controllers_Backend_Ex
     {
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
         parent::init();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getWhitelistedCSRFActions()
+    {
+        return [
+            'login',
+            'logout',
+            'getLocales',
+            'getLoginStatus'
+        ];
     }
 
     /**

@@ -363,17 +363,6 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
                 $mediaData = Shopware()->Container()->get('legacy_struct_converter')->convertMediaStruct($struct);
                 $entry['media'] = $mediaData;
-
-                if (Shopware()->Shop()->getTemplate()->getVersion() < 3) {
-                    $thumbs = [];
-                    foreach ($entry['media']['thumbnails'] as $thumb) {
-                        $thumbs[] = str_replace($imageDir, '', $thumb);
-                    }
-                    $entry['media'] = [
-                        'path' => str_replace($imageDir, '', $mediaData['source']),
-                        'thumbnails' => $thumbs
-                    ];
-                }
             }
         }
 
@@ -440,25 +429,12 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
                 $result = $this->getRandomBlogEntry($data["category_selection"]);
 
                 $data['image'] = $result['media'];
-
-                if (Shopware()->Shop()->getTemplate()->getVersion() < 3) {
-                    if (!empty($result['media']['thumbnails'])) {
-                        $data['image'] = $result['media']['thumbnails'][2];
-                        $data['images'] = $result['media']['thumbnails'];
-                    } else {
-                        $data['image'] = $result['media']['path'];
-                    }
-                }
             } else {
                 // Get random article from selected $category
                 $temp = Shopware()->Modules()->Articles()->sGetPromotionById('random', $data["category_selection"], 0, true);
 
                 $data['image'] = $temp['image'];
                 $data['images'] = $temp['images'];
-                if (Shopware()->Shop()->getTemplate()->getVersion() < 3) {
-                    $data['images'] = $temp['image']['src'];
-                    $data["image"] = $temp["image"]["src"][2];
-                }
             }
         } else {
             $mediaId = Shopware()->Db()->fetchOne('SELECT id FROM s_media WHERE path = ?', [$data['image']]);
@@ -833,21 +809,13 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
     {
         $emotionId = $this->Request()->getParam('emotionId');
 
-        // fetch devices on responsive template or load full emotions for older templates.
-        $templateVersion = Shopware()->Shop()->getTemplate()->getVersion();
+        $emotion = $this->get('emotion_device_configuration')->getById($emotionId);
 
-        if ($templateVersion >= 3) {
-            $emotion = $this->get('emotion_device_configuration')->getById($emotionId);
+        $viewAssignments['emotion'] = $emotion;
+        $viewAssignments['hasEmotion'] = (!empty($emotion));
 
-            $viewAssignments['emotion'] = $emotion;
-            $viewAssignments['hasEmotion'] = (!empty($emotion));
+        $viewAssignments['showListing'] = (bool) max(array_column($emotion, 'showListing'));
 
-            $viewAssignments['showListing'] = (bool) max(array_column($emotion, 'showListing'));
-        } else {
-            //check category emotions
-            $emotion = $this->get('emotion_device_configuration')->getById($emotionId);
-            $viewAssignments['hasEmotion'] = !empty($emotion);
-        }
 
         $showListing = (empty($emotion) || !empty($emotion['show_listing']));
         $viewAssignments['showListing'] = $showListing;

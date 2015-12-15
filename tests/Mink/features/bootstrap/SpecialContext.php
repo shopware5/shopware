@@ -5,7 +5,7 @@ namespace Shopware\Tests\Mink;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Mink\WebAssert;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
-use Shopware\Tests\Mink\Page\Emotion\Homepage;
+use Shopware\Tests\Mink\Page\Homepage;
 use Shopware\Tests\Mink\Element\MultipleElement;
 
 class SpecialContext extends SubContext

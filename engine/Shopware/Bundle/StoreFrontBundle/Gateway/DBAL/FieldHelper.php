@@ -271,10 +271,8 @@ class FieldHelper
             'category.cmsheadline as __category_cmsheadline',
             'category.product_box_layout as __category_product_box_layout',
             'category.cmstext as __category_cmstext',
-            'category.template as __category_template',
             'category.noviewselect as __category_noviewselect',
             'category.blog as __category_blog',
-            'category.showfiltergroups as __category_showfiltergroups',
             'category.external as __category_external',
             'category.hidefilter as __category_hidefilter',
             'category.hidetop as __category_hidetop',
@@ -607,7 +605,6 @@ class FieldHelper
             'propertyGroup.id as __propertyGroup_id',
             'propertyGroup.name as __propertyGroup_name',
             'propertyGroup.filterable as __propertyGroup_filterable',
-            'propertyGroup.default as __propertyGroup_default',
         ];
     }
 

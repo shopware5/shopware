@@ -21,10 +21,11 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Shopware\Components\CSRFWhitelistAware;
 
 /**
  */
-class Shopware_Controllers_Backend_Cron extends Enlight_Controller_Action
+class Shopware_Controllers_Backend_Cron extends Enlight_Controller_Action implements CSRFWhitelistAware
 {
     public function init()
     {
@@ -50,5 +51,17 @@ class Shopware_Controllers_Backend_Cron extends Enlight_Controller_Action
             echo "Processing " . $job->getName() . "\n";
             $cronManager->runJob($job);
         }
+    }
+
+    /**
+     * Returns a list with actions which should not be validated for CSRF protection
+     *
+     * @return string[]
+     */
+    public function getWhitelistedCSRFActions()
+    {
+        return [
+            'index'
+        ];
     }
 }

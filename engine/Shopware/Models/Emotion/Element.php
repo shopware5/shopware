@@ -116,6 +116,14 @@ class Element extends ModelEntity
     private $endCol;
 
     /**
+     * Defines a custom user CSS class for every element.
+     * @var string $cssClass
+     *
+     * @ORM\Column(name="css_class", type="string", length=255, nullable=true)
+     */
+    private $cssClass;
+
+    /**
      * OWNING SIDE
      * Contains the assigned \Shopware\Models\Emotion\Emotion
      * which can be configured in the backend emotion module.
@@ -259,6 +267,22 @@ class Element extends ModelEntity
     public function getEndCol()
     {
         return $this->endCol;
+    }
+
+    /**
+     * @param string $cssClass
+     */
+    public function setCssClass($cssClass)
+    {
+        $this->cssClass = $cssClass;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCssClass()
+    {
+        return $this->cssClass;
     }
 
     /**

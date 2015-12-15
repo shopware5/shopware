@@ -50,6 +50,7 @@
 {include file='ExtJs/overrides/Ext.data.association.HasMany.js'}
 {include file='ExtJs/overrides/Ext.menu.Menu.js'}
 {include file='ExtJs/overrides/Ext.Timeout.js'}
+{include file='ExtJs/overrides/Ext.Ajax.js'}
 
 {* Include default components *}
 {include file='ExtJs/components/Enlight.app.Window.js'}

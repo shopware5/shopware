@@ -60,7 +60,6 @@ class Shopware_Tests_Components_Api_CategoryTest extends Shopware_Tests_Componen
             "active" => true,
             "blog" => false,
 
-            "showFilterGroups" => false,
             "external" => false,
             "hidefilter" => false,
             "hideTop" => true,
@@ -83,7 +82,6 @@ class Shopware_Tests_Components_Api_CategoryTest extends Shopware_Tests_Componen
 
         $this->assertEquals($category->getActive(), $testData['active']);
         $this->assertEquals($category->getMetaDescription(), $testData['metaDescription']);
-        $this->assertEquals($category->getShowFilterGroups(), $testData['showFilterGroups']);
         $this->assertEquals($category->getAttribute()->getAttribute1(), $testData['attribute'][1]);
         $this->assertEquals($category->getAttribute()->getAttribute2(), $testData['attribute'][2]);
         $this->assertEquals($category->getAttribute()->getAttribute6(), $testData['attribute'][6]);

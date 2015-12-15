@@ -1,6 +1,23 @@
 # Shopware Upgrade Information
 In this document you will find a changelog of the important changes related to the code base of Shopware.
 
+## 5.2.0 DEV
+* Increased minimum required PHP version to PHP >= 5.5.9.
+* Added CSRF protection to the backend which is enabled by default.
+    * OptOut by implementing `CSRFWhitelistAware` interface
+    * Added `X-CSRF-Token` to every ajax request
+    * See: https://developers.shopware.com/developers-guide/csrf-protection/
+* Update Symfony Components to version 2.8 LTS
+* Replace polyfill provided by `indigophp/hash-compat` with `symfony/polyfill-php56`
+* Added polyfill for `random_bytes()` and `random_int()` via `paragonie/random_compat`
+* Removed `client_check` and `referer_check` from the config in favor of the CSRF protection.
+* Removed session variables `__SW_REFERER` and `__SW_CLIENT`
+* Added AdvancedMenu feature to configure menu opening delay on mouse hover
+* Added the ability to add custom CSS classes to emotion elements in the backend.
+    * Multiple classnames can be added by separating them with whitespaces.
+    * Added new `css_class` column to the `s_emotion_elements` table.
+* Removed deprecated columns `s_filter_values.value_numeric` and `s_filter_options.default`
+
 ## 5.1.2
 * Out-of-stock variants on the detail page are now selectable
 * `ProductNumberService::getAvailableNumber()` now returns the provided product variant to allow deep linking of out-of-stock variants

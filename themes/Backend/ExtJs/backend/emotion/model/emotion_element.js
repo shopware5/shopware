@@ -51,6 +51,7 @@ Ext.define('Shopware.apps.Emotion.model.EmotionElement', {
         { name: 'startCol', type: 'int' },
         { name: 'endRow', type: 'int' },
         { name: 'endCol', type: 'int' },
+        { name: 'cssClass', type: 'string' },
         { name: 'data' }
     ],
     associations: [

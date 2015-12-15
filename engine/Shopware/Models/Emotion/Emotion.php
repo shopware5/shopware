@@ -105,12 +105,6 @@ class Emotion extends ModelEntity
      */
     private $userId;
 
-    /**
-     * @var integer $categoryId
-     *
-     * @ORM\Column(name="container_width", type="integer", nullable=false)
-     */
-    private $containerWidth;
 
     /**
      * @var integer $position
@@ -460,22 +454,6 @@ class Emotion extends ModelEntity
         } else {
             $this->modified = $modified;
         }
-    }
-
-    /**
-     * @return int
-     */
-    public function getContainerWidth()
-    {
-        return $this->containerWidth;
-    }
-
-    /**
-     * @param int $containerWidth
-     */
-    public function setContainerWidth($containerWidth)
-    {
-        $this->containerWidth = $containerWidth;
     }
 
     /**

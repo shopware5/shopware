@@ -46,9 +46,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -78,9 +78,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -110,9 +110,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -142,9 +142,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -174,9 +174,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -206,9 +206,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -238,9 +238,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -270,9 +270,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -302,9 +302,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -334,9 +334,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -366,9 +366,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -398,9 +398,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => true,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -430,9 +430,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -462,9 +462,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -494,9 +494,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -526,9 +526,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -558,9 +558,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -590,9 +590,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -622,9 +622,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -654,9 +654,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -686,9 +686,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -718,9 +718,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -750,9 +750,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -782,9 +782,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -814,9 +814,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -846,9 +846,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -878,9 +878,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -910,9 +910,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -942,9 +942,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -974,9 +974,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1006,9 +1006,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1038,9 +1038,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Genusswelten',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1070,9 +1070,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tees und Zubehör',
                 'active' => true,
-                'template' => 'article_listing_3col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1102,9 +1102,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tees',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1134,9 +1134,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tee-Zubehör',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1166,9 +1166,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Die besten Edelbrände',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1198,9 +1198,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Köstlichkeiten',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1230,9 +1230,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Freizeitwelten',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1262,9 +1262,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1294,9 +1294,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1326,9 +1326,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Wohnwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1358,9 +1358,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Mit der richtigen Dekoration in eine Wohlfühlwelt',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1390,9 +1390,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Möbel',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1422,9 +1422,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Vielfältiges Zubehör für Ihre Küche',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1454,9 +1454,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1486,9 +1486,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1518,9 +1518,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1550,9 +1550,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1582,9 +1582,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1614,9 +1614,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Blogfunktion',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => true,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1646,9 +1646,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Beispiele',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1678,9 +1678,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'In Kürze verfügbar',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1710,9 +1710,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Das Plugin Artikelkonfigurator',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1742,9 +1742,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Funktionen zur Kundenbindung',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1774,9 +1774,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Eigenschaften und Filter',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1806,9 +1806,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Artikeldarstellung im Listing.',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1838,9 +1838,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Crossselling',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1870,9 +1870,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Versandkosteneinstellungen',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1902,9 +1902,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Kundengruppen',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1934,9 +1934,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Zahlungsarten & Riskmanagement',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -1966,9 +1966,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Möglichkeiten der Preisgestaltung',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2000,9 +2000,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Genusswelten',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2032,9 +2032,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tees und Zubehör',
                 'active' => true,
-                'template' => 'article_listing_3col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2064,9 +2064,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tees',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2096,9 +2096,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tee-Zubehör',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2128,9 +2128,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Die besten Edelbrände',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2160,9 +2160,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Köstlichkeiten',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2192,9 +2192,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Freizeitwelten',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2224,9 +2224,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2256,9 +2256,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2288,9 +2288,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Wohnwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2320,9 +2320,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Mit der richtigen Dekoration in eine Wohlfühlwelt',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2352,9 +2352,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Möbel',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2384,9 +2384,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Vielfältiges Zubehör für Ihre Küche',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2416,9 +2416,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2448,9 +2448,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2480,9 +2480,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2512,9 +2512,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2544,9 +2544,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2576,9 +2576,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Blogfunktion',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => true,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2608,9 +2608,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Beispiele',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2640,9 +2640,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'In Kürze verfügbar',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2672,9 +2672,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Das Plugin Artikelkonfigurator',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2704,9 +2704,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Funktionen zur Kundenbindung',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2736,9 +2736,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Eigenschaften und Filter',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2768,9 +2768,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Artikeldarstellung im Listing.',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2800,9 +2800,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Crossselling',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2832,9 +2832,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Versandkosteneinstellungen',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2864,9 +2864,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Kundengruppen',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2896,9 +2896,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Zahlungsarten & Riskmanagement',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2928,9 +2928,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Möglichkeiten der Preisgestaltung',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2962,9 +2962,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -2994,9 +2994,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3026,9 +3026,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3058,9 +3058,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3090,9 +3090,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3122,9 +3122,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3154,9 +3154,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3186,9 +3186,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3218,9 +3218,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3250,9 +3250,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3282,9 +3282,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => true,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3314,9 +3314,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3346,9 +3346,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3378,9 +3378,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3410,9 +3410,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3442,9 +3442,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3474,9 +3474,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3506,9 +3506,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3538,9 +3538,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3570,9 +3570,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3602,9 +3602,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3634,9 +3634,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3666,9 +3666,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3698,9 +3698,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3730,9 +3730,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3762,9 +3762,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3794,9 +3794,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3826,9 +3826,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3858,9 +3858,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3892,9 +3892,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tees und Zubehör',
                 'active' => true,
-                'template' => 'article_listing_3col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3924,9 +3924,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tees',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3956,9 +3956,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tee-Zubehör',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -3988,9 +3988,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Die besten Edelbrände',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4020,9 +4020,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Köstlichkeiten',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4054,9 +4054,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4086,9 +4086,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4118,9 +4118,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4150,9 +4150,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4184,9 +4184,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Mit der richtigen Dekoration in eine Wohlfühlwelt',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4216,9 +4216,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Möbel',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4248,9 +4248,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Vielfältiges Zubehör für Ihre Küche',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4282,9 +4282,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4314,9 +4314,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4348,9 +4348,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'In Kürze verfügbar',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4380,9 +4380,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Das Plugin Artikelkonfigurator',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4412,9 +4412,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Funktionen zur Kundenbindung',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4444,9 +4444,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Eigenschaften und Filter',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4476,9 +4476,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Artikeldarstellung im Listing.',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4508,9 +4508,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Crossselling',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4540,9 +4540,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Versandkosteneinstellungen',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4572,9 +4572,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Kundengruppen',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4604,9 +4604,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Zahlungsarten & Riskmanagement',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4636,9 +4636,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Möglichkeiten der Preisgestaltung',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4672,9 +4672,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4704,9 +4704,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4736,9 +4736,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4768,9 +4768,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4800,9 +4800,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4834,9 +4834,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4866,9 +4866,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4900,9 +4900,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4932,9 +4932,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4964,9 +4964,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -4998,9 +4998,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5030,9 +5030,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5062,9 +5062,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5094,9 +5094,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5128,9 +5128,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5160,9 +5160,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5192,9 +5192,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5224,9 +5224,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5256,9 +5256,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5288,9 +5288,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5320,9 +5320,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5352,9 +5352,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5384,9 +5384,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5418,9 +5418,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tees',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5450,9 +5450,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tee-Zubehör',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5504,9 +5504,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5536,9 +5536,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5599,9 +5599,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5631,9 +5631,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5663,9 +5663,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => true,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5695,9 +5695,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5727,9 +5727,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5759,9 +5759,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5791,9 +5791,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5823,9 +5823,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => false,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5855,9 +5855,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Genusswelten',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5887,9 +5887,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Freizeitwelten',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5919,9 +5919,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Wohnwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5951,9 +5951,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -5983,9 +5983,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Blogfunktion',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => true,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6015,9 +6015,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Beispiele',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6049,9 +6049,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Genusswelten',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6081,9 +6081,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tees und Zubehör',
                 'active' => true,
-                'template' => 'article_listing_3col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6113,9 +6113,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Die besten Edelbrände',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6145,9 +6145,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Köstlichkeiten',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6177,9 +6177,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Freizeitwelten',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6209,9 +6209,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6241,9 +6241,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6273,9 +6273,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Wohnwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6305,9 +6305,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Mit der richtigen Dekoration in eine Wohlfühlwelt',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6337,9 +6337,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Möbel',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6369,9 +6369,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Vielfältiges Zubehör für Ihre Küche',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6401,9 +6401,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Sommerwelten',
                 'active' => true,
-                'template' => 'article_listing_4col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6433,9 +6433,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6465,9 +6465,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6497,9 +6497,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6529,9 +6529,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6561,9 +6561,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Blogfunktion',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => true,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6593,9 +6593,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Beispiele',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6625,9 +6625,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'In Kürze verfügbar',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6657,9 +6657,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Das Plugin Artikelkonfigurator',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6689,9 +6689,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Funktionen zur Kundenbindung',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6721,9 +6721,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Eigenschaften und Filter',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6753,9 +6753,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Artikeldarstellung im Listing.',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6785,9 +6785,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Crossselling',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6817,9 +6817,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Versandkosteneinstellungen',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6849,9 +6849,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Kundengruppen',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6881,9 +6881,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Zahlungsarten & Riskmanagement',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6913,9 +6913,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Möglichkeiten der Preisgestaltung',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6947,9 +6947,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -6979,9 +6979,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7011,9 +7011,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7043,9 +7043,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7075,9 +7075,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7107,9 +7107,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7139,9 +7139,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7171,9 +7171,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7203,9 +7203,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7235,9 +7235,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7267,9 +7267,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => true,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7299,9 +7299,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7331,9 +7331,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7363,9 +7363,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7395,9 +7395,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7427,9 +7427,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7459,9 +7459,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7491,9 +7491,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7523,9 +7523,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7555,9 +7555,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7587,9 +7587,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7619,9 +7619,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7651,9 +7651,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7683,9 +7683,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7715,9 +7715,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7747,9 +7747,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7779,9 +7779,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7813,9 +7813,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tees und Zubehör',
                 'active' => true,
-                'template' => 'article_listing_3col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7845,9 +7845,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tees',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7877,9 +7877,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tee-Zubehör',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7909,9 +7909,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Die besten Edelbrände',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7941,9 +7941,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Köstlichkeiten',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -7975,9 +7975,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8007,9 +8007,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8039,9 +8039,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8071,9 +8071,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8105,9 +8105,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Mit der richtigen Dekoration in eine Wohlfühlwelt',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8137,9 +8137,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Möbel',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8169,9 +8169,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Vielfältiges Zubehör für Ihre Küche',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8203,9 +8203,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8235,9 +8235,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8269,9 +8269,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'In Kürze verfügbar',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8301,9 +8301,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Das Plugin Artikelkonfigurator',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8333,9 +8333,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Funktionen zur Kundenbindung',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8365,9 +8365,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Eigenschaften und Filter',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8397,9 +8397,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Artikeldarstellung im Listing.',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8429,9 +8429,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Crossselling',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8461,9 +8461,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Versandkosteneinstellungen',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8493,9 +8493,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Kundengruppen',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8525,9 +8525,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Zahlungsarten & Riskmanagement',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8557,9 +8557,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Möglichkeiten der Preisgestaltung',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8593,9 +8593,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8625,9 +8625,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8657,9 +8657,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8689,9 +8689,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8721,9 +8721,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8755,9 +8755,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8787,9 +8787,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8821,9 +8821,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8853,9 +8853,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8885,9 +8885,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8919,9 +8919,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8951,9 +8951,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -8983,9 +8983,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9015,9 +9015,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9049,9 +9049,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9081,9 +9081,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9113,9 +9113,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9145,9 +9145,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9177,9 +9177,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9209,9 +9209,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9241,9 +9241,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9273,9 +9273,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9305,9 +9305,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9339,9 +9339,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tees',
                 'active' => true,
-                'template' => 'article_listing_2col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9371,9 +9371,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => 'Tee-Zubehör',
                 'active' => true,
-                'template' => 'article_listing_1col.tpl',
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9425,9 +9425,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -9457,9 +9457,9 @@ class Shopware_Tests_Models_Category_ActiveChildrenListTest extends Enlight_Comp
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => false,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,

@@ -216,11 +216,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
             $media = $medias[$mediaId];
             $media = $this->get('legacy_struct_converter')->convertMediaStruct($media);
 
-            if (Shopware()->Shop()->getTemplate()->getVersion() < 3) {
-                $blogArticles[$key]["preview"]["thumbNails"] = array_column($media['thumbnails'], 'source');
-            } else {
-                $blogArticles[$key]['media'] = $media;
-            }
+            $blogArticles[$key]['media'] = $media;
         }
 
         //RSS and ATOM Feed part

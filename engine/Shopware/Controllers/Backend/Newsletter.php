@@ -22,10 +22,12 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\CSRFWhitelistAware;
+
 /**
  * Newsletter controller
  */
-class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
+class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action implements CSRFWhitelistAware
 {
     /**
      * Init controller method
@@ -36,6 +38,19 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
     {
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
         Shopware()->Plugins()->Controller()->ViewRenderer()->setNoRender();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getWhitelistedCSRFActions()
+    {
+        return [
+            'view',
+            'index',
+            'cron',
+            'log'
+        ];
     }
 
     /**
@@ -65,9 +80,6 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
      */
     public function viewAction()
     {
-        //Fix header for the case calling this action from frontend, otherwise the referer check would crash
-        $this->Request()->setHeader('referer', '/backend/newsletter/view');
-
         if ($this->Request()->getParam('id')) {
             $mailingID = (int) $this->Request()->getParam('id');
             if (!Shopware()->Auth()->hasIdentity()) {
