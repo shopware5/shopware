@@ -40,6 +40,10 @@ return array_replace_recursive([
             ]
         ]
     ],
+    'csrfProtection' => [
+        'frontend' => true,
+        'backend' => true
+    ],
     'snippet' => [
         'readFromDb' => true,
         'writeToDb' => true,

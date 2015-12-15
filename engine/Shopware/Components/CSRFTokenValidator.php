@@ -47,12 +47,26 @@ class CSRFTokenValidator implements SubscriberInterface
     private $tokenName = 'X-CSRF-Token';
 
     /**
+     * @var bool
+     */
+    private $isEnabledFrontend;
+
+    /**
+     * @var bool
+     */
+    private $isEnabledBackend;
+
+    /**
      * CSRFTokenValidator constructor.
      * @param Container $container
+     * @param bool $isEnabledFrontend
+     * @param bool $isEnabledBackend
      */
-    public function __construct(Container $container)
+    public function __construct(Container $container, $isEnabledFrontend = true, $isEnabledBackend = true)
     {
         $this->container = $container;
+        $this->isEnabledFrontend = (bool) $isEnabledFrontend;
+        $this->isEnabledBackend = (bool) $isEnabledBackend;
     }
 
     /**
@@ -61,45 +75,103 @@ class CSRFTokenValidator implements SubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            'Enlight_Controller_Action_PreDispatch_Backend' => 'checkBackendTokenValidation'
+            'Enlight_Controller_Action_PreDispatch_Backend' => 'checkBackendTokenValidation',
+
+            'Enlight_Controller_Action_PreDispatch_Frontend' => 'checkFrontendTokenValidation',
+            'Enlight_Controller_Action_PreDispatch_Widgets' => 'checkFrontendTokenValidation'
         ];
     }
 
     /**
      * @param ActionEventArgs $args
+     * @throws CSRFTokenValidationException
      */
     public function checkBackendTokenValidation(ActionEventArgs $args)
     {
-        $controller = $args->getSubject();
-
-        if ($controller instanceof CSRFWhitelistAware) {
-            $calledAction = strtolower($args->getRequest()->getActionName());
-            $whitelistedActions = $controller->getWhitelistedCSRFActions();
-            $whitelistedActions = array_map('strtolower', $whitelistedActions);
-
-            if (in_array($calledAction, $whitelistedActions)) {
-                return;
-            }
+        if (!$this->isEnabledBackend) {
+            return;
         }
 
-        $this->validateToken(
-            $args->getRequest(),
-            $this->container->get('BackendSession')
-        );
-    }
+        $controller = $args->getSubject();
 
-    /**
-     * @param Request $request
-     * @param Session $session
-     * @throws CSRFTokenValidationException
-     */
-    private function validateToken(Request $request, Session $session)
-    {
-        $expected = $session->offsetGet($this->tokenName);
-        $token = $request->getHeader($this->tokenName);
+        if ($this->isWhitelisted($controller)) {
+            return;
+        }
+
+        $expected = $this->container->get('BackendSession')->offsetGet($this->tokenName);
+        $token = $controller->Request()->getHeader($this->tokenName);
 
         if (!hash_equals($expected, $token)) {
             throw new CSRFTokenValidationException("The provided X-CSRF-Token header is invalid. If you're sure that the request should be valid, the called controller action needs to be whitelisted using the CSRFWhitelistAware interface.");
         }
+    }
+
+    /**
+     * @param \Enlight_Event_EventArgs $args
+     * @throws CSRFTokenValidationException
+     */
+    public function checkFrontendTokenValidation(\Enlight_Event_EventArgs $args)
+    {
+        if (!$this->isEnabledFrontend) {
+            return;
+        }
+
+        /** @var \Enlight_Controller_Action $controller */
+        $controller = $args->getSubject();
+
+        $request = $controller->Request();
+        $response = $controller->Response();
+
+        /** @var \Enlight_Components_Session_Namespace $session */
+        $session = $this->container->get('session');
+        $token = $session->offsetGet('X-CSRF-Token');
+
+        if (!$token) {
+            $token = $this->generateToken($response);
+        }
+
+        if ($this->isWhitelisted($controller)) {
+            return;
+        }
+
+        if ($request->isPost()) {
+            $requestToken = $request->getParam('__csrf_token') ? : $request->getHeader('X-CSRF-Token');
+            if (!hash_equals($token, $requestToken)) {
+                $this->generateToken($response);
+                throw new CSRFTokenValidationException("The provided X-CSRF-Token is invalid. Please go back, reload the page and try again.");
+            }
+        }
+    }
+
+    /**
+     * @param \Enlight_Controller_Response_ResponseHttp $response
+     * @return string
+     */
+    private function generateToken(\Enlight_Controller_Response_ResponseHttp $response)
+    {
+        $token = Random::getAlphanumericString(30);
+        Shopware()->Session()->offsetSet('X-CSRF-Token', $token);
+        setcookie('invalidate-xcsrf-token', 1, 0, '/');
+
+        return $token;
+    }
+
+    /**
+     * @param \Enlight_Controller_Action $controller
+     * @return bool
+     */
+    private function isWhitelisted(\Enlight_Controller_Action $controller)
+    {
+        if ($controller instanceof CSRFWhitelistAware) {
+            $calledAction = strtolower($controller->Request()->getActionName());
+            $whitelistedActions = $controller->getWhitelistedCSRFActions();
+            $whitelistedActions = array_map('strtolower', $whitelistedActions);
+
+            if (in_array($calledAction, $whitelistedActions)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

@@ -159,7 +159,8 @@
                 'ajax_validate': '{url controller="register"}',
                 'ajax_add_article': '{url controller="checkout" action="addArticle"}',
                 'ajax_listing': '{url module="widgets" controller="Listing" action="ajaxListing"}',
-                'ajax_cart_refresh': '{url controller="checkout" action="ajaxAmount"}'
+                'ajax_cart_refresh': '{url controller="checkout" action="ajaxAmount"}',
+                'csrf_token_generate': '{url controller="csrftoken"}'
             {rdelim};
 
             var snippets = snippets || {ldelim}

@@ -389,6 +389,8 @@
 
         <service id="shopware.csrftoken_validator" class="Shopware\Components\CSRFTokenValidator">
             <argument type="service" id="service_container" />
+            <argument>%shopware.csrfProtection.frontend%</argument>
+            <argument>%shopware.csrfProtection.backend%</argument>
             <tag name="shopware.event_subscriber" />
         </service>
 
