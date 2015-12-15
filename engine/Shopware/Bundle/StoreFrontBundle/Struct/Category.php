@@ -79,11 +79,6 @@ class Category extends Extendable implements \JsonSerializable
     protected $cmsText;
 
     /**
-     * @var string
-     */
-    protected $template;
-
-    /**
      * @var boolean
      */
     protected $blog;
@@ -92,11 +87,6 @@ class Category extends Extendable implements \JsonSerializable
      * @var boolean
      */
     protected $allowViewSelect;
-
-    /**
-     * @var boolean
-     */
-    protected $displayPropertySets;
 
     /**
      * @var boolean
@@ -267,22 +257,6 @@ class Category extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @param string $template
-     */
-    public function setTemplate($template)
-    {
-        $this->template = $template;
-    }
-
-    /**
-     * @return string
-     */
-    public function getTemplate()
-    {
-        return $this->template;
-    }
-
-    /**
      * @param string $externalLink
      */
     public function setExternalLink($externalLink)
@@ -320,14 +294,6 @@ class Category extends Extendable implements \JsonSerializable
     public function setDisplayInNavigation($displayInNavigation)
     {
         $this->displayInNavigation = $displayInNavigation;
-    }
-
-    /**
-     * @param boolean $displayPropertySets
-     */
-    public function setDisplayPropertySets($displayPropertySets)
-    {
-        $this->displayPropertySets = $displayPropertySets;
     }
 
     /**
@@ -384,14 +350,6 @@ class Category extends Extendable implements \JsonSerializable
     public function displayInNavigation()
     {
         return $this->displayInNavigation;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function displayPropertySets()
-    {
-        return $this->displayPropertySets;
     }
 
     /**

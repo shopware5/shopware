@@ -2,8 +2,8 @@
 
 namespace Shopware\Tests\Mink;
 
-use Shopware\Tests\Mink\Page\Emotion\Note;
-use Shopware\Tests\Mink\Element\Emotion\NotePosition;
+use Shopware\Tests\Mink\Page\Note;
+use Shopware\Tests\Mink\Element\NotePosition;
 use Behat\Gherkin\Node\TableNode;
 
 class NoteContext extends SubContext

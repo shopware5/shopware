@@ -65,7 +65,7 @@ Ext.define('Shopware.apps.Category', {
      * Required stores for sub-application
      * @array
      */
-    stores:[ 'Detail', 'Tree', 'Template', 'CustomerGroups', 'AvailableProducts', 'AssignedProducts', 'CategoryPath' ],
+    stores:[ 'Detail', 'Tree', 'CustomerGroups', 'AvailableProducts', 'AssignedProducts', 'CategoryPath' ],
     /**
      * Required views for this sub-application
      * @array
@@ -85,7 +85,7 @@ Ext.define('Shopware.apps.Category', {
      * Required models for sub-application
      * @array
      */
-    models:[ 'Detail','Tree', 'Template', 'Attribute', 'Emotion', 'ProductAssignment' ],
+    models:[ 'Detail','Tree', 'Attribute', 'Emotion', 'ProductAssignment' ],
 
     /**
      * Required controllers for sub-application

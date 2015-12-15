@@ -222,7 +222,7 @@ class sGetCategoryTest extends \Enlight_Components_Test_TestCase
         $category = $result[1];
 
         $keys = array('id', 'name', 'metaKeywords', 'metaDescription', 'cmsHeadline', 'cmsText',
-            'active','template', 'blog', 'path', 'showFilterGroups', 'external', 'hideFilter', 'hideTop', 'noViewSelect',
+            'active', 'blog', 'path', 'external', 'hideFilter', 'hideTop', 'noViewSelect',
             'media', 'attribute', 'description', 'childrenCount', 'hidetop',
             'subcategories', 'link', 'flag'
         );
@@ -245,8 +245,6 @@ class sGetCategoryTest extends \Enlight_Components_Test_TestCase
             ),
             1 => array(
                 'name' => 'Genusswelten',
-                'template' => 'article_listing_1col.tpl',
-                'showFilterGroups' => 1,
                 'childrenCount' => 3
             ),
             2 => array(

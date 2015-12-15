@@ -49,14 +49,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         $this->View()->setScope(Enlight_Template_Manager::SCOPE_PARENT);
         if (!in_array($this->Request()->getActionName(), array('login', 'logout', 'password', 'ajax_login', 'ajax_logout', 'resetPassword'))
             && !$this->admin->sCheckUser()) {
-            // If using the new template, the 'GET' action will be handled
-            // in the Register controller (unified login/register page)
-            if (Shopware()->Shop()->getTemplate()->getVersion() >= 3) {
-                return $this->forward('index', 'register');
-            } else {
-                // redirecting to login action should be considered deprecated
-                return $this->forward('login');
-            }
+            return $this->forward('index', 'register');
         }
         $this->View()->sUserData = $this->admin->sGetUserData();
         $this->View()->sUserLoggedIn = $this->admin->sCheckUser();
@@ -69,7 +62,6 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
     public function indexAction()
     {
         if (
-            Shopware()->Shop()->getTemplate()->getVersion() >= 3 &&
             $this->View()->sUserData['additional']['user']['accountmode'] == 1
         ) {
             $this->logoutAction();
@@ -111,7 +103,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
 
         // If using the new template and we get a request to change address from the checkout page
         // we need to use a different template
-        if (Shopware()->Shop()->getTemplate()->getVersion() >= 3 && $this->View()->sTarget == 'checkout') {
+        if ($this->View()->sTarget == 'checkout') {
             $this->Request()->setControllerName('checkout');
             return $this->View()->loadTemplate('frontend/account/billing_checkout.tpl');
         }
@@ -145,7 +137,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
 
         // If using the new template and we get a request to change address from the checkout page
         // we need to use a different template
-        if (Shopware()->Shop()->getTemplate()->getVersion() >= 3 && $this->View()->sTarget == 'checkout') {
+        if ($this->View()->sTarget == 'checkout') {
             $this->Request()->setControllerName('checkout');
             return $this->View()->loadTemplate('frontend/account/shipping_checkout.tpl');
         }
@@ -332,15 +324,11 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
             );
         }
 
-        // If using the new template, the 'GET' action will be handled
-        // in the Register controller (unified login/register page)
-        if (Shopware()->Shop()->getTemplate()->getVersion() >= 3) {
-            $this->forward(array(
-                'action' => 'index',
-                'controller' => 'register',
-                'sTarget' => $this->View()->sTarget
-            ));
-        }
+        $this->forward(array(
+            'action' => 'index',
+            'controller' => 'register',
+            'sTarget' => $this->View()->sTarget
+        ));
     }
 
     /**
@@ -780,7 +768,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
 
         // If using the new template and we get a request to change address from the checkout page
         // we need to use a different template
-        if (Shopware()->Shop()->getTemplate()->getVersion() >= 3 && $this->View()->sTarget == 'checkout') {
+        if ($this->View()->sTarget == 'checkout') {
             $this->Request()->setControllerName('checkout');
             return $this->View()->loadTemplate('frontend/account/select_billing_checkout.tpl');
         }
@@ -796,7 +784,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
 
         // If using the new template and we get a request to change address from the checkout page
         // we need to use a different template
-        if (Shopware()->Shop()->getTemplate()->getVersion() >= 3 && $this->View()->sTarget == 'checkout') {
+        if ($this->View()->sTarget == 'checkout') {
             $this->Request()->setControllerName('checkout');
             return $this->View()->loadTemplate('frontend/account/select_shipping_checkout.tpl');
         }
@@ -1018,72 +1006,6 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         $connection->executeUpdate(
             'DELETE FROM s_core_optin WHERE datum <= (NOW() - INTERVAL 2 HOUR) AND type = "password"'
         );
-    }
-
-    /**
-     * Login account by ajax request
-     *
-     * @deprecated only used for SW4.x templates
-     */
-    public function ajaxLoginAction()
-    {
-        Enlight()->Plugins()->Controller()->Json()->setPadding();
-
-        // Fix same origin miss match
-        $response = $this->Response();
-        $shop = Shopware()->Shop();
-        if ($shop->getSecure()) {
-            $response->setHeader(
-                'Access-Control-Allow-Origin',
-                'http://' . $shop->getHost()
-            );
-            $response->setHeader(
-                'Access-Control-Allow-Methods', 'POST, GET'
-            );
-            $response->setHeader(
-                'Access-Control-Allow-Credentials', 'true'
-            );
-        }
-
-        if ($this->admin->sCheckUser()) {
-            return $this->View()->setTemplate();
-        }
-
-        if (!$this->Request()->getParam('accountmode')) {
-            return;
-        }
-
-        if (empty(Shopware()->Session()->sRegister)) {
-            Shopware()->Session()->sRegister = array();
-        }
-
-        if ($this->Request()->getParam('accountmode')==0 || $this->Request()->getParam('accountmode')==1) {
-            Shopware()->Session()->sRegister['auth']['email'] = $this->admin->sSYSTEM->_POST['email'];
-            Shopware()->Session()->sRegister['auth']['accountmode'] = (int) $this->Request()->getParam('accountmode');
-
-            $this->View()->setTemplate();
-        } else {
-            $checkData = $this->admin->sLogin();
-
-            if (empty($checkData['sErrorMessages'])) {
-                $this->refreshBasket();
-                $this->View()->setTemplate();
-            } else {
-                $this->View()->sFormData = $this->Request()->getParams();
-                $this->View()->sErrorFlag = $checkData['sErrorFlag'];
-                $this->View()->sErrorMessages = $checkData['sErrorMessages'];
-            }
-        }
-    }
-
-    /**
-     * Logout account by ajax request
-     */
-    public function ajaxLogoutAction()
-    {
-        Enlight()->Plugins()->Controller()->Json()->setPadding();
-        Shopware()->Session()->unsetAll();
-        $this->refreshBasket();
     }
 
     /**

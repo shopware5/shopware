@@ -128,7 +128,6 @@ class Shopware_Tests_Controllers_Backend_CategoryTest extends Enlight_Components
         $this->assertTrue(!empty($foundDummy));
         $this->manager->remove($dummy);
         $this->manager->flush();
-
     }
 
     /**
@@ -175,11 +174,10 @@ class Shopware_Tests_Controllers_Backend_CategoryTest extends Enlight_Components
         $returningData = $this->View()->data;
         $dummyData = $this->dummyData;
 
-        $this->assertEquals($dummyData["parentId"],$returningData["parentId"]);
-        $this->assertEquals($dummyData["name"],$returningData["name"]);
+        $this->assertEquals($dummyData["parentId"], $returningData["parentId"]);
+        $this->assertEquals($dummyData["name"], $returningData["name"]);
         $this->assertTrue($returningData["changed"] instanceof \DateTime);
         $this->assertTrue($returningData["added"] instanceof \DateTime);
-        $this->assertEquals(1,$returningData["showFilterGroups"]);
 
         return $id;
     }
@@ -197,7 +195,7 @@ class Shopware_Tests_Controllers_Backend_CategoryTest extends Enlight_Components
         $this->assertTrue($this->View()->success);
         $categoryPath = $this->View()->data;
         $this->assertTrue(!empty($categoryPath));
-        $this->assertEquals(2,count(explode("/",$categoryPath[0])));
+        $this->assertEquals(2, count(explode("/", $categoryPath[0])));
     }
 
     /**

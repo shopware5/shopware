@@ -57,9 +57,9 @@ class Shopware_Tests_Models_Category_BlogCategoriesByParentQueryTest extends Enl
                 'metaDescription' => '',
                 'cmsHeadline' => 'Blogfunktion',
                 'active' => true,
-                'template' => '',
+                
                 'blog' => true,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,
@@ -78,9 +78,9 @@ class Shopware_Tests_Models_Category_BlogCategoriesByParentQueryTest extends Enl
                 'metaDescription' => '',
                 'cmsHeadline' => '',
                 'active' => true,
-                'template' => null,
+                
                 'blog' => true,
-                'showFilterGroups' => true,
+                
                 'external' => '',
                 'hideFilter' => false,
                 'hideTop' => false,

@@ -866,12 +866,10 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
                 'template' => $template->getTemplate()
             );
 
-            if ($template->getVersion() >= 3) {
-                $data = $this->get('theme_service')->translateTheme(
-                    $template,
-                    $data
-                );
-            }
+            $data = $this->get('theme_service')->translateTheme(
+                $template,
+                $data
+            );
 
             $result[] = $data;
         }

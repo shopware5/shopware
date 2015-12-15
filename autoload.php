@@ -27,8 +27,7 @@ use Composer\Autoload\ClassLoader;
 
 set_include_path(
     __DIR__ . PATH_SEPARATOR .
-    __DIR__ . '/engine/Library/' . PATH_SEPARATOR .   // Library
-    __DIR__ . '/templates/'                           // Templates
+    __DIR__ . '/engine/Library/' . PATH_SEPARATOR // Library
 );
 
 /**

@@ -100,7 +100,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             } else {
                 // If using the new template, the 'GET' action will be handled
                 // in the Register controller (unified login/register page)
-                if (Shopware()->Shop()->getTemplate()->getVersion() >= 3 && empty($this->session['sRegisterFinished'])) {
+                if (empty($this->session['sRegisterFinished'])) {
                     return $this->redirect(array(
                         'controller' => $sTarget,
                         'action' => $sTargetAction
@@ -146,17 +146,15 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
 
                 // If using the new template, we need to check the target page
                 // If its the checkout page, we need to stop by the shippingPayment page
-                if (Shopware()->Shop()->getTemplate()->getVersion() >= 3) {
-                    $sTarget = $this->Request()->getParam('sTarget', 'account');
-                    $sTargetAction = $this->Request()->getParam('sTargetAction', 'index');
-                    if ($sTarget == 'checkout' && $sTargetAction == 'confirm') {
-                        $sTargetAction = 'shippingPayment';
-                    }
-                    return $this->redirect(array(
-                        'action' => $sTargetAction,
-                        'controller' => $sTarget,
-                    ));
+                $sTarget = $this->Request()->getParam('sTarget', 'account');
+                $sTargetAction = $this->Request()->getParam('sTargetAction', 'index');
+                if ($sTarget == 'checkout' && $sTargetAction == 'confirm') {
+                    $sTargetAction = 'shippingPayment';
                 }
+                return $this->redirect(array(
+                    'action' => $sTargetAction,
+                    'controller' => $sTarget,
+                ));
             }
         }
         $this->forward('index');
@@ -654,130 +652,5 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             );
         }
         return $checkData;
-    }
-
-    /**
-     * Checks if the given email isn't already registered
-     */
-    public function ajaxValidateEmailAction()
-    {
-        $error_flags = array();
-        $error_messages = array();
-        $validator = $this->container->get('validator.email');
-
-        if (empty($this->post['personal']['email'])) {
-        } elseif (!$validator->isValid($this->post['personal']['email'])) {
-            $error_messages[] = Shopware()->Snippets()->getNamespace("frontend")->get('RegisterAjaxEmailNotValid', 'Please enter a valid mail address.', true);
-            $error_flags['email'] = true;
-            if (!empty($this->post['personal']['emailConfirmation'])) {
-                $error_flags['emailConfirmation'] = true;
-            }
-        } elseif (empty($this->post['personal']['skipLogin'])&&$this->admin->sGetUserByMail($this->post['personal']['email'])) {
-            $error_messages[] = Shopware()->Snippets()->getNamespace("frontend")->get('RegisterAjaxEmailForgiven', 'This mail address is already in use.', true);
-            $error_flags['email'] = true;
-            if (!empty($this->post['personal']['emailConfirmation'])) {
-                $error_flags['emailConfirmation'] = true;
-            }
-        } elseif (empty($this->post['personal']['emailConfirmation'])) {
-            $error_flags['email'] = false;
-        } elseif ($this->post['personal']['emailConfirmation']!=$this->post['personal']['email']) {
-            $error_messages[] = Shopware()->Snippets()->getNamespace("frontend")->get('RegisterAjaxEmailNotEqual', 'The mail addresses you have entered are not equal.', true);
-            $error_flags['email'] = true;
-            $error_flags['emailConfirmation'] = true;
-        } else {
-            $error_flags['email'] = false;
-            $error_flags['emailConfirmation'] = false;
-        }
-
-        foreach ($error_messages as $key=>$error_message) {
-            $error_messages[$key] = $this->View()->fetch('string:'.$error_message);
-        }
-
-        echo Zend_Json::encode(array('success'=>empty($error_messages), 'error_flags'=>$error_flags, 'error_messages'=>$error_messages));
-    }
-
-    /**
-     * Checks if the two passwords matches
-     */
-    public function ajaxValidatePasswordAction()
-    {
-        $error_messages = array();
-        $error_flags = array();
-
-        if (empty($this->post['personal']['password'])) {
-        } elseif (strlen(utf8_decode($this->post['personal']['password'])) < Shopware()->Config()->get('MinPassword')) {
-            $error_messages[] = Shopware()->Snippets()->getNamespace("frontend")->get(
-                'RegisterPasswordLength',
-                'Please choose a password consisting of {config name="MinPassword"} signs at minimum.',
-                true
-            );
-            $error_flags['password'] = true;
-            if (!empty($this->post['personal']['passwordConfirmation'])) {
-                $error_flags['passwordConfirmation'] = true;
-            }
-        } elseif (empty($this->post['personal']['passwordConfirmation'])) {
-            $error_flags['password'] = false;
-        } elseif (!empty($this->post['personal']['passwordConfirmation']) && $this->post['personal']['password']!=$this->post['personal']['passwordConfirmation']) {
-            $error_messages[] = Shopware()->Snippets()->getNamespace("frontend")->get('RegisterPasswordNotEqual', 'The passwords you have entered are not equal.', true);
-            $error_flags['password'] = true;
-            $error_flags['passwordConfirmation'] = true;
-        } else {
-            $error_flags['password'] = false;
-            $error_flags['passwordConfirmation'] = false;
-        }
-
-        foreach ($error_messages as $key=>$error_message) {
-            $error_messages[$key] = $this->View()->fetch('string:'.$error_message);
-        }
-
-        echo Zend_Json::encode(array('success'=>empty($error_messages), 'error_flags'=>$error_flags, 'error_messages'=>$error_messages));
-    }
-
-    /**
-     * Validates the billing information
-     * and returns an json string with error
-     * codes and messages
-     *
-     * @return void
-     */
-    public function ajaxValidateBillingAction()
-    {
-        $rules = array(
-            'salutation'    => array('required' => 1),
-            'company'       => array('required' => 0),
-            'firstname'     => array('required' => 1),
-            'lastname'      => array('required' => 1),
-            'street'        => array('required' => 1),
-            'zipcode'       => array('required' => 1),
-            'city'          => array('required' => 1),
-            'country'       => array('required' => 1),
-            'department'    => array('required' => 0),
-        );
-        if (!empty($this->post['personal']['customer_type']) && $this->post['personal']['customer_type'] == 'business') {
-            $rules['company']['required'] = 1;
-        }
-        $this->admin->sSYSTEM->_POST = array_merge($this->post['personal'], $this->post['billing']);
-        $checkData = $this->admin->sValidateStep2($rules);
-
-        $error_messages = array();
-        $error_flags = array();
-
-        if (!empty($checkData['sErrorMessages'])) {
-            foreach ($checkData['sErrorMessages'] as $error_message) {
-                $error_messages[] = utf8_encode($error_message);
-            }
-        }
-
-        foreach ($rules as $field => $rule) {
-            $error_flags[$field] = !empty($checkData['sErrorFlag'][$field]);
-        }
-
-        echo Zend_Json::encode(
-            array(
-                'success' => empty($error_messages),
-                'error_flags' => $error_flags,
-                'error_messages' => $error_messages
-            )
-        );
     }
 }

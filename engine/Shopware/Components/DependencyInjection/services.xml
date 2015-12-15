@@ -339,16 +339,6 @@
 
         <service id="file_system" class="Symfony\Component\Filesystem\Filesystem" />
 
-        <service id="legacy_listing_converter" class="Shopware\Components\Compatibility\LegacyListingSubscriber">
-            <argument type="service" id="service_container" />
-            <tag name="shopware.event_subscriber" />
-        </service>
-
-        <service id="legacy_search_converter" class="Shopware\Components\Compatibility\LegacySearchSubscriber">
-            <argument type="service" id="service_container" />
-            <tag name="shopware.event_subscriber" />
-        </service>
-
         <service id="first_run_wizard_plugin_store" class="Shopware\Bundle\PluginInstallerBundle\Service\FirstRunWizardPluginStoreService">
             <argument type="service" id="shopware_plugininstaller.plugin_installer_struct_hydrator" />
             <argument type="service" id="shopware_plugininstaller.plugin_service_local" />

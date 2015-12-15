@@ -397,12 +397,10 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
                 $instance
             );
 
-            if ($theme['version'] >= 3) {
-                $theme = $this->get('theme_service')->translateTheme(
-                    $instance,
-                    $theme
-                );
-            }
+            $theme = $this->get('theme_service')->translateTheme(
+                $instance,
+                $theme
+            );
 
             if ($shop instanceof Shop && $shop->getTemplate() instanceof Template) {
                 $theme['enabled'] = ($theme['id'] === $shop->getTemplate()->getId());
