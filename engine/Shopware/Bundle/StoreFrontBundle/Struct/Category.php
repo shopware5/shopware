@@ -79,6 +79,11 @@ class Category extends Extendable implements \JsonSerializable
     protected $cmsText;
 
     /**
+     * @var string
+     */
+    protected $template;
+
+    /**
      * @var boolean
      */
     protected $blog;
@@ -254,6 +259,22 @@ class Category extends Extendable implements \JsonSerializable
     public function getMetaKeywords()
     {
         return $this->metaKeywords;
+    }
+
+    /**
+     * @param string $template
+     */
+    public function setTemplate($template)
+    {
+        $this->template = $template;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTemplate()
+    {
+        return $this->template;
     }
 
     /**

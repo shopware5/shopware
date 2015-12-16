@@ -340,6 +340,7 @@ class sCategories
             'cmsHeadline'       => $category->getCmsHeadline(),
             'cmsText'           => $category->getCmsText(),
             'active'            => true,
+            'template'          => $category->getTemplate(),
             'blog'              => $category->isBlog(),
             'path'              => $path,
             'external'          => $category->getExternalLink(),

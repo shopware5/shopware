@@ -7,13 +7,11 @@ class Migrations_Migration701 extends Shopware\Components\Migrations\AbstractMig
         $this->addSql("DELETE FROM `s_core_templates` WHERE version < 3;");
 
         // remove unused table fields
-        $this->addSql("ALTER TABLE `s_categories` DROP COLUMN `showfiltergroups`, DROP COLUMN `template`;");
+        $this->addSql("ALTER TABLE `s_categories` DROP COLUMN `showfiltergroups`;");
         $this->addSql("ALTER TABLE `s_emotion` DROP COLUMN `container_width`;");
 
         // remove unused config elements
         $optionsToDelete = [
-            'category_default_tpl',
-            'categorytemplates',
             'maxsupplierscategory',
             'showbundlemainarticle',
             'paymentEditingInCheckoutPage',

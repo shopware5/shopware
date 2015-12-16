@@ -90,6 +90,7 @@ Ext.define('Shopware.apps.Category.controller.Main', {
         me.subApplication.treeStore =  me.subApplication.getStore('Tree');
         me.subApplication.custeromGroupsStore =  me.subApplication.getStore('CustomerGroups');
         me.subApplication.DetailStore =  me.subApplication.getStore('Detail');
+        me.subApplication.templateStore =  me.subApplication.getStore('Template');
 
         // Stores for the product assignment
         me.subApplication.availableProductsStore = me.subApplication.getStore('AvailableProducts');
@@ -101,6 +102,7 @@ Ext.define('Shopware.apps.Category.controller.Main', {
         me.subApplication.treeStore.load();
 
         me.mainWindow = me.getView('main.Window').create({
+            templateStore:me.subApplication.templateStore,
             treeStore:me.subApplication.treeStore
         });
 
