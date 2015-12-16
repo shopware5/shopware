@@ -52,13 +52,5 @@ WHERE
 SQL;
 
         $this->addSql($sql);
-
-
-        /**
-         * Cleanup
-         */
-
-        // remove orphan forms
-        $this->addSql("DELETE FROM `s_core_config_forms` WHERE (SELECT count(*) FROM `s_core_config_elements` WHERE s_core_config_elements.form_id = s_core_config_forms.id) < 1 AND parent_id IS NOT NULL;");
     }
 }
