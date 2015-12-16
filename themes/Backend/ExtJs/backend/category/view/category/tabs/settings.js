@@ -113,6 +113,8 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
         errorMessageWrongFileTypeTitle : '{s name=view/error_message_wrong_file_type_title}Wrong file type{/s}',
         errorMessageWrongFileType : '{s name=view/error_message_wrong_file_type}Wrong file type selected.{/s}',
 
+        defaultSettingsTemplateLabel : '{s name=view/settings_default_settings_template_label}Template selection{/s}',
+        defaultSettingsTemplateHelp: '{s name=view/settings_default_settings_template_help}The template selection is only available for emotion templates. (SW 4){/s}',
         defaultSettingsHideTopLabel : '{s name=view/settings_default_settings_no_top_navigation_label}Do NOT show in top navigation.{/s}',
         defaultSettingsNoDesignSwitchLabel : '{s name=view/settings_default_settings_no_design_switch_label}Do NOT switch design.{/s}',
         defaultSettingsNoFilterLabel : '{s name=view/settings_default_settings_no_filter_label}Hide filters.{/s}',
@@ -311,6 +313,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
      * Those settings are
      *  - an active flag. This flag indicates if the loaded category is active or nor.
      *  - description or name for the category (this text will be displayed in the menu)
+     *  - template selection. This part will be hidden if the parent node is the root node. The data for this field
      *    can be defined in the default shop settings.
      *  - hide in top navigation flag.
      *  - do not switch the design flag.
@@ -336,6 +339,19 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
      */
     getDefaultSettingItems:function () {
         var me = this;
+        // create the template combo box and register it in the local namespace to
+        // gain access from the outside.
+        me.templateComboBox = Ext.create('Ext.form.field.ComboBox', {
+            helpText:me.snippets.defaultSettingsTemplateHelp,
+            fieldLabel:me.snippets.defaultSettingsTemplateLabel,
+            store:me.templateStore,
+            labelWidth:180,
+            valueField:'template',
+            displayField:'name',
+            editable:false,
+            allowBlank:true,
+            name:'template'
+        });
 
         me.productLayoutField = Ext.create('Shopware.apps.Base.view.element.ProductBoxLayoutSelect', {
             name: 'productBoxLayout',
@@ -381,6 +397,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
                 dataIndex:'name',
                 name:'name'
             },
+            me.templateComboBox,
             me.productLayoutField,
             me.streamSelection,
             {

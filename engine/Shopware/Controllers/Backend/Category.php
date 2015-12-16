@@ -69,6 +69,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         $this->addAclPermission('getDetail', 'read', 'Insufficient Permissions');
         $this->addAclPermission('getPathByQuery', 'read', 'Insufficient Permissions');
         $this->addAclPermission('getIdPath', 'read', 'Insufficient Permissions');
+        $this->addAclPermission('getTemplateSettings', 'read', 'Insufficient Permissions');
 
         // update
         $this->addAclPermission('updateDetail', 'update', 'Insufficient Permissions');

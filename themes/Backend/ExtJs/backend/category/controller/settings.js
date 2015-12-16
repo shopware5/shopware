@@ -72,7 +72,8 @@ Ext.define('Shopware.apps.Category.controller.Settings', {
         });
     },
     /**
-     * Reacts if the event recordloaded is fired
+     * Reacts if the event recordloaded is fired and hides or shows the template selection based
+     * on the parent ID of the loaded record.
      *
      * @event recordloaded
      * @param record [Ext.data.Model]
@@ -83,6 +84,12 @@ Ext.define('Shopware.apps.Category.controller.Settings', {
             form = me.getSettingsForm();
 
         if(record.getId() != me.subApplication.defaultRootNodeId){
+            if(~~(1 * record.get('parentId')) === 1) {
+                form.templateComboBox.hide();
+            } else {
+                form.templateComboBox.show();
+            }
+
             form.streamSelection.enable();
 
             //to select the settings if the tree element is not a leaf
@@ -94,7 +101,8 @@ Ext.define('Shopware.apps.Category.controller.Settings', {
             //show or hide the emotionNotice if an emotion is mapped to this category
             if(record.getEmotion().count()){
                 form.emotionNotice.show();
-            } else{
+            }
+            else{
                 form.emotionNotice.hide();
             }
             me.enableForm();

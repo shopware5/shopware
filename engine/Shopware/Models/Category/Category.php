@@ -162,6 +162,15 @@ class Category extends ModelEntity
     private $active = true;
 
     /**
+     * If this field is set the category page will uses this template
+     *
+     * @var string $template
+     *
+     * @ORM\Column(name="template", type="string", length=255, nullable=true)
+     */
+    private $template;
+
+    /**
      * @var string $productBoxLayout
      *
      * @ORM\Column(name="product_box_layout", type="string", length=50, nullable=true)
@@ -631,6 +640,29 @@ class Category extends ModelEntity
     public function getCmsText()
     {
         return $this->cmsText;
+    }
+
+    /**
+     * Set template
+     *
+     * @param string $template
+     * @return Category
+     */
+    public function setTemplate($template)
+    {
+        $this->template = $template;
+
+        return $this;
+    }
+
+    /**
+     * Get template
+     *
+     * @return string
+     */
+    public function getTemplate()
+    {
+        return $this->template;
     }
 
     /**

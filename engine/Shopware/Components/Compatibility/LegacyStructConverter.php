@@ -119,6 +119,7 @@ class LegacyStructConverter
             'cmsHeadline' => $category->getCmsHeadline(),
             'cmsText' => $category->getCmsText(),
             'active' => true,
+            'template' => $category->getTemplate(),
             'productBoxLayout' => $category->getProductBoxLayout(),
             'blog' => $category->isBlog(),
             'path' => $category->getPath(),

@@ -171,6 +171,7 @@ Ext.define('Shopware.apps.Category.view.main.Window', {
         return [
             {
                 xtype:'category-category-tabs-settings',
+                templateStore : me.templateStore
             },
             me.articleMappingContainer,
             me.categoryRestrictionContainer

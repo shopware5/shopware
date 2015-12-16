@@ -124,6 +124,10 @@ class CategoryHydrator extends Hydrator
             $category->setCmsText($data['__category_cmstext']);
         }
 
+        if (isset($data['__category_template'])) {
+            $category->setTemplate($data['__category_template']);
+        }
+
         if (isset($data['__category_noviewselect'])) {
             $category->setAllowViewSelect((bool) !$data['__category_noviewselect']);
         }
