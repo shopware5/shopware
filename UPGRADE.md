@@ -18,6 +18,12 @@ In this document you will find a changelog of the important changes related to t
     * Added new `css_class` column to the `s_emotion_elements` table.
 * Removed deprecated columns `s_filter_values.value_numeric` and `s_filter_options.default`
 * Updated `monolog/monolog` to version 1.17.2
+* Add CSRF protection to frontend and backend which is enabled by default.
+    * OptOut by implementing `CSRFWhitelistAware` interface
+    * Add `X-CSRF-Token` to every ajax request
+    * Add `__csrf_token` to every html form in frontend
+    * Add `csrfProtection` config options to disable CSRF protection
+    * See: https://developers.shopware.com/developers-guide/csrf-protection/
 
 ## 5.1.2
 * Out-of-stock variants on the detail page are now selectable

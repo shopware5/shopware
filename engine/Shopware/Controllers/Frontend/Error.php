@@ -21,10 +21,11 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Shopware\Components\CSRFWhitelistAware;
 
 /**
  */
-class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action
+class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action implements CSRFWhitelistAware
 {
     /**
      * Disable front plugins
@@ -194,5 +195,21 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action
                 'include_dir' => '.'
             )
         );
+    }
+
+    /**
+     * Returns a list with actions which should not be validated for CSRF protection
+     *
+     * @return string[]
+     */
+    public function getWhitelistedCSRFActions()
+    {
+        return [
+            'error',
+            'cli',
+            'pageNotFoundError',
+            'genericError',
+            'service'
+        ];
     }
 }
