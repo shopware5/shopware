@@ -281,13 +281,18 @@ Ext.define('Shopware.apps.Article.view.esd.List', {
             fieldLabel: me.snippets.toolbar.choose,
             emptyText: me.snippets.toolbar.choose,
             anchor: '100%',
+            displayTpl: Ext.create('Ext.XTemplate',
+                '<tpl for=".">',
+                '{literal}' +
+                    '{name} - {additionalText}' +
+                '{/literal}',
+                '</tpl>'
+            ),
             tpl: Ext.create('Ext.XTemplate',
                 '<tpl for=".">',
                     '{literal}' +
                         '<div class="x-boundlist-item">{name}' +
-                        '<tpl if="additionalText">' +
-                            '<span style="font-size:10px; font-weight: 800;"> - {additionalText}</span>' +
-                        '</tpl>' +
+                        '<span style="font-size:10px; font-weight: 800;"> - {additionalText}</span>' +
                         '</div>' +
                     '{/literal}',
                 '</tpl>'
