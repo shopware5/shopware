@@ -17,6 +17,7 @@ In this document you will find a changelog of the important changes related to t
     * Multiple classnames can be added by separating them with whitespaces.
     * Added new `css_class` column to the `s_emotion_elements` table.
 * Removed deprecated columns `s_filter_values.value_numeric` and `s_filter_options.default`
+* Updated `monolog/monolog` to version 1.17.2
 
 ## 5.1.2
 * Out-of-stock variants on the detail page are now selectable
