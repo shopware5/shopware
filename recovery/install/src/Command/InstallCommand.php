@@ -184,6 +184,13 @@ class InstallCommand extends Command
     {
         $this
             ->addOption(
+                'skip-admin-creation',
+                null,
+                InputOption::VALUE_NONE,
+                'If provided, no admin user will be created.'
+            )
+
+            ->addOption(
                 'admin-username',
                 null,
                 InputOption::VALUE_REQUIRED,
@@ -282,8 +289,10 @@ class InstallCommand extends Command
         }
 
         $adminUser = new AdminUser();
-        $adminUser = $this->getAdminInfoFromArgs($input, $adminUser);
-        $adminUser = $this->getAdminInfoFromInteractiveShell($adminUser);
+        if (!$input->getOption('skip-admin-creation')) {
+            $adminUser = $this->getAdminInfoFromArgs($input, $adminUser);
+            $adminUser = $this->getAdminInfoFromInteractiveShell($adminUser);
+        }
 
         $shopService = new ShopService($conn);
         $shopService->updateShop($shop);
@@ -295,9 +304,11 @@ class InstallCommand extends Command
         $localeService = new LocaleSettingsService($conn, $container);
         $localeService->updateLocaleSettings($shop->locale);
 
-        $adminService = new AdminService($conn);
-        $adminService->createAdmin($adminUser);
-        $adminService->addWidgets($adminUser);
+        if (!$input->getOption('skip-admin-creation')) {
+            $adminService = new AdminService($conn);
+            $adminService->createAdmin($adminUser);
+            $adminService->addWidgets($adminUser);
+        }
 
         $this->activateResponsiveTheme();
 
