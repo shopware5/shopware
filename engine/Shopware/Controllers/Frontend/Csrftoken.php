@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Controllers_Frontend_CSRFToken extends Enlight_Controller_Action
+class Shopware_Controllers_Frontend_Csrftoken extends Enlight_Controller_Action
 {
     /**
      * Loads auth and script renderer resource
