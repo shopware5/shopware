@@ -26,6 +26,11 @@ In this document you will find a changelog of the important changes related to t
     * See: https://developers.shopware.com/developers-guide/csrf-protection/
 * Add HTML code widget for the shopping worlds which lets the user enter actual Smarty & JavaScript code which will be included like it is
     * The Smarty code has access to all globally available Smarty variables
+* Add the following fields to status emails:
+    * `billing_additional_address_line1`
+    * `billing_additional_address_line2`
+    * `shipping_additional_address_line1`
+    * `shipping_additional_address_line2`
 
 ## 5.1.2
 * Out-of-stock variants on the detail page are now selectable
