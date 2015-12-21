@@ -43,7 +43,7 @@ class sCategoriesTest extends Enlight_Components_Test_Controller_TestCase
 
         $ids = Shopware()->Db()->fetchCol("SELECT id from s_categories WHERE path LIKE '|".Shopware()->Shop()->get('parentID')."|'");
 
-        foreach ($categoryTree as $key => $category)  {
+        foreach ($categoryTree as $key => $category) {
             $this->assertContains($key, $ids);
             $this->assertArrayHasKey('subcategories', $category);
             $this->assertCount(0, $category['subcategories']);
@@ -60,7 +60,7 @@ class sCategoriesTest extends Enlight_Components_Test_Controller_TestCase
     {
         $categoryTree = $this->module->sGetCategories(13);
 
-        foreach ($categoryTree as $key => $category)  {
+        foreach ($categoryTree as $key => $category) {
             $this->assertArrayHasKey('id', $category);
             $this->assertEquals($key, $category['id']);
             $this->validateCategory($category, 'subcategories');
@@ -145,7 +145,7 @@ class sCategoriesTest extends Enlight_Components_Test_Controller_TestCase
 
         // Calling on root node should return a complete tree
         $categoryTree = $this->module->sGetWholeCategoryTree(1);
-        foreach ($categoryTree as $category)  {
+        foreach ($categoryTree as $category) {
             $this->assertArrayHasKey('id', $category);
             $this->assertArrayHasKey('sub', $category);
             $this->assertGreaterThan(0, count($category['sub']));
@@ -162,16 +162,16 @@ class sCategoriesTest extends Enlight_Components_Test_Controller_TestCase
 
         // Depth argument should work as intended
         $categoryTree = $this->module->sGetWholeCategoryTree(1, 2);
-        foreach ($categoryTree as $category)  {
+        foreach ($categoryTree as $category) {
             $this->assertArrayHasKey('id', $category);
             $this->assertArrayHasKey('sub', $category);
-            foreach ($category['sub'] as $subcategory)  {
+            foreach ($category['sub'] as $subcategory) {
                 $this->assertArrayHasKey('id', $subcategory);
                 $this->assertArrayNotHasKey('sub', $subcategory);
             }
         }
         $categoryTree = $this->module->sGetWholeCategoryTree(1, 1);
-        foreach ($categoryTree as $category)  {
+        foreach ($categoryTree as $category) {
             $this->assertArrayHasKey('id', $category);
             $this->assertArrayNotHasKey('sub', $category);
         }
@@ -202,8 +202,6 @@ class sCategoriesTest extends Enlight_Components_Test_Controller_TestCase
         $this->assertArrayHasKey('sSelf', $categoryArray);
         $this->assertArrayHasKey('canonicalParams', $categoryArray);
         $this->assertArrayHasKey('atomFeed', $categoryArray);
-        $this->assertArrayHasKey('layout', $categoryArray);
-
     }
 
     /**
@@ -235,21 +233,21 @@ class sCategoriesTest extends Enlight_Components_Test_Controller_TestCase
         $sql= "UPDATE `s_categories` SET `active` = '0' WHERE `id` =11";
         Shopware()->Db()->exec($sql);
 
-        $allCategories = $this->module->sGetWholeCategoryTree(3,3);
+        $allCategories = $this->module->sGetWholeCategoryTree(3, 3);
 
         //get "Genusswelten" this category should not have the inactive category "Tees and Zubehör" as subcategory
         $category = $this->getCategoryById($allCategories, 5);
         //search for Tees und Zubehör
-        $result = $this->getCategoryById($category["sub"],11);
+        $result = $this->getCategoryById($category["sub"], 11);
         $this->assertEmpty($result);
 
 
         //if the parent category is inactive the child's should not be displayed
         //category = "Genusswelten" the active child "Tees" and "Tees und Zubehör" should not be return because the father ist inactive
-        $result = $this->getCategoryById($category["sub"],12);
+        $result = $this->getCategoryById($category["sub"], 12);
         $this->assertEmpty($result);
 
-        $result = $this->getCategoryById($category["sub"],13);
+        $result = $this->getCategoryById($category["sub"], 13);
         $this->assertEmpty($result);
 
         //set Category "Tees und Zubehör" to inactive so the childs should not be displayed
@@ -264,10 +262,10 @@ class sCategoriesTest extends Enlight_Components_Test_Controller_TestCase
      * @param $categoryId
      * @return category
      */
-    private function getCategoryById($allCategories, $categoryId) {
-
+    private function getCategoryById($allCategories, $categoryId)
+    {
         foreach ($allCategories as $category) {
-            if($category["id"] == $categoryId) {
+            if ($category["id"] == $categoryId) {
                 return $category;
             }
         }
