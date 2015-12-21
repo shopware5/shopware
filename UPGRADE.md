@@ -24,6 +24,8 @@ In this document you will find a changelog of the important changes related to t
     * Add `__csrf_token` to every html form in frontend
     * Add `csrfProtection` config options to disable CSRF protection
     * See: https://developers.shopware.com/developers-guide/csrf-protection/
+* Add HTML code widget for the shopping worlds which lets the user enter actual Smarty & JavaScript code which will be included like it is
+    * The Smarty code has access to all globally available Smarty variables
 
 ## 5.1.2
 * Out-of-stock variants on the detail page are now selectable
