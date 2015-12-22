@@ -29,19 +29,6 @@
  */
 class Shopware_RegressionTests_Ticket4375 extends Enlight_Components_Test_Plugin_TestCase
 {
-
-    public function testRefererCheckSouldFail()
-    {
-        $this->Request()
-            ->setMethod('POST')
-            ->setHeader('REFERER', 'http://wrong.com')
-            ->setPost('email', 'test@example.com')
-            ->setPost('password', 'shopware');
-        $this->dispatch('/account/login');
-
-        $this->assertTrue($this->Response()->isException());
-    }
-
     /**
      * Checks password confirmation field
      */
