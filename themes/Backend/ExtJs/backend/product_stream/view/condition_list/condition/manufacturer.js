@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 //{namespace name=backend/product_stream/main}
-
+//{block name="backend/product_stream/view/condition_list/condition/manufacturer"}
 Ext.define('Shopware.apps.ProductStream.view.condition_list.condition.Manufacturer', {
     extend: 'ProductStream.filter.AbstractCondition',
 
@@ -79,3 +79,4 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.condition.Manufactur
         });
     }
 });
+//{/block}

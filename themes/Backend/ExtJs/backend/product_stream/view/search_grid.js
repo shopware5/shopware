@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 //{namespace name=backend/product_stream/main}
-
+//{block name="backend/product_stream/view/search_grid"}
 Ext.define('Shopware.apps.ProductStream.view.SearchGrid', {
     extend: 'Ext.form.FieldContainer',
     layout: { type: 'vbox', align: 'stretch' },
@@ -148,3 +148,4 @@ Ext.define('Shopware.apps.ProductStream.view.SearchGrid', {
         this.store.remove(record);
     }
 });
+//{/block}
