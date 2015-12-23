@@ -45,9 +45,10 @@ return [
     'cleanup_disclaimer' => 'Die folgenden Dateien gehören zu einer früheren Shopware Version und werden nach diesem Update nicht länger benötigt. Drücken sie "Weiter" um die Dateien automatisch zu löschen und das Update zu beenden. Wir empfehlen vorher ein Backup anzulegen.',
     'cleanup_error'      => 'Die folgenden Dateien konnten nicht gelöscht werden. Bitte löschen Sie dieser per Hand, oder stellen Sie sicher, dass Ihr Webserver genug rechte besitzt diese Dateien zu löschen. Drücken Sie "Weiter" um den Update Vorgang fortzusetzen.',
 
-    'done_title'    => 'Aktualisierung abgeschlossen',
-    'done_info'     => 'Die Aktualisierung wurde erfolgreich abgeschlossen.',
-    'done_delete'   => 'Ihr Shop befindet sich zurzeit im Wartungsmodus.<br/>Bitte löschen Sie den Updater (/update-assets) nun via FTP vom Server.',
-    'done_frontend' => 'Zum Shop-Frontend',
-    'done_backend'  => 'Zum Shop-Backend (Administration)',
+    'done_title'            => 'Aktualisierung abgeschlossen',
+    'done_info'             => 'Die Aktualisierung wurde erfolgreich abgeschlossen.',
+    'done_delete'           => 'Ihr Shop befindet sich zurzeit im Wartungsmodus.<br/>Bitte löschen Sie den Updater (/update-assets) nun via FTP vom Server.',
+    'done_frontend'         => 'Zum Shop-Frontend',
+    'done_backend'          => 'Zum Shop-Backend (Administration)',
+    'done_template_changed' => '<b>Emotion Template wurde deaktiviert!</b><br/>Zum Zeitpunkt der Aktualisierung wurde festegestellt, dass Sie noch ein (Dokumenten-) Template auf Emotion-Basis verwendet haben. Dieses Template ist ab Shopware 5.2 nicht mehr kompatibel. Aus diesem Grund wurden nun Ihre Shops, die noch das alte Template verwendet haben, auf das neue Responsive Theme umgestellt.',
 ];

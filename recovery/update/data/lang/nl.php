@@ -39,15 +39,16 @@ return [
     'migration_counter_text_migrations' => 'Database Update word uitgevoerd',
     'migration_counter_text_snippets'   => 'Tekstblokken worden geactualiseerd',
     'migration_counter_text_unpack'     => 'Bestanden worden uitgepakt',
-    'migration_update_success'          => 'De update werd succesvol uitgevoerd',
+    'migration_update_success'          => 'De update wordt succesvol uitgevoerd',
 
     'cleanup_header'     => 'Opruimen',
     'cleanup_disclaimer' => 'De volgende bestanden behoren tot een oudere Shopware versie en worden na deze update niet langer geupdate. Drukt u op Verder om de bestanden automatisch te verwijderen en de update te beeindigen. Wij raden aan om een backup te creëren.',
     'cleanup_error'      => 'De volgende bestanden kunnen niet verwijderd worden. U kunt deze manueel verwijderen, of zorg ervoor dat uw webserver genoeg rechten bezit om deze bestanden te verwijderen. Klik op de knop "Verder" om de update voort te zetten.',
 
-    'done_title'    => 'Actualisatie uitgevoerd ',
-    'done_info'     => 'De actualisatie werd succesvol afgesloten.',
-    'done_delete'   => 'Uw shop bevind zich momenteel in onderhoudsmodus. <br/>Verwijder de updater (/update-assets) alleen via FTP van de server.',
-    'done_frontend' => 'Naar het Shop-Frontend',
-    'done_backend'  => 'Naar het Shop-Backend (Administratie)',
+    'done_title'            => 'Actualisatie uitgevoerd ',
+    'done_info'             => 'De actualisatie werd succesvol afgesloten.',
+    'done_delete'           => 'Uw shop bevind zich momenteel in onderhoudsmodus. <br/>Verwijder de updater (/update-assets) alleen via FTP van de server.',
+    'done_frontend'         => 'Naar het Shop-Frontend',
+    'done_backend'          => 'Naar het Shop-Backend (Administratie)',
+    'done_template_changed' => 'Men heeft ontdekt, dat je een (document-) template op basis van emotie gebruikt, die niet langer verenigbaar is sinds Shopware 5.2. Dus worden je winkels, die nog het oude template gebruiken, aangepast aan de nieuwe responsieve thema.'
 ];

@@ -45,9 +45,10 @@ return [
     'cleanup_disclaimer' => 'The following files belong to your previous Shopware version, but are no longer necessary after this update. Press "Forward" to remove them automatically and finish the update process. We recommend performing a backup before proceeding.',
     'cleanup_error'      => 'The following files could not be deleted. Please delete them manually or ensure that your web server user has enough permissions to do so, and press "Forward" to resume the update process.',
 
-    'done_title'    => 'Finished',
-    'done_info'     => 'The update has been finished successfully',
-    'done_delete'   => 'Your shop is currently in maintenance mode.<br/>Please delete the updater (/update-assets) from your server via FTP.',
-    'done_frontend' => 'Open shop frontend',
-    'done_backend'  => 'Open shop backend',
+    'done_title'            => 'Finished',
+    'done_info'             => 'The update has been finished successfully',
+    'done_delete'           => 'Your shop is currently in maintenance mode.<br/>Please delete the updater (/update-assets) from your server via FTP.',
+    'done_frontend'         => 'Open shop frontend',
+    'done_backend'          => 'Open shop backend',
+    'done_template_changed' => '<b>Emotion Template has been deactivated!</b><br/>At least one of your shops is currently using an emotion based (document-) template, which is no longer supported in Shopware 5.2. Shops that were using the emotion template have been automatically configured to use the new responsive theme.',
 ];
