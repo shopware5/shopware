@@ -305,7 +305,6 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 
         $content['metaTitle'] = $manufacturer->getMetaTitle();
         $content['title'] = $manufacturer->getName();
-        $content['canonicalTitle'] = $manufacturer->getName();
 
         return $content;
     }
