@@ -51,7 +51,7 @@ class Theme extends \Shopware\Components\Theme
 
         // Third party plugins / libraries
         'vendors/js/jquery/jquery.min.js',
-        'vendors/js/picturefill/picturefill.js',
+        'vendors/js/picturefill/picturefill.min.js',
         'vendors/js/jquery.transit/jquery.transit.js',
         'vendors/js/jquery.event.move/jquery.event.move.js',
         'vendors/js/jquery.event.swipe/jquery.event.swipe.js',

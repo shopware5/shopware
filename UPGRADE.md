@@ -31,6 +31,9 @@ In this document you will find a changelog of the important changes related to t
     * `billing_additional_address_line2`
     * `shipping_additional_address_line1`
     * `shipping_additional_address_line2`
+* Replaced `bower` with `npm` to manage the frontend dependencies
+    * The dependencies can now be installed using the command: `npm install && npm run build`
+    * Removed the file `vendors/less/open-sans-fontface/open-sans.less`. It's now located under `public/src/less/_components/fonts.less`
 
 ## 5.1.2
 * Out-of-stock variants on the detail page are now selectable
