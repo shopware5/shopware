@@ -3,7 +3,7 @@
 ## Description
 The Responsive Theme is the new default theme which is bundled with Shopware 5. It's based on Smarty 3, HTML5 and CSS3 using the LESS processor. The theme can be customized to your needs the Theme-Manager module in the Shopware 5 backend.
 
-Additionally the theme supports [bower](http://bower.io/), so additional third-party web components can be easily added.
+Additionally third-party web components can be easily added using `npm`.
 
 ## Feature / technologies
 * Predefined color presets
@@ -22,19 +22,15 @@ Additionally the theme supports [bower](http://bower.io/), so additional third-p
 Using the theme is as easy as selecting it in the Theme-Manager module and you're ready to go.
 
 ### Installing third-party components
-1.) Open up the ```bower.json``` file which can be found in the root directory of the theme and insert your third-party component in the ```dependencies``` object, like this:
+Before installation new third-party components, please run `npm install` in the Responsive theme directory to download all defined dependencies.
 
-```
-...
-"dependencies": {
-    "jquery": "2.1.1"
-}
-...
-```
+1.) To install new dependencies, witch to the Responsive theme directory in your Shopware installation e.g. `themes/Frontend/Responsive`
 
-2.) Now install the development dependencies using ```npm install``` in the root directory of the theme.
+2.) Install and save the dependency using `npm install --save <dependency>`
 
-3.) After installing the developement dependencies, you just have to install ```grunt``` and your newly added third-party component will be installed in the directory ```frontend/_public/vendors```.
+3.) After installation, please modify the `Gruntfile.js` and map the necessary files from the dependency to the corresponding folder inside the `public/vendors` directory.
+
+4.) Run `npm run build` to move the files accordingly. 
 
 ### Using the javascript compressor
 We'd implemented a basic javascript in Shopware 5 which concatenates all javascript files. It also strips out all whitespaces and inline comments.
