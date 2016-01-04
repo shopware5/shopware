@@ -641,6 +641,12 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             $params['debit'] = $debitData;
         }
 
+        $attribute = $customer->getAttribute();
+        if (empty($attribute) && empty($params['attribute'])) {
+            $attribute = new \Shopware\Models\Attribute\Customer();
+            $params['attribute'] = [$attribute];
+        }
+
         $params['billing'] = $params['billing'][0];
         $params['shipping'] = $params['shipping'][0];
         $params['attribute'] = $params['attribute'][0];
