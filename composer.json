@@ -30,7 +30,7 @@
         "doctrine/common": "2.5.1",
         "doctrine/dbal": "2.5.1",
         "doctrine/orm": "2.5.1",
-        "doctrine/cache": "1.5.1",
+        "doctrine/cache": "1.6.0",
         "beberlei/assert": "2.4.0",
         "zendframework/zend-escaper": "2.5.1",
         "oyejorge/less.php": "1.7.0.5",

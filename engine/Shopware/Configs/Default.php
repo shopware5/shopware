@@ -22,7 +22,6 @@ return array_replace_recursive([
             'local' => [
                 'type' => 'local',
                 'mediaUrl' => '',
-
                 'path' => realpath(__DIR__ . '/../../../')
             ],
             'ftp' => [
@@ -130,7 +129,7 @@ return array_replace_recursive([
             'lifetime' => 3600,
             'cache_id_prefix' => md5($this->getCacheDir())
         ],
-        'backend' => 'auto', // e.G auto, apc, xcache
+        'backend' => 'auto', // e.G auto, apcu, xcache
         'backendOptions' => [
             'hashed_directory_perm' => 0771,
             'cache_file_perm' => 0644,
@@ -148,7 +147,7 @@ return array_replace_recursive([
         'attributeDir' => $this->getCacheDir().'/doctrine/attributes',
         'proxyDir'     => $this->getCacheDir().'/doctrine/proxies',
         'proxyNamespace' => $this->App() . '\Proxies',
-        'cacheProvider' => 'auto', // supports null, auto, Apc, Array, Wincache and Xcache
+        'cacheProvider' => 'auto', // supports null, auto, Apcu, Array, Wincache and Xcache
         'cacheNamespace' => null // custom namespace for doctrine cache provider (optional; null = auto-generated namespace)
     ],
     'backendsession' => [
