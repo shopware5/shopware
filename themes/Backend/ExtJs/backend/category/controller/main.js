@@ -100,6 +100,7 @@ Ext.define('Shopware.apps.Category.controller.Main', {
             node:me.defaultRootNodeId
         };
         me.subApplication.treeStore.load();
+        me.subApplication.templateStore.load();
 
         me.mainWindow = me.getView('main.Window').create({
             templateStore:me.subApplication.templateStore,

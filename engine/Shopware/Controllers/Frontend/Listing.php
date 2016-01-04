@@ -203,15 +203,23 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             $criteria
         );
 
-        $template = $this->getCategoryTemplate($categoryContent, $categoryArticles);
-        $categoryContent = array_merge($categoryContent, $template);
-
         if ($this->Request()->getParam('sRss') || $this->Request()->getParam('sAtom')) {
             $this->Response()->setHeader('Content-Type', 'text/xml');
             $type = $this->Request()->getParam('sRss') ? 'rss' : 'atom';
             $this->View()->loadTemplate('frontend/listing/' . $type . '.tpl');
-        } elseif (!empty($categoryContent['template']) && empty($categoryContent['layout'])) {
-            $this->view->loadTemplate('frontend/listing/' . $categoryContent['template']);
+        } elseif (!empty($categoryContent['template'])) {
+            if ($this->View()->templateExists('frontend/listing/' . $categoryContent['template'])) {
+                $this->View()->loadTemplate('frontend/listing/' . $categoryContent['template']);
+            } else {
+                $this->get('corelogger')->error(
+                    'Missing category template detected. Please correct the template for category "'.$categoryContent['name'].'".',
+                    [
+                        'uri' => $this->Request()->getRequestUri(),
+                        'categoryId' => $requestCategoryId,
+                        'categoryName' => $categoryContent['name']
+                    ]
+                );
+            }
         }
 
         $viewAssignments['sCategoryContent'] = $categoryContent;
@@ -357,26 +365,6 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             'id' => $data[0]['id'],
             'showListing' => $data[0]['showListing']
         );
-    }
-
-    private function getCategoryTemplate($categoryContent, $categoryArticles)
-    {
-        $template = array();
-        if (empty($categoryContent['noViewSelect'])
-            && !empty($categoryArticles['sTemplate'])
-            && !empty($categoryContent['layout'])) {
-            if ($categoryArticles['sTemplate'] == 'table') {
-                if ($categoryContent['layout'] == '1col') {
-                    $template['layout'] = '3col';
-                    $template['template'] = 'article_listing_3col.tpl';
-                }
-            } else {
-                $template['layout'] = '1col';
-                $template['template'] = 'article_listing_1col.tpl';
-            }
-        }
-
-        return $template;
     }
 
     /**

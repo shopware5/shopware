@@ -113,8 +113,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
         errorMessageWrongFileTypeTitle : '{s name=view/error_message_wrong_file_type_title}Wrong file type{/s}',
         errorMessageWrongFileType : '{s name=view/error_message_wrong_file_type}Wrong file type selected.{/s}',
 
-        defaultSettingsTemplateLabel : '{s name=view/settings_default_settings_template_label}Template selection{/s}',
-        defaultSettingsTemplateHelp: '{s name=view/settings_default_settings_template_help}The template selection is only available for emotion templates. (SW 4){/s}',
+        defaultSettingsTemplateLabel : '{s name=view/settings_default_settings_template_label}Listing layout{/s}',
         defaultSettingsHideTopLabel : '{s name=view/settings_default_settings_no_top_navigation_label}Do NOT show in top navigation.{/s}',
         defaultSettingsNoDesignSwitchLabel : '{s name=view/settings_default_settings_no_design_switch_label}Do NOT switch design.{/s}',
         defaultSettingsNoFilterLabel : '{s name=view/settings_default_settings_no_filter_label}Hide filters.{/s}',
@@ -342,15 +341,21 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
         // create the template combo box and register it in the local namespace to
         // gain access from the outside.
         me.templateComboBox = Ext.create('Ext.form.field.ComboBox', {
-            helpText:me.snippets.defaultSettingsTemplateHelp,
             fieldLabel:me.snippets.defaultSettingsTemplateLabel,
             store:me.templateStore,
             labelWidth:180,
             valueField:'template',
             displayField:'name',
-            editable:false,
+            editable:true,
             allowBlank:true,
-            name:'template'
+            name:'template',
+            listeners: {
+                change: function (element, newValue) {
+                    if (newValue === null && me.form._record) {
+                        me.form._record.set('template', null);
+                    }
+                }
+            }
         });
 
         me.productLayoutField = Ext.create('Shopware.apps.Base.view.element.ProductBoxLayoutSelect', {
