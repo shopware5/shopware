@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 //{namespace name=backend/product_stream/main}
-
+//{block name="backend/product_stream/view/list/list"}
 Ext.define('Shopware.apps.ProductStream.view.list.List', {
     extend: 'Shopware.grid.Panel',
     alias: 'widget.product-stream-listing-grid',
@@ -124,3 +124,4 @@ Ext.define('Shopware.apps.ProductStream.view.list.List', {
         return items;
     }
 });
+//{/block}

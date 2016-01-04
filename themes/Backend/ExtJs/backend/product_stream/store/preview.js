@@ -26,7 +26,7 @@
  * @version    $Id$
  * @author shopware AG
  */
-
+//{block name="backend/product_stream/store/preview"}
 Ext.define('Shopware.apps.ProductStream.store.Preview', {
     extend: 'Ext.data.Store',
     model: 'Shopware.apps.ProductStream.model.Product',
@@ -42,3 +42,4 @@ Ext.define('Shopware.apps.ProductStream.store.Preview', {
         }
     }
 });
+//{/block}

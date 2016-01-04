@@ -26,10 +26,11 @@
  * @version    $Id$
  * @author shopware AG
  */
-
+//{block name="backend/product_stream/model/product"}
 Ext.define('Shopware.apps.ProductStream.model.Product', {
     extend: 'Ext.data.Model',
     fields: [
+        //{block name="backend/product_stream/model/product/fields"}{/block}
         { name : 'id', type: 'int', useNull: true },
         { name : 'number', type: 'string' },
         { name : 'name', type: 'string' },
@@ -37,3 +38,4 @@ Ext.define('Shopware.apps.ProductStream.model.Product', {
         { name : 'cheapestPrice' }
     ]
 });
+//{/block}
