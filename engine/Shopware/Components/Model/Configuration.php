@@ -25,12 +25,12 @@
 namespace Shopware\Components\Model;
 
 use Doctrine\Common\Annotations\Reader;
+use Doctrine\Common\Cache\ApcuCache;
 use Doctrine\Common\Proxy\AbstractProxyFactory;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Configuration as BaseConfiguration;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\CachedReader;
-use Doctrine\Common\Cache\ApcCache;
 use Doctrine\Common\Cache\CacheProvider;
 use Doctrine\Common\Cache\XcacheCache;
 
@@ -126,8 +126,8 @@ class Configuration extends BaseConfiguration
     {
         $cache = null;
 
-        if (extension_loaded('apc') && version_compare(phpversion('apc'), '3.1.13', '>=')) {
-            $cache = new ApcCache();
+        if (extension_loaded('apcu')) {
+            $cache = new ApcuCache();
         } elseif (extension_loaded('xcache')) {
             $cache = new XcacheCache();
         }
@@ -146,6 +146,10 @@ class Configuration extends BaseConfiguration
         if (strtolower($provider) === 'auto') {
             $cache = $this->detectCacheProvider();
         } else {
+            if (strtolower($provider) === 'apc') {
+                $provider = 'apcu';
+            }
+
             if (!class_exists($provider, false)) {
                 $provider = ucfirst($provider);
                 $provider = "Doctrine\\Common\\Cache\\{$provider}Cache";

@@ -376,8 +376,8 @@ class StoreDownloadCommand extends StoreCommand
             opcache_reset();
         }
 
-        if (function_exists('apc_clear_cache')) {
-            apc_clear_cache();
+        if (function_exists('apcu_clear_cache')) {
+            apcu_clear_cache();
         }
     }
 }
