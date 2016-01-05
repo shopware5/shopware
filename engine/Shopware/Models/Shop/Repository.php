@@ -255,19 +255,25 @@ class Repository extends ModelRepository
             ->leftJoin('shop.locale', 'locale')
             ->leftJoin('shop.currency', 'currency')
             ->leftJoin('shop.template', 'template')
+            ->leftJoin('shop.documentTemplate', 'documentTemplate')
             ->leftJoin('shop.currencies', 'currencies')
-            ->leftJoin('shop.pages', 'pages')
             ->leftJoin('shop.customerGroup', 'customerGroup')
             ->leftJoin('main.template', 'mainTemplate')
             ->leftJoin('main.currencies', 'mainCurrencies')
             ->select(array(
-                'shop', 'main',
-                'locale', 'currency',
-                'template', 'currencies'
+                'shop',
+                'main',
+                'locale',
+                'currency',
+                'template',
+                'currencies',
+                'documentTemplate',
+                'customerGroup'
             ))
             ->where('shop.active = 1')
             ->orderBy('shop.main')
             ->addOrderBy('shop.position');
+
         return $baseBuilder;
     }
 
