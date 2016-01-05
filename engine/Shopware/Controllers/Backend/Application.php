@@ -444,40 +444,36 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      */
     public function save($data)
     {
-        try {
-            /**@var $model \Shopware\Components\Model\ModelEntity */
-            if (!empty($data['id'])) {
-                $model = $this->getRepository()->find($data['id']);
-            } else {
-                $model = new $this->model();
-                $this->getManager()->persist($model);
-            }
-
-            $data = $this->resolveExtJsData($data);
-            $model->fromArray($data);
-
-            $violations = $this->getManager()->validate($model);
-            $errors = array();
-            /** @var $violation Symfony\Component\Validator\ConstraintViolation */
-            foreach ($violations as $violation) {
-                $errors[] = array(
-                    'message' => $violation->getMessage(),
-                    'property' => $violation->getPropertyPath()
-                );
-            }
-
-            if (!empty($errors)) {
-                return array('success' => false, 'violations' => $errors);
-            }
-
-            $this->getManager()->flush();
-
-            $detail = $this->getDetail($model->getId());
-
-            return array('success' => true, 'data' => $detail['data']);
-        } catch (Exception $e) {
-            return array('success' => true, 'error' => $e->getMessage());
+        /**@var $model \Shopware\Components\Model\ModelEntity */
+        if (!empty($data['id'])) {
+            $model = $this->getRepository()->find($data['id']);
+        } else {
+            $model = new $this->model();
+            $this->getManager()->persist($model);
         }
+
+        $data = $this->resolveExtJsData($data);
+        $model->fromArray($data);
+
+        $violations = $this->getManager()->validate($model);
+        $errors = array();
+        /** @var $violation Symfony\Component\Validator\ConstraintViolation */
+        foreach ($violations as $violation) {
+            $errors[] = array(
+                'message' => $violation->getMessage(),
+                'property' => $violation->getPropertyPath()
+            );
+        }
+
+        if (!empty($errors)) {
+            return array('success' => false, 'violations' => $errors);
+        }
+
+        $this->getManager()->flush();
+
+        $detail = $this->getDetail($model->getId());
+
+        return array('success' => true, 'data' => $detail['data']);
     }
 
     /**
@@ -575,7 +571,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
         $builder->setParameter('id', $id);
 
         $builder->setFirstResult($offset)
-                ->setMaxResults($limit);
+            ->setMaxResults($limit);
 
         $paginator = $this->getQueryPaginator($builder);
 
@@ -725,7 +721,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
 
         $builder->select(array($alias));
         $builder->from($model, $alias);
-        $builder->innerJoin($alias. '.' . $fieldName, $fieldName);
+        $builder->innerJoin($alias . '.' . $fieldName, $fieldName);
 
         return $builder;
     }
@@ -733,20 +729,20 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
     /**
      * Helper function which resolves the passed Ext JS data of an model.
      * This function resolves the following associations automatically:
-     *  @ORM\OneToOne associations
+     * @ORM\OneToOne associations
      *      => Ext JS sends even for @ORM\OneToOne associations, a multi dimensional array
      *      => array('billing' => array( 0 => array('id' => ...) ))
      *      => The function removes the first level of the array to have to model data directly in the association property.
      *      => array('billing' => array('id' => ...))
      *
-     *  @ORM\ManyToOne associations
+     * @ORM\ManyToOne associations
      *      => @ORM\ManyToOne requires the related doctrine model in the association key property.
      *      => But Ext JS sends only the foreign key property.
      *      => 'article' => array('id' => 1, ... , 'shopId' => 1, 'shop' => null)
      *      => This function resolves the foreign key, removes the foreign key property from the data array and sets the founded doctrine model into the association property.
      *      => 'article' => array('id' => 1, ... , 'shop' => $this->getManager()->find(Model, $data['shopId']);
      *
-     *  @ORM\ManyToMany associations
+     * @ORM\ManyToMany associations
      *      => @ORM\ManyToMany requires like the @ORM\ManyToOne associations the resolved doctrine models in the association property.
      *      => But Ext JS sends only an array of foreign keys.
      *      => 'article' => array('id' => 1, 'categories' => array(array('id'=>1), array('id'=>2), ...)
@@ -1058,7 +1054,8 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
     protected function getQueryPaginator(
         \Doctrine\ORM\QueryBuilder $builder,
         $hydrationMode = \Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY
-    ) {
+    )
+    {
         $query = $builder->getQuery();
         $query->setHydrationMode($hydrationMode);
         return $this->getManager()->createPaginator($query);
