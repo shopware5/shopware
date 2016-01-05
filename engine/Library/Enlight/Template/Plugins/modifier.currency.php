@@ -59,9 +59,7 @@ function smarty_modifier_currency($value, $config = null, $position = null)
     $currency = Enlight_Application::Instance()->Currency();
     $value = floatval(str_replace(',', '.', $value));
     $value = $currency->toCurrency($value, $config);
-    if (function_exists('mb_convert_encoding')) {
-        $value = mb_convert_encoding($value, 'HTML-ENTITIES', 'UTF-8');
-    }
+    $value = mb_convert_encoding($value, 'HTML-ENTITIES', 'UTF-8');
     $value = htmlentities($value, ENT_COMPAT, 'UTF-8', false);
     return $value;
 }
