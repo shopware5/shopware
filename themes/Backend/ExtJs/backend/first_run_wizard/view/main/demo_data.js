@@ -53,6 +53,10 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.DemoData', {
             title: '{s name=demo_data/content/title}Demo Data{/s}',
             message: '{s name=demo_data/content/message}Want to see Shopware in action right away? Install a demo data set. With it, you will be able to explore all the features that will make your Shopware shop an online success. Please note that demo data sets are for testing purposes only, and should not be installed in or modified for a production environment.{/s}',
             noPlugins: '{s name=demo_data/content/noPlugins}No plugins found{/s}'
+        },
+        disclaimer: {
+            title: '{s name=demo_data/disclaimer/title}{/s}',
+            text: '{s name=demo_data/disclaimer/text}{/s}'
         }
     },
 
@@ -74,11 +78,41 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.DemoData', {
                 style: 'margin-bottom: 10px;',
                 html: '<p>' + me.snippets.content.message + '</p>'
             },
+            me.createDisclaimerNotice(),
             me.createStoreListing(),
             me.createNoResultMessage()
         ];
 
         me.callParent(arguments);
+    },
+
+    createDisclaimerNotice: function() {
+        var me = this;
+
+        me.disclaimerTitle = Ext.create('Ext.container.Container', {
+            html: me.snippets.disclaimer.title,
+            margin: '10 0 5 0',
+            plain: true
+        });
+
+        me.disclaimerContainer = Ext.create('Ext.container.Container', {
+            layout: 'fit',
+            margin: '0 0 15 0',
+            width: 632,
+            items: [
+                me.disclaimerTitle,
+                {
+                    xtype: 'panel',
+                    autoScroll: true,
+                    bodyPadding: 10,
+                    height: 125,
+                    html: me.snippets.disclaimer.text,
+                    readOnly: true
+                }
+            ]
+        });
+
+        return me.disclaimerContainer;
     },
 
     createStoreListing: function() {

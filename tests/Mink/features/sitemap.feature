@@ -68,8 +68,8 @@ Feature: View all categories on sitemap
         Given I am on the page "Sitemap"
         Then  I should see the group "Landingpages":
             | value                          | link                                          |
-            | Stop The Water While Using Me  | /sommerwelten/stop-the-water-while-using-me   |
-            | Passend für Ihren Sommerurlaub | /sommerwelten/passend-fuer-ihren-sommerurlaub |
+            | Stop The Water While Using Me  | /stop-the-water-while-using-me   |
+            | Passend für Ihren Sommerurlaub | /passend-fuer-ihren-sommerurlaub |
 
     @categories @xml
     Scenario: All categories are also in the sitemap.xml
@@ -319,5 +319,5 @@ Feature: View all categories on sitemap
             | /sun-smile-and-protect/                                                                |
             | /example/                                                                              |
             | /stop-the-water-while-using-me/                                                        |
-            | /sommerwelten/stop-the-water-while-using-me                                            |
-            | /sommerwelten/passend-fuer-ihren-sommerurlaub                                          |
+            | /stop-the-water-while-using-me                                            |
+            | /passend-fuer-ihren-sommerurlaub                                          |

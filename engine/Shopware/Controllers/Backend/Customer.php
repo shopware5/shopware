@@ -272,7 +272,6 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
      */
     public function getListAction()
     {
-        try {
             //read store parameter to filter and paginate the data.
             $limit = $this->Request()->getParam('limit', 20);
             $offset = $this->Request()->getParam('start', 0);
@@ -293,9 +292,6 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             $countResult = $countQuery->getOneOrNullResult(Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
             $this->View()->assign(array('success' => true, 'data' => $customers, 'total' => $countResult["customerCount"]));
-        } catch (\Doctrine\ORM\ORMException $e) {
-            $this->View()->assign(array('success' => false, 'data' => array(), 'message' => $e->getMessage()));
-        }
     }
 
     /**
@@ -308,7 +304,6 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
      */
     public function getDetailAction()
     {
-        try {
             $customerId = $this->Request()->getParam('customerID');
             if ($customerId === null || $customerId === 0) {
                 $this->View()->assign(array('success' => false, 'message' => 'No customer id passed'));
@@ -318,9 +313,6 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             $data = $this->getCustomer($customerId);
 
             $this->View()->assign(array('success' => true, 'data' => $data, 'total' => 1));
-        } catch (\Doctrine\ORM\ORMException $e) {
-            $this->View()->assign(array('success' => false, 'data' => array(), 'message' => $e->getMessage()));
-        }
     }
 
     /**
@@ -334,7 +326,6 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
      */
     public function getOrdersAction()
     {
-        try {
             if (!$this->_isAllowed('read', 'order')) {
                 /** @var $namespace Enlight_Components_Snippet_Namespace */
                 $namespace = Shopware()->Snippets()->getNamespace('backend/customer');
@@ -371,9 +362,6 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             $orders = $query->getArrayResult();
 
             $this->View()->assign(array('success' => true, 'data' => $orders, 'total' => $totalResult));
-        } catch (\Doctrine\ORM\ORMException $e) {
-            $this->View()->assign(array('success' => false, 'data' => array(), 'message' => $e->getMessage()));
-        }
     }
 
     /**
@@ -383,7 +371,6 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
      */
     public function getOrderChartAction()
     {
-        try {
             if (!$this->_isAllowed('read', 'order')) {
                 /** @var $namespace Enlight_Components_Snippet_Namespace */
                 $namespace = Shopware()->Snippets()->getNamespace('backend/customer');
@@ -405,9 +392,6 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             $orders = $this->getChartData($customerId);
 
             $this->View()->assign(array('success' => true, 'data' => $orders));
-        } catch (Exception $e) {
-            $this->View()->assign(array('success' => true, 'data' => array(), 'message' => $e->getMessage()));
-        }
     }
 
     /**
@@ -518,7 +502,6 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             $customer = new Customer();
         }
 
-        try {
             $params = $this->Request()->getParams();
 
             if (!$paymentData instanceof PaymentData && !empty($params['paymentData']) && array_filter($params['paymentData'][0])) {
@@ -548,13 +531,6 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
                 'success' => true,
                 'data' => $this->getCustomer($customer->getId())
             ));
-        } catch (\Doctrine\ORM\ORMException $e) {
-            $this->View()->assign(array(
-                'success' => false,
-                'data' => $this->Request()->getParams(),
-                'message' => $e->getMessage())
-            );
-        }
     }
 
     /**
@@ -653,6 +629,12 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             $params['debit'] = $debitData;
         }
 
+        $attribute = $customer->getAttribute();
+        if (empty($attribute) && empty($params['attribute'])) {
+            $attribute = new \Shopware\Models\Attribute\Customer();
+            $params['attribute'] = [$attribute];
+        }
+
         $params['billing'] = $params['billing'][0];
         $params['shipping'] = $params['shipping'][0];
         $params['attribute'] = $params['attribute'][0];
@@ -669,7 +651,6 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
      */
     public function deleteAction()
     {
-        try {
             //get posted customers
             $customers = $this->Request()->getParam('customers', array(array('id' => $this->Request()->getParam('id'))));
 
@@ -685,13 +666,6 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
                 'success' => true,
                 'data' => $this->Request()->getParams())
             );
-        } catch (Exception $e) {
-            $this->View()->assign(array(
-                'success' => false,
-                'data' => $this->Request()->getParams(),
-                'message' => $e->getMessage())
-            );
-        }
     }
 
     /**

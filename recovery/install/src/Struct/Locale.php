@@ -1,3 +1,4 @@
+<?php
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -19,31 +20,56 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    ProductStream
- * @subpackage Model
- * @version    $Id$
- * @author shopware AG
  */
-//{block name="backend/product_stream/model/stream"}
-Ext.define('Shopware.apps.ProductStream.model.Stream', {
-    extend: 'Shopware.data.Model',
 
-    configure: function() {
-        return {
-            controller: 'ProductStream'
-        };
-    },
+namespace Shopware\Recovery\Install\Struct;
 
-    fields: [
-        //{block name="backend/product_stream/model/stream/fields"}{/block}
-        { name : 'id', type: 'int', useNull: true },
-        { name : 'name', type: 'string', useNull: false },
-        { name : 'description', type: 'string', useNull: false },
-        { name : 'type', type: 'int', defaultValue: 1 },
-        { name : 'sorting' },
-        { name : 'conditions', useNull: false }
-    ]
-});
-//{/block}
+/**
+ * @category  Shopware
+ * @package   Shopware\Recovery\Install\Struct
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
+ */
+class Locale
+{
+    /**
+     * @var string
+     */
+    private $locale;
+
+    /**
+     * Returns a list of valid locales
+     * @return array
+     */
+    public static function getValidLocales()
+    {
+        return [
+            'de_DE',
+            'en_GB',
+        ];
+    }
+
+    /**
+     * @param string $locale
+     */
+    private function __construct($locale)
+    {
+        $this->locale = $locale;
+    }
+
+    /**
+     * @param string $locale
+     * @return Locale
+     */
+    public static function createFromString($locale)
+    {
+        return new self($locale);
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->locale;
+    }
+}

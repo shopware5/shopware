@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 //{namespace name=backend/product_stream/main}
-
+//{block name="backend/product_stream/view/condition_list/preview_grid"}
 Ext.define('Shopware.apps.ProductStream.view.condition_list.PreviewGrid', {
     extend: 'Ext.grid.Panel',
     title: '{s name=preview}Preview{/s}',
@@ -141,3 +141,4 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.PreviewGrid', {
         return value.calculatedPrice;
     }
 });
+//{/block}

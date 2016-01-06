@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 //{namespace name=backend/product_stream/main}
-
+//{block name="backend/product_stream/view/condition_list/condition/has_pseudo_price"}
 Ext.define('Shopware.apps.ProductStream.view.condition_list.condition.HasPseudoPrice', {
     extend: 'ProductStream.filter.AbstractCondition',
 
@@ -73,3 +73,4 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.condition.HasPseudoP
         });
     }
 });
+//{/block}

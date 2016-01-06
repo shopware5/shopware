@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 //{namespace name=backend/product_stream/main}
-
+//{block name="backend/product_stream/controller/main"}
 Ext.define('Shopware.apps.ProductStream.controller.Main', {
     extend: 'Enlight.app.Controller',
 
@@ -294,3 +294,4 @@ Ext.define('Shopware.apps.ProductStream.controller.Main', {
             }, this, false, '{s name=stream_duplicate_copy}Copy of {/s}' + record.get('name'));
     }
 });
+//{/block}

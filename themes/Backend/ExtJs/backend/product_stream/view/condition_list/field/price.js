@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 //{namespace name=backend/product_stream/main}
-
+//{block name="backend/product_stream/view/condition_list/field/price"}
 Ext.define('Shopware.apps.ProductStream.view.condition_list.field.Price', {
 
     extend: 'Ext.form.FieldContainer',
@@ -136,3 +136,4 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.field.Price', {
         return 'Price range requires at least one value';
     }
 });
+//{/block}

@@ -158,6 +158,7 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action impl
             $error_trace = str_replace($paths, $replace, $error_trace);
             $this->View()->assign(array(
                 'exception' => $exception,
+                'error' => $exception->getMessage(),
                 'error_message' => $exception->getMessage(),
                 'error_file' => $error_file,
                 'error_trace' => $error_trace
