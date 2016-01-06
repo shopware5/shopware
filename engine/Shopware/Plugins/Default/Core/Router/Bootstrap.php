@@ -525,10 +525,6 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
      */
     private function validateShop(Shop $shop)
     {
-        if (!$shop->getDocumentTemplate()) {
-            throw new \RuntimeException(sprintf("Shop '%s (id: %s)' has no document template.", $shop->getName(), $shop->getId()));
-        }
-
         if (!$shop->getCustomerGroup()) {
             throw new \RuntimeException(sprintf("Shop '%s (id: %s)' has no customer group.", $shop->getName(), $shop->getId()));
         }
@@ -537,12 +533,17 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
             throw new \RuntimeException(sprintf("Shop '%s (id: %s)' has no currency.", $shop->getName(), $shop->getId()));
         }
 
-        if (!$shop->getTemplate()) {
+        if (!$shop->getLocale()) {
+            throw new \RuntimeException(sprintf("Shop '%s (id: %s)' has no locale.", $shop->getName(), $shop->getId()));
+        }
+
+        $mainShop = $shop->getMain() !== null ? $shop->getMain() : $shop;
+        if (!$mainShop->getTemplate()) {
             throw new \RuntimeException(sprintf("Shop '%s (id: %s)' has no template.", $shop->getName(), $shop->getId()));
         }
 
-        if (!$shop->getLocale()) {
-            throw new \RuntimeException(sprintf("Shop '%s (id: %s)' has no locale.", $shop->getName(), $shop->getId()));
+        if (!$mainShop->getDocumentTemplate()) {
+            throw new \RuntimeException(sprintf("Shop '%s (id: %s)' has no document template.", $shop->getName(), $shop->getId()));
         }
     }
 }
