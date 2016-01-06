@@ -76,6 +76,10 @@ class DatabaseFactory
             }
         }
 
+        if ($info->databaseName) {
+            $connectionString .= 'dbname=' . $info->databaseName . ';';
+        }
+
         return 'mysql:' . $connectionString;
     }
 
