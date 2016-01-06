@@ -1091,7 +1091,6 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
      */
     protected function refreshBasket()
     {
-        $this->get('session')->offsetSet('sessionId', session_id());
         Shopware()->Modules()->Basket()->sRefreshBasket();
     }
 }
