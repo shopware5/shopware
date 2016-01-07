@@ -40,6 +40,8 @@ class PriceHelper implements PriceHelperInterface
 
     const STATE_INCLUDES_AVAILABLE_VARIANT = 'available_variant';
 
+    const contextError = 'Expected Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface instead of Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface. This will be changed in \Shopware\Bundle\SearchBundleDBAL\PriceHelperInterface in SW 5.2';
+
     /**
      * @var Connection
      */
@@ -63,8 +65,12 @@ class PriceHelper implements PriceHelperInterface
     /**
      * @inheritdoc
      */
-    public function getSelection(Struct\ProductContextInterface $context)
+    public function getSelection(Struct\ShopContextInterface $context)
     {
+        if (!$context instanceof Struct\ProductContextInterface) {
+            throw new \InvalidArgumentException(self::contextError);
+        }
+
         $fallback = $context->getFallbackCustomerGroup();
         $current  = $context->getCurrentCustomerGroup();
         $currency = $context->getCurrency();
