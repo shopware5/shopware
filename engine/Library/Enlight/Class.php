@@ -86,11 +86,7 @@ abstract class Enlight_Class
     public static function getClassName($class=null)
     {
         if (empty($class)) {
-            if (function_exists('get_called_class')) {
-                $class = get_called_class();
-            } else {
-                throw new Enlight_Exception('Method not supported');
-            }
+            $class = get_called_class();
         }
         if (is_object($class)) {
             $class = get_class($class);

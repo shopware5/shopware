@@ -337,7 +337,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
         if (!$this->isSnippetValid($result)) {
             Shopware()->Models()->remove($result);
         }
-        
+
         Shopware()->Models()->flush();
 
         $data = Shopware()->Models()->toArray($result);
@@ -861,9 +861,10 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
      */
     protected function getFormatSnippetForExport($string, $encoding = 'utf-8')
     {
-        if (function_exists('mb_convert_encoding') && $encoding != 'utf-8') {
+        if ($encoding != 'utf-8') {
             $string = mb_convert_encoding($string, $encoding, 'UTF-8');
         }
+
         return $string;
     }
 
@@ -898,9 +899,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
      */
     protected function getFormatSnippetForSave($string)
     {
-        if (function_exists('mb_convert_encoding')) {
-            $string = mb_convert_encoding($string, 'HTML-ENTITIES', mb_detect_encoding($string, array('utf-8', 'iso-8859-1', 'iso-8859-15', 'windows-1251')));
-        }
+        $string = mb_convert_encoding($string, 'HTML-ENTITIES', mb_detect_encoding($string, array('utf-8', 'iso-8859-1', 'iso-8859-15', 'windows-1251')));
 
         $string = html_entity_decode($string, ENT_NOQUOTES, 'UTF-8');
 

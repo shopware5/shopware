@@ -251,16 +251,13 @@ class Enlight_Controller_Plugins_Json_Bootstrap extends Enlight_Plugin_Bootstrap
     protected function convertToUtf8($data, $encoding)
     {
         if (is_string($data)) {
-            if (function_exists('mb_convert_encoding')) {
-                $data = mb_convert_encoding($data, 'UTF-8', $encoding);
-            } elseif ($encoding == 'ISO-8859-1') {
-                $data = utf8_encode($data);
-            }
+            $data = mb_convert_encoding($data, 'UTF-8', $encoding);
         } elseif (is_array($data)) {
             foreach ($data as $key => $value) {
                 $data[$this->convertToUtf8($key, $encoding)] = $this->convertToUtf8($value, $encoding);
             }
         }
+
         return $data;
     }
 
