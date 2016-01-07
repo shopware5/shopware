@@ -4333,9 +4333,15 @@ class sAdmin
             $getOrderDetails[$orderDetailsKey]["price"] = $this->moduleManager->Articles()
                 ->sFormatPrice($orderDetailsValue["price"]);
 
-            $tmpArticle = $this->moduleManager->Articles()->sGetProductByOrdernumber(
-                $getOrderDetails[$orderDetailsKey]['articleordernumber']
-            );
+            if ($orderDetailsValue['articleID'] > 0){
+                $tmpArticle = $this->moduleManager->Articles()->sGetArticleById(
+                    $getOrderDetails[$orderDetailsKey]['articleID'],
+                    null,
+                    $getOrderDetails[$orderDetailsKey]['articleordernumber']
+                );
+            } else {
+                $tmpArticle = null;
+            }
 
             if (!empty($tmpArticle) && is_array($tmpArticle)) {
 
