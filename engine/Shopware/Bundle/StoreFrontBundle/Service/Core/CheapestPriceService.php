@@ -34,6 +34,9 @@ use Shopware\Bundle\StoreFrontBundle\Gateway;
  */
 class CheapestPriceService implements Service\CheapestPriceServiceInterface
 {
+    const contextError = 'Expected Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface instead of Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface. This will be changed in \Shopware\Bundle\StoreFrontBundle\Service\CheapestPriceServiceInterface in SW 5.2';
+    const productError = 'Expected Shopware\Bundle\StoreFrontBundle\Struct\ListProduct instead of Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct. This will be changed in \Shopware\Bundle\StoreFrontBundle\Service\CheapestPriceServiceInterface in SW 5.2';
+
     /**
      * @var Gateway\CheapestPriceGatewayInterface
      */
@@ -50,8 +53,16 @@ class CheapestPriceService implements Service\CheapestPriceServiceInterface
     /**
      * @inheritdoc
      */
-    public function get(Struct\BaseProduct $product, Struct\ProductContextInterface $context)
+    public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context)
     {
+        if (!$context instanceof Struct\ProductContextInterface) {
+            throw new \InvalidArgumentException(self::contextError);
+        }
+
+        if (!$context instanceof Struct\ListProduct) {
+            throw new \InvalidArgumentException(self::productError);
+        }
+
         $cheapestPrices = $this->getList([$product], $context);
 
         return array_shift($cheapestPrices);
@@ -60,8 +71,12 @@ class CheapestPriceService implements Service\CheapestPriceServiceInterface
     /**
      * @inheritdoc
      */
-    public function getList($products, Struct\ProductContextInterface $context)
+    public function getList($products, Struct\ShopContextInterface $context)
     {
+        if (!$context instanceof Struct\ProductContextInterface) {
+            throw new \InvalidArgumentException(self::contextError);
+        }
+
         $group = $context->getCurrentCustomerGroup();
 
         $rules = $this->cheapestPriceGateway->getList($products, $context, $group);
