@@ -1516,7 +1516,7 @@ class sOrder
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
         $shopId = is_numeric($order['language']) ? $order['language'] : $order['subshopID'];
         $shop = $repository->getActiveById($shopId);
-        $shop->registerResources(Shopware()->Bootstrap());
+        $shop->registerResources();
 
         $order['status_description'] = Shopware()->Snippets()->getNamespace('backend/static/order_status')->get(
             $order['status_name'],

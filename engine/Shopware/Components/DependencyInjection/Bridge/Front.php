@@ -40,7 +40,6 @@ class Front
      * the plugin namespace of the front resource is set.
      *
      * @param Container $container
-     * @param \Shopware_Bootstrap $bootstrap
      * @param \Enlight_Event_EventManager $eventManager
      * @param array $options
      * @throws \Exception
@@ -48,7 +47,6 @@ class Front
      */
     public function factory(
         Container $container,
-        \Shopware_Bootstrap $bootstrap,
         \Enlight_Event_EventManager $eventManager,
         array $options
     ) {
@@ -69,8 +67,6 @@ class Front
         $plugins = $container->get('Plugins');
 
         $plugins->registerNamespace($front->Plugins());
-
-        $front->setParam('bootstrap', $bootstrap);
 
         if (!empty($options['throwExceptions'])) {
             $front->throwExceptions((bool) $options['throwExceptions']);

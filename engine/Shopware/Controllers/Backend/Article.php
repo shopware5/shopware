@@ -4292,7 +4292,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             throw new Exception("Invalid shop provided.");
         }
 
-        $shop->registerResources(Shopware()->Bootstrap());
+        $shop->registerResources();
 
         Shopware()->Session()->Admin = true;
 

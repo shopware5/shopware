@@ -29,8 +29,6 @@ use Shopware\Components\DependencyInjection\Container;
  * Creates an new application with the passed configuration. If no configuration is given, enlight loads
  * the configuration automatically. It loads the different resources, for example classes, loader or the
  * managers for the different packages (Hook, Plugin, Event).
- * Afterwards the bootstrap can be loaded by the run method. The individual project resources can be loaded in the
- * Enlight_Bootstrap over the configuration.
  *
  * @category   Enlight
  * @package    Enlight_Application
@@ -108,10 +106,9 @@ class Enlight_Application
     protected $_plugins;
 
     /**
-     * @var Enlight_Bootstrap Instance of the application bootstrap. Is generated automatically when accessing the
-     * Bootstrap function.
+     * @var Container
      */
-    protected $_bootstrap;
+    private $container;
 
     /**
      * Constructor method.
@@ -168,16 +165,7 @@ class Enlight_Application
 
         $this->_hooks    = $container->get('hooks');
         $this->_events   = $container->get('events');
-    }
-
-    /**
-     * Runs the application bootstrap class to load the specify application resources.
-     *
-     * @return mixed
-     */
-    public function run()
-    {
-        return $this->Bootstrap()->run();
+        $this->container = $container;
     }
 
     /**
@@ -322,17 +310,12 @@ class Enlight_Application
 
     /**
      * Returns the instance of the application bootstrap
-     *
-     * @return Enlight_Bootstrap
+     * @deprecated since 5.2, to be removed in 5.3
+     * @return Shopware_Bootstrap
      */
     public function Bootstrap()
     {
-        if (!$this->_bootstrap) {
-            $class = $this->App() . '_Bootstrap';
-            $this->_bootstrap = Enlight_Class::Instance($class, array($this));
-        }
-
-        return $this->_bootstrap;
+        return $this->container->get('bootstrap');
     }
 
     /**
@@ -449,37 +432,13 @@ class Enlight_Application
      */
     public function __call($name, $value = null)
     {
-        if (!$this->Bootstrap()->hasResource($name)) {
+        if (!$this->container->has($name)) {
             throw new Enlight_Exception(
                 'Method "' . get_class($this) . '::' . $name . '" not found failure',
                 Enlight_Exception::METHOD_NOT_FOUND
             );
         }
 
-        return $this->Bootstrap()->getResource($name);
-    }
-
-    /**
-     * Returns called resource
-     *
-     * Example: Enlight_Application::Db()
-     *
-     * @throws Enlight_Exception
-     * @param string $name
-     * @param array $value
-     * @deprecated 4.2
-     * @return mixed
-     */
-    public static function __callStatic($name, $value = null)
-    {
-        $enlight = self::Instance();
-        if (!$enlight->Bootstrap()->hasResource($name)) {
-            throw new Enlight_Exception(
-                'Method "' . get_called_class() . '::' . $name . '" not found failure',
-                Enlight_Exception::METHOD_NOT_FOUND
-            );
-        }
-
-        return $enlight->Bootstrap()->getResource($name);
+        return $this->container->get($name);
     }
 }

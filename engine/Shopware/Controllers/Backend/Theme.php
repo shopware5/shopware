@@ -117,7 +117,7 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
 
         /** @var $shop \Shopware\Models\Shop\Shop */
         $shop = $this->getManager()->getRepository('Shopware\Models\Shop\Shop')->getActiveById($shopId);
-        $shop->registerResources(Shopware()->Bootstrap());
+        $shop->registerResources();
 
         Shopware()->Session()->template = $theme->getTemplate();
         Shopware()->Session()->Admin = true;
@@ -160,7 +160,7 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
             return;
         }
 
-        $shop->registerResources(Shopware()->Bootstrap());
+        $shop->registerResources();
 
         Shopware()->Session()->template = null;
     }

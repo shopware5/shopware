@@ -305,6 +305,8 @@ class Kernel implements HttpKernelInterface
             $this->config,
             $this->container
         );
+
+        $this->container->setApplication($this->shopware);
     }
 
     /**

@@ -136,7 +136,7 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
         $this->View()->assign('sbpLogin', $sbpLogin, true);
         $this->View()->assign('firstRunWizardEnabled', $firstRunWizardEnabled, true);
 
-        if (Shopware()->Bootstrap()->issetResource('License')) {
+        if (Shopware()->Container()->initialized('License')) {
             $l = Shopware()->License();
             $m = 'SwagCommercial';
             $o = $l->getLicenseInfo($m);

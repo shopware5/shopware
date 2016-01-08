@@ -326,25 +326,25 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
 
     private function removeDemoData()
     {
-        if($this->userId) {
+        if ($this->userId) {
             Shopware()->Db()->delete('s_user', 'id = ' . $this->userId);
             Shopware()->Db()->delete('s_user_billingaddress', 'userID = ' . $this->userId);
             Shopware()->Db()->delete('s_order', 'userID = ' . $this->userId);
             Shopware()->Db()->delete('s_order_billingaddress', 'userID = ' . $this->userId);
         }
 
-        if($this->articleDetailId) {
+        if ($this->articleDetailId) {
             Shopware()->Db()->delete('s_articles_details', 'id = ' . $this->articleDetailId);
         }
 
-        if($this->articleId) {
+        if ($this->articleId) {
             Shopware()->Db()->delete('s_articles', 'id = ' . $this->articleId);
             Shopware()->Db()->delete('s_statistics_article_impression', 'articleId = ' . $this->articleId);
             Shopware()->Db()->delete('s_order_details', 'articleID = ' . $this->articleId);
         }
 
-        if($this->categoryId) {
-            if($this->articleId) {
+        if ($this->categoryId) {
+            if ($this->articleId) {
                 Shopware()->Db()->delete('s_articles_categories_ro', 'articleID = ' . $this->articleId);
             }
             Shopware()->Db()->delete('s_categories', 'id = ' . $this->categoryId);
@@ -447,7 +447,7 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
         $this->createOrders();
 
         $shop = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop')->getActiveDefault();
-        $shop->registerResources(Shopware()->Bootstrap());
+        $shop->registerResources();
 
         $result = $this->repository->getReferrerRevenue(
             $shop,
@@ -1024,7 +1024,6 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
 
     private function getSearchTermFromReferrerUrl($url)
     {
-
         preg_match_all(
             "#[?&]([qp]|query|highlight|encquery|url|field-keywords|as_q|sucheall|satitle|KW)=([^&\\$]+)#",
                 utf8_encode($url) . "&",

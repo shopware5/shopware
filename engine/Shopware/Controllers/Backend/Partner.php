@@ -373,7 +373,7 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
             throw new Exception("Invalid shop provided.");
         }
 
-        $shop->registerResources(Shopware()->Bootstrap());
+        $shop->registerResources();
 
         $url = $this->Front()->Router()->assemble(array('module' => 'frontend', 'controller' => 'index'));
 

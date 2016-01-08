@@ -106,7 +106,7 @@ class sExport
      * @var Shopware_Components_Config
      */
     private $config;
-    
+
     /**
      * @param ContextServiceInterface $contextService
      * @param AdditionalTextServiceInterface $additionalTextService
@@ -413,7 +413,7 @@ class sExport
 
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Currency');
         $shop->setCurrency($repository->find($this->sCurrency['id']));
-        $shop->registerResources(Shopware()->Bootstrap());
+        $shop->registerResources();
 
         $this->shop = $shop;
 
@@ -467,10 +467,10 @@ class sExport
         if (empty($char_set)) {
             $char_set = $this->sSettings['encoding'];
         }
-        
+
         return htmlentities($string, ENT_COMPAT | ENT_HTML401, $char_set);
     }
-    
+
     public function sFormatString($string, $esc_type = '', $char_set = null)
     {
         return $this->sEscapeString($string, $esc_type, $char_set);

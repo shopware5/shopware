@@ -1334,8 +1334,8 @@ class sAdmin
 
         $this->sSYSTEM->sSESSION_ID = $newSessionId;
         $this->session->offsetSet('sessionId', $newSessionId);
-        Shopware()->Bootstrap()->resetResource('SessionId');
-        Shopware()->Bootstrap()->registerResource('SessionId', $newSessionId);
+        Shopware()->Container()->reset('SessionId');
+        Shopware()->Container()->set('SessionId', $newSessionId);
 
         $this->eventManager->notify(
             'Shopware_Modules_Admin_Regenerate_Session_Id',

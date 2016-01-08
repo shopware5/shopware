@@ -359,7 +359,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     public function getReferrerRevenueAction()
     {
         $shop = $this->getManager()->getRepository('Shopware\Models\Shop\Shop')->getActiveDefault();
-        $shop->registerResources(Shopware()->Bootstrap());
+        $shop->registerResources();
 
         $result = $this->getRepository()->getReferrerRevenue(
             $shop,

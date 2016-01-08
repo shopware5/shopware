@@ -72,6 +72,9 @@
         "files": ["engine/Shopware/Application.php"]
     },
     "autoload-dev": {
+        "psr-0": {
+            "Shopware": "tests/"
+        },
         "psr-4": {
             "Shopware\\Behat\\ShopwareExtension\\": "tests/Mink/Extension/ShopwareExtension",
             "Shopware\\Tests\\Mink\\": "tests/Mink/features/bootstrap"

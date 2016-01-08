@@ -716,7 +716,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         $repository = $this->getShopRepository();
         $shop = $repository->getActiveById($user['language']);
 
-        $shop->registerResources(Shopware()->Bootstrap());
+        $shop->registerResources();
 
         Shopware()->Session()->Admin = true;
         Shopware()->System()->_POST = array(

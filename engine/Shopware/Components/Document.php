@@ -528,7 +528,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
             $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Currency');
             $shop->setCurrency($repository->find($this->_order->order->currencyID));
         }
-        $shop->registerResources(Shopware()->Bootstrap());
+        $shop->registerResources();
     }
 
     /**

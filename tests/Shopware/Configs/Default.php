@@ -17,10 +17,6 @@ return array_merge($this->loadConfig($this->AppPath() . 'Configs/Default.php'), 
         'gc_divisor' => 100,
         'save_handler' => 'db'
     ),
-    'autoLoaderNamespaces' => array(
-        'Shopware' => $this->TestPath(),
-        'PHPUnit' => 'PHPUnit/'
-    ),
     'mail' => array(
         'type' => 'file',
         'path' => $this->TestPath('TempFiles'),
