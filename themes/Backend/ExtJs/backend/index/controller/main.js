@@ -89,6 +89,33 @@ Ext.define('Shopware.apps.Index.controller.Main', {
 
         me.addKeyboardEvents();
         me.checkLoginStatus();
+
+        var skipTemplateCheck = localStorage.getItem('skipTemplateCheck');
+        if (skipTemplateCheck) {
+            return;
+        }
+
+        Ext.Ajax.request({
+            url: '{url controller="Base" action="getShopsWithEmotionTemplates"}',
+            success: function(operation) {
+                var response = Ext.decode(operation.responseText);
+                if (response.data.length > 0) {
+                    var message = Ext.String.format('{s name="emotion_template_warning"}{/s}', response.data.join(','));
+                    Shopware.Notification.createStickyGrowlMessage({
+                        title: '',
+                        text: message,
+                        onCloseButton: function() {
+                            Ext.MessageBox.confirm('', '{s name="skip_emotion_template_warning"}{/s}', function(button) {
+                                if (button != 'yes') {
+                                    return;
+                                }
+                                localStorage.setItem('skipTemplateCheck', 1);
+                            });
+                        }
+                    });
+                }
+            }
+        });
 	},
 
     /**

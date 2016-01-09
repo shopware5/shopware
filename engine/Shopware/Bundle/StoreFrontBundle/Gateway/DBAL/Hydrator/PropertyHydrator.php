@@ -60,6 +60,8 @@ class PropertyHydrator extends Hydrator
      */
     public function hydrateValues(array $data)
     {
+        $this->sortGroups($data);
+
         $sets = [];
 
         foreach ($data as $row) {
@@ -88,7 +90,17 @@ class PropertyHydrator extends Hydrator
             $sets[$setId] = $set;
 
             $group->setOptions($options);
+
             $set->setGroups($groups);
+        }
+
+        /** @var Struct\Property\Set[] $sets */
+        foreach ($sets as $set) {
+            foreach ($set->getGroups() as $group) {
+                $options = $group->getOptions();
+                $this->sortOptions($options, $set->getSortMode());
+                $group->setOptions($options);
+            }
         }
 
         return $sets;
@@ -112,6 +124,7 @@ class PropertyHydrator extends Hydrator
         $set->setId((int) $data['__propertySet_id']);
         $set->setName($data['__propertySet_name']);
         $set->setComparable((bool) $data['__propertySet_comparable']);
+        $set->setSortMode((int) $data['__propertySet_sortmode']);
 
         if ($data['__propertySetAttribute_id']) {
             $attribute = $this->extractFields('__propertySetAttribute_', $data);
@@ -172,13 +185,13 @@ class PropertyHydrator extends Hydrator
     }
 
     /**
-     * @param $data
-     * @param $arrayKey
-     * @param $fallbackArrayKey
-     * @param $mapping
+     * @param array $data
+     * @param string $arrayKey
+     * @param string $fallbackArrayKey
+     * @param array $mapping
      * @return array
      */
-    private function getTranslation($data, $arrayKey, $fallbackArrayKey, $mapping)
+    private function getTranslation(array $data, $arrayKey, $fallbackArrayKey, array $mapping)
     {
         if (!isset($data[$arrayKey])
             || empty($data[$arrayKey])
@@ -200,5 +213,83 @@ class PropertyHydrator extends Hydrator
         }
 
         return $this->convertArrayKeys($translation, $mapping);
+    }
+
+
+    /**
+     * Sort groups by position in set
+     *
+     * @param array $data
+     */
+    private function sortGroups(array &$data)
+    {
+        usort($data, function ($a, $b) {
+            if ($a['__relations_position'] == $b['__relations_position']) {
+                return 0;
+            }
+
+            return ($a['__relations_position'] < $b['__relations_position']) ? -1 : 1;
+        });
+    }
+
+
+    /**
+     * @param $options Struct\Property\Option[]
+     * @param int $sortMode
+     */
+    private function sortOptions(&$options, $sortMode)
+    {
+        if ($sortMode == Struct\Property\Set::SORT_POSITION) {
+            $this->sortOptionsByPosition($options);
+            return;
+        }
+
+        if ($sortMode == Struct\Property\Set::SORT_NUMERIC) {
+            $this->sortOptionsNumercialValue($options);
+            return;
+        }
+
+        $this->sortOptionsAlphanumeric($options);
+    }
+
+    /**
+     * @param $options Struct\Property\Option[]
+     */
+    private function sortOptionsByPosition(&$options)
+    {
+        usort($options, function (Struct\Property\Option $a, Struct\Property\Option $b) {
+            if ($a->getPosition() == $b->getPosition()) {
+                return 0;
+            }
+
+            return ($a->getPosition() < $b->getPosition()) ? -1 : 1;
+        });
+    }
+
+    /**
+     * @param $options Struct\Property\Option[]
+     */
+    private function sortOptionsNumercialValue(&$options)
+    {
+        usort($options, function (Struct\Property\Option $a, Struct\Property\Option $b) {
+            $a = floatval(str_replace(',', '.', $a->getName()));
+            $b = floatval(str_replace(',', '.', $b->getName()));
+
+            if ($a == $b) {
+                return 0;
+            }
+
+            return ($a < $b) ? -1 : 1;
+        });
+    }
+
+    /**
+     * @param $options Struct\Property\Option[]
+     */
+    private function sortOptionsAlphanumeric(&$options)
+    {
+        usort($options, function (Struct\Property\Option $a, Struct\Property\Option $b) {
+            return strnatcasecmp($a->getName(), $b->getName());
+        });
     }
 }

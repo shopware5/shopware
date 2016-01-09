@@ -26,7 +26,7 @@
  * @version    $Id$
  * @author shopware AG
  */
-
+//{block name="backend/product_stream/store/attribute"}
 Ext.define('Shopware.apps.ProductStream.store.Attribute', {
     extend:'Ext.data.Store',
     fields: [ 'column', 'label' ],
@@ -42,3 +42,4 @@ Ext.define('Shopware.apps.ProductStream.store.Attribute', {
         }
     }
 });
+//{/block}

@@ -133,7 +133,7 @@ Feature: Detail page
             | 208 | 500,00   | 1.000,01    | 50       |
             | 239 | 2.499,00 | 2.799,00    | 10,72    |
 
-    @javascript @knownFailing
+    @javascript
     Scenario: The customer evaluation form has a captcha
         Given I am on the detail page for article 167
         Then  I should see "Sonnenbrille Speed Eyes"
@@ -159,3 +159,9 @@ Feature: Detail page
             |           | 0.5 Liter | 39,98 €   |
             | SW10002.1 | 1.5 Liter | 39,99 €   |
             | SW10002.2 | 5 Liter   | 39,80 €   |
+
+    @notAvailable
+    Scenario: The customer evaluation form has a captcha
+        Given I am on the detail page for article 199
+        Then  I should see "Dieser Artikel steht derzeit nicht zur Verfügung!"
+        But   I should not see "In den Warenkorb"

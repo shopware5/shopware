@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 //{namespace name=backend/product_stream/main}
-
+//{block name="backend/product_stream/view/condition_list/field/attribute"}
 Ext.define('Shopware.apps.ProductStream.view.condition_list.field.Attribute', {
 
     extend: 'Ext.form.FieldContainer',
@@ -182,6 +182,8 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.field.Attribute', {
                 min: this.fromField.getValue(),
                 max: this.toField.getValue()
             }
+        } else if (value.operator == 'IN') {
+            value.value = value.value.split(",");
         }
 
         var result = {};
@@ -189,3 +191,4 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.field.Attribute', {
         return result;
     }
 });
+//{/block}

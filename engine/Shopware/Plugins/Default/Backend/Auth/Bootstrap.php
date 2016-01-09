@@ -405,6 +405,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
         if (
             !$this->isBackendHomepage()
             && $refererCheck
+            && $this->shouldAuth()
             && ($referer = $this->request->getHeader('referer')) !== null
             && strpos($referer, 'http') === 0
         ) {

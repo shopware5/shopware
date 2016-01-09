@@ -114,6 +114,11 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         if ($skipLogin == "1") {
             $this->View()->skipLogin = $skipLogin;
         }
+
+        if ($this->Request()->has('sValidation')) {
+            $this->View()->assign('sValidation', $this->Request()->getParam('sValidation'));
+        }
+
         $this->personalAction();
         $this->billingAction();
         $this->shippingAction();
@@ -439,16 +444,10 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             'lastname'=>array('required'=>1),
             'phone'=>array('required'=> $requirePhone),
             'fax'=>array('required'=>0),
-            'text1'=>array('required'=>0),
-            'text2'=>array('required'=>0),
-            'text3'=>array('required'=>0),
-            'text4'=>array('required'=>0),
-            'text5'=>array('required'=>0),
-            'text6'=>array('required'=>0),
             'sValidation'=>array('required'=>0),
-            'birthyear'=>array('required'=> $requireBirthday),
-            'birthmonth'=>array('required'=> $requireBirthday),
-            'birthday'=>array('required'=> $requireBirthday),
+            'birthyear'=>array('required'=> $requireBirthday, 'date' => ['d' => 'birthday', 'm' => 'birthmonth', 'y' => 'birthyear']),
+            'birthmonth'=>array('required'=> $requireBirthday, 'date' => ['d' => 'birthday', 'm' => 'birthmonth', 'y' => 'birthyear']),
+            'birthday'=>array('required'=> $requireBirthday, 'date' => ['d' => 'birthday', 'm' => 'birthmonth', 'y' => 'birthyear']),
             'dpacheckbox'=>array('required'=>(Shopware()->Config()->get('ACTDPRCHECK'))?1:0)
         );
         $rules = Enlight()->Events()->filter('Shopware_Controllers_Frontend_Register_validatePersonal_FilterRules', $rules, array('subject'=>$this));
@@ -492,7 +491,13 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             ),
             'additional_address_line2' => array(
                 'required' => (Shopware()->Config()->requireAdditionAddressLine2 && Shopware()->Config()->showAdditionAddressLine2) ? 1 : 0
-            )
+            ),
+            'text1'         => array('required' => 0),
+            'text2'         => array('required' => 0),
+            'text3'         => array('required' => 0),
+            'text4'         => array('required' => 0),
+            'text5'         => array('required' => 0),
+            'text6'         => array('required' => 0)
         );
 
         // Check if state selection is required

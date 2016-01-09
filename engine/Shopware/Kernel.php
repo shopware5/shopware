@@ -89,11 +89,17 @@ class Kernel implements HttpKernelInterface
      */
     protected $environment;
 
+
     /**
      * Flag if the kernel already booted
      * @var bool
      */
-    protected $booted;
+    protected $booted = false;
+
+    /**
+     * @var string
+     */
+    protected $name;
 
     const VERSION      = \Shopware::VERSION;
     const VERSION_TEXT = \Shopware::VERSION_TEXT;
@@ -107,7 +113,6 @@ class Kernel implements HttpKernelInterface
     {
         $this->environment = $environment;
         $this->debug = (boolean) $debug;
-        $this->booted = false;
         $this->name = 'Shopware';
 
         $this->initializeConfig();
@@ -446,7 +451,7 @@ class Kernel implements HttpKernelInterface
 
         foreach ($runtimeDirectories as $name => $dir) {
             if (!is_dir($dir)) {
-                if (false === @mkdir($dir, 0777, true)) {
+                if (false === @mkdir($dir, 0777, true) && !is_dir($dir)) {
                     throw new \RuntimeException(sprintf("Unable to create the %s directory (%s)\n", $name, $dir));
                 }
             } elseif (!is_writable($dir)) {

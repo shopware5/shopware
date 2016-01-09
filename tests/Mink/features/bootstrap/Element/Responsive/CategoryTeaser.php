@@ -39,6 +39,6 @@ class CategoryTeaser extends \Shopware\Tests\Mink\Element\Emotion\CategoryTeaser
     public function getImageProperty()
     {
         $elements = Helper::findElements($this, ['image']);
-        return $elements['image']->getText();
+        return $elements['image']->getHtml();
     }
 }

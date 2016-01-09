@@ -44,9 +44,7 @@ class Blog extends Page implements HelperSelectorInterface
      */
     public function verifyPage()
     {
-        $language = Helper::getCurrentLanguage($this);
-
-        if (Helper::hasNamedLink($this, 'rssFeed', $language) && Helper::hasNamedLink($this, 'atomFeed', $language)) {
+        if (Helper::hasNamedLinks($this, ['rssFeed', 'atomFeed']) == true) {
             return;
         }
 
@@ -106,6 +104,7 @@ class Blog extends Page implements HelperSelectorInterface
     }
 
     /**
+     * Helper function to check the rating of a blog comment
      * @param BlogComment $blogComments
      * @param $average
      * @throws \Exception

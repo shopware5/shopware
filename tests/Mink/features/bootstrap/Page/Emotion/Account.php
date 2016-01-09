@@ -69,28 +69,27 @@ class Account extends Page implements HelperSelectorInterface
     }
 
     /**
+     * Verify if we're on an expected page. Throw an exception if not.
      * @param string $action
      * @return bool
      * @throws \Exception
      */
     public function verifyPage($action = '')
     {
-        $language = Helper::getCurrentLanguage($this);
-
         if ($action === 'Dashboard' || empty($action)) {
-            if ($this->verifyPageDashboard($language)) {
+            if ($this->verifyPageDashboard()) {
                 return true;
             }
         }
 
         if ($action === 'Login' || empty($action)) {
-            if ($this->verifyPageLogin($language)) {
+            if ($this->verifyPageLogin()) {
                 return true;
             }
         }
 
         if ($action === 'Register' || empty($action)) {
-            if ($this->verifyPageRegister($language)) {
+            if ($this->verifyPageRegister()) {
                 return true;
             }
         }
@@ -104,42 +103,42 @@ class Account extends Page implements HelperSelectorInterface
     }
 
     /**
-     * @param string $language
+     * Helper function to check weather we are on the account dashboard
      * @return bool
      */
-    protected function verifyPageDashboard($language)
+    protected function verifyPageDashboard()
     {
-        return (
-            Helper::hasNamedLink($this, 'myAccountLink', $language) &&
-            Helper::hasNamedLink($this, 'myOrdersLink', $language) &&
-            Helper::hasNamedLink($this, 'myEsdDownloadsLink', $language) &&
-            Helper::hasNamedLink($this, 'changeBillingLink', $language) &&
-            Helper::hasNamedLink($this, 'changeShippingLink', $language) &&
-            Helper::hasNamedLink($this, 'changePaymentLink', $language) &&
-            Helper::hasNamedLink($this, 'noteLink', $language) &&
-            Helper::hasNamedLink($this, 'logoutLink', $language)
-        );
+        return (Helper::hasNamedLinks($this, [
+                'myAccountLink',
+                'myOrdersLink',
+                'myEsdDownloadsLink',
+                'changeBillingLink',
+                'changeShippingLink',
+                'changePaymentLink',
+                'noteLink',
+                'logoutLink',
+            ]) === true) ?: false;
     }
 
     /**
-     * @param string $language
+     * Helper function to check weather we are on the login page
      * @return bool
      */
-    protected function verifyPageLogin($language)
+    protected function verifyPageLogin()
     {
         return (
             $this->hasField('email') &&
             $this->hasField('password') &&
-            Helper::hasNamedLink($this, 'forgotPasswordLink', $language) &&
-            Helper::hasNamedButton($this, 'loginButton', $language)
+            Helper::hasNamedLink($this, 'forgotPasswordLink') &&
+            Helper::hasNamedButton($this, 'loginButton')
         );
     }
 
     /**
-     * @param string $language
+     * Helper function to check weather we are on the register page
      * @return bool
      */
-    protected function verifyPageRegister($language)
+    protected function verifyPageRegister()
     {
         return (
             $this->hasSelect('register[personal][customer_type]') &&
@@ -169,7 +168,7 @@ class Account extends Page implements HelperSelectorInterface
             $this->hasField('register[shipping][city]') &&
             $this->hasSelect('register[shipping][country]') &&
 
-            Helper::hasNamedButton($this, 'sendButton', $language)
+            Helper::hasNamedButton($this, 'sendButton')
         );
     }
 
@@ -296,14 +295,14 @@ class Account extends Page implements HelperSelectorInterface
     public function changePaymentMethod($data = [])
     {
         $element = $this->getElement('AccountPayment');
-        $language = Helper::getCurrentLanguage($this);
-        Helper::clickNamedLink($element, 'changeButton', $language);
+        Helper::clickNamedLink($element, 'changeButton');
 
         Helper::fillForm($this, 'paymentForm', $data);
-        Helper::pressNamedButton($this, 'changePaymentButton', $language);
+        Helper::pressNamedButton($this, 'changePaymentButton');
     }
 
     /**
+     * Checks the name of the payment method
      * @param string $paymentMethod
      * @throws \Exception
      */
@@ -425,8 +424,7 @@ class Account extends Page implements HelperSelectorInterface
             return;
         }
 
-        $language = Helper::getCurrentLanguage($this);
-        Helper::clickNamedLink($this, 'myEsdDownloadsLink', $language);
+        Helper::clickNamedLink($this, 'myEsdDownloadsLink');
 
         $elements = Helper::findAllOfElements($this, ['esdDownloads']);
         $locator = Helper::getRequiredSelector($this, 'esdDownloadName');
@@ -454,6 +452,7 @@ class Account extends Page implements HelperSelectorInterface
     }
 
     /**
+     * Checks the billing or shipping address
      * @param string $type
      * @param string $address
      */
@@ -500,9 +499,10 @@ class Account extends Page implements HelperSelectorInterface
     }
 
     /**
+     * Fills the fields of the registration form and submits it
      * @param array $data
      */
-    public function register($data)
+    public function register(array $data)
     {
         if ($this->verifyPage('Login') === true) {
             Helper::pressNamedButton($this, 'registerButton');
@@ -535,8 +535,7 @@ class Account extends Page implements HelperSelectorInterface
                 continue;
             }
 
-            $language = Helper::getCurrentLanguage($this);
-            Helper::pressNamedButton($address, 'chooseButton', $language);
+            Helper::pressNamedButton($address, 'chooseButton');
 
             return;
         }

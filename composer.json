@@ -12,7 +12,7 @@
         "forum": "http://forum.shopware.com",
         "wiki": "http://wiki.shopware.com",
         "source": "https://github.com/shopware/shopware",
-        "issues": "http://jira.shopware.de"
+        "issues": "https://issues.shopware.com"
     },
     "require": {
         "php": ">=5.4.0",
@@ -32,6 +32,7 @@
         "doctrine/common": "2.5.1",
         "doctrine/dbal": "2.5.1",
         "doctrine/orm": "2.5.1",
+        "doctrine/cache": "1.5.1",
         "beberlei/assert": "2.4.0",
         "zendframework/zend-escaper": "2.5.1",
         "oyejorge/less.php": "1.7.0.5",

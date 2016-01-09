@@ -38,6 +38,11 @@ class Theme extends \Shopware\Components\Theme
     protected $license = '__license__';
 
     /**
+     * @var bool
+     */
+    protected $injectBeforePlugins = true;
+
+    /**
      * Javascript files which will be used in the theme
      *
      * @var array

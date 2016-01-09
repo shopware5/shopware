@@ -36,6 +36,8 @@ class Theme extends \Shopware\Components\Theme
 
     protected $css = array('responsive_1.css', 'responsive_2.css');
 
+    protected $injectBeforePlugins = false;
+
     public function createConfig(\Shopware\Components\Form\Container\TabContainer $container)
     {
         $container->addTab(new \Shopware\Components\Form\Container\Tab('responsive', 'responsive'));

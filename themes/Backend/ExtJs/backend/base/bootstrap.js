@@ -49,6 +49,7 @@
 {include file='ExtJs/overrides/Ext.picker.Date.js'}
 {include file='ExtJs/overrides/Ext.data.association.HasMany.js'}
 {include file='ExtJs/overrides/Ext.menu.Menu.js'}
+{include file='ExtJs/overrides/Ext.Timeout.js'}
 
 {* Include default components *}
 {include file='ExtJs/components/Enlight.app.Window.js'}
@@ -177,6 +178,7 @@
 {include file='backend/base/component/Shopware.global.ErrorReporter.js'}
 {include file='backend/base/component/Shopware.notification.ExpiredLicence.js'}
 {include file='backend/base/component/Shopware.notification.SubscriptionWarning.js'}
+{include file='backend/base/component/Shopware.component.ValidatePassword.js'}
 
 {include file='backend/base/component/Shopware.form.field.ColorField.js'}
 {include file='backend/base/component/Shopware.form.field.ColorSelection.js'}

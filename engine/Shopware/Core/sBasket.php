@@ -1730,7 +1730,7 @@ class sBasket
             $sql = "
                 SELECT id
                 FROM s_emarketing_voucher_codes
-                WHERE id = :voucherId AND cashed = 0
+                WHERE id = :voucherId AND cashed != 1
             ";
 
             $result = $this->db->fetchRow($sql, array('voucherId' => $voucherData['voucherId']));
@@ -1997,13 +1997,41 @@ class sBasket
     }
 
     /**
+     * Proxy to a cached version of self::getBasketArticlesUncached()
+     *
+     * Caches the result of self::getBasketArticlesUncached() in a
+     * static variable using a hash of the input paramter
+     * to invalidate the cache.
+     *
+     * @param array $getArticles
+     * @return array
+     */
+    private function getBasketArticles(array $getArticles)
+    {
+        static $cache;
+        static $cacheHash;
+
+        $hash = md5(serialize($getArticles));
+        if ($cache && $hash === $cacheHash) {
+            return $cache;
+        }
+
+        $result = $this->getBasketArticlesUncached($getArticles);
+
+        $cache = $result;
+        $cacheHash = $hash;
+
+        return $result;
+    }
+
+    /**
      * Loads relevant associated data for the provided articles
      * Used in sGetBasket
      *
      * @param $getArticles
      * @return array
      */
-    private function getBasketArticles($getArticles)
+    private function getBasketArticlesUncached($getArticles)
     {
         $totalAmount = 0;
         $discount = 0;
@@ -2661,14 +2689,8 @@ class sBasket
         );
 
         if ($article['configurator_set_id'] > 0) {
-            $product = new StoreFrontBundle\Struct\ListProduct(
-                (int) $article['articleID'],
-                (int) $article["articledetailsID"],
-                $article['ordernumber']
-            );
-            $product->setAdditional($article['additionaltext']);
-
-            $context = $this->contextService->getShopContext();
+            $context = $this->contextService->getProductContext();
+            $product = Shopware()->Container()->get('shopware_storefront.list_product_service')->get($article['ordernumber'], $context);
             $product = $this->additionalTextService->buildAdditionalText($product, $context);
             $article['additionaltext'] = $product->getAdditional();
         }

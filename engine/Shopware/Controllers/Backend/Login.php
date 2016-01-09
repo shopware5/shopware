@@ -163,4 +163,21 @@ class Shopware_Controllers_Backend_Login extends Shopware_Controllers_Backend_Ex
             ));
         }
     }
+
+    public function validatePasswordAction()
+    {
+        /** @var $auth Shopware_Components_Auth */
+        $auth = Shopware()->Auth();
+        $username = $auth->getIdentity()->username;
+        $password = $this->Request()->get('password');
+
+        if (empty($username) || empty($password)) {
+            $this->View()->assign(array('success' => false));
+            return;
+        }
+
+        $result = $auth->isPasswordValid($username, $password);
+
+        $this->View()->assign('success', $result);
+    }
 }

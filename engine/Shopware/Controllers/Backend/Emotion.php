@@ -167,8 +167,6 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
 
         if (!empty($emotion["isLandingPage"])) {
             $emotion["link"] = "shopware.php?sViewport=campaign&emotionId=".$emotion["id"];
-        } else {
-            $emotion["categoryId"] = !empty($emotion["categories"][0]["id"]) ? $emotion["categories"][0]["id"] : 0;
         }
 
         $validFrom = $emotion['validFrom'];
@@ -315,18 +313,14 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
             $data['modified'] = new \DateTime();
             $data['elements'] = $this->fillElements($emotion, $data);
 
-            if ($data['isLandingPage']) {
-                if (empty($data['categories'])) {
-                    $data['categories'] = null;
-                } else {
-                    $categories = array();
-                    foreach ($data['categories'] as $category) {
-                        $categories[] = Shopware()->Models()->find('Shopware\Models\Category\Category', $category);
-                    }
-                    $data['categories'] = $categories;
-                }
+            if (empty($data['categories'])) {
+                $data['categories'] = null;
             } else {
-                $data['categories'] = array(Shopware()->Models()->find('Shopware\Models\Category\Category', $data['categoryId']));
+                $categories = array();
+                foreach ($data['categories'] as $category) {
+                    $categories[] = Shopware()->Models()->find('Shopware\Models\Category\Category', $category);
+                }
+                $data['categories'] = $categories;
             }
 
             unset($data['user']);

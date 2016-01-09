@@ -49,7 +49,7 @@ class ArticleSlider extends \Shopware\Tests\Mink\Element\Emotion\ArticleSlider
         $names = [
             'imageAlt' => $slide->find('css', $selectors['slideImage'])->getAttribute('alt'),
             'linkTitle' => $slide->find('css', $selectors['slideLink'])->getAttribute('title'),
-            'name' => $nameElement->getText(),
+            'name' => trim($nameElement->getHtml()),
             'nameTitle' => $nameElement->getAttribute('title'),
         ];
 

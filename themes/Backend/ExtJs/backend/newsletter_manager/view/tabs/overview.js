@@ -51,7 +51,15 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Overview', {
             read: '{s name=columns/read}# read{/s}',
             clicked: '{s name=columns/clicked}# clicked{/s}',
             revenue: '{s name=columns/revenue}Revenue{/s}',
-            actions: '{s name=columns/actions}Actions{/s}'
+            actions: '{s name=columns/actions}Actions{/s}',
+            timedDelivery: '{s name=columns/timed_delivery}Timed delivery{/s}',
+            active: '{s name=columns/active}Released for cronjob{/s}'
+        },
+        error: {
+            active_title: '{s name=error/active_title}Error - can\'t toggle to released{/s}',
+            active_text: '{s name=error/active_text}A delivered newsletter can\'t be unreleased.{/s}',
+            privilege_title: '{s name=error/privilege_title}Missing rights{/s}',
+            privilege_text: '{s name=error/privilege_text}You need write rules to change this field.{/s}'
         }
     },
 
@@ -144,8 +152,17 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Overview', {
                     var me = this,
                         addresses = record.get('addresses'),
                         recipients = record.get('recipients'),
-                        status = record.get('status');
+                        status = record.get('status'),
+                        active = record.get('active');
+
+                    var timedDelivery = Date.parse(record.get('timedDelivery'));
+                    var currentDate = new Date();
+
                     if(status == 1){
+                        if (currentDate < timedDelivery) {
+                            return '{s name=state/willBeSent}Will be send{/s}'
+                        }
+
                         var done = addresses,
                             percentage = 0;
                         if(done > 0) {
@@ -199,6 +216,66 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Overview', {
                 dataIndex: 'revenue',
                 flex: 1,
                 sortable: false
+            },
+            {
+                xtype: 'actioncolumn',
+                header: me.snippets.columns.active,
+                dataIndex: 'mailing.status',
+                flex: 1,
+                items: [{
+                    getClass: function (value, metaData, record) {
+                        value = record.get('status');
+
+                        if (value == 0) {
+                            return 'sprite-ui-check-box-uncheck';
+                        } else {
+                            return 'sprite-ui-check-box';
+                        }
+                    },
+                    handler: function(grid, rowIndex, colIndex, item, eOpts, record) {
+                        /*{if {acl_is_allowed privilege=write}}*/
+                            if (record.get('status') == 2) {
+                                Shopware.Notification.createGrowlMessage(me.snippets.error.active_title, me.snippets.error.active_text);
+                                return false;
+                            }
+
+                            if (record.get('status') == 1) {
+                                Ext.Msg.show({
+                                    title:'{s name=cancel_sending/title}Cancel sending{/s}',
+                                    msg: '{s name=cancel_sending/msg}Do you want to cancel the sending of the newsletter?{/s}',
+                                    buttons: Ext.Msg.YESNO,
+                                    icon: Ext.Msg.QUESTION,
+                                    fn: function(response) {
+                                        if(response == 'yes') {
+                                            me.fireEvent('releaseNewsletter', record, grid, rowIndex);
+                                        } else {
+                                            return false;
+                                        }
+                                    }
+                                });
+                            } else {
+                                me.fireEvent('releaseNewsletter', record, grid, rowIndex);
+                            }
+                        /*{else}*/
+                            Shopware.Notification.createGrowlMessage(me.snippets.error.privilege_title, me.snippets.error.privilege_text);
+                        /*{/if}*/
+
+
+                    }
+                }]
+            },
+            {
+                header: me.snippets.columns.timedDelivery,
+                dataIndex: 'mailing.timedDelivery',
+                width: 110,
+                renderer: function(value, metaData, record) {
+                    value = record.get('timedDelivery');
+
+                    if (!value) {
+                        return '{s name=grid/send_immediately}Immediately{/s}';
+                    }
+                    return Ext.util.Format.date(value) + ' ' + Ext.util.Format.date(value, timeFormat);
+                }
             },
             {
                 header: me.snippets.columns.actions,
@@ -257,8 +334,18 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Overview', {
                 },
                 // Hide the "send" button if the current row does not contain a valid customer
                 getClass: function(value, metaData, record) {
+                    //The user cannot send newsletter which are already send
                     var status = record.get('status');
-                    if(status > 0) {
+                    if(status > 0 && status != 3) {
+                        return 'x-hide-display';
+                    }
+
+                    //The user cannot send newsletter which should be send in the future
+                    var timedDelivery = Date.parse(record.get('timedDelivery'));
+                    var currentDate = new Date();
+                    currentDate = Date.parse(currentDate);
+
+                    if (currentDate < timedDelivery) {
                         return 'x-hide-display';
                     }
                 }
@@ -307,7 +394,6 @@ Ext.define('Shopware.apps.NewsletterManager.view.tabs.Overview', {
         });
 
         return me.toolbar;
-
     },
 
     /**

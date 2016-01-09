@@ -32,6 +32,8 @@ class Theme extends \Shopware\Components\Theme
 
     protected $css = array('bare_1.css', 'bare_2.css');
 
+    protected $injectBeforePlugins = true;
+
     public function createConfig(\Shopware\Components\Form\Container\TabContainer $container)
     {
         $container->addTab(new \Shopware\Components\Form\Container\Tab('bare', 'bare'));

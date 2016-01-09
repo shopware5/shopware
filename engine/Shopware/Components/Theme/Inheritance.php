@@ -115,12 +115,12 @@ class Inheritance
         $util = $this->util;
         $bare = array_filter($hierarchy, function (Shop\Template $template) use ($util) {
             $theme = $util->getThemeByTemplate($template);
-            return ($template->getParent() == null || $theme instanceof ResponsiveTheme);
+            return $theme->injectBeforePlugins();
         });
     
         $custom = array_filter($hierarchy, function (Shop\Template $template) use ($util) {
             $theme = $util->getThemeByTemplate($template);
-            return ($template->getParent() !== null && !($theme instanceof ResponsiveTheme));
+            return !$theme->injectBeforePlugins();
         });
         
         return [

@@ -190,6 +190,11 @@ class Shopware_Components_Config implements ArrayAccess
 
     /**
      * Get config by namespace (form). Each config name is unique by namespace + name
+     *
+     * @param string $namespace
+     * @param string $name
+     * @param mixed $default
+     * @return mixed
      */
     public function getByNamespace($namespace, $name, $default = null)
     {
@@ -197,9 +202,9 @@ class Shopware_Components_Config implements ArrayAccess
     }
 
     /**
-     * @param $name
-     * @param null $default
-     * @return null
+     * @param string $name
+     * @param mixed $default
+     * @return mixed
      */
     public function get($name, $default = null)
     {
@@ -208,7 +213,7 @@ class Shopware_Components_Config implements ArrayAccess
     }
 
     /**
-     * @param $name
+     * @param string $name
      * @return mixed
      */
     public function offsetGet($name)
@@ -224,7 +229,7 @@ class Shopware_Components_Config implements ArrayAccess
     }
 
     /**
-     * @param $name
+     * @param string $name
      */
     public function offsetUnset($name)
     {
@@ -232,7 +237,7 @@ class Shopware_Components_Config implements ArrayAccess
     }
 
     /**
-     * @param $name
+     * @param string $name
      * @return bool
      */
     public function offsetExists($name)
@@ -241,13 +246,14 @@ class Shopware_Components_Config implements ArrayAccess
             $baseName = $this->formatName($name);
             return isset($this->_data[$baseName]) && $this->_data[$baseName] !== null;
         }
+
         return true;
     }
 
     /**
      * @param string $name
      * @param mixed $value
-     * @return array
+     * @return mixed
      */
     public function offsetSet($name, $value)
     {
@@ -282,7 +288,7 @@ class Shopware_Components_Config implements ArrayAccess
      *
      * @param   string $name
      * @param   mixed $value
-     * @return  array
+     * @return  mixed
      */
     public function __set($name, $value)
     {

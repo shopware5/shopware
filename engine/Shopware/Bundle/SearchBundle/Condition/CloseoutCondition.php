@@ -21,9 +21,23 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
+namespace Shopware\Bundle\SearchBundle\Condition;
+
+use Shopware\Bundle\SearchBundle\ConditionInterface;
+
 /**
- * Empty controller due to the fact that we've no logic here. The Shopware_Controllers_Backend_ExtJs handles the rest.
+ * @category  Shopware
+ * @package   Shopware\Bundle\SearchBundle\Condition
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Shopware_Controllers_Backend_BetaFeedback extends Shopware_Controllers_Backend_ExtJs
+class CloseoutCondition implements ConditionInterface
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return 'closeout';
+    }
 }

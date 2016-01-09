@@ -147,20 +147,22 @@ Ext.define('Shopware.apps.UserManager.controller.Rules', {
             return;
         }
 
-        record.save({
-            callback:function (data, operation) {
-                var records = operation.getRecords(),
-                    record = records[0],
-                    rawData = record.getProxy().getReader().rawData;
+        Shopware.app.Application.fireEvent('Shopware.ValidatePassword', function() {
+            record.save({
+                callback: function (data, operation) {
+                    var records = operation.getRecords(),
+                            record = records[0],
+                            rawData = record.getProxy().getReader().rawData;
 
-                if ( operation.success === true ) {
-                    Shopware.Notification.createGrowlMessage(me.snippets.successTitle, me.snippets.privilegeSave.successMessage, me.snippets.growlMessage);
-                } else {
-                    Shopware.Notification.createGrowlMessage(me.snippets.errorTitle, me.snippets.errorMessage + ' ' + rawData.message, me.snippets.growlMessage);
+                    if (operation.success === true) {
+                        Shopware.Notification.createGrowlMessage(me.snippets.successTitle, me.snippets.privilegeSave.successMessage, me.snippets.growlMessage);
+                    } else {
+                        Shopware.Notification.createGrowlMessage(me.snippets.errorTitle, me.snippets.errorMessage + ' ' + rawData.message, me.snippets.growlMessage);
+                    }
+                    window.destroy();
+                    store.load();
                 }
-                window.destroy();
-                store.load();
-            }
+            });
         });
     },
 
@@ -187,20 +189,22 @@ Ext.define('Shopware.apps.UserManager.controller.Rules', {
             return;
         }
 
-        record.save({
-            callback:function (data, operation) {
-                var records = operation.getRecords(),
-                    record = records[0],
-                    rawData = record.getProxy().getReader().rawData;
+        Shopware.app.Application.fireEvent('Shopware.ValidatePassword', function() {
+            record.save({
+                callback: function (data, operation) {
+                    var records = operation.getRecords(),
+                            record = records[0],
+                            rawData = record.getProxy().getReader().rawData;
 
-                if ( operation.success === true ) {
-                    Shopware.Notification.createGrowlMessage(me.snippets.successTitle, me.snippets.resourceSave.successMessage, me.snippets.growlMessage);
-                } else {
-                    Shopware.Notification.createGrowlMessage(me.snippets.errorTitle, me.snippets.errorMessage + ' ' + rawData.message, me.snippets.growlMessage);
+                    if (operation.success === true) {
+                        Shopware.Notification.createGrowlMessage(me.snippets.successTitle, me.snippets.resourceSave.successMessage, me.snippets.growlMessage);
+                    } else {
+                        Shopware.Notification.createGrowlMessage(me.snippets.errorTitle, me.snippets.errorMessage + ' ' + rawData.message, me.snippets.growlMessage);
+                    }
+                    window.destroy();
+                    store.load();
                 }
-                window.destroy();
-                store.load();
-            }
+            });
         });
     },
 
@@ -220,41 +224,43 @@ Ext.define('Shopware.apps.UserManager.controller.Rules', {
         }
         var roleStore = Ext.create('Shopware.apps.UserManager.store.Detail');
 
-        roleStore.load({
-            callback: function() {
-                var role = roleStore.getById(roleId),
-                    privilegeStore = role['getPrivilegeStore'];
+        Shopware.app.Application.fireEvent('Shopware.ValidatePassword', function() {
+            roleStore.load({
+                callback: function () {
+                    var role = roleStore.getById(roleId),
+                            privilegeStore = role['getPrivilegeStore'];
 
-                privilegeStore.removeAll();
-                Ext.each(checkedNodes, function(item, key) {
-                    var rule = Ext.create('Shopware.apps.UserManager.model.Rules');
-                    rule.set('roleId', roleId);
-                    rule.set('resourceId', item.get('resourceId'));
-                    if (item.get('type')==='resource') {
-                        rule.set('privilegeId', null);
-                    } else {
-                        rule.set('privilegeId', item.get('helperId'));
-                    }
-                    privilegeStore.add(rule);
-                });
-                role['getPrivilegeStore'] = privilegeStore;
-
-                role.save({
-                    callback:function (data, operation) {
-                        var records = operation.getRecords(),
-                            record = records[0],
-                            rawData = record.getProxy().getReader().rawData;
-
-                        if ( operation.success === true ) {
-                            Shopware.Notification.createGrowlMessage(me.snippets.successTitle, me.snippets.roleSave.successMessage, me.snippets.growlMessage);
+                    privilegeStore.removeAll();
+                    Ext.each(checkedNodes, function (item, key) {
+                        var rule = Ext.create('Shopware.apps.UserManager.model.Rules');
+                        rule.set('roleId', roleId);
+                        rule.set('resourceId', item.get('resourceId'));
+                        if (item.get('type') === 'resource') {
+                            rule.set('privilegeId', null);
                         } else {
-                            Shopware.Notification.createGrowlMessage(me.snippets.errorTitle, me.snippets.errorMessage + ' ' + rawData.message, me.snippets.growlMessage);
+                            rule.set('privilegeId', item.get('helperId'));
                         }
-                        store.load();
-                    }
-                });
-            }
-        })
+                        privilegeStore.add(rule);
+                    });
+                    role['getPrivilegeStore'] = privilegeStore;
+
+                    role.save({
+                        callback: function (data, operation) {
+                            var records = operation.getRecords(),
+                                    record = records[0],
+                                    rawData = record.getProxy().getReader().rawData;
+
+                            if (operation.success === true) {
+                                Shopware.Notification.createGrowlMessage(me.snippets.successTitle, me.snippets.roleSave.successMessage, me.snippets.growlMessage);
+                            } else {
+                                Shopware.Notification.createGrowlMessage(me.snippets.errorTitle, me.snippets.errorMessage + ' ' + rawData.message, me.snippets.growlMessage);
+                            }
+                            store.load();
+                        }
+                    });
+                }
+            });
+        });
     },
 
     /**
@@ -301,19 +307,21 @@ Ext.define('Shopware.apps.UserManager.controller.Rules', {
                 return false;
             }
 
-            model.destroy({
-                callback:function (data, operation) {
-                    var records = operation.getRecords(),
-                        record = records[0],
-                        rawData = record.getProxy().getReader().rawData;
+            Shopware.app.Application.fireEvent('Shopware.ValidatePassword', function() {
+                model.destroy({
+                    callback: function (data, operation) {
+                        var records = operation.getRecords(),
+                                record = records[0],
+                                rawData = record.getProxy().getReader().rawData;
 
-                    if ( operation.success === true ) {
-                        Shopware.Notification.createGrowlMessage(me.snippets.successTitle, me.snippets.resourceDelete.successMessage, me.snippets.growlMessage);
-                    } else {
-                        Shopware.Notification.createGrowlMessage(me.snippets.errorTitle, me.snippets.errorMessage + ' ' + rawData.message, me.snippets.growlMessage);
+                        if (operation.success === true) {
+                            Shopware.Notification.createGrowlMessage(me.snippets.successTitle, me.snippets.resourceDelete.successMessage, me.snippets.growlMessage);
+                        } else {
+                            Shopware.Notification.createGrowlMessage(me.snippets.errorTitle, me.snippets.errorMessage + ' ' + rawData.message, me.snippets.growlMessage);
+                        }
+                        store.load();
                     }
-                    store.load();
-                }
+                });
             });
         });
 
@@ -343,19 +351,21 @@ Ext.define('Shopware.apps.UserManager.controller.Rules', {
                 return false;
             }
 
-            model.destroy({
-                callback:function (data, operation) {
-                    var records = operation.getRecords(),
-                        record = records[0],
-                        rawData = record.getProxy().getReader().rawData;
+            Shopware.app.Application.fireEvent('Shopware.ValidatePassword', function() {
+                model.destroy({
+                    callback: function (data, operation) {
+                        var records = operation.getRecords(),
+                                record = records[0],
+                                rawData = record.getProxy().getReader().rawData;
 
-                    if ( operation.success === true ) {
-                        Shopware.Notification.createGrowlMessage(me.snippets.privilegeDelete.successTitle, me.snippets.privilegeDelete.successMessage, me.snippets.growlMessage);
-                    } else {
-                        Shopware.Notification.createGrowlMessage(me.snippets.privilegeDelete.errorTitle, me.snippets.privilegeDelete.errorMessage + ' ' + rawData.message, me.snippets.growlMessage);
+                        if (operation.success === true) {
+                            Shopware.Notification.createGrowlMessage(me.snippets.privilegeDelete.successTitle, me.snippets.privilegeDelete.successMessage, me.snippets.growlMessage);
+                        } else {
+                            Shopware.Notification.createGrowlMessage(me.snippets.privilegeDelete.errorTitle, me.snippets.privilegeDelete.errorMessage + ' ' + rawData.message, me.snippets.growlMessage);
+                        }
+                        store.load();
                     }
-                    store.load();
-                }
+                });
             });
         });
     },

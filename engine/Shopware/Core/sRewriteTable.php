@@ -22,6 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\MemoryLimit;
 use Shopware\Components\Model\ModelManager;
 
 /**
@@ -694,7 +695,7 @@ class sRewriteTable
      */
     public function baseSetup()
     {
-        @ini_set('memory_limit', '512M');
+        MemoryLimit::setMinimumMemoryLimit(1024*1024*512);
         @set_time_limit(0);
 
         $keys = array_keys($this->template->registered_plugins['function']);

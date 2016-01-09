@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 //{namespace name=backend/product_stream/main}
-
+//{block name="backend/product_stream/view/common/settings"}
 Ext.define('Shopware.apps.ProductStream.view.common.Settings', {
     extend: 'Ext.form.Panel',
     alias: 'widget.product-stream-settings',
@@ -150,3 +150,4 @@ Ext.define('Shopware.apps.ProductStream.view.common.Settings', {
         return this.descriptionField;
     }
 });
+//{/block}

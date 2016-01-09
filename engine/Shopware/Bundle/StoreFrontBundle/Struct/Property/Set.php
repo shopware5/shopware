@@ -34,6 +34,21 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 class Set extends Extendable implements \JsonSerializable
 {
     /**
+     * Constant for the alphanumeric sort configuration of the category filters
+     */
+    const SORT_ALPHANUMERIC = 0;
+
+    /**
+     * Constant for the numeric sort configuration of the category filters
+     */
+    const SORT_NUMERIC = 1;
+
+    /**
+     * Constant for the position sort configuration of the category filters
+     */
+    const SORT_POSITION = 3;
+
+    /**
      * @var int
      */
     protected $id;
@@ -52,6 +67,11 @@ class Set extends Extendable implements \JsonSerializable
      * @var Group[]
      */
     protected $groups = [];
+
+    /**
+     * @var int
+     */
+    protected $sortMode;
 
     /**
      * @param int $id
@@ -119,6 +139,22 @@ class Set extends Extendable implements \JsonSerializable
         $this->comparable = $comparable;
 
         return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSortMode()
+    {
+        return $this->sortMode;
+    }
+
+    /**
+     * @param int $sortMode
+     */
+    public function setSortMode($sortMode)
+    {
+        $this->sortMode = $sortMode;
     }
 
     /**

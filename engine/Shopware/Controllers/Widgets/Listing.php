@@ -124,7 +124,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
     {
         $this->Front()->Plugins()->ViewRenderer()->setNoRender();
 
-        $context = $this->get('shopware_storefront.context_service')->getShopContext();
+        $context = $this->get('shopware_storefront.context_service')->getProductContext();
 
         $categoryId = $this->Request()->getParam('sCategory');
         $productStreamId = $this->findStreamIdByCategoryId($categoryId);

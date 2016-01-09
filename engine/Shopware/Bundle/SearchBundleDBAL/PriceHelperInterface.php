@@ -35,7 +35,7 @@ interface PriceHelperInterface
 {
     /**
      * Returns the full selection for the cheapest price
-     * @param Struct\ShopContextInterface $context
+     * @param Struct\ProductContextInterface $context
      * @return string
      */
     public function getSelection(Struct\ShopContextInterface $context);

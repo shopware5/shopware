@@ -63,7 +63,7 @@
 			<div class="finish--teaser panel has--border is--rounded">
 
 				{block name='frontend_checkout_finish_teaser_title'}
-					<h2 class="panel--title teaser--title is--align-center">{s name="FinishHeaderThankYou"}{/s} {$sShopname}!</h2>
+					<h2 class="panel--title teaser--title is--align-center">{s name="FinishHeaderThankYou"}{/s} {$sShopname|escapeHtml}!</h2>
 				{/block}
 
 				{block name='frontend_checkout_finish_teaser_content'}

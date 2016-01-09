@@ -2,13 +2,12 @@
 
 namespace Shopware\Tests\Mink;
 
+use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Behat\Hook\Scope\AfterStepScope;
-use Behat\Behat\Hook\Scope\BeforeFeatureScope;
 use Behat\Mink\Driver\BrowserKitDriver;
 use Behat\Mink\Exception\Exception as MinkException;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Behat\Hook\Scope\ScenarioScope;
-use Behat\Gherkin\Node\ScenarioInterface;
 use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Mink\Session;
 use Behat\Testwork\Hook\Scope\BeforeSuiteScope;
@@ -16,7 +15,7 @@ use Behat\Testwork\Suite\Suite;
 use Behat\Testwork\Tester\Result\TestResult;
 use Doctrine\DBAL\Connection;
 
-class FeatureContext extends SubContext
+class FeatureContext extends SubContext implements SnippetAcceptingContext
 {
     /**
      * @var array
@@ -102,6 +101,8 @@ class FeatureContext extends SubContext
             UPDATE `s_core_paymentmeans` SET `active`= 1;
 EOD;
         $this->getService('db')->exec($sql);
+
+        Helper::setCurrentLanguage('de');
 
         /** @var \Shopware\Bundle\PluginInstallerBundle\Service\InstallerService $pluginManager */
         $pluginManager = $this->getService('shopware_plugininstaller.plugin_manager');

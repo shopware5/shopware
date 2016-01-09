@@ -24,12 +24,12 @@
 
 namespace Shopware\Components\Model;
 
+use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\Proxy\AbstractProxyFactory;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Configuration as BaseConfiguration;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\CachedReader;
-use Doctrine\Common\Annotations\FileCacheReader;
 use Doctrine\Common\Cache\ApcCache;
 use Doctrine\Common\Cache\CacheProvider;
 use Doctrine\Common\Cache\XcacheCache;
@@ -47,13 +47,6 @@ class Configuration extends BaseConfiguration
      * @var string
      */
     protected $attributeDir;
-
-    /**
-     * Directory for cached anotations
-     *
-     * @var string
-     */
-    protected $fileCacheDir;
 
     /**
      * Custom namespace for doctrine cache provider
@@ -82,7 +75,6 @@ class Configuration extends BaseConfiguration
         $this->setAutoGenerateProxyClasses(AbstractProxyFactory::AUTOGENERATE_FILE_NOT_EXISTS);
 
         $this->setAttributeDir($options['attributeDir']);
-        $this->setFileCacheDir($options['fileCacheDir']);
 
         $this->addEntityNamespace('Shopware', 'Shopware\Models');
         $this->addEntityNamespace('Custom', 'Shopware\CustomModels');
@@ -181,23 +173,17 @@ class Configuration extends BaseConfiguration
     }
 
     /**
-     * @return AnnotationReader
+     * @return Reader
      */
     public function getAnnotationsReader()
     {
         $reader = new AnnotationReader;
         $cache = $this->getMetadataCacheImpl();
-        if ($this->getMetadataCacheImpl() instanceof Cache) {
-            $reader = new FileCacheReader(
-                $reader,
-                $this->getFileCacheDir()
-            );
-        } else {
-            $reader = new CachedReader(
-                $reader,
-                $cache
-            );
-        }
+
+        $reader = new CachedReader(
+            $reader,
+            $cache
+        );
 
         return $reader;
     }
@@ -227,7 +213,7 @@ class Configuration extends BaseConfiguration
     public function setAttributeDir($dir)
     {
         if (!is_dir($dir)) {
-            if (false === @mkdir($dir, 0777, true)) {
+            if (false === @mkdir($dir, 0777, true) && !is_dir($dir)) {
                 throw new \RuntimeException(sprintf("Unable to create the doctrine attribute directory (%s)\n", $dir));
             }
         } elseif (!is_writable($dir)) {
@@ -250,36 +236,6 @@ class Configuration extends BaseConfiguration
     }
 
     /**
-     * @param string $dir
-     * @throws \RuntimeException
-     * @return Configuration
-     */
-    public function setFileCacheDir($dir)
-    {
-        if (!is_dir($dir)) {
-            if (false === @mkdir($dir, 0777, true)) {
-                throw new \RuntimeException(sprintf("Unable to create the doctrine filecache directory (%s)\n", $dir));
-            }
-        } elseif (!is_writable($dir)) {
-            throw new \RuntimeException(sprintf("Unable to write in the doctrine filecache directory (%s)\n", $dir));
-        }
-
-        $dir = rtrim(realpath($dir), '\\/') . DIRECTORY_SEPARATOR;
-
-        $this->fileCacheDir = $dir;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getFileCacheDir()
-    {
-        return $this->fileCacheDir;
-    }
-
-    /**
      * Sets the directory where Doctrine generates any necessary proxy class files.
      *
      * @param string $dir
@@ -288,7 +244,7 @@ class Configuration extends BaseConfiguration
     public function setProxyDir($dir)
     {
         if (!is_dir($dir)) {
-            if (false === @mkdir($dir, 0777, true)) {
+            if (false === @mkdir($dir, 0777, true) && !is_dir($dir)) {
                 throw new \RuntimeException(sprintf("Unable to create the doctrine proxy directory (%s)\n", $dir));
             }
         } elseif (!is_writable($dir)) {

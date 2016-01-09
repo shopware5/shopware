@@ -151,26 +151,11 @@ class Enlight_Template_Manager extends Smarty
          * as base theme for all extensions
          */
         $pluginDirs = array_diff($template_dir, $themeDirectories);
-        $bareDir = array_pop($themeDirectories);
 
-        /**
-         * Recreate the inheritance with the theme directories on the first level,
-         * the plugin directories on the second level and the bare theme as
-         * third level.
-         *
-         * This allows to override plugin templates with the different customer themes
-         * like responsive.
-         */
-        $inheritance = array_merge(
-            $themeDirectories,
-            $pluginDirs,
-            [$bareDir]
-        );
+        $inheritance = $this->buildInheritance($themeDirectories, $pluginDirs);
 
-        $inheritance = $this->enforceEndingSlash($inheritance);
-        $inheritance = array_map('realpath', $inheritance);
-        $inheritance = array_filter($inheritance);
-        $inheritance = array_unique($inheritance);
+        $inheritance = $this->unifyDirectories($inheritance);
+
         return parent::setTemplateDir($inheritance);
     }
 
@@ -246,5 +231,53 @@ class Enlight_Template_Manager extends Smarty
             $dir = rtrim($dir, '/') . '/';
             return $dir;
         }, $inheritance);
+    }
+
+    /**
+     * @param string[] $inheritance
+     * @return string[]
+     */
+    public function unifyDirectories($inheritance)
+    {
+        $inheritance = $this->enforceEndingSlash($inheritance);
+        $inheritance = array_map('realpath', $inheritance);
+        $inheritance = array_filter($inheritance);
+        $inheritance = array_unique($inheritance);
+        return $inheritance;
+    }
+
+    /**
+     * @param string[] $themeDirectories
+     * @param string[] $pluginDirs
+     * @return string[]
+     */
+    public function buildInheritance($themeDirectories, $pluginDirs)
+    {
+        $themeDirectories = $this->unifyDirectories($themeDirectories);
+
+        $before = [];
+        $after = [];
+        foreach ($themeDirectories as $dir) {
+            $file = $dir . '/Theme.php';
+            if (!file_exists($file)) {
+                continue;
+            }
+            require_once $file;
+
+            $parts = explode('/', $dir);
+            $name = array_pop($parts);
+
+            $class = "\\Shopware\\Themes\\" . $name . '\\Theme';
+
+            /** @var \Shopware\Components\Theme $theme */
+            $theme = new $class();
+
+            if ($theme->injectBeforePlugins()) {
+                $before[] = $dir;
+            } else {
+                $after[] = $dir;
+            }
+        }
+        return array_merge($after, $pluginDirs, $before);
     }
 }

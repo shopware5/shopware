@@ -4,6 +4,14 @@
     <link rel="canonical" href="{url controller=campaign emotionId=$landingPage.id}" />
 {/block}
 
+{block name='frontend_index_header_title'}{strip}
+    {if $seo_title}
+        {$seo_title} | {{config name=sShopname}|escapeHtmlAttr}
+    {else}
+        {$smarty.block.parent}
+    {/if}
+{/strip}{/block}
+
 {* Google optimized crawling *}
 {block name='frontend_index_header_meta_tags' append}
     {if !$hasEscapedFragment}

@@ -75,6 +75,11 @@ class ListProductService implements Service\ListProductServiceInterface
     private $eventManager;
 
     /**
+     * @var Service\CategoryServiceInterface
+     */
+    private $categoryService;
+
+    /**
      * @param Gateway\ListProductGatewayInterface $productGateway
      * @param Service\GraduatedPricesServiceInterface $graduatedPricesService
      * @param Service\CheapestPriceServiceInterface $cheapestPriceService
@@ -83,6 +88,7 @@ class ListProductService implements Service\ListProductServiceInterface
      * @param Service\MarketingServiceInterface $marketingService
      * @param Service\VoteServiceInterface $voteService
      * @param \Enlight_Event_EventManager $eventManager
+     * @param Service\CategoryServiceInterface $categoryService
      */
     public function __construct(
         Gateway\ListProductGatewayInterface $productGateway,
@@ -92,7 +98,8 @@ class ListProductService implements Service\ListProductServiceInterface
         Service\MediaServiceInterface $mediaService,
         Service\MarketingServiceInterface $marketingService,
         Service\VoteServiceInterface $voteService,
-        \Enlight_Event_EventManager $eventManager
+        \Enlight_Event_EventManager $eventManager,
+        Service\CategoryServiceInterface $categoryService
     ) {
         $this->productGateway = $productGateway;
         $this->graduatedPricesService = $graduatedPricesService;
@@ -102,6 +109,7 @@ class ListProductService implements Service\ListProductServiceInterface
         $this->eventManager = $eventManager;
         $this->marketingService = $marketingService;
         $this->voteService = $voteService;
+        $this->categoryService = $categoryService;
     }
 
     /**
@@ -129,6 +137,8 @@ class ListProductService implements Service\ListProductServiceInterface
 
         $voteAverages = $this->voteService->getAverages($products, $context);
 
+        $categories = $this->categoryService->getProductsCategories($products, $context);
+
         $result = [];
         foreach ($numbers as $number) {
             if (!array_key_exists($number, $products)) {
@@ -150,6 +160,10 @@ class ListProductService implements Service\ListProductServiceInterface
 
             if (isset($voteAverages[$number])) {
                 $product->setVoteAverage($voteAverages[$number]);
+            }
+
+            if (isset($categories[$number])) {
+                $product->setCategories($categories[$number]);
             }
 
             $product->addAttribute(
@@ -191,6 +205,10 @@ class ListProductService implements Service\ListProductServiceInterface
             return false;
         }
 
-        return true;
+        $ids = array_map(function (Struct\Category $category) {
+            return $category->getId();
+        }, $product->getCategories());
+
+        return in_array($context->getShop()->getCategory()->getId(), $ids);
     }
 }

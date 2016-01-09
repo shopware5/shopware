@@ -47,10 +47,12 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
             'Enlight_Controller_Front_RouteStartup',
             'onRouteStartup'
         );
+
         $this->subscribeEvent(
             'Enlight_Controller_Front_RouteShutdown',
             'onRouteShutdown'
         );
+
         return true;
     }
 
@@ -69,14 +71,9 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
             return;
         }
 
-        try {
-            /** @var $repository Shopware\Models\Shop\Repository */
-            $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
-            $shop = $this->getShopByRequest($request);
-        } catch (Exception $e) {
-            $args->getResponse()->setException($e);
-            return;
-        }
+        /** @var $repository Shopware\Models\Shop\Repository */
+        $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
+        $shop = $this->getShopByRequest($request);
 
         if (!$shop->getHost()) {
             $shop->setHost($request->getHttpHost());
@@ -126,6 +123,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
             $request->setHttpHost($shop->getSecureHost());
         }
 
+        $this->validateShop($shop);
         $shop->registerResources(Shopware()->Bootstrap());
     }
 
@@ -519,5 +517,33 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
                 && $request->getPost('__redirect') !== null
             )
         );
+    }
+
+    /**
+     * @param Shop $shop
+     * @throws \RuntimeException
+     */
+    private function validateShop(Shop $shop)
+    {
+        if (!$shop->getCustomerGroup()) {
+            throw new \RuntimeException(sprintf("Shop '%s (id: %s)' has no customer group.", $shop->getName(), $shop->getId()));
+        }
+
+        if (!$shop->getCurrency()) {
+            throw new \RuntimeException(sprintf("Shop '%s (id: %s)' has no currency.", $shop->getName(), $shop->getId()));
+        }
+
+        if (!$shop->getLocale()) {
+            throw new \RuntimeException(sprintf("Shop '%s (id: %s)' has no locale.", $shop->getName(), $shop->getId()));
+        }
+
+        $mainShop = $shop->getMain() !== null ? $shop->getMain() : $shop;
+        if (!$mainShop->getTemplate()) {
+            throw new \RuntimeException(sprintf("Shop '%s (id: %s)' has no template.", $shop->getName(), $shop->getId()));
+        }
+
+        if (!$mainShop->getDocumentTemplate()) {
+            throw new \RuntimeException(sprintf("Shop '%s (id: %s)' has no document template.", $shop->getName(), $shop->getId()));
+        }
     }
 }

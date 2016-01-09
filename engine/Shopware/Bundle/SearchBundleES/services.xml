@@ -33,6 +33,10 @@
             <tag name="shopware_search_es.search_handler" />
         </service>
 
+        <service id="shopware_search_es.closeout_condition_handler" class="Shopware\Bundle\SearchBundleES\ConditionHandler\CloseoutConditionHandler" >
+            <tag name="shopware_search_es.search_handler" />
+        </service>
+
         <service id="shopware_search_es.ordernumber_condition_handler" class="Shopware\Bundle\SearchBundleES\ConditionHandler\OrdernumberConditionHandler" >
             <tag name="shopware_search_es.search_handler" />
         </service>
@@ -88,6 +92,10 @@
         </service>
 
         <service id="shopware_search_es.sales_condition_handler" class="Shopware\Bundle\SearchBundleES\ConditionHandler\SalesConditionHandler" >
+            <tag name="shopware_search_es.search_handler" />
+        </service>
+
+        <service id="shopware_search_es.is_available_condition_handler" class="Shopware\Bundle\SearchBundleES\ConditionHandler\IsAvailableConditionHandler">
             <tag name="shopware_search_es.search_handler" />
         </service>
 

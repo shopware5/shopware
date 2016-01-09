@@ -11,7 +11,8 @@ class Form extends \Shopware\Tests\Mink\Page\Emotion\Form
         return [
             'captchaPlaceholder' => 'div.captcha--placeholder',
             'captchaImage' => 'div.captcha--placeholder img',
-            'captchaHidden' => 'div.captcha--placeholder input'
+            'captchaHidden' => 'div.captcha--placeholder input',
+            'inquiryForm' => 'form#support'
         ];
     }
 }

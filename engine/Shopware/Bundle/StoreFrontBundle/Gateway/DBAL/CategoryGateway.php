@@ -83,6 +83,40 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
     /**
      * @inheritdoc
      */
+    public function getProductsCategories(array $products, Struct\ShopContextInterface $context)
+    {
+        $productIds = array_map(function (Struct\BaseProduct $product) {
+            return $product->getId();
+        }, $products);
+
+        $mapping = $this->getMapping($productIds);
+
+        $ids = $this->getMappingIds($mapping);
+
+        $categories = $this->getList($ids, $context);
+
+        $result = [];
+        /** @var Struct\BaseProduct[] $products */
+        foreach ($products as $product) {
+            $id = $product->getId();
+            if (!isset($mapping[$id])) {
+                continue;
+            }
+
+            $productCategories = $this->getProductCategories(
+                explode(',', $mapping[$id]),
+                $categories
+            );
+            $result[$product->getNumber()] = $productCategories;
+        }
+
+        return $result;
+    }
+
+
+    /**
+     * @inheritdoc
+     */
     public function getList(array $ids, Struct\ShopContextInterface $context)
     {
         $query = $this->connection->createQueryBuilder();
@@ -122,5 +156,55 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
         }
 
         return $categories;
+    }
+
+    /**
+     * @param int[] $ids
+     * @return string[] indexed by product id.
+     */
+    private function getMapping(array $ids)
+    {
+        $query = $this->connection->createQueryBuilder();
+
+        $query->select(['mapping.articleID', 'GROUP_CONCAT(DISTINCT mapping.categoryID)']);
+
+        $query->from('s_articles_categories_ro', 'mapping')
+            ->where('mapping.articleID IN (:ids)')
+            ->setParameter(':ids', array_values($ids), Connection::PARAM_INT_ARRAY)
+            ->groupBy('mapping.articleID');
+
+        $mapping = $query->execute()->fetchAll(\PDO::FETCH_KEY_PAIR);
+        return $mapping;
+    }
+
+    /**
+     * @param string[] $mapping
+     * @return int[]
+     */
+    private function getMappingIds(array $mapping)
+    {
+        $ids = [];
+        foreach ($mapping as $row) {
+            $ids = array_merge($ids, explode(',', $row));
+        }
+        $ids = array_unique($ids);
+        return $ids;
+    }
+
+    /**
+     * @param int[] $mapping
+     * @param Struct\Category[] $categories
+     * @return Struct\Category[]
+     */
+    private function getProductCategories(array $mapping, array $categories)
+    {
+        $productCategories = [];
+        foreach ($mapping as $categoryId) {
+            if (!isset($categories[$categoryId])) {
+                continue;
+            }
+            $productCategories[] = $categories[$categoryId];
+        }
+        return $productCategories;
     }
 }

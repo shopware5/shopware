@@ -20,17 +20,12 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  *
- * Shopware UI - Beta Feedback Bootstrapper
+ * Shopware UI - Feedback Bootstrapper
  *
- * This file bootstrapps the Beta Feedback module.
- *
- * @link http://www.shopware.de/
- * @date 2012-05-15
- * @license http://www.shopware.de/license
- * @package beta_feedback
+ * This file bootstrapps the Feedback module.
  */
-//{block name="backend/beta_feedback/app"}
-Ext.define('Shopware.apps.BetaFeedback', {
+//{block name="backend/feedback/app"}
+Ext.define('Shopware.apps.Feedback', {
 
     /**
      * Extends from our special controller, which handles the
@@ -58,7 +53,7 @@ Ext.define('Shopware.apps.BetaFeedback', {
      * The name of the module. Used for internal purpose
      * @string
      */
-	name: 'Shopware.apps.BetaFeedback',
+	name: 'Shopware.apps.Feedback',
 
     /**
      * Required controllers for module (subapplication)

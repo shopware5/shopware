@@ -419,7 +419,12 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
         me.sendAjaxRequest(
             '{url controller=PluginInstaller action=update}',
             { technicalName: plugin.get('technicalName') },
-            callback
+            function(response) {
+                me.handleCrudResponse(response, plugin);
+                if (typeof callback == 'function') {
+                    callback(response);
+                }
+            }
         );
     },
 

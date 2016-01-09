@@ -33,7 +33,7 @@ class CheckoutConfirm extends \Shopware\Tests\Mink\Page\Emotion\CheckoutConfirm
      * Changes the payment method
      * @param array   $data
      */
-    public function changePaymentMethod($data = [])
+    public function changePaymentMethod(array $data = [])
     {
         $data[0]['field'] = 'payment';
         $this->changeShippingMethod($data);
@@ -43,11 +43,10 @@ class CheckoutConfirm extends \Shopware\Tests\Mink\Page\Emotion\CheckoutConfirm
      * Changes the shipping method
      * @param array $data
      */
-    public function changeShippingMethod($data = [])
+    public function changeShippingMethod(array $data = [])
     {
         $element = $this->getElement('CheckoutPayment');
-        $language = Helper::getCurrentLanguage($this);
-        Helper::clickNamedLink($element, 'changeButton', $language);
+        Helper::clickNamedLink($element, 'changeButton');
 
         Helper::fillForm($this, 'shippingPaymentForm', $data);
         Helper::pressNamedButton($this, 'changePaymentButton');

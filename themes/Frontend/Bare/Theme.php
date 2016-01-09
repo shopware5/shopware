@@ -36,6 +36,11 @@ class Theme extends \Shopware\Components\Theme
     protected $license = '__license__';
 
     /**
+     * @var bool
+     */
+    protected $injectBeforePlugins = true;
+
+    /**
      * @param Form\Container\TabContainer $container
      */
     public function createConfig(Form\Container\TabContainer $container)
@@ -175,7 +180,6 @@ class Theme extends \Shopware\Components\Theme
      */
     public function createConfigSets(ArrayCollection $collection)
     {
-
         $set = new ConfigSet();
         $set->setName('__bare_min_appearance__')
             ->setDescription('__bare_min_appearance_description__')
@@ -188,6 +192,5 @@ class Theme extends \Shopware\Components\Theme
             ->setValues(['color' => '#fff']);
 
         $collection->add($set);
-
     }
 }

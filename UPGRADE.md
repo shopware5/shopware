@@ -1,6 +1,46 @@
 # Shopware Upgrade Information
 In this document you will find a changelog of the important changes related to the code base of Shopware.
 
+## 5.1.2
+* Out-of-stock variants on the detail page are now selectable
+* `ProductNumberService::getAvailableNumber()` now returns the provided product variant to allow deep linking of out-of-stock variants
+* Added new configuration property to shopware themes, to configure the inheritance position before or after plugins.
+* Added new smarty blocks `frontend_index_left_menu_entries` and `frontend_index_left_menu_container` to `index/sites-navigation.tpl`.
+* Removed usage of the deprecated `Doctrine\Common\Annotations\FileCacheReader`. Removed methods:
+    * `\Shopware\Components\CacheManager::getDoctrineFileCacheInfo()`
+    * `\Shopware\Components\Model\Configuration::setFileCacheDir()`
+    * `\Shopware\Components\Model\Configuration::getFileCacheDir()`
+* Added `timed_delivery` column in `s_campaigns_mailings` for automatic newsletter delivering.
+* Added new Smarty blocks to the `index/index.tpl` file
+    * `frontend_index_body_classes`
+    * `frontend_index_page_wrap`
+    * `frontend_index_header_navigation`
+    * `frontend_index_container_ajax_cart`
+    * `frontend_index_content_main`
+* Removed `extendsTemplate()` method in the AdvancedMenu plugin. Now the template uses the normal `{extends}` action.
+* Moved template file of the AdvancedMenu plugin from the plugin directory to the normal index directory.
+* Moved content for the AdvancedMenu to separate include file.
+* Added new Smarty block for extending the complete AdvancedMenu template `frontend_plugins_advanced_menu_outer`.
+* Removed obsolete config options `displayFiltersOnDetailPage` and `propertySorting`
+* Add sub shop validation in \Shopware\Bundle\StoreFrontBundle\Service\Core\ListProductService
+* Add getProductsCategories function to \Shopware\Bundle\StoreFrontBundle\Service\CategoryServiceInterface and \Shopware\Bundle\StoreFrontBundle\Gateway\CategoryGatewayInterface which returns all categories of the provided products.
+* Removed duplicate content in `frontend/detail/data.tpl` for block prices
+* Marked unnecessary block `frontend_detail_data_price_info` as deprecated
+* Added seo title for landing pages
+* Added config option to force the selection of a payment method in checkout
+* Deprecated table column `s_filter_values.value_numeric`
+* `\Shopware\Bundle\SearchBundleDBAL\PriceHelper::getSelection()` now requires a `ProductContext` instead of a `ShopContext`
+* Changed type of `\Shopware\Models\Article\Detail::$active` to `boolean` (was `integer`)
+* Emotions can be assigned to multiple categories. Author: Christiansen <t.christiansen@reply.de> via GitHub.
+* Allow clearing caches after plugin update
+* Added Event `Shopware_Modules_Admin_Execute_Risk_Rule_[RuleName]` to provide checks for custom risk rules
+* Added sValidation parameter to the frontend/register/login.tpl url to redirect to same login page in case the login validation failed.
+* Default media albums are now editable in their name. The negative ids are still compatible and fix for development checks and assignments.
+* Add constants for default album ids in \Shopware\Models\Media\Album
+* Replaced `FuzzyLikeThisFieldQuery` with `MultiMatchQuery` in ES Product Search implementation. Should now be compatible to versions >= 1.6
+* Removed deprecated Google Analytics config form and s_core_plugins entry.
+* Removed config option `fuzzysearchresultsperpage`, use `articlesPerPage` instead.
+
 ## 5.1.1
 * Added new smarty block `frontend_detail_index_tabs_cross_selling` in the detail/ajax.tpl to prevent problems with custom themes
 * Renamed block `backend/order/view/detail/communication` in `backend/order/view/detail/configuration.js` to `backend/order/view/detail/configuration`. The name was duplicated in another file and was renamed to match the correct file.
@@ -206,7 +246,6 @@ In this document you will find a changelog of the important changes related to t
 ## 5.0.4
 * Change file extension of `Shopware_Components_Convert_Excel::generateXML` to .xls
 * Fixed jsonrenderer for backend order batchprocessing
-
 
 ## 5.0.3
 * The variant API resource now supports the getList method. It will return all variants with prices and attributes. You can optionally calculate the gross price by using the "considerTaxInput" parameter.

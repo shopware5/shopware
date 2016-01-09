@@ -7,20 +7,20 @@
 
     {$description = "{s name='IndexMetaDescriptionStandard'}{/s}"}
     {if $sCategoryContent.cmstext}
-        {$description = "{$sCategoryContent.cmstext|strip_tags|truncate:240|escape:'htmlall'}"}
+        {$description = "{$sCategoryContent.cmstext|strip_tags|truncate:240|escapeHtmlAttr}"}
     {elseif $sCategoryContent.metadescription}
-        {$description = "{$sCategoryContent.metadescription|strip_tags|escape:'htmlall'}"}
+        {$description = "{$sCategoryContent.metadescription|strip_tags|escapeHtmlAttr}"}
     {/if}
 
     <meta property="og:type" content="product" />
-    <meta property="og:site_name" content="{config name=sShopname}" />
-    <meta property="og:title" content="{$sCategoryContent.name|escape:'htmlall'}" />
-    <meta property="og:description" content="{$description}" />
+    <meta property="og:site_name" content="{{config name=sShopname}|escapeHtmlAttr}" />
+    <meta property="og:title" content="{$sCategoryContent.name|escapeHtmlAttr}" />
+    <meta property="og:description" content="{$description|escapeHtmlAttr}" />
 
     <meta name="twitter:card" content="product" />
-    <meta name="twitter:site" content="{config name=sShopname}" />
-    <meta name="twitter:title" content="{$sCategoryContent.name|escape:'htmlall'}" />
-    <meta name="twitter:description" content="{$description}" />
+    <meta name="twitter:site" content="{{config name=sShopname}|escapeHtmlAttr}" />
+    <meta name="twitter:title" content="{$sCategoryContent.name|escapeHtmlAttr}" />
+    <meta name="twitter:description" content="{$description|escapeHtmlAttr}" />
 
     {* Images *}
     {if $sCategoryContent.media.path}
@@ -66,7 +66,7 @@
 {* Title *}
 {block name='frontend_index_header_title'}{strip}
     {if $sCategoryContent.metaTitle}
-        {$sCategoryContent.metaTitle} | {config name=sShopname}
+        {$sCategoryContent.metaTitle} | {{config name=sShopname}|escapeHtmlAttr}
     {elseif $sCategoryContent.title}
         {$sCategoryContent.title}
     {else}

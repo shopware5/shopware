@@ -259,6 +259,7 @@ class Repository extends ModelRepository
             'c.name as name',
             'c.position as position',
             'c.parentId as parentId',
+            'c.mediaId as mediaId',
         ));
         $builder = $this->addChildrenCountSelect($builder);
         $builder = $this->addArticleCountSelect($builder);
@@ -332,6 +333,23 @@ class Repository extends ModelRepository
     }
 
     /**
+     * Returns the \Doctrine\ORM\Query to select the category detail information based on the category id
+     * Used for detail information in the api resource.
+     *
+     * @param $categoryId
+     *
+     * @return \Doctrine\ORM\Query
+     */
+    public function getDetailQueryWithoutArticles($categoryId)
+    {
+        $builder = $this->getDetailQueryBuilderWithoutArticles($categoryId);
+        $builder = $this->addChildrenCountSelect($builder);
+        $builder = $this->addArticleCountSelect($builder);
+
+        return $builder->getQuery();
+    }
+
+    /**
      * Helper function to create the query builder for the "getDetailQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
@@ -359,6 +377,35 @@ class Repository extends ModelRepository
             ->leftJoin('category.media', 'media')
             ->leftJoin('category.customerGroups', 'customerGroups')
             ->where('category.id = ?1')
+            ->setParameter(1, $categoryId);
+
+        return $builder;
+    }
+
+    /**
+     * Helper function to create the query builder for the "getDetailWithoutArticlesQuery" function.
+     * This function can be hooked to modify the query builder of the query object.
+     *
+     * @param $categoryId
+     *
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getDetailQueryBuilderWithoutArticles($categoryId)
+    {
+        $builder = $this->getEntityManager()->createQueryBuilder();
+        $builder->select(array(
+            'c',
+            'attribute',
+            'emotions',
+            'customerGroups',
+            'media'
+        ))
+            ->from($this->getEntityName(), 'c')
+            ->leftJoin('c.attribute', 'attribute')
+            ->leftJoin('c.emotions', 'emotions')
+            ->leftJoin('c.media', 'media')
+            ->leftJoin('c.customerGroups', 'customerGroups')
+            ->where('c.id = ?1')
             ->setParameter(1, $categoryId);
 
         return $builder;

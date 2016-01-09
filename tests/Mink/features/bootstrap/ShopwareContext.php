@@ -159,7 +159,7 @@ class ShopwareContext extends SubContext
             switch ($args['action']) {
                 //Artikel-Benachrichtigungen
                 case 'notify':
-                    $mask = '%sConfirm&sNotificationConfirmation=%s&sNotify=1';
+                    $mask = '%s&action=notifyConfirm&sNotificationConfirmation=%s&sNotify=1';
                     break;
 
                 //Artikel-Bewertungen
@@ -198,6 +198,14 @@ class ShopwareContext extends SubContext
     public function theConfigValueOfIs($configName, $value)
     {
         $this->featureContext->changeConfigValue($configName, $value);
+    }
+
+    /**
+     * @When the emotion world has loaded
+     */
+    public function theEmotionWorldHasLoaded()
+    {
+        $this->getSession()->wait(5000, "$('.emotion--element').length > 0");
     }
 
     /**

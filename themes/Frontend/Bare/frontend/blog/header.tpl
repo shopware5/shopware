@@ -3,9 +3,9 @@
 {* Title *}
 {block name='frontend_index_header_title'}{strip}
     {if $sArticle.metaTitle}
-        {$sArticle.metaTitle} | {config name=sShopname}
+        {$sArticle.metaTitle} | {{config name=sShopname}|escapeHtmlAttr}
     {elseif $sCategoryContent.metaTitle}
-        {$sCategoryContent.metaTitle}
+        {$sCategoryContent.metaTitle} | {{config name=sShopname}|escapeHtmlAttr}
     {elseif $sCategoryContent.title}
         {$sCategoryContent.title}
     {else}
@@ -16,17 +16,17 @@
 {block name='frontend_index_header_meta_tags_opengraph'}
     {if $sArticle}
         <meta property="og:type" content="article" />
-        <meta property="og:site_name" content="{config name=sShopname}" />
-        <meta property="og:title" content="{$sArticle.title|escape:'htmlall'}" />
-        <meta property="og:description" content="{$sArticle.description|strip_tags|truncate:240|escape:'htmlall'}" />
+        <meta property="og:site_name" content="{{config name=sShopname}|escapeHtmlAttr}" />
+        <meta property="og:title" content="{$sArticle.title|escapeHtmlAttr}" />
+        <meta property="og:description" content="{$sArticle.description|strip_tags|truncate:240|escapeHtmlAttr}" />
 
         {if $sArticle.author}
-        <meta property="article:author" content="{$sArticle.author.name|escape:'htmlall'}" />
+        <meta property="article:author" content="{$sArticle.author.name|escapeHtmlAttr}" />
         {/if}
 
         <meta name="twitter:card" content="summary" />
-        <meta name="twitter:title" content="{$sArticle.title|escape:'htmlall'}" />
-        <meta name="twitter:description" content="{$sArticle.description|strip_tags|truncate:240|escape:'htmlall'}" />
+        <meta name="twitter:title" content="{$sArticle.title|escapeHtmlAttr}" />
+        <meta name="twitter:description" content="{$sArticle.description|strip_tags|truncate:240|escapeHtmlAttr}" />
 
         {if $sArticle.media[0].source}
             <meta property="og:image" content="{$sArticle.media[0].source}" />

@@ -65,8 +65,6 @@ Ext.define('Shopware.apps.UserManager.controller.Roles', {
                 deleteRole: me.onDeleteRole
             }
         });
-
-
 	},
     /**
      * Delete a role from store
@@ -82,14 +80,17 @@ Ext.define('Shopware.apps.UserManager.controller.Roles', {
         message = Ext.String.format('{s name=roles_list/messageDeleteRole}Are you sure you want to delete the role [0]?{/s}', record.data.name);
         Ext.MessageBox.confirm('{s name=roles_list/titleDeleteRole}Delete role{/s}', message, function (response){
             if (response !== 'yes')  return false;
-            record.destroy({
-                success : function () {
-                    roleStore.load();
-                    Shopware.Notification.createGrowlMessage('{s name=user/Success}Successful{/s}', '{s name=roles_list/deletedSuccesfully}Role has been deleted{/s}', '{s name="user/userManager"}User Manager{/s}');
-                },
-                failure : function () {
-                    Shopware.Notification.createGrowlMessage('{s name=user/Error}Error{/s}', '{s name=roles_list/deletedError}An error has occured while deleting role{/s}', '{s name="user/userManager"}User Manager{/s}');
-                }
+
+            Shopware.app.Application.fireEvent('Shopware.ValidatePassword', function() {
+                record.destroy({
+                    success: function () {
+                        roleStore.load();
+                        Shopware.Notification.createGrowlMessage('{s name=user/Success}Successful{/s}', '{s name=roles_list/deletedSuccesfully}Role has been deleted{/s}', '{s name="user/userManager"}User Manager{/s}');
+                    },
+                    failure: function () {
+                        Shopware.Notification.createGrowlMessage('{s name=user/Error}Error{/s}', '{s name=roles_list/deletedError}An error has occured while deleting role{/s}', '{s name="user/userManager"}User Manager{/s}');
+                    }
+                });
             });
         });
     },
@@ -97,22 +98,23 @@ Ext.define('Shopware.apps.UserManager.controller.Roles', {
      * Add a new role to role management grid
      */
     onAddRole: function(){
-        var me = this;
-        var grid = me.getRolesGrid();
+        var me = this,
+            newRole,
+            grid = me.getRolesGrid(),
+            roles = me.getStore('Roles');
 
         grid.rowEditing.cancelEdit();
-        var roles = me.getStore('Roles');
-        var newRole = me.getModel('Roles').create(
-            {
-                name: '{s name=roles_list/enterName}Enter name...{/s}',
-                description: '{s name=roles_list/enterDescription}Enter description...{/s}',
-                source: 'custom',
-                enabled: true,
-                admin: false,
-                parentId: null
-            }
-        );
-        roles.insert(0,newRole);
+
+        newRole = me.getModel('Roles').create({
+            name: '{s name=roles_list/enterName}Enter name...{/s}',
+            description: '{s name=roles_list/enterDescription}Enter description...{/s}',
+            source: 'custom',
+            enabled: true,
+            admin: false,
+            parentId: null
+        });
+
+        roles.insert(0, newRole);
         grid.rowEditing.startEdit(0, 0);
     }
 });

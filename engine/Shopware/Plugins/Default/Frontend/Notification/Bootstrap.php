@@ -159,7 +159,8 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
                         'sArticle' => $id,
                         'sNotificationConfirmation' => $hash,
                         'sNotify' => '1',
-                        'action' => 'notifyConfirm'
+                        'action' => 'notifyConfirm',
+                        'number' => $notifyOrderNumber
                     ));
 
                     $name = Shopware()->Modules()->Articles()->sGetArticleNameByOrderNumber($notifyOrderNumber);

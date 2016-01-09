@@ -307,6 +307,13 @@ class Category extends ModelEntity
     private $added;
 
     /**
+     * @var int $mediaId
+     *
+     * @ORM\Column(name="mediaID", type="integer", nullable=true)
+     */
+    private $mediaId;
+
+    /**
      * INVERSE SIDE
      *
      * @var \Shopware\Models\Attribute\Category
@@ -1043,5 +1050,13 @@ class Category extends ModelEntity
     public function setStream(ProductStream $stream = null)
     {
         $this->stream = $stream;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMediaId()
+    {
+        return $this->mediaId;
     }
 }
