@@ -217,9 +217,16 @@ class Shopware_Plugins_Core_Debug_Bootstrap extends Shopware_Components_Plugin_B
      */
     public function getHandlers(\Enlight_Controller_Request_Request $request)
     {
+        $handlerRegister = Enlight()->Events()->filter(
+            'Shopware_Plugins_Core_Debug_Bootstrap_FilterHandlerRegister',
+            [ $this->get('monolog.handler.firephp') ]
+        );
+
         $handlers = array();
-        if ($this->get('monolog.handler.firephp')->acceptsRequest($request)) {
-            $handlers[] = $this->get('monolog.handler.firephp');
+        foreach ($handlerRegister as $handler) {
+            if ($handler instanceof HandlerInterface && $handler->acceptsRequest($request)) {
+                $handlers[] = $handler;
+            }
         }
 
         return $handlers;
