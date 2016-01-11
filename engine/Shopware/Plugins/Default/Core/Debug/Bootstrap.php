@@ -179,14 +179,9 @@ class Shopware_Plugins_Core_Debug_Bootstrap extends Shopware_Components_Plugin_B
             $collectors[] = new EventCollector($eventManager, $utils);
         }
 
-        $collectors = Enlight()->Events()->filter(
+        $collectors = $this->get('events')->filter(
             'Shopware_Plugins_Core_Debug_Bootstrap_FilterCollectors',
-            $collectors,
-            array(
-                'eventManager' => $eventManager,
-                'utils' => $utils,
-                'errorHandler' => $errorHandler
-            )
+            $collectors
         );
 
         foreach ($collectors as $collector) {
