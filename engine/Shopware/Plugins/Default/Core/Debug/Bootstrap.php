@@ -22,6 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Monolog\Handler\HandlerInterface;
 use Shopware\Components\Logger;
 use Shopware\Plugin\Debug\Components\ControllerCollector;
@@ -229,9 +230,13 @@ class Shopware_Plugins_Core_Debug_Bootstrap extends Shopware_Components_Plugin_B
      */
     public function getHandlers(\Enlight_Controller_Request_Request $request)
     {
-        $handlerRegister = Enlight()->Events()->filter(
+        $handlerRegister = new ArrayCollection([
+            $this->get('monolog.handler.firephp')
+        ]);
+
+        $handlerRegister = $this->get('events')->collect(
             'Shopware_Plugins_Core_Debug_Bootstrap_FilterHandlerRegister',
-            [ $this->get('monolog.handler.firephp') ]
+            $handlerRegister
         );
 
         $handlers = array();
