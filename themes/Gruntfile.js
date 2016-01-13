@@ -6,10 +6,7 @@ module.exports = function (grunt) {
         jsFiles = [],
         jsTargetFile = {},
         content = '',
-        variables = {
-            'font-directory': '"../../themes/Frontend/Responsive/frontend/_public/src/fonts"',
-            'OpenSansPath': '"../../themes/Frontend/Responsive/frontend/_public/vendors/fonts/open-sans-fontface"'
-        };
+        variables = {};
 
     lessTargetFile['../' + config.lessTarget] = '../web/cache/all.less';
 
@@ -51,7 +48,8 @@ module.exports = function (grunt) {
             production: {
                 options: {
                     compress: true,
-                    modifyVars: variables
+                    modifyVars: variables,
+                    relativeUrls: true
                 },
                 files: lessTargetFile
             },
@@ -59,6 +57,7 @@ module.exports = function (grunt) {
                 options: {
                     modifyVars: variables,
                     dumpLineNumbers: 'all',
+                    relativeUrls: true,
                     sourceMap: true,
                     sourceMapFileInline: true
                 },
