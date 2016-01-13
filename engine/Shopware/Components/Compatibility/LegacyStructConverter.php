@@ -389,12 +389,21 @@ class LegacyStructConverter
         }
 
         foreach ($product->getDownloads() as $download) {
-            $data['sDownloads'][] = array(
+            $temp = array(
                 'id' => $download->getId(),
                 'description' => $download->getDescription(),
                 'filename' => $this->mediaService->getUrl($download->getFile()),
-                'size' => $download->getSize()
+                'size' => $download->getSize(),
             );
+
+            $attributes = [];
+
+            if ($download->hasAttribute('core')) {
+                $attributes = $download->getAttribute('core')->toArray();
+            }
+
+            $temp['attributes'] = $attributes;
+            $data['sDownloads'][] = $temp;
         }
 
         foreach ($product->getLinks() as $link) {
