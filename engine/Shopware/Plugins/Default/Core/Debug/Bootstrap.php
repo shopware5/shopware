@@ -236,7 +236,7 @@ class Shopware_Plugins_Core_Debug_Bootstrap extends Shopware_Components_Plugin_B
 
         $handlers = array();
         foreach ($handlerRegister as $handler) {
-            if ($handler instanceof HandlerInterface && $handler->acceptsRequest($request)) {
+            if ($handler instanceof HandlerInterface) {
                 $handlers[] = $handler;
             }
         }
