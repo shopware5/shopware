@@ -189,38 +189,4 @@ class sCoreTest extends Enlight_Components_Test_Controller_TestCase
             $this->assertEquals(strtolower($baseUrl.$expectedPath), $this->module->sRewriteLink('?'.$path, 'testTitle'));
         }
     }
-
-    /**
-     * sCore::rewriteLink is just an alias for sCore::sRewriteLink, using the same arguments
-     * with different arrangement
-     *
-     * @covers sCore::rewriteLink
-     */
-    public function testRewriteLink()
-    {
-        // Call dispatch as we need the Router to be available inside sCore
-        $this->dispatch('/');
-
-        $baseUrl = $this->module->sRewriteLink();
-
-        // Without arguments, we expect the base url
-        $this->assertInternalType('string', $baseUrl);
-        $this->assertGreaterThan(0, strlen($baseUrl));
-
-        // Fetch all rows and test them
-        // Then test again, but with "title" argument
-        $paths = Shopware()->Db()->fetchCol(
-            "SELECT org_path FROM s_core_rewrite_urls WHERE subshopID = ?",
-            array(Shopware()->Shop()->getId())
-        );
-        foreach ($paths as $path) {
-            $expectedPath = Shopware()->Db()->fetchOne(
-                "SELECT path FROM s_core_rewrite_urls WHERE subshopID = ? AND org_path = ? ORDER BY main DESC LIMIT 1",
-                array(Shopware()->Shop()->getId(), $path)
-            );
-
-            $this->assertEquals(strtolower($baseUrl.$expectedPath), $this->module->sRewriteLink('?'.$path));
-            $this->assertEquals(strtolower($baseUrl.$expectedPath), $this->module->sRewriteLink('?'.$path, 'some test title'));
-        }
-    }
 }
