@@ -1,6 +1,9 @@
 # Shopware Upgrade Information
 In this document you will find a changelog of the important changes related to the code base of Shopware.
 
+## 5.1.3
+* Switch Grunt to relativeUrls to unify the paths to less.php
+
 ## 5.1.2
 * Out-of-stock variants on the detail page are now selectable
 * `ProductNumberService::getAvailableNumber()` now returns the provided product variant to allow deep linking of out-of-stock variants
@@ -982,5 +985,3 @@ For further information have a look at the following wiki article:
 
 - GER: <http://wiki.shopware.de/_detail_1342.html>
 - ENG: <http://en.wiki.shopware.de/_detail_1398.html>
-
-
