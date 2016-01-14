@@ -261,9 +261,10 @@ class %className% extends ModelEntity
             $this->tableMapping = $this->createTableMapping();
         }
 
-        $this->createTargetDirectory();
-        if (!file_exists($this->getPath())) {
-            return array('success' => false, 'error' => self::CREATE_TARGET_DIRECTORY_FAILED);
+        try {
+            $this->createTargetDirectory($this->getPath());
+        } catch (\Exception $e) {
+            return array('success' => false, 'error' => self::CREATE_TARGET_DIRECTORY_FAILED, 'message' => $e->getMessage());
         }
 
         $errors = array();
@@ -316,13 +317,17 @@ class %className% extends ModelEntity
 
     /**
      * Creates a new directory for the models which will be generated.
+     * @param string $dir
      */
-    protected function createTargetDirectory()
+    protected function createTargetDirectory($dir)
     {
-        if (file_exists($this->getPath())) {
-            return true;
+        if (!is_dir($dir)) {
+            if (false === @mkdir($dir, 0777, true) && !is_dir($dir)) {
+                throw new \RuntimeException(sprintf("Unable to create directory (%s)\n", $dir));
+            }
+        } elseif (!is_writable($dir)) {
+            throw new \RuntimeException(sprintf("Unable to write in directory (%s)\n", $dir));
         }
-        return mkdir($this->getPath(), 0777);
     }
 
     /**
