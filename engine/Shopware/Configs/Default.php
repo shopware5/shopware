@@ -137,7 +137,8 @@ return array_replace_recursive([
     ],
     'hook' => [
         'proxyDir' => $this->getCacheDir().'/proxies',
-        'proxyNamespace' => $this->App() . '_Proxies'
+        'proxyNamespace' => $this->App() . '_Proxies',
+        'proxyFilePermissions' => 0644
     ],
     'model' => [
         'autoGenerateProxyClasses' => false,
