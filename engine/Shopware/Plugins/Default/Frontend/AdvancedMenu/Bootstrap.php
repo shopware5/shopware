@@ -205,7 +205,12 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
         $view->assign('sAdvancedMenu', $menu);
         $view->assign('columnAmount', $config->columnAmount);
 
-        $view->addTemplateDir($this->Path() . 'Views');
+        $version = Shopware()->Shop()->getTemplate()->getVersion();
+        if ($version >= 3) {
+            $view->addTemplateDir($this->Path() . 'Views');
+        } else {
+            $view->extendsTemplate('frontend/plugins/advanced_menu/index.tpl');
+        }
     }
 
     /**
