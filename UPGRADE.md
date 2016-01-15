@@ -36,6 +36,11 @@ In this document you will find a changelog of the important changes related to t
     * Removed the file `vendors/less/open-sans-fontface/open-sans.less`. It's now located under `public/src/less/_components/fonts.less`
 * Deprecated `Shopware_Bootstrap` and `Enlight_Bootstrap` commonly accesed by `Shopware()->Bootstrap()`.
 
+## 5.1.3
+* Switch Grunt to relativeUrls to unify the paths to less.php
+* Deprecated `Enlight_Application::getOption()` and `Enlight_Application::getOptions`
+* Renamed smarty block from `rontend_index_start` to `frontend_index_start` in `themes/Frontend/Bare/frontend/sitemap/index.tpl`
+
 ## 5.1.2
 * Out-of-stock variants on the detail page are now selectable
 * `ProductNumberService::getAvailableNumber()` now returns the provided product variant to allow deep linking of out-of-stock variants

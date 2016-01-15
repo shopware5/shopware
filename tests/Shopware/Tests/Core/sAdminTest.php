@@ -2272,7 +2272,6 @@ class sAdminTest extends PHPUnit_Framework_TestCase
      * @covers sAdmin::sRiskARTICLESFROM
      * @covers sAdmin::sRiskLASTORDERSLESS
      * @covers sAdmin::sRiskPREGSTREET
-     * @covers sAdmin::sRiskBILLINGPREGSTREET
      * @covers sAdmin::sRiskDIFFER
      * @covers sAdmin::sRiskCUSTOMERNR
      * @covers sAdmin::sRiskLASTNAME

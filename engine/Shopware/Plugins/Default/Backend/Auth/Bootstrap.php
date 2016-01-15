@@ -457,7 +457,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
      */
     private function getSessionOptions()
     {
-        $options = $this->Application()->getOption('backendSession', array());
+        $options = Shopware()->Container()->getParameter('shopware.backendsession');
 
         if (!isset($options['cookie_path']) && $this->request !== null) {
             $options['cookie_path'] = rtrim($this->request->getBaseUrl(), '/').'/backend/';

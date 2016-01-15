@@ -1449,7 +1449,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     {
         Enlight()->Plugins()->Controller()->Json()->setPadding();
 
-        $this->View()->sBasketQuantity = $this->basket->sCountBasket();
         $amount = $this->basket->sGetAmount();
         $quantity = $this->basket->sCountBasket();
 
