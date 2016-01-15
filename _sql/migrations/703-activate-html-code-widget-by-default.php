@@ -3,47 +3,19 @@ class Migrations_Migration703 extends Shopware\Components\Migrations\AbstractMig
 {
     public function up($modus)
     {
-        if ($modus !== self::MODUS_INSTALL) {
-            return;
-        }
-        $this->insertPlugin();
-        $this->fetchPluginId();
-        $this->insertSubscribers();
+        $this->renameHtmlElement();
         $this->addComponentToLibrary();
         $this->fetchComponentId();
         $this->addComponentFields();
     }
 
-    private function insertPlugin()
+    private function renameHtmlElement()
     {
         $sql = <<<SQL
-INSERT INTO `s_core_plugins` (`namespace`, `name`, `label`, `source`, `active`, `added`, `installation_date`, `update_date`, `refresh_date`, `author`, `copyright`, `version`, `capability_update`, `capability_install`, `capability_enable`)
-VALUES('Backend', 'SwagHtmlCodeWidget', 'HTML Code Widget', 'Default', 1, NOW(), NOW(), NOW(), NOW(), 'shopware AG', 'Copyright © 2015, shopware AG', '1.0.1', 1, 1, 1);
+UPDATE `s_library_component` SET `name` = 'Text Element'
+WHERE `x_type` = 'emotion-components-html-element' AND pluginID IS NULL
 SQL;
-        $this->addSql($sql);
-    }
 
-    private function fetchPluginId()
-    {
-        $sql = <<<SQL
-SET @pluginId = (
-  SELECT id
-  FROM s_core_plugins
-  WHERE name LIKE "SwagHtmlCodeWidget"
-  AND author LIKE "shopware AG"
-  LIMIT 1
-);
-SQL;
-        $this->addSql($sql);
-    }
-
-    private function insertSubscribers()
-    {
-        $sql = <<<SQL
-INSERT INTO `s_core_subscribes` (`subscribe`, `type`, `listener`, `pluginID`, `position`)
-VALUES ('Enlight_Controller_Action_PostDispatchSecure_Widgets_Emotion', 0, 'Shopware_Plugins_Backend_SwagHtmlCodeWidget_Bootstrap::extendsEmotionTemplates', @pluginId, 0),
-('Enlight_Controller_Action_PostDispatchSecure_Backend_Emotion', 0, 'Shopware_Plugins_Backend_SwagHtmlCodeWidget_Bootstrap::extendsEmotionTemplates', @pluginId, 0);
-SQL;
         $this->addSql($sql);
     }
 
@@ -51,7 +23,7 @@ SQL;
     {
         $sql = <<<SQL
 INSERT INTO `s_library_component` (`name`, `x_type`, `convert_function`, `description`, `template`, `cls`, `pluginID`)
-VALUES ('HTML Code Widget', 'emotion-html-code', NULL, '', 'component_html_code', 'emotion-html-code-widget', @pluginId);
+VALUES ('Code Element', 'emotion-components-html-code', NULL, '', 'component_html_code', 'html-code-element', null);
 SQL;
 
         $this->addSql($sql);
@@ -63,7 +35,7 @@ SQL;
 SET @componentId = (
   SELECT id
   FROM s_library_component
-  WHERE `x_type` LIKE "emotion-html-code"
+  WHERE `x_type` LIKE "emotion-components-html-code"
   AND `template` LIKE "component_html_code"
   LIMIT 1
 );
