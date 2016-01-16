@@ -53,6 +53,8 @@ use Shopware\Components\QueryAliasMapper;
 
 class PropertyFacetHandler implements HandlerInterface, ResultHydratorInterface
 {
+    const AGGREGATION_SIZE = 5000;
+    
     /**
      * @var QueryAliasMapper
      */
@@ -118,6 +120,7 @@ class PropertyFacetHandler implements HandlerInterface, ResultHydratorInterface
     ) {
         $aggregation = new TermsAggregation('properties');
         $aggregation->setField('properties.id');
+        $aggregation->addParameter('size', self::AGGREGATION_SIZE);
         $search->addAggregation($aggregation);
     }
 
