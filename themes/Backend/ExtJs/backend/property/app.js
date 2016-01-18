@@ -77,7 +77,7 @@ Ext.define('Shopware.apps.Property', {
      * Required models
      * @array
      */
-    models: [ 'Option', 'Group','SetAssign', 'Set', 'Attribute' ],
+    models: [ 'Option', 'Group','SetAssign', 'Set', 'Attribute', 'GroupAttribute' ],
 
     /**
      * Required views
