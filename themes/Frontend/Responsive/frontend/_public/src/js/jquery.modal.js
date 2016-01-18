@@ -464,14 +464,16 @@
                 hasTitle = me._$title.text().length > 0,
                 headerHeight;
 
+            height = (typeof height === 'string' && !(/^\d+$/.test(height))) ? height : window.parseInt(height, 10);
+
             if(hasTitle) {
                 headerHeight = window.parseInt(me._$header.css('height'), 10);
-                me._$content.css('height', (typeof height === 'string' && !(/^\d+$/.test(height))) ? (height - headerHeight) : (window.parseInt(height, 10) - headerHeight));
+                me._$content.css('height', (height - headerHeight));
             } else {
                 me._$content.css('height', '100%');
             }
 
-            me._$modalBox.css('height', (typeof height === 'string' && !(/^\d+$/.test(height))) ? height : window.parseInt(height, 10));
+            me._$modalBox.css('height', height);
             $.publish('plugin/swModal/onSetHeight', [ me ]);
         },
 
