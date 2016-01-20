@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundleES\ConditionHandler;
 
-use ONGR\ElasticsearchDSL\Filter\RangeFilter;
+use ONGR\ElasticsearchDSL\Query\RangeQuery;
 use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\SearchBundle\Condition\ReleaseDateCondition;
 use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
@@ -79,7 +79,7 @@ class ReleaseDateConditionHandler implements HandlerInterface
                 return;
         }
 
-        $filter = new RangeFilter('formattedReleaseDate', $range);
+        $filter = new RangeQuery('formattedReleaseDate', $range);
 
         if ($criteria->hasBaseCondition($criteriaPart->getName())) {
             $search->addFilter($filter);

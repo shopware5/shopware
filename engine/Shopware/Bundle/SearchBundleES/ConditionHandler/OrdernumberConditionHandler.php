@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundleES\ConditionHandler;
 
-use ONGR\ElasticsearchDSL\Filter\TermsFilter;
+use ONGR\ElasticsearchDSL\Query\TermsQuery;
 use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\SearchBundle\Condition\OrdernumberCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
@@ -57,7 +57,7 @@ class OrdernumberConditionHandler implements HandlerInterface
         ShopContextInterface $context
     ) {
         /** @var OrdernumberCondition $criteriaPart */
-        $filter = new TermsFilter('number', $criteriaPart->getOrdernumbers());
+        $filter = new TermsQuery('number', $criteriaPart->getOrdernumbers());
 
         if ($criteria->hasBaseCondition($criteriaPart->getName())) {
             $search->addFilter($filter);

@@ -26,12 +26,12 @@ namespace Shopware\Bundle\SearchBundleES;
 
 use Doctrine\DBAL\Connection;
 use Elasticsearch\Client;
-use ONGR\ElasticsearchDSL\Filter\IdsFilter;
 use ONGR\ElasticsearchDSL\Filter\NotFilter;
 use ONGR\ElasticsearchDSL\Filter\TermFilter;
-use ONGR\ElasticsearchDSL\Filter\TermsFilter;
 use ONGR\ElasticsearchDSL\Query\BoolQuery;
+use ONGR\ElasticsearchDSL\Query\IdsQuery;
 use ONGR\ElasticsearchDSL\Query\MultiMatchQuery;
+use ONGR\ElasticsearchDSL\Query\TermQuery;
 use ONGR\ElasticsearchDSL\Query\TermsQuery;
 use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\ESIndexingBundle\IndexFactoryInterface;
@@ -264,7 +264,7 @@ class SimilarProductsService implements SimilarProductsServiceInterface
     protected function getCustomerGroupFilter(Struct\Customer\Group $customerGroup)
     {
         return new NotFilter(
-            new TermsFilter(
+            new TermsQuery(
                 'blockedCustomerGroupIds',
                 [$customerGroup->getId()]
             )
@@ -277,7 +277,7 @@ class SimilarProductsService implements SimilarProductsServiceInterface
      */
     protected function getProductNumberFilter(Struct\BaseProduct $product)
     {
-        return new NotFilter(new IdsFilter([$product->getNumber()]));
+        return new NotFilter(new IdsQuery([$product->getNumber()]));
     }
 
     /**
@@ -286,7 +286,7 @@ class SimilarProductsService implements SimilarProductsServiceInterface
      */
     private function getCategoryFilter(Struct\Category $category)
     {
-        return new TermFilter('categoryIds', $category->getId());
+        return new TermQuery('categoryIds', $category->getId());
     }
 
     /**
