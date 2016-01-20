@@ -48,7 +48,16 @@
                         {* Discount price content *}
                         {block name='frontend_detail_data_pseudo_price_discount_content'}
                             <span class="content--discount">
+
+                                {block name='frontend_detail_data_pseudo_price_discount_before'}
+                                    {s name="priceDiscountLabel"}{/s}
+                                {/block}
+
                                 <span class="price--line-through">{$sArticle.pseudoprice|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}</span>
+
+                                {block name='frontend_detail_data_pseudo_price_discount_after'}
+                                    {s name="priceDiscountInfo"}{/s}
+                                {/block}
 
                                 {* Percentage discount *}
                                 {block name='frontend_detail_data_pseudo_price_discount_content_percentage'}
