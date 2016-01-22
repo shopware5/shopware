@@ -8,8 +8,8 @@
     {$description = "{s name='IndexMetaDescriptionStandard'}{/s}"}
     {if $sCategoryContent.cmstext}
         {$description = "{$sCategoryContent.cmstext|strip_tags|truncate:240|escapeHtmlAttr}"}
-    {elseif $sCategoryContent.metadescription}
-        {$description = "{$sCategoryContent.metadescription|strip_tags|escapeHtmlAttr}"}
+    {elseif $sCategoryContent.metaDescription}
+        {$description = "{$sCategoryContent.metaDescription|strip_tags|escapeHtmlAttr}"}
     {/if}
 
     <meta property="og:type" content="product" />
@@ -39,7 +39,7 @@
 {/block}
 
 {* Description *}
-{block name="frontend_index_header_meta_description"}{if $sCategoryContent.metadescription}{$sCategoryContent.metadescription|strip_tags|escape}{else}{s name="IndexMetaDescriptionStandard"}{/s}{/if}{/block}
+{block name="frontend_index_header_meta_description"}{if $sCategoryContent.metaDescription}{$sCategoryContent.metaDescription|strip_tags|escape}{else}{s name="IndexMetaDescriptionStandard"}{/s}{/if}{/block}
 
 {* Canonical link *}
 {block name='frontend_index_header_canonical'}
