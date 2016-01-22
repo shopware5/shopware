@@ -81,7 +81,10 @@
             'pagingBottomSelector': '.listing--bottom-paging',
 
             /** @string listingActionsWrapper - this class will be cloned and used as a actions wrapper for the load more and previous button */
-            'listingActionsWrapper': 'infinite--actions'
+            'listingActionsWrapper': 'infinite--actions',
+
+            /** @string ajaxUrl - this string will be used as url for the ajax-call to load the articles */
+            ajaxUrl: window.controller.ajax_listing || null
         },
 
         /**
@@ -99,7 +102,7 @@
             me.applyDataAttributes();
 
             // Check if plugin is enabled
-            if(!me.opts.enabled || !me.$el.is(':visible') || !me.opts.categoryId) {
+            if(!me.opts.enabled || !me.$el.is(':visible') || !me.opts.categoryId || me.opts.ajaxUrl === null) {
                 return;
             }
 
@@ -145,7 +148,7 @@
 
             // Ajax configuration
             me.ajax = {
-                'url': window.controller.ajax_listing,
+                'url': me.opts.ajaxUrl,
                 'params': parseQueryString(window.location.href)
             };
 
