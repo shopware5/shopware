@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\SearchBundleES\ConditionHandler;
 
 use ONGR\ElasticsearchDSL\Filter\NotFilter;
-use ONGR\ElasticsearchDSL\Filter\TermsFilter;
+use ONGR\ElasticsearchDSL\Query\TermsQuery;
 use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundle\Condition\CustomerGroupCondition;
@@ -54,7 +54,7 @@ class CustomerGroupConditionHandler implements HandlerInterface
     ) {
         /** @var CustomerGroupCondition $criteriaPart */
         $filter = new NotFilter(
-            new TermsFilter('blockedCustomerGroupIds', $criteriaPart->getCustomerGroupIds())
+            new TermsQuery('blockedCustomerGroupIds', $criteriaPart->getCustomerGroupIds())
         );
 
         if ($criteria->hasBaseCondition($criteriaPart->getName())) {

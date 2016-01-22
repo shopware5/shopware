@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundleES\ConditionHandler;
 
-use ONGR\ElasticsearchDSL\Filter\TermFilter;
+use ONGR\ElasticsearchDSL\Query\TermQuery;
 use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
 use Shopware\Bundle\SearchBundle\Condition\ImmediateDeliveryCondition;
@@ -51,7 +51,7 @@ class ImmediateDeliveryConditionHandler implements HandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-        $filter = new TermFilter('hasAvailableVariant', 1);
+        $filter = new TermQuery('hasAvailableVariant', 1);
 
         /** @var ImmediateDeliveryCondition $criteriaPart */
         if ($criteria->hasBaseCondition($criteriaPart->getName())) {

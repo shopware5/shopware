@@ -26,7 +26,7 @@ namespace Shopware\Bundle\SearchBundleES\FacetHandler;
 
 use ONGR\ElasticsearchDSL\Aggregation\FilterAggregation;
 use ONGR\ElasticsearchDSL\Aggregation\ValueCountAggregation;
-use ONGR\ElasticsearchDSL\Filter\TermFilter;
+use ONGR\ElasticsearchDSL\Query\TermQuery;
 use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\SearchBundleES\HandlerInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
@@ -83,7 +83,7 @@ class ImmediateDeliveryFacetHandler implements HandlerInterface, ResultHydratorI
         $aggregation->setField('hasAvailableVariant');
 
         $filter = new FilterAggregation('has_available_variant_filter');
-        $filter->setFilter(new TermFilter('hasAvailableVariant', 1));
+        $filter->setFilter(new TermQuery('hasAvailableVariant', 1));
         $filter->addAggregation($aggregation);
 
         $search->addAggregation($filter);
