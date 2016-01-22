@@ -100,17 +100,6 @@ class Shopware_Controllers_Widgets_Recommendation extends Enlight_Controller_Act
         $products = $this->get('shopware_storefront.list_product_service')
             ->getList($numbers, $context);
 
-        $articles = $this->get('legacy_struct_converter')->convertListProductStructList($products);
-
-        $result = [];
-        foreach ($articles as $article) {
-            $promotion = $this->get('legacy_event_manager')->firePromotionByIdEvents($article, null, $this->articleModule);
-
-            if ($promotion) {
-                $result[] = $promotion;
-            }
-        }
-
-        return $result;
+        return $this->get('legacy_struct_converter')->convertListProductStructList($products);
     }
 }

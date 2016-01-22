@@ -705,20 +705,7 @@ class sArticles
         $criteria->addSorting(new PopularitySorting(SortingInterface::SORT_DESC));
 
         $result = $this->searchService->search($criteria, $context);
-
-        $articles = [];
-        foreach ($result->getProducts() as $product) {
-            $article = $this->legacyStructConverter->convertListProductStruct($product);
-            $article = $this->legacyEventManager->firePromotionByIdEvents(
-                $article,
-                $category,
-                $this
-            );
-
-            if ($article) {
-                $articles[] = $article;
-            }
-        }
+        $articles = $this->legacyStructConverter->convertListProductStructList($result->getProducts());
 
         Enlight()->Events()->notify(
             'Shopware_Modules_Articles_GetArticleCharts',
@@ -1395,12 +1382,6 @@ class sArticles
         if (!$result) {
             return false;
         }
-
-        $result = $this->legacyEventManager->firePromotionByIdEvents(
-            $result,
-            $category,
-            $this
-        );
 
         return $result;
     }
@@ -2265,11 +2246,6 @@ class sArticles
                 $article["linkDetails"] .= "&sCategory=$categoryId";
             }
 
-            if (isset($article['sVoteAverange']) && !empty($article['sVoteAverange'])) {
-                // the listing pages use a 0 - 5 based average
-                $article['sVoteAverange']['averange'] = $article['sVoteAverange']['averange'] / 2;
-            }
-
             if ($this->config->get('useShortDescriptionInListing') && strlen($article['description']) > 5) {
                 $article["description_long"] = $article['description'];
             }
@@ -2306,25 +2282,6 @@ class sArticles
     private function getLegacyProduct(Product $product, $categoryId, array $selection)
     {
         $data = $this->legacyStructConverter->convertProductStruct($product);
-
-        $relatedArticles = array();
-        foreach ($data['sRelatedArticles'] as $related) {
-            $related = $this->legacyEventManager->firePromotionByIdEvents($related, null, $this);
-            if ($related) {
-                $relatedArticles[] = $related;
-            }
-        }
-        $data['sRelatedArticles'] = $relatedArticles;
-
-        $similarArticles = array();
-        foreach ($data['sSimilarArticles'] as $similar) {
-            $similar = $this->legacyEventManager->firePromotionByIdEvents($similar, null, $this);
-            if ($similar) {
-                $similarArticles[] = $similar;
-            }
-        }
-        $data['sSimilarArticles'] = $similarArticles;
-
         $data['categoryID'] = $categoryId;
 
         if ($product->hasConfigurator()) {

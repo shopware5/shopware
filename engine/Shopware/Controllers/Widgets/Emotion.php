@@ -242,11 +242,6 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             $data = array_merge($data, $this->articleByNumber($data["article"]));
         }
 
-        if (isset($data['sVoteAverange']) && !empty($data['sVoteAverange'])) {
-            // the listing pages use a 0 - 5 based average
-            $data['sVoteAverange']['averange'] = $data['sVoteAverange']['averange'] / 2;
-        }
-
         return $data;
     }
 
@@ -442,11 +437,6 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             }
         }
 
-        // @deprecated since 5.1 will be removed in 5.2
-        if (!is_array($data['image'])) {
-            $data['image'] = $mediaService->getUrl($data['image']);
-        }
-
         return $data;
     }
 
@@ -535,9 +525,6 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
                 'width' => $mediaData['width'],
                 'height' => $mediaData['height']
             );
-
-            // @deprecated since 5.1 will be removed in 5.2
-            $data['file'] = $mediaService->getUrl($data['file']);
         }
 
         $data['bannerMapping'] = $mappings;
@@ -778,7 +765,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
         /** @var $result ProductSearchResult */
         $result = Shopware()->Container()->get('shopware_search.product_search')->search($criteria, $context);
-        $data = $this->mapData($result, $category);
+        $data = Shopware()->Container()->get('legacy_struct_converter')->convertListProductStructList($result->getProducts());
 
         $count = $result->getTotalCount();
         if ($limit != 0) {
@@ -857,7 +844,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
         /** @var $result ProductSearchResult */
         $result = Shopware()->Container()->get('shopware_search.product_search')->search($criteria, $context);
-        $data = $this->mapData($result, $category);
+        $data = Shopware()->Container()->get('legacy_struct_converter')->convertListProductStructList($result->getProducts());
 
         $count = $result->getTotalCount();
 
@@ -897,30 +884,6 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $this->View()->assign('pages', $values["pages"] > $maxPages ? $maxPages : $values["pages"]);
         $this->View()->assign('sPerPage', $limit);
         $this->View()->assign('productBoxLayout', $this->Request()->getParam('productBoxLayout', 'emotion'));
-    }
-
-    /**
-     * @param ProductSearchResult $result
-     * @param int $category
-     * @return array
-     */
-    private function mapData(ProductSearchResult $result, $category)
-    {
-        $data = [];
-        foreach ($result->getProducts() as $product) {
-            $article = Shopware()->Container()->get('legacy_struct_converter')->convertListProductStruct($product);
-            $article = Shopware()->Container()->get('legacy_event_manager')->firePromotionByIdEvents(
-                $article,
-                $category,
-                Shopware()->Modules()->Articles()
-            );
-
-            if ($article) {
-                $data[] = $article;
-            }
-        }
-
-        return $data;
     }
 
     /**

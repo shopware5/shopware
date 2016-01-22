@@ -35,6 +35,43 @@ In this document you will find a changelog of the important changes related to t
     * The dependencies can now be installed using the command: `npm install && npm run build`
     * Removed the file `vendors/less/open-sans-fontface/open-sans.less`. It's now located under `public/src/less/_components/fonts.less`
 * Deprecated `Shopware_Bootstrap` and `Enlight_Bootstrap` commonly accesed by `Shopware()->Bootstrap()`.
+* Removed deprecated methods and variables:
+    * `sArticle.sVoteAverange` in product listings
+    * `sNote.sVoteAverange` in note listing
+    * `blog.media.path`
+    * Removed methods Shopware\Models\Menu\Repository::addItem() and Shopware\Models\Menu\Repository::save()
+    * `file` property of banner mappings
+    * Removed method sOrder::sManageEsdOrder()
+    * `sBanner.img` variable
+    * emotion category teaser `image` property
+* Removed the following events:
+    * `sArticles::sGetCheapestPrice::replace`
+    * `sArticles::sGetCheapestPrice::after`
+    * `sArticles::sCalculatingPrice::replace`
+    * `sArticles::sCalculatingPrice::replace`
+    * `sArticles::getArticleListingCover::replace`
+    * `sArticles::getArticleListingCover::after`
+    * `sArticles::calculateCheapestBasePriceData::replace`
+    * `sArticles::calculateCheapestBasePriceData::after`
+    * `sArticles::sGetArticleProperties::replace`
+    * `sArticles::sGetArticleProperties::after`
+    * `sArticles::sGetArticlePictures::replace`
+    * `sArticles::sGetArticlePictures::after`
+    * `sArticles::sGetPricegroupDiscount::replace`
+    * `sArticles::sGetPricegroupDiscount::after`
+    * `sArticles::sGetUnit::replace`
+    * `sArticles::sGetUnit::after`
+    * `sArticles::sGetArticlesAverangeVote::replace`
+    * `sArticles::sGetArticlesAverangeVote::after`
+    * `sArticles::sGetArticlesVotes::replace`
+    * `sArticles::sGetArticlesVotes::after`
+    * `Shopware_Modules_Articles_GetPromotionById_FilterResult`
+    * `Shopware_Modules_Articles_GetArticleById_FilterArticle`
+* The following article arrays are now indexed by their order number
+    * top seller
+    * emotion slider data
+    * recommendation data (also bought and also viewed)
+    * similar and related articles
 
 ## 5.1.3
 * Switch Grunt to relativeUrls to unify the paths to less.php

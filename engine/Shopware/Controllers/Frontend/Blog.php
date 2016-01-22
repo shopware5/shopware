@@ -322,9 +322,6 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
                 $blogArticleData["preview"] = $mediaData;
             }
             $media = array_merge($media, $mediaData);
-
-            // @deprecated since 5.1 will be removed in 5.2
-            $media['media']['path'] = $mediaService->getUrl($media['media']['path']);
         }
 
         //add sRelatedArticles
