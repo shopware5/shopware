@@ -5,6 +5,7 @@ In this document you will find a changelog of the important changes related to t
 * Switch Grunt to relativeUrls to unify the paths to less.php
 * Deprecated `Enlight_Application::getOption()` and `Enlight_Application::getOptions`
 * Renamed smarty block from `rontend_index_start` to `frontend_index_start` in `themes/Frontend/Bare/frontend/sitemap/index.tpl`
+* Added new global snippets before (`priceDiscountLabel`) and after (`priceDiscountInfo`) all pseudo prices for the possibility to provide more detailed information
 * Introduced smarty blocks for footer headlines in `themes/Frontend/Bare/frontend/index/footer-navigation.tpl`. New blocks:
     * `frontend_index_footer_column_service_hotline_headline`
     * `frontend_index_footer_column_service_menu_headline`
