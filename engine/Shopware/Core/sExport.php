@@ -106,7 +106,7 @@ class sExport
      * @var Shopware_Components_Config
      */
     private $config;
-    
+
     /**
      * @param ContextServiceInterface $contextService
      * @param AdditionalTextServiceInterface $additionalTextService
@@ -335,7 +335,8 @@ class sExport
         $this->sSettings = $this->db->fetchRow($sql);
 
         if (empty($this->sSettings)) {
-            die();
+            header("HTTP/1.0 404 Not Found");
+            die("Item Export not found");
         }
 
         $this->sSettings["dec_separator"] = ",";
@@ -467,10 +468,10 @@ class sExport
         if (empty($char_set)) {
             $char_set = $this->sSettings['encoding'];
         }
-        
+
         return htmlentities($string, ENT_COMPAT | ENT_HTML401, $char_set);
     }
-    
+
     public function sFormatString($string, $esc_type = '', $char_set = null)
     {
         return $this->sEscapeString($string, $esc_type, $char_set);
