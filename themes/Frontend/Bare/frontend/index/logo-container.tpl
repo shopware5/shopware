@@ -17,7 +17,7 @@
 
 	{* Support Info *}
 	{block name='frontend_index_logo_supportinfo'}
-        {if $theme.checkoutHeader && {controllerAction} !== 'cart'}
+        {if $theme.checkoutHeader && {controllerName} === 'checkout' && {controllerAction} !== 'cart'}
             <div class="logo--supportinfo block">
                 {s name='RegisterSupportInfo' namespace='frontend/register/index'}{/s}
             </div>
