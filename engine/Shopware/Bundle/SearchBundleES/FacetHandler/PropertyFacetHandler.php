@@ -153,6 +153,8 @@ class PropertyFacetHandler implements HandlerInterface, ResultHydratorInterface
         $search->addFilter(new IdsFilter($groupIds));
         $search->addFilter(new TermFilter('filterable', 1));
         $search->addSort(new FieldSort('name'));
+        $search->setFrom(0);
+        $search->setSize(self::AGGREGATION_SIZE);
 
         $index = $this->indexFactory->createShopIndex($context->getShop());
         $data = $this->client->search([
