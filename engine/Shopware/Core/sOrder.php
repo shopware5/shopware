@@ -246,22 +246,6 @@ class sOrder
      */
     public function handleESDOrder($basketRow, $orderID, $orderDetailsID)
     {
-        $this->sManageEsdOrder($basketRow, $orderID, $orderDetailsID);
-
-        return $basketRow;
-    }
-
-    /**
-     * @deprecated since SW 5.0.4, will be removed in SW 5.2, use handleESDOrder() instead
-     *
-     * @param $basketRow
-     * @param $orderID
-     * @param $orderdetailsID
-     * @throws Enlight_Exception
-     * @throws Zend_Db_Adapter_Exception
-     */
-    public function sManageEsdOrder(&$basketRow, $orderID, $orderdetailsID)
-    {
         $quantity = $basketRow["quantity"];
         $basketRow['assignedSerials'] = array();
 
@@ -269,7 +253,7 @@ class sOrder
         $esdArticle = $this->getVariantEsd($basketRow["ordernumber"]);
 
         if (!$esdArticle["id"]) {
-            return;
+            return $basketRow;
         }
 
         if (!$esdArticle["serials"]) {
@@ -279,10 +263,10 @@ class sOrder
                 'esdID' => $esdArticle["id"],
                 'userID' => $this->sUserData["additional"]["user"]["id"],
                 'orderID' => $orderID,
-                'orderdetailsID' => $orderdetailsID,
+                'orderdetailsID' => $orderDetailsID,
                 'datum' => new Zend_Db_Expr('NOW()'),
             ));
-            return;
+            return $basketRow;
         }
 
         $availableSerials = $this->getAvailableSerialsOfEsd($esdArticle["id"]);
@@ -307,7 +291,7 @@ class sOrder
 
         // Check if enough serials are available, if not, an email has been sent, and we can return
         if (count($availableSerials) < $quantity) {
-            return;
+            return $basketRow;
         }
 
         for ($i = 1; $i <= $quantity; $i++) {
@@ -322,10 +306,12 @@ class sOrder
                 'esdID' => $esdArticle["id"],
                 'userID' => $this->sUserData["additional"]["user"]["id"],
                 'orderID' => $orderID,
-                'orderdetailsID' => $orderdetailsID,
+                'orderdetailsID' => $orderDetailsID,
                 'datum' => new Zend_Db_Expr('NOW()'),
             ));
         }
+
+        return $basketRow;
     }
 
     /**

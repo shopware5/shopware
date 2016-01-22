@@ -1231,12 +1231,6 @@ class sBasket
         $structConverter = Shopware()->Container()->get('legacy_struct_converter');
         $promotion = $structConverter->convertListProductStruct($product);
 
-        if ($voteAverage = $product->getVoteAverage()) {
-            $average = $structConverter->convertVoteAverageStruct($voteAverage);
-            $average['averange'] = $average['averange'] / 2;
-            $promotion['sVoteAverange'] = $average;
-        }
-
         $promotion["id"] = $note["id"];
         $promotion["datum_add"] = $note["datum"];
         $promotion["articlename"] = $promotion["articleName"];

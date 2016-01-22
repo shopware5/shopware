@@ -29,7 +29,6 @@
  */
 class Shopware_Tests_Plugins_Core_MarketingAggregate_Modules_ArticleTest extends Shopware_Tests_Plugins_Core_MarketingAggregate_AbstractMarketing
 {
-
     /**
      * @var sArticles
      */
@@ -76,7 +75,7 @@ class Shopware_Tests_Plugins_Core_MarketingAggregate_Modules_ArticleTest extends
         $sql = "UPDATE s_articles SET pseudosales = 500 WHERE id = 3";
         $this->Db()->query($sql);
 
-        foreach($categoryArticles as $article) {
+        foreach ($categoryArticles as $article) {
             $this->Db()->insert('s_articles_categories_ro', $article);
         }
 
@@ -125,6 +124,8 @@ class Shopware_Tests_Plugins_Core_MarketingAggregate_Modules_ArticleTest extends
 
         $topSeller = $this->module->sGetArticleCharts($category['id']);
         $this->assertCount(2, $topSeller);
+
+        $topSeller = array_values($topSeller);
 
         //the article "2" pseudo sales are set to 1000 so we expect that this will be the first article
         //in the top seller slider.

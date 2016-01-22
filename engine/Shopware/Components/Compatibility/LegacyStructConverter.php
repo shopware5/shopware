@@ -247,9 +247,6 @@ class LegacyStructConverter
 
         if ($product->getVoteAverage()) {
             $promotion['sVoteAverage'] = $this->convertVoteAverageStruct($product->getVoteAverage());
-
-            /** @deprecated sVoteAverange value, use sVoteAverage instead */
-            $promotion['sVoteAverange'] = $promotion['sVoteAverage'];
         }
 
         $promotion["linkBasket"] = $this->config->get('baseFile') .
@@ -372,15 +369,9 @@ class LegacyStructConverter
 
         $data['sVoteAverage'] = array('average' => 0, 'count' => 0);
 
-        /** @deprecated averange value, use average instead */
-        $data['sVoteAverage']['averange'] = 0;
-
         if ($product->getVoteAverage()) {
             $data['sVoteAverage'] = $this->convertVoteAverageStruct($product->getVoteAverage());
         }
-
-        /** @deprecated sVoteAverange value, use sVoteAverage instead */
-        $data['sVoteAverange'] = $data['sVoteAverage'];
 
         if ($product->getPropertySet()) {
             $data['filtergroupID'] = $product->getPropertySet()->getId();
@@ -459,9 +450,6 @@ class LegacyStructConverter
         );
 
         $data['attributes'] = $average->getAttributes();
-
-        /** @deprecated averange value, use average instead */
-        $data['averange'] = $data['average'];
 
         return $data;
     }

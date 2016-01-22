@@ -396,6 +396,5 @@
             <argument>%shopware.csrfProtection.backend%</argument>
             <tag name="shopware.event_subscriber" />
         </service>
-
     </services>
 </container>
