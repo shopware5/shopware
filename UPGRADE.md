@@ -72,6 +72,10 @@ In this document you will find a changelog of the important changes related to t
     * emotion slider data
     * recommendation data (also bought and also viewed)
     * similar and related articles
+* Removed deprecated table `s_user_debit`
+    * `\Shopware\Models\Customer\Customer::$debit`
+    * `\Shopware\Models\Customer\Customer::getDebit()`
+    * `\Shopware\Models\Customer\Customer::setDebit()`
 
 ## 5.1.3
 * Switch Grunt to relativeUrls to unify the paths to less.php

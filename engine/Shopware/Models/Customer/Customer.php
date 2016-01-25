@@ -39,7 +39,6 @@ use Doctrine\ORM\Mapping as ORM;
  * <code>
  *   - Billing  =>  Shopware\Models\Customer\Billing    [1:1] [s_user_billingaddress]
  *   - Shipping =>  Shopware\Models\Customer\Shipping   [1:1] [s_user_shippingaddress]
- *   - Debit    =>  Shopware\Models\Customer\Debit      [1:1] [s_user_debit]
  *   - Group    =>  Shopware\Models\Customer\Group      [n:1] [s_core_customergroups]
  *   - Shop     =>  Shopware\Models\Shop\Shop           [n:1] [s_core_shops]
  *   - Orders   =>  Shopware\Models\Order\Order         [1:n] [s_order]
@@ -276,17 +275,6 @@ class Customer extends LazyFetchModelEntity
      * @ORM\OneToOne(targetEntity="Shopware\Models\Customer\Shipping", mappedBy="customer", orphanRemoval=true, cascade={"persist"})
      */
     protected $shipping;
-
-    /**
-     * INVERSE SIDE
-     * The debit property is the inverse side of the association between customer and debit.
-     * The association is joined over the debit userID field and the id field of the customer.
-     *
-     * @var \Shopware\Models\Customer\Debit
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Customer\Debit", mappedBy="customer", orphanRemoval=true, cascade={"persist"})
-     * @Assert\Valid
-     */
-    protected $debit;
 
     /**
      * OWNING SIDE
@@ -917,35 +905,6 @@ class Customer extends LazyFetchModelEntity
     {
         return $this->setManyToOne($group, '\Shopware\Models\Customer\Group', 'group');
     }
-
-
-    /**
-     * Returns the instance of the Shopware\Models\Customer\Debit model which
-     * contains all data about the customer debit. The association is defined over
-     * the Customer.debit property (INVERSE SIDE) and the Debit.customer (OWNING SIDE) property.
-     * The debit data is joined over the s_user_debit.userID field.
-     *
-     * @return \Shopware\Models\Customer\Debit
-     */
-    public function getDebit()
-    {
-        return $this->debit;
-    }
-
-    /**
-     * Setter function for the debit association property which contains an instance of the Shopware\Models\Customer\Debit model which
-     * contains all data about the customer debit. The association is defined over
-     * the Customer.debit property (INVERSE SIDE) and the Debit.customer (OWNING SIDE) property.
-     * The debit data is joined over the s_user_debit.userID field.
-     *
-     * @param \Shopware\Models\Customer\Debit|array|null $debit
-     * @return \Shopware\Models\Customer\Debit
-     */
-    public function setDebit($debit)
-    {
-        return $this->setOneToOne($debit, '\Shopware\Models\Customer\Debit', 'debit', 'customer');
-    }
-
 
     /**
      * Returns the instance of the Shopware\Models\Customer\Shipping model which

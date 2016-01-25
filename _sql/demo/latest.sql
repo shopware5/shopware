@@ -5450,7 +5450,7 @@ TRUNCATE TABLE `s_core_licenses`;
 
 TRUNCATE TABLE `s_core_paymentmeans`;
 INSERT INTO `s_core_paymentmeans` (`id`, `name`, `description`, `template`, `class`, `table`, `hide`, `additionaldescription`, `debit_percent`, `surcharge`, `surchargestring`, `position`, `active`, `esdactive`, `embediframe`, `hideprospect`, `action`, `pluginID`, `source`) VALUES
-(2, 'debit', 'Lastschrift', 'debit.tpl', 'debit.php', 's_user_debit', 0, 'Zusatztext', -10, 0, '', 4, 0, 0, '', 0, '', NULL, NULL),
+(2, 'debit', 'Lastschrift', 'debit.tpl', 'debit.php', '', 0, 'Zusatztext', -10, 0, '', 4, 0, 0, '', 0, '', NULL, NULL),
 (3, 'cash', 'Nachnahme', 'cash.tpl', 'cash.php', '', 0, '(zzgl. 2,00 Euro Nachnahmegebühren)', 0, 0, '', 2, 1, 0, '', 0, NULL, NULL, NULL),
 (4, 'invoice', 'Rechnung', 'invoice.tpl', 'invoice.php', '', 0, 'Sie zahlen einfach und bequem auf Rechnung. Shopware bietet z.B. auch die Möglichkeit, Rechnung automatisiert erst ab der 2. Bestellung für Kunden zur Verfügung zu stellen, um Zahlungsausfälle zu vermeiden.', 0, 5, '', 3, 1, 1, '', 0, '', NULL, NULL),
 (5, 'prepayment', 'Vorkasse', 'prepayment.tpl', 'prepayment.php', '', 0, 'Sie zahlen einfach vorab und erhalten die Ware bequem und günstig bei Zahlungseingang nach Hause geliefert.', 0, 0, '', 1, 1, 0, '', 0, NULL, NULL, NULL),
@@ -10353,10 +10353,7 @@ INSERT INTO `s_user_billingaddress` (`id`, `userID`, `company`, `department`, `s
 
 
 TRUNCATE TABLE `s_user_billingaddress_attributes`;
-TRUNCATE TABLE `s_user_debit`;
-INSERT INTO `s_user_debit` (`id`, `userID`, `account`, `bankcode`, `bankname`, `bankholder`) VALUES
-(2, 1, '1234566', '6654321', 'Bank', 'Inhaber'),
-(3, 2, '', '', '', '');
+
 
 TRUNCATE TABLE `s_user_shippingaddress`;
 INSERT INTO `s_user_shippingaddress` (`id`, `userID`, `company`, `department`, `salutation`, `firstname`, `lastname`, `street`, `zipcode`, `city`, `countryID`, `stateID`) VALUES

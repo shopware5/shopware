@@ -199,13 +199,12 @@ class Repository extends ModelRepository
             ->from('Shopware\Models\Customer\Customer', 'customer2')
             ->leftJoin('customer2.orders', 'canceledOrders', \Doctrine\ORM\Query\Expr\Join::WITH, 'canceledOrders.cleared = 16')
             ->where($subQueryBuilder->expr()->eq('customer2', $customerId));
-        
+
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array(
             'customer',
             'billing',
             'shipping',
-            'debit',
             'paymentData',
             'attribute',
             'billingAttribute',
@@ -223,7 +222,6 @@ class Repository extends ModelRepository
                 ->leftJoin('customer.shop', 'shop')
                 ->leftJoin('customer.languageSubShop', 'subShop')
                 ->leftJoin('subShop.locale', 'locale')
-                ->leftJoin('customer.debit', 'debit')
                 ->leftJoin('customer.paymentData', 'paymentData', \Doctrine\ORM\Query\Expr\Join::WITH, 'paymentData.paymentMean = customer.paymentId')
                 ->leftJoin('customer.orders', 'doneOrders', \Doctrine\ORM\Query\Expr\Join::WITH, 'doneOrders.status <> -1 AND doneOrders.status <> 4')
                 ->leftJoin('billing.attribute', 'billingAttribute')
