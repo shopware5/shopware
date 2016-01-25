@@ -73,7 +73,7 @@ class Shopware_Components_Convert_Xml
                     unset($item['_attributes'], $item['_value']);
                 }
             }
-            if (empty($item)) {
+            if (empty($item) && $item != 0) {
                 $ret .= "$pad<$key$attributes></$key>{$this->sSettings['newline']}";
             } elseif (is_array($item)) {
                 if (is_numeric(key($item))) {
