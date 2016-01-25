@@ -196,6 +196,11 @@ Shopware provides 3 product box types:<br/>
 			}
 		}
 
+		.price--pseudo {
+			.unitize(font-size, 12);
+			.unitize(line-height, 20);
+		}
+
 		.price--discount {
 			.unitize(font-size, 12);
 			.unitize(line-height, 20);
@@ -341,10 +346,10 @@ Creates a corner product badge on a product-box.
 			float: left;
 		}
 
+		.price--pseudo,
 		.price--discount {
 			.unitize(font-size, 10);
 			.unitize(line-height, 14);
-			vertical-align: bottom;
 		}
 	}
 }
