@@ -711,9 +711,9 @@ class sAdmin
 
         // Convert multiple birthday fields into a single value
         if ($this->isValidDate($postData['birthday'], $postData['birthmonth'], $postData['birthyear'])) {
-            $postData['birthday'] = DateTime::createFromFormat('Y-m-d', $postData['birthday'])->format('Y-m-d');
-        }
-        else {
+            $birthdate = new DateTime();
+            $postData['birthday'] = $birthdate->setDate($postData['birthyear'], $postData['birthmonth'], $postData['birthday'])->format('Y-m-d');
+        } else {
             unset($postData['birthday']);
         }
 
