@@ -161,6 +161,8 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
             $params['bindTimeTo'] = null;
         }
 
+        $params['attribute'] = $params['attribute'][0];
+
         // convert params to model
         $dispatchModel->fromArray($params);
 
