@@ -64,19 +64,21 @@
                         {* Article pseudoprice *}
                         {block name='frontend_compare_price_pseudoprice'}
                             {if $sArticle.has_pseudoprice}
+                                <span class="price--pseudo">
 
-                                {block name='frontend_compare_price_pseudoprice_before'}
-                                    {s name="priceDiscountLabel" namespace="frontend/detail/data"}{/s}
-                                {/block}
+                                    {block name='frontend_compare_price_pseudoprice_before'}
+                                        {s name="priceDiscountLabel" namespace="frontend/detail/data"}{/s}
+                                    {/block}
 
-                                <span class="price--pseudoprice">
-                                    {s name="reducedPrice" namespace="frontend/listing/box_article"}{/s} {$sArticle.pseudoprice|currency}
-                                    {s name="Star" namespace="frontend/listing/box_article"}{/s}<br />
+                                    <span class="price--pseudoprice">
+                                        {$sArticle.pseudoprice|currency}
+                                        {s name="Star" namespace="frontend/listing/box_article"}{/s}<br />
+                                    </span>
+
+                                    {block name='frontend_compare_price_pseudoprice_after'}
+                                        {s name="priceDiscountInfo" namespace="frontend/detail/data"}{/s}
+                                    {/block}
                                 </span>
-
-                                {block name='frontend_compare_price_pseudoprice_after'}
-                                    {s name="priceDiscountInfo" namespace="frontend/detail/data"}{/s}
-                                {/block}
                             {/if}
                         {/block}
 
