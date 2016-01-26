@@ -76,6 +76,7 @@ In this document you will find a changelog of the important changes related to t
     * `\Shopware\Models\Customer\Customer::$debit`
     * `\Shopware\Models\Customer\Customer::getDebit()`
     * `\Shopware\Models\Customer\Customer::setDebit()`
+* Added new configuration field to the emotion banner widget for link target.
 
 ## 5.1.3
 * Switch Grunt to relativeUrls to unify the paths to less.php
