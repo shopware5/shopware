@@ -28,7 +28,7 @@
 
 												{if $image.thumbnails[0]}
 													<a href="{$detailLink}" title="{$sBasketItem.articlename|strip_tags}" class="table--media-link"
-                                                        {if {config name=detailmodal} && {controllerAction} === 'confirm'}
+                                                        {if {config name=detailmodal} && {controllerAction|lower} === 'confirm'}
                                                        data-modalbox="true"
                                                        data-content="{url controller="detail" action="productQuickView" ordernumber="{$sBasketItem.ordernumber}" fullPath}"
                                                        data-mode="ajax"
@@ -63,7 +63,7 @@
                         {* Product name *}
                         {block name='frontend_checkout_cart_item_details_title'}
                             <a class="content--title" href="{$detailLink}" title="{$sBasketItem.articlename|strip_tags|escape}"
-                                {if {config name=detailmodal} && {controllerAction} === 'confirm'}
+                                {if {config name=detailmodal} && {controllerAction|lower} === 'confirm'}
                                data-modalbox="true"
                                data-content="{url controller="detail" action="productQuickView" ordernumber="{$sBasketItem.ordernumber}" fullPath}"
                                data-mode="ajax"
