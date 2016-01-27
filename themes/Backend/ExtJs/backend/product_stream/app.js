@@ -57,6 +57,7 @@ Ext.define('Shopware.apps.ProductStream', {
         'condition_list.condition.ReleaseDate',
         'condition_list.condition.CreateDate',
         'condition_list.condition.HasPseudoPrice',
+        'condition_list.condition.IsNew',
         'condition_list.condition.ImmediateDelivery',
         'condition_list.condition.VoteAverage',
         'condition_list.condition.Sales',
