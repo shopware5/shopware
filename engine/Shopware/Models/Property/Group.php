@@ -212,7 +212,7 @@ class Group extends ModelEntity
     }
 
     /**
-     * Returns Array of associated Options
+     * Returns ArrayCollection of associated Options
      *
      * @return \Doctrine\Common\Collections\ArrayCollection
      */
