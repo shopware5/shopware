@@ -25,6 +25,7 @@
 namespace Shopware\Components\Api\Resource;
 
 use Shopware\Components\Api\Exception as ApiException;
+use Shopware\Components\Model\QueryBuilder;
 use Shopware\Models\Customer\Customer as CustomerModel;
 use Shopware\Models\Customer\PaymentData;
 
@@ -135,7 +136,7 @@ class Customer extends Resource
     {
         $this->checkPrivilege('read');
 
-        $builder = $this->getRepository()->createQueryBuilder('customer');
+        $builder = $this->getListQuery();
 
         $builder->addFilter($criteria);
         $builder->addOrderBy($orderBy);
@@ -488,5 +489,13 @@ class Customer extends Resource
         $customer = $query->getArrayResult();
 
         return empty($customer);
+    }
+
+    /**
+     * @return QueryBuilder
+     */
+    protected function getListQuery()
+    {
+        return $this->getRepository()->createQueryBuilder('customer');
     }
 }
