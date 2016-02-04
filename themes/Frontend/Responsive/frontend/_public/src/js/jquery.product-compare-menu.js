@@ -112,7 +112,7 @@
                         // Resize every property row height to biggest height in cell
                         var maxRows = 0;
                         $(".entry--property").each(function () {
-                            var row = $(this).attr('data-property-row');
+                            var row = Number($(this).attr('data-property-row'));
                             if(row > maxRows) {
                                 maxRows = row;
                             }
