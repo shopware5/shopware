@@ -267,16 +267,16 @@ class %className% extends ModelEntity
         }
 
         $errors = array();
-        /**@var $table \Doctrine\DBAL\Schema\Table*/
-        foreach ($this->getSchemaManager()->listTables() as $table) {
-            if (!empty($tableNames) && !in_array($table->getName(), $tableNames)) {
+        foreach ($this->getSchemaManager()->listTableNames() as $tableName) {
+            if (!empty($tableNames) && !in_array($tableName, $tableNames)) {
                 continue;
             }
 
-            if (!$this->stringEndsWith($table->getName(), '_attributes')) {
+            if (!$this->stringEndsWith($tableName, '_attributes')) {
                 continue;
             }
 
+            $table = $this->getSchemaManager()->listTableDetails($tableName);
             $sourceCode = $this->generateModel($table);
             $result = $this->createModelFile($table, $sourceCode);
             if ($result === false) {
