@@ -1205,12 +1205,24 @@ class sArticles
         }
 
         $hideNoInstock = $this->config->get('hideNoInstock');
-        if ($hideNoInstock && !$product->hasAvailableVariant()) {
+        if ($hideNoInstock && !$product->isAvailable()) {
             return [];
         }
 
         if ($product->hasConfigurator()) {
-            $selection = $product->getSelectedOptions();
+            $type = $this->getConfiguratorType($product->getId());
+
+            /**
+             * Check if a variant should be loaded. And load the configuration for the variant for pre selection.
+             *
+             * Requires the following scenario:
+             * 1. $number has to be set (without a number we can't load a configuration)
+             * 2. $number is equals to $productNumber (if the order number is invalid or inactive fallback to main variant)
+             * 3. $configuration is empty (Customer hasn't not set an own configuration)
+             */
+            if ($providedNumber && $providedNumber == $productNumber && empty($configuration) || $type === 0) {
+                $selection = $product->getSelectedOptions();
+            }
         }
 
         $categoryId = (int) $sCategoryID;

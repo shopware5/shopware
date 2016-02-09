@@ -93,7 +93,7 @@
 
 					{* Article notification *}
 					{block name="frontend_detail_index_notification"}
-						{if $sArticle.laststock && $sArticle.notification && ($sArticle.instock <= 0 || $sArticle.sVariants) && $ShowNotification}
+						{if $sArticle.notification && ($sArticle.instock <= 0 || $sArticle.sVariants) && $ShowNotification}
 							{include file="frontend/plugins/notification/index.tpl"}
 						{/if}
 					{/block}

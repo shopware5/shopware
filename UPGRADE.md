@@ -12,7 +12,7 @@ In this document you will find a changelog of the important changes related to t
     * `frontend_index_footer_column_service_menu_headline`
     * `frontend_index_footer_column_information_menu_headline`
     * `frontend_index_footer_column_newsletter_headline`
-* Changed `ProductNumberService::getAvailableNumber()` to ignore the `hideNoInstock` config option
+* Removed out-of-stock variant selection due to problems
 
 ## 5.1.2
 * Out-of-stock variants on the detail page are now selectable

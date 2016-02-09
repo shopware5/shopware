@@ -153,7 +153,7 @@
 
                     {* Product eMail notification *}
                     {block name="frontend_detail_index_notification"}
-                        {if ($sArticle.isSelectionSpecified || !$sArticle.sConfigurator) && $sArticle.notification && $sArticle.instock <= 0 && $ShowNotification}
+                        {if $sArticle.notification && $sArticle.instock <= 0 && $ShowNotification}
                             {include file="frontend/plugins/notification/index.tpl"}
                         {/if}
                     {/block}
