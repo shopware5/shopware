@@ -102,6 +102,10 @@ class Models
 
         LazyFetchModelEntity::setEntityManager($entityManager);
 
+        if (!class_exists('Shopware\Models\Attribute\CustomerGroup')) {
+            $entityManager->generateAttributeModels();
+        }
+
         return $entityManager;
     }
 }
