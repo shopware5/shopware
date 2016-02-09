@@ -3,11 +3,11 @@
 {* Title *}
 {block name='frontend_index_header_title'}{strip}
     {if $sArticle.metaTitle}
-        {$sArticle.metaTitle} | {{config name=sShopname}|escapeHtmlAttr}
+        {$sArticle.metaTitle|escapeHtml} | {{config name=sShopname}|escapeHtml}
     {elseif $sCategoryContent.metaTitle}
-        {$sCategoryContent.metaTitle} | {{config name=sShopname}|escapeHtmlAttr}
+        {$sCategoryContent.metaTitle|escapeHtml} | {{config name=sShopname}|escapeHtml}
     {elseif $sCategoryContent.title}
-        {$sCategoryContent.title}
+        {$sCategoryContent.title|escapeHtml}
     {else}
         {$smarty.block.parent}
     {/if}
@@ -16,17 +16,17 @@
 {block name='frontend_index_header_meta_tags_opengraph'}
     {if $sArticle}
         <meta property="og:type" content="article" />
-        <meta property="og:site_name" content="{{config name=sShopname}|escapeHtmlAttr}" />
-        <meta property="og:title" content="{$sArticle.title|escapeHtmlAttr}" />
-        <meta property="og:description" content="{$sArticle.description|strip_tags|truncate:240|escapeHtmlAttr}" />
+        <meta property="og:site_name" content="{{config name=sShopname}|escapeHtml}" />
+        <meta property="og:title" content="{$sArticle.title|escapeHtml}" />
+        <meta property="og:description" content="{$sArticle.description|strip_tags|truncate:240|escapeHtml}" />
 
         {if $sArticle.author}
-        <meta property="article:author" content="{$sArticle.author.name|escapeHtmlAttr}" />
+        <meta property="article:author" content="{$sArticle.author.name|escapeHtml}" />
         {/if}
 
         <meta name="twitter:card" content="summary" />
-        <meta name="twitter:title" content="{$sArticle.title|escapeHtmlAttr}" />
-        <meta name="twitter:description" content="{$sArticle.description|strip_tags|truncate:240|escapeHtmlAttr}" />
+        <meta name="twitter:title" content="{$sArticle.title|escapeHtml}" />
+        <meta name="twitter:description" content="{$sArticle.description|strip_tags|truncate:240|escapeHtml}" />
 
         {if $sArticle.media[0].source}
             <meta property="og:image" content="{$sArticle.media[0].source}" />
@@ -38,7 +38,7 @@
 {/block}
 
 {* Keywords *}
-{block name="frontend_index_header_meta_keywords"}{if $sArticle.metaKeyWords}{$sArticle.metaKeyWords}{else}{if $sCategoryContent.metaKeywords}{$sCategoryContent.metaKeywords}{/if}{/if}{/block}
+{block name="frontend_index_header_meta_keywords"}{if $sArticle.metaKeyWords}{$sArticle.metaKeyWords|escapeHtml}{else}{if $sCategoryContent.metaKeywords}{$sCategoryContent.metaKeywords|escapeHtml}{/if}{/if}{/block}
 
 {* Description *}
 {block name="frontend_index_header_meta_description"}{if $sArticle.metaDescription}{$sArticle.metaDescription|strip_tags|escape}{else}{if $sCategoryContent.metaDescription}{$sCategoryContent.metaDescription|strip_tags|escape}{/if}{/if}{/block}

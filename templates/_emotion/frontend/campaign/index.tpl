@@ -7,7 +7,7 @@
 
 {block name='frontend_index_header_title'}{strip}
     {if $seo_title}
-        {$seo_title} | {{config name=sShopname}|escapeHtmlAttr}
+        {$seo_title|escapeHtml} | {{config name=sShopname}|escapeHtml}
     {else}
         {$smarty.block.parent}
     {/if}

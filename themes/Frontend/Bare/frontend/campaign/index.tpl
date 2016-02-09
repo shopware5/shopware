@@ -6,7 +6,7 @@
 
 {block name='frontend_index_header_title'}{strip}
     {if $seo_title}
-        {$seo_title} | {{config name=sShopname}|escapeHtmlAttr}
+        {$seo_title|escapeHtml} | {{config name=sShopname}|escapeHtml}
     {else}
         {$smarty.block.parent}
     {/if}
@@ -20,10 +20,10 @@
 {/block}
 
 {* Keywords *}
-{block name="frontend_index_header_meta_keywords"}{if $seo_keywords}{$seo_keywords}{/if}{/block}
+{block name="frontend_index_header_meta_keywords"}{if $seo_keywords}{$seo_keywords|escapeHtml}{/if}{/block}
 
 {* Description *}
-{block name="frontend_index_header_meta_description"}{if $seo_description}{$seo_description}{/if}{/block}
+{block name="frontend_index_header_meta_description"}{if $seo_description}{$seo_description|escapeHtml}{/if}{/block}
 
 {* Promotion *}
 {block name='frontend_home_index_promotions'}

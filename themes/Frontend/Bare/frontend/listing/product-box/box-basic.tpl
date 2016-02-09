@@ -35,8 +35,8 @@
                         {block name='frontend_listing_box_article_name'}
                             <a href="{$sArticle.linkDetails|rewrite:$sArticle.articleName}"
                                class="product--title"
-                               title="{$sArticle.articleName|escape}">
-                                {$sArticle.articleName|truncate:50}
+                               title="{$sArticle.articleName|escapeHtml}">
+                                {$sArticle.articleName|truncate:50|escapeHtml}
                             </a>
                         {/block}
 
