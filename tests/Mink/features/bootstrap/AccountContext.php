@@ -113,7 +113,7 @@ class AccountContext extends SubContext
         $pageName = ucfirst($pageInfo['controller']);
 
         if ($pageName === 'Checkout') {
-            $pageName = ($pageInfo['action'] === 'shippingPayment') ? 'CheckoutCart' : 'CheckoutConfirm';
+            $pageName = ($pageInfo['action'] === 'shippingpayment') ? 'CheckoutCart' : 'CheckoutConfirm';
         }
 
         /** @var \Shopware\Tests\Mink\Page\Emotion\Account|\Shopware\Tests\Mink\Page\Emotion\CheckoutConfirm $page */
