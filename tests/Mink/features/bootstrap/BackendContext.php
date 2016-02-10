@@ -36,7 +36,17 @@ class BackendContext extends SubContext
         $page = $this->getPage('Backend');
         $page->open();
 
-        $page->login('demo', 'demo');
+        $this->spin(function ($context) use ($page) {
+            return $page->verifyLogin();
+        });
+
+        $this->spin(function ($context) use ($page) {
+            return $page->login('demo', 'demo');
+        });
+
+        $this->spin(function ($context) use ($page) {
+            return $page->verifyIsLoggedIn();
+        });
     }
 
     /**
@@ -44,7 +54,10 @@ class BackendContext extends SubContext
      */
     public function iOpenTheModule($moduleName)
     {
-        $this->getPage('Backend')->openModule($moduleName);
+        $this->spin(function ($context) use ($moduleName) {
+            $context->getPage('Backend')->openModule($moduleName);
+            return true;
+        });
     }
 
     /**
@@ -52,6 +65,41 @@ class BackendContext extends SubContext
      */
     public function theModuleShouldOpenAWindow()
     {
-        $this->getPage('Backend')->verifyModule();
+        $page = $this->getPage('Backend');
+
+        $this->spin(function ($context) use ($page) {
+            $context->getPage('Backend')->verifyModule();
+            return true;
+        });
+    }
+
+    /**
+     * Wait for an command to be true and abort after $maxRetries iterations
+     * Sleeps for 1 second after each try
+     *
+     * @param callable $lambda
+     * @param int $maxRetries
+     * @return bool
+     * @throws \Exception
+     */
+    public function spin($lambda, $maxRetries = 10)
+    {
+        for ($i = 0; $i < $maxRetries; $i++) {
+            try {
+                if ($lambda($this)) {
+                    return true;
+                }
+            } catch (\Exception $e) {
+            }
+
+            sleep(1);
+        }
+
+        if (!empty($e) && $e instanceof \Exception) {
+            throw $e;
+        } else {
+            $backtrace = debug_backtrace();
+            throw new \Exception("Timeout thrown by " . $backtrace[1]['class'] . "::" . $backtrace[1]['function'] . "()");
+        }
     }
 }
