@@ -335,7 +335,8 @@ class sExport
         $this->sSettings = $this->db->fetchRow($sql);
 
         if (empty($this->sSettings)) {
-            die();
+            header("HTTP/1.0 404 Not Found");
+            die("Item Export not found");
         }
 
         $this->sSettings["dec_separator"] = ",";

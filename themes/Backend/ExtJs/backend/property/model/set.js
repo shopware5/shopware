@@ -34,10 +34,10 @@
 Ext.define('Shopware.apps.Property.model.Set', {
 
     /**
-     * Extends the standard ExtJS 4
+     * Extends the standard ExtJS Model
      * @string
      */
-    extend: 'Ext.data.Model',
+    extend: 'Shopware.data.Model',
 
     /**
      * The fields used for this model

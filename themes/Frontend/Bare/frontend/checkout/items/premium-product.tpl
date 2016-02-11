@@ -17,7 +17,7 @@
                                         <a href="{$sBasketItem.linkDetails}" title="{$sBasketItem.articlename|strip_tags}" class="table--media-link"
                                             {if {config name=detailmodal} && {controllerAction} === 'confirm'}
                                                 data-modalbox="true"
-                                                data-content="{url controller="detail" action="productQuickView" ordernumber="{$sBasketItem.ordernumber}" fullPath}"
+                                                data-content="{url controller="detail" action="productQuickView" ordernumber="{$sBasketItem.ordernumber}" fullPath forceSecure}"
                                                 data-mode="ajax"
                                                 data-width="750"
                                                 data-sizing="content"
@@ -56,7 +56,7 @@
                         <a href="{$sBasketItem.linkDetails}" title="{$sBasketItem.articlename|strip_tags}" class="content--title"
                             {if {config name=detailmodal} && {controllerAction} === 'confirm'}
                                 data-modalbox="true"
-                                data-content="{url controller="detail" action="productQuickView" ordernumber="{$sBasketItem.ordernumber}" fullPath}"
+                                data-content="{url controller="detail" action="productQuickView" ordernumber="{$sBasketItem.ordernumber}" fullPath forceSecure}"
                                 data-mode="ajax"
                                 data-width="750"
                                 data-sizing="content"

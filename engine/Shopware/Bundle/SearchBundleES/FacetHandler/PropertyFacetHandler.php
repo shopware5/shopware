@@ -52,6 +52,8 @@ use Shopware\Components\QueryAliasMapper;
 
 class PropertyFacetHandler implements HandlerInterface, ResultHydratorInterface
 {
+    const AGGREGATION_SIZE = 5000;
+    
     /**
      * @var QueryAliasMapper
      */
@@ -117,6 +119,7 @@ class PropertyFacetHandler implements HandlerInterface, ResultHydratorInterface
     ) {
         $aggregation = new TermsAggregation('properties');
         $aggregation->setField('properties.id');
+        $aggregation->addParameter('size', self::AGGREGATION_SIZE);
         $search->addAggregation($aggregation);
     }
 
@@ -149,6 +152,8 @@ class PropertyFacetHandler implements HandlerInterface, ResultHydratorInterface
         $search->addFilter(new IdsQuery($groupIds));
         $search->addFilter(new TermQuery('filterable', 1));
         $search->addSort(new FieldSort('name'));
+        $search->setFrom(0);
+        $search->setSize(self::AGGREGATION_SIZE);
 
         $index = $this->indexFactory->createShopIndex($context->getShop());
         $data = $this->client->search([

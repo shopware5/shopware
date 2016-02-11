@@ -1196,10 +1196,6 @@ class sArticles
             return [];
         }
 
-        if (!$product) {
-            return [];
-        }
-
         if ($product->hasConfigurator()) {
             $type = $this->getConfiguratorType($product->getId());
 

@@ -19,7 +19,7 @@
     </target>
 
     <target name="build-continuous" depends="unit-shopware-continuous"/>
-    <target name="build-unit" depends="build-cache-dir, build-composer-install, build-config, build-database, build-generate-attributes, build-snippets-deploy, build-theme-initialize, build-install-lock-file, build-disable-firstrunwizard, install-git-hooks" />
+    <target name="build-unit" depends="build-cache-dir, build-composer-install, build-config, build-database, build-snippets-deploy, build-theme-initialize, build-install-lock-file, build-disable-firstrunwizard, install-git-hooks" />
     <target name="test-unit" depends="unit-shopware"/>
 
     <target name="configure" description="Set up build-variables">
@@ -172,13 +172,13 @@
         </exec>
     </target>
 
-    <target name="build-snippets-deploy" depends="build-generate-attributes">
+    <target name="build-snippets-deploy">
         <exec executable="php" dir="${basedir}/bin" failonerror="true">
             <arg line="console sw:snippets:to:db --include-plugins"/>
         </exec>
     </target>
 
-    <target name="build-theme-initialize" depends="build-generate-attributes">
+    <target name="build-theme-initialize">
         <exec executable="php" dir="${basedir}/bin" failonerror="true">
             <arg line="console sw:theme:initialize"/>
         </exec>

@@ -184,6 +184,8 @@ class Repository extends ModelRepository
             'detailAttribute',
             'documentAttribute',
             'shippingAttribute',
+            'paymentAttribute',
+            'dispatchAttribute',
             'subShop',
             'locale',
         ));
@@ -202,6 +204,8 @@ class Repository extends ModelRepository
                 ->leftJoin('orders.shipping', 'shipping')
                 ->leftJoin('orders.shop', 'shop')
                 ->leftJoin('orders.dispatch', 'dispatch')
+                ->leftJoin('payment.attribute', 'paymentAttribute')
+                ->leftJoin('dispatch.attribute', 'dispatchAttribute')
                 ->leftJoin('billing.attribute', 'billingAttribute')
                 ->leftJoin('shipping.attribute', 'shippingAttribute')
                 ->leftJoin('details.attribute', 'detailAttribute')
