@@ -15,12 +15,14 @@
 
                         {* Rating tab *}
                         {block name="frontend_detail_tabs_rating"}
-                            <a href="#" class="tab--link" title="{s name='DetailTabsRating'}{/s}">
-                                {s name='DetailTabsRating'}{/s}
-                                {block name="frontend_detail_tabs_navigation_rating_count"}
-                                    <span class="product--rating-count">{$sArticle.sVoteAverage.count}</span>
-                                {/block}
-                            </a>
+                            {if !{config name=VoteDisable}}
+                                <a href="#" class="tab--link" title="{s name='DetailTabsRating'}{/s}">
+                                    {s name='DetailTabsRating'}{/s}
+                                    {block name="frontend_detail_tabs_navigation_rating_count"}
+                                        <span class="product--rating-count">{$sArticle.sVoteAverage.count}</span>
+                                    {/block}
+                                </a>
+                            {/if}
                         {/block}
                     {/block}
                 </div>
