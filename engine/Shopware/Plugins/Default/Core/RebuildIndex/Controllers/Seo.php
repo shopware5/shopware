@@ -207,7 +207,7 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
         $sql = Shopware()->Db()->limit($sql, $limit, $offset);
 
 
-        $shopFallbackId = (Shopware()->Shop()->getFallback() instanceof \Shopware\Models\Shop\Shop) ? Shopware()->Shop()->getFallback()->getId():NULL;
+        $shopFallbackId = ($shop->getFallback() instanceof \Shopware\Models\Shop\Shop) ? $shop->getFallback()->getId():NULL;
 
         $articles = Shopware()->Db()->fetchAll($sql, array(
             $shop->get('parentID'),
