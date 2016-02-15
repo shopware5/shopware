@@ -89,7 +89,7 @@ Ext.define('Shopware.apps.ImportExport.view.main.Mainwindow', {
 		empty: '{s name=empty}empty{/s}',
 		file: '{s name=file}File{/s}',
         noticeMessage: '{s name=notice_message}The import / export options do possibly not support all of your maintained fields. Please read our \<a href=\'http://wiki.shopware.de/Datenaustausch_detail_308.html\' target=\'_blank\' \>wiki\</a\> documentation before using the module.{/s}',
-        deprecationMessage: '{s name=deprecated_message}The import / export is now marked as deprecated and will be removed in Shopware 5.2. Please refer to our new import / export module.{/s}',
+        deprecationMessage: '{s name=deprecated_message}The import / export is now marked as deprecated and will be removed soon. Please refer to our new import / export module.{/s}',
         deprecationButton: '{s name=deprecated_button}get new import / export{/s}',
         deprecationTitle: '{s name=deprecated_title}Heads up!{/s}'
     },
