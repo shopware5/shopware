@@ -61,6 +61,11 @@ class ListProductGateway implements Gateway\ListProductGatewayInterface
     private $config;
 
     /**
+     * @var Connection
+     */
+    private $connection;
+
+    /**
      * @param Connection $connection
      * @param FieldHelper $fieldHelper
      * @param Hydrator\ProductHydrator $hydrator
@@ -227,13 +232,8 @@ class ListProductGateway implements Gateway\ListProductGatewayInterface
         $query->select("COUNT(availableVariant.id)")
             ->from('s_articles_details', 'availableVariant')
             ->where('availableVariant.articleID = product.id')
-            ->andWhere('availableVariant.active = 1');
-
-        if ($this->config->get('hideNoInstock')) {
-            $query->andWhere(
-                '(product.laststock * availableVariant.instock) >= (product.laststock * availableVariant.minpurchase)'
-            );
-        }
+            ->andWhere('availableVariant.active = 1')
+            ->andWhere('availableVariant.instock >= availableVariant.minpurchase');
 
         return $query;
     }
