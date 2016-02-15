@@ -8,7 +8,7 @@
         {/if}
 
         <div class="product-slider--item">
-            {include file="frontend/listing/box_article.tpl" sArticle=$article productBoxLayout=$boxLayout}
+            {include file="frontend/listing/box_article.tpl" sArticle=$article productBoxLayout=$boxLayout fixedImageSize=true}
         </div>
     {/block}
 {/foreach}
