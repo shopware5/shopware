@@ -24,6 +24,10 @@
 
 namespace Shopware\Components\DependencyInjection\Bridge;
 
+use Doctrine\Common\EventManager;
+use Doctrine\DBAL\Configuration;
+use Doctrine\DBAL\Connection;
+
 /**
  * @category  Shopware
  * @package   Shopware\Components\DependencyInjection\Bridge
@@ -32,17 +36,43 @@ namespace Shopware\Components\DependencyInjection\Bridge;
 class Db
 {
     /**
-     * @param string $adapter
+     * @param array $options
+     * @param Configuration $config
+     * @param EventManager $eventManager
+     * @return Connection
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    public static function createDbalConnection(
+        array $options,
+        Configuration $config,
+        EventManager $eventManager
+    ) {
+        $connectionParams = array(
+            'dbname'    => $options['dbname'],
+            'user'      => $options['username'],
+            'password'  => $options['password'],
+            'host'      => $options['host'],
+            'driver'    => $options['adapter'],
+            'charset'   => $options['charset'],
+        );
+
+        $connectionParams['driverOptions'] = [
+            \PDO::MYSQL_ATTR_INIT_COMMAND => "SET @@session.sql_mode = '';",  // Reset sql_mode "STRICT_TRANS_TABLES" that will be default in MySQL 5.6
+        ];
+
+        $conn = \Doctrine\DBAL\DriverManager::getConnection($connectionParams, $config, $eventManager);
+
+        return $conn;
+    }
+
+    /**
+     * @param Connection $connection
      * @param array $options
      * @return \Enlight_Components_Db_Adapter_Pdo_Mysql
      */
-    public function factory($adapter, $options)
+    public static function createEnlightDbAdapter(Connection $connection, array $options)
     {
-        /** @var \Enlight_Components_Db_Adapter_Pdo_Mysql $db */
-        $db = \Enlight_Components_Db::factory($adapter, $options);
-
-        // Reset sql_mode "STRICT_TRANS_TABLES" that will be default in MySQL 5.6
-        $db->exec("SET @@session.sql_mode = ''");
+        $db = \Enlight_Components_Db_Adapter_Pdo_Mysql::createFromDbalConnectionAndConfig($connection, $options);
 
         \Zend_Db_Table_Abstract::setDefaultAdapter($db);
 
