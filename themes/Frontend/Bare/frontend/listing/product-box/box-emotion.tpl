@@ -35,7 +35,7 @@
 
                                                         {$baseSource = $sArticle.image.thumbnails[0].source}
 
-                                                        {if $itemCols && $emotion.grid.cols}
+                                                        {if $itemCols && $emotion.grid.cols && !$fixedImageSize}
                                                             {$colSize = 100 / $emotion.grid.cols}
                                                             {$itemSize = "{$itemCols * $colSize}vw"}
                                                         {else}
