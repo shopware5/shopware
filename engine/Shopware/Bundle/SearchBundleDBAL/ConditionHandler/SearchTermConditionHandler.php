@@ -62,16 +62,14 @@ class SearchTermConditionHandler implements ConditionHandlerInterface
     }
 
     /**
-     * @param ConditionInterface|SearchTermCondition $condition
-     * @param QueryBuilder $query
-     * @param ShopContextInterface $context
-     * @return void
+     * {@inheritdoc}
      */
     public function generateCondition(
         ConditionInterface $condition,
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
+        /** @var SearchTermCondition $condition */
         $searchQuery = $this->searchTermQueryBuilder->buildQuery(
             $condition->getTerm()
         );

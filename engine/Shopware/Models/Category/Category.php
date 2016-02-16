@@ -28,6 +28,7 @@ use Shopware\Components\Model\ModelEntity;
 use Shopware\Models\Article\Article;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Models\ProductStream\ProductStream;
 
 /**
  * Shopware Categories
@@ -60,6 +61,19 @@ class Category extends ModelEntity
      * @ORM\Column(name="parent", type="integer", nullable=true)
      */
     private $parentId;
+
+    /**
+     * @var int
+     * @ORM\Column(name="stream_id", type="integer", nullable=true)
+     */
+    private $streamId;
+
+    /**
+     * @var ProductStream
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\ProductStream\ProductStream")
+     * @ORM\JoinColumn(name="stream_id", referencedColumnName="id")
+     */
+    private $stream;
 
     /**
      * The parent category
@@ -291,6 +305,13 @@ class Category extends ModelEntity
      * @ORM\Column(name="added", type="datetime", nullable=false)
      */
     private $added;
+
+    /**
+     * @var int $mediaId
+     *
+     * @ORM\Column(name="mediaID", type="integer", nullable=true)
+     */
+    private $mediaId;
 
     /**
      * INVERSE SIDE
@@ -1013,5 +1034,29 @@ class Category extends ModelEntity
     public function setMetaTitle($metaTitle)
     {
         $this->metaTitle = $metaTitle;
+    }
+
+    /**
+     * @return ProductStream
+     */
+    public function getStream()
+    {
+        return $this->stream;
+    }
+
+    /**
+     * @param ProductStream $stream
+     */
+    public function setStream(ProductStream $stream = null)
+    {
+        $this->stream = $stream;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMediaId()
+    {
+        return $this->mediaId;
     }
 }

@@ -34,7 +34,6 @@ use Doctrine\ORM\Query\Expr;
  */
 class Repository extends ModelRepository
 {
-
     /**
      * Returns a query-object for all known and active payments
      *

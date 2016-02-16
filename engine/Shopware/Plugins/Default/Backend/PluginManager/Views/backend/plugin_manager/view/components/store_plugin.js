@@ -19,7 +19,7 @@ Ext.define('Shopware.apps.PluginManager.view.components.StorePlugin', {
         me.on('afterrender', function(comp) {
             comp.el.on('click', function(event, el) {
                 if (!el.classList.contains('button')) {
-                    me.displayPluginEvent(me.record);
+                    me.onClickElement(me.record);
                 }
             });
         });
@@ -35,6 +35,11 @@ Ext.define('Shopware.apps.PluginManager.view.components.StorePlugin', {
             me.hideLoadingMask();
         });
 
+    },
+
+    onClickElement: function(record) {
+        var me = this;
+        me.displayPluginEvent(record);
     },
 
     loadRecord: function(plugin) {
@@ -82,7 +87,7 @@ Ext.define('Shopware.apps.PluginManager.view.components.StorePlugin', {
 
         return Ext.create('Ext.Component', {
             cls: 'certified',
-            html: '<span class="icon">&nbsp;</span><span class="text">{s name="certified"}{/s}</span>'
+            html: '<span class="icon">&nbsp;</span><span class="text">{s name="certified"}Certified{/s}</span>'
         });
     },
 
@@ -116,7 +121,7 @@ Ext.define('Shopware.apps.PluginManager.view.components.StorePlugin', {
 
         return Ext.create('Ext.Component', {
             cls: 'author',
-            html: '<span class="prefix">' + '{s name="plugin_author_from"}{/s}' + '</span> ' + Ext.util.Format.ellipsis(producer.get('name'), 25)
+            html: '<span class="prefix">' + '{s name="plugin_author_from"}By:{/s}' + '</span> ' + Ext.util.Format.ellipsis(producer.get('name'), 25)
         });
     },
 
@@ -153,7 +158,7 @@ Ext.define('Shopware.apps.PluginManager.view.components.StorePlugin', {
         if (me.record.allowUpdate()) {
             items.push({
                 cls: 'update badge',
-                html: template + '{s name="update"}{/s}</div>'
+                html: template + '{s name="update"}Update{/s}</div>'
             });
         }
 
@@ -174,7 +179,7 @@ Ext.define('Shopware.apps.PluginManager.view.components.StorePlugin', {
 
                 return Ext.create('PluginManager.container.Container', {
                     cls: 'button dummy',
-                    html: '{s name="install"}{/s}',
+                    html: '{s name="install"}Install{/s}',
                     handler: function() {
                         me.registerConfigRequiredEvent(me.record);
                         me.updateDummyPluginEvent(me.record);
@@ -184,7 +189,7 @@ Ext.define('Shopware.apps.PluginManager.view.components.StorePlugin', {
             case me.record.allowUpdate():
                 return Ext.create('PluginManager.container.Container', {
                     cls: 'button update',
-                    html: '{s name="update_plugin"}{/s}',
+                    html: '{s name="update_plugin"}Update{/s}',
                     handler: function() {
                         me.updatePluginEvent(me.record);
                     }
@@ -193,7 +198,7 @@ Ext.define('Shopware.apps.PluginManager.view.components.StorePlugin', {
             case me.record.allowInstall():
                 return Ext.create('PluginManager.container.Container', {
                     cls: 'button install',
-                    html: '{s name="install"}{/s}',
+                    html: '{s name="install"}Install{/s}',
                     handler: function() {
                         me.registerConfigRequiredEvent(me.record);
                         me.installPluginEvent(me.record);
@@ -203,7 +208,7 @@ Ext.define('Shopware.apps.PluginManager.view.components.StorePlugin', {
             case me.record.allowActivate():
                 return Ext.create('PluginManager.container.Container', {
                     cls: 'button activate',
-                    html: '{s name="activate"}{/s}',
+                    html: '{s name="activate"}Activate{/s}',
                     handler: function() {
                         me.activatePluginEvent(me.record);
                     }
@@ -212,7 +217,7 @@ Ext.define('Shopware.apps.PluginManager.view.components.StorePlugin', {
             case me.record.allowConfigure():
                 return Ext.create('PluginManager.container.Container', {
                     cls: 'button configure',
-                    html: '{s name="configure"}{/s}',
+                    html: '{s name="configure"}Configure{/s}',
                     handler: function() {
                         me.displayPluginEvent(me.record);
                     }
@@ -222,7 +227,7 @@ Ext.define('Shopware.apps.PluginManager.view.components.StorePlugin', {
             case me.record.isLocalPlugin():
                 return Ext.create('PluginManager.container.Container', {
                     cls: 'button locale',
-                    html: '{s name="open"}{/s}',
+                    html: '{s name="open"}Open{/s}',
                     handler: function() {
                         me.displayPluginEvent(me.record);
                     }
@@ -232,9 +237,9 @@ Ext.define('Shopware.apps.PluginManager.view.components.StorePlugin', {
             case me.record.get('useContactForm'):
                 return Ext.create('PluginManager.container.Container', {
                     cls: 'button contact-form',
-                    html: '{s name="request"}{/s}',
+                    html: '{s name="request"}Contact{/s}',
                     handler: function() {
-                        var link = '{s name="contact_link"}{/s}?technicalName=' + me.record.get('technicalName');
+                        var link = '{s name="contact_link"}http://store.shopware.com/en/contact-producer{/s}?technicalName=' + me.record.get('technicalName');
                         window.open(link);
                     }
                 });
@@ -246,13 +251,13 @@ Ext.define('Shopware.apps.PluginManager.view.components.StorePlugin', {
                     var rentPrice = me.getPriceByType(prices, 'rent');
 
                     if (rentPrice) {
-                        text = '{s name="from_price"}{/s} ' + Ext.util.Format.currency(rentPrice.get('price'), ' €', 2, true);
+                        text = '{s name="from_price"}From{/s} ' + Ext.util.Format.currency(rentPrice.get('price'), ' €', 2, true);
                         cls  = 'rent';
                     } else if (buyPrice) {
                         text = Ext.util.Format.currency(buyPrice.get('price'), ' €', 2, true);
                         cls = 'buy';
                     } else {
-                        text = '{s name="free_price"}{/s}';
+                        text = '{s name="free_price"}Free{/s}';
                         cls  = 'free';
                     }
                 }

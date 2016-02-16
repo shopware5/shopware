@@ -55,10 +55,9 @@ class CheckoutContext extends SubContext
 
         /** @var \Shopware\Tests\Mink\Page\Emotion\Account $page */
         $page = $this->getPage('Account');
-        $language = Helper::getCurrentLanguage($page);
 
         $page->open();
-        Helper::clickNamedLink($page, 'myOrdersLink', $language);
+        Helper::clickNamedLink($page, 'myOrdersLink');
 
         /** @var \Shopware\Tests\Mink\Element\Emotion\AccountOrder $order */
         $order = $this->getMultipleElement($page, 'AccountOrder');

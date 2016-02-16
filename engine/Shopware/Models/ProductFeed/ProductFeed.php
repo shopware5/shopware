@@ -55,7 +55,7 @@ class ProductFeed extends ModelEntity
     private $name;
 
     /**
-     * @var datetime $lastExport
+     * @var \DateTime $lastExport
      *
      * @ORM\Column(name="last_export", type="datetime", nullable=false)
      */
@@ -90,7 +90,7 @@ class ProductFeed extends ModelEntity
     private $countArticles;
 
     /**
-     * @var datetime $expiry
+     * @var \DateTime $expiry
      *
      * @ORM\Column(name="expiry", type="datetime", nullable=false)
      */
@@ -111,7 +111,7 @@ class ProductFeed extends ModelEntity
     private $formatId = 1;
 
     /**
-     * @var datetime $lastChange
+     * @var \DateTime $lastChange
      *
      * @ORM\Column(name="last_change", type="datetime", nullable=false)
      */
@@ -338,7 +338,7 @@ class ProductFeed extends ModelEntity
     /**
      * Set lastExport
      *
-     * @param datetime $lastExport
+     * @param \DateTime|string $lastExport
      * @return ProductFeed
      */
     public function setLastExport($lastExport)
@@ -353,7 +353,7 @@ class ProductFeed extends ModelEntity
     /**
      * Get lastExport
      *
-     * @return datetime
+     * @return \DateTime
      */
     public function getLastExport()
     {
@@ -451,7 +451,7 @@ class ProductFeed extends ModelEntity
     /**
      * Set expiry
      *
-     * @param datetime $expiry
+     * @param \DateTime|string $expiry
      * @return ProductFeed
      */
     public function setExpiry($expiry)
@@ -466,7 +466,7 @@ class ProductFeed extends ModelEntity
     /**
      * Get expiry
      *
-     * @return datetime
+     * @return \DateTime
      */
     public function getExpiry()
     {
@@ -520,7 +520,7 @@ class ProductFeed extends ModelEntity
     /**
      * Set lastChange
      *
-     * @param datetime $lastChange
+     * @param \DateTime|string $lastChange
      * @return ProductFeed
      */
     public function setLastChange($lastChange)
@@ -535,7 +535,7 @@ class ProductFeed extends ModelEntity
     /**
      * Get lastChange
      *
-     * @return datetime
+     * @return \DateTime
      */
     public function getLastChange()
     {
@@ -809,7 +809,7 @@ class ProductFeed extends ModelEntity
     /**
      * Set ownFilter
      *
-     * @param text $ownFilter
+     * @param string $ownFilter
      * @return ProductFeed
      */
     public function setOwnFilter($ownFilter)
@@ -821,7 +821,7 @@ class ProductFeed extends ModelEntity
     /**
      * Get ownFilter
      *
-     * @return text
+     * @return string
      */
     public function getOwnFilter()
     {
@@ -831,7 +831,7 @@ class ProductFeed extends ModelEntity
     /**
      * Set header
      *
-     * @param text $header
+     * @param string $header
      * @return ProductFeed
      */
     public function setHeader($header)
@@ -843,7 +843,7 @@ class ProductFeed extends ModelEntity
     /**
      * Get header
      *
-     * @return text
+     * @return string
      */
     public function getHeader()
     {
@@ -853,7 +853,7 @@ class ProductFeed extends ModelEntity
     /**
      * Set body
      *
-     * @param text $body
+     * @param string $body
      * @return ProductFeed
      */
     public function setBody($body)
@@ -865,7 +865,7 @@ class ProductFeed extends ModelEntity
     /**
      * Get body
      *
-     * @return text
+     * @return string
      */
     public function getBody()
     {
@@ -875,7 +875,7 @@ class ProductFeed extends ModelEntity
     /**
      * Set footer
      *
-     * @param text $footer
+     * @param string $footer
      * @return ProductFeed
      */
     public function setFooter($footer)
@@ -887,7 +887,7 @@ class ProductFeed extends ModelEntity
     /**
      * Get footer
      *
-     * @return text
+     * @return string
      */
     public function getFooter()
     {
@@ -1030,7 +1030,7 @@ class ProductFeed extends ModelEntity
     /**
      * Set cache refreshed datetime
      *
-     * @param datetime|string $cacheRefreshed
+     * @param \DateTime|string $cacheRefreshed
      * @return ProductFeed
      */
     public function setCacheRefreshed($cacheRefreshed)
@@ -1045,7 +1045,7 @@ class ProductFeed extends ModelEntity
     /**
      * Get cache refreshed datetime
      *
-     * @return datetime
+     * @return \DateTime
      */
     public function getCacheRefreshed()
     {

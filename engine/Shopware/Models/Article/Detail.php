@@ -92,7 +92,7 @@ class Detail extends ModelEntity
     /**
      * @var integer $active
      *
-     * @ORM\Column(name="active", type="integer", nullable=false)
+     * @ORM\Column(name="active", type="boolean", nullable=false)
      */
     private $active = false;
 
@@ -687,7 +687,7 @@ class Detail extends ModelEntity
     /**
      * Get releaseDate
      *
-     * @return \Date
+     * @return \DateTime
      */
     public function getReleaseDate()
     {

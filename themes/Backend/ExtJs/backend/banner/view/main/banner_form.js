@@ -45,7 +45,7 @@ Ext.define('Shopware.apps.Banner.view.main.BannerForm', {
     width : 700,
     height : 350,
     bodyPadding: 5,
-    basePath: '{link file=""}/',
+    basePath: '',
 
     /**
      * Initializes the component

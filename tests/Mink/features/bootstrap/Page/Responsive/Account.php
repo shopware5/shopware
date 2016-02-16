@@ -53,31 +53,28 @@ class Account extends \Shopware\Tests\Mink\Page\Emotion\Account
     }
 
     /**
-     * @param string $language
-     * @return bool
+     * @inheritdoc
      */
-    protected function verifyPageLogin($language)
+    protected function verifyPageLogin()
     {
         return (
-            parent::verifyPageLogin($language) &&
-            parent::verifyPageRegister($language)
+            parent::verifyPageLogin() &&
+            parent::verifyPageRegister()
         );
     }
 
     /**
-     * @param string $language
-     * @return bool
+     * @inheritdoc
      */
-    protected function verifyPageRegister($language)
+    protected function verifyPageRegister()
     {
-        return $this->verifyPageLogin($language);
+        return $this->verifyPageLogin();
     }
 
-
     /**
-     * @param $data
+     * @inheritdoc
      */
-    public function register($data)
+    public function register(array $data)
     {
         $this->verifyPage();
 
@@ -86,8 +83,7 @@ class Account extends \Shopware\Tests\Mink\Page\Emotion\Account
     }
 
     /**
-     * @param AddressBox $addresses
-     * @param string $name
+     * @inheritdoc
      */
     public function chooseAddress(AddressBox $addresses, $name)
     {

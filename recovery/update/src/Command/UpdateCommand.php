@@ -100,7 +100,9 @@ class UpdateCommand extends Command
         $this->migrateDatabase();
         $this->importSnippets();
         $this->cleanup();
+        $this->synchronizeThemes();
         $this->writeLockFile();
+
 
         $ioService->cls();
         $ioService->writeln("");
@@ -242,7 +244,7 @@ class UpdateCommand extends Command
 
     private function cleanupCache()
     {
-        $cachePath = SW_PATH . '/' . 'cache';
+        $cachePath = SW_PATH . '/var/cache';
         foreach (new \DirectoryIterator($cachePath) as $cacheDirectory) {
             if ($cacheDirectory->isDot() || !$cacheDirectory->isDir()) {
                 continue;
@@ -258,5 +260,12 @@ class UpdateCommand extends Command
             $systemLocker = $this->container->get('system.locker');
             $systemLocker();
         }
+    }
+
+    private function synchronizeThemes()
+    {
+        /** @var \Shopware\Components\Theme\Installer $themeService */
+        $themeService = $this->container->get('shopware.theme_installer');
+        $themeService->synchronize();
     }
 }

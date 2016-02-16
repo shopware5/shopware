@@ -16,8 +16,6 @@
      */
     $.plugin('swAjaxWishlist', {
 
-        alias: 'ajaxWishlist',
-
         /** @object Default configuration */
         defaults: {
 
@@ -92,7 +90,7 @@
 
             me.$el.on(me.getEventName('click'), '.action--note, .link--notepad', $.proxy(me.triggerRequest, me));
 
-            $.publish('plugin/swAjaxWishlist/onRegisterEvents', me);
+            $.publish('plugin/swAjaxWishlist/onRegisterEvents', [ me ]);
         },
 
         /**
@@ -119,7 +117,7 @@
                 'success': $.proxy(me.responseHandler, me, $target)
             });
 
-            $.publish('plugin/swAjaxWishlist/onTriggerRequest', [me, event, url]);
+            $.publish('plugin/swAjaxWishlist/onTriggerRequest', [ me, event, url ]);
         },
 
         /**
@@ -134,7 +132,7 @@
             var me = this,
                 response = JSON.parse(json);
 
-            $.publish('plugin/swAjaxWishlist/onTriggerRequestLoaded', [me, $target, response]);
+            $.publish('plugin/swAjaxWishlist/onTriggerRequestLoaded', [ me, $target, response ]);
 
             if (!response.success) {
                 return;
@@ -143,7 +141,7 @@
             me.updateCounter(response.notesCount);
             me.animateElement($target);
 
-            $.publish('plugin/swAjaxWishlist/onTriggerRequestFinished', [me, $target, response]);
+            $.publish('plugin/swAjaxWishlist/onTriggerRequestFinished', [ me, $target, response ]);
         },
 
         /**
@@ -167,10 +165,10 @@
                 $text.html(originalText);
                 $icon.removeClass(me.opts.iconCls).addClass(originalIcon);
 
-                $.publish('plugin/swAjaxWishlist/onAnimateElementFinished', [me, $target]);
+                $.publish('plugin/swAjaxWishlist/onAnimateElementFinished', [ me, $target ]);
             }, me.opts.delay);
 
-            $.publish('plugin/swAjaxWishlist/onAnimateElement', [me, $target]);
+            $.publish('plugin/swAjaxWishlist/onAnimateElement', [ me, $target ]);
         },
 
         /**
@@ -206,7 +204,7 @@
                 'opacity': 1
             }, 500);
 
-            $.publish('plugin/swAjaxWishlist/onUpdateCounter', [me, me.$counter, count]);
+            $.publish('plugin/swAjaxWishlist/onUpdateCounter', [ me, me.$counter, count ]);
 
             return me.$counter;
         },

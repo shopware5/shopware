@@ -81,24 +81,6 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
     }
 
     /**
-     * Run application method
-     *
-     * @deprecated 4.2 Dispatching is done in \Shopware\Kernel::handle()
-     * @return mixed
-     */
-    public function run()
-    {
-        /** @var $front Enlight_Controller_Front */
-        $front = $this->getResource('Front');
-        $front->Response()->setHeader(
-            'Content-Type',
-            'text/html; charset=' . $front->getParam('charset')
-        );
-
-        $front->dispatch();
-    }
-
-    /**
      * Adds the given resource to the internal resource list and sets the STATUS_ASSIGNED status.
      * The given name will be used as identifier.
      *

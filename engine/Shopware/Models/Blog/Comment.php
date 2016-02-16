@@ -162,7 +162,7 @@ class Comment extends ModelEntity
     /**
      * Set creationDate
      *
-     * @param \DateTime $creationDate
+     * @param \DateTime|string $creationDate
      */
     public function setCreationDate($creationDate)
     {

@@ -127,18 +127,18 @@ class BatchController
         /** @var FilesystemFactory $factory */
         $factory = $this->container->get('filesystem.factory');
 
-        $localFilesytem   = $factory->createLocalFilesystem();
+        $localFilesystem   = $factory->createLocalFilesystem();
         $remoteFilesystem = $factory->createRemoteFilesystem();
 
         if ($offset == 0) {
-            $this->validateFilesytems($localFilesytem, $remoteFilesystem);
+            $this->validateFilesytems($localFilesystem, $remoteFilesystem);
         }
 
         /** @var PathBuilder $pathBuilder */
         $pathBuilder = $this->container->get('path.builder');
 
         $debug = false;
-        $step = new UnpackStep($localFilesytem, $remoteFilesystem, $pathBuilder, $debug);
+        $step = new UnpackStep($localFilesystem, $remoteFilesystem, $pathBuilder, $debug);
 
         $result = $step->run($offset, $total);
 

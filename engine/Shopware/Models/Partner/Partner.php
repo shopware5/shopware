@@ -35,7 +35,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Partner extends ModelEntity
 {
-
     /**
      * @var integer $id
      *
@@ -53,7 +52,7 @@ class Partner extends ModelEntity
     private $idCode;
 
     /**
-     * @var date $date
+     * @var \DateTime $date
      *
      * @ORM\Column(name="datum", type="date", nullable=false)
      */
@@ -213,7 +212,7 @@ class Partner extends ModelEntity
     /**
      * Set datum
      *
-     * @param date $date
+     * @param \DateTime|string $date
      * @return Partner
      */
     public function setDate($date)
@@ -229,7 +228,7 @@ class Partner extends ModelEntity
     /**
      * Get datum
      *
-     * @return date
+     * @return \DateTime
      */
     public function getDate()
     {
@@ -469,7 +468,7 @@ class Partner extends ModelEntity
     /**
      * Set profile
      *
-     * @param text $profile
+     * @param string $profile
      * @return Partner
      */
     public function setProfile($profile)
@@ -482,7 +481,7 @@ class Partner extends ModelEntity
     /**
      * Get profile
      *
-     * @return text
+     * @return string
      */
     public function getProfile()
     {

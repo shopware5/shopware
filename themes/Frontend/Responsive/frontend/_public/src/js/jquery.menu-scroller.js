@@ -28,8 +28,6 @@
      */
     $.plugin('swMenuScroller', {
 
-        alias: 'menuScroller',
-
         /**
          * Default options for the menu scroller plugin
          *
@@ -234,7 +232,7 @@
                 'class': opts.rightArrowClass
             }).appendTo($el);
 
-            $.publish('plugin/swMenuScroller/onInitTemplate', me);
+            $.publish('plugin/swMenuScroller/onInitTemplate', [ me ]);
         },
 
         /**
@@ -255,7 +253,7 @@
                 'margin-top': offset
             });
 
-            $.publish('plugin/swMenuScroller/onUpdateScrollBarOffset', [me, offset]);
+            $.publish('plugin/swMenuScroller/onUpdateScrollBarOffset', [ me, offset ]);
         },
 
         /**
@@ -275,7 +273,7 @@
 
             me._on(me.$list, 'scroll', $.proxy(me.updateButtons, me));
 
-            $.publish('plugin/swMenuScroller/onRegisterEvents', me);
+            $.publish('plugin/swMenuScroller/onRegisterEvents', [ me ]);
         },
 
         /**
@@ -299,10 +297,7 @@
 
             me.updateButtons();
 
-            /** @deprecated - will be removed in 5.1 */
-            $.publish('plugin/menuScroller/updateResize', me);
-
-            $.publish('plugin/swMenuScroller/onUpdateResize', me);
+            $.publish('plugin/swMenuScroller/onUpdateResize', [ me ]);
         },
 
         /**
@@ -320,7 +315,7 @@
 
             me.addOffset(me.scrollStep * -1);
 
-            $.publish('plugin/swMenuScroller/onLeftArrowClick', me);
+            $.publish('plugin/swMenuScroller/onLeftArrowClick', [ me ]);
         },
 
         /**
@@ -338,7 +333,7 @@
 
             me.addOffset(me.scrollStep);
 
-            $.publish('plugin/swMenuScroller/onRightArrowClick', me);
+            $.publish('plugin/swMenuScroller/onRightArrowClick', [ me ]);
         },
 
         /**
@@ -373,7 +368,7 @@
                     'scrollLeft': newPos
                 }, opts.animationSpeed, $.proxy(me.updateButtons, me));
 
-                $.publish('plugin/swMenuScroller/onSetOffset', [me, offset, animate]);
+                $.publish('plugin/swMenuScroller/onSetOffset', [ me, offset, animate ]);
                 return;
             }
 
@@ -381,7 +376,7 @@
 
             me.updateButtons();
 
-            $.publish('plugin/swMenuScroller/onSetOffset', [me, offset, animate]);
+            $.publish('plugin/swMenuScroller/onSetOffset', [ me, offset, animate ]);
         },
 
         /**
@@ -400,7 +395,7 @@
             me.$leftArrow.toggle(scrollLeft > 0);
             me.$rightArrow.toggle(listWidth > elWidth && scrollLeft < (listWidth - elWidth));
 
-            $.publish('plugin/swMenuScroller/onUpdateButtons', [me, me.$leftArrow, me.$rightArrow]);
+            $.publish('plugin/swMenuScroller/onUpdateButtons', [ me, me.$leftArrow, me.$rightArrow ]);
         },
 
         /**
@@ -426,7 +421,7 @@
 
             me.setOffset(newPos, false);
 
-            $.publish('plugin/swMenuScroller/onJumpToElement', [me, $el, newPos]);
+            $.publish('plugin/swMenuScroller/onJumpToElement', [ me, $el, newPos ]);
         },
 
         /**

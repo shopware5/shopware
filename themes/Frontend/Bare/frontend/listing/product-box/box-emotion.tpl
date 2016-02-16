@@ -35,7 +35,7 @@
 
                                                         {$baseSource = $sArticle.image.thumbnails[0].source}
 
-                                                        {if $itemCols && $emotion.grid.cols}
+                                                        {if $itemCols && $emotion.grid.cols && !$fixedImageSize}
                                                             {$colSize = 100 / $emotion.grid.cols}
                                                             {$itemSize = "{$itemCols * $colSize}vw"}
                                                         {else}
@@ -81,8 +81,8 @@
                                 {block name='frontend_listing_box_article_name'}
                                     <a href="{$sArticle.linkDetails|rewrite:$sArticle.articleName}"
                                        class="product--title"
-                                       title="{$sArticle.articleName|escape}">
-                                        {$sArticle.articleName|truncate:50}
+                                       title="{$sArticle.articleName|escapeHtml}">
+                                        {$sArticle.articleName|truncate:50|escapeHtml}
                                     </a>
                                 {/block}
 

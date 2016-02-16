@@ -159,7 +159,7 @@ class LegacyListingSubscriber implements SubscriberInterface
         $view = $args->getSubject()->View();
 
         $totalCount = $view->getAssign('sNumberArticles');
-        $shortParameters = $view->getAssign('shortParameters');
+        $shortParameters = $view->getAssign('shortParameters') ? : [];
 
         $params = $this->getCategoryConfig($args->getSubject()->Request());
 
@@ -324,7 +324,11 @@ class LegacyListingSubscriber implements SubscriberInterface
     {
         $currentPage = $config['sPage'];
 
-        $count = ceil($totalCount / $config['sPerPage']);
+        if ($config['sPerPage'] != 0) {
+            $count = ceil($totalCount / $config['sPerPage']);
+        } else {
+            $count = 0;
+        }
 
         if ((int) $this->get('config')->get('maxPages') > 0 && (int) $this->get('config')->get('maxPages') < $count) {
             $count = (int) $this->get('config')->get('maxPages');
@@ -480,6 +484,12 @@ class LegacyListingSubscriber implements SubscriberInterface
         $params = $this->getListingLinkParameters($config);
 
         $request = $this->get('front')->Request();
+
+        // @deprecated since 5.1 will be removed in 5.2
+        if ($activeSupplier['image']) {
+            $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+            $activeSupplier['image'] = $mediaService->getUrl($activeSupplier['image']);
+        }
 
         if ($request->getParam('action') == 'manufacturer') {
             $activeSupplier['link'] = null;

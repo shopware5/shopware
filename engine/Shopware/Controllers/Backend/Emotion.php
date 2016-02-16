@@ -22,6 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
+use Doctrine\Common\Collections\ArrayCollection;
+
 class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_ExtJs
 {
     /**
@@ -157,6 +159,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     {
         $id = $this->Request()->getParam('id', null);
         $query = $this->getRepository()->getEmotionDetailQuery($id);
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
 
         $emotion = $query->getArrayResult();
         $emotion = $emotion[0];
@@ -164,8 +167,6 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
 
         if (!empty($emotion["isLandingPage"])) {
             $emotion["link"] = "shopware.php?sViewport=campaign&emotionId=".$emotion["id"];
-        } else {
-            $emotion["categoryId"] = !empty($emotion["categories"][0]["id"]) ? $emotion["categories"][0]["id"] : 0;
         }
 
         $validFrom = $emotion['validFrom'];
@@ -191,13 +192,30 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
                 $value = '';
                 switch (strtolower($entry['valueType'])) {
                     case "json":
-                        $value = Zend_Json::decode($entry['value']);
+                        if ($entry['value'] != '') {
+                            $value = Zend_Json::decode($entry['value']);
+                        } else {
+                            $value = null;
+                        }
                         break;
                     case "string":
                     default:
                         $value = $entry['value'];
                         break;
                 }
+
+                if ($entry['name'] === 'file') {
+                    $value = $mediaService->getUrl($value);
+                }
+
+                if (in_array($entry['name'], ['selected_manufacturers', 'banner_slider'])) {
+                    foreach ($value as $k => $v) {
+                        if (isset($v['path'])) {
+                            $value[$k]['path'] = $mediaService->getUrl($v['path']);
+                        }
+                    }
+                }
+
                 $data[] = array(
                     'id' => $entry['id'],
                     'valueType' => $entry['valueType'],
@@ -222,10 +240,10 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     {
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(array('components', 'fields'))
-                ->from('Shopware\Models\Emotion\Library\Component', 'components')
-                ->leftJoin('components.fields', 'fields')
-                ->orderBy('components.id', 'ASC')
-                ->addOrderBy('fields.position', 'ASC');
+            ->from('Shopware\Models\Emotion\Library\Component', 'components')
+            ->leftJoin('components.fields', 'fields')
+            ->orderBy('components.id', 'ASC')
+            ->addOrderBy('fields.position', 'ASC');
 
         $components = $builder->getQuery()->getArrayResult();
         $this->View()->assign(array(
@@ -253,9 +271,9 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
                 $emotion = Shopware()->Models()->find('Shopware\Models\Emotion\Emotion', $id);
                 if (!$emotion) {
                     $this->View()->assign(array(
-                        'success' => false,
-                        'data' => $this->Request()->getParams(),
-                        'message' => $namespace->get('no_valid_id', 'No valid emotion id passed.'))
+                            'success' => false,
+                            'data' => $this->Request()->getParams(),
+                            'message' => $namespace->get('no_valid_id', 'No valid emotion id passed.'))
                     );
                     return;
                 }
@@ -295,18 +313,14 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
             $data['modified'] = new \DateTime();
             $data['elements'] = $this->fillElements($emotion, $data);
 
-            if ($data['isLandingPage']) {
-                if (empty($data['categories'])) {
-                    $data['categories'] = null;
-                } else {
-                    $categories = array();
-                    foreach ($data['categories'] as $category) {
-                        $categories[] = Shopware()->Models()->find('Shopware\Models\Category\Category', $category);
-                    }
-                    $data['categories'] = $categories;
-                }
+            if (empty($data['categories'])) {
+                $data['categories'] = null;
             } else {
-                $data['categories'] = array(Shopware()->Models()->find('Shopware\Models\Category\Category', $data['categoryId']));
+                $categories = array();
+                foreach ($data['categories'] as $category) {
+                    $categories[] = Shopware()->Models()->find('Shopware\Models\Category\Category', $category);
+                }
+                $data['categories'] = $categories;
             }
 
             unset($data['user']);
@@ -400,6 +414,8 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     private function fillElements($emotion, $data)
     {
         $elements= array();
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaFields = $this->getMediaXTypes();
 
         foreach ($data['elements'] as $elementData) {
             $element = new \Shopware\Models\Emotion\Element();
@@ -418,6 +434,13 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
                 $value = '';
                 switch (strtolower($field->getValueType())) {
                     case "json":
+
+                        if (is_array($item['value'])) {
+                            foreach ($item['value'] as &$val) {
+                                $val['path'] = $mediaService->normalize($val['path']);
+                            }
+                        }
+
                         $value = Zend_Json::encode($item['value']);
                         break;
                     case "string":
@@ -425,6 +448,11 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
                         $value = $item['value'];
                         break;
                 }
+
+                if (in_array($field->getXType(), $mediaFields)) {
+                    $value = $mediaService->normalize($value);
+                }
+
                 $model->setValue($value);
                 $model->setEmotionId($emotion->getId());
                 Shopware()->Models()->persist($model);
@@ -694,11 +722,11 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     {
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(array('grids'))
-                ->from('Shopware\Models\Emotion\Grid', 'grids');
+            ->from('Shopware\Models\Emotion\Grid', 'grids');
 
         if ($offset !== null  && $limit !== null) {
             $builder->setFirstResult($offset)
-                    ->setMaxResults($limit);
+                ->setMaxResults($limit);
         }
 
         return $builder;
@@ -845,9 +873,9 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     {
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(array('grid'))
-                ->from('Shopware\Models\Emotion\Grid', 'grid')
-                ->where('grid.id = :id')
-                ->setParameter('id', $id);
+            ->from('Shopware\Models\Emotion\Grid', 'grid')
+            ->where('grid.id = :id')
+            ->setParameter('id', $id);
 
         return $builder->getQuery()->getOneOrNullResult(
             \Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY
@@ -1096,11 +1124,11 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     {
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(array('templates'))
-                ->from('Shopware\Models\Emotion\Template', 'templates');
+            ->from('Shopware\Models\Emotion\Template', 'templates');
 
         if ($offset !== null  && $limit !== null) {
             $builder->setFirstResult($offset)
-                    ->setMaxResults($limit);
+                ->setMaxResults($limit);
         }
 
         return $builder;
@@ -1246,12 +1274,29 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     {
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(array('template'))
-                ->from('Shopware\Models\Emotion\Template', 'template')
-                ->where('template.id = :id')
-                ->setParameter('id', $id);
+            ->from('Shopware\Models\Emotion\Template', 'template')
+            ->where('template.id = :id')
+            ->setParameter('id', $id);
 
         return $builder->getQuery()->getOneOrNullResult(
             \Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY
         );
+    }
+
+    /**
+     * Collects all media related x_types which needs to be normalized
+     *
+     * @return array
+     */
+    private function getMediaXTypes()
+    {
+        $mediaFields = new ArrayCollection([
+            'mediaselectionfield',
+            'mediatextfield'
+        ]);
+
+        $mediaFields = $this->get('events')->collect('Shopware_Plugin_Collect_MediaXTypes', $mediaFields);
+
+        return $mediaFields->toArray();
     }
 }

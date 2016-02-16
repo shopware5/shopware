@@ -32,7 +32,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Product;
 use Shopware\Components\QueryAliasMapper;
 
 /**
- * Deprecated Shopware Class that handle articles
+ * Shopware Class that handle articles
  *
  * @category  Shopware
  * @package   Shopware\Core\Class
@@ -535,7 +535,8 @@ class sArticles
                 $getSupplier[$supplierKey] = $this->sGetTranslation($supplierValue, $supplierValue['id'], 'supplier');
             }
             if ($supplierValue["image"]) {
-                $getSupplier[$supplierKey]["image"] = $supplierValue["image"];
+                $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+                $getSupplier[$supplierKey]["image"] = $mediaService->getUrl($supplierValue['image']);
             }
 
             if ($id !== Shopware()->Shop()->getCategory()->getId()) {
@@ -1208,10 +1209,6 @@ class sArticles
             return [];
         }
 
-        if (!$product) {
-            return [];
-        }
-
         if ($product->hasConfigurator()) {
             $type = $this->getConfiguratorType($product->getId());
 
@@ -1282,6 +1279,9 @@ class sArticles
 
         $price = floatval(str_replace(",", ".", $price));
 
+        if ($purchaseUnit == 0 || $referenceUnit == 0) {
+            return 0;
+        }
         return $price / $purchaseUnit * $referenceUnit;
     }
 
@@ -1434,27 +1434,25 @@ class sArticles
     protected function getRandomArticle($mode, $category = 0)
     {
         $category = (int)$category;
-        $context = $this->contextService->getShopContext();
+        $context = $this->contextService->getProductContext();
         if (empty($category)) {
             $category = $context->getShop()->getCategory()->getId();
         }
 
         $criteria = $this->storeFrontCriteriaFactory->createBaseCriteria([$category], $context);
 
-        $criteria->offset(0);
+        $criteria->offset(0)
+            ->limit(100);
 
         switch ($mode) {
             case 'top':
                 $criteria->addSorting(new PopularitySorting(SortingInterface::SORT_DESC));
-                $criteria->limit(10);
                 break;
             case 'new':
                 $criteria->addSorting(new ReleaseDateSorting(SortingInterface::SORT_DESC));
-                $criteria->limit(1);
                 break;
             default:
                 $criteria->addSorting(new ReleaseDateSorting(SortingInterface::SORT_DESC));
-                $criteria->limit(100);
         }
 
         $result = $this->productNumberSearch->search($criteria, $context);
@@ -1504,6 +1502,7 @@ class sArticles
     {
         //initial the data array
         $imageData = array();
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
 
         if (empty($image["path"])) {
             return $imageData;
@@ -1559,9 +1558,9 @@ class sArticles
             if (strpos($size, 'x')===0) {
                 $size = $size.'x'.$size;
             }
-            $imageData["src"][$key] = $thumbDir . $image['path'] . '_'. $size .'.'. $image['extension'];
+            $imageData["src"][$key] = $mediaService->getUrl($thumbDir . $image['path'] . '_'. $size .'.'. $image['extension']);
             if ($highDpiThumbnails) {
-                $imageData["srchd"][$key] = $thumbDir . $image['path'] . '_'. $size .'@2x.'. $image['extension'];
+                $imageData["srchd"][$key] = $mediaService->getUrl($thumbDir . $image['path'] . '_'. $size .'@2x.'. $image['extension']);
             }
         }
 
@@ -1684,7 +1683,6 @@ class sArticles
         } else {
             $cover = $this->getArticleCover($articleId, $ordernumber, $articleAlbum);
         }
-
 
         if ($onlyCover) {
             $cover = Enlight()->Events()->filter(
@@ -2238,14 +2236,14 @@ class sArticles
      *
      * @param $categoryId
      * @param StoreFrontBundle\Struct\ProductContextInterface $context
-     * @param Enlight_Controller_Request_RequestHttp $request
+     * @param Enlight_Controller_Request_Request $request
      * @param SearchBundle\Criteria $criteria
      * @return array
      */
     private function getListing(
         $categoryId,
         StoreFrontBundle\Struct\ProductContextInterface $context,
-        Enlight_Controller_Request_RequestHttp $request,
+        Enlight_Controller_Request_Request $request,
         SearchBundle\Criteria $criteria
     ) {
         $searchResult = $this->searchService->search(
@@ -2273,7 +2271,7 @@ class sArticles
             }
             $article['description_long'] = $this->sOptimizeText($article['description_long']);
 
-            $articles[$article['articleID']] = $article;
+            $articles[$article['ordernumber']] = $article;
         }
 
         $pageSizes = explode("|", $this->config->get('numberArticlesToShow'));
@@ -2303,7 +2301,7 @@ class sArticles
      */
     private function getLegacyProduct(Product $product, $categoryId, array $selection)
     {
-        $data = $this->legacyStructConverter->convertProductStruct($product, $categoryId);
+        $data = $this->legacyStructConverter->convertProductStruct($product);
 
         $relatedArticles = array();
         foreach ($data['sRelatedArticles'] as $related) {

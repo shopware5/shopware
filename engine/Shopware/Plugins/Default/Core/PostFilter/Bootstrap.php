@@ -192,11 +192,15 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
                 break;
         }
 
-        if (strpos($link, 'www.') === 0) {
-            $link = 'http://' . $link;
-        }
-        if (!preg_match('#^[a-z]+:|^\#|^/#', $link)) {
-            $link = $this->basePathUrl . $link;
+        if (strpos($link, "{media") === 0) {
+            $link = $this->handleMediaPlugin($link);
+        } else {
+            if (strpos($link, 'www.') === 0) {
+                $link = 'http://' . $link;
+            }
+            if (!preg_match('#^[a-z]+:|^\#|^/#', $link)) {
+                $link = $this->basePathUrl . $link;
+            }
         }
 
         //check canonical shopware configuration
@@ -266,5 +270,32 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
         }
         $hosts = array_filter($hosts);
         return $hosts;
+    }
+
+    /**
+     * @param $link
+     * @return string
+     * @throws SmartyException
+     */
+    private function handleMediaPlugin($link)
+    {
+        // remove beginning and end of tag {media ...}
+        $link = ltrim($link, '{media ');
+        $link = substr($link, 0, -1);
+
+        $attributes = [];
+        $parts = explode(" ", $link);
+        foreach ($parts as $part) {
+            list($key, $value) = explode("=", $part);
+            $attributes[$key] = trim($value, '"\'');
+        }
+
+        // load plugin to have access to the compiler
+        Shopware()->Template()->loadPlugin('Smarty_Compiler_Media');
+
+        $compiler = new Smarty_Compiler_Media();
+        $attributes = $compiler->parseAttributes($attributes);
+
+        return $attributes['path'];
     }
 }

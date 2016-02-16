@@ -32,7 +32,6 @@ use Shopware\Components\Model\ModelRepository;
  */
 class Repository extends ModelRepository
 {
-
     /**
      * Receives all known newsletter groups
      *

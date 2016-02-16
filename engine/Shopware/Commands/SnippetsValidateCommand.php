@@ -66,7 +66,7 @@ class SnippetsValidateCommand extends ShopwareCommand
             $invalidPaths = $validator->validate($this->container->getParameter('kernel.root_dir').'/snippets');
             $invalidPaths = array_merge(
                 $invalidPaths,
-                $this->validatePlugins($validator, ['Default', 'Local', 'Community'])
+                $this->validatePlugins($validator)
             );
         } else {
             $invalidPaths = $validator->validate($argument);

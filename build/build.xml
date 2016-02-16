@@ -19,13 +19,17 @@
     </target>
 
     <target name="build-continuous" depends="unit-shopware-continuous"/>
-    <target name="build-unit" depends="build-cache-dir, build-composer-install, build-config, build-database, build-generate-attributes, build-snippets-deploy, build-theme-initialize, build-install-lock-file, build-disable-firstrunwizard" />
+    <target name="build-unit" depends="build-cache-dir, build-composer-install, build-config, build-database, build-snippets-deploy, build-theme-initialize, build-install-lock-file, build-disable-firstrunwizard, install-git-hooks" />
     <target name="test-unit" depends="unit-shopware"/>
 
     <target name="configure" description="Set up build-variables">
         <input message="Please enter db-host:"
                addproperty="user.db.host"
                defaultvalue="${db.host}" />
+
+        <input message="Please enter db-port:"
+               addproperty="user.db.port"
+               defaultvalue="${db.port}" />
 
         <input message="Please enter db-name:"
                addproperty="user.db.name"
@@ -40,11 +44,11 @@
             <handler type="secure"/>
         </input>
 
-        <input message="Please enter app.host:"
+        <input message="Please enter app.host (Hostname e.g. example.com):"
                addproperty="user.app.host"
                defaultvalue="${app.host}" />
 
-        <input message="Please enter app.path:"
+        <input message="Please enter app.path (e.g. /shopware. Leave blank if installed in document root):"
                addproperty="user.app.path"
                defaultvalue="${app.path}" />
 
@@ -55,6 +59,7 @@
             <entry  key="db.name"     value="${user.db.name}"/>
             <entry  key="db.user"     value="${user.db.user}"/>
             <entry  key="db.password" value="${user.db.password}"/>
+            <entry  key="db.port"     value="${user.db.port}"/>
             <entry  key="app.path"    value="${user.app.path}"/>
             <entry  key="app.host"    value="${user.app.host}"/>
         </propertyfile>
@@ -99,8 +104,7 @@
     <target name="build-database" depends="build-database-foundation, build-database-apply-deltas, build-database-deploy-demodata" />
 
     <target name="build-database-foundation">
-        <concat destfile="${build.dir}/scripts/deploy.sql">
-
+        <concat encoding="UTF-8" outputencoding="UTF-8" destfile="${build.dir}/scripts/deploy.sql">
             <fileset file="${build.dir}/scripts/deploy.create.sql"/>
             <fileset file="${sql.dir}/install/latest.sql"/>
             <fileset file="${build.dir}/scripts/deploy.shopconfig.sql"/>
@@ -116,6 +120,7 @@
 
         <exec executable="${script.mysql}" failonerror="true" input="${build.dir}/scripts/deploy.sql">
             <arg value="-u${db.user}"/>
+            <arg value="-P${db.port}"/>
             <arg value="--password=${db.password}"/>
             <arg value="--host=${db.host}"/>
         </exec>
@@ -126,6 +131,7 @@
     <target name="build-database-apply-deltas">
         <exec executable="php" failonerror="true">
             <arg value="${build.dir}/ApplyDeltas.php"/>
+            <arg value="--port=${db.port}"/>
             <arg value="--password=${db.password}"/>
             <arg value="--host=${db.host}"/>
             <arg value="--username=${db.user}"/>
@@ -134,12 +140,12 @@
     </target>
 
     <target name="build-database-deploy-demodata">
-        <concat destfile="${build.dir}/scripts/demo.template.sql">
+        <concat encoding="UTF-8" outputencoding="UTF-8" destfile="${build.dir}/scripts/demo.template.sql">
             <fileset file="${demo.data}"/>
             <fileset file="${build.dir}/scripts/deploy.shopconfig.sql"/>
         </concat>
 
-        <copy file="${build.dir}/scripts/demo.template.sql" toFile="${build.dir}/scripts/demo.deploy.sql">
+        <copy encoding="UTF-8" outputencoding="UTF-8" file="${build.dir}/scripts/demo.template.sql" toFile="${build.dir}/scripts/demo.deploy.sql">
             <filterset>
                 <filter token="database" value="${db.name}"/>
                 <filter token="host" value="${app.host}"/>
@@ -149,6 +155,7 @@
 
         <exec executable="${script.mysql}" failonerror="true" input="${build.dir}/scripts/demo.deploy.sql">
             <arg value="-u${db.user}"/>
+            <arg value="-P${db.port}"/>
             <arg value="--password=${db.password}"/>
             <arg value="--host=${db.host}"/>
             <arg value="--default-character-set=utf8"/>
@@ -165,13 +172,13 @@
         </exec>
     </target>
 
-    <target name="build-snippets-deploy" depends="build-generate-attributes">
+    <target name="build-snippets-deploy">
         <exec executable="php" dir="${basedir}/bin" failonerror="true">
             <arg line="console sw:snippets:to:db --include-plugins"/>
         </exec>
     </target>
 
-    <target name="build-theme-initialize" depends="build-generate-attributes">
+    <target name="build-theme-initialize">
         <exec executable="php" dir="${basedir}/bin" failonerror="true">
             <arg line="console sw:theme:initialize"/>
         </exec>
@@ -183,6 +190,11 @@
         </exec>
     </target>
 
+    <target name="install-git-hooks">
+        <mkdir dir="${basedir}/.git/hooks/"/>
+        <symlink link="${basedir}/.git/hooks/pre-commit" resource="${build.dir}/gitHooks/pre-commit" overwrite="true"/>
+    </target>
+
     <target name="build-install-lock-file">
         <tstamp>
             <format property="installDate" pattern="yyyyMMddHHmm" />
@@ -192,6 +204,7 @@
     </target>
 
     <target name="build-cache-dir">
+        <mkdir dir="${cache.dir}/"/>
         <exec executable="chmod" os="Linux">
             <arg value="0777"/>
             <arg value="${cache.dir}/"/>
@@ -218,7 +231,7 @@
                 <filter token="db.host"     value="${db.host}"/>
                 <filter token="db.user"     value="${db.user}"/>
                 <filter token="db.password" value="${db.password}"/>
-                <filter token="db.port"     value=""/>
+                <filter token="db.port"     value="${db.port}"/>
             </filterset>
         </copy>
     </target>
@@ -268,21 +281,23 @@
 
     <target name="mink-shopware-continuous">
         <exec executable="${script.behat}" dir="${test.dir}/Mink">
-            <env key="MINK_EXTENSION_PARAMS" value="base_url=http://${app.host}${app.path}"/>
-            <arg value="--no-ansi"/>
+            <env key="BEHAT_PARAMS" value='{"extensions" : {"Behat\\MinkExtension" : {"base_url" : "http://${app.host}${app.path}"}}}'/>
             <arg value="--profile=emotion"/>
-            <arg value="--format=pretty,junit,html"/>
-            <arg value="--out=,${log.dir}/mink,${log.dir}/mink-report.html"/>
+            <arg value="--format=pretty"/>
+            <arg value="--out=std"/>
+            <arg value="--format=junit"/>
+            <arg value="--out=${log.dir}/mink"/>
         </exec>
     </target>
 
     <target name="mink-shopware-continuous-responsive">
         <exec executable="${script.behat}" dir="${test.dir}/Mink">
-            <env key="MINK_EXTENSION_PARAMS" value="base_url=http://${app.host}${app.path}"/>
-            <arg value="--no-ansi"/>
+            <env key="BEHAT_PARAMS" value='{"extensions" : {"Behat\\MinkExtension" : {"base_url" : "http://${app.host}${app.path}"}}}'/>
             <arg value="--profile=responsive"/>
-            <arg value="--format=pretty,junit,html"/>
-            <arg value="--out=,${log.dir}/mink,${log.dir}/mink-report.html"/>
+            <arg value="--format=pretty"/>
+            <arg value="--out=std"/>
+            <arg value="--format=junit"/>
+            <arg value="--out=${log.dir}/mink"/>
         </exec>
     </target>
 

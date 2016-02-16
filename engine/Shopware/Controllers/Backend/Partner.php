@@ -34,7 +34,6 @@ use Doctrine\ORM\AbstractQuery;
  */
 class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_ExtJs
 {
-
     /**
      * Registers the different acl permission for the different controller actions.
      *

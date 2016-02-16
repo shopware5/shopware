@@ -107,7 +107,6 @@ class Enlight_Controller_Plugins_ScriptRenderer_Bootstrap extends Enlight_Plugin
         if ($this->viewRenderer->Action()->View()->hasTemplate()
             || !$this->viewRenderer->shouldRender()
         ) {
-
             return;
         }
 

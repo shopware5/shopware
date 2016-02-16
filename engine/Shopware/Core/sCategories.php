@@ -27,7 +27,7 @@ use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Category;
 
 /**
- * Deprecated Shopware Class that handles categories
+ * Shopware Class that handles categories
  *
  * @category  Shopware
  * @package   Shopware\Core
@@ -527,7 +527,6 @@ class sCategories
         }
 
         $category = $this->getActiveCategoryData($id, $this->customerGroupId);
-
         if (empty($category)) {
             return null;
         }
@@ -553,7 +552,6 @@ class sCategories
                 'metaDescription' => $category['metaDescription'],
                 'noviewselect'    => $category['noViewSelect'],
                 'childrenCount'   => (int) $category['childrenCount'],
-                'articleCount'    => (int) $category['articleCount'],
                 'sSelf'           => $detailUrl,
                 'sSelfCanonical'  => $canonical,
                 'canonicalParams' => $canonicalParams,
@@ -587,7 +585,7 @@ class sCategories
     {
         $request = $this->frontController->Request();
         $page = $request->getQuery('sPage');
-        
+
         $emotion = $this->manager->getRepository('Shopware\Models\Emotion\Emotion')
             ->getCategoryBaseEmotionsQuery($category['id'])->getArrayResult();
 
@@ -595,11 +593,11 @@ class sCategories
             'sViewport' => $category['blog'] ? 'blog' : 'cat',
             'sCategory' => $category['id'],
         );
-        
+
         if ($this->config->get('seoIndexPaginationLinks') && (!$emotion || $page)) {
             $canonicalParams['sPage'] = $page ? : 1;
         }
-        
+
         return $canonicalParams;
     }
 

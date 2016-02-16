@@ -159,3 +159,9 @@ Feature: Detail page
             |           | 0.5 Liter | 39,98 €   |
             | SW10002.1 | 1.5 Liter | 39,99 €   |
             | SW10002.2 | 5 Liter   | 39,80 €   |
+
+    @notAvailable
+    Scenario: The customer evaluation form has a captcha
+        Given I am on the detail page for article 199
+        Then  I should see "Dieser Artikel steht derzeit nicht zur Verfügung!"
+        But   I should not see "In den Warenkorb"

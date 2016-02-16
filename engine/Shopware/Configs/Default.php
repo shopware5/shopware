@@ -15,12 +15,40 @@ if (!is_array($customConfig)) {
 return array_replace_recursive([
     'custom' => [],
     'trustedproxies' => [],
+    'cdn' => [
+        'backend' => 'local',
+        'strategy' => 'md5',
+        'adapters' => [
+            'local' => [
+                'type' => 'local',
+                'mediaUrl' => '',
+
+                'path' => realpath(__DIR__ . '/../../../')
+            ],
+            'ftp' => [
+                'type' => 'ftp',
+                'mediaUrl' => '',
+
+                'host' => '',
+                'username' => '',
+                'password' => '',
+                'port' => 21,
+                'root' => '/',
+                'passive' => true,
+                'ssl' => false,
+                'timeout' => 30
+            ]
+        ]
+    ],
     'snippet' => [
         'readFromDb' => true,
         'writeToDb' => true,
         'readFromIni' => false,
         'writeToIni' => false,
         'showSnippetPlaceholder' => false,
+    ],
+    'errorHandler' => [
+        'throwOnRecoverableError' => false,
     ],
     'db' => [
         'username' => 'root',
@@ -29,6 +57,15 @@ return array_replace_recursive([
         'host' => 'localhost',
         'charset' => 'utf8',
         'adapter' => 'pdo_mysql'
+    ],
+    'es' => [
+        'prefix' => 'sw_shop',
+        'enabled' => false,
+        'client' => [
+            'hosts' => [
+                'localhost:9200'
+            ]
+        ]
     ],
     'front' => [
         'noErrorHandler' => false,
@@ -91,8 +128,8 @@ return array_replace_recursive([
         ],
         'backend' => 'auto', // e.G auto, apc, xcache
         'backendOptions' => [
-            'hashed_directory_perm' => 0771,
-            'cache_file_perm' => 0644,
+            'hashed_directory_perm' => 0777 & ~umask(),
+            'cache_file_perm' => 0666 & ~umask(),
             'hashed_directory_level' => 3,
             'cache_dir' => $this->getCacheDir().'/general',
             'file_name_prefix' => 'shopware'
@@ -104,7 +141,6 @@ return array_replace_recursive([
     ],
     'model' => [
         'autoGenerateProxyClasses' => false,
-        'fileCacheDir' => $this->getCacheDir().'/doctrine/filecache',
         'attributeDir' => $this->getCacheDir().'/doctrine/attributes',
         'proxyDir'     => $this->getCacheDir().'/doctrine/proxies',
         'proxyNamespace' => $this->App() . '\Proxies',

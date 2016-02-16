@@ -27,7 +27,7 @@
  * @package   Shopware\Tests
  * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
  */
-class Shopware_Tests_Components_Hash_Hasher_Sha256Test extends Enlight_Components_Test_TestCase
+class Shopware_Tests_Components_Hash_Hasher_Sha256Test extends PHPUnit_Framework_TestCase
 {
     /**
      * @var\Shopware\Components\Password\Encoder\Sha256

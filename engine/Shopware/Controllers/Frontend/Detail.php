@@ -112,7 +112,8 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
             return $this->forward('error');
         }
 
-        if (!empty($article['template'])) {
+        $template = trim($article['template']);
+        if (!empty($template)) {
             $this->View()->loadTemplate('frontend/detail/' . $article['template']);
         } elseif (!empty($article['mode'])) {
             $this->View()->loadTemplate('frontend/blog/detail.tpl');
@@ -175,7 +176,11 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Category\Category');
         $categoryPath = $repository->getPathById($categoryId);
 
-        if (!array_key_exists($defaultShopCategoryId , $categoryPath)) {
+        if (!$categoryPath) {
+            return true;
+        }
+
+        if (!array_key_exists($defaultShopCategoryId, $categoryPath)) {
             return false;
         }
 
@@ -280,7 +285,7 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
 
                 $mail = Shopware()->TemplateMail()->createMail('sOPTINVOTE', $context);
                 $mail->addTo($this->Request()->getParam('sVoteMail'));
-                $mail->Send();
+                $mail->send();
             } else {
                 unset(Shopware()->Config()->sOPTINVOTE);
                 Shopware()->Modules()->Articles()->sSaveComment($id);

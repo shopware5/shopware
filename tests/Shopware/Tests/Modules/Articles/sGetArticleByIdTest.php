@@ -3536,7 +3536,13 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
     }
 
     private function assertArticleData($expected, $data) {
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
         foreach($this->articleProperties as $property) {
+
+            if ($property === 'supplierImg') {
+                $expected[$property] = $mediaService->getUrl($expected[$property]);
+            }
+
             $this->assertEquals(
                 $expected[$property],
                 $data[$property],
@@ -3557,10 +3563,15 @@ class Shopware_Tests_Modules_Articles_sGetArticleByIdTest extends Enlight_Compon
     private function assertRelated($expected, $data)
     {
         $this->assertCount(count($expected['sRelatedArticles']), $data['sRelatedArticles']);
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
 
         for($i=0; $i < count($expected['sRelatedArticles']); $i++) {
 
             $expectedArticle = $expected['sRelatedArticles'][$i];
+
+            if (isset($expectedArticle['supplierImg'])) {
+                $expectedArticle['supplierImg'] = $mediaService->getUrl($expectedArticle['supplierImg']);
+            }
 
             $gotArticle = $data['sRelatedArticles'][$i];
 

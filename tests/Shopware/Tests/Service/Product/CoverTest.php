@@ -2,10 +2,8 @@
 
 namespace Shopware\Tests\Service\Product;
 
-use Shopware\Bundle\StoreFrontBundle\Struct\Context;
+use Shopware\Bundle\StoreFrontBundle\Struct\ProductContext;
 use Shopware\Models\Category\Category;
-use Shopware\Models\Customer\Group;
-use Shopware\Models\Tax\Tax;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\MediaService;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Tests\Service\TestCase;
@@ -14,6 +12,7 @@ class CoverTest extends TestCase
 {
     public function testProductWithOneImage()
     {
+        $this->resetContext();
         $number = 'Cover-Test';
         $context = $this->getContext();
         $data = $this->getProduct($number, $context, null, 1);
@@ -26,6 +25,7 @@ class CoverTest extends TestCase
 
     public function testProductWithMultipleImages()
     {
+        $this->resetContext();
         $number = 'Cover-Test-Multiple';
         $context = $this->getContext();
         $this->helper->createArticle(
@@ -39,6 +39,7 @@ class CoverTest extends TestCase
 
     public function testProductList()
     {
+        $this->resetContext();
         $number = 'Cover-Test-Listing';
         $context = $this->getContext();
 
@@ -88,6 +89,7 @@ class CoverTest extends TestCase
      */
     public function testVariantImages()
     {
+        $this->resetContext();
         $number = 'Variant-Cover-Test';
         $context = $this->getContext();
 
@@ -121,11 +123,13 @@ class CoverTest extends TestCase
      */
     public function testForceMainImage()
     {
+        $this->resetContext();
         $number = 'Force-Main-Cover-Test';
         $context = $this->getContext();
         $data = $this->getVariantImageProduct($number, $context);
         $this->helper->createArticle($data);
 
+        /** @var \Shopware_Components_Config $config */
         $config = $this->getMockBuilder('\Shopware_Components_Config')
             ->disableOriginalConstructor()
             ->getMock();
@@ -170,6 +174,7 @@ class CoverTest extends TestCase
      */
     public function testFallbackImage()
     {
+        $this->resetContext();
         $number = 'Force-Main-Cover-Test';
         $context = $this->getContext();
 
@@ -207,7 +212,7 @@ class CoverTest extends TestCase
 
     protected function getProduct(
         $number,
-        Context $context,
+        ProductContext $context,
         Category $category = null,
         $imageCount = 1
     ) {
@@ -225,7 +230,7 @@ class CoverTest extends TestCase
         return $data;
     }
 
-    private function getVariantImageProduct($number, Context $context)
+    private function getVariantImageProduct($number, ProductContext $context)
     {
         $data = $this->getProduct($number, $context, null, 2);
 
@@ -242,5 +247,16 @@ class CoverTest extends TestCase
         $data['variants'][1]['images'] = array($this->helper->getImageData('bienen_teaser.jpg'));
 
         return $data;
+    }
+
+    private function resetContext() {
+        // correct router context for url building
+        Shopware()->Container()->get('router')->setContext(
+            new \Shopware\Components\Routing\Context(
+                'localhost',
+                Shopware()->Shop()->getBasePath(),
+                Shopware()->Shop()->getSecure()
+            )
+        );
     }
 }

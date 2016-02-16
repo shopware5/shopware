@@ -12,8 +12,6 @@
      */
     $.plugin('swAjaxProductNavigation', {
 
-        alias: 'ajaxProductNavigation',
-
         /**
          * Default configuration of the plugin
          *
@@ -189,7 +187,7 @@
                 params[key] = $.isNumeric(value) ? parseFloat(value) : value;
             }
 
-            $.publish('plugin/swAjaxProductNavigation/onParseQueryString', [this, url, params]);
+            $.publish('plugin/swAjaxProductNavigation/onParseQueryString', [ this, url, params ]);
 
             return params;
         },
@@ -205,7 +203,7 @@
             var me = this,
                 state = JSON.parse(me.storage.getItem('lastProductState')) || {};
 
-            $.publish('plugin/swAjaxProductNavigation/onSetProductState', [me, state]);
+            $.publish('plugin/swAjaxProductNavigation/onSetProductState', [ me, state ]);
 
             return state;
         },
@@ -223,7 +221,7 @@
 
             me.storage.setItem('lastProductState', JSON.stringify(params));
 
-            $.publish('plugin/swAjaxProductNavigation/onSetProductState', [me, params]);
+            $.publish('plugin/swAjaxProductNavigation/onSetProductState', [ me, params ]);
         },
 
         /**
@@ -237,7 +235,7 @@
 
             me.storage.removeItem('lastProductState');
 
-            $.publish('plugin/swAjaxProductNavigation/onClearProductState', me);
+            $.publish('plugin/swAjaxProductNavigation/onClearProductState', [ me ]);
         },
 
         /**
@@ -250,9 +248,9 @@
             var me = this,
                 selectors = me.opts.listingSelectors.join(', ');
 
-            me.$el.on('click', selectors, $.proxy(me.onClickProductInListing, me));
+            me.$el.on(me.getEventName('click'), selectors, $.proxy(me.onClickProductInListing, me));
 
-            $.publish('plugin/swAjaxProductNavigation/onRegisterEventsListing', me);
+            $.publish('plugin/swAjaxProductNavigation/onRegisterEventsListing', [ me ]);
         },
 
         /**
@@ -274,7 +272,7 @@
                 'ordernumber': $parent.attr('data-ordernumber')
             }));
 
-            $.publish('plugin/swAjaxProductNavigation/onClickProductInListing', [me, event]);
+            $.publish('plugin/swAjaxProductNavigation/onClickProductInListing', [ me, event ]);
         },
 
         /**
@@ -291,7 +289,7 @@
             me._on(me.$prevButton, 'click', $.proxy(me.onArrowClick, me));
             me._on(me.$nextButton, 'click', $.proxy(me.onArrowClick, me));
 
-            $.publish('plugin/swAjaxProductNavigation/onRegisterEventsDetail', me);
+            $.publish('plugin/swAjaxProductNavigation/onRegisterEventsDetail', [ me ]);
         },
 
         /**
@@ -307,7 +305,7 @@
                 me.setProductState(me.productState);
             }
 
-            $.publish('plugin/swAjaxProductNavigation/onArrowClick', [me, event]);
+            $.publish('plugin/swAjaxProductNavigation/onArrowClick', [ me, event ]);
         },
 
         /**
@@ -348,7 +346,7 @@
             $prevBtn[(prevBtnImage !== 'none' && remainingSpacePrev >= slideOffset) ? 'addClass' : 'removeClass'](opts.arrowSlideClass);
             $nextBtn[(nextBtnImage !== 'none' && remainingSpaceNext >= slideOffset) ? 'addClass' : 'removeClass'](opts.arrowSlideClass);
 
-            $.publish('plugin/swAjaxProductNavigation/onCheckPossibleSliding', me);
+            $.publish('plugin/swAjaxProductNavigation/onCheckPossibleSliding', [ me ]);
         },
 
         /**
@@ -381,7 +379,7 @@
                 'success': $.proxy(me.onProductNavigationLoaded, me)
             });
 
-            $.publish('plugin/swAjaxProductNavigation/onGetProductNavigation', me);
+            $.publish('plugin/swAjaxProductNavigation/onGetProductNavigation', [ me ]);
         },
 
         /**
@@ -405,7 +403,7 @@
                     opacity: 1
                 };
 
-            $.publish('plugin/swAjaxProductNavigation/onProductNavigationLoaded', [me, response]);
+            $.publish('plugin/swAjaxProductNavigation/onProductNavigationLoaded', [ me, response ]);
 
             if (listing && listing.href) {
                 me.$backButton.attr('href', listing.href);
@@ -455,7 +453,7 @@
 
             me.checkPossibleSliding();
 
-            $.publish('plugin/swAjaxProductNavigation/onProductNavigationFinished', [me, response]);
+            $.publish('plugin/swAjaxProductNavigation/onProductNavigationFinished', [ me, response ]);
         },
 
         /**
@@ -470,7 +468,7 @@
 
             StateManager.off('resize', me.checkPossibleSliding, me);
 
-            me.$el.off('click', selectors, $.proxy(me.onClickProductInListing, me));
+            me.$el.off(me.getEventName('click'), selectors);
 
             me._destroy();
         }

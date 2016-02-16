@@ -53,12 +53,12 @@ class RangeFacetResult
     private $label;
 
     /**
-     * @var int
+     * @var float
      */
     private $min;
 
     /**
-     * @var int
+     * @var float
      */
     private $max;
 
@@ -212,5 +212,45 @@ class RangeFacetResult
     public function setTemplate($template)
     {
         $this->template = $template;
+    }
+
+    /**
+     * @param float $min
+     */
+    public function setMin($min)
+    {
+        $this->min = $min;
+    }
+
+    /**
+     * @param float $max
+     */
+    public function setMax($max)
+    {
+        $this->max = $max;
+    }
+
+    /**
+     * @param float $activeMax
+     */
+    public function setActiveMax($activeMax)
+    {
+        $this->activeMax = $activeMax;
+    }
+
+    /**
+     * @param float $activeMin
+     */
+    public function setActiveMin($activeMin)
+    {
+        $this->activeMin = $activeMin;
+    }
+
+    /**
+     * @param boolean $active
+     */
+    public function setActive($active)
+    {
+        $this->active = $active;
     }
 }

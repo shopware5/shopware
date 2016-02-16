@@ -34,7 +34,7 @@
  *
  * todo@all: Documentation
  */
-//{block name="backend/order/view/detail/communication"}
+//{block name="backend/order/view/detail/configuration"}
 Ext.define('Shopware.apps.Order.view.detail.Configuration', {
 
     /**

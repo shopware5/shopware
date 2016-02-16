@@ -47,14 +47,7 @@ class ManufacturerConditionHandler implements ConditionHandlerInterface
     }
 
     /**
-     * Extends the query with a manufacturer condition.
-     * The passed manufacturer condition contains an array of manufacturer ids.
-     * The searched products have to be assigned on one of the passed manufacturers.
-     *
-     * @param ConditionInterface|ManufacturerCondition $condition
-     * @param QueryBuilder $query
-     * @param ShopContextInterface $context
-     * @return void
+     * {@inheritdoc}
      */
     public function generateCondition(
         ConditionInterface $condition,
@@ -69,6 +62,7 @@ class ManufacturerConditionHandler implements ConditionHandlerInterface
              AND product.supplierID IN (:manufacturer)'
         );
 
+        /** @var ManufacturerCondition $condition */
         $query->setParameter(
             ':manufacturer',
             $condition->getManufacturerIds(),

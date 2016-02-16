@@ -30,7 +30,7 @@ namespace Shopware\Recovery\Install;
  * <?xml version="1.0"?>
  * <shopware>
  *   <files>
- *     <file><name>logs/</name></file>
+ *     <file><name>var/log/</name></file>
  *     <file><name>config.php</name></file>
  *   </files>
  * </shopware>

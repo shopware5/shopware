@@ -23,7 +23,7 @@
  */
 
 /**
- * Deprecated Shopware class that handle static shop pages and dynamic content
+ * Shopware class that handle static shop pages and dynamic content
  * Used to handle pages such as "Help", etc
  *
  * Used by Frontend_Custom and Frontend_Content controllers

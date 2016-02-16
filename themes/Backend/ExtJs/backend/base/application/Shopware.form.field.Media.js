@@ -36,7 +36,7 @@ Ext.define('Shopware.form.field.Media', {
      * Used to display the images.
      * @type { String }
      */
-    mediaPath: '{link file=""}',
+    mediaPath: '',
 
     /**
      * Url for the "no picture" image.

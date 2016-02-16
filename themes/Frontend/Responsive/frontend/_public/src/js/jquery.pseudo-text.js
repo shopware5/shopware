@@ -20,15 +20,13 @@
      */
     $.plugin('swPseudoText', {
 
-        alias: 'pseudoText',
-
         /**
          * Default settings for the plugin
          * @type {Object}
          */
         defaults: {
             /** @type {String} eventType - The event type which should be used to duplicate the content */
-            eventType: 'keydown'
+            eventType: 'keyup'
         },
 
         /**

@@ -30,7 +30,6 @@ use Shopware\Components\Model\ModelRepository;
  */
 class Repository extends ModelRepository
 {
-
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which selects all defined countries.
      * @return \Doctrine\ORM\Query

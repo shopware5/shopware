@@ -63,7 +63,7 @@ class Configuration implements \JsonSerializable
      * @param string $lessTarget
      * @param string $jsTarget
      */
-    function __construct($less, $js, $config, $lessTarget, $jsTarget)
+    public function __construct($less, $js, $config, $lessTarget, $jsTarget)
     {
         $this->less = $less;
         $this->js = $js;
@@ -115,9 +115,8 @@ class Configuration implements \JsonSerializable
     /**
      * @inheritdoc
      */
-    function jsonSerialize()
+    public function jsonSerialize()
     {
         return get_object_vars($this);
     }
-
 }

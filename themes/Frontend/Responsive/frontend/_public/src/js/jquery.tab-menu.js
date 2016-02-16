@@ -7,8 +7,6 @@
      */
     $.plugin('swTabMenu', {
 
-        alias: 'tabMenu',
-
         defaults: {
 
             /**
@@ -90,7 +88,17 @@
              * @property startIndex
              * @type {Number}
              */
-            'startIndex': 0
+            'startIndex': -1,
+
+            /**
+             * This option can make the tab menu container horizontally
+             * scrollable when too many tab menu items are displayed.
+             * The functionality is provided by the swMenuScroller plugin.
+             *
+             * @property scrollable
+             * @type {Boolean}
+             */
+            'scrollable': false
         },
 
         /**
@@ -125,8 +133,22 @@
                 if ($container.find(opts.contentSelector).html().length) {
                     $container.addClass(opts.hasContentClass);
                     $tab.addClass(opts.hasContentClass);
+                    
+                    // When no start index is specified, we take the first tab with content.
+                    if (opts.startIndex === -1) {
+                        $tab.addClass(opts.activeTabClass);
+                        opts.startIndex = i;
+                    }
                 }
             });
+
+            if (me.opts.scrollable) {
+                me.$el.swMenuScroller({
+                    'listSelector': me.$tabContainer
+                });
+            }
+
+            opts.startIndex = Math.max(opts.startIndex, 0);
 
             me._index = null;
 
@@ -149,7 +171,7 @@
                 me._on(el, 'click touchstart', $.proxy(me.changeTab, me, i));
             });
 
-            $.publish('plugin/swTabMenu/onRegisterEvents', me);
+            $.publish('plugin/swTabMenu/onRegisterEvents', [ me ]);
         },
 
         /**
@@ -167,6 +189,8 @@
                 activeTabClass = opts.activeTabClass,
                 activeContainerClass = opts.activeContainerClass,
                 $tab,
+                tabId,
+                dataUrl,
                 $container;
 
             if (event) {
@@ -194,15 +218,18 @@
 
             $container.addClass(activeContainerClass);
 
-            $.each($container.find('.product-slider'), function(index, item) {
-                $(item).data('plugin_swProductSlider').update();
-            });
+            dataUrl = $tab.attr('data-url');
+            tabId = $container.attr('data-tab-id');
 
-            if ($tab.attr('data-mode') === 'remote' && $tab.attr('data-url')) {
-                $container.load($tab.attr('data-url'));
+            if ($tab.attr('data-mode') === 'remote' && dataUrl) {
+                $container.load(dataUrl);
             }
 
-            $.publish('plugin/swTabMenu/onChangeTab', [me, index]);
+            if (tabId !== undefined) {
+                $.publish('onShowContent-' + tabId, [ me, index ]);
+            }
+
+            $.publish('plugin/swTabMenu/onChangeTab', [ me, index ]);
         },
 
         /**
@@ -213,7 +240,12 @@
          * @method destroy
          */
         destroy: function () {
-            var me = this;
+            var me = this,
+                menuScroller = me.$el.data('plugin_swMenuScroller');
+
+            if (menuScroller !== undefined) {
+                menuScroller.destroy();
+            }
 
             me.$el.removeClass(me.opts.pluginClass);
 

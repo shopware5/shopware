@@ -31,7 +31,7 @@
 
 {* Main content *}
 {block name='frontend_index_content'}
-    <div class="content product--details" itemscope itemtype="http://schema.org/Product"{if !{config name=disableArticleNavigation}} data-product-navigation="{url module="widgets" controller="listing" action="productNavigation"}" data-category-id="{$sArticle.categoryID}" data-main-ordernumber="{$sArticle.mainVariantNumber}"{/if} data-ajax-wishlist="true" data-compare-ajax="true">
+    <div class="content product--details" itemscope itemtype="http://schema.org/Product"{if !{config name=disableArticleNavigation}} data-product-navigation="{url module="widgets" controller="listing" action="productNavigation"}" data-category-id="{$sArticle.categoryID}" data-main-ordernumber="{$sArticle.mainVariantNumber}"{/if} data-ajax-wishlist="true" data-compare-ajax="true"{if $theme.ajaxVariantSwitch} data-ajax-variants-container="true"{/if}>
 
         {* The configurator selection is checked at this early point
            to use it in different included files in the detail template. *}
@@ -296,15 +296,15 @@
             {$showAlsoViewed = {config name=similarViewedShow}}
             {$showAlsoBought = {config name=alsoBoughtShow}}
 
-            <div class="tab-menu--cross-selling">
+            <div class="tab-menu--cross-selling"{if $sArticle.relatedProductStreams} data-scrollable="true"{/if}>
 
                 {* Tab navigation *}
                 {block name="frontend_detail_index_tabs_navigation"}
-                    <ul class="tab--navigation">
+                    <div class="tab--navigation">
                         {block name="frontend_detail_index_tabs_navigation_inner"}
-
                             {block name="frontend_detail_index_related_similiar_tabs"}
-                                {* Tab navigation - Related products *}
+
+                                {* Tab navigation - Accessory products *}
                                 {block name="frontend_detail_tabs_entry_related"}
                                     {if $sArticle.sRelatedArticles && !$sArticle.crossbundlelook}
                                         <a href="#content--related-products" title="{s namespace="frontend/detail/tabs" name='DetailTabsAccessories'}{/s}" class="tab--link">
@@ -318,7 +318,7 @@
 
                                 {* Similar products *}
                                 {block name="frontend_detail_index_recommendation_tabs_entry_similar_products"}
-                                    {if $sArticle.sSimilarArticles}
+                                    {if count($sArticle.sSimilarArticles) > 0}
                                         <a href="#content--similar-products" title="{s name="DetailRecommendationSimilarLabel"}{/s}" class="tab--link">{s name="DetailRecommendationSimilarLabel"}{/s}</a>
                                     {/if}
                                 {/block}
@@ -326,19 +326,26 @@
 
                             {* Customer also bought *}
                             {block name="frontend_detail_index_tabs_entry_also_bought"}
-                                {if {config name=alsoBoughtShow}}
+                                {if $showAlsoBought}
                                     <a href="#content--also-bought" title="{s name="DetailRecommendationAlsoBoughtLabel"}{/s}" class="tab--link">{s name="DetailRecommendationAlsoBoughtLabel"}{/s}</a>
                                 {/if}
                             {/block}
 
                             {* Customer also viewed *}
                             {block name="frontend_detail_index_tabs_entry_also_viewed"}
-                                {if {config name=similarViewedShow}}
+                                {if $showAlsoViewed}
                                     <a href="#content--customer-viewed" title="{s name="DetailRecommendationAlsoViewedLabel"}{/s}" class="tab--link">{s name="DetailRecommendationAlsoViewedLabel"}{/s}</a>
                                 {/if}
                             {/block}
+
+                            {* Related product streams *}
+                            {block name="frontend_detail_index_tabs_entry_related_product_streams"}
+                                {foreach $sArticle.relatedProductStreams as $key => $relatedProductStream}
+                                    <a href="#content--related-product-streams-{$key}" title="{$relatedProductStream.name}" class="tab--link">{$relatedProductStream.name}</a>
+                                {/foreach}
+                            {/block}
                         {/block}
-                    </ul>
+                    </div>
                 {/block}
 
                 {* Tab content container *}
@@ -347,7 +354,7 @@
                         {block name="frontend_detail_index_inner_tabs"}
                             {block name='frontend_detail_index_before_tabs'}{/block}
 
-                            {* Related articles *}
+                            {* Accessory articles *}
                             {block name="frontend_detail_index_tabs_related"}
                                 {if $sArticle.sRelatedArticles && !$sArticle.crossbundlelook}
                                     <div class="tab--container">
@@ -367,19 +374,21 @@
                             {/block}
 
                             {* Similar products slider *}
-                            {block name="frontend_detail_index_tabs_similar"}
-                                <div class="tab--container">
-                                    {block name="frontend_detail_index_tabs_similar_inner"}
-                                        <div class="tab--header">
-                                            <a href="#" class="tab--title" title="{s name="DetailRecommendationSimilarLabel"}{/s}">{s name="DetailRecommendationSimilarLabel"}{/s}</a>
-                                        </div>
-                                        <div class="tab--content content--similar">{include file='frontend/detail/tabs/similar.tpl'}</div>
-                                    {/block}
-                                </div>
-                            {/block}
+                            {if $sArticle.sSimilarArticles}
+                                {block name="frontend_detail_index_tabs_similar"}
+                                    <div class="tab--container">
+                                        {block name="frontend_detail_index_tabs_similar_inner"}
+                                            <div class="tab--header">
+                                                <a href="#" class="tab--title" title="{s name="DetailRecommendationSimilarLabel"}{/s}">{s name="DetailRecommendationSimilarLabel"}{/s}</a>
+                                            </div>
+                                            <div class="tab--content content--similar">{include file='frontend/detail/tabs/similar.tpl'}</div>
+                                        {/block}
+                                    </div>
+                                {/block}
+                            {/if}
 
                             {* "Customers bought also" slider *}
-                            {if {config name=alsoBoughtShow}}
+                            {if $showAlsoBought}
                                 {block name="frontend_detail_index_tabs_also_bought"}
                                     <div class="tab--container">
                                         {block name="frontend_detail_index_tabs_also_bought_inner"}
@@ -393,7 +402,7 @@
                             {/if}
 
                             {* "Customers similar viewed" slider *}
-                            {if {config name=similarViewedShow}}
+                            {if $showAlsoViewed}
                                 {block name="frontend_detail_index_tabs_also_viewed"}
                                     <div class="tab--container">
                                         {block name="frontend_detail_index_tabs_also_viewed_inner"}
@@ -405,6 +414,22 @@
                                     </div>
                                 {/block}
                             {/if}
+
+                            {* Related product streams *}
+                            {foreach $sArticle.relatedProductStreams as $key => $relatedProductStream}
+                                {block name="frontend_detail_index_tabs_related_product_streams"}
+                                    <div class="tab--container" data-tab-id="productStreamSliderId-{$relatedProductStream.id}">
+                                        {block name="frontend_detail_index_tabs_related_product_streams_inner"}
+                                            <div class="tab--header">
+                                                <a href="#" class="tab--title" title="{$relatedProductStream.name}">{$relatedProductStream.name}</a>
+                                            </div>
+                                            <div class="tab--content content--related-product-streams-{$key}">
+                                                {include file='frontend/detail/tabs/product_streams.tpl'}
+                                            </div>
+                                        {/block}
+                                    </div>
+                                {/block}
+                            {/foreach}
 
                             {block name='frontend_detail_index_after_tabs'}{/block}
                         {/block}

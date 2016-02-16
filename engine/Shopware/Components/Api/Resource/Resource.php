@@ -293,13 +293,13 @@ abstract class Resource
     }
 
     /**
-     * @param Collection $collection
+     * @param Collection|array $collection
      * @param $property
      * @param $value
      * @throws \Exception
      * @return null
      */
-    protected function getCollectionElementByProperty(Collection $collection, $property, $value)
+    protected function getCollectionElementByProperty($collection, $property, $value)
     {
         foreach ($collection as $entity) {
             $method = 'get' . ucfirst($property);

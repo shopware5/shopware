@@ -23,15 +23,34 @@
  */
 class Shopware_Tests_Components_Theme_InheritanceTest extends Shopware_Tests_Components_Theme_Base
 {
+    public function getTheme(\Shopware\Models\Shop\Template $template)
+    {
+        if ($template->getParent() === null) {
+            return $this->getBareTheme();
+        } else {
+            return $this->getResponsiveTheme();
+        }
+    }
+
     public function testBuildInheritance()
     {
         $custom = $this->getDummyTemplates();
 
+        $util = $this->getUtilClass();
+        $util->expects($this->any())
+            ->method('getThemeByTemplate')
+            ->with($this->logicalOr(
+                $this->equalTo($custom),
+                $this->equalTo($custom->getParent())
+            ))
+            ->will($this->returnCallback(array($this, 'getTheme')));
+
         $inheritance = new \Shopware\Components\Theme\Inheritance(
             Shopware()->Container()->get('models'),
-            $this->getUtilClass(),
+            $util,
             Shopware()->Container()->get('theme_path_resolver'),
-            Shopware()->Container()->get('events')
+            Shopware()->Container()->get('events'),
+            Shopware()->Container()->get('shopware_media.media_service')
         );
 
         $hierarchy = $inheritance->buildInheritances($custom);
@@ -101,10 +120,11 @@ class Shopware_Tests_Components_Theme_InheritanceTest extends Shopware_Tests_Com
             ->will($this->returnValue('public_directory'));
 
         $inheritance = new \Shopware\Components\Theme\Inheritance(
-            null,
+            $this->getEntityManager(),
             $util,
             $pathResolver,
-            $this->getEventManager()
+            $this->getEventManager(),
+            Shopware()->Container()->get('shopware_media.media_service')
         );
 
         $files = $inheritance->getTemplateJavascriptFiles($template);

@@ -260,7 +260,7 @@
 
             me.closeMenu();
 
-            $.publish('plugin/advancedMenu/onCloseWithButton', me);
+            $.publish('plugin/swAdvancedMenu/onCloseWithButton', [ me ]);
         },
 
         /**
@@ -279,7 +279,7 @@
                 $(el).toggleClass(me.opts.menuActiveClass, i === index);
             });
 
-            $.publish('plugin/advancedMenu/onSetMenuIndex', [ me, index ]);
+            $.publish('plugin/swAdvancedMenu/onSetMenuIndex', [ me, index ]);
         },
 
         /**
@@ -293,7 +293,7 @@
 
             me.$el.show();
 
-            $.publish('plugin/advancedMenu/onOpenMenu', me);
+            $.publish('plugin/swAdvancedMenu/onOpenMenu', [ me ]);
         },
 
         /**
@@ -312,7 +312,7 @@
 
             me._targetIndex = -1;
 
-            $.publish('plugin/advancedMenu/onCloseMenu', me);
+            $.publish('plugin/swAdvancedMenu/onCloseMenu', [ me ]);
         }
     });
 })(jQuery, window);

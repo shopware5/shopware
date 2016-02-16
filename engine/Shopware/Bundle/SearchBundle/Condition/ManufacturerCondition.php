@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundle\Condition;
 
+use Assert\Assertion;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 
 /**
@@ -34,16 +35,17 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
 class ManufacturerCondition implements ConditionInterface
 {
     /**
-     * @var array
+     * @var int[]
      */
     private $manufacturerIds;
 
     /**
-     * @param array $manufacturerIds
+     * @param int[] $manufacturerIds
      */
     public function __construct(array $manufacturerIds)
     {
-        $this->manufacturerIds = $manufacturerIds;
+        Assertion::allIntegerish($manufacturerIds);
+        $this->manufacturerIds = array_map('intval', $manufacturerIds);
     }
 
     /**
@@ -55,7 +57,7 @@ class ManufacturerCondition implements ConditionInterface
     }
 
     /**
-     * @return array
+     * @return int[]
      */
     public function getManufacturerIds()
     {

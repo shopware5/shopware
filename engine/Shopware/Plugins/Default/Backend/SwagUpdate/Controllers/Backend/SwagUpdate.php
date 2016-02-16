@@ -24,6 +24,7 @@
 
 use Psr\Log\LoggerInterface;
 use Shopware\Components\Random;
+use ShopwarePlugins\SwagUpdate\Components\Checks\EmotionTemplateCheck;
 use ShopwarePlugins\SwagUpdate\Components\Checks\IonCubeLoaderCheck;
 use ShopwarePlugins\SwagUpdate\Components\Checks\LicenseCheck;
 use ShopwarePlugins\SwagUpdate\Components\Checks\MySQLVersionCheck;
@@ -121,6 +122,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
             new RegexCheck($namespace, $userLang),
             new MySQLVersionCheck($conn, $namespace),
             new PHPVersionCheck($namespace),
+            new EmotionTemplateCheck($conn, $namespace),
             new PHPExtensionCheck($namespace),
             new WritableCheck($fileSystem, $namespace),
             new IonCubeLoaderCheck($namespace),

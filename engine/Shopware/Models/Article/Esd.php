@@ -205,7 +205,7 @@ class Esd extends ModelEntity
     }
 
     /**
-     * @param null|\DateTime $date
+     * @param null|\DateTime|string $date
      * @return Esd
      */
     public function setDate($date = null)

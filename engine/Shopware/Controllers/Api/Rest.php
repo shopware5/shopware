@@ -32,7 +32,6 @@ class Shopware_Controllers_Api_Rest extends Enlight_Controller_Action
     {
         $this->Front()->Plugins()->ViewRenderer()->setNoRender();
 
-        // todo@bc set url in shopware specific way
         $serverUrlHelper = new Zend_View_Helper_ServerUrl();
         $this->apiBaseUrl = $serverUrlHelper->serverUrl() . $this->Request()->getBaseUrl() . '/api/';
     }
@@ -54,8 +53,8 @@ class Shopware_Controllers_Api_Rest extends Enlight_Controller_Action
             $data = Zend_Json::prettyPrint($data);
         }
 
-        $this->response()->setHeader('Content-type', 'application/json', true);
-        $this->response()->setBody($data);
+        $this->Response()->setHeader('Content-type', 'application/json', true);
+        $this->Response()->setBody($data);
     }
 
     /**

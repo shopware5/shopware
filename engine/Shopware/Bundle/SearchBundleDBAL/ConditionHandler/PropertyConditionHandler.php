@@ -46,14 +46,7 @@ class PropertyConditionHandler implements ConditionHandlerInterface
     }
 
     /**
-     * Handles the passed condition object.
-     * Extends the provided query builder with the specify conditions.
-     * Should use the andWhere function, otherwise other conditions would be overwritten.
-     *
-     * @param ConditionInterface|PropertyCondition $condition
-     * @param QueryBuilder $query
-     * @param ShopContextInterface $context
-     * @return void
+     * {@inheritdoc}
      */
     public function generateCondition(
         ConditionInterface $condition,
@@ -63,6 +56,7 @@ class PropertyConditionHandler implements ConditionHandlerInterface
         $tableKey = $condition->getName();
 
         $where = [];
+        /** @var PropertyCondition $condition */
         foreach ($condition->getValueIds() as $valueId) {
             $valueKey = $tableKey . '_' . $valueId;
 

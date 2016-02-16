@@ -80,7 +80,7 @@ class MediaGateway implements Gateway\MediaGatewayInterface
      */
     public function getList($ids, Struct\ShopContextInterface $context)
     {
-        $query = $this->getQuery($context);
+        $query = $this->getQuery();
 
         $query->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 

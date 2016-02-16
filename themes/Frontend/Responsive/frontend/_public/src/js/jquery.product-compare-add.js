@@ -8,8 +8,6 @@
      */
     $.plugin('swProductCompareAdd', {
 
-        alias: 'productCompareAdd',
-
         /** Your default options */
         defaults: {
             /** @string compareMenuSelector Listener Class for compare button */
@@ -30,7 +28,7 @@
             // On add article to compare button
             me.$el.on(me.getEventName('click'), '*[data-product-compare-add="true"]', $.proxy(me.onAddArticleCompare, me));
 
-            $.publish('plugin/swProductCompareAdd/onRegisterEvents', me);
+            $.publish('plugin/swProductCompareAdd/onRegisterEvents', [ me ]);
         },
 
         /**
@@ -58,7 +56,7 @@
                 openOverlay: false
             });
 
-            $.publish('plugin/swProductCompareAdd/onAddArticleCompareBefore', [me, event]);
+            $.publish('plugin/swProductCompareAdd/onAddArticleCompareBefore', [ me, event ]);
 
             // Ajax request for adding article to compare list
             $.ajax({
@@ -96,11 +94,11 @@
                         })
                     }
 
-                    $.publish('plugin/swProductCompareAdd/onAddArticleCompareSuccess', [me, event, data, compareMenu]);
+                    $.publish('plugin/swProductCompareAdd/onAddArticleCompareSuccess', [ me, event, data, compareMenu ]);
                 }
             });
 
-            $.publish('plugin/swProductCompareAdd/onAddArticleCompare', [me, event]);
+            $.publish('plugin/swProductCompareAdd/onAddArticleCompare', [ me, event ]);
         },
 
         /** Destroys the plugin */

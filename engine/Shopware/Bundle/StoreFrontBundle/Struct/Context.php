@@ -104,11 +104,11 @@ class Context extends Extendable implements \JsonSerializable, LocationContextIn
         Currency $currency,
         Group $currentCustomerGroup,
         Group $fallbackCustomerGroup,
-        $taxRules,
-        $priceGroups,
-        Area $area,
-        Country $country,
-        State $state
+        array $taxRules,
+        array $priceGroups,
+        Area $area = null,
+        Country $country = null,
+        State $state = null
     ) {
         $this->baseUrl = $baseUrl;
         $this->shop = $shop;

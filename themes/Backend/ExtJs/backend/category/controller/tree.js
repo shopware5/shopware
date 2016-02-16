@@ -53,6 +53,7 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
         { ref: 'mainWindow', selector: 'category-main-window' },
         { ref: 'categoryTree', selector: 'category-category-tree' },
         { ref: 'deleteButton', selector: 'category-category-tree button[action=deleteCategory]' },
+        { ref: 'duplicateButton', selector: 'category-category-tree button[action=duplicateCategory]' },
         { ref: 'saveCategoryButton', selector: 'button[action=saveDetail]' },
         { ref: 'settingsForm', selector: 'category-category-tabs-settings' },
         { ref: 'articleMappingForm', selector: 'category-category-tabs-article_mapping' }
@@ -67,10 +68,12 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
         moveCategorySuccess : '{s name=tree/move_success}Category has been moved.{/s}',
         moveCategoryFailure : '{s name=tree/move_failure}Category could not be moved.{/s}',
         confirmDeleteCategoryTitle   : '{s name=tree/delete_confirmation_title}Are you sure you want to delete the category?{/s}',
-        confirmDeleteCategory   : '{s name=tree/delete_confirmation}Are you sure you want to delete category: [0] and all its sub categories?.{/s}',
+        confirmDeleteCategory : '{s name=tree/delete_confirmation}Are you sure you want to delete category: [0] and all its sub categories?.{/s}',
         confirmDeleteCategoryHeadline: '{s name=tree/delete_confirmation_headline}Delete this Category?{/s}',
         deleteSingleItemSuccess : '{s name=tree/delete_success}Category has been deleted.{/s}',
         deleteSingleItemFailure : '{s name=tree/delete_failure}Category could not be deleted.{/s}',
+        duplicateItemSuccess : '{s name=tree/duplicate_success}Category has been duplicated.{/s}',
+        duplicateItemFailure : '{s name=tree/duplicate_failure}Category could not be duplicated.{/s}',
         onSaveChangesSuccess    : '{s name=settings/save_success}Changes have been saved successfully.{/s}',
         onSaveChangesError      : '{s name=settings/save_error}An error has occurred while saving the changes.{/s}',
         emptySubcategoryField   : '{s name=tree/empty_subcategory}Required field.{/s}',
@@ -99,8 +102,10 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
                 'reload'        : me.onReload,
                 // delete event
                 'deleteSubCategory' : function() { me._destroyOtherModuleInstances(me.onDeleteCategory, arguments) },
-                // event when ever someone tries to  add a new category into the category tree
+                // event when ever someone tries to add a new category into the category tree
                 'addSubCategory'    : function() { me._destroyOtherModuleInstances(me.onOpenNameDialog, arguments) },
+                // event when ever someone tries to duplicate a category from the category tree
+                'duplicateSubCategory'    : function() { me._destroyOtherModuleInstances(me.onDuplicateCategory, arguments) },
                 // event when ever someone tries to edit a category
                 'itemclick'      : me.onItemClick,
                 //
@@ -114,9 +119,15 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
             'category-category-tabs-settings [action=addCategory]':{
                 'click' : function() { me._destroyOtherModuleInstances(me.onAddCategory, arguments) }
             },
+            'category-category-tree button[action=duplicateCategory]' : {
+                'click' : function() { me._destroyOtherModuleInstances(me.onDuplicateCategory, arguments) }
+            },
             // Add dialog box
             'category-category-tree button[action=deleteCategory]' : {
                 'click' : function() { me._destroyOtherModuleInstances(me.onDeleteCategory, arguments) }
+            },
+            'duplication-settings-window': {
+                'start-duplication': me.onStartDuplication
             }
         });
         // need to call parent
@@ -171,6 +182,22 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
                 });
 
             });
+    },
+
+    /**
+     * Duplicate selected category and children
+     *
+     * @return void
+     */
+    onDuplicateCategory: function() {
+        var me          = this,
+            tree        = me.getCategoryTree(),
+            selection   = tree.getSelectionModel( ).getSelection(),
+            record      = selection[0];
+
+        me.getView('main.DuplicateSettings').create({
+            treeRecord: record
+        }).show();
     },
 
     /**
@@ -234,7 +261,13 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
                 // load record into forms
                 settingForm.loadRecord(me.detailRecord);
 
-                var disableTab = !record.data.leaf;
+                var disableTab = !record.get('leaf');
+                if (me.detailRecord.get('streamId')) {
+                    disableTab = true;
+                    settingForm.streamSelection.store.load({
+                        params: { id: me.detailRecord.get('streamId') }
+                    });
+                }
 
                 // Just create the selection view once, if created just refresh the stores and the detail record.
                 if(!me.productMappingRendered) {
@@ -243,6 +276,7 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
                         assignedProductsStore: me.subApplication.assignedProductsStore,
                         record: me.detailRecord
                     });
+
                     me.updateTab(articleMappingContainer, me.selectorView, disableTab);
                     me.productMappingRendered = true;
                 } else {
@@ -437,12 +471,15 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
         /* {if {acl_is_allowed privilege=delete}} */
         var me = this,
             deleteButton = me.getDeleteButton(),
+            duplicateButton = me.getDuplicateButton(),
             selectedNode = selection[0];
         // do not delete the root node
         if(selection.length > 0 && ! selectedNode.isRoot() ) {
             deleteButton.enable();
+            duplicateButton.enable();
         } else {
             deleteButton.disable(true);
+            duplicateButton.disable(true);
         }
         /* {/if} */
     },
@@ -616,6 +653,31 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
         } else {
             return treeStore.getRootNode();
         }
+    },
+
+    onStartDuplication: function(window, treeRecord) {
+        var me = this,
+            form = window.form,
+            values = form.getValues(),
+            store = me.getStore('Tree'),
+            batch;
+
+        if(!values.categoryId) {
+            values.categoryId = NaN;
+        }
+
+        window.close();
+
+        batch = me.getView('main.DuplicateTasks').create({
+            categoryId: treeRecord.get('id'),
+            parentId: values.categoryId,
+            reassignArticleAssociations: values.reassignArticleAssociations,
+            originalParentId: treeRecord.get('id'),
+            callback: function() {
+                store.load({ node: store.getById(values.categoryId) });
+            }
+        }).show();
+        batch.run();
     }
 });
 //{/block}

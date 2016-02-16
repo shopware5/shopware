@@ -65,7 +65,7 @@ Ext.define('Shopware.apps.Category', {
      * Required stores for sub-application
      * @array
      */
-    stores:[ 'Detail', 'Tree', 'Template', 'CustomerGroups', 'AvailableProducts', 'AssignedProducts' ],
+    stores:[ 'Detail', 'Tree', 'Template', 'CustomerGroups', 'AvailableProducts', 'AssignedProducts', 'CategoryPath' ],
     /**
      * Required views for this sub-application
      * @array
@@ -73,6 +73,8 @@ Ext.define('Shopware.apps.Category', {
     views: [
         'main.Window',
         'main.MultiRequestTasks',
+        'main.DuplicateSettings',
+        'main.DuplicateTasks',
         'category.Tree',
         'category.tabs.Settings',
         'category.tabs.ArticleMapping',
@@ -94,7 +96,8 @@ Ext.define('Shopware.apps.Category', {
         'Tree',
         'Settings',
         'ArticleMapping',
-        'MultiRequest'
+        'MultiRequest',
+        'DuplicateTasks'
     ],
 
     /**

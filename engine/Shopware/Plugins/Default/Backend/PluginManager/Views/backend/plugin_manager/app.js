@@ -27,6 +27,7 @@ Ext.define('Shopware.apps.PluginManager', {
         'list.StoreListingPage',
         'list.UpdatePage',
         'list.LicencePage',
+        'list.PremiumPluginsPage',
         'list.Window',
 
 
@@ -141,6 +142,10 @@ Ext.define('Shopware.apps.PluginManager', {
 
             if (me.globalEvents.indexOf(event.name) >= 0 && event.listeners.length > 0) {
                 Ext.each(event.listeners, function(listener) {
+                    if(!listener) {
+                        return;
+                    }
+
                     Shopware.app.Application.removeListener(
                         event.name,
                         listener.fn,

@@ -29,11 +29,8 @@
  */
 class Shopware_Controllers_Backend_Systeminfo extends Shopware_Controllers_Backend_ExtJs
 {
-
-
     public function initAcl()
     {
-        $this->setAclResourceName("systeminfo");
         $this->addAclPermission("getConfigList", "read", "You're not allowed to open the module.");
         $this->addAclPermission("getPathList", "read", "You're not allowed to open the module.");
         $this->addAclPermission("getFileList", "read", "You're not allowed to open the module.");

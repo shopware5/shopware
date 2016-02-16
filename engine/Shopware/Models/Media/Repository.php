@@ -33,7 +33,6 @@ use Shopware\Components\Model\ModelRepository;
  */
 class Repository extends ModelRepository
 {
-
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which allows you to access a list of media
      * @param $filter

@@ -148,7 +148,7 @@ class AccountManagerService
         try {
             return $this->storeClient->doPostRequest('/users', $postData);
         } catch (StoreException $se) {
-            $this->translateExceptionMessage($se);
+            throw $this->translateExceptionMessage($se);
         }
     }
 
@@ -163,7 +163,7 @@ class AccountManagerService
         try {
             $responseBody = $this->storeClient->doGetRequest("/locales");
         } catch (StoreException $se) {
-            $this->translateExceptionMessage($se);
+            throw $this->translateExceptionMessage($se);
         }
 
         return $this->hydrator->hydrateLocales($responseBody);
@@ -183,7 +183,7 @@ class AccountManagerService
         try {
             return $this->storeClient->doAuthGetRequest($token, "/shops", $query);
         } catch (StoreException $se) {
-            $this->translateExceptionMessage($se);
+            throw $this->translateExceptionMessage($se);
         }
     }
 
@@ -194,7 +194,7 @@ class AccountManagerService
      * @param string $domain
      * @param AccessTokenStruct $token
      * @return array Filename and domain hash of the domain validation file
-     * @throws \RuntimeException
+     * @throws \Exception
      */
     public function getDomainHash($domain, AccessTokenStruct $token)
     {
@@ -203,7 +203,7 @@ class AccountManagerService
         try {
             return $this->storeClient->doAuthPostRequest($token, "/domainhashes", $postData);
         } catch (StoreException $se) {
-            $this->translateExceptionMessage($se);
+            throw $this->translateExceptionMessage($se);
         }
     }
 
@@ -214,7 +214,7 @@ class AccountManagerService
      * @param string $shopwareVersion Current Shopware version
      * @param AccessTokenStruct $token
      * @return array Result of the validation operation (empty if successful)
-     * @throws \RuntimeException
+     * @throws \Exception
      */
     public function verifyDomain($domain, $shopwareVersion, AccessTokenStruct $token)
     {
@@ -227,7 +227,7 @@ class AccountManagerService
         try {
             return $this->storeClient->doAuthPostRequest($token, "/domainverifications", $postData);
         } catch (StoreException $se) {
-            $this->translateExceptionMessage($se);
+            throw $this->translateExceptionMessage($se);
         }
     }
 
@@ -237,20 +237,20 @@ class AccountManagerService
      * @param string $shopwareId
      * @param string $password
      * @return AccessTokenStruct Token to access the API
-     * @throws \RuntimeException
+     * @throws \Exception
      */
     public function getToken($shopwareId = null, $password = null)
     {
         try {
             return $this->storeClient->getAccessToken($shopwareId, $password);
         } catch (StoreException $se) {
-            $this->translateExceptionMessage($se);
+            throw $this->translateExceptionMessage($se);
         }
     }
 
     /**
      * @param StoreException $exception
-     * @throws \Exception
+     * @return \Exception
      */
     private function translateExceptionMessage(StoreException $exception)
     {
@@ -265,6 +265,6 @@ class AccountManagerService
 
         $snippet .= '<br><br>Error code: ' . $exception->getSbpCode();
 
-        throw new \Exception($snippet, $exception->getCode(), $exception);
+        return new \Exception($snippet, $exception->getCode(), $exception);
     }
 }

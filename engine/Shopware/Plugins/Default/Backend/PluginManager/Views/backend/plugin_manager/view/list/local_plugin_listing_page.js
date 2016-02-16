@@ -22,25 +22,25 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
             columns: {
                 label: {
                     flex: 2,
-                    header: '{s name="plugin_name"}{/s}',
+                    header: '{s name="plugin_name"}Plugin name{/s}',
                     groupable: false,
                     renderer: this.nameRenderer,
                     editor: null
                 },
                 version: {
                     width: 30,
-                    header: '{s name="version"}{/s}',
+                    header: '{s name="version"}Version{/s}',
                     groupable: false,
                     editor: null
                 },
                 installationDate: {
-                    header: '{s name="installed_on"}{/s}',
+                    header: '{s name="installed_on"}Installed on{/s}',
                     groupable: false,
                     renderer: this.dateRenderer,
                     editor: null
                 },
                 updateDate: {
-                    header: '{s name="updated_on"}{/s}',
+                    header: '{s name="updated_on"}Updated on{/s}',
                     groupable: false,
                     renderer: this.dateRenderer,
                     editor: null
@@ -50,13 +50,13 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
                     sortable: false,
                     groupable: false,
                     cls: 'licence-column',
-                    header: '{s name="licence"}{/s}',
+                    header: '{s name="licence"}License{/s}',
                     renderer: this.licenceRenderer,
                     editor: null
                 },
                 active: this.createActiveColumn,
                 author: {
-                    header: '{s name="from_producer"}{/s}',
+                    header: '{s name="from_producer"}Developed by{/s}',
                     groupable: false,
                     renderer: this.authorRenderer,
                     editor: null
@@ -71,25 +71,7 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
         me.callParent(arguments);
 
         Shopware.app.Application.on('plugin-reloaded', function(plugin) {
-            me.store.each(function(record, index) {
-                if (record && record.get('technicalName') == plugin.get('technicalName')) {
-                    me.store.remove(record);
-                }
-            });
-
-            if (plugin.get('id') > 0) {
-                plugin.set('groupingState', null);
-                plugin.dirty = false;
-                try {
-                    me.store.add(plugin);
-                } catch (e) {
-                    me.store.load();
-                }
-            }
-
-            me.store.sort();
-            me.store.group();
-            me.reconfigure(me.store);
+            me.store.load();
             me.hideLoadingMask();
         });
     },
@@ -110,7 +92,7 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
             items = [];
 
         items.push({
-            tooltip: '{s name="activate_deactivate"}{/s}',
+            tooltip: '{s name="activate_deactivate"}Activate / Deactivate{/s}',
             handler: function(grid, rowIndex, colIndex, item, eOpts, record) {
                 if (record.allowActivate()) {
                     me.activatePluginEvent(record);
@@ -136,7 +118,7 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
             xtype: 'actioncolumn',
             width: 60,
             align: 'center',
-            header: '{s name="active"}{/s}',
+            header: '{s name="active"}Active{/s}',
             groupable: false,
             items: items
         };
@@ -185,11 +167,11 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
                     formatName: function(name) {
                         switch(name) {
                             case 2:
-                                return '{s name="group_headline_installed"}{/s}';
+                                return '{s name="group_headline_installed"}Installed{/s}';
                             case 1:
-                                return '{s name="group_headline_deactivated"}{/s}';
+                                return '{s name="group_headline_deactivated"}Inactive{/s}';
                             case 0:
-                                return '{s name="group_headline_uninstalled"}{/s}';
+                                return '{s name="group_headline_uninstalled"}Uninstalled{/s}';
                         }
                     }
                 }
@@ -257,7 +239,7 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
         }
 
         if (expiration) {
-            result += '<br><span class="label">{s name="till"}{/s}: </span><span class="date">' + Ext.util.Format.date(expiration.date) + '</span>';
+            result += '<br><span class="label">{s name="till"}until{/s}: </span><span class="date">' + Ext.util.Format.date(expiration.date) + '</span>';
         }
 
         return result;
@@ -278,7 +260,7 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
         var me = this;
 
         me.uploadButton = Ext.create('Ext.button.Button', {
-            text: '{s name="upload_plugin"}{/s}',
+            text: '{s name="upload_plugin"}Upload plugin{/s}',
             iconCls: 'sprite-plus-circle',
             handler: function() {
                 me.fireEvent('open-plugin-upload');
@@ -293,7 +275,7 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
 
         items.push({
             iconCls: 'sprite-pencil',
-            tooltip: '{s name="open"}{/s}',
+            tooltip: '{s name="open"}Open{/s}',
             handler: function(grid, rowIndex, colIndex, item, eOpts, record) {
                 me.displayPluginEvent(record);
             }
@@ -301,7 +283,7 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
 
         items.push({
             iconCls: 'sprite-plus-circle',
-            tooltip: '{s name="install"}{/s}',
+            tooltip: '{s name="install"}Install{/s}',
             handler: function(grid, rowIndex, colIndex, item, eOpts, record) {
                 me.updateDummyPluginEvent(record);
             },
@@ -314,7 +296,7 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
 
         items.push({
             iconCls: 'sprite-minus-circle',
-            tooltip: '{s name="install_uninstall"}{/s}',
+            tooltip: '{s name="install_uninstall"}Install / Uninstall{/s}',
             handler: function(grid, rowIndex, colIndex, item, eOpts, record) {
                 if (record.allowInstall()) {
                     me.registerConfigRequiredEvent(record);
@@ -337,7 +319,7 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
 
         items.push({
             iconCls: 'sprite-arrow-continue',
-            tooltip: '{s name="reinstall"}{/s}',
+            tooltip: '{s name="reinstall"}Reinstall{/s}',
             handler: function(grid, rowIndex, colIndex, item, eOpts, record) {
                 me.reinstallPluginEvent(record);
             },
@@ -350,7 +332,7 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
 
         items.push({
             iconCls: 'sprite-arrow-circle-135',
-            tooltip: '{s name="update_plugin"}{/s}',
+            tooltip: '{s name="update_plugin"}Update{/s}',
             handler: function(grid, rowIndex, colIndex, item, eOpts, record) {
                 me.updatePluginEvent(record);
             },
@@ -358,13 +340,13 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
                 if (!record.allowUpdate()) {
                     return Ext.baseCSSPrefix + 'hidden';
                 }
-                this.items[4].tooltip = '{s name="install_update"}{/s} (v ' + record.get('availableVersion') + ')';
+                this.items[4].tooltip = '{s name="install_update"}Install update{/s} (v ' + record.get('availableVersion') + ')';
             }
         });
 
         items.push({
             iconCls: 'sprite-bin-metal-full',
-            tooltip: '{s name="delete"}{/s}',
+            tooltip: '{s name="delete"}Delete{/s}',
             handler: function(grid, rowIndex, colIndex, item, eOpts, record) {
                 me.deletePluginEvent(record);
             },
@@ -377,7 +359,7 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
 
         items.push({
             iconCls: 'sprite-arrow-circle-225-left',
-            tooltip: '{s name="local_update"}{/s}',
+            tooltip: '{s name="local_update"}Update{/s}',
             handler: function(grid, rowIndex, colIndex, item, eOpts, record) {
                 me.executePluginUpdateEvent(record);
             },

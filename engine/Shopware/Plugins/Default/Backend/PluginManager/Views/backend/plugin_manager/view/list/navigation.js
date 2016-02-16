@@ -16,9 +16,9 @@ Ext.define('Shopware.apps.PluginManager.view.list.Navigation', {
         me.items = [
             me.createSearchField(),
             me.createAccountContainer(),
-            { xtype: 'component', margin: 10, cls: 'navigation-headline', html: '{s name="administration"}{/s}' },
+            { xtype: 'component', margin: 10, cls: 'navigation-headline', html: '{s name="administration"}Management{/s}' },
             me.createLocalContainer(),
-            { xtype: 'component', margin: 10, cls: 'navigation-headline', html: '{s name="discover"}{/s}' },
+            { xtype: 'component', margin: 10, cls: 'navigation-headline', html: '{s name="discover"}Discover{/s}' },
             me.createCategoryTree()
         ];
 
@@ -36,12 +36,12 @@ Ext.define('Shopware.apps.PluginManager.view.list.Navigation', {
 
         if (count <= 0) {
             me.localUpdatesLink.update(
-                '<div class="content has-badge">{s name="updates"}{/s}</div>'
+                '<div class="content has-badge">{s name="updates"}Updates{/s}</div>'
             );
             me.localUpdatesLink.disable();
         } else {
             me.localUpdatesLink.update(
-                '<div class="content has-badge">{s name="updates"}{/s}<div class="badge">'+count+'</div></div>'
+                '<div class="content has-badge">{s name="updates"}Updates{/s}<div class="badge">'+count+'</div></div>'
             );
             me.localUpdatesLink.enable();
         }
@@ -55,7 +55,7 @@ Ext.define('Shopware.apps.PluginManager.view.list.Navigation', {
             margin: '10 10 20',
             width: 220,
             disabled: !Shopware.app.Application.sbpAvailable,
-            emptyText: '{s name="search"}{/s} ...',
+            emptyText: '{s name="search"}Search{/s} ...',
             enableKeyEvents: true,
             checkChangeBuffer: 500,
             listeners: {
@@ -85,7 +85,7 @@ Ext.define('Shopware.apps.PluginManager.view.list.Navigation', {
             },{
                 cls: 'headline',
                 xtype: 'component',
-                html: '{s name="account"}{/s}'
+                html: '{s name="account"}Account{/s}'
             },  me.shopwareIdField]
         });
 
@@ -107,14 +107,14 @@ Ext.define('Shopware.apps.PluginManager.view.list.Navigation', {
 
         me.accountLink = Ext.create('PluginManager.container.Container', {
             html: '<div class="content">' +
-                      '<a href="https://account.shopware.com/" target="_blank">{s name="open_account"}{/s}</a>' +
+                      '<a href="https://account.shopware.com/" target="_blank">{s name="open_account"}View account{/s}</a>' +
                   '</div>',
             cls: 'navigation-item',
             disabled: !Shopware.app.Application.sbpAvailable
         });
 
         me.accountLicenceLink = Ext.create('PluginManager.container.Container', {
-            html: '<div class="content">{s name="my_purchases"}{/s}</div>',
+            html: '<div class="content">{s name="my_purchases"}My purchases{/s}</div>',
             cls: 'navigation-item',
             disabled: !Shopware.app.Application.sbpAvailable,
             handler: function() {
@@ -140,7 +140,7 @@ Ext.define('Shopware.apps.PluginManager.view.list.Navigation', {
 
         me.localHomeLink = Ext.create('PluginManager.container.Container', {
             cls: 'navigation-item active',
-            html: '<div class="content">{s name="home"}{/s}</div>',
+            html: '<div class="content">{s name="home"}Home{/s}</div>',
             disabled: !Shopware.app.Application.sbpAvailable,
             handler: function() {
                 me.fireEvent('display-home');
@@ -149,7 +149,7 @@ Ext.define('Shopware.apps.PluginManager.view.list.Navigation', {
 
         me.localInstalledLink = Ext.create('PluginManager.container.Container', {
             cls: 'navigation-item',
-            html: '<div class="content">{s name="navigation_installed"}{/s}</div>',
+            html: '<div class="content">{s name="navigation_installed"}Installed{/s}</div>',
             handler: function() {
                 me.fireEvent('display-installed');
             }
@@ -157,7 +157,7 @@ Ext.define('Shopware.apps.PluginManager.view.list.Navigation', {
 
         me.localUpdatesLink = Ext.create('PluginManager.container.Container', {
             cls: 'navigation-item',
-            html: '<div class="content">{s name="updates"}{/s}</div>',
+            html: '<div class="content">{s name="updates"}Updates{/s}</div>',
             disabled: !Shopware.app.Application.sbpAvailable,
             handler: function() {
                 me.fireEvent('display-updates');

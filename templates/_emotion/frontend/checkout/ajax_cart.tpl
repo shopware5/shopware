@@ -46,7 +46,7 @@
 	</a>
 </div>
 <div class="right">
-<a href="{url controller='checkout' action='confirm'}" class="button-right small_right checkout" title="{s name='AjaxCartLinkConfirm'}{/s}">
+	<a href="{if {config name=always_select_payment}}{url controller='checkout' action='shippingPayment'}{else}{url controller='checkout' action='confirm'}{/if}" class="button-right small_right checkout" title="{s name='AjaxCartLinkConfirm'}{/s}">
 		{se name='AjaxCartLinkConfirm'}{/se}
 	</a>
 </div>

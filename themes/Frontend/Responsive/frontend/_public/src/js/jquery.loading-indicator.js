@@ -26,6 +26,7 @@
         defaults: {
             loaderCls: 'js--loading-indicator',
             iconCls: 'icon--default',
+            delay: 0,
             animationSpeed: 500,
             closeOnClick: true,
             openOverlay: true
@@ -49,13 +50,6 @@
 
             me.options = $.extend({}, me.defaults, indicatorOptions);
 
-            if (me.options.openOverlay !== false) {
-                $.overlay.open($.extend({}, {
-                    closeOnClick: me.options.closeOnClick,
-                    onClose: me.close.bind(me)
-                }));
-            }
-
             if (me.$loader === null) {
                 me.$loader = me._createLoader();
                 $('body').append(me.$loader);
@@ -63,11 +57,20 @@
 
             me._updateLoader();
 
-            me.$loader.fadeIn(me.options.animationSpeed, function () {
-                $.publish('plugin/loadingIndicator/onOpenFinished', me);
-            });
+            me._timeout = window.setTimeout(function() {
+                if (me.options.openOverlay !== false) {
+                    $.overlay.open($.extend({}, {
+                        closeOnClick: me.options.closeOnClick,
+                        onClose: me.close.bind(me)
+                    }));
+                }
 
-            $.publish('plugin/loadingIndicator/onOpen', me);
+                me.$loader.fadeIn(me.options.animationSpeed, function () {
+                    $.publish('plugin/swLoadingIndicator/onOpenFinished', [ me ]);
+                });
+            }, me.options.delay);
+
+            $.publish('plugin/swLoadingIndicator/onOpen', [ me ]);
         },
 
         /**
@@ -77,19 +80,25 @@
             var me = this,
                 opts = me.options;
 
-            if (opts.openOverlay !== false) {
-                $.overlay.close();
-            }
+            callback = callback || function() {};
 
             if (me.$loader !== null) {
                 me.$loader.fadeOut(opts.animationSpeed || me.defaults.animationSpeed, function () {
                     callback.call(me);
 
-                    $.publish('plugin/loadingIndicator/onCloseFinished', me);
+                    if(me._timeout) {
+                        window.clearTimeout(me._timeout);
+                    }
+
+                    if (opts.openOverlay !== false) {
+                        $.overlay.close();
+                    }
+
+                    $.publish('plugin/swLoadingIndicator/onCloseFinished', [ me ]);
                 });
             }
 
-            $.publish('plugin/loadingIndicator/onClose', me);
+            $.publish('plugin/swLoadingIndicator/onClose', [ me ]);
         },
 
         /**

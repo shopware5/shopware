@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundleDBAL\SortingHandler;
 
+use Shopware\Bundle\SearchBundleDBAL\ConditionHandler\SalesConditionHandler;
 use Shopware\Bundle\SearchBundleDBAL\SortingHandlerInterface;
 use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
 use Shopware\Bundle\SearchBundle\SortingInterface;
@@ -46,28 +47,25 @@ class PopularitySortingHandler implements SortingHandlerInterface
     }
 
     /**
-     * Handles the passed sorting object.
-     * Extends the passed query builder with the specify sorting.
-     * Should use the addOrderBy function, otherwise other sortings would be overwritten.
-     *
-     * @param SortingInterface|PopularitySorting $sorting
-     * @param QueryBuilder $query
-     * @param ShopContextInterface $context
-     * @return void
+     * {@inheritdoc}
      */
     public function generateSorting(
         SortingInterface $sorting,
         QueryBuilder $query,
         ShopContextInterface $context
     ) {
-        $query->leftJoin(
-            'product',
-            's_articles_top_seller_ro',
-            'topSeller',
-            'topSeller.article_id = product.id'
-        );
+        if (!$query->hasState(SalesConditionHandler::STATE_INCLUDES_TOPSELLER_TABLE)) {
+            $query->leftJoin(
+                'product',
+                's_articles_top_seller_ro',
+                'topSeller',
+                'topSeller.article_id = product.id'
+            );
+            $query->addState(SalesConditionHandler::STATE_INCLUDES_TOPSELLER_TABLE);
+        }
 
+        /** @var PopularitySorting $sorting */
         $query->addOrderBy('topSeller.sales', $sorting->getDirection())
-            ->addOrderBy('topSeller.article_id', $sorting->getDirection());
+              ->addOrderBy('topSeller.article_id', $sorting->getDirection());
     }
 }

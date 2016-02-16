@@ -76,7 +76,7 @@ Ext.define('Shopware.apps.Category.view.category.Tree', {
      * The width of this component in pixels.
      * @integer
      */
-    width: 250,
+    width: 300,
     /**
      * Plugins and plugin configurations
      * @object
@@ -101,12 +101,14 @@ Ext.define('Shopware.apps.Category.view.category.Tree', {
         columnActionHeader : '{s name=view/action_column_title}Action{/s}',
         columnArticleHeader : '{s name=view/articles_column_title}Articles{/s}',
         // Context menu
-        contextAddSubCategory : '{s name=view/context_add_category}Add new sub category{/s}',
-        contextDeleteSubCategory : '{s name=view/context_delete_category}Delete sub category{/s}',
+        contextAddSubCategory : '{s name=view/context_add_category}Add new{/s}',
+        contextDuplicateSubCategory : '{s name=view/context_duplicate_category}Duplicate{/s}',
+        contextDeleteSubCategory : '{s name=view/context_delete_category}Delete{/s}',
         contextReloadTree : '{s name=view/context_reload_tree}Reload{/s}',
 
-        treeAdd : '{s name=view/tree_add}Add category{/s}',
-        treeDelete : '{s name=view/tree_delete}Delete category{/s}'
+        treeAdd : '{s name=view/tree_add}Add new{/s}',
+        treeDuplicate : '{s name=view/tree_duplicate}Duplicate{/s}',
+        treeDelete : '{s name=view/tree_delete}Delete{/s}'
     },
     /**
      * Name of the root node. We have to show the root node in order to move a subcategory under the root.
@@ -172,16 +174,26 @@ Ext.define('Shopware.apps.Category.view.category.Tree', {
         /*{if {acl_is_allowed privilege=create}}*/
         menuElements.push({
                 text: me.snippets.contextAddSubCategory,
-                iconCls: 'sprite-blue-folder--plus',
+                iconCls: 'sprite-plus-circle',
                 handler: function() {
                     me.fireEvent('addSubCategory', record, item, index);
                 }
         });
         /* {/if} */
+        /*{if {acl_is_allowed privilege=create}}*/
+        menuElements.push({
+            text: me.snippets.contextDuplicateSubCategory,
+            iconCls: 'sprite-document-copy',
+            disabled: disableStatus,
+            handler: function() {
+                me.fireEvent('duplicateSubCategory', record, item, index);
+            }
+        });
+        /* {/if} */
         /* {if {acl_is_allowed privilege=delete}} */
         menuElements.push({
                 text: me.snippets.contextDeleteSubCategory,
-                iconCls: 'sprite-blue-folder--minus',
+                iconCls: 'sprite-minus-circle',
                 disabled: disableStatus,
                 handler: function() {
                     me.fireEvent('deleteSubCategory', me, view, record, item, index);
@@ -216,7 +228,7 @@ Ext.define('Shopware.apps.Category.view.category.Tree', {
          /* {if {acl_is_allowed privilege=create}} */
          menuElements.push({
              text:me.snippets.contextAddSubCategory,
-             iconCls: 'sprite-blue-folder--plus',
+             iconCls: 'sprite-plus-circle',
              handler:function () {
                  me.fireEvent('addSubCategory');
              }
@@ -247,15 +259,26 @@ Ext.define('Shopware.apps.Category.view.category.Tree', {
             menu = [];
         /* {if {acl_is_allowed privilege=create}} */
         menu.push({
-            text   :me.snippets.treeAdd,
+            text   : me.snippets.treeAdd,
+            iconCls: 'sprite-plus-circle',
             action : 'addCategory',
             cls    : 'addBtn small secondary'
         });
         menu.push( '->');
         /* {/if} */
+        /* {if {acl_is_allowed privilege=create}} */
+        menu.push({
+            text     : me.snippets.treeDuplicate,
+            iconCls  : 'sprite-document-copy',
+            action   : 'duplicateCategory',
+            disabled : true,
+            cls      : 'small secondary'
+        });
+        /* {/if} */
         /* {if {acl_is_allowed privilege=delete}} */
         menu.push({
             text     : me.snippets.treeDelete,
+            iconCls  : 'sprite-minus-circle',
             action   : 'deleteCategory',
             disabled : true,
             cls      : 'deleteBtn small secondary'

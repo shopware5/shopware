@@ -72,6 +72,12 @@ Ext.define('Shopware.apps.Emotion.view.components.ArticleSlider', {
 
         me.articleType = me.down('emotion-components-fields-article-slider-type');
         me.categoryFilter = me.down('emotion-components-fields-category-selection');
+        me.streamSelection = me.down('productstreamselection');
+
+        me.streamSelection.allowBlank = true;
+        me.categoryFilter.allowBlank = true;
+        me.streamSelection.hide();
+
         if(!me.articleType.getValue()) {
             me.maxCountField.hide();
             me.categoryFilter.hide();
@@ -83,13 +89,27 @@ Ext.define('Shopware.apps.Emotion.view.components.ArticleSlider', {
             me.articleFieldset.show();
             me.rotateSpeed.show().enable();
             me.rotation.show().enable();
+            me.streamSelection.allowBlank = true;
+            me.categoryFilter.allowBlank = true;
+        } else if (me.articleType.getValue() == 'product_stream') {
+            me.maxCountField.hide();
+            me.categoryFilter.hide();
+            me.articleFieldset.hide();
+            me.rotateSpeed.show().enable();
+            me.rotation.show().enable();
+            me.streamSelection.show();
+            me.streamSelection.allowBlank = false;
+            me.categoryFilter.allowBlank = true;
         } else {
             me.maxCountField.show();
             me.categoryFilter.show();
             me.articleFieldset.hide();
             me.rotateSpeed.hide().disable();
             me.rotation.hide().disable();
+            me.streamSelection.allowBlank = true;
+            me.categoryFilter.allowBlank = false;
         }
+        me.streamSelection.validate();
         me.articleType.on('change', me.onChange, me);
 
         me.refreshHiddenValue();
@@ -98,19 +118,36 @@ Ext.define('Shopware.apps.Emotion.view.components.ArticleSlider', {
     onChange: function(field, newValue) {
         var me = this;
 
-        if(newValue !== 'selected_article') {
-            me.maxCountField.show();
-            me.categoryFilter.show();
-            me.articleFieldset.hide();
-            me.rotateSpeed.hide().disable();
-            me.rotation.hide().disable();
-        } else {
+        me.streamSelection.allowBlank = true;
+        me.streamSelection.hide();
+
+        if (newValue == 'selected_article') {
             me.maxCountField.hide();
             me.categoryFilter.hide();
             me.articleFieldset.show();
             me.rotateSpeed.show().enable();
             me.rotation.show().enable();
+            me.streamSelection.allowBlank = true;
+            me.categoryFilter.allowBlank = true;
+        } else if (newValue == 'product_stream') {
+            me.maxCountField.hide();
+            me.categoryFilter.hide();
+            me.articleFieldset.hide();
+            me.rotateSpeed.show().enable();
+            me.rotation.show().enable();
+            me.streamSelection.show();
+            me.streamSelection.allowBlank = false;
+            me.categoryFilter.allowBlank = true;
+        } else {
+            me.maxCountField.show();
+            me.categoryFilter.show();
+            me.articleFieldset.hide();
+            me.rotateSpeed.hide().disable();
+            me.rotation.hide().disable();
+            me.streamSelection.allowBlank = true;
+            me.categoryFilter.allowBlank = false;
         }
+        me.streamSelection.validate();
     },
 
     /**

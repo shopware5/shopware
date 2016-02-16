@@ -32,7 +32,7 @@
 							{* Product name *}
 							{block name="search_ajax_list_entry_name"}
 								<span class="entry--name block">
-									{$search_result.name}
+									{$search_result.name|escapeHtml}
 								</span>
 							{/block}
 

@@ -52,6 +52,8 @@ Feature: Blog
             | comment  | Hallo Welt      |
             | sCaptcha | 123456          |
 
+        Then I should see "Vielen Dank für die Abgabe Ihrer Bewertung! Sie erhalten in wenigen Minuten eine Bestätigungsmail"
+
         When  I click the link in my latest email
         Then  I should see "Vielen Dank für die Abgabe Ihrer Bewertung! Ihre Bewertung wird nach Überprüfung freigeschaltet."
         But   I should not see "Hallo Welt"

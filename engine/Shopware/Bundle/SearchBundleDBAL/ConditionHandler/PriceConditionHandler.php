@@ -60,14 +60,7 @@ class PriceConditionHandler implements ConditionHandlerInterface
     }
 
     /**
-     * Extends the query with a price range condition.
-     * The passed price condition contains a min and max value of the filtered price.
-     * Searched products should have a price within this range.
-     *
-     * @param ConditionInterface|PriceCondition $condition
-     * @param QueryBuilder $query
-     * @param ShopContextInterface $context
-     * @return void
+     * {@inheritdoc}
      */
     public function generateCondition(
         ConditionInterface $condition,
@@ -79,13 +72,15 @@ class PriceConditionHandler implements ConditionHandlerInterface
 
         $this->priceHelper->joinPrices($query, $context);
 
-        if ($condition->getMaxPrice() > 0) {
+        /** @var PriceCondition $condition */
+        if ($condition->getMaxPrice() > 0 && $condition->getMinPrice() > 0) {
             $query->andHaving($selection . ' BETWEEN :priceMin AND :priceMax');
             $query->setParameter(':priceMin', $condition->getMinPrice());
             $query->setParameter(':priceMax', $condition->getMaxPrice());
-        }
-
-        if ($condition->getMinPrice() > 0) {
+        } elseif ($condition->getMaxPrice() > 0) {
+            $query->andHaving($selection . ' <= :priceMax');
+            $query->setParameter(':priceMax', $condition->getMaxPrice());
+        } elseif ($condition->getMinPrice() > 0) {
             $query->andHaving($selection . ' >= :priceMin');
             $query->setParameter(':priceMin', $condition->getMinPrice());
         }

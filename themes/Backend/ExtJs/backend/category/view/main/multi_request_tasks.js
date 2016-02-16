@@ -152,7 +152,6 @@ Ext.define('Shopware.apps.Category.view.main.MultiRequestTasks', {
         var me = this;
 
         me.rebuildCategoryProgress     = me.createProgressBar();
-        me.removeOldAssignmentsProgress = me.createProgressBar();
         me.rebuildAssignmentsProgress  = me.createProgressBar();
 
         return [
@@ -161,7 +160,6 @@ Ext.define('Shopware.apps.Category.view.main.MultiRequestTasks', {
                 padding: '10 0',
                 items: [
                     me.rebuildCategoryProgress,
-                    me.removeOldAssignmentsProgress,
                     me.rebuildAssignmentsProgress
                 ]
             },

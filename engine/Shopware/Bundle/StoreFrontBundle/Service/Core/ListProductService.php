@@ -23,7 +23,6 @@
  */
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
-use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Service;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
@@ -71,9 +70,9 @@ class ListProductService implements Service\ListProductServiceInterface
     private $voteService;
 
     /**
-     * @var \Enlight_Event_EventManager
+     * @var Service\CategoryServiceInterface
      */
-    private $eventManager;
+    private $categoryService;
 
     /**
      * @var \Shopware_Components_Config
@@ -88,7 +87,7 @@ class ListProductService implements Service\ListProductServiceInterface
      * @param Service\MediaServiceInterface $mediaService
      * @param Service\MarketingServiceInterface $marketingService
      * @param Service\VoteServiceInterface $voteService
-     * @param \Enlight_Event_EventManager $eventManager
+     * @param Service\CategoryServiceInterface $categoryService
      * @param \Shopware_Components_Config $config
      */
     public function __construct(
@@ -99,7 +98,7 @@ class ListProductService implements Service\ListProductServiceInterface
         Service\MediaServiceInterface $mediaService,
         Service\MarketingServiceInterface $marketingService,
         Service\VoteServiceInterface $voteService,
-        \Enlight_Event_EventManager $eventManager,
+        Service\CategoryServiceInterface $categoryService,
         \Shopware_Components_Config $config
     ) {
         $this->productGateway = $productGateway;
@@ -107,9 +106,9 @@ class ListProductService implements Service\ListProductServiceInterface
         $this->cheapestPriceService = $cheapestPriceService;
         $this->priceCalculationService = $priceCalculationService;
         $this->mediaService = $mediaService;
-        $this->eventManager = $eventManager;
         $this->marketingService = $marketingService;
         $this->voteService = $voteService;
+        $this->categoryService = $categoryService;
         $this->config = $config;
     }
 
@@ -138,6 +137,8 @@ class ListProductService implements Service\ListProductServiceInterface
 
         $voteAverages = $this->voteService->getAverages($products, $context);
 
+        $categories = $this->categoryService->getProductsCategories($products, $context);
+
         $result = [];
         foreach ($numbers as $number) {
             if (!array_key_exists($number, $products)) {
@@ -159,6 +160,10 @@ class ListProductService implements Service\ListProductServiceInterface
 
             if (isset($voteAverages[$number])) {
                 $product->setVoteAverage($voteAverages[$number]);
+            }
+
+            if (isset($categories[$number])) {
+                $product->setCategories($categories[$number]);
             }
 
             $product->addAttribute(
@@ -196,10 +201,14 @@ class ListProductService implements Service\ListProductServiceInterface
             return false;
         }
 
-        if (!$product->hasAvailableVariant()) {
+        if ($this->config->get('hideNoInstock') && $product->isCloseouts() && !$product->hasAvailableVariant()) {
             return false;
         }
 
-        return true;
+        $ids = array_map(function (Struct\Category $category) {
+            return $category->getId();
+        }, $product->getCategories());
+
+        return in_array($context->getShop()->getCategory()->getId(), $ids);
     }
 }

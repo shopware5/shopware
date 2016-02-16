@@ -43,23 +43,30 @@ class SimilarProductsService implements Service\SimilarProductsServiceInterface
      * @var Service\ListProductServiceInterface
      */
     private $listProductService;
+    /**
+     * @var \Shopware_Components_Config
+     */
+    private $config;
 
     /**
      * @param Gateway\SimilarProductsGatewayInterface $gateway
      * @param Service\ListProductServiceInterface $listProductService
+     * @param \Shopware_Components_Config $config
      */
     public function __construct(
         Gateway\SimilarProductsGatewayInterface $gateway,
-        Service\ListProductServiceInterface $listProductService
+        Service\ListProductServiceInterface $listProductService,
+        \Shopware_Components_Config $config
     ) {
         $this->gateway = $gateway;
         $this->listProductService = $listProductService;
+        $this->config = $config;
     }
 
     /**
      * @inheritdoc
      */
-    public function get(Struct\BaseProduct $product, Struct\ProductContextInterface $context)
+    public function get(Struct\ListProduct $product, Struct\ProductContextInterface $context)
     {
         $similar = $this->getList([$product], $context);
 
@@ -101,6 +108,10 @@ class SimilarProductsService implements Service\SimilarProductsServiceInterface
         }
 
         if (empty($fallback)) {
+            return $result;
+        }
+
+        if ($this->config->get('similarLimit') <= 0) {
             return $result;
         }
 

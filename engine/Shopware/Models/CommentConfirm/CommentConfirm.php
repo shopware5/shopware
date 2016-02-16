@@ -45,7 +45,7 @@ class CommentConfirm extends ModelEntity
     private $id;
 
     /**
-     * @var string $creationDate
+     * @var \DateTime $creationDate
      *
      * @ORM\Column(name="datum", type="datetime", nullable=false)
      */
@@ -126,7 +126,7 @@ class CommentConfirm extends ModelEntity
     /**
      * Set CreationDate
      *
-     * @param string $creationDate
+     * @param \DateTime|string $creationDate
      */
     public function setCreationDate($creationDate)
     {

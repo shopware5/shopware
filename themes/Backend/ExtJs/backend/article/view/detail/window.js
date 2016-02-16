@@ -124,6 +124,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
         crossSellingTab:'{s name=cross_selling_tab}Cross-Selling{/s}',
         esdTab:'{s name=esd_tab}ESD{/s}',
         statisticTab:'{s name=statistic_tab}Statistics{/s}',
+        resourcesTab: '{s name=resources_tab}Resources{/s}',
         save:'{s name=save_button}Save article{/s}',
         cancel:'{s name=cancel_button}Cancel{/s}',
         categoryNotice:'{s name=category/category_notice}Please select the category to which the product <strong>[0]</strong> is supposed to be assigned.{/s}',
@@ -239,7 +240,6 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
     createMainTabPanel: function() {
         var me = this, tooltip = '';
 
-
         if (me.subApp.splitViewActive) {
             tooltip = me.snippets.variantTabTooltip;
         }
@@ -273,6 +273,21 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
             } : { }
         });
 
+        me.crossSellingTab = Ext.create('Ext.form.Panel', {
+            title: me.snippets.crossSellingTab,
+            disabled: true,
+            layout: 'fit',
+            deferredRender: true
+        });
+
+        me.propertiesTab = Ext.create('Ext.container.Container', {
+            disabled: true,
+            layout: 'fit',
+            name: 'properties-tab',
+            title: me.snippets.propertyTab,
+            items: [ me.createPropertiesFieldSet() ]
+        });
+
         me.esdTab = Ext.create('Ext.container.Container', {
             title: me.snippets.esdTab,
             disabled: true,
@@ -292,6 +307,14 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
             }
         });
 
+        me.resourcesTab = Ext.create('Ext.form.Panel', {
+            title: me.snippets.resourcesTab,
+            name: 'resources-tab',
+            disabled: true,
+            autoScroll: true,
+            bodyPadding: 10
+        });
+
         return me.mainTab = Ext.create('Ext.tab.Panel', {
             name: 'main-tab-panel',
             items: [
@@ -299,8 +322,11 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
                 me.categoryTab,
                 me.imageTab,
                 me.variantTab,
+                me.propertiesTab,
+                me.crossSellingTab,
                 me.esdTab,
-                me.statisticTab
+                me.statisticTab,
+                me.resourcesTab
             ]
         });
     },
@@ -354,23 +380,19 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
                 me.createDescriptionFieldSet(),
                 me.createMetaFieldSet(),
                 me.createBasePriceFieldSet(),
-                me.createSettingsFieldSet(),
-                me.createPropertiesFieldSet()
+                me.createSettingsFieldSet()
+            ],
+            dockedItems: [
+                me.createActionsToolbar()
             ]
         });
 
         return me.detailContainer = Ext.create('Ext.container.Container', {
-            layout: 'border',
+            layout: 'fit',
             name: 'main',
             title: me.snippets.formTab,
             items: [
-                me.detailForm,
-                {
-                    xtype: 'article-sidebar',
-                    region: 'east',
-                    article: me.article,
-                    shopStore: me.shopStore
-                }
+                me.detailForm
             ]
         });
     },
@@ -390,6 +412,16 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
     },
 
     /**
+     * Creates the toolbar for the article actions.
+     * @return Shopware.apps.Article.view.detail.Toolbar
+     */
+    createActionsToolbar: function() {
+        return Ext.create('Shopware.apps.Article.view.detail.Toolbar', {
+            subApp: this.subApp
+        });
+    },
+
+    /**
      * Creates the base field set for the detail form.
      * @return Shopware.apps.Article.view.detail.Base
      */
@@ -401,8 +433,6 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
      * Creates the field set for the article price configuration.
      */
     createPriceFieldSet: function() {
-        var me = this;
-
         return Ext.create('Shopware.apps.Article.view.detail.Prices');
     },
 
@@ -763,6 +793,15 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
         });
     },
 
+    createCrossselingTab: function() {
+        var me = this;
+
+        return Ext.create('Shopware.apps.Article.view.crossselling.Tab', {
+            name: 'crossselling',
+            article: me.article
+        });
+    },
+
     /**
      * Creates the esd tab which contains the configuration for the esd options.
      * @return Ext.container.Container
@@ -821,6 +860,23 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
         return [ chart, list ];
     },
 
+    /**
+     * Creates the resources tab that contains the additional links
+     */
+    createResourcesTab: function() {
+        var me = this;
+
+        me.resourcesLinks = Ext.create('Shopware.apps.Article.view.resources.Links', {
+            article: me.article
+        });
+
+        me.resourcesDownloads = Ext.create('Shopware.apps.Article.view.resources.Downloads', {
+            article: me.article
+        });
+
+        return [ me.resourcesLinks, me.resourcesDownloads ]
+    },
+
     onStoresLoaded: function(article, stores) {
         var me = this;
         me.article = article;
@@ -840,11 +896,19 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
 
         me.variantTab.add(me.createVariantTab());
 
+        me.crossSellingTab.add(me.createCrossselingTab());
+        me.crossSellingTab.setDisabled(false);
+
+        me.propertiesTab.setDisabled(false);
+
         me.esdTab.add(me.createEsdTab());
         me.esdTab.setDisabled((me.article.get('id') === null));
 
         me.statisticTab.add(me.createStatisticTab());
         me.statisticTab.setDisabled(me.article.get('id') === null);
+
+        me.resourcesTab.add(me.createResourcesTab());
+        me.resourcesTab.setDisabled(false);
 
         me.variantListing.customerGroupStore = stores['customerGroups'];
 

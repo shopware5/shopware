@@ -37,32 +37,37 @@ class Product extends ListProduct implements \JsonSerializable
     /**
      * @var ListProduct[]
      */
-    protected $relatedProducts;
+    protected $relatedProducts = [];
+
+    /**
+     * @var ProductStream[]
+     */
+    protected $relatedProductStreams = [];
 
     /**
      * @var ListProduct[]
      */
-    protected $similarProducts;
+    protected $similarProducts = [];
 
     /**
      * @var Product\Download[]
      */
-    protected $downloads;
+    protected $downloads = [];
 
     /**
      * @var Product\Link[]
      */
-    protected $links;
+    protected $links = [];
 
     /**
      * @var Media[]
      */
-    protected $media;
+    protected $media = [];
 
     /**
      * @var Product\Vote[]
      */
-    protected $votes;
+    protected $votes = [];
 
     /**
      * @var Set
@@ -72,7 +77,24 @@ class Product extends ListProduct implements \JsonSerializable
     /**
      * @var Group[]
      */
-    protected $configuration;
+    protected $configuration = [];
+
+    /**
+     * @param ListProduct $listProduct
+     * @return Product
+     */
+    public static function createFromListProduct(ListProduct $listProduct)
+    {
+        $product = new self(
+            $listProduct->getId(),
+            $listProduct->getVariantId(),
+            $listProduct->getNumber()
+        );
+        foreach ($listProduct as $key => $value) {
+            $product->$key = $value;
+        }
+        return $product;
+    }
 
     /**
      * @param \Shopware\Bundle\StoreFrontBundle\Struct\Media[] $media
@@ -152,6 +174,22 @@ class Product extends ListProduct implements \JsonSerializable
     public function getRelatedProducts()
     {
         return $this->relatedProducts;
+    }
+
+    /**
+     * @return \Shopware\Bundle\StoreFrontBundle\Struct\ProductStream[]
+     */
+    public function getRelatedProductStreams()
+    {
+        return $this->relatedProductStreams;
+    }
+
+    /**
+     * @param \Shopware\Bundle\StoreFrontBundle\Struct\ProductStream[] $relatedProductStreams
+     */
+    public function setRelatedProductStreams($relatedProductStreams)
+    {
+        $this->relatedProductStreams = $relatedProductStreams;
     }
 
     /**

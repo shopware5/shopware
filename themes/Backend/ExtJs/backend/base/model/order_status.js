@@ -39,16 +39,16 @@ Ext.define('Shopware.apps.Base.model.OrderStatus', {
 
     snippets: {
         //{block name="backend/base/model/order_status/snippets"}{/block}
-        state0: '{s name=cancelled}Cancelled{/s}',
-        state1: '{s name=open}Open{/s}',
-        state2: '{s name=in_process}In process{/s}',
-        state3: '{s name=completed}Completed{/s}',
-        state4: '{s name=partially_completed}Partially completed{/s}',
-        state5: '{s name=cancelled_rejected}Cancelled/rejected{/s}',
-        state6: '{s name=ready_for_delivery}Ready for delivery{/s}',
-        state7: '{s name=partially_delivered}Partially delivered{/s}',
-        state8: '{s name=completely_delivered}Completely delivered{/s}',
-        state9: '{s name=clarification_required}Clarification required{/s}'
+        cancelled: '{s name=cancelled}Cancelled{/s}',
+        open: '{s name=open}Open{/s}',
+        in_process: '{s name=in_process}In process{/s}',
+        completed: '{s name=completed}Completed{/s}',
+        partially_completed: '{s name=partially_completed}Partially completed{/s}',
+        cancelled_rejected: '{s name=cancelled_rejected}Cancelled/rejected{/s}',
+        ready_for_delivery: '{s name=ready_for_delivery}Ready for delivery{/s}',
+        partially_delivered: '{s name=partially_delivered}Partially delivered{/s}',
+        completely_delivered: '{s name=completely_delivered}Completely delivered{/s}',
+        clarification_required: '{s name=clarification_required}Clarification required{/s}'
     },
 
     /**
@@ -75,14 +75,14 @@ Ext.define('Shopware.apps.Base.model.OrderStatus', {
     fields:[
 		//{block name="backend/base/model/order_status/fields"}{/block}
         { name:'id', type: 'int' },
+        { name:'name', type: 'string' },
         {
             name:'description',
             type: 'string',
             convert: function(value, record) {
                 var snippet = value;
-                var internalId = record.get('id') + 1;
                 if (record && record.snippets) {
-                    snippet = record.snippets['state' + internalId];
+                    snippet = record.snippets[record.get('name')];
                 }
                 if (Ext.isString(snippet) && snippet.length > 0) {
                     return snippet;

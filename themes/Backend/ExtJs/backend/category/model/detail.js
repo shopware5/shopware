@@ -50,6 +50,7 @@ Ext.define('Shopware.apps.Category.model.Detail', {
 		// {block name="backend/category/model/detail/fields"}{/block}
         { name : 'id', type: 'integer', useNull:true },
         { name : 'parentId', type: 'integer' },
+        { name : 'streamId', type: 'integer', useNull:true, defaultValue: null },
         { name : 'name', type: 'string' },
         { name : 'position', type: 'integer', useNull:true, defaultValue: null},
         { name : 'metaKeywords', type: 'string', useNull:true, defaultValue: null },

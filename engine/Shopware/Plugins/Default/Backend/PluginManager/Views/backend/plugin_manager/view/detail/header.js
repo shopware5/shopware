@@ -18,7 +18,7 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Header', {
         if (me.plugin.get('certified')) {
             certified = Ext.create('Ext.Component', {
                 cls: 'headline-certified',
-                html: '<span class="icon">&nbsp;</span><span class="text">{s name="certified"}{/s}</span>'
+                html: '<span class="icon">&nbsp;</span><span class="text">{s name="certified"}Certified{/s}</span>'
             });
         }
 
@@ -28,7 +28,7 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Header', {
             producer = Ext.create('Ext.Component', {
                 cls: 'headline-author',
                 margin: '5 0 0',
-                html: '<span class="prefix">{s name="from_producer"}{/s}:</span> ' + record.get('name')
+                html: '<span class="prefix">{s name="from_producer"}Developed by{/s}:</span> ' + record.get('name')
             });
         }
 

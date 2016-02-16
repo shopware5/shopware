@@ -98,11 +98,7 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
         $view->NotifyHideBasket = Shopware()->Config()->sDEACTIVATEBASKETONNOTIFICATION;
 
         $view->NotificationVariants = $notificationVariants;
-        $view->NotifyEmailError = $view->NotifyEmailError;
-        $view->NotifyValid = $view->NotifyValid;
-        $view->NotifyInvalid = $view->NotifyInvalid;
         $view->ShowNotification = true;
-        $view->NotifyAlreadyRegistered = $view->NotifyAlreadyRegistered;
         $view->WaitingForOptInApprovement = Shopware()->Session()->sNotifcationArticleWaitingForOptInApprovement[$view->sArticle['ordernumber']];
     }
 
@@ -127,7 +123,7 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
         $notifyOrderNumber = $action->Request()->notifyOrdernumber;
         if (!empty($notifyOrderNumber)) {
             $validator = Shopware()->Container()->get('validator.email');
-            if (empty($email) || !$validator->isValid($email, false, true)) {
+            if (empty($email) || !$validator->isValid($email)) {
                 $sError = true;
                 $action->View()->NotifyEmailError = true;
             } elseif (!empty($notifyOrderNumber)) {
@@ -163,7 +159,8 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
                         'sArticle' => $id,
                         'sNotificationConfirmation' => $hash,
                         'sNotify' => '1',
-                        'action' => 'notifyConfirm'
+                        'action' => 'notifyConfirm',
+                        'number' => $notifyOrderNumber
                     ));
 
                     $name = Shopware()->Modules()->Articles()->sGetArticleNameByOrderNumber($notifyOrderNumber);

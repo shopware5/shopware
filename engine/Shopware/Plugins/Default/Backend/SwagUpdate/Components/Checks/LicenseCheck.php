@@ -125,7 +125,11 @@ class LicenseCheck implements CheckInterface
 
             try {
                 $body = $response->getBody();
-                $json = \Zend_Json::decode($body, true);
+                if ($body != '') {
+                    $json = \Zend_Json::decode($body, true);
+                } else {
+                    $json = null;
+                }
             } catch (\Exception $e) {
                 // Do not show exception to user if SBP returns an error
                 return null;

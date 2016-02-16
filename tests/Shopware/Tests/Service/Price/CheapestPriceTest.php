@@ -2,13 +2,13 @@
 
 namespace Shopware\Tests\Service\Price;
 
-use Shopware\Bundle\StoreFrontBundle\Struct\Context;
 use Shopware\Bundle\StoreFrontBundle\Struct\ProductContext;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Tests\Service\TestCase;
 
 class CheapestPriceTest extends TestCase
 {
-    private function getConfiguratorProduct($number, ProductContext $context)
+    private function getConfiguratorProduct($number, ShopContextInterface $context) // ProductContext
     {
         $product = $this->helper->getSimpleProduct(
             $number,
@@ -22,6 +22,7 @@ class CheapestPriceTest extends TestCase
             array('farbe' => array('rot', 'blau', 'grün', 'schwarz', 'weiß'))
         );
         $product = array_merge($product, $configurator);
+        $product['categories'] = [['id' => $context->getShop()->getCategory()->getId()]];
 
         foreach ($product['variants'] as $index => &$variant) {
             $offset = ($index + 1) * -10;
@@ -89,7 +90,6 @@ class CheapestPriceTest extends TestCase
         $this->assertEquals(80, $cheapestPrice->getCalculatedPrice());
         $this->assertEquals(90, $cheapestPrice->getCalculatedPseudoPrice());
         $this->assertEquals(160, $cheapestPrice->getCalculatedReferencePrice());
-
     }
 
     public function testCheapestWithMinPurchase()

@@ -27,7 +27,7 @@
 													   name="group[{$option.groupID}]"
 													   value="{$option.optionID}"
 													   title="{$option.optionname}"
-													   data-auto-submit="true"
+													   {if $theme.ajaxVariantSwitch}data-ajax-select-variants="true"{else}data-auto-submit="true"{/if}
 													   {if !$option.selectable}disabled="disabled"{/if}
 													   {if $option.selected && $option.selectable}checked="checked"{/if} />
 											{/block}

@@ -69,21 +69,21 @@ class Listing extends Page implements HelperSelectorInterface
      */
     public function verifyPage()
     {
-        if(Helper::hasNamedLink($this, 'moreProducts')) {
+        if (Helper::hasNamedLink($this, 'moreProducts')) {
             return;
         }
 
         $errors = [];
 
-        if(!$this->hasSelect('n')) {
+        if (!$this->hasSelect('n')) {
             $errors[] = '- There is no "article per page" select!';
         }
 
-        if(!$this->hasSelect('o')) {
+        if (!$this->hasSelect('o')) {
             $errors[] = '- There is no "order" select!';
         }
 
-        if(!$errors) {
+        if (!$errors) {
             return;
         }
 
@@ -133,6 +133,7 @@ class Listing extends Page implements HelperSelectorInterface
         foreach ($properties as $property) {
             $found = false;
 
+            /** @var FilterGroup $filterGroup */
             foreach ($filterGroups as $filterGroup) {
                 $filterGroupName = rtrim($filterGroup->getText(), ' +');
 
@@ -209,6 +210,7 @@ class Listing extends Page implements HelperSelectorInterface
     }
 
     /**
+     * Checks the properties of a product box
      * @param ArticleBox $articleBox
      * @param array $properties
      * @throws \Exception

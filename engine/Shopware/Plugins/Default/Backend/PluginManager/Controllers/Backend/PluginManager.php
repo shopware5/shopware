@@ -44,6 +44,8 @@ use ShopwarePlugins\SwagUpdate\Components\Steps\FinishResult;
 class Shopware_Controllers_Backend_PluginManager
     extends Shopware_Controllers_Backend_ExtJs
 {
+    const FALLBACK_LOCALE = 'en_GB';
+
     public function preDispatch()
     {
         if (strtolower($this->Request()->getActionName()) == 'index') {
@@ -53,7 +55,10 @@ class Shopware_Controllers_Backend_PluginManager
                 $this->getCategoryService()->synchronize();
             }
 
-            $this->get('shopware_plugininstaller.plugin_manager')->refreshPluginList();
+            try {
+                $this->get('shopware_plugininstaller.plugin_manager')->refreshPluginList();
+            } catch (Exception $e) {
+            }
         }
 
         parent::preDispatch();
@@ -143,7 +148,8 @@ class Shopware_Controllers_Backend_PluginManager
     public function getCategoriesAction()
     {
         $categories = $this->getCategoryService()->get(
-            $this->getLocale()
+            $this->getLocale(),
+            self::FALLBACK_LOCALE
         );
 
         $this->View()->assign([
@@ -245,7 +251,12 @@ class Shopware_Controllers_Backend_PluginManager
 
     public function localListingAction()
     {
-        $this->get('shopware_plugininstaller.plugin_manager')->refreshPluginList();
+        $error = null;
+        try {
+            $this->get('shopware_plugininstaller.plugin_manager')->refreshPluginList();
+        } catch (Exception $e) {
+            $error = $e->getMessage();
+        }
 
         $context = new ListingRequest(
             $this->getLocale(),
@@ -266,7 +277,8 @@ class Shopware_Controllers_Backend_PluginManager
 
         $this->View()->assign([
             'success' => true,
-            'data' => array_values($plugins)
+            'data' => array_values($plugins),
+            'error' => $error
         ]);
     }
 

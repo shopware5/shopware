@@ -872,7 +872,7 @@ Ext.define('Shopware.model.Container', {
      * @return { Ext.form.field.Field }
      */
     createModelField: function (model, field, alias, customConfig) {
-        var me = this, formField = {}, fieldModel, fieldComponent, xtype;
+        var me = this, value, formField = {}, fieldModel, fieldComponent, xtype;
 
         if (!me.fireEvent(me.eventAlias + '-before-create-model-field', me, formField, model, field, alias)) {
             return formField;
@@ -942,8 +942,7 @@ Ext.define('Shopware.model.Container', {
                     me.getConfig('searchUrl')
                 );
 
-                var value = me.record.get(formField.name);
-                if (value) {
+                if (me.record && (value = me.record.get(formField.name))) {
                     formField.store.load({
                         params: { id: value }
                     });

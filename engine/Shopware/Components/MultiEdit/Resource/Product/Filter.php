@@ -166,6 +166,7 @@ class Filter
     public function getPaginatedResult($query)
     {
         $paginator = Shopware()->Models()->createPaginator($query);
+        $paginator->setUseOutputWalkers(true);
 
         $totalCount = $paginator->count();
 

@@ -24,6 +24,7 @@
 
 namespace Shopware\Components\Compatibility;
 
+use Shopware\Bundle\MediaBundle\MediaService;
 use Shopware\Bundle\SearchBundle;
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
@@ -51,18 +52,26 @@ class LegacyStructConverter
     private $eventManager;
 
     /**
+     * @var MediaService
+     */
+    private $mediaService;
+
+    /**
      * @param \Shopware_Components_Config $config
      * @param ContextService $contextService
      * @param \Enlight_Event_EventManager $eventManager
+     * @param MediaService $mediaService
      */
     public function __construct(
         \Shopware_Components_Config $config,
         ContextService $contextService,
-        \Enlight_Event_EventManager $eventManager
+        \Enlight_Event_EventManager $eventManager,
+        MediaService $mediaService
     ) {
         $this->config = $config;
         $this->contextService = $contextService;
         $this->eventManager = $eventManager;
+        $this->mediaService = $mediaService;
     }
 
     /**
@@ -216,7 +225,12 @@ class LegacyStructConverter
             $discPseudo = $cheapestPrice->getCalculatedPseudoPrice();
             $discPrice = $cheapestPrice->getCalculatedPrice();
 
-            $discount = round(($discPrice / $discPseudo * 100) - 100, 2) * -1;
+            if ($discPseudo != 0) {
+                $discount = round(($discPrice / $discPseudo * 100) - 100, 2) * -1;
+            } else {
+                $discount = 0;
+            }
+
             $promotion["pseudopricePercent"] = array(
                 "int" => round($discount, 0),
                 "float" => $discount
@@ -246,6 +260,26 @@ class LegacyStructConverter
             "?sViewport=detail&sArticle=" . $promotion["articleID"];
 
         return $promotion;
+    }
+
+    /**
+     * Converts the passed ProductStream struct to an array structure.
+     *
+     * @param StoreFrontBundle\Struct\ProductStream $productStream
+     * @return array
+     */
+    public function convertRelatedProductStreamStruct(StoreFrontBundle\Struct\ProductStream $productStream)
+    {
+        if (!$productStream instanceof StoreFrontBundle\Struct\ProductStream) {
+            return array();
+        }
+
+        return [
+            'id' => $productStream->getId(),
+            'name' => $productStream->getName(),
+            'description' => $productStream->getDescription(),
+            'type' => $productStream->getType()
+        ];
     }
 
     /**
@@ -295,7 +329,12 @@ class LegacyStructConverter
             $discPseudo = $variantPrice->getCalculatedPseudoPrice();
             $discPrice = $variantPrice->getCalculatedPrice();
 
-            $discount = round(($discPrice / $discPseudo * 100) - 100, 2) * -1;
+            if ($discPseudo != 0) {
+                $discount = round(($discPrice / $discPseudo * 100) - 100, 2) * -1;
+            } else {
+                $discount = 0;
+            }
+
             $data["pseudopricePercent"] = array(
                 "int" => round($discount, 0),
                 "float" => $discount
@@ -350,12 +389,21 @@ class LegacyStructConverter
         }
 
         foreach ($product->getDownloads() as $download) {
-            $data['sDownloads'][] = array(
+            $temp = array(
                 'id' => $download->getId(),
                 'description' => $download->getDescription(),
-                'filename' => $this->contextService->getShopContext()->getBaseUrl() . $this->config->get('articleFiles') . "/" . $download->getFile(),
-                'size' => $download->getSize()
+                'filename' => $this->mediaService->getUrl($download->getFile()),
+                'size' => $download->getSize(),
             );
+
+            $attributes = [];
+
+            if ($download->hasAttribute('core')) {
+                $attributes = $download->getAttribute('core')->toArray();
+            }
+
+            $temp['attributes'] = $attributes;
+            $data['sDownloads'][] = $temp;
         }
 
         foreach ($product->getLinks() as $link) {
@@ -389,6 +437,11 @@ class LegacyStructConverter
         $data['sSimilarArticles'] = array();
         foreach ($product->getSimilarProducts() as $similarProduct) {
             $data['sSimilarArticles'][] = $this->convertListProductStruct($similarProduct);
+        }
+
+        $data['relatedProductStreams'] = array();
+        foreach ($product->getRelatedProductStreams() as $relatedProductStream) {
+            $data['relatedProductStreams'][] = $this->convertRelatedProductStreamStruct($relatedProductStream);
         }
 
         return $data;
@@ -467,6 +520,15 @@ class LegacyStructConverter
         return $data;
     }
 
+    private function getSourceSet($thumbnail)
+    {
+        if ($thumbnail->getRetinaSource() !== null) {
+            return sprintf('%s, %s 2x', $thumbnail->getSource(), $thumbnail->getRetinaSource());
+        } else {
+            return $thumbnail->getSource();
+        }
+    }
+
     /**
      * @param StoreFrontBundle\Struct\Media $media
      * @return array
@@ -477,33 +539,29 @@ class LegacyStructConverter
             return [];
         }
 
-        //now we get the configured image and thumbnail dir.
-        $imageDir = $this->contextService->getShopContext()->getBaseUrl() . '/media/image/';
-        $imageDir = str_replace('/media/image/', '/', $imageDir);
-
         $thumbnails = [];
+
         foreach ($media->getThumbnails() as $thumbnail) {
             $retina = null;
-            if ($thumbnail->hasRetinaSource()) {
-                $retina = $imageDir . $thumbnail->getRetinaSource();
-            }
             $thumbnails[] = [
-                'source' => $imageDir . $thumbnail->getSource(),
+                'source' => $thumbnail->getSource(),
                 'retinaSource' => $retina,
-                'sourceSet' => $thumbnail->getSourceSet($imageDir),
+                'sourceSet' => $this->getSourceSet($thumbnail),
                 'maxWidth' => $thumbnail->getMaxWidth(),
-                'maxHeight' => $thumbnail->getmaxHeight()
+                'maxHeight' => $thumbnail->getMaxHeight()
             ];
         }
 
         $data = array(
             'id' => $media->getId(),
             'position' => 1,
-            'source' => $imageDir . $media->getFile(),
+            'source' => $media->getFile(),
             'description' => $media->getName(),
             'extension' => $media->getExtension(),
             'main' => $media->isPreview(),
             'parentId' => null,
+            'width' => $media->getWidth(),
+            'height' => $media->getHeight(),
             'thumbnails' => $thumbnails
         );
 
@@ -933,7 +991,7 @@ class LegacyStructConverter
             'notification' => $product->allowsNotification(),
             'ean' => $product->getEan(),
             'keywords' => $product->getKeywords(),
-            'sReleasedate' => $product->getReleaseDate(),
+            'sReleasedate' => $this->dateToString($product->getReleaseDate()),
             'template' => $product->getTemplate(),
         );
 
@@ -947,16 +1005,18 @@ class LegacyStructConverter
         $data['attributes'] = $product->getAttributes();
 
         if ($product->getManufacturer()) {
-            $data = array_merge(
-                $data,
-                array(
-                    'supplierName' => $product->getManufacturer()->getName(),
-                    'supplierImg' => $product->getManufacturer()->getCoverFile(),
-                    'supplierID' => $product->getManufacturer()->getId(),
-                    'supplierDescription' => $product->getManufacturer()->getDescription(),
-                )
+            $manufacturer = array(
+                'supplierName' => $product->getManufacturer()->getName(),
+                'supplierImg' => $product->getManufacturer()->getCoverFile(),
+                'supplierID' => $product->getManufacturer()->getId(),
+                'supplierDescription' => $product->getManufacturer()->getDescription(),
             );
 
+            if (!empty($manufacturer['supplierImg'])) {
+                $manufacturer['supplierImg'] = $this->mediaService->getUrl($manufacturer['supplierImg']);
+            }
+
+            $data = array_merge($data, $manufacturer);
             $data['supplier_attributes'] = $product->getManufacturer()->getAttributes();
         }
 
@@ -974,5 +1034,18 @@ class LegacyStructConverter
         }
 
         return $data;
+    }
+
+    /**
+     * @param mixed $date
+     * @return string
+     */
+    private function dateToString($date)
+    {
+        if ($date instanceof \DateTime) {
+            return $date->format('Y-m-d');
+        }
+
+        return '';
     }
 }

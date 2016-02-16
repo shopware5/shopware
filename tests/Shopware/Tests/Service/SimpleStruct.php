@@ -8,7 +8,7 @@ class SimpleStruct extends Struct
 {
     protected $value;
 
-    function __construct($value)
+    public function __construct($value)
     {
         $this->value = $value;
     }

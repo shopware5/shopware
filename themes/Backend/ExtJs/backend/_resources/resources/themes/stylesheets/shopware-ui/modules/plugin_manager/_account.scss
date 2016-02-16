@@ -202,7 +202,7 @@
 	}
 
     .forgot {
-		margin: 0 0 10px 135px;
+		margin: 0 0 10px 160px;
 
 		a {
 			text-decoration: none;
@@ -218,15 +218,22 @@
 		.headline {
 			font-weight: 300;
 			font-size: 41px;
+            line-height: 52px;
 			color: #0e384f;
 		}
 
 		.headline-close {
-			font-size: 24px;
-			padding-top: 10px;
-			color: #1491e7;
-			cursor: pointer;
-			font-weight: bold;
+            @include background-image(linear-gradient(#20b4fc, #0581d7));
+            @include border-radius(3px);
+            text-shadow: 0 1px 1px #0872c0;
+            font-size: 13px;
+            text-align: center;
+            top: 14px !important;
+            width: 18px;
+            height: 18px;
+            color: #fff;
+            cursor: pointer;
+            font-weight: bold;
 		}
 	}
 
@@ -234,7 +241,60 @@
 		margin-top: 10px;
 		padding-top: 15px;
 		border-top: 1px solid #cad9e0;
+        font-family: 'Open Sans', Arial, sans-serif;
+
+        .#{$prefix}panel-body-default {
+            line-height: 28px;
+            font-size: 14px !important;
+            color: #5c6f7c;
+        }
 	}
+
+    .plugin-manager-login-window {
+        td.#{$prefix}form-item-body {
+            padding: 0;
+
+            .#{$prefix}form-field:not(.#{$prefix}form-checkbox) {
+                @include border-radius(5px);
+                background: #fff;
+                border: 2px solid #cad9e0;
+                font-family: 'Open Sans', Arial, sans-serif;
+                font-size: 14px;
+                font-weight: 600;
+                line-height: 28px;
+                height: 32px;
+
+                &.#{$prefix}form-invalid-field {
+                    border-color: #FC9D9D;
+                }
+
+                &:focus {
+                    @include reset-box-shadow();
+                    border: 2px solid #1fb3fb !important;
+                }
+            }
+        }
+
+        .section-title {
+            font-family: 'Open Sans', Arial, sans-serif;
+            color: #0e384f;
+            font-size: 24px;
+            font-weight: 400;
+            line-height: 32px;
+        }
+    }
+
+    .plugin-manager-register-form .#{$prefix}panel-body {
+        @include border-radius(5px);
+        border: 1px solid #dfe4e7 !important;
+        background: #f1f5f7;
+        padding: 25px;
+
+        .#{$prefix}panel-body {
+            padding: 0 !important;
+            border: 0 none !important;
+        }
+    }
 
     .input--field {
 		label {
@@ -250,5 +310,4 @@
 
         }
     }
-
 }

@@ -3,8 +3,6 @@
 
     $.plugin('swNewsletter', {
 
-        alias: 'newsletter',
-        
         init: function () {
             var me = this;
 
@@ -13,7 +11,7 @@
 
             me._on(me.$checkMail, 'change', $.proxy(me.refreshAction, me));
 
-            $.publish('plugin/swNewsletter/onRegisterEvents', me);
+            $.publish('plugin/swNewsletter/onRegisterEvents', [ me ]);
 
             me.$checkMail.trigger('change');
         },
@@ -29,7 +27,7 @@
                 me.$addionalForm.show();
             }
 
-            $.publish('plugin/swNewsletter/onRefreshAction', me);
+            $.publish('plugin/swNewsletter/onRefreshAction', [ me ]);
         },
 
         destroy: function () {

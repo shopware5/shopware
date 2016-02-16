@@ -18,7 +18,8 @@ Ext.define('Shopware.apps.PluginManager.controller.Navigation', {
         pluginUpdatesPage: 2,
         listingPage: 3,
         accountPage: 4,
-        licencePage: 5
+        licencePage: 5,
+        premiumPluginsPage: 6
     },
 
     animationSpeed: 150,
@@ -54,7 +55,9 @@ Ext.define('Shopware.apps.PluginManager.controller.Navigation', {
 
         Shopware.app.Application.on({
             'display-plugin': me.displayDetailPage,
+            'display-plugin-by-name': me.displayDetailPageByName,
             'plugin-manager-display-updates': me.displayPluginUpdatesPage,
+            'display-premium-plugins': me.displayPremiumPluginsPage,
             scope: me
         });
 
@@ -202,6 +205,15 @@ Ext.define('Shopware.apps.PluginManager.controller.Navigation', {
         me.setActiveNavigationLink(navigation.localInstalledLink);
     },
 
+    displayPremiumPluginsPage: function () {
+        var me = this,
+            navigation = me.getNavigation();
+
+        Shopware.app.Application.fireEvent('enable-premium-plugins-mode');
+
+        me.switchView(me.cards.premiumPluginsPage);
+    },
+
     displayPluginUpdatesPage: function () {
         var me = this,
             updatePage = me.getUpdatePage(),
@@ -217,11 +229,32 @@ Ext.define('Shopware.apps.PluginManager.controller.Navigation', {
         me.switchView(me.cards.listingPage);
     },
 
-    displayDetailPage: function (plugin) {
+    displayDetailPage: function (plugin, callback) {
         var me = this;
 
         var detailWindow = me.getView('detail.Window').create().show();
         detailWindow.loadRecord(plugin);
+
+        if (Ext.isFunction(callback)) {
+            callback(detailWindow);
+        }
+    },
+
+    displayDetailPageByName: function (technicalName) {
+        var me = this;
+
+        me.communityStore = Ext.create('Shopware.apps.PluginManager.store.StorePlugin');
+        me.communityStore.filter({
+            property: 'search',
+            value: technicalName
+        });
+
+        me.communityStore.load({
+            callback: function(items) {
+                var detailWindow = me.getView('detail.Window').create().show();
+                detailWindow.loadRecord(items[0]);
+            }
+        });
     },
 
     displayAccountPage: function () {

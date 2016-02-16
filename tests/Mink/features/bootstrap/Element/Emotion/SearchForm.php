@@ -37,6 +37,4 @@ class SearchForm extends Element implements \Shopware\Tests\Mink\HelperSelectorI
             'searchButton' => ['de' => 'Suchen', 'en' => 'Search']
         ];
     }
-
-
 }

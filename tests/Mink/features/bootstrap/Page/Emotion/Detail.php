@@ -1,10 +1,9 @@
 <?php
-namespace  Shopware\Tests\Mink\Page\Emotion;
+namespace Shopware\Tests\Mink\Page\Emotion;
 
 use Behat\Mink\Driver\GoutteDriver;
 use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Mink\Element\NodeElement;
-
 use Shopware\Tests\Mink\Element\Emotion\ArticleEvaluation;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use Shopware\Tests\Mink\Helper;
@@ -40,7 +39,11 @@ class Detail extends Page implements HelperSelectorInterface
     {
         return [
             'notificationFormSubmit' => ['de' => 'Eintragen', 'en' => 'Enter'],
-            'voteFormSubmit'         => ['de' => 'Speichern', 'en' => 'Save']
+            'voteFormSubmit' => ['de' => 'Speichern', 'en' => 'Save'],
+            'inquiryLink' => ['de' => 'Fragen zum Artikel?', 'en' => 'Do you have any questions concerning this product?'],
+            'compareLink' => ['de' => 'Vergleichen', 'en' => 'Compare'],
+            'rememberLink' => ['de' => 'Auf den Merkzettel', 'en' => 'Add to wish list'],
+            'commentLink' => ['de' => 'Bewertung abgeben', 'en' => 'Comment'],
         ];
     }
 
@@ -58,9 +61,20 @@ class Detail extends Page implements HelperSelectorInterface
      */
     public function verifyPage()
     {
-        if (!$this->hasButton('In den Warenkorb')) {
-            Helper::throwException('Detail page has no basket button');
+        $result = Helper::hasNamedLinks($this, ['compareLink', 'rememberLink', 'commentLink', 'inquiryLink']);
+
+        if ($result === true) {
+            return;
         }
+
+        $message = ['You are not on a detail page:'];
+
+        foreach ($result as $key => $value) {
+            $message[] = "- Link '$key' ('$value') not found!";
+        }
+
+        $message[] = 'Current URL: ' . $this->getSession()->getCurrentUrl();
+        Helper::throwException($message);
     }
 
     /**
@@ -91,7 +105,7 @@ class Detail extends Page implements HelperSelectorInterface
         $evaluations = Helper::floatArray($evaluations, ['stars']);
         $result = Helper::assertElements($evaluations, $articleEvaluations);
 
-        if($result === true) {
+        if ($result === true) {
             return;
         }
 
@@ -116,7 +130,8 @@ class Detail extends Page implements HelperSelectorInterface
      */
     protected function checkRating(ArticleEvaluation $articleEvaluations, $average)
     {
-        $elements = Helper::findElements($this, ['productRating', 'productRatingCount', 'productEvaluationAverage', 'productEvaluationCount']);
+        $elements = Helper::findElements($this,
+            ['productRating', 'productRatingCount', 'productEvaluationAverage', 'productEvaluationCount']);
 
         $check = [
             'productRating' => [$elements['productRating']->getAttribute('class'), $average],
@@ -129,7 +144,8 @@ class Detail extends Page implements HelperSelectorInterface
         $result = Helper::checkArray($check);
 
         if ($result !== true) {
-            $message = sprintf('There was a different value of the evaluation! (%s: "%s" instead of %s)', $result, $check[$result][0], $check[$result][1]);
+            $message = sprintf('There was a different value of the evaluation! (%s: "%s" instead of %s)', $result,
+                $check[$result][0], $check[$result][1]);
             Helper::throwException($message);
         }
     }
@@ -168,9 +184,8 @@ class Detail extends Page implements HelperSelectorInterface
     }
 
     /**
-     * @param $configuratorOption
-     * @param $configuratorGroup
-     * @throws \Behat\Behat\Exception\PendingException
+     * @param string $configuratorOption
+     * @param string $configuratorGroup
      * @throws \Exception
      */
     public function canNotSelectConfiguratorOption($configuratorOption, $configuratorGroup)
@@ -204,10 +219,10 @@ class Detail extends Page implements HelperSelectorInterface
 
     /**
      * Checks a select box
-     * @param string $select        Name of the select box
-     * @param string $min           First option
-     * @param string $max           Last option
-     * @param integer $graduation   Steps between each options
+     * @param string $select Name of the select box
+     * @param string $min First option
+     * @param string $max Last option
+     * @param integer $graduation Steps between each options
      * @throws \Exception
      */
     public function checkSelect($select, $min, $max, $graduation)
@@ -227,9 +242,9 @@ class Detail extends Page implements HelperSelectorInterface
         $optionText = $options[0]->getText();
         $parts = explode(' ', $optionText, 2);
         $value = $parts[0];
-        $unit = isset($parts[1]) ? ' '.$parts[1] : '';
+        $unit = isset($parts[1]) ? ' ' . $parts[1] : '';
 
-        if($optionText !== $min){
+        if ($optionText !== $min) {
             $errors[] = sprintf('The first option of "%s" is "%s"! (should be "%s")', $select, $optionText, $min);
         }
 
@@ -238,16 +253,17 @@ class Detail extends Page implements HelperSelectorInterface
             $optionText = $option->getText();
             $value += $graduation;
 
-            if($optionText !== $value.$unit){
-                $errors[] = sprintf('There is the invalid option "%s" in "%s"! ("%s" expected)', $optionText, $select, $value.$unit);
+            if ($optionText !== $value . $unit) {
+                $errors[] = sprintf('There is the invalid option "%s" in "%s"! ("%s" expected)', $optionText, $select,
+                    $value . $unit);
             }
         }
 
-        if($optionText !== $max){
+        if ($optionText !== $max) {
             $errors[] = sprintf('The last option of "%s" is "%s"! (should be "%s")', $select, $value, $max);
         }
 
-        if(!empty($errors)) {
+        if (!empty($errors)) {
             Helper::throwException($errors);
         }
     }

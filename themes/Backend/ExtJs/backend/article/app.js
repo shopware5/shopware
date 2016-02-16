@@ -65,16 +65,12 @@ Ext.define('Shopware.apps.Article', {
      * @array
      */
     views:[
+        'detail.Toolbar',
         'detail.Window',
         'detail.Settings',
         'detail.Properties',
         'detail.Prices',
         'detail.Base',
-        'detail.Sidebar',
-        'detail.sidebar.Option',
-        'detail.sidebar.Link',
-        'detail.sidebar.Similar',
-        'detail.sidebar.Accessory',
         'category.Tree',
         'category.Seo',
         'category.List',
@@ -102,7 +98,12 @@ Ext.define('Shopware.apps.Article', {
         'esd.Detail',
         'esd.Serials',
         'statistics.List',
-        'statistics.Chart'
+        'statistics.Chart',
+        'crossselling.Tab',
+        'crossselling.Base',
+        'crossselling.ProductStreams',
+        'resources.Links',
+        'resources.Downloads'
     ],
 
     /**
@@ -125,8 +126,7 @@ Ext.define('Shopware.apps.Article', {
         'Dependency',
         'ConfiguratorSet',
         'MediaMapping',
-        'Property',
-        'PropertyValue'
+        'Property'
     ],
 
     /**
@@ -139,7 +139,6 @@ Ext.define('Shopware.apps.Article', {
         'Attribute',
         'PropertyGroup',
         'PropertyOption',
-        'PropertyValue',
         'Template',
         'Category',
         'Media',
@@ -169,6 +168,7 @@ Ext.define('Shopware.apps.Article', {
         'Dependency',
         'PriceVariation',
         'Field',
+        'Stream',
         'MediaMapping',
         'MediaMappingRule',
         'Property'
@@ -178,7 +178,7 @@ Ext.define('Shopware.apps.Article', {
      * Requires controllers for sub-application
      * @array
      */
-    controllers: [ 'Main', 'Detail', 'Category', 'Media', 'Variant', 'PriceVariation', 'Esd', 'Statistic' ]
+    controllers: [ 'Main', 'Detail', 'Category', 'Media', 'Variant', 'PriceVariation', 'Esd', 'Statistic', 'Crossselling' ]
 });
 //{/block}
 

@@ -8,8 +8,6 @@
      */
     $.plugin('swProductCompareMenu', {
 
-        alias: 'productCompareMenu',
-
         /** Your default options */
         defaults: {
             /** @string compareMenuSelector HTML class for the topbarnavigation menu wrapper */
@@ -62,7 +60,7 @@
             // On delete single product item from comparison
             me._on(me.opts.deleteCompareItemSelector, 'touchstart click', $.proxy(me.onDeleteItem, me));
 
-            $.publish('plugin/swProductCompareMenu/onRegisterEvents', me);
+            $.publish('plugin/swProductCompareMenu/onRegisterEvents', [ me ]);
         },
 
         /**
@@ -87,14 +85,14 @@
                 openOverlay: false
             });
 
-            $.publish('plugin/swProductCompareMenu/onStartCompareBefore', me);
+            $.publish('plugin/swProductCompareMenu/onStartCompareBefore', [ me ]);
 
             // Load compare modal before opening modal box
             $.ajax({
                 'url': modalUrl,
                 'dataType': 'jsonp',
                 'success': function(template) {
-                    $.publish('plugin/swProductCompareMenu/onStartCompareSuccess', [me, template]);
+                    $.publish('plugin/swProductCompareMenu/onStartCompareSuccess', [ me, template ]);
 
                     $.loadingIndicator.close(function() {
 
@@ -112,8 +110,8 @@
                         // Resize every property row height to biggest height in cell
                         var maxRows = 0;
                         $(".entry--property").each(function () {
-                            var row = $(this).attr('data-property-row');
-                            if(row > maxRows) {
+                            var row = ~~($(this).attr('data-property-row'));
+                            if (row > maxRows) {
                                 maxRows = row;
                             }
                         });
@@ -136,12 +134,12 @@
 
                             $(rowSelector).height(maximumHeight);
                         }
-                        $.publish('plugin/swProductCompareMenu/onStartCompareFinished', [me, template]);
+                        $.publish('plugin/swProductCompareMenu/onStartCompareFinished', [ me, template ]);
                     });
                 }
             });
 
-            $.publish('plugin/swProductCompareMenu/onStartCompare', me);
+            $.publish('plugin/swProductCompareMenu/onStartCompare', [ me ]);
         },
 
         /**
@@ -163,11 +161,11 @@
                 'success': function () {
                     $menu.empty();
 
-                    $.publish('plugin/swProductCompareMenu/onDeleteCompareSuccess', me);
+                    $.publish('plugin/swProductCompareMenu/onDeleteCompareSuccess', [ me ]);
                 }
             });
 
-            $.publish('plugin/swProductCompareMenu/onDeleteCompare', me);
+            $.publish('plugin/swProductCompareMenu/onDeleteCompare', [ me ]);
         },
 
         /**
@@ -183,7 +181,7 @@
                 deleteUrl = $deleteBtn.attr('href'),
                 rowElement = $deleteBtn.closest(me.opts.compareEntrySelector),
                 compareCount = $(me.opts.compareEntriesSelector).length;
-            
+
             if(compareCount > 1) {
 
                 // slide up and remove product from unordered list
@@ -199,7 +197,7 @@
                     'url': deleteUrl,
                     'dataType': 'jsonp',
                     'success': function (response) {
-                        $.publish('plugin/swProductCompareMenu/onDeleteItemSuccess', [me, response]);
+                        $.publish('plugin/swProductCompareMenu/onDeleteItemSuccess', [ me, response ]);
                     }
                 });
 
@@ -214,12 +212,12 @@
                         //Reload compare menu plugin
                         $('*[data-product-compare-menu="true"]').swProductCompareMenu();
 
-                        $.publish('plugin/swProductCompareMenu/onDeleteItemSuccess', [me, response]);
+                        $.publish('plugin/swProductCompareMenu/onDeleteItemSuccess', [ me, response ]);
                     }
                 });
             }
 
-            $.publish('plugin/swProductCompareMenu/onDeleteItem', [me, event, deleteUrl]);
+            $.publish('plugin/swProductCompareMenu/onDeleteItem', [ me, event, deleteUrl ]);
         },
 
         /** Destroys the plugin */

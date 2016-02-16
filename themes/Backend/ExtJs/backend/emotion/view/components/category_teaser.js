@@ -45,7 +45,7 @@ Ext.define('Shopware.apps.Emotion.view.components.CategoryTeaser', {
      * Base path which will be used from the component.
      * @string
      */
-    basePath: '{link file=""}',
+    basePath: '',
 
     /**
      * Initialize the component.

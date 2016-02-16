@@ -107,7 +107,7 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.ShopwareId', {
                 },
                 me.descriptionContainer
             ];
-        
+
             me.snippets.buttons.next = null;
         
         } else {

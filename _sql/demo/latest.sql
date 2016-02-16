@@ -5366,7 +5366,7 @@ INSERT INTO `s_core_documents` (`id`, `name`, `template`, `numbers`, `left`, `ri
 TRUNCATE TABLE `s_core_documents_box`;
 INSERT INTO `s_core_documents_box` (`id`, `documentID`, `name`, `style`, `value`) VALUES
 (1, 1, 'Body', 'width:100%;\r\nfont-family: Verdana, Arial, Helvetica, sans-serif;\r\nfont-size:11px;', ''),
-(2, 1, 'Logo', 'height: 20mm;\r\nwidth: 90mm;\r\nmargin-bottom:5mm;', '<p><img src="http://www.shopware.de/logo/logo.png " alt="" /></p>'),
+(2, 1, 'Logo', 'height: 20mm;\r\nwidth: 90mm;\r\nmargin-bottom:5mm;', '<p><img src="http://www.shopware.de/logo/logo.png" alt="" /></p>'),
 (3, 1, 'Header_Recipient', '', ''),
 (4, 1, 'Header', 'height: 60mm;', ''),
 (5, 1, 'Header_Sender', '', '<p>Demo GmbH - Stra&szlig;e 3 - 00000 Musterstadt</p>'),
@@ -5382,7 +5382,7 @@ INSERT INTO `s_core_documents_box` (`id`, `documentID`, `name`, `style`, `value`
 (15, 1, 'Content_Amount', 'margin-left:90mm;', ''),
 (16, 1, 'Content_Info', '', '<p>Die Ware bleibt bis zur vollst&auml;ndigen Bezahlung unser Eigentum</p>'),
 (68, 2, 'Body', 'width:100%;\r\nfont-family: Verdana, Arial, Helvetica, sans-serif;\r\nfont-size:11px;', ''),
-(69, 2, 'Logo', 'height: 20mm;\r\nwidth: 90mm;\r\nmargin-bottom:5mm;', '<p><img src="http://www.shopware.de/logo/logo.png " alt="" /></p>'),
+(69, 2, 'Logo', 'height: 20mm;\r\nwidth: 90mm;\r\nmargin-bottom:5mm;', '<p><img src="http://www.shopware.de/logo/logo.png" alt="" /></p>'),
 (70, 2, 'Header_Recipient', '', ''),
 (71, 2, 'Header', 'height: 60mm;', ''),
 (72, 2, 'Header_Sender', '', '<p>Demo GmbH - Stra&szlig;e 3 - 00000 Musterstadt</p>'),
@@ -5398,7 +5398,7 @@ INSERT INTO `s_core_documents_box` (`id`, `documentID`, `name`, `style`, `value`
 (82, 2, 'Content_Amount', 'margin-left:90mm;', ''),
 (83, 2, 'Content_Info', '', '<p>Die Ware bleibt bis zur vollst&auml;ndigen Bezahlung unser Eigentum</p>'),
 (84, 3, 'Body', 'width:100%;\r\nfont-family: Verdana, Arial, Helvetica, sans-serif;\r\nfont-size:11px;', ''),
-(85, 3, 'Logo', 'height: 20mm;\r\nwidth: 90mm;\r\nmargin-bottom:5mm;', '<p><img src="http://www.shopware.de/logo/logo.png " alt="" /></p>'),
+(85, 3, 'Logo', 'height: 20mm;\r\nwidth: 90mm;\r\nmargin-bottom:5mm;', '<p><img src="http://www.shopware.de/logo/logo.png" alt="" /></p>'),
 (86, 3, 'Header_Recipient', '', ''),
 (87, 3, 'Header', 'height: 60mm;', ''),
 (88, 3, 'Header_Sender', '', '<p>Demo GmbH - Stra&szlig;e 3 - 00000 Musterstadt</p>'),
@@ -5414,7 +5414,7 @@ INSERT INTO `s_core_documents_box` (`id`, `documentID`, `name`, `style`, `value`
 (98, 3, 'Content_Amount', 'margin-left:90mm;', ''),
 (99, 3, 'Content_Info', '', '<p>Die Ware bleibt bis zur vollst&auml;ndigen Bezahlung unser Eigentum</p>'),
 (100, 4, 'Body', 'width:100%;\r\nfont-family: Verdana, Arial, Helvetica, sans-serif;\r\nfont-size:11px;', ''),
-(101, 4, 'Logo', 'height: 20mm;\r\nwidth: 90mm;\r\nmargin-bottom:5mm;', '<p><img src="http://www.shopware.de/logo/logo.png " alt="" /></p>'),
+(101, 4, 'Logo', 'height: 20mm;\r\nwidth: 90mm;\r\nmargin-bottom:5mm;', '<p><img src="http://www.shopware.de/logo/logo.png" alt="" /></p>'),
 (102, 4, 'Header_Recipient', '', ''),
 (103, 4, 'Header', 'height: 60mm;', ''),
 (104, 4, 'Header_Sender', '', '<p>Demo GmbH - Stra&szlig;e 3 - 00000 Musterstadt</p>'),
@@ -5447,11 +5447,6 @@ INSERT INTO `s_core_engine_groups` (`id`, `name`, `label`, `layout`, `variantabl
 (11, 'property', 'Eigenschaften', NULL, 0, 6);
 
 TRUNCATE TABLE `s_core_licenses`;
-
-TRUNCATE TABLE `s_core_multilanguage`;
-INSERT INTO `s_core_multilanguage` (`id`, `mainID`, `isocode`, `locale`, `parentID`, `flagstorefront`, `flagbackend`, `skipbackend`, `name`, `defaultcustomergroup`, `template`, `doc_template`, `separate_numbers`, `domainaliase`, `defaultcurrency`, `default`, `switchCurrencies`, `switchLanguages`, `scoped_registration`, `fallback`, `navigation`) VALUES
-(1, NULL, '1', 1, 3, '', '', 1, 'Deutsch', 'EK', 'templates/emotion_orange', 'templates/orange', 0, '', 1, 1, '1|2', '1|2', NULL, NULL, ''),
-(2, NULL, '2', 2, 39, '', '', 0, 'Englisch', 'EK', 'templates/emotion_orange', 'templates/orange', 0, '', 1, 0, '1|2', '1|2', NULL, 2, '');
 
 TRUNCATE TABLE `s_core_paymentmeans`;
 INSERT INTO `s_core_paymentmeans` (`id`, `name`, `description`, `template`, `class`, `table`, `hide`, `additionaldescription`, `debit_percent`, `surcharge`, `surchargestring`, `position`, `active`, `esdactive`, `embediframe`, `hideprospect`, `action`, `pluginID`, `source`) VALUES
@@ -6154,7 +6149,8 @@ INSERT INTO `s_core_widgets` (`id`, `name`, `label`) VALUES
 (3, 'swag-visitors-customers-widget', 'Besucher online'),
 (4, 'swag-last-orders-widget', 'Letzte Bestellungen'),
 (5, 'swag-notice-widget', 'Notizzettel'),
-(6, 'swag-merchant-widget', 'Händlerfreischaltung');
+(6, 'swag-merchant-widget', 'Händlerfreischaltung'),
+(7, 'swag-shopware-news-widget', 'shopware News');
 
 TRUNCATE TABLE `s_core_widget_views`;
 INSERT INTO `s_core_widget_views` (`id`, `widget_id`, `auth_id`, `column`, `position`) VALUES
@@ -6163,7 +6159,8 @@ INSERT INTO `s_core_widget_views` (`id`, `widget_id`, `auth_id`, `column`, `posi
 (9, 2, 50, 1, 1),
 (10, 3, 50, 1, 2),
 (11, 4, 50, 2, 1),
-(12, 5, 50, 2, 2);
+(12, 5, 50, 2, 2),
+(13, 7, 50, 3, 1);
 
 TRUNCATE TABLE `s_emarketing_banners`;
 TRUNCATE TABLE `s_emarketing_banners_attributes`;
@@ -7348,6 +7345,7 @@ INSERT INTO `s_media` (`id`, `albumID`, `name`, `description`, `path`, `type`, `
 
 TRUNCATE TABLE `s_media_album`;
 INSERT INTO `s_media_album` (`id`, `name`, `parentID`, `position`) VALUES
+(-13, 'Papierkorb', NULL, 12),
 (-12, 'Hersteller', NULL, 12),
 (-11, 'Blog', NULL, 3),
 (-10, 'Unsortiert', NULL, 7),
@@ -7376,7 +7374,8 @@ INSERT INTO `s_media_album_settings` (`id`, `albumID`, `create_thumbnails`, `thu
 (10, -1, 1, '200x200;600x600;1280x1280', 'sprite-inbox', 1, 90, 60),
 (11, -11, 1, '200x200;600x600;1280x1280', 'sprite-leaf', 1, 90, 60),
 (12, 1, 0, '', 'sprite-hard-hat', 0, 90, 60),
-(13, -12, 0, '', 'sprite-blue-folder', 0, 90, 60);
+(13, -12, 0, '', 'sprite-blue-folder', 0, 90, 60),
+(14, -13, 0, '', 'sprite-bin-metal-full', 0, 90, 60);
 
 TRUNCATE TABLE `s_media_association`;
 TRUNCATE TABLE `s_media_attributes`;

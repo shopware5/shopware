@@ -25,6 +25,7 @@
             <argument type="service" id="dbal_connection" />
             <argument type="service" id="shopware_searchdbal.cache_keyword_finder" />
             <argument type="service" id="shopware_searchdbal.search_indexer" />
+            <argument type="service" id="shopware_searchdbal.search_term_helper" />
         </service>
 
         <service id="shopware_searchdbal.cache_keyword_finder" class="Shopware\Bundle\SearchBundleDBAL\SearchTerm\CacheKeywordFinder">
@@ -125,11 +126,35 @@
             <tag name="condition_handler_dbal"/>
         </service>
 
+        <service id="shopware_searchdbal.closeout_condition_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\CloseoutConditionHandler">
+            <tag name="condition_handler_dbal"/>
+        </service>
+
         <service id="shopware_searchdbal.has_price_condition_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\HasPriceConditionHandler">
             <argument type="service" id="shopware_searchdbal.search_price_helper_dbal" />
             <argument type="service" id="config" />
             <tag name="condition_handler_dbal"/>
         </service>
+
+        <service id="shopware_searchdbal.has_pseudo_price_condition_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\HasPseudoPriceConditionHandler">
+            <argument type="service" id="shopware_searchdbal.search_price_helper_dbal" />
+            <argument type="service" id="config" />
+            <tag name="condition_handler_dbal"/>
+        </service>
+
+        <service id="shopware_searchdbal.is_new_condition_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\IsNewConditionHandler">
+            <argument type="service" id="config" />
+            <tag name="condition_handler_dbal"/>
+        </service>
+
+        <service id="shopware_searchdbal.release_date_condition_handler" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\ReleaseDateConditionHandler">
+            <tag name="condition_handler_dbal"/>
+        </service>
+
+        <service id="shopware_searchdbal.create_date_condition_handler" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\CreateDateConditionHandler">
+            <tag name="condition_handler_dbal"/>
+        </service>
+
 
         <service id="shopware_searchdbal.search_condition_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\SearchTermConditionHandler">
             <argument type="service" id="shopware_searchdbal.search_query_builder_dbal" />
@@ -137,6 +162,10 @@
         </service>
 
         <service id="shopware_searchdbal.category_condition_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\CategoryConditionHandler">
+            <tag name="condition_handler_dbal"/>
+        </service>
+
+        <service id="shopware_searchdbal.ordernumber_condition_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\OrdernumberConditionHandler">
             <tag name="condition_handler_dbal"/>
         </service>
 
@@ -161,6 +190,10 @@
         </service>
 
         <service id="shopware_searchdbal.shipping_free_condition_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\ShippingFreeConditionHandler">
+            <tag name="condition_handler_dbal"/>
+        </service>
+
+        <service id="shopware_searchdbal.sales_condition_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\SalesConditionHandler">
             <tag name="condition_handler_dbal"/>
         </service>
 

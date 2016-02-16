@@ -48,14 +48,7 @@ class SearchRankingSortingHandler implements SortingHandlerInterface
     }
 
     /**
-     * Handles the passed sorting object.
-     * Extends the passed query builder with the specify sorting.
-     * Should use the addOrderBy function, otherwise other sortings would be overwritten.
-     *
-     * @param SortingInterface|ReleaseDateSorting $sorting
-     * @param QueryBuilder $query
-     * @param ShopContextInterface $context
-     * @return void
+     * {@inheritdoc}
      */
     public function generateSorting(
         SortingInterface $sorting,
@@ -66,6 +59,7 @@ class SearchRankingSortingHandler implements SortingHandlerInterface
             return;
         }
 
+        /** @var SearchRankingSorting $sorting */
         $query->addOrderBy('searchTable.ranking', $sorting->getDirection());
         $query->addOrderBy('product.id', $sorting->getDirection());
     }

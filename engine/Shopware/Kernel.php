@@ -24,8 +24,13 @@
 
 namespace Shopware;
 
+use Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\SettingsCompilerPass;
+use Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\SynchronizerCompilerPass;
+use Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\DataIndexerCompilerPass;
+use Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\MappingCompilerPass;
 use Shopware\Bundle\SearchBundle\DependencyInjection\Compiler\CriteriaRequestHandlerCompilerPass;
 use Shopware\Bundle\SearchBundleDBAL\DependencyInjection\Compiler\DBALCompilerPass;
+use Shopware\Bundle\SearchBundleES\DependencyInjection\CompilerPass\SearchHandlerCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\DoctrineEventSubscriberCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\EventListenerCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\EventSubscriberCompilerPass;
@@ -84,11 +89,17 @@ class Kernel implements HttpKernelInterface
      */
     protected $environment;
 
+
     /**
      * Flag if the kernel already booted
      * @var bool
      */
-    protected $booted;
+    protected $booted = false;
+
+    /**
+     * @var string
+     */
+    protected $name;
 
     const VERSION      = \Shopware::VERSION;
     const VERSION_TEXT = \Shopware::VERSION_TEXT;
@@ -102,7 +113,6 @@ class Kernel implements HttpKernelInterface
     {
         $this->environment = $environment;
         $this->debug = (boolean) $debug;
-        $this->booted = false;
         $this->name = 'Shopware';
 
         $this->initializeConfig();
@@ -217,6 +227,7 @@ class Kernel implements HttpKernelInterface
                 $cookieContent['value'],
                 $cookieContent['expire'],
                 $cookieContent['path'],
+                $cookieContent['domain'],
                 (bool) $cookieContent['secure'],
                 (bool) $cookieContent['httpOnly']
             );
@@ -317,7 +328,7 @@ class Kernel implements HttpKernelInterface
             $this->dumpContainer($cache, $container, $class, 'Shopware\Components\DependencyInjection\Container');
         }
 
-        require_once $cache;
+        require_once $cache->getPath();
 
         $this->container = new $class();
         $this->container->set('kernel', $this);
@@ -330,6 +341,15 @@ class Kernel implements HttpKernelInterface
     {
         $config = $this->getHttpCacheConfig();
 
+        return (isset($config['enabled']) && $config['enabled']);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isElasticSearchEnabled()
+    {
+        $config = $this->getElasticSearchConfig();
         return (isset($config['enabled']) && $config['enabled']);
     }
 
@@ -376,7 +396,7 @@ class Kernel implements HttpKernelInterface
      */
     public function getCacheDir()
     {
-        return $this->getRootDir().'/cache/'.$this->environment.'_'.\Shopware::REVISION;
+        return $this->getRootDir().'/var/cache/'.$this->environment.'_'.\Shopware::REVISION;
     }
 
     /**
@@ -386,7 +406,7 @@ class Kernel implements HttpKernelInterface
      */
     public function getLogDir()
     {
-        return $this->getRootDir().'/logs';
+        return $this->getRootDir().'/var/log';
     }
 
     /**
@@ -431,7 +451,7 @@ class Kernel implements HttpKernelInterface
 
         foreach ($runtimeDirectories as $name => $dir) {
             if (!is_dir($dir)) {
-                if (false === @mkdir($dir, 0777, true)) {
+                if (false === @mkdir($dir, 0777, true) && !is_dir($dir)) {
                     throw new \RuntimeException(sprintf("Unable to create the %s directory (%s)\n", $name, $dir));
                 }
             } elseif (!is_writable($dir)) {
@@ -452,6 +472,12 @@ class Kernel implements HttpKernelInterface
         $loader->load('SearchBundleDBAL/services.xml');
         $loader->load('StoreFrontBundle/services.xml');
         $loader->load('PluginInstallerBundle/services.xml');
+        $loader->load('ESIndexingBundle/services.xml');
+        $loader->load('MediaBundle/services.xml');
+
+        if ($this->isElasticSearchEnabled()) {
+            $loader->load('SearchBundleES/services.xml');
+        }
 
         if (is_file($file = __DIR__ . '/Components/DependencyInjection/services_local.xml')) {
             $loader->load($file);
@@ -465,6 +491,14 @@ class Kernel implements HttpKernelInterface
         $container->addCompilerPass(new DoctrineEventSubscriberCompilerPass());
         $container->addCompilerPass(new DBALCompilerPass());
         $container->addCompilerPass(new CriteriaRequestHandlerCompilerPass());
+        $container->addCompilerPass(new MappingCompilerPass());
+        $container->addCompilerPass(new SynchronizerCompilerPass());
+        $container->addCompilerPass(new DataIndexerCompilerPass());
+        $container->addCompilerPass(new SettingsCompilerPass());
+
+        if ($this->isElasticSearchEnabled()) {
+            $container->addCompilerPass(new SearchHandlerCompilerPass());
+        }
 
         return $container;
     }
@@ -579,6 +613,14 @@ class Kernel implements HttpKernelInterface
      */
     public function getHttpCacheConfig()
     {
-        return is_array($this->config['httpcache']) ? $this->config['httpcache'] : array();
+        return is_array($this->config['httpcache']) ? $this->config['httpcache'] : [];
+    }
+
+    /**
+     * @return array
+     */
+    public function getElasticSearchConfig()
+    {
+        return is_array($this->config['es']) ? $this->config['es'] : [];
     }
 }

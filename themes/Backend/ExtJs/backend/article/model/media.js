@@ -65,28 +65,11 @@ Ext.define('Shopware.apps.Article.model.Media', {
 
         {
             name: 'original',
-            type: 'string',
-            convert: function(value, record) {
-                var name, extension;
-                if (record.get('path').indexOf('media/image') === -1) {
-                    return 'media/image/' + record.get('path') + '.' + record.get('extension');
-                } else {
-                    return record.get('path');
-                }
-            }
+            type: 'string'
         },
         {
             name: 'thumbnail',
-            type: 'string',
-            convert: function(value, record) {
-                if (record.get('path').indexOf('media/image') === -1) {
-                    return 'media/image/thumbnail/' + record.get('path') + '_140x140.' + record.get('extension');
-                } else {
-                    var name =  record.get('path').replace('media/image/', '');
-                    name = name.replace('.' + record.get('extension'), '');
-                    return 'media/image/thumbnail/' + name + '_140x140.' + record.get('extension');
-                }
-            }
+            type: 'string'
         }
     ],
 

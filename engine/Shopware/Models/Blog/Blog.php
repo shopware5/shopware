@@ -337,7 +337,7 @@ class Blog extends ModelEntity
     /**
      * Set DisplayDate
      *
-     * @param \DateTime $displayDate
+     * @param \DateTime|string $displayDate
      */
     public function setDisplayDate($displayDate)
     {

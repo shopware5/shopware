@@ -80,24 +80,40 @@ class ContextService implements Service\ContextServiceInterface
     private $priceGroupDiscountGateway;
 
     /**
+     * @var Gateway\ShopGatewayInterface
+     */
+    private $shopGateway;
+
+    /**
+     * @var Gateway\CurrencyGatewayInterface
+     */
+    private $currencyGateway;
+
+    /**
      * @param Container $container
      * @param Gateway\CustomerGroupGatewayInterface $customerGroupGateway
      * @param Gateway\TaxGatewayInterface $taxGateway
      * @param Gateway\CountryGatewayInterface $countryGateway
      * @param Gateway\PriceGroupDiscountGatewayInterface $priceGroupDiscountGateway
+     * @param Gateway\ShopGatewayInterface $shopGateway
+     * @param Gateway\CurrencyGatewayInterface $currencyGateway
      */
     public function __construct(
         Container $container,
         Gateway\CustomerGroupGatewayInterface $customerGroupGateway,
         Gateway\TaxGatewayInterface $taxGateway,
         Gateway\CountryGatewayInterface $countryGateway,
-        Gateway\PriceGroupDiscountGatewayInterface $priceGroupDiscountGateway
+        Gateway\PriceGroupDiscountGatewayInterface $priceGroupDiscountGateway,
+        Gateway\ShopGatewayInterface $shopGateway,
+        Gateway\CurrencyGatewayInterface $currencyGateway
     ) {
         $this->container = $container;
         $this->taxGateway = $taxGateway;
         $this->countryGateway = $countryGateway;
         $this->customerGroupGateway = $customerGroupGateway;
         $this->priceGroupDiscountGateway = $priceGroupDiscountGateway;
+        $this->shopGateway = $shopGateway;
+        $this->currencyGateway = $currencyGateway;
     }
 
     /**
@@ -179,16 +195,10 @@ class ContextService implements Service\ContextServiceInterface
             $key = $shop->getCustomerGroup()->getKey();
         }
 
-        $fallback = self::FALLBACK_CUSTOMER_GROUP;
-
-        $groups = $this->customerGroupGateway->getList([$key, $fallback]);
-
-        $this->shopContext = new Struct\ShopContext(
-            $this->buildBaseUrl(),
-            Struct\Shop::createFromShopEntity($shop),
-            Struct\Currency::createFromCurrencyEntity($shop->getCurrency()),
-            $groups[$key],
-            $groups[$fallback]
+        $this->shopContext = $this->createShopContext(
+            $shop->getId(),
+            $shop->getCurrency()->getId(),
+            $key
         );
     }
 
@@ -347,5 +357,71 @@ class ContextService implements Service\ContextServiceInterface
         );
 
         return $rules;
+    }
+
+    /**
+     * @param int $shopId
+     * @param null|int $currencyId
+     * @param null|int $customerGroupKey
+     * @return Struct\ProductContext
+     */
+    public function createProductContext($shopId, $currencyId = null, $customerGroupKey = null)
+    {
+        $shopContext = $this->createShopContext($shopId, $currencyId, $customerGroupKey);
+
+        $locationContext = new Struct\LocationContext(null, null, null, null);
+
+        $rules = $this->createTaxRulesStruct(
+            $shopContext,
+            $locationContext->getArea(),
+            $locationContext->getCountry(),
+            $locationContext->getState()
+        );
+
+        $priceGroups = $this->priceGroupDiscountGateway->getPriceGroups(
+            $shopContext->getCurrentCustomerGroup(),
+            $shopContext
+        );
+
+        return Struct\ProductContext::createFromContexts(
+            $shopContext,
+            $rules,
+            $priceGroups
+        );
+    }
+
+    /**
+     * @param int $shopId
+     * @param null|int $currencyId
+     * @param null|int $customerGroupKey
+     * @return Struct\ShopContext
+     */
+    public function createShopContext($shopId, $currencyId = null, $customerGroupKey = null)
+    {
+        $shop = $this->shopGateway->get($shopId);
+        $fallback = self::FALLBACK_CUSTOMER_GROUP;
+
+        if ($customerGroupKey == null) {
+            $customerGroupKey = $fallback;
+        }
+
+        $groups = $this->customerGroupGateway->getList([$customerGroupKey, $fallback]);
+
+        $currency = null;
+        if ($currencyId != null) {
+            $currency = $this->currencyGateway->getList([$currencyId]);
+            $currency = array_shift($currency);
+        }
+        if (!$currency) {
+            $currency = $shop->getCurrency();
+        }
+
+        return new Struct\ShopContext(
+            $this->buildBaseUrl(),
+            $shop,
+            $currency,
+            $groups[$customerGroupKey],
+            $groups[$fallback]
+        );
     }
 }

@@ -2,6 +2,8 @@
 
 namespace Shopware\Tests\Mink;
 
+use Behat\Gherkin\Node\PyStringNode;
+use Behat\Mink\WebAssert;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use Shopware\Tests\Mink\Page\Emotion\Homepage;
 use Shopware\Tests\Mink\Element\MultipleElement;
@@ -20,7 +22,7 @@ class SpecialContext extends SubContext
             $supplier
         );
 
-        $this->getContainer()->get('db')->exec($sql);
+        $this->getService('db')->exec($sql);
     }
 
     /**
@@ -66,6 +68,7 @@ class SpecialContext extends SubContext
      */
     public function iFollowTheLinkOfTheElement($elementClass, $position = 1)
     {
+        $this->getSession()->wait(5000, "$('.emotion--element').length > 0");
         $this->iFollowTheLinkOfTheElementOnPosition(null, $elementClass, $position);
     }
 
@@ -88,22 +91,20 @@ class SpecialContext extends SubContext
             $element = $element->setInstance($position);
         }
 
-        if(empty($linkName)) {
+        if (empty($linkName)) {
             $element->click();
             return;
         }
 
-        $language = Helper::getCurrentLanguage($this->getPage('Homepage'));
-        $selectors = $element->getNamedSelectors();
-        $element->clickLink($selectors[$linkName][$language]);
+        Helper::clickNamedLink($element, $linkName);
     }
 
     /**
      * @Given /^the "(?P<field>[^"]*)" field should contain:$/
      */
-    public function theFieldShouldContain($field, \Behat\Gherkin\Node\PyStringNode $string)
+    public function theFieldShouldContain($field, PyStringNode $string)
     {
-        $assert = new \Behat\Mink\WebAssert($this->getSession());
+        $assert = new WebAssert($this->getSession());
         $assert->fieldValueEquals($field, $string->getRaw());
     }
 }

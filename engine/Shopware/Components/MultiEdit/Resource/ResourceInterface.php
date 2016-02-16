@@ -30,7 +30,6 @@ namespace Shopware\Components\MultiEdit\Resource;
  */
 interface ResourceInterface
 {
-
     /**
      * Needs to return the grammar for out lexer
      * @return mixed

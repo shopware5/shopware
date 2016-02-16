@@ -31,7 +31,6 @@ use Shopware\Components\Model\Query\SqlWalker;
  */
 class Repository extends ModelRepository
 {
-
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which allows you to get property relations
      * @param $filter
@@ -123,38 +122,6 @@ class Repository extends ModelRepository
         if ($order !== null) {
             $builder->addOrderBy($order);
         }
-
-        return $builder;
-    }
-
-    /**
-     * Returns an instance of the \Doctrine\ORM\Query object which selects all property groups
-     * with their options and attributes.
-     * @deprecated no longer needed
-     * @return \Doctrine\ORM\Query
-     */
-    public function getGroupsQuery()
-    {
-        $builder = $this->getGroupsQueryBuilder();
-        return $builder->getQuery();
-    }
-
-    /**
-     * Helper function to create the query builder for the "getGroupsQuery" function.
-     * This function can be hooked to modify the query builder of the query object.
-     * @deprecated no longer needed
-     * @return \Doctrine\ORM\QueryBuilder
-     */
-    public function getGroupsQueryBuilder()
-    {
-        $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(array('groups', 'relations', 'option', 'attribute'))
-                ->from('Shopware\Models\Property\Group', 'groups')
-                ->leftJoin('groups.relations', 'relations')
-                ->leftJoin('relations.option', 'option')
-                ->leftJoin('groups.attribute', 'attribute')
-                ->orderBy('groups.position')
-                ->orderBy('relations.position');
 
         return $builder;
     }

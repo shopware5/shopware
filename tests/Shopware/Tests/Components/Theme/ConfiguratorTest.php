@@ -33,50 +33,8 @@ class Shopware_Tests_Components_Theme_ConfiguratorTest extends Shopware_Tests_Co
         parent::setUp();
     }
 
-    public function testContainerInjection()
-    {
-        $manager = $this->getEntityManager();
-        $util = $this->getUtilClass();
-        $persister = $this->getFormPersister();
-        $template = $this->getTemplate();
-        $repo = $this->getShopRepository();
-
-        $template->expects($this->any())
-            ->method('getParent')
-            ->will($this->returnValue(true));
-
-        $manager->expects($this->any())
-            ->method('getRepository')
-            ->will($this->returnValue($repo));
-
-        $repo->expects($this->any())
-            ->method('findOneBy')
-            ->will($this->returnValue($template));
-
-        $util->expects($this->any())
-            ->method('getThemeByTemplate')
-            ->will($this->returnValue($this->getBareTheme()));
-
-        $configurator = new \Shopware\Components\Theme\Configurator(
-            $manager,
-            $util,
-            $persister,
-            $this->getEventManager()
-        );
-
-        $container = new \Shopware\Components\Form\Container\TabContainer('test');
-
-        $this->invokeMethod($configurator, 'injectConfig', array(
-            $this->getResponsiveTheme(),
-            $container
-        ));
-
-        $this->assertCount(1, $container->getElements());
-    }
-
     public function testContainerNames()
     {
-
         $container = new \Shopware\Components\Form\Container\TabContainer('test1');
         $tab = new \Shopware\Components\Form\Container\Tab('test2', 'test2');
         $container->addTab($tab);
@@ -98,7 +56,6 @@ class Shopware_Tests_Components_Theme_ConfiguratorTest extends Shopware_Tests_Co
         $this->assertArrayHasKey('fields', $names);
         $this->assertArrayHasKey('containers', $names);
 
-
         $this->assertCount(3, $names['fields']);
         $this->assertCount(3, $names['containers']);
 
@@ -110,7 +67,6 @@ class Shopware_Tests_Components_Theme_ConfiguratorTest extends Shopware_Tests_Co
         $this->assertContains('test2', $names['containers']);
         $this->assertContains('fieldset', $names['containers']);
     }
-
 
     public function testRemoveUnused()
     {
@@ -148,11 +104,12 @@ class Shopware_Tests_Components_Theme_ConfiguratorTest extends Shopware_Tests_Co
                 'fields' => array('field1','field3','field4')
             )));
 
+
         $configurator = $this->getMockBuilder('Shopware\Components\Theme\Configurator')
             ->setConstructorArgs(array(
                 $entityManager,
-                null,
-                null,
+                $this->getUtilClass(),
+                $this->getFormPersister(),
                 $eventManager
             ))
             ->getMock();
@@ -221,7 +178,7 @@ class Shopware_Tests_Components_Theme_ConfiguratorTest extends Shopware_Tests_Co
             ->method('flush');
 
         $configurator = $this->getMockBuilder('Shopware\Components\Theme\Configurator')
-            ->setConstructorArgs(array($entityManager, null, null, $this->getEventManager()))
+            ->setConstructorArgs(array($entityManager, $this->getUtilClass(), $this->getFormPersister(), $this->getEventManager()))
             ->getMock();
 
         $this->invokeMethod(
@@ -269,7 +226,7 @@ class Shopware_Tests_Components_Theme_ConfiguratorTest extends Shopware_Tests_Co
             ->with($this->isInstanceOf('Shopware\Models\Shop\TemplateConfig\Set'));
 
         $configurator = $this->getMockBuilder('Shopware\Components\Theme\Configurator')
-            ->setConstructorArgs(array($entityManager, null, null, $this->getEventManager()))
+            ->setConstructorArgs(array($entityManager, $this->getUtilClass(), $this->getFormPersister(), $this->getEventManager()))
             ->getMock();
 
         $theme = $this->getResponsiveTheme();
@@ -283,7 +240,4 @@ class Shopware_Tests_Components_Theme_ConfiguratorTest extends Shopware_Tests_Co
             )
         );
     }
-
-
-
 }

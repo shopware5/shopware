@@ -9,28 +9,42 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Prices', {
         events: 'Shopware.apps.PluginManager.view.PluginHelper'
     },
 
-    initComponent: function() {
-        var me = this, items = [];
+    tabIndex: {
+    },
 
-        var buyPrice = me.getPriceByType(me.prices, 'buy');
-        var rentPrice = me.getPriceByType(me.prices, 'rent');
-        var testPrice = me.getPriceByType(me.prices, 'test');
-        var freePrice = me.getPriceByType(me.prices, 'free');
+    initComponent: function() {
+        var me = this,
+            items = [],
+            index = 0,
+            buyPrice = me.getPriceByType(me.prices, 'buy'),
+            rentPrice = me.getPriceByType(me.prices, 'rent'),
+            testPrice = me.getPriceByType(me.prices, 'test'),
+            freePrice = me.getPriceByType(me.prices, 'free');
 
         if (buyPrice) {
             items.push(me.createBuyTab(buyPrice));
+            me.tabIndex['buy'] = index;
+            index++;
         }
         if (rentPrice) {
             items.push(me.createRentTab(rentPrice));
+            me.tabIndex['rent'] = index;
+            index++;
         }
         if (testPrice) {
             items.push(me.createTestTab(testPrice));
+            me.tabIndex['test'] = index;
+            index++;
         }
         if (freePrice) {
             items.push(me.createFreeTab(freePrice));
+            me.tabIndex['free'] = index;
+            index++;
         }
         if (items.length <= 0 && me.plugin.get('useContactForm')) {
             items.push(me.createContactTab());
+            me.tabIndex['contact'] = index;
+            index++;
         }
 
         me.items = items;
@@ -45,15 +59,15 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Prices', {
         items.push({
             xtype: 'plugin-manager-container-container',
             cls: 'button contact',
-            html: '<div class="text">{s name="contact_text"}{/s}</div>',
+            html: '<div class="text">{s name="contact_text"}Contact producer{/s}</div>',
             handler: function() {
-                var link = '{s name="contact_link"}{/s}?technicalName=' + me.plugin.get('technicalName');
+                var link = '{s name="contact_link"}http://store.shopware.com/en/contact-producer{/s}?technicalName=' + me.plugin.get('technicalName');
                 window.open(link);
             }
         });
 
         return Ext.create('Ext.container.Container', {
-            title: '{s name="contact_version"}{/s}',
+            title: '{s name="contact_version"}Contact{/s}',
             cls: 'tab',
             height: 110,
             items: items
@@ -66,7 +80,7 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Prices', {
         items.push({
             xtype: 'plugin-manager-container-container',
             cls: 'button free',
-            html: '<div class="text">{s name="download_now"}{/s}</div>',
+            html: '<div class="text">{s name="download_now"}Download now{/s}</div>',
             handler: function() {
                 me.downloadFreePluginEvent(me.plugin, price);
             }
@@ -75,11 +89,11 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Prices', {
         items.push({
             xtype: 'component',
             cls: 'price-free',
-            html: '{s name="for_free"}{/s}'
+            html: '{s name="for_free"}Free{/s}'
         });
 
         return Ext.create('Ext.container.Container', {
-            title: '{s name="free_version"}{/s}',
+            title: '{s name="free_version"}Free version{/s}',
             cls: 'tab',
             height: 110,
             items: items
@@ -93,7 +107,7 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Prices', {
         items.push({
             xtype: 'plugin-manager-container-container',
             cls: 'button buy',
-            html: '<div class="text">{s name="buy_now"}{/s}</div>',
+            html: '<div class="text">{s name="buy_now"}Buy now{/s}</div>',
             handler: function() {
                 me.buyPluginEvent(me.plugin, price);
             }
@@ -110,12 +124,12 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Prices', {
                 xtype: 'component',
                 cls: 'subscription',
                 html: '<div class="icon">U</div>' +
-                '<div class="text">{s name="subscription_info"}{/s}</div>'
+                '<div class="text">{s name="subscription_info"}Incl. updates for 12 Months (subscription){/s}</div>'
             });
         }
 
         return Ext.create('Ext.container.Container', {
-            title: '{s name="buy_version"}{/s}',
+            title: '{s name="buy_version"}Purchase version{/s}',
             cls: 'tab buy-tab',
             height: 110,
             items: items
@@ -128,7 +142,7 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Prices', {
         items.push({
             xtype: 'plugin-manager-container-container',
             cls: 'button rent',
-            html: '<div class="text">{s name="rent_now"}{/s}</div>',
+            html: '<div class="text">{s name="rent_now"}Rent now{/s}</div>',
             handler: function() {
                 me.rentPluginEvent(me.plugin, price);
             }
@@ -137,24 +151,24 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Prices', {
         items.push({
             xtype: 'component',
             cls: 'price',
-            html: me.formatPrice(price.get('price')) + ' * <div class="month">/ {s name="per_month"}{/s}</div>'
+            html: me.formatPrice(price.get('price')) + ' * <div class="month">/ {s name="per_month"}per month{/s}</div>'
         });
 
         items.push({
             xtype: 'component',
             cls: 'subscription',
             html: '<div class="icon">U</div>' +
-            '<div class="text">{s name="rent_subscription_info"}{/s}</div>'
+            '<div class="text">{s name="rent_subscription_info"}All updates included during renting period{/s}</div>'
         });
 
         items.push({
             xtype: 'component',
             cls: 'dismissal',
-            html: '{s name="rent_cancel"}{/s}'
+            html: '{s name="rent_cancel"}Is cancelable on a monthly basis.{/s}'
         });
 
         return Ext.create('Ext.container.Container', {
-            title: '{s name="rent_version"}{/s}',
+            title: '{s name="rent_version"}Rent version{/s}',
             cls: 'tab rent-tab',
             height: 110,
             items: items
@@ -167,7 +181,7 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Prices', {
         items.push({
             xtype: 'plugin-manager-container-container',
             cls: 'button test',
-            html: '<div class="text">{s name="request_test_version"}{/s}</div>',
+            html: '<div class="text">{s name="request_test_version"}Request test version{/s}</div>',
             handler: function() {
                 me.requestPluginTestVersionEvent(me.plugin, price);
             }
@@ -176,11 +190,11 @@ Ext.define('Shopware.apps.PluginManager.view.detail.Prices', {
         items.push({
             xtype: 'component',
             cls: 'price-free',
-            html: '{s name="for_free"}{/s}'
+            html: '{s name="for_free"}Free{/s}'
         });
 
         return Ext.create('Ext.container.Container', {
-            title: '{s name="test_version"}{/s}',
+            title: '{s name="test_version"}Test version{/s}',
             cls: 'tab',
             height: 110,
             items: items

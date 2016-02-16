@@ -4,7 +4,7 @@
         <atom:link href="{$sCategoryContent.rssFeed}" rel="self" type="application/rss+xml" />
         <title>{block name='frontend_atom_title'}{s name="BlogRssFeedHeader"}{$sCategoryContent.description}{/s}{/block}</title>
         <link>{url controller='index'}</link>
-        <description>{$sShopname} - {$sCategoryContent.description}</description>
+        <description>{$sShopname|escapeHtml} - {$sCategoryContent.description}</description>
         <language>de-de</language>
         <lastBuildDate>{time()|date:rss}</lastBuildDate>
     {foreach from=$sBlogArticles item=sArticle key=key name="counter"}

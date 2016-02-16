@@ -32,7 +32,6 @@ use Shopware\Components\Form\Field;
  */
 class Date extends Field
 {
-
     /**
      * Format of the date value.
      * @var string

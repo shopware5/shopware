@@ -33,7 +33,6 @@ namespace ShopwarePlugin\PaymentMethods\Components;
  */
 abstract class BasePaymentMethod
 {
-
     /**
      * Validates the input received from the client
      *

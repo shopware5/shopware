@@ -10,9 +10,7 @@
      * The created list will be showed as a product slider.
      */
     $.plugin('swLastSeenProducts', {
-
-        alias: 'lastSeenProducts',
-
+        
         defaults: {
 
             /**
@@ -153,7 +151,7 @@
 
             me.productSlider.initSlider();
 
-            $.publish('plugin/swLastSeenProducts/onCreateProductList', me);
+            $.publish('plugin/swLastSeenProducts/onCreateProductList', [ me ]);
         },
 
         /**
@@ -173,7 +171,7 @@
                     ]
                 });
 
-            $.publish('plugin/swLastSeenProducts/onCreateTemplate', [me, $template, article]);
+            $.publish('plugin/swLastSeenProducts/onCreateTemplate', [ me, $template, article ]);
 
             return $template;
         },
@@ -195,7 +193,7 @@
                     'html': data.articleName
                 });
 
-            $.publish('plugin/swLastSeenProducts/onCreateProductTitle', [me, $title, data]);
+            $.publish('plugin/swLastSeenProducts/onCreateProductTitle', [ me, $title, data ]);
 
             return $title;
         },
@@ -230,13 +228,14 @@
             } else {
                 srcSet = me.opts.noPicture
             }
+
             $('<img>', {
                 'srcset': srcSet,
-                'alt': data.imageTitle || data.articleName,
-                'title': data.imageTitle || data.articleName
+                'alt': data.articleName,
+                'title': data.articleName
             }).appendTo(imageMedia);
 
-            $.publish('plugin/swLastSeenProducts/onCreateProductImage', [me, element, data]);
+            $.publish('plugin/swLastSeenProducts/onCreateProductImage', [ me, element, data ]);
 
             return element;
         },
@@ -286,7 +285,7 @@
 
             me.storage.setItem(itemKey, JSON.stringify(products));
 
-            $.publish('plugin/swLastSeenProducts/onCollectProduct', [me, newProduct]);
+            $.publish('plugin/swLastSeenProducts/onCollectProduct', [ me, newProduct ]);
         }
     });
 }(jQuery));

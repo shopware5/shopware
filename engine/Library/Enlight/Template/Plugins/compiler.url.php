@@ -33,7 +33,6 @@
  */
 class Smarty_Compiler_Url extends Smarty_Internal_CompileBase
 {
-
     /**
      * Attribute definition: Overwrites base class.
      *

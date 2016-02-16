@@ -98,7 +98,7 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
         $this->addOffset($request, $criteria);
 
         $this->addCategoryCondition($request, $criteria);
-        $this->addIsAvailableCondition($criteria, $context);
+        $this->addIsAvailableCondition($criteria);
         $this->addCustomerGroupCondition($criteria, $context);
         $this->addSearchCondition($request, $criteria);
 
@@ -163,10 +163,15 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
      */
     private function addManufacturerCondition(Request $request, Criteria $criteria)
     {
+        if (!$request->has('sSupplier')) {
+            return;
+        }
+
         $manufacturers = explode(
             '|',
-            $request->getParam('sSupplier', [])
+            $request->getParam('sSupplier')
         );
+
         if (!empty($manufacturers)) {
             $criteria->addCondition(new ManufacturerCondition($manufacturers));
         }
@@ -245,7 +250,7 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
         $search = trim(strip_tags(htmlspecialchars_decode(stripslashes($search))));
 
         //we have to strip the / otherwise broken urls would be created e.g. wrong pager urls
-        $search = str_replace("/", "", $search);
+        $search = str_replace("/", " ", $search);
 
         $criteria->addBaseCondition(new SearchTermCondition($search));
     }

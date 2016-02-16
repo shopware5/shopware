@@ -24,6 +24,9 @@ RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization},L]
 <IfModule mod_alias.c>
     # Block access to VCS directories
     RedirectMatch 404 /\\.(svn|git|hg|bzr|cvs)(/|$)
+
+    # Restrict access to root folder files
+    RedirectMatch 404 /(composer\.(json|lock)|README\.md|UPGRADE\.md)$
 </IfModule>
 
 # Staging environment

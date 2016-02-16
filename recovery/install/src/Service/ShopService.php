@@ -84,19 +84,6 @@ EOT;
                 $shop->basePath,
                 $shop->host,
             ]);
-
-            // Update s_core_multilanguage
-            $sql = <<<EOT
-UPDATE s_core_multilanguage
-SET `name` = ?, locale = ?, domainaliase = ?
-WHERE `default` = 1
-EOT;
-            $prepareStatement = $this->connection->prepare($sql);
-            $prepareStatement->execute([
-                $shop->name,
-                $fetchLanguageId,
-                $shop->host
-            ]);
         } catch (\Exception $e) {
             throw new \RuntimeException($e->getMessage(), 0, $e);
         }

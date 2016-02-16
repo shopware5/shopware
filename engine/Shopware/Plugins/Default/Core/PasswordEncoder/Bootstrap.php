@@ -129,7 +129,7 @@ class Shopware_Plugins_Core_PasswordEncoder_Bootstrap extends Shopware_Component
      */
     public function getBcryptOptions()
     {
-        $config = $this->config();
+        $config = $this->Config();
 
         $options = array(
             'cost' => $config['bcryptCost']
@@ -143,7 +143,7 @@ class Shopware_Plugins_Core_PasswordEncoder_Bootstrap extends Shopware_Component
      */
     public function getSha256Options()
     {
-        $config = $this->config();
+        $config = $this->Config();
 
         $options = array(
             'iterations' => $config['sha256iterations'],

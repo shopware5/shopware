@@ -182,6 +182,11 @@ Ext.define('Shopware.form.field.Search', {
             me.listConfig = me.createSearchComboListConfig();
         }
 
+        me.on('change', function(field, newValue) {
+            if (!newValue) {
+                me.setValue('');
+            }
+        });
         me.callParent(arguments);
     },
 

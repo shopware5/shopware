@@ -2,12 +2,24 @@
 
 namespace Shopware\Tests\Mink;
 
+use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Shopware\Tests\Mink\Page\Emotion\Homepage;
 use Behat\Gherkin\Node\TableNode;
 use Shopware\Tests\Mink\Element\Emotion\CompareColumn;
 
 class ShopwareContext extends SubContext
 {
+    /** @var  FeatureContext */
+    protected $featureContext;
+
+    /** @BeforeScenario */
+    public function gatherContexts(BeforeScenarioScope $scope)
+    {
+        $environment = $scope->getEnvironment();
+
+        $this->featureContext = $environment->getContext('Shopware\Tests\Mink\FeatureContext');
+    }
+
     /**
      * @When /^I search for "(?P<searchTerm>[^"]*)"$/
      */
@@ -79,8 +91,7 @@ class ShopwareContext extends SubContext
 
         if ($pageName === 'Index') {
             $pageName = 'Homepage';
-        }
-        elseif (($pageName === 'Newsletter') && ($additionalData)) {
+        } elseif (($pageName === 'Newsletter') && ($additionalData)) {
             $data = array_merge($data, $additionalData->getHash());
         }
 
@@ -116,7 +127,7 @@ class ShopwareContext extends SubContext
     public function iConfirmTheLinkInTheEmail($limit = 1)
     {
         $sql = 'SELECT `type`, `hash` FROM `s_core_optin` ORDER BY `id` DESC LIMIT ' . $limit;
-        $hashes = $this->getContainer()->get('db')->fetchAll($sql);
+        $hashes = $this->getService('db')->fetchAll($sql);
 
         $session = $this->getSession();
         $link = $session->getCurrentUrl();
@@ -135,18 +146,17 @@ class ShopwareContext extends SubContext
         $query = parse_url($link, PHP_URL_QUERY);
         $anchor = strpos($link, "#");
 
-        if($anchor) {
+        if ($anchor) {
             $link = substr($link, 0, $anchor);
         }
 
         //Blogartikel-Bewertung
-        if(empty($query)) {
+        if (empty($query)) {
             $mask = '%s/sConfirmation/%s';
-        }
-        else {
+        } else {
             parse_str($query, $args);
 
-            switch($args['action']) {
+            switch ($args['action']) {
                 //Artikel-Benachrichtigungen
                 case 'notify':
                     $mask = '%sConfirm&sNotificationConfirmation=%s&sNotify=1';
@@ -187,9 +197,15 @@ class ShopwareContext extends SubContext
      */
     public function theConfigValueOfIs($configName, $value)
     {
-        /** @var FeatureContext $featureContext */
-        $featureContext = $this->getMainContext();
-        $featureContext->changeConfigValue($configName, $value);
+        $this->featureContext->changeConfigValue($configName, $value);
+    }
+
+    /**
+     * @When the emotion world has loaded
+     */
+    public function theEmotionWorldHasLoaded()
+    {
+        $this->getSession()->wait(5000, "$('.emotion--element').length > 0");
     }
 
     /**

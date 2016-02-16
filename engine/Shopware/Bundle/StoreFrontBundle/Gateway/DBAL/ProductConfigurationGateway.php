@@ -25,8 +25,8 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
+use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
  * @category  Shopware
@@ -106,6 +106,7 @@ class ProductConfigurationGateway implements Gateway\ProductConfigurationGateway
         $query->where('relations.article_id IN (:ids)')
             ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
+        $query->addOrderBy('configuratorGroup.position');
         $query->addOrderBy('configuratorGroup.id');
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */

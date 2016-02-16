@@ -1090,8 +1090,7 @@
                 len = $el.length,
                 i = 0,
                 $currentEl,
-                plugin,
-                alias;
+                plugin;
 
             if (!len) {
                 return;
@@ -1101,10 +1100,6 @@
                 $currentEl = $($el[i]);
 
                 if ((plugin = $currentEl.data(name))) {
-                    if (alias = plugin.alias) {
-                        $currentEl.removeData('plugin_' + alias);
-                    }
-
                     plugin.destroy();
                     $currentEl.removeData(name);
                 }

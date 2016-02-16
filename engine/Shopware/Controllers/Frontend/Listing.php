@@ -46,8 +46,8 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
     {
         $manufacturerId = $this->Request()->getParam('sSupplier', null);
 
-        /**@var $context ShopContextInterface*/
-        $context = $this->get('shopware_storefront.context_service')->getShopContext();
+        /**@var $context ProductContextInterface*/
+        $context = $this->get('shopware_storefront.context_service')->getProductContext();
 
         if (!$this->Request()->getParam('sCategory')) {
             $this->Request()->setParam('sCategory', $context->getShop()->getCategory()->getId());
@@ -71,8 +71,13 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         /**@var $manufacturer Manufacturer*/
         $manufacturer = $this->get('shopware_storefront.manufacturer_service')->get(
             $manufacturerId,
-            $this->get('shopware_storefront.context_service')->getShopContext()
+            $this->get('shopware_storefront.context_service')->getProductContext()
         );
+
+        if ($manufacturer->getCoverFile()) {
+            $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+            $manufacturer->setCoverFile($mediaService->getUrl($manufacturer->getCoverFile()));
+        }
 
         $facets = array();
         foreach ($categoryArticles['facets'] as $facet) {
@@ -91,7 +96,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             'sSupplier' => $manufacturerId,
             'sCategory' => $context->getShop()->getCategory()->getId()
         ]);
-        
+
         $this->View()->assign('sCategoryContent', $this->getSeoDataOfManufacturer($manufacturer));
     }
 
@@ -133,7 +138,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             /**@var $manufacturer Manufacturer*/
             $manufacturer = $this->get('shopware_storefront.manufacturer_service')->get(
                 $manufacturerId,
-                $this->get('shopware_storefront.context_service')->getShopContext()
+                $this->get('shopware_storefront.context_service')->getProductContext()
             );
 
             $manufacturerContent = $this->getSeoDataOfManufacturer($manufacturer);
@@ -144,6 +149,12 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
                 'Listing category missing, non-existent or invalid for the current shop',
                 404
             );
+        }
+
+        // media fix
+        if (isset($categoryContent['media']['path'])) {
+            $mediaService = $this->get('shopware_media.media_service');
+            $categoryContent['media']['path'] = $mediaService->getUrl($categoryContent['media']['path']);
         }
 
         $viewAssignments = array(
@@ -164,11 +175,25 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             return;
         }
 
-        $context = $this->get('shopware_storefront.context_service')->getShopContext();
+        $context = $this->get('shopware_storefront.context_service')->getProductContext();
 
-        /**@var $criteria Criteria*/
-        $criteria = $this->get('shopware_search.store_front_criteria_factory')
-            ->createListingCriteria($this->Request(), $context);
+        if ($categoryContent['streamId']) {
+            /** @var \Shopware\Components\ProductStream\CriteriaFactoryInterface $factory */
+            $factory = $this->get('shopware_product_stream.criteria_factory');
+            $criteria = $factory->createCriteria($this->Request(), $context);
+
+            /** @var \Shopware\Components\ProductStream\RepositoryInterface $streamRepository */
+            $streamRepository = $this->get('shopware_product_stream.repository');
+            $streamRepository->prepareCriteria($criteria, $categoryContent['streamId']);
+
+            /** @var \Shopware\Components\ProductStream\FacetFilter $facetFilter */
+            $facetFilter = $this->get('shopware_product_stream.facet_filter');
+            $facetFilter->add($criteria);
+        } else {
+            /**@var $criteria Criteria*/
+            $criteria = $this->get('shopware_search.store_front_criteria_factory')
+                ->createListingCriteria($this->Request(), $context);
+        }
 
         if ($categoryContent['hideFilter']) {
             $criteria->resetFacets();
@@ -198,10 +223,20 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 
         $viewAssignments['sCategoryContent'] = $categoryContent;
 
+        /** @var \Shopware\Components\ProductStream\FacetFilter $facetFilter */
+        $facetFilter = $this->get('shopware_product_stream.facet_filter');
+        $facets = $facetFilter->filter($categoryArticles['facets'], $criteria);
+        $categoryArticles['facets'] = $facets;
+
         $this->View()->assign($viewAssignments);
         $this->View()->assign($categoryArticles);
     }
 
+    /**
+     * @param array $categoryContent
+     * @param bool $hasEmotion
+     * @return array|bool
+     */
     private function getRedirectLocation($categoryContent, $hasEmotion)
     {
         $location = false;
@@ -220,7 +255,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             $location = array('controller' => 'index');
         } elseif ($this->get('config')->get('categoryDetailLink') && $checkRedirect) {
             /**@var $context ShopContextInterface*/
-            $context = $this->get('shopware_storefront.context_service')->getShopContext();
+            $context = $this->get('shopware_storefront.context_service')->getProductContext();
 
             /**@var $factory StoreFrontCriteriaFactoryInterface*/
             $factory = $this->get('shopware_search.store_front_criteria_factory');
@@ -245,7 +280,6 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         return $location;
     }
 
-
     /**
      * Converts the provided manufacturer to the category seo data structure.
      * Result can be merged with "sCategoryContent" to override relevant seo category data with
@@ -268,7 +302,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         );
 
         $content['canonicalParams'] = $canonicalParams;
-        
+
         $path = $this->Front()->Router()->assemble($canonicalParams);
 
         if ($path) {
@@ -326,7 +360,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         if (empty($data)) {
             return array();
         }
-        
+
         return array(
             'id' => $data[0]['id'],
             'showListing' => $data[0]['showListing']
@@ -411,7 +445,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         $queryParamsWhiteList = array('controller', 'action', 'sCategory', 'sViewport', 'rewriteUrl', 'module');
         $queryParamsNames = array_keys($this->Request()->getParams());
         $paramsDiff = array_diff($queryParamsNames, $queryParamsWhiteList);
-        
+
         return ($defaultShopCategoryId == $categoryId && !$paramsDiff);
     }
 

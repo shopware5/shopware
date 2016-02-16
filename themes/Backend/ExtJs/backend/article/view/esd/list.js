@@ -86,9 +86,6 @@ Ext.define('Shopware.apps.Article.view.esd.List', {
 
         me.store = me.esdStore;
 
-//        me.filteredStore = me.filteredStore;
-//        me.filteredStore = Ext.create('Shopware.apps.Article.store.Esd');
-
         me.selModel = me.getGridSelModel();
         me.columns = me.getColumns();
         me.toolbar = me.getToolbar();
@@ -279,10 +276,30 @@ Ext.define('Shopware.apps.Article.view.esd.List', {
             forceSelection: true,
             queryMode: 'local',
             valueField: 'id',
+            width: 450,
             displayField: 'name',
             fieldLabel: me.snippets.toolbar.choose,
             emptyText: me.snippets.toolbar.choose,
             anchor: '100%',
+            displayTpl: Ext.create('Ext.XTemplate',
+                '<tpl for=".">',
+                '{literal}' +
+                    '{name}' +
+                    '<tpl if="additionalText"> - {additionalText}</tpl>' +
+                '{/literal}',
+                '</tpl>'
+            ),
+            tpl: Ext.create('Ext.XTemplate',
+                '<tpl for=".">',
+                    '{literal}' +
+                        '<div class="x-boundlist-item">{name}' +
+                        '<tpl if="additionalText">' +
+                            '<span style="font-size:10px; font-weight: 800;"> - {additionalText}</span>' +
+                        '</tpl>' +
+                        '</div>' +
+                    '{/literal}',
+                '</tpl>'
+            ),
             listeners: {
                 select: function(field, records) {
                     me.addButton.enable();

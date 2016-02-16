@@ -24,8 +24,8 @@
 
 namespace Shopware\Bundle\SearchBundle;
 
-use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
 use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 
 /**
  * Defines the search result of the search gateway.
@@ -34,7 +34,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
  * @package   Shopware\Bundle\SearchBundle
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class ProductNumberSearchResult implements \JsonSerializable
+class ProductNumberSearchResult extends Extendable implements \JsonSerializable
 {
     /**
      * @var BaseProduct[] Indexed by the product order number
@@ -52,22 +52,15 @@ class ProductNumberSearchResult implements \JsonSerializable
     protected $facets;
 
     /**
-     * @var Attribute
-     */
-    protected $attribute;
-
-    /**
      * @param BaseProduct[] $products Indexed by the product order number
      * @param int $totalCount
      * @param FacetResultInterface[] $facets
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Attribute $attribute
      */
-    public function __construct($products, $totalCount, $facets, Attribute $attribute = null)
+    public function __construct($products, $totalCount, $facets)
     {
         $this->products = $products;
         $this->totalCount = $totalCount;
         $this->facets = $facets;
-        $this->attribute = $attribute;
     }
 
     /**
@@ -87,6 +80,14 @@ class ProductNumberSearchResult implements \JsonSerializable
     }
 
     /**
+     * @param FacetResultInterface $facet
+     */
+    public function addFacet(FacetResultInterface $facet)
+    {
+        $this->facets[] = $facet;
+    }
+
+    /**
      * @return int
      */
     public function getTotalCount()
@@ -100,21 +101,5 @@ class ProductNumberSearchResult implements \JsonSerializable
     public function jsonSerialize()
     {
         return get_object_vars($this);
-    }
-
-    /**
-     * @return Attribute
-     */
-    public function getAttribute()
-    {
-        return $this->attribute;
-    }
-
-    /**
-     * @param Attribute $attribute
-     */
-    public function setAttribute($attribute)
-    {
-        $this->attribute = $attribute;
     }
 }

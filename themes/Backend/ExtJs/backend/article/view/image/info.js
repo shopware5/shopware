@@ -185,7 +185,7 @@ Ext.define('Shopware.apps.Article.view.image.Info', {
                     '<div class="thumb">',
                         '<div class="inner-thumb"><img src="',
                             '<tpl if="original">',
-                                '{link file=""}','{literal}{original}{/literal}',
+                                '{literal}{original}{/literal}',
                             '</tpl>',
                         '" /></div>',
                     '</div>',
@@ -208,7 +208,7 @@ Ext.define('Shopware.apps.Article.view.image.Info', {
             if (me.record) {
                 me.fireEvent('saveImageSettings', me.settingsForm, me.record);
             }
-        }
+        };
 
         me.titleField = Ext.create('Ext.form.field.Text', {
             name: 'description',

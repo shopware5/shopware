@@ -82,7 +82,7 @@ class DetailContext extends SubContext
     public function theShopOwnerActivateMyLatestEvaluation($limit = 1)
     {
         $sql = 'UPDATE `s_articles_vote` SET `active`= 1 ORDER BY id DESC LIMIT '.$limit;
-        $this->getContainer()->get('db')->exec($sql);
+        $this->getService('db')->exec($sql);
         $this->getSession()->reload();
     }
 
@@ -101,6 +101,4 @@ class DetailContext extends SubContext
     {
         $this->getPage('Detail')->submitNotification($email);
     }
-
-
 }

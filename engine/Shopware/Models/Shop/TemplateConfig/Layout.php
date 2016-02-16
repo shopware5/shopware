@@ -33,7 +33,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Layout extends ModelEntity
 {
-
     /**
      * @var integer $id
      *

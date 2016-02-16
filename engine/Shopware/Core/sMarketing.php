@@ -247,6 +247,12 @@ class sMarketing
 
 
         $images = array_column($getBanners, 'image');
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+
+        array_walk($images, function (&$image) use ($mediaService) {
+            $image = $mediaService->normalize($image);
+        });
+
         $mediaIds = $this->getMediaIdsOfPath($images);
         $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
         $medias = Shopware()->Container()->get('shopware_storefront.media_service')->getList($mediaIds, $context);
@@ -283,6 +289,9 @@ class sMarketing
                 );
                 $getAffectedBanners["link"] = Shopware()->Front()->Router()->assemble($query);
             }
+
+            // @deprecated since 5.1 will be removed in 5.2
+            $getAffectedBanners['img'] = $mediaService->getUrl($getAffectedBanners['img']);
         }
         if ($limit == 1) {
             $getBanners = $getBanners[0];
@@ -298,8 +307,9 @@ class sMarketing
      */
     private function getMediaByPath($media, $path)
     {
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
         foreach ($media as $single) {
-            if ($single->getFile() == $path) {
+            if ($mediaService->normalize($single->getFile()) == $path) {
                 return $single;
             }
         }
@@ -353,11 +363,10 @@ class sMarketing
             AND (p.subshopID = ? OR p.subshopID = 0)
             ORDER BY p.startprice ASC
         ";
-
-        $premiums = $this->db->fetchAll($sql, array($context->getShop()->getId()));
+        $activeShopId = $context->getShop()->getId();
+        $premiums = $this->db->fetchAll($sql, array($activeShopId));
 
         foreach ($premiums as &$premium) {
-            $activeShopId = Shopware()->Shop()->getId();
             $activeFactor = $this->sSYSTEM->sCurrency["factor"];
 
             if ($premium['subshopID'] === "0") {
@@ -378,10 +387,10 @@ class sMarketing
                 $premiumFactor = Shopware()->Db()->fetchOne($sql, array($activeShopId));
             }
 
-            if ($premiumFactor == $activeFactor) {
-                $activeFactor = 1;
+            if ($premiumFactor != 0) {
+                $activeFactor = $activeFactor / $premiumFactor;
             } else {
-                $activeFactor = $activeFactor/$premiumFactor;
+                $activeFactor = 0;
             }
 
             $premium["startprice"] *= $activeFactor;
@@ -450,7 +459,7 @@ class sMarketing
         $products = $this->additionalTextService->buildAdditionalTextLists($products, $context);
 
         return array_map(
-            function (StoreFrontBundle\Struct\Product $elem) {
+            function (StoreFrontBundle\Struct\ListProduct $elem) {
                 return array(
                     'ordernumber' => $elem->getNumber(),
                     'additionaltext' => $elem->getAdditional()
@@ -540,7 +549,13 @@ class sMarketing
             $name = trim($name, " -");
             $articles[$articleId]["articleID"] = $articleId;
             $articles[$articleId]["name"] = $name;
-            $articles[$articleId]["class"] = $class . round($pos / $anz * $steps);
+
+            if ($anz != 0) {
+                $articles[$articleId]["class"] = $class . round($pos / $anz * $steps);
+            } else {
+                $articles[$articleId]["class"] = $class . 0;
+            }
+
             $articles[$articleId]["link"] = $link . $articleId;
             $pos++;
         }
@@ -636,6 +651,7 @@ class sMarketing
             );
 
             $getCampaignContainers = $this->db->fetchAll($sql);
+            $mediaService = Shopware()->Container()->get('shopware_media.media_service');
 
             foreach ($getCampaignContainers as $campaignKey => $campaignValue) {
                 switch ($campaignValue["type"]) {
@@ -647,7 +663,7 @@ class sMarketing
                         ");
                         // Rewrite banner
                         if ($getBanner["image"]) {
-                            $getBanner["image"] = $this->sSYSTEM->sPathBanner . $getBanner["image"];
+                            $getBanner["image"] = $mediaService->getUrl($getBanner["image"]);
                         }
 
                         if (!preg_match("/http/", $getBanner["link"]) && $getBanner["link"]) {
@@ -696,7 +712,7 @@ class sMarketing
                             WHERE parentID={$campaignValue["id"]}
                         ");
                         if ($getText["image"]) {
-                            $getText["image"] = $this->sSYSTEM->sPathBanner . $getText["image"];
+                            $getText["image"] = $mediaService->getUrl($getText["image"]);
                         }
                         if (!preg_match("/http/", $getText["link"]) && $getText["link"]) {
                             $getText["link"] = "http://" . $getText["link"];

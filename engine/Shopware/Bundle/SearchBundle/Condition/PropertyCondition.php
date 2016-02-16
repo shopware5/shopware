@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundle\Condition;
 
+use Assert\Assertion;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 
 /**
@@ -36,16 +37,17 @@ class PropertyCondition implements ConditionInterface
     /**
      * Each value id is combined via OR expression to restrict the criteria.
      *
-     * @var array
+     * @var int[]
      */
     private $valueIds = [];
 
     /**
-     * @param array $valueIds
+     * @param int[] $valueIds
      */
     public function __construct(array $valueIds)
     {
-        $this->valueIds = $valueIds;
+        Assertion::allIntegerish($valueIds);
+        $this->valueIds = array_map('intval', $valueIds);
     }
 
     /**
@@ -57,7 +59,7 @@ class PropertyCondition implements ConditionInterface
     }
 
     /**
-     * @return array
+     * @return int[]
      */
     public function getValueIds()
     {

@@ -49,6 +49,7 @@
 {include file='ExtJs/overrides/Ext.picker.Date.js'}
 {include file='ExtJs/overrides/Ext.data.association.HasMany.js'}
 {include file='ExtJs/overrides/Ext.menu.Menu.js'}
+{include file='ExtJs/overrides/Ext.Timeout.js'}
 
 {* Include default components *}
 {include file='ExtJs/components/Enlight.app.Window.js'}
@@ -86,6 +87,7 @@
 
 {include file='backend/base/application/Shopware.store.Association.js'}
 {include file='backend/base/application/Shopware.form.field.Media.js'}
+{include file='backend/base/application/Shopware.store.Search.js'}
 
 
 
@@ -163,6 +165,7 @@
 {include file='backend/base/component/Shopware.form.field.CodeMirror.js'}
 {include file='backend/base/component/Shopware.form.field.ArticleSearch.js'}
 {include file='backend/base/component/Shopware.form.field.PagingComboBox.js'}
+{include file='backend/base/component/Shopware.form.field.ProductStreamSelection.js'}
 {include file='backend/base/component/Shopware.container.Viewport.js'}
 {include file='backend/base/component/Shopware.DragAndDropSelector.js'}
 {include file='backend/base/component/Shopware.DataView.GooglePreview.js'}
@@ -175,11 +178,13 @@
 {include file='backend/base/component/Shopware.global.ErrorReporter.js'}
 {include file='backend/base/component/Shopware.notification.ExpiredLicence.js'}
 {include file='backend/base/component/Shopware.notification.SubscriptionWarning.js'}
+{include file='backend/base/component/Shopware.component.ValidatePassword.js'}
 
 {include file='backend/base/component/Shopware.form.field.ColorField.js'}
 {include file='backend/base/component/Shopware.form.field.ColorSelection.js'}
 {include file='backend/base/component/Shopware.color.Window.js'}
 {include file='backend/base/component/Shopware.grid.ButtonColumn.js'}
+{include file='backend/base/component/Shopware.window.SimpleModule.js'}
 
 {include file='backend/base/component/element/boolean.js'}
 {include file='backend/base/component/element/boolean_select.js'}
@@ -199,3 +204,5 @@
 {include file='backend/base/component/element/media_selection.js'}
 {include file='backend/base/component/element/product_box_layout_select.js'}
 {include file='backend/base/component/element/media_text_selection.js'}
+
+{include file='backend/base/component/Shopware.ModuleManager.js'}

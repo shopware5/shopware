@@ -59,6 +59,11 @@ class Currency extends Extendable implements \JsonSerializable
     protected $symbol;
 
     /**
+     * @var string
+     */
+    protected $symbolPosition;
+
+    /**
      * @param CurrencyEntity $currency
      * @return Currency
      */
@@ -161,5 +166,21 @@ class Currency extends Extendable implements \JsonSerializable
     public function jsonSerialize()
     {
         return get_object_vars($this);
+    }
+
+    /**
+     * @return string
+     */
+    public function getSymbolPosition()
+    {
+        return $this->symbolPosition;
+    }
+
+    /**
+     * @param string $symbolPosition
+     */
+    public function setSymbolPosition($symbolPosition)
+    {
+        $this->symbolPosition = $symbolPosition;
     }
 }

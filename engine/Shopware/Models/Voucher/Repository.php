@@ -36,7 +36,6 @@ use Doctrine\ORM\Query;
  */
 class Repository extends ModelRepository
 {
-
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select a list of voucher
      * codes for the passed voucher id.

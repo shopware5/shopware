@@ -48,7 +48,7 @@ class Homepage extends Page implements HelperSelectorInterface
     {
         $info = Helper::getPageInfo($this->getSession(), ['controller']);
 
-        if($info['controller'] === 'index') {
+        if ($info['controller'] === 'index') {
             return;
         }
 
@@ -70,9 +70,8 @@ class Homepage extends Page implements HelperSelectorInterface
         ];
 
         $searchForm = $this->getElement('SearchForm');
-        $language = Helper::getCurrentLanguage($this);
         Helper::fillForm($searchForm, 'searchForm', $data);
-        Helper::pressNamedButton($searchForm, 'searchButton', $language);
+        Helper::pressNamedButton($searchForm, 'searchButton');
         $this->verifyResponse();
     }
 
@@ -92,6 +91,7 @@ class Homepage extends Page implements HelperSelectorInterface
         $searchForm = $this->getElement('SearchForm');
         Helper::fillForm($searchForm, 'searchForm', $data);
         $this->getSession()->wait(5000, "$('ul.searchresult').children().length > 0");
+        $this->getSession()->wait(500);
     }
 
     /**
@@ -210,7 +210,6 @@ class Homepage extends Page implements HelperSelectorInterface
      * Checks an emotion blog element
      * @param BlogArticle $blogArticle
      * @param array $articles
-     * @throws \Behat\Behat\Exception\PendingException
      * @throws \Exception
      */
     public function checkBlogArticles(BlogArticle $blogArticle, $articles)

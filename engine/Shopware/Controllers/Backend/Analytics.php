@@ -32,7 +32,6 @@ use Shopware\Models\Analytics\Repository;
  */
 class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backend_ExtJs
 {
-
     protected $dateFields = array(
         'date', 'displayDate',  'firstLogin', 'birthday', 'orderTime'
     );
@@ -231,7 +230,11 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
         foreach ($data as $date => &$row) {
             $row['date'] = strtotime($date);
-            $row['conversion'] = round($row['orderCount'] / $row['visits'] * 100, 2);
+            if ($row['visits'] != 0) {
+                $row['conversion'] = round($row['orderCount'] / $row['visits'] * 100, 2);
+            } else {
+                $row['conversion'] = 0;
+            }
         }
 
         //sets the correct limit
@@ -274,18 +277,38 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $visitors = $row['visits'];
             $cancelledOrders = $row['cancelledOrders'];
 
-            $row['basketConversion'] = round($orders / ($cancelledOrders + $orders) * 100, 2);
-            $row['orderConversion'] = round($orders / $visitors * 100, 2);
-            $row['basketVisitConversion'] = round($cancelledOrders / $visitors * 100, 2);
+            if (($cancelledOrders + $orders) != 0) {
+                $row['basketConversion'] = round($orders / ($cancelledOrders + $orders) * 100, 2);
+            } else {
+                $row['basketConversion'] = 0;
+            }
+
+            if ($visitors != 0) {
+                $row['orderConversion'] = round($orders / $visitors * 100, 2);
+                $row['basketVisitConversion'] = round($cancelledOrders / $visitors * 100, 2);
+            } else {
+                $row['orderConversion'] = 0;
+                $row['basketVisitConversion'] = 0;
+            }
 
             foreach ($shopIds as $shopId) {
                 $orders = $row['orderCount' . $shopId];
                 $visitors = $row['visits' . $shopId];
                 $cancelledOrders = $row['cancelledOrders' . $shopId];
 
-                $row['basketConversion' . $shopId] = round($orders / ($cancelledOrders + $orders) * 100, 2);
-                $row['orderConversion' . $shopId] = round($orders / $visitors * 100, 2);
-                $row['basketVisitConversion' . $shopId] = round($cancelledOrders / $visitors * 100, 2);
+                if (($cancelledOrders + $orders) != 0) {
+                    $row['basketConversion' . $shopId] = round($orders / ($cancelledOrders + $orders) * 100, 2);
+                } else {
+                    $row['basketConversion' . $shopId] = 0;
+                }
+
+                if ($visitors != 0) {
+                    $row['orderConversion' . $shopId] = round($orders / $visitors * 100, 2);
+                    $row['basketVisitConversion' . $shopId] = round($cancelledOrders / $visitors * 100, 2);
+                } else {
+                    $row['orderConversion' . $shopId] = 0;
+                    $row['basketVisitConversion' . $shopId] = 0;
+                }
             }
         }
 
@@ -346,9 +369,23 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         }
 
         foreach ($referrer as &$ref) {
-            $ref['average'] = round($ref['turnover'] / $ref['orderCount'], 2);
-            $ref['averageNewCustomer'] = round($ref['turnoverNewCustomer'] / $ref['newCustomers'], 2);
-            $ref['averageRegularCustomer'] = round($ref['turnoverRegularCustomer'] / $ref['regularCustomers'], 2);
+            if ($ref['orderCount'] != 0) {
+                $ref['average'] = round($ref['turnover'] / $ref['orderCount'], 2);
+            } else {
+                $ref['average'] = 0;
+            }
+
+            if ($ref['newCustomers'] != 0) {
+                $ref['averageNewCustomer'] = round($ref['turnoverNewCustomer'] / $ref['newCustomers'], 2);
+            } else {
+                $ref['averageNewCustomer'] = 0;
+            }
+
+            if ($ref['regularCustomers'] != 0) {
+                $ref['averageRegularCustomer'] = round($ref['turnoverRegularCustomer'] / $ref['regularCustomers'], 2);
+            } else {
+                $ref['averageRegularCustomer'] = 0;
+            }
         }
 
         // Sort the multidimensional array
@@ -531,11 +568,19 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         }
 
         foreach ($ages as &$age) {
-            $age['percent'] = round($age['count'] / $result->getTotalCount() * 100, 2);
+            if ($result->getTotalCount() != 0) {
+                $age['percent'] = round($age['count'] / $result->getTotalCount() * 100, 2);
+            } else {
+                $age['percent'] = 0;
+            }
 
             if (!empty($shopIds)) {
                 foreach ($shopIds as $shopId) {
-                    $age['percent' . $shopId] = round($age['count' . $shopId] / $subShopCounts[$shopId] * 100, 2);
+                    if ($subShopCounts[$shopId] != 0) {
+                        $age['percent' . $shopId] = round($age['count' . $shopId] / $subShopCounts[$shopId] * 100, 2);
+                    } else {
+                        $age['percent' . $shopId] = 0;
+                    }
                 }
             }
         }
@@ -976,7 +1021,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     /**
      * helper to get the from date in the right format
      *
-     * return DateTime | fromDate
+     * return \DateTime | fromDate
      */
     private function getFromDate()
     {

@@ -143,11 +143,11 @@ class Compiler
             $lessFiles = array_merge($lessFiles, $definition->getFiles());
         }
 
-        $js = array_map(function($file) use ($rootDir) {
+        $js = array_map(function ($file) use ($rootDir) {
             return ltrim(str_replace($this->rootDir, '', $file), '/');
         }, $js);
 
-        $lessFiles = array_map(function($file) use ($rootDir) {
+        $lessFiles = array_map(function ($file) use ($rootDir) {
             return ltrim(str_replace($this->rootDir, '', $file), '/');
         }, $lessFiles);
 
@@ -416,7 +416,7 @@ class Compiler
         foreach ($collection as $file) {
             if (!file_exists($file)) {
                 throw new \Exception(
-                    sprintf("Some plugin tries to compress a css file, but the file %s doesn't exist", $file)
+                    sprintf("Some plugin tries to compress a javascript file, but the file %s doesn't exist", $file)
                 );
             }
         }

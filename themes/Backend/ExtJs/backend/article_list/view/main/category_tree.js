@@ -26,10 +26,7 @@
 Ext.define('Shopware.apps.ArticleList.view.main.CategoryTree', {
     extend: 'Ext.panel.Panel',
     alias: 'widget.multi-edit-category-tree',
-
-
     layout: 'fit',
-
     title: '{s name=categories}Categories{/s}',
 
     initComponent: function () {
@@ -38,7 +35,8 @@ Ext.define('Shopware.apps.ArticleList.view.main.CategoryTree', {
         me.items = me.getPanels();
 
         me.addEvents(
-                'filterByCategory'
+            'filterByCategory',
+            'showVariants'
         );
 
         me.callParent(arguments);
@@ -80,6 +78,7 @@ Ext.define('Shopware.apps.ArticleList.view.main.CategoryTree', {
                 {
                     xtype: 'checkbox',
                     boxLabel: '{s name=list/Variants}Show variants{/s}',
+                    name: 'displayVariants',
                     uncheckedValue: false,
                     inputValue: true,
                     listeners: {
@@ -94,6 +93,7 @@ Ext.define('Shopware.apps.ArticleList.view.main.CategoryTree', {
                                 categoryId = selection.selected.items[0].get('id');
                             }
 
+                            me.fireEvent('showVariants', newValue);
                             me.fireEvent('filterByCategory', categoryId, newValue);
                         }
                     }

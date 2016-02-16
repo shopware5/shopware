@@ -38,7 +38,6 @@ use Doctrine\ORM\Query;
  */
 class Repository extends ModelRepository
 {
-
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select the blog articles for the frontend list
      * @param $blogCategoryIds
@@ -431,7 +430,7 @@ class Repository extends ModelRepository
      */
     public function getBlogCommentsById($blogId, $filter, $order, $offset, $limit)
     {
-        $builder = $this->getBlogCommentsByIdBuilder($blogId, $filter, $order, $offset, $limit);
+        $builder = $this->getBlogCommentsByIdBuilder($blogId, $filter, $order);
         if (!empty($offset)) {
             $builder->setFirstResult($offset);
         }

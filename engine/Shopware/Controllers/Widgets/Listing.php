@@ -124,10 +124,25 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
     {
         $this->Front()->Plugins()->ViewRenderer()->setNoRender();
 
-        $context = $this->get('shopware_storefront.context_service')->getShopContext();
+        $context = $this->get('shopware_storefront.context_service')->getProductContext();
 
-        $criteria = $this->get('shopware_search.store_front_criteria_factory')
-            ->createAjaxCountCriteria($this->Request(), $context);
+        $categoryId = $this->Request()->getParam('sCategory');
+        $productStreamId = $this->findStreamIdByCategoryId($categoryId);
+
+        if ($productStreamId) {
+            /** @var \Shopware\Components\ProductStream\CriteriaFactoryInterface $factory */
+            $factory = $this->get('shopware_product_stream.criteria_factory');
+            $criteria = $factory->createCriteria($this->Request(), $context);
+
+            /** @var \Shopware\Components\ProductStream\RepositoryInterface $streamRepository */
+            $streamRepository = $this->get('shopware_product_stream.repository');
+            $streamRepository->prepareCriteria($criteria, $productStreamId);
+
+            $criteria->resetSorting();
+        } else {
+            $criteria = $this->get('shopware_search.store_front_criteria_factory')
+                ->createAjaxCountCriteria($this->Request(), $context);
+        }
 
         /**@var $result ProductNumberSearchResult*/
         $result = $this->get('shopware_search.product_number_search')->search(
@@ -151,11 +166,21 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         $categoryId = $this->Request()->getParam('sCategory');
         $pageIndex = $this->Request()->getParam('sPage');
 
-        $context = Shopware()->Container()->get('shopware_storefront.context_service')
-            ->getProductContext();
+        $context = $this->get('shopware_storefront.context_service')->getProductContext();
+        $productStreamId = $this->findStreamIdByCategoryId($categoryId);
 
-        $criteria = Shopware()->Container()->get('shopware_search.store_front_criteria_factory')
-            ->createAjaxListingCriteria($this->Request(), $context);
+        if ($productStreamId) {
+            /** @var \Shopware\Components\ProductStream\CriteriaFactoryInterface $factory */
+            $factory = $this->get('shopware_product_stream.criteria_factory');
+            $criteria = $factory->createCriteria($this->Request(), $context);
+
+            /** @var \Shopware\Components\ProductStream\RepositoryInterface $streamRepository */
+            $streamRepository = $this->get('shopware_product_stream.repository');
+            $streamRepository->prepareCriteria($criteria, $productStreamId);
+        } else {
+            $criteria = $this->get('shopware_search.store_front_criteria_factory')
+                ->createAjaxListingCriteria($this->Request(), $context);
+        }
 
         $articles = Shopware()->Modules()->Articles()->sGetArticlesByCategory($categoryId, $criteria);
         $articles = $articles['sArticles'];
@@ -243,5 +268,23 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
 
         $childrenIds = $query->execute()->fetchAll(PDO::FETCH_COLUMN);
         return $childrenIds;
+    }
+
+    /**
+     * @param int $categoryId
+     * @return int|null
+     */
+    private function findStreamIdByCategoryId($categoryId)
+    {
+        $streamId = $this->get('dbal_connection')->fetchColumn(
+            'SELECT stream_id FROM s_categories WHERE id = :id',
+            ['id' => $categoryId]
+        );
+
+        if ($streamId) {
+            return (int)$streamId;
+        }
+
+        return null;
     }
 }

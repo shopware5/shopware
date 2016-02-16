@@ -59,7 +59,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Emotion extends ModelEntity
 {
-
     /**
      * Unique identifier field for the shopware emotion.
      *
@@ -164,6 +163,13 @@ class Emotion extends ModelEntity
      * @ORM\Column(name="landingpage_teaser", type="string",length=255, nullable=false)
      */
     private $landingPageTeaser;
+
+    /**
+     * @var string $seoTitle
+     *
+     * @ORM\Column(name="seo_title", type="string",length=255, nullable=false)
+     */
+    private $seoTitle;
 
     /**
      * @var string $seoKeywords
@@ -363,7 +369,7 @@ class Emotion extends ModelEntity
      * With the $validFrom and $validTo property you can define
      * a date range in which the emotion will be displayed.
      *
-     * @param \DateTime $validFrom
+     * @param \DateTime|string $validFrom
      */
     public function setValidFrom($validFrom)
     {
@@ -389,7 +395,7 @@ class Emotion extends ModelEntity
      * With the $validFrom and $validTo property you can define
      * a date range in which the emotion will be displayed.
      *
-     * @param \DateTime $validTo
+     * @param \DateTime|string $validTo
      */
     public function setValidTo($validTo)
     {
@@ -445,7 +451,7 @@ class Emotion extends ModelEntity
     }
 
     /**
-     * @param \DateTime $modified
+     * @param \DateTime|string $modified
      */
     public function setModified($modified)
     {
@@ -561,6 +567,22 @@ class Emotion extends ModelEntity
     public function getSeoDescription()
     {
         return $this->seoDescription;
+    }
+
+    /**
+     * @param string $seoTitle
+     */
+    public function setSeoTitle($seoTitle)
+    {
+        $this->seoTitle = $seoTitle;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSeoTitle()
+    {
+        return $this->seoTitle;
     }
 
     /**

@@ -563,6 +563,9 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         }
 
         switch ($name) {
+            case 'tax':
+                $this->saveTaxRules($data, $model);
+                return;
             case 'customerGroup':
                 if (isset($data['discounts'])) {
                     $model->getDiscounts()->clear();
@@ -580,19 +583,6 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                 }
                 if (empty($data["mode"])) {
                     $data["discount"] = 0;
-                }
-                break;
-            case 'tax':
-                if (isset($data['rules'])) {
-                    $model->getRules()->clear();
-                    $rules = array();
-                    foreach ($data['rules'] as $ruleData) {
-                        $rule = new Shopware\Models\Tax\Rule();
-                        $rule->fromArray($ruleData);
-                        $rule->setGroup($model);
-                        $rules[] = $rule;
-                    }
-                    $data['rules'] = $rules;
                 }
                 break;
             case 'shop':
@@ -699,9 +689,6 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         $manager->persist($model);
         $manager->flush();
 
-        if ($name === 'shop') {
-            $this->fixTranslationTable();
-        }
         $this->View()->assign(array('success' => true));
     }
 
@@ -764,43 +751,6 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
             'success' => true,
             'result' => $result
         ));
-    }
-
-    /**
-     * Fix the translation table data
-     * @deprecated s_core_multilanguage is deprecated since SW 5.0 and will be removed in SW 5.1
-     */
-    private function fixTranslationTable()
-    {
-        Shopware()->Db()->exec("TRUNCATE s_core_multilanguage;");
-        $sql = "
-            INSERT IGNORE INTO `s_core_multilanguage` (
-              `id`, `isocode`, `locale`, `parentID`, `skipbackend`,
-              `name`, `defaultcustomergroup`, `template`, `doc_template`,
-              `domainaliase`,
-              `switchCurrencies`, `switchLanguages`,
-              `defaultcurrency`, `default`,
-              `fallback`
-            )
-            SELECT
-              s.id, s.id as isocode, s.locale_id, s.category_id, s.default as skipbackend, s.name,
-              (SELECT groupkey FROM s_core_customergroups WHERE id=s.customer_group_id) as defaultcustomergroup,
-              (SELECT CONCAT('templates/', template) FROM s_core_templates WHERE id=m.template_id) as template,
-              (SELECT CONCAT('templates/', template) FROM s_core_templates WHERE id=m.document_template_id) as doc_template,
-              CONCAT(s.host, '\n', s.hosts) as hosts,
-              GROUP_CONCAT(d.currency_id SEPARATOR '|') as switchCurrencies,
-              (SELECT GROUP_CONCAT(id SEPARATOR '|') FROM s_core_shops WHERE id=m.id OR main_id=m.id)  as switchLanguages,
-              s.currency_id, s.default, s.fallback_id
-            FROM `s_core_shops` s
-            LEFT JOIN `s_core_shops` m
-            ON m.id=s.main_id
-            OR (s.main_id IS NULL AND m.id=s.id)
-            LEFT JOIN `s_core_shop_currencies` d
-            ON d.shop_id=m.id
-            WHERE s.active=1
-            GROUP BY s.id
-        ";
-        Shopware()->Db()->exec($sql);
     }
 
     /**
@@ -966,7 +916,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
 
         $elementModel = new Shopware\Models\Document\Element();
         $elementModel->setName('Logo');
-        $elementModel->setValue('<p><img src="http://www.shopware.de/logo/logo.png " alt="" /></p>');
+        $elementModel->setValue('<p><img src="http://www.shopware.de/logo/logo.png" alt="" /></p>');
         $elementModel->setStyle('height: 20mm; width: 90mm; margin-bottom:5mm;');
         $elementModel->setDocument($model);
         $elementCollection->add($elementModel);
@@ -1125,5 +1075,31 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         }
 
         return true;
+    }
+
+    /**
+     * @param array $data
+     * @param \Shopware\Models\Tax\Tax $model
+     */
+    private function saveTaxRules(array $data, \Shopware\Models\Tax\Tax $model)
+    {
+        if (isset($data['rules'])) {
+            $model->getRules()->clear();
+            $rules = array();
+            foreach ($data['rules'] as $ruleData) {
+                $rule = new Shopware\Models\Tax\Rule();
+                $rule->fromArray($ruleData);
+                $rule->setGroup($model);
+                $rules[] = $rule;
+            }
+            $data['rules'] = $rules;
+
+            $model->fromArray($data);
+
+            $this->getModelManager()->persist($model);
+            $this->getModelManager()->flush();
+        }
+
+        $this->View()->assign(array('success' => true));
     }
 }

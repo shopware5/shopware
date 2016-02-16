@@ -24,6 +24,8 @@
 
 namespace Shopware\Components\MultiEdit\Resource\Product;
 
+use Shopware\Components\Model\ModelManager;
+
 /**
  * The dql helper class holds some general helper methods used by various components
  *
@@ -33,14 +35,14 @@ class DqlHelper
 {
     /**
      * Reference to the PDO object
-     * @var \PDO
+     * @var \Enlight_Components_Db_Adapter_Pdo_Mysql
      */
     protected $db;
 
     /**
      * Reference to an instance of the EntityManager
      *
-     * @var \Shopware\Components\Model\ModelManager
+     * @var ModelManager
      */
     protected $em;
 
@@ -81,7 +83,6 @@ class DqlHelper
     protected $columnsNotToShowInGrid = array(
         'Tax_tax',
         'Detail_kind',
-        'Detail_active',
         'Detail_articleId',
         'Detail_unitId',
         'Article_template' ,
@@ -121,13 +122,13 @@ class DqlHelper
     /**
      * Constructor
      *
-     * @param \PDO $db
-     * @param \Shopware\Components\Model\ModelManager $em
+     * @param \Enlight_Components_Db_Adapter_Pdo_Mysql $db
+     * @param ModelManager $em
      * @param \Enlight_Event_EventManager $eventManager
      */
     public function __construct(
-        \PDO $db,
-        \Shopware\Components\Model\ModelManager $em,
+        \Enlight_Components_Db_Adapter_Pdo_Mysql $db,
+        ModelManager $em,
         \Enlight_Event_EventManager $eventManager
     ) {
         $this->db = $db;
@@ -140,7 +141,7 @@ class DqlHelper
     /**
      * Returns a reference to the Doctrine EntityManager
      *
-     * @return \Shopware\Components\Model\ModelManager
+     * @return ModelManager
      */
     public function getEntityManager()
     {
@@ -150,7 +151,7 @@ class DqlHelper
     /**
      * Returns a reference to our PDO object
      *
-     * @return \PDO
+     * @return \Enlight_Components_Db_Adapter_Pdo_Mysql
      */
     public function getDb()
     {
@@ -258,13 +259,14 @@ class DqlHelper
     public function getDefaultColumns()
     {
         return array(
-            0 => 'Detail_number',
-            1 => 'Article_name',
-            2 => 'Supplier_name',
-            3 => 'Article_active',
-            4 => 'Price_price',
-            5 => 'Tax_name',
-            6 => 'Detail_inStock'
+            'Detail_number',
+            'Article_name',
+            'Supplier_name',
+            'Article_active',
+            'Detail_active',
+            'Price_price',
+            'Tax_name',
+            'Detail_inStock'
         );
     }
 

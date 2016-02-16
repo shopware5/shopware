@@ -122,6 +122,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
 
         defaultSettingsProductLayoutLabel: '{s name=view/settings_default_settings_box_layout_label}Product layout{/s}',
         defaultSettingsProductLayoutHelp: '{s name=view/settings_default_settings_box_layout_help}Product layout allows you to control how your products are presented on the category page. Choose between three different layouts to fine-tune your product display. You can select a layout for each category or automatically adopt the settings from the parent category.{/s}',
+        defaultSettingsProductStream: '{s name=view/settings_default_settings_box_stream_label}Product stream{/s}',
 
         cmsTitle : '{s name=view/settings_cms_title}CMS functions{/s}',
         cmsHeaderLabel : '{s name=view/settings_cms_header_label}Header{/s}',
@@ -363,6 +364,11 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
             }
         });
 
+        me.streamSelection = Ext.create('Shopware.form.field.ProductStreamSelection', {
+            name: 'streamId',
+            labelWidth: 180
+        });
+
         return [
             {
                 xtype:'checkboxgroup',
@@ -394,6 +400,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
             },
             me.templateComboBox,
             me.productLayoutField,
+            me.streamSelection,
             {
                 xtype:'textfield',
                 fieldLabel:me.snippets.defaultSettingsLinkExternalPageLabel,

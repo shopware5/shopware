@@ -31,7 +31,7 @@
 function smarty_function_compileJavascript($params, $template)
 {
     $time = $params['timestamp'];
-	$output = $params['output'];
+    $output = $params['output'];
 
     /**@var $pathResolver \Shopware\Components\Theme\PathResolver*/
     $pathResolver = Shopware()->Container()->get('theme_path_resolver');

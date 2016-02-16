@@ -77,7 +77,7 @@
 	 	<name>max_execution_time</name><group>config</group><required>30</required>
 	</requirement>
 	<requirement>
-	 	<name>upload_max_filesize</name><group>config</group><required>10M</required>
+	 	<name>upload_max_filesize</name><group>config</group><required>6M</required>
 	</requirement>
 	<requirement>
 	 	<name>post_max_size</name><group>config</group><required>8M</required>

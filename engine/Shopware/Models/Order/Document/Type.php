@@ -120,7 +120,7 @@ class Type extends ModelEntity
      * Set name
      *
      * @param string $name
-     * @return SCoreDocuments
+     * @return Type
      */
     public function setName($name)
     {
@@ -142,7 +142,7 @@ class Type extends ModelEntity
      * Set template
      *
      * @param string $template
-     * @return SCoreDocuments
+     * @return Type
      */
     public function setTemplate($template)
     {
@@ -164,7 +164,7 @@ class Type extends ModelEntity
      * Set numbers
      *
      * @param string $numbers
-     * @return SCoreDocuments
+     * @return Type
      */
     public function setNumbers($numbers)
     {
@@ -186,7 +186,7 @@ class Type extends ModelEntity
      * Set left
      *
      * @param integer $left
-     * @return SCoreDocuments
+     * @return Type
      */
     public function setLeft($left)
     {
@@ -208,7 +208,7 @@ class Type extends ModelEntity
      * Set right
      *
      * @param integer $right
-     * @return SCoreDocuments
+     * @return Type
      */
     public function setRight($right)
     {
@@ -230,7 +230,7 @@ class Type extends ModelEntity
      * Set top
      *
      * @param integer $top
-     * @return SCoreDocuments
+     * @return Type
      */
     public function setTop($top)
     {
@@ -252,7 +252,7 @@ class Type extends ModelEntity
      * Set bottom
      *
      * @param integer $bottom
-     * @return SCoreDocuments
+     * @return Type
      */
     public function setBottom($bottom)
     {
@@ -274,7 +274,7 @@ class Type extends ModelEntity
      * Set pageBreak
      *
      * @param integer $pageBreak
-     * @return SCoreDocuments
+     * @return Type
      */
     public function setPageBreak($pageBreak)
     {

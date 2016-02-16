@@ -23,6 +23,21 @@ class Detail extends \Shopware\Tests\Mink\Page\Emotion\Detail
     }
 
     /**
+     * @inheritdoc
+     */
+    public function getNamedSelectors()
+    {
+        return [
+            'notificationFormSubmit' => ['de' => 'Eintragen', 'en' => 'Enter'],
+            'voteFormSubmit' => ['de' => 'Speichern', 'en' => 'Save'],
+            'inquiryLink' => ['de' => 'Fragen zum Artikel?', 'en' => 'Do you have any questions concerning this product?'],
+            'compareLink' => ['de' => 'Vergleichen', 'en' => 'Compare'],
+            'rememberLink' => ['de' => 'Merken', 'en' => 'Remember'],
+            'commentLink' => ['de' => 'Bewerten', 'en' => 'Comment'],
+        ];
+    }
+
+    /**
      * @var string[]
      */
     protected $configuratorTypes = [
@@ -48,7 +63,6 @@ class Detail extends \Shopware\Tests\Mink\Page\Emotion\Detail
     /**
      * @param ArticleEvaluation $articleEvaluations
      * @param $average
-     * @throws \Behat\Behat\Exception\PendingException
      * @throws \Exception
      */
     protected function checkRating(ArticleEvaluation $articleEvaluations, $average)

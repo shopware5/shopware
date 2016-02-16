@@ -406,3 +406,18 @@ div[id^=swag-notice-widget] {
 		padding: 0;
 	}
 }
+
+div[id^=swag-shopware-news-widget] .#{$prefix}grid-cell {
+
+    .#{$prefix}grid-cell-inner {
+        color: darken(#fff, 10%);
+        cursor: pointer;
+    }
+
+    &.is-unread {
+        .#{$prefix}grid-cell-inner {
+            font-weight: bold;
+            color: #fff !important;
+        }
+    }
+}

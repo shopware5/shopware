@@ -94,10 +94,7 @@
         // Call the init method of the plugin
         me.init();
 
-        /** @deprecated - will be removed in 5.1 */
-        $.publish('plugin/' + name + '/init', [ me ]);
-
-        $.publish('plugin/' + name + '/onInit', me);
+        $.publish('plugin/' + name + '/onInit', [ me ]);
     }
 
     PluginBase.prototype = {
@@ -166,14 +163,7 @@
 
             me.$el.removeData('plugin_' + name);
 
-            if (me.alias) {
-                me.$el.removeData('plugin_' + me.alias);
-            }
-
-            /** @deprecated - will be removed in 5.1 */
-            $.publish('plugin/' + name + '/destroy', [ me ]);
-
-            $.publish('plugin/' + name + '/onDestroy', me);
+            $.publish('plugin/' + name + '/onDestroy', [ me ]);
 
             return me;
         },
@@ -195,9 +185,6 @@
             me._events.push({ 'el': $el, 'event': event });
             args.unshift(event);
             $el.on.apply($el, args);
-
-            /** @deprecated - will be removed in 5.1 */
-            $.publish('plugin/' + me._name + '/on', [ $el, event ]);
 
             $.publish('plugin/' + me._name + '/onRegisterEvent', [ $el, event ]);
 
@@ -234,9 +221,6 @@
                 }
                 delete events[id];
             });
-
-            /** @deprecated - will be removed in 5.1 */
-            $.publish('plugin/' + me._name + '/off', [ $element, pluginEvent ]);
 
             $.publish('plugin/' + me._name + '/onRemoveEvent', [ $element, event ]);
 
@@ -379,11 +363,10 @@
      * $('.test').yourName();
      */
     $.plugin = function (name, plugin) {
-        var alias = plugin.alias,
-            pluginFn = function (options) {
+        var pluginFn = function (options) {
                 return this.each(function () {
                     var element = this,
-                        pluginData = $.data(element, 'plugin_' + alias) || $.data(element, 'plugin_' + name);
+                        pluginData = $.data(element, 'plugin_' + name);
 
                     if (!pluginData) {
                         if (typeof plugin === 'function') {
@@ -398,10 +381,6 @@
                         }
 
                         $.data(element, 'plugin_' + name, pluginData);
-
-                        if (alias) {
-                            $.data(element, 'plugin_' + alias, pluginData);
-                        }
                     }
                 });
             };
@@ -410,14 +389,6 @@
         window.PluginsCollection[name] = plugin;
 
         $.fn[name] = pluginFn;
-
-        if (alias) {
-            window.PluginsCollection[alias] = plugin;
-
-            if (!$.fn[alias]) {
-                $.fn[alias] = pluginFn;
-            }
-        }
     };
 
     /**
@@ -443,19 +414,16 @@
      * });
      */
     $.overridePlugin = function (pluginName, override) {
-        var overridePlugin = window.PluginsCollection[pluginName],
-            alias;
+        var overridePlugin = window.PluginsCollection[pluginName];
 
         if (typeof overridePlugin !== 'object' || typeof override !== 'object') {
             return false;
         }
 
-        alias = overridePlugin.alias;
-
         $.fn[pluginName] = function (options) {
             return this.each(function () {
                 var element = this,
-                    pluginData = $.data(element, 'plugin_' + alias) || $.data(element, 'plugin_' + pluginName);
+                    pluginData = $.data(element, 'plugin_' + pluginName);
 
                 if (!pluginData) {
                     var Plugin = function () {
@@ -466,10 +434,6 @@
                     pluginData = new Plugin();
 
                     $.data(element, 'plugin_' + pluginName, pluginData);
-
-                    if (alias) {
-                        $.data(element, 'plugin_' + pluginName, pluginData);
-                    }
                 }
             });
         };

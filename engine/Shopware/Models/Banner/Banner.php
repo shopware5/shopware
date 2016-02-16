@@ -187,7 +187,7 @@ class Banner extends ModelEntity
      *
      * This field may be null or empty
      *
-     * @param \DateTime $validFrom
+     * @param \DateTime|string $validFrom
      * @return Banner
      */
     public function setValidFrom($validFrom)
@@ -217,7 +217,7 @@ class Banner extends ModelEntity
     /**
      * Sets the date and time this banner should stopped to been displayed
      *
-     * @param \DateTime $validTo
+     * @param \DateTime|string $validTo
      * @return Banner
      */
     public function setValidTo($validTo)

@@ -23,8 +23,9 @@
  */
 namespace Shopware\Components\Theme;
 
-use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\AbstractQuery;
+use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Shop as Shop;
 use Shopware\Models\Theme\Settings;
@@ -60,18 +61,26 @@ class Service
     private $util;
 
     /**
+     * @var MediaServiceInterface
+     */
+    private $mediaService;
+
+    /**
      * @param ModelManager $entityManager
      * @param \Shopware_Components_Snippet_Manager $snippets
      * @param Util $util
+     * @param MediaServiceInterface $mediaService
      */
     public function __construct(
         ModelManager $entityManager,
         \Shopware_Components_Snippet_Manager $snippets,
-        Util $util
+        Util $util,
+        MediaServiceInterface $mediaService
     ) {
         $this->entityManager = $entityManager;
         $this->snippets = $snippets;
         $this->util = $util;
+        $this->mediaService = $mediaService;
     }
 
     /**
@@ -340,8 +349,7 @@ class Service
             $themes = array_merge(
                 $themes,
                 $this->getConfigSets(
-                    $template->getParent(),
-                    $namespace
+                    $template->getParent()
                 )
             );
         }
@@ -411,6 +419,10 @@ class Service
                 'Shopware\Models\Shop\Shop',
                 $data['shopId']
             );
+
+            if ($element->getType() === 'theme-media-selection') {
+                $data['value'] = $this->mediaService->normalize($data['value']);
+            }
 
             $value->setShop($shop);
             $value->setElement($element);
@@ -534,11 +546,11 @@ class Service
      * Helper function which checks if the element name is already exists in the
      * passed collection of config elements.
      *
-     * @param \Doctrine\Common\Collections\ArrayCollection $collection
-     * @param $name
+     * @param Collection $collection
+     * @param string $name
      * @return Shop\TemplateConfig\Element
      */
-    private function getElementByName(ArrayCollection $collection, $name)
+    private function getElementByName(Collection $collection, $name)
     {
         /**@var $element Shop\TemplateConfig\Element */
         foreach ($collection as $element) {
@@ -554,11 +566,11 @@ class Service
      * value collection.
      * If no shop value exist, the function creates a new value object.
      *
-     * @param ArrayCollection $collection
-     * @param $shopId
+     * @param Collection $collection
+     * @param int $shopId
      * @return Shop\TemplateConfig\Value
      */
-    private function getElementShopValue(ArrayCollection $collection, $shopId)
+    private function getElementShopValue(Collection $collection, $shopId)
     {
         /**@var $value Shop\TemplateConfig\Value */
         foreach ($collection as $value) {

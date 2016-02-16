@@ -699,62 +699,6 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     }
 
     /**
-     * @deprecated Will be executed automatically.
-     */
-    public function deleteForm()
-    {
-    }
-
-    /**
-     * @deprecated Will be executed automatically.
-     */
-    public function deleteConfig()
-    {
-    }
-
-    /**
-     * @deprecated Use the event subscriber direct
-     *
-     * @param      $event
-     * @param      $listener
-     * @param null $position
-     *
-     * @return Enlight_Event_Handler_Plugin
-     */
-    public function createEvent($event, $listener, $position = null)
-    {
-        $handler = new Enlight_Event_Handler_Plugin(
-            $event, $this->collection, $this, $listener, $position
-        );
-
-        return $handler;
-    }
-
-    /**
-     * @deprecated Use the event subscriber (Event: class::method::type)
-     *
-     * @param        $class
-     *
-     * @deprecated
-     *
-     * @param        $method
-     * @param        $listener
-     * @param   null $type
-     * @param   null $position
-     *
-     * @return  Enlight_Event_Handler_Plugin
-     */
-    public function createHook($class, $method, $listener, $type = null, $position = null)
-    {
-        $handler = new Enlight_Event_Handler_Plugin(
-            $class . '::' . $method . '::' . $type,
-            $this->collection, $this, $listener, $position
-        );
-
-        return $handler;
-    }
-
-    /**
      * Subscribe hook method
      *
      * @param Enlight_Hook_HookHandler $handler
@@ -764,23 +708,6 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     public function subscribeHook($handler)
     {
         return $this->subscribeEvent($handler);
-    }
-
-    /**
-     * Subscribe cron method
-     *
-     * @deprecated Use the createCronJob method
-     */
-    public function subscribeCron(
-        $name,
-        $action,
-        $interval = 86400,
-        $active = true,
-        $next = null,
-        $start = null,
-        $end = null
-    ) {
-        $this->createCronJob($name, $action, $interval, $active);
     }
 
     /**
@@ -835,7 +762,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      * Check if a given version is greater or equal to
      * the currently installed shopware version.
      *
-     * @deprectated 4.1.3 Use assertMinimumVersion instead
+     * @deprecated 4.1.3 Use assertMinimumVersion instead
      *
      * @param  $requiredVersion string Format: 3.5.4 or 3.5.4.21111
      *

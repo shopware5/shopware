@@ -32,7 +32,6 @@ class Shopware_Controllers_Backend_Overview extends Shopware_Controllers_Backend
      */
     protected function initAcl()
     {
-        $this->setAclResourceName('overview');
         $this->addAclPermission('getOrderSummary', 'read');
     }
 
@@ -47,8 +46,8 @@ class Shopware_Controllers_Backend_Overview extends Shopware_Controllers_Backend
                 SUM(visitors.uniquevisits)/SUM(order_count.order_count) AS averageUsers,
                 SUM(visitors.pageimpressions) AS hits,
                 order_count.order_count AS countOrders,
-                SUM(customer_count.new_customer_count) AS countUsers,
-                SUM(customer_count.new_customer_order_count) AS countCustomers,
+                customer_count.new_customer_count AS countUsers,
+                customer_count.new_customer_order_count AS countCustomers,
                 order_amount.amount AS amount,
                 visitors.datum AS `date`
             FROM s_statistics_visitors AS visitors
@@ -104,7 +103,7 @@ class Shopware_Controllers_Backend_Overview extends Shopware_Controllers_Backend
                     $order[$key] = 0;
                 }
             }
-            if (!empty($order['countOrders'])) {
+            if ($order['countOrders'] != 0) {
                 $order['averageOrders'] = $order['amount'] / $order['countOrders'];
             } else {
                 $order['averageOrders'] = 0;
@@ -112,6 +111,7 @@ class Shopware_Controllers_Backend_Overview extends Shopware_Controllers_Backend
             $order['amount'] = round($order['amount'], 2);
             $orders[] = $order;
         }
+
         $this->View()->assign(array(
             'success' => true,
             'data'    => $orders,

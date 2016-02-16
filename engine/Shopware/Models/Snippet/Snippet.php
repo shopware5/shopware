@@ -230,7 +230,7 @@ class Snippet extends ModelEntity
     /**
      * Set created
      *
-     * @param \DateTime $created
+     * @param \DateTime|string $created
      * @return \Shopware\Models\Snippet\Snippet
      */
     public function setCreated($created = 'now')
@@ -257,7 +257,7 @@ class Snippet extends ModelEntity
     /**
      * Set updated
      *
-     * @param \DateTime $updated
+     * @param \DateTime|string $updated
      * @return \Shopware\Models\Snippet\Snippet
      */
     public function setUpdated($updated = 'now')

@@ -56,14 +56,6 @@ class sSystem
     public $sSMARTY;
 
     /**
-     * Current database connection
-     *
-     * @var Enlight_Components_Adodb
-     * @deprecated Use Shopware()->Db(), will be removed in SW 5.1
-     */
-    public $sDB_CONNECTION;
-
-    /**
      * Pointer to the different modules and its inherits
      *
      * @var Shopware_Components_Modules
@@ -123,25 +115,11 @@ class sSystem
     public $sPathBanner;
 
     /**
-     * Path to Article downloads
-     *
-     * @var string
-     */
-    public $sPathArticleFiles;
-
-    /**
      * Path to Start
      *
      * @var string
      */
     public $sPathStart;
-
-    /**
-     * Strip parts of rewritten urls and append them
-     *
-     * @var array
-     */
-    public $sExtractor;
 
     /**
      * Current active currency
@@ -150,14 +128,6 @@ class sSystem
      * @deprecated Use Shopware()->Shop()->getCurrency() or Shopware()->Shop()->getCurrency()->toArray()
      */
     public $sCurrency;
-
-    /**
-     * Current active subshop
-     *
-     * @var array
-     * @deprecated
-     */
-    public $sSubShop;
 
     /**
      * Pointer to PHP-Mailer Object
@@ -222,18 +192,6 @@ class sSystem
         }
 
         return null;
-    }
-
-    /**
-     * @deprecated Throw your specific exceptions
-     *
-     * @param $WARNING_ID
-     * @param $WARNING_MESSAGE
-     * @throws Enlight_Exception
-     */
-    public function E_CORE_WARNING($WARNING_ID, $WARNING_MESSAGE)
-    {
-        throw new Enlight_Exception($WARNING_ID.': '.$WARNING_MESSAGE);
     }
 
     /**

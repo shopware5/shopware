@@ -1,26 +1,25 @@
 /*
 Tab-menu
 ==========================================
-The shopware tab-menu allows the creation of multiple tabs filled with content that the user can swtich between.
+The Shopware tab-menu allows the creation of multiple tabs filled with content that the user can swtich between.
 
 The functionality is provided by the `jquery.tab-menu.js` file.
-```
-<div class="tab-menu--product js--tab-menu">
 
-    <div class="tab--navigation">
-        <a href="#" class="tab--link is--active" title="Tab-1">First Tab</a>
-        <a href="#" class="tab--link" title="Tab-2">Second Tab</a>
-    </div>
-
-    <div class="tab--container-list">
-        <div class="tab--container is--active">
+    <div class="tab-menu--product js--tab-menu">
+    
+        <div class="tab--navigation">
+            <a href="#" class="tab--link is--active" title="Tab-1">First Tab</a>
+            <a href="#" class="tab--link" title="Tab-2">Second Tab</a>
         </div>
-        <div class="tab--container">
+    
+        <div class="tab--container-list">
+            <div class="tab--container is--active">
+            </div>
+            <div class="tab--container">
+            </div>
         </div>
+    
     </div>
-
-</div>
-```
 */
 
 .js--tab-menu {
@@ -65,6 +64,23 @@ The functionality is provided by the `jquery.tab-menu.js` file.
 
         &.has--content {
             display: inline-block;
+        }
+    }
+
+    // Different styling when tab navigation is scrollable
+    &.js--menu-scroller {
+        .tab--navigation { overflow: hidden; }
+        .tab--navigation .js--menu-scroller--item { top: 0; }
+
+        .js--menu-scroller--arrow {
+            .unitize(line-height, 46);
+            .unitize-height(46);
+            .border-radius();
+            border: 1px solid @btn-default-border-color;
+
+            &:hover {
+                border-color: @btn-default-hover-border-color;
+            }
         }
     }
 

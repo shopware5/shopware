@@ -31,28 +31,9 @@ use Shopware\Models\Mail\Attachment;
 class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_ExtJs
 {
     /**
-     * Entity Manager
-     * @var null
-     */
-    protected $manager = null;
-
-    /**
      * @var \Shopware\Models\Mail\Repository
      */
     protected $repository = null;
-
-
-    /**
-     * Internal helper function to get access to the entity manager.
-     * @return null
-     */
-    private function getManager()
-    {
-        if ($this->manager === null) {
-            $this->manager= Shopware()->Models();
-        }
-        return $this->manager;
-    }
 
     /**
      * Internal helper function to get access to the mail repository.
@@ -92,7 +73,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
     public function getMailsAction()
     {
         /** @var $namespace Enlight_Components_Snippet_Namespace */
-        $snippet = Shopware()->Snippets()->getNamespace('backend/mail');
+        $snippet = Shopware()->Snippets()->getNamespace('backend/mail/view/navigation');
 
         // if id is provided return a single mail instead of a collection
         $id = $this->Request()->getParam('id');
@@ -145,10 +126,16 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
             );
 
             if ($mail->isOrderStateMail()) {
-                $node['name']  = $mail->getStatus()->getDescription();
+                $orderStatus = $mail->getStatus();
+                $node['name'] = $this->get('snippets')
+                        ->getNamespace('backend/static/order_status')
+                        ->get($orderStatus->getName(), $orderStatus->getDescription());
                 $orderNodes['data'][] = $node;
             } elseif ($mail->isPaymentStateMail()) {
-                $node['name']  = $mail->getStatus()->getDescription();
+                $paymentStatus = $mail->getStatus();
+                $node['name'] = $this->get('snippets')
+                    ->getNamespace('backend/static/payment_status')
+                    ->get($paymentStatus->getName(), $paymentStatus->getDescription());
                 $paymentNodes['data'][] = $node;
             } elseif ($mail->isSystemMail()) {
                 $systemNodes['data'][] = $node;
@@ -465,7 +452,7 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
             $this->View()->assign(array('success' => false, 'message' => 'Value not found'));
         }
 
-        $compiler = new Shopware_Components_StringCompiler($this->View());
+        $compiler = new Shopware_Components_StringCompiler($this->View()->Engine());
 
         $shop = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop')->getActiveDefault();
         $shop->registerResources(Shopware()->Bootstrap());

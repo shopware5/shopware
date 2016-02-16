@@ -20,8 +20,6 @@
      */
     $.plugin('swCaptcha', {
 
-        alias: 'captcha',
-
         /**
          * Default plugin initialisation function.
          * Registers all needed event listeners and sends a request to load the captcha image.
@@ -67,11 +65,11 @@
                 success: function (response) {
                     $el.html(response);
 
-                    $.publish('plugin/swCaptcha/onSendRequestSuccess', me);
+                    $.publish('plugin/swCaptcha/onSendRequestSuccess', [ me ]);
                 }
             });
 
-            $.publish('plugin/swCaptcha/onSendRequest', me);
+            $.publish('plugin/swCaptcha/onSendRequest', [ me ]);
         }
     });
 })(jQuery, window);

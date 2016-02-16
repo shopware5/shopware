@@ -39,10 +39,17 @@ class Attribute extends Struct implements \JsonSerializable
     protected $storage = [];
 
     /**
-     * @param $data
+     * @param array $data
+     * @throws \Exception
      */
     public function __construct($data = [])
     {
+        if (!$this->isValid($data)) {
+            throw new \Exception(sprintf(
+                'Class values should be serializable',
+                __CLASS__
+            ));
+        }
         $this->storage = $data;
     }
 
@@ -68,7 +75,7 @@ class Attribute extends Struct implements \JsonSerializable
      */
     public function set($name, $value)
     {
-        if (!is_scalar($value) && $value !== null) {
+        if (!$this->isValid($value)) {
             throw new \Exception(sprintf(
                 'Class values should be serializable',
                 __CLASS__
@@ -76,6 +83,31 @@ class Attribute extends Struct implements \JsonSerializable
         }
 
         $this->storage[$name] = $value;
+    }
+
+    /**
+     * @param mixed $value
+     * @return bool
+     */
+    private function isValid($value)
+    {
+        if (is_scalar($value)) {
+            return true;
+        }
+        if ($value instanceof \JsonSerializable) {
+            return true;
+        }
+        if (!is_array($value)) {
+            return true;
+        }
+
+        foreach ($value as $val) {
+            if (!$this->isValid($val)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**

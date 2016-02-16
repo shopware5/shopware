@@ -58,7 +58,7 @@ class LegacySearchSubscriber implements SubscriberInterface
         $args->getSubject()->View()->assign($data);
     }
 
-    public function convertSearchParameter(\Enlight_Controller_EventArgs $args)
+    public function convertSearchParameter(\Enlight_Controller_ActionEventArgs $args)
     {
         /**@var $shop Shop */
         $shop = $this->container->get('shop');
@@ -87,9 +87,9 @@ class LegacySearchSubscriber implements SubscriberInterface
     }
 
     /**
-     * @param \Enlight_Controller_EventArgs $args
+     * @param \Enlight_Controller_ActionEventArgs $args
      */
-    public function convertSearch(\Enlight_Controller_EventArgs $args)
+    public function convertSearch(\Enlight_Controller_ActionEventArgs $args)
     {
         /**@var $shop Shop */
         $shop = $this->container->get('shop');
@@ -171,7 +171,12 @@ class LegacySearchSubscriber implements SubscriberInterface
 
     private function getPages(Criteria $criteria, $currentPage, $totalCount)
     {
-        $numberPages = ceil($totalCount / $criteria->getLimit());
+        if ($criteria->getLimit() != 0) {
+            $numberPages = ceil($totalCount / $criteria->getLimit());
+        } else {
+            $numberPages = 0;
+        }
+
         if ($numberPages > 1) {
             for ($i = 1; $i <= $numberPages; $i++) {
                 $sPages['pages'][$i] = $i;
@@ -277,7 +282,7 @@ class LegacySearchSubscriber implements SubscriberInterface
                 $result[$index] = 1;
             }
         }
-        
+
         return $result;
     }
 

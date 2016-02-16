@@ -11,8 +11,6 @@
      */
     $.plugin('swSearch', {
 
-        alias: 'search',
-
         defaults: {
 
             /**
@@ -247,6 +245,14 @@
              */
             me.keyupTimeout = 0;
 
+            /**
+             * Indicates if the form is already submitted
+             *
+             * @type {boolean}
+             * @private
+             */
+            me._isSubmitting = false;
+
             me.registerListeners();
         },
 
@@ -259,11 +265,13 @@
         registerListeners: function () {
             var me = this,
                 opts = me.opts,
-                $searchField = me.$searchField;
+                $searchField = me.$searchField,
+                $formElement = me.$searchField.closest('form');
 
             me._on($searchField, 'keyup', $.proxy(me.onKeyUp, me));
             me._on($searchField, 'keydown', $.proxy(me.onKeyDown, me));
             me._on(me.$toggleSearchBtn, 'click', $.proxy(me.onClickSearchEntry, me));
+            me._on($formElement, 'submit', $.proxy(me.onSubmit, me));
 
             if (msPointerEnabled) {
                 me.$results.on('click', opts.resultLinkSelector, function (event) {
@@ -283,7 +291,7 @@
                 }
             });
 
-            $.publish('plugin/swSearch/onRegisterEvents', me);
+            $.publish('plugin/swSearch/onRegisterEvents', [ me ]);
         },
 
         /**
@@ -301,10 +309,7 @@
                 keyCode = event.which,
                 navKeyPressed = opts.keyBoardNavigation && (keyCode === keyMap.UP || keyCode === keyMap.DOWN || keyCode === keyMap.ENTER);
 
-            /** @deprecated - will be removed in 5.1 */
-            $.publish('plugin/search/onKeyDown', [ me, event ]);
-
-            $.publish('plugin/swSearch/onKeyDown', [me, event]);
+            $.publish('plugin/swSearch/onKeyDown', [ me, event ]);
 
             if (navKeyPressed && me.$results.hasClass(opts.activeCls)) {
                 me.onKeyboardNavigation(keyCode);
@@ -328,10 +333,7 @@
                 term = me.$searchField.val() + '',
                 timeout = me.keyupTimeout;
 
-            /** @deprecated - will be removed in 5.1 */
-            $.publish('plugin/search/onKeyUp', [ me, event ]);
-
-            $.publish('plugin/swSearch/onKeyUp', [me, event]);
+            $.publish('plugin/swSearch/onKeyUp', [ me, event ]);
 
             if (timeout) {
                 window.clearTimeout(timeout);
@@ -351,6 +353,22 @@
         },
 
         /**
+         * Blocks further submit events to throttle requests to the server
+         *
+         * @param event
+         */
+        onSubmit: function (event) {
+            var me = this;
+
+            if (me._isSubmitting) {
+                event.preventDefault();
+                return;
+            }
+
+            me._isSubmitting = true;
+        },
+
+        /**
          * Triggers an AJAX request with the given search term.
          *
          * @public
@@ -364,10 +382,7 @@
 
             me.lastSearchTerm = $.trim(searchTerm);
 
-            /** @deprecated - will be removed in 5.1 */
-            $.publish('plugin/search/onSearchRequest', [ me, searchTerm ]);
-
-            $.publish('plugin/swSearch/onSearchRequest', [me, searchTerm]);
+            $.publish('plugin/swSearch/onSearchRequest', [ me, searchTerm ]);
 
             $.ajax({
                 'url': me.requestURL,
@@ -377,10 +392,7 @@
                 'success': function (response) {
                     me.showResult(response);
 
-                    /** @deprecated - will be removed in 5.1 */
-                    $.publish('plugin/search/onSearchResponse', [ me, searchTerm, response ]);
-
-                    $.publish('plugin/swSearch/onSearchResponse', [me, searchTerm, response]);
+                    $.publish('plugin/swSearch/onSearchResponse', [ me, searchTerm, response ]);
                 }
             });
         },
@@ -405,10 +417,7 @@
 
             picturefill();
 
-            /** @deprecated - will be removed in 5.1 */
-            $.publish('plugin/search/onShowResult', me);
-
-            $.publish('plugin/swSearch/onShowResult', me);
+            $.publish('plugin/swSearch/onShowResult', [ me ]);
         },
 
         /**
@@ -422,10 +431,7 @@
 
             me.$results.removeClass(me.opts.activeCls).hide().empty();
 
-            /** @deprecated - will be removed in 5.1 */
-            $.publish('plugin/search/onCloseResult', me);
-
-            $.publish('plugin/swSearch/onCloseResult', me);
+            $.publish('plugin/swSearch/onCloseResult', [ me ]);
         },
 
         /**
@@ -469,10 +475,7 @@
                 $nextSibling,
                 firstLast;
 
-            /** @deprecated - will be removed in 5.1 */
-            $.publish('plugin/search/onKeyboardNavigation', [ me, keyCode ]);
-
-            $.publish('plugin/swSearch/onKeyboardNavigation', [me, keyCode]);
+            $.publish('plugin/swSearch/onKeyboardNavigation', [ me, keyCode ]);
 
             if (keyCode === keyMap.UP || keyCode === keyMap.DOWN) {
                 $resultItems = $results.find(opts.resultItemSelector);
@@ -518,10 +521,7 @@
                 $el = me.$el,
                 opts = me.opts;
 
-            /** @deprecated - will be removed in 5.1 */
-            $.publish('plugin/search/onClickSearchEntry', [ me, event ]);
-
-            $.publish('plugin/swSearch/onClickSearchEntry', [me, event]);
+            $.publish('plugin/swSearch/onClickSearchEntry', [ me, event ]);
 
             if (!StateManager.isCurrentState('xs')) {
                 return;
@@ -553,10 +553,7 @@
 
             me.$searchField.focus();
 
-            /** @deprecated - will be removed in 5.1 */
-            $.publish('plugin/search/onOpenMobileSearch', [ me ]);
-
-            $.publish('plugin/swSearch/onOpenMobileSearch', me);
+            $.publish('plugin/swSearch/onOpenMobileSearch', [ me ]);
         },
 
         /**
@@ -577,10 +574,7 @@
 
             me.$searchField.blur();
 
-            /** @deprecated - will be removed in 5.1 */
-            $.publish('plugin/search/onCloseMobileSearch', [ me ]);
-
-            $.publish('plugin/swSearch/onCloseMobileSearch', me);
+            $.publish('plugin/swSearch/onCloseMobileSearch', [ me ]);
 
             me.closeResult();
         },

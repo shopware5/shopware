@@ -40,7 +40,6 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
      */
     protected function initAcl()
     {
-        $this->setAclResourceName('canceled_order');
         // read
         $this->addAclPermission('getStatistics', 'read', 'Insufficient Permissions');
         $this->addAclPermission('getArticle', 'read', 'Insufficient Permissions');
@@ -108,7 +107,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
             $outOfStock = $this->getOutOfStockProducts($orderModel);
 
             if (!empty($outOfStock)) {
-                $numbers = array_map(function(\Shopware\Models\Article\Detail $variant) {
+                $numbers = array_map(function (\Shopware\Models\Article\Detail $variant) {
                     return $variant->getNumber();
                 }, $outOfStock);
 
@@ -229,13 +228,15 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         $data = Shopware()->Db()->fetchAll($sql, $params);
 
         // Insert the percentage into each field manually
-        $sum = 0;
         if ($data !== null && isset($total)) {
-            for ($i=0;$i<count($data);$i++) {
-                $data[$i]['percent'] = round($data[$i]['number'] / $total * 100, 1);
+            for ($i = 0; $i < count($data); $i++) {
+                if ($total != 0) {
+                    $data[$i]['percent'] = round($data[$i]['number'] / $total * 100, 1);
+                } else {
+                    $data[$i]['percent'] = 0;
+                }
             }
         }
-
 
         $this->View()->assign([
             'success' => true,

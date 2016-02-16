@@ -2,13 +2,20 @@
 
 namespace Shopware\Tests\Mink;
 
-use \Behat\Behat\Exception\PendingException;
+use \Behat\Behat\Tester\Exception\PendingException;
 use \SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use \SensioLabs\Behat\PageObjectExtension\PageObject\Element;
 use Shopware\Tests\Mink\Element\MultipleElement;
 
 class Helper
 {
+    private static $language;
+
+    public static function setCurrentLanguage($language)
+    {
+        self::$language = $language;
+    }
+
     /**
      * Helper function to check each row of an array.
      * If each second sub-element of a row is equal or in its first, function returns true
@@ -205,7 +212,6 @@ class Helper
         }
 
         return $elements;
-
     }
 
     /**
@@ -330,10 +336,10 @@ Stacktrace:
 EOD
         ];
 
-        foreach($debug as $key => $call) {
+        foreach ($debug as $key => $call) {
             $next = $debug[$key + 1];
 
-            if(!isset($next['class'])) {
+            if (!isset($next['class'])) {
                 break;
             }
 
@@ -364,108 +370,108 @@ EOD
      * Checks if a page or element has the requested named link
      * @param Page|Element|HelperSelectorInterface $parent
      * @param string $key
-     * @param string $language
      * @return bool
-     * @throws \Exception
-     * @throws PendingException
      */
-    public static function hasNamedLink(HelperSelectorInterface $parent, $key, $language = '')
+    public static function hasNamedLink(HelperSelectorInterface $parent, $key)
     {
-        $locatorArray = $parent->getNamedSelectors();
+        return (self::hasNamedLinks($parent, [$key]) === true) ?: false;
+    }
 
-        if (empty($language)) {
-            if ($parent instanceof Page) {
-                $language = self::getCurrentLanguage($parent);
-            } else {
-                self::throwException('For elements the language has to be set!', self::EXCEPTION_PENDING);
-            }
-        }
+    /**
+     * Searches for named links given by $keys. Returns true if all exist, otherwise an array of the not found keys.
+     * @param Page|Element|HelperSelectorInterface $parent
+     * @param string[] $keys
+     * @return bool|string[]
+     */
+    public static function hasNamedLinks(HelperSelectorInterface $parent, array $keys)
+    {
+        $notFound = [];
+        $locatorArray = $parent->getNamedSelectors();
 
         if ($parent instanceof Page) {
             $parent = self::getContentBlock($parent);
         }
 
-        return $parent->hasLink($locatorArray[$key][$language]);
+        foreach($keys as $key) {
+            if($parent->hasLink($locatorArray[$key][self::$language])) {
+                continue;
+            }
+
+            $notFound[$key] = $locatorArray[$key][self::$language];
+        }
+
+        return ($notFound) ?: true;
     }
 
     /**
      * Clicks the requested named link
      * @param Page|Element|HelperSelectorInterface $parent
      * @param string $key
-     * @param string $language
      * @throws \Exception
      * @throws PendingException
      */
-    public static function clickNamedLink(HelperSelectorInterface $parent, $key, $language = '')
+    public static function clickNamedLink(HelperSelectorInterface $parent, $key)
     {
         $locatorArray = $parent->getNamedSelectors();
-
-        if (empty($language)) {
-            if ($parent instanceof Page) {
-                $language = self::getCurrentLanguage($parent);
-            } else {
-                self::throwException('For elements the language has to be set!', self::EXCEPTION_PENDING);
-            }
-        }
 
         if ($parent instanceof Page) {
             $parent = self::getContentBlock($parent);
         }
 
-        $parent->clickLink($locatorArray[$key][$language]);
+        $parent->clickLink($locatorArray[$key][self::$language]);
     }
 
     /**
      * Checks if a page or element has the requested named link
      * @param Page|Element|HelperSelectorInterface $parent
      * @param string $key
-     * @param string $language
      * @return bool
-     * @throws \Exception
-     * @throws PendingException
      */
-    public static function hasNamedButton(HelperSelectorInterface $parent, $key, $language = '')
+    public static function hasNamedButton(HelperSelectorInterface $parent, $key)
     {
-        $locatorArray = $parent->getNamedSelectors();
+        return (self::hasNamedButtons($parent, [$key]) === true) ?: false;
+    }
 
-        if (empty($language)) {
-            if ($parent instanceof Page) {
-                $language = self::getCurrentLanguage($parent);
-            } else {
-                self::throwException('For elements the language has to be set!', self::EXCEPTION_PENDING);
-            }
-        }
+    /**
+     * Searches for named buttons given by $keys. Returns true if all exist, otherwise an array of the not found keys.
+     * @param Page|Element|HelperSelectorInterface $parent
+     * @param string[] $keys
+     * @return bool|string[]
+     */
+    public static function hasNamedButtons(HelperSelectorInterface $parent, array $keys)
+    {
+        $notFound = [];
+        $locatorArray = $parent->getNamedSelectors();
 
         if ($parent instanceof Page) {
             $parent = self::getContentBlock($parent);
         }
 
-        return $parent->hasButton($locatorArray[$key][$language]);
+        foreach($keys as $key) {
+            if($parent->hasButton($locatorArray[$key][self::$language])) {
+                continue;
+            }
+
+            $notFound[$key] = $locatorArray[$key][self::$language];
+        }
+
+        return ($notFound) ?: true;
     }
 
     /**
      * Presses the requested named button
      * @param Page|Element|HelperSelectorInterface $parent
      * @param string $key
-     * @param string $language
      */
-    public static function pressNamedButton(HelperSelectorInterface $parent, $key, $language = '')
+    public static function pressNamedButton(HelperSelectorInterface $parent, $key)
     {
         $locatorArray = $parent->getNamedSelectors();
-
-        if (empty($language)) {
-            if ($parent instanceof Page) {
-                $language = self::getCurrentLanguage($parent);
-            } else {
-                self::throwException('For elements the language has to be set!', self::EXCEPTION_PENDING);
-            }
-        }
 
         if ($parent instanceof Page) {
             $parent = self::getContentBlock($parent);
         }
 
-        $parent->pressButton($locatorArray[$key][$language]);
+        $parent->pressButton($locatorArray[$key][self::$language]);
     }
 
     /**
@@ -552,20 +558,11 @@ EOD
 
     /**
      * Helper function to get the current language ('de' or 'en')
-     * @param Page $page
      * @return string
      */
-    public static function getCurrentLanguage(Page $page)
+    public static function getCurrentLanguage()
     {
-        $shop = null;
-        $meta = $page->find('css', 'meta[name=application-name]');
-        $shop = $meta->getAttribute('content');
-
-        if ($shop === 'English') {
-            return 'en';
-        }
-
-        return 'de';
+        return self::$language;
     }
 
     /**

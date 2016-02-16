@@ -67,7 +67,7 @@ class SnippetValidator
 
         /** @var $entry \SplFileInfo */
         foreach ($iterator as $entry) {
-            if (!$entry->isFile() || substr($entry->getFileName(), -4) !== '.ini') {
+            if (!$entry->isFile() || substr($entry->getFilename(), -4) !== '.ini') {
                 continue;
             }
 

@@ -297,6 +297,7 @@ Ext.define('Shopware.apps.ArticleList.controller.Main', {
      * @param searchTerm
      */
     onSearch: function (searchTerm) {
+
         var me = this,
                 filter,
                 result,
@@ -307,7 +308,9 @@ Ext.define('Shopware.apps.ArticleList.controller.Main', {
         }
 
         if (searchTerm && searchTerm.length > 0) {
-            filter = '(article.name ~ "[0]" OR detail.number ~ "[0]" OR supplier.name ~ "[0]") AND ';
+            searchTerm = me.filterSearchTerm(searchTerm);
+
+            filter = '(article.name = "%[0]%" OR detail.number = "%[0]%" OR supplier.name = "%[0]%") AND ';
             filter = Ext.String.format(filter, searchTerm);
         } else {
             filter = '';
@@ -317,8 +320,26 @@ Ext.define('Shopware.apps.ArticleList.controller.Main', {
         if (result) {
             me.lastSearchFilter = filter;
         }
-    }
+    },
 
+    /**
+     * Removes quotes from searchTerm that will break the parser/lexer.
+     *
+     * @param searchTerm
+     * @returns string
+     */
+    filterSearchTerm: function (searchTerm) {
+        // remove leading "
+        searchTerm = searchTerm.replace(/^"/, "");
+
+        // remove trailing "
+        searchTerm = searchTerm.replace(/"$/, "");
+
+        // replace " by _ wildcard
+        searchTerm = searchTerm.replace(/"/g, "_");
+
+        return searchTerm;
+    }
 
 });
 //{/block}

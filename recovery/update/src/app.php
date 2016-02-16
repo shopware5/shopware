@@ -160,6 +160,10 @@ $app->map('/cleanup', function () use ($container) {
 })->via('GET', 'POST')->name('cleanup');
 
 $app->map('/done', function () use ($app, $container) {
+    /** @var \Shopware\Components\Theme\Installer $themeService */
+    $themeService = $container->get('shopware.theme_installer');
+    $themeService->synchronize();
+
     if (is_dir(SW_PATH.'/recovery/install')) {
         /** @var \Shopware\Recovery\Common\SystemLocker $systemLocker */
         $systemLocker = $container->get('system.locker');

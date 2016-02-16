@@ -283,9 +283,9 @@
                 $modalBox.css('top', 0);
             }
 
+            me.setTitle(opts.title);
             me.setWidth(opts.width);
             me.setHeight(opts.height);
-            me.setTitle(opts.title);
 
             // set display to block instead of .show() for browser compatibility
             $modalBox.css('display', 'block');
@@ -298,7 +298,7 @@
                         },
                         success: function (result) {
                             me.setContent(result);
-                            $.publish('plugin/modal/onOpenAjax', me);
+                            $.publish('plugin/swModal/onOpenAjax', me);
                         }
                     });
                     me.options.src = content;
@@ -318,7 +318,7 @@
 
             $html.addClass('no--scroll');
 
-            $.publish('plugin/modal/onOpen', me);
+            $.publish('plugin/swModal/onOpen', [ me ]);
 
             return me;
         },
@@ -356,7 +356,7 @@
                 });
             }
 
-            $.publish('plugin/modal/onClose', me);
+            $.publish('plugin/swModal/onClose', [ me ]);
 
             return me;
         },
@@ -389,7 +389,7 @@
 
             $modalBox.stop(true).transition(css, opts.duration, opts.animation, callback);
 
-            $.publish('plugin/modal/onSetTransition', [me, css, opts]);
+            $.publish('plugin/swModal/onSetTransition', [ me, css, opts ]);
         },
 
         /**
@@ -404,7 +404,7 @@
 
             me._$title.html(title);
 
-            $.publish('plugin/modal/onSetTitle', [me, title]);
+            $.publish('plugin/swModal/onSetTitle', [ me, title ]);
         },
 
         /**
@@ -432,7 +432,7 @@
                 picturefill();
             }
 
-            $.publish('plugin/modal/onSetContent', me);
+            $.publish('plugin/swModal/onSetContent', [ me ]);
         },
 
         /**
@@ -448,7 +448,7 @@
 
             me._$modalBox.css('width', (typeof width === 'string' && !(/^\d+$/.test(width))) ? width : parseInt(width, 10));
 
-            $.publish('plugin/modal/onSetWidth', me);
+            $.publish('plugin/swModal/onSetWidth', [ me ]);
         },
 
         /**
@@ -460,11 +460,21 @@
          * @param {Number|String} height
          */
         setHeight: function (height) {
-            var me = this;
+            var me = this,
+                hasTitle = me._$title.text().length > 0,
+                headerHeight;
 
-            me._$modalBox.css('height', (typeof height === 'string' && !(/^\d+$/.test(height))) ? height : parseInt(height, 10));
+            height = (typeof height === 'string' && !(/^\d+$/.test(height))) ? height : window.parseInt(height, 10);
 
-            $.publish('plugin/modal/onSetHeight', me);
+            if(hasTitle) {
+                headerHeight = window.parseInt(me._$header.css('height'), 10);
+                me._$content.css('height', (height - headerHeight));
+            } else {
+                me._$content.css('height', '100%');
+            }
+
+            me._$modalBox.css('height', height);
+            $.publish('plugin/swModal/onSetHeight', [ me ]);
         },
 
         /**
@@ -499,7 +509,7 @@
 
             $('body').append(me._$modalBox);
 
-            $.publish('plugin/modal/onInit', me);
+            $.publish('plugin/swModal/onInit', [ me ]);
         },
 
         /**
@@ -527,7 +537,7 @@
                 }
             });
 
-            $.publish('plugin/modal/onRegisterEvents', me);
+            $.publish('plugin/swModal/onRegisterEvents', [ me ]);
         },
 
         /**
@@ -554,7 +564,7 @@
                 }
             }
 
-            $.publish('plugin/modal/onKeyDown', [me, event, keyCode]);
+            $.publish('plugin/swModal/onKeyDown', [ me, event, keyCode ]);
         },
 
         /**
@@ -571,7 +581,7 @@
                 me.center();
             }
 
-            $.publish('plugin/modal/onWindowResize', [me, event]);
+            $.publish('plugin/swModal/onWindowResize', [ me, event ]);
         },
 
         /**
@@ -586,7 +596,7 @@
 
             $modalBox.css('top', ($(window).height() - $modalBox.height()) / 2);
 
-            $.publish('plugin/modal/onCenter', me);
+            $.publish('plugin/swModal/onCenter', [ me ]);
         },
 
         /**
@@ -605,7 +615,7 @@
 
             me.close();
 
-            $.publish('plugin/modal/onOverlayClick', me);
+            $.publish('plugin/swModal/onOverlayClick', [ me ]);
         },
 
         /**
@@ -634,7 +644,7 @@
                 delete me.options[p];
             }
 
-            StateManager.off('resize', me.onWindowResize, me);
+            StateManager.off('resize', me.onWindowResize, [ me ]);
         }
     };
 
@@ -646,8 +656,6 @@
      * or the target element will be used as the content.
      */
     $.plugin('swModalbox', {
-
-        alias: 'modalbox',
 
         defaults: {
 
@@ -701,9 +709,9 @@
 
             me._on(me.$target, 'click', $.proxy(me.onClick, me));
 
-            $.subscribe('plugin/modal/onClose', $.proxy(me.onClose, me));
+            $.subscribe('plugin/swModal/onClose', $.proxy(me.onClose, me));
 
-            $.publish('plugin/modalbox/onRegisterEvents', me);
+            $.publish('plugin/swModalbox/onRegisterEvents', [ me ]);
         },
 
         /**
@@ -724,7 +732,7 @@
 
             me._isOpened = true;
 
-            $.publish('plugin/modalbox/onClick', [me, event]);
+            $.publish('plugin/swModalbox/onClick', [ me, event ]);
         },
 
         /**
@@ -738,7 +746,7 @@
 
             me._isOpened = false;
 
-            $.publish('plugin/modalbox/onClose', me);
+            $.publish('plugin/swModalbox/onClose', [ me ]);
         },
 
         /**
@@ -755,7 +763,7 @@
                 $.modal.close();
             }
 
-            $.unsubscribe('plugin/modal/onClose', $.proxy(me.onClose, me));
+            $.unsubscribe('plugin/swModal/onClose', $.proxy(me.onClose, me));
 
             me._destroy();
         }

@@ -142,7 +142,7 @@ class Repository
      * @param array $shopIds
      * @return Result
      */
-    public function getDailyShopOrders(\DateTime $from = null, \DateTime $to = null, array $shopIds = array())
+    public function getDailyShopOrders(\DateTime $from, \DateTime $to, array $shopIds)
     {
         $builder = $this->createDailyShopOrderBuilder($from, $to, $shopIds);
 
@@ -173,7 +173,7 @@ class Repository
      * @param array $shopIds
      * @return DBALQueryBuilder
      */
-    protected function createDailyShopOrderBuilder(\DateTime $from = null, \DateTime $to = null, array $shopIds = array())
+    protected function createDailyShopOrderBuilder(\DateTime $from, \DateTime $to, array $shopIds)
     {
         $builder = $this->connection->createQueryBuilder();
 
@@ -1551,7 +1551,7 @@ class Repository
      * @param $column
      * @return $this
      */
-    private function addDateRangeCondition(DBALQueryBuilder $builder, \DateTime $from = null, \DateTime $to = null, $column)
+    private function addDateRangeCondition(DBALQueryBuilder $builder, \DateTime $from = null, \DateTime $to = null, $column = null)
     {
         if ($from instanceof \DateTime) {
             $builder->andWhere($column . ' >= :fromDate')

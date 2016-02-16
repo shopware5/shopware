@@ -214,9 +214,6 @@ class CacheManager
         // Clear Shopware Proxies / Classmaps / Container
         $this->clearDirectory($this->container->getParameter('shopware.hook.proxyDir'));
 
-        // Clear Doctrine Proxies
-        $this->clearDirectory($this->container->getParameter('shopware.model.fileCacheDir'));
-
         // Clear Anotation file cache
         $this->clearDirectory($this->container->getParameter('shopware.model.proxyDir'));
     }
@@ -327,21 +324,6 @@ class CacheManager
      *
      * @return array
      */
-    public function getDoctrineFileCacheInfo()
-    {
-        $dir = $this->container->getParameter('shopware.model.fileCacheDir');
-
-        $info = $this->getDirectoryInfo($dir);
-        $info['name'] = 'Doctrine annotations';
-
-        return $info;
-    }
-
-    /**
-     * Returns cache information
-     *
-     * @return array
-     */
     public function getShopwareProxyCacheInfo()
     {
         $dir = $this->container->getParameter('shopware.hook.proxyDir');
@@ -392,7 +374,7 @@ class CacheManager
 
         /** @var $entry \SplFileInfo */
         foreach ($iterator as $entry) {
-            if ($entry->getFileName() === '.gitkeep') {
+            if ($entry->getFilename() === '.gitkeep') {
                 continue;
             }
 

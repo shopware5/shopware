@@ -24,7 +24,7 @@
 
 namespace Shopware\Commands;
 
-use Shopware\Components\Plugin\Manager;
+use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -79,7 +79,7 @@ EOF
             return false;
         });
 
-        /** @var Manager $pluginManager */
+        /** @var InstallerService $pluginManager */
         $pluginManager  = $this->container->get('shopware_plugininstaller.plugin_manager');
         $pluginName = $input->getArgument('plugin');
 

@@ -72,8 +72,6 @@
 
     $.plugin('swRangeSlider', {
 
-        alias: 'rangeSlider',
-
         defaults: {
             /**
              * The css class for the range slider container element.
@@ -207,7 +205,7 @@
             me._on($document, 'mouseup touchend', $.proxy(me.onEndDrag, me));
             me._on($document, 'mousemove touchmove', $.proxy(me.slide, me));
 
-            $.publish('plugin/swRangeSlider/onRegisterEvents', me);
+            $.publish('plugin/swRangeSlider/onRegisterEvents', [ me ]);
         },
 
         createSliderTemplate: function() {
@@ -231,7 +229,7 @@
                     'class': me.opts.sliderContainerCls
                 });
 
-            $.publish('plugin/swRangeSlider/onCreateRangeContainer', [me, $container]);
+            $.publish('plugin/swRangeSlider/onCreateRangeContainer', [ me, $container ]);
 
             return $container;
         },
@@ -242,7 +240,7 @@
                     'class': me.opts.rangeBarCls
                 });
 
-            $.publish('plugin/swRangeSlider/onCreateRangeBar', [me, $bar]);
+            $.publish('plugin/swRangeSlider/onCreateRangeBar', [ me, $bar ]);
 
             return $bar;
         },
@@ -254,7 +252,7 @@
                     'class': me.opts.handleCls + ' ' + typeClass
                 });
 
-            $.publish('plugin/swRangeSlider/onCreateHandle', [me, $handle]);
+            $.publish('plugin/swRangeSlider/onCreateHandle', [ me, $handle ]);
 
             return $handle;
         },
@@ -281,7 +279,7 @@
                 me.maxValue = me.maxRange;
             }
 
-            $.publish('plugin/swRangeSlider/onComputeBaseValues', [me, me.minValue, me.maxValue]);
+            $.publish('plugin/swRangeSlider/onComputeBaseValues', [ me, me.minValue, me.maxValue ]);
 
             me.setRangeBarPosition(me.minValue, me.maxValue);
             me.updateLayout();
@@ -300,7 +298,7 @@
                 'width': width + '%'
             });
 
-            $.publish('plugin/swRangeSlider/onSetRangeBarPosition', [me, me.$rangeBar, minValue, maxValue]);
+            $.publish('plugin/swRangeSlider/onSetRangeBarPosition', [ me, me.$rangeBar, minValue, maxValue ]);
         },
 
         setMin: function(min, updateInput) {
@@ -317,10 +315,7 @@
             me.setRangeBarPosition();
             me.updateLayout();
 
-            /** @deprecated - will be removed in 5.1 */
-            $.publish('plugin/rangeSlider/changeMin', min);
-
-            $.publish('plugin/swRangeSlider/onSetMin', [me, min, updateInput]);
+            $.publish('plugin/swRangeSlider/onSetMin', [ me, min, updateInput ]);
         },
 
         setMax: function(max, updateInput) {
@@ -337,10 +332,7 @@
             me.setRangeBarPosition();
             me.updateLayout();
 
-            /** @deprecated - will be removed in 5.1 */
-            $.publish('plugin/rangeSlider/changeMax', max);
-
-            $.publish('plugin/swRangeSlider/onSetMax', [me, max, updateInput]);
+            $.publish('plugin/swRangeSlider/onSetMax', [ me, max, updateInput ]);
         },
 
         reset: function(param) {
@@ -361,10 +353,7 @@
             me.setRangeBarPosition();
             me.updateLayout();
 
-            /** @deprecated - will be removed in 5.1 */
-            $.publish('plugin/rangeSlider/reset');
-
-            $.publish('plugin/swRangeSlider/onReset', [me, param]);
+            $.publish('plugin/swRangeSlider/onReset', [ me, param ]);
         },
 
         onStartDrag: function(type, $handle) {
@@ -375,7 +364,7 @@
             me.dragState = true;
             me.dragType = type;
 
-            $.publish('plugin/swRangeSlider/onStartDrag', [me, type, $handle]);
+            $.publish('plugin/swRangeSlider/onStartDrag', [ me, type, $handle ]);
         },
 
         onEndDrag: function() {
@@ -399,10 +388,7 @@
 
             $(me).trigger('rangeChange', me);
 
-            /** @deprecated - will be removed in 5.1 */
-            $.publish('plugin/rangeSlider/onChange', me);
-
-            $.publish('plugin/swRangeSlider/onEndDrag', [me, me.dragType]);
+            $.publish('plugin/swRangeSlider/onEndDrag', [ me, me.dragType ]);
         },
 
         slide: function(event) {
@@ -429,7 +415,7 @@
                 me.setMin(clamp(value, me.minRange, maxValue));
             }
 
-            $.publish('plugin/swRangeSlider/onSlide', [me, event, xPercent, value]);
+            $.publish('plugin/swRangeSlider/onSlide', [ me, event, xPercent, value ]);
         },
 
         updateMinInput: function(value) {
@@ -440,7 +426,7 @@
                     .removeAttr('disabled')
                     .trigger('change');
 
-                $.publish('plugin/swRangeSlider/onUpdateMinInput', [me, me.$minInputEl, value]);
+                $.publish('plugin/swRangeSlider/onUpdateMinInput', [ me, me.$minInputEl, value ]);
             }
         },
 
@@ -452,7 +438,7 @@
                     .removeAttr('disabled')
                     .trigger('change');
 
-                $.publish('plugin/swRangeSlider/onUpdateMaxInput', [me, me.$maxInputEl, value]);
+                $.publish('plugin/swRangeSlider/onUpdateMaxInput', [ me, me.$maxInputEl, value ]);
             }
         },
 
@@ -462,7 +448,7 @@
             if (me.$minLabel.length) {
                 me.$minLabel.html(me.formatValue(value));
 
-                $.publish('plugin/swRangeSlider/onUpdateMinLabel', [me, me.$minLabel, value]);
+                $.publish('plugin/swRangeSlider/onUpdateMinLabel', [ me, me.$minLabel, value ]);
             }
         },
 
@@ -472,7 +458,7 @@
             if (me.$maxLabel.length) {
                 me.$maxLabel.html(me.formatValue(value));
 
-                $.publish('plugin/swRangeSlider/onUpdateMaxLabel', [me, me.$maxLabel, value]);
+                $.publish('plugin/swRangeSlider/onUpdateMaxLabel', [ me, me.$maxLabel, value ]);
             }
         },
 
@@ -484,7 +470,7 @@
             me.updateMinLabel(min);
             me.updateMaxLabel(max);
 
-            $.publish('plugin/swRangeSlider/onUpdateLayout', [me, minValue, maxValue]);
+            $.publish('plugin/swRangeSlider/onUpdateLayout', [ me, minValue, maxValue ]);
         },
 
         roundValue: function(value) {
@@ -504,7 +490,7 @@
         formatValue: function(value) {
             var me = this;
 
-            $.publish('plugin/swRangeSlider/onFormatValueBefore', [me, value]);
+            $.publish('plugin/swRangeSlider/onFormatValueBefore', [ me, value ]);
 
             if (value != me.minRange && value != me.maxRange) {
                 value = me.roundValue(value);
@@ -524,7 +510,7 @@
                 value = me.opts.labelFormat.replace('0,00', value);
             }
 
-            $.publish('plugin/swRangeSlider/onFormatValue', [me, value]);
+            $.publish('plugin/swRangeSlider/onFormatValue', [ me, value ]);
 
             return value;
         },

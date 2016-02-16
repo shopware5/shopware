@@ -21,11 +21,12 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle;
 
 /**
- * Deprecated Shopware Class that handles cart operations
+ * Shopware Class that handles cart operations
  */
 class sBasket
 {
@@ -144,7 +145,6 @@ class sBasket
      * Get total value of current user's cart
      * Used in multiple locations
      *
-     * @deprecated
      * @return array Total amount of the user's cart
      */
     public function sGetAmount()
@@ -163,7 +163,6 @@ class sBasket
      * Get total value of current user's cart (only products)
      * Used only internally in sBasket
      *
-     * @deprecated
      * @return array Total amount of the user's cart (only products)
      */
     public function sGetAmountArticles()
@@ -183,7 +182,6 @@ class sBasket
      * Check if all positions in cart are available
      * Used in CheckoutController
      *
-     * @deprecated
      * @return array
      */
     public function sCheckBasketQuantities()
@@ -220,7 +218,6 @@ class sBasket
      * Get cart amount for certain products / suppliers
      * Used only internally in sBasket
      *
-     * @deprecated
      * @param array $articles Articles numbers to filter
      * @param int $supplier Supplier id to filter
      * @return array Amount of articles in current basket that match the current filter
@@ -262,9 +259,6 @@ class sBasket
     /**
      * Update vouchers in cart
      * Used only internally in sBasket
-     *
-     * @deprecated
-     * @return null
      */
     public function sUpdateVoucher()
     {
@@ -293,9 +287,6 @@ class sBasket
     /**
      * Insert basket discount
      * Used only internally in sBasket::sGetBasket()
-     *
-     * @deprecated
-     * @return Enlight_Components_Adodb_Statement|null
      */
     public function sInsertDiscount()
     {
@@ -380,7 +371,9 @@ class sBasket
         $discountNumber = $this->config->get('sDISCOUNTNUMBER');
         $name = isset($discountNumber) ? $discountNumber: "DISCOUNT";
 
-        $discountName = - $basketDiscount . ' % ' . $this->config->get('sDISCOUNTNAME');
+        $discountName = - $basketDiscount . ' % ' . $this->snippetManager
+                ->getNamespace('backend/static/discounts_surcharges')
+                ->get('discount_name');
 
         $this->db->insert(
             's_order_basket',
@@ -404,7 +397,6 @@ class sBasket
      * Check if any discount is in the cart
      * Used only internally in sBasket
      *
-     * @deprecated
      * @return bool
      */
     public function sCheckForDiscount()
@@ -421,7 +413,6 @@ class sBasket
      * Add premium products to cart
      * Used internally in sBasket and in CheckoutController
      *
-     * @deprecated
      * @return bool|int
      */
     public function sInsertPremium()
@@ -556,7 +547,6 @@ class sBasket
      * Get the max tax rate in applied in the current basket
      * Used in several places
      *
-     * @deprecated
      * @return int|false May tax value, or false if none found
      */
     public function getMaxTax()
@@ -576,7 +566,6 @@ class sBasket
      * Add voucher to cart
      * Used in several places
      *
-     * @deprecated
      * @param string $voucherCode Voucher code
      * @param string $basket
      * @return array|bool True if successful, false if stopped by an event, array with error data if one occurred
@@ -719,8 +708,12 @@ class sBasket
             $factor = 1;
         }
 
+        $basketValue = 0;
+        if ($factor != 0) {
+            $basketValue = $amount["totalAmount"] / $factor;
+        }
         // Check if the basket's value is above the voucher's
-        if (($amount["totalAmount"]/$factor) < $voucherDetails["minimumcharge"]) {
+        if ($basketValue < $voucherDetails["minimumcharge"]) {
             $sErrorMessages[] = str_replace(
                 "{sMinimumCharge}",
                 $voucherDetails["minimumcharge"],
@@ -734,7 +727,10 @@ class sBasket
 
         $timeInsert = date("Y-m-d H:i:s");
 
-        $voucherName = $this->config->get('sVOUCHERNAME');
+        $voucherName = $this->snippetManager
+            ->getNamespace('backend/static/discounts_surcharges')
+            ->get('voucher_name', 'Voucher');
+
         if ($voucherDetails["percental"]) {
             $value = $voucherDetails["value"];
             $voucherName .= " ".$value." %";
@@ -784,7 +780,6 @@ class sBasket
      * Get articleId of all products from cart
      * Used in CheckoutController
      *
-     * @deprecated
      * @return array|null List of article ids in current basket, or null if none
      */
     public function sGetBasketIds()
@@ -805,7 +800,6 @@ class sBasket
      * Check if minimum charging is reached
      * Used only in CheckoutController::getMinimumCharge()
      *
-     * @deprecated
      * @return double|false Minimum order value in current currency, or false
      */
     public function sCheckMinimumCharge()
@@ -826,7 +820,6 @@ class sBasket
      * Add surcharge for payment means to cart
      * Used only internally in sBasket::sGetBasket
      *
-     * @deprecated
      * @return null|false False on failure, null on success
      */
     public function sInsertSurcharge()
@@ -877,12 +870,15 @@ class sBasket
                 }
 
                 $surcharge = $minimumOrderSurcharge * $factor;
+                $surchargeName = $this->snippetManager
+                    ->getNamespace('backend/static/discounts_surcharges')
+                    ->get('surcharge_name');
 
                 $this->db->insert(
                     's_order_basket',
                     $params = array(
                         'sessionID'      => $this->session->get('sessionId'),
-                        'articlename'    => $this->config->get('sSURCHARGENAME'),
+                        'articlename'    => $surchargeName,
                         'articleID'      => 0,
                         'ordernumber'    => $name,
                         'quantity'       => 1,
@@ -902,7 +898,6 @@ class sBasket
      * Add percentual surcharge
      * Used only internally in sBasket::sGetBasket
      *
-     * @deprecated
      * @return void|false False on failure, null on success
      */
     public function sInsertSurchargePercent()
@@ -946,9 +941,13 @@ class sBasket
             $amount = $this->sGetAmount();
 
             if ($percent >= 0) {
-                $surchargeName = $this->config->get('sPAYMENTSURCHARGEADD');
+                $surchargeName = $this->snippetManager
+                    ->getNamespace('backend/static/discounts_surcharges')
+                    ->get('payment_surcharge_add');
             } else {
-                $surchargeName = $this->config->get('sPAYMENTSURCHARGEDEV');
+                $surchargeName = $this->snippetManager
+                    ->getNamespace('backend/static/discounts_surcharges')
+                    ->get('payment_surcharge_dev');
             }
 
             $surcharge = $amount["totalAmount"] / 100 * $percent;
@@ -993,7 +992,6 @@ class sBasket
      * Fetch count of products in basket
      * Used in multiple locations
      *
-     * @deprecated
      * @return array Number
      */
     public function sCountBasket()
@@ -1008,7 +1006,6 @@ class sBasket
      * Get all basket positions
      * Used in multiple location
      *
-     * @deprecated
      * @return array Basket content
      */
     public function sGetBasket()
@@ -1144,7 +1141,6 @@ class sBasket
      * Add product to wishlist
      * Used only in NoteController::addAction()
      *
-     * @deprecated
      * @param int $articleID
      * @param string $articleName
      * @param string $articleOrderNumber
@@ -1191,7 +1187,6 @@ class sBasket
      * Get all products current on wishlist
      * Used in the NoteController
      *
-     * @deprecated
      * @return array Article notes
      */
     public function sGetNotes()
@@ -1282,7 +1277,6 @@ class sBasket
      * Returns the number of wishlist entries
      * Used in several locations
      *
-     * @deprecated
      * @return int
      */
     public function sCountNotes()
@@ -1310,7 +1304,6 @@ class sBasket
      * Delete a certain position from note
      * Used internally in sBasket and in NoteController
      *
-     * @deprecated
      * @param int $id Id of the wishlist line
      * @throws Enlight_Exception If entry could not be deleted from database
      * @return bool if the operation was successful
@@ -1343,7 +1336,6 @@ class sBasket
      * Update quantity / price of a certain cart position
      * Used in several locations
      *
-     * @deprecated
      * @param int $id Basket entry id
      * @param int $quantity Quantity
      * @throws Enlight_Exception If database could not be updated
@@ -1425,7 +1417,6 @@ class sBasket
      * Check if the current basket has any ESD article
      * Used in sAdmin and CheckoutController
      *
-     * @deprecated
      * @return bool If an ESD article is present in the current basket
      */
     public function sCheckForESD()
@@ -1447,7 +1438,6 @@ class sBasket
      * Used on sAdmin tests and SwagBonusSystem
      * See @ticket PT-1845
      *
-     * @deprecated
      * @return void|false False on no session, null otherwise
      */
     public function sDeleteBasket()
@@ -1468,7 +1458,6 @@ class sBasket
      * Delete a certain position from the basket
      * Used in multiple locations
      *
-     * @deprecated
      * @param int $id Id of the basket line
      * @throws Enlight_Exception If entry could not be deleted from the database
      * @return null
@@ -1499,7 +1488,6 @@ class sBasket
      * Add product to cart
      * Used in multiple locations
      *
-     * @deprecated
      * @param int $id Order number (s_articles_details.ordernumber)
      * @param int $quantity Amount
      * @throws Enlight_Exception If no price could be determined, or a database error occurs
@@ -1686,11 +1674,19 @@ class sBasket
     }
 
     /**
+     * Clear basket for current user
+     */
+    public function clearBasket()
+    {
+        $this->db->executeUpdate(
+            'DELETE FROM s_order_basket WHERE sessionID= :sessionId',
+            ['sessionId' => $this->session->get('sessionId')]
+        );
+    }
+
+    /**
      * Refresh basket after login / currency change
      * Used in multiple locations
-     *
-     * @deprecated
-     * @return null
      */
     public function sRefreshBasket()
     {
@@ -1741,7 +1737,7 @@ class sBasket
             $sql = "
                 SELECT id
                 FROM s_emarketing_voucher_codes
-                WHERE id = :voucherId AND cashed = 0
+                WHERE id = :voucherId AND cashed != 1
             ";
 
             $result = $this->db->fetchRow($sql, array('voucherId' => $voucherData['voucherId']));
@@ -2008,13 +2004,41 @@ class sBasket
     }
 
     /**
+     * Proxy to a cached version of self::getBasketArticlesUncached()
+     *
+     * Caches the result of self::getBasketArticlesUncached() in a
+     * static variable using a hash of the input paramter
+     * to invalidate the cache.
+     *
+     * @param array $getArticles
+     * @return array
+     */
+    private function getBasketArticles(array $getArticles)
+    {
+        static $cache;
+        static $cacheHash;
+
+        $hash = md5(serialize($getArticles));
+        if ($cache && $hash === $cacheHash) {
+            return $cache;
+        }
+
+        $result = $this->getBasketArticlesUncached($getArticles);
+
+        $cache = $result;
+        $cacheHash = $hash;
+
+        return $result;
+    }
+
+    /**
      * Loads relevant associated data for the provided articles
      * Used in sGetBasket
      *
      * @param $getArticles
      * @return array
      */
-    private function getBasketArticles($getArticles)
+    private function getBasketArticlesUncached($getArticles)
     {
         $totalAmount = 0;
         $discount = 0;
@@ -2068,9 +2092,12 @@ class sBasket
                 } else {
                     $getArticles[$key]['additional_details'] = $tempArticle;
                     $properties = '';
-                    foreach ($getArticles[$key]['additional_details']['sProperties'] as $property) {
-                        $properties .= $property['name'] . ':&nbsp;' . $property['value'] . ',&nbsp;';
+                    if (isset($getArticles[$key]['additional_details']['sProperties'])) {
+                        foreach ($getArticles[$key]['additional_details']['sProperties'] as $property) {
+                            $properties .= $property['name'] . ':&nbsp;' . $property['value'] . ',&nbsp;';
+                        }
                     }
+
                     $getArticles[$key]['additional_details']['properties'] = substr($properties, 0, -7);
                 }
             }
@@ -2188,7 +2215,7 @@ class sBasket
 
             // If price per unit is not referring to 1, calculate base-price
             // Choose 1000, quantity refers to 500, calculate price / 1000 * 500 as reference
-            if ($getArticles[$key]["purchaseunit"] > 0) {
+            if ($getArticles[$key]["purchaseunit"] != 0) {
                 $getArticles[$key]["itemInfo"] = $getArticles[$key]["purchaseunit"] . " {$getUnitData["description"]} / " . $this->moduleManager->Articles()->sFormatPrice($getArticles[$key]["amount"] / $quantity * $getArticles[$key]["purchaseunit"]);
                 $getArticles[$key]["itemInfoArray"]["reference"] = $getArticles[$key]["purchaseunit"];
                 $getArticles[$key]["itemInfoArray"]["unit"] = $getUnitData;
@@ -2506,7 +2533,7 @@ class sBasket
         }
 
         // Recalculate price per item, if purchase unit is set
-        if ($queryAdditionalInfo["purchaseunit"] > 0) {
+        if ($queryAdditionalInfo["purchaseunit"] != 0) {
             $grossPrice = $grossPrice / $queryAdditionalInfo["purchaseunit"];
             $netPrice = $netPrice / $queryAdditionalInfo["purchaseunit"];
         }
@@ -2669,14 +2696,8 @@ class sBasket
         );
 
         if ($article['configurator_set_id'] > 0) {
-            $product = new StoreFrontBundle\Struct\ListProduct(
-                (int) $article['articleID'],
-                (int) $article["articledetailsID"],
-                $article['ordernumber']
-            );
-            $product->setAdditional($article['additionaltext']);
-
-            $context = $this->contextService->getShopContext();
+            $context = $this->contextService->getProductContext();
+            $product = Shopware()->Container()->get('shopware_storefront.list_product_service')->get($article['ordernumber'], $context);
             $product = $this->additionalTextService->buildAdditionalText($product, $context);
             $article['additionaltext'] = $product->getAdditional();
         }

@@ -1,6 +1,6 @@
 {* Blog listing sidebar right *}
 {block name='frontend_index_content_right'}
-	<div class="blog--filter-options" off-canvas{if $activeFilters} is--collapsed{/if}">
+	<div class="blog--filter-options off-canvas">
 
 		{* Filter container *}
 		{block name='frontend_listing_actions_filter_container'}

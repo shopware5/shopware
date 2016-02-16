@@ -88,7 +88,8 @@ Ext.define('Shopware.apps.MediaManager.controller.Album', {
                 deleteAlbum: me.onDeleteAlbum,
                 reload: me.onReloadAlbums,
                 editSettings: me.onOpenSettingsWindow,
-                itemmove: me.onMoveAlbum
+                itemmove: me.onMoveAlbum,
+                emptyTrash: me.onEmptyTrash
             },
             'mediamanager-media-view html5fileupload': {
                 uploadReady: me.onReload
@@ -352,6 +353,39 @@ Ext.define('Shopware.apps.MediaManager.controller.Album', {
                 tree.setLoading(false);
             }
         })
+    },
+
+    /**
+     * Event listener method which fires when the user
+     * clicks the "delete album"-button in the item
+     * context menu.
+     *
+     * Deletes the associated album.
+     *
+     * @event deleteAlbum
+     * @param scope
+     * @param view
+     * @param record
+     */
+    onEmptyTrash: function () {
+        var me = this;
+
+        Ext.Msg.confirm('{s name=recycle/title}Empty recycle bin?{/s}', '{s name=recycle/message}All items in the recycle bin will be deleted and can not be recovered. Dou you want to continue?{/s}', function (btn) {
+            if (btn !== 'yes') {
+                return false;
+            }
+
+            Ext.Ajax.request({
+                url: '{url controller="MediaManager" action="emptyTrash"}',
+                success: function(response) {
+                    var response = Ext.JSON.decode(response.responseText);
+                    if(response.success) {
+                        me.onReload();
+                        me.getController('Media').onReload();
+                    }
+                }
+            });
+        });
     },
 
     /**

@@ -32,26 +32,45 @@
  */
 //{block name="backend/media_manager/model/media"}
 Ext.define('Shopware.apps.MediaManager.model.Media', {
-	extend: 'Ext.data.Model',
-	fields: [
-		//{block name="backend/media_manager/model/media/fields"}{/block}
-		'created', 'description', 'extension', 'id', { name: 'name', sortType: 'asUCText' }, 'type', 'path', 'userId', 'thumbnail', 'width', 'height', 'albumId', 'newAlbumID' ],
-	proxy: {
-		type: 'ajax',
+    extend: 'Ext.data.Model',
+    fields: [
+        //{block name="backend/media_manager/model/media/fields"}{/block}
+        'created',
+        'description',
+        'extension',
+        'id',
+        { name: 'name', sortType: 'asUCText' },
+        'type',
+        'path',
+        'userId',
+        'thumbnail',
+        'width',
+        'height',
+        'albumId',
+        'newAlbumID',
+        'virtualPath'
+    ],
+    proxy: {
+        type: 'ajax',
         api: {
             read: '{url controller="MediaManager" action="getAlbumMedia"}',
             create: '{url controller="MediaManager" action="saveMedia"}',
             update: '{url controller="MediaManager" action="saveMedia" targetField=media}',
             destroy: '{url controller="MediaManager" action="removeMedia"}'
         },
-		reader: {
-			type: 'json',
-			root: 'data',
+        reader: {
+            type: 'json',
+            root: 'data',
             totalProperty: 'total'
-		}
-	},
+        }
+    },
     associations: [
-        { type: 'hasMany', model: 'Shopware.apps.MediaManager.model.Attribute', name: 'getAttributes', associationKey: 'attribute'}
+        {
+            type: 'hasMany',
+            model: 'Shopware.apps.MediaManager.model.Attribute',
+            name: 'getAttributes',
+            associationKey: 'attribute'
+        }
     ]
 });
 //{/block}

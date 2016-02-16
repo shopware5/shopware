@@ -31,7 +31,6 @@ namespace Shopware\Components\Password\Encoder;
  */
 class PreHashed implements PasswordEncoderInterface
 {
-
     /**
      * @return string
      */
@@ -47,7 +46,7 @@ class PreHashed implements PasswordEncoderInterface
      */
     public function isPasswordValid($password, $hash)
     {
-        return $password == $hash;
+        return hash_equals($hash, $password);
     }
 
     /**

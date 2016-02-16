@@ -39,7 +39,7 @@ class FilterGroup extends MultipleElement
         /** @var NodeElement $propertyContainer */
         $propertyContainer = $elements['properties'];
 
-        if(!$propertyContainer->hasLink($propertyName)) {
+        if (!$propertyContainer->hasLink($propertyName)) {
             return false;
         }
 

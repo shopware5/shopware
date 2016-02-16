@@ -2,11 +2,8 @@
 
 namespace Shopware\Tests\Service\Price;
 
-
 use Shopware\Bundle\StoreFrontBundle;
-use Shopware\Bundle\StoreFrontBundle\Struct\Context;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Price;
-use Shopware\Tests\Service\Helper;
 use Shopware\Tests\Service\TestCase;
 
 class BasePriceTest extends TestCase
@@ -26,6 +23,7 @@ class BasePriceTest extends TestCase
             'purchaseUnit' => 0.5,
             'referenceUnit' => 1
         ));
+        $data['categories'] = [['id' => $context->getShop()->getCategory()->getId()]];
 
         $this->helper->createArticle($data);
 
@@ -53,6 +51,7 @@ class BasePriceTest extends TestCase
             $context->getCurrentCustomerGroup()
         );
 
+        $data['categories'] = [['id' => $context->getShop()->getCategory()->getId()]];
         $data['mainDetail'] = array_merge($data['mainDetail'], array(
             'purchaseUnit' => 0.5,
             'referenceUnit' => 0.1
@@ -70,5 +69,4 @@ class BasePriceTest extends TestCase
         $this->assertEquals(50, $last->getCalculatedPrice());
         $this->assertEquals(10, $last->getCalculatedReferencePrice());
     }
-
 }

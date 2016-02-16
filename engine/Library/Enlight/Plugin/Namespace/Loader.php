@@ -131,10 +131,7 @@ class Enlight_Plugin_Namespace_Loader extends Enlight_Plugin_Namespace
                 }
                 $file = $dir->getPathname() . DIRECTORY_SEPARATOR . 'Bootstrap.php';
                 if (!file_exists($file)) {
-                    $file = $dir->getPathname() . DIRECTORY_SEPARATOR . 'BootstrapDummy.php';
-                    if (!file_exists($file)) {
-                        continue;
-                    }
+                    continue;
                 }
                 $name = $dir->getFilename();
                 $this->initPlugin($name, $prefix, $file);

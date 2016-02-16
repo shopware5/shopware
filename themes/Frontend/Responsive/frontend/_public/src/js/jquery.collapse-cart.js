@@ -1,9 +1,7 @@
-;jQuery(function ($) {
+;(function($, window) {
     'use strict';
 
     $.plugin('swCollapseCart', {
-
-        alias: 'collapseCart',
 
         defaults: {
 
@@ -95,6 +93,31 @@
             me._$triggerEl = $(opts.triggerElSelector);
 
             /**
+             * Button element to change disabled state
+             *
+             * @private
+             * @property _$linkEl
+             * @type {jQuery}
+             */
+            me._$linkEl = me._$triggerEl.find('.cart--link');
+
+            /**
+             * Holds the state if the mouse is over the cart
+             *
+             * @private
+             * @property _mousePosition
+             * @type {boolean}
+             */
+            me._isOverMe = false;
+
+            /**
+             * Holds the state if the cart is loading
+             * @type {boolean}
+             * @private
+             */
+            me._isCartLoading = false;
+
+            /**
              * Loading icon that will be used for loading when an AJAX request is send.
              *
              * @private
@@ -143,12 +166,18 @@
                 $.subscribe('plugin/swAddArticle/onAddArticle', $.proxy(me.onArticleAdded, me));
                 $.subscribe('plugin/swAddArticle/onBeforeAddArticle', $.proxy(me.onBeforeAddArticle, me));
             } else {
+                me._on('.container--ajax-cart,' + me.opts.triggerElSelector, 'mousemove', $.proxy(me.onMouseHover, me));
                 me._on(me._$triggerEl, 'mouseenter touchstart', $.proxy(me.onMouseEnter, me));
                 me._on(me._$triggerEl, 'mouseleave', $.proxy(me.onMouseLeave, me));
+                me._on(me._$triggerEl, 'click', $.proxy(me.onClick, me));
                 me._on(me.$el, 'mouseleave', $.proxy(me.onMouseLeave, me));
+                $('.container--ajax-cart,' + me.opts.triggerElSelector).hover(
+                    $.proxy(me.onMouseHoverStart, me),
+                    $.proxy(me.onMouseHoverEnd, me)
+                );
             }
 
-            $.publish('plugin/swCollapseCart/onRegisterEvents', me);
+            $.publish('plugin/swCollapseCart/onRegisterEvents', [ me ]);
         },
 
         /**
@@ -163,7 +192,7 @@
             me.showLoadingIndicator();
             me.openMenu();
 
-            $.publish('plugin/swCollapseCart/onBeforeAddArticle', me);
+            $.publish('plugin/swCollapseCart/onBeforeAddArticle', [ me ]);
         },
 
         /**
@@ -186,7 +215,7 @@
 
             picturefill();
 
-            $.publish('plugin/swCollapseCart/onArticleAdded', me);
+            $.publish('plugin/swCollapseCart/onArticleAdded', [ me ]);
         },
 
         /**
@@ -198,26 +227,38 @@
         onMouseEnter: function (event) {
             var me = this;
 
-            me.showLoadingIndicator();
-            me.openMenu();
-
             if (me.isDisplayMode('offcanvas')) {
                 event.preventDefault();
 
+                me.showLoadingIndicator();
+                me.openMenu();
+
                 me.loadCart();
             } else {
-                me.buffer(function () {
-                    me.loadCart(function () {
-                        $('body').one('touchstart', $.proxy(me.onMouseLeave, me));
+                if (me.isCartLoading()) {
+                    me.showLoadingIndicator();
+                    me.openMenu();
+                } else {
+                    me.buffer(function () {
+                        if (me.isOverMe() === false || me._wasClicked === true) {
+                            return;
+                        }
 
-                        $.publish('plugin/swCollapseCart/onMouseEnterLoaded', [me, event]);
-                    });
+                        me.showLoadingIndicator();
+                        me.openMenu();
 
-                    $.publish('plugin/swCollapseCart/onMouseEnterBuffer', [me, event]);
-                }, 500);
+                        me.loadCart(function () {
+                            $('body').one('touchstart', $.proxy(me.onMouseLeave, me));
+
+                            $.publish('plugin/swCollapseCart/onMouseEnterLoaded', [me, event]);
+                        });
+
+                        $.publish('plugin/swCollapseCart/onMouseEnterBuffer', [me, event]);
+                    }, 500);
+                }
             }
 
-            $.publish('plugin/swCollapseCart/onMouseEnter', [me, event]);
+            $.publish('plugin/swCollapseCart/onMouseEnter', [ me, event ]);
         },
 
         /**
@@ -230,16 +271,14 @@
             var me = this,
                 target = event.toElement || event.relatedTarget || event.target;
 
-            /** @deprecated - will be removed in 5.1 */
-            $.publish('plugin/collapseCart/onMouseLeave', me);
-
-            $.publish('plugin/swCollapseCart/onMouseLeave', [me, event]);
+            $.publish('plugin/swCollapseCart/onMouseLeave', [ me, event ]);
 
             if (me.isElementOrChild(me.$el[0], target) || me.isElementOrChild(me._$triggerEl[0], target)) {
                 return;
             }
 
             me.closeMenu();
+            me.clearBuffer();
         },
 
         /**
@@ -251,10 +290,7 @@
         onCloseButtonClick: function (event) {
             event.preventDefault();
 
-            /** @deprecated - will be removed in 5.1 */
-            $.publish('plugin/collapseCart/onCloseButton', this);
-
-            $.publish('plugin/swCollapseCart/onCloseButton', this);
+            $.publish('plugin/swCollapseCart/onCloseButton', [ this ]);
 
             this.closeMenu();
         },
@@ -273,10 +309,7 @@
                 $parent = $currentTarget.parent(),
                 url = $currentTarget.attr('href');
 
-            /** @deprecated - will be removed in 5.1 */
-            $.publish('plugin/collapseCart/onRemoveArticle', [me, event]);
-
-            $.publish('plugin/swCollapseCart/onRemoveArticle', [me, event]);
+            $.publish('plugin/swCollapseCart/onRemoveArticle', [ me, event ]);
             $parent.html(me._$loadingIcon.clone());
 
             $.ajax({
@@ -288,10 +321,7 @@
 
                     picturefill();
 
-                    /** @deprecated - will be removed in 5.1 */
-                    $.publish('plugin/collapseCart/afterRemoveArticle', [me, event]);
-
-                    $.publish('plugin/swCollapseCart/onRemoveArticleFinished', [me, event, result]);
+                    $.publish('plugin/swCollapseCart/onRemoveArticleFinished', [ me, event, result ]);
                 }
             });
         },
@@ -306,11 +336,19 @@
         buffer: function(func, bufferTime) {
             var me = this;
 
+            me.clearBuffer();
+            me.bufferTimeout = setTimeout(func, bufferTime);
+        },
+
+        /**
+         * Clears the open cart timeout
+         */
+        clearBuffer: function() {
+            var me = this;
+
             if (me.bufferTimeout) {
                 clearTimeout(me.bufferTimeout);
             }
-
-            me.bufferTimeout = setTimeout(func, bufferTime);
         },
 
         /**
@@ -350,7 +388,7 @@
                 'html': me._$loadingIcon.clone()
             }));
 
-            $.publish('plugin/swCollapseCart/onShowLoadingIndicator', me);
+            $.publish('plugin/swCollapseCart/onShowLoadingIndicator', [ me ]);
         },
 
         /**
@@ -372,10 +410,7 @@
                 me.$el.addClass(me.opts.activeClass);
             }
 
-            /** @deprecated - will be removed in 5.1 */
-            $.publish('plugin/collapseCart/onMenuOpen', me);
-
-            $.publish('plugin/swCollapseCart/onMenuOpen', me);
+            $.publish('plugin/swCollapseCart/onMenuOpen', [ me ]);
         },
 
         /**
@@ -391,10 +426,14 @@
                 opts = me.opts,
                 $el = me.$el;
 
-            /** @deprecated - will be removed in 5.1 */
-            $.publish('plugin/collapseCart/onLoadCart', me);
+            if (me.isCartLoading()) {
+                return;
+            }
 
-            $.publish('plugin/swCollapseCart/onLoadCart', me);
+            $.publish('plugin/swCollapseCart/onLoadCart', [ me ]);
+
+            me._$linkEl.addClass('is--disabled');
+            me._isCartLoading = true;
 
             $.ajax({
                 'url': opts.ajaxCartURL,
@@ -407,10 +446,11 @@
                         callback();
                     }
 
-                    /** @deprecated - will be removed in 5.1 */
-                    $.publish('plugin/collapseCart/afterLoadCart', me);
-
-                    $.publish('plugin/swCollapseCart/onLoadCartFinished', [me, result]);
+                    $.publish('plugin/swCollapseCart/onLoadCartFinished', [ me, result ]);
+                },
+                'complete': function () {
+                    me._$linkEl.removeClass('is--disabled');
+                    me._isCartLoading = false;
                 }
             });
         },
@@ -434,10 +474,56 @@
                 me.$el.removeClass(me.opts.activeClass);
             }
 
-            /** @deprecated - will be removed in 5.1 */
-            $.publish('plugin/collapseCart/onCloseMenu', me);
+            $.publish('plugin/swCollapseCart/onCloseMenu', [ me ]);
+        },
 
-            $.publish('plugin/swCollapseCart/onCloseMenu', me);
+        /**
+         * Intercepts the click event to prevent redirect while
+         * the request is being made
+         *
+         * @param event
+         */
+        onClick: function(event) {
+            var me = this;
+
+            if (me.isCartLoading()) {
+                event.preventDefault();
+                return false;
+            }
+
+            me._wasClicked = true;
+        },
+
+        /**
+         * Indicates if the cart is currently loading
+         *
+         * @returns {boolean}
+         */
+        isCartLoading: function() {
+            return !!this._isCartLoading;
+        },
+
+        /**
+         * Indicates if the mouse is over the cart button or cart menu itself
+         *
+         * @returns {boolean}
+         */
+        isOverMe: function() {
+            return !!this._isOverMe;
+        },
+
+        /**
+         * Indicates that the mouse is over the element
+         */
+        onMouseHoverStart: function() {
+            this._isOverMe = true;
+        },
+
+        /**
+         * Indicates that the mouse is not over the element anymore
+         */
+        onMouseHoverEnd: function() {
+            this._isOverMe = false;
         },
 
         /**
@@ -454,4 +540,4 @@
             me._destroy();
         }
     });
-});
+})(jQuery, window);

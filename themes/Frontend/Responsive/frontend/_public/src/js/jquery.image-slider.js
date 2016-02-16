@@ -35,8 +35,6 @@
      */
     $.plugin('swImageSlider', {
 
-        alias: 'imageSlider',
-
         defaults: {
 
             /**
@@ -666,7 +664,7 @@
 
             StateManager.on('resize', me.onResize, me);
 
-            $.publish('plugin/swImageSlider/onRegisterEvents', me);
+            $.publish('plugin/swImageSlider/onRegisterEvents', [ me ]);
         },
 
         /**
@@ -913,7 +911,7 @@
                 event.stopImmediatePropagation();
             }
 
-            $.publish('plugin/swImageSlider/onClick', [me, event]);
+            $.publish('plugin/swImageSlider/onClick', [ me, event ]);
         },
 
         /**
@@ -935,7 +933,7 @@
 
             event.preventDefault();
 
-            $.publish('plugin/swImageSlider/onScroll', [me, event]);
+            $.publish('plugin/swImageSlider/onScroll', [ me, event ]);
         },
 
         /**
@@ -962,7 +960,7 @@
                 me.setScale(1, true);
             }
 
-            $.publish('plugin/swImageSlider/onDoubleClick', [me, event]);
+            $.publish('plugin/swImageSlider/onDoubleClick', [ me, event ]);
         },
 
         /**
@@ -979,7 +977,7 @@
 
             me.slidePrev();
 
-            $.publish('plugin/swImageSlider/onLeftArrowClick', [me, event]);
+            $.publish('plugin/swImageSlider/onLeftArrowClick', [ me, event ]);
         },
 
         /**
@@ -996,7 +994,7 @@
 
             me.slideNext();
 
-            $.publish('plugin/swImageSlider/onRightArrowClick', [me, event]);
+            $.publish('plugin/swImageSlider/onRightArrowClick', [ me, event ]);
         },
 
         /**
@@ -1030,7 +1028,7 @@
 
             me.setThumbnailSlidePosition(me._thumbnailOffset - (size / 2), true);
 
-            $.publish('plugin/swImageSlider/onThumbnailNextArrowClick', [me, event]);
+            $.publish('plugin/swImageSlider/onThumbnailNextArrowClick', [ me, event ]);
         },
 
         /**
@@ -1047,7 +1045,7 @@
 
             me.slide(me._slideIndex);
 
-            $.publish('plugin/swImageSlider/onMouseLeave', [me, event]);
+            $.publish('plugin/swImageSlider/onMouseLeave', [ me, event ]);
         },
 
         /**
@@ -1069,7 +1067,7 @@
                 me.trackThumbnailControls();
             }
 
-            $.publish('plugin/swImageSlider/onResize', [me, newWidth]);
+            $.publish('plugin/swImageSlider/onResize', [ me, newWidth ]);
         },
 
         /**
@@ -1085,7 +1083,7 @@
 
             me._startTouchPoint.set(pointerA.clientX, pointerA.clientY);
 
-            $.publish('plugin/swImageSlider/onThumbnailSlideTouch', [me, event, pointerA.clientX, pointerA.clientY]);
+            $.publish('plugin/swImageSlider/onThumbnailSlideTouch', [ me, event, pointerA.clientX, pointerA.clientY ]);
         },
 
         /**
@@ -1114,7 +1112,7 @@
 
             me.trackThumbnailControls();
 
-            $.publish('plugin/swImageSlider/onThumbnailSlideTouch', [me, event, pointerA.clientX, pointerA.clientY]);
+            $.publish('plugin/swImageSlider/onThumbnailSlideTouch', [ me, event, pointerA.clientX, pointerA.clientY ]);
         },
 
         /**
@@ -1152,7 +1150,7 @@
                     Math.max(minY * -1, Math.min(minY, y))
                 );
 
-            $.publish('plugin/swImageSlider/onGetTransformedPosition', [me, newPos, x, y, scale]);
+            $.publish('plugin/swImageSlider/onGetTransformedPosition', [ me, newPos, x, y, scale ]);
 
             return newPos;
         },
@@ -1195,7 +1193,7 @@
 
             me.updateTransform(false);
 
-            $.publish('plugin/swImageSlider/onSetTranslation', [me, x, y]);
+            $.publish('plugin/swImageSlider/onSetTranslation', [ me, x, y ]);
         },
 
         /**
@@ -1213,7 +1211,7 @@
 
             me.setTranslation(translation.x + x, translation.y + y);
 
-            $.publish('plugin/swImageSlider/onTranslate', [me, x, y]);
+            $.publish('plugin/swImageSlider/onTranslate', [ me, x, y ]);
         },
 
         /**
@@ -1244,7 +1242,7 @@
 
             me.updateTransform(animate, callback);
 
-            $.publish('plugin/swImageSlider/onSetScale', [me, scale, animate, callback]);
+            $.publish('plugin/swImageSlider/onSetScale', [ me, scale, animate, callback ]);
         },
 
         /**
@@ -1273,7 +1271,7 @@
 
             me.setScale(me._imageScale + factor, animate, callback);
 
-            $.publish('plugin/swImageSlider/onScale', [me, factor, animate, callback]);
+            $.publish('plugin/swImageSlider/onScale', [ me, factor, animate, callback ]);
         },
 
         /**
@@ -1301,10 +1299,7 @@
 
             image.style[transformProperty] = 'scale(' + scale + ') translate(' + translation.x + 'px, ' + translation.y + 'px)';
 
-            /** @deprecated - will be removed in 5.1 */
-            $.publish('plugin/imageSlider/updateTransform', [ me ]);
-
-            $.publish('plugin/swImageSlider/onUpdateTransform', [me, animate, callback]);
+            $.publish('plugin/swImageSlider/onUpdateTransform', [ me, animate, callback ]);
 
             if (!callback) {
                 return;
@@ -1337,7 +1332,7 @@
                 me.slide(i);
             });
 
-            $.publish('plugin/swImageSlider/onApplyClickEventHandler', [me, index, el]);
+            $.publish('plugin/swImageSlider/onApplyClickEventHandler', [ me, index, el ]);
         },
 
         /**
@@ -1373,7 +1368,7 @@
                 'class': opts.rightArrowCls + ((opts.loopSlides || me._slideIndex < me._itemCount - 1) && me._itemCount > 1 ? '' : hiddenClass)
             }).appendTo(me._$slideContainer);
 
-            $.publish('plugin/swImageSlider/onCreateArrows', [me, me._$arrowLeft, me._$arrowRight]);
+            $.publish('plugin/swImageSlider/onCreateArrows', [ me, me._$arrowLeft, me._$arrowRight ]);
         },
 
         /**
@@ -1411,7 +1406,7 @@
                 'class': opts.thumbnailArrowCls + ' ' + nextClass
             }).appendTo(me._$thumbnailContainer);
 
-            $.publish('plugin/swImageSlider/onCreateThumbnailArrows', [me, me._$thumbnailArrowPrev, me._$thumbnailArrowNext]);
+            $.publish('plugin/swImageSlider/onCreateThumbnailArrows', [ me, me._$thumbnailArrowPrev, me._$thumbnailArrowNext ]);
         },
 
         /**
@@ -1479,7 +1474,7 @@
              */
             me._itemCount = me._$items.length;
 
-            $.publish('plugin/swImageSlider/onTrackItems', me);
+            $.publish('plugin/swImageSlider/onTrackItems', [ me ]);
         },
 
         /**
@@ -1505,7 +1500,7 @@
 
             me.updateMaxZoomValue();
 
-            $.publish('plugin/swImageSlider/onSetIndex', [me, index]);
+            $.publish('plugin/swImageSlider/onSetIndex', [ me, index ]);
         },
 
         /**
@@ -1541,7 +1536,7 @@
 
             me._maxZoom = Math.max(image.naturalWidth, image.naturalHeight) / Math.max($currentImage.width(), $currentImage.height());
 
-            $.publish('plugin/swImageSlider/onUpdateMaxZoomValue', [me, me._maxZoom]);
+            $.publish('plugin/swImageSlider/onUpdateMaxZoomValue', [ me, me._maxZoom ]);
         },
 
         /**
@@ -1591,7 +1586,7 @@
 
             me.setThumbnailSlidePosition(newPos, true);
 
-            $.publish('plugin/swImageSlider/onSetActiveThumbnail', [me, index]);
+            $.publish('plugin/swImageSlider/onSetActiveThumbnail', [ me, index ]);
         },
 
         /**
@@ -1610,7 +1605,7 @@
                 $dots.eq(index || me._slideIndex).addClass(me.opts.activeStateClass);
             }
 
-            $.publish('plugin/swImageSlider/onSetActiveDot', [me, index]);
+            $.publish('plugin/swImageSlider/onSetActiveDot', [ me, index ]);
         },
 
         /**
@@ -1643,7 +1638,7 @@
                 $slide[Modernizr.csstransitions ? 'transition' : 'animate'](css, me.animationSpeed, $.proxy(me.trackThumbnailControls, me));
             }
 
-            $.publish('plugin/swImageSlider/onSetThumbnailSlidePosition', [me, offset, animate]);
+            $.publish('plugin/swImageSlider/onSetThumbnailSlidePosition', [ me, offset, animate ]);
         },
 
         /**
@@ -1687,7 +1682,7 @@
                 $nextArr.toggleClass(activeCls, ($slide.innerHeight() + pos.top) > $container.innerHeight());
             }
 
-            $.publish('plugin/swImageSlider/onTrackThumbnailControls', me);
+            $.publish('plugin/swImageSlider/onTrackThumbnailControls', [ me ]);
         },
 
         /**
@@ -1703,7 +1698,7 @@
 
             me._slideInterval = window.setTimeout($.proxy(me.slideNext, me), me.opts.autoSlideInterval);
 
-            $.publish('plugin/swImageSlider/onStartAutoSlide', [me, me._slideInterval]);
+            $.publish('plugin/swImageSlider/onStartAutoSlide', [ me, me._slideInterval ]);
         },
 
         /**
@@ -1717,7 +1712,7 @@
 
             window.clearTimeout(me._slideInterval);
 
-            $.publish('plugin/swImageSlider/onStopAutoSlide', me);
+            $.publish('plugin/swImageSlider/onStopAutoSlide', [ me ]);
         },
 
         /**
@@ -1774,10 +1769,7 @@
                 me._$arrowRight.toggleClass(opts.hiddenClass, !opts.loopSlides && index >= me._itemCount - 1);
             }
 
-            /** @deprecated - will be removed in 5.1 */
-            $.publish('plugin/imageSlider/slide', [ me ]);
-
-            $.publish('plugin/imageSlider/onSlide', [me, index, callback]);
+            $.publish('plugin/swImageSlider/onSlide', [ me, index, callback ]);
         },
 
         /**
@@ -1807,7 +1799,7 @@
                 callback.call(me);
             }
 
-            $.publish('plugin/imageSlider/onResetTransformation', [me, animate, callback]);
+            $.publish('plugin/swImageSlider/onResetTransformation', [ me, animate, callback ]);
         },
 
         /**
@@ -1826,10 +1818,7 @@
 
             me.slide((newIndex >= itemCount && isLooping) ? 0 : Math.min(itemCount - 1, newIndex));
 
-            /** @deprecated - will be removed in 5.1 */
-            $.publish('plugin/imageSlider/slideNext', [ me ]);
-
-            $.publish('plugin/imageSlider/onSlideNext', [me, newIndex]);
+            $.publish('plugin/swImageSlider/onSlideNext', [ me, newIndex ]);
         },
 
         /**
@@ -1848,10 +1837,7 @@
 
             me.slide((newIndex < 0 && isLooping) ? itemCount - 1 : Math.max(0, newIndex));
 
-            /** @deprecated - will be removed in 5.1 */
-            $.publish('plugin/imageSlider/slidePrev', [ me ]);
-
-            $.publish('plugin/imageSlider/onSlidePrev', [me, newIndex]);
+            $.publish('plugin/swImageSlider/onSlidePrev', [ me, newIndex ]);
         },
 
         /**

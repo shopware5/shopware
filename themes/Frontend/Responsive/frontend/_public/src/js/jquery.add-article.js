@@ -1,4 +1,4 @@
-;jQuery(function ($) {
+;(function($, window) {
     'use strict';
 
     /**
@@ -33,8 +33,6 @@
      *
      */
     $.plugin('swAddArticle', {
-
-        alias: 'addArticle',
 
         defaults: {
             /**
@@ -131,14 +129,14 @@
                 });
             }
 
-            $.publish('plugin/swAddArticle/onBeforeAddArticle', [me, ajaxData]);
+            $.publish('plugin/swAddArticle/onBeforeAddArticle', [ me, ajaxData ]);
 
             $.ajax({
                 'data': ajaxData,
                 'dataType': 'jsonp',
                 'url': opts.addArticleUrl,
                 'success': function (result) {
-                    $.publish('plugin/swAddArticle/onAddArticle', [me, result]);
+                    $.publish('plugin/swAddArticle/onAddArticle', [ me, result ]);
 
                     if (!opts.showModal) {
                         return;
@@ -155,7 +153,7 @@
 
                         StateManager.updatePlugin(opts.productSliderSelector, 'swProductSlider');
 
-                        $.publish('plugin/swAddArticle/onAddArticleOpenModal', [me, result]);
+                        $.publish('plugin/swAddArticle/onAddArticleOpenModal', [ me, result ]);
                     });
                 }
             });
@@ -172,7 +170,7 @@
 
             $.modal.close();
 
-            $.publish('plugin/swAddArticle/onCloseModal', this);
+            $.publish('plugin/swAddArticle/onCloseModal', [ this ]);
         },
 
         /**
@@ -187,7 +185,7 @@
 
             StateManager.destroyPlugin(me.opts.productSliderSelector, 'swProductSlider');
 
-            $.publish('plugin/swAddArticle/onCloseModal', me);
+            $.publish('plugin/swAddArticle/onCloseModal', [ me ]);
         }
     });
-});
+})(jQuery, window);

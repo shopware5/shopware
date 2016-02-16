@@ -144,7 +144,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
         }
 
         if ($this->Request()->isPost()) {
-            $this->checkFields($this->_elements);
+            $this->checkFields();
         }
 
         if (empty($this->Request()->Submit) || count($this->_errors)) {
@@ -311,7 +311,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
 
         $mail = Enlight()->Events()->filter('Shopware_Controllers_Frontend_Forms_commitForm_Mail', $mail, array('subject' => $this));
 
-        if (!$mail->Send()) {
+        if (!$mail->send()) {
             throw new Enlight_Exception("Could not send mail");
         }
     }

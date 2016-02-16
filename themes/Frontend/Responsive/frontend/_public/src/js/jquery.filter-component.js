@@ -102,8 +102,6 @@
      */
     $.plugin('swFilterComponent', {
 
-        alias: 'filterComponent',
-
         defaults: {
             /**
              * The type of the filter component
@@ -174,7 +172,7 @@
 
             me.registerComponentEvents();
 
-            $.publish('plugin/swFilterComponent/onInitComponent', me);
+            $.publish('plugin/swFilterComponent/onInitComponent', [ me ]);
         },
 
         /**
@@ -187,7 +185,7 @@
                 me._on(me.$title, 'click', $.proxy(me.toggleCollapse, me, true));
             }
 
-            $.publish('plugin/swFilterComponent/onRegisterEvents', me);
+            $.publish('plugin/swFilterComponent/onRegisterEvents', [ me ]);
         },
 
         /**
@@ -199,7 +197,7 @@
 
             me._on(me.$inputs, 'change', $.proxy(me.onChange, me));
 
-            $.publish('plugin/swFilterComponent/onRegisterComponentEvents', me);
+            $.publish('plugin/swFilterComponent/onRegisterComponentEvents', [ me ]);
         },
 
         /**
@@ -216,10 +214,7 @@
 
             me.$el.trigger('onChange', [me, $el]);
 
-            /** @deprecated - will be removed in 5.1 */
-            $.publish('plugin/filterComponent/onChange', me);
-
-            $.publish('plugin/swFilterComponent/onChange', [me, event]);
+            $.publish('plugin/swFilterComponent/onChange', [ me, event ]);
         },
 
         /**
@@ -245,7 +240,7 @@
 
             me.$el.addClass(me.opts.collapseCls);
 
-            $.publish('plugin/swFilterComponent/onOpen', me);
+            $.publish('plugin/swFilterComponent/onOpen', [ me ]);
         },
 
         /**
@@ -256,7 +251,7 @@
 
             me.$el.removeClass(me.opts.collapseCls);
 
-            $.publish('plugin/swFilterComponent/onClose', me);
+            $.publish('plugin/swFilterComponent/onClose', [ me ]);
         },
 
         /**
@@ -272,7 +267,7 @@
                 me.close();
             }
 
-            $.publish('plugin/swFilterComponent/onToggleCollapse', [me, shouldOpen]);
+            $.publish('plugin/swFilterComponent/onToggleCollapse', [ me, shouldOpen ]);
         },
 
         /**

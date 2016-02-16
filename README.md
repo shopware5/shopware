@@ -1,11 +1,11 @@
 # Shopware 5
 
-[![Build Status](https://travis-ci.org/shopware/shopware.svg?branch=5.0)](https://travis-ci.org/shopware/shopware)
+[![Build Status](https://travis-ci.org/shopware/shopware.svg?branch=5.1)](https://travis-ci.org/shopware/shopware)
 [![Crowdin](https://d322cqt584bo4o.cloudfront.net/shopware/localized.svg)](https://crowdin.com/project/shopware)
 
 - **License**: Dual license AGPL v3 / Proprietary
 - **Github Repository**: <https://github.com/shopware/shopware>
-- **Issue Tracker**: <http://jira.shopware.de/jira>
+- **Issue Tracker**: <https://issues.shopware.com>
 
 ## Overview
 
@@ -32,18 +32,16 @@ Follow the instruction below if you want to install Shopware 5 using Git.
 
     git clone https://github.com/shopware/shopware.git
 
-In case you wish to contribute to Shopware, fork the `5.0` branch rather than cloning it, and create a pull request via Github. For further information please read the section "Get involved" of this document.
+In case you wish to contribute to Shopware, fork the `5.1` branch rather than cloning it, and create a pull request via Github. For further information please read the section "Get involved" of this document.
 
 2.) Set the correct directory permissions:
 
     chmod 755 config.php
-    chmod -R 755 logs
-    chmod -R 755 cache
+    chmod -R 755 var
     chmod -R 755 web
     chmod -R 755 files
     chmod -R 755 media
     chmod -R 755 engine/Shopware/Plugins/Community
-
 
 Depending on your server configuration, it might be necessary to set whole write permissions (777) to the files and folders above.
 You can also start testing with lower permissions due to security reasons (644 for example) as long as your php process can write to those files.
@@ -87,7 +85,7 @@ For more information about contributing to Shopware, please see [CONTRIBUTING.md
 
 We've always had a sympathetic ear for our community, so please feel free to submit tickets with bug reports or feature requests. In order to have a single issue tracking tool, we've decided to close the GitHub issue panel in favor of our Jira issue tracker, which is directly connected to our development division.
 
-* [Shopware Jira ticket submit form](http://jira.shopware.de/jira)
+* [Shopware Jira ticket submit form](https://issues.shopware.com)
 
 # Copying / License
 
@@ -95,12 +93,13 @@ Shopware is distributed under a dual license (AGPL v3 and proprietary license). 
 
 # Changelog
 
-The changelog and all available commits are located under <https://github.com/shopware/shopware/commits/5.0>.
+The changelog and all available commits are located under <https://github.com/shopware/shopware/commits/5.1>.
 
 ## Further reading
 
 * [Shopware AG](http://www.shopware.com) - Homepage of shopware AG
 * [Shopware Developer Documentation](https://devdocs.shopware.com/)
-* [Shopware Wiki](http://wiki.shopware.com) - Shopware Wiki
+* [Shopware Community](http://community.shopware.com/) - Shopware Community
 * [Shopware Forum](http://forum.shopware.com) - Community forum
 * [Shopware Marketplace](http://store.shopware.com) - Shopware Store
+* [Shopware on Crowdin](https://crowdin.com/project/shopware) - Crowdin (Translations)

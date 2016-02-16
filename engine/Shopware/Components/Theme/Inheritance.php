@@ -24,6 +24,7 @@
 
 namespace Shopware\Components\Theme;
 
+use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Theme;
 use Shopware\Models\Shop as Shop;
@@ -78,21 +79,29 @@ class Inheritance
     );
 
     /**
+     * @var MediaServiceInterface
+     */
+    private $mediaService;
+
+    /**
      * @param ModelManager $entityManager
      * @param Util $util
      * @param PathResolver $pathResolver
      * @param \Enlight_Event_EventManager $eventManager
+     * @param MediaServiceInterface $mediaService
      */
     public function __construct(
         ModelManager $entityManager,
         Util $util,
         PathResolver $pathResolver,
-        \Enlight_Event_EventManager $eventManager
+        \Enlight_Event_EventManager $eventManager,
+        MediaServiceInterface $mediaService
     ) {
         $this->pathResolver = $pathResolver;
         $this->entityManager = $entityManager;
         $this->util = $util;
         $this->eventManager = $eventManager;
+        $this->mediaService = $mediaService;
     }
 
     /**
@@ -106,12 +115,12 @@ class Inheritance
         $util = $this->util;
         $bare = array_filter($hierarchy, function (Shop\Template $template) use ($util) {
             $theme = $util->getThemeByTemplate($template);
-            return ($template->getParent() == null || $theme instanceof ResponsiveTheme);
+            return $theme->injectBeforePlugins();
         });
     
         $custom = array_filter($hierarchy, function (Shop\Template $template) use ($util) {
             $theme = $util->getThemeByTemplate($template);
-            return ($template->getParent() !== null && !($theme instanceof ResponsiveTheme));
+            return !$theme->injectBeforePlugins();
         });
         
         return [
@@ -426,6 +435,10 @@ class Inheritance
 
             if ($lessCompatible && $row['type'] === 'theme-media-selection') {
                 $row['value'] = '"' . $row['value'] . '"';
+            }
+
+            if ($row['type'] === 'theme-media-selection' && $row['value'] !== $row['defaultValue'] && strpos($row['value'], "media/") !== false) {
+                $row['value'] = $this->mediaService->getUrl($row['value']);
             }
         }
 

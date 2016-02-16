@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace   Shopware\Models\Order;
+namespace Shopware\Models\Order;
 
 use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
@@ -57,7 +57,15 @@ class Status extends ModelEntity
     private $id;
 
     /**
+     * @var string $name
+     *
+     * @ORM\Column(name="name", type="string", length=50, nullable=false)
+     */
+    private $name;
+
+    /**
      * @var string $description
+     * @deprecated Use 'name' in conjunction with the 'backend/static/*' snippet namespaces instead
      *
      * @ORM\Column(name="description", type="string", length=255, nullable=false)
      */
@@ -102,7 +110,24 @@ class Status extends ModelEntity
     }
 
     /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
      * Set description
+     * @deprecated Use getName() + snippets instead
      *
      * @param string $description
      * @return Status
@@ -115,6 +140,7 @@ class Status extends ModelEntity
 
     /**
      * Get description
+     * @deprecated Use getName() + snippets instead
      *
      * @return string
      */

@@ -211,7 +211,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
             if (!isset($medias[$mediaId])) {
                 continue;
             }
-            
+
             /**@var $media \Shopware\Bundle\StoreFrontBundle\Struct\Media*/
             $media = $medias[$mediaId];
             $media = $this->get('legacy_struct_converter')->convertMediaStruct($media);
@@ -316,6 +316,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         $mediaIds = array_column($blogArticleData["media"], 'mediaId');
         $context = $this->get('shopware_storefront.context_service')->getShopContext();
         $mediaStructs = $this->get('shopware_storefront.media_service')->getList($mediaIds, $context);
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
 
         //adding thumbnails to the blog article
         foreach ($blogArticleData["media"] as &$media) {
@@ -325,6 +326,9 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
                 $blogArticleData["preview"] = $mediaData;
             }
             $media = array_merge($media, $mediaData);
+
+            // @deprecated since 5.1 will be removed in 5.2
+            $media['media']['path'] = $mediaService->getUrl($media['media']['path']);
         }
 
         //add sRelatedArticles
@@ -446,7 +450,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
                     $context = array('sConfirmLink' => $link, 'sArticle' => array('title' => $blogArticleData["title"]));
                     $mail = Shopware()->TemplateMail()->createMail('sOPTINVOTE', $context);
                     $mail->addTo($this->Request()->getParam('eMail'));
-                    $mail->Send();
+                    $mail->send();
                 } else {
                     //save comment
                     $commentData = $this->Request()->getPost();
@@ -502,7 +506,11 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
     protected function getPagerData($totalResult, $sLimitEnd, $sPage, $categoryId)
     {
         // How many pages in this category?
-        $numberPages = ceil($totalResult / $sLimitEnd);
+        if ($sLimitEnd != 0) {
+            $numberPages = ceil($totalResult / $sLimitEnd);
+        } else {
+            $numberPages = 0;
+        }
 
         // Make Array with page-structure to render in template
         $pages = array();
@@ -591,11 +599,13 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
     {
         foreach ($filterData as $key => $dateData) {
             $filterData[$key]["link"] = $this->blogBaseUrl . Shopware()->Modules()->Core()->sBuildLink(
-                array("sPage" => 1, $requestParameterName => urlencode($dateData[$requestParameterValue])), false);
+                array("sPage" => 1, $requestParameterName => urlencode($dateData[$requestParameterValue]))
+            );
         }
         if ($addRemoveProperty) {
             $filterData[] = array("removeProperty" => 1, "link" => $this->blogBaseUrl . Shopware()->Modules()->Core()->sBuildLink(
-                array("sPage" => 1, $requestParameterName => '')), false);
+                array("sPage" => 1, $requestParameterName => ''))
+            );
         }
         return $filterData;
     }

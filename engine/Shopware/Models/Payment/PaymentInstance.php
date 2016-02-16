@@ -147,7 +147,7 @@ class PaymentInstance extends ModelEntity
     protected $iban;
 
     /**
-     * @var decimal $amount
+     * @var float $amount
      *
      * @ORM\Column(name="amount", type="decimal", precision=20, scale=4)
      */

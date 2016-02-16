@@ -479,8 +479,7 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
      */
     public function dispatch(Enlight_Controller_Request_Request $request,
                              Enlight_Controller_Response_Response $response
-    )
-    {
+    ) {
         $this->setResponse($response);
 
         if (!$this->isDispatchable($request)) {

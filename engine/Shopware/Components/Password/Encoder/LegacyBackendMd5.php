@@ -31,7 +31,6 @@ namespace Shopware\Components\Password\Encoder;
  */
 class LegacyBackendMd5 implements PasswordEncoderInterface
 {
-
     /**
      * @return string
      */
@@ -49,7 +48,7 @@ class LegacyBackendMd5 implements PasswordEncoderInterface
     {
         $salt = "A9ASD:_AD!_=%a8nx0asssblPlasS$";
 
-        return md5($salt . md5($password)) == $hash;
+        return hash_equals($hash, md5($salt . md5($password)));
     }
 
     /**

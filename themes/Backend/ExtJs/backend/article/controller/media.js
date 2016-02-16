@@ -69,7 +69,6 @@ Ext.define('Shopware.apps.Article.controller.Media', {
         { ref:'previewButton', selector:'article-detail-window article-image-list button[action=previewImage]' },
         { ref:'removeButton', selector:'article-detail-window article-image-list button[action=removeImage]' },
         { ref:'mediaInfo', selector:'article-detail-window article-image-info' },
-        { ref:'sidebarMediaDropZone', selector:'article-detail-window article-sidebar-option article-image-drop-zone' },
         { ref:'mediaDropZone', selector:'article-detail-window article-image-upload article-image-drop-zone' }
     ],
 
@@ -115,9 +114,6 @@ Ext.define('Shopware.apps.Article.controller.Media', {
             },
             'article-detail-window article-image-upload': {
                 mediaUpload: me.onMediaUpload
-            },
-            'article-detail-window article-sidebar-option': {
-                mediaUpload: me.onSidebarMediaUpload
             }
         });
         me.callParent(arguments);
@@ -238,7 +234,7 @@ Ext.define('Shopware.apps.Article.controller.Media', {
         var mapping = Ext.create('Shopware.apps.Article.model.MediaMapping', {
             id: null,
             imageId: record.get('id')
-        })
+        });
 
         //now we create a store for the selected options to collect all rules.
         var ruleStore = Ext.create('Ext.data.Store', { model: 'Shopware.apps.Article.model.MediaMappingRule' });
@@ -430,26 +426,6 @@ Ext.define('Shopware.apps.Article.controller.Media', {
     },
 
     /**
-     * Event listener function which fired when the user uploads images
-     * over the file field of the sidebar.
-     * @param field
-     */
-    onSidebarMediaUpload: function(field) {
-        var dropZone = this.getSidebarMediaDropZone(), me = this;
-
-        if(Ext.isIE || Ext.isSafari) {
-        	var form = field.ownerCt;
-        	form.submit({
-        		success: function() {
-	        		Shopware.Notification.createGrowlMessage(me.snippets.growlMessage, me.snippets.upload.text);
-        		}
-        	});
-        } else {
-            this.uploadMedia(field, dropZone);
-        }
-    },
-
-    /**
      * Event will be fired when the user want to upload images over the button on the image tab.
      *
      * @event
@@ -510,6 +486,8 @@ Ext.define('Shopware.apps.Article.controller.Media', {
         if (operation.success === true) {
             var media = Ext.create('Shopware.apps.Article.model.Media', operation.data);
             media.set('path', operation.data.name);
+            media.set('original', operation.data.path);
+            media.set('thumbnail', operation.data.path);
             media.set('main', 2);
             media.set('mediaId', operation.data.id);
 

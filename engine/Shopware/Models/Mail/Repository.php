@@ -30,7 +30,6 @@ use Shopware\Components\Model\ModelRepository;
  */
 class Repository extends ModelRepository
 {
-
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which selects a list of all mails.
      * @param $mailId

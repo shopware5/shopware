@@ -31,7 +31,6 @@ namespace Shopware\Components\MultiEdit\Resource\Product;
  */
 class BatchProcess
 {
-
     /**
      * Reference to an instance of the DqlHelper
      *
@@ -108,7 +107,7 @@ class BatchProcess
     public function getEditableColumns()
     {
         $columns = $this->getDqlHelper()->getColumnsForProductListing();
-        
+
         foreach ($columns as $key => $config) {
             $attribute = $config['entity'] . '.' . $config['field'];
 
@@ -311,7 +310,7 @@ class BatchProcess
                 $connection->commit();
             }
         } catch (\Exception $e) {
-            $connection->rollback();
+            $connection->rollBack();
             throw new \RuntimeException("Error updating details: {$e->getMessage()}", 0, $e);
         }
         $remaining = $queue->getArticleDetails()->count();

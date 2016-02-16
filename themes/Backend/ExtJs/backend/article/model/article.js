@@ -105,6 +105,7 @@ Ext.define('Shopware.apps.Article.model.Article', {
         { type: 'hasMany', model: 'Shopware.apps.Article.model.SeoCategory', name: 'getSeoCategories', associationKey: 'seoCategories' },
         { type: 'hasMany', model: 'Shopware.apps.Article.model.Accessory', name: 'getAccessory', associationKey: 'related' },
         { type: 'hasMany', model: 'Shopware.apps.Article.model.Similar', name: 'getSimilar', associationKey: 'similar' },
+        { type: 'hasMany', model: 'Shopware.apps.Article.model.Stream', name: 'getStreams', associationKey: 'streams'},
         { type: 'hasMany', model: 'Shopware.apps.Article.model.Link', name: 'getLink', associationKey: 'links' },
         { type: 'hasMany', model: 'Shopware.apps.Article.model.Media', name: 'getMedia', associationKey: 'images' },
         { type: 'hasMany', model: 'Shopware.apps.Article.model.Download', name: 'getDownload', associationKey: 'downloads' },

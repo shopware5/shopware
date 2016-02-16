@@ -68,7 +68,7 @@ class Log extends ModelEntity
     private $text;
 
     /**
-     * @var datetime $date
+     * @var \DateTime $date
      *
      * @ORM\Column(name="date", type="datetime", nullable=false)
      */

@@ -16,7 +16,8 @@ Thumbs.db
 
 # Composer
 /composer.phar
-/vendor/
+/vendor/*
+!/vendor/.htaccess
 
 # Internal Repositories
 /internal
@@ -33,15 +34,15 @@ Thumbs.db
 # Caches/Proxies
 /tests/Shopware/TempFiles/*
 !/tests/Shopware/TempFiles/.gitkeep
-/cache/*
-!/cache/.htaccess
-!/cache/clear_cache.sh
+/var/cache/*
+!/var/cache/.htaccess
+!/var/cache/clear_cache.sh
 /web/cache/*
 !/web/cache/.gitkeep
 
 # Log files
-/logs/*
-!/logs/.htaccess
+/var/log/*
+!/var/log/.htaccess
 
 
 # User provided content

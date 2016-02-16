@@ -31,7 +31,7 @@ Ext.define('Shopware.apps.PluginManager.view.account.Upload', {
         var me = this;
 
         me.fileUpload = Ext.create('Ext.form.field.File', {
-            fieldLabel: '{s name="upload_plugin"}{/s}',
+            fieldLabel: '{s name="upload_plugin"}Upload plugin{/s}',
             name: 'plugin',
             labelWidth: 125,
             flex: 1,
@@ -39,7 +39,7 @@ Ext.define('Shopware.apps.PluginManager.view.account.Upload', {
             margin: '10 0 0',
             buttonConfig: {
                 cls: 'primary small',
-                text: '{s name="upload_select"}{/s}'
+                text: '{s name="upload_select"}Select{/s}'
             },
             listeners: {
                 'change': function() {
@@ -54,8 +54,8 @@ Ext.define('Shopware.apps.PluginManager.view.account.Upload', {
 
         me.info = Ext.create('Ext.form.FieldSet', {
             cls : 'info',
-            title: '{s name="upload_info_title"}{/s}',
-            html: '{s name="upload_info_text"}{/s}'
+            title: '{s name="upload_info_title"}Tip{/s}',
+            html: '{s name="upload_info_text"}Here you can upload and install your plugins manually. Please keep in mind that plugins have to be in a ZIP archive and the file size can´t exceed the configured upload size limit.{/s}'
         });
 
         me.form = Ext.create('Ext.form.Panel', {
@@ -78,7 +78,7 @@ Ext.define('Shopware.apps.PluginManager.view.account.Upload', {
 
         me.cancelButton = Ext.create('Ext.button.Button', {
             cls: 'secondary',
-            text: '{s name="cancel"}{/s}',
+            text: '{s name="cancel"}Cancel{/s}',
             handler: function() {
                 me.destroy();
             }
@@ -86,7 +86,7 @@ Ext.define('Shopware.apps.PluginManager.view.account.Upload', {
 
         me.uploadButton = Ext.create('Ext.button.Button', {
             cls: 'primary',
-            text: '{s name="upload_plugin"}{/s}',
+            text: '{s name="upload_plugin"}Upload plugin{/s}',
             disabled: true,
             handler: function() {
                 if (!me.form.getForm().isValid()) {

@@ -61,16 +61,6 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
     public $_config;
 
     /**
-     * compatibilityMode = true means that html2ps will be used instead of mpdf.
-     * Additionally old templatebase will be used (For pre 3.5 versions)
-     *
-     * Unsupported till shopware 4.0.0
-     * @var bool
-     * @deprecated
-     */
-    protected $_compatibilityMode = false;
-
-    /**
      * Define output
      *
      * @var string html,pdf,return
@@ -177,7 +167,6 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
         $document->setConfig($config);
 
         $document->setDocumentId($documentID);
-        $document->_compatibilityMode = false;
         if (!empty($orderID)) {
             $document->_subshop = Shopware()->Db()->fetchRow("
                 SELECT
@@ -397,30 +386,38 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
     {
         $id = $this->_typID;
 
-        $this->_document = new ArrayObject(Shopware()->Db()->fetchRow("
-        SELECT * FROM s_core_documents WHERE id = ?
-        ", array($id), ArrayObject::ARRAY_AS_PROPS));
-
+        $this->_document = new ArrayObject(
+            Shopware()->Db()->fetchRow(
+                "SELECT * FROM s_core_documents WHERE id = ?",
+                array($id),
+                \PDO::FETCH_ASSOC
+            )
+        );
 
         // Load Containers
-        $this->_document->containers = new ArrayObject(Shopware()->Db()->fetchAll("
-        SELECT * FROM s_core_documents_box WHERE documentID = ?
-        ", array($id), ArrayObject::ARRAY_AS_PROPS));
+        $containers = Shopware()->Db()->fetchAll(
+            "SELECT * FROM s_core_documents_box WHERE documentID = ?",
+            array($id),
+            \PDO::FETCH_ASSOC
+        );
 
         $translation = $this->translationComponent->read($this->_order->order->language, 'documents', 1);
-
-        foreach ($this->_document->containers as $key => $container) {
+        $this->_document->containers = new ArrayObject();
+        foreach ($containers as $key => $container) {
             if (!is_numeric($key)) {
                 continue;
             }
             if (!empty($translation[$id][$container["name"]."_Value"])) {
-                $this->_document->containers[$key]["value"] = $translation[$id][$container["name"]."_Value"];
+                $containers[$key]["value"] = $translation[$id][$container["name"]."_Value"];
             }
             if (!empty($translation[$id][$container["name"]."_Style"])) {
-                $this->_document->containers[$key]["style"] = $translation[$id][$container["name"]."_Style"];
+                $containers[$key]["style"] = $translation[$id][$container["name"]."_Style"];
             }
-            $this->_document->containers[$container["name"]] = $this->_document->containers[$key];
-            unset($this->_document->containers[$key]);
+
+            // parse smarty tags
+            $containers[$key]['value'] = $this->_template->fetch('string:'.$containers[$key]['value']);
+
+            $this->_document->containers->offsetSet($container["name"], $containers[$key]);
         }
     }
 
@@ -472,7 +469,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
         $getVoucher = Shopware()->Db()->fetchRow($sqlVoucher, array($id));
         if ($getVoucher["id"]) {
             // Update Voucher and pass-information to template
-            $updateVoucher = Shopware()->Db()->query("
+            Shopware()->Db()->query("
             UPDATE s_emarketing_voucher_codes
             SET
                 userID = ?
@@ -482,7 +479,6 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
             if ($this->_order->currency->factor!=1) {
                 $getVoucher["value"]*=$this->_order->currency->factor;
             }
-            $getVoucher["value"] = $getVoucher["value"];
             if (!empty($getVoucher["percental"])) {
                 $getVoucher["prefix"] = "%";
             } else {
@@ -584,7 +580,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
             if ($typID == 4) {
                 $amount *= -1;
             }
-            $update = Shopware()->Db()->query($update, array(
+            Shopware()->Db()->query($update, array(
                     $amount,
                     $typID,
                     $this->_order->userID,
@@ -628,14 +624,14 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
             INSERT INTO s_order_documents (`date`, `type`, `userID`, `orderID`, `amount`, `docID`,`hash`)
             VALUES ( NOW() , ? , ? , ?, ?, ?,?)
             ";
-            $insert = Shopware()->Db()->query($sql, array(
-                    $typID,
-                    $this->_order->userID,
-                    $this->_order->id,
-                    $amount,
-                    $bid,
-                    $hash
-                ));
+            Shopware()->Db()->query($sql, array(
+                $typID,
+                $this->_order->userID,
+                $this->_order->id,
+                $amount,
+                $bid,
+                $hash
+            ));
             $rowID = Shopware()->Db()->lastInsertId();
 
             // Add an entry in s_order_documents_attributes for the created document

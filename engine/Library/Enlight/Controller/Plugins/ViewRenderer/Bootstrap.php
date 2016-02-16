@@ -248,7 +248,7 @@ class Enlight_Controller_Plugins_ViewRenderer_Bootstrap extends Enlight_Plugin_B
      */
     public function shouldRender()
     {
-        return ( $this->Front() !== null
+        return ($this->Front() !== null
             &&!$this->Front()->getParam('noViewRenderer')
             && !$this->neverRender
             && !$this->noRender

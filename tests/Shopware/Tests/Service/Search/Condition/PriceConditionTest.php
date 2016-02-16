@@ -2,11 +2,8 @@
 
 namespace Shopware\Tests\Service\Search\Condition;
 
-use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
 use Shopware\Bundle\SearchBundle\Condition\PriceCondition;
-use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
-use Shopware\Bundle\StoreFrontBundle\Struct\Context;
+use Shopware\Bundle\StoreFrontBundle\Struct\ProductContext;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Service\TestCase;
 
@@ -15,13 +12,13 @@ class PriceConditionTest extends TestCase
     /**
      * @param $number
      * @param \Shopware\Models\Category\Category $category
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Context $context
+     * @param ProductContext $context
      * @param $prices
      * @return array
      */
     protected function getProduct(
         $number,
-        Context $context,
+        ProductContext $context,
         Category $category = null,
         $prices = array()
     ) {

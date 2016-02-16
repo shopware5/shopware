@@ -52,8 +52,7 @@ class BlogComment extends MultipleElement
 
         $elements = Helper::findElements($this, $locators);
 
-        foreach($elements as $locator => $element)
-        {
+        foreach ($elements as $locator => $element) {
             $funcName = 'get'.ucfirst($locator);
             $return[$locator] = $this->$funcName($element);
         }
@@ -105,5 +104,4 @@ class BlogComment extends MultipleElement
     {
         return $element->getText();
     }
-
 }

@@ -68,6 +68,21 @@ class CategoryService implements Service\CategoryServiceInterface
     }
 
     /**
+     * @inheritdoc
+     */
+    public function getProductsCategories(array $products, Struct\ShopContextInterface $context)
+    {
+        $categories = $this->categoryGateway->getProductsCategories($products, $context);
+
+        $result = [];
+        foreach ($categories as $key => $productCategories) {
+            $result[$key] = $this->filterValidCategories($productCategories, $context);
+        }
+
+        return $result;
+    }
+
+    /**
      * @param Struct\Category[] $categories
      * @param Struct\ShopContextInterface $context
      * @return Struct\Category[] $categories Indexed by the category id

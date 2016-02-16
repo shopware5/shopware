@@ -57,21 +57,29 @@ class SearchTermQueryBuilder implements SearchTermQueryBuilderInterface
     private $searchIndexer;
 
     /**
+     * @var TermHelperInterface
+     */
+    private $termHelper;
+
+    /**
      * @param \Shopware_Components_Config $config
      * @param Connection $connection
      * @param KeywordFinderInterface $keywordFinder
      * @param SearchIndexerInterface $searchIndexer
+     * @param TermHelperInterface $termHelper
      */
     public function __construct(
         \Shopware_Components_Config $config,
         Connection $connection,
         KeywordFinderInterface $keywordFinder,
-        SearchIndexerInterface $searchIndexer
+        SearchIndexerInterface $searchIndexer,
+        TermHelperInterface $termHelper
     ) {
         $this->config = $config;
         $this->connection = $connection;
         $this->keywordFinder = $keywordFinder;
         $this->searchIndexer = $searchIndexer;
+        $this->termHelper = $termHelper;
 
         $this->searchIndexer->validate();
     }
@@ -118,6 +126,11 @@ class SearchTermQueryBuilder implements SearchTermQueryBuilderInterface
             ]
         );
 
+        $enableAndSearchLogic = $this->config->get('enableAndSearchLogic', false);
+        if ($enableAndSearchLogic) {
+            $this->addAndSearchLogic($query, $term);
+        }
+
         return $query;
     }
 
@@ -141,7 +154,7 @@ class SearchTermQueryBuilder implements SearchTermQueryBuilderInterface
             $query = $this->connection->createQueryBuilder();
             $alias = 'st' . $table['tableID'];
 
-            $query->select(['MAX(sf.relevance * sm.relevance) as relevance', 'sm.keywordID']);
+            $query->select(['MAX(sf.relevance * sm.relevance) as relevance', 'sm.keywordID', 'term']);
             $query->from('(' . $keywordSelection . ')', 'sm');
             $query->innerJoin('sm', 's_search_index', 'si', 'sm.keywordID = si.keywordID');
             $query->innerJoin('si', 's_search_fields', 'sf', 'si.fieldID = sf.id AND sf.relevance != 0 AND sf.tableID = ' . $table['tableID']);
@@ -166,7 +179,7 @@ class SearchTermQueryBuilder implements SearchTermQueryBuilderInterface
         $tablesSql = "\n" . implode("\n     UNION ALL\n", $tablesSql);
 
         $subQuery = $this->connection->createQueryBuilder();
-        $subQuery->select(['srd.articleID', 'SUM(srd.relevance) as relevance']);
+        $subQuery->select(['srd.articleID', 'SUM(srd.relevance) as relevance', 'COUNT(DISTINCT term) as termCount']);
         $subQuery->from("(" . $tablesSql . ')', 'srd')
             ->groupBy('srd.articleID')
             ->setMaxResults(5000);
@@ -224,5 +237,17 @@ class SearchTermQueryBuilder implements SearchTermQueryBuilderInterface
                     AND sf.relevance != 0
             GROUP BY sf.tableID
        ");
+    }
+
+    /**
+     * checks if the given result set matches all search terms
+     *
+     * @param QueryBuilder $query
+     * @param string $term
+     */
+    private function addAndSearchLogic($query, $term)
+    {
+        $searchTerms = $this->termHelper->splitTerm($term);
+        $query->andWhere('termCount >= ' . count($searchTerms));
     }
 }

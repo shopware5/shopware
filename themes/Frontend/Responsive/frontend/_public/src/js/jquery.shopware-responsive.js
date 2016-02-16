@@ -120,6 +120,7 @@
         .addPlugin('*[data-compare-ajax="true"]', 'swProductCompareAdd')
         .addPlugin('*[data-product-compare-menu="true"]', 'swProductCompareMenu')
         .addPlugin('*[data-infinite-scrolling="true"]', 'swInfiniteScrolling')
+        .addPlugin('*[data-ajax-variants-container="true"]', 'swAjaxVariant')
         .addPlugin('*[data-subcategory-nav="true"]', 'swSubCategoryNav', ['xs', 's']);
 
     $(function($) {

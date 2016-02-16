@@ -3,7 +3,7 @@
 namespace Shopware\Tests\Service\Product;
 
 use Shopware\Bundle\StoreFrontBundle\Struct;
-use Shopware\Bundle\StoreFrontBundle\Struct\Context;
+use Shopware\Bundle\StoreFrontBundle\Struct\ProductContext;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Service\TestCase;
 
@@ -11,7 +11,7 @@ class ProductMediaTest extends TestCase
 {
     protected function getProduct(
         $number,
-        Context $context,
+        ProductContext $context,
         Category $category = null,
         $imageCount
     ) {
@@ -29,7 +29,7 @@ class ProductMediaTest extends TestCase
         return $data;
     }
 
-    private function getVariantImageProduct($number, Struct\Context $context, $imageCount = 2)
+    private function getVariantImageProduct($number, Struct\ProductContext $context, $imageCount = 2)
     {
         $data = $this->getProduct(
             $number,
@@ -56,6 +56,7 @@ class ProductMediaTest extends TestCase
 
     public function testProductMediaList()
     {
+        $this->resetContext();
         $context = $this->getContext();
         $numbers = array('testProductMediaList-1', 'testProductMediaList-2');
         foreach ($numbers as $number) {
@@ -92,6 +93,7 @@ class ProductMediaTest extends TestCase
 
     public function testVariantMediaList()
     {
+        $this->resetContext();
         $numbers = array('testVariantMediaList1-', 'testVariantMediaList2-');
         $context = $this->getContext();
         $articles = array();
@@ -141,6 +143,7 @@ class ProductMediaTest extends TestCase
 
     public function testProductImagesWithVariant()
     {
+        $this->resetContext();
         $number = 'testProductImagesWithVariant';
         $context = $this->getContext();
 
@@ -171,4 +174,15 @@ class ProductMediaTest extends TestCase
         }
     }
 
+    private function resetContext()
+    {
+        // correct router context for url building
+        Shopware()->Container()->get('router')->setContext(
+            new \Shopware\Components\Routing\Context(
+                'localhost',
+                Shopware()->Shop()->getBasePath(),
+                Shopware()->Shop()->getSecure()
+            )
+        );
+    }
 }

@@ -31,7 +31,6 @@ use Shopware\Components\Model\ModelRepository;
  */
 class Repository extends ModelRepository
 {
-
     /**
      * Returns an Banner Statistic Model.Either a new one or an existing one. If no date given
      * the current date will be used.

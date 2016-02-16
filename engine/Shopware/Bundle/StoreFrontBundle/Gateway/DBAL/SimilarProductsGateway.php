@@ -141,6 +141,10 @@ class SimilarProductsGateway implements Gateway\SimilarProductsGatewayInterface
      */
     public function getListByCategory($products, Struct\ShopContextInterface $context)
     {
+        if (!$this->config->offsetExists('similarLimit') || $this->config->get('similarLimit') <= 0) {
+            return [];
+        }
+
         $ids = [];
         foreach ($products as $product) {
             $ids[] = $product->getId();
@@ -195,10 +199,7 @@ class SimilarProductsGateway implements Gateway\SimilarProductsGatewayInterface
         $statement = $query->execute();
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
-        $limit = 3;
-        if ($this->config->offsetExists('similarLimit') && $this->config->get('similarLimit') > 0) {
-            $limit = (int) $this->config->get('similarLimit');
-        }
+        $limit = (int) $this->config->get('similarLimit');
 
         $result = [];
         foreach ($data as $row) {

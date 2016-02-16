@@ -169,7 +169,7 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.GroupEdit', {
             growMax: 300,
             fieldLabel: me.snippets.description.label,
             supportText: me.snippets.description.support
-        })
+        });
 
         me.formPanel = Ext.create('Ext.form.Panel', {
             layout: 'anchor',

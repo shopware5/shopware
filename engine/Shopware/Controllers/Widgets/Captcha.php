@@ -113,7 +113,7 @@ class Shopware_Controllers_Widgets_Captcha extends Enlight_Controller_Action
             $colors = explode(',', '255,0,0');
         }
 
-        $black = ImageColorAllocate($im, $colors[0], $colors[1], $colors[2]);
+        $black = imagecolorallocate($im, $colors[0], $colors[1], $colors[2]);
 
         $string = implode(' ', str_split($string));
 
@@ -130,7 +130,7 @@ class Shopware_Controllers_Widgets_Captcha extends Enlight_Controller_Action
                 imageline($im, mt_rand(30, 70), mt_rand(0, 50), mt_rand(100, 150), mt_rand(20, 100), $black);
             }
         } else {
-            $white = ImageColorAllocate($im, 255, 255, 255);
+            $white = imagecolorallocate($im, 255, 255, 255);
             imagestring($im, 5, 40, 35, $string, $white);
             imagestring($im, 3, 40, 70, 'missing font', $white);
         }

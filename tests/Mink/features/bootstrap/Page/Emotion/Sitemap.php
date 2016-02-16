@@ -13,15 +13,22 @@ class Sitemap extends Page
     protected $path = '/sitemap{xml}';
 
     /**
+     * @inheritdoc
+     */
+    public function open(array $urlParameters = ['xml' => ''])
+    {
+        return parent::open($urlParameters);
+    }
+
+    /**
      * @param SitemapGroup|string $group
      * @param string $link
      * @param array $sites
-     * @throws \Behat\Behat\Exception\PendingException
      * @throws \Exception
      */
     public function checkGroup($group, $link, array $sites)
     {
-        if(!($group instanceof SitemapGroup)) {
+        if (!($group instanceof SitemapGroup)) {
             $message = sprintf('Sitemap group "%s" was not found!', $group);
             Helper::throwException($message);
         }
@@ -30,10 +37,10 @@ class Sitemap extends Page
 
         $this->checkGroupTitleLink($group->getText(), $link, $data['titleLink']);
 
-        foreach($sites as $site) {
+        foreach ($sites as $site) {
             $level = 1;
 
-            if(isset($site['level'])) {
+            if (isset($site['level'])) {
                 $level = $site['level'];
             }
 
@@ -56,7 +63,7 @@ class Sitemap extends Page
 
         $result = Helper::checkArray($check);
 
-        if($result === true) {
+        if ($result === true) {
             return;
         }
 
@@ -82,7 +89,7 @@ class Sitemap extends Page
      */
     private function checkGroupSite($title, $link, array $data)
     {
-        foreach($data as $site) {
+        foreach ($data as $site) {
             $check = [
                 [$site['value'], $title],
                 [$site['title'], $title],
@@ -91,7 +98,7 @@ class Sitemap extends Page
 
             $result = Helper::checkArray($check);
 
-            if($result === true) {
+            if ($result === true) {
                 return;
             }
         }
@@ -102,6 +109,7 @@ class Sitemap extends Page
 
     /**
      * @param array $links
+     * @throws \Exception
      */
     public function checkXml(array $links)
     {
@@ -111,8 +119,8 @@ class Sitemap extends Page
         $check = [];
         $i = 0;
 
-        foreach($xml as $link) {
-            if(empty($links[$i])) {
+        foreach ($xml as $link) {
+            if (empty($links[$i])) {
                 $messages = [
                     'There are more links in the sitemap.xml as expected!',
                     sprintf('(%d sites in sitemap.xml, %d in test data', count($xml), count($links))
@@ -127,7 +135,7 @@ class Sitemap extends Page
 
         $result = Helper::checkArray($check, true);
 
-        if($result === true) {
+        if ($result === true) {
             return;
         }
 

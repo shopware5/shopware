@@ -234,7 +234,7 @@ class QueryBuilderFactory implements QueryBuilderFactoryInterface
             $sortingHandlers
         );
 
-        $this->assertCollectionIsInstaceOf($sortingHandlers, __NAMESPACE__ . '\SortingHandlerInterface');
+        $this->assertCollectionIsInstanceOf($sortingHandlers, __NAMESPACE__ . '\SortingHandlerInterface');
 
         return array_merge($sortingHandlers->toArray(), $this->sortingHandlers);
     }
@@ -250,7 +250,7 @@ class QueryBuilderFactory implements QueryBuilderFactoryInterface
             $conditionHandlers
         );
 
-        $this->assertCollectionIsInstaceOf($conditionHandlers, __NAMESPACE__ . '\ConditionHandlerInterface');
+        $this->assertCollectionIsInstanceOf($conditionHandlers, __NAMESPACE__ . '\ConditionHandlerInterface');
 
         return array_merge($conditionHandlers->toArray(), $this->conditionHandlers);
     }
@@ -260,7 +260,7 @@ class QueryBuilderFactory implements QueryBuilderFactoryInterface
      * @param ArrayCollection $objects
      * @param string $class
      */
-    private function assertCollectionIsInstaceOf(ArrayCollection $objects, $class)
+    private function assertCollectionIsInstanceOf(ArrayCollection $objects, $class)
     {
         foreach ($objects as $object) {
             if (!$object instanceof $class) {

@@ -65,6 +65,7 @@ Ext.define('Shopware.apps.Article.controller.Main', {
         { ref: 'mediaInfo', selector:'article-detail-window article-image-info' },
         { ref: 'esdListing', selector: 'article-detail-window article-esd-list' },
         { ref: 'esdTab', selector: 'article-detail-window container[name=esd-tab]' },
+        { ref: 'propertiesTab', selector: 'article-detail-window article-properties-panel' },
 
         { ref: 'statisticList', selector: 'article-detail-window article-statistics-list' },
         { ref: 'statisticChart', selector: 'article-detail-window article-statistics-chart' },
@@ -507,7 +508,7 @@ Ext.define('Shopware.apps.Article.controller.Main', {
             });
 
             if(edit) {
-                detailCtrl.loadPropertyStore(article);
+                //detailCtrl.loadPropertyStore(article);
                 me.mainWindow.changeTitle();
             }
 
@@ -595,6 +596,11 @@ Ext.define('Shopware.apps.Article.controller.Main', {
                 }
                 statisticList.fromDate.setValue(statisticList.fromDate.initialConfig.value);
                 statisticList.toDate.setValue(statisticList.toDate.initialConfig.value);
+
+                var propertiesTab = me.getPropertiesTab();
+                propertiesTab.setComboBox.setValue('');
+                propertiesTab.groupComboBox.setValue('');
+                propertiesTab.valueComboBox.setValue('');
 
                 /**
                  * Fire the event within the subApplication in order to prevent problems when

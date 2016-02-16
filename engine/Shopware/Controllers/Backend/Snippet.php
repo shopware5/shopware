@@ -255,17 +255,22 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
     public function createSnippetAction()
     {
         $snippets = $this->Request()->getPost();
+        $isSingleSnippet = false;
         $result = array();
 
         if (array_key_exists('namespace', $snippets)) {
             $snippets = array($snippets);
+            $isSingleSnippet = true;
         }
-
 
         foreach ($snippets as $params) {
             $snippet = new Snippet();
             $snippet->fromArray($params);
             $snippet->setDirty(true);
+
+            if (!$this->isSnippetValid($snippet)) {
+                continue;
+            }
 
             try {
                 Shopware()->Models()->persist($snippet);
@@ -278,7 +283,11 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
             $result[$snippet->getId()] = Shopware()->Models()->toArray($snippet);
         }
 
-        $this->View()->assign(array('success' => true, 'data' => $result));
+        if ($isSingleSnippet) {
+            $result = current($result);
+        }
+
+        $this->View()->assign(array('success' => !empty($result), 'data' => $result));
     }
 
     /**
@@ -296,6 +305,11 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
                 $dirty = ($snippetModel->getDirty() || strcmp($snippetModel->getValue(), $snippet['value']) != 0);
                 $snippetModel->setDirty($dirty);
                 $snippetModel->setValue($snippet['value']);
+
+                if (!$this->isSnippetValid($snippetModel)) {
+                    Shopware()->Models()->remove($snippetModel);
+                    continue;
+                }
             }
             Shopware()->Models()->flush();
             $this->View()->assign(array('success' => true));
@@ -320,6 +334,10 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
         $result->setDirty($dirty);
         $result->fromArray($params);
 
+        if (!$this->isSnippetValid($result)) {
+            Shopware()->Models()->remove($result);
+        }
+        
         Shopware()->Models()->flush();
 
         $data = Shopware()->Models()->toArray($result);
@@ -434,7 +452,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
             $headers = $this->readXmlRow(current($snippets));
         } else {
             $snippets = new Shopware_Components_CsvIterator($filePath, ';');
-            $headers = $snippets->getHeader();
+            $headers = $snippets->GetHeader();
         }
 
         if (empty($headers) || !in_array('namespace', $headers) || !in_array('name', $headers)) {
@@ -598,12 +616,12 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
 
             echo  "REPLACE INTO `s_core_snippets` (`namespace`, `name`, `value`, `localeID`, `shopID`,`created`, `updated`, `dirty`) VALUES \r\n";
             foreach ($result->fetchAll() as $row) {
-                $value = Shopware()->DB()->quote($row['value']);
+                $value = Shopware()->Db()->quote($row['value']);
                 $value = str_replace("\n", "\\n", $value);
 
                 $rows[] = sprintf("(%s, %s, %s, '%s', '%s', '%s', NOW(), %d)",
-                      Shopware()->DB()->quote($row['namespace']),
-                      Shopware()->DB()->quote($row['name']),
+                      Shopware()->Db()->quote($row['namespace']),
+                      Shopware()->Db()->quote($row['name']),
                       $value,
                       (int) $row['localeID'],
                       (int) $row['shopID'],
@@ -899,5 +917,23 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
         if (!empty($this->uploadedFilePath) && file_exists($this->uploadedFilePath)) {
             @unlink($this->uploadedFilePath);
         }
+    }
+
+    /**
+     * Validates the value of the snippet. Returns false if the snippet value is empty and the shopId/localeId is
+     * not 1.
+     *
+     * @param Snippet $snippet
+     * @return bool
+     */
+    private function isSnippetValid(Snippet $snippet)
+    {
+        if (!$snippet->getValue()) {
+            if ($snippet->getShopId() != 1 || $snippet->getLocaleId() != 1) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

@@ -21,13 +21,13 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Shopware\Models\Shop\Locale;
 
 /**
  * Backend widget controller
  */
 class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_ExtJs
 {
-
     /**
      * Returns the list of active widgets for the current logged
      * in user as an JSON string.
@@ -93,12 +93,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
             return;
         }
 
-        try {
-            $this->setWidgetPosition($id, $position, $column);
-        } catch (\Doctrine\ORM\ORMException $e) {
-            $this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
-            return;
-        }
+        $this->setWidgetPosition($id, $position, $column);
 
         $this->View()->assign(array('success' => true, 'newPosition' => $position, 'newColumn' => $column));
     }
@@ -118,12 +113,8 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         $widgets = $this->Request()->getParam('widgets');
 
         foreach ($widgets as $widget) {
-            try {
-                $this->setWidgetPosition($widget['id'], $widget['position'], $widget['column']);
-            } catch (\Doctrine\ORM\ORMException $e) {
-                $this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
-                return;
-            }
+            $this->setWidgetPosition($widget['id'], $widget['position'], $widget['column']);
+
         }
 
         $this->View()->assign(array('success' => true));
@@ -167,23 +158,18 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         $column = $request->getParam('column');
         $position = $request->getParam('position');
 
-        try {
-            $model = new \Shopware\Models\Widget\View();
-            $model->setWidget(
-                Shopware()->Container()->get('models')->find('Shopware\Models\Widget\Widget', $widgetId)
-            );
-            $model->setAuth(
-                Shopware()->Container()->get('models')->find('Shopware\Models\User\User', $userID)
-            );
-            $model->setColumn($column);
-            $model->setPosition($position);
+        $model = new \Shopware\Models\Widget\View();
+        $model->setWidget(
+            Shopware()->Container()->get('models')->find('Shopware\Models\Widget\Widget', $widgetId)
+        );
+        $model->setAuth(
+            Shopware()->Container()->get('models')->find('Shopware\Models\User\User', $userID)
+        );
+        $model->setColumn($column);
+        $model->setPosition($position);
 
-            Shopware()->Container()->get('models')->persist($model);
-            Shopware()->Container()->get('models')->flush();
-        } catch (\Doctrine\ORM\ORMException $e) {
-            $this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
-        }
-
+        Shopware()->Container()->get('models')->persist($model);
+        Shopware()->Container()->get('models')->flush();
         $viewId = $model->getId();
 
         $this->View()->assign(array('success' => !empty($viewId), 'viewId' => $viewId));
@@ -204,14 +190,9 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         $request = $this->Request();
         $id = $request->getParam('id');
 
-        try {
-            $model = Shopware()->Container()->get('models')->find('Shopware\Models\Widget\View', $id);
-            Shopware()->Container()->get('models')->remove($model);
-            Shopware()->Container()->get('models')->flush();
-        } catch (\Doctrine\ORM\ORMException $e) {
-            $this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
-            return;
-        }
+        $model = Shopware()->Container()->get('models')->find('Shopware\Models\Widget\View', $id);
+        Shopware()->Container()->get('models')->remove($model);
+        Shopware()->Container()->get('models')->flush();
 
         $this->View()->assign(array('success' => true));
     }
@@ -331,7 +312,12 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
             $sql,
             array($timeBack, $timeBack, $timeBack, $timeBack, $timeBack)
         );
-        $fetchConversion = number_format($fetchConversion["countOrders"] / $fetchConversion["visitors"] * 100, 2);
+
+        if ($fetchConversion['visitors'] != 0) {
+            $fetchConversion = number_format($fetchConversion["countOrders"] / $fetchConversion["visitors"] * 100, 2);
+        } else {
+            $fetchConversion = number_format(0, 2);
+        }
 
         $namespace = Shopware()->Container()->get('snippets')->getNamespace('backend/widget/controller');
         $this->View()->assign(
@@ -428,6 +414,21 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         );
     }
 
+    public function getShopwareNewsAction()
+    {
+        /** @var $auth Shopware_Components_Auth */
+        $auth = Shopware()->Auth();
+        $user = $auth->getIdentity();
+        $result = $this->fetchRssFeedData($user->locale, 5);
+
+        $this->View()->assign(
+            array(
+                'success' => !empty($result),
+                'data' => $result
+            )
+        );
+    }
+
     /**
      * Gets the latest orders for the "last orders" widget.
      *
@@ -470,7 +471,13 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
                 ENT_QUOTES,
                 "UTF-8"
             );
-            $amount = round(($order["invoice_amount"] / $order["currencyFactor"]), 2);
+
+            if ($order["currencyFactor"] != 0) {
+                $amount = round(($order["invoice_amount"] / $order["currencyFactor"]), 2);
+            } else {
+                $amount = 0;
+            }
+
             $order["amount"] = $amount;
             if (strlen($order["customer"]) > 25) {
                 $order["customer"] = substr($order["customer"], 0, 25) . "..";
@@ -588,9 +595,9 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
      */
     public function requestMerchantFormAction()
     {
-        $customerGroup = (string) $this->Request()->getParam('customerGroup');
-        $userId = (int) $this->Request()->getParam('id');
-        $mode = (string) $this->Request()->getParam('mode');
+        $customerGroup = (string)$this->Request()->getParam('customerGroup');
+        $userId = (int)$this->Request()->getParam('id');
+        $mode = (string)$this->Request()->getParam('mode');
 
         if ($mode === 'allow') {
             $tplMail = 'sCUSTOMERGROUP%sACCEPTED';
@@ -611,7 +618,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
                 array(
                     'success' => false,
                     'message' => $this->container->get('snippets')->getNamespace('backend/widget/controller')
-                            ->get('merchantNoUserId', 'There is no user for the specific user id')
+                        ->get('merchantNoUserId', 'There is no user for the specific user id')
                 )
             );
             return false;
@@ -645,9 +652,9 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         $mailModel->setTranslation($translation);
 
         $mailData = array(
-            'content' => nl2br($mailModel->getContent()) ? : '',
-            'fromMail' => $mailModel->getFromMail() ? : '{config name=mail}',
-            'fromName' => $mailModel->getFromName() ? : '{config name=shopName}',
+            'content' => nl2br($mailModel->getContent()) ?: '',
+            'fromMail' => $mailModel->getFromMail() ?: '{config name=mail}',
+            'fromName' => $mailModel->getFromName() ?: '{config name=shopName}',
             'subject' => $mailModel->getSubject(),
             'toMail' => $customer['email'],
             'userId' => $userId,
@@ -695,10 +702,10 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         $mail->FromName = $compiler->compileString($fromName);
         $mail->Subject = $compiler->compileString($subject);
         $mail->Body = $compiler->compileString($content);
-        $mail->ClearAddresses();
-        $mail->AddAddress($toMail, "");
+        $mail->clearRecipients();
+        $mail->addTo($toMail);
 
-        if (!$mail->Send()) {
+        if (!$mail->send()) {
             $this->View()->assign(array('success' => false, 'message' => 'The mail could not be sent.'));
             return false;
         } else {
@@ -719,5 +726,48 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
             }
         }
         $this->View()->assign(array('success' => true, 'message' => 'The mail was send successfully.'));
+    }
+
+    /**
+     * @param Locale $locale
+     * @param int $limit
+     * @return array
+     */
+    private function fetchRssFeedData(Locale $locale, $limit = 5)
+    {
+        $lang = 'de';
+
+        if ($locale->getLocale() != 'de_DE') {
+            $lang = 'en';
+        }
+
+        $result = [];
+        $xml = new \SimpleXMLElement(file_get_contents('https://' . $lang . '.shopware.com/news/?sRss=1', false, stream_context_create([
+            'http' => [
+                'timeout' => 20
+            ]
+        ])));
+
+        /**
+         * @var \SimpleXMLElement $news
+         */
+        foreach ($xml->channel->item as $news) {
+            $tmp = (array)$news->children();
+
+            $date = new \DateTime($tmp['pubDate']);
+
+            $result[] = [
+                'title' => $tmp['title'],
+                'link' => $tmp['link'],
+                'linkHash' => md5($tmp['link']),
+                'pubDate' => $date->format('Y-m-d\TH:i:s')
+            ];
+        }
+
+        if ($limit) {
+            $result = array_slice($result, 0, $limit);
+        }
+
+        return $result;
     }
 }
