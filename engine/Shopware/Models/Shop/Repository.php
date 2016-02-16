@@ -376,6 +376,7 @@ class Repository extends ModelRepository
     }
 
     /**
+     * @deprecated
      * @param \Shopware\Models\Shop\Shop $shop
      */
     protected function fixActive($shop)

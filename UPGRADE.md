@@ -9,6 +9,7 @@ In this document you will find a changelog of the important changes related to t
 * Fixed `AND` search logic for search terms which not exist in the s_articles table.
 * Added order and payment state constants in `\Shopware\Models\Order\Status`
 * change email validation to a simple regex: `/^.+\@\S+\.\S+$/`. You can implement your own email validation by implementing the `EmailValidatorInterface`. 
+* Deprecated `Shopware\Models\Shop\Repository::fixActive()`
 
 ## 5.1.3
 * Switch Grunt to relativeUrls to unify the paths to less.php
