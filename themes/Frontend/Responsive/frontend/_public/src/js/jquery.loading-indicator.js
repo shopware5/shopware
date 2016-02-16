@@ -84,8 +84,6 @@
 
             if (me.$loader !== null) {
                 me.$loader.fadeOut(opts.animationSpeed || me.defaults.animationSpeed, function () {
-                    callback.call(me);
-
                     if(me._timeout) {
                         window.clearTimeout(me._timeout);
                     }
@@ -93,6 +91,8 @@
                     if (opts.openOverlay !== false) {
                         $.overlay.close();
                     }
+
+                    callback.call(me);
 
                     $.publish('plugin/swLoadingIndicator/onCloseFinished', [ me ]);
                 });
