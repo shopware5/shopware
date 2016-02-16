@@ -4,6 +4,7 @@ In this document you will find a changelog of the important changes related to t
 ## 5.1.4
 * Customer logout will now regenerate the session id and clear the customers basket.
 * Added `IsNew` condition for product streams
+* Added method `\Shopware\Models\Article\Repository::getSupplierListQueryBuilder()` to make the query builder extensible
 
 ## 5.1.3
 * Switch Grunt to relativeUrls to unify the paths to less.php
