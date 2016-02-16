@@ -10,7 +10,7 @@ var $CSS;
 var $tbCSSlvl;
 
 
-function cssmgr(&$mpdf) {
+function __construct(&$mpdf) {
 	$this->mpdf = $mpdf;
 	$this->tablecascadeCSS = array();
 	$this->CSS=array();
