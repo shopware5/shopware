@@ -103,7 +103,7 @@ class <namespace>_<proxyClassName> extends <className> implements Enlight_Hook_P
         $this->proxyNamespace = $proxyNamespace;
 
         if (!is_dir($proxyDir)) {
-            if (false === @mkdir($proxyDir, 0777, true)) {
+            if (false === @mkdir($proxyDir, 0777, true) && !is_dir($proxyDir)) {
                 throw new \RuntimeException(sprintf("Unable to create the %s directory (%s)\n", "Proxy", $proxyDir));
             }
         } elseif (!is_writable($proxyDir)) {
@@ -220,13 +220,14 @@ class <namespace>_<proxyClassName> extends <className> implements Enlight_Hook_P
      */
     protected function writeProxyClass($fileName, $content)
     {
-        $oldMask = umask(0);
-        if (!file_put_contents($fileName, $content)) {
-            umask($oldMask);
-            throw new Enlight_Exception('Unable to write file "' . $fileName . '"');
+        $tmpFile = tempnam(dirname($fileName), basename($fileName));
+        if (false !== @file_put_contents($tmpFile, $content) && @rename($tmpFile, $fileName)) {
+            @chmod($fileName, 0666 & ~umask());
+
+            return;
         }
-        chmod($fileName, 0644);
-        umask($oldMask);
+
+        throw new Enlight_Exception('Unable to write file "' . $fileName . '"');
     }
 
     /**
