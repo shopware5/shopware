@@ -1,6 +1,9 @@
 # Shopware Upgrade Information
 In this document you will find a changelog of the important changes related to the code base of Shopware.
 
+## 5.1.4
+* Customer logout will now regenerate the session id and clear the customers basket.
+
 ## 5.1.3
 * Switch Grunt to relativeUrls to unify the paths to less.php
 * Deprecated `Enlight_Application::getOption()` and `Enlight_Application::getOptions`

@@ -1191,6 +1191,14 @@ class sAdmin
         return array("sErrorFlag" => $sErrorFlag, "sErrorMessages" => $sErrorMessages);
     }
 
+    public function logout()
+    {
+        $this->moduleManager->Basket()->clearBasket();
+
+        Shopware()->Session()->unsetAll();
+        $this->regenerateSessionId();
+    }
+
     /**
      * Attempt to login a user in the frontend
      * Used for login and registration in frontend, also for user impersonation
