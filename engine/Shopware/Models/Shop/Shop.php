@@ -572,19 +572,15 @@ class Shop extends ModelEntity
      */
     public function getSecureBaseUrl()
     {
-        if($this->main !== null) {
-            return $this->main->getSecureBaseUrl();
-        } elseif($this->secureBaseUrl === null) {
-            $baseUrl = $this->getSecureBasePath();
-            if ($this->getBaseUrl() != $this->getBasePath()) {
-                if (!$this->getBasePath()) {
-                    $baseUrl .= $this->getBaseUrl();
-                } elseif (strpos($this->getBaseUrl(), $this->getBasePath()) === 0) {
-                    $baseUrl .= substr($this->getBaseUrl(), strlen($this->getBasePath()));
-                }
+        $baseUrl = $this->getSecureBasePath();
+        if ($this->getBaseUrl() != $this->getBasePath()) {
+            if (!$this->getBasePath()) {
+                $baseUrl .= $this->getBaseUrl();
+            } elseif (strpos($this->getBaseUrl(), $this->getBasePath()) === 0) {
+                $baseUrl .= substr($this->getBaseUrl(), strlen($this->getBasePath()));
             }
-            $this->setSecureBaseUrl($baseUrl);
         }
+        return $baseUrl;
     }
 
     /**
