@@ -70,14 +70,14 @@ class ListProductService implements Service\ListProductServiceInterface
     private $voteService;
 
     /**
-     * @var \Enlight_Event_EventManager
-     */
-    private $eventManager;
-
-    /**
      * @var Service\CategoryServiceInterface
      */
     private $categoryService;
+
+    /**
+     * @var \Shopware_Components_Config
+     */
+    private $config;
 
     /**
      * @param Gateway\ListProductGatewayInterface $productGateway
@@ -87,8 +87,8 @@ class ListProductService implements Service\ListProductServiceInterface
      * @param Service\MediaServiceInterface $mediaService
      * @param Service\MarketingServiceInterface $marketingService
      * @param Service\VoteServiceInterface $voteService
-     * @param \Enlight_Event_EventManager $eventManager
      * @param Service\CategoryServiceInterface $categoryService
+     * @param \Shopware_Components_Config $config
      */
     public function __construct(
         Gateway\ListProductGatewayInterface $productGateway,
@@ -98,18 +98,18 @@ class ListProductService implements Service\ListProductServiceInterface
         Service\MediaServiceInterface $mediaService,
         Service\MarketingServiceInterface $marketingService,
         Service\VoteServiceInterface $voteService,
-        \Enlight_Event_EventManager $eventManager,
-        Service\CategoryServiceInterface $categoryService
+        Service\CategoryServiceInterface $categoryService,
+        \Shopware_Components_Config $config
     ) {
         $this->productGateway = $productGateway;
         $this->graduatedPricesService = $graduatedPricesService;
         $this->cheapestPriceService = $cheapestPriceService;
         $this->priceCalculationService = $priceCalculationService;
         $this->mediaService = $mediaService;
-        $this->eventManager = $eventManager;
         $this->marketingService = $marketingService;
         $this->voteService = $voteService;
         $this->categoryService = $categoryService;
+        $this->config = $config;
     }
 
     /**
@@ -201,7 +201,7 @@ class ListProductService implements Service\ListProductServiceInterface
             return false;
         }
 
-        if (!$product->hasAvailableVariant()) {
+        if ($this->config->get('hideNoInstock') && $product->isCloseouts() && !$product->hasAvailableVariant()) {
             return false;
         }
 
