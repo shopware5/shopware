@@ -5,6 +5,7 @@ In this document you will find a changelog of the important changes related to t
 * Customer logout will now regenerate the session id and clear the customers basket.
 * Added `IsNew` condition for product streams
 * Added method `\Shopware\Models\Article\Repository::getSupplierListQueryBuilder()` to make the query builder extensible
+* Added index on `s_article_img_mapping_rules`.`mapping_id` and `s_article_img_mapping_rules`.`option_id`
 * Fixed `AND` search logic for search terms which not exist in the s_articles table.
 * Added order and payment state constants in `\Shopware\Models\Order\Status`
 
