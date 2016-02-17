@@ -72,12 +72,12 @@
     <target name="install-composer-binary" depends="check-composer-binary"  unless="composer.binary.present">
         <exec executable="bash" failonerror="true">
             <arg value="-c" />
-            <arg value="curl -s https://getcomposer.org/installer | php" />
+            <arg value="curl -s https://getcomposer.org/installer | ${script.php}" />
         </exec>
     </target>
 
     <target name="update-composer-binary" depends="install-composer-binary">
-        <exec executable="php">
+        <exec executable="${script.php}">
             <arg value="composer.phar" />
             <arg value="self-update" />
             <arg value="--no-interaction" />
@@ -85,7 +85,7 @@
     </target>
 
     <target name="build-composer-install" depends="update-composer-binary">
-        <exec executable="php" failonerror="true">
+        <exec executable="${script.php}" failonerror="true">
             <arg value="composer.phar" />
             <arg value="install" />
             <arg value="--no-interaction" />
@@ -94,7 +94,7 @@
     </target>
 
     <target name="build-composer-update" depends="update-composer-binary">
-        <exec executable="php" failonerror="true">
+        <exec executable="${script.php}" failonerror="true">
             <arg value="composer.phar" />
             <arg value="update" />
             <arg value="--no-interaction" />
@@ -129,7 +129,7 @@
     </target>
 
     <target name="build-database-apply-deltas">
-        <exec executable="php" failonerror="true">
+        <exec executable="${script.php}" failonerror="true">
             <arg value="${build.dir}/ApplyDeltas.php"/>
             <arg value="--port=${db.port}"/>
             <arg value="--password=${db.password}"/>
@@ -167,25 +167,25 @@
     </target>
 
     <target name="build-generate-attributes">
-        <exec executable="php" dir="${basedir}/bin" failonerror="true">
+        <exec executable="${script.php}" dir="${basedir}/bin" failonerror="true">
             <arg line="console sw:generate:attributes"/>
         </exec>
     </target>
 
     <target name="build-snippets-deploy">
-        <exec executable="php" dir="${basedir}/bin" failonerror="true">
+        <exec executable="${script.php}" dir="${basedir}/bin" failonerror="true">
             <arg line="console sw:snippets:to:db --include-plugins"/>
         </exec>
     </target>
 
     <target name="build-theme-initialize">
-        <exec executable="php" dir="${basedir}/bin" failonerror="true">
+        <exec executable="${script.php}" dir="${basedir}/bin" failonerror="true">
             <arg line="console sw:theme:initialize"/>
         </exec>
     </target>
 
     <target name="build-disable-firstrunwizard">
-        <exec executable="php" dir="${basedir}/bin" failonerror="true">
+        <exec executable="${script.php}" dir="${basedir}/bin" failonerror="true">
             <arg line="console sw:firstrunwizard:disable"/>
         </exec>
     </target>
@@ -320,7 +320,7 @@
     </target>
 
     <target name="static-phpcs" description="PHP CodeSniffer">
-        <exec executable="phpcs" output="/dev/null" failonerror="false">
+        <exec executable="${script.phpcs}" output="/dev/null" failonerror="false">
             <arg value="--standard=${build.dir}"/>
             <arg value="--report=checkstyle"/>
             <arg value="--report-file=${log.dir}/checkstyle.xml"/>
@@ -331,7 +331,7 @@
     </target>
 
     <target name="static-phpmd" description="PHP Mess Detector">
-        <exec executable="phpmd" failonerror="false" error="${log.dir}/error.log" append="true">
+        <exec executable="${script.phpmd}" failonerror="false" error="${log.dir}/error.log" append="true">
             <arg value="${app.dir}/"/>
             <arg value="xml"/>
             <arg value="codesize,design,unusedcode"/>
@@ -341,7 +341,7 @@
     </target>
 
     <target name="static-phpcpd" description="PHP Copy/Paste Detector">
-        <exec executable="phpcpd" failonerror="false" output="/dev/null" error="${log.dir}/error.log" append="true">
+        <exec executable="${script.phpcpd}" failonerror="false" output="/dev/null" error="${log.dir}/error.log" append="true">
             <arg value="--log-pmd"/>
             <arg value="${log.dir}/cpd.xml"/>
             <arg value="${app.dir}/"/>
@@ -349,7 +349,7 @@
     </target>
 
     <target name="static-phploc" description="PHP Lines of Code">
-        <exec executable="phploc" failonerror="false" output="${log.dir}/loc.txt" error="${log.dir}/error.log" append="true">
+        <exec executable="${script.phploc}" failonerror="false" output="${log.dir}/loc.txt" error="${log.dir}/error.log" append="true">
             <arg value="--log-xml"/>
             <arg value="${log.dir}/loc.xml"/>
             <arg value="--log-csv"/>
@@ -361,7 +361,7 @@
 
     <target name="static-pdepend">
         <mkdir dir="${log.dir}/depend"/>
-        <exec executable="pdepend" failonerror="false" output="${log.dir}/depend/output.txt" error="${log.dir}/error.log" append="true" dir="${app.dir}">
+        <exec executable="${script.pdepend}" failonerror="false" output="${log.dir}/depend/output.txt" error="${log.dir}/error.log" append="true" dir="${app.dir}">
             <arg value="--summary-xml=${log.dir}/depend/summary.xml"/>
             <arg value="--jdepend-chart=${log.dir}/depend/jdepend.svg"/>
             <arg value="--overview-pyramid=${log.dir}/depend/pyramid.svg"/>
@@ -370,7 +370,7 @@
     </target>
 
     <target name="build-phpcb" description="Build CodeBrowser">
-        <exec executable="phpcb" failonerror="false" output="/dev/null" error="${log.dir}/error.log" append="true">
+        <exec executable="${script.phpcb}" failonerror="false" output="/dev/null" error="${log.dir}/error.log" append="true">
             <arg value="-l${log.dir}"/>
             <arg value="-o${log.dir}/code-browser"/>
             <arg value="-s${app.dir}"/>
