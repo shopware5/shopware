@@ -1,7 +1,7 @@
 <?php
 class Migrations_Migration108 Extends Shopware\Components\Migrations\AbstractMigration
 {
-    public function up()
+    public function up($modus)
     {
         $sql = <<<'EOD'
 ALTER TABLE  `s_categories` ADD INDEX  `active_query_builder`

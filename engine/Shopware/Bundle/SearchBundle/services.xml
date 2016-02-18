@@ -1,0 +1,37 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <!--shopware_search.-->
+        <service id="shopware_search.product_search" class="Shopware\Bundle\SearchBundle\ProductSearch">
+            <argument type="service" id="shopware_storefront.list_product_service"/>
+            <argument type="service" id="shopware_search.product_number_search"/>
+        </service>
+
+
+        <service id="shopware_search.core_criteria_request_handler" class="Shopware\Bundle\SearchBundle\CriteriaRequestHandler\CoreCriteriaRequestHandler">
+            <argument type="service" id="config" />
+            <argument type="service" id="dbal_connection" />
+
+            <tag name="criteria_request_handler"/>
+        </service>
+
+        <service id="shopware_search.property_criteria_request_handler" class="Shopware\Bundle\SearchBundle\CriteriaRequestHandler\PropertyCriteriaRequestHandler">
+            <argument type="service" id="config" />
+            <argument type="service" id="dbal_connection" />
+
+            <tag name="criteria_request_handler"/>
+        </service>
+
+        <service id="shopware_search.store_front_criteria_factory" class="Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactory" >
+            <argument type="service" id="config" />
+            <argument type="service" id="events" />
+
+            <!--criteria request handlers-->
+            <argument type="collection" />
+        </service>
+    </services>
+</container>

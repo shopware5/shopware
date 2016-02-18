@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -101,11 +101,11 @@ class Shopware_Tests_Components_TemplateMailTest extends Enlight_Components_Test
 
         $templateMock->expects($this->any())
                      ->method('getFromName')
-                     ->will($this->returnValue('Shopware 4 Demo'));
+                     ->will($this->returnValue('Shopware 5 Demo'));
 
         $templateMock->expects($this->any())
                      ->method('getSubject')
-                     ->will($this->returnValue('Shopware 4 Testmail'));
+                     ->will($this->returnValue('Shopware 5 Testmail'));
 
         $templateMock->expects($this->any())
                      ->method('getContent')

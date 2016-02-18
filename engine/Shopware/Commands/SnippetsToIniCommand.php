@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -33,7 +33,7 @@ use Symfony\Component\Finder\Finder;
 /**
  * @category  Shopware
  * @package   Shopware\Command
- * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class SnippetsToIniCommand extends ShopwareCommand
 {

@@ -1,7 +1,7 @@
 <?php
 class Migrations_Migration140 Extends Shopware\Components\Migrations\AbstractMigration
 {
-    public function up()
+    public function up($modus)
     {
         $sql = <<<'EOD'
         UPDATE `s_emotion` SET grid_id =

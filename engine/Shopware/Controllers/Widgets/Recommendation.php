@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -58,12 +58,8 @@ class Shopware_Controllers_Widgets_Recommendation extends Enlight_Controller_Act
         $this->marketingModule->sBlacklist[] = $articleId;
         $articles = $this->marketingModule->sGetSimilaryShownArticles($articleId, $maxPages * $perPage);
 
-        foreach ($articles as $article) {
-            $article = $this->articleModule->sGetPromotionById('fix', 0, (int) $article['id']);
-            if (!empty($article['articleName'])) {
-                $result[] = $article;
-            }
-        }
+        $numbers = array_column($articles, 'number');
+        $result = $this->getPromotions($numbers);
 
         $this->View()->maxPages = $maxPages;
         $this->View()->perPage = $perPage;
@@ -80,17 +76,41 @@ class Shopware_Controllers_Widgets_Recommendation extends Enlight_Controller_Act
         $perPage = (int) $this->config->get('alsoBoughtPerPage', 4);
 
         $this->marketingModule->sBlacklist[] = $articleId;
-        $articles = $this->marketingModule->sGetAlsoBoughtArticles($articleId, $maxPages  *$perPage);
+        $articles = $this->marketingModule->sGetAlsoBoughtArticles($articleId, $maxPages * $perPage);
 
-        foreach ($articles as $article) {
-            $article = $this->articleModule->sGetPromotionById('fix', 0, (int) $article['id']);
-            if (!empty($article['articleName'])) {
-                $result[] = $article;
-            }
-        }
+        $numbers = array_column($articles, 'number');
+        $result = $this->getPromotions($numbers);
 
         $this->View()->maxPages = $maxPages;
         $this->View()->perPage = $perPage;
         $this->View()->boughtArticles = $result;
+    }
+
+    /**
+     * @param string[] $numbers
+     * @return array[]
+     */
+    private function getPromotions($numbers)
+    {
+        if (empty($numbers)) {
+            return [];
+        }
+
+        $context = $this->get('shopware_storefront.context_service')->getProductContext();
+        $products = $this->get('shopware_storefront.list_product_service')
+            ->getList($numbers, $context);
+
+        $articles = $this->get('legacy_struct_converter')->convertListProductStructList($products);
+
+        $result = [];
+        foreach ($articles as $article) {
+            $promotion = $this->get('legacy_event_manager')->firePromotionByIdEvents($article, null, $this->articleModule);
+
+            if ($promotion) {
+                $result[] = $promotion;
+            }
+        }
+
+        return $result;
     }
 }

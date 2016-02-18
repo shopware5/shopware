@@ -1,0 +1,19 @@
+{
+    "minimum-stability": "stable",
+    "require": {
+        "slim/slim": "~2.4.3",
+        "symfony/console": "~2.6.1",
+        "pimple/pimple": "~3.0",
+        "knplabs/gaufrette": "~0.1.8"
+    },
+    "autoload": {
+        "psr-4": {
+            "Shopware\\Recovery\\Common\\": "src",
+            "Shopware\\Recovery\\Install\\": "../install/src",
+            "Shopware\\Recovery\\Update\\": "../update/src"
+        }
+    },
+    "config": {
+        "autoloader-suffix": "ShopwareRecovery"
+    }
+}

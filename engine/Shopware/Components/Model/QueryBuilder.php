@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -168,7 +168,7 @@ class QueryBuilder extends BaseQueryBuilder
                 continue;
             }
 
-            $parameterKey = str_replace(array('.'), array('_') , $exprKey);
+            $parameterKey = str_replace(array('.'), array('_'), $exprKey) . uniqid();
             if (isset($this->alias) && strpos($exprKey, '.') === false) {
                 $exprKey = $this->alias . '.' . $exprKey;
             }
@@ -176,6 +176,7 @@ class QueryBuilder extends BaseQueryBuilder
             if (null == $expression) {
                 switch (true) {
                     case is_string($where):
+
                         $expression = 'LIKE';
                         break;
                     case is_array($where):
@@ -190,7 +191,11 @@ class QueryBuilder extends BaseQueryBuilder
                 }
             }
 
-            $expression = new Expr\Comparison($exprKey, $expression, $where !== null ? (':' . $parameterKey) : null);
+            $exprParameterKey = ':' . $parameterKey;
+            if (is_array($where)) {
+                $exprParameterKey = '('.$exprParameterKey.')' ;
+            }
+            $expression = new Expr\Comparison($exprKey, $expression, $where !== null ? $exprParameterKey : null);
 
             if (isset($operator)) {
                 $this->orWhere($expression);

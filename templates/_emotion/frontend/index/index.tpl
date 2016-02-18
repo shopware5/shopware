@@ -5,8 +5,6 @@
  * @package    Shopware_Template
  * @subpackage Shopware_Template_Frontend
  * @copyright  Copyright (c) 2010 shopware AG (http://www.shopware.de)
- * @author     hl/shopware AG
- * @author     stp/shopware AG
  *}
 {block name="frontend_index_start"}{/block}
 <?xml version="1.0" ?>
@@ -17,7 +15,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{s name='IndexXmlLang'}de{/s}">
 {/block}
 {block name='frontend_index_header'}
-{include file='./frontend/index/header.tpl'}
+	{include file='./frontend/index/header.tpl'}
 {/block}
 <body {if $Controller}class="ctl_{$Controller}"{/if}>
 
@@ -39,16 +37,6 @@
 	<div id="header">
 		<div class="inner">
 
-			{* Trusted Shops *}
-			{if {config name=TSID}}
-			<div class="trusted_shops_top">
-				<a href="https://www.trustedshops.com/shop/certificate.php?shop_id={config name=TSID}" title="{s name='WidgetsTrustedLogo' namespace='frontend/plugins/trusted_shops/logo'}{/s}" target="_blank">
-				    <img src="{link file='frontend/_resources/images/logo_trusted_shop_top.png'}" alt="{s name='WidgetsTrustedLogo' namespace='frontend/plugins/trusted_shops/logo'}{/s}" />
-				    <p>{s name='WidgetsTrustedLogoText2'}<span><strong>Sicher</strong> einkaufen</span><br/>Trusted Shops zertifiziert{/s}</p>	
-				</a>
-			</div>
-			{/if}
-			
 			{* Search *}
             {block name='frontend_index_search'}
 			    {include file="frontend/index/search.tpl"}
@@ -70,10 +58,10 @@
 			{/block}
 			
 			{block name='frontend_index_navigation_inline'}
-				{if $sCompareShow}
-				<div id="compareContainerAjax">
-				    {action module=widgets controller=compare}
-				</div>
+				{if {config name="compareShow"}}
+                    <div id="compareContainerAjax">
+                        {action module=widgets controller=compare}
+                    </div>
 				{/if}
 			{/block}
 			

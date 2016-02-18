@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -28,8 +28,8 @@ use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\EventManager;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
-use Doctrine\ORM\Proxy\Autoloader;
 use Shopware\Components\Model\Configuration;
+use Shopware\Components\Model\LazyFetchModelEntity;
 use Shopware\Components\Model\ModelManager;
 
 /**
@@ -60,7 +60,7 @@ class Models
         EventManager $eventManager,
         Configuration $config,
         \Enlight_Loader $loader,
-        \Pdo $db,
+        \PDO $db,
         $kernelRootDir,
         // annotation driver is not really used here but has to be loaded first
         AnnotationDriver $modelAnnotation
@@ -100,6 +100,21 @@ class Models
             $eventManager
         );
 
+        LazyFetchModelEntity::setEntityManager($entityManager);
+
+        $this->generateAttributeModels($entityManager);
+
         return $entityManager;
+    }
+
+    /**
+     * @param ModelManager $entityManager
+     */
+    protected function generateAttributeModels($entityManager)
+    {
+        // CustomerGroup model is arbitrarily chosen
+        if (!class_exists('Shopware\Models\Attribute\CustomerGroup')) {
+            $entityManager->generateAttributeModels();
+        }
     }
 }

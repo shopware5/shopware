@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2013 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -105,7 +105,7 @@ class Shopware_Tests_Controllers_Backend_ConfigTest extends Enlight_Components_T
     {
         // should return more than 2 items
         $this->Request()->setMethod('GET');
-        $this->dispatch('backend/Config/getTableList/name/'.$tableListName);
+        $this->dispatch('backend/Config/getTableList/_repositoryClass/'.$tableListName);
         $returnData = $this->View()->getAssign('data');
         $this->assertGreaterThan(2, count($returnData));
         $this->assertTrue($this->View()->getAssign('success'));
@@ -119,7 +119,7 @@ class Shopware_Tests_Controllers_Backend_ConfigTest extends Enlight_Components_T
     private function checkGetTableListConfigPagination($tableListName)
     {
         $this->Request()->setMethod('GET');
-        $this->dispatch('backend/Config/getTableList/name/'.$tableListName.'?page=1&start=0&limit=2');
+        $this->dispatch('backend/Config/getTableList/_repositoryClass/'.$tableListName.'?page=1&start=0&limit=2');
         $this->assertTrue($this->View()->getAssign('success'));
         $returnData = $this->View()->getAssign('data');
         $this->assertGreaterThan(2, $this->View()->getAssign('total'));
@@ -149,7 +149,7 @@ class Shopware_Tests_Controllers_Backend_ConfigTest extends Enlight_Components_T
             )
         );
         $query = http_build_query($queryParams);
-        $url = 'backend/Config/getTableList/name/'.$tableListName.'?';
+        $url = 'backend/Config/getTableList/_repositoryClass/'.$tableListName.'?';
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
         $this->dispatch($url . $query);
         $returnData = $this->View()->getAssign('data');
@@ -181,7 +181,7 @@ class Shopware_Tests_Controllers_Backend_ConfigTest extends Enlight_Components_T
         );
 
         $query = http_build_query($queryParams);
-        $url = 'backend/Config/getTableList/name/'.$tableListName.'?';
+        $url = 'backend/Config/getTableList/_repositoryClass/'.$tableListName.'?';
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
         $this->dispatch($url . $query);
         $returnData = $this->View()->getAssign('data');

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,10 +23,11 @@
  */
 
 namespace Shopware\Models\Article\Configurator;
-use Shopware\Components\Model\ModelEntity,
-    Doctrine\ORM\Mapping AS ORM,
-    Symfony\Component\Validator\Constraints as Assert,
-    Doctrine\Common\Collections\ArrayCollection;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity
@@ -105,9 +106,9 @@ class Set extends ModelEntity
 
     /**
      * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Configurator\PriceSurcharge", mappedBy="configuratorSet", orphanRemoval=true, cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Configurator\PriceVariation", mappedBy="configuratorSet", orphanRemoval=true, cascade={"persist"})
      */
-    protected $priceSurcharges;
+    protected $priceVariations;
 
     /**
      * Class constructor, initials the array collections for the associations.
@@ -118,7 +119,7 @@ class Set extends ModelEntity
         $this->options = new ArrayCollection();
         $this->articles = new ArrayCollection();
         $this->dependencies = new ArrayCollection();
-        $this->priceSurcharges = new ArrayCollection();
+        $this->priceVariations = new ArrayCollection();
     }
 
     /**

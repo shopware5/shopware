@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -178,7 +178,6 @@ class Manager
         $migrations = array();
 
         foreach ($regex as $result) {
-
             $migrationVersion = $result['1'];
             if ($migrationVersion <= $currentVersion) {
                 continue;
@@ -223,9 +222,10 @@ class Manager
      * Applies given $migration to database
      *
      * @param AbstractMigration $migration
+     * @param string $modus
      * @throws \Exception
      */
-    public function apply(AbstractMigration $migration)
+    public function apply(AbstractMigration $migration, $modus = AbstractMigration::MODUS_INSTALL)
     {
         $sql = 'REPLACE s_schema_version (version, start_date, name) VALUES (:version, :date, :name)';
         $stmt = $this->connection->prepare($sql);
@@ -236,7 +236,7 @@ class Manager
         ));
 
         try {
-            $migration->up();
+            $migration->up($modus);
             $sqls = $migration->getSql();
 
             foreach ($sqls as $sql) {
@@ -262,8 +262,9 @@ class Manager
 
     /**
      * Composite Method to apply all migrations
+     * @param string $modus
      */
-    public function run()
+    public function run($modus = AbstractMigration::MODUS_INSTALL)
     {
         $this->createSchemaTable();
 
@@ -276,7 +277,7 @@ class Manager
 
         foreach ($migrations as $migration) {
             $this->log(sprintf("Apply MigrationNumber: %s - %s", $migration->getVersion(), $migration->getLabel()));
-            $this->apply($migration);
+            $this->apply($migration, $modus);
         }
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,15 +23,15 @@
  */
 
 namespace   Shopware\Models\Mail;
-use         Shopware\Components\Model\ModelEntity,
-            Doctrine\ORM\Mapping AS ORM;
+
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Shopware attachment model represents a single attachment
  *
  * Associations:
  * <code>
- *   - Shop => Shopware\Models\Shop\Shop    [n:1]   [s_core_multilanguage]
+ *   - Shop => Shopware\Models\Shop\Shop    [n:1]   [s_core_shops]
  *   - Mail => Shopware\Models\Mail\Mail    [n:1]   [s_core_config_mails]
  *   - Mail => Shopware\Models\Media\Media  [n:1]   [s_core_config_mails]
  * </code>

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -24,9 +24,10 @@
 
 namespace Shopware\Models\Shop;
 
-use Shopware\Components\Model\ModelEntity,
-    Doctrine\ORM\Mapping as ORM,
-    Doctrine\Common\Collections\ArrayCollection;
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Theme\Inheritance;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  *
@@ -134,8 +135,15 @@ class Shop extends ModelEntity
     private $secureBaseUrl;
 
     /**
+     * @var $template int
+     * @ORM\Column(name="template_id", type="integer", nullable=true)
+     */
+    private $templateId;
+
+    /**
      * @var Template $template
-     * @ORM\ManyToOne(targetEntity="Template")
+     * @ORM\ManyToOne(targetEntity="Template", inversedBy="shops")
+     * @ORM\JoinColumn(name="template_id", referencedColumnName="id")
      */
     private $template;
 
@@ -664,7 +672,6 @@ class Shop extends ModelEntity
 
     /**
      * @param \Enlight_Bootstrap $bootstrap
-     * @deprecated
      * @return Shop
      */
     public function registerResources(\Enlight_Bootstrap $bootstrap)
@@ -700,23 +707,28 @@ class Shop extends ModelEntity
             }
         }
 
+        Shopware()->Container()->get('shopware_storefront.context_service')->initializeShopContext();
+
         if ($this->getTemplate() !== null) {
-            /** @var $template \Enlight_Template_Manager */
+            /** @var $templateManager \Enlight_Template_Manager */
             $templateManager = $bootstrap->getResource('Template');
             $template = $this->getTemplate();
             $localeName = $this->getLocale()->toString();
 
-            if ($template->getVersion() == 2) {
+            if ($template->getVersion() == 3) {
+                $this->registerTheme($template);
+            } elseif ($template->getVersion() == 2) {
                 $templateManager->addTemplateDir(array(
                     'custom' => $template->toString(),
                     'local' => '_emotion_local',
                     'emotion' => '_emotion',
+                    'include_dir' => '.'
                 ));
             } else {
-                $templateManager->addTemplateDir(array(
-                    'custom' => $template->toString(),
-                    'local' => '_local',
-                    'emotion' => '_default',
+                throw new \Exception(sprintf(
+                    'Tried to load unsupported template version %s for template: %s',
+                    $template->getVersion(),
+                    $template->getName()
                 ));
             }
 
@@ -733,6 +745,22 @@ class Shop extends ModelEntity
         $templateMail->setShop($this);
 
         return $this;
+    }
+
+    /**
+     * @param Template $template
+     * @throws \Exception
+     */
+    private function registerTheme(Template $template)
+    {
+        /**@var $templateManager \Enlight_Template_Manager*/
+        $templateManager = Shopware()->Container()->get('template');
+
+        /**@var $inheritance Inheritance*/
+        $inheritance = Shopware()->Container()->get('theme_inheritance');
+
+        $path = $inheritance->getTemplateDirectories($template);
+        $templateManager->setTemplateDir($path);
     }
 
     /**

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -24,6 +24,8 @@
 
 use Monolog\Handler\BufferHandler;
 use Shopware\Components\Log\Handler\EnlightMailHandler;
+use Shopware\Components\Log\Processor\ShopwareEnvironmentProcessor;
+use Shopware\Components\Log\Formatter\HtmlFormatter;
 
 /**
  * Shopware Error Handler
@@ -65,6 +67,11 @@ class Shopware_Plugins_Core_ErrorHandler_Bootstrap extends Shopware_Components_P
     protected $_errorList = array();
 
     /**
+     * @var bool
+     */
+    private $throwOnRecoverableError = false;
+
+    /**
      * @var array
      */
     protected $_errorLevelList = array(
@@ -79,11 +86,11 @@ class Shopware_Plugins_Core_ErrorHandler_Bootstrap extends Shopware_Components_P
         E_USER_ERROR        => 'E_USER_ERROR',
         E_USER_WARNING      => 'E_USER_WARNING',
         E_USER_NOTICE       => 'E_USER_NOTICE',
-        E_ALL               => 'E_ALL',
         E_STRICT            => 'E_STRICT',
         E_RECOVERABLE_ERROR => 'E_RECOVERABLE_ERROR',
-        8192                => 'E_DEPRECATED',
-        16384               => 'E_USER_DEPRECATED',
+        E_DEPRECATED        => 'E_DEPRECATED',
+        E_USER_DEPRECATED   => 'E_USER_DEPRECATED',
+        E_ALL               => 'E_ALL',
     );
 
     /**
@@ -118,6 +125,9 @@ class Shopware_Plugins_Core_ErrorHandler_Bootstrap extends Shopware_Components_P
      */
     public function onStartDispatch($args)
     {
+        $this->throwOnRecoverableError = Shopware()->Container()->getParameter('shopware.errorHandler.throwOnRecoverableError');
+
+        // Register ErrorHanlder for all errors, including strict
         $this->registerErrorHandler(E_ALL | E_STRICT);
 
         if ($this->Config()->get('logMail')) {
@@ -165,6 +175,16 @@ class Shopware_Plugins_Core_ErrorHandler_Bootstrap extends Shopware_Components_P
      */
     public function errorHandler($errno, $errstr, $errfile, $errline, $errcontext)
     {
+        // Ignore suppressed errors/warnings
+        if (error_reporting() === 0) {
+            return;
+        }
+
+        // Ignore access to not initialized variables in smarty templates
+        if ($errno === E_NOTICE && stripos($errfile, '/var/cache/') !== false && stripos($errfile, '/templates/') !== false) {
+            return;
+        }
+
         if ($this->_errorLog) {
             $hash_id = md5($errno . $errstr . $errfile . $errline);
             if (!isset($this->_errorList[$hash_id])) {
@@ -184,22 +204,25 @@ class Shopware_Plugins_Core_ErrorHandler_Bootstrap extends Shopware_Components_P
 
         switch ($errno) {
             case 0:
+            case E_DEPRECATED:
             case E_NOTICE:
             case E_WARNING:
-            case E_USER_NOTICE:
-            case E_RECOVERABLE_ERROR:
             case E_STRICT:
-            case defined('E_DEPRECATED') ? E_DEPRECATED : 0:
-            case defined('E_USER_DEPRECATED') ? E_USER_DEPRECATED : 0:
-                break;
+            case E_USER_NOTICE:
+            case E_USER_DEPRECATED:
             case E_CORE_WARNING:
             case E_USER_WARNING:
             case E_ERROR:
             case E_USER_ERROR:
             case E_CORE_ERROR:
                 break;
+            case E_RECOVERABLE_ERROR:
+                if ($this->throwOnRecoverableError) {
+                    throw new ErrorException($this->_errorLevelList[$errno].': '.$errstr, 0, $errno, $errfile, $errline);
+                }
+                break;
             default:
-                throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
+                throw new ErrorException($this->_errorLevelList[$errno].': '.$errstr, 0, $errno, $errfile, $errline);
                 break;
         }
 
@@ -260,6 +283,8 @@ class Shopware_Plugins_Core_ErrorHandler_Bootstrap extends Shopware_Components_P
         $mailer->addTo(Shopware()->Config()->Mail);
         $mailer->setSubject('Error in shop "'.Shopware()->Config()->Shopname.'".');
         $mailHandler = new EnlightMailHandler($mailer, \Monolog\Logger::WARNING);
+        $mailHandler->pushProcessor(new ShopwareEnvironmentProcessor());
+        $mailHandler->setFormatter(new HtmlFormatter());
         $bufferedHandler = new BufferHandler($mailHandler);
 
         return $bufferedHandler;

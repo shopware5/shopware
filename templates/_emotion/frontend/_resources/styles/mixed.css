@@ -1,0 +1,18 @@
+.ctl_checkout .confirm_accept {
+    top: 35px !important;
+}
+.agb_accept {
+    top: 50px !important;
+}
+.agb_accept.service_article {
+    top: 70px !important;
+}
+.agb_accept.esd_article {
+    top: 70px !important;
+}
+.ctl_checkout .more_info {
+    top: 110px !important;
+}
+.ctl_checkout .agb_info {
+    top: 135px !important;
+}

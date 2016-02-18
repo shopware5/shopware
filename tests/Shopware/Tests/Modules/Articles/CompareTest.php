@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -51,6 +51,7 @@ class Shopware_Tests_Modules_Articles_CompareTest extends Enlight_Components_Tes
         parent::setUp();
 
         $this->module = Shopware()->Modules()->Articles();
+        $this->module->sSYSTEM->sSESSION_ID = uniqid();
         $this->module->sDeleteComparisons();
 
         $sql = 'SELECT `id` FROM `s_articles` WHERE `active` =1';

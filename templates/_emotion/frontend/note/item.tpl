@@ -1,18 +1,24 @@
 <div class="table_row {if $lastrow} lastrow{/if}">
 
 	{* Reviews *}
-	{if !{config name=VoteDisable}}
+	{if !{config name=VoteDisable} && $sBasketItem.sVoteAverange.averange}
 		<div class="rating{if !$sUserLoggedIn} full_length{/if}">
 			<div class="star star{($sBasketItem.sVoteAverange.averange*2)|round}"></div>
 		</div>
 	{/if}
+
+    {if $sBasketItem.sConfigurator}
+        {$detailLink={url controller="detail" sArticle=$sBasketItem.articleID number=$sBasketItem.ordernumber}}
+    {else}
+        {$detailLink=$sBasketItem.linkDetails}
+    {/if}
 
 	{* Article informations *}
 	<div class="grid_12">
 
 		{* Article picture *}
 		{if $sBasketItem.image.src.0}
-			<a href="{$sBasketItem.linkDetails}" title="{$sBasketItem.articlename}" class="thumb_image">
+			<a href="{$detailLink}" title="{$sBasketItem.articlename}" class="thumb_image">
 				<img src="{$sBasketItem.image.src.2}" border="0" alt="{$sBasketItem.articlename}" />
 			</a>
 			{* Zoom picture *}
@@ -20,7 +26,7 @@
 				{s name='NoteLinkZoom'}{/s}
 			</a>
 		{else}
-			<a href="{$sBasketItem.linkDetails}" title="{$sBasketItem.articlename}" class="thumb_image">
+			<a href="{$detailLink}" title="{$sBasketItem.articlename}" class="thumb_image">
 				<img class="no_image" src="{link file='frontend/_resources/images/no_picture.jpg'}" alt="{$sBasketItem.articlename}" />
 			</a>
 		{/if}
@@ -36,7 +42,7 @@
 
 		<div class="basket_details">
 			{* Article name *}
-			<a class="title" href="{$sBasketItem.linkDetails}" title="{$sBasketItem.articlename}">
+			<a class="title" href="{$detailLink}" title="{$sBasketItem.articlename}">
 				{$sBasketItem.articlename|truncate:40}
 			</a>
 
@@ -106,10 +112,14 @@
 			{/if}
 
 			{* Compare article *}
-			{block name="frontend_note_item_actions_compare"}{/block}
+			{block name="frontend_note_item_actions_compare"}
+                <a href="{url controller='compare' action='add_article' articleID=$sBasketItem.articleID}" class="compare_add_article" title="{s name='ListingBoxLinkCompare'}{/s}" rel="nofollow">
+                    {s name='ListingBoxLinkCompare'}{/s}
+                </a>
+			{/block}
 
 			{* Article Details *}
-			<a href="{$sBasketItem.linkDetails}" class="detail" title="{$sBasketItem.articlename}">
+			<a href="{$detailLink}" class="detail" title="{$sBasketItem.articlename}">
 				{se name='NoteLinkDetails'}{/se}
 			</a>
 		</div>

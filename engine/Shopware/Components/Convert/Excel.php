@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -84,7 +84,7 @@ class Shopware_Components_Convert_Excel
     {
         // deliver header (as recommended in php manual)
         header("Content-Type: application/vnd.ms-excel; charset=UTF-8");
-        header("Content-Disposition: inline; filename=\"" . $filename . ".xlsx\"");
+        header("Content-Disposition: inline; filename=\"" . $filename . ".xls\"");
 
         // print out document to the browser
         // need to use stripslashes for the damn ">"

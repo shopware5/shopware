@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -78,24 +78,6 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
         $this->application = $application;
 
         return $this;
-    }
-
-    /**
-     * Run application method
-     *
-     * @deprecated 4.2 Dispatching is done in \Shopware\Kernel::handle()
-     * @return mixed
-     */
-    public function run()
-    {
-        /** @var $front Enlight_Controller_Front */
-        $front = $this->getResource('Front');
-        $front->Response()->setHeader(
-            'Content-Type',
-            'text/html; charset=' . $front->getParam('charset')
-        );
-
-        $front->dispatch();
     }
 
     /**

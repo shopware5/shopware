@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -36,7 +36,6 @@ class Plugins
     /**
      * @param Container $container
      * @param \Enlight_Loader $loader
-     * @param \Zend_Cache_Core $cache
      * @param \Enlight_Event_EventManager $eventManager
      * @param \Shopware $application
      * @param array $config

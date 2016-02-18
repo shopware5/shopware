@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -163,7 +163,6 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
                 b.firstname AS billing_firstname,
                 b.lastname AS billing_lastname,
                 b.street AS billing_street,
-                b.streetnumber AS billing_streetnumber,
                 b.zipcode AS billing_zipcode,
                 b.city AS billing_city,
                 b.phone AS phone,
@@ -189,7 +188,6 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
                 s.firstname AS shipping_firstname,
                 s.lastname AS shipping_lastname,
                 s.street AS shipping_street,
-                s.streetnumber AS shipping_streetnumber,
                 s.zipcode AS shipping_zipcode,
                 s.city AS shipping_city,
                 s.countryID AS shipping_countryID,

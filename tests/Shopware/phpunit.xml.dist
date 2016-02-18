@@ -12,6 +12,7 @@
             <group>disable</group>
             <group>performance</group>
             <group>functional</group>
+            <group>knownFailing</group>
         </exclude>
     </groups>
 

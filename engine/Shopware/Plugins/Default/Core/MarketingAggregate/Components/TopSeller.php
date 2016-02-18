@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -41,7 +41,7 @@ class Shopware_Components_TopSeller extends Enlight_Class
      * @param int $articleId
      * @param int $quantity
      */
-    public function incrementTopSeller(int $articleId, int $quantity)
+    public function incrementTopSeller($articleId, $quantity)
     {
         $sql = "
             INSERT INTO s_articles_top_seller_ro (article_id, sales, last_cleared)
@@ -244,6 +244,4 @@ class Shopware_Components_TopSeller extends Enlight_Class
 
         return $sumSelect;
     }
-
-
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -24,7 +24,7 @@
 
 namespace Shopware\Components\Test\Plugin;
 
-use Shopware\Components\Plugin\Manager;
+use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
 
 /**
  * Ensures a given plugin is installed and sets configuration.
@@ -46,7 +46,7 @@ use Shopware\Components\Plugin\Manager;
 abstract class TestCase extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Manager
+     * @var InstallerService
      */
     private static $pluginManager;
 
@@ -62,11 +62,10 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
 
     public static function setUpBeforeClass()
     {
-        self::$pluginManager = Shopware()->Container()->get('shopware.plugin_Manager');
+        self::$pluginManager = Shopware()->Container()->get('shopware_plugininstaller.plugin_manager');
         $loadedPlugins = static::$ensureLoadedPlugins;
 
         foreach ($loadedPlugins as $key => $value) {
-
             if (is_array($value)) {
                 $pluginName = $key;
                 $config = $value;

@@ -98,6 +98,5 @@ class Enlight_Plugin_Bootstrap_Config extends Enlight_Plugin_Bootstrap
      */
     public function install()
     {
-
     }
 }

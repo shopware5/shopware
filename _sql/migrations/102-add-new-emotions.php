@@ -1,7 +1,7 @@
 <?php
 class Migrations_Migration102 Extends Shopware\Components\Migrations\AbstractMigration
 {
-    public function up()
+    public function up($modus)
     {
         $sql = <<<'EOD'
 ALTER TABLE  `s_emotion` ADD  `grid_id` INT NOT NULL;

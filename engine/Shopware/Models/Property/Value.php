@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,9 +23,10 @@
  */
 
 namespace Shopware\Models\Property;
-use Shopware\Components\Model\ModelEntity,
-    Doctrine\ORM\Mapping AS ORM,
-    Doctrine\Common\Collections\ArrayCollection;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
+use Shopware\Models\Media\Media;
 
 /**
  * Shopware Article Property Model
@@ -35,8 +36,6 @@ use Shopware\Components\Model\ModelEntity,
  */
 class Value extends ModelEntity
 {
-
-
     /**
      * @var integer $id
      *
@@ -91,11 +90,24 @@ class Value extends ModelEntity
     private $articles;
 
     /**
+     * @deprecated since version 5.1.2, to be removed in 5.2
      * @var float $len
      * @ORM\Column(name="value_numeric", type="decimal", nullable=false, precision=2)
      */
     private $valueNumeric = 0;
 
+    /**
+     * @var int $mediaId
+     * @ORM\Column(name="media_id", type="integer", nullable=true)
+     */
+    private $mediaId = null;
+
+    /**
+     * @var Media
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Media\Media", inversedBy="properties")
+     * @ORM\JoinColumn(name="media_id", referencedColumnName="id")
+     */
+    private $media;
 
     /**
      * Class constructor.
@@ -166,7 +178,7 @@ class Value extends ModelEntity
     }
 
     /**
-     * @param string $option
+     * @param Option $option
      */
     public function setOption($option)
     {
@@ -174,10 +186,26 @@ class Value extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return Option
      */
     public function getOption()
     {
         return $this->option;
+    }
+
+    /**
+     * @return \Shopware\Models\Media\Media
+     */
+    public function getMedia()
+    {
+        return $this->media;
+    }
+
+    /**
+     * @param \Shopware\Models\Media\Media $media
+     */
+    public function setMedia($media)
+    {
+        $this->media = $media;
     }
 }

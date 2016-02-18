@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use ShopwarePlugin\PaymentMethods\Components\DebitPaymentMethod;
 
 /**
  * @category  Shopware
@@ -30,6 +31,9 @@
 
 class Shopware_Tests_Plugins_Core_PaymentMethods_DebitPaymentMethod extends Enlight_Components_Test_Plugin_TestCase
 {
+    /**
+     * @var DebitPaymentMethod
+     */
     protected static $debitPaymentMethod;
 
     protected static $debitStatus;
@@ -57,7 +61,7 @@ class Shopware_Tests_Plugins_Core_PaymentMethods_DebitPaymentMethod extends Enli
         $debitPaymentMean->setActive(true);
         Shopware()->Models()->flush($debitPaymentMean);
 
-        self::$debitPaymentMethod = new \ShopwarePlugin\PaymentMethods\Components\DebitPaymentMethod();
+        self::$debitPaymentMethod = new DebitPaymentMethod();
     }
 
     public static function tearDownAfterClass()
@@ -87,9 +91,7 @@ class Shopware_Tests_Plugins_Core_PaymentMethods_DebitPaymentMethod extends Enli
 
     public function testValidateEmptyGet()
     {
-        $this->Request()->setMethod('GET');
-
-        $validationResult = self::$debitPaymentMethod->validate($this->Request());
+        $validationResult = self::$debitPaymentMethod->validate([]);
         $this->assertTrue(is_array($validationResult));
         $this->assertCount(2, $validationResult);
         $this->assertArrayHasKey('sErrorFlag', $validationResult);
@@ -101,16 +103,15 @@ class Shopware_Tests_Plugins_Core_PaymentMethods_DebitPaymentMethod extends Enli
 
     public function testValidateCorrectData()
     {
-        $this->Request()->setMethod('POST');
-        $this->Request()->setQuery(array(
+        $data = [
             "sDebitAccount" => "AL47 2121 1009 0000 0002 3569 8741",
             "sDebitBankHolder" => "Some Account Holder Name",
             "sDebitBankcode" => "Some Bank Code",
             "sDebitBankName" => "Some Bank Name"
-        ));
+        ];
 
-        $validationResult = self::$debitPaymentMethod->validate($this->Request());
-        $this->assertTrue($validationResult);
+        $validationResult = self::$debitPaymentMethod->validate($data);
+        $this->assertEmpty($validationResult);
     }
 
     public function testCreatePaymentInstanceWithNoPaymentData()
@@ -143,7 +144,7 @@ class Shopware_Tests_Plugins_Core_PaymentMethods_DebitPaymentMethod extends Enli
         $this->assertNull($paymentInstance->getIban());
         $this->assertEquals($addressData['firstName'], $paymentInstance->getFirstName());
         $this->assertEquals($addressData['lastName'], $paymentInstance->getLastName());
-        $this->assertEquals($addressData['street'] . ' ' . $addressData['streetNumber'], $paymentInstance->getAddress());
+        $this->assertEquals($addressData['street'], $paymentInstance->getAddress());
         $this->assertEquals($addressData['zipCode'], $paymentInstance->getZipCode());
         $this->assertEquals($addressData['city'], $paymentInstance->getCity());
         $this->assertNotNull($paymentInstance->getAmount());

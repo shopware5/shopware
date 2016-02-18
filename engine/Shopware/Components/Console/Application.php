@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -97,8 +97,7 @@ class Application extends BaseApplication
         $this->kernel->boot();
 
         if (!$this->commandsRegistered) {
-            $this->registerCommands();
-
+            $this->registerCommands($output);
             $this->commandsRegistered = true;
         }
 
@@ -121,7 +120,10 @@ class Application extends BaseApplication
         return parent::doRun($input, $output);
     }
 
-    protected function registerCommands()
+    /**
+     * @param OutputInterface $output
+     */
+    protected function registerCommands(OutputInterface $output)
     {
         //Wrap database related logic in a try-catch
         //so that non-db commands can still execute
@@ -137,10 +139,11 @@ class Application extends BaseApplication
 
             $this->registerEventCommands();
         } catch (\Exception $e) {
+            $formatter = $this->getHelperSet()->get('formatter');
+            $output->writeln($formatter->formatBlock('WARNING! ' . $e->getMessage() . " in ". $e->getFile(), 'error'));
         }
 
         $this->registerFilesystemCommands();
-
     }
 
     protected function registerFilesystemCommands()

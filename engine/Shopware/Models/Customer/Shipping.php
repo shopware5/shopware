@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,8 +23,9 @@
  */
 
 namespace   Shopware\Models\Customer;
-use         Shopware\Components\Model\ModelEntity,
-            Doctrine\ORM\Mapping AS ORM;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Shopware customer shipping model represents a single shipping address of a customer.
@@ -104,16 +105,9 @@ class Shipping extends ModelEntity
     /**
      * Contains the street name of the shipping address
      * @var string $street
-     * @ORM\Column(name="street", type="string", length=100, nullable=false)
+     * @ORM\Column(name="street", type="string", length=255, nullable=false)
      */
     private $street = '';
-
-    /**
-     * Contains the street number of the shipping address
-     * @var string $streetNumber
-     * @ORM\Column(name="streetnumber", type="string", length=50, nullable=false)
-     */
-    private $streetNumber = '';
 
     /**
      * Contains the zip code of the shipping address
@@ -142,6 +136,22 @@ class Shipping extends ModelEntity
      * @ORM\Column(name="countryID", type="integer", nullable=false)
      */
     private $countryId = 0;
+
+    /**
+     * Contains the additional address line data
+     *
+     * @var string $additionalAddressLine1
+     * @ORM\Column(name="additional_address_line1", type="string", length=255, nullable=true)
+     */
+    protected $additionalAddressLine1 = null;
+
+    /**
+     * Contains the additional address line data 2
+     *
+     * @var string $additionalAddressLine2
+     * @ORM\Column(name="additional_address_line2", type="string", length=255, nullable=true)
+     */
+    protected $additionalAddressLine2 = null;
 
     /**
      * OWNING SIDE
@@ -304,28 +314,6 @@ class Shipping extends ModelEntity
     }
 
     /**
-     * Setter function for the streetNumber column property.
-     *
-     * @param string $streetNumber
-     * @return Shipping
-     */
-    public function setStreetNumber($streetNumber)
-    {
-        $this->streetNumber = $streetNumber;
-        return $this;
-    }
-
-    /**
-     * Getter function for the streetNumber column property.
-     *
-     * @return string
-     */
-    public function getStreetNumber()
-    {
-        return $this->streetNumber;
-    }
-
-    /**
      * Setter function for the zipCode column property.
      *
      * @param string $zipCode
@@ -448,5 +436,45 @@ class Shipping extends ModelEntity
     public function getStateId()
     {
         return $this->stateId;
+    }
+
+    /**
+     * Setter function for the setAdditionalAddressLine2 column property.
+     *
+     * @param string $additionalAddressLine2
+     */
+    public function setAdditionalAddressLine2($additionalAddressLine2)
+    {
+        $this->additionalAddressLine2 = $additionalAddressLine2;
+    }
+
+    /**
+     * Getter function for the getAdditionalAddressLine2 column property.
+     *
+     * @return string
+     */
+    public function getAdditionalAddressLine2()
+    {
+        return $this->additionalAddressLine2;
+    }
+
+    /**
+     * Setter function for the setAdditionalAddressLine1 column property.
+     *
+     * @param string $additionalAddressLine1
+     */
+    public function setAdditionalAddressLine1($additionalAddressLine1)
+    {
+        $this->additionalAddressLine1 = $additionalAddressLine1;
+    }
+
+    /**
+     * Getter function for the getAdditionalAddressLine1 column property.
+     *
+     * @return string
+     */
+    public function getAdditionalAddressLine1()
+    {
+        return $this->additionalAddressLine1;
     }
 }

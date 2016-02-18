@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2013 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -53,15 +53,43 @@ class Shopware_Tests_Components_Api_MediaTest extends Shopware_Tests_Components_
         copy($source, $dest);
 
         $data['file'] = $dest;
-        $path = Shopware()->DocPath('media_image') . '/test-bild-used.jpg';
-        unlink($path);
+        $path = Shopware()->DocPath('media_image') . 'test-bild-used.jpg';
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        if ($mediaService->has($path)) {
+            $mediaService->delete($path);
+        }
 
         $media = $this->resource->create($data);
-        $this->assertFileExists($path);
+        $this->assertTrue($mediaService->has($path));
 
         //check if the thumbnails are generated
-        $path = Shopware()->DocPath('media_image_thumbnail') . '/test-bild-used_140x140.jpg';
-        $this->assertFileExists($path);
+        $path = Shopware()->DocPath('media_image_thumbnail') . 'test-bild-used_140x140.jpg';
+        $this->assertTrue($mediaService->has($path));
+    }
+
+    public function testUploadNameWithOver50Characters()
+    {
+        $data = $this->getSimpleTestData();
+        $source = __DIR__ . '/fixtures/test-bild.jpg';
+        $dest = __DIR__ . '/fixtures/test-bild-with-more-than-50-characaters-more-more-more-more-used.jpg';
+
+        //copy image to execute test case multiple times.
+        unlink($dest);
+        copy($source, $dest);
+
+        $data['file'] = $dest;
+        $media = $this->resource->create($data);
+
+        $pathPicture = Shopware()->DocPath('media_image') . $media->getFileName();
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $this->assertTrue($mediaService->has($pathPicture));
+
+        //check if the thumbnails are generated
+        $path = Shopware()->DocPath('media_image_thumbnail') . $media->getName() . '_140x140.jpg';
+        $this->assertTrue($mediaService->has($path));
+
+        $mediaService->delete(Shopware()->DocPath('media_image') . $media->getFileName());
+        $mediaService->delete($path);
     }
 
 
