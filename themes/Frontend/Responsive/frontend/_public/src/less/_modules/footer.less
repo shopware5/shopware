@@ -11,7 +11,7 @@ The footer element sizes are defined with the unitize mixin.
 */
 
 .footer-main {
-	background: #fff;
+    background: #fff;
 
     .footer--phone-link {
         .unitize(font-size, 19);
@@ -30,8 +30,8 @@ The footer element sizes are defined with the unitize mixin.
 
     .column--headline {
         .user-select(none);
-		.unitize-padding(8, 0);
-		margin: 0;
+        .unitize-padding(8, 0);
+        margin: 0;
         font-weight: 700;
         color: @brand-primary;
         cursor: pointer;
@@ -91,12 +91,14 @@ The footer element sizes are defined with the unitize mixin.
     }
 
     .navigation--link {
-		.unitize-padding(10, 0, 10, 0, 16);
-		display: block;
-		color: @text-color;
+        .unitize-padding(10, 0, 10, 0, 16);
+        display: block;
+        color: @text-color;
 
-		&:hover { color: @brand-primary; }
-	}
+        &:hover {
+            color: @brand-primary;
+        }
+    }
 
     // Newsletter registration
     .newsletter--form {
@@ -107,10 +109,12 @@ The footer element sizes are defined with the unitize mixin.
     .newsletter--field {
         .border-radius-multi(3px, 0, 0, 3px);
         position: relative;
-		width: 87.5%;
+        width: 87.5%;
         float: left;
 
-		&:focus { z-index: @zindex-footer-newsletter-field-focus; }
+        &:focus {
+            z-index: @zindex-footer-newsletter-field-focus;
+        }
     }
 
     .newsletter--button {
@@ -118,8 +122,8 @@ The footer element sizes are defined with the unitize mixin.
         .border-radius-multi(0, 3px, 3px, 0);
         .unitize-padding(3, 5, 3, 5, 16);
         .unitize(-1, 16, margin-left);
-		position: relative;
-		width: 12.5%;
+        position: relative;
+        width: 12.5%;
         text-align: center;
         float: left;
 
@@ -128,12 +132,14 @@ The footer element sizes are defined with the unitize mixin.
             .unitize(margin-right, 0);
         }
 
-        .button--text { display: none }
+        .button--text {
+            display: none
+        }
     }
 
-	.footer--logo {
-		.unitize-padding(10, 0);
-	}
+    .footer--logo {
+        .unitize-padding(10, 0);
+    }
 }
 
 .footer-vat {
@@ -143,11 +149,11 @@ The footer element sizes are defined with the unitize mixin.
 }
 
 .footer--vat-info {
-	.vat-info--text {
-		.unitize(font-size, 12);
-		.unitize(margin-bottom, 10);
-		text-align: center;
-	}
+    .vat-info--text {
+        .unitize(font-size, 12);
+        .unitize(margin-bottom, 10);
+        text-align: center;
+    }
 }
 
 .footer-minimal {
@@ -155,6 +161,10 @@ The footer element sizes are defined with the unitize mixin.
     .unitize-padding(40, 10, 20, 10);
     background: transparent;
     text-align: center;
+
+    .footer-main & {
+        padding: 0;
+    }
 
     .footer--service-menu .service--list {
         list-style-type: none;
@@ -195,15 +205,24 @@ The footer element sizes are defined with the unitize mixin.
 }
 
 @media screen and (min-width: @tabletViewportWidth) {
+    .footer-main .footer-minimal {
+        display: none;
+    }
+}
+
+
+@media screen and (min-width: @tabletViewportWidth) {
     .footer-main {
         border-top: 1px solid @border-color;
 
         .column--headline {
-			.unitize-margin(28, 0, 10, 0, 16);
-			padding: 0;
+            .unitize-margin(28, 0, 10, 0, 16);
+            padding: 0;
             cursor: text;
 
-			&::after { display: none; }
+            &::after {
+                display: none;
+            }
         }
 
         .footer--column {
@@ -222,21 +241,29 @@ The footer element sizes are defined with the unitize mixin.
             border-bottom: 1px solid @border-color;
         }
 
-        .column--content { display: block; }
+        .column--content {
+            display: block;
+        }
 
         // Don't display sub Navigation links on tablet/desktop
         .navigation--list {
-            .is--level1 { display: none; }
+            .is--level1 {
+                display: none;
+            }
         }
 
-        .navigation--entry { padding: 0; }
+        .navigation--entry {
+            padding: 0;
+        }
 
         .navigation--link {
-			line-height: 1.7;
-			padding: 0
-		}
+            line-height: 1.7;
+            padding: 0
+        }
 
-        .newsletter--field { width: 80%; }
+        .newsletter--field {
+            width: 80%;
+        }
 
         .newsletter--button {
             width: 20%;
@@ -247,13 +274,15 @@ The footer element sizes are defined with the unitize mixin.
         }
     }
 
-    .footer-vat { padding: 0; }
+    .footer-vat {
+        padding: 0;
+    }
 
-    .footer--vat-info  {
-		.vat-info--text {
-        	.unitize(margin-bottom, 20);
-    	}
-	}
+    .footer--vat-info {
+        .vat-info--text {
+            .unitize(margin-bottom, 20);
+        }
+    }
 }
 
 @media screen and (min-width: @desktopViewportWidth) {
