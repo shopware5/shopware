@@ -35,7 +35,6 @@ use Doctrine\DBAL\Connection;
 use Doctrine\Common\Util\Inflector;
 use Doctrine\Common\EventManager;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
-use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
@@ -47,11 +46,6 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
  */
 class ModelManager extends EntityManager
 {
-    /**
-     * @var ValidatorInterface
-     */
-    protected $validator;
-
     /**
      * Debug mode flag for the query builders.
      * @var bool
@@ -253,29 +247,9 @@ class ModelManager extends EntityManager
     /**
      * @return ValidatorInterface
      */
-    private function createValidator()
-    {
-        $validatorBuilder = Validation::createValidatorBuilder();
-
-        $reader = $this->getConfiguration()->getAnnotationsReader();
-
-        $validatorBuilder->enableAnnotationMapping($reader);
-
-        $validator = $validatorBuilder->getValidator();
-
-        return $validator;
-    }
-
-    /**
-     * @return ValidatorInterface
-     */
     public function getValidator()
     {
-        if (null === $this->validator) {
-            $this->validator = $this->createValidator();
-        }
-
-        return $this->validator;
+        return Shopware()->Container()->get('validator');
     }
 
     /**

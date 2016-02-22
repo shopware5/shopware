@@ -28,9 +28,11 @@ use Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\SettingsCo
 use Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\SynchronizerCompilerPass;
 use Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\DataIndexerCompilerPass;
 use Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\MappingCompilerPass;
+use Shopware\Bundle\FormBundle\DependencyInjection\CompilerPass\FormPass;
 use Shopware\Bundle\SearchBundle\DependencyInjection\Compiler\CriteriaRequestHandlerCompilerPass;
 use Shopware\Bundle\SearchBundleDBAL\DependencyInjection\Compiler\DBALCompilerPass;
 use Shopware\Bundle\SearchBundleES\DependencyInjection\CompilerPass\SearchHandlerCompilerPass;
+use Shopware\Bundle\FormBundle\DependencyInjection\CompilerPass\AddConstraintValidatorsPass;
 use Shopware\Components\DependencyInjection\Compiler\DoctrineEventSubscriberCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\EventListenerCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\EventSubscriberCompilerPass;
@@ -476,6 +478,7 @@ class Kernel implements HttpKernelInterface
         $loader->load('PluginInstallerBundle/services.xml');
         $loader->load('ESIndexingBundle/services.xml');
         $loader->load('MediaBundle/services.xml');
+        $loader->load('FormBundle/services.xml');
 
         if ($this->isElasticSearchEnabled()) {
             $loader->load('SearchBundleES/services.xml');
@@ -497,6 +500,8 @@ class Kernel implements HttpKernelInterface
         $container->addCompilerPass(new SynchronizerCompilerPass());
         $container->addCompilerPass(new DataIndexerCompilerPass());
         $container->addCompilerPass(new SettingsCompilerPass());
+        $container->addCompilerPass(new FormPass());
+        $container->addCompilerPass(new AddConstraintValidatorsPass());
 
         if ($this->isElasticSearchEnabled()) {
             $container->addCompilerPass(new SearchHandlerCompilerPass());
