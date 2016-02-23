@@ -8,6 +8,7 @@ In this document you will find a changelog of the important changes related to t
 * Added index on `s_article_img_mapping_rules`.`mapping_id` and `s_article_img_mapping_rules`.`option_id`
 * Fixed `AND` search logic for search terms which not exist in the s_articles table.
 * Added order and payment state constants in `\Shopware\Models\Order\Status`
+* change email validation to a simple regex: `/^.+\@\S+\.\S+$/`. You can implement your own email validation by implementing the `EmailValidatorInterface`. 
 
 ## 5.1.3
 * Switch Grunt to relativeUrls to unify the paths to less.php

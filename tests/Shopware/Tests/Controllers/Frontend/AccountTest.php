@@ -83,8 +83,8 @@ class Shopware_Tests_Controllers_Frontend_AccountTest extends Enlight_Components
             'test@example.active',
             'test@example.love',
             'test@example.video',
-
-            'test@example'
+            'test@example.app',
+            'test@example.shop'
         );
 
         $invalidEmailAddresses = array(
