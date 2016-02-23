@@ -91,7 +91,7 @@ Ext.define('Shopware.apps.Blog.view.blog.detail.comments.InfoPanel', {
                             '<span>{literal}{name}{/literal}</span>',
                         '</p>',
                         '<p style="margin-top: 10px;">',
-                            '<b>{s name=blog/detail/comments/info_panel/email}eMail: {/s}</b>',
+                            '<b>{s name=blog/detail/comments/info_panel/email}Email: {/s}</b>',
                             '<span>{literal}{eMail}{/literal}</span>',
                         '</p>',
                         '<p style="margin-top: 10px;">',

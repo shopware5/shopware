@@ -151,7 +151,7 @@
                         {/if}
                     {/block}
 
-                    {* Product eMail notification *}
+                    {* Product email notification *}
                     {block name="frontend_detail_index_notification"}
                         {if $sArticle.notification && $sArticle.instock <= 0 && $ShowNotification}
                             {include file="frontend/plugins/notification/index.tpl"}
