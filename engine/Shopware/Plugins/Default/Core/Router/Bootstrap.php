@@ -71,8 +71,6 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
             return;
         }
 
-        /** @var $repository Shopware\Models\Shop\Repository */
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
         $shop = $this->getShopByRequest($request);
 
         // Read original base path for resources
