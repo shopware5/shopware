@@ -75,23 +75,6 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
         $shop = $this->getShopByRequest($request);
 
-        if (!$shop->getHost()) {
-            $shop->setHost($request->getHttpHost());
-        }
-        if (!$shop->getBaseUrl()) {
-            $preferBasePath = $this->Application()->Config()->preferBasePath;
-            $shop->setBaseUrl($preferBasePath ? $request->getBasePath() : $request->getBaseUrl());
-        }
-        if (!$shop->getBasePath()) {
-            $shop->setBasePath($request->getBasePath());
-        }
-        if (!$shop->getSecureBasePath()) {
-            $shop->setSecureBasePath($shop->getBasePath());
-        }
-        if (!$shop->getSecureHost()) {
-            $shop->setSecureHost($shop->getHost());
-        }
-
         // Read original base path for resources
         $request->getBasePath();
 
