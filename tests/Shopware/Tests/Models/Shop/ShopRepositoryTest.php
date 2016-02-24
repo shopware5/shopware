@@ -199,4 +199,38 @@ class Shopware_Tests_Models_ShopRepositoryTest extends Enlight_Components_Test_C
         ";
         Shopware()->Db()->exec($sql);
     }
+
+    /**
+     * Tests the shop duplication bug caused by the detaching the shop entity
+     * in the obsolete Shopware\Models\Shop\Repsoitory::fixActive()
+     */
+    public function testShopDuplication()
+    {
+        // Get inital number of shops
+        $numberOfShopsBefore = Shopware()->Db()->fetchOne("SELECT count(*) FROM s_core_shops");
+
+        // Load arbitrary order
+        $order = Shopware()->Models()->getRepository('Shopware\Models\Order\Order')->find(57);
+
+        // Modify order entitiy to trigger an update action, when the entity is flushed to the database
+        $order->setComment('Dummy');
+
+        // Send order status mail to customer, this will invoke the fixActive()-method
+        $mail = Shopware()->Modules()->Order()->createStatusMail($order->getId(), 7);
+        Shopware()->Modules()->Order()->sendStatusMail($mail);
+
+        // Flush changes changed order to the database
+        Shopware()->Models()->flush($order);
+
+        // Get current number of shops
+        $numberOfShopsAfter = Shopware()->Db()->fetchOne("SELECT count(*) FROM s_core_shops");
+
+        // Check that the number of shops has not changed
+        $this->assertSame($numberOfShopsBefore, $numberOfShopsAfter);
+
+        // Clean up comment
+        $order->setComment('');
+        Shopware()->Models()->flush($order);
+    }
+
 }

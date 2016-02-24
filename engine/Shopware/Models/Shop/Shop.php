@@ -296,7 +296,7 @@ class Shop extends ModelEntity
      */
     public function getHost()
     {
-        return $this->host;
+        return $this->main !== null ? $this->main->getHost() : $this->host;
     }
 
     /**
@@ -312,7 +312,11 @@ class Shop extends ModelEntity
      */
     public function getBasePath()
     {
-        return $this->basePath;
+        if($this->main !== null) {
+            return $this->main->getBasePath();
+        } else {
+            return $this->basePath;
+        }
     }
 
     /**
@@ -328,7 +332,11 @@ class Shop extends ModelEntity
      */
     public function getBaseUrl()
     {
-        return $this->baseUrl;
+        if($this->baseUrl !== null) {
+            return $this->baseUrl;
+        } else {
+            return $this->getBasePath();
+        }
     }
 
     /**
@@ -360,7 +368,7 @@ class Shop extends ModelEntity
      */
     public function getTemplate()
     {
-        return $this->template;
+        return $this->main !== null ? $this->main->getTemplate() : $this->template;
     }
 
     /**
@@ -472,7 +480,7 @@ class Shop extends ModelEntity
      */
     public function getCurrencies()
     {
-        return $this->currencies;
+        return $this->main !== null ? $this->main->getCurrencies() : $this->currencies;
     }
 
     /**
@@ -504,7 +512,7 @@ class Shop extends ModelEntity
      */
     public function getSecure()
     {
-        return $this->secure;
+        return $this->main !== null ? $this->main->getSecure() : $this->secure;
     }
 
     /**
@@ -520,7 +528,13 @@ class Shop extends ModelEntity
      */
     public function getSecureHost()
     {
-        return $this->secureHost;
+        if($this->main !== null) {
+            return $this->main->getSecureHost();
+        } elseif($this->secureHost !== null) {
+            return $this->secureHost;
+        } else {
+            return $this->getHost();
+        }
     }
 
     /**
@@ -536,7 +550,13 @@ class Shop extends ModelEntity
      */
     public function getSecureBasePath()
     {
-        return $this->secureBasePath;
+        if($this->main !== null) {
+            return $this->main->getSecureBasePath();
+        } elseif($this->secureBasePath !== null) {
+            return $this->secureBasePath;
+        } else {
+            return $this->getBasePath();
+        }
     }
 
     /**
@@ -552,7 +572,15 @@ class Shop extends ModelEntity
      */
     public function getSecureBaseUrl()
     {
-        return $this->secureBaseUrl;
+        $baseUrl = $this->getSecureBasePath();
+        if ($this->getBaseUrl() != $this->getBasePath()) {
+            if (!$this->getBasePath()) {
+                $baseUrl .= $this->getBaseUrl();
+            } elseif (strpos($this->getBaseUrl(), $this->getBasePath()) === 0) {
+                $baseUrl .= substr($this->getBaseUrl(), strlen($this->getBasePath()));
+            }
+        }
+        return $baseUrl;
     }
 
     /**
@@ -584,7 +612,7 @@ class Shop extends ModelEntity
      */
     public function getCustomerScope()
     {
-        return $this->customerScope;
+        return $this->main !== null ? $this->main->getCustomerScope() : $this->customerScope;
     }
 
     /**
@@ -616,7 +644,7 @@ class Shop extends ModelEntity
      */
     public function getChildren()
     {
-        return $this->children;
+        return $this->main !== null ? $this->main->getChildren() : $this->children;
     }
 
     /**
