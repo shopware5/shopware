@@ -140,7 +140,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     /**
      * Install plugin method
      *
-     * @return bool
+     * @return array|bool
      */
     public function install()
     {
@@ -150,7 +150,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     /**
      * Uninstall plugin method
      *
-     * @return bool
+     * @return array|bool
      */
     public function uninstall()
     {
@@ -176,7 +176,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      *
      * @param string $version
      *
-     * @return bool
+     * @return array|bool
      */
     public function update($version)
     {
