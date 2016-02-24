@@ -251,7 +251,7 @@ class Order extends ModelEntity
      *
      * Used for the language subshop association
      * @var \Shopware\Models\Shop\Shop
-     * @ORM\ManyToOne(targetEntity="Shopware\Models\Shop\Shop", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Shop\Shop")
      * @ORM\JoinColumn(name="language", referencedColumnName="id")
      */
     private $languageSubShop;
