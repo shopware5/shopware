@@ -32,5 +32,18 @@
             <tag name="validator.constraint_validator" alias="shopware.form.constraint.unique" />
         </service>
 
+        <service id="shopware.form.constraint.belongs_to" class="Shopware\Bundle\FormBundle\Constraints\BelongsToValidator">
+            <argument type="service" id="dbal_connection" />
+            <tag name="validator.constraint_validator" alias="shopware.form.constraint.belongs_to" />
+        </service>
+
+        <service id="shopware.form.type.account_addressform" class="Shopware\Bundle\FormBundle\Forms\Account\AddressFormType">
+            <argument type="service" id="snippets" />
+            <argument type="service" id="config" />
+            <argument type="service" id="events" />
+            <argument type="service" id="models" />
+            <tag name="form.type" />
+        </service>
+
     </services>
 </container>
