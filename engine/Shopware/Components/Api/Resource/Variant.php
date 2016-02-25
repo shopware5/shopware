@@ -783,9 +783,9 @@ class Variant extends Resource implements BatchInterface
                 $optionData['option'] != $option->getName() &&
                 strtolower($optionData['option']) == strtolower($option->getName())
             ){
-                // manipulate api input if option was found case sensitive
+                // manipulate api input if option was found case insensitive
                 $optionData['option'] = $option->getName();
-                // manipulate api input (base array) if option was found case sensitive
+                // manipulate api input (base array) if option was found case insensitive
                 $data['configuratorOptions'][$optionKey]['option'] = $optionData['option'];
             }
 
