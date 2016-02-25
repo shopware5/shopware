@@ -760,7 +760,7 @@ class Variant extends Resource implements BatchInterface
 
         $options = new ArrayCollection();
 
-        foreach ($data['configuratorOptions'] as $optionData) {
+        foreach ($data['configuratorOptions'] as $optionKey => $optionData) {
             $availableGroup = $this->getAvailableGroup($availableGroups, [
                 'id' => $optionData['groupId'],
                 'name' => $optionData['group']
