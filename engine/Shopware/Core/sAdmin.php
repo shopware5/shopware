@@ -2479,21 +2479,17 @@ class sAdmin
     /**
      * Returns the given user's shipping address attributes
      *
-     * @param $userId User id
+     * @param $shipping Shipping Address
      * @return array The given user's shipping address attributes
      */
-    private function getUserShippingAddressAttributes($userId)
+    private function getUserShippingAddressAttributes($shipping)
     {
-        $builder = Shopware()->Models()->createQueryBuilder();
-        $attributes = $builder->select(array('attributes'))
-            ->from('Shopware\Models\Attribute\CustomerShipping', 'attributes')
-            ->innerJoin('attributes.customerShipping', 'shipping')
-            ->where('shipping.customerId = :userId')
-            ->setParameter('userId', $userId)
-            ->setFirstResult(0)
-            ->setMaxResults(1)
-            ->getQuery()
-            ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        if (!empty($shipping['id'])) {
+            $attributes = $this->db->fetchRow(
+                'SELECT * FROM s_user_shippingaddress_attributes WHERE shippingID = ?',
+                array((int)$shipping['id'])
+            );
+        }
 
         if (!is_array($attributes)) {
             return array();
@@ -4482,7 +4478,8 @@ class sAdmin
             array($userId)
         );
         $shipping = $shipping ? : array();
-        $attributes = $this->getUserShippingAddressAttributes($userId);
+        $attributes = $this->getUserShippingAddressAttributes($shipping);
+
         $userData["shippingaddress"] = array_merge($attributes, $shipping);
 
         // If shipping address is not available, billing address is coeval the shipping address
@@ -4554,16 +4551,13 @@ class sAdmin
         );
         $billing = $billing ? : array();
 
-        $builder = Shopware()->Models()->createQueryBuilder();
-        $attributes = $builder->select(array('attributes'))
-            ->from('Shopware\Models\Attribute\CustomerBilling', 'attributes')
-            ->innerJoin('attributes.customerBilling', 'billing')
-            ->where('billing.customerId = :userId')
-            ->setParameter('userId', $userId)
-            ->setFirstResult(0)
-            ->setMaxResults(1)
-            ->getQuery()
-            ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        if (!empty($billing['id'])) {
+            $attributes = $this->db->fetchRow(
+                'SELECT * FROM s_user_billingaddress_attributes WHERE billingID = ?',
+                array((int)$billing['id'])
+            );
+        }
+
         if (!is_array($attributes)) {
             $attributes = array();
         } else {
