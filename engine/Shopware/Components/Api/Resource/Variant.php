@@ -777,8 +777,18 @@ class Variant extends Resource implements BatchInterface
                 'name' => $optionData['option']
             ]);
             if (
+                $availableGroup &&
+                isset($optionData['group']) &&
+                $optionData['group'] !== null &&
+                $optionData['group'] != $availableGroup->getName() &&
+                strtolower($optionData['group']) == strtolower($availableGroup->getName())
+            ){
+                // manipulate api input (base array) if option was found case insensitive
+                $data['configuratorOptions'][$optionKey]['group'] = $availableGroup->getName();
+            }
+            if (
                 $option &&
-                isset($optionData['option']) && 
+                isset($optionData['option']) &&
                 $optionData['option'] !== null &&
                 $optionData['option'] != $option->getName() &&
                 strtolower($optionData['option']) == strtolower($option->getName())
