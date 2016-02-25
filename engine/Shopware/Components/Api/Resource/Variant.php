@@ -776,6 +776,18 @@ class Variant extends Resource implements BatchInterface
                 'id'   => $optionData['optionId'],
                 'name' => $optionData['option']
             ]);
+            if (
+                $option &&
+                isset($optionData['option']) && 
+                $optionData['option'] !== null &&
+                $optionData['option'] != $option->getName() &&
+                strtolower($optionData['option']) == strtolower($option->getName())
+            ){
+                // manipulate api input if option was found case sensitive
+                $optionData['option'] = $option->getName();
+                // manipulate api input (base array) if option was found case sensitive
+                $data['configuratorOptions'][$optionKey]['option'] = $optionData['option'];
+            }
 
             if (!$option) {
                 if (!$optionData['option']) {
@@ -811,8 +823,8 @@ class Variant extends Resource implements BatchInterface
     {
         /**@var $availableGroup Option */
         foreach ($availableGroups as $availableGroup) {
-            if (($availableGroup->getName() == $groupData['name'] && $groupData['name'] !== null)
-                || ($availableGroup->getId() == $groupData['id']) && $groupData['id'] !== null) {
+            if ( ($groupData['name'] !== null && strtolower($availableGroup->getName()) == strtolower($groupData['name']))
+                || ($groupData['id'] !== null && $availableGroup->getId() == $groupData['id'])) {
                 return $availableGroup;
             }
         }
@@ -832,8 +844,8 @@ class Variant extends Resource implements BatchInterface
     {
         /**@var $availableOption Option */
         foreach ($availableOptions as $availableOption) {
-            if (($availableOption->getName() == $optionData['name'] && $optionData['name'] !== null)
-                || ($availableOption->getId() == $optionData['id'] && $optionData['id'] !== null)) {
+            if ( ($optionData['name'] !== null && strtolower($availableOption->getName()) == strtolower($optionData['name']))
+                || ($optionData['id'] !== null && $availableOption->getId() == $optionData['id'] )) {
                 return $availableOption;
             }
         }
