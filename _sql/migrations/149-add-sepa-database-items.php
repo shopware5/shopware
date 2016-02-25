@@ -1,7 +1,7 @@
 <?php
 class Migrations_Migration149 Extends Shopware\Components\Migrations\AbstractMigration
 {
-    public function up()
+    public function up($modus)
     {
         $sql = <<<'EOD'
         SET @parent_form = (SELECT id FROM s_core_config_forms WHERE name = 'Frontend' LIMIT 1);

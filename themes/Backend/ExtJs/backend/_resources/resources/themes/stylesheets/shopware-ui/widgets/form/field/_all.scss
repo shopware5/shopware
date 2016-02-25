@@ -1,0 +1,140 @@
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ *
+ * @category   Shopware
+ * @package    Shopware_Styling
+ * @subpackage Forms
+ * @version    $Id$
+ * @author shopware AG
+ */
+$input-color: #6c818f;
+
+/** Default label after style */
+.#{$prefix}form-cb-label-after {
+	margin: 0 0 0 12px;
+}
+
+/** Default label style */
+.#{$prefix}form-item-label {
+	font-weight: bold;
+	color: $font-color;
+	margin-top: 5px;
+    font-size: 11px;
+}
+
+/** Checkbox label style */
+.#{$prefix}form-cb-label {
+	color: $font-color;
+	text-shadow: 0 1px 0 #fff;
+}
+
+/** Support text styling */
+.#{$prefix}form-support-text, .#{$prefix}global-notice-text {
+	color: #8698A3;
+	font-size: 11px;
+	font-style: italic;
+	margin: 3px 0 0 3px;
+	text-shadow: 0 1px 0 #fff;
+}
+.#{$prefix}global-notice-text {
+    margin: 0 0 15px;
+    font-size: 12px;
+    line-height: 16px;
+}
+
+/** Help icon */
+.#{$prefix}form-help-icon {
+    background: url("data:image/png;base64,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") no-repeat;
+    display: block;
+    cursor: help;
+    height: 16px;
+    width: 17px;
+    margin: 5px 0 0 8px;
+    border: 0 none transparent !important;
+    outline: 0 none transparent;
+    vertical-align: middle;
+
+    /** Help icon - Hover state */
+    &:hover { background-position: 0 -17px }
+
+}
+
+/** Basic form item style - Needs to adjust for the different types of form elements */
+td.#{$prefix}form-item-body {
+	@include border-radius(3px);
+	padding: 2px;
+	background: darken(#dce1e5, 2%);
+	display: block;
+
+	.#{$prefix}form-field {
+		@include border-radius(3px);
+		//@include single-box-shadow(darken(#d4d9dc, 5%), 1px, 1px, 1px, false, true);
+		@include form-item-focus;
+		border-color: #a6b0b7;
+		border-bottom-color: #d9dee2;
+		border-right-color: #d9dee2;
+		color: lighten($font-color, 15%);
+		padding: 2px 6px;
+		font-size: 11px;
+		height: 24px;
+
+		/** Styling the empty text */
+		&::-webkit-input-placeholder { color: lighten($font-color, 35%) }
+		&:-moz-placeholder { color: lighten($font-color, 35%) }
+	}
+	textarea.#{$prefix}form-field {
+		height: auto;
+	}
+}
+/** Exceptions for the basic style */
+td[id*=displayfield], td.#{$prefix}form-checkboxgroup-body {
+	padding: 0 !important;
+	background: transparent;
+}
+table[id*=hiddenfield] { display: none !important }
+
+/** Disable the default border around check- and radioboxes */
+td.#{$prefix}form-cb-wrap, td[id^=fieldcontainer] {
+	@include border-radius(0);
+
+	background: transparent;
+}
+
+/** Include the default widgets */
+@import 'checkbox';
+@import 'radiobox';
+@import 'textfield';
+@import 'combobox';
+@import 'numberfield';
+@import 'datefield';
+@import 'timefield';
+@import 'filefield';
+@import 'slider';
+
+/** Include our widgets */
+@import 'boxselect';
+@import 'mediaselection';
+@import 'passwordstrength';
+@import 'livearticlesearch';
+@import 'codemirrorfield';
+@import 'tinymce';
+@import 'itemselector';

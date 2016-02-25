@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2013 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -29,6 +29,17 @@
  */
 class Shopware_Tests_Components_Api_CacheTest extends Shopware_Tests_Components_Api_TestCase
 {
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $httpCacheDir = Shopware()->Container()->getParameter('shopware.httpCache.cache_dir');
+        $templateCacheDir   = Shopware()->Container()->getParameter('shopware.template.cacheDir');
+
+        @mkdir($httpCacheDir, 0777, true);
+        @mkdir($templateCacheDir, 0777, true);
+    }
+
     /**
      * @return \Shopware\Components\Api\Resource\Cache
      */
@@ -54,7 +65,8 @@ class Shopware_Tests_Components_Api_CacheTest extends Shopware_Tests_Components_
     public function testGetListShouldBeSuccessFull()
     {
         $caches = $this->getResource()->getList();
-        $this->assertEquals(6, count($caches['data']));
+
+        $this->assertEquals(5, count($caches['data']));
     }
 
     /**

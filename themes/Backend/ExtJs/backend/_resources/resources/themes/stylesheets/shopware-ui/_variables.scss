@@ -1,0 +1,30 @@
+$theme: 'shopware-ui';
+
+// Default font settings
+$font-family: Arial, Verdana, sans-serif;
+$font-size: 12px;
+
+// Define basic variables
+$font-color: #475c6a;
+$link-color: #009cff;
+$dark-font-color: #475c6a;
+$light-font-color: #6c818f;
+
+// Define colors
+$light-blue: #2f79b1;
+$dark-blue: #0e5c99;
+$border-color: #a4b5c0;
+$light-border-color: #f5f7f8;
+
+$css-shadow-background-color: $dark-font-color;
+$border-layout-ct-background: #ebedef;
+
+@import 'variables/toolbar';
+@import 'variables/panel';
+@import 'variables/grid';
+@import 'variables/window';
+@import 'variables/button';
+@import 'variables/fieldset';
+@import 'variables/viewport';
+
+@import 'variables/form/combobox';

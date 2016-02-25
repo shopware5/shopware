@@ -133,4 +133,15 @@ class Enlight_Components_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql
     {
         return $this->query($query, $params);
     }
+
+    /**
+     * Returns the error message of the last query, or null if none
+     *
+     * @return string|null
+     */
+    public function getErrorMessage()
+    {
+        $error = $this->getConnection()->errorInfo();
+        return isset($error[2]) ? $error[2] : null;
+    }
 }

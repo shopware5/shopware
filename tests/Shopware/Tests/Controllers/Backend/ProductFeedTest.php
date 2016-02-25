@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -157,7 +157,7 @@ class Shopware_Tests_Controllers_Backend_ProductFeedTest extends Enlight_Compone
 
         $this->dispatch('backend/ProductFeed/saveFeed');
         $this->assertTrue($this->View()->success);
-        $this->assertCount(34, $this->View()->data);
+        $this->assertCount(36, $this->View()->data);
         $this->assertEquals($params["name"], $this->View()->data["name"]);
 
         return $this->View()->data["id"];
@@ -208,7 +208,7 @@ class Shopware_Tests_Controllers_Backend_ProductFeedTest extends Enlight_Compone
         $this->dispatch('backend/ProductFeed/saveFeed');
 
         $this->assertTrue($this->View()->success);
-        $this->assertCount(34, $this->View()->data);
+        $this->assertCount(36, $this->View()->data);
         $this->assertEquals($params["name"], $this->View()->data["name"]);
 
         return $id;

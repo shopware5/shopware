@@ -1,0 +1,12 @@
+#!/bin/bash
+BASEDIR=$(readlink -f ${BASH_SOURCE[0]})
+BASEDIR=$(dirname $BASEDIR)
+PIDFILE=$BASEDIR/server.pid
+
+if [ ! -f $PIDFILE ]; then
+    echo "No Pidfile found"
+    exit 0
+fi
+
+kill $(cat $PIDFILE) > /dev/null 2>&1
+rm $PIDFILE

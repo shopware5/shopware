@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -24,8 +24,16 @@
 
 namespace Shopware;
 
+use Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\SettingsCompilerPass;
+use Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\SynchronizerCompilerPass;
+use Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\DataIndexerCompilerPass;
+use Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\MappingCompilerPass;
+use Shopware\Bundle\SearchBundle\DependencyInjection\Compiler\CriteriaRequestHandlerCompilerPass;
+use Shopware\Bundle\SearchBundleDBAL\DependencyInjection\Compiler\DBALCompilerPass;
+use Shopware\Bundle\SearchBundleES\DependencyInjection\CompilerPass\SearchHandlerCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\DoctrineEventSubscriberCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\EventListenerCompilerPass;
+use Shopware\Components\DependencyInjection\Compiler\EventSubscriberCompilerPass;
 use Shopware\Components\ConfigLoader;
 use Shopware\Components\DependencyInjection\Container;
 use Symfony\Component\Config\ConfigCache;
@@ -81,11 +89,17 @@ class Kernel implements HttpKernelInterface
      */
     protected $environment;
 
+
     /**
      * Flag if the kernel already booted
      * @var bool
      */
-    protected $booted;
+    protected $booted = false;
+
+    /**
+     * @var string
+     */
+    protected $name;
 
     const VERSION      = \Shopware::VERSION;
     const VERSION_TEXT = \Shopware::VERSION_TEXT;
@@ -99,13 +113,16 @@ class Kernel implements HttpKernelInterface
     {
         $this->environment = $environment;
         $this->debug = (boolean) $debug;
-        $this->booted = false;
         $this->name = 'Shopware';
 
         $this->initializeConfig();
 
         if (!empty($this->config['phpsettings'])) {
             $this->setPhpSettings($this->config['phpsettings']);
+        }
+
+        if ($trustedProxies = $this->config['trustedproxies']) {
+            SymfonyRequest::setTrustedProxies($trustedProxies);
         }
     }
 
@@ -128,11 +145,6 @@ class Kernel implements HttpKernelInterface
 
         /** @var $front \Enlight_Controller_Front **/
         $front = $this->container->get('front');
-
-        // alays return response from front controller
-        // the response will be transformed to a symfony response
-        // this is required for the http-cache to work
-        $front->returnResponse(true);
 
         $request = $this->transformSymfonyRequestToEnlightRequest($request);
 
@@ -181,6 +193,7 @@ class Kernel implements HttpKernelInterface
 
         // Let the symfony request handle the trusted proxies
         $enlightRequest->setRemoteAddress($request->getClientIp());
+        $enlightRequest->setSecure($request->isSecure());
 
         return $enlightRequest;
     }
@@ -202,15 +215,6 @@ class Kernel implements HttpKernelInterface
             }
         }
 
-        // Handling headers sent by header()
-        foreach (headers_list() as $header) {
-            $headerArray = explode(': ', $header, 2);
-            $headerName  = strtolower($headerArray[0]);
-            $headerValue = $headerArray[1];
-            header_remove($headerName);
-            $headers[$headerName] = $headerValue;
-        }
-
         $symfonyResponse = new SymfonyResponse(
             $response->getBody(),
             $response->getHttpResponseCode(),
@@ -223,6 +227,7 @@ class Kernel implements HttpKernelInterface
                 $cookieContent['value'],
                 $cookieContent['expire'],
                 $cookieContent['path'],
+                $cookieContent['domain'],
                 (bool) $cookieContent['secure'],
                 (bool) $cookieContent['httpOnly']
             );
@@ -245,10 +250,6 @@ class Kernel implements HttpKernelInterface
         $this->initializeContainer();
         $this->initializeShopware();
 
-        if ($this->isHttpCacheEnabled()) {
-            SymfonyRequest::setTrustedProxies(array('127.0.0.1'));
-        }
-
         $this->booted = true;
     }
 
@@ -261,7 +262,8 @@ class Kernel implements HttpKernelInterface
     protected function initializeConfig()
     {
         $configLoader = new ConfigLoader(
-            $this->getRootDir() . '/',
+            $this->getRootDir(),
+            $this->getCacheDir(),
             $this->environment,
             $this->name
         );
@@ -271,8 +273,8 @@ class Kernel implements HttpKernelInterface
         );
 
         // Set up mpdf cache dirs
-        define("_MPDF_TEMP_PATH", $this->getRootDir() .'/cache/mpdf/tmp/');
-        define("_MPDF_TTFONTDATAPATH", $this->getRootDir() .'/cache/mpdf/ttfontdata/');
+        define("_MPDF_TEMP_PATH", $this->getCacheDir() .'/mpdf/tmp/');
+        define("_MPDF_TTFONTDATAPATH", $this->getCacheDir() .'/mpdf/ttfontdata/');
     }
 
     /**
@@ -316,7 +318,7 @@ class Kernel implements HttpKernelInterface
         $class = $this->getContainerClass();
 
         $cache = new ConfigCache(
-            $this->getCacheDir() . '/' . $class . '.php',
+            $this->config['hook']['proxyDir'] . '/' . $class . '.php',
             true //always check for file modified time
         );
 
@@ -326,7 +328,7 @@ class Kernel implements HttpKernelInterface
             $this->dumpContainer($cache, $container, $class, 'Shopware\Components\DependencyInjection\Container');
         }
 
-        require_once $cache;
+        require_once $cache->getPath();
 
         $this->container = new $class();
         $this->container->set('kernel', $this);
@@ -339,6 +341,15 @@ class Kernel implements HttpKernelInterface
     {
         $config = $this->getHttpCacheConfig();
 
+        return (isset($config['enabled']) && $config['enabled']);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isElasticSearchEnabled()
+    {
+        $config = $this->getElasticSearchConfig();
         return (isset($config['enabled']) && $config['enabled']);
     }
 
@@ -367,14 +378,6 @@ class Kernel implements HttpKernelInterface
     /**
      * @return string
      */
-    public function getCacheDir()
-    {
-        return $this->config['hook']['proxyDir'];
-    }
-
-    /**
-     * @return string
-     */
     protected function getConfigPath()
     {
         return __DIR__  . '/Configs/Default.php';
@@ -389,13 +392,21 @@ class Kernel implements HttpKernelInterface
     }
 
     /**
+     * @return string
+     */
+    public function getCacheDir()
+    {
+        return $this->getRootDir().'/var/cache/'.$this->environment.'_'.\Shopware::REVISION;
+    }
+
+    /**
      * Gets the log directory.
      *
      * @return string The log directory
      */
     public function getLogDir()
     {
-        return $this->getRootDir().'/logs';
+        return $this->getRootDir().'/var/log';
     }
 
     /**
@@ -427,11 +438,20 @@ class Kernel implements HttpKernelInterface
      *
      * @throws \RuntimeException
      */
+
     protected function buildContainer()
     {
-        foreach (array('cache' => $this->getCacheDir(), 'logs' => $this->getLogDir()) as $name => $dir) {
+        $runtimeDirectories = array(
+            'cache'              => $this->getCacheDir(),
+            'coreCache'          => $this->config['cache']['backendOptions']['cache_dir'],
+            'mpdfTemp'           => _MPDF_TEMP_PATH,
+            'mpdfFontData'       => _MPDF_TTFONTDATAPATH,
+            'logs'               => $this->getLogDir()
+        );
+
+        foreach ($runtimeDirectories as $name => $dir) {
             if (!is_dir($dir)) {
-                if (false === @mkdir($dir, 0777, true)) {
+                if (false === @mkdir($dir, 0777, true) && !is_dir($dir)) {
                     throw new \RuntimeException(sprintf("Unable to create the %s directory (%s)\n", $name, $dir));
                 }
             } elseif (!is_writable($dir)) {
@@ -444,7 +464,20 @@ class Kernel implements HttpKernelInterface
 
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/Components/DependencyInjection/'));
         $loader->load('services.xml');
+        $loader->load('theme.xml');
         $loader->load('logger.xml');
+
+        $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/Bundle/'));
+        $loader->load('SearchBundle/services.xml');
+        $loader->load('SearchBundleDBAL/services.xml');
+        $loader->load('StoreFrontBundle/services.xml');
+        $loader->load('PluginInstallerBundle/services.xml');
+        $loader->load('ESIndexingBundle/services.xml');
+        $loader->load('MediaBundle/services.xml');
+
+        if ($this->isElasticSearchEnabled()) {
+            $loader->load('SearchBundleES/services.xml');
+        }
 
         if (is_file($file = __DIR__ . '/Components/DependencyInjection/services_local.xml')) {
             $loader->load($file);
@@ -454,7 +487,18 @@ class Kernel implements HttpKernelInterface
         $this->addResources($container);
 
         $container->addCompilerPass(new EventListenerCompilerPass());
+        $container->addCompilerPass(new EventSubscriberCompilerPass());
         $container->addCompilerPass(new DoctrineEventSubscriberCompilerPass());
+        $container->addCompilerPass(new DBALCompilerPass());
+        $container->addCompilerPass(new CriteriaRequestHandlerCompilerPass());
+        $container->addCompilerPass(new MappingCompilerPass());
+        $container->addCompilerPass(new SynchronizerCompilerPass());
+        $container->addCompilerPass(new DataIndexerCompilerPass());
+        $container->addCompilerPass(new SettingsCompilerPass());
+
+        if ($this->isElasticSearchEnabled()) {
+            $container->addCompilerPass(new SearchHandlerCompilerPass());
+        }
 
         return $container;
     }
@@ -466,7 +510,7 @@ class Kernel implements HttpKernelInterface
     {
         $files = array(
             '/config.php',
-            '/engine/Shopware/Configs/Custom.php',
+            '/config_dev.php',
         );
         foreach ($files as $file) {
             if (!is_file($filePath = $this->getRootDir() . $file)) {
@@ -549,12 +593,11 @@ class Kernel implements HttpKernelInterface
     /**
      * Gets the container class.
      *
-     * @param string $nameSuffix
      * @return string The container class
      */
-    protected function getContainerClass($nameSuffix = null)
+    protected function getContainerClass()
     {
-        return $this->name . \Shopware::REVISION . ($nameSuffix? ucfirst($nameSuffix) : '') . ucfirst($this->environment) . ($this->debug ? 'Debug' : '') . 'ProjectContainer';
+        return $this->name.ucfirst($this->environment).($this->debug ? 'Debug' : '').'ProjectContainer';
     }
 
     /**
@@ -570,6 +613,14 @@ class Kernel implements HttpKernelInterface
      */
     public function getHttpCacheConfig()
     {
-        return is_array($this->config['httpcache']) ? $this->config['httpcache'] : array();
+        return is_array($this->config['httpcache']) ? $this->config['httpcache'] : [];
+    }
+
+    /**
+     * @return array
+     */
+    public function getElasticSearchConfig()
+    {
+        return is_array($this->config['es']) ? $this->config['es'] : [];
     }
 }

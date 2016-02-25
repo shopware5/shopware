@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -21,20 +21,501 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
 
 /**
- * Backend Controller for the article list backend module
+ * Shopware SwagMultiEdit Plugin - MultiEdit Backend Controller
  *
- * @category  Shopware
- * @package   Shopware\Controllers\Backend
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
+ * Loads the ExtJS application and some configuration requests
  */
 class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Backend_ExtJs
 {
     /**
+     * Reference to the SwagMultiEdit repository
+     *
+     * @var Shopware\Models\MultiEdit\Repository
+     */
+    protected $multiEditRepository;
+
+    /**
+     * Registers the different acl permission for the different controller actions.
+     *
+     */
+    public function initAcl()
+    {
+        $this->addAclPermission('saveSingleEntityAction', 'editSingleArticle', 'Insufficient Permissions');
+        $this->addAclPermission('deleteAction', 'doBackup', 'Insufficient Permissions');
+        $this->addAclPermission('restoreAction', 'doBackup', 'Insufficient Permissions');
+        $this->addAclPermission('getOperationsAction', 'doMultiEdit', 'Insufficient Permissions');
+        $this->addAclPermission('getOperatorsAction', 'doMultiEdit', 'Insufficient Permissions');
+        $this->addAclPermission('getEditableColumnsAction', 'doMultiEdit', 'Insufficient Permissions');
+        $this->addAclPermission('batchAction', 'doMultiEdit', 'Insufficient Permissions');
+        $this->addAclPermission('getGrammarAction', 'createFilters', 'Insufficient Permissions');
+        $this->addAclPermission('getValuesAction', 'createFilters', 'Insufficient Permissions');
+        $this->addAclPermission('saveFilterAction', 'editFilters', 'Insufficient Permissions');
+        $this->addAclPermission('deleteFilterAction', 'deleteFilters', 'Insufficient Permissions');
+        $this->addAclPermission('createQueueAction', 'doMultiEdit', 'Insufficient Permissions');
+    }
+
+    /**
+     * @return \Shopware\Models\MultiEdit\Repository
+     */
+    public function getMultiEditRepository()
+    {
+        if (!isset($this->multiEditRepository)) {
+            $this->multiEditRepository = Shopware()->Models()->getRepository('Shopware\Models\MultiEdit\Filter');
+        }
+
+        return $this->multiEditRepository;
+    }
+
+    /**
+     * Returns an array with all the columns the user is able to show / edit and their configuration
+     */
+    public function columnConfigAction()
+    {
+        $resourceName = $this->Request()->getParam('resource');
+
+        /** @var \Shopware\Components\MultiEdit\Resource\ResourceInterface $resource */
+        $resource = $this->container->get('multi_edit.' . $resourceName);
+        $data = $resource->getColumnConfig();
+
+        $this->View()->assign(array(
+            'success' => true,
+            'data' => $data
+        ));
+    }
+
+    /**
+     * Called when a single entity (=> product) is stored
+     */
+    public function saveSingleEntityAction()
+    {
+        $params = $this->Request()->getParams();
+        $resource = $this->Request()->getParam('resource');
+
+        // Sort out context params
+        foreach ($params as $key => &$value) {
+            if (preg_match('/[0-9a-z]+_[0-9a-z]+/i', $key) != 1) {
+                unset($params[$key]);
+                continue;
+            }
+            list($entity, $field) = explode('_', $key);
+            $value = array('entity' => $entity, 'field' => $field, 'value' => $value);
+        }
+
+        /** @var \Shopware\Components\MultiEdit\Resource\ResourceInterface $resource */
+        $resource = $this->container->get('multi_edit.' . $resource);
+        $data = $resource->save($params);
+
+        $this->View()->assign(array(
+            'success' => true,
+            'data' => $data
+        ));
+    }
+
+
+    /**
+     * Backup related operations
+     */
+
+    /**
+     * Controller action for deleting a given plugin
+     */
+    public function deleteAction()
+    {
+        $resource = $this->Request()->getParam('resource');
+        $id = $this->Request()->getParam('id');
+
+        /** @var \Shopware\Components\MultiEdit\Resource\ResourceInterface $resource */
+        $resource = $this->container->get('multi_edit.' . $resource);
+        $success = $resource->deleteBackup($id);
+
+        $this->View()->assign(array(
+            'success' => $success
+        ));
+    }
+
+    /**
+     * Controller action for restoring a given backup
+     */
+    public function restoreAction()
+    {
+        $resource = $this->Request()->getParam('resource');
+        $id = $this->Request()->getParam('id');
+        $offset = $this->Request()->getParam('offset');
+
+        /** @var \Shopware\Components\MultiEdit\Resource\ResourceInterface $resource */
+        $resource = $this->container->get('multi_edit.' . $resource);
+        $data = $resource->restoreBackup($id, $offset);
+
+        $this->View()->assign(array(
+            'success' => true,
+            'data' => $data
+        ));
+    }
+
+
+    /**
+     * Returns the backups available for the current resource
+     */
+    public function listAction()
+    {
+        $resource = $this->Request()->getParam('resource');
+        $limit = $this->Request()->getParam('limit', 25);
+        $offset = ($this->Request()->getParam('page', 1) - 1) * $limit;
+
+        /** @var \Shopware\Components\MultiEdit\Resource\ResourceInterface $resource */
+        $resource = $this->container->get('multi_edit.' . $resource);
+        $result = $resource->listBackups($offset, $limit);
+        $result['success'] = true;
+
+        $this->View()->assign($result);
+    }
+
+
+    /**
+     * Batch process related operations
+     */
+
+    /**
+     * Currently returns an array of an hardcoded default operation. Might be use for storing operations in the future
+     */
+    public function getOperationsAction()
+    {
+        $data = array(
+            array()
+        );
+
+        $this->View()->assign(
+            array(
+                'success' => true,
+                'data' => $data
+            )
+        );
+    }
+
+    /**
+     * Returns an array of operators
+     */
+    public function getOperatorsAction()
+    {
+        $resource = $this->Request()->getParam('resource');
+
+        /** @var \Shopware\Components\MultiEdit\Resource\ResourceInterface $resource */
+        $resource = $this->container->get('multi_edit.' . $resource);
+        $columns = $resource->getBatchColumns();
+
+        // Extract the operators and build array for the extjs store
+        $operators = array();
+        foreach ($columns as $columnOperators) {
+            foreach ($columnOperators as $operator) {
+                if (!array_key_exists($operator, $operators)) {
+                    $operators[$operator] = array('name' => $operator);
+                }
+            }
+        }
+
+        $this->View()->assign(
+            array(
+                'success' => true,
+                'data' => array_values($operators)
+            )
+        );
+    }
+
+    /**
+     * Returns a list of columns the user is able to edit
+     */
+    public function getEditableColumnsAction()
+    {
+        $resource = $this->Request()->getParam('resource');
+
+        /** @var \Shopware\Components\MultiEdit\Resource\ResourceInterface $resource */
+        $resource = $this->container->get('multi_edit.' . $resource);
+        $columns = $resource->getBatchColumns();
+
+        ksort($columns);
+
+        // yo dawg i heard you like functional programming…
+        // Prepare the returned array structure for extjs
+        $columns = array_map(
+            function ($column, $operators) {
+                $operators = array_map(
+                    function ($operator, $id) {
+                        return array('id' => $id, 'name' => $operator);
+                    },
+                    $operators,
+                    array_keys($operators)
+                );
+
+                return array('name' => $column, 'operators' => $operators);
+            },
+            array_keys($columns),
+            $columns
+        );
+
+        $this->View()->assign(
+            array(
+                'success' => true,
+                'data' => $columns
+            )
+        );
+    }
+
+    /**
+     * Runs the batch process
+     */
+    public function batchAction()
+    {
+        $resource = $this->Request()->getParam('resource');
+
+        $queueId = $this->Request()->getParam('queueId', null);
+
+        /** @var \Shopware\Components\MultiEdit\Resource\ResourceInterface $resource */
+        $resource = $this->container->get('multi_edit.' . $resource);
+        $data = $resource->batchProcess($queueId);
+
+        $this->View()->assign(
+            array(
+                'success' => true,
+                'data' => $data
+            )
+        );
+    }
+
+
+    /**
+     * Filter related operations
+     */
+
+
+    /**
+     * Controller action which will return the grammar of the requested resource
+     */
+    public function getGrammarAction()
+    {
+        $resource = $this->Request()->getParam('resource');
+
+        /** @var \Shopware\Components\MultiEdit\Resource\ResourceInterface $resource */
+        $resource = $this->container->get('multi_edit.' . $resource);
+        $grammar = $resource->getGrammar();
+
+        $this->View()->assign(
+            array(
+                'success' => true,
+                'data' => $grammar
+            )
+        );
+    }
+
+    /**
+     * Controller action that will return suggested values for a given resource and a given attribute
+     */
+    public function getValuesAction()
+    {
+        $resource = $this->Request()->getParam('resource');
+        $attribute = $this->Request()->getParam('attribute');
+        $operator = $this->Request()->getParam('operator');
+
+        // The offset needs to be decreased by one as ExtJs starts counting by 1
+        $limit = $this->Request()->getParam('limit', 25);
+        $offset = ($this->Request()->getParam('page', 1) - 1) * $limit;
+        $filter = $this->Request()->getParam('filter', array());
+        $filter = isset($filter[0]['value']) ? $filter[0]['value'] : null;
+        if (!$filter) {
+            $filter = $this->Request()->getParam('query', null);
+        }
+
+        /** @var \Shopware\Components\MultiEdit\Resource\ResourceInterface $resource */
+        $resource = $this->container->get('multi_edit.' . $resource);
+        $data = $resource->getValuesFor(
+            $attribute,
+            $operator,
+            array('offset' => $offset, 'limit' => $limit, 'filter' => $filter)
+        );
+        $data['success'] = true;
+
+        $this->View()->assign($data);
+    }
+
+    /**
+     * Controller action which filters the products
+     */
+    public function filterAction()
+    {
+        $resource = $this->Request()->getParam('resource');
+        $ast = $this->Request()->getParam('ast');
+        $limit = $this->Request()->getParam('limit', 25);
+        $offset = ($this->Request()->getParam('page', 1) - 1) * $limit;
+        $sort = $this->Request()->getParam('sort', array());
+
+        if (!empty($sort)) {
+            $sort = array_pop($sort);
+        }
+
+        $ast = json_decode($ast, true);
+        if ($ast == false) {
+            throw new RuntimeException('Could not decode AST');
+        }
+
+        /** @var \Shopware\Components\MultiEdit\Resource\ResourceInterface $resource */
+        $resource = $this->container->get('multi_edit.' . $resource);
+        $result = $resource->filter($ast, $offset, $limit, $sort);
+
+        if ($this->displayVariants($ast)) {
+            $result = $this->addAdditionalText($result);
+        }
+
+        $this->View()->assign(
+            array(
+                'success' => true,
+                'data' => $result['data'],
+                'total' => $result['total']
+            )
+        );
+    }
+
+    /**
+     * Normalize filter
+     *
+     * @param $filter
+     * @return string
+     */
+    private function normalizeFilter($filter)
+    {
+        return strtolower(preg_replace('/[^\da-z]/i', '_', strip_tags($filter)));
+    }
+
+    /**
+     * Translate filter name and description
+     *
+     * @param $filter
+     * @return mixed
+     */
+    private function translateFilter($filter)
+    {
+        $name = 'filterName-' . $this->normalizeFilter($filter['name']);
+        $description = 'filterDescription-' . $this->normalizeFilter($filter['description']);
+
+        $namespace = Shopware()->Snippets()->getNamespace('backend/article_list/main');
+        $filter['name'] = $namespace->get($name, $filter['name']);
+        $filter['description'] = $namespace->get($description, $filter['description']);
+
+        return $filter;
+    }
+
+    /**
+     * Returns a list of all available filters
+     */
+    public function getFilterAction()
+    {
+        $repository = $this->getMultiEditRepository();
+        $query = $repository->getListQuery();
+        $results = $query->getArrayResult();
+
+        foreach ($results as &$filter) {
+            $filter = $this->translateFilter($filter);
+        }
+
+        $this->View()->assign(
+            array(
+                'success' => true,
+                'data' => $results
+            )
+        );
+    }
+
+    /**
+     * Save/update a given filter. Also called when a filter is (un)favorited
+     */
+    public function saveFilterAction()
+    {
+        $data = $this->Request()->getParams();
+        $id = $this->Request()->get('id', null);
+
+        if ($id) {
+            $filter = $this->getMultiEditRepository()->find($id);
+        } else {
+            $filter = new Shopware\Models\MultiEdit\Filter();
+        }
+
+        $filter->fromArray($data);
+
+        Shopware()->Models()->persist($filter);
+        Shopware()->Models()->flush();
+
+        $this->View()->assign(
+            array(
+                'success' => true,
+            )
+        );
+    }
+
+    /**
+     * Delete a given filter
+     */
+    public function deleteFilterAction()
+    {
+        $id = $this->Request()->get('id');
+
+        $filter = Shopware()->Models()->find('Shopware\Models\MultiEdit\Filter', $id);
+
+        if ($filter) {
+            Shopware()->Models()->remove($filter);
+            Shopware()->Models()->flush();
+        }
+
+        $this->View()->assign(
+            array(
+                'success' => true,
+            )
+        );
+    }
+
+    /**
+     * Queue related operations
+     */
+
+    /**
+     * Controller action called while the batch queue is created
+     *
+     * @throws RuntimeException
+     */
+    public function createQueueAction()
+    {
+        $resource = $this->Request()->getParam('resource');
+        $filterArray = $this->Request()->getParam('filterArray');
+        $operations = $this->Request()->getParam('operations');
+        $limit = $this->Request()->getParam('limit', 1000);
+        $queueId = $this->Request()->getParam('queueId', null);
+        $offset = $this->Request()->getParam('offset', 0);
+        $filterArray = json_decode($filterArray, true);
+        if ($filterArray == false) {
+            throw new RuntimeException("Could not decode '{$this->Request()->getParam('filterArray')}'");
+        }
+
+        $operations = json_decode($operations, true);
+        if ($operations == false) {
+            throw new RuntimeException("Could not decode '{$this->Request()->getParam('operations')}'");
+        }
+
+        /** @var \Shopware\Components\MultiEdit\Resource\ResourceInterface $resource */
+        $resource = $this->container->get('multi_edit.' . $resource);
+        $return = $resource->createQueue($filterArray, $operations, $offset, $limit, $queueId);
+
+        $this->View()->assign(
+            array(
+                'success' => true,
+                'data' => $return
+            )
+        );
+    }
+
+    /**
      * Internal helper function to get access to the article repository.
      *
-     * @return Shopware\Models\Article\Repository
+     * @return \Shopware\Components\Model\ModelRepository
      */
     private function getDetailRepository()
     {
@@ -46,87 +527,9 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
      *
      * @return mixed
      */
-    public function updateAction()
+    public function deleteProductAction()
     {
-        $id = (int) $this->Request()->getParam('id');
-
-        /** @var $articleDetail \Shopware\Models\Article\Detail   */
-        $articleDetail = $this->getDetailRepository()->find($id);
-        if (!$articleDetail instanceof \Shopware\Models\Article\Detail) {
-            $this->View()->assign(array(
-                'success' => false
-            ));
-            return;
-        }
-
-        $article = $articleDetail->getArticle();
-        if (!$article instanceof \Shopware\Models\Article\Article) {
-            $this->View()->assign(array(
-               'success' => false,
-               'message' => 'article not found',
-            ));
-            return;
-        }
-
-        $price = $this->Request()->getPost('price');
-        if ($price) {
-            $price = floatval(str_replace(',' , '.', $price));
-            $tax = $article->getTax();
-            if (!$tax instanceof \Shopware\Models\Tax\Tax) {
-                $this->View()->assign(array(
-                    'success' => false
-                ));
-                return;
-            }
-
-            $price = $price / (100 + $tax->getTax()) * 100;
-            Shopware()->Db()->update(
-                's_articles_prices',
-                array('price' => $price),
-                array(
-                     'pricegroup = ?'       => 'EK',
-                     'articleId = ?'        => $article->getId(),
-                     'articledetailsID = ?' => $articleDetail->getId(),
-                     '`to` LIKE ?'          => 'beliebig',
-                )
-            );
-            Shopware()->Events()->notify(
-                'Shopware_Plugins_HttpCache_InvalidateCacheId',
-                array('cacheId' => 'a' . $article->getId())
-            );
-        }
-
-        $number = $this->Request()->getPost('number');
-        $articleDetail->setNumber($number);
-
-        $name = $this->Request()->getPost('name');
-        $article->setName($name);
-
-        $inStock = $this->Request()->getPost('inStock');
-        $articleDetail->setInStock($inStock);
-
-        $active = $this->Request()->getPost('active');
-        if ($articleDetail->getKind() == 1) {
-            $article->setActive($active);
-        }
-        $articleDetail->setActive($active);
-
-        Shopware()->Models()->flush();
-
-        $this->View()->assign(array(
-            'success' => true,
-            'data'    => $this->Request()->getPost()
-        ));
-    }
-
-    /**
-     * Event listener function of the article store of the backend module.
-     *
-     * @return mixed
-     */
-    public function deleteAction()
-    {
-        $id = (int) $this->Request()->getParam('id');
+        $id = (int) $this->Request()->getParam('Detail_id');
 
         /** @var $articleDetail \Shopware\Models\Article\Detail   */
         $articleDetail = $this->getDetailRepository()->find($id);
@@ -135,13 +538,11 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
                 'success' => false
             ));
         } else {
+            $articleResource = new Shopware\Components\Api\Resource\Article();
+            $articleResource->setManager($this->get('models'));
+
             if ($articleDetail->getKind() == 1) {
-                $article = $articleDetail->getArticle();
-                $this->removePrices($article->getId());
-                $this->removeArticleEsd($article->getId());
-                $this->removeAttributes($article->getId());
-                $this->removeArticleDetails($article);
-                Shopware()->Models()->remove($article);
+                $articleResource->delete($articleDetail->getArticle()->getId());
             } else {
                 Shopware()->Models()->remove($articleDetail);
             }
@@ -155,279 +556,90 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
     }
 
     /**
-     * Internal helper function to remove all article prices quickly.
-     * @param $articleId
+     * @param array[] $result
+     * @return array[]
      */
-    private function removePrices($articleId)
+    private function addAdditionalText($result)
     {
-        $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->delete('Shopware\Models\Article\Price', 'prices')
-                ->where('prices.articleId = :id')
-                ->setParameter('id',$articleId)
-                ->getQuery()
-                ->execute();
-    }
+        $products = $this->buildListProducts($result['data']);
 
-    /**
-     * Internal helper function to remove the article attributes quickly.
-     * @param $articleId
-     */
-    private function removeAttributes($articleId)
-    {
-        $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->delete('Shopware\Models\Attribute\Article', 'attribute')
-                ->where('attribute.articleId = :id')
-                ->setParameter('id',$articleId)
-                ->getQuery()
-                ->execute();
-    }
+        $products = $this->getAdditionalTexts($products);
 
-    /**
-     * Internal helper function to remove the detail esd configuration quickly.
-     * @param $articleId
-     */
-    private function removeArticleEsd($articleId)
-    {
-        $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->delete('Shopware\Models\Article\Esd', 'esd')
-                ->where('esd.articleId = :id')
-                ->setParameter('id',$articleId)
-                ->getQuery()
-                ->execute();
-    }
-
-    /**
-     * @param $article \Shopware\Models\Article\Article
-     */
-    private function removeArticleDetails($article)
-    {
-        $sql= "SELECT id FROM s_articles_details WHERE articleID = ? AND kind != 1";
-        $details = Shopware()->Db()->fetchAll($sql, array($article->getId()));
-
-        foreach ($details as $detail) {
-            $builder = Shopware()->Models()->createQueryBuilder();
-            $builder->delete('Shopware\Models\Article\Image', 'image')
-                    ->where('image.articleDetailId = :id')
-                    ->setParameter('id', $detail['id'])
-                    ->getQuery()
-                    ->execute();
-
-            $sql= "DELETE FROM s_article_configurator_option_relations WHERE article_id = ?";
-            Shopware()->Db()->query($sql, array($detail['id']));
-
-            $builder = Shopware()->Models()->createQueryBuilder();
-            $builder->delete('Shopware\Models\Article\Detail', 'detail')
-                    ->where('detail.id = :id')
-                    ->setParameter('id', $detail['id'])
-                    ->getQuery()
-                    ->execute();
+        foreach ($result['data'] as &$item) {
+            $number = $item['Detail_number'];
+            if (!isset($products[$number])) {
+                continue;
+            }
+            $product = $products[$number];
+            $item['Detail_additionalText'] = $product->getAdditional();
         }
+        return $result;
     }
 
-    public function listAction()
+    /**
+     * @param array[] $result
+     * @return ListProduct[]
+     */
+    private function buildListProducts($result)
     {
-        if (!$this->_isAllowed('read', 'article')) {
-            /** @var $namespace Enlight_Components_Snippet_Namespace */
-            $this->View()->assign(array(
-                'success' => false,
-                'data' => $this->Request()->getParams(),
-                'message' => 'Insufficient permissions' )
+        $products = [];
+        foreach ($result as $item) {
+            $number = $item['Detail_number'];
+
+            $product = new \Shopware\Bundle\StoreFrontBundle\Struct\ListProduct(
+                $item['Article_id'],
+                $item['Detail_id'],
+                $item['Detail_number']
             );
-            return;
+            if ($item['Detail_additionalText']) {
+                $product->setAdditional($item['Detail_additionalText']);
+            }
+            $products[$number] = $product;
         }
+        return $products;
+    }
 
-        $categoryId   = $this->Request()->getParam('categoryId');
-        $filterParams = $this->Request()->getParam('filter', array());
-        $filterBy     = $this->Request()->getParam('filterBy');
-        $showVariants = (bool) $this->Request()->getParam('showVariants', false);
-        $order        = $this->Request()->getParam('sort', null);
-        $start        = $this->Request()->getParam('start', 0);
-        $limit        = $this->Request()->getParam('limit', 20);
-
-        $filters = array();
-        foreach ($filterParams as $singleFilter) {
-            $filters[$singleFilter['property']] = $singleFilter['value'];
+    /**
+     * @param array[] $ast
+     * @return bool
+     */
+    private function displayVariants($ast)
+    {
+        foreach ($ast as $filter) {
+            if (!isset($filter['token'])) {
+                continue;
+            }
+            if ($filter['token'] === 'ISMAIN') {
+                return false;
+            }
         }
+        return true;
+    }
 
+    /**
+     * @param \Shopware\Bundle\StoreFrontBundle\Struct\ListProduct[] $products
+     * @return \Shopware\Bundle\StoreFrontBundle\Struct\ListProduct[]
+     */
+    private function getAdditionalTexts($products)
+    {
+        /** @var \Shopware\Bundle\StoreFrontBundle\Service\AdditionalTextServiceInterface $service */
+        $service = $this->get('shopware_storefront.additional_text_service');
 
-        $categorySql = '';
-        $imageSQL = '';
-        $sqlParams = array();
+        /** @var \Shopware\Models\Shop\Repository $shopRepo */
+        $shopRepo = $this->get('models')->getRepository('Shopware\Models\Shop\Shop');
 
+        /** @var \Shopware\Models\Shop\Shop $shop */
+        $shop = $shopRepo->getActiveDefault();
 
-        $filterSql = 'WHERE 1 = 1';
-        if (isset($filters['search'])) {
-            $filterSql .= " AND (details.ordernumber LIKE :orderNumber OR articles.name LIKE :articleName OR suppliers.name LIKE :supplierName OR articles.description_long LIKE :descriptionLong)";
-            $searchFilter =  '%' . $filters['search'] . '%';
+        /** @var \Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface $contextService */
+        $contextService = $this->get('shopware_storefront.context_service');
 
-            $sqlParams["orderNumber"] = $searchFilter;
-            $sqlParams["articleName"] = $searchFilter;
-            $sqlParams["supplierName"] = $searchFilter;
-            $sqlParams["descriptionLong"] = $searchFilter;
-        }
-
-        if ($filterBy == 'notInStock') {
-            $filterSql .= " AND details.instock <= 0 ";
-        }
-
-        if ($filterBy == 'noCategory') {
-            $categorySql = "
-                    LEFT JOIN s_articles_categories_ro ac
-                    ON ac.articleID = articles.id
-            ";
-
-            $filterSql .= " AND ac.id IS NULL ";
-        } elseif (!empty($categoryId) && $categoryId !== 'NaN') {
-            $categorySql =  "
-                LEFT JOIN s_categories c
-                    ON  c.id = :categoryId
-
-                INNER JOIN s_articles_categories_ro ac
-                    ON  ac.articleID  = articles.id
-                    AND ac.categoryID = c.id
-            ";
-            $sqlParams["categoryId"] = $categoryId;
-        }
-
-        if ($filterBy == 'noImage') {
-            $imageSQL = "
-                LEFT JOIN s_articles_img as mainImages
-                ON mainImages.articleID = articles.id
-            ";
-
-            $filterSql .= " AND mainImages.id IS NULL ";
-        }
-
-
-        // Make sure that whe don't get a cold here
-        $columns = array('number', 'name', 'supplier', 'active', 'inStock', 'price', 'tax' );
-        $directions = array('ASC', 'DESC');
-
-        if (null === $order || !in_array($order[0]['property'] , $columns) || !in_array($order[0]['direction'], $directions)) {
-            $order = 'id DESC';
-        } else {
-            $order = array_shift($order);
-            $order = $order['property'] . ' ' . $order['direction'];
-        }
-
-        list($sqlParams, $filterSql, $categorySql, $imageSQL, $order) = Enlight()->Events()->filter(
-            'Shopware_Controllers_Backend_ArticleList_SQLParts',
-            array($sqlParams, $filterSql, $categorySql, $imageSQL, $order),
-            array('subject' => $this)
+        $context = $contextService->createShopContext(
+            $shop->getId(),
+            $shop->getCurrency()->getId(),
+            ContextService::FALLBACK_CUSTOMER_GROUP
         );
 
-        if ($showVariants) {
-            $sql = "
-                SELECT DISTINCT SQL_CALC_FOUND_ROWS
-                   details.id as id,
-                   articles.id as articleId,
-                   articles.name as name,
-                   articles.configurator_set_id,
-                   suppliers.name as supplier,
-                   articles.active as active,
-                   details.id as detailId,
-                   details.additionaltext as additionalText,
-                   details.instock as inStock,
-                   details.ordernumber as number,
-                   ROUND(prices.price*(100+tax.tax)/100,2) as `price`,
-                   tax.tax as tax
-                FROM
-                    s_articles_details as details
-                INNER JOIN s_articles as articles
-                    ON details.articleID = articles.id
-                LEFT JOIN s_articles_supplier as suppliers
-                    ON articles.supplierID = suppliers.id
-
-                LEFT JOIN s_articles_prices prices
-                    ON prices.articledetailsID = details.id
-                    AND prices.`to`= 'beliebig'
-                    AND prices.pricegroup='EK'
-
-                LEFT JOIN s_core_tax AS tax
-                    ON tax.id = articles.taxID
-
-                $categorySql
-                $imageSQL
-
-                $filterSql
-                AND details.kind <> 3
-                ORDER BY $order, details.ordernumber ASC
-                LIMIT  $start, $limit
-            ";
-        } else {
-            $sql = "
-                SELECT DISTINCT SQL_CALC_FOUND_ROWS
-                       details.id as id,
-                       articles.id as articleId,
-                       articles.name as name,
-                       articles.configurator_set_id,
-                       suppliers.name as supplier,
-                       articles.active as active,
-                       details.id as detailId,
-                       details.additionaltext as additionalText,
-                       details.instock as inStock,
-                       details.ordernumber as number,
-                       ROUND(prices.price*(100+tax.tax)/100,2) as `price`,
-                       tax.tax as tax
-
-                FROM s_articles as articles
-
-                INNER JOIN s_articles_details as details
-                    ON articles.main_detail_id = details.id
-
-                LEFT JOIN s_articles_supplier as suppliers
-                    ON articles.supplierID = suppliers.id
-
-                LEFT JOIN s_articles_prices prices
-                    ON prices.articledetailsID = details.id
-                    AND prices.`to`= 'beliebig'
-                    AND prices.pricegroup='EK'
-
-                LEFT JOIN s_core_tax AS tax
-                    ON tax.id = articles.taxID
-
-                $categorySql
-                $imageSQL
-                $filterSql
-
-                ORDER BY $order, details.ordernumber ASC
-                LIMIT  $start, $limit
-            ";
-        }
-
-        $sql = Enlight()->Events()->filter('Shopware_Controllers_Backend_ArticleList_ListSQL', $sql, array('subject' => $this, 'sqlParams' => $sqlParams));
-        $articles = Shopware()->Db()->fetchAll($sql, $sqlParams);
-
-        $sql= "SELECT FOUND_ROWS() as count";
-        $count = Shopware()->Db()->fetchOne($sql);
-
-        foreach ($articles as $key => $article) {
-            // Check for configurator
-            $isConfigurator = !empty($article['configurator_set_id']);
-            $articles[$key]['hasConfigurator'] = ($isConfigurator !== false);
-
-            // Check for Image
-            $image = Shopware()->Db()->fetchOne(
-                'SELECT img FROM s_articles_img WHERE articleID = ? AND main = 1 AND article_detail_id IS NULL',
-                $article['articleId']
-            );
-
-            if ($image) {
-                $articles[$key]['imageSrc']= $image . '_140x140.jpg';
-            }
-
-            // Check for Categories
-            $hasCategories = Shopware()->Db()->fetchOne(
-                'SELECT id FROM s_articles_categories_ro WHERE articleID = ?',
-                $article['articleId']
-            );
-            $articles[$key]['hasCategories'] = ($hasCategories !== false);
-        }
-
-        $this->View()->assign(array(
-            'success' => true,
-            'data'    => $articles,
-            'total'   => $count
-        ));
+        return $service->buildAdditionalTextLists($products, $context);
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,8 +23,9 @@
  */
 
 namespace Shopware\Models\Widget;
-use Shopware\Components\Model\ModelEntity,
-Doctrine\ORM\Mapping as ORM;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  *
@@ -62,12 +63,6 @@ class View extends ModelEntity
     private $authId = null;
 
     /**
-     * @var string $label
-     * @ORM\Column(name="label", type="string", nullable=false)
-     */
-    private $label;
-
-    /**
      * @var integer $column
      * @ORM\Column(name="`column`", type="integer", nullable=false)
      */
@@ -88,7 +83,7 @@ class View extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Config\Widget
+     * @return Widget
      */
     public function getWidget()
     {
@@ -96,7 +91,7 @@ class View extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Config\Widget $widget
+     * @param Widget $widget
      */
     public function setWidget($widget)
     {
@@ -149,21 +144,5 @@ class View extends ModelEntity
     public function setPosition($position)
     {
         $this->position = $position;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLabel()
-    {
-        return $this->label;
-    }
-
-    /**
-     * @param string $label
-     */
-    public function setLabel($label)
-    {
-        $this->label = $label;
     }
 }

@@ -1,18 +1,13 @@
 <?xml version="1.0"?>
 <shopware>
 <files>
-    <file><name>logs/</name></file>
-    <file><name>cache/html/</name></file>
-    <file><name>cache/general/</name></file>
-    <file><name>cache/templates/</name></file>
-    <file><name>cache/proxies/</name></file>
-    <file><name>cache/doctrine/filecache/</name></file>
-    <file><name>cache/doctrine/proxies/</name></file>
-    <file><name>cache/doctrine/attributes/</name></file>
-    <file><name>cache/mpdf/tmp/</name></file>
-    <file><name>cache/mpdf/ttfontdata/</name></file>
+    <file><name>config.php</name></file>
+    <file><name>var/log/</name></file>
+    <file><name>var/cache/</name></file>
+    <file><name>web/cache/</name></file>
     <file><name>files/documents/</name></file>
     <file><name>files/downloads/</name></file>
+    <file><name>recovery/</name></file>
     <file><name>engine/Shopware/Plugins/Community/</name></file>
     <file><name>engine/Shopware/Plugins/Community/Frontend</name></file>
     <file><name>engine/Shopware/Plugins/Community/Core</name></file>
@@ -21,6 +16,7 @@
     <file><name>engine/Shopware/Plugins/Default/Frontend</name></file>
     <file><name>engine/Shopware/Plugins/Default/Core</name></file>
     <file><name>engine/Shopware/Plugins/Default/Backend</name></file>
+    <file><name>themes/Frontend</name></file>
     <file><name>media/archive/</name></file>
     <file><name>media/image/</name></file>
     <file><name>media/image/thumbnail/</name></file>

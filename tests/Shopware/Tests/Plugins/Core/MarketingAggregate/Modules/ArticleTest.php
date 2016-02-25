@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -66,11 +66,11 @@ class Shopware_Tests_Plugins_Core_MarketingAggregate_Modules_ArticleTest extends
         $categoryArticles = array(
             array('articleID' => '3','categoryID' => '3','parentCategoryID' => $this->category['id']),
             array('articleID' => '3','categoryID' => $this->category['id'],'parentCategoryID' => $this->category['id']),
-            array('articleID' => '2','categoryID' => '3','parentCategoryID' => $this->category['id']),
-            array('articleID' => '2','categoryID' => $this->category['id'],'parentCategoryID' => $this->category['id'])
+            array('articleID' => '4','categoryID' => '3','parentCategoryID' => $this->category['id']),
+            array('articleID' => '4','categoryID' => $this->category['id'],'parentCategoryID' => $this->category['id'])
         );
 
-        $sql = "UPDATE s_articles SET pseudosales = 1000 WHERE id = 2";
+        $sql = "UPDATE s_articles SET pseudosales = 1000 WHERE id = 4";
         $this->Db()->query($sql);
 
         $sql = "UPDATE s_articles SET pseudosales = 500 WHERE id = 3";
@@ -81,7 +81,7 @@ class Shopware_Tests_Plugins_Core_MarketingAggregate_Modules_ArticleTest extends
         }
 
 
-        $this->TopSeller()->refreshTopSellerForArticleId(2);
+        $this->TopSeller()->refreshTopSellerForArticleId(4);
         $this->TopSeller()->refreshTopSellerForArticleId(3);
     }
 
@@ -128,7 +128,7 @@ class Shopware_Tests_Plugins_Core_MarketingAggregate_Modules_ArticleTest extends
 
         //the article "2" pseudo sales are set to 1000 so we expect that this will be the first article
         //in the top seller slider.
-        $this->assertEquals(2, $topSeller[0]['articleID']);
+        $this->assertEquals(4, $topSeller[0]['articleID']);
         $this->assertEquals(3, $topSeller[1]['articleID']);
 
         $this->removeDemoData();

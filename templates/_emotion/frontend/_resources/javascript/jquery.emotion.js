@@ -21,6 +21,15 @@
     });
 })(jQuery);
 
+/* Auto submit form for new configurator */
+(function($) {
+    $(document).ready(function() {
+        $('*[data-auto-submit="true"]').bind('change', function(event) {
+            this.form.submit();
+        });
+    });
+})(jQuery);
+
 /* Add class to the searchfield */
 (function($) {
 
@@ -291,182 +300,306 @@
 
 /**
  * Overview button progressive enhancement
- * using the { @link sessionStorage } to provide a personalized link with the currently active
+ * using the {@link window.sessionStorage} to provide a personalized link with the currently active
  * filter properties for the HTTP cache.
  *
- * Copyright (c) 2013, shopware AG
+ * Copyright (c) 2014, shopware AG
  */
-;(function($, window, undefined) {
-     /*global jQuery:false */
-    "use strict";
+;(function ($, window) {
+    /*global jQuery:false */
+    'use strict';
 
-    var pluginName = 'httpCacheFilters',
-        sessionStorage = window.sessionStorage,
-        hasSessionStorageSupport = isSessionStorageSupported(),
-        defaults = {
-            mode: 'listing'
-        };
+    var pluginName = 'ajaxProductNavigation';
 
-    if(!hasSessionStorageSupport) {
-        sessionStorage = new StoragePolyFill('session');
-        hasSessionStorageSupport = true;
-    }
-
-    /**
-     * Returns whether or not the sessionStorage is available and works - SW-7524
-     *
-     * @returns {boolean}
-     */
-    function isSessionStorageSupported () {
-        var testKey = 'test';
-
-        if (!sessionStorage) {
-            return false;
+    $.extend($.easing, {
+        easeOutBounce: function (x, t, b, c, d) {
+            if ((t /= d) < (1 / 2.75)) {
+                return c * (7.5625 * t * t) + b;
+            } else if (t < (2 / 2.75)) {
+                return c * (7.5625 * (t -= (1.5 / 2.75)) * t + .75) + b;
+            } else if (t < (2.5 / 2.75)) {
+                return c * (7.5625 * (t -= (2.25 / 2.75)) * t + .9375) + b;
+            } else {
+                return c * (7.5625 * (t -= (2.625 / 2.75)) * t + .984375) + b;
+            }
         }
-
-        try {
-            sessionStorage.setItem(testKey, '1');
-            sessionStorage.removeItem(testKey);
-            return true;
-        } catch (error) {
-            return false;
-        }
-    }
+    });
 
     /**
      * Plugin constructor which merges the default settings
      * with the user configuration and sets up the DOM bridge.
      *
-     * @param { HTMLElement } element
-     * @param { Object } options
-     * @returms { Void }
+     * @param {HTMLElement} element
+     * @param {Object} options
      * @constructor
      */
-    function Plugin(element, options) {
+    function Plugin(element) {
         var me = this;
 
-        me.element = element;
-        me.opts = $.extend({}, defaults, options);
-        me._defaults = defaults;
+        me.$el = $(element);
         me._name = pluginName;
+        me.opts = $.extend({}, me.defaults);
 
         me.init();
     }
 
-    /**
-     * Initialized the plugin, checks if { @link sessionStorage } is
-     * supported and sets up the event listener.
-     *
-     * @returns { Boolean } Falsy, if { @link sessionStorage } isn't supported, otherwise truthy
-     */
-    Plugin.prototype.init = function() {
-        var me = this,
-            mode;
+    Plugin.prototype.defaults = {
 
-        // Terminate if we're on the category listing or on the detail page
-        mode = $(me.element).hasClass('ctl_detail') ? 'detail' : 'listing';
-        if(mode === 'listing') {
-            $('.artbox .artbox_thumb, .artbox .title, .artbox .buynow').on('click.' + pluginName, $.proxy(me.onOpenDetailPage, me));
-            $('.filter_properties .close a').on('click.' + pluginName, $.proxy(me.onResetFilterOptions, me));
-        } else {
-            me.restoreState();
-        }
+        /**
+         * Animation speed in milliseconds of the arrow fading.
+         *
+         * @type {Number}
+         */
+        arrowAnimSpeed: 500,
 
-        return true;
+        /**
+         * Selector for the product box in the listing.
+         *
+         * @type {String}
+         */
+        productBoxSelector: '.artbox',
+
+        /**
+         * Selector for the product details.
+         * This element should have data attributes of the ordernumber and product navigation link.
+         *
+         * @type {String}
+         */
+        productDetailsSelector: '#detail',
+
+        /**
+         * Selector for the previous button.
+         *
+         * @type {String}
+         */
+        prevLinkSelector: 'a.article_back',
+
+        /**
+         * Selector for the next button.
+         *
+         * @type {String}
+         */
+        nextLinkSelector: 'a.article_next',
+
+        /**
+         * Selector for the breadcrumb back button.
+         *
+         * @type {String}
+         */
+        breadcrumbButtonSelector: 'a.article_back',
+
+        /**
+         * Selectors of product box childs in the listing.
+         *
+         * @type {Array}
+         */
+        listingSelectors: [
+            '.artbox .title',
+            '.artbox .artbox_thumb',
+            '.artbox .actions .more'
+        ]
     };
 
-    /**
-     * Event callback which will be fired when the user wants to open up
-     * the detail page.
-     *
-     * The method just proxies the method { @link #saveCurrentState }.
-     *
-     * @event `click`
-     * @returns { Void }
-     */
-    Plugin.prototype.onOpenDetailPage = function() {
+    Plugin.prototype.init = function () {
+        var me = this,
+            $el = me.$el,
+            isListing = $el.hasClass('ctl_listing'),
+            isDetail = $el.hasClass('ctl_detail'),
+            opts = me.opts;
+
+        if (!(isListing || isDetail)) {
+            return;
+        }
+
+        me.urlParams = me.parseQueryString(location.href);
+
+        if (isListing) {
+            me.registerListingEventListeners();
+            return;
+        }
+
+        me.$prevButton = $el.find(opts.prevLinkSelector);
+        me.$nextButton = $el.find(opts.nextLinkSelector);
+        me.$backButton = $el.find(opts.breadcrumbButtonSelector);
+        me.$productDetails = $el.find(opts.productDetailsSelector);
+
+        me.categoryId = ~~(me.urlParams.c || me.$productDetails.attr('data-category-id'));
+        me.orderNumber = me.$productDetails.attr('data-ordernumber');
+        me.productState = me.getProductState();
+
+        // Clear the product state if the order numbers are not identical
+        if (!$.isEmptyObject(me.productState) && me.productState.ordernumber !== me.orderNumber) {
+            me.clearProductState();
+            me.productState = {};
+        }
+
+        me.registerDetailEventListeners();
+        me.getProductNavigation();
+    };
+
+    Plugin.prototype.parseQueryString = function (url) {
+        var params = {},
+            urlParts = (url + '').split('?'),
+            queryParts,
+            part,
+            key,
+            value,
+            p;
+
+        if (urlParts.length < 2) {
+            return params;
+        }
+
+        queryParts = urlParts[1].split('&');
+
+        for (p in queryParts) {
+            if (!queryParts.hasOwnProperty(p)) {
+                continue;
+            }
+
+            part = queryParts[p].split('=');
+
+            key = decodeURIComponent(part[0]);
+            value = decodeURIComponent(part[1] || '');
+
+            params[key] = $.isNumeric(value) ? parseFloat(value) : value;
+        }
+
+        return params;
+    };
+
+    Plugin.prototype.registerListingEventListeners = function () {
+        var me = this,
+            selectors = me.opts.listingSelectors.join(', '),
+            $listingEls = me.$el.find(selectors);
+
+        $listingEls.on('click', $.proxy(me.onClickProductInListing, me));
+    };
+
+    Plugin.prototype.onClickProductInListing = function (event) {
+        var me = this,
+            opts = me.opts,
+            $target = $(event.target),
+            $parent = $target.parents(opts.productBoxSelector),
+            params = $.extend({}, me.urlParams, {
+                'categoryId': ~~($parent.attr('data-category-id')),
+                'ordernumber': $parent.attr('data-ordernumber')
+            });
+
+        me.setProductState(params);
+    };
+
+    Plugin.prototype.registerDetailEventListeners = function () {
         var me = this;
-        me.saveCurrentState();
+
+        me.$prevButton.on('click', $.proxy(me.onArrowClick, me));
+        me.$nextButton.on('click', $.proxy(me.onArrowClick, me));
     };
 
-    /**
-     * Event callback which will be fired when the user wants to
-     * reset a filter property group.
-     *
-     * The method reads out the url of the reset link and save it
-     * to the { @link sessionStorage }.
-     *
-     * @param { Event } event
-     * @return { Void }
-     */
-    Plugin.prototype.onResetFilterOptions = function(event) {
+    Plugin.prototype.onArrowClick = function (event) {
         var me = this,
-            $this = $(event.currentTarget),
-            url = $this.attr('href');
+            $target = $(event.currentTarget);
 
-        me.saveCurrentState(url);
-    };
-
-    /**
-     * Saves the passed url to the { @link sessionStorage } using
-     * the { @link pluginName } as the key of the entry.
-     *
-     * @param { String } [url] - URL, which should be saved.
-     * @returns { Boolean }
-     */
-    Plugin.prototype.saveCurrentState = function(url) {
-        var itemValue = url || window.location.href;
-
-        if (hasSessionStorageSupport) {
-            sessionStorage.setItem(pluginName, itemValue);
+        if (!$.isEmptyObject(me.productState)) {
+            me.productState.ordernumber = $target.attr('data-ordernumber');
+            me.setProductState(me.productState);
         }
-
-        return true;
     };
 
-    /**
-     * Restores a state from the `sessionStorage` on the
-     * detail page and removes the entry to prevent
-     * strange behaviors of the overview link.
-     *
-     * @returns { Boolean } Truthy, if all went well, otherwise falsy
-     */
-    Plugin.prototype.restoreState = function() {
-        var item = hasSessionStorageSupport && sessionStorage.getItem(pluginName);
+    Plugin.prototype.getProductState = function () {
+        try {
+            return JSON.parse(window.sessionStorage.getItem('lastProductState'));
+        } catch (err) {
+            return {};
+        }
+    };
 
-        if(!item) {
+    Plugin.prototype.setProductState = function (params) {
+        try {
+            window.sessionStorage.setItem('lastProductState', JSON.stringify(params));
+            return true;
+        } catch (err) {
             return false;
         }
-
-        var detailItem = sessionStorage.getItem(pluginName + '-detail');
-
-        if (!detailItem) {
-            detailItem = window.location.href;
-            sessionStorage.setItem(pluginName + '-detail', window.location.href);
-        }
-
-        if(detailItem === window.location.href) {
-            $('.article_overview a').attr('href', item);
-        } else {
-            sessionStorage.removeItem(pluginName);
-            sessionStorage.removeItem(pluginName + '-detail');
-        }
-
-        return true;
     };
 
-    /** Lightweight plugin starter */
-    $.fn[pluginName] = function ( options ) {
+    Plugin.prototype.clearProductState = function () {
+        try {
+            window.sessionStorage.removeItem('lastProductState');
+            return true;
+        } catch (err) {
+            return false;
+        }
+    };
+
+    Plugin.prototype.getProductNavigation = function () {
+        var me = this,
+            url = me.$el.find('#detail').attr('data-product-navigation'),
+            params = $.extend({}, me.productState, {
+                'ordernumber': me.orderNumber,
+                'categoryId': me.categoryId
+            });
+
+        if ($.isEmptyObject(params) || !url || !url.length) {
+            return;
+        }
+
+        $.ajax({
+            'url': url,
+            'data': params,
+            'method': 'GET',
+            'dataType': 'json',
+            'success': $.proxy(me.onProductNavigationLoaded, me)
+        });
+    };
+
+    Plugin.prototype.onProductNavigationLoaded = function (response) {
+        var me = this,
+            opts = me.opts,
+            $prevBtn = me.$prevButton,
+            $nextBtn = me.$nextButton,
+            prevProduct = response.previousProduct,
+            nextProduct = response.nextProduct,
+            animSpeed = opts.arrowFadeSpeed;
+
+        if (typeof prevProduct === 'object') {
+            $prevBtn.attr('data-ordernumber', prevProduct.orderNumber);
+
+            $prevBtn
+                .attr('href', prevProduct.href)
+                .attr('title', prevProduct.name)
+                .parents('div.article_back')
+                .animate({
+                    'left': 5
+                }, animSpeed, 'easeOutBounce');
+        } else {
+            $prevBtn.remove();
+        }
+
+        if (typeof nextProduct === 'object') {
+            $nextBtn.attr('data-ordernumber', nextProduct.orderNumber);
+
+            $nextBtn
+                .attr('href', nextProduct.href)
+                .attr('title', nextProduct.name)
+                .parents('div.article_next')
+                .animate({
+                    'right': 5
+                }, animSpeed, 'easeOutBounce');
+        } else {
+            $nextBtn.remove();
+        }
+    };
+
+    $.fn[pluginName] = function () {
         return this.each(function () {
             if (!$.data(this, 'plugin_' + pluginName)) {
-                $.data(this, 'plugin_' + pluginName,
-                new Plugin( this, options ));
+                $.data(this, 'plugin_' + pluginName, new Plugin(this));
             }
         });
     };
 
-    /** Fire up the plugin */
-    $(function() {
-        $('body').httpCacheFilters();
+    $(function () {
+        $('body').ajaxProductNavigation();
     });
 })(jQuery, window);

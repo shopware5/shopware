@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,7 +23,9 @@
  */
 
 namespace   Shopware\Models\Customer;
-use         Shopware\Components\Model\ModelRepository;
+
+use Shopware\Components\Model\ModelRepository;
+
 /**
  * Repository for the customer model (Shopware\Models\Customer\Customer).
  *
@@ -33,7 +35,6 @@ use         Shopware\Components\Model\ModelRepository;
  */
 class Repository extends ModelRepository
 {
-
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which contains
      * all required fields for the backend customer list.
@@ -94,9 +95,14 @@ class Repository extends ModelRepository
 
         //filter the displayed columns with the passed filter string
         if (!empty($filter)) {
+            $fullNameExp = $builder->expr()->concat('billing.firstName', $builder->expr()->concat($builder->expr()->literal(' '), 'billing.lastName'));
+            $fullNameReversedExp = $builder->expr()->concat('billing.lastName', $builder->expr()->concat($builder->expr()->literal(' '), 'billing.firstName'));
+
             $builder->where('billing.number LIKE ?1')           //Search only the beginning of the customer number.
                     ->orWhere('billing.firstName LIKE ?2')      //Full text search for the first name of the customer
                     ->orWhere('billing.lastName LIKE ?2')       //Full text search for the last name of the customer
+                    ->orWhere($fullNameExp . ' LIKE ?2')        //Full text search for the full name of the customer
+                    ->orWhere($fullNameReversedExp . ' LIKE ?2')//Full text search for the full name in reversed order of the customer
                     ->orWhere('customer.email LIKE ?2')         //Full text search for the customer email
                     ->orWhere('customer.firstLogin LIKE ?3')    //Search only for the end of the first login date.
                     ->orWhere('customergroups.name LIKE ?2')    //Full text search for the customer group
@@ -105,7 +111,7 @@ class Repository extends ModelRepository
                     ->orWhere('billing.zipCode LIKE ?1')        //Search only the beginning of the customer number.
                     ->setParameter(1,       $filter . '%')
                     ->setParameter(2, '%' . $filter . '%')
-                    ->setParameter(3, '%' . $filter      );
+                    ->setParameter(3, '%' . $filter);
         }
         //filter the customers with the passed customer group parameter
         if (!empty($customerGroup)) {
@@ -140,9 +146,14 @@ class Repository extends ModelRepository
 
         //filter the displayed columns with the passed filter string
         if (!empty($filter)) {
+            $fullNameExp = $builder->expr()->concat('billing.firstName', $builder->expr()->concat($builder->expr()->literal(' '), 'billing.lastName'));
+            $fullNameReversedExp = $builder->expr()->concat('billing.lastName', $builder->expr()->concat($builder->expr()->literal(' '), 'billing.firstName'));
+
             $builder->andWhere('billing.number LIKE ?1')        //Search only the beginning of the customer number.
                     ->orWhere('billing.firstName LIKE ?2')      //Full text search for the first name of the customer
                     ->orWhere('billing.lastName LIKE ?2')       //Full text search for the last name of the customer
+                    ->orWhere($fullNameExp . ' LIKE ?2')        //Full text search for the full name of the customer
+                    ->orWhere($fullNameReversedExp . ' LIKE ?2')//Full text search for the full name in reversed order of the customer
                     ->orWhere('customer.email LIKE ?2')         //Full text search for the customer email
                     ->orWhere('customer.firstLogin LIKE ?3')    //Search only for the end of the first login date.
                     ->orWhere('customergroups.name LIKE ?2')    //Full text search for the customer group
@@ -151,7 +162,7 @@ class Repository extends ModelRepository
                     ->orWhere('billing.zipCode LIKE ?1')        //Search only the beginning of the customer number.
                     ->setParameter(1,       $filter . '%')
                     ->setParameter(2, '%' . $filter . '%')
-                    ->setParameter(3, '%' . $filter      );
+                    ->setParameter(3, '%' . $filter);
         }
         //filter the customers with the passed customer group parameter
         if (!empty($customerGroup)) {
@@ -182,6 +193,13 @@ class Repository extends ModelRepository
      */
     public function getCustomerDetailQueryBuilder($customerId)
     {
+        // sub query to select the canceledOrderAmount. This can't be done with another join condition
+        $subQueryBuilder = $this->getEntityManager()->createQueryBuilder();
+        $subQueryBuilder->select('SUM(canceledOrders.invoiceAmount)')
+            ->from('Shopware\Models\Customer\Customer', 'customer2')
+            ->leftJoin('customer2.orders', 'canceledOrders', \Doctrine\ORM\Query\Expr\Join::WITH, 'canceledOrders.cleared = 16')
+            ->where($subQueryBuilder->expr()->eq('customer2', $customerId));
+        
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array(
             'customer',
@@ -196,7 +214,7 @@ class Repository extends ModelRepository
             'shop.name as shopName',
             $builder->expr()->count('doneOrders.id') . ' as orderCount',
             'SUM(doneOrders.invoiceAmount) as amount',
-            'SUM(canceledOrders.id as canceledOrderAmount'
+            '('. $subQueryBuilder->getDQL(). ') as canceledOrderAmount'
         ));
         //join s_orders second time to display the count of canceled orders and the count and total amount of done orders
         $builder->from($this->getEntityName(), 'customer')
@@ -206,9 +224,8 @@ class Repository extends ModelRepository
                 ->leftJoin('customer.languageSubShop', 'subShop')
                 ->leftJoin('subShop.locale', 'locale')
                 ->leftJoin('customer.debit', 'debit')
-                ->leftJoin('customer.paymentData', 'paymentData', \Doctrine\ORM\Query\Expr\Join::WITH, 'paymentData.paymentMean = customer.paymentId' )
-                ->leftJoin('customer.orders', 'doneOrders', \Doctrine\ORM\Query\Expr\Join::WITH, 'doneOrders.status <> -1 AND doneOrders.status <> 4' )
-                ->leftJoin('customer.orders', 'canceledOrders', \Doctrine\ORM\Query\Expr\Join::WITH, 'canceledOrders.cleared = 16')
+                ->leftJoin('customer.paymentData', 'paymentData', \Doctrine\ORM\Query\Expr\Join::WITH, 'paymentData.paymentMean = customer.paymentId')
+                ->leftJoin('customer.orders', 'doneOrders', \Doctrine\ORM\Query\Expr\Join::WITH, 'doneOrders.status <> -1 AND doneOrders.status <> 4')
                 ->leftJoin('billing.attribute', 'billingAttribute')
                 ->leftJoin('shipping.attribute', 'shippingAttribute')
                 ->leftJoin('customer.attribute', 'attribute')
@@ -228,6 +245,7 @@ class Repository extends ModelRepository
         $builder = $this->getCustomerGroupsQueryBuilder();
         return $builder->getQuery();
     }
+
     /**
      * Helper function to create the query builder for the "getCustomerGroupsQuery" function.
      * This function can be hooked to modify the query builder of the query object.
@@ -308,8 +326,8 @@ class Repository extends ModelRepository
                 )
             )
             ->setParameter(1,       $filter . '%')
-            ->setParameter(2, '%' . $filter      )
-            ->setParameter(3, str_replace(".", "_",str_replace(",", "_", $filter)) . '%');
+            ->setParameter(2, '%' . $filter)
+            ->setParameter(3, str_replace(".", "_", str_replace(",", "_", $filter)) . '%');
         } else {
             $builder->where($expr->eq('orders.customerId', $customerId));
         }
@@ -410,9 +428,9 @@ class Repository extends ModelRepository
      * @param null $customerId
      * @return \Doctrine\ORM\Query
      */
-    public function getValidateEmailQuery($email = null, $customerId = null,$shopId=null)
+    public function getValidateEmailQuery($email = null, $customerId = null, $shopId=null)
     {
-        $builder = $this->getValidateEmailQueryBuilder($email, $customerId,$shopId);
+        $builder = $this->getValidateEmailQueryBuilder($email, $customerId, $shopId);
         return $builder->getQuery();
     }
 
@@ -423,7 +441,7 @@ class Repository extends ModelRepository
      * @param null $customerId
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getValidateEmailQueryBuilder($email = null, $customerId = null,$shopId = null)
+    public function getValidateEmailQueryBuilder($email = null, $customerId = null, $shopId = null)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array('customer'))
@@ -484,5 +502,4 @@ class Repository extends ModelRepository
 
         return $builder;
     }
-
 }

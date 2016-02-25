@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -63,12 +63,6 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
 
         //order data
         $order = (array) $this->Request()->getParam('sort', array());
-        //Get the value itself
-        if ($this->Request()->get('filter')) {
-            $filter = $this->Request()->get('filter');
-            $filter = $filter[count($filter) - 1];
-            $filterValue = $filter['value'];
-        }
 
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(
@@ -81,10 +75,19 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
             'log.ipAddress as ip_address',
             'log.userAgent as user_agent',
             'log.value4 as value4'
-        )->from('Shopware\Models\Log\Log','log');
+        )->from('Shopware\Models\Log\Log', 'log');
 
-        if ($filterValue) {
-            $builder->where('log.user = ?1')->setParameter(1, $filterValue);
+        if ($filter = $this->Request()->get('filter')) {
+            $filter = $filter[0];
+
+            $builder->where('log.user LIKE ?1')
+                    ->orWhere('log.text LIKE ?1')
+                    ->orWhere('log.date LIKE ?1')
+                    ->orWhere('log.ipAddress LIKE ?1')
+                    ->orWhere('log.key LIKE ?1')
+                    ->orWhere('log.type LIKE ?1');
+
+            $builder->setParameter(1, '%'. $filter['value'] . '%');
         }
         $builder->addOrderBy($order);
 
@@ -139,7 +142,7 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
     {
         try {
             $params = $this->Request()->getParams();
-            $params['key'] = utf8_encode(html_entity_decode($params['key']));
+            $params['key'] = html_entity_decode($params['key']);
 
             $logModel = new Shopware\Models\Log\Log;
 

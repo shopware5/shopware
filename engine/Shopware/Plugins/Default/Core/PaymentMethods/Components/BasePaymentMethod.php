@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -33,14 +33,13 @@ namespace ShopwarePlugin\PaymentMethods\Components;
  */
 abstract class BasePaymentMethod
 {
-
     /**
      * Validates the input received from the client
      *
-     * @param \Enlight_Controller_Request_Request $request The Request object
+     * @param array $paymentData
      * @return array List of fields containing errors
      */
-    abstract public function validate(\Enlight_Controller_Request_Request $request);
+    abstract public function validate($paymentData);
 
     /**
      * Called when the customer edits his payment data.

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -52,7 +52,7 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action
     public function preDispatch()
     {
         // Redirect broken backend urls to frontend
-        if (!in_array($this->Request()->getActionName(), array('index', 'load', 'menu', 'auth'))) {
+        if (!in_array($this->Request()->getActionName(), array('index', 'load', 'menu', 'auth', 'changeLocale'))) {
             $uri = $this->Request()->getRequestUri();
             $uri = str_replace('shopware.php/', '', $uri);
             $uri = str_replace('/backend/', '/', $uri);
@@ -81,9 +81,9 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action
 
         // Check session
         try {
-            $this->Request()->setHeader('referer', '');
             $auth = $this->auth->checkAuth();
-        } catch (Exception $e) { }
+        } catch (Exception $e) {
+        }
 
         // No session
         if ($auth === null) {
@@ -109,12 +109,45 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action
         $this->View()->assign('product', '', true);
         $this->View()->assign('maxParameterLength', (int) ini_get('suhosin.get.max_value_length') + 0, true);
 
+        $firstRunWizardEnabled = $this->isFirstRunWizardEnabled($identity);
+        $sbpLogin = 0;
+        if ($firstRunWizardEnabled) {
+            /** @var \Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct $tokenData */
+            $tokenData = Shopware()->BackendSession()->accessToken;
+
+            $sbpLogin = (int) (!empty($tokenData) && $tokenData->getExpire() >= new DateTime("+30 seconds"));
+        }
+        $this->View()->assign('sbpLogin', $sbpLogin, true);
+        $this->View()->assign('firstRunWizardEnabled', $firstRunWizardEnabled, true);
+
         if (Shopware()->Bootstrap()->issetResource('License')) {
             $l = Shopware()->License();
             $m = 'SwagCommercial';
             $o = $l->getLicenseInfo($m);
             $r = isset($o['product']) ? $o['product'] : null;
             $this->View()->assign('product', $r, true);
+        }
+
+        /** @var Shopware_Components_Config $config */
+        $config = $this->get('config');
+
+        $this->View()->assign('updateWizardStarted', $config->get('updateWizardStarted'));
+    }
+
+    /**
+     * Returns if the first run wizard should be loaded in the current backend instance
+     *
+     * @param $identity
+     * @return bool
+     * @throws Exception
+     */
+    private function isFirstRunWizardEnabled($identity)
+    {
+        // Only admins can see the wizard
+        if ($identity->role->getAdmin()) {
+            return $this->container->get('config')->get('firstRunWizardEnabled', false);
+        } else {
+            return false;
         }
     }
 
@@ -123,7 +156,49 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action
      */
     public function authAction()
     {
+    }
 
+    /**
+     *
+     */
+    public function changeLocaleAction()
+    {
+        $this->Front()->Plugins()->Json()->setRenderer();
+
+        $localeId = $this->Request()->getParam('localeId');
+        if ($localeId == null) {
+            $this->View()->assign(array(
+                'success' => false,
+                'message' => false
+            ));
+            return;
+        }
+
+        $locale = $this->container->get('models')
+            ->getRepository('Shopware\Models\Shop\Locale')
+            ->find($localeId);
+
+        if ($locale == null) {
+            $this->View()->assign(array(
+                'success' => false,
+                'message' => false
+            ));
+            return;
+        }
+
+        $auth = $this->auth->checkAuth();
+
+        if ($auth !== null) {
+            $identity = $auth->getIdentity();
+            if (!empty($identity)) {
+                $identity->locale = $locale;
+
+                $this->View()->assign(array(
+                    'success' => true,
+                    'message' => true
+                ));
+            }
+        }
     }
 
     /**

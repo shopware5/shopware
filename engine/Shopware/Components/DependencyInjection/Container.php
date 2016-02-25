@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -192,7 +192,7 @@ class Container extends BaseContainer
             throw new \Exception('Resource "' . $name . '" not found failure');
         }
 
-        // a privious attempt to load the resource resulted in an exception,
+        // a previous attempt to load the resource resulted in an exception,
         // try to reload the resource to provide the original exception
         // instead of generic "resource not found" message.
         if ($this->resourceStatus[$name] === self::STATUS_EXCEPTION) {

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -40,7 +40,6 @@ class Shopware_Tests_Controllers_Backend_PartnerTest extends Enlight_Components_
         'company' => 'phpUnitTestCompany',
         'contact' => 'contactDummy',
         'street' => 'streetDummy',
-        'streetNumber' => 'streetNumberDummy',
         'zipCode' => 'zipCodeDummy',
         'city' => 'cityDummy',
         'phone' => 'phoneDummy',
@@ -159,7 +158,7 @@ class Shopware_Tests_Controllers_Backend_PartnerTest extends Enlight_Components_
         $this->Request()->setParams($params);
         $this->dispatch('backend/Partner/savePartner');
         $this->assertTrue($this->View()->success);
-        $this->assertCount(20, $this->View()->data);
+        $this->assertCount(19, $this->View()->data);
         $this->assertEquals("streetDummy", $this->View()->data["street"]);
 
         //test update partner
@@ -195,7 +194,6 @@ class Shopware_Tests_Controllers_Backend_PartnerTest extends Enlight_Components_
         $this->assertEquals($dummyData["company"],$returningData["company"]);
         $this->assertEquals($dummyData["contact"],$returningData["contact"]);
         $this->assertEquals($this->updateStreet,$returningData["street"]);
-        $this->assertEquals($dummyData["streetNumber"],$returningData["streetNumber"]);
         $this->assertEquals($dummyData["zipCode"],$returningData["zipCode"]);
         $this->assertEquals($dummyData["city"],$returningData["city"]);
         $this->assertEquals($dummyData["phone"],$returningData["phone"]);

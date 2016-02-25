@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2014 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -34,10 +34,10 @@ class Shopware_Tests_Models_Customer_ShippingTest extends Enlight_Components_Tes
         $shipping = $this->getRandomShipping();
 
         $shippingId = $shipping->getId();
-        $originalStreetNumber = $shipping->getStreetNumber();
+        $originalStreet = $shipping->getStreet();
         $originalZipCode = $shipping->getZipCode();
 
-        $shipping->setStreetNumber('This is a really really really long city name'); //
+        $shipping->setStreet('This is a really really really long city name'); //
         $shipping->setZipCode('This is a really really really long zip code');
 
         Shopware()->Models()->persist($shipping);
@@ -45,10 +45,10 @@ class Shopware_Tests_Models_Customer_ShippingTest extends Enlight_Components_Tes
         Shopware()->Models()->clear();
 
         $shipping = Shopware()->Models()->getRepository('Shopware\Models\Order\Shipping')->find($shippingId);
-        $this->assertEquals('This is a really really really long city name', $shipping->getStreetNumber());
+        $this->assertEquals('This is a really really really long city name', $shipping->getStreet());
         $this->assertEquals('This is a really really really long zip code', $shipping->getZipCode());
 
-        $shipping->setStreetNumber($originalStreetNumber);
+        $shipping->setStreet($originalStreet);
         $shipping->setZipCode($originalZipCode);
 
         Shopware()->Models()->persist($shipping);

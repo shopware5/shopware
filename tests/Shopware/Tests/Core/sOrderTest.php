@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2013 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -22,13 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-/**
- * Shopware SwagAboCommerce Plugin - Bootstrap
- *
- * @category  Shopware
- * @package   Shopware\Plugins\SwagAboCommerce
- * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
- */
 class sOrderTest extends PHPUnit_Framework_TestCase
 {
     /**
@@ -82,7 +75,6 @@ class sOrderTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($next, $current + 1);
     }
 
-
     public function testGetOrderAttributes()
     {
         $orderId = $this->createDummyOrder();
@@ -96,6 +88,53 @@ class sOrderTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('attribute1', $attributes);
         $this->assertArrayHasKey('orderID', $attributes);
     }
+
+    /**
+     * @covers sOrder::sendMail()
+     * @ticket SW-8261
+     */
+    public function testSendMailPaymentData()
+    {
+        // First, block email sending, so we don't get an exception or spam someone.
+        $config = $this->invokeMethod(
+            $this->module,
+            'getConfig'
+        );
+
+        $config->offsetSet('sendOrderMail', false);
+
+        $this->invokeMethod(
+            $this->module,
+            'setConfig',
+            array(
+                $config
+            )
+        );
+
+        // Register the event listener, so that we test the value of "$context"
+        Shopware()->Events()->addListener(
+            'Shopware_Modules_Order_SendMail_Create',
+            array($this, 'validatePaymentContextData')
+        );
+
+        $variables = array(
+            'additional' => array(
+                'payment' => Shopware()->Modules()->Admin()->sGetPaymentMeanById(
+                        Shopware()->Db()->fetchRow('SELECT * FROM s_core_paymentmeans WHERE name LIKE "debit"')
+                    )
+            )
+        );
+
+        $this->module->sendMail($variables);
+    }
+
+    public function validatePaymentContextData(Enlight_Event_EventArgs $args)
+    {
+        $context = $args->get('context');
+        $this->assertInternalType('array', $context['sPaymentTable']);
+        $this->assertCount(0, $context['sPaymentTable']);
+    }
+
 
     public function testGetOrderDetailAttributes()
     {
@@ -155,45 +194,6 @@ class sOrderTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($updated['sales'], $detail['sales'] + 10);
         $this->assertEquals($updated['instock'], $detail['instock'] - 10);
-    }
-
-    public function testRefreshLastStockArticle()
-    {
-        $data = $this->getSimpleArticleData();
-        $data['mainDetail']['inStock'] = 0;
-
-        $config = $this->invokeMethod(
-            $this->module,
-            'getConfig'
-        );
-
-        $config->offsetSet('deactivatenoinstock', true);
-
-        $this->invokeMethod(
-            $this->module,
-            'setConfig',
-            array(
-                $config
-            )
-        );
-
-        $article = $this->getArticleResource()->create($data);
-
-        $this->invokeMethod(
-            $this->module,
-            'refreshLastStockArticle',
-            array(
-                $article->getMainDetail()->getNumber(),
-                $article->getId(),
-                true
-            )
-        );
-
-        /**@var $article \Shopware\Models\Article\Article */
-        $article = Shopware()->Models()->find('Shopware\Models\Article\Article', $article->getId());
-
-        $this->assertFalse((bool)$article->getActive());
-        $this->assertFalse((bool)$article->getMainDetail()->getActive());
     }
 
     public function testGetOrderDetailsForMail()
@@ -476,7 +476,7 @@ class sOrderTest extends PHPUnit_Framework_TestCase
         $this->assertNull($order);
     }
 
-    public function testSManageEsdOrder()
+    public function testHandleESDOrder()
     {
         $config = $this->invokeMethod(
             $this->module,
@@ -510,7 +510,7 @@ class sOrderTest extends PHPUnit_Framework_TestCase
                 array($esdArticle["id"])
             );
 
-            $this->module->sManageEsdOrder($basketRow, 1234, 4567);
+            $basketRow = $this->module->handleESDOrder($basketRow, 1234, 4567);
 
             if (!$esdArticle['id']) {
                 // Not ESD, ensure nothing happened
@@ -1070,8 +1070,7 @@ class sOrderTest extends PHPUnit_Framework_TestCase
                 'customernumber' => '20001',
                 'firstname' => 'Max',
                 'lastname' => 'Mustermann',
-                'street' => 'Musterstr.',
-                'streetnumber' => '55',
+                'street' => 'Musterstr. 55',
                 'zipcode' => '55555',
                 'city' => 'Musterhausen',
                 'countryID' => '2',
@@ -1170,8 +1169,7 @@ class sOrderTest extends PHPUnit_Framework_TestCase
                 'salutation' => 'mr',
                 'firstname' => 'Max',
                 'lastname' => 'Mustermann',
-                'street' => 'MustermannstraÃŸe',
-                'streetnumber' => '92',
+                'street' => 'MustermannstraÃŸe 92',
                 'zipcode' => '48624',
                 'city' => 'SchÃ¶ppingen',
                 'countryID' => '2',
@@ -1179,5 +1177,4 @@ class sOrderTest extends PHPUnit_Framework_TestCase
             ),
         );
     }
-
 }

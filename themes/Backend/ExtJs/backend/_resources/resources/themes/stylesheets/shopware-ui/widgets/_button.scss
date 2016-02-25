@@ -1,0 +1,568 @@
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ *
+ * @category   Shopware
+ * @package    Shopware_Styling
+ * @subpackage Buttons
+ * @version    $Id$
+ * @author shopware AG
+ */
+
+/**
+ * Shopware Main Menu Toolbar Buttons
+ * -----------------------------------------------------------------------
+ */
+.shopware-menu {
+
+    // Normal state
+	.#{$prefix}btn-default-toolbar-small {
+		@include border-radius(0);
+		@include single-box-shadow(transparent, 0, 0, 0);
+		-webkit-transition: none;
+		-moz-transition: none;
+		-ms-transition: none;
+		-o-transition: none;
+		transition: none;
+        padding: 0;
+		height: $menu-button-height;
+		border: 0 none;
+        top: 4px !important;
+
+		em {
+			padding: 0;
+			display: block;
+			height: $menu-button-height;
+            background: none;
+		}
+
+		button {
+		    @include box-sizing('content-box');
+			height: $menu-top-button-height;
+
+            .#{$prefix}btn-inner {
+				height: $menu-top-button-height;
+				line-height: $menu-top-button-line-height;
+				color: $menu-top-button-color;
+				font-size: $menu-top-button-font-size;
+				text-shadow: 1px 1px 0px #145c9a;
+				padding: 0 0px 0 39px !important;
+	            margin: -1px 16px 0 0;
+	            font-weight: normal;
+			}
+            .#{$prefix}btn-icon {
+			    @include box-sizing('border-box');
+				width: 18px;
+				height: 18px;
+				left: 12px;
+	            top: 7px;
+
+				&.question_frame {
+					left: 19px;
+				}
+			}
+		}
+
+		.icon-feedback {
+			background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAWCAYAAADEtGw7AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAABC5JREFUeNqcVWtMHFUU/u7M7s6+hikLZYGlu5TFujSl1iqhxhCraahppAXTRmmiNqnGV2LqAyvqD/GHqW0jaILGRGP6w1htS1tITCGmGmIqGqM8Skla1EB3QQssZYFl9jE7npldtrgFXyf5Zuace853zz333jNMVVUsJw++zWw8BwdvQDnPw80Y7OQ6q8QxElcwkEhguu2gGsYKwjKJ9xxh+SYB26wWPGq1ospihtlkAmgSKAkgFgPkCBaiMr6NRHDs+iy6TjaoE39LvLeF7ZIkvJbjQIXDAdjtgCAQKQ9wDNBcKVvIMhCaBaaDQCSMfjWW/+Y7+8ZP3URce4jxooiXnE405edB0EhtVsBoJAemeRFS82s6lQGULcILQJDIJ64hZmWb3n1j988Ni8Sc9iDSJ12FeKu4GIKzgEhFIjBQdtrSKcNYPPVO6XGahKfyiFmA5l/kgTHC977Y2rnnvUViflBs8hUU4rOiNbBkSWQgwoSarKcOdQmUDDu9GZVJ2wPOCDY2eWmzhbt1xJ1b3mewS3jMkQvJbCNHrc6eIEx8NgLznTgXuB+PeJN6ppwZWYOK1R9jLHwO/cFmWGk/bNkw/hbsfuVu1HdxNjuqBKqnQrWTacc1ks5ADVy27ZCMbl1vH92C1kGmQ5P20UrMxfxwWauxLutZPY6qBYGSG5+/4KTPbZzBDFuClhOhkaiSzGa7qwMRJYjR0Kiu73T3YL9vSvfRJKZw8NhewEzsF0gmL4rFB/RYLTmFu07FxG0cbdDVaDyZrRxNBp7+tQYC70ChdYuuH79yF5p7c9LE0ZiKdVI9rcir6y7rjmTWRC4KJXQYYeHmw/gyLCdJZW2CeBB1JR20pB8xNNkDWZnGw7d8h8Y7VDhMa/XxUOQanNY78eFACU5c3gmPvVqPnyce3+q6KSL+g9W2Iqe0FD8xi35toS45r9rZVZd8I/XSK53yTQ/RIwuu0IHK/j674GjSL8iB06t2MPvMKaq1mbEUQUYLSdtxY5K0kG5mkPet//piWf7WH8jSkL7Szd21T/ujZ4/MxWHD4m3LCE6nx27YtPAcozhXX3by8sbC6mGyvk648pdecXbwaN3wzFeHB6Y7vfp1z8w4k1xFojJvb6DW1+QvEEuHyHKUMLRsd5ucC7ivhi4+9f3Y5/Xd/k/cKgdOczHxUHiGBPUA1SGULGzIrZna6nl8omiVb45nhjYKPUGYWLFtLvaQjy40bu7yH2qPcijIMiDyXEXHpXx76XS2pWDBZpKoBWGM0EM4T/j9psprxMth46vw3Ps+grs+hfzN8PE+sn1BKCfkEYSV4hZhWOkPQB1tE51N6ZkNLb33eB8KkOkwYQD/Vpabzb0fYtlBfPByW20j6ecJ9/1ThplY1uh6Atm7W25fT9/PE6r+K6mGlTZP7/8EaoYYx/+QPwUYAHt2U21iFEUAAAAAAElFTkSuQmCC") no-repeat;
+			width: 22px !important;
+		}
+
+	}
+
+	// Active button state
+	.#{$prefix}btn-default-toolbar-small-menu-active {
+        background: #fff;
+
+        .#{$prefix}btn-inner {
+            color: #0e6bbb !important;
+            text-shadow: none !important;
+        }
+
+        em {
+            background: #fff;
+        }
+
+        button {
+            background: #fff;
+        }
+    }
+
+    .#{$prefix}btn-default-toolbar-small-pressed {
+        background: none;
+    }
+
+    .#{$prefix}btn-default-toolbar-small-over {
+        background: none;
+
+        em {
+            background: none;
+        }
+    }
+}
+
+/** Safari specific */
+.#{$prefix}safari {
+    .#{$prefix}btn.primary, .#{$prefix}btn.secondary {
+        .#{$prefix}btn-inner {
+            font-weight: 700 !important;
+        }
+    }
+    .#{$prefix}btn.small .#{$prefix}btn-inner {
+        font-weight: normal !important;
+    }
+}
+
+/**
+ * Shopware Footer Toolbar Buttons
+ * -----------------------------------------------------------------------
+ */
+.shopware-footer {
+
+    .#{$prefix}toolbar-separator {
+        &.separator-first {
+            left: 52px !important;
+        }
+        &.separator-second {
+            left: 105px !important;
+        }
+    }
+
+    // Normal state
+	.#{$prefix}btn-default-toolbar-small {
+		@include border-radius(0);
+		-webkit-box-shadow: transparent 0 0 0 !important;
+		-moz-box-shadow: transparent 0 0 0 !important;
+		-ms-box-shadow: transparent 0 0 0 !important;
+		box-shadow: transparent 0 0 0 !important;
+        border: none;
+        background: none;
+		height: 40px;
+        top: 0 !important;
+		padding: 0 0 0 6px;
+		position: relative;
+
+        &.logout {
+            left: 0 !important;
+        }
+        &.window {
+            left: 53px !important;
+        }
+        &#widgetTaskBarBtn {
+            left: 106px !important;
+        }
+
+		em {
+			display: block;
+			height: 40px;
+			line-height: 28px;
+			padding: 0 6px 0 0;
+			background: none;
+		}
+		button {
+		    @include box-sizing('content-box');
+            width: 40px;
+			height: 46px;
+			line-height: 28px;
+			background: none;
+
+			.#{$prefix}btn-inner {
+				color: #324552 !important;
+                width: 40px;
+				font-size: 11px;
+				text-shadow: 1px 1px 1px #fff !important;
+			}
+
+			.#{$prefix}btn-icon {
+				width: 28px;
+				height: 18px;
+				bottom: auto;
+				top: 10px;
+                left: 6px;
+			}
+		}
+
+		// Icons
+		.logout {
+			background: theme-image($theme, 'icon_taskbar_cap_logout.png') no-repeat center center;
+		}
+		.window-managment {
+			background: theme-image($theme, 'icon_taskbar_cap_fenster.png') no-repeat center center;
+		}
+		.widget-sidebar {
+			background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2hJREFUeNqslG1MU1cYx//nvrXcC6WUtkhFpOjEGtlQFMwSXcSAChVs5hKNEV8GCTHLWPZJEzWSIPpFE+MHs2iMuplMY3yP9TXR+MHMmU1lilRQ1pAxodhq5cptb+/1XK1a6hc/eJInJ+d5zvM753k5h+i6js8xuHQFWbyJASs0gDcvA2eaC5bNh3GWlhiAGrsBdfQ4VOW07m/Xxvil3oh428og5hxElv0rSDmA2UKPEqiBGuMxQIkCI8+AaOgu5Mga/eyWOx+ByNLtNbC6ziC30ASLDWtLc1FXYkH3sIqOW1Ec8dpwsTuKvXeGgOcUFg4qCP9Xr5/aeOk9iDR0lMJe9Ceck0zlE5349dt81eMwH6X2c09fKF8qCf3Hwhzzarqu7QvHGtecGOCu9/wPDD1WEOqbTWGdBN42Rhzn/ke2f+Epn5iHy40FD3JEfhl16kreOpOKjUowuXa/VBK/LzkSrLj2aBDicKBLHngynSGStU7OcnmQ5UT30AutftfVdSkQY7w0IKR2MyHerS2kvr0v08TOZ9VXEUg2yJkuj8HgPMXu1gecHStKMlFpF2JNc6bJH1dyM08Tf+CHunJ1T1PVL1QleydnBIUM3uqP2WEwmJAuVYLhUDVe/6P1m4INkom/PwbibStFdt5Jx4Qi345Vc69T1Zvq/FTl3vldCd8JlkdIFyu5EDFJ0GlLxGUjubvHQBo6KpE74SayXaR10aQIPeS3FPNhLjFqpb67Q8QsMRp4Alq5/sFIb3pIK6srvsa4KYS2BUbjqp+q1FR7oH+4B5oGDQLhCiwm9NOs/P3vsDMddGj9gkDNXyGo9MIrymzn0u3UJx/Iw/gsAUyZg1fAEPSGVR8NxZe6kWXI+cZZju/XVThaMgT26Jiw6zvmBaOqD4RghpNXmPlF4kMQFvdHxVqaj2O0w6ek7DcSe4CKUanEB0i7FbmuC50jUh0YBlVu6SF5LseaZu59vK/3FYsF2VG9eYY0Z/m2wwFo6b+C/hZLHX9evtB2LyoGrkQs7GRJw+2W4mbjiQj+rnCw9lQkDyMRYLCHdsmzt06GkJQZyVmkje4shvGw/T7r00VTbYXvHm31/ltDF5svRwjiCg0inuwWpFHefT48wAvYV2PTm2bba6jmCgxQUlqoJPRPH4mkzxv/1wIMAHKkfMrJK2ZOAAAAAElFTkSuQmCC');
+			background-position: center center;
+		}
+	}
+
+	// Active state
+	.btn-over, .#{$prefix}btn-default-toolbar-small-menu-active {
+        background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+            svg-color-stop(rgba(22,129,211,1), 0%, 1),
+            svg-color-stop(rgba(46,181,249,1), 100%, 1)
+        )) center center no-repeat transparent;
+
+		em {
+			background: none;
+		}
+
+		button {
+			background: none;
+		}
+		.window-managment {
+			background: theme-image($theme, 'icon_taskbar_cap_fenster_active.png') no-repeat center center;
+		}
+		.widget-sidebar {
+			background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAvlJREFUeNqsVOtLFFEUvzM7O2uuK+szhCUzQhJS+6KCUOAXKf0QQgVJmmjEQlAKfvA/KJAQPyhZ2WMxSfNRYg+hWM1nqKitro/Vsi11NbTVdpd2nJ3bOeNMrH4ohC785t5zzzm/e89jLkMpJf9jcHxZ464NoSqfheks4BzgJCBOUa0AegEtgBfgJzFBfoy29AlRN/xV+SdgegRI/ccFJgBFQDYukwDwdEJ3SLIlSoeQZDsgkWeji6TY0k9uddmI1y+Swod9pGHoE0Ed2qAt3D5bvQTDlzYCycVkUAyzDKOzr2ySose94sTqVhPoO03hISkHNJrrjh/ey3BgzrGosML6gkwuLT6agI8ffNJ0ZY02BpLNegVxUs9zSfZlNzld89bu8gmYn2nltDAgiIS1U7l9QqRO+7TDnJWefjia+ARxOpTnjrMBieYiCRrFR4VJbVezihnCKCTy1wNwQugMwAzhLG74t7PAz41KIElCDnZx3XMDNzo/fiM3u2zCmdp3PjyXEvUrV1ILk6W+35Gh26my76Xtq/P9nEvWIwdrDOUzULDOrnyotE5XbAri1J+S7hQhGVqtfd3rz6voGOsBaor7ld0zt1vHnTa0Qw4uPESrRyFAaRMYVe8hwUMGGYj1fp/DvSWIDaoebC1QQSMsq5GD1WpYORGmCP0Cs6dZ2sa+ZKqJ4jXsa5hERmkXHEdjDPM4Iwf3/ecvEmMIIammiNi9XVfQMDBnhTxwcCXLyOdOqrIqI8UUKXf9GnCwtmW3H4WEKEMehJKnNihClOiruqGFktrBebNnO9AUHDYU4NShCL1sPwkcbM+ca0a+ZqwhBxqsGQwSg/KAfA8AdbAIBP1KRij5m8SD4bkoyxxxFc1XnBseiqPfsSqVWPrSYWn8G2p7Zo8MzK+J6OPc8FLkIPDT8hfudrsCkkT3O9Dn/L1uF3LgTyu025cKyltHqbSPtwlty1tG6POppUsQsiA/I8oww0YNVV4EElQhtVp09x4+A9dAvoPybwEGAO2Jsyfl3nhDAAAAAElFTkSuQmCC');
+		}
+	}
+}
+
+/**
+ * Shopware Footer - Window Management button
+ * -----------------------------------------------------------------------
+ */
+.window-management-holder {
+    overflow: visible !important;
+    left: 158px !important;
+    top: 0 !important;
+    padding-top: 4px;
+    border-left: 1px solid rgba(170, 173, 203, 0.18);
+
+    .footer-btn {
+        margin: 0 5px;
+    }
+
+    .#{$prefix}btn-default-small {
+        @include border-radius(4px);
+        top: 1px;
+        border: 0 none;
+        padding: 0 0 0 4px;
+        background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+            svg-color-stop(rgba(127,152,169,1), 0%, 1),
+            svg-color-stop(rgba(178,193,203,1), 100%, 1)
+        )) center center no-repeat transparent;
+
+		em {
+			display: block;
+			padding: 0 4px 0 0;
+			background: none;
+		}
+        button {
+			height: 29px;
+			background: none;
+		}
+
+		// Button text
+        .#{$prefix}btn-inner {
+            color: #fff;
+            text-shadow: 0 1px 1px #555;
+            padding-left: 10px;
+            padding-right: 30px;
+            font-size: 12px;
+            font-weight: normal;
+        }
+        .#{$prefix}btn-icon {
+            left: auto;
+            right: 0px;
+            top: 7px;
+            width: 14px;
+            height: 14px;
+            background-position: inherit;
+        }
+
+        .closeable {
+            background: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAxNi4wLjQsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9uOiA2LjAwIEJ1aWxkIDApICAtLT4NCjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+DQo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkViZW5lXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB3aWR0aD0iODRweCIgaGVpZ2h0PSI4NHB4IiB2aWV3Qm94PSIwIDAgODQgODQiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDg0IDg0IiB4bWw6c3BhY2U9InByZXNlcnZlIj4NCjxnPg0KCTxkZWZzPg0KCQk8cmVjdCBpZD0iU1ZHSURfMV8iIHg9IjAiIHdpZHRoPSI4NCIgaGVpZ2h0PSI4NCIvPg0KCTwvZGVmcz4NCgk8Y2xpcFBhdGggaWQ9IlNWR0lEXzJfIj4NCgkJPHVzZSB4bGluazpocmVmPSIjU1ZHSURfMV8iICBvdmVyZmxvdz0idmlzaWJsZSIvPg0KCTwvY2xpcFBhdGg+DQoJPHBhdGggY2xpcC1wYXRoPSJ1cmwoI1NWR0lEXzJfKSIgZmlsbD0iI0ZGRkZGRiIgZD0iTTQyLDBDMTguODAzLDAsMCwxOC44MDcsMCw0MmMwLDIzLjE5NywxOC44MDMsNDIsNDIsNDINCgkJYzIzLjE5NCwwLDQyLTE4LjgwMyw0Mi00MkM4NCwxOC44MDcsNjUuMTk0LDAsNDIsMCBNNTAuNjQzLDQybDE1LjMwMywxNS4zMDJsLTguNjQzLDguNjQyTDQyLjAwMiw1MC42NDNMMjYuNjk5LDY1Ljk0NA0KCQlsLTguNjQxLTguNjQybDE1LjMwMS0xNS4zMDJMMTguMDU5LDI2LjcwMmw4LjY0MS04LjY0NUw0MiwzMy4zNTdsMTUuMzAxLTE1LjI5OGw4LjY0Myw4LjY0TDUwLjY0Myw0MnoiLz4NCjwvZz4NCjwvc3ZnPg0K") center no-repeat;
+            background-size: 100%;
+            margin: -1px 4px 0 0;
+            width: 17px;
+            height: 17px;
+        }
+    }
+
+    .#{$prefix}btn-pressed {
+        background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+            svg-color-stop(rgba(46,181,249,1), 0%, 1),
+            svg-color-stop(rgba(22,129,211,1), 100%, 1)
+        )) center center no-repeat transparent;
+
+        em {
+            background: none;
+        }
+
+        button {
+             background: none;
+        }
+
+        .#{$prefix}btn-inner {
+            color: #fff;
+            text-shadow: 0 1px 1px #555;
+        }
+
+        .closeable { background-position: 0 bottom }
+    }
+    .#{$prefix}btn-pressed.#{$prefix}btn-over {
+        background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+            svg-color-stop(rgba(27,201,250,1), 0%, 1),
+            svg-color-stop(rgba(17,153,226,1), 100%, 1)
+        )) center center no-repeat transparent;
+    }
+}
+
+/**
+ * ------------------------
+ * DEFAULT TOOLBAR BUTTONS
+ * ------------------------
+ */
+.#{$prefix}toolbar-docked-bottom {
+
+	/** Toolbar button style - Normal state */
+	.#{$prefix}btn {
+		border-color: transparent;
+		padding: 2px;
+	}
+
+	/** Separator */
+	.#{$prefix}toolbar-separator {
+		border-left-color: #AEB7BD;
+		border-right-color: #fff;
+	}
+}
+
+/**
+ * ------------------------
+ * SHOPWARE TOOLBAR BUTTONS
+ * ------------------------
+ */
+.#{$prefix}toolbar-shopware-ui {
+
+	/** Toolbar button style - Normal state */
+	.#{$prefix}btn {
+		@include border-radius(4px);
+		padding: 2px 6px 2px 10px;
+        border: 0 none;
+        margin-top: 1px;
+        background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+            svg-color-stop(rgba(250,250,251,1), 0%, 1),
+            svg-color-stop(rgba(202,214,227,1), 100%, 1)
+        )) center center no-repeat transparent;
+
+		button, a {
+			height: 23px;
+			overflow: visible;
+		}
+
+		// Button text
+		.#{$prefix}btn-inner {
+			color: $font-color;
+			font-weight: normal;
+			font-size: 11px;
+		}
+
+		// Button icon
+		.#{$prefix}btn-icon {
+			top: 3px;
+			left: -1px;
+		}
+	}
+
+	/** Toolbar button style - Hover state */
+	.#{$prefix}btn-over {
+        background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+            svg-color-stop(rgba(253,254,254,1), 0%, 1),
+            svg-color-stop(rgba(183,206,231,1), 100%, 1)
+        )) center center no-repeat transparent;	}
+
+	/** Toolbar button style - Disabled state */
+	.#{$prefix}btn-disabled {
+		@include opacity(0.5);
+
+		.#{$prefix}btn-inner {
+			color: darken($font-color, 50%) !important;
+		}
+	}
+}
+
+/**
+ * Shopware Normal Buttons states
+ * -----------------------------------------------------------------------
+ */
+@mixin shopware-button {
+
+	/**
+	 * ------------------------
+	 * SHOPWARE BUTTON SET
+	 * ------------------------
+	 */
+
+	/** Secondary button style - Normal state */
+	.#{$prefix}btn.secondary {
+        @include border-radius(4px !important);
+        border: 0;
+        margin: 0 5px;
+		padding: 2px 25px;
+        background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+            svg-color-stop(rgba(178,193,203,1), 0%, 1),
+            svg-color-stop(rgba(127,152,169,1), 100%, 1)
+        )) center center no-repeat transparent;
+
+		button, a {
+			height: 24px;
+		}
+
+		.#{$prefix}btn-inner {
+			@include user-select(none);
+			color: #fff;
+			font-weight: normal;
+            text-shadow: 0px 1px 1px #475c6a;
+            font-size: 12px;
+			margin: 0 !important; /** Align the button text in FF */
+		}
+	}
+
+	/** Secondary button style - Disabled state */
+	.#{$prefix}btn-disabled.secondary {
+		@include opacity(0.65);
+	}
+
+	/** Secondary button style - Hover state */
+	.#{$prefix}btn-over.secondary {
+        background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+            svg-color-stop(rgba(198,209,217,1), 0%, 1),
+            svg-color-stop(rgba(147,168,183,1), 100%, 1)
+        )) center center no-repeat transparent;
+    }
+
+	/** Primary button style - Normal state */
+	.#{$prefix}btn.primary {
+        @include border-radius(4px !important);
+        border: 0;
+        margin: 0 5px;
+        padding: 2px 25px;
+        background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+            svg-color-stop(rgba(46,181,249,1), 0%, 1),
+            svg-color-stop(rgba(22,129,211,1), 100%, 1)
+        )) center center no-repeat transparent;
+
+		button, a {
+			height: 24px;
+		}
+
+		.#{$prefix}btn-inner {
+			@include user-select(none);
+			color: #fff;
+            font-weight: normal;
+			font-size: 12px;
+			margin: 0 !important; /** Align the button text in FF */
+			text-shadow: 0 1px 1px #0B489D;
+		}
+	}
+
+	/** Primary button style - Hover and disabled state. Based on the secondary button style */
+	.#{$prefix}btn-over.primary, .#{$prefix}btn-disabled.primary {
+        background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+            svg-color-stop(rgba(27,201,250,1), 0%, 1),
+            svg-color-stop(rgba(17,153,226,1), 100%, 1)
+        )) center center no-repeat transparent;
+	}
+
+	/** Primary button style - Disabled state. */
+	.#{$prefix}btn-disabled.primary {
+		@include opacity(0.65);
+
+		.#{$prefix}btn-inner {
+			color: #fff !important;
+		}
+	}
+
+	/** Small secondary button style - Normal state */
+	.#{$prefix}btn.small {
+        @include border-radius(4px !important);
+        border: 0;
+        margin: 0 5px 0 0;
+		padding: 4px 6px;
+        background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+            svg-color-stop(#dde4e9, 0%, 1),
+            svg-color-stop(#bdc9d3, 100%, 1)
+        )) center center no-repeat transparent;
+
+		button, a {
+			height: 16px;
+		}
+
+		.#{$prefix}btn-inner {
+			color: $font-color;
+			text-shadow: 0 1px 0 #dde4e9;
+			font-weight: normal;
+            font-size: 11px;
+		}
+	}
+    .#{$prefix}btn.small:last-child {
+        margin: 0
+    }
+
+	/** Small secondary button style - Hover and disabled state */
+	.#{$prefix}btn-over.small, .#{$prefix}btn-disabled.small {
+        background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+            svg-color-stop(#e4ebf0, 0%, 1),
+            svg-color-stop(#c8d4de, 100%, 1)
+        )) center center no-repeat transparent;	}
+
+
+	/** Small primary button style - Normal state */
+	.#{$prefix}btn.small.primary {
+        background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+            svg-color-stop(rgba(46,181,249,1), 0%, 1),
+            svg-color-stop(rgba(22,129,211,1), 100%, 1)
+        )) center center no-repeat transparent;
+
+		.#{$prefix}btn-inner {
+			@include user-select(none);
+			color: #fff;
+			font-weight: normal;
+            font-size: 11px;
+			margin: 0 !important; /** Align the button text in FF */
+			text-shadow: 0 1px 0 #0B489D;
+		}
+	}
+
+	/** Small primary button style - Hover state */
+	.#{$prefix}btn-over.small.primary, .#{$prefix}btn-disabled.small.primary {
+        background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+            svg-color-stop(rgba(27,201,250,1), 0%, 1),
+            svg-color-stop(rgba(17,153,226,1), 100%, 1)
+        )) center center no-repeat transparent;
+	}
+}
+
+/**
+ * ------------------------
+ * SHOPWARE BOTTOM TOOLBAR BUTTONS
+ * ------------------------
+ */
+.#{$prefix}toolbar-shopware-ui-docked-bottom {
+	@include shopware-button;
+
+	.#{$prefix}btn {
+		padding: 0 25px !important;
+		height: 28px !important;
+	}
+}

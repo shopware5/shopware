@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2013 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -261,6 +261,20 @@ class Shopware_Tests_Components_Api_VariantTest extends Shopware_Tests_Component
     }
 
     /**
+     * @depends testCreateShouldBeSuccessful
+     */
+    public function testGetListShouldBeSuccessful()
+    {
+        $result = $this->resource->getList();
+
+        $this->assertArrayHasKey('data', $result);
+        $this->assertArrayHasKey('total', $result);
+
+        $this->assertGreaterThanOrEqual(1, $result['total']);
+        $this->assertGreaterThanOrEqual(1, $result['data']);
+    }
+
+    /**
      * @depends testGetOneShouldBeSuccessful
      * @param $article\Shopware\Models\Article\Article
      */
@@ -477,6 +491,7 @@ class Shopware_Tests_Components_Api_VariantTest extends Shopware_Tests_Component
         $configuratorSet = $this->getSimpleConfiguratorSet();
         $data['configuratorSet'] = $configuratorSet;
         $article = $this->resourceArticle->create($data);
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
 
         $create = $this->getSimpleVariantData();
         $create['articleId'] = $article->getId();
@@ -508,9 +523,9 @@ class Shopware_Tests_Components_Api_VariantTest extends Shopware_Tests_Component
                 }
             }
 
-            $this->assertCount(6, $media->getThumbnails());
+            $this->assertCount(4, $media->getThumbnails());
             foreach ($media->getThumbnails() as $thumbnail) {
-                $this->assertFileExists(Shopware()->OldPath() . $thumbnail);
+                $this->assertTrue($mediaService->has(Shopware()->OldPath() . $thumbnail));
             }
 
             $this->assertCount(1, $image->getMappings(), "No image mapping created!");
@@ -691,5 +706,50 @@ class Shopware_Tests_Components_Api_VariantTest extends Shopware_Tests_Component
 
         $this->assertCount(5, $article['details']);
         $this->assertEquals(398, round($article['mainDetail']['prices'][0]['price']));
+    }
+
+
+    public function testNewConfiguratorOptionForVariant()
+    {
+        $data = $this->getSimpleArticleData();
+        $data['mainDetail'] = $this->getSimpleVariantData();
+        $configuratorSet = $this->getSimpleConfiguratorSet(1, 2);
+        $data['configuratorSet'] = $configuratorSet;
+
+        $article = $this->resourceArticle->create($data);
+
+        // Create 5 new variants
+        $batchData = array();
+        $names = array();
+        for ($i = 0; $i < 5; $i++) {
+            $create = $this->getSimpleVariantData();
+            $create['articleId'] = $article->getId();
+
+            $options = $this->getVariantOptionsOfSet($configuratorSet);
+
+            unset($options[0]['optionId']);
+            $name = 'New-' . uniqid();
+            $names[] = $name;
+            $options[0]['option'] = $name;
+            $create['configuratorOptions'] = $options;
+
+            $batchData[] = $create;
+        }
+
+        // Run batch operations
+        $result = $this->resource->batch($batchData);
+
+        $this->resource->setResultMode(\Shopware\Components\Api\Resource\Resource::HYDRATE_ARRAY);
+        foreach($result as $operation) {
+            $this->assertTrue($operation['success']);
+
+            $variant = $this->resource->getOne($operation['data']['id']);
+
+            $this->assertCount(1, $variant['configuratorOptions']);
+
+            $option = $variant['configuratorOptions'][0];
+
+            $this->assertContains($option['name'], $names);
+        }
     }
 }

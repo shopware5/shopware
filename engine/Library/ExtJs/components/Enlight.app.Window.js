@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -19,14 +19,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    ExtJS
- * @subpackage Window
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Stephan Pohl
- * @author     $Author$
  */
 
 /**
@@ -49,6 +41,9 @@ Ext.define('Enlight.app.Window', {
     border: false,
     minimized: false,
     focusable: true,
+
+    closePopupTitle: 'Close module',
+    closePopupMessage: 'This will close all windows of the "__MODULE__" module. Do you want to continue?',
 
     /**
      * Property which indicates that the window should first just set to hidden before destroying it.
@@ -105,6 +100,12 @@ Ext.define('Enlight.app.Window', {
      * @boolean
      */
     isSubWindow: false,
+
+    /**
+     * Whether or not the initial window position should be centered in the current desktop.
+     * @boolean
+     */
+    centerOnStart: true,
 
     /**
      * Provides the window management functionality for
@@ -202,14 +203,19 @@ Ext.define('Enlight.app.Window', {
             return true;
         }
 
-        Ext.Msg.confirm('Modul schließen', 'Sollen alle Unterfenster vom "' + me.title + '"-Modul geschlossen werden?', function (button) {
-            if (button == 'yes') {
-                me.closeSubWindows(subWindows, windowManager);
-                me.destroy();
-            }
-        });
 
-        // Prevent the event to continue to the the fact that we're triggering the destroying programmically...
+        Ext.Msg.confirm(
+            me.closePopupTitle,
+            me.closePopupMessage.replace('__MODULE__', me.title),
+            function (button) {
+                if (button == 'yes') {
+                    me.closeSubWindows(subWindows, windowManager);
+                    me.destroy();
+                }
+            }
+        );
+
+        // Prevent the event to continue to the the fact that we're triggering the destroying programatically...
         return false;
     },
 
@@ -265,8 +271,11 @@ Ext.define('Enlight.app.Window', {
         }
 
         me.callParent(arguments);
+
+        if(me.centerOnStart) {
+            me.center();
+        }
         me.isWindowOnFront = true;
-        me.center();
 	},
 
     /**
@@ -294,7 +303,22 @@ Ext.define('Enlight.app.Window', {
             elDom = el.dom;
 
             // Setting the style with vanilla js to prevent issues with the Ext.ZIndexManager
-            el.dom.style.zIndex = "999999";
+            elDom.style.zIndex = "999999";
+        }
+    },
+
+    /**
+     * Sets the title of the header.
+     *
+     * @param { String } title - The title to be set
+     */
+    setTitle: function(title) {
+        var me = this;
+
+        me.callParent(arguments);
+
+        if(me.footerButton && me._toolbarBtn) {
+            me._toolbarBtn.setText(title);
         }
     },
 
@@ -366,7 +390,6 @@ Ext.define('Enlight.app.Window', {
             me.hiddenLayer = viewport.getHiddenLayer();
             me.hiddenLayer.setStyle('z-index', '9999999');
             me.hiddenLayer.appendTo(Ext.getBody());
-
         }
         Ext.each(activeWindows, function(window) {
             if(window != me) {
@@ -389,7 +412,6 @@ Ext.define('Enlight.app.Window', {
             }
         });
 
-        Ext.WindowManager.bringToFront(me);
         if(viewport) {
             viewport.jumpTo(me.desktopPosition, true);
             me.hiddenLayer.setStyle('z-index', null);
@@ -410,8 +432,13 @@ Ext.define('Enlight.app.Window', {
      */
     onMouseDown: function() {
         var me = this,
-            subApp = me.subApplication || me.subApp,
-            windowManager = subApp.windowManager;
+            subApp = me.subApplication || me.subApp;
+
+        if (!subApp) {
+            return;
+        }
+
+        var windowManager = subApp.windowManager;
 
         // We need a try & catch here to prevent errors if the will be activated and
         // destroyed immediately after that.
@@ -429,9 +456,8 @@ Ext.define('Enlight.app.Window', {
             container = parent ? parent.getTargetEl() : me.container,
             size = container.getViewSize(false);
 
-        size.height = size.height - 20;
         me.setSize(size);
-        me.setPosition.apply(me, [0, 0]);
+        me.setPosition(0, 0);
     },
 
     maximize: function() {
@@ -449,7 +475,6 @@ Ext.define('Enlight.app.Window', {
             }
             me.maximized = true;
             me.el.disableShadow();
-
 
             if (me.dd) {
                 me.dd.disable();
