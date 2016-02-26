@@ -760,7 +760,7 @@ class Variant extends Resource implements BatchInterface
 
         $options = new ArrayCollection();
 
-        foreach ($data['configuratorOptions'] as $optionKey => $optionData) {
+        foreach ($data['configuratorOptions'] as $optionData) {
             $availableGroup = $this->getAvailableGroup($availableGroups, [
                 'id' => $optionData['groupId'],
                 'name' => $optionData['group']
@@ -776,28 +776,6 @@ class Variant extends Resource implements BatchInterface
                 'id'   => $optionData['optionId'],
                 'name' => $optionData['option']
             ]);
-            if (
-                $availableGroup &&
-                isset($optionData['group']) &&
-                $optionData['group'] !== null &&
-                $optionData['group'] != $availableGroup->getName() &&
-                strtolower($optionData['group']) == strtolower($availableGroup->getName())
-            ){
-                // manipulate api input (base array) if option was found case insensitive
-                $data['configuratorOptions'][$optionKey]['group'] = $availableGroup->getName();
-            }
-            if (
-                $option &&
-                isset($optionData['option']) &&
-                $optionData['option'] !== null &&
-                $optionData['option'] != $option->getName() &&
-                strtolower($optionData['option']) == strtolower($option->getName())
-            ){
-                // manipulate api input if option was found case insensitive
-                $optionData['option'] = $option->getName();
-                // manipulate api input (base array) if option was found case insensitive
-                $data['configuratorOptions'][$optionKey]['option'] = $optionData['option'];
-            }
 
             if (!$option) {
                 if (!$optionData['option']) {
