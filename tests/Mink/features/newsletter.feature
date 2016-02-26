@@ -8,7 +8,7 @@ Feature: Newsletter
         And   I should see "Vielen Dank. Wir haben Ihre Adresse eingetragen."
 
         When  I unsubscribe the newsletter
-        Then  I should see "Ihre eMail-Adresse wurde gelöscht"
+        Then  I should see "Ihre E-Mail-Adresse wurde gelöscht"
 
     Scenario: I can subscribe to the newsletter with additional data
         Given I am on the page "Newsletter"
@@ -23,7 +23,7 @@ Feature: Newsletter
         Then  I should see "Vielen Dank. Wir haben Ihre Adresse eingetragen."
 
         When  I unsubscribe the newsletter
-        Then  I should see "Ihre eMail-Adresse wurde gelöscht"
+        Then  I should see "Ihre E-Mail-Adresse wurde gelöscht"
 
     @javascript @account
     Scenario: I can subscribe and unsubscribe from newsletter in my account
@@ -34,6 +34,6 @@ Feature: Newsletter
         And   the checkbox "newsletter" should be checked
 
         When  I uncheck "newsletter"
-        Then  I should see "Ihre eMail-Adresse wurde gelöscht"
+        Then  I should see "Ihre E-Mail-Adresse wurde gelöscht"
         And   the checkbox "newsletter" should be unchecked
         And   I log me out
