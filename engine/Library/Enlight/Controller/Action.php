@@ -22,6 +22,7 @@
 
 use Shopware\Components\DependencyInjection\Container;
 use Shopware\Components\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\Form\Form;
 
 /**
  * Basic class for each Enlight controller action.
@@ -371,6 +372,20 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
     public function getModelManager()
     {
         return $this->container->get('Models');
+    }
+
+    /**
+     * Creates and returns a Form instance from the type of the form.
+     *
+     * @param string $type    The fully qualified class name of the form type
+     * @param mixed  $data    The initial data for the form
+     * @param array  $options Options for the form
+     *
+     * @return Form
+     */
+    protected function createForm($type, $data = null, array $options = array())
+    {
+        return $this->container->get('shopware.form.factory')->create($type, $data, $options);
     }
 
     /**

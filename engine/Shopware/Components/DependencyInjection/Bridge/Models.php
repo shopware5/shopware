@@ -28,6 +28,7 @@ use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\EventManager;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
+use Doctrine\ORM\ORMException;
 use Shopware\Components\Model\Configuration;
 use Shopware\Components\Model\LazyFetchModelEntity;
 use Shopware\Components\Model\ModelManager;
@@ -47,13 +48,12 @@ class Models
     /**
      * Creates the entity manager for the application.
      *
-     * @param EventManager      $eventManager
-     * @param Configuration     $config
-     * @param \Enlight_Loader   $loader
-     * @param \Pdo              $db
-     * @param string            $kernelRootDir
-     * @param AnnotationDriver  $modelAnnotation
-     *
+     * @param EventManager $eventManager
+     * @param Configuration $config
+     * @param \Enlight_Loader $loader
+     * @param \Pdo $db
+     * @param string $kernelRootDir
+     * @param AnnotationDriver $modelAnnotation
      * @return ModelManager
      */
     public function factory(
