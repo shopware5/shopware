@@ -312,17 +312,19 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
 
     public function resetCart()
     {
+        $originalPath = $this->path;
+
         try {
             $elements = Helper::findElements($this, ['articleDeleteButtons']);
-            $originalPath = $this->path;
 
             foreach ($elements as $element) {
                 $this->path = $element->getAttribute('href');
                 $this->open();
             }
-
-            $this->path = $originalPath;
         } catch (\Exception $ex) {
         }
+
+        $this->path = $originalPath;
+        $this->open();
     }
 }
