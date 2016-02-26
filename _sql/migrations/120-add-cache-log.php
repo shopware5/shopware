@@ -1,7 +1,7 @@
 <?php
 class Migrations_Migration120 Extends Shopware\Components\Migrations\AbstractMigration
 {
-    public function up()
+    public function up($modus)
     {
         $sql = <<<'EOD'
 CREATE TABLE IF NOT EXISTS `s_cache_log` (

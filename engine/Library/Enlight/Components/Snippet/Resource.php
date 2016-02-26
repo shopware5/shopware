@@ -36,18 +36,25 @@ require_once 'Smarty/Smarty.class.php';
 class Enlight_Components_Snippet_Resource extends Smarty_Internal_Resource_Extends
 {
     /**
-     * @var     Enlight_Components_Snippet_Manager Snippet manager which has to be set in the constructor
+     * @var Enlight_Components_Snippet_Manager Snippet manager which has to be set in the constructor
      */
-    protected $snippets;
+    protected $snippetManager;
+
+    /**
+     * @var bool The config options provided in the global config.php file
+     */
+    protected $showSnippetPlaceholder;
 
     /**
      * Class constructor, sets snippet manager
      *
-     * @param   Enlight_Components_Snippet_Manager $snippets
+     * @param Enlight_Components_Snippet_Manager $snippetManager
+     * @param bool $showSnippetPlaceholder
      */
-    public function __construct(Enlight_Components_Snippet_Manager $snippets)
+    public function __construct(Enlight_Components_Snippet_Manager $snippetManager, $showSnippetPlaceholder = false)
     {
-        $this->snippets = $snippets;
+        $this->snippetManager = $snippetManager;
+        $this->showSnippetPlaceholder = $showSnippetPlaceholder;
     }
 
     /**
@@ -83,10 +90,6 @@ class Enlight_Components_Snippet_Resource extends Smarty_Internal_Resource_Exten
             return '';
         }
 
-        if (empty($content) && !empty($params['name'])) {
-            $content = '#' . $params['name'] . '#';
-        }
-
         if (!empty($params['tag']) && !empty($params['namespace'])) {
             if (!empty($params['class'])) {
                 $params['class'] .= ' ' . str_replace('/', '_', $params['namespace']);
@@ -96,14 +99,7 @@ class Enlight_Components_Snippet_Resource extends Smarty_Internal_Resource_Exten
         }
 
         if (!empty($params['tag'])) {
-
             $params['tag'] = strtolower($params['tag']);
-
-            //if (!empty($params['class'])) {
-            //    $params['class'] .= ' shopware_studio_snippet';
-            //} else {
-            //    $params['class'] = 'shopware_studio_snippet';
-            //}
 
             $attr = '';
             foreach ($params as $key => $param) {
@@ -139,7 +135,7 @@ class Enlight_Components_Snippet_Resource extends Smarty_Internal_Resource_Exten
     public function compileSnippetModifier($content, $name = null, $namespace = null, $force = false)
     {
         if (is_string($namespace)) {
-            $namespace = $this->snippets->getNamespace($namespace);
+            $namespace = $this->snippetManager->getNamespace($namespace);
         } elseif (!$namespace instanceof Enlight_Config) {
             return $content;
         }
@@ -169,7 +165,7 @@ class Enlight_Components_Snippet_Resource extends Smarty_Internal_Resource_Exten
             /** @var $content Smarty_Template_Source */
             $_component->content = $this->getSnippetContent($_component);
         }
-        $this->snippets->write();
+        $this->snippetManager->write();
         return parent::getContent($source);
     }
 
@@ -222,7 +218,11 @@ class Enlight_Components_Snippet_Resource extends Smarty_Internal_Resource_Exten
             $_rdl = $source->smarty->right_delimiter;
             $_ldl = $source->smarty->left_delimiter;
 
-            $_block_content = "{$_ldl}snippet$_block_args{$_rdl}{$_block_content}{$_ldl}/snippet{$_rdl}";
+            if (empty($_block_content) && !empty($_block_name) && $this->showSnippetPlaceholder) {
+                $_block_content = '#' . $_block_name . '#';
+            } else {
+                $_block_content = "{$_ldl}snippet$_block_args{$_rdl}{$_block_content}{$_ldl}/snippet{$_rdl}";
+            }
 
             $source->content = substr_replace($source->content, $_block_content, $_block_start, $_block_length);
         }
@@ -242,7 +242,7 @@ class Enlight_Components_Snippet_Resource extends Smarty_Internal_Resource_Exten
      */
     protected function getSnippet($namespace, $name, $default, $force = false)
     {
-        $snippet = $this->snippets->getNamespace($namespace);
+        $snippet = $this->snippetManager->getNamespace($namespace);
         $content = $snippet->get($name);
         if ($content === null || $force) {
             $snippet->set($name, $default);

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,8 +23,9 @@
  */
 
 namespace   Shopware\Models\Mail;
-use         Shopware\Components\Model\ModelEntity,
-            Doctrine\ORM\Mapping AS ORM;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Shopware mail model represents a single mail
@@ -56,8 +57,6 @@ class Mail extends ModelEntity
     const MAILTYPE_STATE  = 3;
 
     /**
-     *
-     *
      * @var integer $id
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
@@ -116,6 +115,13 @@ class Mail extends ModelEntity
      * @ORM\Column(name="ishtml", type="boolean", nullable=false)
      */
     private $isHtml = false;
+
+    /**
+     * @var boolean $dirty
+     *
+     * @ORM\Column(name="dirty", type="boolean", nullable=true)
+     */
+    private $dirty = false;
 
     /**
      * Defines the mailtype
@@ -556,4 +562,19 @@ class Mail extends ModelEntity
         return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\Mail', 'attribute', 'mail');
     }
 
+    /**
+     * @return boolean
+     */
+    public function isDirty()
+    {
+        return $this->dirty;
+    }
+
+    /**
+     * @param boolean $dirty
+     */
+    public function setDirty($dirty)
+    {
+        $this->dirty = $dirty;
+    }
 }

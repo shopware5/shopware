@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -103,6 +103,17 @@ class Shopware extends Enlight_Application
     public function Container()
     {
         return $this->container;
+    }
+
+    /**
+     * Returns the system configuration
+     *
+     * @deprecated sSystem is deprecated
+     * @return sSystem
+     */
+    public function System()
+    {
+        return $this->Bootstrap()->getResource('System');
     }
 
     /**
@@ -213,6 +224,26 @@ class Shopware extends Enlight_Application
     public function Plugins()
     {
         return $this->_bootstrap->getResource('plugin_manager');
+    }
+
+    /**
+     * Returns the instance of the snippet manager
+     *
+     * @return Shopware_Components_Snippet_Manager
+     */
+    public function Snippets()
+    {
+        return $this->_bootstrap->getResource('snippets');
+    }
+
+    /**
+     * Returns the instance of the password manager
+     *
+     * @return \Shopware\Components\Password\Manager
+     */
+    public function PasswordEncoder()
+    {
+        return $this->_bootstrap->getResource('PasswordEncoder');
     }
 
     /**

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -34,9 +34,7 @@ class Shopware_Tests_Controllers_Frontend_SitemapXmlTest extends Enlight_Compone
      */
     public function testIndex()
     {
-        ob_start();
         $this->dispatch('/SitemapXml');
-        $content = ob_get_clean();
 
         $this->assertEquals(200, $this->Response()->getHttpResponseCode());
     }
@@ -48,10 +46,12 @@ class Shopware_Tests_Controllers_Frontend_SitemapXmlTest extends Enlight_Compone
      */
     public function testCount()
     {
-        ob_start();
-        $this->dispatch('/SitemapXml');
-        $content = ob_get_clean();
+        $response = $this->dispatch('/SitemapXml');
+        $content = $response->getBody();
 
-        $this->assertSelectCount('url', array('>=' => 40), $content);
+        $crawler = new Symfony\Component\DomCrawler\Crawler($content);
+        $crawler =  $crawler->filter('url');
+
+        $this->assertGreaterThanOrEqual(40, count($crawler));
     }
 }

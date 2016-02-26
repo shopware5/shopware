@@ -1,7 +1,7 @@
 <?php
 class Migrations_Migration213 Extends Shopware\Components\Migrations\AbstractMigration
 {
-    public function up()
+    public function up($modus)
     {
         $sql = <<<'EOD'
         UPDATE `s_core_plugins`

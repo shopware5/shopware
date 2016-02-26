@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -31,6 +31,9 @@ namespace Shopware\Components\Migrations;
  */
 abstract class AbstractMigration
 {
+    const MODUS_UPDATE = 'update';
+    const MODUS_INSTALL = 'install';
+
     /**
      * @var \PDO
      */
@@ -100,9 +103,10 @@ abstract class AbstractMigration
     }
 
     /**
+     * @param string $modus
      * @return void
      */
-    abstract public function up();
+    abstract public function up($modus);
 
     /**
      * @param string $sql

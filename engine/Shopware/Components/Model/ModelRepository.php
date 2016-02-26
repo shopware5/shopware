@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -25,7 +25,6 @@
 namespace Shopware\Components\Model;
 
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Query\Expr;
 
 /**
@@ -46,15 +45,17 @@ use Doctrine\ORM\Query\Expr;
 class ModelRepository extends EntityRepository
 {
     /**
-     * Create a new QueryBuilder instance that is pre populated for this entity name
+     * Creates a new QueryBuilder instance that is prepopulated for this entity name.
      *
-     * @param   string $alias
-     * @return \Doctrine\ORM\QueryBuilder
-     * @return  \Doctrine\ORM\QueryBuilder
+     * @param string $alias
+     * @param string $indexBy The index for the from.
+     *
+     * @return QueryBuilder
      */
-    public function createQueryBuilder($alias)
+    public function createQueryBuilder($alias, $indexBy = null)
     {
-        $builder = parent::createQueryBuilder($alias);
+        /** @var QueryBuilder $builder */
+        $builder = parent::createQueryBuilder($alias, $indexBy = null);
         $builder->setAlias($alias);
 
         return $builder;

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -148,7 +148,6 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
         }
 
         throw new Exception("New line detection failed");
-
     }
 
     public function SetFieldmark($fieldmark)
@@ -258,7 +257,7 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
             $this->_current = false;
             return;
         }
-        $line = explode($this->_delimiter,$line);
+        $line = explode($this->_delimiter, $line);
         if (empty($count)) {
             $this->_current = $line;
             return;
@@ -272,7 +271,7 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
                 $row .= ";";
                 continue;
             } elseif ($count) {
-                $this->_current[] = str_replace($this->_fieldmark.$this->_fieldmark,$this->_fieldmark,substr($row,1,-1));
+                $this->_current[] = str_replace($this->_fieldmark.$this->_fieldmark, $this->_fieldmark, substr($row, 1, -1));
             } else {
                 $this->_current[] = $row;
             }

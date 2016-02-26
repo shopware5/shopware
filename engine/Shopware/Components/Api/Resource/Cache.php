@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -37,12 +37,12 @@ use Shopware\Components\DependencyInjection\ContainerAwareInterface;
  *
  * @category  Shopware
  * @package   Shopware\Components\Api\Resource
- * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Cache extends Resource implements ContainerAwareInterface
 {
     /**
-     * @var \Enlight_Controller_Request_RequestHttp
+     * @var \Enlight_Controller_Request_Request
      */
     private $request;
 
@@ -52,7 +52,7 @@ class Cache extends Resource implements ContainerAwareInterface
     private $cacheManager;
 
     /**
-     * @return \Enlight_Controller_Request_RequestHttp
+     * @return \Enlight_Controller_Request_Request
      */
     protected function getRequest()
     {
@@ -101,7 +101,6 @@ class Cache extends Resource implements ContainerAwareInterface
             $this->getCacheInfo('http'),
             $this->getCacheInfo('template'),
             $this->getCacheInfo('proxy'),
-            $this->getCacheInfo('doctrine-file'),
             $this->getCacheInfo('doctrine-proxy')
         );
 
@@ -222,9 +221,6 @@ class Cache extends Resource implements ContainerAwareInterface
                 break;
             case 'doctrine-proxy':
                 $cacheInfo = $this->cacheManager->getDoctrineProxyCacheInfo();
-                break;
-            case 'doctrine-file':
-                $cacheInfo = $this->cacheManager->getDoctrineFileCacheInfo();
                 break;
             default:
                 throw new ApiException\NotFoundException("Cache {$cache} is not a valid cache id.");

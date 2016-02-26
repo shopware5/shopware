@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,13 +23,14 @@
  */
 
 namespace Shopware\Models\Tracking;
+
 use Shopware\Components\Model\ModelRepository;
+
 /**
  * Shopware Tracking Model
  */
 class Repository extends ModelRepository
 {
-
     /**
      * Returns an Banner Statistic Model.Either a new one or an existing one. If no date given
      * the current date will be used.
@@ -47,8 +48,7 @@ class Repository extends ModelRepository
 
         // If no Entry for this day exists - create a new one
         if (! $bannerStatistics) {
-
-            $bannerStatistics = new \Shopware\Models\Tracking\Banner($bannerId,$date);
+            $bannerStatistics = new \Shopware\Models\Tracking\Banner($bannerId, $date);
 
             $bannerStatistics->setClicks(0);
             $bannerStatistics->setViews(0);
@@ -62,14 +62,15 @@ class Repository extends ModelRepository
      * @param $articleId
      * @param $shopId
      * @param null $date
+     * @param null $deviceType
      * @return \Doctrine\ORM\Query
      */
-    public function getArticleImpressionQuery($articleId, $shopId, $date = null)
+    public function getArticleImpressionQuery($articleId, $shopId, $date = null, $deviceType = null)
     {
         if ($date == null) {
             $date = new \DateTime();
         }
-        $builder = $this->getArticleImpressionQueryBuilder($articleId, $shopId, $date);
+        $builder = $this->getArticleImpressionQueryBuilder($articleId, $shopId, $date, $deviceType);
         return $builder->getQuery();
     }
 
@@ -80,10 +81,10 @@ class Repository extends ModelRepository
      * @param $articleId
      * @param $shopId
      * @param $date
+     * @param $deviceType
      * @return \Doctrine\ORM\QueryBuilder
-     *
      */
-    public function getArticleImpressionQueryBuilder($articleId, $shopId, $date)
+    public function getArticleImpressionQueryBuilder($articleId, $shopId, $date, $deviceType = null)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select('articleImpression')
@@ -91,9 +92,17 @@ class Repository extends ModelRepository
                 ->where('articleImpression.articleId = :articleId')
                 ->andWhere('articleImpression.shopId = :shopId')
                 ->andWhere('articleImpression.date = :fromDate')
-                ->setParameters(array('articleId' => $articleId, 'shopId' => $shopId, 'fromDate' => $date->format("Y-m-d")));
+                ->setParameters(array(
+                    'articleId' => $articleId,
+                    'shopId' => $shopId,
+                    'fromDate' => $date->format("Y-m-d")
+            ));
+
+        if ($deviceType) {
+            $builder->andWhere('articleImpression.deviceType = :deviceType')
+                ->setParameter('deviceType', $deviceType);
+        }
 
         return $builder;
     }
-
 }

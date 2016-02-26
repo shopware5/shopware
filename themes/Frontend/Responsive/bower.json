@@ -1,0 +1,61 @@
+{
+  "name": "SwagResponsiveTheme",
+  "version": "1.0.0",
+  "authors": [
+    "shopware AG"
+  ],
+  "description": "A responsive theme for Shopware",
+  "keywords": [
+    "bare",
+    "theme",
+    "shopware"
+  ],
+  "license": "MIT",
+  "homepage": "http://shopware.com",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "frontend/_public/vendors",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "normalize-less": "*",
+    "jquery": "2.1.1",
+    "picturefill": "2.2.0",
+    "open-sans-fontface": "1.0.4",
+    "jquery.event.swipe": "0.5.2",
+    "jquery.event.move": "1.3.6",
+    "jquery.transit": "0.9.12",
+    "masonry": "3.1.5"
+  },
+    "exportsOverride": {
+        "jquery.event.move": {
+            "js": [ "js/jquery.event.move.js", "README.md" ]
+        },
+        "jquery.event.swipe": {
+            "js": [ "js/jquery.event.swipe.js", "README.md" ]
+        },
+        "jquery.transit": {
+            "js": [ "jquery.transit.js", "README.md" ]
+        },
+        "jquery": {
+            "js": [ "dist/jquery.min.js", "MIT-LICENSE.txt" ]
+        },
+        "masonry": {
+            "js": [ "dist/masonry.pkgd.min.js", "README.mdown" ]
+        },
+        "normalize-less": {
+            "less": ["normalize.less", "README.md"]
+        },
+        "picturefill": {
+            "js": [ "dist/picturefill.js", "README.md" ]
+        },
+        "open-sans-fontface": {
+            "less": [ "open-sans.less", "README.md" ],
+            "fonts": "fonts/"
+        }
+    }
+}

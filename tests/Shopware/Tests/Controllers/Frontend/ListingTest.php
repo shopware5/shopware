@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -29,80 +29,32 @@
  */
 class Shopware_Tests_Controllers_Frontend_ListingTest extends Enlight_Components_Test_Controller_TestCase
 {
-
-    protected $category;
-
-    public function testCategoryDetailLink()
-    {
-        $default = Shopware()->Config()->categoryDetailLink;
-        Shopware()->Config()->categoryDetailLink = true;
-
-        $this->removeDemoData();
-        $this->insertDemoData();
-
-        $this->Request()
-            ->setMethod('POST');
-
-        $this->dispatch('/cat/index/sCategory/80');
-        $this->assertTrue($this->Response()->isRedirect());
-
-        $this->removeDemoData();
-        Shopware()->Config()->categoryDetailLink = $default;
-    }
-
-
     /**
-     * Helper function to initial the test case
-     * demo data.
+     * @group functional
+     * @ticket SW-4611
      */
-    protected function insertDemoData()
+    public function testListingRss()
     {
-        $category = array(
-            'parent' => '3',
-            'path' => '|3|',
-            'description' => 'ListingTest',
-            'active' => '1'
-        );
-        Shopware()->Db()->insert('s_categories', $category);
-
-        $this->category = $this->getDemoCategory();
-
-        $categoryArticles = array(
-            array('articleID' => '3','categoryID' => '3','parentCategoryID' => $this->category['id']),
-            array('articleID' => '3','categoryID' => $this->category['id'],'parentCategoryID' => $this->category['id'])
-        );
-
-        foreach($categoryArticles as $article) {
-            Shopware()->Db()->insert('s_articles_categories_ro', $article);
+        $this->dispatch('/listing?sCategory=5&sRss=1');
+        if (!preg_match('#<atom:link href="([^"]+)"#msi', $this->Response()->getBody(), $match)) {
+            $this->fail();
         }
-
-        Shopware()->Db()->insert('s_articles_categories', array('articleID' => '3','categoryID' => $this->category['id']));
-    }
-
-
-    /**
-     * Helper function to clean up the test case demo data.
-     */
-    protected function removeDemoData()
-    {
-        $category = $this->getDemoCategory();
-
-        $sql = "DELETE FROM s_categories WHERE description = 'ListingTest'";
-        Shopware()->Db()->query($sql);
-
-        if (!empty($category)) {
-            $sql = "DELETE FROM s_articles_categories_ro WHERE parentCategoryID = ?";
-            Shopware()->Db()->query($sql, array($category['id']));
-        }
+        $this->assertNotContains('sCoreId', $match[1]);
+        $this->assertLinkExists($match[1]);
     }
 
     /**
-     * Helper function to get the test case demo category.
-     * @return array
+     * Test the home redirect if the base category called directly
+     * The request should return a 301 redirection to the base homepage.
+     *
+     * @ticket SW-11418
      */
-    protected function getDemoCategory()
+    public function testHomeRedirect()
     {
-        return Shopware()->Db()->fetchRow("SELECT * FROM s_categories WHERE description = 'ListingTest' LIMIT 1");
-    }
+        $mainCategory = Shopware()->Shop()->getCategory()->getId();
+        
+        $this->dispatch('/cat/index/sCategory/' . $mainCategory);
 
+        $this->assertEquals(301, $this->Response()->getHttpResponseCode());
+    }
 }

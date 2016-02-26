@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,14 +23,14 @@
  */
 
 namespace Shopware\Models\Shop;
-use Doctrine\ORM\AbstractQuery;
-use Shopware\Components\Model\ModelRepository;
 
-/**
- */
+use Doctrine\ORM\AbstractQuery;
+use Doctrine\ORM\Query;
+use Shopware\Components\Model\ModelRepository;
+use Shopware\Components\Model\QueryBuilder;
+
 class Repository extends ModelRepository
 {
-
     /**
      * Returns a builder-object in order to get all locales
      *
@@ -38,7 +38,7 @@ class Repository extends ModelRepository
      * @param null $order
      * @param null $offset
      * @param null $limit
-     * @return \Doctrine\ORM\Query
+     * @return Query
      */
     public function getLocalesListQuery($filter = null, $order = null, $offset = null, $limit = null)
     {
@@ -56,7 +56,7 @@ class Repository extends ModelRepository
      *
      * @param null $filter
      * @param null $order
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getLocalesListQueryBuilder($filter = null, $order = null)
     {
@@ -79,11 +79,11 @@ class Repository extends ModelRepository
     /**
      * Returns a builder-object in order to get all shops
      *
-     * @param null $filter
-     * @param null $order
-     * @param null $offset
-     * @param null $limit
-     * @return \Doctrine\ORM\Query
+     * @param array $filter
+     * @param array $order
+     * @param int $offset
+     * @param int $limit
+     * @return Query
      */
     public function getBaseListQuery($filter = null, $order = null, $offset = null, $limit = null)
     {
@@ -96,12 +96,45 @@ class Repository extends ModelRepository
     }
 
     /**
+     * Returns a query object for all shops with themes.
+     *
+     * @param array $filter
+     * @param array $order
+     * @param int $offset
+     * @param int $limit
+     * @return Query
+     */
+    public function getShopsWithThemes($filter = null, $order = null, $offset = null, $limit = null)
+    {
+        $builder = $this->createQueryBuilder('shop');
+
+        $builder->select(array('shop', 'template'))
+            ->innerJoin('shop.template', 'template')
+            ->where('template.version >= 3')
+            ->andWhere('shop.main IS NULL')
+            ->andWhere('shop.active = 1');
+
+        if ($filter) {
+            $builder->addFilter($filter);
+        }
+        if ($order !== null) {
+            $builder->addOrderBy($order);
+        }
+        if ($limit !== null) {
+            $builder->setFirstResult($offset)
+                ->setMaxResults($limit);
+        }
+
+        return $builder->getQuery();
+    }
+
+    /**
      * Helper method to create the query builder for the "getBaseListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param null $filter
-     * @param null $order
-     * @return \Doctrine\ORM\QueryBuilder
+     * @param array $filter
+     * @param array $order
+     * @return QueryBuilder
      */
     public function getBaseListQueryBuilder($filter = null, $order = null)
     {
@@ -132,7 +165,6 @@ class Repository extends ModelRepository
         return $builder;
     }
 
-
     /**
      * Returns the \Doctrine\ORM\Query to select all categories for example for the backend tree
      *
@@ -140,7 +172,7 @@ class Repository extends ModelRepository
      * @param array $orderBy
      * @param null $limit
      * @param null $offset
-     * @return \Doctrine\ORM\Query
+     * @return Query
      */
     public function getListQuery(array $filterBy, array $orderBy, $limit = null, $offset = null)
     {
@@ -156,7 +188,7 @@ class Repository extends ModelRepository
      * @param   array $orderBy
      * @param   null $limit
      * @param   null $offset
-     * @return  \Shopware\Components\Model\QueryBuilder
+     * @return  QueryBuilder
      */
     public function getListQueryBuilder(array $filterBy, array $orderBy, $limit = null, $offset = null)
     {
@@ -190,7 +222,7 @@ class Repository extends ModelRepository
     /**
      * Helper function to create the query builder for the "getShopsQuery" function.
      * This function can be hooked to modify the query builder of the query object.
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getMainListQueryBuilder()
     {
@@ -203,7 +235,7 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of \Doctrine\ORM\Query object which selects a list of
      * sub shops. Used for the shop combo box on the article detail page in the article backend module.
-     * @return \Doctrine\ORM\Query
+     * @return Query
      */
     public function getMainListQuery()
     {
@@ -212,35 +244,41 @@ class Repository extends ModelRepository
     }
 
     /**
-     * @return \Shopware\Components\Model\QueryBuilder
+     * @return QueryBuilder
      */
     public function getActiveQueryBuilder()
     {
-        /** @var $builder \Shopware\Components\Model\QueryBuilder */
+        /** @var $builder QueryBuilder */
         $baseBuilder = $this->createQueryBuilder('shop')
             ->leftJoin('shop.main', 'main')
             ->leftJoin('shop.locale', 'locale')
             ->leftJoin('shop.currency', 'currency')
             ->leftJoin('shop.template', 'template')
+            ->leftJoin('shop.documentTemplate', 'documentTemplate')
             ->leftJoin('shop.currencies', 'currencies')
-            ->leftJoin('shop.pages', 'pages')
             ->leftJoin('shop.customerGroup', 'customerGroup')
             ->leftJoin('main.template', 'mainTemplate')
             ->leftJoin('main.currencies', 'mainCurrencies')
             ->select(array(
-                'shop', 'main',
-                'locale', 'currency',
-                'template', 'currencies'
+                'shop',
+                'main',
+                'locale',
+                'currency',
+                'template',
+                'currencies',
+                'documentTemplate',
+                'customerGroup'
             ))
             ->where('shop.active = 1')
             ->orderBy('shop.main')
             ->addOrderBy('shop.position');
+
         return $baseBuilder;
     }
 
     /**
-     * @param $id
-     * @return \Shopware\Models\Shop\Shop
+     * @param int $id
+     * @return DetachedShop
      */
     public function getActiveById($id)
     {
@@ -250,7 +288,7 @@ class Repository extends ModelRepository
         $shop = $builder->getQuery()->getOneOrNullResult();
 
         if ($shop !== null) {
-            $this->fixActive($shop);
+            $shop = $this->fixActive($shop);
         }
 
         return $shop;
@@ -259,7 +297,7 @@ class Repository extends ModelRepository
     /**
      * Returns the default shop with additional data
      *
-     * @return \Shopware\Models\Shop\Shop
+     * @return DetachedShop
      */
     public function getActiveDefault()
     {
@@ -268,7 +306,7 @@ class Repository extends ModelRepository
         $shop = $builder->getQuery()->getOneOrNullResult();
 
         if ($shop !== null) {
-            $this->fixActive($shop);
+            $shop = $this->fixActive($shop);
         }
 
         return $shop;
@@ -277,7 +315,7 @@ class Repository extends ModelRepository
     /**
      * Returns only the default shop model
      *
-     * @return \Shopware\Models\Shop\Shop
+     * @return Shop
      */
     public function getDefault()
     {
@@ -291,7 +329,8 @@ class Repository extends ModelRepository
     /**
      * Returns the active shops
      *
-     * @return mixed
+     * @param int $hydrationMode
+     * @return array
      */
     public function getActiveShops($hydrationMode = AbstractQuery::HYDRATE_OBJECT)
     {
@@ -303,17 +342,16 @@ class Repository extends ModelRepository
     }
 
     /**
-     * @param \Enlight_Controller_Request_RequestHttp $request
-     * @return \Shopware\Models\Shop\Shop
+     * @param \Enlight_Controller_Request_Request $request
+     * @return DetachedShop
      */
     public function getActiveByRequest($request)
     {
-        /** @var $shop \Shopware\Models\Shop\Shop */
-        $shop = null;
         $host = $request->getHttpHost();
         if (empty($host)) {
-            return $shop;
+            return null;
         }
+
         $requestPath = $request->getRequestUri();
 
         $builder = $this->getActiveQueryBuilder();
@@ -323,11 +361,11 @@ class Repository extends ModelRepository
         }
         $builder->setParameter('host', $host);
 
-        /** @var $shops \Shopware\Models\Shop\Shop[] */
+        /** @var $shops Shop[] */
         $shops = $builder->getQuery()->getResult();
 
-        foreach ($shops as $currentShop) {
-            $this->fixActive($currentShop);
+        foreach ($shops as $key => $currentShop) {
+            $shops[$key] = $this->fixActive($currentShop);
         }
 
         //returns the right shop depending on the url
@@ -346,32 +384,35 @@ class Repository extends ModelRepository
         $shop = $builder->getQuery()->getOneOrNullResult();
 
         if ($shop !== null) {
-            $this->fixActive($shop);
+            $shop = $this->fixActive($shop);
         }
 
         return $shop;
     }
 
     /**
-     * @param \Shopware\Models\Shop\Shop $shop
+     * @param Shop $shop
+     * @return DetachedShop
      */
-    protected function fixActive($shop)
+    protected function fixActive(Shop $shop)
     {
-        $this->getEntityManager()->detach($shop);
+        $shop = DetachedShop::createFromShop($shop);
+
         $main = $shop->getMain();
         if ($main !== null) {
-            $this->getEntityManager()->detach($main);
+            $main = DetachedShop::createFromShop($main);
             $shop->setHost($main->getHost());
             $shop->setSecure($main->getSecure());
+            $shop->setAlwaysSecure($main->getAlwaysSecure());
             $shop->setSecureHost($main->getSecureHost());
             $shop->setSecureBasePath($main->getSecureBasePath());
             $shop->setBasePath($shop->getBasePath() ?: $main->getBasePath());
-            $shop->setBaseUrl($shop->getBaseUrl() ?: $main->getBaseUrl());
             $shop->setTemplate($main->getTemplate());
             $shop->setCurrencies($main->getCurrencies());
             $shop->setChildren($main->getChildren());
             $shop->setCustomerScope($main->getCustomerScope());
         }
+
         $shop->setBaseUrl($shop->getBaseUrl() ?: $shop->getBasePath());
         if ($shop->getSecure()) {
             $shop->setSecureHost($shop->getSecureHost()?: $shop->getHost());
@@ -386,14 +427,16 @@ class Repository extends ModelRepository
             }
             $shop->setSecureBaseUrl($baseUrl);
         }
+
+        return DetachedShop::createFromShop($shop);
     }
 
     /**
      * returns the right shop depending on the request object
      *
-     * @param \Shopware\Models\Shop\Shop[] $shops
+     * @param Shop[] $shops
      * @param string $requestPath
-     * @return null|\Shopware\Models\Shop\Shop $shop
+     * @return null|Shop $shop
      */
     protected function getShopByRequest($shops, $requestPath)
     {
@@ -433,6 +476,19 @@ class Repository extends ModelRepository
                 if (!$shop || $currentShop->getSecureBaseUrl() > $shop->getSecureBaseUrl()) {
                     $shop = $currentShop;
                 }
+            } elseif (!$shop && $currentShop->getBasePath() . '/' == $requestPath) {
+                /*
+                 * If no shop was found, use the one which basePath equals the requestPath
+                 *
+                 * This is mainly for shops with virtual aliases, which are requested on the baseBath instead
+                 * of the virtual alias.
+                 *
+                 * f.e. basePath: www.subshop1.com      virtual alias: /subshop1
+                 *      if you navigate to www.subshop1.com you would have been redirected
+                 *      to the main shop on www.mainshop.com. Now you get to your subshop.
+                 *
+                 */
+                $shop = $currentShop;
             }
         }
 

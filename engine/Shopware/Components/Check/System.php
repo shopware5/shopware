@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -75,22 +75,21 @@ class Shopware_Components_Check_System implements IteratorAggregate, Countable
      */
     protected function check($name)
     {
-        $m = 'check'.str_replace(' ', '', ucwords(str_replace(array('_','.'), ' ', $name)));
+        $m = 'check'.str_replace(' ', '', ucwords(str_replace(array('_', '.'), ' ', $name)));
         if (method_exists($this, $m)) {
             return $this->$m();
         } elseif (extension_loaded($name)) {
             return true;
         } elseif (function_exists($name)) {
             return true;
-        } elseif (($value = ini_get($name))!==null) {
-            if (strtolower($value)=='off' || $value==0) {
+        } elseif (($value = ini_get($name)) !== null) {
+            if (strtolower($value) == 'off' || (is_numeric($value) && $value == 0)) {
                 return false;
-            } elseif (strtolower($value)=='on' || $value==1) {
+            } elseif (strtolower($value) == 'on' || (is_numeric($value) && $value == 1)) {
                 return true;
             } else {
                 return $value;
             }
-            return (!empty($value)&&strtolower($value)!='off');
         } else {
             return null;
         }
@@ -123,7 +122,7 @@ class Shopware_Components_Check_System implements IteratorAggregate, Countable
      */
     protected function compare($name, $version, $required)
     {
-        $m = 'compare'.str_replace(' ', '', ucwords(str_replace(array('_','.'), ' ', $name)));
+        $m = 'compare'.str_replace(' ', '', ucwords(str_replace(array('_', '.'), ' ', $name)));
         if (method_exists($this, $m)) {
             return $this->$m($version, $required);
         } elseif (preg_match('#^[0-9]+[A-Z]$#', $required)) {
@@ -148,26 +147,6 @@ class Shopware_Components_Check_System implements IteratorAggregate, Countable
     }
 
     /**
-     * Checks the zend optimizer
-     *
-     * @return bool|string
-     */
-    public function checkZendOptimizer()
-    {
-        if (!extension_loaded('Zend Optimizer')) {
-            return false;
-        }
-        ob_start();
-        phpinfo(1);
-        $s = ob_get_contents();
-        ob_end_clean();
-        if (preg_match('/Zend&nbsp;Optimizer&nbsp;v([0-9.]+)/',$s,$match)) {
-            return $match[1];
-        }
-        return false;
-    }
-
-    /**
      * Checks the ion cube loader
      *
      * @return bool|string
@@ -177,14 +156,12 @@ class Shopware_Components_Check_System implements IteratorAggregate, Countable
         if (!extension_loaded('ionCube Loader')) {
             return false;
         }
-        ob_start();
-        phpinfo(1);
-        $s = ob_get_contents();
-        ob_end_clean();
-        if (preg_match('/ionCube&nbsp;PHP&nbsp;Loader&nbsp;v([0-9.]+)/',$s,$match)) {
-            return $match[1];
+
+        if (!function_exists('ioncube_loader_version')) {
+            return false;
         }
-        return false;
+
+        return ioncube_loader_version();
     }
 
     /**
@@ -275,7 +252,7 @@ class Shopware_Components_Check_System implements IteratorAggregate, Countable
         if (function_exists('gd_info')) {
             $gd = gd_info();
             if (preg_match('#[0-9.]+#', $gd['GD Version'], $match)) {
-                if (substr_count($match[0],'.')==1) {
+                if (substr_count($match[0], '.')==1) {
                     $match[0] .='.0';
                 }
                 return $match[0];
@@ -332,21 +309,6 @@ class Shopware_Components_Check_System implements IteratorAggregate, Countable
         }
     }
 
-    /**
-     * Checks the magic quotes config
-     *
-     * @return bool|string
-     */
-    public function checkMagicQuotes()
-    {
-        if (function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc()) {
-            return true;
-        } elseif (function_exists('get_magic_quotes_runtime') && get_magic_quotes_runtime()) {
-            return true;
-        } else {
-            return false;
-        }
-    }
     /**
      * Checks the disk free space
      *
@@ -422,7 +384,7 @@ class Shopware_Components_Check_System implements IteratorAggregate, Countable
     public static function decodeSize($val)
     {
         $val = trim($val);
-        list($val, $last) = explode(' ',$val);
+        list($val, $last) = explode(' ', $val);
         $val = (float) $val;
         switch (strtoupper($last)) {
             case 'TB':
@@ -448,8 +410,8 @@ class Shopware_Components_Check_System implements IteratorAggregate, Countable
     public static function encodeSize($bytes)
     {
         $types = array( 'B', 'KB', 'MB', 'GB', 'TB' );
-        for( $i = 0; $bytes >= 1024 && $i < ( count( $types ) -1 ); $bytes /= 1024, $i++ );
-        return( round( $bytes, 2 ) . ' ' . $types[$i] );
+        for ($i = 0; $bytes >= 1024 && $i < (count($types) -1); $bytes /= 1024, $i++);
+        return(round($bytes, 2) . ' ' . $types[$i]);
     }
 
     /**

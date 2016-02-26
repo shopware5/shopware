@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -33,7 +33,7 @@ use Symfony\Component\Finder\Finder;
 /**
  * @category  Shopware
  * @package   Shopware\Command
- * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class SnippetsFindMissingCommand extends ShopwareCommand
 {
@@ -56,6 +56,13 @@ class SnippetsFindMissingCommand extends ShopwareCommand
                 InputOption::VALUE_REQUIRED,
                 'The folder where the exported files should be placed. Defaults to snippetsExport',
                 'snippetsExport'
+            )
+            ->addOption(
+                'fallback',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'If a locale is provided, it will be used to fill in the values for the snippets. Ideal to export missing snippets directly for translation. Defaults to null, which exports empty snippets',
+                null
             )
         ;
     }
@@ -94,9 +101,28 @@ class SnippetsFindMissingCommand extends ShopwareCommand
                 )
             )
             ->setParameter('snippets', array_map(function ($item) {return $item['hash'];}, $localeSnippets))
-            ->execute()
         ;
-        $snippets = $statement->fetchAll();
+        
+        if ($input->getOption('fallback')) {
+            $targetLocale = $this->container->get('models')->getRepository('Shopware\Models\Shop\Locale')->findOneByLocale($input->getOption('fallback'));
+            if (!$targetLocale) {
+                $output->writeln('<error>Provided fallback locale not found</error>');
+                return;
+            }
+            
+            $statement
+                ->addSelect('fallback_values.value AS value')
+                ->leftJoin(
+                    's',
+                    's_core_snippets',
+                    'fallback_values',
+                    '(s.name = fallback_values.name AND s.namespace = fallback_values.namespace AND fallback_values.localeID = :targetLocale)'
+                )
+                ->setParameter('targetLocale', $targetLocale->getId())
+            ;
+        }
+
+        $snippets = $statement->execute()->fetchAll();
 
         $output->writeln('<info></info>');
         $output->writeln('<info>'.count($snippets).' missing snippets detected</info>');
@@ -118,7 +144,7 @@ class SnippetsFindMissingCommand extends ShopwareCommand
             }
             $content = $data[$snippet['namespace']];
 
-            $content->set($snippet['name'], '');
+            $content->set($snippet['name'], isset($snippet['value']) ? $snippet['value'] : '');
         }
         $output->writeln('<info>'.count($data).' namespaces written</info>');
 

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,7 +23,8 @@
  */
 
 namespace   Shopware\Models\Emotion\Library;
-use         Shopware\Components\Model\ModelRepository;
+
+use Shopware\Components\Model\ModelRepository;
 
 /**
  * Repository for the \Shopware\Models\Emotion\Library\Component model.
@@ -39,5 +40,4 @@ use         Shopware\Components\Model\ModelRepository;
  */
 class Repository extends ModelRepository
 {
-
 }

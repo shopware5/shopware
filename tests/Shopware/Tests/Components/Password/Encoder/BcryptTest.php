@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -27,7 +27,7 @@
  * @package   Shopware\Tests
  * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
  */
-class Shopware_Tests_Components_Hash_HasherBcryptTest extends Enlight_Components_Test_TestCase
+class Shopware_Tests_Components_Hash_HasherBcryptTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var \Shopware\Components\Password\Encoder\Bcrypt
@@ -52,7 +52,6 @@ class Shopware_Tests_Components_Hash_HasherBcryptTest extends Enlight_Components
                 'Brypt Hasher is not compatible with current system.'
             );
         }
-
     }
 
     /**
@@ -135,11 +134,11 @@ class Shopware_Tests_Components_Hash_HasherBcryptTest extends Enlight_Components
      */
     public function testIfSaltIsGivenHashIsKnown()
     {
-        $expectedHash = '$2y$04$T3l1YWl1Ri5CY3c3bU5DYOiIKqbbPpdcIiqpnkLoRwJkELw/uCaUO';
+        $expectedHash = '$2y$04$usesomesillystringfore0pFChtAErThomfG2Hq4BYOHbY1fhRUq';
 
         $this->hasher = new \Shopware\Components\Password\Encoder\Bcrypt(array(
-            'cost' => 4,
-            'salt' => 'OyuaiuF.Bcw7mNCak/3Au7c=',
+            'cost' => 04,
+            'salt' => 'usesomesillystringforsalt',
         ));
 
         $hash = $this->hasher->encodePassword('foobar');

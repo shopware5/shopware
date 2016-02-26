@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -312,17 +312,6 @@ class ModelEntityTest extends \PHPUnit_Framework_TestCase
         );
 
         $article->fromArray($data);
-    }
-
-    public function testFromArrayWithFalseDoesNothing()
-    {
-        $article = new Article();
-
-        $articleBefore = serialize($article);
-
-        $article->fromArray(false);
-
-        $this->assertEquals($articleBefore, serialize($article));
     }
 
     public function testCanAssignOneToMany()

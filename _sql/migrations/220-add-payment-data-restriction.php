@@ -1,11 +1,11 @@
 <?php
 class Migrations_Migration220 Extends Shopware\Components\Migrations\AbstractMigration
 {
-    public function up()
+    public function up($modus)
     {
         // The intermediate table t is needed to avoid a MySql error
         // see http://stackoverflow.com/questions/5816840/delete-i-cant-specify-target-table
-        
+
         $sql = <<<'EOD'
         DELETE FROM s_core_payment_data WHERE id IN ( SELECT * FROM (
         SELECT s_core_payment_data.payment_mean_id

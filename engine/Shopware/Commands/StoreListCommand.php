@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -24,7 +24,8 @@
 
 namespace Shopware\Commands;
 
-use CommunityStore;
+use Shopware\Bundle\PluginInstallerBundle\Context\LicenceRequest;
+use Shopware\Bundle\PluginInstallerBundle\Struct\LicenceStruct;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -58,43 +59,41 @@ class StoreListCommand extends StoreCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->setupShopwareVersion($input);
+        $version = $this->setupShopwareVersion($input);
+        $token   = $this->setupAuth($input, $output);
+        $domain  = $this->setupDomain($input, $output);
 
-        $auth   = $this->setupAuth($input, $output);
-        $domain = $this->setupDomain($input, $output, $auth);
-
-        /** @var \CommunityStore $store */
-        $store = $this->container->get('CommunityStore');
-
-        $resultSet = $store->getAccountService()->getLicencedProducts(
-            $auth,
+        $context = new LicenceRequest(
+            null,
+            $version,
             $domain,
-            $store->getNumericShopwareVersion()
+            $token
         );
 
-        $products = array();
+        try {
+            $licences = $this->container->get('shopware_plugininstaller.plugin_service_store_production')
+                ->getLicences($context);
+        } catch (\Exception $e) {
+            $this->handleError([
+                'message' => $e->getMessage()
+            ]);
+            return;
+        }
 
-        /** @var $product \Shopware_StoreApi_Models_Licence */
-        foreach ($resultSet as $product) {
-            $data = $product->getRawData();
-
-            $payed = (int) $data['payed'];
-            if ($payed === 1) {
-                if (empty($data['downloads'])) {
-                    continue;
-                }
-
-                $products[] = array(
-                    'id'          => $data['id'],
-                    'ordernumber' => $data['ordernumber'],
-                    'plugin'      => $data['plugin'],
-                );
-            }
+        /**@var $licence LicenceStruct*/
+        foreach ($licences as $licence) {
+            $result[] = [
+                'technicalName' => $licence->getTechnicalName(),
+                'label'         => $licence->getLabel(),
+                'domain'        => $licence->getShop(),
+                'createDate'    => $licence->getCreationDate()->format('Y-m-d'),
+                'type'          => $licence->getPriceModel()->getType()
+            ];
         }
 
         $table = $this->getHelperSet()->get('table');
-        $table->setHeaders(array('id', 'OrderNumber', 'Name'))
-              ->setRows($products);
+        $table->setHeaders(array('Technical name', 'Description', 'domain', 'Creation date', 'Type'))
+              ->setRows($result);
 
         $table->render($output);
     }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,8 +23,11 @@
  */
 
 namespace Shopware\Models\Shop;
-use Shopware\Components\Model\ModelEntity,
-    Doctrine\ORM\Mapping as ORM;
+
+use Doctrine\Common\Collections\ArrayCollection;
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
+use Shopware\Models\Shop\TemplateConfig\Set;
 
 /**
  * Template Model Entity
@@ -125,6 +128,71 @@ class Template extends ModelEntity
      * @ORM\JoinColumn(name="plugin_id", referencedColumnName="id")
      */
     private $plugin;
+
+    /**
+     * @var integer $parentId
+     * @ORM\Column(name="parent_id", type="integer", nullable=true)
+     */
+    private $parentId = null;
+
+    /**
+     * @var \Shopware\Models\Shop\Template
+     * @ORM\ManyToOne(targetEntity="\Shopware\Models\Shop\Template")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
+     */
+    protected $parent = null;
+
+    /**
+     * @var ArrayCollection $shops
+     * @ORM\OneToMany(
+     *      targetEntity="Shopware\Models\Shop\Shop",
+     *      mappedBy="template"
+     * )
+     */
+    protected $shops;
+
+    /**
+     * @var $config ArrayCollection
+     * @ORM\OneToMany(
+     *      targetEntity="Shopware\Models\Shop\TemplateConfig\Element",
+     *      mappedBy="template",
+     *      orphanRemoval=true,
+     *      cascade={"persist"}
+     * )
+     */
+    protected $elements;
+
+    /**
+     * @var $config ArrayCollection
+     * @ORM\OneToMany(
+     *      targetEntity="Shopware\Models\Shop\TemplateConfig\Layout",
+     *      mappedBy="template",
+     *      orphanRemoval=true,
+     *      cascade={"persist"}
+     * )
+     */
+    protected $layouts;
+
+    /**
+     * @var $configSets ArrayCollection
+     * @ORM\OneToMany(
+     *      targetEntity="Shopware\Models\Shop\TemplateConfig\Set",
+     *      mappedBy="template",
+     *      orphanRemoval=true,
+     *      cascade={"persist"}
+     * )
+     */
+    protected $configSets;
+
+
+    public function __construct()
+    {
+        $this->shops = new ArrayCollection();
+        $this->elements = new ArrayCollection();
+        $this->layouts = new ArrayCollection();
+        $this->configSets = new ArrayCollection();
+    }
+
 
     /**
      * Get id
@@ -237,7 +305,7 @@ class Template extends ModelEntity
      */
     public function setEsi($esi)
     {
-        $this->esi = (bool) $esi;
+        $this->esi = (bool)$esi;
         return $this;
     }
 
@@ -255,7 +323,7 @@ class Template extends ModelEntity
      */
     public function setEmotion($emotion)
     {
-        $this->emotion = (bool) $emotion;
+        $this->emotion = (bool)$emotion;
         return $this;
     }
 
@@ -274,7 +342,7 @@ class Template extends ModelEntity
      */
     public function setStyle($style)
     {
-        $this->style = (bool) $style;
+        $this->style = (bool)$style;
 
         return $this;
     }
@@ -327,5 +395,95 @@ class Template extends ModelEntity
     public function toString()
     {
         return $this->getTemplate();
+    }
+
+    /**
+     * @param \Shopware\Models\Shop\Template $parent
+     */
+    public function setParent(Template $parent = null)
+    {
+        $this->parent = $parent;
+    }
+
+    /**
+     * @return \Shopware\Models\Shop\Template
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    /**
+     * @param mixed $elements
+     */
+    public function setElements($elements)
+    {
+        $this->setOneToMany(
+            $elements,
+            '\Shopware\Models\Shop\TemplateConfig\Element',
+            'elements',
+            'template'
+        );
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getElements()
+    {
+        return $this->elements;
+    }
+
+    /**
+     * @param ArrayCollection $shops
+     */
+    public function setShops($shops)
+    {
+        $this->shops = $shops;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getShops()
+    {
+        return $this->shops;
+    }
+
+    /**
+     * @param \Doctrine\Common\Collections\ArrayCollection $layouts
+     */
+    public function setLayouts($layouts)
+    {
+        $this->setOneToMany(
+            $layouts,
+            '\Shopware\Models\Shop\TemplateConfig\Layout',
+            'layouts',
+            'template'
+        );
+    }
+
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getLayouts()
+    {
+        return $this->layouts;
+    }
+
+    /**
+     * @return Set[]
+     */
+    public function getConfigSets()
+    {
+        return $this->configSets;
+    }
+
+    /**
+     * @param Set[] $configSets
+     */
+    public function setConfigSets($configSets)
+    {
+        $this->configSets = $configSets;
     }
 }

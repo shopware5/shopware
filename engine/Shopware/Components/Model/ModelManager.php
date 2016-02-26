@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -24,6 +24,7 @@
 
 namespace Shopware\Components\Model;
 
+use Doctrine\DBAL\Query\QueryBuilder as DBALQueryBuilder;
 use Shopware\Components\Model\Query\SqlWalker;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;
@@ -31,7 +32,6 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Query\QueryBuilder as DBALQueryBuilder;
 use Doctrine\Common\Util\Inflector;
 use Doctrine\Common\EventManager;
 use Symfony\Component\Translation\Translator;
@@ -221,7 +221,7 @@ class ModelManager extends EntityManager
     {
         $pagination = $this->createPaginator($query);
 
-        return $pagination->count($query);
+        return $pagination->count();
     }
 
     /**
@@ -283,12 +283,7 @@ class ModelManager extends EntityManager
      */
     public function generateAttributeModels($tableNames = array())
     {
-        /** @var $generator \Shopware\Components\Model\Generator*/
-        $generator = new \Shopware\Components\Model\Generator();
-
-        $generator->setPath($this->getConfiguration()->getAttributeDir());
-        $generator->setModelPath(Shopware()->AppPath('Models'));
-        $generator->setSchemaManager($this->getConnection()->getSchemaManager());
+        $generator = $this->createModelGenerator();
         $generator->generateAttributeModels($tableNames);
 
         $this->regenerateAttributeProxies($tableNames);
@@ -505,5 +500,19 @@ class ModelManager extends EntityManager
     public function enableDebugMode()
     {
         $this->debugMode = true;
+    }
+
+    /**
+     * @return Generator
+     */
+    public function createModelGenerator()
+    {
+        $generator = new Generator(
+            $this->getConnection()->getSchemaManager(),
+            $this->getConfiguration()->getAttributeDir(),
+            Shopware()->AppPath('Models')
+        );
+
+        return $generator;
     }
 }

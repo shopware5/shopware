@@ -61,7 +61,6 @@ abstract class Enlight_Plugin_Bootstrap extends Enlight_Class
      */
     public function afterInit()
     {
-
     }
 
     /**

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -22,6 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Bundle\SearchBundleDBAL\SearchTerm\SearchIndexerInterface;
+
 /**
  * @category  Shopware
  * @package   Shopware\Plugins\RebuildIndex\Controllers\Backend
@@ -31,6 +33,7 @@ class Shopware_Controllers_Backend_SearchIndex extends Shopware_Controllers_Back
 {
     /**
      * Helper function to get the new seo index component with auto completion
+     *
      * @return Shopware_Components_SeoIndex
      */
     public function SearchIndex()
@@ -45,13 +48,9 @@ class Shopware_Controllers_Backend_SearchIndex extends Shopware_Controllers_Back
     {
         @set_time_limit(1200);
 
-        $adapter = new Shopware_Components_Search_Adapter_Default(
-            Shopware()->Db(),
-            Shopware()->Cache(),
-            new Shopware_Components_Search_Result_Default(),
-            Shopware()->Config()
-        );
-        $adapter->buildSearchIndex();
+        /* @var $indexer SearchIndexerInterface */
+        $indexer = $this->get('shopware_searchdbal.search_indexer');
+        $indexer->build();
 
         $this->View()->assign(array('success' => true));
     }

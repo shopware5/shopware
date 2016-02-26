@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -76,8 +76,7 @@ class Shopware_Controllers_Frontend_Tellafriend extends Enlight_Controller_Actio
                 $variables["sError"] = true;
             }
 
-            $validator = new Zend_Validate_EmailAddress();
-
+            $validator = $this->container->get('validator.email');
             if (!$validator->isValid($this->Request()->getPost("sRecipient"))) {
                 $variables["sError"] = true;
             }
@@ -117,7 +116,6 @@ class Shopware_Controllers_Frontend_Tellafriend extends Enlight_Controller_Actio
                 $this->View()->sSuccess = true;
                 $url = $this->Front()->Router()->assemble(array('controller' => 'tellafriend', 'action' => 'success'));
                 $this->redirect($url);
-
             } else {
                 $this->View()->sError = true;
                 $this->View()->sName = $this->Request()->getPost("sName");

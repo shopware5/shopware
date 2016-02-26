@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -106,7 +106,7 @@ class Customer extends Resource
                 ->select('customer', 'attribute', 'billing', 'billingAttribute', 'shipping', 'shippingAttribute', 'debit', 'paymentData')
                 ->leftJoin('customer.attribute', 'attribute')
                 ->leftJoin('customer.billing', 'billing')
-                ->leftJoin('customer.paymentData', 'paymentData', \Doctrine\ORM\Query\Expr\Join::WITH, 'paymentData.paymentMean = customer.paymentId' )
+                ->leftJoin('customer.paymentData', 'paymentData', \Doctrine\ORM\Query\Expr\Join::WITH, 'paymentData.paymentMean = customer.paymentId')
                 ->leftJoin('billing.attribute', 'billingAttribute')
                 ->leftJoin('customer.shipping', 'shipping')
                 ->leftJoin('shipping.attribute', 'shippingAttribute')
@@ -350,6 +350,33 @@ class Customer extends Resource
     protected function prepareAssociatedData($data, CustomerModel $customer)
     {
         $data = $this->prepareCustomerPaymentData($data, $customer);
+        $data = $this->prepareCustomerAddressData($data);
+
+        return $data;
+    }
+
+    /**
+     * Legacy support
+     * Merges streetNumber into street in billing and shipping addresses
+     * If no street is provided, streetNumber is dropped
+     *
+     * @param array $data
+     * @return array
+     */
+    protected function prepareCustomerAddressData($data)
+    {
+        if (isset($data['billing']) && isset($data['billing']['streetNumber'])) {
+            if (isset($data['billing']['street'])) {
+                $data['billing']['street'] .= ' '.$data['billing']['streetNumber'];
+            }
+            unset($data['billing']['streetNumber']);
+        }
+        if (isset($data['shipping']) && isset($data['shipping']['streetNumber'])) {
+            if (isset($data['shipping']['street'])) {
+                $data['shipping']['street'] .= ' '.$data['shipping']['streetNumber'];
+            }
+            unset($data['shipping']['streetNumber']);
+        }
 
         return $data;
     }

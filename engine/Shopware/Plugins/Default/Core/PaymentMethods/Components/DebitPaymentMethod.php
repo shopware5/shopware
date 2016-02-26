@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -39,32 +39,35 @@ class DebitPaymentMethod extends GenericPaymentMethod
     /**
      * @inheritdoc
      */
-    public function validate(\Enlight_Controller_Request_Request $request)
+    public function validate($paymentData)
     {
-        if (!$request->getParam("sDebitAccount")) {
-            $sErrorFlag["sDebitAccount"] = true;
-        }
-        if (!$request->getParam("sDebitBankcode")) {
-            $sErrorFlag["sDebitBankcode"] = true;
-        }
-        if (!$request->getParam("sDebitBankName")) {
-            $sErrorFlag["sDebitBankName"] = true;
-        }
-        $bankHolder = $request->getParam("sDebitBankHolder");
-        if (empty($bankHolder) && isset($bankHolder)) {
-            $sErrorFlag["sDebitBankHolder"] = true;
+        $sErrorFlag = array();
+        $fields = array(
+            'sDebitAccount',
+            'sDebitBankcode',
+            'sDebitBankName',
+            'sDebitBankHolder'
+        );
+
+        foreach ($fields as $field) {
+            $value = $paymentData[$field] ? : '';
+            $value = trim($value);
+
+            if (empty($value)) {
+                $sErrorFlag[$field] = true;
+            }
         }
 
         if (count($sErrorFlag)) {
             $sErrorMessages[] = Shopware()->Snippets()->getNamespace('frontend/account/internalMessages')
-                ->get('ErrorFillIn','Please fill in all red fields');
+                ->get('ErrorFillIn', 'Please fill in all red fields');
 
             return array(
                 "sErrorFlag" => $sErrorFlag,
                 "sErrorMessages" => $sErrorMessages
             );
         } else {
-            return true;
+            return array();
         }
     }
 
@@ -212,7 +215,7 @@ class DebitPaymentMethod extends GenericPaymentMethod
             'user_id' => $userId,
             'firstname' => $addressData['firstName'],
             'lastname' => $addressData['lastName'],
-            'address' => $addressData['street'] . ' ' . $addressData['streetNumber'],
+            'address' => $addressData['street'],
             'zipcode' => $addressData['zipCode'],
             'city' => $addressData['city'],
             'account_number' => $debitData['sDebitAccount'],

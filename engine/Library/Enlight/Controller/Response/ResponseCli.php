@@ -35,5 +35,4 @@ class Enlight_Controller_Response_ResponseCli
     extends Zend_Controller_Response_Cli
     implements Enlight_Controller_Response_Response
 {
-
 }

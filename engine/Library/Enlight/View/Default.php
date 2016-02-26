@@ -89,6 +89,7 @@ class Enlight_View_Default extends Enlight_View implements Enlight_View_Cache
      * Returns the instance of the Enlight_Template_Default which will be set by the setTemplate or loadTemplate
      * function.
      *
+     * @throws Enlight_Exception
      * @return  Enlight_Template_Default
      */
     public function Template()

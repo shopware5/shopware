@@ -1,0 +1,90 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="less_compiler" alias="oyejorge_compiler" />
+
+        <service id="oyejorge_compiler" class="Shopware\Components\Theme\LessCompiler\Oyejorge">
+            <argument type="service" id="oyejorge_compiler_lib" />
+        </service>
+        <service id="oyejorge_compiler_lib" class="Less_Parser" />
+
+        <service id="js_compressor" class="Shopware\Components\Theme\Compressor\Js" />
+
+        <service id="theme_service" class="Shopware\Components\Theme\Service">
+            <argument type="service" id="models" />
+            <argument type="service" id="snippets" />
+            <argument type="service" id="theme_util" />
+            <argument type="service" id="shopware_media.media_service" />
+        </service>
+
+        <service id="theme_config_loader" class="Shopware\Components\Theme\EventListener\ConfigLoader">
+            <argument type="service" id="service_container" />
+            <tag name="shopware.event_subscriber" />
+        </service>
+
+        <service id="theme_path_resolver" class="Shopware\Components\Theme\PathResolver">
+            <argument>%kernel.root_dir%</argument>
+            <argument type="service" id="template" />
+        </service>
+
+        <service id="theme_generator" class="Shopware\Components\Theme\Generator">
+            <argument type="service" id="theme_path_resolver" />
+            <argument type="service" id="file_system" />
+            <argument type="service" id="events" />
+        </service>
+
+        <service id="theme_config_persister" class="Shopware\Components\Form\Persister\Theme">
+            <argument type="service" id="models" />
+        </service>
+
+        <service id="theme_configurator" class="Shopware\Components\Theme\Configurator">
+            <argument type="service" id="models" />
+            <argument type="service" id="theme_util" />
+            <argument type="service" id="theme_config_persister" />
+            <argument type="service" id="events" />
+        </service>
+
+        <service id="theme_inheritance" class="Shopware\Components\Theme\Inheritance">
+            <argument type="service" id="models" />
+            <argument type="service" id="theme_util" />
+            <argument type="service" id="theme_path_resolver" />
+            <argument type="service" id="events" />
+            <argument type="service" id="shopware_media.media_service" />
+        </service>
+
+        <service id="theme_util" class="Shopware\Components\Theme\Util">
+            <argument type="service" id="models" />
+            <argument type="service" id="theme_path_resolver" />
+        </service>
+
+        <service id="theme_installer" class="Shopware\Components\Theme\Installer">
+            <argument type="service" id="models" />
+            <argument type="service" id="theme_configurator" />
+            <argument type="service" id="theme_path_resolver" />
+            <argument type="service" id="theme_util" />
+            <argument type="service" id="shopware.snippet_database_handler" />
+            <argument type="service" id="theme_service" />
+            <argument>%shopware.snippet%</argument>
+        </service>
+
+        <service id="theme_compiler" class="Shopware\Components\Theme\Compiler">
+            <argument>%kernel.root_dir%</argument>
+            <argument type="service" id="less_compiler" />
+            <argument type="service" id="theme_path_resolver" />
+            <argument type="service" id="theme_inheritance" />
+            <argument type="service" id="theme_service" />
+            <argument type="service" id="js_compressor" />
+            <argument type="service" id="events" />
+        </service>
+
+        <service id="theme_backend_registration" class="Shopware\Components\Theme\EventListener\BackendTheme">
+            <argument type="service" id="service_container" />
+            <tag name="shopware.event_listener" method="registerBackendTheme" event="Enlight_Controller_Front_RouteShutdown" />
+        </service>
+
+    </services>
+</container>

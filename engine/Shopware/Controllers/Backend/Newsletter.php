@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -65,6 +65,9 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
      */
     public function viewAction()
     {
+        //Fix header for the case calling this action from frontend, otherwise the referer check would crash
+        $this->Request()->setHeader('referer', '/backend/newsletter/view');
+
         if ($this->Request()->getParam('id')) {
             $mailingID = (int) $this->Request()->getParam('id');
             if (!Shopware()->Auth()->hasIdentity()) {
@@ -198,6 +201,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
         $from = $template->fetch('string:' . $mailing['sendermail'], $template);
         $fromName = $template->fetch('string:' . $mailing['sendername'], $template);
 
+        /** @var \Enlight_Components_Mail $mail */
         $mail = clone Shopware()->Mail();
         $mail->setFrom($from, $fromName);
 
@@ -235,10 +239,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
             $mail->setSubject($subject);
             $mail->clearRecipients();
             $mail->addTo($user['email']);
-            /**
-             * SW-44 Check if mail-address is valid
-             */
-            $validator = new Zend_Validate_EmailAddress();
+            $validator = $this->container->get('validator.email');
             if (!$validator->isValid($user['email'])) {
                 echo "Skipped invalid email\n";
                 // SW-4526
@@ -274,12 +275,53 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
     }
 
     /**
+     * Returns plugin bootstrap if plugin exits, is enabled, and active.
+     * Otherwise return null.
+     *
+     * @param string $pluginName
+     * @return Enlight_Plugin_Bootstrap|null
+     */
+    private function getPluginBootstrap($pluginName)
+    {
+        /** @var Shopware_Components_Plugin_Namespace $namespace */
+        $namespace = Shopware()->Plugins()->Core();
+        $pluginBootstrap = $namespace->get($pluginName);
+
+        if (!$pluginBootstrap instanceof Enlight_Plugin_Bootstrap) {
+            return null;
+        }
+
+        /**@var $plugin \Shopware\Models\Plugin\Plugin */
+        $plugin = Shopware()->Models()->find('\Shopware\Models\Plugin\Plugin', $pluginBootstrap->getId());
+        if (!$plugin) {
+            return null;
+        }
+
+        if (!$plugin->getActive() || !$plugin->getInstalled()) {
+            return null;
+        }
+
+        return $pluginBootstrap;
+    }
+
+    /**
      * Cron action method
      *
      * Sends the newsletter emails as a cronjob.
      */
     public function cronAction()
     {
+        /** @var Shopware_Plugins_Core_Cron_Bootstrap $cronBootstrap */
+        $cronBootstrap = $this->getPluginBootstrap('Cron');
+        if ($cronBootstrap && !$cronBootstrap->authorizeCronAction($this->Request())) {
+            $this->Response()
+                 ->clearHeaders()
+                 ->setHttpResponseCode(403)
+                 ->appendBody("Forbidden");
+
+            return;
+        }
+
         $this->Response()->setHeader('Content-Type', 'text/plain');
         $this->mailAction();
     }
@@ -319,10 +361,10 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
         }
 
         $this->Response()->setHeader('Content-Type', 'image/gif');
-        $bild = imagecreate (1, 1);
+        $bild = imagecreate(1, 1);
         $white = imagecolorallocate($bild, 255, 255, 255);
         imagefill($bild, 1, 1, $white);
-        imagegif ($bild);
+        imagegif($bild);
         imagedestroy($bild);
     }
 
@@ -330,8 +372,10 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
      * Init mailing method
      *
      * Initializes the mailing using the mailing id.
+     * @param int|null $mailingID
+     * @return array|null
      */
-    public function initMailing($mailingID=null)
+    public function initMailing($mailingID = null)
     {
         $mailing = $this->getMailing($mailingID);
         if (empty($mailing)) {
@@ -339,11 +383,13 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
         }
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
         $shop = $repository->getActiveById($mailing['languageID']);
-        $shop->registerResources(Shopware()->Bootstrap());
 
         $this->Request()
             ->setHttpHost($shop->getHost())
+            ->setBasePath($shop->getBasePath())
             ->setBaseUrl($shop->getBasePath());
+
+        $shop->registerResources(Shopware()->Bootstrap());
 
         Shopware()->Session()->sUserGroup = $mailing['customergroup'];
         $sql = 'SELECT * FROM s_core_customergroups WHERE groupkey=?';
@@ -396,9 +442,14 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
         if (!empty($id)) {
             $where = Shopware()->Db()->quoteInto('cm.id=?', $id);
         } else {
-            $where = 'cm.status=1';
+            $where = 'cm.status=1 ';
         }
-        $sql = 'SELECT cm.*, ct.path as template FROM s_campaigns_mailings cm, s_campaigns_templates ct WHERE ct.id=cm.templateID AND '.$where;
+        $sql = 'SELECT cm.*, ct.path as template
+        FROM s_campaigns_mailings cm, s_campaigns_templates ct
+        WHERE ct.id=cm.templateID
+        AND '.$where . '
+        AND (`timed_delivery` <= NOW()
+        OR `timed_delivery` IS NULL)';
 
         $mailing = Shopware()->Db()->fetchRow($sql);
         return $mailing;
@@ -476,7 +527,9 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
         $sql = 'SELECT groups, languageID FROM s_campaigns_mailings WHERE id=?';
         $mailing = Shopware()->Db()->fetchRow($sql, array($id));
 
-        if(empty($mailing)) return false;
+        if (empty($mailing)) {
+            return false;
+        }
 
         $mailing['groups'] = unserialize($mailing['groups']);
 
@@ -486,14 +539,13 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
         }
         $customerGroups = implode(' OR ', $customerGroups);
 
-
-        // The second element holds the selected *newsletter* groups for the current newletter
+        // The second element holds the selected *newsletter* groups for the current newsletter
         foreach ($mailing['groups'][1] as $customerGroupKey => $customerGroupValue) {
             $recipientGroups[] = Shopware()->Db()->quoteInto('sc.groupID=?', $customerGroupKey);
         }
         $recipientGroups = implode(' OR ', $recipientGroups);
 
-        // If no customer-/recipientgroup was selected, force the condition to be false
+        // If no customer/recipient group was selected, force the condition to be false
         if (empty($recipientGroups)) {
             $recipientGroups = '1=2';
         }
@@ -520,13 +572,11 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
             AND
             (
                 (
-                su.subshopID = ?
+                su.language = ?
                 AND ($customerGroups)
                 )
             OR
-                (
                 ($recipientGroups)
-                )
             )
             GROUP BY sc.email
         ";
@@ -567,7 +617,6 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
      */
     public function getMailingUserByEmail($email)
     {
-
         $select = '
             cm.email, cm.email as newsletter, cg.name as `group`,
             IFNULL(ub.salutation, nd.salutation) as salutation,
@@ -575,7 +624,6 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
             IFNULL(ub.firstname, nd.firstname) as firstname,
             IFNULL(ub.lastname, nd.lastname) as lastname,
             IFNULL(ub.street, nd.street) as street,
-            IFNULL(ub.streetnumber, nd.streetnumber) as streetnumber,
             IFNULL(ub.zipcode, nd.zipcode) as zipcode,
             IFNULL(ub.city, nd.city) as city,
             customer,
@@ -647,7 +695,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
      */
     public function outputFilter($source)
     {
-        $source = preg_replace('#(src|background)="([^:"./][^:"]+)"#Umsi','$1="../../campaigns/$2"', $source);
+        $source = preg_replace('#(src|background)="([^:"./][^:"]+)"#Umsi', '$1="../../campaigns/$2"', $source);
         $callback = array(Shopware()->Plugins()->Core()->PostFilter(),'rewriteSrc');
         $source = preg_replace_callback('#<(link|img|script|input|a|form|iframe|td)[^<>]*(href|src|action|background)="([^"]*)".*>#Umsi', $callback, $source);
         return $source;
@@ -662,8 +710,8 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
     public function altFilter($source)
     {
         $source = preg_replace('#<a.+href="(.*)".*>#Umsi', '$1', $source);
-        $source = str_replace(array('<br />', '</p>', '&nbsp;'), array("\n","\n", ' '), $source);
-        $source = trim(strip_tags(preg_replace('/<(head|title|style|script)[^>]*>.*?<\/\\1>/s','',$source)));
+        $source = str_replace(array('<br />', '</p>', '&nbsp;'), array("\n", "\n", ' '), $source);
+        $source = trim(strip_tags(preg_replace('/<(head|title|style|script)[^>]*>.*?<\/\\1>/s', '', $source)));
         $source = html_entity_decode($source);
         return $source;
     }

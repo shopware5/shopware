@@ -1,4 +1,3 @@
-	
 {* Delivery informations *}
 {block name='frontend_widgets_delivery_infos'}
 	<div class="delivery_container">
@@ -22,6 +21,11 @@
 	    <p class="deliverable1">
 	    	{se name="DetailDataInfoInstantDownload"}{/se}
 	    </p>
+	{elseif {config name="instockinfo"} && $sArticle.modus == 0 && $sArticle.instock > 0 && $sArticle.quantity > $sArticle.instock}
+		<div class="status3">&nbsp;</div>
+		<p class="deliverable2">
+			{s name="DetailDataInfoPartialStock"}{/s}
+		</p>
 	{elseif $sArticle.instock > 0}
 		<div class="status2">&nbsp;</div>
 	    <p class="deliverable1">

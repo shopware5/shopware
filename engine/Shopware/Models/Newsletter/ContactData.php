@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,8 +23,9 @@
  */
 
 namespace   Shopware\Models\Newsletter;
-use         Shopware\Components\Model\ModelEntity,
-            Doctrine\ORM\Mapping AS ORM;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Shopware Data model represents a non-customer shop visior contact data.
@@ -93,16 +94,9 @@ class ContactData extends ModelEntity
     /**
      * @var string $street
      *
-     * @ORM\Column(name="street", type="string", nullable=true)
+     * @ORM\Column(name="street", type="string", length=255, nullable=true)
      */
     protected $street;
-
-    /**
-     * @var string $streetNumber
-     *
-     * @ORM\Column(name="streetNumber", type="string", nullable=true)
-     */
-    protected $streetNumber;
 
     /**
      * @var string $zipCode
@@ -285,22 +279,6 @@ class ContactData extends ModelEntity
     }
 
     /**
-     * @param string $streetNumber
-     */
-    public function setStreetNumber($streetNumber)
-    {
-        $this->streetNumber = $streetNumber;
-    }
-
-    /**
-     * @return string
-     */
-    public function getStreetNumber()
-    {
-        return $this->streetNumber;
-    }
-
-    /**
      * @param string $title
      */
     public function setTitle($title)
@@ -331,6 +309,4 @@ class ContactData extends ModelEntity
     {
         return $this->zipCode;
     }
-
-
 }

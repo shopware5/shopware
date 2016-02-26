@@ -479,19 +479,14 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
      */
     public function dispatch(Enlight_Controller_Request_Request $request,
                              Enlight_Controller_Response_Response $response
-    )
-    {
+    ) {
         $this->setResponse($response);
 
         if (!$this->isDispatchable($request)) {
-            $controller = $request->getControllerName();
-            if (!$this->Front()->getParam('useDefaultControllerAlways') && !empty($controller)) {
-                throw new Enlight_Controller_Exception(
-                    'Controller "' . $controller . '" not found',
-                    Enlight_Controller_Exception::Controller_Dispatcher_Controller_Not_Found
-                );
-            }
-            $request->setControllerName($this->defaultController);
+            throw new Enlight_Controller_Exception(
+                'Controller "' . $request->getControllerName() . '" not found',
+                Enlight_Controller_Exception::Controller_Dispatcher_Controller_Not_Found
+            );
         }
 
         $class = $this->getControllerClass($request);

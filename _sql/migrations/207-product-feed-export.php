@@ -1,7 +1,7 @@
 <?php
 class Migrations_Migration207 Extends Shopware\Components\Migrations\AbstractMigration
 {
-    public function up()
+    public function up($modus)
     {
         /**
          * @author Tiago Garcia

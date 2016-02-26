@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -31,7 +31,6 @@ namespace Shopware\Components\Password\Encoder;
  */
 class LegacyBackendMd5 implements PasswordEncoderInterface
 {
-
     /**
      * @return string
      */
@@ -49,7 +48,7 @@ class LegacyBackendMd5 implements PasswordEncoderInterface
     {
         $salt = "A9ASD:_AD!_=%a8nx0asssblPlasS$";
 
-        return md5($salt . md5($password)) == $hash;
+        return hash_equals($hash, md5($salt . md5($password)));
     }
 
     /**

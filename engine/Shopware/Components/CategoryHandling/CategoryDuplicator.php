@@ -1,0 +1,200 @@
+<?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
+
+namespace Shopware\Components\CategoryHandling;
+
+use Shopware\Components\Model\CategoryDenormalization;
+
+class CategoryDuplicator
+{
+    /**
+     * @var \PDO
+     */
+    protected $connection;
+
+    /**
+     * @var CategoryDenormalization
+     */
+    protected $categoryDenormalization;
+
+    /**
+     * @param \PDO $connection
+     * @param CategoryDenormalization $categoryDenormalization
+     */
+    public function __construct(\PDO $connection, CategoryDenormalization $categoryDenormalization)
+    {
+        $this->connection = $connection;
+        $this->categoryDenormalization = $categoryDenormalization;
+    }
+
+    /**
+     * Duplicates the provided category into the provided parent category
+     *
+     * @param int $originalCategoryId
+     * @param int $parentId
+     * @param bool $copyArticleAssociations
+     * @return int
+     * @throws \RuntimeException
+     */
+    public function duplicateCategory($originalCategoryId, $parentId, $copyArticleAssociations)
+    {
+        $originalCategoryStmt = $this->connection
+            ->prepare('SELECT * FROM s_categories WHERE id = :id');
+        $originalCategoryStmt->execute([':id' => $originalCategoryId]);
+        $originalCategory = $originalCategoryStmt->fetch(\PDO::FETCH_ASSOC);
+
+        if (empty($originalCategory)) {
+            throw new \RuntimeException('Category ' . $originalCategoryId . ' not found');
+        }
+
+        $newPosStmt = $this->connection
+            ->prepare('SELECT MAX(`position`) FROM s_categories WHERE parent = :parent');
+        $newPosStmt->execute([':parent' => $parentId]);
+        $newPos = (int) $newPosStmt->fetchColumn(0);
+        $originalCategory['position'] = $newPos + 1;
+
+        $originalCategory['parent'] = $parentId;
+
+        unset($originalCategory['id']);
+        unset($originalCategory['path']);
+
+        $valuePlaceholders = array_fill(0, count($originalCategory), '?');
+        $insertStmt = $this->connection->prepare(
+            "INSERT INTO s_categories (`".implode(array_keys($originalCategory), "`, `")."`)
+            VALUES (".implode($valuePlaceholders, ", ").")"
+        );
+        $insertStmt->execute(array_values($originalCategory));
+        $newCategoryId = $this->connection->lastInsertId();
+
+        $this->rebuildPath($newCategoryId);
+
+        $this->duplicateCategoryAttributes($originalCategoryId, $newCategoryId);
+        $this->duplicateCategoryRestrictions($originalCategoryId, $newCategoryId);
+
+        if ($copyArticleAssociations) {
+            $this->duplicateCategoryArticleAssociations($originalCategoryId, $newCategoryId);
+        }
+
+        return $newCategoryId;
+    }
+
+    /**
+     * Duplicates the category restrictions from one category to another
+     *
+     * @param int $originalCategoryId
+     * @param int $newCategoryId
+     */
+    public function duplicateCategoryRestrictions($originalCategoryId, $newCategoryId)
+    {
+        $stmt = $this->connection->prepare(
+            'INSERT INTO s_categories_avoid_customergroups (`categoryID`, `customergroupID`)
+            SELECT :newCategoryID, `customergroupID`
+            FROM s_categories_avoid_customergroups WHERE categoryID = :categoryID'
+        );
+        $stmt->execute(
+            [
+                ':newCategoryID' => $newCategoryId,
+                ':categoryID' => $originalCategoryId
+            ]
+        );
+    }
+
+    /**
+     * Duplicates the category attributes from one category to another
+     *
+     * @param int $originalCategoryId
+     * @param int $newCategoryId
+     */
+    public function duplicateCategoryAttributes($originalCategoryId, $newCategoryId)
+    {
+        $stmt = $this->connection->prepare(
+            'INSERT INTO s_categories_attributes (`categoryID`, `attribute1`, `attribute2`, `attribute3`, `attribute4`, `attribute5`, `attribute6`)
+            SELECT :newCategoryID, `attribute1`, `attribute2`, `attribute3`, `attribute4`, `attribute5`, `attribute6`
+            FROM s_categories_attributes WHERE categoryID = :categoryID'
+        );
+        $stmt->execute(
+            [
+                ':newCategoryID' => $newCategoryId,
+                ':categoryID' => $originalCategoryId
+            ]
+        );
+    }
+
+    /**
+     * Duplicates the category article associations from one category to another
+     *
+     * @param int $originalCategoryId
+     * @param int $newCategoryId
+     */
+    public function duplicateCategoryArticleAssociations($originalCategoryId, $newCategoryId)
+    {
+        $assocArticlesStmt = $this->connection->prepare(
+            'SELECT articleID FROM s_articles_categories WHERE categoryID = :categoryID'
+        );
+        $assocArticlesStmt->execute([':categoryID' => $originalCategoryId]);
+        $articles = $assocArticlesStmt->fetchAll(\PDO::FETCH_COLUMN, 0);
+
+        if ($articles) {
+            $insertStmt = $this->connection->prepare(
+                "INSERT INTO s_articles_categories (categoryID, articleID)
+            VALUES (".$newCategoryId.", ".implode($articles, "), (".$newCategoryId.", ").")"
+            );
+            $insertStmt->execute();
+
+            foreach ($articles as $articleId) {
+                $this->categoryDenormalization->addAssignment($articleId, $newCategoryId);
+            }
+        }
+    }
+
+    /**
+     * Rebuilds the path for a single category
+     *
+     * @param int $categoryId
+     * @param String $categoryPath
+     * @return int
+     */
+    public function rebuildPath($categoryId, $categoryPath = null)
+    {
+        $updateStmt = $this->connection->prepare('UPDATE s_categories set path = :path WHERE id = :categoryId');
+
+        $parents = $this->categoryDenormalization->getParentCategoryIds($categoryId);
+        array_shift($parents);
+
+        if (empty($parents)) {
+            $path = null;
+        } else {
+            $path = implode('|', $parents);
+            $path = '|'.$path.'|';
+        }
+
+        if ($categoryPath != $path) {
+            $updateStmt->execute(array(':path' => $path, ':categoryId' => $categoryId));
+
+            return 1;
+        }
+
+        return 0;
+    }
+}

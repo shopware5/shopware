@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2014 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -34,10 +34,10 @@ class Shopware_Tests_Models_Customer_BillingTest extends Enlight_Components_Test
         $billing = $this->getRandomBilling();
 
         $billingId = $billing->getId();
-        $originalStreetNumber = $billing->getStreetNumber();
+        $originalStreet = $billing->getStreet();
         $originalZipCode = $billing->getZipCode();
 
-        $billing->setStreetNumber('This is a really really really long city name'); //
+        $billing->setStreet('This is a really really really long city name'); //
         $billing->setZipCode('This is a really really really long zip code');
 
         Shopware()->Models()->persist($billing);
@@ -45,10 +45,10 @@ class Shopware_Tests_Models_Customer_BillingTest extends Enlight_Components_Test
         Shopware()->Models()->clear();
 
         $billing = Shopware()->Models()->getRepository('Shopware\Models\Customer\Billing')->find($billingId);
-        $this->assertEquals('This is a really really really long city name', $billing->getStreetNumber());
+        $this->assertEquals('This is a really really really long city name', $billing->getStreet());
         $this->assertEquals('This is a really really really long zip code', $billing->getZipCode());
 
-        $billing->setStreetNumber($originalStreetNumber);
+        $billing->setStreet($originalStreet);
         $billing->setZipCode($originalZipCode);
 
         Shopware()->Models()->persist($billing);
