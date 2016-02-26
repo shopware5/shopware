@@ -35,6 +35,11 @@ use Shopware\Components\Model\ModelManager;
 class sRewriteTable
 {
     /**
+     * @var string|null
+     */
+    protected $rewriteArticleslastId;
+
+    /**
      * Rules from the MIT licensed https://github.com/cocur/slugify project
      * See: https://github.com/cocur/slugify/blob/master/src/Slugify.php#L29
      *
@@ -632,6 +637,15 @@ class sRewriteTable
     }
 
     /**
+     * Getter function for retriving last ID from sCreateRewriteTableArticles()
+     * @return string|null
+     */
+    public function getRewriteArticleslastId()
+    {
+        return $this->rewriteArticleslastId;
+    }
+
+    /**
      * Getter function of the prepared insert PDOStatement
      *
      * @return null|PDOStatement
@@ -881,10 +895,13 @@ class sRewriteTable
      *
      * @param string $lastUpdate
      * @param int $limit
+     * @param int $offset
      * @return string
      */
-    public function sCreateRewriteTableArticles($lastUpdate, $limit = 1000)
+    public function sCreateRewriteTableArticles($lastUpdate, $limit = 1000, $offset = 0)
     {
+        $lastId = null;
+
         $routerArticleTemplate = $this->config->get('sROUTERARTICLETEMPLATE');
         if (empty($routerArticleTemplate)) {
             return $lastUpdate;
@@ -896,7 +913,7 @@ class sRewriteTable
         );
 
         $sql = $this->getSeoArticleQuery();
-        $sql = $this->db->limit($sql, $limit);
+        $sql = $this->db->limit($sql, $limit, $offset);
 
         $result = $this->db->fetchAll(
             $sql,
@@ -937,6 +954,8 @@ class sRewriteTable
                 array($lastUpdate, $lastId)
             );
         }
+
+        $this->rewriteArticleslastId = $lastId;
 
         return $lastUpdate;
     }
