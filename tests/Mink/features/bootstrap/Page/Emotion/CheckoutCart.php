@@ -35,7 +35,8 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
             'addArticleSubmit' => 'div.add_article input.box_send',
             'removeVoucher' => 'div.table_row.voucher a.del',
             'aggregationLabels' => '#aggregation_left > *',
-            'aggregationValues' => '#aggregation > *'
+            'aggregationValues' => '#aggregation > *',
+            'articleDeleteButtons' => 'div.table_row a.del'
         ];
     }
 
@@ -307,5 +308,21 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
         }
 
         $this->getPage('Account')->register($data);
+    }
+
+    public function resetCart()
+    {
+        try {
+            $elements = Helper::findElements($this, ['articleDeleteButtons']);
+            $originalPath = $this->path;
+
+            foreach ($elements as $element) {
+                $this->path = $element->getAttribute('href');
+                $this->open();
+            }
+
+            $this->path = $originalPath;
+        } catch (\Exception $ex) {
+        }
     }
 }
