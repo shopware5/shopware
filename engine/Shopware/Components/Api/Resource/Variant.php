@@ -787,6 +787,25 @@ class Variant extends Resource implements BatchInterface
                 $option->setName($optionData['option']);
                 $option->setGroup($availableGroup);
                 $this->getManager()->persist($option);
+            }elseif (
+	            isset($optionData['option']) &&
+		        $optionData['option'] !== null &&
+		        $optionData['option'] != '' &&
+		        $availableGroup->getId() !== null &&
+		        $availableGroup->getId() >= 1 &&
+		        strtolower($option->getName()) == strtolower($optionData['option']) &&
+		        $option->getName() != $optionData['option']
+            ) {
+                Shopware()->Db()->query("UPDATE `s_article_configurator_options`
+                SET `name` = ?
+                WHERE `name` = ?
+                AND `group_id` = ?",
+			        array(
+				        $optionData['option'],
+				        $optionData['option'],
+				        $availableGroup->getId()
+			        )
+		        );
             }
             $options->add($option);
         }
