@@ -1,0 +1,47 @@
+/*
+Tagcloud
+=============================================
+The tagcloud element shows recent keywords inside a box, ordered in importance by font-size.
+```
+<div class="panel has--border tagcloud--content">
+    <div class="panel--body is--wide tagcloud">
+        <a href="#" title="tagcloud-item" class="tag0">Tagcloud-Item</a>
+        <a href="#" title="tagcloud-item" class="tag1">Tagcloud-Item</a>
+        <a href="#" title="tagcloud-item" class="tag2">Tagcloud-Item</a>
+        <a href="#" title="tagcloud-item" class="tag3">Tagcloud-Item</a>
+    </div>
+</div>
+```
+*/
+
+.tagcloud {
+
+    a {
+        color: @text-color;
+        .unitize-margin(0, 10, 0, 0);
+
+        &:hover { color: @link-color; }
+    }
+
+    .tag0 {
+        .unitize(font-size, 21);
+        .unitize(line-height, 21);
+    }
+
+    .tag1 {
+        .unitize(font-size, 16);
+        .unitize(line-height, 16);
+        font-weight: bold;
+    }
+
+    .tag2 {
+        .unitize(font-size, 14);
+        .unitize(line-height, 14);
+    }
+
+    .tag3 {
+        .unitize(font-size, 12);
+        .unitize(line-height, 12);
+        font-weight: bold;
+    }
+}

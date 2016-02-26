@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -26,6 +26,7 @@ namespace Shopware\Components\Api\Resource;
 
 use Shopware\Components\Api\Exception as ApiException;
 use Shopware\Models\Category\Category as CategoryModel;
+use Shopware\Models\Media\Media as MediaModel;
 
 /**
  * Category API Resource
@@ -53,22 +54,25 @@ class Category extends Resource
      */
     public function getOne($id)
     {
-
         $this->checkPrivilege('read');
 
         if (empty($id)) {
             throw new ApiException\ParameterMissingException();
         }
 
-        $filters = array(array('property' => 'id','expression' => '=','value' => $id));
-        $query = $this->getRepository()->getListQuery($filters, array(), 1);
+        $query = $this->getRepository()->getDetailQueryWithoutArticles($id);
 
         /** @var $category \Shopware\Models\Category\Category */
         $category = $query->getOneOrNullResult($this->getResultMode());
 
-
         if (!$category) {
             throw new ApiException\NotFoundException("Category by id $id not found");
+        }
+
+        if ($this->getResultMode() === Resource::HYDRATE_ARRAY) {
+            $category = $category[0] + $category;
+        } else {
+            $category = $category[0];
         }
 
         return $category;
@@ -109,9 +113,11 @@ class Category extends Resource
     {
         $this->checkPrivilege('create');
 
-        $params = $this->prepareCategoryData($params);
-
         $category = new \Shopware\Models\Category\Category();
+
+        $params = $this->prepareCategoryData($params);
+        $params = $this->prepareMediaData($params, $category);
+
         $category->fromArray($params);
 
         if (isset($params['id'])) {
@@ -155,7 +161,8 @@ class Category extends Resource
             throw new ApiException\NotFoundException("Category by id $id not found");
         }
 
-        $params = $this->prepareCategoryData($params, $category);
+        $params = $this->prepareCategoryData($params);
+        $params = $this->prepareMediaData($params, $category);
         $category->fromArray($params);
 
         $violations = $this->getManager()->validate($category);
@@ -195,7 +202,7 @@ class Category extends Resource
         return $category;
     }
 
-    private function prepareCategoryData($params, $category = null)
+    private function prepareCategoryData($params)
     {
         if (!isset($params['name'])) {
             throw new ApiException\CustomValidationException("A name is required");
@@ -262,7 +269,7 @@ class Category extends Resource
                 }
 
                 if (null === $parent) {
-                    /** @var Category $parent */
+                    /** @var \Shopware\Models\Category\Category $parent */
                     $parent = $this->getRepository()->find($parentId);
                     if (!$parent) {
                         throw new \RuntimeException(sprintf('Could not find parent %s', $parentId));
@@ -277,7 +284,6 @@ class Category extends Resource
 
             $parentId = $categoryModel->getId();
             $parent = $categoryModel;
-
         }
 
         if (empty($categoryModel)) {
@@ -285,5 +291,41 @@ class Category extends Resource
         }
 
         return $categoryModel;
+    }
+
+    /**
+     * @param array $data
+     * @param CategoryModel $categoryModel
+     * @return array
+     * @throws ApiException\CustomValidationException
+     */
+    private function prepareMediaData(array $data, CategoryModel $categoryModel)
+    {
+        if (!isset($data['media'])) {
+            return $data;
+        }
+
+        $media = null;
+
+        if (isset($data['media']['link'])) {
+            /**@var $media MediaModel */
+            $media = $this->getResource('media')->internalCreateMediaByFileLink(
+                $data['media']['link']
+            );
+        } elseif (!empty($data['media']['mediaId'])) {
+            $media = $this->getManager()->find(
+                'Shopware\Models\Media\Media',
+                (int) $data['media']['mediaId']
+            );
+
+            if (!($media instanceof MediaModel)) {
+                throw new ApiException\CustomValidationException(sprintf("Media by mediaId %s not found", $data['media']['mediaId']));
+            }
+        }
+
+        $categoryModel->setMedia($media);
+        unset($data['media']);
+
+        return $data;
     }
 }

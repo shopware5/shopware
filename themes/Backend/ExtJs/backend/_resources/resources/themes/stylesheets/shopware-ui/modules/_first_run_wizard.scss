@@ -1,0 +1,190 @@
+.first-run-wizard {
+
+  .plugin-manager-listing-page {
+    background: transparent;
+  }
+
+  .header {
+    position: relative;
+    padding: 18px 25px 10px;
+    padding: 1.125rem 1.563rem 0.625rem;
+    background: #2db3f7;
+    background: -moz-linear-gradient(top, #2db3f7 0%, #1886d7 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#2db3f7), color-stop(100%,#1886d7));
+    background: -webkit-linear-gradient(top, #2db3f7 0%,#1886d7 100%);
+    background: -o-linear-gradient(top, #2db3f7 0%,#1886d7 100%);
+    background: -ms-linear-gradient(top, #2db3f7 0%,#1886d7 100%);
+    background: linear-gradient(to bottom, #2db3f7 0%,#1886d7 100%);
+  }
+
+  .wizard-navigation {
+    padding: 20px;
+    font-size: 14px;
+    background: #f4f7f8;
+
+    .item {
+      margin: 0;
+      list-style: none;
+      position: relative;
+      padding-bottom: 20px;
+      padding-bottom: 1.1719rem;
+      z-index: 1;
+      font-size: 13px;
+    }
+
+    .item::before {
+      content: '';
+      height: 100%;
+      background: #e6e6e6;
+      width: 2px;
+      position: absolute;
+      left: 2px;
+      top: 10px;
+    }
+
+    .item:last-child {
+      padding-bottom: 0;
+    }
+
+    .item:last-child::before {
+      height: 0;
+    }
+
+    .item span {
+      display: inline-block;
+      padding-left: 20px;
+      text-decoration: none;
+      color: #a8a8a8;
+    }
+
+    .item span::before {
+      content: '';
+      display: inline-block;
+      background: #e6e6e6;
+      height: 8px; width: 8px;
+      -webkit-border-radius: 100%;
+      -moz-border-radius: 100%;
+      border-radius: 100%;
+      margin-left: 1px;
+      position: absolute;
+      left: -2px;
+      top: 4px;
+    }
+
+    .item.current span::before {
+      height: 10px; width: 10px;
+      margin-left: 0;
+      background: #08a1e0;
+    }
+
+    .item.disabled span {
+      color: #a8a8a8 !important;
+    }
+
+    .item.disabled span::before {
+      height: 0;
+    }
+
+    .item.current span, .item.previous span {
+      color: #475c6a;
+    }
+
+    .item.current span, {
+      font-weight: bold;
+    }
+
+    .item.previous span::after {
+      height: 10px; width: 10px;
+      margin: 2px 0 0 6px;
+      color: #3fcf29;
+      font-family: "scc";
+      content: '\e677';
+    }
+  }
+
+  .card-container {
+      background: #f4f7f8;
+      padding: 20px;
+
+      h1 {
+        font-size: 18px;
+        margin-bottom: 10px;
+      }
+      p {
+        line-height: 21px;
+        font-size: 13px;
+        color: #a8a8a8;
+      }
+  }
+
+  .listing-container {
+    min-height: 153px;
+  }
+
+  .store-plugin {
+    position: relative;
+    top: 1px;
+    border-top: 0 none !important;
+    border-bottom: 1px solid #d3e0e6;
+  }
+  .store-plugin:nth-child(2n+0) {
+    border-right: 0 none !important;
+  }
+  .store-plugin:nth-child(3n+0) {
+    border-right: 1px solid #d3e0e6;
+  }
+
+  .tile-link {
+    display: inline-block;
+    width: 170px;
+    height: 90px;
+    background: #fff;
+    border: 1px solid #e7ecf2;
+    padding: 15px;
+    text-decoration: none;
+    color: #3F5D71;
+    font-weight: 700;
+    text-align: center;
+    margin: 0 10px 10px 0;
+    overflow: hidden;
+    border-radius: 3px;
+
+    &:hover {
+      color: #2eb5f9;
+      border-color: #2eb5f9;
+    }
+
+    .tile-icon {
+      width: 28px;
+      height: 28px;
+      display: block;
+      margin: 0 auto 10px;
+
+      $dir-frw-icons: '../themes/images/shopware-ui/first_run_wizard/';
+
+      &.icon-help {
+        background: url(#{$dir-frw-icons}help.png);
+      }
+
+      &.icon-account {
+        background: url(#{$dir-frw-icons}account.png);
+      }
+
+      &.icon-templater {
+        background: url(#{$dir-frw-icons}templater.png);
+      }
+
+      &.icon-developer {
+        background: url(#{$dir-frw-icons}developer.png);
+      }
+
+      &.icon-forum {
+        background: url(#{$dir-frw-icons}forum.png);
+      }
+
+      &.icon-store {
+        background: url(#{$dir-frw-icons}store.png);
+      }
+    }
+  }
+}

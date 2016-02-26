@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -44,7 +44,7 @@ abstract class Random
      * Generate random bytes using OpenSSL, Mcrypt, /dev/urandom and mt_rand() as fallback
      *
      * @param  integer $length
-     * @param  bool $strong true if you need a strong random generator (cryptography)
+     * @param  bool $strong If true, an exception is thrown if no secure random generator is available
      * @return string
      * @throws \Exception
      */
@@ -77,7 +77,7 @@ abstract class Random
         if ($strong) {
             throw new \Exception(
                 'This PHP environment doesn\'t support secure random number generation. ' .
-                'Please consider to install the OpenSSL and/or Mcrypt extensions'
+                'Please consider installing the OpenSSL and/or Mcrypt extensions'
             );
         }
 
@@ -162,13 +162,15 @@ abstract class Random
 
     /**
      * Generate a random string of specified length.
+     * Prioritizes secure random generators (OpenSSL/Mcrypt)
+     * and uses a non-secure random generator as fallback
      *
      * Uses supplied character list for generating the new string.
      * If no character list provided - uses Base 64 character set.
      *
      * @param  integer $length
      * @param  string|null $charlist
-     * @param  bool $strong  true if you need a strong random generator (cryptography)
+     * @param  bool $strong If true, an exception is thrown if no secure random generator is available
      * @return string
      * @throws \DomainException
      */
@@ -204,11 +206,13 @@ abstract class Random
 
     /**
      * Generate a random alphanumeric string of specified length.
+     * Prioritizes secure random generators (OpenSSL/Mcrypt)
+     * and uses a non-secure random generator as fallback
      *
      * Charlist: a-zA-Z0-9
      *
      * @param  integer $length
-     * @param  bool $strong  true if you need a strong random generator (cryptography)
+     * @param  bool $strong If true, an exception is thrown if no secure random generator is available
      * @return string
      * @throws \DomainException
      */

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -24,12 +24,12 @@
 
 namespace Shopware\Components\Model;
 
+use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\Proxy\AbstractProxyFactory;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Configuration as BaseConfiguration;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\CachedReader;
-use Doctrine\Common\Annotations\FileCacheReader;
 use Doctrine\Common\Cache\ApcCache;
 use Doctrine\Common\Cache\CacheProvider;
 use Doctrine\Common\Cache\XcacheCache;
@@ -49,11 +49,11 @@ class Configuration extends BaseConfiguration
     protected $attributeDir;
 
     /**
-     * Directory for cached anotations
+     * Custom namespace for doctrine cache provider
      *
      * @var string
      */
-    protected $fileCacheDir;
+    protected $cacheNamespace = null;
 
     /**
      * @param array $options
@@ -75,7 +75,6 @@ class Configuration extends BaseConfiguration
         $this->setAutoGenerateProxyClasses(AbstractProxyFactory::AUTOGENERATE_FILE_NOT_EXISTS);
 
         $this->setAttributeDir($options['attributeDir']);
-        $this->setFileCacheDir($options['fileCacheDir']);
 
         $this->addEntityNamespace('Shopware', 'Shopware\Models');
         $this->addEntityNamespace('Custom', 'Shopware\CustomModels');
@@ -86,6 +85,13 @@ class Configuration extends BaseConfiguration
 
         $this->addCustomStringFunction('DATE_FORMAT', 'Shopware\Components\Model\Query\Mysql\DateFormat');
         $this->addCustomStringFunction('IFNULL', 'Shopware\Components\Model\Query\Mysql\IfNull');
+        $this->addCustomStringFunction('RegExp', 'Shopware\Components\Model\Query\Mysql\RegExp');
+        $this->addCustomStringFunction('Replace', 'Shopware\Components\Model\Query\Mysql\Replace');
+
+        // Load custom namespace for doctrine cache provider, if provided
+        if (isset($options['cacheNamespace'])) {
+            $this->cacheNamespace = $options['cacheNamespace'];
+        }
 
         if (isset($options['cacheProvider'])) {
             $this->setCacheProvider($options['cacheProvider']);
@@ -102,7 +108,9 @@ class Configuration extends BaseConfiguration
      */
     public function setCache(CacheProvider $cache)
     {
-        $cache->setNamespace("dc2_" . md5($this->getProxyDir() . \Shopware::REVISION) . "_"); // to avoid collisions
+        // Set namespace for doctrine cache provider to avoid collisions
+        $namespace =  ! is_null($this->cacheNamespace) ? $this->cacheNamespace : md5($this->getProxyDir() . \Shopware::REVISION);
+        $cache->setNamespace("dc2_" . $namespace  . "_");
 
         $this->setMetadataCacheImpl($cache);
         $this->setQueryCacheImpl($cache);
@@ -165,23 +173,17 @@ class Configuration extends BaseConfiguration
     }
 
     /**
-     * @return AnnotationReader
+     * @return Reader
      */
     public function getAnnotationsReader()
     {
         $reader = new AnnotationReader;
         $cache = $this->getMetadataCacheImpl();
-        if ($this->getMetadataCacheImpl() instanceof Cache) {
-            $reader = new FileCacheReader(
-                $reader,
-                $this->getFileCacheDir()
-            );
-        } else {
-            $reader = new CachedReader(
-                $reader,
-                $cache
-            );
-        }
+
+        $reader = new CachedReader(
+            $reader,
+            $cache
+        );
 
         return $reader;
     }
@@ -205,17 +207,17 @@ class Configuration extends BaseConfiguration
 
     /**
      * @param string $dir
-     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
      * @return Configuration
      */
     public function setAttributeDir($dir)
     {
         if (!is_dir($dir)) {
-            throw new \InvalidArgumentException(sprintf('The directory "%s" does not exist.', $dir));
-        }
-
-        if (!is_writable($dir)) {
-            throw new \InvalidArgumentException(sprintf('The directory "%s" is not writable.', $dir));
+            if (false === @mkdir($dir, 0777, true) && !is_dir($dir)) {
+                throw new \RuntimeException(sprintf("Unable to create the doctrine attribute directory (%s)\n", $dir));
+            }
+        } elseif (!is_writable($dir)) {
+            throw new \RuntimeException(sprintf("Unable to write in the doctrine attribute directory (%s)\n", $dir));
         }
 
         $dir = rtrim(realpath($dir), '\\/') . DIRECTORY_SEPARATOR;
@@ -234,58 +236,19 @@ class Configuration extends BaseConfiguration
     }
 
     /**
-     * @param string $dir
-     * @throws \InvalidArgumentException
-     * @return Configuration
-     */
-    public function setFileCacheDir($dir)
-    {
-        if (!is_dir($dir)) {
-            throw new \InvalidArgumentException(sprintf('The directory "%s" does not exist.', $dir));
-        }
-
-        if (!is_writable($dir)) {
-            throw new \InvalidArgumentException(sprintf('The directory "%s" is not writable.', $dir));
-        }
-
-        $dir = rtrim(realpath($dir), '\\/') . DIRECTORY_SEPARATOR;
-
-        $this->fileCacheDir = $dir;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getFileCacheDir()
-    {
-        return $this->fileCacheDir;
-    }
-
-    /**
      * Sets the directory where Doctrine generates any necessary proxy class files.
      *
      * @param string $dir
-     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
      */
     public function setProxyDir($dir)
     {
         if (!is_dir($dir)) {
-            throw new \InvalidArgumentException(sprintf('The directory "%s" does not exist.', $dir));
-        }
-
-        if (!is_writable($dir)) {
-            throw new \InvalidArgumentException(sprintf('The directory "%s" is not writable.', $dir));
-        }
-
-        $dir = rtrim(realpath($dir), '\\/') . DIRECTORY_SEPARATOR . \Shopware::REVISION;
-        if (!is_dir($dir)) {
-            mkdir($dir, 0775);
-        }
-
-        if (!is_writable($dir)) {
-            throw new \InvalidArgumentException(sprintf('The directory "%s" is not writable.', $dir));
+            if (false === @mkdir($dir, 0777, true) && !is_dir($dir)) {
+                throw new \RuntimeException(sprintf("Unable to create the doctrine proxy directory (%s)\n", $dir));
+            }
+        } elseif (!is_writable($dir)) {
+            throw new \RuntimeException(sprintf("Unable to write in the doctrine proxy directory (%s)\n", $dir));
         }
 
         parent::setProxyDir($dir);

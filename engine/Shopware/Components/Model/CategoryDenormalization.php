@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -30,7 +30,7 @@ namespace Shopware\Components\Model;
  * This class contains various methods to maintain
  * the denormalized representation of the Article to Category assignments.
  *
- * The assignments between artciles and categories are stored in s_articles_categories.
+ * The assignments between articles and categories are stored in s_articles_categories.
  * The table s_articles_categories_ro contains each assignment of s_articles_categories
  * plus additional assignments for each child category.
  *
@@ -144,7 +144,7 @@ class CategoryDenormalization
     }
 
     /**
-     * Returns maxcount for paging rebuildCategoryPath()
+     * Returns count for paging rebuildCategoryPath()
      *
      * @param  int $categoryId
      * @return int
@@ -177,7 +177,7 @@ class CategoryDenormalization
     }
 
     /**
-     * Sets path for child-categories of given $categoryId
+     * Sets path for child categories of given $categoryId
      *
      * @param  int $categoryId
      * @param  int $count
@@ -212,28 +212,12 @@ class CategoryDenormalization
         $stmt = $this->getConnection()->prepare($sql);
         $stmt->execute($parameters);
 
-        $updateStmt = $this->getConnection()->prepare('UPDATE s_categories set path = :path WHERE id = :categoryId');
-
         $count = 0;
 
         $this->beginTransaction();
 
         while ($category = $stmt->fetch(\PDO::FETCH_ASSOC)) {
-
-            $parents = $this->getParentCategoryIds($category['id']);
-            array_shift($parents);
-
-            if (empty($parents)) {
-                $path = null;
-            } else {
-                $path = implode('|', $parents);
-                $path = '|' . $path . '|';
-            }
-
-            if ($category['path'] != $path) {
-                $updateStmt->execute(array(':path' => $path, ':categoryId' => $category['id']));
-                $count++;
-            }
+            $count += $this->rebuildPath($category['id'], $category['path']);
         }
 
         $this->commit();
@@ -242,7 +226,36 @@ class CategoryDenormalization
     }
 
     /**
-     * Returns maxcount for paging removeOldAssignmentsCount()
+     * Rebuilds the path for a single category
+     *
+     * @param $categoryId
+     * @param $categoryPath
+     * @return int
+     */
+    public function rebuildPath($categoryId, $categoryPath = null)
+    {
+        $updateStmt = $this->connection->prepare('UPDATE s_categories set path = :path WHERE id = :categoryId');
+
+        $parents = $this->getParentCategoryIds($categoryId);
+        array_shift($parents);
+
+        if (empty($parents)) {
+            $path = null;
+        } else {
+            $path = implode('|', $parents);
+            $path = '|'.$path.'|';
+        }
+
+        if ($categoryPath != $path) {
+            $updateStmt->execute(array(':path' => $path, ':categoryId' => $categoryId));
+            return 1;
+        }
+
+        return 0;
+    }
+
+    /**
+     * Rebuilds the path for a single category
      *
      * @param  int $categoryId
      * @return int
@@ -316,7 +329,7 @@ class CategoryDenormalization
     }
 
     /**
-     * Returns maxcount for paging rebuildAssignmentsCount()
+     * Returns count for paging rebuildAssignmentsCount()
      *
      * @param  int $categoryId
      * @return int
@@ -404,21 +417,15 @@ class CategoryDenormalization
     public function rebuildAllAssignmentsCount()
     {
         $sql = '
-            SELECT ac.id, c.parent
+            SELECT COUNT(*)
             FROM  s_articles_categories ac
-            INNER JOIN s_categories c
+            JOIN s_categories c
             ON ac.categoryID = c.id
-            GROUP BY ac.id
         ';
 
         $stmt = $this->getConnection()->query($sql);
-        $rows = $stmt->fetchAll(\PDO::FETCH_COLUMN);
-
-        if (empty($rows)) {
-            return 0;
-        }
-
-        return count($rows);
+        $rows = $stmt->fetchColumn();
+        return (int)$rows;
     }
 
     /**
@@ -435,7 +442,7 @@ class CategoryDenormalization
             LEFT JOIN s_categories c2 ON c.id = c2.parent
             WHERE c2.id IS NULL
             GROUP BY ac.id
-            ORDER BY articleID
+            ORDER BY articleID, categoryID
         ";
 
         if ($count !== null) {
@@ -520,13 +527,16 @@ class CategoryDenormalization
         ';
 
         $stmt = $this->getConnection()->prepare($deleteQuery);
-        $stmt->execute(array('categoryId' => $categoryId, 'articleId' => $articleId));
+        $stmt->execute(array(
+            'categoryId' => $categoryId,
+            'articleId' => $articleId
+        ));
 
         return $stmt->rowCount();
     }
 
     /**
-     * Adds new assignment beween $articleId and $categoryId
+     * Adds new assignment between $articleId and $categoryId
      *
      * @param int $articleId
      * @param int $categoryId

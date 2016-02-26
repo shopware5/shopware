@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,8 +23,9 @@
  */
 
 namespace   Shopware\Models\Order;
-use         Shopware\Components\Model\ModelEntity,
-            Doctrine\ORM\Mapping AS ORM;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * The Shopware order shipping model represents the shipping address for a single order.
@@ -76,6 +77,13 @@ class Shipping extends ModelEntity
     private $countryId = 0;
 
     /**
+     * Contains the id of the state. Used for billing - state association.
+     * @var integer $stateId
+     * @ORM\Column(name="stateID", type="integer", nullable=true)
+     */
+    private $stateId = null;
+
+    /**
      * If of the associated customer. Used as foreign key for the
      * customer - shipping association.
      *
@@ -122,16 +130,9 @@ class Shipping extends ModelEntity
     /**
      * Contains the street name of the shipping address
      * @var string $street
-     * @ORM\Column(name="street", type="string", length=100, nullable=false)
+     * @ORM\Column(name="street", type="string", length=255, nullable=false)
      */
     private $street = '';
-
-    /**
-     * Contains the street number of the shipping address
-     * @var string $streetNumber
-     * @ORM\Column(name="streetnumber", type="string", length=50, nullable=false)
-     */
-    private $streetNumber = '';
 
     /**
      * Contains the zip code of the shipping address
@@ -146,6 +147,22 @@ class Shipping extends ModelEntity
      * @ORM\Column(name="city", type="string", length=70, nullable=false)
      */
     private $city = '';
+
+    /**
+     * Contains the additional address line data
+     *
+     * @var string $additionalAddressLine1
+     * @ORM\Column(name="additional_address_line1", type="string", length=255, nullable=true)
+     */
+    protected $additionalAddressLine1 = null;
+
+    /**
+     * Contains the additional address line data 2
+     *
+     * @var string $additionalAddressLine2
+     * @ORM\Column(name="additional_address_line2", type="string", length=255, nullable=true)
+     */
+    protected $additionalAddressLine2 = null;
 
     /**
      * The customer property is the owning side of the association between customer and shipping.
@@ -173,6 +190,13 @@ class Shipping extends ModelEntity
      * @var \Shopware\Models\Country\Country $country
      */
     protected $country;
+
+    /**
+     * @ORM\OneToOne(targetEntity="\Shopware\Models\Country\State")
+     * @ORM\JoinColumn(name="stateID", referencedColumnName="id")
+     * @var \Shopware\Models\Country\State
+     */
+    private $state;
 
     /**
      * INVERSE SIDE
@@ -325,28 +349,6 @@ class Shipping extends ModelEntity
     }
 
     /**
-     * Setter function for the streetNumber column property.
-     *
-     * @param string $streetNumber
-     * @return Shipping
-     */
-    public function setStreetNumber($streetNumber)
-    {
-        $this->streetNumber = $streetNumber;
-        return $this;
-    }
-
-    /**
-     * Getter function for the streetNumber column property.
-     *
-     * @return string
-     */
-    public function getStreetNumber()
-    {
-        return $this->streetNumber;
-    }
-
-    /**
      * Setter function for the zipCode column property.
      *
      * @param string $zipCode
@@ -433,6 +435,25 @@ class Shipping extends ModelEntity
         $this->order = $order;
     }
 
+    /**
+     * Setter for the state association
+     *
+     * @param \Shopware\Models\Country\State $state
+     */
+    public function setState($state)
+    {
+        $this->state = $state;
+    }
+
+    /**
+     * Getter for the state association
+     *
+     * @return \Shopware\Models\Country\State
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
 
     /**
      * @return \Shopware\Models\Country\Country
@@ -467,4 +488,43 @@ class Shipping extends ModelEntity
         return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\OrderShipping', 'attribute', 'orderShipping');
     }
 
+    /**
+     * Setter function for the setAdditionalAddressLine2 column property.
+     *
+     * @param string $additionalAddressLine2
+     */
+    public function setAdditionalAddressLine2($additionalAddressLine2)
+    {
+        $this->additionalAddressLine2 = $additionalAddressLine2;
+    }
+
+    /**
+     * Getter function for the getAdditionalAddressLine2 column property.
+     *
+     * @return string
+     */
+    public function getAdditionalAddressLine2()
+    {
+        return $this->additionalAddressLine2;
+    }
+
+    /**
+     * Setter function for the setAdditionalAddressLine1 column property.
+     *
+     * @param string $additionalAddressLine1
+     */
+    public function setAdditionalAddressLine1($additionalAddressLine1)
+    {
+        $this->additionalAddressLine1 = $additionalAddressLine1;
+    }
+
+    /**
+     * Getter function for the getAdditionalAddressLine1 column property.
+     *
+     * @return string
+     */
+    public function getAdditionalAddressLine1()
+    {
+        return $this->additionalAddressLine1;
+    }
 }

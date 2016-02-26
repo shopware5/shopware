@@ -1,7 +1,7 @@
 <?php
 class Migrations_Migration218 Extends Shopware\Components\Migrations\AbstractMigration
 {
-    public function up()
+    public function up($modus)
     {
         // remove old plugins
         $this->deletePluginByName('BenchmarkEvents');

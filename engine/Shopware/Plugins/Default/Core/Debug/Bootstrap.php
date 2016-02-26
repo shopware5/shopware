@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -187,7 +187,7 @@ class Shopware_Plugins_Core_Debug_Bootstrap extends Shopware_Components_Plugin_B
      */
     public function onStartDispatch(\Enlight_Event_EventArgs $args)
     {
-        /** @var \Enlight_Controller_Request_RequestHttp $request */
+        /** @var \Enlight_Controller_Request_Request $request */
         $request = $args->getSubject()->Request();
 
         if (!$this->isRequestAllowed($request)) {
@@ -212,10 +212,10 @@ class Shopware_Plugins_Core_Debug_Bootstrap extends Shopware_Components_Plugin_B
     }
 
     /**
-     * @param Enlight_Controller_Request_RequestHttp $request
+     * @param Enlight_Controller_Request_Request $request
      * @return HandlerInterface[]
      */
-    public function getHandlers(\Enlight_Controller_Request_RequestHttp $request)
+    public function getHandlers(\Enlight_Controller_Request_Request $request)
     {
         $handlers = array();
         if ($this->get('monolog.handler.firephp')->acceptsRequest($request)) {
@@ -226,10 +226,10 @@ class Shopware_Plugins_Core_Debug_Bootstrap extends Shopware_Components_Plugin_B
     }
 
     /**
-     * @param Enlight_Controller_Request_RequestHttp $request
+     * @param Enlight_Controller_Request_Request $request
      * @return bool
      */
-    public function isRequestAllowed(\Enlight_Controller_Request_RequestHttp $request)
+    public function isRequestAllowed(\Enlight_Controller_Request_Request $request)
     {
         $clientIp  = $request->getClientIp();
         $allowedIp = $this->Config()->get('AllowIP');

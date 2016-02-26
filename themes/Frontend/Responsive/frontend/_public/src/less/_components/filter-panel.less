@@ -1,0 +1,659 @@
+/*
+Filter Panel
+===========================================
+Defines the styling of the filter panel element.
+
+The styling includes the collapsed and expanded styling and the panel component properties.
+```
+<div class="filter-panel">
+	<div class="filter-panel--flyout">
+
+		<label class="filter-panel--title">
+		Preis
+		</label>
+
+		<span class="filter-panel--icon"></span>
+
+		<div class="filter-panel--content">
+		test test
+		</div>
+
+	</div>
+</div>
+```
+*/
+.filter-panel {
+    .unitize-height(38);
+    .unitize(margin-bottom, 10);
+    .border-radius();
+    .white-gradient();
+	.user-select(none);
+	.touch-callout(none);
+	.tap-highlight-color(rgba(0, 0, 0, 0));
+    display: block;
+    position: relative;
+    border: 1px solid @border-color;
+
+    &:hover {
+        border: 1px solid @brand-primary;
+        background: #FFF;
+
+        .filter-panel--icon,
+        .filter-panel--title {
+            color: @brand-primary;
+        }
+    }
+
+    &.is--collapsed {
+        height: auto;
+        border: 0 none;
+
+        .filter-panel--flyout {
+            height: auto;
+            border: 1px solid @brand-primary;
+            background: #FFF;
+            overflow: visible;
+            z-index: @zindex-filter-panel-flyout-collapsed;
+        }
+
+        .filter-panel--title {
+            color: @brand-primary;
+        }
+
+        .filter-panel--icon:before {
+            color: @brand-primary;
+            content: "\e610";
+        }
+    }
+}
+
+.filter-panel--flyout {
+    .unitize-height(38);
+    .border-radius();
+    display: block;
+    width: 100%;
+    overflow: hidden;
+    z-index: @zindex-filter-panel-flyout;
+}
+
+.filter-panel--title {
+    .unitize-height(36);
+    .unitize(line-height, 36);
+    .unitize-padding(0, 30, 0, 10);
+    .unitize-margin(0, 0, 5, 0);
+    .user-select(none);
+    .touch-callout(none);
+    .tap-highlight-color(rgba(0, 0, 0, 0));
+    display: block;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+    cursor: pointer;
+}
+
+.filter-panel--icon {
+    .unitize-width(16);
+    .unitize-height(16);
+    .unitize(top, 8);
+    .unitize(right, 10);
+    .unitize(font-size, 6);
+    .unitize(line-height, 16);
+    .user-select(none);
+    .touch-callout(none);
+    .tap-highlight-color(rgba(0, 0, 0, 0));
+    display: inline-block;
+    position: absolute;
+    font-family: "shopware";
+    text-align: center;
+    cursor: pointer;
+    pointer-events: none;
+
+    &:before {
+        content: "\e612";
+    }
+}
+
+.filter-panel--content {
+    .unitize-padding(10, 10);
+    display: block;
+}
+
+.filter-panel--option-list {
+    .unitize(padding-bottom, 5);
+    list-style: none;
+
+    &.sub-level {
+    	.unitize-margin(0, 0, 0, 8);
+    	.unitize-padding(0, 0, 0, 18);
+    	border-left: 1px solid @border-color;
+    }
+}
+
+.filter-panel--option {
+    display: block;
+    position: relative;
+
+    .option--container:hover {
+		.filter-panel--label {
+			color: @brand-primary;
+		}
+		.filter-panel--checkbox {
+			border-color: @brand-primary;
+		}
+    }
+}
+
+.value-tree--option {
+	.unitize-margin(0, 0, 10, 0);
+
+	.sub-level & {
+		margin: 0;
+	}
+}
+
+.filter-panel--label {
+    .unitize-padding(4, 0, 4, 30);
+    .unitize(line-height, 18);
+	.user-select(none);
+	.touch-callout(none);
+	.tap-highlight-color(rgba(0, 0, 0, 0));
+    display: block;
+    cursor: pointer;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.filter-panel--checkbox {
+    .unitize-width(16);
+    .unitize-height(16);
+    .unitize-padding(1, 1);
+    .border-radius();
+    display: inline-block;
+    position: relative;
+    border: 1px solid @border-color;
+    cursor: pointer;
+
+    &:hover {
+        border-color: @brand-primary;
+    }
+
+    input[type="checkbox"] {
+        .opacity(0);
+        display: block;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0; left: 0;
+        border: 0 none;
+        background: none;
+        cursor: pointer;
+        z-index: @zindex-filter-panel-checkbox;
+
+        &:checked ~ .checkbox--state {
+            .primary-gradient();
+
+            &:before {
+                .unitize-width(12);
+                .unitize-height(12);
+                .unitize(line-height, 12);
+                .unitize(font-size, 7);
+                display: block;
+                font-family: 'shopware';
+                font-weight: normal;
+                text-align: center;
+                color: #fff;
+                content: "\e60c";
+            }
+        }
+
+        &:checked ~ .filter-panel--label {
+            color: @brand-primary;
+            font-weight: 600;
+        }
+
+        &:disabled ~ .checkbox--state {
+            background: @body-bg;
+        }
+
+        &:disabled ~ .filter-panel--label {
+            color: @text-color;
+        }
+    }
+
+    .checkbox--state {
+        .border-radius();
+        display: block;
+        width: 100%;
+        height: 100%;
+        position: relative;
+        z-index: @zindex-filter-panel-checkbox-state;
+    }
+}
+
+.filter-panel--radio {
+	.unitize-width(16);
+	.unitize-height(16);
+	.unitize-padding(1, 1);
+	.border-radius(11px);
+	display: inline-block;
+	position: relative;
+	border: 1px solid @border-color;
+	cursor: pointer;
+
+	&:hover {
+		border-color: @brand-primary;
+	}
+
+	input[type="radio"] {
+		.opacity(0);
+		display: block;
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		top: 0; left: 0;
+		border: 0 none;
+		background: none;
+		cursor: pointer;
+		z-index: @zindex-filter-panel-radio;
+
+		&:checked ~ .radio--state {
+			.primary-gradient();
+		}
+
+		&:checked ~ .filter-panel--label {
+			color: @brand-primary;
+			font-weight: 600;
+		}
+
+		&:disabled .radio--state {
+			background: @body-bg;
+		}
+
+		&:disabled .filter-panel--label {
+			color: @text-color;
+		}
+	}
+
+	.radio--state {
+		.border-radius(11px);
+		display: block;
+		width: 100%;
+		height: 100%;
+		position: relative;
+		z-index: @zindex-filter-panel-radio-state;
+	}
+}
+
+.filter-panel--media-list {
+    .clearfix();
+    list-style: none;
+    margin-left: -2%;
+}
+
+.filter-panel--media-option {
+    .unitize-height(45);
+    .unitize(max-width, 45);
+    width: 18%;
+    margin: 0 0 2% 2%;
+    display: block;
+    position: relative;
+    float: left;
+
+    input[type="checkbox"] {
+        .opacity(0);
+        display: block;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0; left: 0;
+        border: 0 none;
+        background: none;
+        cursor: pointer;
+        z-index: @zindex-filter-panel-media-checkbox;
+
+        &:hover ~ .filter-panel--media-label {
+            border-color: @brand-primary;
+        }
+
+        &:checked ~ .filter-panel--media-label {
+            border-color: @brand-primary;
+
+            &:after {
+                .unitize-width(16);
+                .unitize-height(16);
+                .unitize(line-height, 16);
+                .unitize(font-size, 7);
+                .unitize(-4, 16, top);
+                .unitize(-4, 16, right);
+                .primary-gradient();
+                .border-radius(8px);
+                display: block;
+                position: absolute;
+                font-family: 'shopware';
+                font-weight: normal;
+                text-align: center;
+                color: #fff;
+                content: "\e60c";
+            }
+        }
+
+        &:disabled .filter-panel--media-label {
+            .opacity(0.5);
+        }
+    }
+}
+
+.filter-panel--media-label {
+    .unitize-padding(2, 2);
+    .unitize(line-height, 36);
+    .border-radius();
+    width: 100%;
+    height: 100%;
+    display: block;
+    position: relative;
+    text-align: center;
+    border: 1px solid @border-color;
+
+    .filter-panel--media-image {
+        display: inline-block;
+        vertical-align: middle;
+    }
+}
+
+.filter-panel--range-info {
+    .unitize-padding(10, 0, 5, 0);
+    text-align: center;
+
+    .range-info--label {
+        color: @text-color-dark;
+        font-weight: 600;
+    }
+}
+
+.filter-panel--star-rating {
+    .clearfix();
+    .unitize-width(150);
+    .unitize-height(30);
+    .unitize(margin-bottom, 10);
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+
+    .rating-star--input {
+        .opacity(0);
+        .unitize-width(30);
+        .unitize-height(30);
+        display: block;
+        position: absolute;
+        top: 0; left: 0;
+        border: 0 none;
+        background: none;
+        cursor: pointer;
+        z-index: @zindex-filter-panel-rating-star;
+
+        &#star--1 { .unitize(left, 0); }
+        &#star--2 { .unitize(left, 30); }
+        &#star--3 { .unitize(left, 60); }
+        &#star--4 { .unitize(left, 90); }
+        &#star--5 { .unitize(left, 120); }
+
+        &:checked ~ .rating-star--label,
+        &#star--reset:checked:disabled ~ .rating-star--label {
+            color: @text-color;
+
+            &:before {
+                content: "\e601";
+            }
+        }
+    }
+
+    .rating-star--label {
+        .unitize-width(30);
+        .unitize-height(30);
+        .unitize(line-height, 30);
+        .unitize(font-size, 30);
+        position: absolute;
+        top: 0; left: 0;
+        font-family: 'shopware';
+        font-weight: normal;
+        color: @rating-star-color;
+
+        &:before {
+            content: "\e600";
+        }
+
+        &.star--1 { .unitize(left, 0); }
+        &.star--2 { .unitize(left, 30); }
+        &.star--3 { .unitize(left, 60); }
+        &.star--4 { .unitize(left, 90); }
+        &.star--5 { .unitize(left, 120); }
+    }
+}
+
+.filter--set-title {
+    .unitize-margin(30, 0, 10, 0);
+    .unitize(font-size, 14);
+    .unitize(line-height, 24);
+    margin-left: 1%;
+    margin-right: 1%;
+    border-bottom: 1px solid @border-color;
+    clear: both;
+}
+
+.filter--value {
+    background: #fff;
+
+    &:hover {
+        .filter-panel--checkbox {
+            border-color: @brand-primary;
+        }
+    }
+
+    .filter-panel--title {
+        .unitize(padding-left, 35);
+    }
+
+    .filter-panel--checkbox {
+        .unitize(top, 8);
+        .unitize(left, 10);
+        position: absolute;
+    }
+}
+
+.filter--property {
+    .filter-panel--checkbox {
+        .unitize(top, 5);
+        .unitize(left, 0);
+        position: absolute;
+    }
+}
+
+.filter--radio {
+	.filter-panel--radio {
+		.unitize(top, 5);
+		.unitize(left, 0);
+		position: absolute;
+	}
+}
+
+.filter--range {
+    .filter-panel--content {
+        .unitize-padding(10, 20);
+    }
+}
+
+.filter--active-container {
+    .unitize-padding(20, 0, 0, 0);
+}
+
+.filter--active {
+    .unitize-padding(0, 10);
+    .unitize-margin(0, 10, 10, 0);
+    .unitize(line-height, 22);
+    .unitize(font-size, 13);
+    .border-radius();
+    display: inline-block;
+    border: 1px solid @border-color;
+    color: @brand-primary;
+    background: #FFF;
+    cursor: pointer;
+    white-space: nowrap;
+
+    .filter--active-icon {
+        .unitize-margin(0, 10, 0, 0);
+        .unitize(font-size, 8);
+        .unitize(-1, 16, top);
+        position: relative;
+        font-family: 'shopware';
+        color: @text-color;
+
+        &:before {
+            content: "\e60d";
+        }
+    }
+
+    .icon--star {
+        color: @rating-star-color;
+    }
+
+    .icon--star-empty {
+        color: @text-color;
+    }
+
+    &:hover,
+    &[data-filter-param="reset"] {
+        color: @brand-primary;
+        border-color: @brand-primary;
+
+        .filter--active-icon {
+            color: @brand-primary;
+        }
+    }
+}
+
+.filter--actions {
+    .unitize-padding(10, 0);
+    .unitize(margin-bottom, 10);
+    border-bottom: 1px solid @border-color;
+    clear: both;
+}
+
+.filter--btn-apply {
+    position: relative;
+    font-weight: 600;
+    width: 100%;
+
+    &.is--icon-right [class^="icon--"] {
+        .unitize(font-size, 14);
+        .unitize(line-height, 16);
+        .unitize-margin(-8, 0, 0, 0);
+    }
+
+    &.is--loading {
+        [class^="icon--"] {
+            .animation(keyframe--spin-reverse 1s linear infinite);
+        }
+    }
+
+    .filter--count {
+        font-weight: bold;
+    }
+}
+
+@media screen and(min-width: @tabletViewportWidth) {
+
+    .filter-panel {
+        width: 49%;
+        margin-left: 1%;
+        float: left;
+
+        &.is--collapsed {
+            .unitize-height(38);
+        }
+    }
+
+    .is--no-sidebar .filter-panel {
+        width: 32%;
+    }
+
+    .filter-panel--flyout {
+        position: absolute;
+        top: 0; left: 0;
+    }
+
+    .filter-panel--content {
+        .unitize-max-height(200);
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+
+    .filter--active-container {
+        .unitize-padding(15, 0, 5, 0);
+        margin-left: 1%;
+        margin-right: 1%;
+
+        &.is--disabled {
+            .filter--active:not([data-filter-param="reset"]),
+            .filter--active:not([data-filter-param="reset"]):hover {
+                color: @text-color;
+                border-color: @border-color;
+                cursor: default;
+
+                .filter--active-icon {
+                    color: @text-color;
+
+                    &:before {
+                        content: "\e60c";
+                    }
+                }
+            }
+        }
+    }
+
+    .filter--actions {
+        margin-left: 1%;
+        margin-right: 1%;
+    }
+
+    .filter--btn-apply {
+        width: auto;
+    }
+}
+
+@media screen and(min-width: @tabletLandscapeViewportWidth) {
+
+    .filter-panel { width: 32%; }
+}
+
+@media screen and(min-width: @desktopViewportWidth) {
+
+    .filter-panel--star-rating {
+        .unitize-width(100);
+        .unitize-height(20);
+
+        .rating-star--input {
+            .unitize-width(20);
+            .unitize-height(20);
+
+            &#star--1 { .unitize(left, 0); }
+            &#star--2 { .unitize(left, 20); }
+            &#star--3 { .unitize(left, 40); }
+            &#star--4 { .unitize(left, 60); }
+            &#star--5 { .unitize(left, 80); }
+        }
+
+        .rating-star--label {
+            .unitize-width(20);
+            .unitize-height(20);
+            .unitize(line-height, 20);
+            .unitize(font-size, 20);
+
+            &.star--1 { .unitize(left, 0); }
+            &.star--2 { .unitize(left, 20); }
+            &.star--3 { .unitize(left, 40); }
+            &.star--4 { .unitize(left, 60); }
+            &.star--5 { .unitize(left, 80); }
+        }
+    }
+}

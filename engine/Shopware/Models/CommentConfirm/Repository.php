@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,23 +23,22 @@
  */
 
 namespace Shopware\Models\CommentConfirm;
-use Shopware\Components\Model\ModelRepository, Doctrine\ORM\Query;
+
+use Shopware\Components\Model\ModelRepository;
+use Doctrine\ORM\Query;
 
 /**
- *
  * Repository for the CommentConfirm model (Shopware\Models\CommentConfirm\CommentConfirm).
  * <br>
  * The CommentConfirm model repository is responsible to manage all data's in s_core_optin
  * This repository can be used to work with the saved optin data.
- *
  */
 class Repository extends ModelRepository
 {
-
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select the blog article for the detail page
      *
-     * @param $hash
+     * @param string $hash
      * @return \Doctrine\ORM\Query
      */
     public function getConfirmationByHashQuery($hash)
@@ -52,7 +51,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getConfirmationByIdQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param $hash
+     * @param string $hash
      * @return \Doctrine\ORM\QueryBuilder
      */
     public function getConfirmationByHashBuilder($hash)
@@ -64,5 +63,4 @@ class Repository extends ModelRepository
 
         return $builder;
     }
-
 }

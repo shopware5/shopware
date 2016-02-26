@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -53,10 +53,12 @@ class Shopware_Controllers_Widgets_Captcha extends Enlight_Controller_Action
         imagepng($imgResource, null, 9);
         $img = ob_get_clean();
         imagedestroy($imgResource);
-        $img =  base64_encode($img);
+        $img = base64_encode($img);
 
-        echo '<img src="data:image/png;base64,' . $img. '" alt="Captcha" />';
-        echo '<input type="hidden" name="sRand" value="' . $rand . '" />';
+        $body = '<img src="data:image/png;base64,' . $img. '" alt="Captcha" />';
+        $body .= '<input type="hidden" name="sRand" value="' . $rand . '" />';
+
+        $this->Response()->setBody($body);
     }
 
     /**
@@ -88,42 +90,34 @@ class Shopware_Controllers_Widgets_Captcha extends Enlight_Controller_Action
      */
     public function getImageResource($string)
     {
-        $captcha = 'frontend/_resources/images/captcha/background.jpg';
-        $font = 'frontend/_resources/images/captcha/font.ttf';
+        $captcha = $this->getCaptchaFile('frontend/_public/src/img/bg--captcha.jpg');
+        $font = $this->getCaptchaFile('frontend/_public/src/fonts/captcha.ttf');
 
-        $template_dirs = Shopware()->Template()->getTemplateDir();
-
-        foreach ($template_dirs as $template_dir) {
-            if (file_exists($template_dir . $captcha)) {
-                $captcha = $template_dir . $captcha;
-                break;
-            }
+        if (empty($captcha)) {
+            $captcha = $this->getCaptchaFile('frontend/_resources/images/captcha/background.jpg');
         }
 
-        foreach ($template_dirs as $template_dir) {
-            if (file_exists($template_dir . $font)) {
-                $font = $template_dir . $font;
-                break;
-            }
+        if (empty($font)) {
+            $font = $this->getCaptchaFile('frontend/_resources/images/captcha/font.ttf');
         }
 
-        if (file_exists($captcha)) {
+        if (!empty($captcha)) {
             $im = imagecreatefromjpeg($captcha);
         } else {
             $im = imagecreatetruecolor(162, 87);
         }
 
-        if (!empty(Shopware()->Config()->CaptchaColor)) {
-            $colors = explode(',', Shopware()->Config()->CaptchaColor);
+        if (!empty($this->get('config')->CaptchaColor)) {
+            $colors = explode(',', $this->get('config')->CaptchaColor);
         } else {
             $colors = explode(',', '255,0,0');
         }
 
-        $black = ImageColorAllocate($im, $colors[0], $colors[1], $colors[2]);
+        $black = imagecolorallocate($im, $colors[0], $colors[1], $colors[2]);
 
         $string = implode(' ', str_split($string));
 
-        if (file_exists($font)) {
+        if (!empty($font)) {
             for ($i = 0; $i <= strlen($string); $i++) {
                 $rand1 = rand(35, 40);
                 $rand2 = rand(15, 20);
@@ -136,11 +130,31 @@ class Shopware_Controllers_Widgets_Captcha extends Enlight_Controller_Action
                 imageline($im, mt_rand(30, 70), mt_rand(0, 50), mt_rand(100, 150), mt_rand(20, 100), $black);
             }
         } else {
-            $white = ImageColorAllocate($im, 255, 255, 255);
+            $white = imagecolorallocate($im, 255, 255, 255);
             imagestring($im, 5, 40, 35, $string, $white);
             imagestring($im, 3, 40, 70, 'missing font', $white);
         }
 
         return $im;
+    }
+
+    /**
+     * Helper function that checks if the file exists in the all available template directories
+     * If the file exists, the full file path will be returned, otherwise null
+     *
+     * @param $fileName
+     * @return null|string
+     */
+    private function getCaptchaFile($fileName)
+    {
+        $templateDirs = $this->get('template')->getTemplateDir();
+
+        foreach ($templateDirs as $templateDir) {
+            if (file_exists($templateDir . $fileName)) {
+                return $templateDir . $fileName;
+            }
+        }
+
+        return null;
     }
 }

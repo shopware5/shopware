@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,7 +32,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * @category  Shopware
  * @package   Shopware\Command
- * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class SnippetsToDbCommand extends ShopwareCommand
 {
@@ -56,6 +56,13 @@ class SnippetsToDbCommand extends ShopwareCommand
                 InputOption::VALUE_NONE,
                 'If given, the file will be overwritten if it already exists'
             )
+            ->addOption(
+                'source',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'The folder from where the snippets should be imported, relative to Shopware\'s root folder',
+                'snippets'
+            )
         ;
     }
 
@@ -68,8 +75,10 @@ class SnippetsToDbCommand extends ShopwareCommand
         $databaseLoader = $this->container->get('shopware.snippet_database_handler');
         $force = $input->getOption('force');
 
+        $sourceDir = $this->container->get('application')->DocPath($input->getOption('source'));
+        
         $databaseLoader->setOutput($output);
-        $databaseLoader->loadToDatabase(null, $force);
+        $databaseLoader->loadToDatabase($sourceDir, $force);
 
         //Import plugin snippets
         if ($input->getOption('include-plugins')) {

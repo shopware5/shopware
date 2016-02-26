@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,8 +23,11 @@
  */
 
 namespace   Shopware\Models\Dispatch;
-use         Shopware\Components\Model\ModelRepository,
-            Shopware\Models\Customer;
+
+use Doctrine\ORM\Query\Expr\Join;
+use Shopware\Components\Model\ModelRepository;
+use Shopware\Models\Customer;
+
 /**
  * Repository for the customer model (Shopware\Models\Dispatch\Dispatch).
  * <br>
@@ -33,7 +36,6 @@ use         Shopware\Components\Model\ModelRepository,
  */
 class Repository extends ModelRepository
 {
-
     /**
      * @param $filter
      * @param $order
@@ -104,6 +106,28 @@ class Repository extends ModelRepository
     }
 
     /**
+     * Returns basic info about known shipping and dispatch settings
+     *
+     * @param null $filter - Used to search in the name and description of the dispatch data set
+     * @param array $order - Name of the field which should considered as sorting field
+     * @param null $limit - Reduce the number of returned data sets
+     * @param null $offset - Start the output based on that offset
+     *
+     * @return \Doctrine\ORM\Query
+     */
+    public function getListQuery($filter = null, $order = array(), $limit = null, $offset = null)
+    {
+        $builder = $this->getListQueryBuilder($filter, $order);
+        if (!empty($offset)) {
+            $builder->setFirstResult($offset);
+        }
+        if (!empty($limit)) {
+            $builder->setMaxResults($limit);
+        }
+        return $builder->getQuery();
+    }
+
+    /**
      * Helper function to create the query builder for the "getShippingCostsQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      * @param $dispatchId - If this parameter is given, only one data set will be returned
@@ -117,16 +141,48 @@ class Repository extends ModelRepository
         $expr     = $this->getEntityManager()->getExpressionBuilder();
 
         // Build the query
-        $builder->select(array('dispatch', 'countries', 'categories', 'holidays', 'payments', 'attribute'))
-                ->leftJoin('dispatch.countries','countries')
-                ->leftJoin('dispatch.categories','categories')
-                ->leftJoin('dispatch.holidays','holidays')
-                ->leftJoin('dispatch.attribute','attribute')
-                ->leftJoin('dispatch.payments','payments');
+        $builder->select(['dispatch', 'countries', 'categories', 'holidays', 'payments', 'attribute'])
+                ->leftJoin('dispatch.countries', 'countries')
+                ->leftJoin('dispatch.categories', 'categories')
+                ->leftJoin('dispatch.holidays', 'holidays')
+                ->leftJoin('dispatch.attribute', 'attribute')
+                ->leftJoin('dispatch.payments', 'payments');
         if (null !== $dispatchId) {
             $builder->where($expr->eq('dispatch.id', '?2'))
                     ->setParameter(2, $dispatchId);
         }
+
+        // Set the filtering logic
+        if (null !== $filter) {
+            $builder->andWhere(
+                $expr->orX(
+                    $expr->like('dispatch.name', '?1'),
+                    $expr->like('dispatch.description', '?1')
+                )
+            );
+            $builder->setParameter(1, '%' . $filter . '%');
+        }
+
+        // Set the order logic
+        $this->addOrderBy($builder, $order);
+
+        return $builder;
+    }
+
+    /**
+     * Helper function to create the query builder for the "getShippingCostsQuery" function.
+     * This function can be hooked to modify the query builder of the query object.
+     * @param null $filter - Used to search in the name and description of the dispatch data set
+     * @param array $order - Name of the field which should considered as sorting field
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getListQueryBuilder($filter = null, $order = array())
+    {
+        $builder  = $this->createQueryBuilder('dispatch');
+        $expr     = $this->getEntityManager()->getExpressionBuilder();
+
+        // Build the query
+        $builder->select(['dispatch']);
 
         // Set the filtering logic
         if (null !== $filter) {
@@ -176,7 +232,7 @@ class Repository extends ModelRepository
         $builder->from('Shopware\Models\Dispatch\ShippingCost', 'shippingcosts')->select(array('shippingcosts'));
 
         // assure that we will get an empty result set when no dispatch ID is provided
-        if (is_null($dispatchId) || empty($dispatchId) ) {
+        if (is_null($dispatchId) || empty($dispatchId)) {
             $dispatchId = '-1';
         }
         $builder->where($expr->eq('shippingcosts.dispatchId', $dispatchId));
@@ -196,7 +252,7 @@ class Repository extends ModelRepository
     {
         return $this->getEntityManager()
             ->createQuery('delete from Shopware\Models\Dispatch\ShippingCost cm where cm.dispatchId = ?1')
-            ->setParameter(1,$dispatchId);
+            ->setParameter(1, $dispatchId);
     }
 
     /**
@@ -345,7 +401,7 @@ class Repository extends ModelRepository
 
         // Build the query
         $builder->from('Shopware\Models\Dispatch\Holiday', 'holiday')
-                ->select(array('holiday'));
+                ->select(['holiday']);
 
         // Set the order logic
         $builder = $this->sortOrderQuery($builder, 'holiday', $order);
@@ -355,6 +411,24 @@ class Repository extends ModelRepository
         }
 
         return $builder;
+    }
+
+    /**
+     * Selects all shipping costs with a deleted shop
+     *
+     * @return \Doctrine\ORM\Query
+     */
+    public function getDispatchWithDeletedShopsQuery()
+    {
+        $builder = $this->getEntityManager()->createQueryBuilder();
+
+        $builder->select('dispatch')
+            ->from('Shopware\Models\Dispatch\Dispatch', 'dispatch')
+            ->leftJoin('Shopware\Models\Shop\Shop', 'shop', Join::WITH, 'dispatch.multiShopId = shop.id')
+            ->andWhere('dispatch.multiShopId IS NOT NULL')
+            ->andWhere('shop.id IS NULL');
+
+        return $builder->getQuery();
     }
 
     /**

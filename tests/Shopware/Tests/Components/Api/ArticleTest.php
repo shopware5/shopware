@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2013 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -83,6 +83,9 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
      * @group performance
      *
      * @depends testPerformanceCreateBigOne
+     * @param $id
+     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      */
     public function testPerformanceGetBigOneObject($id)
     {
@@ -96,6 +99,9 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
      * @group performance
      *
      * @depends testPerformanceCreateBigOne
+     * @param $id
+     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      */
     public function testPerformanceGetBigOneArray($id)
     {
@@ -112,10 +118,12 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
      */
     public function testPerformanceBigArticleUpdate($id)
     {
-        for($i=0; $i < 20; $i++) {
+        for ($i = 0; $i < 20; $i++) {
             $data = array(
                 'similar' => Shopware()->Db()->fetchAll("SELECT DISTINCT id FROM s_articles ORDER BY RAND() LIMIT 10"),
-                'categories' => Shopware()->Db()->fetchAll("SELECT DISTINCT id FROM s_categories ORDER BY RAND() LIMIT 20"),
+                'categories' => Shopware()->Db()->fetchAll(
+                    "SELECT DISTINCT id FROM s_categories ORDER BY RAND() LIMIT 20"
+                ),
                 'related' => Shopware()->Db()->fetchAll("SELECT DISTINCT id FROM s_articles LIMIT 10"),
             );
 
@@ -136,9 +144,7 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
             'highlight' => true,
             'keywords' => 'test, testarticle',
             'metaTitle' => 'this is a test title with umlauts äöüß',
-
             'filterGroupId' => 1,
-
             'propertyValues' => array(
                 array(
                     'value' => 'grün',
@@ -153,25 +159,20 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
                     )
                 )
             ),
-
             'mainDetail' => array(
                 'number' => 'swTEST' . uniqid(),
                 'inStock' => 15,
                 'unitId' => 1,
-
                 'attribute' => array(
                     'attr1' => 'Freitext1',
                     'attr2' => 'Freitext2',
                 ),
-
                 'minPurchase' => 5,
                 'purchaseSteps' => 2,
                 'purchaseSteps' => 2,
-
                 'prices' => array(
                     array(
                         'customerGroupKey' => 'EK',
-                        'from' => 1,
                         'to' => 20,
                         'price' => 500,
                     ),
@@ -183,7 +184,6 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
                     ),
                 )
             ),
-
             'configuratorSet' => array(
                 'name' => 'MeinKonf',
                 'groups' => array(
@@ -203,7 +203,6 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
                     ),
                 )
             ),
-
             'variants' => array(
                 array(
                     'number' => 'swTEST.variant.' . uniqid(),
@@ -213,12 +212,10 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
                         'unit' => 'xyz',
                         'name' => 'newUnit'
                     ),
-
                     'attribute' => array(
                         'attr3' => 'Freitext3',
                         'attr4' => 'Freitext4',
                     ),
-
                     'configuratorOptions' => array(
                         array(
                             'option' => 'Gelb',
@@ -230,14 +227,11 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
                         )
 
                     ),
-
                     'minPurchase' => 5,
                     'purchaseSteps' => 2,
-
                     'prices' => array(
                         array(
                             'customerGroupKey' => 'H',
-                            'from' => 1,
                             'to' => 20,
                             'price' => 500,
                         ),
@@ -290,7 +284,6 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
             $testData['mainDetail']['attribute']['attr2']
         );
 
-
         $propertyValues = $article->getPropertyValues()->getValues();
         $this->assertEquals(count($propertyValues), count($testData['propertyValues']));
         foreach ($propertyValues as $propertyValue) {
@@ -304,6 +297,14 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         $this->assertEquals(2, count($article->getSimilar()));
         $this->assertEquals(2, count($article->getLinks()));
         $this->assertEquals(2, count($article->getMainDetail()->getPrices()));
+        foreach ($article->getMainDetail()->getPrices() as $price) {
+            $this->assertGreaterThan(0, $price->getFrom());
+        }
+        foreach ($article->getDetails() as $variant) {
+            foreach ($variant->getPrices() as $price) {
+                $this->assertGreaterThan(0, $price->getFrom());
+            }
+        }
 
         return $article->getId();
     }
@@ -320,7 +321,6 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
             'description' => 'Test description',
             'active' => true,
             'filterGroupId' => 1,
-
             'propertyValues' => array(
                 array(
                     'value' => 'grün',
@@ -335,10 +335,9 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
                     )
                 )
             ),
-
             'images' => array(
                 array(
-                    'link' => 'http://lorempixel.com/600/400/'
+                    'link' => 'file://' . __DIR__ . '/fixtures/test-bild.jpg'
                 ),
                 array(
                     'link' => 'data:image/png;base64,' . require(__DIR__ . '/fixtures/base64image.php')
@@ -347,25 +346,19 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
                     'link' => 'file://' . __DIR__ . '/fixtures/variant-image.png'
                 )
             ),
-
             'mainDetail' => array(
                 'number' => 'swTEST' . uniqid(),
                 'inStock' => 15,
                 'unitId' => 1,
-
                 'attribute' => array(
                     'attr1' => 'Freitext1',
                     'attr2' => 'Freitext2',
                 ),
-
                 'minPurchase' => 5,
                 'purchaseSteps' => 2,
-                'purchaseSteps' => 2,
-
                 'prices' => array(
                     array(
                         'customerGroupKey' => 'EK',
-                        'from' => 1,
                         'to' => 20,
                         'price' => 500,
                     ),
@@ -377,7 +370,6 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
                     ),
                 )
             ),
-
             'configuratorSet' => array(
                 'name' => 'MeinKonf',
                 'groups' => array(
@@ -397,7 +389,6 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
                     ),
                 )
             ),
-
             'variants' => array(
                 array(
                     'number' => 'swTEST.variant.' . uniqid(),
@@ -407,18 +398,15 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
                         'unit' => 'xyz',
                         'name' => 'newUnit'
                     ),
-
                     'attribute' => array(
                         'attr3' => 'Freitext3',
                         'attr4' => 'Freitext4',
                     ),
-
                     'images' => array(
                         array(
-                            'link' => 'http://lorempixel.com/600/400/'
+                            'link' => 'file://' . __DIR__ . '/fixtures/test-bild.jpg'
                         )
                     ),
-
                     'configuratorOptions' => array(
                         array(
                             'option' => 'Gelb',
@@ -430,10 +418,8 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
                         )
 
                     ),
-
                     'minPurchase' => 5,
                     'purchaseSteps' => 2,
-
                     'prices' => array(
                         array(
                             'customerGroupKey' => 'H',
@@ -461,14 +447,95 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         $this->assertGreaterThan(0, $article->getId());
         $this->assertCount(4, $article->getImages());
 
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+
         foreach ($article->getImages() as $image) {
-            $this->assertCount(6, $image->getMedia()->getThumbnails());
+            $this->assertCount(4, $image->getMedia()->getThumbnails());
             foreach ($image->getMedia()->getThumbnails() as $thumbnail) {
-                $this->assertFileExists(Shopware()->OldPath() . $thumbnail);
+                $this->assertTrue($mediaService->has($thumbnail));
+            }
+        }
+        foreach ($article->getMainDetail()->getPrices() as $price) {
+            $this->assertGreaterThan(0, $price->getFrom());
+        }
+        foreach ($article->getDetails() as $variant) {
+            foreach ($variant->getPrices() as $price) {
+                $this->assertGreaterThan(0, $price->getFrom());
             }
         }
 
         return $article->getId();
+    }
+
+    /**
+     * @depends testCreateWithImageShouldCreateThumbnails
+     * @param $id
+     * @throws Zend_Http_Client_Exception
+     * @throws Zend_Json_Exception
+     */
+    public function testFlipArticleMainVariantShouldBeSuccessful($id)
+    {
+        $originalArticle = $this->resource->getOne($id);
+        $mainVariantNumber = $originalArticle['mainDetailId'];
+
+        $testData = array(
+            'mainDetail' => array(
+                'number' => $mainVariantNumber,
+                'inStock' => 15,
+                'unitId' => 1,
+                'prices' => array(
+                    array(
+                        'customerGroupKey' => 'EK',
+                        'from' => 1,
+                        'to' => 20,
+                        'price' => 500,
+                    ),
+                    array(
+                        'customerGroupKey' => 'EK',
+                        'from' => 21,
+                        'to' => '-',
+                        'price' => 400,
+                    ),
+                )
+            ),
+            'variants' => array(
+                array(
+                    'number' => $mainVariantNumber,
+                    'inStock' => 15,
+                    'unitId' => 1,
+                    'isMain' => true,
+                    'prices' => array(
+                        array(
+                            'customerGroupKey' => 'EK',
+                            'from' => 1,
+                            'to' => 20,
+                            'price' => 500,
+                        ),
+                        array(
+                            'customerGroupKey' => 'EK',
+                            'from' => 21,
+                            'to' => '-',
+                            'price' => 400,
+                        ),
+                    ),
+                    'configuratorOptions' => array(
+                        array(
+                            'option' => 'Gelb',
+                            'group' => 'Farbe'
+                        ),
+                        array(
+                            'option' => 'XL',
+                            'group' => 'Größe'
+                        )
+
+                    ),
+                ),
+            ),
+        );
+
+        $article = $this->resource->update($id, $testData);
+
+        $this->assertEquals($mainVariantNumber, $article->getMainDetail()->getNumber());
     }
 
     /**
@@ -482,26 +549,188 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         $testData = array(
             'images' => array(
                 array(
-                    'link' => 'http://www.shopware.com/sites/default/files/assets/images/refsprite_dbahn.png'
+                    'link' => 'https://cdn.shopware.de/github/readme_screenshot.png'
                 )
             ),
         );
 
         $article = $this->resource->update($id, $testData);
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
 
         $this->assertInstanceOf('\Shopware\Models\Article\Article', $article);
         $this->assertGreaterThan(0, $article->getId());
 
         $this->assertCount(5, $article->getImages());
         foreach ($article->getImages() as $image) {
-            $this->assertCount(6, $image->getMedia()->getThumbnails());
+            $this->assertCount(4, $image->getMedia()->getThumbnails());
             foreach ($image->getMedia()->getThumbnails() as $thumbnail) {
-                $this->assertFileExists(Shopware()->OldPath() . $thumbnail);
+                $this->assertTrue($mediaService->has($thumbnail));
             }
         }
 
         // Cleanup test data
         $this->resource->delete($id);
+    }
+
+    /**
+     * Tests the thumbnail generation and their proportional sizes
+     *
+     * @return int
+     */
+    public function testCreateWithImageShouldCreateThumbnailsWithRightProportions()
+    {
+        $testData = array(
+            'name' => 'Test article with images and right proportions',
+            'description' => 'Test description',
+            'active' => true,
+            'filterGroupId' => 1,
+            'propertyValues' => array(
+                array(
+                    'value' => 'grün',
+                    'option' => array(
+                        'name' => 'Farbe'
+                    )
+                ),
+                array(
+                    'value' => 'testWert',
+                    'option' => array(
+                        'name' => 'neueOption' . uniqid()
+                    )
+                )
+            ),
+            'images' => array(
+                array(
+                    'link' => 'file://' . __DIR__ . '/fixtures/test-bild.jpg'
+                )
+            ),
+            'mainDetail' => array(
+                'number' => 'swTEST' . uniqid(),
+                'inStock' => 15,
+                'unitId' => 1,
+                'attribute' => array(
+                    'attr1' => 'Freitext1',
+                    'attr2' => 'Freitext2',
+                ),
+                'minPurchase' => 5,
+                'purchaseSteps' => 2,
+                'prices' => array(
+                    array(
+                        'customerGroupKey' => 'EK',
+                        'from' => 1,
+                        'to' => 20,
+                        'price' => 500,
+                    ),
+                    array(
+                        'customerGroupKey' => 'EK',
+                        'from' => 21,
+                        'to' => '-',
+                        'price' => 400,
+                    ),
+                )
+            ),
+            'configuratorSet' => array(
+                'name' => 'MeinKonf',
+                'groups' => array(
+                    array(
+                        'name' => 'Farbe',
+                        'options' => array(
+                            array('name' => 'Gelb'),
+                            array('name' => 'grün')
+                        )
+                    ),
+                    array(
+                        'name' => 'Gräße',
+                        'options' => array(
+                            array('name' => 'L'),
+                            array('name' => 'XL')
+                        )
+                    ),
+                )
+            ),
+            'variants' => array(
+                array(
+                    'number' => 'swTEST.variant.' . uniqid(),
+                    'inStock' => 17,
+                    // create a new unit
+                    'unit' => array(
+                        'unit' => 'xyz',
+                        'name' => 'newUnit'
+                    ),
+                    'attribute' => array(
+                        'attr3' => 'Freitext3',
+                        'attr4' => 'Freitext4',
+                    ),
+                    'images' => array(
+                        array(
+                            'link' => 'file://' . __DIR__ . '/fixtures/test-bild.jpg'
+                        )
+                    ),
+                    'configuratorOptions' => array(
+                        array(
+                            'option' => 'Gelb',
+                            'group' => 'Farbe'
+                        ),
+                        array(
+                            'option' => 'XL',
+                            'group' => 'Größe'
+                        )
+
+                    ),
+                    'minPurchase' => 5,
+                    'purchaseSteps' => 2,
+                    'prices' => array(
+                        array(
+                            'customerGroupKey' => 'H',
+                            'from' => 1,
+                            'to' => 20,
+                            'price' => 500,
+                        ),
+                        array(
+                            'customerGroupKey' => 'H',
+                            'from' => 21,
+                            'to' => '-',
+                            'price' => 400,
+                        ),
+                    )
+
+                )
+            ),
+            'taxId' => 1,
+            'supplierId' => 2,
+        );
+
+        $article = $this->resource->create($testData);
+
+        $this->assertInstanceOf('\Shopware\Models\Article\Article', $article);
+        $this->assertGreaterThan(0, $article->getId());
+        $this->assertCount(2, $article->getImages());
+
+        $proportionalSizes = array(
+            '200x200',
+            '600x600',
+            '1280x1280',
+            '140x140'
+        );
+
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+
+        foreach ($article->getImages() as $image) {
+            $thumbnails = $image->getMedia()->getThumbnails();
+            $this->assertCount(4, $thumbnails);
+            $thumbnails = array_values($thumbnails);
+
+            foreach ($thumbnails as $key => $thumbnail) {
+                $this->assertTrue($mediaService->has($thumbnail));
+
+                $image = imagecreatefromstring($mediaService->read($thumbnail));
+                $width = imagesx($image);
+                $height = imagesy($image);
+
+                $this->assertSame($proportionalSizes[$key], $width . 'x' . $height);
+            }
+        }
+
+        $this->resource->delete($article->getId());
     }
 
     /**
@@ -521,9 +750,7 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
             'highlight' => true,
             'keywords' => 'test, testarticle',
             'metaTitle' => 'this is a test title with umlauts äöüß',
-
             'filterGroupId' => 1,
-
             'propertyValues' => array(
                 array(
                     'value' => 'grün',
@@ -538,21 +765,17 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
                     )
                 )
             ),
-
             'mainDetail' => array(
                 'number' => 'swConfigSetMainTest' . uniqid(),
                 'inStock' => 15,
                 'unitId' => 1,
-
                 'attribute' => array(
                     'attr1' => 'Freitext1',
                     'attr2' => 'Freitext2',
                 ),
-
                 'minPurchase' => 5,
                 'purchaseSteps' => 2,
                 'purchaseSteps' => 2,
-
                 'prices' => array(
                     array(
                         'customerGroupKey' => 'EK',
@@ -568,7 +791,6 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
                     ),
                 )
             ),
-
             'configuratorSet' => array(
                 'name' => 'NewConfigSet',
                 'groups' => array(
@@ -593,7 +815,6 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
                     ),
                 )
             ),
-
             'variants' => array(
                 array(
                     'number' => 'swConfigSetMainTest.variant.' . uniqid(),
@@ -603,12 +824,10 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
                         'unit' => 'xyz',
                         'name' => 'newUnit'
                     ),
-
                     'attribute' => array(
                         'attr3' => 'Freitext3',
                         'attr4' => 'Freitext4',
                     ),
-
                     'configuratorOptions' => array(
                         array(
                             'option' => 'Opt11',
@@ -623,10 +842,8 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
                             'group' => 'Group2'
                         )
                     ),
-
                     'minPurchase' => 5,
                     'purchaseSteps' => 2,
-
                     'prices' => array(
                         array(
                             'customerGroupKey' => 'H',
@@ -650,12 +867,10 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
                         'unit' => 'xyz',
                         'name' => 'newUnit'
                     ),
-
                     'attribute' => array(
                         'attr3' => 'Freitext3',
                         'attr4' => 'Freitext4',
                     ),
-
                     'configuratorOptions' => array(
                         array(
                             'option' => 'Opt12',
@@ -666,10 +881,8 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
                             'group' => 'Group2'
                         )
                     ),
-
                     'minPurchase' => 5,
                     'purchaseSteps' => 2,
-
                     'prices' => array(
                         array(
                             'customerGroupKey' => 'H',
@@ -717,7 +930,6 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
             $testData['mainDetail']['attribute']['attr2']
         );
 
-
         $propertyValues = $article->getPropertyValues()->getValues();
         $this->assertEquals(count($propertyValues), count($testData['propertyValues']));
         foreach ($propertyValues as $propertyValue) {
@@ -732,9 +944,9 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         $this->assertEquals(2, count($article->getLinks()));
         $this->assertEquals(2, count($article->getMainDetail()->getPrices()));
 
-        $groups = Shopware()->Models()
-                ->getRepository('Shopware\Models\Article\Configurator\Group')
-                ->findBy(array('name' => array('Group1', 'Group2')));
+        $groups = Shopware()->Models()->getRepository('Shopware\Models\Article\Configurator\Group')->findBy(
+                array('name' => array('Group1', 'Group2'))
+            );
 
         foreach ($groups as $group) {
             Shopware()->Models()->remove($group);
@@ -754,7 +966,6 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
 
         $article = $this->resource->getOneByNumber($number);
         $this->assertEquals($id, $article->getId());
-
     }
 
     /**
@@ -994,8 +1205,7 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
             if (!empty($id)) {
                 $this->resource->delete($id);
             }
-        } catch (Exception $e) {
-
+        } catch(Exception $e) {
         }
 
         $article = $this->resource->create(
@@ -1039,8 +1249,6 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
                 )
             ),
             'taxId' => 1,
-
-
             'variants' => array(
                 array(
                     'isMain' => true,
@@ -1114,7 +1322,13 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
 
         /**@var $variant \Shopware\Models\Article\Detail */
         foreach ($updated->getDetails() as $variant) {
-            $this->assertTrue(in_array($variant->getNumber(), array('turn', 'turn.1', 'turn.2', 'turn.3'), 'Variant number dont match'));
+            $this->assertTrue(
+                in_array(
+                    $variant->getNumber(),
+                    array('turn', 'turn.1', 'turn.2', 'turn.3'),
+                    'Variant number dont match'
+                )
+            );
 
             $this->assertCount(2, $variant->getConfiguratorOptions(), 'Configurator option count dont match');
 
@@ -1128,10 +1342,303 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
             if (!empty($id)) {
                 $this->resource->delete($id);
             }
-        } catch (Exception $e) {
+        } catch(Exception $e) {
+        }
+    }
 
+    public function testUpdateToConfiguratorSetPosition()
+    {
+        try {
+            $id = $this->resource->getIdFromNumber('turn');
+            if (!empty($id)) {
+                $this->resource->delete($id);
+            }
+        } catch(Exception $e) {
         }
 
+        $article = $this->resource->create(
+            array(
+                'name' => 'Turnschuhe',
+                'active' => true,
+                'tax' => 19,
+                'supplier' => 'Turnschuhe Inc.',
+                'categories' => array(
+                    array('id' => 15),
+                ),
+                'mainDetail' => array(
+                    'number' => 'turn',
+                    'prices' => array(
+                        array(
+                            'customerGroupKey' => 'EK',
+                            'price' => 999,
+                        ),
+                    )
+                ),
+            )
+        );
+
+        $updateArticle = array(
+            'configuratorSet' => array(
+                'groups' => array(
+                    array(
+                        'name' => 'Größe',
+                        'options' => array(
+                            array('name' => 'S', 'position' => 123),
+                            array('name' => 'M', 'position' => 4)
+                        )
+                    ),
+                    array(
+                        'name' => 'Farbe',
+                        'options' => array(
+                            array('name' => 'grün', 'position' => 99),
+                            array('name' => 'blau', 'position' => 11)
+                        )
+                    ),
+                )
+            ),
+            'taxId' => 1,
+            'variants' => array(
+                array(
+                    'isMain' => true,
+                    'number' => 'turn',
+                    'inStock' => 15,
+                    'addtionnaltext' => 'S / grün',
+                    'configuratorOptions' => array(
+                        array('group' => 'Größe', 'option' => 'S'),
+                        array('group' => 'Farbe', 'option' => 'grün'),
+                    ),
+                    'prices' => array(
+                        array(
+                            'customerGroupKey' => 'EK',
+                            'price' => 1999,
+                        ),
+                    )
+                ),
+                array(
+                    'isMain' => false,
+                    'number' => 'turn.1',
+                    'inStock' => 15,
+                    'addtionnaltext' => 'S / blau',
+                    'configuratorOptions' => array(
+                        array('group' => 'Größe', 'option' => 'S'),
+                        array('group' => 'Farbe', 'option' => 'blau'),
+                    ),
+                    'prices' => array(
+                        array(
+                            'customerGroupKey' => 'EK',
+                            'price' => 999,
+                        ),
+                    )
+                ),
+                array(
+                    'isMain' => false,
+                    'number' => 'turn.2',
+                    'inStock' => 15,
+                    'addtionnaltext' => 'M / grün',
+                    'configuratorOptions' => array(
+                        array('group' => 'Größe', 'option' => 'M'),
+                        array('group' => 'Farbe', 'option' => 'grün'),
+                    ),
+                    'prices' => array(
+                        array(
+                            'customerGroupKey' => 'EK',
+                            'price' => 999,
+                        ),
+                    )
+                ),
+                array(
+                    'isMain' => false,
+                    'number' => 'turn.3',
+                    'inStock' => 15,
+                    'addtionnaltext' => 'M / blau',
+                    'configuratorOptions' => array(
+                        array('group' => 'Größe', 'option' => 'M'),
+                        array('group' => 'Farbe', 'option' => 'blau'),
+                    ),
+                    'prices' => array(
+                        array(
+                            'customerGroupKey' => 'EK',
+                            'price' => 999,
+                        ),
+                    )
+                )
+            )
+        );
+        /**@var $article \Shopware\Models\Article\Article */
+        $updated = $this->resource->update($article->getId(), $updateArticle);
+        $this->assertEquals($updated->getName(), 'Turnschuhe', "Article name doesn't match");
+
+        /**@var $variant \Shopware\Models\Article\Detail */
+        foreach ($updated->getDetails() as $variant) {
+            $this->assertTrue(
+                in_array(
+                    $variant->getNumber(),
+                    array('turn', 'turn.1', 'turn.2', 'turn.3'),
+                    'Variant number dont match'
+                )
+            );
+
+            /**@var $option \Shopware\Models\Article\Configurator\Option */
+            foreach ($variant->getConfiguratorOptions() as $option) {
+                $this->assertTrue(in_array($option->getName(), array('M', 'S', 'blau', 'grün')));
+
+                switch ($option->getName()) {
+                    case 'M':
+                        $this->assertEquals(4, $option->getPosition());
+                        break;
+                    case 'S':
+                        $this->assertEquals(123, $option->getPosition());
+                        break;
+                    case 'blau':
+                        $this->assertEquals(11, $option->getPosition());
+                        break;
+                    case 'grün':
+                        $this->assertEquals(99, $option->getPosition());
+                        break;
+
+                    default:
+                        $this->assertTrue(false, 'There is an unknown variant.');
+                }
+            }
+        }
+
+        try {
+            if (!empty($id)) {
+                $this->resource->delete($id);
+            }
+        } catch(Exception $e) {
+        }
+    }
+
+    public function testUpdateToConfiguratorSetType()
+    {
+        try {
+            $id = $this->resource->getIdFromNumber('turn');
+            if (!empty($id)) {
+                $this->resource->delete($id);
+            }
+        } catch(Exception $e) {
+        }
+
+        $article = $this->resource->create(
+            array(
+                'name' => 'Turnschuhe',
+                'active' => true,
+                'tax' => 19,
+                'supplier' => 'Turnschuhe Inc.',
+                'categories' => array(
+                    array('id' => 15),
+                ),
+                'mainDetail' => array(
+                    'number' => 'turn',
+                    'prices' => array(
+                        array(
+                            'customerGroupKey' => 'EK',
+                            'price' => 999,
+                        ),
+                    )
+                ),
+            )
+        );
+
+        $updateArticle = array(
+            'configuratorSet' => array(
+                'type' => 2,
+                'groups' => array(
+                    array(
+                        'name' => 'Größe',
+                        'options' => array(
+                            array('name' => 'S', 'position' => 123),
+                            array('name' => 'M', 'position' => 4)
+                        )
+                    ),
+                    array(
+                        'name' => 'Farbe',
+                        'options' => array(
+                            array('name' => 'grün', 'position' => 99),
+                            array('name' => 'blau', 'position' => 11)
+                        )
+                    ),
+                )
+            ),
+            'taxId' => 1,
+            'variants' => array(
+                array(
+                    'isMain' => true,
+                    'number' => 'turn',
+                    'inStock' => 15,
+                    'addtionnaltext' => 'S / grün',
+                    'configuratorOptions' => array(
+                        array('group' => 'Größe', 'option' => 'S'),
+                        array('group' => 'Farbe', 'option' => 'grün'),
+                    ),
+                    'prices' => array(
+                        array(
+                            'customerGroupKey' => 'EK',
+                            'price' => 1999,
+                        ),
+                    )
+                ),
+                array(
+                    'isMain' => false,
+                    'number' => 'turn.1',
+                    'inStock' => 15,
+                    'addtionnaltext' => 'S / blau',
+                    'configuratorOptions' => array(
+                        array('group' => 'Größe', 'option' => 'S'),
+                        array('group' => 'Farbe', 'option' => 'blau'),
+                    ),
+                    'prices' => array(
+                        array(
+                            'customerGroupKey' => 'EK',
+                            'price' => 999,
+                        ),
+                    )
+                ),
+                array(
+                    'isMain' => false,
+                    'number' => 'turn.2',
+                    'inStock' => 15,
+                    'addtionnaltext' => 'M / grün',
+                    'configuratorOptions' => array(
+                        array('group' => 'Größe', 'option' => 'M'),
+                        array('group' => 'Farbe', 'option' => 'grün'),
+                    ),
+                    'prices' => array(
+                        array(
+                            'customerGroupKey' => 'EK',
+                            'price' => 999,
+                        ),
+                    )
+                ),
+                array(
+                    'isMain' => false,
+                    'number' => 'turn.3',
+                    'inStock' => 15,
+                    'addtionnaltext' => 'M / blau',
+                    'configuratorOptions' => array(
+                        array('group' => 'Größe', 'option' => 'M'),
+                        array('group' => 'Farbe', 'option' => 'blau'),
+                    ),
+                    'prices' => array(
+                        array(
+                            'customerGroupKey' => 'EK',
+                            'price' => 999,
+                        ),
+                    )
+                )
+            )
+        );
+        /**@var $article \Shopware\Models\Article\Article */
+        $updated = $this->resource->update($article->getId(), $updateArticle);
+        $this->assertEquals($updated->getConfiguratorSet()->getType(), 2, "ConfiguratorSet.Type doesn't match");
+
+        try {
+            if (!empty($id)) {
+                $this->resource->delete($id);
+            }
+        } catch(Exception $e) {
+        }
     }
 
     /**
@@ -1155,7 +1662,7 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
                 'inStock' => 15,
                 'unitId' => 1,
                 'prices' => array(
-                    array('customerGroupKey' => 'EK','from' => 1,'to' => '-','price' => 400)
+                    array('customerGroupKey' => 'EK', 'from' => 1, 'to' => '-', 'price' => 400)
                 )
             ),
             'variants' => array(
@@ -1164,7 +1671,7 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
                     'inStock' => 15,
                     'unitId' => 1,
                     'prices' => array(
-                        array('customerGroupKey' => 'EK','from' => 1,'to' => '-','price' => 400)
+                        array('customerGroupKey' => 'EK', 'from' => 1, 'to' => '-', 'price' => 400)
                     ),
                     'configuratorOptions' => $variantOptions
                 )
@@ -1177,7 +1684,6 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         $this->resource->setResultMode(\Shopware\Components\Api\Resource\Article::HYDRATE_ARRAY);
         $data = $this->resource->getOne($article->getId());
 
-
         $this->assertCount(2, $data['details'][0]['configuratorOptions']);
 
         return $variantNumber;
@@ -1186,12 +1692,15 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
     /**
      * @depends testCreateUseConfiguratorId
      */
-    public function testUpdateUseConfiguratorIds($variantNumber) {
-
+    public function testUpdateUseConfiguratorIds($variantNumber)
+    {
         $configurator = $this->getSimpleConfiguratorSet(2, 5);
         $variantOptions = $this->getVariantOptionsOfSet($configurator);
 
-        $id = Shopware()->Db()->fetchOne("SELECT articleID FROM s_articles_details WHERE ordernumber = ?", array($variantNumber));
+        $id = Shopware()->Db()->fetchOne(
+            "SELECT articleID FROM s_articles_details WHERE ordernumber = ?",
+            array($variantNumber)
+        );
 
         $data = array(
             'variants' => array(
@@ -1215,14 +1724,14 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         );
 
         $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->select(array(
-            'media.id as mediaId',
-            '2 as main'
-        ))
-            ->from('Shopware\Models\Media\Media', 'media')
-            ->addOrderBy('media.id', 'ASC')
-            ->setFirstResult(5)
-            ->setMaxResults(4);
+        $builder->select(
+            array(
+                'media.id as mediaId',
+                '2 as main'
+            )
+        )->from('Shopware\Models\Media\Media', 'media')->addOrderBy('media.id', 'ASC')->setFirstResult(
+                5
+            )->setMaxResults(4);
 
         /**
          * Get random images.
@@ -1240,8 +1749,8 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
 
         $mainFlagExists = false;
 
-        /**@var $image \Shopware\Models\Article\Image*/
-        foreach($article->getImages() as $image) {
+        /**@var $image \Shopware\Models\Article\Image */
+        foreach ($article->getImages() as $image) {
             if ($image->getMain() === 1) {
                 $mainFlagExists = true;
                 $this->assertEquals($expectedMainId, $image->getMedia()->getId());
@@ -1263,7 +1772,7 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
 
         $updateImages = array();
         $newId = null;
-        foreach($article['images'] as $image) {
+        foreach ($article['images'] as $image) {
             if ($image['main'] !== 1) {
                 $updateImages['images'][] = array(
                     'id' => $image['id'],
@@ -1278,7 +1787,7 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         $this->assertCount(4, $article->getImages());
 
         $hasMain = false;
-        foreach($article->getImages() as $image) {
+        foreach ($article->getImages() as $image) {
             if ($image->getMain() === 1) {
                 $hasMain = true;
                 $this->assertEquals($image->getId(), $newId);
@@ -1304,7 +1813,7 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         $updateImages = array();
         $lastMainId = null;
 
-        foreach($article['images'] as $image) {
+        foreach ($article['images'] as $image) {
             $newImageData = array(
                 'id' => $image['id'],
                 'main' => $image['main']
@@ -1319,7 +1828,7 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         }
 
         $newMainId = null;
-        foreach($updateImages['images'] as &$image) {
+        foreach ($updateImages['images'] as &$image) {
             if ($image['id'] !== $lastMainId) {
                 $image['main'] = 1;
                 $newMainId = $image['id'];
@@ -1330,8 +1839,8 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         $this->assertCount(4, $article->getImages());
 
         $hasMain = false;
-        /**@var $image \Shopware\Models\Article\Image*/
-        foreach($article->getImages() as $image) {
+        /**@var $image \Shopware\Models\Article\Image */
+        foreach ($article->getImages() as $image) {
             if ($image->getMain() === 1) {
                 $hasMain = true;
                 $this->assertEquals($newMainId, $image->getId());
@@ -1358,7 +1867,7 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
             )
         );
 
-        for($i=1; $i<=20; $i++) {
+        for ($i = 1; $i <= 20; $i++) {
             $definedTranslation[0]['attr' . $i] = 'English-Attr' . $i;
         }
 
@@ -1376,7 +1885,7 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         $this->assertEquals($definedTranslation['keywords'], $savedTranslation['keywords']);
         $this->assertEquals($definedTranslation['packUnit'], $savedTranslation['packUnit']);
 
-        for($i=1; $i<=20; $i++) {
+        for ($i = 1; $i <= 20; $i++) {
             $attr = 'attr' . $i;
             $this->assertEquals($definedTranslation[$attr], $savedTranslation[$attr]);
         }
@@ -1398,12 +1907,17 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         );
         $article = $this->resource->getOne($model->getId());
 
-        $mediaPath = Shopware()->DocPath('media_image');
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
 
         $this->assertCount(count($data['images']), $article['images']);
-        foreach($article['images'] as $image) {
-            $this->assertFileExists($mediaPath . $image['path'] . '.' . $image['extension']);
-            $this->assertEquals('image/png', mime_content_type($mediaPath . $image['path'] . '.' . $image['extension']));
+        foreach ($article['images'] as $image) {
+            $key = 'media/image/' . $image['path'] . '.' . $image['extension'];
+            $this->assertTrue($mediaService->has($key));
+
+            $imageContent = $mediaService->read($key);
+
+            $mimeType = finfo_buffer(finfo_open(FILEINFO_MIME_TYPE), $imageContent);
+            $this->assertEquals('image/png', $mimeType);
         }
     }
 
@@ -1413,9 +1927,12 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         $data['images'] = $this->getImagesForNewArticle();
         $article = $this->resource->create($data);
 
-        $createdIds = Shopware()->Db()->fetchCol('SELECT id FROM s_articles_img WHERE articleID = :articleId', array(
-            ':articleId' => $article->getId()
-        ));
+        $createdIds = Shopware()->Db()->fetchCol(
+            'SELECT id FROM s_articles_img WHERE articleID = :articleId',
+            array(
+                ':articleId' => $article->getId()
+            )
+        );
 
         $data = array(
             '__options_images' => array('replace' => true),
@@ -1424,11 +1941,14 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
 
         $this->resource->update($article->getId(), $data);
 
-        $updateIds = Shopware()->Db()->fetchCol('SELECT id FROM s_articles_img WHERE articleID = :articleId', array(
-            ':articleId' => $article->getId()
-        ));
+        $updateIds = Shopware()->Db()->fetchCol(
+            'SELECT id FROM s_articles_img WHERE articleID = :articleId',
+            array(
+                ':articleId' => $article->getId()
+            )
+        );
 
-        foreach($updateIds as $id) {
+        foreach ($updateIds as $id) {
             $this->assertNotContains($id, $createdIds);
         }
         $this->assertCount(5, $updateIds);
@@ -1447,9 +1967,12 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
 
         $this->resource->update($article->getId(), $data);
 
-        $updateIds = Shopware()->Db()->fetchCol('SELECT id FROM s_articles_img WHERE articleID = :articleId', array(
-            ':articleId' => $article->getId()
-        ));
+        $updateIds = Shopware()->Db()->fetchCol(
+            'SELECT id FROM s_articles_img WHERE articleID = :articleId',
+            array(
+                ':articleId' => $article->getId()
+            )
+        );
 
         $this->assertCount(10, $updateIds);
     }
@@ -1466,19 +1989,21 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
 
         $this->resource->update($article->getId(), $data);
 
-        $updateIds = Shopware()->Db()->fetchCol('SELECT id FROM s_articles_img WHERE articleID = :articleId', array(
-            ':articleId' => $article->getId()
-        ));
+        $updateIds = Shopware()->Db()->fetchCol(
+            'SELECT id FROM s_articles_img WHERE articleID = :articleId',
+            array(
+                ':articleId' => $article->getId()
+            )
+        );
 
         $this->assertCount(10, $updateIds);
     }
-
 
     public function testImageAttributes()
     {
         $data = $this->getSimpleTestData();
         $images = $this->getImagesForNewArticle();
-        foreach($images as &$image) {
+        foreach ($images as &$image) {
             $image['attribute'] = array(
                 'attribute1' => 'attr1'
             );
@@ -1486,8 +2011,8 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         $data['images'] = $images;
         $article = $this->resource->create($data);
 
-        /**@var $image \Shopware\Models\Article\Image*/
-        foreach($article->getImages() as $image) {
+        /**@var $image \Shopware\Models\Article\Image */
+        foreach ($article->getImages() as $image) {
             $this->assertInstanceOf('\Shopware\Models\Attribute\ArticleImage', $image->getAttribute());
             $this->assertEquals('attr1', $image->getAttribute()->getAttribute1());
             $this->assertEquals(null, $image->getAttribute()->getAttribute2());
@@ -1498,11 +2023,10 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
     public function testCreateWithDuplicateProperties()
     {
         $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->select(array('values', 'option'))
-            ->from('Shopware\Models\Property\Value', 'values')
-            ->innerJoin('values.option', 'option')
-            ->setFirstResult(0)
-            ->setMaxResults(20);
+        $builder->select(array('values', 'option'))->from('Shopware\Models\Property\Value', 'values')->innerJoin(
+                'values.option',
+                'option'
+            )->setFirstResult(0)->setMaxResults(20);
         $databaseValues = $builder->getQuery()->getArrayResult();
         $properties = array();
         foreach ($databaseValues as $value) {
@@ -1529,14 +2053,63 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         }
     }
 
+    public function testCreateWithMultiplePropertiesAndNewGroup()
+    {
+        $data = $this->getSimpleTestData();
+
+        $optionName = 'newOption' . uniqid();
+        $properties = array(
+            array(
+                'option' => array('name' => $optionName),
+                'value' => 'testValue'
+            ),
+            array(
+                'option' => array('name' => $optionName),
+                'value' => 'anotherTestValue'
+            )
+        );
+
+        $data['propertyValues'] = $properties;
+        $data['filterGroupId'] = 1;
+        $article = $this->resource->create($data);
+        $this->resource->setResultMode(
+            \Shopware\Components\Api\Resource\Resource::HYDRATE_ARRAY
+        );
+        $articleId = $article->getId();
+        $article = $this->resource->getOne($articleId);
+
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder->select(array('option'))->from('Shopware\Models\Property\Option', 'option')->where(
+                'option.name = :optionName'
+            )->setParameter('optionName', $optionName)->setFirstResult(0)->setMaxResults(20);
+        $databaseValuesOptions = $builder->getQuery()->getArrayResult();
+
+        $this->assertEquals($article['propertyValues'][0]['optionId'], $article['propertyValues'][1]['optionId']);
+        $this->assertEquals(1, count($databaseValuesOptions));
+
+        $this->resource->delete($articleId);
+
+        //delete test values in s_filter_values
+        $sql = "DELETE FROM `s_filter_values` WHERE `optionId` = ?";
+        Shopware()->Db()->query($sql, array($databaseValuesOptions[0]['id']));
+
+        //delete test values in s_filter_relations
+        $sql = "DELETE FROM `s_filter_relations` WHERE `optionId` = ?";
+        Shopware()->Db()->query($sql, array($databaseValuesOptions[0]['id']));
+
+        //delete test values in s_filter_options
+        $builder->delete('Shopware\Models\Property\Option', 'option')->andWhere(
+                'option.name = :optionName'
+            )->setParameter('optionName', $optionName)->getQuery()->execute();
+    }
+
     public function testUpdateWithDuplicateProperties()
     {
         $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->select(array('values', 'option'))
-            ->from('Shopware\Models\Property\Value', 'values')
-            ->innerJoin('values.option', 'option')
-            ->setFirstResult(0)
-            ->setMaxResults(20);
+        $builder->select(array('values', 'option'))->from('Shopware\Models\Property\Value', 'values')->innerJoin(
+                'values.option',
+                'option'
+            )->setFirstResult(0)->setMaxResults(20);
         $databaseValues = $builder->getQuery()->getArrayResult();
         $properties = array();
         foreach ($databaseValues as $value) {
@@ -1560,14 +2133,15 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         $article = $this->resource->create($data);
         /**@var $article Shopware\Models\Article\Article */
         $article = $this->resource->update($article->getId(), $update);
-        /**@var $value \Shopware\Models\Property\Value*/
+        /**@var $value \Shopware\Models\Property\Value */
         foreach ($article->getPropertyValues() as $value) {
             $this->assertTrue(in_array($value->getId(), $valueIds));
             $this->assertTrue(in_array($value->getOption()->getId(), $optionIds));
         }
     }
 
-    public function testPriceReplacement() {
+    public function testPriceReplacement()
+    {
         $data = $this->getSimpleTestData();
         $article = $this->resource->create($data);
 
@@ -1596,7 +2170,62 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         $this->assertCount(3, $article->getMainDetail()->getPrices());
     }
 
+    public function testUpdateWithMultiplePropertiesAndNewGroup()
+    {
+        $optionName = 'newOption' . uniqid();
+        $properties = array(
+            array(
+                'option' => array('name' => $optionName),
+                'value' => 'testValue'
+            ),
+            array(
+                'option' => array('name' => $optionName),
+                'value' => 'anotherTestValue'
+            )
+        );
 
+        $update = array(
+            'propertyValues' => $properties,
+            'filterGroupId' => 1
+        );
+        $data = $this->getSimpleTestData();
+        $this->resource->setResultMode(
+            \Shopware\Components\Api\Resource\Resource::HYDRATE_OBJECT
+        );
+        $article = $this->resource->create($data);
+        /**@var $article Shopware\Models\Article\Article */
+        $article = $this->resource->update($article->getId(), $update);
+
+        $articleId = $article->getId();
+        $this->resource->setResultMode(
+            \Shopware\Components\Api\Resource\Resource::HYDRATE_ARRAY
+        );
+        $article = $this->resource->getOne($article->getId());
+
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder->select(array('option'))->from('Shopware\Models\Property\Option', 'option')->where(
+                'option.name = :optionName'
+            )->setParameter('optionName', $optionName)->setFirstResult(0)->setMaxResults(20);
+        $databaseValuesOptions = $builder->getQuery()->getArrayResult();
+
+        $this->assertEquals($article['propertyValues'][0]['optionId'], $article['propertyValues'][1]['optionId']);
+        $this->assertEquals(1, count($databaseValuesOptions));
+
+        $this->resource->delete($articleId);
+
+        //delete test values in s_filter_values
+        $sql = "DELETE FROM `s_filter_values` WHERE `optionId` = ?";
+        Shopware()->Db()->query($sql, array($databaseValuesOptions[0]['id']));
+
+        //delete test values in s_filter_relations
+        $sql = "DELETE FROM `s_filter_relations` WHERE `optionId` = ?";
+        Shopware()->Db()->query($sql, array($databaseValuesOptions[0]['id']));
+
+        //delete test values in s_filter_options
+        $builder->delete('Shopware\Models\Property\Option', 'option')->andWhere(
+                'option.name = :optionName'
+            )->setParameter('optionName', $optionName)->getQuery()->execute();
+    }
 
     public function testImageConfiguration()
     {
@@ -1617,7 +2246,7 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         $variants = $this->createConfiguratorVariants($configurator['groups']);
 
         $usedOption = $this->getOptionsForImage($configurator, 1, 'name');
-        foreach($images as &$image) {
+        foreach ($images as &$image) {
             $image['options'] = array($usedOption);
         }
 
@@ -1627,12 +2256,12 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
 
         $article = $this->resource->create($create);
 
-        /**@var $image \Shopware\Models\Article\Image*/
-        foreach($article->getImages() as $image) {
+        /**@var $image \Shopware\Models\Article\Image */
+        foreach ($article->getImages() as $image) {
             $this->assertCount(1, $image->getMappings());
 
-            /**@var $mapping \Shopware\Models\Article\Image\Mapping*/
-            foreach($image->getMappings() as $mapping) {
+            /**@var $mapping \Shopware\Models\Article\Image\Mapping */
+            foreach ($image->getMappings() as $mapping) {
                 $this->assertCount(1, $mapping->getRules());
             }
         }
@@ -1641,17 +2270,15 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
 
         $article = $this->resource->getOne($article->getId());
 
-        /**@var $variant \Shopware\Models\Article\Detail*/
-        foreach($article->getDetails() as $variant) {
-            foreach($variant->getConfiguratorOptions() as $option) {
+        /**@var $variant \Shopware\Models\Article\Detail */
+        foreach ($article->getDetails() as $variant) {
+            foreach ($variant->getConfiguratorOptions() as $option) {
                 if ($option->getName() == $usedOption[0]['name']) {
                     $this->assertCount(1, $variant->getImages());
                 }
             }
         }
     }
-
-
 
     private function getOptionsForImage($configuratorSet, $optionCount = null, $property = 'id')
     {
@@ -1660,7 +2287,7 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         }
 
         $options = array();
-        foreach($configuratorSet['groups'] as $group) {
+        foreach ($configuratorSet['groups'] as $group) {
             $id = rand(0, count($group['options']) - 1);
             $option = $group['options'][$id];
             $options[] = array(
@@ -1685,8 +2312,7 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         $groups,
         $groupMapping = array('key' => 'groupId', 'value' => 'id'),
         $optionMapping = array('key' => 'option', 'value' => 'name')
-    )
-    {
+    ) {
         $options = array();
 
         $groupArrayKey = $groupMapping['key'];
@@ -1694,9 +2320,9 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         $optionArrayKey = $optionMapping['key'];
         $optionValuesKey = $optionMapping['value'];
 
-        foreach($groups as $group) {
+        foreach ($groups as $group) {
             $groupOptions = array();
-            foreach($group['options'] as $option) {
+            foreach ($group['options'] as $option) {
                 $groupOptions[] = array(
                     $groupArrayKey => $group[$groupValuesKey],
                     $optionArrayKey => $option[$optionValuesKey]
@@ -1709,7 +2335,7 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         $combinations = $this->cleanUpCombinations($combinations);
 
         $variants = array();
-        foreach($combinations as $combination) {
+        foreach ($combinations as $combination) {
             $variant = $this->getSimpleVariantData();
             $variant['configuratorOptions'] = $combination;
             $variants[] = $variant;
@@ -1723,9 +2349,9 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
      * @param $combinations
      * @return mixed
      */
-    protected function cleanUpCombinations($combinations) {
-
-        foreach($combinations as &$combination) {
+    protected function cleanUpCombinations($combinations)
+    {
+        foreach ($combinations as &$combination) {
             $combination[] = array(
                 'option' => $combination['option'],
                 'groupId' => $combination['groupId']
@@ -1745,7 +2371,8 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
      * @param int $i
      * @return array
      */
-    protected function combinations($arrays, $i = 0) {
+    protected function combinations($arrays, $i = 0)
+    {
         if (!isset($arrays[$i])) {
             return array();
         }
@@ -1761,16 +2388,12 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         // concat each array from tmp with each element from $arrays[$i]
         foreach ($arrays[$i] as $v) {
             foreach ($tmp as $t) {
-                $result[] = is_array($t) ?
-                    array_merge(array($v), $t) :
-                    array($v, $t);
+                $result[] = is_array($t) ? array_merge(array($v), $t) : array($v, $t);
             }
         }
 
         return $result;
     }
-
-
 
     public function testCategoryReplacement()
     {
@@ -1831,14 +2454,14 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
     private function getImagesForNewArticle($offset = 10, $limit = 5)
     {
         $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->select(array(
-            'media.id as mediaId',
-            '2 as main'
-        ))
-            ->from('Shopware\Models\Media\Media', 'media', 'media.id')
-            ->addOrderBy('media.id', 'ASC')
-            ->setFirstResult($offset)
-            ->setMaxResults($limit);
+        $builder->select(
+            array(
+                'media.id as mediaId',
+                '2 as main'
+            )
+        )->from('Shopware\Models\Media\Media', 'media', 'media.id')->addOrderBy('media.id', 'ASC')->setFirstResult(
+                $offset
+            )->setMaxResults($limit);
 
         /**
          * Get random images.
@@ -1859,7 +2482,7 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
 
         $this->assertInstanceOf('Shopware\Models\Article\Article', $article);
 
-        /**@var $price \Shopware\Models\Article\Price*/
+        /**@var $price \Shopware\Models\Article\Price */
         $price = $article->getMainDetail()->getPrices()->first();
 
         $this->assertEquals(
@@ -1876,15 +2499,16 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         );
     }
 
-    public function testSimilarWithNumber() 
+    public function testSimilarWithNumber()
     {
         $articles = $this->getEntityOffset('Shopware\Models\Article\Article', 0, 3);
 
         $data = $this->getSimpleTestData();
         $similar = array();
-        foreach($articles as $article) {
+        foreach ($articles as $article) {
             $model = Shopware()->Models()->find(
-                'Shopware\Models\Article\Article', $article['id']
+                'Shopware\Models\Article\Article',
+                $article['id']
             );
 
             $similar[] = array('number' => $model->getMainDetail()->getNumber());
@@ -1903,9 +2527,10 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
 
         $data = $this->getSimpleTestData();
         $similar = array();
-        foreach($articles as $article) {
+        foreach ($articles as $article) {
             $model = Shopware()->Models()->find(
-                'Shopware\Models\Article\Article', $article['id']
+                'Shopware\Models\Article\Article',
+                $article['id']
             );
 
             $similar[] = array('number' => $model->getMainDetail()->getNumber());
@@ -1917,7 +2542,6 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
 
         $this->assertNotEmpty($article->getRelated());
     }
-
 
     public function testDownloads()
     {
@@ -1947,7 +2571,37 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         $this->assertCount(2, $update->getDownloads());
     }
 
-    
+    public function testSeoCategories()
+    {
+        $data = $this->getSimpleTestData();
+
+        $data['categories'] = Shopware()->Db()->fetchAll("SELECT DISTINCT id FROM s_categories LIMIT 5, 10");
+
+        $first = $data['categories'][3];
+        $second = $data['categories'][4];
+
+        $ids = array($first['id'], $second['id']);
+
+        $data['seoCategories'] = array(
+            array('shopId' => 1, 'categoryId' => $first['id']),
+            array('shopId' => 2, 'categoryId' => $second['id']),
+        );
+
+        $article = $this->resource->create($data);
+
+        $this->resource->setResultMode(Shopware\Components\Api\Resource\Resource::HYDRATE_OBJECT);
+
+        /**@var $article Shopware\Models\Article\Article */
+        $article = $this->resource->getOne($article->getId());
+
+        $this->assertCount(2, $article->getSeoCategories());
+
+        foreach ($article->getSeoCategories() as $category) {
+            $this->assertContains($category->getCategory()->getId(), $ids);
+            $this->assertContains($category->getShop()->getId(), array(1, 2));
+        }
+    }
+
     public function testArticleGrossPrices()
     {
         $data = $this->getSimpleTestData();
@@ -1956,7 +2610,7 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
 
         $this->assertInstanceOf('Shopware\Models\Article\Article', $article);
 
-        /**@var $price \Shopware\Models\Article\Price*/
+        /**@var $price \Shopware\Models\Article\Price */
         $price = $article->getMainDetail()->getPrices()->first();
 
         $net = 400 / (($article->getTax()->getTax() + 100) / 100);
@@ -1981,7 +2635,6 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         $this->assertEquals(400, $price['price']);
         $this->assertEquals($net, $price['net']);
     }
-
 
     protected function internalTestReplaceMode($entity, $arrayKey, $replace = true)
     {
@@ -2021,20 +2674,22 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
     private function createBigArticle()
     {
         $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->select(array('groups', 'options'))
-            ->from('Shopware\Models\Article\Configurator\Group', 'groups')
-            ->innerJoin('groups.options', 'options');
+        $builder->select(array('groups', 'options'))->from(
+                'Shopware\Models\Article\Configurator\Group',
+                'groups'
+            )->innerJoin('groups.options', 'options');
 
         $configurator = array(
             'name' => 'Performance Test Set',
             'groups' => $builder->getQuery()->getArrayResult()
         );
 
-        $builder->select(array(
-            'groups.name as groupName',
-            'options.name as option'
-        ))
-            ->groupBy('groups.id');
+        $builder->select(
+            array(
+                'groups.name as groupName',
+                'options.name as option'
+            )
+        )->groupBy('groups.id');
 
         $variantOptions = $builder->getQuery()->getArrayResult();
         foreach ($variantOptions as &$option) {
@@ -2059,7 +2714,6 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
             );
         }
 
-
         $testData = array(
             'name' => 'Performance - Artikel',
             'description' => 'Test description',
@@ -2068,9 +2722,7 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
             'pseudoSales' => 999,
             'highlight' => true,
             'keywords' => 'test, testarticle',
-
             'filterGroupId' => 1,
-
             'propertyValues' => array(
                 array(
                     'value' => 'grün',
@@ -2085,20 +2737,16 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
                     )
                 )
             ),
-
             'mainDetail' => array(
                 'number' => 'swTEST' . uniqid(),
                 'inStock' => 15,
                 'unitId' => 1,
-
                 'attribute' => array(
                     'attr1' => 'Freitext1',
                     'attr2' => 'Freitext2',
                 ),
-
                 'minPurchase' => 5,
                 'purchaseSteps' => 2,
-
                 'prices' => array(
                     array(
                         'customerGroupKey' => 'EK',
@@ -2169,7 +2817,7 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
     {
         if (!empty($fields)) {
             $selectFields = array();
-            foreach($fields as $field) {
+            foreach ($fields as $field) {
                 $selectFields[] = 'alias.' . $field;
             }
         } else {
@@ -2177,35 +2825,31 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         }
 
         $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->select($selectFields)
-                ->from($entity, 'alias')
-                ->setFirstResult($offset)
-                ->setMaxResults($limit);
+        $builder->select($selectFields)->from($entity, 'alias')->setFirstResult($offset)->setMaxResults($limit);
 
         return $builder->getQuery()->getArrayResult();
     }
 
     private function getSimpleConfiguratorSet($groupLimit = 3, $optionLimit = 5)
     {
-
         $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->select(array('groups.id', 'groups.name'))
-            ->from('Shopware\Models\Article\Configurator\Group', 'groups')
-            ->setFirstResult(0)
-            ->setMaxResults($groupLimit)
-            ->orderBy('groups.position', 'ASC');
+        $builder->select(array('groups.id', 'groups.name'))->from(
+                'Shopware\Models\Article\Configurator\Group',
+                'groups'
+            )->setFirstResult(0)->setMaxResults($groupLimit)->orderBy('groups.position', 'ASC');
 
         $groups = $builder->getQuery()->getArrayResult();
 
         $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->select(array('options.id', 'options.name'))
-            ->from('Shopware\Models\Article\Configurator\Option', 'options')
-            ->where('options.groupId = :groupId')
-            ->setFirstResult(0)
-            ->setMaxResults($optionLimit)
-            ->orderBy('options.position', 'ASC');
+        $builder->select(array('options.id', 'options.name'))->from(
+                'Shopware\Models\Article\Configurator\Option',
+                'options'
+            )->where('options.groupId = :groupId')->setFirstResult(0)->setMaxResults($optionLimit)->orderBy(
+                'options.position',
+                'ASC'
+            );
 
-        foreach($groups as &$group) {
+        foreach ($groups as &$group) {
             $builder->setParameter('groupId', $group['id']);
             $group['options'] = $builder->getQuery()->getArrayResult();
         }
@@ -2216,7 +2860,8 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
         );
     }
 
-    private function getSimpleVariantData() {
+    private function getSimpleVariantData()
+    {
         return array(
             'number' => 'swTEST' . uniqid(),
             'inStock' => 100,
@@ -2240,7 +2885,7 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
             if (!empty($id)) {
                 $this->resource->delete($id);
             }
-        } catch (Exception $e) {
+        } catch(Exception $e) {
         }
         // Associate three kinds of categories with the article:
         // category by id, category by path, new category by path
@@ -2267,7 +2912,7 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
             )
         );
         $ids = array_map(
-            function($category) {
+            function ($category) {
                 return $category->getId();
             },
             $article->getCategories()->toArray()
@@ -2292,12 +2937,13 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
             'keywords' => 'newKeyword2'
         );
 
-        $result = $this->resource->batch(array(
-           'new' => $createNew,
-           'existingByNumber' => $updateExistingByNumber,
-           'existingById' => $updateExistingById,
-        ));
-
+        $result = $this->resource->batch(
+            array(
+                'new' => $createNew,
+                'existingByNumber' => $updateExistingByNumber,
+                'existingById' => $updateExistingById,
+            )
+        );
 
         $this->assertEquals('newKeyword1', $result['existingByNumber']['data']['keywords']);
         $this->assertEquals('newKeyword2', $result['existingById']['data']['keywords']);
@@ -2306,7 +2952,6 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
 
     public function testBatchDeleteShouldBeSuccessful()
     {
-
         $result = $this->resource->batch(
             array(
                 $this->getSimpleTestData(),
@@ -2328,17 +2973,114 @@ class Shopware_Tests_Components_Api_ArticleTest extends Shopware_Tests_Component
     private function getVariantOptionsOfSet($configuratorSet)
     {
         $options = array();
-        foreach($configuratorSet['groups'] as $group) {
+        foreach ($configuratorSet['groups'] as $group) {
             $id = rand(0, count($group['options']) - 1);
             $option = $group['options'][$id];
             $options[] = array(
                 'optionId' => $option['id'],
-                'groupId'  => $group['id']
+                'groupId' => $group['id']
             );
         }
         return $options;
     }
 
+    public function testCategoryAssignment()
+    {
+        $number = 'CategoryAssignment' . uniqid();
+
+        $data = $this->getSimpleTestData();
+        $data['mainDetail']['number'] = $number;
+
+        $categories = Shopware()->Db()->fetchAll("SELECT id FROM s_categories WHERE parent = 3 ORDER BY id LIMIT 2");
+        $data['categories'] = $categories;
+
+        $article = $this->resource->create($data);
+
+        $normal = Shopware()->Db()->fetchCol(
+            "SELECT categoryID FROM s_articles_categories WHERE articleID = ?",
+            array($article->getId())
+        );
+
+        $denormalized = Shopware()->Db()->fetchCol(
+            "SELECT categoryID FROM s_articles_categories_ro WHERE articleID = ?",
+            array($article->getId())
+        );
+
+        $this->assertCount(2, $normal);
+        $this->assertCount(4, $denormalized);
+
+        foreach ($categories as $category) {
+            $this->assertContains($category['id'], $normal);
+            $this->assertContains($category['id'], $denormalized);
+        }
+
+        $rewriteCategories = Shopware()->Db()->fetchAll(
+            "SELECT id FROM s_categories WHERE parent = 3 ORDER BY id LIMIT 2, 2"
+        );
+        $data = array(
+            'categories' => $rewriteCategories
+        );
+
+        $this->resource->update($article->getId(), $data);
+
+        $normal = Shopware()->Db()->fetchCol(
+            "SELECT categoryID FROM s_articles_categories WHERE articleID = ?",
+            array($article->getId())
+        );
+
+        $denormalized = Shopware()->Db()->fetchCol(
+            "SELECT categoryID FROM s_articles_categories_ro WHERE articleID = ?",
+            array($article->getId())
+        );
+
+        $this->assertCount(2, $normal);
+        $this->assertCount(4, $denormalized);
+
+        foreach ($rewriteCategories as $category) {
+            $this->assertContains($category['id'], $normal);
+            $this->assertContains(
+                $category['id'],
+                $denormalized,
+                "Denormalized array contains not the expected category id"
+            );
+        }
+
+        $additionally = Shopware()->Db()->fetchAll("SELECT id FROM s_categories WHERE parent = 3 ORDER BY id LIMIT 2");
+        $data = array(
+            '__options_categories' => array('replace' => false),
+            'categories' => $additionally
+        );
+        $this->resource->update($article->getId(), $data);
+
+        $normal = Shopware()->Db()->fetchCol(
+            "SELECT categoryID FROM s_articles_categories WHERE articleID = ?",
+            array($article->getId())
+        );
+
+        $denormalized = Shopware()->Db()->fetchCol(
+            "SELECT categoryID FROM s_articles_categories_ro WHERE articleID = ?",
+            array($article->getId())
+        );
+
+        $this->assertCount(4, $normal);
+        $this->assertCount(8, $denormalized);
+
+        foreach ($rewriteCategories as $category) {
+            $this->assertContains($category['id'], $normal);
+            $this->assertContains(
+                $category['id'],
+                $denormalized,
+                "Denormalized array contains not the expected category id"
+            );
+        }
+
+        foreach ($additionally as $category) {
+            $this->assertContains($category['id'], $normal);
+            $this->assertContains(
+                $category['id'],
+                $denormalized,
+                "Denormalized array contains not the expected category id"
+            );
+        }
+    }
 }
-
-

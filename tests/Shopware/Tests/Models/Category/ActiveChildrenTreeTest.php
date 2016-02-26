@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -68,6 +68,54 @@ class Shopware_Tests_Models_Category_ActiveChildrenTreeTest extends Enlight_Comp
             $this->assertEquals($expected, $data);
         }
     }
+
+    /**
+     * Test if the Query returns depending on the options the right children
+     * @ticket SW-5098
+     */
+    public function testGetActiveChildrenByIdQuery()
+    {
+        //set Category "Tees und Zubehör" to inactive so the childs should not be displayed
+        $sql= "UPDATE `s_categories` SET `active` = '0' WHERE `id` =11";
+        Shopware()->Db()->exec($sql);
+
+        /**
+         * @var $repository Shopware\Models\Category\Repository
+         */
+        $repository = Shopware()->Models()->getRepository('Shopware\Models\Category\Category');
+
+        $categoryArray = $repository->getActiveChildrenTree(3, 1, 3);
+
+        //This category should always been in this structure because it always active
+        $this->assertTrue($this->isCategoryNameInArray("Genusswelten",$categoryArray));
+        //This category should not be in this array because the category is inactive
+        $this->assertFalse($this->isCategoryNameInArray("Tees und Zubehör",$categoryArray));
+
+        //This categories should not be in the array because the option $onlyWithActiveParent is set to true so children will only be returned if the parent is active
+        $this->assertFalse($this->isCategoryNameInArray("Tees",$categoryArray));
+        $this->assertFalse($this->isCategoryNameInArray("Tee-Zubehör",$categoryArray));
+
+        //set Category "Tees und Zubehör" to inactive so the childs should not be displayed
+        $sql= "UPDATE `s_categories` SET `active` = '1' WHERE `id` = 11";
+        Shopware()->Db()->exec($sql);
+    }
+
+    /**
+     * Helper method to check if an category name can be found in the given array
+     *
+     * @param $categoryName
+     * @param $categoryArray
+     * @return bool
+     */
+    private function isCategoryNameInArray($categoryName, $categoryArray) {
+        foreach ($categoryArray as $category) {
+            if($category["name"] == $categoryName) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     protected function removeSimpleDates($data) {
         foreach($data as &$subCategory) {

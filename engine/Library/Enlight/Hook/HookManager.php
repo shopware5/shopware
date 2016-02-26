@@ -65,6 +65,7 @@ class Enlight_Hook_HookManager extends Enlight_Class
 
     /**
      * @param Enlight_Event_EventManager $eventManager
+     * @param Enlight_Loader $loader
      * @param array $options
      * @throws Exception
      */

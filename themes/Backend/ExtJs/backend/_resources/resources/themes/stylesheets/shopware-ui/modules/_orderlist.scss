@@ -1,0 +1,186 @@
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ *
+ * @category   Shopware
+ * @package    Shopware_Styling
+ * @subpackage OrderList
+ * @version    $Id$
+ * @author shopware AG
+ */
+@mixin shopware-orderlist {
+
+    .#{$prefix}order-list-chart-tooltip .#{$prefix}tip-header {
+        position: relative !important;
+        left: 0 !important;
+        right: 0 !important;
+    }
+
+    .#{$prefix}order-list-main-window {
+        .#{$prefix}order-grid {
+
+            .#{$prefix}grid-cell[data-qtip] .#{$prefix}grid-cell-inner {
+                padding: 0;
+                position: relative;
+            }
+
+            .customer-column-icon {
+                height: 16px;
+                width: 16px;
+                margin: 0 5px;
+                display: inline-block;
+            }
+            .customer-column-text {
+                display:inline-block;
+                top: 3px;
+                position: absolute;
+            }
+
+            .#{$prefix}order-position-grid {
+                border-left: 1px solid $border-color !important;
+            }
+        }
+
+        .#{$prefix}document-grid {
+            .#{$prefix}panel-header-default-docked-top {
+                border-top: 1px solid $border-color !important;
+            }
+
+            .#{$prefix}grid-header-ct-docked-top {
+                border-left: 1px solid $border-color !important;
+                border-right: 1px solid $border-color !important;
+            }
+
+            .#{$prefix}grid-body {
+                border-bottom: 1px solid $border-color !important;
+                border-left: 1px solid $border-color !important;
+                border-right: 1px solid $border-color !important;
+            }
+        }
+
+        .#{$prefix}filter-options {
+
+            .#{$prefix}filter-form .#{$prefix}panel-body {
+                background: none !important;
+            }
+
+            .#{$prefix}search-article-live {
+                .#{$prefix}form-item-hidden {
+                    margin: 0;
+                }
+                .#{$prefix}search-article-live-field {
+
+                    /** Fixes the width of the search field in all modern browsers except IE9 */
+                    .#{$prefix}form-item-body {
+                        display: block !important;
+                        width: 168px !important;
+                    }
+
+                    /** Fixes the width of the search field in IE9 - we need "!important" here to override the inline style */
+                    input[name=live-article-search] {
+                        width: 165px !important
+                    }
+                }
+            }
+        }
+
+        //statistic panel which displayed in the left navigation
+        .#{$prefix}order-statistic-grid {
+            .#{$prefix}panel-header-default-docked-top {
+                border-top: 1px solid $border-color !important;
+            }
+
+            .#{$prefix}grid-header-ct-docked-top {
+                border-left: 1px solid $border-color !important;
+                border-right: 1px solid $border-color !important;
+            }
+
+            .#{$prefix}grid-body {
+                border-bottom: 1px solid $border-color !important;
+                border-left: 1px solid $border-color !important;
+                border-right: 1px solid $border-color !important;
+            }
+        }
+    }
+
+    //Styling for the order batch window which is responsible to change to order/payment status for many orders or create documents
+    .#{$prefix}order-batch-window {
+        .#{$prefix}batch-settings-panel.layout-expert .#{$prefix}panel-body {
+            border-right: 0;
+        }
+        .#{$prefix}batch-settings-panel.layout-easy .#{$prefix}panel-body {
+            border-right: 1px solid $border-color;
+        }
+
+        .#{$prefix}order-batch-grid {
+            .#{$prefix}grid-header-ct {
+                border-left: 1px solid $border-color !important;
+                border-right: 1px solid $border-color !important;
+            }
+
+            .#{$prefix}grid-body {
+                border-left: 1px solid $border-color !important;
+                border-right: 1px solid $border-color !important;
+            }
+        }
+    }
+
+    //Styling for the order detail page
+    .#{$prefix}order-detail-window {
+
+        .#{$prefix}detail-panel {
+            .#{$prefix}toolbar-footer {
+                background: #fff;
+                box-shadow: none;
+            }
+        }
+        .#{$prefix}document-panel {
+            .#{$prefix}toolbar-footer {
+                background: #fff;
+                box-shadow: none;
+            }
+        }
+        .#{$prefix}overview-panel {
+            .#{$prefix}toolbar-footer {
+                background: #fff;
+                box-shadow: none;
+            }
+        }
+
+        //Styling for the document tab panel which contains the configuration for the document creation.
+        .#{$prefix}document-grid {
+            .#{$prefix}panel-header-default-docked-top {
+                border-top: 1px solid $border-color !important;
+            }
+
+            .#{$prefix}grid-header-ct-docked-top {
+                border-left: 1px solid $border-color !important;
+                border-right: 1px solid $border-color !important;
+            }
+
+            .#{$prefix}grid-body {
+                border-bottom: 1px solid $border-color !important;
+                border-left: 1px solid $border-color !important;
+                border-right: 1px solid $border-color !important;
+            }
+        }
+    }
+}

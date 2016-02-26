@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -43,8 +43,8 @@ class Shopware_Tests_Plugins_Frontend_StatisticsTest extends Enlight_Components_
 
         $this->plugin = Shopware()->Plugins()->Frontend()->Statistics();
 
-        $sql= "INSERT IGNORE INTO `s_emarketing_partner` (`idcode`, `datum`, `company`, `contact`, `street`, `streetnumber`, `zipcode`, `city`, `phone`, `fax`, `country`, `email`, `web`, `profil`, `fix`, `percent`, `cookielifetime`, `active`, `userID`) VALUES
-                  ('test123', '0000-00-00', 'Partner', '', '', '', '', '', '', '', '', '', '', '', 0, 10, 3600, 1, NULL)";
+        $sql= "INSERT IGNORE INTO `s_emarketing_partner` (`idcode`, `datum`, `company`, `contact`, `street`, `zipcode`, `city`, `phone`, `fax`, `country`, `email`, `web`, `profil`, `fix`, `percent`, `cookielifetime`, `active`, `userID`) VALUES
+                  ('test123', '0000-00-00', 'Partner', '', '', '', '', '', '', '', '', '', '', 0, 10, 3600, 1, NULL)";
         Shopware()->Db()->query($sql);
     }
 
@@ -72,41 +72,6 @@ class Shopware_Tests_Plugins_Frontend_StatisticsTest extends Enlight_Components_
     /**
      * Test case method
      */
-    public function testDispatchLoopShutdown()
-    {
-        $request = $this->Request()
-            ->setModuleName('frontend')
-            ->setDispatched(true)
-            ->setClientIp('127.0.0.1', false)
-            ->setRequestUri('/');
-
-        $response = $this->Response();
-
-        $action = $this->getMock('Enlight_Controller_Action',
-            null,
-            array($request, $response)
-        );
-
-        Shopware()->Session()->Bot = false;
-        Shopware()->Config()->BlockIP = null;
-
-        $eventArgs = new Enlight_Controller_EventArgs(array(
-            'subject' => $action,
-            'request' => $request,
-            'response' => $response,
-        ));
-
-        $e = null;
-           try {
-            $this->Plugin()->onDispatchLoopShutdown($eventArgs);
-           } catch (Exception $e) { }
-
-           $this->assertEquals(null, $e);
-    }
-
-    /**
-     * Test case method
-     */
     public function testRefreshCurrentUsers()
     {
         $request = $this->Request()
@@ -114,6 +79,8 @@ class Shopware_Tests_Plugins_Frontend_StatisticsTest extends Enlight_Components_
             ->setDispatched(true)
             ->setClientIp('127.0.0.1', false)
             ->setRequestUri('/');
+
+        $request->setDeviceType('desktop');
 
         $this->Plugin()->refreshCurrentUsers($request);
 

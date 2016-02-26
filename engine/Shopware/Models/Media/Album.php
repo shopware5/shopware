@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,8 +23,9 @@
  */
 
 namespace   Shopware\Models\Media;
-use         Shopware\Components\Model\ModelEntity,
-            Doctrine\ORM\Mapping AS ORM;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * The Shopware album model is used to structure the media data.
@@ -54,6 +55,20 @@ use         Shopware\Components\Model\ModelEntity,
  */
 class Album extends ModelEntity
 {
+    const ALBUM_ARTICLE = -1;
+    const ALBUM_BANNER = -2;
+    const ALBUM_EMOTION = -3;
+    const ALBUM_PROMOTIONS = -4;
+    const ALBUM_NEWSLETTER = -5;
+    const ALBUM_FILES = -6;
+    const ALBUM_VIDEO = -7;
+    const ALBUM_MUSIC = -8;
+    const ALBUM_OTHER = -9;
+    const ALBUM_UNSORTED = -10;
+    const ALBUM_BLOG = -11;
+    const ALBUM_SUPPLIER = -12;
+    const ALBUM_GARBAGE = -13;
+
     /**
      * Unique identifier
      * @var integer $id
@@ -263,5 +278,4 @@ class Album extends ModelEntity
         $sql = "UPDATE s_media SET albumID = ? WHERE albumID = ?";
         Shopware()->Db()->query($sql, array(-10, $this->id));
     }
-
 }

@@ -1,4 +1,53 @@
-{extends file='parent:frontend/checkout/confirm.tpl'}
+{extends file="frontend/index/index.tpl"}
+
+{* Javascript *}
+{block name="frontend_index_header_javascript" append}
+<script type="text/javascript">
+//<![CDATA[
+	if(top!=self){
+		top.location=self.location;
+	}
+//]]>
+</script>
+{/block}
+
+{* Include the necessary stylesheets. We need inline styles here due to the fact that the colors are configuratable. *}
+{block name="frontend_index_header_css_screen" append}
+	<style type="text/css">
+		#confirm .table, #confirm .country-notice {
+			background: {config name=baskettablecolor};
+		}
+		#confirm .table .table_head {
+			color: {config name=basketheaderfontcolor};
+			background: {config name=basketheadercolor};
+		}
+	</style>
+{/block}
+
+{* Hide breadcrumb *}
+{block name='frontend_index_breadcrumb'}<hr class="clear" />{/block}
+
+{block name="frontend_index_content_top"}
+<div class="grid_20 first">
+
+	{* Step box *}
+	{include file="frontend/register/steps.tpl" sStepActive="finished"}
+
+	{* AGB is not accepted by user *}
+	{if $sAGBError}
+		<div class="error agb_confirm">
+			<div class="center">
+				<strong>
+					{s name='ConfirmErrorAGB'}{/s}
+				</strong>
+			</div>
+		</div>
+	{/if}
+</div>
+{/block}
+
+{* Hide sidebar left *}
+{block name='frontend_index_content_left'}{/block}
 
 {* Main content *}
 {block name="frontend_index_content"}
@@ -19,23 +68,32 @@
 
             <div class="inner_container">
 
-                {* Display the right of cancelation *}
-                {if {config name=revocationnotice}}
-                    <div class="confirm_accept modal_open">
-                        {s name="ConfirmTextRightOfRevocationNew"}<p>Bitte beachten Sie bei Ihrer Bestellung auch unsere <a href="{url controller=custom sCustom=8 forceSecure}" data-modal-height="500" data-modal-width="800">Widerrufsbelehrung</a>.</p>{/s}
-                    </div>
-                {/if}
+				{if {config name=revocationnotice}}
+					<div class="positioned_spacer"></div>
+					<div class="confirm_accept positioned_revocation modal_open">
+						{s name="ConfirmTextRightOfRevocationNew"}<p>Bitte beachten Sie bei Ihrer Bestellung auch unsere <a href="{url controller=custom sCustom=8 forceSecure}" data-modal-height="500" data-modal-width="800">Widerrufsbelehrung</a>.</p>{/s}
+					</div>
+				{/if}
 
-                {* AGB checkbox *}
-                {block name='frontend_checkout_confirm_agb'}
-                {/block}
+				{block name='frontend_checkout_confirm_agb'}
+					{if !{config name='IgnoreAGB'}}
+						<div class="positioned_spacer"></div>
+					{/if}
+				{/block}
 
-                {* Newsletter registration *}
-                {block name='frontend_checkout_confirm_newsletter'}
-                    {if !$sUserData.additional.user.newsletter && {config name=newsletter}}
-                        <div class="clear"></div>
-                    {/if}
-                {/block}
+				{block name='frontend_checkout_confirm_newsletter'}
+					{if !$sUserData.additional.user.newsletter && {config name=newsletter}}
+						<div class="positioned_spacer"></div>
+					{/if}
+				{/block}
+
+				{if $hasEsdArticles}
+					<div class="positioned_spacer"></div>
+				{/if}
+
+				{if $hasServiceArticles}
+					<div class="positioned_spacer"></div>
+				{/if}
 
                 {if {config name=additionalfreetext}}
                     <div class="agb_info">
@@ -44,6 +102,17 @@
                 {/if}
             </div>
         </div>
+
+		{* Bank connection *}
+		{block name='frontend_checkout_bank_connection'}
+			{if {config name=bankConnection}}
+				<div class="bank-connection">
+					{s name="ConfirmInfoChange"}{/s}<br/>
+					{s name="ConfirmInfoPaymentData"}{/s}
+				</div>
+			{/if}
+		{/block}
+
         <div class="space"></div>
 
         {* Personal information *}
@@ -53,12 +122,6 @@
             </h2>
 
             <div class="inner_container">
-                {if {config name=additionalfreetext}}
-                    <p>
-                        {s name="ConfirmInfoChange"}{/s}<br/>
-                        {s name="ConfirmInfoPaymentData"}{/s}
-                    </p>
-                {/if}
 
                 {* Billing address *}
                 {block name='frontend_checkout_confirm_left_billing_address'}
@@ -78,9 +141,12 @@
                                 {s name="ConfirmSalutationMs" namespace="frontend/checkout/confirm_left"}Frau{/s}
                             {/if}
                             {$sUserData.billingaddress.firstname} {$sUserData.billingaddress.lastname}<br />
-                            {$sUserData.billingaddress.street} {$sUserData.billingaddress.streetnumber}<br />
+                            {$sUserData.billingaddress.street}<br />
+							{if $sUserData.billingaddress.additional_address_line1}{$sUserData.billingaddress.additional_address_line1}<br />{/if}
+							{if $sUserData.billingaddress.additional_address_line2}{$sUserData.billingaddress.additional_address_line2}<br />{/if}
                             {$sUserData.billingaddress.zipcode} {$sUserData.billingaddress.city}<br />
-                            {if $sUserData.additional.state.shortcode}{$sUserData.additional.state.shortcode} - {/if}{$sUserData.additional.country.countryname}
+                            {if $sUserData.additional.state.statename}{$sUserData.additional.state.statename}<br />{/if}
+							{$sUserData.additional.country.countryname}
 
 
                         </p>
@@ -114,9 +180,12 @@
                                 {s name="ConfirmSalutationMs" namespace="frontend/checkout/confirm_left"}Frau{/s}
                             {/if}
                             {$sUserData.shippingaddress.firstname} {$sUserData.shippingaddress.lastname}<br />
-                            {$sUserData.shippingaddress.street} {$sUserData.shippingaddress.streetnumber}<br />
+                            {$sUserData.shippingaddress.street}<br />
+							{if $sUserData.shippingaddress.additional_address_line1}{$sUserData.shippingaddress.additional_address_line1}<br />{/if}
+							{if $sUserData.shippingaddress.additional_address_line2}{$sUserData.shippingaddress.additional_address_line2}<br />{/if}
                             {$sUserData.shippingaddress.zipcode} {$sUserData.shippingaddress.city}<br />
-                            {if $sUserData.additional.stateShipping.shortcode}{$sUserData.additional.stateShipping.shortcode} - {/if}{$sUserData.additional.countryShipping.countryname}
+							{if $sUserData.additional.stateShipping.statename}{$sUserData.additional.stateShipping.statename}<br />{/if}
+                            {$sUserData.additional.countryShipping.countryname}
                         </p>
 
                         {* Action buttons *}
@@ -140,7 +209,7 @@
                             <p>
                                 <strong>{$sUserData.additional.payment.description}</strong><br />
 
-                                {if !$sUserData.additional.payment.esdactive}
+                                {if !$sUserData.additional.payment.esdactive && {config name="showEsd"}}
                                     {s name="ConfirmInfoInstantDownload" namespace="frontend/checkout/confirm_left"}{/s}
                                 {/if}
                             </p>
@@ -176,20 +245,25 @@
         {if {config name=commentvoucherarticle}||{config name=premiumarticles}||{config name=bonussystem} && {config name=bonus_system_active} && {config name=displaySlider}}
             <div class="additional-options grid_16 first">
 
-                <h2 class="headingbox">{s name="ConfirmHeadlineAdditionalOptions"}Weitere Optionen{/s}</h2>
+                {if {config name=commentvoucherarticle}}
+                    <h2 class="headingbox">{s name="ConfirmHeadlineAdditionalOptions"}Weitere Optionen{/s}</h2>
+                {/if}
+
                 <div class="inner_container">
 
                     {* Voucher and add article *}
                     {if {config name=commentvoucherarticle}}
                         <div class="voucher-add-article">
+
                             {block name='frontend_checkout_table_footer_left_add_voucher'}
                                 <div class="vouchers">
                                     <form method="post" action="{url action='addVoucher' sTargetAction=$sTargetAction}">
-                                    {* Add a hidden AGB Checkbox into the form *}
+                                        {block name='frontend_checkout_table_footer_left_add_voucher_agb'}
                                         {if !{config name='IgnoreAGB'}}
                                             <input type="hidden" class="agb-checkbox" name="sAGB"
                                                    value="{if $sAGBChecked}1{else}0{/if}"/>
                                         {/if}
+                                        {/block}
                                         <label for="basket_add_voucher">{s name="CheckoutFooterLabelAddVoucher" namespace="frontend/checkout/cart_footer_left"}{/s}</label>
                                         <input type="text" class="text" id="basket_add_voucher" name="sVoucher"
                                                onfocus="this.value='';"
@@ -225,31 +299,40 @@
 
 					{* Premiums articles *}
 					{block name='frontend_checkout_confirm_premiums'}
-					{if $sPremiums}
-					    {if {config name=premiumarticles}}
-					    	<h2 class="headingbox">{s name="sCartPremiumsHeadline" namespace="frontend/checkout/premiums"}{/s}</h2>
-					        {include file='frontend/checkout/premiums.tpl'}
-					    {/if}
-					{/if}
+						{if $sPremiums}
+							{if {config name=premiumarticles}}
+								<h2 class="headingbox">{s name="sCartPremiumsHeadline" namespace="frontend/checkout/premiums"}{/s}</h2>
+								{include file='frontend/checkout/premiums.tpl'}
+							{/if}
+						{/if}
 					{/block}
                 </div>
             </div>
             <div class="space"></div>
         {/if}
 
-
         <div class="table grid_16">
-            {include file="frontend/checkout/confirm_header.tpl"}
+			{block name='frontend_checkout_confirm_confirm_head'}
+            	{include file="frontend/checkout/confirm_header.tpl"}
+			{/block}
+
+			{block name='frontend_checkout_confirm_item_before'}{/block}
 
             {* Article items *}
+			{block name='frontend_checkout_confirm_item_outer'}
             {foreach name=basket from=$sBasket.content item=sBasketItem key=key}
                 {block name='frontend_checkout_confirm_item'}
-                {include file='frontend/checkout/confirm_item.tpl'}
+                	{include file='frontend/checkout/confirm_item.tpl'}
                 {/block}
             {/foreach}
+			{/block}
+
+			{block name='frontend_checkout_confirm_item_after'}{/block}
 
             {* Table footer *}
-            {include file="frontend/checkout/confirm_footer.tpl"}
+			{block name='frontend_checkout_confirm_confirm_footer'}
+            	{include file="frontend/checkout/confirm_footer.tpl"}
+			{/block}
         </div>
 
         <div class="space">&nbsp;</div>
@@ -295,26 +378,77 @@
                         {/if}
                         <div class="clear">&nbsp;</div>
                     {/block}
-                {block name='frontend_checkout_confirm_agb_checkbox'}
-                <div class="agb_accept">
-                    {if !{config name='IgnoreAGB'}}
-                    	<input type="checkbox" class="left" name="sAGB" id="sAGB" {if $sAGBChecked} checked="checked"{/if} />
-                    {/if}
-					{* Additional hidden input for IE11 fix empty post body *}
-					<input type="hidden" name="ieCheckValue" value="42" />
-                    <label for="sAGB" class="chklabel modal_open {if $sAGBError}instyle_error{/if}">{s name="ConfirmTerms"}{/s}</label>
-                </div>
+
+					<div class="positioned_wrapper{if {config name=revocationnotice}} positioned_with_revocation{/if}">
+
+					{block name='frontend_checkout_confirm_agb_checkbox'}
+						<div class="positioned_agb">
+							{if !{config name='IgnoreAGB'}}
+								<input type="checkbox" class="left" name="sAGB" id="sAGB" {if $sAGBChecked} checked="checked"{/if} />
+							{/if}
+
+							{* Additional hidden input for IE11 fix empty post body *}
+							<input type="hidden" name="ieCheckValue" value="42" />
+							<label for="sAGB" class="chklabel modal_open {if $sAGBError}instyle_error{/if}">{s name="ConfirmTerms"}{/s}</label>
+
+							<div class="clear"></div>
+						</div>
+					{/block}
+
+                {block name='frontend_checkout_confirm_service_esd'}
+                {if $hasServiceArticles}
+                    {block name='frontend_checkout_confirm_service'}
+                    <div class="positioned_service_article">
+
+                        {* Service checkbox *}
+                        {block name='frontend_checkout_confirm_service_checkbox'}
+                        <input type="checkbox" class="left" name="serviceAgreementChecked" id="serviceAgreementChecked" {if $serviceAgreementChecked} checked="checked"{/if} />
+                        {/block}
+
+                        {* Service label *}
+                        {block name='frontend_checkout_confirm_service_label'}
+                        <label for="serviceAgreementChecked" class="chklabel modal_open{if $agreementErrors && $agreementErrors.serviceError} instyle_error{/if}">
+                            {s namespace="frontend/checkout/confirm" name="AcceptServiceMessage"}I agree to the starting of the service and I acknowledge that I lose my right to cancel once the service has been fully performed.{/s}
+                        </label>
+                        {/block}
+
+						<div class="clear"></div>
+                    </div>
+                    {/block}
+                {/if}
+
+                {if $hasEsdArticles}
+                    {block name='frontend_checkout_confirm_esd'}
+                    <div class="positioned_esd_article">
+
+                        {* ESD checkbox *}
+                        {block name='frontend_checkout_confirm_esd_checkbox'}
+                        <input type="checkbox" class="left" name="esdAgreementChecked" id="esdAgreementChecked"{if $esdAgreementChecked} checked="checked"{/if} />
+                        {/block}
+
+                        {* ESD label *}
+                        {block name='frontend_checkout_confirm_esd_label'}
+                        <label for="esdAgreementChecked" class="chklabel modal_open{if $agreementErrors && $agreementErrors.esdError} instyle_error{/if}">
+                            {s namespace="frontend/checkout/confirm" name="AcceptEsdMessage"}I want immediate access to the digital content and I acknowledge that thereby I lose my right to cancel once the service has begun.{/s}
+                        </label>
+                        {/block}
+
+						<div class="clear"></div>
+                    </div>
+                    {/block}
+                {/if}
                 {/block}
+
                 {if !$sUserData.additional.user.newsletter && {config name=newsletter}}
-                    <div class="more_info">
-                        <p>
-                            <input type="checkbox" name="sNewsletter" value="1" class="chkbox"{if $sNewsletter} checked="checked"{/if} />
-                            <label for="sNewsletter" class="chklabel">
-                                {s name="ConfirmLabelNewsletter"}{/s}
-                            </label>
-                        </p>
+                    <div class="positioned_info">
+						<input type="checkbox" class="left" name="sNewsletter" id="sNewsletter" value="1" class="chkbox"{if $sNewsletter} checked="checked"{/if} />
+						<label for="sNewsletter" class="chklabel">
+							{s name="ConfirmLabelNewsletter"}{/s}
+						</label>
+						<div class="clear"></div>
                     </div>
                 {/if}
+			</div>
             </form>
         </div>
 	</div>

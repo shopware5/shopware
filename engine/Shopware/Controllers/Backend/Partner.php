@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -22,8 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Models\Partner\Partner as Partner,
-    Doctrine\ORM\AbstractQuery;
+use Shopware\Models\Partner\Partner as Partner;
+use Doctrine\ORM\AbstractQuery;
+
 /**
  * Shopware Backend Controller for the Partner Module
  *
@@ -33,7 +34,6 @@ use Shopware\Models\Partner\Partner as Partner,
  */
 class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_ExtJs
 {
-
     /**
      * Registers the different acl permission for the different controller actions.
      *
@@ -44,24 +44,24 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
         /**
          * permission to list all partner
          */
-        $this->addAclPermission('getList', 'read','Insufficient Permissions');
+        $this->addAclPermission('getList', 'read', 'Insufficient Permissions');
 
         /**
          * permission to view the statistic information's and downloads
          */
-        $this->addAclPermission('getStatisticList', 'statistic','Insufficient Permissions');
-        $this->addAclPermission('getChartData', 'statistic','Insufficient Permissions');
-        $this->addAclPermission('downloadStatistic', 'statistic','Insufficient Permissions');
+        $this->addAclPermission('getStatisticList', 'statistic', 'Insufficient Permissions');
+        $this->addAclPermission('getChartData', 'statistic', 'Insufficient Permissions');
+        $this->addAclPermission('downloadStatistic', 'statistic', 'Insufficient Permissions');
 
         /**
          * permission to show detail information of a partner
          */
-        $this->addAclPermission('getDetail', 'read','Insufficient Permissions');
+        $this->addAclPermission('getDetail', 'read', 'Insufficient Permissions');
 
         /**
          * permission to delete the partner
          */
-        $this->addAclPermission('deletePartner', 'delete','Insufficient Permissions');
+        $this->addAclPermission('deletePartner', 'delete', 'Insufficient Permissions');
     }
 
 
@@ -74,7 +74,7 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
     public function preDispatch()
     {
         parent::preDispatch();
-        if (in_array($this->Request()->getActionName(), array('validateTrackingCode','mapCustomerAccount'))) {
+        if (in_array($this->Request()->getActionName(), array('validateTrackingCode', 'mapCustomerAccount'))) {
             $this->Front()->Plugins()->Json()->setRenderer(false);
             $this->Front()->Plugins()->ViewRenderer()->setNoRender();
         }
@@ -96,7 +96,7 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
 
             /** @var $repository \Shopware\Models\Partner\Repository */
             $repository = Shopware()->Models()->Partner();
-            $dataQuery = $repository->getListQuery($order,$offset,$limit);
+            $dataQuery = $repository->getListQuery($order, $offset, $limit);
 
 
             $totalCount = Shopware()->Models()->getQueryCount($dataQuery);
@@ -128,14 +128,13 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
 
             /** @var $repository \Shopware\Models\Partner\Repository */
             $repository = Shopware()->Models()->Partner();
-            $dataQuery = $repository->getStatisticListQuery($order,$offset,$limit,$partnerId,false,$fromDate,$toDate);
+            $dataQuery = $repository->getStatisticListQuery($order, $offset, $limit, $partnerId, false, $fromDate, $toDate);
 
-            $totalCount = Shopware()->Models()->getQueryCount($dataQuery);
-
+            $totalCount = $this->getStatisticListTotalCount($dataQuery);
 
             $data = $dataQuery->getArrayResult();
 
-            $summaryQuery = $repository->getStatisticListQuery($order,$offset,$limit,$partnerId, true,$fromDate,$toDate);
+            $summaryQuery = $repository->getStatisticListQuery($order, $offset, $limit, $partnerId, true, $fromDate, $toDate);
             $summaryData = $summaryQuery->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
             $this->View()->assign(
@@ -150,6 +149,34 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
         } catch (Exception $e) {
             $this->View()->assign(array('success' => false, 'errorMsg' => $e->getMessage()));
         }
+    }
+
+    /**
+     * Helper function returns total count of the passed query builder
+     *
+     * @param \Doctrine\ORM\Query $dataQuery
+     * @return int|null
+     */
+    private function getStatisticListTotalCount(\Doctrine\ORM\Query $dataQuery)
+    {
+        //userCurrencyFactor has not to be part of the count parameters
+        $originalParameters = $dataQuery->getParameters();
+        $countParameters = new \Doctrine\Common\Collections\ArrayCollection();
+
+        /** @var \Doctrine\ORM\Query\Parameter $parameter */
+        foreach ($originalParameters as $parameter) {
+            if ($parameter->getName() === 'userCurrencyFactor') {
+                continue;
+            }
+
+            $countParameters->add($parameter);
+        }
+
+        $dataQuery->setParameters($countParameters);
+        $totalCount = Shopware()->Models()->getQueryCount($dataQuery);
+        $dataQuery->setParameters($originalParameters);
+
+        return $totalCount;
     }
 
     /**
@@ -187,7 +214,7 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
         $repository = Shopware()->Models()->Partner();
 
         //get the information of the partner chart
-        $dataQuery = $repository->getStatisticChartQuery($partnerId,$fromDate,$toDate);
+        $dataQuery = $repository->getStatisticChartQuery($partnerId, $fromDate, $toDate);
         $data = $dataQuery->getArrayResult();
 
         $this->View()->assign(array('success' => true, 'data' => $data));
@@ -249,7 +276,7 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
         $userId = $customerData["id"];
         unset($customerData["id"]);
         if (!empty($customerData)) {
-            echo implode(", ",array_filter($customerData))."|".$userId;
+            echo implode(", ", array_filter($customerData))."|".$userId;
         }
     }
 
@@ -298,11 +325,11 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
 
         /** @var $repository \Shopware\Models\Partner\Repository */
         $repository = Shopware()->Models()->Partner();
-        $dataQuery = $repository->getStatisticListQuery(null,null,null,$partnerId,false,$this->getFromDate(), $this->getToDate());
+        $dataQuery = $repository->getStatisticListQuery(null, null, null, $partnerId, false, $this->getFromDate(), $this->getToDate());
         $resultArray = $dataQuery->getArrayResult();
 
-        $this->Response()->setHeader('Content-Type','text/csv; charset=utf-8');
-        $this->Response()->setHeader('Content-Disposition','attachment;filename=partner_statistic.csv');
+        $this->Response()->setHeader('Content-Type', 'text/csv; charset=utf-8');
+        $this->Response()->setHeader('Content-Disposition', 'attachment;filename=partner_statistic.csv');
         //use this to set the BOM to show it in the right way for excel and stuff
         echo "\xEF\xBB\xBF";
         $fp = fopen('php://output', 'w');
@@ -313,8 +340,8 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
         foreach ($resultArray as $value) {
             $date = $value["orderTime"]->format("d-m-Y");
             $value["orderTime"] = $date;
-            $value["netTurnOver"] = number_format(floatval($value["netTurnOver"]),2,',','.');
-            $value["provision"] = number_format(floatval($value["provision"]),2,',','.');
+            $value["netTurnOver"] = number_format(floatval($value["netTurnOver"]), 2, ',', '.');
+            $value["provision"] = number_format(floatval($value["provision"]), 2, ',', '.');
             fputcsv($fp, $value, ";");
         }
         fclose($fp);

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -267,6 +267,16 @@ class Article extends ModelEntity
      */
     protected $allCategories;
 
+    /**
+     * @var ArrayCollection
+     * @ORM\OneToMany(
+     *      targetEntity="Shopware\Models\Article\SeoCategory",
+     *      mappedBy="article",
+     *      orphanRemoval=true,
+     *      cascade={"persist"}
+     * )
+     */
+    protected $seoCategories;
 
     /**
      * @var ArrayCollection
@@ -282,6 +292,21 @@ class Article extends ModelEntity
      * )
      */
     protected $customerGroups;
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\ManyToMany(targetEntity="Shopware\Models\ProductStream\ProductStream")
+     * @ORM\JoinTable(name="s_product_streams_articles",
+     *      joinColumns={
+     *          @ORM\JoinColumn(name="article_id", referencedColumnName="id")
+     *      },
+     *      inverseJoinColumns={
+     *          @ORM\JoinColumn(name="stream_id", referencedColumnName="id")
+     *      }
+     * )
+     */
+    protected $relatedProductStreams;
 
     /**
      * OWNING SIDE
@@ -474,6 +499,7 @@ class Article extends ModelEntity
     {
         $this->categories = new ArrayCollection();
         $this->allCategories = new ArrayCollection();
+        $this->seoCategories = new ArrayCollection();
         $this->customerGroups = new ArrayCollection();
         $this->propertyValues = new ArrayCollection();
         $this->related = new ArrayCollection();
@@ -1249,5 +1275,43 @@ class Article extends ModelEntity
         $this->setOneToOne($configuratorTemplate, '\Shopware\Models\Article\Configurator\Template\Template', 'configuratorTemplate', 'article');
 
         return $this;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getSeoCategories()
+    {
+        return $this->seoCategories;
+    }
+
+    /**
+     * @param ArrayCollection $seoCategories
+     * @return \Shopware\Components\Model\ModelEntity
+     */
+    public function setSeoCategories($seoCategories)
+    {
+        return $this->setOneToMany(
+            $seoCategories,
+            '\Shopware\Models\Article\SeoCategory',
+            'seoCategories',
+            'article'
+        );
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getRelatedProductStreams()
+    {
+        return $this->relatedProductStreams;
+    }
+
+    /**
+     * @param ArrayCollection $relatedProductStreams
+     */
+    public function setRelatedProductStreams($relatedProductStreams)
+    {
+        $this->relatedProductStreams = $relatedProductStreams;
     }
 }

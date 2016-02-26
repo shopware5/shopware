@@ -59,8 +59,7 @@ class Enlight_Controller_Response_ResponseTestCase
                                $domain = null,
                                $secure = false,
                                $httpOnly = false
-    )
-    {
+    ) {
         $this->_cookies[$name] = array(
             'value' => $value,
             'expire' => $expire,
@@ -70,6 +69,14 @@ class Enlight_Controller_Response_ResponseTestCase
             'httpOnly' => $httpOnly
         );
         return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getCookies()
+    {
+        return $this->_cookies;
     }
 
     /**
@@ -110,5 +117,13 @@ class Enlight_Controller_Response_ResponseTestCase
             }
         }
         return $default;
+    }
+
+    /**
+     * @return null
+     */
+    public function unsetExceptions()
+    {
+        $this->_exceptions = array();
     }
 }

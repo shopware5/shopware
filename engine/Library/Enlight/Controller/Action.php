@@ -83,8 +83,7 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
      */
     public function __construct(Enlight_Controller_Request_Request $request,
                                 Enlight_Controller_Response_Response $response
-    )
-    {
+    ) {
         $this->setRequest($request)->setResponse($response);
 
         $this->controller_name = $this->Front()->Dispatcher()->getFullControllerName($this->Request());
@@ -338,7 +337,7 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
     /**
      * Returns request instance
      *
-     * @return Enlight_Controller_Request_RequestHttp
+     * @return Enlight_Controller_Request_Request
      */
     public function Request()
     {
@@ -385,7 +384,6 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
     public function __call($name, $value = null)
     {
         if ('Action' == substr($name, -6)) {
-            $action = substr($name, 0, strlen($name) - 6);
             throw new Enlight_Controller_Exception(
                 'Action "' . $this->controller_name . '_' . $name . '" not found failure',
                 Enlight_Controller_Exception::ActionNotFound

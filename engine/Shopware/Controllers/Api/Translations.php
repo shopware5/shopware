@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,6 +32,20 @@ class Shopware_Controllers_Api_Translations extends Shopware_Controllers_Api_Res
     public function init()
     {
         $this->resource = \Shopware\Components\Api\Manager::getResource('translation');
+    }
+
+    public function preDispatch()
+    {
+        parent::preDispatch();
+
+        // We still support the old behavior
+        $request = $this->Request();
+        $localeId = $request->getPost('localeId');
+
+        if ($localeId !== null) {
+            $request->setPost('shopId', $localeId);
+            $request->setPost('localeId', null);
+        }
     }
 
     /**
@@ -68,9 +82,9 @@ class Shopware_Controllers_Api_Translations extends Shopware_Controllers_Api_Res
             $translation = $this->resource->create($params);
         }
 
-        $location = $this->apiBaseUrl . 'translations/' . $translation['id'];
+        $location = $this->apiBaseUrl . 'translations/' . $translation->getId();
         $data = array(
-            'id'       => $translation['id'],
+            'id'       => $translation->getId(),
             'location' => $location
         );
 
@@ -96,14 +110,13 @@ class Shopware_Controllers_Api_Translations extends Shopware_Controllers_Api_Res
             $translation = $this->resource->update($id, $params);
         }
 
-        $location = $this->apiBaseUrl . 'translations/' . $translation['id'];
+        $location = $this->apiBaseUrl . 'translations/' . $translation->getId();
         $data = array(
-            'id'       => $translation['id'],
+            'id'       => $translation->getId(),
             'location' => $location
         );
 
         $this->View()->assign(array('success' => true, 'data' => $data));
-        $this->Response()->setHeader('Location', $location);
     }
 
     /**

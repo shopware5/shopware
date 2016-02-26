@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -62,8 +62,8 @@ class Shopware_Components_Menu_SaveHandler_DbTable extends Zend_Db_Table_Abstrac
         foreach ($config as $key => $value) {
             if ($key=='order') {
                 $this->_order = $value;
-            } elseif (substr($key,-6)=='Column') {
-                $this->_colums[substr($key,0,-6)] = $value;
+            } elseif (substr($key, -6)=='Column') {
+                $this->_colums[substr($key, 0, -6)] = $value;
             }
         }
 

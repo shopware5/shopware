@@ -36,6 +36,15 @@ class Enlight_Controller_Request_RequestHttp
     implements Enlight_Controller_Request_Request
 {
     /**
+     * @var string[]
+     */
+    private $validDeviceTypes = [
+        'desktop',
+        'tablet',
+        'mobile',
+    ];
+
+    /**
      * Set GET values method
      *
      * @param  string|array $spec
@@ -47,15 +56,38 @@ class Enlight_Controller_Request_RequestHttp
         if (!is_array($spec) && $value === null) {
             unset($_GET[$spec]);
             return $this;
+        } elseif (is_array($spec) && empty($spec)) {
+            $_GET = array();
+            return $this;
         }
         return parent::setQuery($spec, $value);
+    }
+
+    /**
+     * Set POST values method
+     *
+     * @param  string|array $spec
+     * @param  null|mixed   $value
+     * @return Zend_Controller_Request_Http
+     */
+    public function setPost($spec, $value = null)
+    {
+        if (!is_array($spec) && $value === null) {
+            unset($_POST[$spec]);
+            return $this;
+        } elseif (is_array($spec) && empty($spec)) {
+            $_POST = array();
+            return $this;
+        }
+
+        return parent::setPost($spec, $value);
     }
 
     /**
      * Sets the request URI scheme
      *
      * @param $value
-     * @return Enlight_Controller_Request_RequestHttp
+     * @return Enlight_Controller_Request_Request
      */
     public function setSecure($value = true)
     {
@@ -67,7 +99,7 @@ class Enlight_Controller_Request_RequestHttp
      * Set SERVER remote address
      *
      * @param string $address
-     * @return Enlight_Controller_Request_RequestHttp
+     * @return Enlight_Controller_Request_Request
      */
     public function setRemoteAddress($address)
     {
@@ -80,7 +112,7 @@ class Enlight_Controller_Request_RequestHttp
      * Sets HTTP host method
      *
      * @param string $host
-     * @return Enlight_Controller_Request_RequestHttp
+     * @return Enlight_Controller_Request_Request
      */
     public function setHttpHost($host)
     {
@@ -136,12 +168,42 @@ class Enlight_Controller_Request_RequestHttp
      *
      * @param   string $header
      * @param   $value
-     * @return  Enlight_Controller_Request_RequestHttp
+     * @return  Enlight_Controller_Request_Request
      */
     public function setHeader($header, $value)
     {
         $temp = strtoupper(str_replace('-', '_', $header));
         $_SERVER['HTTP_' . $temp] = $value;
         return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getModuleName()
+    {
+        if (parent::getModuleName() === null) {
+            return null;
+        }
+
+        return strtolower(trim(parent::getModuleName()));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getClientIp($checkProxy = false)
+    {
+        return parent::getClientIp($checkProxy);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDeviceType()
+    {
+        $deviceType = strtolower($this->getCookie('x-ua-device', 'desktop'));
+
+        return (in_array($deviceType, $this->validDeviceTypes)) ? $deviceType : 'desktop';
     }
 }

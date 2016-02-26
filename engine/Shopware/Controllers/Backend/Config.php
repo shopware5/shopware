@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -39,14 +39,10 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         $this->addAclPermission('getList', 'read', 'Insufficient Permissions');
         $this->addAclPermission('getTableList', 'read', 'Insufficient Permissions');
         $this->addAclPermission('getValues', 'read', 'Insufficient Permissions');
-        $this->addAclPermission('getTemplateList', 'read', 'Insufficient Permissions');
-        $this->addAclPermission('refreshTemplate', 'read', 'Insufficient Permissions');
-        $this->addAclPermission('previewTemplate', 'read', 'Insufficient Permissions');
 
         $this->addAclPermission('saveForm', 'update', 'Insufficient Permissions');
         $this->addAclPermission('saveValues', 'update', 'Insufficient Permissions');
         $this->addAclPermission('saveTableValues', 'update', 'Insufficient Permissions');
-        $this->addAclPermission('saveTemplate', 'update', 'Insufficient Permissions');
 
         $this->addAclPermission('deleteValues', 'delete', 'Insufficient Permissions');
         $this->addAclPermission('deleteTableValues', 'delete', 'Insufficient Permissions');
@@ -70,7 +66,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         $builder = $repository->createQueryBuilder('form')
             ->leftJoin('form.elements', 'element')
             ->leftJoin('element.translations', 'elementTranslation', \Doctrine\ORM\Query\Expr\Join::WITH, 'elementTranslation.localeId = :localeId')
-            ->leftJoin('form.translations', 'translation' , \Doctrine\ORM\Query\Expr\Join::WITH, 'translation.localeId = :localeId')
+            ->leftJoin('form.translations', 'translation', \Doctrine\ORM\Query\Expr\Join::WITH, 'translation.localeId = :localeId')
             ->leftJoin('form.children', 'children')
             ->select(array(
                 'form.id',
@@ -78,7 +74,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                 'COUNT(children.id) as childrenCount'
             ))
             ->groupBy('form.id')
-            ->setParameter("localeId",$locale->getId());
+            ->setParameter("localeId", $locale->getId());
 
         // Search forms
         if (isset($filter[0]['property']) && $filter[0]['property'] == 'search') {
@@ -117,29 +113,37 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         $user = Shopware()->Auth()->getIdentity();
         /** @var $locale \Shopware\Models\Shop\Locale */
         $locale = $user->locale;
+        $language = $locale->toString();
 
         /** @var $builder \Shopware\Components\Model\QueryBuilder */
         $builder = $repository->createQueryBuilder('form')
             ->leftJoin('form.elements', 'element')
-            ->leftJoin('form.translations', 'formTranslation' , \Doctrine\ORM\Query\Expr\Join::WITH, 'formTranslation.localeId = :localeId')
+            ->leftJoin('form.translations', 'formTranslation', \Doctrine\ORM\Query\Expr\Join::WITH, 'formTranslation.localeId = :localeId')
             ->leftJoin('element.translations', 'elementTranslation', \Doctrine\ORM\Query\Expr\Join::WITH, 'elementTranslation.localeId = :localeId')
             ->leftJoin('element.values', 'value')
             ->select(array('form', 'element', 'value', 'elementTranslation', 'formTranslation'))
-            ->setParameter("localeId",$locale->getId());
-
-
+            ->setParameter("localeId", $locale->getId());
 
         $builder->addOrderBy((array) $this->Request()->getParam('sort', array()))
             ->addFilter((array) $this->Request()->getParam('filter', array()));
 
         $data = $builder->getQuery()->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
-        foreach ($data['elements'] as $elementsKey => $values) {
-            foreach ($values['translations'] as $translationsKey => $array) {
+        foreach ($data['elements'] as &$values) {
+            foreach ($values['translations'] as $array) {
                 if ($array['label'] !== null) {
-                    $data['elements'][$elementsKey]['label'] = $array['label'];
+                    $values['label'] = $array['label'];
+                }
+                if ($array['description'] !== null) {
+                    $values['description'] = $array['description'];
                 }
             }
+
+            if (!in_array($values['type'], array('select', 'combo'))) {
+                continue;
+            }
+
+            $values['options']['store'] = $this->translateStore($language, $values['options']['store']);
         }
 
         $this->View()->assign(array(
@@ -147,6 +151,49 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
             'data' => $data,
             'total' => count($data)
         ));
+    }
+
+    /**
+     * Helper function to translate the store of select- and combo-fields
+     * Store value will be replaced by the value in the correct language.
+     * If there is no matching language in array defined, the first array element will be used.
+     * If the store or a value is not an array, it will not be changed.
+     *
+     * Store should be an array like this:
+     *
+     * $store = array(
+     *              array(1, array('de_DE' => 'Auto', 'en_GB' => 'car')),
+     *              array(2, array('de_DE' => 'Hund', 'en_GB' => 'dog')),
+     *              array(3, array('de_DE' => 'Katze', 'en_GB' => 'cat'))
+     *          );
+     *
+     * @param string $language
+     * @param mixed $store
+     * @return mixed
+     */
+    private function translateStore($language, $store)
+    {
+        if (!is_array($store)) {
+            return $store;
+        }
+
+        foreach ($store as &$row) {
+            $value = array_pop($row);
+
+            if (!is_array($value)) {
+                $row[] = $value;
+                continue;
+            }
+
+            if (!array_key_exists($language, $value)) {
+                $row[] = array_shift($value);
+                continue;
+            }
+
+            $row[] = $value[$language];
+        }
+
+        return $store;
     }
 
     /**
@@ -193,17 +240,22 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                 if ((!isset($valueData['value']) || $valueData['value'] === '') && !empty($elementData['required'])) {
                     continue;
                 }
+
                 // Do not save default value
                 if ($valueData['value'] === $elementData['value'] && (empty($elementData['scope']) || $shop->getId() == $defaultShop->getId())) {
                     continue;
                 }
+
+                // Simple data validation
+                if (!$this->validateData($elementData, $valueData['value'])) {
+                    continue;
+                }
+
                 $value = new Shopware\Models\Config\Value();
                 $value->setElement($element);
                 $value->setShop($shop);
                 $value->setValue($valueData['value']);
                 $values[$shop->getId()] = $value;
-
-                Shopware()->Config()->offsetSet($element->getName(), $values);
             }
 
             $values = Shopware()->Events()->filter('Shopware_Controllers_Backend_Config_Before_Save_Config_Element', $values, array(
@@ -231,7 +283,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
     public function getListAction()
     {
         /** @var $name string */
-        $name = $this->Request()->get('name');
+        $name = $this->Request()->get('_repositoryClass');
         /** @var $repository Shopware\Components\Model\ModelRepository */
         $repository = $this->getRepository($name);
 
@@ -249,12 +301,13 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                     'shop.basePath as basePath',
                     'shop.baseUrl as baseUrl',
                     'shop.default as default',
-                    'IFNULL(main.default, shop.default) as orderValue1',
-                    'IFNULL(main.name, shop.name) as orderValue2'
+                    'IFNULL(shop.mainId, shop.id) as orderValue0',
+                    'IFNULL(main.default, shop.default) as orderValue1'
                 ));
-                $builder->orderBy('orderValue1', 'DESC');
-                $builder->orderBy('orderValue2');
-                $builder->orderBy('name');
+                $builder->addOrderBy('orderValue1', 'DESC');
+                $builder->addOrderBy('orderValue0', 'ASC');
+                $builder->addOrderBy('shop.host', 'DESC');
+                $builder->addOrderBy('name');
                 break;
             case 'pageGroup':
                 $builder->leftJoin('pageGroup.mapping', 'mapping');
@@ -305,7 +358,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
      */
     public function getTableListAction()
     {
-        $name = $this->Request()->get('name');
+        $name = $this->Request()->get('_repositoryClass');
         $limit = intval($this->Request()->get('limit'));
         $start = intval($this->Request()->get('start'));
         $table = $this->getTable($name);
@@ -409,7 +462,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
      */
     public function getValuesAction()
     {
-        $name = $this->Request()->get('name');
+        $name = $this->Request()->get('_repositoryClass');
         $repository = $this->getRepository($name);
         if ($repository === null) {
             return;
@@ -487,7 +540,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
     public function saveValuesAction()
     {
         $manager = Shopware()->Models();
-        $name = $this->Request()->getQuery('name');
+        $name = $this->Request()->get('_repositoryClass');
         $repository = $this->getRepository($name);
         $data = $this->Request()->getPost();
 
@@ -510,6 +563,9 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         }
 
         switch ($name) {
+            case 'tax':
+                $this->saveTaxRules($data, $model);
+                return;
             case 'customerGroup':
                 if (isset($data['discounts'])) {
                     $model->getDiscounts()->clear();
@@ -527,19 +583,6 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                 }
                 if (empty($data["mode"])) {
                     $data["discount"] = 0;
-                }
-                break;
-            case 'tax':
-                if (isset($data['rules'])) {
-                    $model->getRules()->clear();
-                    $rules = array();
-                    foreach ($data['rules'] as $ruleData) {
-                        $rule = new Shopware\Models\Tax\Rule();
-                        $rule->fromArray($ruleData);
-                        $rule->setGroup($model);
-                        $rules[] = $rule;
-                    }
-                    $data['rules'] = $rules;
                 }
                 break;
             case 'shop':
@@ -564,6 +607,14 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                         $data[$key] = null;
                     }
                 }
+
+                if ($data['templateId'] === null && $data['mainId'] === null && $data['id'] === null) {
+                    $templateId = Shopware()->Db()->fetchOne(
+                        'SELECT template_id FROM s_core_shops WHERE `default` = 1 AND template_id IS NOT NULL'
+                    );
+                    $data['templateId'] = $templateId;
+                }
+
                 $fields = array(
                     'mainId' => 'main',
                     'templateId' => 'template',
@@ -626,7 +677,6 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                     $data['elements'] = $elements;
                 } else {
                     $data['elements'] = $this->createDocumentElements($model);
-
                 }
 
                 break;
@@ -639,9 +689,6 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         $manager->persist($model);
         $manager->flush();
 
-        if ($name === 'shop') {
-            $this->fixTranslationTable();
-        }
         $this->View()->assign(array('success' => true));
     }
 
@@ -650,8 +697,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
      */
     public function saveTableValuesAction()
     {
-        $name = $this->Request()->getQuery('name');
-
+        $name = $this->Request()->get('_repositoryClass');
         $data = $this->Request()->getPost();
         $data = isset($data[0]) ? array_pop($data) : $data;
         $id = !empty($data['id']) ? $data['id'] : null;
@@ -708,52 +754,12 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
     }
 
     /**
-     * Fix the translation table data
-     * @deprecated
-     */
-    protected function fixTranslationTable()
-    {
-        $sql = "
-            TRUNCATE `s_core_multilanguage`;
-        ";
-        Shopware()->Db()->exec($sql);
-        $sql = "
-            INSERT IGNORE INTO `s_core_multilanguage` (
-              `id`, `isocode`, `locale`, `parentID`, `skipbackend`,
-              `name`, `defaultcustomergroup`, `template`, `doc_template`,
-              `domainaliase`,
-              `switchCurrencies`, `switchLanguages`,
-              `defaultcurrency`, `default`,
-              `fallback`
-            )
-            SELECT
-              s.id, s.id as isocode, s.locale_id, s.category_id, s.default as skipbackend, s.name,
-              (SELECT groupkey FROM s_core_customergroups WHERE id=s.customer_group_id) as defaultcustomergroup,
-              (SELECT CONCAT('templates/', template) FROM s_core_templates WHERE id=m.template_id) as template,
-              (SELECT CONCAT('templates/', template) FROM s_core_templates WHERE id=m.document_template_id) as doc_template,
-              CONCAT(s.host, '\n', s.hosts) as hosts,
-              GROUP_CONCAT(d.currency_id SEPARATOR '|') as switchCurrencies,
-              (SELECT GROUP_CONCAT(id SEPARATOR '|') FROM s_core_shops WHERE id=m.id OR main_id=m.id)  as switchLanguages,
-              s.currency_id, s.default, s.fallback_id
-            FROM `s_core_shops` s
-            LEFT JOIN `s_core_shops` m
-            ON m.id=s.main_id
-            OR (s.main_id IS NULL AND m.id=s.id)
-            LEFT JOIN `s_core_shop_currencies` d
-            ON d.shop_id=m.id
-            WHERE s.active=1
-            GROUP BY s.id
-        ";
-        Shopware()->Db()->exec($sql);
-    }
-
-    /**
      * Save form values values with shop reverence
      */
     public function deleteValuesAction()
     {
         $manager = Shopware()->Models();
-        $name = $this->Request()->getQuery('name');
+        $name = $this->Request()->get('_repositoryClass');
         $repository = $this->getRepository($name);
         $data = $this->Request()->getPost();
 
@@ -779,7 +785,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
      */
     public function deleteTableValuesAction()
     {
-        $name = $this->Request()->getQuery('name');
+        $name = $this->Request()->get('_repositoryClass');
 
         $data = $this->Request()->getPost();
         $data = isset($data[0]) ? array_pop($data) : $data;
@@ -894,158 +900,6 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         return isset($this->tables[$name]) ? $this->tables[$name] : null;
     }
 
-    /**
-     * Returns a full list of all templates
-     */
-    public function getTemplateListAction()
-    {
-        $shopId = $this->Request()->getParam('shopId');
-        $shop = $shopId !== null ? $this->getRepository('shop')->find($shopId) : null;
-        $enabled = $shop !== null ? $shop->getTemplate() : null;
-        $enabled = $enabled !== null ? $enabled->getTemplate() : null;
-
-        //$preview = Shopware()->Shop()->getTemplate();
-        $preview = null;
-
-        $templateDir = Shopware()->DocPath('templates');
-        $this->refreshTemplateList($templateDir);
-
-        $repository = $this->getRepository('template');
-        /** @var $builder \Shopware\Components\Model\QueryBuilder */
-        $builder = $repository->createQueryBuilder('template');
-
-        $builder->addFilter((array) $this->Request()->getParam('filter', array()))
-            ->addOrderBy((array) $this->Request()->getParam('sort', array()));
-        $builder->setFirstResult($this->Request()->getParam('start'))
-            ->setMaxResults($this->Request()->getParam('limit'));
-
-        $query = $builder->getQuery();
-        $total = Shopware()->Models()->getQueryCount($query);
-        $data = $query->getArrayResult();
-
-        foreach ($data as &$item) {
-            $item['preview'] = $item['template'] === $preview;
-            $item['enabled'] = $item['template'] === $enabled;
-
-            // Check for preview images
-            $templateDir = Shopware()->Template()->resolveTemplateDir($item['template']);
-            $item['previewFull'] = '/preview.png';
-            $item['previewThumb'] = '/preview_thb.png';
-            if (!file_exists($templateDir . $item['preview'])) {
-                $item['previewFull'] = null;
-            } else {
-                $item['previewFull'] = $item['template'] . $item['previewFull'];
-            }
-            if (!file_exists($templateDir . $item['previewThumb'])) {
-                $item['previewThumb'] = null;
-            } else {
-                $item['previewThumb'] = file_get_contents($templateDir . $item['previewThumb']);
-                $item['previewThumb'] = 'data:image/png;base64,' . base64_encode($item['previewThumb']);
-            }
-        }
-
-        $this->View()->assign(array('success' => true, 'data' => $data, 'total' => $total));
-    }
-
-    /**
-     * Updates the template list
-     *
-     * @param $templateDir
-     */
-    protected function refreshTemplateList($templateDir)
-    {
-        $repository = $this->getRepository('template');
-        $templates = $repository->findAll();
-
-        $templateList = array();
-        foreach ($templates as $template) {
-            $templateList[$template->getTemplate()] = $template;
-        }
-
-        $dirs = new DirectoryIterator($templateDir);
-        foreach ($dirs as $dirInfo) {
-            if ($dirInfo->isDot() || !$dirInfo->isDir()) {
-                continue;
-            }
-            $dirName = $dirInfo->getFilename();
-            if (in_array($dirName, array('.svn'))
-                || is_numeric($dirName)
-                || strpos($dirName, '_') === 0
-            ) {
-                continue;
-            }
-
-            $templateData = array();
-            $templateFile = $dirInfo->getPathname() . '/info.json';
-            if (file_exists($templateFile)) {
-                $templateData = (array) Zend_Json::decode(file_get_contents($templateFile));
-            }
-            if (!isset($templateData['version'])) {
-                $templateData['version'] = strpos($dirName, 'emotion_') !== 0 ? 1 : 2;
-            }
-            if (isset($templateList[$dirName])) {
-                $template = $templateList[$dirName];
-            } else {
-                $template = new Shopware\Models\Shop\Template();
-                $templateData['template'] = $dirName;
-                if (empty($templateData['name'])) {
-                    $templateData['name'] = ucwords(str_replace('_', ' ', $dirName));
-                }
-            }
-            $template->fromArray($templateData);
-
-            Shopware()->Models()->persist($template);
-        }
-        Shopware()->Models()->flush();
-    }
-
-    /**
-     * Save template selection
-     */
-    public function saveTemplateAction()
-    {
-        $data = $this->Request()->getPost();
-        $data = isset($data[0]) ? $data : array($data);
-
-        $shopId = $this->Request()->getParam('shopId');
-        $shop = $this->getRepository('shop')->find($shopId);
-
-        foreach ($data as $template) {
-            if (empty($template['enabled']) || empty($template['id'])) {
-                continue;
-            }
-            $template = $this->getRepository('template')->find($template['id']);
-            $shop->setTemplate($template);
-        }
-
-        Shopware()->Models()->flush();
-    }
-
-    /**
-     * Starts a template preview
-     */
-    public function previewTemplateAction()
-    {
-        $template = $this->Request()->getParam('template');
-
-        $shopId = $this->Request()->getParam('shopId');
-        /** @var $shop \Shopware\Models\Shop\Shop */
-        $shop = $this->getRepository('shop')->getActiveById($shopId);
-        $shop->registerResources(Shopware()->Bootstrap());
-
-        Shopware()->Session()->template = $template;
-        Shopware()->Session()->Admin = true;
-
-        if (!$this->Request()->isXmlHttpRequest()) {
-            $url = $this->Front()->Router()->assemble(array(
-                'module' => 'frontend',
-                'controller' => 'index',
-                'appendSession' => true,
-            ));
-            $this->redirect($url);
-        }
-    }
-
     private function createDocumentElements($model)
     {
         $elementCollection = new \Doctrine\Common\Collections\ArrayCollection();
@@ -1062,7 +916,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
 
         $elementModel = new Shopware\Models\Document\Element();
         $elementModel->setName('Logo');
-        $elementModel->setValue('<p><img src="http://www.shopware.de/logo/logo.png " alt="" /></p>');
+        $elementModel->setValue('<p><img src="http://www.shopware.de/logo/logo.png" alt="" /></p>');
         $elementModel->setStyle('height: 20mm; width: 90mm; margin-bottom:5mm;');
         $elementModel->setDocument($model);
         $elementCollection->add($elementModel);
@@ -1147,7 +1001,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         $elementModel = new Shopware\Models\Document\Element();
         $elementModel->setName('Footer');
         $elementModel->setValue(
-            '<table style="height: 90px;" border="0" width="100%">
+            '<table style="vertical-align: top;" width="100%" border="0">
             <tbody>
             <tr valign="top">
             <td style="width: 25%;">
@@ -1189,5 +1043,63 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         $elementCollection->add($elementModel);
 
         return $elementCollection;
+    }
+
+    /**
+     * Simple validation for backend config elements
+     *
+     * @param $elementData
+     * @param $value
+     * @return boolean
+     */
+    private function validateData($elementData, $value)
+    {
+        switch ($elementData['name']) {
+            /**
+             * Add rules for a bad case and return false to abort saving
+             */
+            case 'backendLocales':
+                if (!is_array($value) || count($value) === 0) {
+                    return false;
+                }
+
+                // check existence of each locale
+                foreach ($value as $localeId) {
+                    $locale = Shopware()->Models()->find('Shopware\Models\Shop\Locale', $localeId);
+                    if (null === $locale) {
+                        return false;
+                    }
+                }
+
+                break;
+        }
+
+        return true;
+    }
+
+    /**
+     * @param array $data
+     * @param \Shopware\Models\Tax\Tax $model
+     */
+    private function saveTaxRules(array $data, \Shopware\Models\Tax\Tax $model)
+    {
+        if (isset($data['rules'])) {
+            $model->getRules()->clear();
+            $rules = array();
+            foreach ($data['rules'] as $ruleData) {
+                $rule = new Shopware\Models\Tax\Rule();
+                $rule->fromArray($ruleData);
+                $rule->setGroup($model);
+                $rules[] = $rule;
+            }
+            $data['rules'] = $rules;
+
+            $model->fromArray($data);
+
+            $this->getModelManager()->persist($model);
+            $this->getModelManager()->flush();
+        }
+
+        $this->View()->assign(array('success' => true));
     }
 }

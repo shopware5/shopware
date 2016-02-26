@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -24,7 +24,7 @@
 
 namespace Shopware\Commands;
 
-use Shopware\Components\Plugin\Manager;
+use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -51,6 +51,12 @@ class PluginUninstallCommand extends ShopwareCommand
                 InputArgument::REQUIRED,
                 'Name of the plugin to be uninstalled.'
             )
+            ->addOption(
+                'secure',
+                'S',
+                InputOption::VALUE_NONE,
+                'Keep the saved data of the plugin. (if supported)'
+            )
             ->setHelp(<<<EOF
 The <info>%command.name%</info> uninstalls a plugin.
 EOF
@@ -63,8 +69,8 @@ EOF
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        /** @var Manager $pluginManager */
-        $pluginManager  = $this->container->get('shopware.plugin_manager');
+        /** @var InstallerService $pluginManager */
+        $pluginManager  = $this->container->get('shopware_plugininstaller.plugin_manager');
         $pluginName = $input->getArgument('plugin');
 
         try {
@@ -79,7 +85,9 @@ EOF
             return 1;
         }
 
-        $pluginManager->uninstallPlugin($plugin);
+        $removeData = !(bool)$input->getOption('secure');
+
+        $pluginManager->uninstallPlugin($plugin, $removeData);
 
         $output->writeln(sprintf('Plugin %s has been uninstalled successfully.', $pluginName));
     }

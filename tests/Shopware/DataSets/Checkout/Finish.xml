@@ -106,7 +106,6 @@
 		<column>firstname</column>
 		<column>lastname</column>
 		<column>street</column>
-		<column>streetnumber</column>
 		<column>zipcode</column>
 		<column>city</column>
 		<column>phone</column>
@@ -123,8 +122,7 @@
 			<value></value>
 			<value>Max</value>
 			<value>Mustermann</value>
-			<value>Musterstr.</value>
-			<value>55</value>
+			<value>Musterstr. 55</value>
 			<value>55555</value>
 			<value>Musterhausen</value>
 			<value>55555 / 555555</value>
@@ -201,7 +199,6 @@
 		<column>firstname</column>
 		<column>lastname</column>
 		<column>street</column>
-		<column>streetnumber</column>
 		<column>zipcode</column>
 		<column>city</column>
 		<column>countryID</column>
@@ -214,8 +211,7 @@
 			<value>mr</value>
 			<value>Max</value>
 			<value>Mustermann</value>
-			<value>Musterstr.</value>
-			<value>55</value>
+			<value>Musterstr. 55</value>
 			<value>55555</value>
 			<value>Musterhausen</value>
 			<value>2</value>
@@ -279,7 +275,6 @@
 		<column>firstname</column>
 		<column>lastname</column>
 		<column>street</column>
-		<column>streetnumber</column>
 		<column>zipcode</column>
 		<column>city</column>
 		<column>phone</column>
@@ -296,8 +291,7 @@
 			<value>20001</value>
 			<value>Max</value>
 			<value>Mustermann</value>
-			<value>Musterstr.</value>
-			<value>55</value>
+			<value>Musterstr. 55</value>
 			<value>55555</value>
 			<value>Musterhausen</value>
 			<value>55555 / 555555</value>

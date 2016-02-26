@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -93,7 +93,6 @@ class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Action
      */
     protected function initAcl()
     {
-
     }
 
     /**
@@ -103,17 +102,6 @@ class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Action
     public function getAclRules()
     {
         return $this->aclPermissions;
-    }
-
-    /**
-     * Set acl resource name - will be set in init-method to controller base - name for default
-     *
-     * @deprecated Not required any more
-     * @param $resource
-     */
-    protected function setAclResourceName($resource = null)
-    {
-
     }
 
     /**
@@ -142,7 +130,6 @@ class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Action
      * @param null|string $privilege Name of privilege
      * @param null|string|Zend_Acl_Role_Interface $resource
      * @param null|string|Zend_Acl_Resource_Interface $role
-     * @deprecated use is_allowed template plugin
      * @return boolean
      */
     protected function _isAllowed($privilege, $resource = null, $role = null)

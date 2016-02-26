@@ -62,8 +62,7 @@ class Enlight_Controller_Response_ResponseHttp
                                 $domain = null,
                                 $secure = false,
                                 $httpOnly = false
-    )
-    {
+    ) {
         $this->_cookies[$name] = array(
             'value' => $value,
             'expire' => $expire,
@@ -116,5 +115,13 @@ class Enlight_Controller_Response_ResponseHttp
     {
         $this->sendCookies();
         return parent::sendHeaders();
+    }
+
+    /**
+     * @return null
+     */
+    public function unsetExceptions()
+    {
+        $this->_exceptions = array();
     }
 }

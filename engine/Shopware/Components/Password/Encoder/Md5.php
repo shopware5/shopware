@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -31,7 +31,6 @@ namespace Shopware\Components\Password\Encoder;
  */
 class Md5 implements PasswordEncoderInterface
 {
-
     /**
      * @return string
      */
@@ -48,11 +47,11 @@ class Md5 implements PasswordEncoderInterface
     public function isPasswordValid($password, $hash)
     {
         if (strpos($hash, ':') === false) {
-            return $hash == md5($password);
+            return hash_equals($hash, md5($password));
         }
         list($md5, $salt) = explode(':', $hash);
 
-        return $md5 == md5($password . $salt);
+        return hash_equals($md5, md5($password . $salt));
     }
 
     /**

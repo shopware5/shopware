@@ -182,15 +182,15 @@ class Enlight_Config_BaseConfig implements Countable, Iterator
      */
     public function __clone()
     {
-      $array = array();
-      foreach ($this->_data as $key => $value) {
-          if ($value instanceof Enlight_Config_BaseConfig) {
-              $array[$key] = clone $value;
-          } else {
-              $array[$key] = $value;
-          }
-      }
-      $this->_data = $array;
+        $array = array();
+        foreach ($this->_data as $key => $value) {
+            if ($value instanceof Enlight_Config_BaseConfig) {
+                $array[$key] = clone $value;
+            } else {
+                $array[$key] = $value;
+            }
+        }
+        $this->_data = $array;
     }
 
     /**
@@ -239,7 +239,6 @@ class Enlight_Config_BaseConfig implements Countable, Iterator
         } else {
             throw new Enlight_Config_Exception('Enlight_Config_BaseConfig is read only');
         }
-
     }
 
     /**

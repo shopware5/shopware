@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,8 +23,9 @@
  */
 
 namespace   Shopware\Models\Snippet;
-use         Shopware\Components\Model\ModelEntity,
-            Doctrine\ORM\Mapping AS ORM;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Shopware snippet model represents a single snippet
@@ -229,7 +230,7 @@ class Snippet extends ModelEntity
     /**
      * Set created
      *
-     * @param \DateTime $created
+     * @param \DateTime|string $created
      * @return \Shopware\Models\Snippet\Snippet
      */
     public function setCreated($created = 'now')
@@ -256,7 +257,7 @@ class Snippet extends ModelEntity
     /**
      * Set updated
      *
-     * @param \DateTime $updated
+     * @param \DateTime|string $updated
      * @return \Shopware\Models\Snippet\Snippet
      */
     public function setUpdated($updated = 'now')
@@ -316,6 +317,4 @@ class Snippet extends ModelEntity
     {
         return $this->dirty;
     }
-
-
 }

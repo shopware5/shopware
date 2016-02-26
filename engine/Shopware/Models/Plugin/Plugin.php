@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -69,7 +69,6 @@ class Plugin extends ModelEntity
      * @ORM\Column(name="source", type="string", nullable=false)
      */
     private $source;
-
 
     /**
      * @var string $description
@@ -180,12 +179,6 @@ class Plugin extends ModelEntity
     private $capabilityEnable = true;
 
     /**
-     * @var boolean $capabilityDummy
-     * @ORM\Column(name="capability_dummy", type="boolean")
-     */
-    private $capabilityDummy = false;
-
-    /**
      * INVERSE SIDE
      * @var \Shopware\Models\Config\Form[]|ArrayCollection $configForms
      * @ORM\OneToMany(targetEntity="\Shopware\Models\Config\Form", mappedBy="plugin", cascade={"all"})
@@ -222,6 +215,15 @@ class Plugin extends ModelEntity
     private $templates;
 
     /**
+     * INVERSE SIDE
+     * @var \Shopware\Models\Widget\Widget[]|ArrayCollection $elements
+     * @ORM\OneToMany(targetEntity="\Shopware\Models\Widget\Widget", mappedBy="plugin", cascade={"all"})
+     * @ORM\JoinColumn(name="id", referencedColumnName="plugin_id")
+     * @ORM\OrderBy({"id" = "ASC"})
+     */
+    private $widgets;
+
+    /**
      * @var ArrayCollection
      * @ORM\OneToMany(targetEntity="Shopware\Models\Plugin\License", mappedBy="plugin")
      * @ORM\OrderBy({"type" = "ASC"})
@@ -236,6 +238,12 @@ class Plugin extends ModelEntity
     protected $emotionComponents;
 
     /**
+     * @var boolean $capabilitySecureUninstall
+     * @ORM\Column(name="capability_secure_uninstall", type="boolean")
+     */
+    private $capabilitySecureUninstall = false;
+
+    /**
      * Class constructor.
      */
     public function __construct()
@@ -247,22 +255,7 @@ class Plugin extends ModelEntity
         $this->payments = new ArrayCollection();
         $this->templates = new ArrayCollection();
         $this->licenses = new ArrayCollection();
-    }
-
-    /**
-     * @return bool
-     */
-    public function isDummy()
-    {
-        return (bool) $this->capabilityDummy;
-    }
-
-    /**
-     * Disables dummy capability
-     */
-    public function disableDummy()
-    {
-        $this->capabilityDummy = false;
+        $this->widgets = new ArrayCollection();
     }
 
     /**
@@ -538,7 +531,7 @@ class Plugin extends ModelEntity
     }
 
     /**
-     * @param Doctrine\Common\Collections\ArrayCollection|\Shopware\Models\Menu\Menu[] $configForms
+     * @param \Doctrine\Common\Collections\ArrayCollection|\Shopware\Models\Menu\Menu[] $configForms
      */
     public function setConfigForms($configForms)
     {
@@ -655,5 +648,53 @@ class Plugin extends ModelEntity
     public function setEmotionComponents($emotionComponents)
     {
         $this->emotionComponents = $emotionComponents;
+    }
+
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getWidgets()
+    {
+        return $this->widgets;
+    }
+
+    /**
+     * @param \Doctrine\Common\Collections\ArrayCollection $widgets
+     */
+    public function setWidgets($widgets)
+    {
+        $this->widgets = $widgets;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function hasCapabilitySecureUninstall()
+    {
+        return $this->capabilitySecureUninstall;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function hasCapabilityEnable()
+    {
+        return $this->capabilityEnable;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function hasCapabilityInstall()
+    {
+        return $this->capabilityInstall;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function hasCapabilityUpdate()
+    {
+        return $this->capabilityUpdate;
     }
 }

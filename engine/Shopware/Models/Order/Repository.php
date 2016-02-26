@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,7 +23,9 @@
  */
 
 namespace   Shopware\Models\Order;
-use         Shopware\Components\Model\ModelRepository;
+
+use Shopware\Components\Model\ModelRepository;
+
 /**
  * Repository for the order model (Shopware\Models\Order\Order).
  *
@@ -65,6 +67,7 @@ class Repository extends ModelRepository
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array(
             'status.id as id',
+            'status.name as name',
             'status.description as description'
         ));
         $builder->from('Shopware\Models\Order\Status', 'status')
@@ -113,6 +116,7 @@ class Repository extends ModelRepository
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array(
             'status.id as id',
+            'status.name as name',
             'status.description as description'
         ));
         $builder->from('Shopware\Models\Order\Status', 'status');
@@ -128,7 +132,6 @@ class Repository extends ModelRepository
         }
 
         return $builder;
-
     }
 
     /**
@@ -181,6 +184,8 @@ class Repository extends ModelRepository
             'detailAttribute',
             'documentAttribute',
             'shippingAttribute',
+            'paymentAttribute',
+            'dispatchAttribute',
             'subShop',
             'locale',
             'debit'
@@ -201,6 +206,8 @@ class Repository extends ModelRepository
                 ->leftJoin('orders.shipping', 'shipping')
                 ->leftJoin('orders.shop', 'shop')
                 ->leftJoin('orders.dispatch', 'dispatch')
+                ->leftJoin('payment.attribute', 'paymentAttribute')
+                ->leftJoin('dispatch.attribute', 'dispatchAttribute')
                 ->leftJoin('billing.attribute', 'billingAttribute')
                 ->leftJoin('shipping.attribute', 'shippingAttribute')
                 ->leftJoin('details.attribute', 'detailAttribute')
@@ -255,11 +262,11 @@ class Repository extends ModelRepository
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array(
                 'orders',
-                'details',
                 'customer',
                 'payment',
                 'billing',
                 'billingCountry',
+                'billingState',
                 'shop',
                 'dispatch',
                 'paymentStatus',
@@ -274,8 +281,8 @@ class Repository extends ModelRepository
                 ->leftJoin('orders.orderStatus', 'orderStatus')
                 ->leftJoin('orders.billing', 'billing')
                 ->leftJoin('orders.customer', 'customer')
-                ->leftJoin('orders.details', 'details')
                 ->leftJoin('billing.country', 'billingCountry')
+                ->leftJoin('billing.state', 'billingState')
                 ->leftJoin('orders.shop', 'shop')
                 ->leftJoin('orders.dispatch', 'dispatch')
                 ->leftJoin('billing.attribute', 'billingAttribute')
@@ -316,6 +323,7 @@ class Repository extends ModelRepository
                 'shipping',
                 'shippingAttribute',
                 'shippingCountry',
+                'shippingState',
                 'subShop',
                 'locale'
             ));
@@ -329,13 +337,14 @@ class Repository extends ModelRepository
                 ->leftJoin('customer.debit', 'debit')
                 ->leftJoin('orders.paymentInstances', 'paymentInstances')
                 ->leftJoin('orders.shipping', 'shipping')
+                ->leftJoin('shipping.state', 'shippingState')
                 ->leftJoin('shipping.attribute', 'shippingAttribute')
                 ->leftJoin('shipping.country', 'shippingCountry')
                 ->leftJoin('orders.languageSubShop', 'subShop')
                 ->leftJoin('subShop.locale', 'locale');
 
         $builder->where('orders.number = :orderNumber');
-        $builder->setParameter('orderNumber',$orderNumber);
+        $builder->setParameter('orderNumber', $orderNumber);
         return $builder->getQuery();
     }
 
@@ -454,28 +463,22 @@ class Repository extends ModelRepository
                                 $expr->like('orders.number', '?1'),
                                 $expr->like('orders.invoiceAmount', '?1'),
                                 $expr->like('orders.transactionId', '?1'),
-                                $expr->like('payment.description', '?1'),
-                                $expr->like('dispatch.name', '?1'),
-                                $expr->like('orderStatus.description', '?1'),
-                                $expr->like('paymentStatus.description', '?1'),
-                                $expr->like('orders.orderTime', '?2'),
                                 $expr->like('billing.company', '?3'),
                                 $expr->like('customer.email', '?3'),
                                 $expr->like('billing.lastName', '?3'),
                                 $expr->like('billing.firstName', '?3'),
-                                $expr->like('shop.name', '?3'),
                                 $expr->like('orders.comment', '?3'),
                                 $expr->like('orders.customerComment', '?3'),
                                 $expr->like('orders.internalComment', '?3')
                             )
                         );
                         $builder->setParameter(1,       $filter['value'] . '%');
-                        $builder->setParameter(2, '%' . $filter['value']      );
                         $builder->setParameter(3, '%' . $filter['value'] . '%');
                         break;
                     case "from":
                         $tmp = new \DateTime($filter['value']);
-                        $builder->andWhere($expr->gte('orders.orderTime', $tmp->format('Ymd')));
+                        $builder->andWhere('orders.orderTime > :orderTimeFrom');
+                        $builder->setParameter('orderTimeFrom', $tmp->format('Ymd'));
                         break;
                     case "to":
                         $tmp = new \Zend_Date($filter['value']);
@@ -486,14 +489,12 @@ class Repository extends ModelRepository
                         $builder->setParameter('orderTimeTo', $tmp->get('yyyy-MM-dd HH:mm:ss'));
                         break;
                     case 'details.articleNumber':
+                        $builder->leftJoin('orders.details', 'details');
                         $builder->andWhere('details.articleNumber LIKE :articleNumber');
-                        $builder->setParameter('articleNumber',  $filter['value'] . "%");
-                        break;
-                    case 'customer.groupKey':
-                        $builder->andWhere($expr->eq($filter['property'], "'" . $filter['value'] . "'"));
+                        $builder->setParameter('articleNumber',  $filter['value']);
                         break;
                     default:
-                        $builder->andWhere($expr->eq($filter['property'], $filter['value']));
+                        $builder->addFilter(array($filter));
                 }
             }
         }
@@ -532,7 +533,5 @@ class Repository extends ModelRepository
                        ->andWhere($builder->expr()->eq('codes.cashed', 0))
                        ->andWhere($builder->expr()->eq('voucher.modus', 1))
                        ->getQuery();
-
     }
-
 }

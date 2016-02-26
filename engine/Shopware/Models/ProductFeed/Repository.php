@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,7 +23,9 @@
  */
 
 namespace Shopware\Models\ProductFeed;
-use Shopware\Components\Model\ModelRepository, Doctrine\ORM\Query;
+
+use Shopware\Components\Model\ModelRepository;
+use Doctrine\ORM\Query;
 
 /**
  *
@@ -80,6 +82,37 @@ class Repository extends ModelRepository
 
         return $builder;
     }
+
+    /**
+     * Returns an instance of the \Doctrine\ORM\Query object which select a list of active
+     * product feeds.
+     *
+     * @return \Doctrine\ORM\Query
+     */
+    public function getActiveListQuery()
+    {
+        $builder = $this->getActiveListQueryBuilder();
+        return $builder->getQuery();
+    }
+
+    /**
+     * Helper function to create the query builder for the "getActiveListQuery" function.
+     * This function can be hooked to modify the query builder of the query object.
+     *
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getActiveListQueryBuilder()
+    {
+        $builder = $this->createQueryBuilder("feeds");
+        $builder->select(
+            array(
+                'feeds',
+            )
+        );
+        $builder->where('feeds.active = 1');
+        return $builder;
+    }
+
 
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which

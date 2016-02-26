@@ -1,4 +1,27 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
+
 class Shopware_Tests_Api_ArticleTest extends PHPUnit_Framework_TestCase
 {
     public $apiBaseUrl = '';
@@ -216,6 +239,51 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit_Framework_TestCase
                             'price' => 400,
                         ),
                     )
+                ),
+                array(
+                    'number' => 'swTEST.variant.' . uniqid(),
+                    'inStock' => 17,
+                    // create a new unit
+                    'unit' => array(
+                        'unit' => 'xyz',
+                        'name' => 'newUnit'
+                    ),
+
+                    'attribute' => array(
+                        'attr3' => 'Freitext3',
+                        'attr4' => 'Freitext4',
+                    ),
+
+                    'configuratorOptions' => array(
+                        array(
+                            'option' => 'Grün',
+                            'group' => 'Farbe'
+                        ),
+                        array(
+                            'option' => 'XL',
+                            'group' => 'Größe'
+                        )
+
+                    ),
+
+                    'minPurchase' => 5,
+                    'purchaseSteps' => 2,
+                    'purchaseSteps' => 2,
+
+                    'prices' => array(
+                        array(
+                            'customerGroupKey' => 'H',
+                            'from' => 1,
+                            'to' => 20,
+                            'price' => 500,
+                        ),
+                        array(
+                            'customerGroupKey' => 'H',
+                            'from' => 21,
+                            'to' => '-',
+                            'price' => 400,
+                        ),
+                    )
 
                 )
             ),
@@ -387,9 +455,16 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit_Framework_TestCase
         $client->setRawData($requestData, 'application/json; charset=UTF-8');
         $response = $client->request('PUT');
 
-        $this->assertEquals('application/json', $response->getHeader('Content-Type'));
-        $this->assertEquals(null, $response->getHeader('Set-Cookie'));
         $this->assertEquals(200, $response->getStatus());
+        $this->assertEquals('application/json', $response->getHeader('Content-Type'));
+        $this->assertNull(
+            $response->getHeader('Set-Cookie'),
+            'There should be no set-cookie header set.'
+        );
+        $this->assertNull(
+            $response->getHeader('location',
+            'There should be no location header set.'
+        ));
 
         $result = $response->getBody();
         $result = Zend_Json::decode($result);
@@ -411,6 +486,7 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit_Framework_TestCase
 
         $article = $result['data'];
 
+
         $this->assertEquals($id, $article['id']);
         $this->assertEquals($testData['description'], $article['description']);
         $this->assertEquals($testData['descriptionLong'], $article['descriptionLong']);
@@ -428,6 +504,156 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit_Framework_TestCase
 
     /**
      * @depends testPostArticlesShouldBeSuccessful
+     * @param $id
+     * @throws Zend_Http_Client_Exception
+     * @throws Zend_Json_Exception
+     */
+    public function testChangeVariantArticleMainVariantShouldBeSuccessful($id)
+    {
+        $response = $this->getHttpClient()
+            ->setUri($this->apiBaseUrl . '/articles/' . $id)
+            ->request('GET');
+
+        $this->assertEquals('application/json', $response->getHeader('Content-Type'));
+        $this->assertEquals(null, $response->getHeader('Set-Cookie'));
+        $this->assertEquals(200, $response->getStatus());
+
+        $result = $response->getBody();
+        $result = Zend_Json::decode($result);
+
+        $variantNumbers = array_map(function ($item) { return $item['number']; }, $result['data']['details']);
+
+        $oldMain = $result['data']['mainDetail']['number'];
+
+        foreach ($variantNumbers as $variantNumber) {
+            $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/articles/' . $id);
+
+            $testData = array(
+                'variants' => array(
+                    array(
+                        "number" => $variantNumber,
+                        "isMain" => true
+                    )
+                )
+            );
+            $requestData = Zend_Json::encode($testData);
+
+            $client->setRawData($requestData, 'application/json; charset=UTF-8');
+            $response = $client->request('PUT');
+            $this->assertEquals('application/json', $response->getHeader('Content-Type'));
+            $this->assertEquals(null, $response->getHeader('Set-Cookie'));
+            $this->assertEquals(200, $response->getStatus());
+            $result = $response->getBody();
+            $result = Zend_Json::decode($result);
+            $this->assertArrayHasKey('success', $result);
+            $this->assertTrue($result['success']);
+
+
+            $response = $this->getHttpClient()
+                ->setUri($this->apiBaseUrl . '/articles/' . $id)
+                ->request('GET');
+            $this->assertEquals('application/json', $response->getHeader('Content-Type'));
+            $this->assertEquals(null, $response->getHeader('Set-Cookie'));
+            $this->assertEquals(200, $response->getStatus());
+            $result = $response->getBody();
+            $result = Zend_Json::decode($result);
+
+            $this->assertEquals($variantNumber, $result['data']['mainDetail']['number']);
+
+            foreach ($result['data']['details'] as $variantData) {
+                if ($variantData['number'] == $oldMain) {
+                    $this->assertEquals(2, $variantData['kind']);
+                }
+            }
+
+            $oldMain = $result['data']['mainDetail']['number'];
+        }
+    }
+
+    /**
+     * @depends testPostArticlesShouldBeSuccessful
+     */
+    public function testReplaceArticleImagesWithUrlAndMediaId($articleId)
+    {
+        $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/articles/' . $articleId);
+
+        $requestData = array(
+            '__options_images' => [
+                'replace' => 1
+            ],
+            'images' => [
+                [
+                    'mediaId' => 44
+                ],
+                [
+                    'link' => 'http://lorempixel.com/640/480/food/'
+                ],
+                [
+                    'mediaId' => 46
+                ],
+
+            ]
+        );
+        $requestData = Zend_Json::encode($requestData);
+
+        $client->setRawData($requestData, 'application/json; charset=UTF-8');
+        $response = $client->request('PUT');
+
+        $this->assertEquals(200, $response->getStatus());
+
+        $result = $response->getBody();
+        $result = Zend_Json::decode($result);
+
+        $this->assertArrayHasKey('success', $result);
+        $this->assertTrue($result['success']);
+
+        $this->assertArrayHasKey('data', $result);
+
+        $data = $result['data'];
+        $this->assertInternalType('array', $data);
+        $this->assertEquals($articleId, $data['id']);
+    }
+
+    /**
+     * @depends testPostArticlesShouldBeSuccessful
+     */
+    public function testReplaceArticleImagesWithInvalidPayload($articleId)
+    {
+        $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/articles/' . $articleId);
+
+        $requestData = array(
+            '__options_images' => [
+                'replace' => 1
+            ],
+            'images' => [
+                [
+                    'id' => 999999,
+                    'mediaId' => 44
+                ]
+            ]
+        );
+        $requestData = Zend_Json::encode($requestData);
+
+        $client->setRawData($requestData, 'application/json; charset=UTF-8');
+        $response = $client->request('PUT');
+
+        $this->assertEquals(400, $response->getStatus());
+
+        $result = $response->getBody();
+        $result = Zend_Json::decode($result);
+
+        $this->assertArrayHasKey('success', $result);
+        $this->assertFalse($result['success']);
+
+        $this->assertArrayHasKey('message', $result);
+    }
+
+    /**
+     * @depends testPostArticlesShouldBeSuccessful
+     * @param $id
+     * @return
+     * @throws Zend_Http_Client_Exception
+     * @throws Zend_Json_Exception
      */
     public function testDeleteArticlesShouldBeSuccessful($id)
     {
@@ -626,7 +852,7 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit_Framework_TestCase
 
         $this->assertArrayHasKey('success', $result);
         $this->assertTrue($result['success']);
-        
+
         $this->assertEquals('create', $result['data'][0]['operation']);
         $this->assertEquals('create', $result['data'][1]['operation']);
         $this->assertEquals('create', $result['data'][2]['operation']);
