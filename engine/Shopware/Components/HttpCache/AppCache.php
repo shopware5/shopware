@@ -268,7 +268,7 @@ class AppCache extends HttpCache
      */
     protected function createStore()
     {
-        return new Store($this->cacheDir? $this->cacheDir : $this->kernel->getCacheDir().'/http_cache', $this->options['cache_cookies']);
+        return new Store($this->cacheDir? $this->cacheDir : $this->kernel->getCacheDir().'/http_cache', $this->options['cache_cookies'], $this->options['lookup_optimization']);
     }
 
     /**
