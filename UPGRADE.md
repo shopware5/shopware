@@ -14,6 +14,7 @@ In this document you will find a changelog of the important changes related to t
 * Added css rule in order to remove bottom border from last child of `.emotion--html > .html--content` so there is no scrollbar when only whitespace would overlap parent div
 * Enabled product streams for parent categories
 * Disabled the automatic detection of similar products for install customers. Enabling this option may decrease the shop performance.
+* Fixed the `removeListener` method in `Enlight_Event_Subscriber_Config`, `Enlight_Event_Subscriber_Array` and `Enlight_Event_EventManager`
 
 ## 5.1.3
 * Switch Grunt to relativeUrls to unify the paths to less.php
