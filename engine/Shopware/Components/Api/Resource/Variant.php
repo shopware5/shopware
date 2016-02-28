@@ -742,7 +742,7 @@ class Variant extends Resource implements BatchInterface
     /**
      * Simulates utf8_general_ci similar conditions
      */
-    private function simulateUtf8GeneralCi($inputvar){
+    private function simulateUtf8UnicodeCi($inputvar){
         return strtolower(preg_replace('/ß/', 'ss', $inputvar));
     }
 
@@ -799,7 +799,7 @@ class Variant extends Resource implements BatchInterface
 		        $optionData['option'] != '' &&
 		        $availableGroup->getId() !== null &&
 		        $availableGroup->getId() >= 1 &&
-		        $this->simulateUtf8GeneralCi($option->getName()) == $this->simulateUtf8GeneralCi($optionData['option']) &&
+		        $this->simulateUtf8UnicodeCi($option->getName()) == $this->simulateUtf8UnicodeCi($optionData['option']) &&
 		        $option->getName() != $optionData['option']
             ) {
                 Shopware()->Db()->query("UPDATE `s_article_configurator_options`
@@ -835,7 +835,7 @@ class Variant extends Resource implements BatchInterface
     {
         /**@var $availableGroup Option */
         foreach ($availableGroups as $availableGroup) {
-            if ( ($groupData['name'] !== null && $this->simulateUtf8GeneralCi($availableGroup->getName()) == $this->simulateUtf8GeneralCi($groupData['name']))
+            if ( ($groupData['name'] !== null && $this->simulateUtf8UnicodeCi($availableGroup->getName()) == $this->simulateUtf8UnicodeCi($groupData['name']))
                 || ($groupData['id'] !== null && $availableGroup->getId() == $groupData['id'])) {
                 return $availableGroup;
             }
@@ -856,7 +856,7 @@ class Variant extends Resource implements BatchInterface
     {
         /**@var $availableOption Option */
         foreach ($availableOptions as $availableOption) {
-            if ( ($optionData['name'] !== null && $this->simulateUtf8GeneralCi($availableOption->getName()) == $this->simulateUtf8GeneralCi($optionData['name']))
+            if ( ($optionData['name'] !== null && $this->simulateUtf8UnicodeCi($availableOption->getName()) == $this->simulateUtf8UnicodeCi($optionData['name']))
                 || ($optionData['id'] !== null && $availableOption->getId() == $optionData['id'] )) {
                 return $availableOption;
             }
