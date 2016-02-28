@@ -738,7 +738,13 @@ class Variant extends Resource implements BatchInterface
 
         return $priceData;
     }
-
+    
+    /**
+     * Simulates utf8_general_ci similar conditions
+     */
+    private function simulateUtf8GeneralCi($inputvar){
+        return strtolower(preg_replace('/ß/', 'ss', $inputvar));
+    }
 
     /**
      * Resolves the passed configuratorOptions parameter for a single variant.
@@ -815,13 +821,6 @@ class Variant extends Resource implements BatchInterface
         $variant->setConfiguratorOptions($options);
 
         return $data;
-    }
-    
-    /**
-     * Simulates utf8_general_ci similar conditions
-     */
-    private function simulateUtf8GeneralCi($inputvar){
-        return strtolower(preg_replace('/ß/', 'ss', $inputvar));
     }
 
     /**
