@@ -66,7 +66,7 @@ class Enlight_Event_Subscriber_Config extends Enlight_Event_Subscriber
         } elseif (isset($options['storage']) && $options['storage'] instanceof Enlight_Config) {
             $this->storage = $options['storage'];
         } else {
-            throw new Enlight_Event_Exception('');
+            throw new Enlight_Event_Exception('No storage provided');
         }
     }
 
