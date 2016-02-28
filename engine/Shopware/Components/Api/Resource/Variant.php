@@ -793,7 +793,7 @@ class Variant extends Resource implements BatchInterface
 		        $optionData['option'] != '' &&
 		        $availableGroup->getId() !== null &&
 		        $availableGroup->getId() >= 1 &&
-		        strtolower($option->getName()) == strtolower($optionData['option']) &&
+		        $this->simulateUtf8GeneralCi($option->getName()) == $this->simulateUtf8GeneralCi($optionData['option']) &&
 		        $option->getName() != $optionData['option']
             ) {
                 Shopware()->Db()->query("UPDATE `s_article_configurator_options`
@@ -816,7 +816,13 @@ class Variant extends Resource implements BatchInterface
 
         return $data;
     }
-
+    
+    /**
+     * Simulates utf8_general_ci similar conditions
+     */
+    private function simulateUtf8GeneralCi($inputvar){
+        return strtolower(preg_replace('/ß/', 'ss', $inputvar));
+    }
 
     /**
      * Checks if the passed group data is already existing in the passed array collection.
@@ -830,7 +836,7 @@ class Variant extends Resource implements BatchInterface
     {
         /**@var $availableGroup Option */
         foreach ($availableGroups as $availableGroup) {
-            if ( ($groupData['name'] !== null && strtolower($availableGroup->getName()) == strtolower($groupData['name']))
+            if ( ($groupData['name'] !== null && $this->simulateUtf8GeneralCi($availableGroup->getName()) == $this->simulateUtf8GeneralCi($groupData['name']))
                 || ($groupData['id'] !== null && $availableGroup->getId() == $groupData['id'])) {
                 return $availableGroup;
             }
@@ -851,7 +857,7 @@ class Variant extends Resource implements BatchInterface
     {
         /**@var $availableOption Option */
         foreach ($availableOptions as $availableOption) {
-            if ( ($optionData['name'] !== null && strtolower($availableOption->getName()) == strtolower($optionData['name']))
+            if ( ($optionData['name'] !== null && $this->simulateUtf8GeneralCi($availableOption->getName()) == $this->simulateUtf8GeneralCi($optionData['name']))
                 || ($optionData['id'] !== null && $availableOption->getId() == $optionData['id'] )) {
                 return $availableOption;
             }
