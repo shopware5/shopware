@@ -313,6 +313,37 @@ class Shopware_Tests_Components_Event_ManagerTest extends \PHPUnit_Framework_Tes
         $listener = $listeners[5];
         $this->assertEquals(5, $listener->getPosition());
     }
+
+    public function testRemoveSubscriber()
+    {
+        $handler0 = new Enlight_Event_Handler_Default(
+            'Example',
+            function ($args) {
+                return 'foo';
+            }
+        );
+        $this->eventManager->registerListener($handler0);
+
+        $handler1 = new Enlight_Event_Handler_Default(
+            'Example',
+            function ($args) {
+                return 'bar';
+            }
+        );
+        $this->eventManager->registerListener($handler1);
+
+        // Remove first subscriber
+        $this->eventManager->removeListener($handler0);
+
+        $result = $this->eventManager->collect(
+            'Example',
+            new ArrayCollection()
+        );
+
+        // Only the second one should be left
+        $this->assertCount(1, $result->getValues());
+        $this->assertEquals('bar', $result->get(0));
+    }
 }
 
 
