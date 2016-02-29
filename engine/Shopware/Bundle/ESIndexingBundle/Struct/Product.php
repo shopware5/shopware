@@ -59,6 +59,8 @@ class Product extends ListProduct
      */
     protected $calculatedPrices = [];
 
+    protected $suggest = [];
+
     /**
      * @param ListProduct $listProduct
      * @return Product
@@ -154,5 +156,21 @@ class Product extends ListProduct
     public function setCalculatedPrices($calculatedPrices)
     {
         $this->calculatedPrices = $calculatedPrices;
+    }
+
+    /**
+     * @return array
+     */
+    public function getSuggest()
+    {
+        return $this->suggest;
+    }
+
+    /**
+     * @param array $suggest
+     */
+    public function setSuggest($suggest)
+    {
+        $this->suggest = $suggest;
     }
 }

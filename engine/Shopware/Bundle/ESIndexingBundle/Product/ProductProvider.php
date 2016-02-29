@@ -180,6 +180,17 @@ class ProductProvider implements ProductProviderInterface
             if (!$this->isValid($shop, $product)) {
                 continue;
             }
+
+
+            $suggest = explode(' ', $product->getName());
+//            $suggest[] = $product->getManufacturer()->getName();
+
+            $product->setSuggest([
+                "input" => $suggest,
+                "output" => $product->getName(),
+//                "weight" => 34
+            ]);
+
             $result[$number] = $product;
         }
 

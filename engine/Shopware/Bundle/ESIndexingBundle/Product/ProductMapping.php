@@ -140,6 +140,13 @@ class ProductMapping implements MappingInterface
                 'esd' => $this->getEsdMapping(),
                 'tax' => $this->getTaxMapping(),
                 'unit' => $this->getUnitMapping(),
+
+                "suggest" => [
+                    "type" => "completion",
+                    "analyzer" => "simple",
+                    "search_analyzer" => "simple",
+                    "payloads" => true
+                ]
             ]
         ];
     }

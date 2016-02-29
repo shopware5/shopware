@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundleES\ConditionHandler;
 
+use Elasticsearch\Endpoints\Suggest;
 use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\SearchBundle\Condition\SearchTermCondition;
 use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
@@ -65,7 +66,11 @@ class SearchTermConditionHandler implements HandlerInterface
         ShopContextInterface $context
     ) {
         /** @var SearchTermCondition $criteriaPart */
-        $query = $this->queryBuilder->buildQuery($context, $criteriaPart->getTerm());
+        $query = $this->queryBuilder->buildQuery(
+            $context,
+            $criteriaPart->getTerm()
+        );
+        $search->addAggregation();
         $search->addQuery($query);
     }
 }

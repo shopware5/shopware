@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Shopware\Bundle\ESIndexingBundle\Product\ProductMapping;
 use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\ProductSearchResult;
@@ -50,6 +51,10 @@ class Shopware_Controllers_Frontend_AjaxSearch extends Enlight_Controller_Action
     public function indexAction()
     {
         Enlight()->Plugins()->Controller()->Json()->setPadding();
+
+
+
+
 
         $this->View()->loadTemplate('frontend/search/ajax.tpl');
 

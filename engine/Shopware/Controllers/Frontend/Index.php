@@ -22,6 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Bundle\ESIndexingBundle\Product\ProductMapping;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
@@ -38,6 +39,33 @@ class Shopware_Controllers_Frontend_Index extends Enlight_Controller_Action
 
     public function indexAction()
     {
+        /**@var $context ProductContextInterface*/
+        $context  = $this->get('shopware_storefront.context_service')->getProductContext();
+
+        $index = Shopware()->Container()->get('shopware_elastic_search.index_factory')
+            ->createShopIndex($context->getShop());
+
+        $data = Shopware()->Container()->get('shopware_elastic_search.client')
+            ->suggest([
+                'index' => $index->getName(),
+                'body' => [
+                    "my-suggestion" => [
+                        "text" => "Spech",
+                        "completion" => [
+                            "field" => "suggest",
+                            "fuzzy" => [
+                                "fuzziness" => 2,
+                                'prefix_length' => 2
+                            ]
+                        ]
+                    ]
+                ]
+            ]);
+
+        echo '<pre>';
+        print_r($data);
+        exit();
+
         /**@var $context ShopContextInterface*/
         $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
         $categoryId = $context->getShop()->getCategory()->getId();
