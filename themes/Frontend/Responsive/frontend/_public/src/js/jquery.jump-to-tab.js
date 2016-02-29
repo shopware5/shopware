@@ -19,7 +19,8 @@
 
         init: function () {
             var me = this,
-                param = decodeURI((RegExp('action=(.+?)(&|$)').exec(location.search) || [, null])[1]);
+                param = decodeURI((RegExp('action=(.+?)(&|$)').exec(location.search) || [, null])[1]),
+                tabId;
 
             me.$htmlBody = $('body, html');
             me.tabMenuProduct = me.$el.find(me.opts.tabDetail).data('plugin_swTabMenu');
@@ -29,17 +30,10 @@
             me.registerEvents();
 
             if (param === 'rating') {
-                me.jumpToTab(1, '#detail--product-reviews');
-            }
+                var $tab = $('[data-tabName="' + param + '"]'),
+                    index = $tab.index() || 1;
 
-            if (me.$el.hasClass('is--ctl-blog')) {
-                param = window.location.href.indexOf("sConfirmation");
-
-                if (param === -1) {
-                    return;
-                }
-
-                me.jumpToTab(1, '#blog--comments-start');
+                me.jumpToTab(index, $tab);
             }
         },
 
@@ -61,17 +55,21 @@
         registerEvents: function () {
             var me = this;
 
-            me.$el.find('.product--rating-link, .link--publish-comment').on(me.getEventName('click'), $.proxy(me.onJumpToTab, me));
+            me.$el.on(me.getEventName('click'), '.product--rating-link, .link--publish-comment', $.proxy(me.onJumpToTab, me));
 
             $.publish('plugin/swJumpToTab/onRegisterEvents', [ me ]);
         },
 
         onJumpToTab: function (event) {
+            var me = this,
+                $tab = $('[data-tabName="rating"]'),
+                index = $tab.index() || 1;
+
             event.preventDefault();
 
-            this.jumpToTab(1);
+            me.jumpToTab(index, $tab);
 
-            $.publish('plugin/swJumpToTab/onClick', [ this, event ]);
+            $.publish('plugin/swJumpToTab/onClick', [ me, event ]);
         },
 
         jumpToTab: function (tabIndex, jumpTo) {
