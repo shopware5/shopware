@@ -252,8 +252,8 @@ class CheckoutContext extends SubContext
         $manufacturerResource->setManager($this->getService('models'));
 
         foreach ($products as $row) {
-            $category = $categoryResource->getList(0, 1, [['property' => 'name', 'value' => $row['category']]])['data'][0];
-            $manufacturer = $manufacturerResource->getList(0, 1, [['property' => 'name', 'value' => $row['manufacturer']]])['data'][0];
+            $category = $categoryResource->getList(0, 1, [['property' => 'c.name', 'value' => $row['category']]])['data'][0];
+            $manufacturer = $manufacturerResource->getList(0, 1, [['property' => 'supplier.name', 'value' => $row['manufacturer']]])['data'][0];
 
             $data = [
                 'name' => $row['name'],
@@ -297,7 +297,7 @@ class CheckoutContext extends SubContext
         $manufacturerResource->setManager($this->getService('models'));
 
         foreach ($manufactures as $row) {
-            $manufacturer = $manufacturerResource->getList(0, 1, [['property' => 'name', 'value' => $row['name']]]);
+            $manufacturer = $manufacturerResource->getList(0, 1, [['property' => 'supplier.name', 'value' => $row['name']]]);
 
             if ($manufacturer['total']) {
                 continue;
