@@ -22,7 +22,16 @@ return array_replace_recursive([
             'local' => [
                 'type' => 'local',
                 'mediaUrl' => '',
-
+                'permissions' => [
+                    'file' => [
+                        'public' => 0744,
+                        'private' => 0700,
+                    ],
+                    'dir' => [
+                        'public' => 0755,
+                        'private' => 0700,
+                    ]
+                ],
                 'path' => realpath(__DIR__ . '/../../../')
             ],
             'ftp' => [

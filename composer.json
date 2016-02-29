@@ -40,7 +40,7 @@
         "egulias/email-validator": "1.2.9",
         "elasticsearch/elasticsearch": "2.0.0",
         "ongr/elasticsearch-dsl": "v1.0.0",
-        "league/flysystem": "1.0.11",
+        "league/flysystem": "1.0.14",
         "indigophp/hash-compat": "1.1.0"
     },
     "require-dev": {
