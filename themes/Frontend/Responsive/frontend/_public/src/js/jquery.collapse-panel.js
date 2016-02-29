@@ -150,6 +150,7 @@
             if (opts.closeSiblings) {
                 siblings.slideUp(opts.animationSpeed, function () {
                     siblings.removeClass(opts.collapsedStateCls);
+                    siblings.prev().removeClass(opts.activeTriggerCls);
                 });
             }
 

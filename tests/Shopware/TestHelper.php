@@ -97,8 +97,6 @@ class TestKernel extends \Shopware\Kernel
         $kernel->boot();
 
         $container = $kernel->getContainer();
-
-        $container->get('models')->generateAttributeModels();
         $container->get('plugins')->Core()->ErrorHandler()->registerErrorHandler(E_ALL | E_STRICT);
 
         /** @var $repository \Shopware\Models\Shop\Repository */

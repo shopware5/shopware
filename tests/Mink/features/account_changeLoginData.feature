@@ -78,7 +78,7 @@ Feature: Successful changes of login data
             | city          |                    | Musterhausen      | Bern               |
             | country       |                    | Deutschland       | Schweiz            |
 
-        Then  I should see "Bitte geben Sie eine gültige eMail-Adresse ein"
+        Then  I should see "Bitte geben Sie eine gültige E-Mail-Adresse ein"
         And   I should see "Bitte füllen Sie alle rot markierten Felder aus"
 
         When  I register me:
@@ -87,7 +87,7 @@ Feature: Successful changes of login data
             | password | abc                |                   |
             | street   |                    | Musterstr. 55     |
 
-        Then  I should see "Diese eMail-Adresse ist bereits registriert"
+        Then  I should see "Diese E-Mail-Adresse ist bereits registriert"
         And   I should see "Bitte wählen Sie ein Passwort, welches aus mindestens 8 Zeichen besteht."
         But   I should not see "Bitte füllen Sie alle rot markierten Felder aus"
 
@@ -116,7 +116,7 @@ Feature: Successful changes of login data
         When  I follow "Passwort vergessen?"
 
         Then  I should see "Passwort vergessen?"
-        And   I should see "Wir senden Ihnen eine Bestätigungsmail. Klicken Sie auf den darin enthaltenen Link, um Ihr Passwort zu ändern."
+        And   I should see "Wir senden Ihnen eine Bestätigungs-E-Mail. Klicken Sie auf den darin enthaltenen Link, um Ihr Passwort zu ändern."
 
         When  I fill in "email" with "test@example.info"
         And   I press "E-Mail senden"
@@ -124,7 +124,7 @@ Feature: Successful changes of login data
 
         When  I fill in "email" with "test@example.com"
         And   I press "E-Mail senden"
-        Then  I should see "Wir haben Ihnen eine Bestätigungsmail gesendet."
+        Then  I should see "Wir haben Ihnen eine Bestätigungs-E-Mail gesendet."
 
         When  I follow "Mein Konto"
         And   I log in successful as "Max Mustermann" with email "test@example.com" and password "shopware"

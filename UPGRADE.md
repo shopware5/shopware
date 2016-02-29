@@ -1,6 +1,7 @@
 # Shopware Upgrade Information
 In this document you will find a changelog of the important changes related to the code base of Shopware.
 
+
 ## 5.2.0 DEV
 * Increased minimum required PHP version to PHP >= 5.5.9.
 * Added CSRF protection to the backend which is enabled by default.
@@ -79,6 +80,15 @@ In this document you will find a changelog of the important changes related to t
     * `\Shopware\Models\Customer\Customer::setDebit()`
 * Added new configuration field to the emotion banner widget for link target.
 * Added composer dependency for Symfony Form and implemented FormBundle
+
+## 5.1.4
+* Customer logout will now regenerate the session id and clear the customers basket.
+* Added `IsNew` condition for product streams
+* Added method `\Shopware\Models\Article\Repository::getSupplierListQueryBuilder()` to make the query builder extensible
+* Added index on `s_article_img_mapping_rules`.`mapping_id` and `s_article_img_mapping_rules`.`option_id`
+* Fixed `AND` search logic for search terms which not exist in the s_articles table.
+* Added order and payment state constants in `\Shopware\Models\Order\Status`
+* change email validation to a simple regex: `/^.+\@\S+\.\S+$/`. You can implement your own email validation by implementing the `EmailValidatorInterface`. 
 
 ## 5.1.3
 * Switch Grunt to relativeUrls to unify the paths to less.php
@@ -1074,5 +1084,3 @@ For further information have a look at the following wiki article:
 
 - GER: <http://wiki.shopware.de/_detail_1342.html>
 - ENG: <http://en.wiki.shopware.de/_detail_1398.html>
-
-

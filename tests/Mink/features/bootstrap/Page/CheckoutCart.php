@@ -32,7 +32,8 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
             'removeVoucher' => 'div.row--voucher a.btn',
             'aggregationLabels' => 'ul.aggregation--list .entry--label',
             'aggregationValues' => 'ul.aggregation--list .entry--value',
-            'shippingPaymentForm' => 'form.payment'
+            'shippingPaymentForm' => 'form.payment',
+            'articleDeleteButtons' => '.column--actions-link[title="Löschen"]'
         ];
     }
 
@@ -318,5 +319,23 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
     {
         Helper::fillForm($this, 'shippingPaymentForm', $data);
         Helper::pressNamedButton($this, 'changePaymentButton');
+    }
+
+    public function resetCart()
+    {
+        $originalPath = $this->path;
+
+        try {
+            $elements = Helper::findElements($this, ['articleDeleteButtons']);
+
+            foreach ($elements as $element) {
+                $this->path = $element->getAttribute('href');
+                $this->open();
+            }
+        } catch (\Exception $ex) {
+        }
+
+        $this->path = $originalPath;
+        $this->open();
     }
 }

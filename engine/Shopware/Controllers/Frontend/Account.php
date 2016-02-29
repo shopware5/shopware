@@ -291,8 +291,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
      */
     public function logoutAction()
     {
-        Shopware()->Session()->unsetAll();
-        $this->refreshBasket();
+        $this->admin->logout();
     }
 
     /**

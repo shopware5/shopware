@@ -123,7 +123,7 @@ Ext.define('Shopware.apps.UserManager.view.user.List', {
             flex: 1
         }
         , {
-            header: '{s name="list_users/email"}eMail Address{/s}',
+            header: '{s name="list_users/email"}Email Address{/s}',
             dataIndex: 'email',
             flex: 1,
             renderer: this.emailColumn

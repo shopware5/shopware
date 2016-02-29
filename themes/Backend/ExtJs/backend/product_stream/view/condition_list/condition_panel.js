@@ -115,6 +115,7 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.ConditionPanel', {
             Ext.create('Shopware.apps.ProductStream.view.condition_list.condition.ImmediateDelivery'),
             Ext.create('Shopware.apps.ProductStream.view.condition_list.condition.Closeout'),
             Ext.create('Shopware.apps.ProductStream.view.condition_list.condition.HasPseudoPrice'),
+            Ext.create('Shopware.apps.ProductStream.view.condition_list.condition.IsNew'),
             Ext.create('Shopware.apps.ProductStream.view.condition_list.condition.CreateDate'),
             Ext.create('Shopware.apps.ProductStream.view.condition_list.condition.ReleaseDate'),
             Ext.create('Shopware.apps.ProductStream.view.condition_list.condition.VoteAverage'),

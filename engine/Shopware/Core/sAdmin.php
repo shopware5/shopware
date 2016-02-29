@@ -1191,6 +1191,14 @@ class sAdmin
         return array("sErrorFlag" => $sErrorFlag, "sErrorMessages" => $sErrorMessages);
     }
 
+    public function logout()
+    {
+        $this->moduleManager->Basket()->clearBasket();
+
+        Shopware()->Session()->unsetAll();
+        $this->regenerateSessionId();
+    }
+
     /**
      * Attempt to login a user in the frontend
      * Used for login and registration in frontend, also for user impersonation
@@ -4326,6 +4334,14 @@ class sAdmin
         }
 
         $active = 1;
+        $context = $this->contextService->getProductContext();
+        $orderArticleOrderNumbers = array_column($getOrderDetails, 'articleordernumber');
+        $listProducts = Shopware()->Container()->get('shopware_storefront.list_product_service')->getList($orderArticleOrderNumbers, $context);
+        $listProducts = Shopware()->Container()->get('legacy_struct_converter')->convertListProductStructList($listProducts);
+
+        foreach ($listProducts as &$listProduct) {
+            $listProduct = array_merge($listProduct, $listProduct['prices'][0]);
+        }
 
         foreach ($getOrderDetails as $orderDetailsKey => $orderDetailsValue) {
             $getOrderDetails[$orderDetailsKey]["amount"] = $this->moduleManager->Articles()
@@ -4333,9 +4349,10 @@ class sAdmin
             $getOrderDetails[$orderDetailsKey]["price"] = $this->moduleManager->Articles()
                 ->sFormatPrice($orderDetailsValue["price"]);
 
-            $tmpArticle = $this->moduleManager->Articles()->sGetProductByOrdernumber(
-                $getOrderDetails[$orderDetailsKey]['articleordernumber']
-            );
+            $tmpArticle = null;
+            if (!empty($listProducts[$orderDetailsValue['articleordernumber']])) {
+                $tmpArticle = $listProducts[$orderDetailsValue['articleordernumber']];
+            }
 
             if (!empty($tmpArticle) && is_array($tmpArticle)) {
 
