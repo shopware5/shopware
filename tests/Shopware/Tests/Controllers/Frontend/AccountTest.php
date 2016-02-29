@@ -94,6 +94,10 @@ class Shopware_Tests_Controllers_Frontend_AccountTest extends Enlight_Components
             '@example.de',
             '@.',
             ' @ .de',
+            ' @foo.de',
+            '@foo.',
+            'foo@ .de',
+            'foo@bar. ',
         );
 
         $validator = Shopware()->Container()->get('validator.email');
