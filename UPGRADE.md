@@ -19,6 +19,7 @@ In this document you will find a changelog of the important changes related to t
 * Disabled the automatic detection of similar products for install customers. Enabling this option may decrease the shop performance.
 * Fixed the `removeListener` method in `Enlight_Event_Subscriber_Config`, `Enlight_Event_Subscriber_Array` and `Enlight_Event_EventManager`
 * Removed `engine/Shopware/Bundle/SearchBundleES/SimilarProductsService.php`
+* Added the possibility to configure the file and directory permissions for the `Local` CDN adapter.
 
 ## 5.1.3
 * Switch Grunt to relativeUrls to unify the paths to less.php

@@ -102,7 +102,7 @@ class ServiceSubscriber implements SubscriberInterface
         $config = $args->get('config');
 
         return new ArrayCollection([
-            new Local($config['path'])
+            new Local($config['path'], LOCK_EX, Local::DISALLOW_LINKS, $config['permissions'])
         ]);
     }
 
