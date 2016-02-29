@@ -127,7 +127,10 @@ class Enlight_Event_EventManager extends Enlight_Class
         $eventName = strtolower($handler->getName());
 
         if (!empty($this->listeners[$eventName])) {
-            $this->listeners[$eventName] = array_diff($this->listeners[$eventName], array($handler));
+            $handlerIndex = array_search($handler, $this->listeners[$eventName]);
+            if ($handlerIndex !== false) {
+                array_splice($this->listeners[$eventName], $handlerIndex, 1);
+            }
         }
 
         return $this;

@@ -90,7 +90,10 @@ class Enlight_Event_Subscriber_Array extends Enlight_Event_Subscriber
      */
     public function removeListener(Enlight_Event_Handler $handler)
     {
-        $this->listeners = array_diff($this->listeners, array($handler));
+        $handlerIndex = array_search($handler, $this->listeners);
+        if ($handlerIndex !== false) {
+            array_splice($this->listeners, $handlerIndex, 1);
+        }
         return $this;
     }
 }
