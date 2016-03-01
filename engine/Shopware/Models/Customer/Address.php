@@ -183,7 +183,7 @@ class Address extends ModelEntity
     /**
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Country\State")
      * @ORM\JoinColumn(name="stateID", referencedColumnName="id")
-     * @var Country
+     * @var State
      */
     protected $state;
 
