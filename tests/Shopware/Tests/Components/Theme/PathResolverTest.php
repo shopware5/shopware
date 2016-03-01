@@ -37,6 +37,7 @@ class Shopware_Tests_Components_Theme_PathResolverTest extends Shopware_Tests_Co
 
         $this->pathResolver = new PathResolver(
             '/my/root/dir',
+            [],
             $this->createTemplateManagerMock()
         );
     }

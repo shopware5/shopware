@@ -45,39 +45,41 @@ class InstallerService
     private $plugins;
 
     /**
-     * @var string
+     * @var array
      */
-    private $rootDir;
+    private $pluginDirectories;
 
     /**
      * @param ModelManager $em
      * @param \Enlight_Plugin_PluginManager $plugins
-     * @param $rootDir
+     * @param array $pluginDirectories
      */
     public function __construct(
         ModelManager $em,
         \Enlight_Plugin_PluginManager $plugins,
-        $rootDir
-
+        array $pluginDirectories
     ) {
         $this->plugins = $plugins;
         $this->em = $em;
-        $this->rootDir = $rootDir;
+        $this->pluginDirectories = $pluginDirectories;
     }
 
+    /**
+     * @param string $pluginName
+     * @return string
+     * @throws \Exception
+     */
     public function getPluginPath($pluginName)
     {
         $plugin = $this->getPluginByName($pluginName);
 
-        return $this->rootDir .
-               '/engine/Shopware/Plugins/' .
-               $plugin->getSource() . '/' .
-               $plugin->getNamespace() . '/' .
-               $plugin->getName();
+        $baseDir = $this->pluginDirectories[$plugin->getSource()];
+
+        return $baseDir . $plugin->getNamespace() . DIRECTORY_SEPARATOR . $plugin->getName() . DIRECTORY_SEPARATOR;
     }
 
     /**
-     * @param $pluginName
+     * @param string $pluginName
      * @throws \Exception
      * @return Plugin
      */
@@ -114,6 +116,7 @@ class InstallerService
 
     /**
      * @param Plugin $plugin
+     * @return bool
      * @throws \Exception
      */
     public function installPlugin(Plugin $plugin)
@@ -148,6 +151,7 @@ class InstallerService
     /**
      * @param Plugin $plugin
      * @param bool $removeData
+     * @return bool
      * @throws \Exception
      */
     public function uninstallPlugin(Plugin $plugin, $removeData = true)
@@ -181,6 +185,7 @@ class InstallerService
 
     /**
      * @param Plugin $plugin
+     * @return bool
      * @throws \Exception
      */
     public function updatePlugin(Plugin $plugin)
@@ -213,6 +218,7 @@ class InstallerService
 
     /**
      * @param Plugin $plugin
+     * @return array|bool|void
      * @throws \Exception
      */
     public function activatePlugin(Plugin $plugin)
@@ -240,6 +246,7 @@ class InstallerService
 
     /**
      * @param Plugin $plugin
+     * @return array|bool|void
      * @throws \Exception
      */
     public function deactivatePlugin(Plugin $plugin)
@@ -363,11 +370,14 @@ class InstallerService
             if (!$collection instanceof \Shopware_Components_Plugin_Namespace) {
                 continue;
             }
-            foreach (['Local', 'Community', 'Commercial', 'Default'] as $source) {
-                $path = Shopware()->AppPath('Plugins_' . $source . '_' . $namespace);
+
+            $pluginDirectories = Shopware()->Container()->getParameter('shopware.plugin_directories');
+            foreach ($pluginDirectories as $source => $path) {
+                $path = $path . $namespace;
                 if (!is_dir($path)) {
                     continue;
                 }
+
                 foreach (new \DirectoryIterator($path) as $dir) {
                     if (!$dir->isDir() || $dir->isDot()) {
                         continue;

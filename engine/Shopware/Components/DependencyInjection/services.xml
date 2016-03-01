@@ -79,7 +79,7 @@
             <argument type="service" id="Loader"/>
             <argument type="service" id="events"/>
             <argument type="service" id="application"/>
-            <argument>%shopware.plugins%</argument>
+            <argument>%shopware.plugin_directories%</argument>
         </service>
 
         <service id="router_factory" class="Shopware\Components\DependencyInjection\Bridge\Router" />
@@ -107,6 +107,7 @@
         <service id="Loader"     class="Enlight_Loader" />
         <service id="snippets"   class="Shopware_Components_Snippet_Manager">
             <argument type="service" id="shopware.model_manager"/>
+            <argument>%shopware.plugin_directories%</argument>
             <argument>%shopware.snippet%</argument>
         </service>
 
