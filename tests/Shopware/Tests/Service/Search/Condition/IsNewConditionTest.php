@@ -15,13 +15,14 @@ class IsNewConditionTest extends TestCase
 
         $this->search(
             array(
-                'first'  => array('added' => date("Y-m-d", strtotime('-2 months'))),
-                'second' => array('added' => date("Y-m-d", strtotime('-1 months'))),
+                'first'  => array('added' => date("Y-m-d", strtotime('-60 days'))),
+                'second' => array('added' => date("Y-m-d", strtotime('-31 days'))),
                 'third'  => array('added' => '2011-01-01'),
                 'fourth' => array('added' => date("Y-m-d", strtotime('-20 days'))),
-                'fifth' => array('added' => date("Y-m-d"))
+                'fifth' => array('added' => date("Y-m-d")),
+                'sixth' => array('added' => date("Y-m-d", strtotime('-30 days')))
             ),
-            array('fourth', 'fifth'),
+            array('fourth', 'fifth', 'sixth'),
             null,
             array($condition)
         );
