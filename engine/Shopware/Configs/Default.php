@@ -95,6 +95,7 @@ return array_replace_recursive([
     ],
     'httpcache' => [
         'enabled' => true,
+        'lookup_optimization' => true,
         'debug' => false,
         'default_ttl' => 0,
         'private_headers' => ['Authorization', 'Cookie'],
