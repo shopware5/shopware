@@ -18,7 +18,7 @@
 				{* Link to the account overview page *}
 				{block name="frontend_account_menu_link_overview"}
 					<li class="navigation--entry">
-						<a href="{url controller='account'}" title="{s name="AccountLinkOverview"}{/s}" class="navigation--link{if $sAction == 'index'} is--active{/if}">
+						<a href="{url controller='account'}" title="{s name="AccountLinkOverview"}{/s}" class="navigation--link{if {controllerName|lower} == 'account' && $sAction == 'index'} is--active{/if}">
 							{s name="AccountLinkOverview"}{/s}
 						</a>
 					</li>
@@ -42,6 +42,15 @@
 						    </a>
 					    </li>
                     {/if}
+				{/block}
+
+				{* Link to the user addresses *}
+				{block name="frontend_account_menu_link_addresses"}
+					<li class="navigation--entry">
+						<a href="{url controller='address' action='index'}" title="{s name="AccountLinkAddresses"}My addresses{/s}" class="navigation--link{if {controllerName} == 'address'} is--active{/if}">
+							{s name="AccountLinkAddresses"}My addresses{/s}
+						</a>
+					</li>
 				{/block}
 
 				{* Link to the user billing address settings *}

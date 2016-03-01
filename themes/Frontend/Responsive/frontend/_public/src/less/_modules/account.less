@@ -9,7 +9,7 @@ It allows the user to directly see and change the important information of their
 */
 
 .account--content {
-	.unitize-margin(10, 0, 0, 0);
+    .unitize-margin(10, 0, 0, 0);
 }
 
 .partner-statistic .panel--title {
@@ -152,7 +152,7 @@ It allows the user to directly see and change the important information of their
 .account--orders-overview {
     border: 1px solid @panel-border;
 
-	p { .unitize(font-size, 14); }
+    p { .unitize(font-size, 14); }
 
     .orders--table-header {
         display: none;
@@ -320,20 +320,20 @@ It allows the user to directly see and change the important information of their
     .unitize(top, 8);
     display: inline-block;
     position: relative;
-    
+
     &.status--0,  //The order has not been processed yet.
     &.status--1,  //The order is in process
     &.status--3,  //Partially completed
     &.status--6 { //The order has been sent in part
         background: @highlight-info;
     }
-    
+
     &.status--2,  //Completed
     &.status--5,  //Ready for shipping
     &.status--7 { //The order has been sent
         background: @highlight-success;
     }
-    
+
     &.status--4,  //The order has been cancelled
     &.status--8 { //Clarification needed
         background: @highlight-error;
@@ -428,6 +428,90 @@ It allows the user to directly see and change the important information of their
     }
 }
 
+.account--content.account--addresses {
+    .unitize(margin, 0);
+    .unitize(padding-top, 50);
+
+    &.account--addresses-form {
+        .alert {
+            .unitize-margin(20, 18, 20, 18);
+        }
+    }
+
+    .addresses--action {
+        .clearfix();
+        .unitize-margin(20, 20);
+
+        .addresses--submit {
+            width: 100%;
+            text-align: center;
+        }
+    }
+
+    .addresses--required-info {
+        .unitize-margin(0, 26, 16);
+        .unitize(font-size, 14);
+    }
+
+    .js--fancy-select {
+        .unitize(margin-bottom, 5);
+        width: 100%;
+    }
+
+    .addresses--field {
+        .unitize(margin-bottom, 10);
+        width: 100%;
+    }
+
+    .addresses--customertype {
+        display: block;
+    }
+
+    .addresses--zip-city {
+        .addresses--field-zipcode {
+            width: 28%;
+            float: left;
+        }
+
+        .addresses--field-city {
+            .clearfix();
+            width: 70%;
+            float: left;
+        }
+
+        .addresses--spacer {
+            margin-right: 2%;
+        }
+
+    }
+
+    .birthday--label {
+        .clearfix();
+        .unitize-margin(0, 0, 5, 0);
+        display: block;
+        font-weight: bold;
+    }
+
+}
+
+.addresses--content {
+    .clearfix();
+
+    margin: -2% 0 0 -2%;
+}
+
+.addresses--content-item {
+    width: 100%;
+    float: left;
+    padding: 2% 0 0 2%;
+}
+
+.addresses--item-create {
+    .btn {
+        text-align: center;
+    }
+}
+
 @media screen and(min-width: @phoneLandscapeViewportWidth ) {
     .account--password-reset {
         .unitize(margin-top, 10);
@@ -459,11 +543,11 @@ It allows the user to directly see and change the important information of their
 @media screen and(min-width: @tabletViewportWidth) {
 
     .account--content {
-		.unitize-margin(30, 0, 0, 0);
+        .unitize-margin(30, 0, 0, 0);
 
-		&.is--wide {
-			width: 100%;
-		}
+        &.is--wide {
+            width: 100%;
+        }
     }
 
     .account--password-reset {
@@ -797,46 +881,93 @@ It allows the user to directly see and change the important information of their
 
 @media screen and(min-width: @tabletLandscapeViewportWidth) {
 
-	.account--info,
-	.account--billing {
-		width: 49%;
-		float: left;
-	}
+    .account--info,
+    .account--billing {
+        width: 49%;
+        float: left;
+    }
 
-	.account--payment,
-	.account--shipping {
-		width: 49%;
-		float: right;
-	}
+    .account--payment,
+    .account--shipping {
+        width: 49%;
+        float: right;
+    }
 
-	.account--email,
-	.account--password {
-		display: none;
-	}
+    .account--email,
+    .account--password {
+        display: none;
+    }
 
-	.account--email,
-	.account--password,
-	.account--newsletter {
-		clear: both;
-	}
+    .account--email,
+    .account--password,
+    .account--newsletter {
+        clear: both;
+    }
 
     .account--password-reset {
         .unitize-margin(20, 0, 0, 0);
     }
 
-	.account--info,
-	.account--payment {
-		.panel--body {
-			.unitize-height(120);
-		}
-	}
+    .account--info,
+    .account--payment {
+        .panel--body {
+            .unitize-height(120);
+        }
+    }
 
-	.account--billing,
-	.account--shipping {
-		.panel--body {
-			.unitize-height(220);
-		}
-	}
+    .account--billing,
+    .account--shipping {
+        .panel--body {
+            .unitize-height(220);
+        }
+    }
+
+    .account--addresses.account--content {
+
+        .addresses--field {
+            .unitize(margin-bottom, 15);
+            width: 70%;
+        }
+
+        .js--fancy-select {
+            width: 70%;
+        }
+
+        .addresses--customertype .js--fancy-select,
+        .addresses--salutation .js--fancy-select {
+            width: 40%;
+        }
+
+        .addresses--form-actions {
+            .clearfix();
+        }
+
+        .addresses--content-item {
+            width: 50%;
+
+            .addresses--item-body {
+                .unitize(height, 255);
+            }
+        }
+
+        .addresses--zip-city {
+            .addresses--field-zipcode {
+                width: 18%;
+                float: left;
+            }
+
+            .addresses--field-city {
+                .clearfix();
+                width: 50%;
+                float: left;
+            }
+
+            .addresses--spacer {
+                margin-right: 2%;
+            }
+
+        }
+    }
 }
 
 @media screen and(min-width: @desktopViewportWidth) {
