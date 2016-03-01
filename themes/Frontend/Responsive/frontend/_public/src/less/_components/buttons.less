@@ -215,3 +215,26 @@ Options: `is--primary`, `is--secondary`
         .unitize(line-height, 38);
     }
 }
+
+.is--link {
+    .unitize-padding(2, 12);
+    .unitize(line-height, 34);
+
+    border: 0 none;
+    background: transparent;
+    color: @brand-secondary;
+
+    &:hover {
+        color: @brand-primary;
+    }
+
+    /** State: Small button */
+    &.is--small {
+        .unitize(line-height, 30);
+    }
+
+    /** State: Large button */
+    &.is--large {
+        .unitize(line-height, 38);
+    }
+}

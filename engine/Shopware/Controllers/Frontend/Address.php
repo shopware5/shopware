@@ -29,7 +29,7 @@ use Shopware\Models\Customer\AddressRepository;
 use Shopware\Models\Customer\Customer;
 
 /**
- * Account controller
+ * Address controller
  */
 class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
 {
@@ -39,18 +39,18 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
     protected $admin;
 
     /**
-     * Init controller method
+     * @var AddressRepository
      */
-    public function init()
-    {
-        $this->admin = Shopware()->Modules()->Admin();
-    }
+    protected $addressRepository;
 
     /**
      * Pre dispatch method
      */
     public function preDispatch()
     {
+        $this->admin = Shopware()->Modules()->Admin();
+        $this->addressRepository = $this->get('models')->getRepository(Address::class);
+
         $this->View()->assign('sUserLoggedIn', $this->admin->sCheckUser());
 
         if (!$this->View()->getAssign('sUserLoggedIn')) {
@@ -67,13 +67,11 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
      */
     public function indexAction()
     {
-        /** @var AddressRepository $repository */
-        $repository = $this->get('models')->getRepository('Shopware\Models\Customer\Address');
-
-        $addresses = $repository
+        $addresses = $this->addressRepository
             ->getByUserQuery($this->get('session')->get('sUserId'))
             ->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
+        $this->View()->assign('error', $this->Request()->getParam('error'));
         $this->View()->assign('success', $this->Request()->getParam('success'));
         $this->View()->assign('addresses', $addresses);
     }
@@ -107,11 +105,7 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
         if ($form->isValid()) {
             $this->get('models')->flush($address);
 
-            $this->redirect([
-                'controller' => 'address',
-                'action' => 'index',
-                'success' => 'save'
-            ]);
+            $this->redirect(['action' => 'index', 'success' => 'save']);
 
             return;
         } else {
@@ -130,8 +124,13 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
             $this->View()->assign('error_messages', $errorMessages);
         }
 
+        $formData = array_merge(
+            $this->get('models')->toArray($form->getViewData()),
+            $form->getExtraData()
+        );
+
         $this->View()->assign('countryList', $this->admin->sGetCountryList());
-        $this->View()->assign('formData', array_merge(Shopware()->Models()->toArray($form->getViewData()), $form->getExtraData()));
+        $this->View()->assign('formData', $formData);
     }
 
     /**
@@ -143,11 +142,8 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
         $userId = $this->get('session')->get('sUserId');
         $addressId = $request->getParam('id', null);
 
-        /** @var AddressRepository $repository */
-        $repository = $this->get('models')->getRepository(Address::class);
-
         if ($addressId) {
-            $address = $repository->getDetailByUserQuery($addressId, $userId)->getSingleResult();
+            $address = $this->addressRepository->getDetailByUserQuery($addressId, $userId)->getSingleResult();
         } else {
             $address = new Address();
             $address->setCustomer(
@@ -158,5 +154,31 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
         }
 
         return $address;
+    }
+
+    /**
+     * Delete confirm action
+     */
+    public function deleteAction()
+    {
+        $userId = $this->get('session')->get('sUserId');
+        $addressId = $this->Request()->getParam('id', null);
+
+        $address = $this->addressRepository->getDetailByUserQuery($addressId, $userId)->getSingleResult();
+
+        if ($this->Request()->isPost()) {
+            $this->get('models')->remove($address);
+            $this->get('models')->flush($address);
+
+            $this->redirect(['action' => 'index', 'success' => 'delete']);
+
+            return;
+        }
+
+        $addressView = $this->get('models')->toArray($address);
+        $addressView['country'] = $this->get('models')->toArray($address->getCountry());
+        $addressView['state'] = $this->get('models')->toArray($address->getState());
+
+        $this->View()->assign('address', $addressView);
     }
 }

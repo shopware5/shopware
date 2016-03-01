@@ -512,6 +512,10 @@ It allows the user to directly see and change the important information of their
     }
 }
 
+.addresses--item-actions form {
+    display: inline-block;
+}
+
 @media screen and(min-width: @phoneLandscapeViewportWidth ) {
     .account--password-reset {
         .unitize(margin-top, 10);
@@ -924,6 +928,12 @@ It allows the user to directly see and change the important information of their
 
     .account--addresses.account--content {
 
+        &.addresses--delete {
+            .panel {
+                .unitize(margin-bottom, 20);
+            }
+        }
+
         .addresses--field {
             .unitize(margin-bottom, 15);
             width: 70%;
@@ -945,7 +955,7 @@ It allows the user to directly see and change the important information of their
         .addresses--content-item {
             width: 50%;
 
-            .addresses--item-body {
+            .panel--body {
                 .unitize(height, 255);
             }
         }
