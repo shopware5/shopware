@@ -25,6 +25,7 @@
 namespace Shopware\Components\HttpCache;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpCache\Store as BaseStore;
 
 /**
@@ -33,9 +34,7 @@ use Symfony\Component\HttpKernel\HttpCache\Store as BaseStore;
  * $httpCacheStore->purgeByHeader($name);
  * </code>
  *
- * @category  Shopware
  * @package   Shopware\Components\HttpCache
- * @copyright Copyright (c) shopware 11AG (http://www.shopware.de)
  */
 class Store extends BaseStore
 {
@@ -45,14 +44,20 @@ class Store extends BaseStore
     private $cacheCookies;
 
     /**
+     * @var bool
+     */
+    private $lookupOptimization;
+
+    /**
      * @param string $root
      * @param string[] $cacheCookies
      */
-    public function __construct($root, array $cacheCookies)
+    public function __construct($root, array $cacheCookies, $lookupOptimization)
     {
         $this->cacheCookies = $cacheCookies;
 
         parent::__construct($root);
+        $this->lookupOptimization = $lookupOptimization;
     }
 
     /**
@@ -67,11 +72,11 @@ class Store extends BaseStore
 
         foreach ($this->cacheCookies as $cookieName) {
             if ($request->cookies->has($cookieName)) {
-                $uri .= '&__'. $cookieName . '=' . $request->cookies->get($cookieName);
+                $uri .= '&__' . $cookieName . '=' . $request->cookies->get($cookieName);
             }
         }
 
-        return 'md'.hash('sha256', $uri);
+        return 'md' . hash('sha256', $uri);
     }
 
     /**
@@ -114,6 +119,11 @@ class Store extends BaseStore
      */
     public function purgeByHeader($name, $value = null)
     {
+        // optimized purging for x-shopware-cache-id
+        if ($this->lookupOptimization && $name == 'x-shopware-cache-id') {
+            return $this->purgeByShopwareId($value);
+        }
+
         $headerDir = $this->root . DIRECTORY_SEPARATOR . 'md';
 
         if (!file_exists($headerDir)) {
@@ -183,5 +193,130 @@ class Store extends BaseStore
             $directoryIterator,
             \RecursiveIteratorIterator::LEAVES_ONLY
         );
+    }
+
+    /**
+     * When saving a page, also save the page's cacheKey in an optimized version
+     * so we can look it up more quickly
+     *
+     * @param Request $request
+     * @param Response $response
+     * @return string
+     */
+
+    public function write(Request $request, Response $response)
+    {
+        $headerKey = parent::write($request, $response);
+
+        if (!$this->lookupOptimization) {
+            return $headerKey;
+        }
+
+        if (!$response->headers->has('x-shopware-cache-id') || !$response->headers->has('x-content-digest')) {
+            return $headerKey;
+        }
+
+        $cacheIds = array_filter(explode(';', $response->headers->get('x-shopware-cache-id')));
+        $cacheKey = $response->headers->get('x-content-digest');
+
+        foreach ($cacheIds as $cacheId) {
+            $key = 'ci' . hash('sha256', $cacheId);
+            if (!$content = json_decode($this->load($key), true)) {
+                $content = [];
+            }
+
+
+            // Storing the headerKey and the cacheKey will increase the lookup file size a bit
+            // but save a lot of reads when invalidating
+            $content[$cacheKey] = $headerKey;
+
+            if (!false === $this->save($key, json_encode($content))) {
+                throw new \RuntimeException("Could not write cacheKey $key");
+            }
+        }
+
+        return $headerKey;
+    }
+
+
+    /**
+     * Delete all pages with the given cache id
+     *
+     * @param $id
+     * @return bool
+     */
+    private function purgeByShopwareId($id)
+    {
+        if (!$id) {
+            return false;
+        }
+
+        $cacheInvalidateKey = 'ci' . hash('sha256', $id);
+        $cacheInvalidatePath = $this->getPath($cacheInvalidateKey);
+
+        if (!$content = json_decode($this->load($cacheInvalidateKey), true)) {
+            return false;
+        }
+
+        // unlink all cache files which contain the given id
+        foreach ($content as $cacheKey => $headerKey) {
+            $contentPath = $this->getPath($cacheKey);
+            $headerPath = $this->getPath($headerKey);
+
+            @unlink($contentPath);
+            @unlink($headerPath);
+        }
+
+        @unlink($cacheInvalidatePath);
+
+        return true;
+    }
+
+
+    /**
+     * Loads data for the given key.
+     *
+     * @param string $key The store key
+     *
+     * @return string The data associated with the key
+     */
+    private function load($key)
+    {
+        $path = $this->getPath($key);
+
+        return is_file($path) ? file_get_contents($path) : false;
+    }
+
+    /**
+     * Save data for the given key.
+     *
+     * @param string $key  The store key
+     * @param string $data The data to store
+     *
+     * @return bool
+     */
+    private function save($key, $data)
+    {
+        $path = $this->getPath($key);
+        if (!is_dir(dirname($path)) && false === @mkdir(dirname($path), 0777, true) && !is_dir(dirname($path))) {
+            return false;
+        }
+
+        $tmpFile = tempnam(dirname($path), basename($path));
+        if (false === $fp = @fopen($tmpFile, 'wb')) {
+            return false;
+        }
+        @fwrite($fp, $data);
+        @fclose($fp);
+
+        if ($data != file_get_contents($tmpFile)) {
+            return false;
+        }
+
+        if (false === @rename($tmpFile, $path)) {
+            return false;
+        }
+
+        @chmod($path, 0666 & ~umask());
     }
 }
