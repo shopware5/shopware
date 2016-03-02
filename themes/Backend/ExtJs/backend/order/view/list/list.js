@@ -81,6 +81,7 @@ Ext.define('Shopware.apps.Order.view.list.List', {
             dispatchName:'{s name=column/dispatch_name}Shipping{/s}',
             shopName:'{s name=column/shop}Shop{/s}',
             customer:'{s name=column/customer}Customer{/s}',
+            customerEmail:'{s name=column/customer_email}E-Mail{/s}',
             paymentName:'{s name=column/payment_name}Payment{/s}',
             orderStatus:'{s name=column/order_status}Order Status{/s}',
             paymentStatus:'{s name=column/payment_status}Payment Status{/s}',
@@ -319,6 +320,12 @@ Ext.define('Shopware.apps.Order.view.list.List', {
                 dataIndex: 'customerId',
                 flex:2,
                 renderer: me.customerColumn
+            },
+            {
+                header: me.snippets.columns.customerEmail,
+                dataIndex: 'customerEmail',
+                flex:2,
+                renderer: me.customerEmailColumn
             },
             {
                 header: me.snippets.columns.orderStatus,
@@ -619,6 +626,18 @@ Ext.define('Shopware.apps.Order.view.list.List', {
         } else {
             return value;
         }
+    },
+
+    /**
+     * Formats the customerEmail column.
+     * If no email is set, the function will not change the given value.
+     * Otherwise the email is formatted as mailto link.
+     *
+     * @param string value    - The field value
+     * @return string
+     */
+    customerEmailColumn: function (value) {
+        return (Ext.isDefined(value)) ? Ext.String.format('<a href="mailto:[0]" data-qtip="[0]">[0]</a>', value) : value;
     },
 
     /**

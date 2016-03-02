@@ -354,6 +354,8 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             //Deprecated: use payment instance
             $order['debit'] = $order['customer']['debit'];
 
+            $order['customerEmail'] = $order['customer']['email'];
+
             unset($order['billing']['attribute']);
             unset($order['shipping']['attribute']);
 

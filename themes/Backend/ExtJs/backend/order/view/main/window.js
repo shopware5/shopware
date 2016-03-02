@@ -70,7 +70,7 @@ Ext.define('Shopware.apps.Order.view.main.Window', {
      * Define window width
      * @integer
      */
-    width:1200,
+    width:1300,
     /**
      * Define window height
      * @integer
