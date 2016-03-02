@@ -184,7 +184,6 @@
             <argument type="service" id="shopware.model_config" />
             <argument type="service" id="shopware.loader" />
             <argument type="service" id="db_connection" />
-            <argument>%kernel.root_dir%</argument>
             <argument type="service" id="shopware.model_annotations" />
          </service>
 
