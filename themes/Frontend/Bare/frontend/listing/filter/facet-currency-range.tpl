@@ -7,6 +7,6 @@
         {$rangeMax = $facet->getMax()}
         {$roundPretty = 'true'}
         {$format = "{'0'|currency}"}
-        {$stepCount = 100}
+        {$stepCount = ceil($facet->getMax())}
         {$stepCurve = 'linear'}
 {/block}
