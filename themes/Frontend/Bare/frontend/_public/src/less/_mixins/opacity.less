@@ -14,4 +14,6 @@ Please refer to <http://caniuse.com/css-opacity> to see the browser support tabl
 
 .opacity(@opacity) {
 	opacity: @opacity;
+    	@opacity-ie: @opacity * 100;
+    	filter: alpha(opacity=@opacity-ie);
 }
