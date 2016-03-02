@@ -67,11 +67,6 @@ class Models
     ) {
         $vendorPath = $kernelRootDir . '/vendor';
 
-        // register standard doctrine annotations
-        AnnotationRegistry::registerFile(
-            $vendorPath . '/doctrine/orm/lib/Doctrine/ORM/Mapping/Driver/DoctrineAnnotations.php'
-        );
-
         // register symfony validation annotations
         AnnotationRegistry::registerAutoloadNamespace(
             'Symfony\Component\Validator\Constraint',
