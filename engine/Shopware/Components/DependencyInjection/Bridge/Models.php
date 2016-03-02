@@ -52,7 +52,6 @@ class Models
      * @param Configuration $config
      * @param \Enlight_Loader $loader
      * @param \Pdo $db
-     * @param string $kernelRootDir
      * @param AnnotationDriver $modelAnnotation
      * @return ModelManager
      */
@@ -61,18 +60,9 @@ class Models
         Configuration $config,
         \Enlight_Loader $loader,
         \PDO $db,
-        $kernelRootDir,
         // annotation driver is not really used here but has to be loaded first
         AnnotationDriver $modelAnnotation
     ) {
-        $vendorPath = $kernelRootDir . '/vendor';
-
-        // register symfony validation annotations
-        AnnotationRegistry::registerAutoloadNamespace(
-            'Symfony\Component\Validator\Constraint',
-            realpath($vendorPath . '/symfony/validator')
-        );
-
         $loader->registerNamespace(
             'Shopware\Models\Attribute',
             $config->getAttributeDir()
