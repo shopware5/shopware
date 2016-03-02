@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="./TestHelper.php" colors="true">
+<phpunit
+        bootstrap="./TestHelper.php"
+        colors="true"
+        verbose="true"
+        beStrictAboutTestsThatDoNotTestAnything="true"
+        beStrictAboutOutputDuringTests="true"
+        beStrictAboutTestSize="true">
+
     <testsuites>
         <testsuite name="Shopware_AllTests">
             <directory>./Tests</directory>
@@ -22,7 +29,6 @@
             <exclude>
                 <directory>../../engine/Shopware/Plugins/Community</directory>
                 <directory>../../engine/Shopware/Components/Xml</directory>
-                <directory suffix="Meta.php">../../engine/Shopware/Plugins/</directory>
             </exclude>
         </whitelist>
     </filter>
