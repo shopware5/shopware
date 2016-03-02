@@ -24,7 +24,9 @@
 
 class PDOMock extends \PDO
 {
-    public function __construct() {}
+    public function __construct()
+    {
+    }
 }
 
 /**
@@ -61,7 +63,7 @@ class Shopware_Tests_Components_Model_CategoryDenormalizationTest extends PHPUni
             $conn = new PDO('sqlite::memory:');
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $conn->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-        } catch(PDOException $e) {
+        } catch (PDOException $e) {
             $this->markTestSkipped(
               'Could not create sqlite connection, got error:  ' . $e->getMessage()
             );
@@ -323,16 +325,6 @@ class Shopware_Tests_Components_Model_CategoryDenormalizationTest extends PHPUni
         $this->assertEquals(6, $affectedRows);
 
         $this->assertEquals(3, $this->getConnection()->getRowCount('s_articles_categories_ro'));
-    }
-
-    public function testRemoveCategoryAssignmentments()
-    {
-        // SQLite does not support joins with delete statement
-    }
-
-    public function testRemoveOrphanedAssignments()
-    {
-        // SQLite does not support joins with delete statement
     }
 
     public function testGetParentCategoryIdsForRootLevelReturnsEmptyArray()

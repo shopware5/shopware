@@ -101,7 +101,7 @@ class Shopware_Tests_Components_Theme_ConfiguratorTest extends Shopware_Tests_Co
             ->method('filter')
             ->will($this->returnValue(array(
                 'containers' => array('container1', 'container4'),
-                'fields' => array('field1','field3','field4')
+                'fields' => array('field1', 'field3', 'field4')
             )));
 
 
@@ -146,6 +146,8 @@ class Shopware_Tests_Components_Theme_ConfiguratorTest extends Shopware_Tests_Co
             'validateConfig',
             array($container)
         );
+
+        $this->assertTrue(true, 'validateConfig doesn\'t throw an exception');
     }
     /**
      * @expectedException \Exception

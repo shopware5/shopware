@@ -202,15 +202,6 @@ class ConfiguratorTest extends TestCase
         $this->assertInactiveOptions($configurator, array('M', 'S'));
     }
 
-    public function testMediaConfigurator()
-    {
-        $number = __FUNCTION__;
-        $context = $this->getContext();
-        $data = $this->getProduct($number, $context);
-
-        $article = $this->helper->createArticle($data);
-    }
-
     private function assertInactiveOptions(Set $configurator, $expectedOptions)
     {
         foreach ($configurator->getGroups() as $group) {
