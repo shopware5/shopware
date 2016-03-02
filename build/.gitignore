@@ -1,6 +1,2 @@
 logs/
-scripts/deploy.sql
-scripts/deploy.template.sql
-scripts/demo.deploy.sql
-scripts/demo.template.sql
 build.properties
