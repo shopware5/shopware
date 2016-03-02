@@ -145,6 +145,10 @@ class ModelManager extends EntityManager
      */
     protected function serializeEntity($entity)
     {
+        if ($entity === null) {
+            return [];
+        }
+
         if ($entity instanceof \Doctrine\ORM\Proxy\Proxy) {
             /** @var $entity \Doctrine\ORM\Proxy\Proxy */
             $entity->__load();

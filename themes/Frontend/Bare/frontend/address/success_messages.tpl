@@ -3,6 +3,8 @@
     {$content = ''}
     {if $type == 'save'}
         {$content = "{s name='AddressesSuccess'}{/s}"}
+    {elseif $type == 'delete'}
+        {$content = "{s name='AddressesDeleteSuccess'}{/s}"}
     {/if}
 
     {include file="frontend/_includes/messages.tpl" type="success" content="{$content}"}

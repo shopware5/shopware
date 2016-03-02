@@ -30,6 +30,13 @@
             {/if}
         {/block}
 
+        {* Error messages *}
+        {block name="frontend_address_error_messages"}
+            {if $error}
+                {include file="frontend/address/error_messages.tpl" type=$error}
+            {/if}
+        {/block}
+
         {block name="frontend_address_content"}
             <div class="addresses--content block-group">
 
@@ -62,9 +69,17 @@
 
                                 {block name="frontend_address_content_item_actions"}
                                     <div class="addresses--item-actions panel--actions is--wide">
-                                        <a href="{url controller=address action=edit id=$address.id}" title="{s name="AddressesContentItemActionEdit"}Change{/s}" class="btn is--small">
-                                            {s name="AddressesContentItemActionEdit"}Change{/s}
-                                        </a>
+                                        {block name="frontend_address_content_item_actions_change"}
+                                            <a href="{url controller=address action=edit id=$address.id}" title="{s name="AddressesContentItemActionEdit"}Change{/s}" class="btn is--small">
+                                                {s name="AddressesContentItemActionEdit"}Change{/s}
+                                            </a>
+                                        {/block}
+
+                                        {block name="frontend_address_content_item_actions_delete"}
+                                            <a href="{url controller=address action=delete id=$address.id}" title="{s name="AddressesContentItemActionDelete"}Delete{/s}" class="btn is--small">
+                                                {s name="AddressesContentItemActionDelete"}Delete{/s}
+                                            </a>
+                                        {/block}
                                     </div>
                                 {/block}
 
