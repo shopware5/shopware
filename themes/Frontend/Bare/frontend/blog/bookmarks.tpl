@@ -24,7 +24,7 @@
 				{/block}
 
 				{* Del.icio.us *}
-				{block name='frontend_blog_bookmarks_deliciosus'}
+				{block name='frontend_blog_bookmarks_delicious'}
 					<a href="http://del.icio.us/post?url={url controller=blog action=detail sCategory=$sArticle.categoryId blogArticle=$sArticle.id}&amp;title={$sArticle.title|escape:'url'}"
 						title="{"{s name='BookmarkDeliciousShare'}{/s}"|escape}"
 						class="blog--bookmark icon--delicious"
