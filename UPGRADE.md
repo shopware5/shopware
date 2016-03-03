@@ -114,6 +114,7 @@ In this document you will find a changelog of the important changes related to t
     * `Shopware.apps.Customer.view.detail.Shipping`
 * Removed fax field form billing addresses
 * Updated `ongr/elasticsearch-dsl` to v2.0.0, see https://github.com/ongr-io/ElasticsearchDSL/blob/master/CHANGELOG.md#v200-2016-03-03 for BC breaks.
+* Renamed block 'frontend_blog_bookmarks_deliciosus' to 'frontend_blog_bookmarks_delicious'
 
 ## 5.1.4
 * Customer logout will now regenerate the session id and clear the customers basket.
