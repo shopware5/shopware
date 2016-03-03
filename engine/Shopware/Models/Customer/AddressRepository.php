@@ -24,7 +24,6 @@
 
 namespace Shopware\Models\Customer;
 
-use Shopware\Bundle\FormBundle\Forms\Account\AddressFormType;
 use Shopware\Components\Model\ModelRepository;
 
 /**

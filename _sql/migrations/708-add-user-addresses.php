@@ -48,6 +48,12 @@ SQL;
 CREATE TABLE `s_user_addresses_attributes` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `addressID` int(11) NOT NULL,
+  `text1` VARCHAR(255) DEFAULT NULL,
+  `text2` VARCHAR(255) DEFAULT NULL,
+  `text3` VARCHAR(255) DEFAULT NULL,
+  `text4` VARCHAR(255) DEFAULT NULL,
+  `text5` VARCHAR(255) DEFAULT NULL,
+  `text6` VARCHAR(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `addressID` (`addressID`),
   CONSTRAINT `s_user_addresses_attributes_ibfk_1` FOREIGN KEY (`addressID`) REFERENCES `s_user_addresses` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION

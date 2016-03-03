@@ -188,6 +188,19 @@ class Customer extends Resource
         $this->getManager()->persist($customer);
         $this->flush();
 
+        $addressImportService = $this->getContainer()->get('shopware_account.address_import_service');
+
+        try {
+            $addressImportService->importCustomerBilling($customer->getId());
+        } catch (\Exception $ex) {
+        }
+
+        try {
+            $addressImportService->importCustomerShipping($customer->getId());
+        } catch (\Exception $ex) {
+        }
+
+
         return $customer;
     }
 

@@ -1691,7 +1691,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
             'AmountWithTaxNumeric'
         );
 
-        $contentKeys = array (
+        $contentKeys = array(
             'id',
             'sessionID',
             'userID',
@@ -2227,6 +2227,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
                 "firstName"  => "Max",
                 "lastName"   => "Mustermann",
                 "street"     => "Merkel Strasse, 10",
+                "countryId"  => '3',
                 "attribute"  => array(
                     'text1'  => 'Freitext1',
                     'text2'  => 'Freitext2',
@@ -2255,11 +2256,11 @@ class sBasketTest extends PHPUnit_Framework_TestCase
         $billingId = $this->db->fetchOne('SELECT id FROM s_user_billingaddress WHERE userID = ?', array($customer->getId()));
         $shippingId = $this->db->fetchOne('SELECT id FROM s_user_shippingaddress WHERE userID = ?', array($customer->getId()));
 
-        if($billingId) {
+        if ($billingId) {
             $this->db->delete('s_user_billingaddress_attributes', 'billingID = '.$billingId);
             $this->db->delete('s_user_billingaddress', 'id = '.$billingId);
         }
-        if($shippingId) {
+        if ($shippingId) {
             $this->db->delete('s_user_shippingaddress_attributes', 'shippingID = '.$shippingId);
             $this->db->delete('s_user_shippingaddress', 'id = '.$shippingId);
         }

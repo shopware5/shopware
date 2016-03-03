@@ -22,11 +22,12 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Bundle\FormBundle\Forms\Account\AddressFormType;
-use \Enlight_Controller_Request_Request as Request;
+use Shopware\Bundle\AccountBundle\Form\Account\AddressFormType;
+use Shopware\Bundle\AccountBundle\Service\AddressServiceInterface;
 use Shopware\Models\Customer\Address;
 use Shopware\Models\Customer\AddressRepository;
 use Shopware\Models\Customer\Customer;
+use Symfony\Component\Form\FormInterface;
 
 /**
  * Address controller
@@ -44,12 +45,18 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
     protected $addressRepository;
 
     /**
+     * @var AddressServiceInterface
+     */
+    protected $addressService;
+
+    /**
      * Pre dispatch method
      */
     public function preDispatch()
     {
         $this->admin = Shopware()->Modules()->Admin();
         $this->addressRepository = $this->get('models')->getRepository(Address::class);
+        $this->addressService = $this->get('shopware_account.address_service');
 
         $this->View()->assign('sUserLoggedIn', $this->admin->sCheckUser());
 
@@ -81,7 +88,21 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
      */
     public function createAction()
     {
-        $this->forward('form');
+        $address = new Address();
+        $form = $this->createForm(AddressFormType::class, $address, ['allow_extra_fields' => true]);
+        $form->handleRequest($this->Request());
+
+        if ($form->isValid()) {
+            $userId = $this->get('session')->get('sUserId');
+            $customer = $this->get('models')->find(Customer::class, $userId);
+
+            $this->addressService->create($address, $customer);
+
+            $this->redirect(['action' => 'index', 'success' => 'create']);
+            return;
+        }
+
+        $this->View()->assign($this->getFormViewData($form));
     }
 
     /**
@@ -89,71 +110,21 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
      */
     public function editAction()
     {
-        $this->forward('form');
-    }
-
-    /**
-     * Form to create and edit addresses
-     */
-    public function formAction()
-    {
-        $address = $this->getAddressByRequest($this->Request());
+        $userId = $this->get('session')->get('sUserId');
+        $addressId = $this->Request()->getParam('id', null);
+        $address = $this->addressRepository->getDetailByUserQuery($addressId, $userId)->getSingleResult();
 
         $form = $this->createForm(AddressFormType::class, $address, ['allow_extra_fields' => true]);
         $form->handleRequest($this->Request());
 
         if ($form->isValid()) {
-            $this->get('models')->flush($address);
+            $this->addressService->update($address);
 
-            $this->redirect(['action' => 'index', 'success' => 'save']);
-
+            $this->redirect(['action' => 'index', 'success' => 'update']);
             return;
-        } else {
-            $errorFlags = [];
-            $errorMessages = [];
-
-            foreach ($form->getErrors(true) as $error) {
-                $errorFlags[$error->getOrigin()->getName()] = true;
-                $errorMessages[] = $this->get('snippets')->getNamespace('frontend/account/internalMessages')
-                    ->get('ErrorFillIn', 'Please fill in all red fields');
-            }
-
-            $errorMessages = array_unique($errorMessages);
-
-            $this->View()->assign('error_flags', $errorFlags);
-            $this->View()->assign('error_messages', $errorMessages);
         }
 
-        $formData = array_merge(
-            $this->get('models')->toArray($form->getViewData()),
-            $form->getExtraData()
-        );
-
-        $this->View()->assign('countryList', $this->admin->sGetCountryList());
-        $this->View()->assign('formData', $formData);
-    }
-
-    /**
-     * @param Request $request
-     * @return Address
-     */
-    private function getAddressByRequest(Request $request)
-    {
-        $userId = $this->get('session')->get('sUserId');
-        $addressId = $request->getParam('id', null);
-
-        if ($addressId) {
-            $address = $this->addressRepository->getDetailByUserQuery($addressId, $userId)->getSingleResult();
-        } else {
-            $address = new Address();
-            $address->setCustomer(
-                $this->get('models')->find(Customer::class, $userId)
-            );
-
-            $this->get('models')->persist($address);
-        }
-
-        return $address;
+        $this->View()->assign($this->getFormViewData($form));
     }
 
     /**
@@ -167,11 +138,9 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
         $address = $this->addressRepository->getDetailByUserQuery($addressId, $userId)->getSingleResult();
 
         if ($this->Request()->isPost()) {
-            $this->get('models')->remove($address);
-            $this->get('models')->flush($address);
+            $this->addressService->delete($address);
 
             $this->redirect(['action' => 'index', 'success' => 'delete']);
-
             return;
         }
 
@@ -180,5 +149,36 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
         $addressView['state'] = $this->get('models')->toArray($address->getState());
 
         $this->View()->assign('address', $addressView);
+    }
+
+    /**
+     * @param FormInterface $form
+     * @return array
+     */
+    private function getFormViewData(FormInterface $form)
+    {
+        $errorFlags = [];
+        $errorMessages = [];
+        $viewData = [];
+
+        foreach ($form->getErrors(true) as $error) {
+            $errorFlags[$error->getOrigin()->getName()] = true;
+            $errorMessages[] = $this->get('snippets')->getNamespace('frontend/account/internalMessages')
+                ->get('ErrorFillIn', 'Please fill in all red fields');
+        }
+
+        $errorMessages = array_unique($errorMessages);
+
+        $formData = array_merge(
+            $this->get('models')->toArray($form->getViewData()),
+            $form->getExtraData()
+        );
+
+        $viewData['error_flags'] = $errorFlags;
+        $viewData['error_messages'] = $errorMessages;
+        $viewData['countryList'] = $this->admin->sGetCountryList();
+        $viewData['formData'] = $formData;
+
+        return $viewData;
     }
 }
