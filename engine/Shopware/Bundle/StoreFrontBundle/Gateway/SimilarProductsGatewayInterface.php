@@ -79,6 +79,7 @@ interface SimilarProductsGatewayInterface
      * @param Struct\BaseProduct $product
      * @param Struct\ShopContextInterface $context
      * @return array Array of order numbers
+     * @deprecated since version 5.1.4, to be removed in 5.3 - Use SimilarProductCondition instead
      */
     public function getByCategory(Struct\BaseProduct $product, Struct\ShopContextInterface $context);
 
@@ -103,6 +104,7 @@ interface SimilarProductsGatewayInterface
      * @param Struct\BaseProduct[] $products
      * @param Struct\ShopContextInterface $context
      * @return array Indexed by the product number
+     * @deprecated since version 5.1.4, to be removed in 5.3 - Use SimilarProductCondition instead
      */
     public function getListByCategory($products, Struct\ShopContextInterface $context);
 }

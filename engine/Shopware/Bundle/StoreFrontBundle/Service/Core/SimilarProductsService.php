@@ -23,6 +23,10 @@
  */
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
+use Shopware\Bundle\SearchBundle\Condition\SimilarProductCondition;
+use Shopware\Bundle\SearchBundle\ProductSearchInterface;
+use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
+use Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactoryInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Service;
 use Shopware\Bundle\StoreFrontBundle\Gateway;
@@ -49,18 +53,34 @@ class SimilarProductsService implements Service\SimilarProductsServiceInterface
     private $config;
 
     /**
+     * @var ProductSearchInterface
+     */
+    private $search;
+
+    /**
+     * @var StoreFrontCriteriaFactoryInterface
+     */
+    private $factory;
+
+    /**
      * @param Gateway\SimilarProductsGatewayInterface $gateway
      * @param Service\ListProductServiceInterface $listProductService
      * @param \Shopware_Components_Config $config
+     * @param ProductSearchInterface $search
+     * @param StoreFrontCriteriaFactoryInterface $factory
      */
     public function __construct(
         Gateway\SimilarProductsGatewayInterface $gateway,
         Service\ListProductServiceInterface $listProductService,
+        ProductSearchInterface $search,
+        StoreFrontCriteriaFactoryInterface $factory,
         \Shopware_Components_Config $config
     ) {
         $this->gateway = $gateway;
         $this->listProductService = $listProductService;
         $this->config = $config;
+        $this->search = $search;
+        $this->factory = $factory;
     }
 
     /**
@@ -111,30 +131,27 @@ class SimilarProductsService implements Service\SimilarProductsServiceInterface
             return $result;
         }
 
-        if ($this->config->get('similarLimit') <= 0) {
+        $limit = $this->config->get('similarLimit');
+        if ($limit <= 0) {
             return $result;
         }
 
-        $fallback = $this->gateway->getListByCategory($fallback, $context);
-
-        //loads the list product data for the selected numbers.
-        //all numbers are joined in the extractNumbers function to prevent that a product will be
-        //loaded multiple times
-        $listProducts = $this->listProductService->getList(
-            $this->extractNumbers($fallback),
-            $context
-        );
-
         $fallbackResult = [];
-        foreach ($products as $product) {
-            if (!isset($fallback[$product->getId()])) {
-                continue;
-            }
+        /** @var \Shopware\Bundle\StoreFrontBundle\Struct\ListProduct $product */
+        foreach ($fallback as $product) {
+            $criteria = $this->factory->createBaseCriteria([$context->getShop()->getCategory()->getId()], $context);
+            $criteria->limit($limit);
 
-            $fallbackResult[$product->getNumber()] = $this->getProductsByNumbers(
-                $listProducts,
-                $fallback[$product->getId()]
-            );
+            $condition = new SimilarProductCondition($product->getId(), $product->getName());
+            $sorting = new PopularitySorting();
+
+            $criteria->addBaseCondition($condition);
+            $criteria->addSorting($sorting);
+
+            /** @var \Shopware\Bundle\SearchBundle\ProductSearchResult $searchResult */
+            $searchResult = $this->search->search($criteria, $context);
+
+            $fallbackResult[$product->getNumber()] = $searchResult->getProducts();
         }
 
         return ($result + $fallbackResult);

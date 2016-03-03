@@ -8,16 +8,6 @@
 
         <service id="shopware_search_es.struct_hydrator" class="Shopware\Bundle\SearchBundleES\StructHydrator" />
 
-        <service id="shopware_search_es.similar_products_service" class="Shopware\Bundle\SearchBundleES\SimilarProductsService">
-            <argument type="service" id="shopware_elastic_search.client" />
-            <argument type="service" id="shopware_storefront.list_product_service" />
-            <argument type="service" id="shopware_storefront.similar_products_gateway" />
-            <argument type="service" id="shopware_storefront.similar_products_service" />
-            <argument type="service" id="config" />
-            <argument type="service" id="shopware_elastic_search.index_factory" />
-            <argument type="service" id="dbal_connection" />
-        </service>
-
         <service id="shopware_search_es.product_number_search_factory" class="Shopware\Bundle\SearchBundleES\DependencyInjection\Factory\ProductNumberSearchFactory">
             <argument type="collection" />
         </service>
@@ -30,6 +20,11 @@
         <service id="shopware_search_es.search_term_query_builder" class="Shopware\Bundle\SearchBundleES\SearchTermQueryBuilder" />
 
         <service id="shopware_search_es.category_condition_handler" class="Shopware\Bundle\SearchBundleES\ConditionHandler\CategoryConditionHandler" >
+            <tag name="shopware_search_es.search_handler" />
+        </service>
+
+        <service id="shopware_search_es.similar_product_condition_handler" class="Shopware\Bundle\SearchBundleES\ConditionHandler\SimilarProductConditionHandler" >
+            <argument type="service" id="dbal_connection" />
             <tag name="shopware_search_es.search_handler" />
         </service>
 

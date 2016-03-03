@@ -4,6 +4,9 @@ In this document you will find a changelog of the important changes related to t
 ## 5.1.4
 * Customer logout will now regenerate the session id and clear the customers basket.
 * Added `IsNew` condition for product streams
+* Added `SimilarProducts` condition
+* Deprecated Method `Shopware\Bundle\StoreFrontBundle\Gateway\SimilarProductsGatewayInterface::getListByCategory` will be removed in shopware version 5.3
+* Deprecated Method `Shopware\Bundle\StoreFrontBundle\Gateway\SimilarProductsGatewayInterface::getByCategory` will be removed in shopware version 5.3
 * Added method `\Shopware\Models\Article\Repository::getSupplierListQueryBuilder()` to make the query builder extensible
 * Added index on `s_article_img_mapping_rules`.`mapping_id` and `s_article_img_mapping_rules`.`option_id`
 * Fixed `AND` search logic for search terms which not exist in the s_articles table.
@@ -15,6 +18,7 @@ In this document you will find a changelog of the important changes related to t
 * Enabled product streams for parent categories
 * Disabled the automatic detection of similar products for install customers. Enabling this option may decrease the shop performance.
 * Fixed the `removeListener` method in `Enlight_Event_Subscriber_Config`, `Enlight_Event_Subscriber_Array` and `Enlight_Event_EventManager`
+* Removed `engine/Shopware/Bundle/SearchBundleES/SimilarProductsService.php`
 
 ## 5.1.3
 * Switch Grunt to relativeUrls to unify the paths to less.php
