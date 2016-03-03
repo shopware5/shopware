@@ -80,6 +80,7 @@ In this document you will find a changelog of the important changes related to t
     * `\Shopware\Models\Customer\Customer::setDebit()`
 * Added new configuration field to the emotion banner widget for link target.
 * Added composer dependency for Symfony Form and implemented FormBundle
+* Renamed block 'frontend_blog_bookmarks_deliciosus' to 'frontend_blog_bookmarks_delicious'
 
 ## 5.1.4
 * Customer logout will now regenerate the session id and clear the customers basket.
