@@ -1,0 +1,29 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+
+        <service id="shopware_account.address_service" class="Shopware\Bundle\AccountBundle\Service\Core\AddressService">
+            <argument type="service" id="models" />
+            <argument type="service" id="shopware.form.factory" />
+        </service>
+
+        <service id="shopware_account.address_import_service" class="Shopware\Bundle\AccountBundle\Service\Core\AddressImportService">
+            <argument type="service" id="dbal_connection" />
+            <argument type="service" id="models" />
+            <argument type="service" id="shopware_account.address_service" />
+        </service>
+
+        <service id="shopware_account.form.addressform" class="Shopware\Bundle\AccountBundle\Form\Account\AddressFormType">
+            <argument type="service" id="snippets" />
+            <argument type="service" id="config" />
+            <argument type="service" id="events" />
+            <argument type="service" id="models" />
+            <tag name="form.type" />
+        </service>
+
+    </services>
+</container>

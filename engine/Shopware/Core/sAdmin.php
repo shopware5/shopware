@@ -22,6 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Bundle\AccountBundle\Service\AddressImportServiceInterface;
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Components\Validator\EmailValidatorInterface;
 
@@ -126,6 +127,11 @@ class sAdmin
      */
     public $sSYSTEM;
 
+    /**
+     * @var AddressImportServiceInterface
+     */
+    private $addressImportService;
+
     public function __construct(
         Enlight_Components_Db_Adapter_Pdo_Mysql          $db                 = null,
         Enlight_Event_EventManager                       $eventManager       = null,
@@ -137,7 +143,8 @@ class sAdmin
         Shopware_Components_Modules                      $moduleManager      = null,
         sSystem                                          $systemModule       = null,
         StoreFrontBundle\Service\ContextServiceInterface $contextService     = null,
-        EmailValidatorInterface                          $emailValidator     = null
+        EmailValidatorInterface                          $emailValidator     = null,
+        AddressImportServiceInterface                    $addressImportService     = null
     ) {
         $this->db = $db ? : Shopware()->Db();
         $this->eventManager = $eventManager ? : Shopware()->Events();
@@ -155,6 +162,7 @@ class sAdmin
         $this->contextService = $contextService ? : Shopware()->Container()->get('shopware_storefront.context_service');
         $this->emailValidator = $emailValidator ? : Shopware()->Container()->get('validator.email');
         $this->subshopId = $this->contextService->getShopContext()->getShop()->getParentId();
+        $this->addressImportService = $addressImportService ? : Shopware()->Container()->get('shopware_account.address_import_service');
     }
 
     /**
@@ -1878,6 +1886,11 @@ class sAdmin
             array('subject' => $this, 'insertObject' => $saveAttributeData)
         );
 
+        try {
+            $this->addressImportService->importCustomerBilling($userID);
+        } catch (\Exception $ex) {
+        }
+
         return $billingID;
     }
 
@@ -1952,6 +1965,11 @@ class sAdmin
             'Shopware_Modules_Admin_SaveRegisterShippingAttributes_Return',
             array('subject' => $this, 'insertObject' => $saveAttributeData)
         );
+
+        try {
+            $this->addressImportService->importCustomerShipping($userID);
+        } catch (\Exception $ex) {
+        }
 
         return $shippingId;
     }

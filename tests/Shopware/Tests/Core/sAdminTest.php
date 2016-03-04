@@ -1727,7 +1727,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                 'street' => 'teststreet',
                 'zipcode' => 'testzipcode',
                 'city' => 'testcity',
-                'country' => 'testcountry'
+                'country' => '2'
             ),
             'payment' => array(
                 'object' => array(

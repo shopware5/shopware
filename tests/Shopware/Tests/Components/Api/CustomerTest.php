@@ -76,6 +76,7 @@ class Shopware_Tests_Components_Api_CustomerTest extends Shopware_Tests_Componen
                 "birthday"  => $birthday,
                 "additionalAddressLine1"  => "Address Billing Addition 1",
                 "additionalAddressLine2"  => "Address Billing Addition 2",
+                "countryId" => "2",
                 "attribute" => array(
                     'text1' => 'Freitext1',
                     'text2' => 'Freitext2',
@@ -89,6 +90,7 @@ class Shopware_Tests_Components_Api_CustomerTest extends Shopware_Tests_Componen
                 "lastName"   => "Mustermann",
                 "additionalAddressLine1"  => "Address Shipping Addition 1",
                 "additionalAddressLine2"  => "Address Shipping Addition 2",
+                "countryId" => "2",
                 "attribute" => array(
                     'text1' => 'Freitext1',
                     'text2' => 'Freitext2',
@@ -399,6 +401,7 @@ class Shopware_Tests_Components_Api_CustomerTest extends Shopware_Tests_Componen
                 "firstName" => "Max",
                 "lastName"  => "Mustermann",
                 "birthday"  => $birthday,
+                "countryId" => "2"
             ),
 
             "shipping" => array(
@@ -406,6 +409,7 @@ class Shopware_Tests_Components_Api_CustomerTest extends Shopware_Tests_Componen
                 "company"    => "Widgets Inc.",
                 "firstName"  => "Max",
                 "lastName"   => "Mustermann",
+                "countryId"  => "2"
             ),
 
             "debit" => array(
@@ -460,6 +464,7 @@ class Shopware_Tests_Components_Api_CustomerTest extends Shopware_Tests_Componen
                 "firstName" => "Max",
                 "lastName"  => "Mustermann",
                 "birthday"  => $birthday,
+                "countryId" => "2"
             ),
 
             "shipping" => array(
@@ -467,6 +472,7 @@ class Shopware_Tests_Components_Api_CustomerTest extends Shopware_Tests_Componen
                 "company"    => "Widgets Inc.",
                 "firstName"  => "Max",
                 "lastName"   => "Mustermann",
+                "countryId"  => "2"
             ),
 
             "paymentData" => array(

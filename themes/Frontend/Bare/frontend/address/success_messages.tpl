@@ -1,8 +1,10 @@
 {namespace name="frontend/address/index"}
 <div class="account--success">
     {$content = ''}
-    {if $type == 'save'}
-        {$content = "{s name='AddressesSuccess'}{/s}"}
+    {if $type == 'create'}
+        {$content = "{s name='AddressesCreateSuccess'}{/s}"}
+    {elseif $type == 'update'}
+        {$content = "{s name='AddressesUpdateSuccess'}{/s}"}
     {elseif $type == 'delete'}
         {$content = "{s name='AddressesDeleteSuccess'}{/s}"}
     {/if}

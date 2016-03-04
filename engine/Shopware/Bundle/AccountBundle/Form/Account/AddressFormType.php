@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\FormBundle\Forms\Account;
+namespace Shopware\Bundle\AccountBundle\Form\Account;
 
 use Shopware\Bundle\FormBundle\Transformer\EntityTransformer;
 use Shopware\Components\Model\ModelManager;
