@@ -78,7 +78,7 @@ class LegacyEventManager
         \sArticles $module
     ) {
         foreach ($result['sArticles'] as &$article) {
-            $article = Enlight()->Events()->filter(
+            $article = Shopware()->Events()->filter(
                 'Shopware_Modules_Articles_sGetArticlesByCategory_FilterLoopEnd',
                 $article,
                 array(
@@ -111,7 +111,7 @@ class LegacyEventManager
         $getArticle = $product;
         $context = $this->contextService->getShopContext();
 
-        return Enlight()->Events()->filter(
+        return Shopware()->Events()->filter(
             'Shopware_Modules_Articles_GetArticleById_FilterResult',
             $getArticle,
             array(

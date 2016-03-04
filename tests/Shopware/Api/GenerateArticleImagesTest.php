@@ -34,7 +34,7 @@ class Shopware_Tests_Api_GenerateArticleImagesTest extends PHPUnit_Framework_Tes
     {
         parent::setUp();
 
-        $helper = TestHelper::Instance();
+        $helper = Shopware();
 
         $hostname = $helper->Shop()->getHost();
         if (empty($hostname)) {

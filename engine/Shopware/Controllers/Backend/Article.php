@@ -3922,7 +3922,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $filename = $this->Request()->getParam('filename');
         $file = 'files/' . Shopware()->Config()->get('sESDKEY') . '/' . $filename;
 
-        if (!file_exists(Shopware()->OldPath() . $file)) {
+        if (!file_exists(Shopware()->DocPath() . $file)) {
             $this->View()->assign(array(
                 'message' => 'File not found',
                 'success' => false

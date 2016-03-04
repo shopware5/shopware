@@ -418,7 +418,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
         /**
          * Emits Shopware_Plugins_HttpCache_ShouldNotCache Event
          */
-        if (Enlight()->Events()->notifyUntil(
+        if (Shopware()->Events()->notifyUntil(
             // deprecated since SW 4.3, will be removed in SW 5.0
             'Shopware_Plugins_HttpCache_ShouldNotCache',
             array(

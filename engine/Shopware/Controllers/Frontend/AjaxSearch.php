@@ -49,7 +49,7 @@ class Shopware_Controllers_Frontend_AjaxSearch extends Enlight_Controller_Action
      */
     public function indexAction()
     {
-        Enlight()->Plugins()->Controller()->Json()->setPadding();
+        Shopware()->Plugins()->Controller()->Json()->setPadding();
 
         $this->View()->loadTemplate('frontend/search/ajax.tpl');
 

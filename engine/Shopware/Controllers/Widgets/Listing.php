@@ -161,7 +161,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
      */
     public function ajaxListingAction()
     {
-        Enlight()->Plugins()->Controller()->Json()->setPadding();
+        Shopware()->Plugins()->Controller()->Json()->setPadding();
 
         $categoryId = $this->Request()->getParam('sCategory');
         $pageIndex = $this->Request()->getParam('sPage');

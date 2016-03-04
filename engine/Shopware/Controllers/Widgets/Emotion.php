@@ -190,7 +190,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             $data[$entry['name']] = $value;
         }
 
-        $data = Enlight()->Events()->filter(
+        $data = Shopware()->Events()->filter(
             'Shopware_Controllers_Widgets_Emotion_AddElement',
             $data,
             array('subject' => $this, 'element' => $element)

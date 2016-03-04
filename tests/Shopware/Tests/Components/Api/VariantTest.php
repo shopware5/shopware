@@ -253,11 +253,9 @@ class Shopware_Tests_Components_Api_VariantTest extends Shopware_Tests_Component
 
             $this->assertEquals($articleDetail->getId(), $articleDetailById->getId());
             $this->assertEquals($articleDetail->getId(), $articleDetailByNumber->getId());
-
         }
 
         return $article;
-
     }
 
     /**
@@ -280,7 +278,6 @@ class Shopware_Tests_Components_Api_VariantTest extends Shopware_Tests_Component
      */
     public function testDeleteShouldBeSuccessful($article)
     {
-
         $this->resource->setResultMode(\Shopware\Components\Api\Resource\Variant::HYDRATE_OBJECT);
 
         $deleteByNumber = true;
@@ -300,7 +297,6 @@ class Shopware_Tests_Components_Api_VariantTest extends Shopware_Tests_Component
 
         // Delete the whole article at last
         $this->resourceArticle->delete($article->getId());
-
     }
 
     /**
@@ -354,7 +350,7 @@ class Shopware_Tests_Components_Api_VariantTest extends Shopware_Tests_Component
     private function getVariantOptionsOfSet($configuratorSet)
     {
         $options = array();
-        foreach($configuratorSet['groups'] as $group) {
+        foreach ($configuratorSet['groups'] as $group) {
             $id = rand(0, count($group['options']) - 1);
             $option = $group['options'][$id];
             $options[] = array(
@@ -374,7 +370,7 @@ class Shopware_Tests_Components_Api_VariantTest extends Shopware_Tests_Component
         $this->resourceArticle->setResultMode(\Shopware\Components\Api\Resource\Variant::HYDRATE_ARRAY);
         $article = $this->resourceArticle->getOne($articleId);
 
-        foreach($article['details'] as $variantData) {
+        foreach ($article['details'] as $variantData) {
             $updateData = array(
                 'articleId' => $articleId,
                 'inStock' => 2000,
@@ -409,7 +405,6 @@ class Shopware_Tests_Components_Api_VariantTest extends Shopware_Tests_Component
 
         $this->assertCount(1, $variant->getImages());
         return $variant->getId();
-
     }
 
     /**
@@ -435,7 +430,7 @@ class Shopware_Tests_Components_Api_VariantTest extends Shopware_Tests_Component
 
         $article = $variant->getArticle();
         /**@var $image \Shopware\Models\Article\Image*/
-        foreach($article->getImages() as $image) {
+        foreach ($article->getImages() as $image) {
             $this->assertCount(0, $image->getMappings());
         }
 
@@ -468,7 +463,7 @@ class Shopware_Tests_Components_Api_VariantTest extends Shopware_Tests_Component
         $this->assertCount(8, $variant->getImages());
 
         /**@var $image \Shopware\Models\Article\Image*/
-        foreach($variant->getArticle()->getImages() as $image) {
+        foreach ($variant->getArticle()->getImages() as $image) {
             $this->assertCount(1, $image->getMappings(), "No image mapping created!");
 
             /**@var $mapping \Shopware\Models\Article\Image\Mapping*/
@@ -511,7 +506,7 @@ class Shopware_Tests_Components_Api_VariantTest extends Shopware_Tests_Component
         $this->assertCount(2, $article->getImages());
 
         /**@var $image \Shopware\Models\Article\Image*/
-        foreach($article->getImages() as $image) {
+        foreach ($article->getImages() as $image) {
             $media = null;
             while ($media === null) {
                 if ($image->getMedia()) {
@@ -525,7 +520,7 @@ class Shopware_Tests_Components_Api_VariantTest extends Shopware_Tests_Component
 
             $this->assertCount(4, $media->getThumbnails());
             foreach ($media->getThumbnails() as $thumbnail) {
-                $this->assertTrue($mediaService->has(Shopware()->OldPath() . $thumbnail));
+                $this->assertTrue($mediaService->has(Shopware()->DocPath() . $thumbnail));
             }
 
             $this->assertCount(1, $image->getMappings(), "No image mapping created!");
@@ -588,7 +583,6 @@ class Shopware_Tests_Components_Api_VariantTest extends Shopware_Tests_Component
 
     private function getSimpleConfiguratorSet($groupLimit = 3, $optionLimit = 5)
     {
-
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(array('groups.id'))
             ->from('Shopware\Models\Article\Configurator\Group', 'groups')
@@ -606,7 +600,7 @@ class Shopware_Tests_Components_Api_VariantTest extends Shopware_Tests_Component
             ->setMaxResults($optionLimit)
             ->orderBy('options.position', 'ASC');
 
-        foreach($groups as &$group) {
+        foreach ($groups as &$group) {
             $builder->setParameter('groupId', $group['id']);
             $group['options'] = $builder->getQuery()->getArrayResult();
         }
@@ -740,7 +734,7 @@ class Shopware_Tests_Components_Api_VariantTest extends Shopware_Tests_Component
         $result = $this->resource->batch($batchData);
 
         $this->resource->setResultMode(\Shopware\Components\Api\Resource\Resource::HYDRATE_ARRAY);
-        foreach($result as $operation) {
+        foreach ($result as $operation) {
             $this->assertTrue($operation['success']);
 
             $variant = $this->resource->getOne($operation['data']['id']);

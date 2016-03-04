@@ -37,7 +37,7 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
         $categoryTree = Shopware()->Modules()->sCategories()->sGetWholeCategoryTree();
         $additionalTrees = $this->getAdditionalTrees();
 
-        $additionalTrees = Enlight()->Events()->filter(
+        $additionalTrees = Shopware()->Events()->filter(
             'Shopware_Modules_Sitemap_indexAction',
             $additionalTrees,
             array('subject' => $this)

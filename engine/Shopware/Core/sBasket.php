@@ -316,7 +316,7 @@ class sBasket
               GROUP BY sessionID';
         $params = array($this->session->get('sessionId'));
 
-        $sql = Enlight()->Events()->filter(
+        $sql = Shopware()->Events()->filter(
             'Shopware_Modules_Basket_InsertDiscount_FilterSql_BasketAmount',
             $sql,
             array('subject' => $this, 'params' => $params)

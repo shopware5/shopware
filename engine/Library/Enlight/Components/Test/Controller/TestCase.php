@@ -122,7 +122,7 @@ abstract class Enlight_Components_Test_Controller_TestCase extends Enlight_Compo
      */
     public function reset()
     {
-        $app = Enlight_Application::Instance();
+        $app = Shopware();
 
         $this->resetRequest();
         $this->resetResponse();

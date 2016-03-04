@@ -77,7 +77,7 @@ class Shopware_Tests_Controllers_Frontend_AccountTest extends Enlight_Components
         et justo duo dolores et ea rebum. Stet clita kasd gubergren,
         no sea takimata sanctus est Lorem ipsum dolor sit amet.";
 
-        $filePath = Shopware()->OldPath() . 'files/'.Shopware()->Config()->get('sESDKEY');
+        $filePath = Shopware()->DocPath() . 'files/'.Shopware()->Config()->get('sESDKEY');
         $deleteFolderOnTearDown = !file_exists($filePath) ? $filePath : false;
         mkdir($filePath, 0777);
         file_put_contents($filePath . '/shopware_packshot_community_edition_72dpi_rgb.png', $loremIpsum);
@@ -216,7 +216,8 @@ class Shopware_Tests_Controllers_Frontend_AccountTest extends Enlight_Components
      * set user data to post
      * @return void
      */
-    private function setUserDataToPost() {
+    private function setUserDataToPost()
+    {
         $sql = 'SELECT email, password FROM s_user WHERE id = 1';
         $userData = Shopware()->Db()->fetchRow($sql);
         $this->Request()->setMethod('POST')

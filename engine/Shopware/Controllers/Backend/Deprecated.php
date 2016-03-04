@@ -72,7 +72,7 @@ class Shopware_Controllers_Backend_Deprecated extends Enlight_Controller_Action 
      */
     public function includeAction()
     {
-        $oldPath = Shopware()->OldPath('engine');
+        $oldPath = Shopware()->DocPath('engine');
 
         $module = basename($this->Request()->getParam('includeDir'));
         $module = preg_replace('/[^a-z0-9_.:-]/i', '', $module);

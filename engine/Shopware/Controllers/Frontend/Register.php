@@ -218,7 +218,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             // Simply check if this customergroup is valid
             if (Shopware()->Db()->fetchOne("SELECT id FROM s_core_customergroups WHERE `groupkey` = ? ", array($sValidation))) {
                 // New event to do further validations in b2b customergroup plugin
-                if (!Enlight()->Events()->notifyUntil('Shopware_Controllers_Frontend_Register_CustomerGroupRegister', array('subject'=>$this, 'sValidation'=>$sValidation))) {
+                if (!Shopware()->Events()->notifyUntil('Shopware_Controllers_Frontend_Register_CustomerGroupRegister', array('subject'=>$this, 'sValidation'=>$sValidation))) {
                     $this->View()->register->personal->form_data->sValidation = $sValidation;
                 }
             } else {
@@ -448,7 +448,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             'birthday'=>array('required'=> $requireBirthday, 'date' => ['d' => 'birthday', 'm' => 'birthmonth', 'y' => 'birthyear']),
             'dpacheckbox'=>array('required'=>(Shopware()->Config()->get('ACTDPRCHECK'))?1:0)
         );
-        $rules = Enlight()->Events()->filter('Shopware_Controllers_Frontend_Register_validatePersonal_FilterRules', $rules, array('subject'=>$this));
+        $rules = Shopware()->Events()->filter('Shopware_Controllers_Frontend_Register_validatePersonal_FilterRules', $rules, array('subject'=>$this));
 
         $checkData = $this->admin->sValidateStep2($rules);
 
@@ -534,7 +534,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             $rules['company'] = array('required'=>1);
             $rules['ustid'] = array('required'=>(Shopware()->Config()->vatCheckRequired && Shopware()->Config()->vatCheckEndabled));
         }
-        $rules = Enlight()->Events()->filter('Shopware_Controllers_Frontend_Register_validateBilling_FilterRules', $rules, array('subject'=>$this));
+        $rules = Shopware()->Events()->filter('Shopware_Controllers_Frontend_Register_validateBilling_FilterRules', $rules, array('subject'=>$this));
 
         $this->admin->sSYSTEM->_POST = $this->post['billing'];
 
@@ -619,7 +619,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             }
         }
 
-        $rules = Enlight()->Events()->filter('Shopware_Controllers_Frontend_Register_validateShipping_FilterRules', $rules, array('subject'=>$this));
+        $rules = Shopware()->Events()->filter('Shopware_Controllers_Frontend_Register_validateShipping_FilterRules', $rules, array('subject'=>$this));
 
         $this->admin->sSYSTEM->_POST = $this->post['shipping'];
 
