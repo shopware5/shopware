@@ -651,4 +651,31 @@ class Billing extends ModelEntity
     {
         return $this->additionalAddressLine1;
     }
+
+    /**
+     * Transfer values from the new address object
+     *
+     * @param Address $address
+     */
+    public function fromAddress(Address $address)
+    {
+        $this->setCompany($address->getCompany());
+        $this->setDepartment($address->getDepartment());
+        $this->setFirstName($address->getFirstname());
+        $this->setLastName($address->getLastname());
+        $this->setStreet($address->getStreet());
+        $this->setCity($address->getCity());
+        $this->setZipCode($address->getZipcode());
+        $this->setAdditionalAddressLine1($address->getAdditionalAddressLine1());
+        $this->setAdditionalAddressLine2($address->getAdditionalAddressLine2());
+        $this->setCountryId($address->getCountry()->getId());
+        $this->setPhone($address->getPhone());
+        $this->setVatId($address->getVatId());
+
+        if ($address->getState()) {
+            $this->setStateId($address->getState()->getId());
+        } else {
+            $this->setStateId(null);
+        }
+    }
 }

@@ -3,7 +3,7 @@
 
 {* Breadcrumb *}
 {block name="frontend_index_start" append}
-    {$sBreadcrumb[] = ["name"=>"{s name="AddressesTitleEdit"}Change address{/s}", "link"=>{url}]}
+    {$sBreadcrumb[] = ["name"=>"{s name="AddressesTitleEdit"}Change address{/s}", "link"=>{url id=$formData.id}]}
 {/block}
 
 {* Main content *}

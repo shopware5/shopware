@@ -349,6 +349,24 @@ class Customer extends LazyFetchModelEntity
     protected $paymentData;
 
     /**
+     * OWNING SIDE
+     *
+     * @var \Shopware\Models\Customer\Address $defaultBillingAddress
+     * @ORM\ManyToOne(targetEntity="\Shopware\Models\Customer\Address", inversedBy="customer")
+     * @ORM\JoinColumn(name="defaultBillingAddressId", referencedColumnName="id")
+     */
+    protected $defaultBillingAddress;
+
+    /**
+     * OWNING SIDE
+     *
+     * @var \Shopware\Models\Customer\Address $defaultShippingAddress
+     * @ORM\ManyToOne(targetEntity="\Shopware\Models\Customer\Address", inversedBy="customer")
+     * @ORM\JoinColumn(name="defaultShippingAddressId", referencedColumnName="id")
+     */
+    protected $defaultShippingAddress;
+
+    /**
      * Class constructor. Initials the orders array and the date fields.
      */
     public function __construct()
@@ -1061,5 +1079,38 @@ class Customer extends LazyFetchModelEntity
     public function getGroupKey()
     {
         return $this->groupKey;
+    }
+
+
+    /**
+     * @return Address
+     */
+    public function getDefaultBillingAddress()
+    {
+        return $this->defaultBillingAddress;
+    }
+
+    /**
+     * @param Address $defaultBillingAddress
+     */
+    public function setDefaultBillingAddress(Address $defaultBillingAddress)
+    {
+        $this->defaultBillingAddress = $defaultBillingAddress;
+    }
+
+    /**
+     * @return Address
+     */
+    public function getDefaultShippingAddress()
+    {
+        return $this->defaultShippingAddress;
+    }
+
+    /**
+     * @param Address $defaultShippingAddress
+     */
+    public function setDefaultShippingAddress(Address $defaultShippingAddress)
+    {
+        $this->defaultShippingAddress = $defaultShippingAddress;
     }
 }

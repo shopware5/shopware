@@ -121,7 +121,8 @@
         .addPlugin('*[data-product-compare-menu="true"]', 'swProductCompareMenu')
         .addPlugin('*[data-infinite-scrolling="true"]', 'swInfiniteScrolling')
         .addPlugin('*[data-ajax-variants-container="true"]', 'swAjaxVariant')
-        .addPlugin('*[data-subcategory-nav="true"]', 'swSubCategoryNav', ['xs', 's']);
+        .addPlugin('*[data-subcategory-nav="true"]', 'swSubCategoryNav', ['xs', 's'])
+        .addPlugin('*[data-panel-auto-resizer="true"]', 'swPanelAutoResizer', {}, ['l', 'xl']);
 
     $(function($) {
 

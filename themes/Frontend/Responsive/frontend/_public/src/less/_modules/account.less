@@ -430,7 +430,11 @@ It allows the user to directly see and change the important information of their
 
 .account--content.account--addresses {
     .unitize(margin, 0);
-    .unitize(padding-top, 50);
+    .unitize(padding-top, 45);
+
+    .account--welcome {
+        margin-bottom: 0;
+    }
 
     &.account--addresses-form {
         .alert {
@@ -445,6 +449,25 @@ It allows the user to directly see and change the important information of their
         .addresses--submit {
             width: 100%;
             text-align: center;
+        }
+    }
+
+    .addresses--item-default-container {
+        .unitize(margin-bottom, 15);
+
+        h3 {
+            margin: 0;
+        }
+    }
+
+    .addresses--actions-set-defaults {
+        .unitize(margin-bottom, 10);
+        line-height: normal;
+
+        .btn {
+            .unitize(font-size, 13);
+            padding: 0;
+            color: @brand-primary;
         }
     }
 
@@ -485,35 +508,40 @@ It allows the user to directly see and change the important information of their
 
     }
 
-    .birthday--label {
-        .clearfix();
-        .unitize-margin(0, 0, 5, 0);
-        display: block;
-        font-weight: bold;
+    &.addresses--delete {
+        .panel {
+            .unitize(margin-bottom, 20);
+        }
     }
 
-}
+    .addresses--delete-actions .btn.is--primary {
+        float: right;
+    }
 
-.addresses--content {
-    .clearfix();
+    .addresses--content {
+        .clearfix();
 
-    margin: -2% 0 0 -2%;
-}
+        margin: -2% 0 0 -2%;
+    }
 
-.addresses--content-item {
-    width: 100%;
-    float: left;
-    padding: 2% 0 0 2%;
-}
+    .addresses--content-item {
+        width: 100%;
+        float: left;
+        padding: 2% 0 0 2%;
 
-.addresses--item-create {
-    .btn {
+        .panel--actions {
+            display: table-cell;
+            vertical-align: bottom;
+        }
+    }
+
+    .addresses--item-create .btn {
         text-align: center;
     }
-}
 
-.addresses--item-actions form {
-    display: inline-block;
+    .addresses--item-actions form {
+        display: block;
+    }
 }
 
 @media screen and(min-width: @phoneLandscapeViewportWidth ) {
@@ -928,12 +956,6 @@ It allows the user to directly see and change the important information of their
 
     .account--addresses.account--content {
 
-        &.addresses--delete {
-            .panel {
-                .unitize(margin-bottom, 20);
-            }
-        }
-
         .addresses--field {
             .unitize(margin-bottom, 15);
             width: 70%;
@@ -954,10 +976,6 @@ It allows the user to directly see and change the important information of their
 
         .addresses--content-item {
             width: 50%;
-
-            .panel--body {
-                .unitize(height, 255);
-            }
         }
 
         .addresses--zip-city {

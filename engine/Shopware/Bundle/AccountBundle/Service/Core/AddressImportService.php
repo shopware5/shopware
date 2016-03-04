@@ -149,7 +149,7 @@ class AddressImportService implements AddressImportServiceInterface
         return array_merge(
             $this->getShippingAddressFields(),
             [
-                'ustid',
+                'ustid as vatId',
                 'phone'
             ]
         );

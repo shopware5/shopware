@@ -104,6 +104,7 @@ class Theme extends \Shopware\Components\Theme
         'src/js/jquery.jump-to-tab.js',
         'src/js/jquery.ajax-variant.js',
         'src/js/jquery.csrf-protection.js',
+        'src/js/jquery.panel-auto-resizer.js',
         'src/js/jquery.shopware-responsive.js'
     ];
 

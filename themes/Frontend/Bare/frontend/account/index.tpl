@@ -2,7 +2,7 @@
 
 {* Breadcrumb *}
 {block name='frontend_index_start' append}
-	{assign var='sBreadcrumb' value=[['name'=>"{s name='AccountTitle'}{/s}", 'link' =>{url action='index'}]]}
+	{assign var='sBreadcrumb' value=[['name'=>"{s name='AccountTitle'}{/s}", 'link' =>{url controller='account' action='index'}]]}
 {/block}
 
 {block name="frontend_index_left_categories_my_account"}{/block}

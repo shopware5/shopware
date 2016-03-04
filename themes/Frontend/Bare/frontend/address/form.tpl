@@ -287,6 +287,30 @@
                                     </div>
                                 {/if}
                             {/block}
+
+                            {block name='frontend_address_form_input_set_default_shipping'}
+                                {if !$formData.id || $sUserData.additional.user.defaultShippingAddressID != $formData.id}
+                                    <div class="addresses--default-shipping">
+                                        <input type="checkbox"
+                                               id="set_default_shipping"
+                                               name="address[set_default_shipping]"
+                                               value="1" />
+                                        <label for="set_default_shipping">{s name="AddressesSetAsDefaultShippingAction"}{/s}</label>
+                                    </div>
+                                {/if}
+                            {/block}
+
+                            {block name='frontend_address_form_input_set_default_billing'}
+                                {if !$formData.id || $sUserData.additional.user.defaultBillingAddressID != $formData.id}
+                                    <div class="addresses--default-billing">
+                                        <input type="checkbox"
+                                               id="set_default_billing"
+                                               name="address[set_default_billing]"
+                                               value="1" />
+                                        <label for="set_default_billing">{s name="AddressesSetAsDefaultBillingAction"}{/s}</label>
+                                    </div>
+                                {/if}
+                            {/block}
                         {/block}
                     </div>
                 </div>

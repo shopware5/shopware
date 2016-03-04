@@ -22,9 +22,7 @@
             {block name="frontend_address_delete_notice"}
                 <p>
                     {s name="AddressesDeleteNotice"}<b>Please note:</b> Deleting this address will not delete any pending orders being shipped to this address.{/s}
-                </p>
-
-                <p>
+                    <br/>
                     {s name="AddressesDeleteConfirmText"}To permanently remove this address from your address book, click Confirm.{/s}
                 </p>
             {/block}
@@ -57,19 +55,22 @@
             {/block}
 
             {block name="frontend_address_delete_actions"}
-                <form action="{url controller=address action=delete id=$address.id}" method="post">
-                    {block name="frontend_address_delete_actions_confirm"}
-                        <button type="submit" title="{s name="AddressesDeleteButtonText"}Confirm{/s}" class="btn is--primary">
-                            {s name="AddressesDeleteButtonText"}Confirm{/s}
-                        </button>
-                    {/block}
+                <div class="addresses--delete-actions">
+                    <form action="{url controller=address action=delete id=$address.id}" method="post">
 
-                    {block name="frontend_address_delete_actions_cancel"}
-                        <a href="{url controller=address action=index}" title="{s name="AddressesDeleteCancelText"}Cancel{/s}" class="btn is--link">
-                            {s name="AddressesDeleteCancelText"}Cancel{/s}
-                        </a>
-                    {/block}
-                </form>
+                        {block name="frontend_address_delete_actions_cancel"}
+                            <a href="{url controller=address action=index}" title="{s name="AddressesDeleteCancelText"}Cancel{/s}" class="btn  is--secondary">
+                                {s name="AddressesDeleteCancelText"}Cancel{/s}
+                            </a>
+                        {/block}
+
+                        {block name="frontend_address_delete_actions_confirm"}
+                            <button type="submit" title="{s name="AddressesDeleteButtonText"}Confirm{/s}" class="btn is--primary is--right">
+                                {s name="AddressesDeleteButtonText"}Confirm{/s}
+                            </button>
+                        {/block}
+                    </form>
+                </div>
             {/block}
         {/block}
     </div>
