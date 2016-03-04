@@ -63,7 +63,7 @@ class Enlight_Plugin_Namespace_Loader extends Enlight_Plugin_Namespace
      * @throws  Enlight_Exception
      * @param   string $prefix
      * @param   string $path
-     * @return  Enlight_Plugin_PluginNamespace
+     * @return  Enlight_Plugin_Namespace
      */
     public function addPrefixPath($prefix, $path)
     {

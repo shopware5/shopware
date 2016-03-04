@@ -92,7 +92,7 @@ class Enlight_Plugin_Namespace_Config extends Enlight_Plugin_Namespace
         /** @var $plugin Enlight_Plugin_Bootstrap_Config */
         $plugin = new $classname($name, $item);
 
-        return parent::registerPlugin($plugin, $throwException);
+        return parent::registerPlugin($plugin);
     }
 
     /**

@@ -81,7 +81,11 @@ return array_replace_recursive([
     'store' => [
         'apiEndpoint' => 'https://api.shopware.com',
     ],
-    'plugins' => [],
+    'plugin_directories' => [
+        'Default'   => $this->AppPath('Plugins_' . 'Default'),
+        'Local'     => $this->AppPath('Plugins_' . 'Local'),
+        'Community' => $this->AppPath('Plugins_' . 'Community'),
+    ],
     'template' => [
         'compileCheck' => true,
         'compileLocking' => true,

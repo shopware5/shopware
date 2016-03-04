@@ -32,8 +32,8 @@ class PluginExtractor
     /**
      * Extracts the provided zip file to the provided destination
      *
-     * @param $file
-     * @param $destination
+     * @param string $file
+     * @param string $destination
      * @throws \Exception
      */
     public function extract($file, $destination)
@@ -56,7 +56,7 @@ class PluginExtractor
      * path and validates the plugin namespace, directory traversal
      * and multiple plugin directories.
      *
-     * @param $filePath
+     * @param string $filePath
      * @return \ZipArchive
      */
     private function validatePluginZip($filePath)

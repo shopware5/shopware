@@ -46,9 +46,9 @@ class DownloadService
     private $storeClient;
 
     /**
-     * @var string
+     * @var array
      */
-    private $rootDir;
+    private $pluginDirectories;
 
     /**
      * @var Connection
@@ -56,18 +56,26 @@ class DownloadService
     private $connection;
 
     /**
-     * @param $rootDir
+     * @var string
+     */
+    private $rootDir;
+
+    /**
+     * @param string $rootDir
+     * @param array $pluginDirectories
      * @param StoreClient $storeClient
      * @param Connection $connection
      */
     public function __construct(
         $rootDir,
+        array $pluginDirectories,
         StoreClient $storeClient,
         Connection $connection
     ) {
-        $this->rootDir = $rootDir;
+        $this->pluginDirectories = $pluginDirectories;
         $this->storeClient = $storeClient;
         $this->connection = $connection;
+        $this->rootDir = $rootDir;
     }
 
     /**
@@ -76,6 +84,9 @@ class DownloadService
      */
     public function downloadRange(RangeDownloadRequest $request)
     {
+        // Load SwagUpdate so the DownloadStep can be autoloaded
+        Shopware()->Plugins()->Backend()->SwagUpdate();
+
         $version = new Version([
             'uri'  => $request->getUri(),
             'size' => $request->getSize(),
@@ -97,7 +108,8 @@ class DownloadService
         if (!$source) {
             $source = 'Community';
         }
-        $destination = $this->rootDir . '/engine/Shopware/Plugins/' . $source;
+
+        $destination = $this->pluginDirectories[$source];
 
         $extractor = new PluginExtractor();
         $extractor->extract($file, $destination);
