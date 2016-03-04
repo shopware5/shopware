@@ -302,12 +302,7 @@ class Kernel implements HttpKernelInterface
      */
     protected function initializeShopware()
     {
-        $this->shopware = new \Shopware(
-            $this->environment,
-            $this->config,
-            $this->container
-        );
-
+        $this->shopware = new \Shopware($this->container);
         $this->container->setApplication($this->shopware);
     }
 
@@ -582,10 +577,13 @@ class Kernel implements HttpKernelInterface
     }
 
     /**
+     * @deprecated since 5.2, to be removed in 5.3
      * @return \Shopware
      */
     public function getShopware()
     {
+        trigger_error('Shopware\Kernel::getShopware() is deprecated since version 5.2 and will be removed in 5.3.', E_USER_DEPRECATED);
+
         return $this->shopware;
     }
 

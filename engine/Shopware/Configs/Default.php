@@ -123,7 +123,7 @@ return array_replace_recursive([
         'save_handler' => 'db'
     ],
     'phpsettings' => [
-        'error_reporting' => E_ALL,
+        'error_reporting' => E_ALL & ~E_USER_DEPRECATED,
         'display_errors' => 1,
         'date.timezone' => 'Europe/Berlin',
     ],

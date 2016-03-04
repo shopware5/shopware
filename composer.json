@@ -58,6 +58,9 @@
         "symfony/polyfill-php55": "~1.0",
         "symfony/polyfill-mbstring": "~1.0"
     },
+    "include-path": [
+        "engine/Library/"
+    ],
     "autoload": {
         "psr-0": {
             "Doctrine\\Common\\Proxy\\AbstractProxyFactory": "engine/Library/",
