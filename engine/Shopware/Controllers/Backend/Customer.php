@@ -271,14 +271,14 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
      */
     public function getListAction()
     {
-            //read store parameter to filter and paginate the data.
+        //read store parameter to filter and paginate the data.
             $limit = $this->Request()->getParam('limit', 20);
-            $offset = $this->Request()->getParam('start', 0);
-            $sort = $this->Request()->getParam('sort', array(array('property' => 'customer.id', 'direction' => 'DESC')));
-            $filter = $this->Request()->getParam('filter', null);
-            $filter = $filter[0]['value'];
+        $offset = $this->Request()->getParam('start', 0);
+        $sort = $this->Request()->getParam('sort', array(array('property' => 'customer.id', 'direction' => 'DESC')));
+        $filter = $this->Request()->getParam('filter', null);
+        $filter = $filter[0]['value'];
 
-            $customerGroup = $this->Request()->getParam('customerGroup', null);
+        $customerGroup = $this->Request()->getParam('customerGroup', null);
 
             //get access on the customer repository
             $query = $this->getRepository()->getListQuery($filter, $customerGroup, $sort, $limit, $offset);
@@ -288,9 +288,9 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
 
             //returns the total count of the query because getQueryCount and the paginator are to slow with huge data
             $countQuery = $this->getRepository()->getBackendListCountedBuilder($filter, $customerGroup)->getQuery();
-            $countResult = $countQuery->getOneOrNullResult(Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        $countResult = $countQuery->getOneOrNullResult(Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
-            $this->View()->assign(array('success' => true, 'data' => $customers, 'total' => $countResult["customerCount"]));
+        $this->View()->assign(array('success' => true, 'data' => $customers, 'total' => $countResult["customerCount"]));
     }
 
     /**
@@ -303,15 +303,15 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
      */
     public function getDetailAction()
     {
-            $customerId = $this->Request()->getParam('customerID');
-            if ($customerId === null || $customerId === 0) {
-                $this->View()->assign(array('success' => false, 'message' => 'No customer id passed'));
-                return;
-            }
+        $customerId = $this->Request()->getParam('customerID');
+        if ($customerId === null || $customerId === 0) {
+            $this->View()->assign(array('success' => false, 'message' => 'No customer id passed'));
+            return;
+        }
 
-            $data = $this->getCustomer($customerId);
+        $data = $this->getCustomer($customerId);
 
-            $this->View()->assign(array('success' => true, 'data' => $data, 'total' => 1));
+        $this->View()->assign(array('success' => true, 'data' => $data, 'total' => 1));
     }
 
     /**
@@ -325,31 +325,31 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
      */
     public function getOrdersAction()
     {
-            if (!$this->_isAllowed('read', 'order')) {
-                /** @var $namespace Enlight_Components_Snippet_Namespace */
+        if (!$this->_isAllowed('read', 'order')) {
+            /** @var $namespace Enlight_Components_Snippet_Namespace */
                 $namespace = Shopware()->Snippets()->getNamespace('backend/customer');
 
-                $this->View()->assign(array(
+            $this->View()->assign(array(
                     'success' => false,
                     'data' => $this->Request()->getParams(),
                     'message' => $namespace->get('no_order_rights', 'You do not have sufficient rights to view customer orders.'))
                 );
-                return;
-            }
+            return;
+        }
 
-            $customerId = $this->Request()->getParam('customerID');
-            if ($customerId === null || $customerId === 0) {
-                $this->View()->assign(array('success' => false, 'message' => 'No customer id passed'));
-                return;
-            }
+        $customerId = $this->Request()->getParam('customerID');
+        if ($customerId === null || $customerId === 0) {
+            $this->View()->assign(array('success' => false, 'message' => 'No customer id passed'));
+            return;
+        }
 
-            $defaultSort = array('0' => array('property' => 'orderTime', 'direction' => 'DESC'));
+        $defaultSort = array('0' => array('property' => 'orderTime', 'direction' => 'DESC'));
 
-            $limit = $this->Request()->getParam('limit', 20);
-            $offset = $this->Request()->getParam('start', 0);
-            $sort = $this->Request()->getParam('sort', $defaultSort);
-            $filter = $this->Request()->getParam('filter', null);
-            $filter = $filter[0]['value'];
+        $limit = $this->Request()->getParam('limit', 20);
+        $offset = $this->Request()->getParam('start', 0);
+        $sort = $this->Request()->getParam('sort', $defaultSort);
+        $filter = $this->Request()->getParam('filter', null);
+        $filter = $filter[0]['value'];
 
             //get access on the customer getRepository()
             $query = $this->getRepository()->getOrdersQuery($customerId, $filter, $sort, $limit, $offset);
@@ -360,7 +360,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             //returns the customer data
             $orders = $query->getArrayResult();
 
-            $this->View()->assign(array('success' => true, 'data' => $orders, 'total' => $totalResult));
+        $this->View()->assign(array('success' => true, 'data' => $orders, 'total' => $totalResult));
     }
 
     /**
@@ -370,27 +370,27 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
      */
     public function getOrderChartAction()
     {
-            if (!$this->_isAllowed('read', 'order')) {
-                /** @var $namespace Enlight_Components_Snippet_Namespace */
+        if (!$this->_isAllowed('read', 'order')) {
+            /** @var $namespace Enlight_Components_Snippet_Namespace */
                 $namespace = Shopware()->Snippets()->getNamespace('backend/customer');
 
-                $this->View()->assign(array(
+            $this->View()->assign(array(
                     'success' => false,
                     'data' => $this->Request()->getParams(),
                     'message' => $namespace->get('no_order_rights', 'You do not have sufficient rights to view customer orders.'))
                 );
-                return;
-            }
+            return;
+        }
 
             //customer id passed?
             $customerId = $this->Request()->getParam('customerID');
-            if ($customerId === null || $customerId === 0) {
-                $this->View()->assign(array('success' => false, 'message' => 'No customer id passed'));
-                return;
-            }
-            $orders = $this->getChartData($customerId);
+        if ($customerId === null || $customerId === 0) {
+            $this->View()->assign(array('success' => false, 'message' => 'No customer id passed'));
+            return;
+        }
+        $orders = $this->getChartData($customerId);
 
-            $this->View()->assign(array('success' => true, 'data' => $orders));
+        $this->View()->assign(array('success' => true, 'data' => $orders));
     }
 
     /**
@@ -501,32 +501,32 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             $customer = new Customer();
         }
 
-            $params = $this->Request()->getParams();
+        $params = $this->Request()->getParams();
 
-            if (!$paymentData instanceof PaymentData && !empty($params['paymentData']) && array_filter($params['paymentData'][0])) {
-                $paymentData = new PaymentData();
-                $customer->addPaymentData($paymentData);
-                $paymentData->setPaymentMean(
+        if (!$paymentData instanceof PaymentData && !empty($params['paymentData']) && array_filter($params['paymentData'][0])) {
+            $paymentData = new PaymentData();
+            $customer->addPaymentData($paymentData);
+            $paymentData->setPaymentMean(
                     $this->getManager()->getRepository('Shopware\Models\Payment\Payment')->find($paymentId)
                 );
-            }
+        }
 
-            $params = $this->prepareCustomerData($params, $customer, $paymentData);
+        $params = $this->prepareCustomerData($params, $customer, $paymentData);
 
             //set parameter to the customer model.
             $customer->fromArray($params);
 
-            $password = $this->Request()->getParam('newPassword', null);
+        $password = $this->Request()->getParam('newPassword', null);
 
             //encode the password with md5
             if (!empty($password)) {
                 $customer->setPassword($password);
             }
 
-            $this->getManager()->persist($customer);
-            $this->getManager()->flush();
+        $this->getManager()->persist($customer);
+        $this->getManager()->flush();
 
-            $this->View()->assign(array(
+        $this->View()->assign(array(
                 'success' => true,
                 'data' => $this->getCustomer($customer->getId())
             ));
@@ -636,7 +636,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
      */
     public function deleteAction()
     {
-            //get posted customers
+        //get posted customers
             $customers = $this->Request()->getParam('customers', array(array('id' => $this->Request()->getParam('id'))));
 
             //iterate the customers and add the remove action
@@ -647,7 +647,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             //Performs all of the collected actions.
             $this->getManager()->flush();
 
-            $this->View()->assign(array(
+        $this->View()->assign(array(
                 'success' => true,
                 'data' => $this->Request()->getParams())
             );
@@ -714,7 +714,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             'action'    => 'performOrderRedirect',
             'shopId'    => $shop->getId(),
             'hash'      => $this->createPerformOrderRedirectHash($user['password']),
-            'sessionId' => Shopware()->SessionID(),
+            'sessionId' => Shopware()->Session()->get('sessionId'),
             'userId'    => $user['id'],
             'fullPath'  => true
         ));

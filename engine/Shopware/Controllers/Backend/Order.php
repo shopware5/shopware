@@ -1065,7 +1065,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             return;
         }
 
-        $mail = clone Shopware()->Mail();
+        $mail = clone Shopware()->Container()->get('mail');
         $mail->clearRecipients();
         $mail->setSubject($this->Request()->getParam('subject', ''));
         $mail->setBodyText($this->Request()->getParam('content', ''));

@@ -284,7 +284,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
                 AND   articleID = :articleId";
 
         $alreadyViewed = Shopware()->Db()->fetchOne($sql, array(
-            'sessionId' => Shopware()->SessionID(),
+            'sessionId' => Shopware()->Session()->get('sessionId'),
             'articleId' => $articleId
         ));
 
@@ -301,7 +301,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
         ";
 
         $articles = Shopware()->Db()->fetchCol($sql, array(
-            'sessionId' => Shopware()->SessionID(),
+            'sessionId' => Shopware()->Session()->get('sessionId'),
             'articleId' => $articleId
         ));
 
@@ -395,7 +395,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
             WHERE basket1.sessionID = :sessionId
         ";
         $combinations = Shopware()->Db()->fetchAll($sql, array(
-            'sessionId' => Shopware()->SessionID()
+            'sessionId' => Shopware()->Session()->get('sessionId')
         ));
 
         $this->AlsoBought()->refreshMultipleBoughtArticles($combinations);

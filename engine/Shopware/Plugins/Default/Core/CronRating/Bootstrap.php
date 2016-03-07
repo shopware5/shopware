@@ -67,7 +67,7 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
             $shop->registerResources();
 
             foreach ($positions[$orderId] as &$position) {
-                $position["link"] = Shopware()->Router()->assemble(array(
+                $position["link"] = Shopware()->Container()->get('router')->assemble(array(
                     'module' => 'frontend', 'sViewport' => 'detail',
                     'sArticle' => $position["articleID"]
                 ));

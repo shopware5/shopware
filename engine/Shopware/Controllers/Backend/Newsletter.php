@@ -214,7 +214,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
         $fromName = $template->fetch('string:' . $mailing['sendername'], $template);
 
         /** @var \Enlight_Components_Mail $mail */
-        $mail = clone Shopware()->Mail();
+        $mail = clone Shopware()->Container()->get('mail');
         $mail->setFrom($from, $fromName);
 
         $counter = 0;
@@ -407,7 +407,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
         $sql = 'SELECT * FROM s_core_customergroups WHERE groupkey=?';
         Shopware()->Session()->sUserGroupData =  Shopware()->Db()->fetchRow($sql, array($mailing['customergroup']));
 
-        Shopware()->Router()->setGlobalParam('module', 'frontend');
+        Shopware()->Container()->get('router')->setGlobalParam('module', 'frontend');
         Shopware()->Config()->DontAttachSession = true;
 
         return $mailing;

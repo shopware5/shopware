@@ -405,7 +405,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         if (!empty($this->View()->sPayment['embediframe'])) {
             $embedded = $this->View()->sPayment['embediframe'];
             $embedded = preg_replace('#^[./]+#', '', $embedded);
-            $embedded .= '?sCoreId='.Shopware()->SessionID();
+            $embedded .= '?sCoreId='.Shopware()->Session()->get('sessionId');
             $embedded .= '&sAGB=1';
 
             $this->View()->sEmbedded = $embedded;
@@ -868,7 +868,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         ';
         $row = Shopware()->Db()->fetchRow($sql, array(
                 $ordernumber,
-                Shopware()->SessionID(),
+                Shopware()->Session()->get('sessionId'),
             ));
         return $row;
     }
@@ -1089,7 +1089,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     public function getPremiums()
     {
         $sql = 'SELECT `id` FROM `s_order_basket` WHERE `sessionID`=? AND `modus`=1';
-        $result = Shopware()->Db()->fetchOne($sql, array(Shopware()->SessionID()));
+        $result = Shopware()->Db()->fetchOne($sql, array(Shopware()->Session()->get('sessionId')));
         if (!empty($result)) {
             return array();
         }
