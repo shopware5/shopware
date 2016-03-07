@@ -131,7 +131,7 @@ class Shopware_Tests_Plugins_Core_MarketingAggregate_Components_SimilarShownTest
 
         $countBefore = count($this->getAllSimilarShown());
         $this->saveConfig('similarRefreshStrategy', 3);
-        Shopware()->Cache()->clean();
+        Shopware()->Container()->get('cache')->clean();
 
         $this->setSimilarShownInvalid('2010-01-01', 'LIMIT 20');
 
@@ -148,7 +148,7 @@ class Shopware_Tests_Plugins_Core_MarketingAggregate_Components_SimilarShownTest
         $this->SimilarShown()->initSimilarShown();
 
         $this->saveConfig('similarRefreshStrategy', 2);
-        Shopware()->Cache()->clean();
+        Shopware()->Container()->get('cache')->clean();
 
         $this->setSimilarShownInvalid();
 

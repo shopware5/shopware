@@ -152,7 +152,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
      */
     public function getConfigAction()
     {
-        Shopware()->Cache()->remove('Shopware_Config');
+        Shopware()->Container()->get('cache')->remove('Shopware_Config');
         $this->View()->assign(array(
             'success' => true,
             'data' => $this->prepareConfigData()
@@ -203,7 +203,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         $data = $this->prepareDataForSaving($data);
         $this->saveConfigData($data);
 
-        Shopware()->Cache()->remove('Shopware_Config');
+        Shopware()->Container()->get('cache')->remove('Shopware_Config');
 
         // Reload config, so that the actual config from the
         // db is returned
@@ -602,7 +602,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         $offset = $this->Request()->getParam('offset', 0);
         $limit  = $this->Request()->getParam('limit', null);
 
-        $component = Shopware()->CategoryDenormalization();
+        $component = Shopware()->Container()->get('CategoryDenormalization');
 
         if ($offset == 0) {
             $component->rebuildCategoryPath();
@@ -619,7 +619,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
 
     public function prepareTreeAction()
     {
-        $component = Shopware()->CategoryDenormalization();
+        $component = Shopware()->Container()->get('CategoryDenormalization');
 
         $component->removeOrphanedAssignments();
 

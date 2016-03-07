@@ -32,22 +32,25 @@ class Shopware_Tests_Plugins_Core_MarketingAggregate_AbstractMarketing extends E
     /**
      * @return Shopware_Components_SimilarShown
      */
-    protected function SimilarShown() {
-        return Shopware()->SimilarShown();
+    protected function SimilarShown()
+    {
+        return Shopware()->Container()->get('SimilarShown');
     }
 
     /**
      * @return Shopware_Components_TopSeller
      */
-    protected function TopSeller() {
-        return Shopware()->TopSeller();
+    protected function TopSeller()
+    {
+        return Shopware()->Container()->get('TopSeller');
     }
 
     /**
      * @return Shopware_Components_AlsoBought
      */
-    protected function AlsoBought() {
-        return Shopware()->AlsoBought();
+    protected function AlsoBought()
+    {
+        return Shopware()->Container()->get('AlsoBought');
     }
 
     /**

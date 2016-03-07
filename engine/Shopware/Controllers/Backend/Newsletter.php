@@ -82,7 +82,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
     {
         if ($this->Request()->getParam('id')) {
             $mailingID = (int) $this->Request()->getParam('id');
-            if (!Shopware()->Auth()->hasIdentity()) {
+            if (!Shopware()->Container()->get('Auth')->hasIdentity()) {
                 $hash = $this->createHash($mailingID);
                 if ($hash!==$this->Request()->getParam('hash')) {
                     return;
@@ -144,7 +144,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
     {
         $mailingID = (int) $this->Request()->getParam('id');
 
-        if (!empty($mailingID) && !Shopware()->Auth()->hasIdentity()) {
+        if (!empty($mailingID) && !Shopware()->Container()->get('Auth')->hasIdentity()) {
             return;
         }
 

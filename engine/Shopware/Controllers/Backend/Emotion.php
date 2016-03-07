@@ -324,8 +324,8 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
             }
 
             unset($data['user']);
-            if (Shopware()->Auth()->getIdentity()->id) {
-                $data['user'] = Shopware()->Models()->find('Shopware\Models\User\User', Shopware()->Auth()->getIdentity()->id);
+            if (Shopware()->Container()->get('Auth')->getIdentity()->id) {
+                $data['user'] = Shopware()->Models()->find('Shopware\Models\User\User', Shopware()->Container()->get('Auth')->getIdentity()->id);
             }
             if (!$data['parentId']) {
                 $emotion->setParentId(null);

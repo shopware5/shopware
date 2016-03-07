@@ -57,8 +57,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         $filter = $this->Request()->getParam('filter');
         $repository = $this->getRepository('form');
 
-
-        $user = Shopware()->Auth()->getIdentity();
+        $user = Shopware()->Container()->get('Auth')->getIdentity();
         /** @var $locale \Shopware\Models\Shop\Locale */
         $locale = $user->locale;
 
@@ -110,7 +109,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
     {
         $repository = $this->getRepository('form');
 
-        $user = Shopware()->Auth()->getIdentity();
+        $user = Shopware()->Container()->get('Auth')->getIdentity();
         /** @var $locale \Shopware\Models\Shop\Locale */
         $locale = $user->locale;
         $language = $locale->toString();
@@ -647,9 +646,9 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                     $data['widget'] = $mappingRepository->find($data['widgetId']);
                     unset($data['widgetId']);
                 }
-                if (Shopware()->Auth()->hasIdentity()) {
+                if (Shopware()->Container()->get('Auth')->hasIdentity()) {
                     $mappingRepository = $this->getRepository('auth');
-                    $authId = Shopware()->Auth()->getIdentity()->id;
+                    $authId = Shopware()->Container()->get('Auth')->getIdentity()->id;
                     $data['auth'] = $mappingRepository->find($authId);
                 }
                 break;

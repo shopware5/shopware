@@ -71,7 +71,7 @@ class OrderHistorySubscriber implements EventSubscriber
         );
 
         if ($this->hasIdentity()) {
-            $user = $eventArgs->getEntityManager()->find('Shopware\Models\User\User', Shopware()->Auth()->getIdentity()->id);
+            $user = $eventArgs->getEntityManager()->find('Shopware\Models\User\User', Shopware()->Container()->get('Auth')->getIdentity()->id);
             $historyData['userID'] = $user->getId();
         }
 
@@ -102,7 +102,7 @@ class OrderHistorySubscriber implements EventSubscriber
     private function hasIdentity()
     {
         return Shopware()->Container()->initialized('auth') &&
-            Shopware()->Auth()->getIdentity() &&
-            Shopware()->Auth()->getIdentity()->id;
+            Shopware()->Container()->get('Auth')->getIdentity() &&
+            Shopware()->Container()->get('Auth')->getIdentity()->id;
     }
 }

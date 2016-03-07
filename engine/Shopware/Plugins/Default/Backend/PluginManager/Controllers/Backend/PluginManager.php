@@ -612,7 +612,7 @@ class Shopware_Controllers_Backend_PluginManager
      */
     private function getLocale()
     {
-        return Shopware()->Auth()->getIdentity()->locale->getLocale();
+        return Shopware()->Container()->get('Auth')->getIdentity()->locale->getLocale();
     }
 
     /**

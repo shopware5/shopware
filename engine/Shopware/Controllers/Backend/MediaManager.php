@@ -573,7 +573,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         $media->setDescription('');
         $media->setCreated(new DateTime());
 
-        $identity = Shopware()->Auth()->getIdentity();
+        $identity = Shopware()->Container()->get('Auth')->getIdentity();
         if ($identity !== null) {
             $media->setUserId($identity->id);
         } else {

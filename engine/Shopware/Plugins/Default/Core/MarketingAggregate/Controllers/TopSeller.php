@@ -36,7 +36,7 @@ class Shopware_Controllers_Backend_TopSeller extends Shopware_Controllers_Backen
      */
     public function TopSeller()
     {
-        return Shopware()->TopSeller();
+        return Shopware()->Container()->get('TopSeller');
     }
 
     /**

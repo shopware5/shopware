@@ -132,7 +132,7 @@ class Shopware_Tests_Plugins_Core_MarketingAggregate_Components_TopSellerTest ex
         $this->TopSeller()->initTopSeller();
 
         $this->saveConfig('topSellerRefreshStrategy', 3);
-        Shopware()->Cache()->clean();
+        Shopware()->Container()->get('cache')->clean();
 
         $this->Db()->query("UPDATE s_articles_top_seller_ro SET last_cleared = '2010-01-01'");
 
@@ -149,7 +149,7 @@ class Shopware_Tests_Plugins_Core_MarketingAggregate_Components_TopSellerTest ex
         $this->TopSeller()->initTopSeller();
 
         $this->saveConfig('topSellerRefreshStrategy', 2);
-        Shopware()->Cache()->clean();
+        Shopware()->Container()->get('cache')->clean();
 
         $this->Db()->query("UPDATE s_articles_top_seller_ro SET last_cleared = '2010-01-01'");
 
@@ -178,7 +178,7 @@ class Shopware_Tests_Plugins_Core_MarketingAggregate_Components_TopSellerTest ex
         $this->TopSeller()->initTopSeller();
 
         $this->saveConfig('topSellerRefreshStrategy', 1);
-        Shopware()->Cache()->clean();
+        Shopware()->Container()->get('cache')->clean();
 
         $this->Db()->query("UPDATE s_articles_top_seller_ro SET last_cleared = '2010-01-01'");
 

@@ -34,7 +34,7 @@ class Shopware_RegressionTests_Ticket5217 extends Enlight_Components_Test_TestCa
      */
     public function testMailTransport()
     {
-        $mailTransport = Shopware()->MailTransport();
+        $mailTransport = Shopware()->Container()->get('MailTransport');
 
         $mail = new Enlight_Components_Mail();
 

@@ -417,7 +417,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
     public function getShopwareNewsAction()
     {
         /** @var $auth Shopware_Components_Auth */
-        $auth = Shopware()->Auth();
+        $auth = Shopware()->Container()->get('Auth');
         $user = $auth->getIdentity();
         $result = $this->fetchRssFeedData($user->locale, 5);
 

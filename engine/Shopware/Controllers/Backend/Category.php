@@ -125,7 +125,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
      */
     public function getCategoryComponent()
     {
-        return Shopware()->CategoryDenormalization();
+        return Shopware()->Container()->get('CategoryDenormalization');
     }
 
     /**

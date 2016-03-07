@@ -36,7 +36,7 @@ class Shopware_Controllers_Backend_AlsoBought extends Shopware_Controllers_Backe
      */
     public function AlsoBought()
     {
-        return Shopware()->AlsoBought();
+        return Shopware()->Container()->get('AlsoBought');
     }
 
 
