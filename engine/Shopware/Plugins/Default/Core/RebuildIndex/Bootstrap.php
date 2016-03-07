@@ -108,7 +108,7 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
      */
     public function SeoIndex()
     {
-        return Shopware()->SeoIndex();
+        return Shopware()->Container()->get('SeoIndex');
     }
 
     /**

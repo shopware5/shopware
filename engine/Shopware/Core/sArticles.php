@@ -436,7 +436,7 @@ class sArticles
      */
     public function sGetArticlesByCategory($categoryId = null, SearchBundle\Criteria $criteria = null)
     {
-        if (Enlight()->Events()->notifyUntil('Shopware_Modules_Articles_sGetArticlesByCategory_Start', array(
+        if (Shopware()->Events()->notifyUntil('Shopware_Modules_Articles_sGetArticlesByCategory_Start', array(
                 'subject' => $this,
                 'id'      => $categoryId
             ))) {
@@ -707,7 +707,7 @@ class sArticles
         $result = $this->searchService->search($criteria, $context);
         $articles = $this->legacyStructConverter->convertListProductStructList($result->getProducts());
 
-        Enlight()->Events()->notify(
+        Shopware()->Events()->notify(
             'Shopware_Modules_Articles_GetArticleCharts',
             array('subject' => $this, 'category' => $category, 'articles' => $articles)
         );
@@ -1328,13 +1328,13 @@ class sArticles
      */
     public function sGetProductByOrdernumber($ordernumber)
     {
-        if (Enlight()->Events()->notifyUntil('Shopware_Modules_Articles_sGetProductByOrdernumber_Start', array('subject' => $this, 'value' => $ordernumber))) {
+        if (Shopware()->Events()->notifyUntil('Shopware_Modules_Articles_sGetProductByOrdernumber_Start', array('subject' => $this, 'value' => $ordernumber))) {
             return false;
         }
 
         $getPromotionResult = $this->getPromotion(null, $ordernumber);
 
-        $getPromotionResult = Enlight()->Events()->filter(
+        $getPromotionResult = Shopware()->Events()->filter(
             'Shopware_Modules_Articles_sGetProductByOrdernumber_FilterResult',
             $getPromotionResult,
             array('subject' => $this, 'value' => $ordernumber)
@@ -1653,7 +1653,7 @@ class sArticles
         //first we convert the passed article id into an integer to prevent sql injections
         $articleId = (int) $sArticleID;
 
-        Enlight()->Events()->notify(
+        Shopware()->Events()->notify(
             'Shopware_Modules_Articles_GetArticlePictures_Start',
             array('subject' => $this, 'id' => $articleId)
         );
@@ -1666,7 +1666,7 @@ class sArticles
         }
 
         if ($onlyCover) {
-            $cover = Enlight()->Events()->filter(
+            $cover = Shopware()->Events()->filter(
                 'Shopware_Modules_Articles_GetArticlePictures_FilterResult',
                 $cover,
                 array('subject' => $this, 'id' => $articleId)
@@ -1721,7 +1721,7 @@ class sArticles
             }
         }
 
-        $images = Enlight()->Events()->filter(
+        $images = Shopware()->Events()->filter(
             'Shopware_Modules_Articles_GetArticlePictures_FilterResult',
             $images,
             array('subject' => $this, 'id' => $articleId)

@@ -190,7 +190,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             $data[$entry['name']] = $value;
         }
 
-        $data = Enlight()->Events()->filter(
+        $data = Shopware()->Events()->filter(
             'Shopware_Controllers_Widgets_Emotion_AddElement',
             $data,
             array('subject' => $this, 'element' => $element)
@@ -588,7 +588,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
                     $query['sCategory'] = $category;
                 }
 
-                $value["link"] = Shopware()->Router()->assemble($query);
+                $value["link"] = Shopware()->Container()->get('router')->assemble($query);
             }
         }
 
@@ -684,7 +684,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
                     'streamId' => $data['article_slider_stream'],
                 );
 
-                $data["ajaxFeed"] = Shopware()->Router()->assemble($query);
+                $data["ajaxFeed"] = Shopware()->Container()->get('router')->assemble($query);
 
                 break;
             case "selected_article":
@@ -716,7 +716,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
                     'action' => 'emotionArticleSlider',
                     'sort' => $data["article_slider_type"]
                 );
-                $data["ajaxFeed"] = Shopware()->Router()->assemble($query);
+                $data["ajaxFeed"] = Shopware()->Container()->get('router')->assemble($query);
                 break;
             default;
                 // Prevent the slider form endless loading

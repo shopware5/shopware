@@ -31,7 +31,7 @@ use Enlight\Event\SubscriberInterface;
  * notify function. <br><br>
  *
  * Example to execute an event manuel:<br>
- *       Enlight_Application::Instance()->Events()->notify(
+ *       Shopware()->Events()->notify(
  *           'Enlight_Controller_Front_StartDispatch',
  *           array('subject' => $this)
  *       );

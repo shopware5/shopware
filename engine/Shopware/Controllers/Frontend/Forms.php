@@ -309,7 +309,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
         $mail->setBodyText($mailBody);
         $mail->setSubject($content["email_subject"]);
 
-        $mail = Enlight()->Events()->filter('Shopware_Controllers_Frontend_Forms_commitForm_Mail', $mail, array('subject' => $this));
+        $mail = Shopware()->Events()->filter('Shopware_Controllers_Frontend_Forms_commitForm_Mail', $mail, array('subject' => $this));
 
         if (!$mail->send()) {
             throw new Enlight_Exception("Could not send mail");

@@ -83,6 +83,25 @@ In this document you will find a changelog of the important changes related to t
 * Changed constructor of `\Shopware\Components\Theme\PathResolver`
 * Changed constructor of `\Shopware_Components_Snippet_Manager`
 * Changed constructor of `\Shopware\Bundle\PluginInstallerBundle\Service\DownloadService`
+* Deprecated methods now use `trigger_error` of type `E_USER_DEPRECATED`
+* Changed default error_reporting to `E_ALL & ~E_USER_DEPRECATED`
+* Deprecated Class `Enlight_Application`
+* Deprecated `Enlight_Application::Instance()` and `Enlight()`, use `Shopware()` instead
+* Deprecated `Shopware\Kernel::getShopware()`
+* Deprecated `Shopware::App()` / `Shopware()->App()`
+* Deprecated `Shopware::Environment()` / `Shopware()->Environment()`
+* Deprecated `Shopware::OldPath()` / `Shopware()->OldPath()`
+* Deprecated `Shopware::setEventManager()` / `Shopware()->setEventManager()`
+* Deprecated `Enlight_Application::CorePath()` / `Shopware()->CorePath()`
+* Deprecated `Enlight_Application::Path()` / `Shopware()->Path()`
+* Deprecated `Enlight_Application::ComponentsPath()` / `Shopware()->ComponentsPath()`
+* Deprecated `Enlight_Application::DS()`
+* Removed `Enlight_Application::setOptions()`
+* Removed `Enlight_Application::getOptions()`
+* Removed `Enlight_Application::getOption()`
+* Removed `Enlight_Application::setPhpSettings()`
+* Removed `Enlight_Application::setIncludePaths()`
+* Removed `Enlight_Application::__callStatic()`
 
 ## 5.1.4
 * Customer logout will now regenerate the session id and clear the customers basket.

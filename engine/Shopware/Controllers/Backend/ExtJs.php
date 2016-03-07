@@ -162,7 +162,7 @@ class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Action
 
         $attemptedLanguage = substr($identity->locale->getLocale(), 0, 2);
 
-        if (file_exists(Shopware()->OldPath() . "engine/Library/TinyMce/langs/".$attemptedLanguage.".js")) {
+        if (file_exists(Shopware()->DocPath() . "engine/Library/TinyMce/langs/".$attemptedLanguage.".js")) {
             return $attemptedLanguage;
         }
 

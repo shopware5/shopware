@@ -640,7 +640,7 @@ class sMarketing
             WHERE promotionID=$id
             ORDER BY position
             ";
-            $sql = Enlight()->Events()->filter('Shopware_Modules_Marketing_MailCampaignsGetDetail_FilterSQL', $sql,
+            $sql = Shopware()->Events()->filter('Shopware_Modules_Marketing_MailCampaignsGetDetail_FilterSQL', $sql,
                 array(
                     'subject' => $this,
                     'id' => $id

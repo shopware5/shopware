@@ -1614,7 +1614,7 @@ class Media extends ModelEntity
             //rename the file
             $mediaService->rename($this->path, $newPath);
 
-            $newPath = str_replace(Shopware()->OldPath(), '', $newPath);
+            $newPath = str_replace(Shopware()->DocPath(), '', $newPath);
 
             //set the new path to save it.
             $this->path = $newPath;
@@ -1806,7 +1806,7 @@ class Media extends ModelEntity
                 $this->name = $this->name . uniqid();
                 // Path in setFileInfo is set, before the file gets a unique ID here
                 // Therefore the path is updated here SW-2889
-                $this->path = str_replace(Shopware()->OldPath(), '', $this->getUploadDir() . $this->getFileName());
+                $this->path = str_replace(Shopware()->DocPath(), '', $this->getUploadDir() . $this->getFileName());
 
                 /**
                  * SW-3805 - Hotfix for windows path's
@@ -1951,7 +1951,7 @@ class Media extends ModelEntity
             );
 
             $path = $this->getThumbnailDir() . $fileName;
-            $path = str_replace(Shopware()->OldPath(), '', $path);
+            $path = str_replace(Shopware()->DocPath(), '', $path);
             if (DIRECTORY_SEPARATOR !== '/') {
                 $path = str_replace(DIRECTORY_SEPARATOR, '/', $path);
             }
@@ -2169,7 +2169,7 @@ class Media extends ModelEntity
         $this->fileSize  = $this->file->getSize();
         $this->name      = $this->removeSpecialCharacters($name);
         $this->extension = str_replace('jpeg', 'jpg', $extension);
-        $this->path = str_replace(Shopware()->OldPath(), '', $this->getUploadDir() . $this->getFileName());
+        $this->path = str_replace(Shopware()->DocPath(), '', $this->getUploadDir() . $this->getFileName());
 
         if (DIRECTORY_SEPARATOR !== '/') {
             $this->path = str_replace(DIRECTORY_SEPARATOR, '/', $this->path);

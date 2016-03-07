@@ -45,7 +45,7 @@ function smarty_function_compileJavascript($params, $template)
     );
 
     /** @var $front Enlight_Controller_Front */
-    $front = Enlight_Application::Instance()->Front();
+    $front = Shopware()->Front();
     $secure = $front->Request()->isSecure();
 
     $file = $pathResolver->getJsFilePath($shop, $time);

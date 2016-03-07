@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-include_once(Shopware()->OldPath() . "engine/Library/Mpdf/mpdf.php");
+include_once(Shopware()->DocPath() . "engine/Library/Mpdf/mpdf.php");
 
 /**
  * Shopware document generator
@@ -250,7 +250,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
                 $mpdf->Output();
                 exit;
             } else {
-                $path = Shopware()->OldPath()."files/documents"."/".$this->_documentHash.".pdf";
+                $path = Shopware()->DocPath()."files/documents"."/".$this->_documentHash.".pdf";
                 $mpdf = new mPDF("utf-8", "A4", "", "", $this->_document["left"], $this->_document["right"], $this->_document["top"], $this->_document["bottom"]);
                 $mpdf->WriteHTML($data);
                 $mpdf->Output($path, "F");

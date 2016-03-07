@@ -85,7 +85,7 @@ class Shopware_Controllers_Frontend_Note extends Enlight_Controller_Action
 
     public function ajaxAddAction()
     {
-        Enlight()->Plugins()->Controller()->Json()->setPadding();
+        Shopware()->Plugins()->Controller()->Json()->setPadding();
 
         $this->Front()->Plugins()->ViewRenderer()->setNoRender();
 

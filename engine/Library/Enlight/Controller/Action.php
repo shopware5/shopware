@@ -89,11 +89,11 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
 
         $this->controller_name = $this->Front()->Dispatcher()->getFullControllerName($this->Request());
 
-        Enlight_Application::Instance()->Events()->notify(
+        Shopware()->Events()->notify(
             __CLASS__ . '_Init',
             array('subject' => $this, 'request' => $this->Request(), 'response' => $this->Response())
         );
-        Enlight_Application::Instance()->Events()->notify(
+        Shopware()->Events()->notify(
             __CLASS__ . '_Init_' . $this->controller_name,
             array('subject' => $this, 'request' => $this->Request(), 'response' => $this->Response())
         );
@@ -132,17 +132,17 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
 
         $moduleName = ucfirst($this->Request()->getModuleName());
 
-        Enlight_Application::Instance()->Events()->notify(
+        Shopware()->Events()->notify(
             __CLASS__ . '_PreDispatch',
             $args
         );
 
-        Enlight_Application::Instance()->Events()->notify(
+        Shopware()->Events()->notify(
             __CLASS__ . '_PreDispatch_' . $moduleName,
             $args
         );
 
-        Enlight_Application::Instance()->Events()->notify(
+        Shopware()->Events()->notify(
             __CLASS__ . '_PreDispatch_' . $this->controller_name,
             $args
         );
@@ -151,7 +151,7 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
 
         if ($this->Request()->isDispatched() && !$this->Response()->isRedirect()) {
             $action_name = $this->Front()->Dispatcher()->getFullActionName($this->Request());
-            if (!$event = Enlight_Application::Instance()->Events()->notifyUntil(
+            if (!$event = Shopware()->Events()->notifyUntil(
                 __CLASS__ . '_' . $action_name,
                 array('subject' => $this)
             )
@@ -169,34 +169,34 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
             && !$this->Response()->isException()
             && $this->View()->hasTemplate()
         ) {
-            Enlight_Application::Instance()->Events()->notify(
+            Shopware()->Events()->notify(
                 __CLASS__ . '_PostDispatchSecure_' . $this->controller_name,
                 $args
             );
 
-            Enlight_Application::Instance()->Events()->notify(
+            Shopware()->Events()->notify(
                 __CLASS__ . '_PostDispatchSecure_' . $moduleName,
                 $args
             );
 
-            Enlight_Application::Instance()->Events()->notify(
+            Shopware()->Events()->notify(
                 __CLASS__ . '_PostDispatchSecure',
                 $args
             );
         }
 
         // fire non-secure/legacy-PostDispatch-Events
-        Enlight_Application::Instance()->Events()->notify(
+        Shopware()->Events()->notify(
             __CLASS__ . '_PostDispatch_' . $this->controller_name,
             $args
         );
 
-        Enlight_Application::Instance()->Events()->notify(
+        Shopware()->Events()->notify(
             __CLASS__ . '_PostDispatch_' . $moduleName,
             $args
         );
 
-        Enlight_Application::Instance()->Events()->notify(
+        Shopware()->Events()->notify(
             __CLASS__ . '_PostDispatch',
             $args
         );

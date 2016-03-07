@@ -85,9 +85,7 @@ class Shopware_Controllers_Backend_Systeminfo extends Shopware_Controllers_Backe
      */
     public function getFileListAction()
     {
-        $fileName = Shopware()->AppPath() . '/Components/Check/Data/Files.md5sums';
-
-
+        $fileName = __DIR__ . '/../../Components/Check/Data/Files.md5sums';
         if (!is_file($fileName)) {
             $this->View()->assign(array('success' => true, 'data' => array()));
             return;

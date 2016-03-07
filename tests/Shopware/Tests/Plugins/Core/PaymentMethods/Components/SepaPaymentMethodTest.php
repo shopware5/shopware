@@ -42,7 +42,7 @@ class Shopware_Tests_Plugins_Core_PaymentMethods_SepaPaymentMethod extends Enlig
     {
         parent::setUpBeforeClass();
 
-        $helper = \TestHelper::Instance();
+        $helper = Shopware();
         $loader = $helper->Loader();
 
         $pluginDir = $helper->DocPath() . 'engine/Shopware/Plugins/Default/Core/PaymentMethods';

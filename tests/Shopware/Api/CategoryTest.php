@@ -11,7 +11,7 @@ class Shopware_Tests_Api_CategoryTest extends PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
-        $helper = TestHelper::Instance();
+        $helper = Shopware();
 
         $hostname = $helper->Shop()->getHost();
         if (empty($hostname)) {

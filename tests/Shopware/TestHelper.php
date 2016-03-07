@@ -22,6 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\DependencyInjection\Container;
+
 require __DIR__ . '/../../autoload.php';
 
 
@@ -42,15 +44,13 @@ class TestHelper extends Shopware
     protected $testPath;
 
     /**
-     * Constructor method
-     *
-     * Loads all needed resources for the test.
+     * @param Container $container
      */
-    public function __construct($env, $config, $container)
+    public function __construct($container)
     {
         $this->testPath = __DIR__ . '/';
 
-        parent::__construct($env, $config, $container);
+        parent::__construct($container);
     }
 
     /**
@@ -74,12 +74,7 @@ class TestKernel extends \Shopware\Kernel
 {
     protected function initializeShopware()
     {
-        $this->shopware = new \TestHelper(
-            $this->environment,
-            $this->getConfig(),
-            $this->container
-        );
-
+        $this->shopware = new \TestHelper($this->container);
         $this->container->setApplication($this->shopware);
     }
 
