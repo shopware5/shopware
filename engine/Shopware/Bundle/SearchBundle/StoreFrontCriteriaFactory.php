@@ -57,6 +57,11 @@ class StoreFrontCriteriaFactory implements StoreFrontCriteriaFactoryInterface
     private $eventManager;
 
     /**
+     * @var CriteriaRequestHandlerInterface[]
+     */
+    private $requestHandlers;
+
+    /**
      * @param \Shopware_Components_Config $config
      * @param \Enlight_Event_EventManager $eventManager
      * @param CriteriaRequestHandlerInterface[] $requestHandlers
