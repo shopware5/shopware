@@ -8,7 +8,7 @@
         {block name="widget_emotion_component_video_element"}
             {strip}
             <video class="video--element"
-                   poster="none"
+                   poster=""
                    {if $Data.autobuffer} preload{/if}
                    {if $Data.autoplay} autoplay{/if}
                    {if $Data.loop} loop{/if}
