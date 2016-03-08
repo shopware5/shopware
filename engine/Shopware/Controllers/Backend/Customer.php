@@ -554,7 +554,9 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             'amount' => $data['amount'],
             'shopName' => $data['shopName'],
             'language' => $data['language'],
-            'canceledOrderAmount' => $data['canceledOrderAmount']
+            'canceledOrderAmount' => $data['canceledOrderAmount'],
+            'defaultBillingAddressId' => $data['defaultBillingAddressId'],
+            'defaultShippingAddressId' => $data['defaultShippingAddressId']
         );
 
         $data = array_merge($orderInfo, $data[0]);

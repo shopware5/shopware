@@ -207,6 +207,8 @@ class Repository extends ModelRepository
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array(
             'customer',
+            'IDENTITY(customer.defaultBillingAddress) as defaultBillingAddressId',
+            'IDENTITY(customer.defaultShippingAddress) as defaultShippingAddressId',
             'billing',
             'shipping',
             'paymentData',
@@ -234,6 +236,7 @@ class Repository extends ModelRepository
                 ->where($builder->expr()->eq('customer.id', $customerId));
 
         $builder->groupBy('customer.id');
+
         return $builder;
     }
 
