@@ -180,10 +180,6 @@ class Shopware_Plugins_Core_ErrorHandler_Bootstrap extends Shopware_Components_P
             return;
         }
 
-        if ($errno === E_USER_DEPRECATED) {
-            throw new ErrorException($this->_errorLevelList[$errno].': '.$errstr, 0, $errno, $errfile, $errline);
-        }
-
         // Ignore access to not initialized variables in smarty templates
         if ($errno === E_NOTICE && stripos($errfile, '/var/cache/') !== false && stripos($errfile, '/templates/') !== false) {
             return;
@@ -202,7 +198,6 @@ class Shopware_Plugins_Core_ErrorHandler_Bootstrap extends Shopware_Components_P
                     'file' => $errfile
                 );
             } else {
-
                 ++$this->_errorList[$hash_id]['count'];
             }
         }
