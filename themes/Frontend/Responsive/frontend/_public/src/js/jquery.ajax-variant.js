@@ -74,6 +74,8 @@
             var me = this,
                 location;
 
+            var categoryid = this.getUrlParameter('c');
+
             // `location.origin` isn't available in IE 11, so we have to create it
             if (!window.location.origin) {
                 window.location.origin = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port: '');
@@ -86,10 +88,15 @@
                 delay: 100
             });
 
-            $.publish('plugin/swAjaxVariant/onBeforeRequestData', [ me, values, location ]);
+            var url = location + '?template=ajax';
+            if (categoryid) {
+                url = url + '&c=' + categoryid;
+            }
+
+            $.publish('plugin/swAjaxVariant/onBeforeRequestData', [ me, values, url ]);
 
             $.ajax({
-                url: location + '?template=ajax',
+                url: location + url,
                 data: values || '',
                 method: 'GET',
                 success: function(response) {
@@ -123,7 +130,7 @@
                 }
             });
         },
-
+        
         /**
          * Event handler method which will be fired when the user click the back button
          * in it's browser.
@@ -186,6 +193,21 @@
             $.publish('plugin/swAjaxVariant/onChange', [ me, values, $target ]);
 
             me.requestData(values, true);
+        },
+        // Private function to get existing url params
+        getUrlParameter: function getUrlParameter(sParam) {
+            var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+                sURLVariables = sPageURL.split('&'),
+                sParameterName,
+                i;
+
+            for (i = 0; i < sURLVariables.length; i++) {
+                sParameterName = sURLVariables[i].split('=');
+
+                if (sParameterName[0] === sParam) {
+                    return sParameterName[1] === undefined ? true : sParameterName[1];
+                }
+            }
         }
     });
 })(jQuery, window);
