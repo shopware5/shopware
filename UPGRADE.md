@@ -11,6 +11,7 @@ In this document you will find a changelog of the important changes related to t
 * change email validation to a simple regex: `/^.+\@\S+\.\S+$/`. You can implement your own email validation by implementing the `EmailValidatorInterface`.
 * Optimized header lookups for `x-shopware-cache-id` will improve HTTP-Cache invalidation performance. Old behaviour can be restored by setting `lookup_optimization` to false
 * Added css rule in order to remove bottom border from last child of `.emotion--html > .html--content` so there is no scrollbar when only whitespace would overlap parent div
+* Enabled product streams for parent categories
 
 ## 5.1.3
 * Switch Grunt to relativeUrls to unify the paths to less.php
