@@ -4129,7 +4129,7 @@ class sAdmin
      * @param $plaintext
      * @param $hash
      */
-    private function loginUser($getUser, $email, $password, $isPreHashed, $encoderName, $plaintext, $hash)
+    public function loginUser($getUser, $email, $password, $isPreHashed, $encoderName, $plaintext, $hash)
     {
         $this->regenerateSessionId();
 
