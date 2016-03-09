@@ -339,28 +339,12 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
     private function convertCategories($categories)
     {
         $converter = Shopware()->Container()->get('legacy_struct_converter');
+
         return array_map(function (Category $category) use ($converter) {
-            $data = [
-                'id' => $category->getId(),
-                'name' => $category->getName(),
-                'parentId' => $category->getParentId(),
-                'hidetop' => !$category->displayInNavigation(),
-                'external' => $category->getExternalLink(),
-                'active' => 1,
-                'cmsHeadline' => $category->getCmsHeadline(),
-                'cmsText' => $category->getCmsText(),
-                'position' => $category->getPosition(),
-                'link' => 'shopware.php?sViewport=cat&sCategory=' . $category->getId(),
-                'media' => null,
-                'flag' => false
-            ];
+            $data = $converter->convertCategoryStruct($category);
 
-            if ($category->isBlog()) {
-                $data['link'] = 'shopware.php?sViewport=blog&sCategory=' . $category->getId();
-            }
-
+            $data['flag'] = false;
             if ($category->getMedia()) {
-                $data['media'] = $converter->convertMediaStruct($category->getMedia());
                 $data['media']['path'] = $category->getMedia()->getFile();
             }
             return $data;
