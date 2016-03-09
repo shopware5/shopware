@@ -66,7 +66,7 @@ class Enlight_Event_Subscriber_Config extends Enlight_Event_Subscriber
         } elseif (isset($options['storage']) && $options['storage'] instanceof Enlight_Config) {
             $this->storage = $options['storage'];
         } else {
-            throw new Enlight_Event_Exception('');
+            throw new Enlight_Event_Exception('No storage provided');
         }
     }
 
@@ -103,7 +103,10 @@ class Enlight_Event_Subscriber_Config extends Enlight_Event_Subscriber
      */
     public function removeListener(Enlight_Event_Handler $handler)
     {
-        $this->listeners = array_diff($this->listeners, array($handler));
+        $handlerIndex = array_search($handler, $this->listeners);
+        if ($handlerIndex !== false) {
+            array_splice($this->listeners, $handlerIndex, 1);
+        }
         return $this;
     }
 
