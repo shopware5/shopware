@@ -344,6 +344,9 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
         updateButton.setDisabled(false);
         columns[1].setValue(record.get('number'));
         columns[2].setValue(record.get('name'));
+
+        // Update articleId for row
+        editor.context.record.set('articleId', record.get('articleId'));
     },
 
 
