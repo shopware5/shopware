@@ -23,7 +23,7 @@
 
         {if !$sSuccess}
 
-		<form name="mailtofriend" action="" method="post">
+		<form name="mailtofriend" method="post">
 			<input type="hidden" name="sMailTo" value="1" />
 			<input type="hidden" name="sDetails" value="{$sArticle.articleID}" />
 

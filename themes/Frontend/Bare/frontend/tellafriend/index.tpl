@@ -21,7 +21,7 @@
 			{if !$sSuccess}
 
 				{block name='frontend_tellafriend_form'}
-					<form name="mailtofriend" class="panel tellafriend--form has--border is--rounded" action="" method="post">
+					<form name="mailtofriend" class="panel tellafriend--form has--border is--rounded" method="post">
 					<input type="hidden" name="sMailTo" value="1"/>
 					<input type="hidden" name="sDetails" value="{$sArticle.articleID}"/>
 
