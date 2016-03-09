@@ -29,7 +29,9 @@ use Shopware\Bundle\AccountBundle\Service\AddressServiceInterface;
 use Shopware\Bundle\AccountBundle\Form\Account\AddressFormType;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Customer\Address;
+use Shopware\Models\Customer\Billing;
 use Shopware\Models\Customer\Customer;
+use Shopware\Models\Customer\Shipping;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Validator\Exception\ValidatorException;
 
@@ -65,7 +67,16 @@ class AddressService implements AddressServiceInterface
 
         $this->validate($address);
         $this->modelManager->persist($address);
-        $this->modelManager->flush($address);
+
+        if (!$customer->getDefaultBillingAddress()) {
+            $customer->setDefaultBillingAddress($address);
+        }
+
+        if (!$customer->getDefaultShippingAddress()) {
+            $customer->setDefaultShippingAddress($address);
+        }
+
+        $this->modelManager->flush([$address, $customer]);
 
         return $address;
     }
@@ -145,5 +156,38 @@ class AddressService implements AddressServiceInterface
     {
         $this->modelManager->remove($address);
         $this->modelManager->flush($address);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setDefaultBillingAddress(Address $address)
+    {
+        $customer = $address->getCustomer();
+        $customer->setDefaultBillingAddress($address);
+
+        $billing = $customer->getBilling();
+        $billing->fromAddress($address);
+
+        $this->modelManager->flush([$customer, $billing]);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setDefaultShippingAddress(Address $address)
+    {
+        $customer = $address->getCustomer();
+        $customer->setDefaultShippingAddress($address);
+
+        $shipping = $customer->getShipping();
+        if (!$shipping) {
+            $shipping = new Shipping();
+            $shipping->setCustomer($customer);
+            $this->modelManager->persist($shipping);
+        }
+        $shipping->fromAddress($address);
+
+        $this->modelManager->flush([$customer, $shipping]);
     }
 }

@@ -10,6 +10,7 @@ class Migrations_Migration708 extends Shopware\Components\Migrations\AbstractMig
     {
         $this->changeConfusingVatLabel();
         $this->createAddressTables();
+        $this->createDefaultShippingBillingRelations();
     }
 
     private function createAddressTables()
@@ -76,6 +77,22 @@ SET
 WHERE
   origin.name = 'vatcheckrequired'
 SQL;
+        $this->addSql($sql);
+    }
+
+    private function createDefaultShippingBillingRelations()
+    {
+        $sql = <<<SQL
+
+ALTER TABLE `s_user`
+ADD `defaultBillingAddressID` int(11) DEFAULT NULL,
+ADD `defaultShippingAddressID` int(11) DEFAULT NULL AFTER `defaultBillingAddressID`,
+ADD INDEX `defaultBillingAddressID` (`defaultBillingAddressID`),
+ADD INDEX `defaultShippingAddressID` (`defaultShippingAddressID`),
+ADD FOREIGN KEY (`defaultBillingAddressID`) REFERENCES `s_user_addresses` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
+ADD FOREIGN KEY (`defaultShippingAddressID`) REFERENCES `s_user_addresses` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+SQL;
+
         $this->addSql($sql);
     }
 }

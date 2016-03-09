@@ -22,6 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Bundle\AccountBundle\Service\AddressServiceInterface;
 use Shopware\Bundle\AccountBundle\Service\AddressImportServiceInterface;
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Components\Validator\EmailValidatorInterface;
@@ -132,19 +133,25 @@ class sAdmin
      */
     private $addressImportService;
 
+    /**
+     * @var AddressServiceInterface
+     */
+    private $addressService;
+
     public function __construct(
-        Enlight_Components_Db_Adapter_Pdo_Mysql          $db                 = null,
-        Enlight_Event_EventManager                       $eventManager       = null,
-        Shopware_Components_Config                       $config             = null,
-        Enlight_Components_Session_Namespace             $session            = null,
-        Enlight_Controller_Front                         $front              = null,
-        \Shopware\Components\Password\Manager            $passwordEncoder    = null,
-        Shopware_Components_Snippet_Manager              $snippetManager     = null,
-        Shopware_Components_Modules                      $moduleManager      = null,
-        sSystem                                          $systemModule       = null,
-        StoreFrontBundle\Service\ContextServiceInterface $contextService     = null,
-        EmailValidatorInterface                          $emailValidator     = null,
-        AddressImportServiceInterface                    $addressImportService     = null
+        Enlight_Components_Db_Adapter_Pdo_Mysql          $db                    = null,
+        Enlight_Event_EventManager                       $eventManager          = null,
+        Shopware_Components_Config                       $config                = null,
+        Enlight_Components_Session_Namespace             $session               = null,
+        Enlight_Controller_Front                         $front                 = null,
+        \Shopware\Components\Password\Manager            $passwordEncoder       = null,
+        Shopware_Components_Snippet_Manager              $snippetManager        = null,
+        Shopware_Components_Modules                      $moduleManager         = null,
+        sSystem                                          $systemModule          = null,
+        StoreFrontBundle\Service\ContextServiceInterface $contextService        = null,
+        EmailValidatorInterface                          $emailValidator        = null,
+        AddressImportServiceInterface                    $addressImportService  = null,
+        AddressServiceInterface                          $addressService        = null
     ) {
         $this->db = $db ? : Shopware()->Db();
         $this->eventManager = $eventManager ? : Shopware()->Events();
@@ -163,6 +170,7 @@ class sAdmin
         $this->emailValidator = $emailValidator ? : Shopware()->Container()->get('validator.email');
         $this->subshopId = $this->contextService->getShopContext()->getShop()->getParentId();
         $this->addressImportService = $addressImportService ? : Shopware()->Container()->get('shopware_account.address_import_service');
+        $this->addressService = $addressService ? : Shopware()->Container()->get('shopware_account.address_service');
     }
 
     /**
@@ -1818,6 +1826,7 @@ class sAdmin
         } else {
             $date = "0000-00-00";
         }
+        $hasShippingAddress = count($userObject['shipping']) > 0;
         $userObject = $userObject["billing"];
         $data = array(
             $userID,
@@ -1887,9 +1896,17 @@ class sAdmin
         );
 
         try {
-            $this->addressImportService->importCustomerBilling($userID);
+            $address = $this->addressImportService->importCustomerBilling($userID);
+            $this->addressService->setDefaultBillingAddress($address);
+
+            if ($hasShippingAddress === false) {
+                $this->addressService->setDefaultShippingAddress($address);
+            }
         } catch (\Exception $ex) {
+            // Exception is thrown, if there is no address to import or it is
+            // a duplicate of an existing address
         }
+
 
         return $billingID;
     }
@@ -1967,8 +1984,11 @@ class sAdmin
         );
 
         try {
-            $this->addressImportService->importCustomerShipping($userID);
+            $address = $this->addressImportService->importCustomerShipping($userID);
+            $this->addressService->setDefaultShippingAddress($address);
         } catch (\Exception $ex) {
+            // Exception is thrown, if there is no address to import or it is
+            // a duplicate of an existing address
         }
 
         return $shippingId;

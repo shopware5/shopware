@@ -1549,7 +1549,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             'text6' => 'text6'
         );
 
-        $result = $this->module->sSaveRegisterBilling($userId, array('billing' => $testData));
+        $result = $this->module->sSaveRegisterBilling($userId, array('billing' => $testData, 'shipping' => $testData));
         $this->assertGreaterThan(0, $result);
 
         $savedData = Shopware()->Db()->fetchRow('
@@ -1619,7 +1619,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             'text6' => 'text6'
         );
 
-        $result = $this->module->sSaveRegisterShipping($userId, array('shipping' => $testData));
+        $result = $this->module->sSaveRegisterShipping($userId, array('shipping' => $testData, 'billing' => $testData));
         $this->assertGreaterThan(0, $result);
 
         $savedData = Shopware()->Db()->fetchRow('
@@ -2148,7 +2148,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                 ),
                 'state' => array(),
                 'user' => array(
-                    'id' => $customer->getId(),
+                    'id' => (int) $customer->getId(),
                     'password' => $customer->getPassword(),
                     'encoder' => 'bcrypt',
                     'email' => $customer->getEmail(),
@@ -2171,6 +2171,8 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                     'internalcomment' => '',
                     'failedlogins' => '0',
                     'lockeduntil' => null,
+                    'defaultBillingAddressID' => null,
+                    'defaultShippingAddressID' => null,
                 ),
                 'countryShipping' => array(
                     'id' => '4',

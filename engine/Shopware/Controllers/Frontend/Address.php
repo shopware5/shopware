@@ -74,9 +74,7 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
      */
     public function indexAction()
     {
-        $addresses = $this->addressRepository
-            ->getByUserQuery($this->get('session')->get('sUserId'))
-            ->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        $addresses = $this->addressRepository->getListArray($this->get('session')->get('sUserId'));
 
         $this->View()->assign('error', $this->Request()->getParam('error'));
         $this->View()->assign('success', $this->Request()->getParam('success'));
@@ -98,6 +96,16 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
 
             $this->addressService->create($address, $customer);
 
+            $extraData = $form->getExtraData();
+
+            if (!empty($extraData['set_default_billing'])) {
+                $this->addressService->setDefaultBillingAddress($address);
+            }
+
+            if (!empty($extraData['set_default_shipping'])) {
+                $this->addressService->setDefaultShippingAddress($address);
+            }
+
             $this->redirect(['action' => 'index', 'success' => 'create']);
             return;
         }
@@ -112,13 +120,23 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
     {
         $userId = $this->get('session')->get('sUserId');
         $addressId = $this->Request()->getParam('id', null);
-        $address = $this->addressRepository->getDetailByUserQuery($addressId, $userId)->getSingleResult();
+        $address = $this->addressRepository->getOne($addressId, $userId);
 
         $form = $this->createForm(AddressFormType::class, $address, ['allow_extra_fields' => true]);
         $form->handleRequest($this->Request());
 
         if ($form->isValid()) {
             $this->addressService->update($address);
+
+            $extraData = $form->getExtraData();
+
+            if (!empty($extraData['set_default_billing'])) {
+                $this->addressService->setDefaultBillingAddress($address);
+            }
+
+            if (!empty($extraData['set_default_shipping'])) {
+                $this->addressService->setDefaultShippingAddress($address);
+            }
 
             $this->redirect(['action' => 'index', 'success' => 'update']);
             return;
@@ -135,7 +153,7 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
         $userId = $this->get('session')->get('sUserId');
         $addressId = $this->Request()->getParam('id', null);
 
-        $address = $this->addressRepository->getDetailByUserQuery($addressId, $userId)->getSingleResult();
+        $address = $this->addressRepository->getOne($addressId, $userId);
 
         if ($this->Request()->isPost()) {
             $this->addressService->delete($address);
@@ -147,6 +165,7 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
         $addressView = $this->get('models')->toArray($address);
         $addressView['country'] = $this->get('models')->toArray($address->getCountry());
         $addressView['state'] = $this->get('models')->toArray($address->getState());
+        $addressView['attribute'] = $this->get('models')->toArray($address->getAttribute());
 
         $this->View()->assign('address', $addressView);
     }
@@ -171,6 +190,7 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
 
         $formData = array_merge(
             $this->get('models')->toArray($form->getViewData()),
+            ['attribute' => $this->get('models')->toArray($form->getViewData()->getAttribute())],
             $form->getExtraData()
         );
 
@@ -180,5 +200,45 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
         $viewData['formData'] = $formData;
 
         return $viewData;
+    }
+
+    /**
+     * Sets the default shipping address
+     */
+    public function setDefaultShippingAddressAction()
+    {
+        $userId = $this->get('session')->get('sUserId');
+        $addressId = $this->Request()->getParam('addressId', null);
+
+        $address = $this->addressRepository->getOne($addressId, $userId);
+
+        if (!$this->Request()->isPost()) {
+            $this->redirect(['action' => 'index']);
+            return;
+        }
+
+        $this->addressService->setDefaultShippingAddress($address);
+
+        $this->redirect(['action' => 'index', 'success' => 'default_shipping']);
+    }
+
+    /**
+     * Sets the default shipping address
+     */
+    public function setDefaultBillingAddressAction()
+    {
+        $userId = $this->get('session')->get('sUserId');
+        $addressId = $this->Request()->getParam('addressId', null);
+
+        $address = $this->addressRepository->getOne($addressId, $userId);
+
+        if (!$this->Request()->isPost()) {
+            $this->redirect(['action' => 'index']);
+            return;
+        }
+
+        $this->addressService->setDefaultBillingAddress($address);
+
+        $this->redirect(['action' => 'index', 'success' => 'default_billing']);
     }
 }

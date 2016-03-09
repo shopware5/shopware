@@ -62,4 +62,18 @@ interface AddressServiceInterface
      * @return \Shopware\Models\Attribute\CustomerAddress
      */
     public function saveAttribute(Address $address, array $data = []);
+
+    /**
+     * Sets the address to the default billing address in the customer model
+     *
+     * @param Address $address
+     */
+    public function setDefaultBillingAddress(Address $address);
+
+    /**
+     * Sets the address to the default shipping address in the customer model
+     *
+     * @param Address $address
+     */
+    public function setDefaultShippingAddress(Address $address);
 }
