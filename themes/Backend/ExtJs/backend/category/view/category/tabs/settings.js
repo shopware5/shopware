@@ -123,6 +123,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
         defaultSettingsProductLayoutLabel: '{s name=view/settings_default_settings_box_layout_label}Product layout{/s}',
         defaultSettingsProductLayoutHelp: '{s name=view/settings_default_settings_box_layout_help}Product layout allows you to control how your products are presented on the category page. Choose between three different layouts to fine-tune your product display. You can select a layout for each category or automatically adopt the settings from the parent category.{/s}',
         defaultSettingsProductStream: '{s name=view/settings_default_settings_box_stream_label}Product stream{/s}',
+        defaultSettingsProductStreamHelp: '{s name=view/settings_default_settings_box_stream_help}If a product stream is selected, the items from the stream will be used instead of the assigned ones. Subcategories do not inherit items from product streams.{/s}',
 
         cmsTitle : '{s name=view/settings_cms_title}CMS functions{/s}',
         cmsHeaderLabel : '{s name=view/settings_cms_header_label}Header{/s}',
@@ -366,7 +367,8 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
 
         me.streamSelection = Ext.create('Shopware.form.field.ProductStreamSelection', {
             name: 'streamId',
-            labelWidth: 180
+            labelWidth: 180,
+            helpText: me.snippets.defaultSettingsProductStreamHelp
         });
 
         return [
