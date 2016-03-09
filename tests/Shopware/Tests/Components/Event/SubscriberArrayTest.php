@@ -65,8 +65,6 @@ class Shopware_Tests_Components_Event_SubscriberArrayTest extends \PHPUnit_Frame
 
         $result = $this->eventManager->getListeners();
 
-        ;
-
         $this->assertCount(2, $result);
         $this->assertEquals('foo', $result[0]->execute(new Enlight_Event_EventArgs()));
         $this->assertEquals('bar', $result[1]->execute(new Enlight_Event_EventArgs()));
