@@ -123,21 +123,4 @@ class Shopware_Tests_Components_Hash_HasherBcryptTest extends PHPUnit_Framework_
 
         $this->assertTrue($this->hasher->isReencodeNeeded($hash));
     }
-
-    /**
-     * Test case
-     */
-    public function testIfSaltIsGivenHashIsKnown()
-    {
-        $expectedHash = '$2y$04$usesomesillystringfore0pFChtAErThomfG2Hq4BYOHbY1fhRUq';
-
-        $this->hasher = new \Shopware\Components\Password\Encoder\Bcrypt(array(
-            'cost' => 04,
-            'salt' => 'usesomesillystringforsalt',
-        ));
-
-        $hash = $this->hasher->encodePassword('foobar');
-
-        $this->assertEquals($expectedHash, $hash);
-    }
 }
