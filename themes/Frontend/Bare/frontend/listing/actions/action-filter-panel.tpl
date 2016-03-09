@@ -24,7 +24,6 @@
 					{block name='frontend_listing_actions_filter_form'}
 						<form id="filter"
 							  method="get"
-							  action=""
 							  data-filter-form="true"
 							  data-count-ctrl="{$countCtrlUrl}">
 
