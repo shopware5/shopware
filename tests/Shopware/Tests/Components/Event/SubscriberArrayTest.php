@@ -27,7 +27,7 @@
  * @package   Shopware\Tests
  * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
  */
-class Shopware_Tests_Components_Event_SubscriberArrayTest extends Enlight_Components_Test_Plugin_TestCase
+class Shopware_Tests_Components_Event_SubscriberArrayTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Enlight_Event_Subscriber_Array
@@ -65,9 +65,11 @@ class Shopware_Tests_Components_Event_SubscriberArrayTest extends Enlight_Compon
 
         $result = $this->eventManager->getListeners();
 
+        ;
+
         $this->assertCount(2, $result);
-        $this->assertEquals('foo', $result[0]->execute($this->createEventArgs()));
-        $this->assertEquals('bar', $result[1]->execute($this->createEventArgs()));
+        $this->assertEquals('foo', $result[0]->execute(new Enlight_Event_EventArgs()));
+        $this->assertEquals('bar', $result[1]->execute(new Enlight_Event_EventArgs()));
     }
 
     public function testRemoveSubscriber()
@@ -96,6 +98,6 @@ class Shopware_Tests_Components_Event_SubscriberArrayTest extends Enlight_Compon
 
         // Only the second one should be left
         $this->assertCount(1, $result);
-        $this->assertEquals('bar', $result[0]->execute($this->createEventArgs()));
+        $this->assertEquals('bar', $result[0]->execute(new Enlight_Event_EventArgs()));
     }
 }
