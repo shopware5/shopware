@@ -83,6 +83,12 @@ In this document you will find a changelog of the important changes related to t
 * Changed constructor of `\Shopware\Components\Theme\PathResolver`
 * Changed constructor of `\Shopware_Components_Snippet_Manager`
 * Changed constructor of `\Shopware\Bundle\PluginInstallerBundle\Service\DownloadService`
+* Changed signature of `Shopware\Bundle\SearchBundleDBAL\PriceHelperInterface::getSelection`, now expects `ProductContextInterface` instead of `ShopContextInterface`
+* Changed signature of `Shopware\Bundle\SearchBundleDBAL\PriceHelper::getSelection` to match changed interface, now expects `ProductContextInterface` instead of `ShopContextInterface`
+* Changed signature of `Shopware\Bundle\StoreFrontBundle\Service\CheapestPriceServiceInterface::getList`, now expects `ProductContextInterface` instead of `ShopContextInterface`
+* Changed signature of `Shopware\Bundle\StoreFrontBundle\Service\CheapestPriceServiceInterface::get`, now expects `ProductContextInterface` instead of `ShopContextInterface` and `ListProduct` instead of `BaseProduct`
+* Changed signature of `Shopware\Bundle\StoreFrontBundle\Service\Core\CheapestPriceService::getList` to match changed interface, now expects `ProductContextInterface` instead of `ShopContextInterface`
+* Changed signature of `Shopware\Bundle\StoreFrontBundle\Service\Core\CheapestPriceService::get` to match changed interface, now expects `ProductContextInterface` instead of `ShopContextInterface` and `ListProduct` instead of `BaseProduct`
 * Deprecated methods now use `trigger_error` of type `E_USER_DEPRECATED`
 * Changed default error_reporting to `E_ALL & ~E_USER_DEPRECATED`
 * Deprecated Class `Enlight_Application`
