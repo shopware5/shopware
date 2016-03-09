@@ -560,10 +560,9 @@ class LegacyStructConverter
         $thumbnails = [];
 
         foreach ($media->getThumbnails() as $thumbnail) {
-            $retina = null;
             $thumbnails[] = [
                 'source' => $thumbnail->getSource(),
-                'retinaSource' => $retina,
+                'retinaSource' => $thumbnail->getRetinaSource(),
                 'sourceSet' => $this->getSourceSet($thumbnail),
                 'maxWidth' => $thumbnail->getMaxWidth(),
                 'maxHeight' => $thumbnail->getMaxHeight()
