@@ -29,7 +29,7 @@ use Shopware\Models\Plugin\Plugin;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\FileBag;
 
-class Shopware_Controllers_Backend_PluginInstaller extends Shopware_Controllers_Backend_ExtJs implements \Shopware\Components\CSRFWhitelistAware
+class Shopware_Controllers_Backend_PluginInstaller extends Shopware_Controllers_Backend_ExtJs
 {
     protected $model = 'Shopware\Models\Plugin\Plugin';
 
@@ -224,7 +224,7 @@ class Shopware_Controllers_Backend_PluginInstaller extends Shopware_Controllers_
         if ($information['extension'] !== 'zip') {
             $this->View()->assign([
                 'success' => false,
-                'message' => 'Wrong archive extension %s. Zip archive expected'
+                'message' => sprintf('Wrong archive extension %s. Zip archive expected', $information['extension'])
             ]);
             unlink($file->getPathname());
             unlink($file);
@@ -290,17 +290,5 @@ class Shopware_Controllers_Backend_PluginInstaller extends Shopware_Controllers_
         }
         $returns[] = rmdir($path);
         return $returns;
-    }
-
-    /**
-     * Returns a list with actions which should not be validated for CSRF protection
-     *
-     * @return string[]
-     */
-    public function getWhitelistedCSRFActions()
-    {
-        return [
-            'upload'
-        ];
     }
 }

@@ -101,8 +101,12 @@ class CSRFTokenValidator implements SubscriberInterface
         $expected = $this->container->get('BackendSession')->offsetGet($this->tokenName);
         $token = $controller->Request()->getHeader($this->tokenName);
 
+        if (empty($token)) {
+            $token = $controller->Request()->getParam('__csrf_token');
+        }
+
         if (!hash_equals($expected, $token)) {
-            throw new CSRFTokenValidationException("The provided X-CSRF-Token header is invalid. If you're sure that the request should be valid, the called controller action needs to be whitelisted using the CSRFWhitelistAware interface.");
+            throw new CSRFTokenValidationException("The provided CSRF-Token is invalid. If you're sure that the request should be valid, the called controller action needs to be whitelisted using the CSRFWhitelistAware interface.");
         }
     }
 
