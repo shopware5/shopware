@@ -100,40 +100,6 @@ class ModelManager extends EntityManager
     }
 
     /**
-     * The EntityRepository instances.
-     *
-     * @var array
-     */
-    private $repositories = array();
-
-    /**
-     * Gets the repository for an entity class.
-     *
-     * @param string $entityName The name of the entity.
-     * @return ModelRepository The repository class.
-     */
-    public function getRepository($entityName)
-    {
-        $entityName = ltrim($entityName, '\\');
-
-        if (!isset($this->repositories[$entityName])) {
-            $metadata = $this->getClassMetadata($entityName);
-            $repositoryClassName = $metadata->customRepositoryClassName;
-
-            if ($repositoryClassName === null) {
-                $repositoryClassName = $this->getConfiguration()->getDefaultRepositoryClassName();
-            }
-
-            $repositoryClassName = $this->getConfiguration()
-                ->getHookManager()->getProxy($repositoryClassName);
-
-            $this->repositories[$entityName] = new $repositoryClassName($this, $metadata);
-        }
-
-        return $this->repositories[$entityName];
-    }
-
-    /**
      * Serialize an entity to an array
      *
      * @author      Boris Guéry <guery.b@gmail.com>
