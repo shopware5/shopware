@@ -898,8 +898,7 @@ class sRewriteTable
         $sql = $this->getSeoArticleQuery();
         $sql = $this->db->limit($sql, $limit);
 
-
-        $shopFallbackId = (Shopware()->Shop()->getFallback() instanceof \Shopware\Models\Shop\Shop) ? Shopware()->Shop()->getFallback()->getId():NULL;
+        $shopFallbackId = (Shopware()->Shop()->getFallback() instanceof \Shopware\Models\Shop\Shop) ? Shopware()->Shop()->getFallback()->getId() : null;
 
         $result = $this->db->fetchAll(
             $sql,
@@ -1296,26 +1295,33 @@ class sRewriteTable
     {
         foreach ($articles as &$article) {
             if (empty($article['objectdata']) && empty($article['objectdataFallback'])) {
-                unset($article['objectdata']);
-                unset($article['objectdataFallback']);
+                unset($article['objectdata'], $article['objectdataFallback']);
                 continue;
             }
 
             $objectData = unserialize($article['objectdata']);
             $objectDataFallback = unserialize($article['objectdataFallback']);
-            if (!$objectData && !$objectDataFallback) {
+
+            if (empty($objectData)) {
+                $objectData = [];
+            }
+
+            if (empty($objectDataFallback)) {
+                $objectDataFallback = [];
+            }
+
+            if (empty($objectData) && empty($objectDataFallback)) {
                 continue;
             }
 
-            $article=$this->mapArticleObjectField($article,$objectData,$objectDataFallback,'name','txtArtikel');
-            $article=$this->mapArticleObjectField($article,$objectData,$objectDataFallback,'description_long','txtlangbeschreibung');
-            $article=$this->mapArticleObjectField($article,$objectData,$objectDataFallback,'description','txtshortdescription');
-            $article=$this->mapArticleObjectField($article,$objectData,$objectDataFallback,'keywords','keywords');
+            unset($article['objectdata'], $article['objectdataFallback']);
 
-
-            unset($article['objectdata']);
-            unset($article['objectdataFallback']);
-
+            $article = $this->mapArticleObjectFields($article, $objectData, $objectDataFallback, [
+                'name' => 'txtArtikel',
+                'description_long' => 'txtlangbeschreibung',
+                'description' => 'txtshortdescription',
+                'keywords' => 'keywords',
+            ]);
         }
 
         return $articles;
@@ -1323,23 +1329,29 @@ class sRewriteTable
 
     /**
      * map article core translation including fallback fields for given article
+     *
      * @param array $article
-     * @param $objectData
-     * @param $objectDataFallback
-     * @param $articleFieldName
-     * @param $objectFieldName
+     * @param array $objectData
+     * @param array $objectDataFallback
+     * @param array $fieldMappings array(articleFieldName => objectDataFieldName)
      * @return array $article
      */
-    private function mapArticleObjectField(array $article,$objectData,$objectDataFallback,$articleFieldName,$objectFieldName )
-    {
-        if(!empty($objectData[$objectFieldName])){
-            $article[$articleFieldName]=$objectData[$objectFieldName];
-        }else{
-            if(!empty($objectDataFallback[$objectFieldName])){
-                $article[$articleFieldName]=$objectDataFallback[$objectFieldName];
+    private function mapArticleObjectFields(
+        array $article,
+        array $objectData,
+        array $objectDataFallback,
+        array $fieldMappings
+    ) {
+        foreach ($fieldMappings as $articleFieldName => $objectDataFieldName) {
+            if (!empty($objectData[$objectDataFieldName])) {
+                $article[$articleFieldName] = $objectData[$objectDataFieldName];
+                continue;
+            }
+
+            if (!empty($objectDataFallback[$objectDataFieldName])) {
+                $article[$articleFieldName] = $objectDataFallback[$objectDataFieldName];
             }
         }
-
         return $article;
     }
 }
