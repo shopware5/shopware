@@ -159,7 +159,7 @@
                 'url': deleteUrl,
                 'dataType': 'jsonp',
                 'success': function () {
-                    $menu.empty();
+                    $menu.empty().addClass(me.opts.hiddenCls);
 
                     $.publish('plugin/swProductCompareMenu/onDeleteCompareSuccess', [ me ]);
                 }
