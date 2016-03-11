@@ -24,12 +24,12 @@ return array_replace_recursive([
                 'mediaUrl' => '',
                 'permissions' => [
                     'file' => [
-                        'public' => 0744,
-                        'private' => 0700,
+                        'public' => 0666 & ~umask(),
+                        'private' => 0600 & ~umask(),
                     ],
                     'dir' => [
-                        'public' => 0755,
-                        'private' => 0700,
+                        'public' => 0777 & ~umask(),
+                        'private' => 0700 & ~umask(),
                     ]
                 ],
                 'path' => realpath(__DIR__ . '/../../../')
