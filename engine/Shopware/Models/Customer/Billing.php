@@ -659,18 +659,18 @@ class Billing extends ModelEntity
      */
     public function fromAddress(Address $address)
     {
-        $this->setCompany($address->getCompany());
-        $this->setDepartment($address->getDepartment());
-        $this->setFirstName($address->getFirstname());
-        $this->setLastName($address->getLastname());
-        $this->setStreet($address->getStreet());
-        $this->setCity($address->getCity());
-        $this->setZipCode($address->getZipcode());
-        $this->setAdditionalAddressLine1($address->getAdditionalAddressLine1());
-        $this->setAdditionalAddressLine2($address->getAdditionalAddressLine2());
+        $this->setCompany((string) $address->getCompany());
+        $this->setDepartment((string) $address->getDepartment());
+        $this->setFirstName((string) $address->getFirstname());
+        $this->setLastName((string) $address->getLastname());
+        $this->setStreet((string) $address->getStreet());
+        $this->setCity((string) $address->getCity());
+        $this->setZipCode((string) $address->getZipcode());
+        $this->setAdditionalAddressLine1((string) $address->getAdditionalAddressLine1());
+        $this->setAdditionalAddressLine2((string) $address->getAdditionalAddressLine2());
         $this->setCountryId($address->getCountry()->getId());
-        $this->setPhone($address->getPhone());
-        $this->setVatId($address->getVatId());
+        $this->setPhone((string) $address->getPhone());
+        $this->setVatId((string) $address->getVatId());
 
         if ($address->getState()) {
             $this->setStateId($address->getState()->getId());

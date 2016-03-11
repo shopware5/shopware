@@ -69,8 +69,8 @@ Ext.define('Shopware.apps.Base.model.Customer', {
         { name:'internalComment', type:'string' },
         { name:'failedLogins', type:'int' },
         { name:'referer', type:'string' },
-        { name:'defaultBillingAddressId', type:'int', useNull: true },
-        { name:'defaultShippingAddressId', type:'int', useNull: true }
+        { name:'default_billing_address_id', type:'int', useNull: true },
+        { name:'default_shipping_address_id', type:'int', useNull: true }
     ]
 
 });

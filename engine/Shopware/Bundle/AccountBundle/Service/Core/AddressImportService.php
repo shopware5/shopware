@@ -111,7 +111,7 @@ class AddressImportService implements AddressImportServiceInterface
         $data = $builder
             ->select($fields)
             ->from($table)
-            ->where('userID = :customerId')
+            ->where('user_id = :customerId')
             ->setParameter('customerId', $customerId)
             ->execute()
             ->fetch(\PDO::FETCH_ASSOC);
@@ -169,8 +169,8 @@ class AddressImportService implements AddressImportServiceInterface
             'street',
             'zipcode',
             'city',
-            'countryID as country',
-            'stateID as state',
+            'country_id as country',
+            'state_id as state',
             'additional_address_line1',
             'additional_address_line2'
         ];
@@ -191,7 +191,7 @@ class AddressImportService implements AddressImportServiceInterface
             ->select('*')
             ->from($table, 'address')
             ->innerJoin('address', $attributeTable, 'attribute', 'address.id = attribute.' . $attributeForeignKey)
-            ->where('address.userID = :addressId')
+            ->where('address.user_id = :addressId')
             ->setParameter('addressId', $address->getCustomer()->getId())
             ->execute()
             ->fetch(\PDO::FETCH_ASSOC);
@@ -200,7 +200,7 @@ class AddressImportService implements AddressImportServiceInterface
             return;
         }
 
-        unset($data['id'], $data['addressID'], $data['shippingID'], $data['billingID']);
+        unset($data['id'], $data['address_id'], $data['shippingID'], $data['billingID']);
 
         $this->addressService->saveAttribute($address, $data);
     }

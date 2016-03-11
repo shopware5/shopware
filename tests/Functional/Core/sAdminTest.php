@@ -2171,8 +2171,8 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                     'internalcomment' => '',
                     'failedlogins' => '0',
                     'lockeduntil' => null,
-                    'defaultBillingAddressID' => null,
-                    'defaultShippingAddressID' => null,
+                    'default_billing_address_id' => null,
+                    'default_shipping_address_id' => null,
                 ),
                 'countryShipping' => array(
                     'id' => '4',

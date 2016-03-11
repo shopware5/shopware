@@ -28,6 +28,7 @@ use Shopware\Bundle\FormBundle\Transformer\EntityTransformer;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Country\Country;
 use Shopware\Models\Country\State;
+use Shopware\Models\Customer\Address;
 use Shopware_Components_Snippet_Manager;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -132,7 +133,9 @@ class AddressFormType extends AbstractType
             ]
         ]);
 
-        $builder->add('state', IntegerType::class);
+        $builder->add('state', IntegerType::class, [
+            'constraints' => $this->getStateConstraints()
+        ]);
 
         $builder->add('phone', TextType::class, [
             'constraints' => $this->getPhoneConstraints()
@@ -242,5 +245,30 @@ class AddressFormType extends AbstractType
     private function getSalutationChoices()
     {
         return ['mr', 'ms'];
+    }
+
+    /**
+     * @return Constraint[]
+     */
+    private function getStateConstraints()
+    {
+        $constraints = [];
+
+        $stateCallback = function ($value, ExecutionContextInterface $context) {
+
+            /** @var Address $data */
+            $data = $context->getRoot()->getData();
+
+            if ($data->getCountry()->getDisplayStateInRegistration() && $data->getCountry()->getForceStateInRegistration() && empty($value)) {
+                $notBlank = new NotBlank();
+                $context->buildViolation($notBlank->message)
+                    ->atPath($context->getPropertyPath())
+                    ->addViolation();
+            }
+        };
+
+        $constraints[] = new Callback(['callback' => $stateCallback]);
+
+        return $constraints;
     }
 }

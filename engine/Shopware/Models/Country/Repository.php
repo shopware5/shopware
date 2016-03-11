@@ -69,6 +69,8 @@ class Repository extends ModelRepository
             'countries.iso',
             'countries.position',
             'countries.active as active',
+            'countries.forceStateInRegistration',
+            'countries.displayStateInRegistration',
             'area.id as areaId'
         ));
         $builder->from('Shopware\Models\Country\Country', 'countries')

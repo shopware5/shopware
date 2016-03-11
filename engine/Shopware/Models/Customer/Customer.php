@@ -353,7 +353,7 @@ class Customer extends LazyFetchModelEntity
      *
      * @var \Shopware\Models\Customer\Address $defaultBillingAddress
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Customer\Address", inversedBy="customer")
-     * @ORM\JoinColumn(name="defaultBillingAddressId", referencedColumnName="id")
+     * @ORM\JoinColumn(name="default_billing_address_id", referencedColumnName="id")
      */
     protected $defaultBillingAddress;
 
@@ -362,7 +362,7 @@ class Customer extends LazyFetchModelEntity
      *
      * @var \Shopware\Models\Customer\Address $defaultShippingAddress
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Customer\Address", inversedBy="customer")
-     * @ORM\JoinColumn(name="defaultShippingAddressId", referencedColumnName="id")
+     * @ORM\JoinColumn(name="default_shipping_address_id", referencedColumnName="id")
      */
     protected $defaultShippingAddress;
 

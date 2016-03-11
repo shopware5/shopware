@@ -343,7 +343,8 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
         me.addressStore.load();
 
         me.addressListWindow = Ext.create('Shopware.apps.Customer.view.address.List', {
-            store: me.addressStore
+            store: me.addressStore,
+            customerRecord: me.record
         });
 
         me.addressTab = Ext.create('Ext.container.Container', {
