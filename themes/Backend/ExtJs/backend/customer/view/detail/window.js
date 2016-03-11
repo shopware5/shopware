@@ -100,6 +100,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
         save:'{s name=window/save}Save{/s}',
         dataTab:'{s name=window/data_tab}Data{/s}',
         orderTab:'{s name=window/order_tab}Orders{/s}',
+        addressTab:'{s name=window/address_tab}Addresses{/s}',
         from:'{s name=window/from_date}From{/s}',
         to:'{s name=window/to_date}To{/s}'
     },
@@ -256,17 +257,18 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
      */
     getTabs:function () {
         var me = this,
-            form = me.createFormTab();
+            tabs = [
+                me.createFormTab()
+            ];
 
         if ( me.record.get('id') ) {
+            tabs.push(me.createAddressTab());
             /*{if {acl_is_allowed resource=order privilege=read}}*/
-                return [ form, me.createOrderTab() ];
-            /*{else}*/
-                return [ form ];
+                tabs.push(me.createOrderTab());
             /*{/if}*/
-        } else {
-            return [ form ];
         }
+
+        return tabs;
 
     },
 
@@ -327,6 +329,32 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
                 me.detailForm
             ]
         });
+    },
+
+    /**
+     * Creates the customer addresses tab which contains all addresses of the customer
+     * @return [Ext.container.Container]
+     */
+    createAddressTab: function() {
+        var me = this;
+
+        me.addressStore = Ext.create('Shopware.apps.Customer.store.Address');
+        me.addressStore.getProxy().extraParams['customerId'] = me.record.get('id');
+        me.addressStore.load();
+
+        me.addressListWindow = Ext.create('Shopware.apps.Customer.view.address.List', {
+            store: me.addressStore
+        });
+
+        me.addressTab = Ext.create('Ext.container.Container', {
+            layout: 'border',
+            title: me.snippets.addressTab,
+            items: [
+                me.addressListWindow
+            ]
+        });
+
+        return me.addressTab;
     },
 
     /**
