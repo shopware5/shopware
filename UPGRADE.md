@@ -7,6 +7,7 @@ In this document you will find a changelog of the important changes related to t
 * Added CSRF protection to the backend which is enabled by default.
     * OptOut by implementing `CSRFWhitelistAware` interface
     * Added `X-CSRF-Token` to every ajax request
+    * Added `__csrf_token` param to every ExtJS form submit via override in `ExtJs/overrides/Ext.form.Base.js` 
     * See: https://developers.shopware.com/developers-guide/csrf-protection/
 * Update Symfony Components to version 2.8 LTS
 * Replace polyfill provided by `indigophp/hash-compat` with `symfony/polyfill-php56`
