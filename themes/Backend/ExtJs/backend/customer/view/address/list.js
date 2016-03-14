@@ -74,7 +74,26 @@ Ext.define('Shopware.apps.Customer.view.address.List', {
             city: '{s name="list/header/city"}City{/s}',
             state: '{s name="list/header/state"}State{/s}',
             country: '{s name="list/header/country"}Country{/s}',
-            phone: '{s name="list/header/phone"}Phone{/s}'
+            phone: '{s name="list/header/phone"}Phone{/s}',
+            vatId: '{s name="list/header/vatId"}VAT ID{/s}'
+        }
+    },
+
+    /**
+     * Listeners
+     * - Enable double-click to open detail window
+     * - Disable deletion by disabling the row selection for default addresses
+     */
+    listeners: {
+        itemdblclick: function(view, record) {
+            this.controller.onEditItem(this, record);
+        },
+        beforeselect: function(row, record) {
+            var me = this;
+
+            if (me.isDefaultAddress(record)) {
+                return false;
+            }
         }
     },
 
@@ -96,6 +115,10 @@ Ext.define('Shopware.apps.Customer.view.address.List', {
                 header: me.snippets.header.company,
                 renderer: me.companyRenderer,
                 flex: 2
+            },
+            vatId: {
+                header: me.snippets.header.vatId,
+                flex: 1
             },
             salutation: {
                 header: me.snippets.header.salutation,
@@ -120,12 +143,12 @@ Ext.define('Shopware.apps.Customer.view.address.List', {
                 header: me.snippets.header.city,
                 flex: 1
             },
-            stateId: {
+            state_id: {
                 header: me.snippets.header.state,
                 flex: 1,
                 sortable: false
             },
-            countryId: {
+            country_id: {
                 header: me.snippets.header.country,
                 flex: 1,
                 sortable: false
@@ -139,9 +162,9 @@ Ext.define('Shopware.apps.Customer.view.address.List', {
         };
         /*{/if}*/
 
-
         return {
-            columns: columns
+            columns: columns,
+            detailWindow: 'Shopware.apps.Customer.view.address.detail.Window'
         }
     },
 
@@ -180,14 +203,14 @@ Ext.define('Shopware.apps.Customer.view.address.List', {
      * @returns { String }
      */
     companyRenderer: function (value, col, record) {
-        var companyName = record.get('company');
-
-        if (record.get('department')) {
-            companyName += ' (' + record.get('department') + ')';
+        if (!record.get('company')) {
+            return null;
         }
 
-        if (record.get('vatId')) {
-            companyName += '<br/>' + record.get('vatId');
+        var companyName = '<b>' + record.get('company') + '</b>';
+
+        if (record.get('department')) {
+            companyName += '<br/>' + record.get('department');
         }
 
         return companyName;
@@ -227,16 +250,55 @@ Ext.define('Shopware.apps.Customer.view.address.List', {
         var defaults = [],
             customer = record.getCustomerStore && record.getCustomerStore.first();
 
-        if (customer && customer.get('defaultBillingAddressId') == record.get('id')) {
+        if (customer && customer.get('default_billing_address_id') == record.get('id')) {
             defaults.push('{s name="list/data/billingaddress"}{/s}');
         }
 
-        if (customer && customer.get('defaultShippingAddressId') == record.get('id')) {
+        if (customer && customer.get('default_shipping_address_id') == record.get('id')) {
             defaults.push('{s name="list/data/shippingaddress"}{/s}');
         }
 
         return defaults.join("<br/>");
-    }
+    },
 
+    /**
+     * Inject customer id for model relation
+     */
+    createNewRecord: function() {
+        var me = this;
+
+        return Ext.create(this.store.model, {
+            user_id: me.customerRecord.get('id')
+        });
+    },
+
+    /**
+     * Hide delete icon for default billing or shipping address
+     */
+    createDeleteColumn: function() {
+        var me = this,
+            button = me.callParent(arguments);
+
+        button.getClass = function(value, meta, record) {
+            if (me.isDefaultAddress(record)) {
+                return 'x-hidden';
+            }
+        };
+
+        return button;
+    },
+
+    /**
+     * Checks if the given address is set as default billing or shipping address
+     *
+     * @param record
+     * @returns { boolean }
+     */
+    isDefaultAddress: function(record) {
+        var customer = record.getCustomerStore && record.getCustomerStore.first();
+
+        return customer
+            && (customer.get('default_billing_address_id') == record.get('id') || customer.get('default_shipping_address_id') == record.get('id'));
+    }
 });
 //{/block}

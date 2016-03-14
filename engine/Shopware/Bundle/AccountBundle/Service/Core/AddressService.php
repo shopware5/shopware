@@ -87,7 +87,16 @@ class AddressService implements AddressServiceInterface
     public function update(Address $address)
     {
         $this->validate($address);
-        $this->modelManager->flush($address);
+
+        if ($address->getCustomer()->getDefaultBillingAddress()->getId() == $address->getId()) {
+            $address->getCustomer()->getBilling()->fromAddress($address);
+        }
+
+        if ($address->getCustomer()->getDefaultShippingAddress()->getId() == $address->getId()) {
+            $address->getCustomer()->getShipping()->fromAddress($address);
+        }
+
+        $this->modelManager->flush();
 
         return $address;
     }

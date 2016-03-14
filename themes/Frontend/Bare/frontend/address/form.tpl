@@ -289,7 +289,7 @@
                             {/block}
 
                             {block name='frontend_address_form_input_set_default_shipping'}
-                                {if !$formData.id || $sUserData.additional.user.defaultShippingAddressID != $formData.id}
+                                {if !$formData.id || $sUserData.additional.user.default_shipping_address_id != $formData.id}
                                     <div class="addresses--default-shipping">
                                         <input type="checkbox"
                                                id="set_default_shipping"
@@ -301,7 +301,7 @@
                             {/block}
 
                             {block name='frontend_address_form_input_set_default_billing'}
-                                {if !$formData.id || $sUserData.additional.user.defaultBillingAddressID != $formData.id}
+                                {if !$formData.id || $sUserData.additional.user.default_billing_address_id != $formData.id}
                                     <div class="addresses--default-billing">
                                         <input type="checkbox"
                                                id="set_default_billing"

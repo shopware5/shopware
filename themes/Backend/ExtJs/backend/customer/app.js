@@ -83,7 +83,9 @@ Ext.define('Shopware.apps.Customer', {
         'main.Window',
         'order.List',
         'order.Chart',
-        'address.List'
+        'address.List',
+        'address.detail.Window',
+        'address.detail.Address'
     ],
 
     /**

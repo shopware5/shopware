@@ -24,6 +24,7 @@
 
 use Shopware\Bundle\AccountBundle\Form\Account\AddressFormType;
 use Shopware\Bundle\AccountBundle\Service\AddressServiceInterface;
+use Shopware\Models\Customer\Customer;
 
 class Shopware_Controllers_Backend_Address extends Shopware_Controllers_Backend_Application
 {
@@ -111,7 +112,7 @@ class Shopware_Controllers_Backend_Address extends Shopware_Controllers_Backend_
      */
     public function save($data)
     {
-        /**@var $model \Shopware\Components\Model\ModelEntity */
+        /**@var $model \Shopware\Models\Customer\Address */
         if (!empty($data['id'])) {
             $model = $this->getRepository()->find($data['id']);
         } else {
@@ -119,9 +120,10 @@ class Shopware_Controllers_Backend_Address extends Shopware_Controllers_Backend_
             $this->getManager()->persist($model);
         }
 
-        $data['country'] = $data['countryId'];
-        $data['state'] = $data['stateId'];
+        $data['country'] = $data['country_id'];
+        $data['state'] = $data['state_id'];
 
+        /** @var \Symfony\Component\Form\FormInterface $form */
         $form = $this->get('shopware.form.factory')->create(AddressFormType::class, $model, ['allow_extra_fields' => true]);
         $form->submit($data);
 
@@ -139,7 +141,21 @@ class Shopware_Controllers_Backend_Address extends Shopware_Controllers_Backend_
 
         $model = $form->getData();
 
-        $this->getManager()->flush();
+        if ($model->getId()) {
+            $this->addressService->update($model);
+        } else {
+            /** @var Customer $customer */
+            $customer = $this->get('models')->find(Customer::class, $data['user_id']);
+            $this->addressService->create($model, $customer);
+        }
+
+        if (!empty($data['setDefaultBillingAddress'])) {
+            $this->addressService->setDefaultBillingAddress($model);
+        }
+
+        if (!empty($data['setDefaultShippingAddress'])) {
+            $this->addressService->setDefaultShippingAddress($model);
+        }
 
         $detail = $this->getDetail($model->getId());
 

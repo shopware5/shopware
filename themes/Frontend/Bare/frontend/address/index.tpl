@@ -40,10 +40,10 @@
                                 <div class="addresses--item-body panel--body is--wide">
                                     {block name="frontend_address_content_item_default_container"}
                                         <div class="addresses--item-default-container">
-                                            {if $sUserData.additional.user.defaultShippingAddressID == $address.id}
+                                            {if $sUserData.additional.user.default_shipping_address_id == $address.id}
                                                 <h3>{s name="AddressesTitleDefaultShippingAddress"}Default shipping address{/s}</h3>
                                             {/if}
-                                            {if $sUserData.additional.user.defaultBillingAddressID == $address.id}
+                                            {if $sUserData.additional.user.default_billing_address_id == $address.id}
                                                 <h3>{s name="AddressesTitleDefaultBillingAddress"}Default billing address{/s}</h3>
                                             {/if}
                                         </div>
@@ -76,7 +76,7 @@
                                             <div class="addresses--actions-set-defaults">
 
                                                 {block name="frontend_address_content_item_set_default_shipping"}
-                                                    {if $sUserData.additional.user.defaultShippingAddressID != $address.id}
+                                                    {if $sUserData.additional.user.default_shipping_address_id != $address.id}
                                                         <form action="{url controller="address" action="setDefaultShippingAddress"}" method="post">
                                                             <input type="hidden" name="addressId" value="{$address.id}" />
                                                             <button type="submit" class="btn is--link is--small">{s name="AddressesSetAsDefaultShippingAction"}{/s}</button>
@@ -85,7 +85,7 @@
                                                 {/block}
 
                                                 {block name="frontend_address_content_item_set_default_billing"}
-                                                    {if $sUserData.additional.user.defaultBillingAddressID != $address.id}
+                                                    {if $sUserData.additional.user.default_billing_address_id != $address.id}
                                                         <form action="{url controller="address" action="setDefaultBillingAddress"}" method="post">
                                                             <input type="hidden" name="addressId" value="{$address.id}" />
                                                             <button type="submit" class="btn is--link is--small">{s name="AddressesSetAsDefaultBillingAction"}{/s}</button>
@@ -103,7 +103,7 @@
                                         {/block}
 
                                         {block name="frontend_address_content_item_actions_delete"}
-                                            {if $sUserData.additional.user.defaultShippingAddressID != $address.id && $sUserData.additional.user.defaultBillingAddressID != $address.id}
+                                            {if $sUserData.additional.user.default_shipping_address_id != $address.id && $sUserData.additional.user.default_billing_address_id != $address.id}
                                                 <a href="{url controller=address action=delete id=$address.id}" title="{s name="AddressesContentItemActionDelete"}Delete{/s}" class="btn is--small">
                                                     {s name="AddressesContentItemActionDelete"}Delete{/s}
                                                 </a>

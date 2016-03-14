@@ -42,15 +42,15 @@ use Shopware\Models\Country\State;
  * The s_user_addresses table has the follows indices:
  * <code>
  *   - PRIMARY KEY (`id`)
- *   - KEY `userID` (`userID`)
- *   - KEY `countryID` (`countryID`)
- *   - KEY `stateID` (`stateID`)
+ *   - KEY `user_id` (`user_id`)
+ *   - KEY `country_id` (`country_id`)
+ *   - KEY `state_id` (`state_id`)
  * </code>
  * The table has the following constraints
  * <code>
- *   - CONSTRAINT `s_user_addresses_ibfk_1` FOREIGN KEY (`countryID`) REFERENCES `s_core_countries` (`id`) ON UPDATE CASCADE,
- *   - CONSTRAINT `s_user_addresses_ibfk_2` FOREIGN KEY (`stateID`) REFERENCES `s_core_countries_states` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
- *   - CONSTRAINT `s_user_addresses_ibfk_3` FOREIGN KEY (`userID`) REFERENCES `s_user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+ *   - CONSTRAINT `s_user_addresses_ibfk_1` FOREIGN KEY (`country_id`) REFERENCES `s_core_countries` (`id`) ON UPDATE CASCADE,
+ *   - CONSTRAINT `s_user_addresses_ibfk_2` FOREIGN KEY (`state_id`) REFERENCES `s_core_countries_states` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+ *   - CONSTRAINT `s_user_addresses_ibfk_3` FOREIGN KEY (`user_id`) REFERENCES `s_user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
  * </code>
  *
  * @ORM\Entity(repositoryClass="AddressRepository")
@@ -158,10 +158,10 @@ class Address extends ModelEntity
     /**
      * OWNING SIDE
      * The customer property is the owning side of the association between customer and address.
-     * The association is joined over the address userID and the customer id
+     * The association is joined over the address user_id and the customer id
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Customer\Customer")
-     * @ORM\JoinColumn(name="userID", referencedColumnName="id")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      * @var Customer
      */
     protected $customer;
@@ -175,14 +175,14 @@ class Address extends ModelEntity
 
     /**
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Country\Country")
-     * @ORM\JoinColumn(name="countryID", referencedColumnName="id")
+     * @ORM\JoinColumn(name="country_id", referencedColumnName="id")
      * @var Country
      */
     protected $country;
 
     /**
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Country\State")
-     * @ORM\JoinColumn(name="stateID", referencedColumnName="id")
+     * @ORM\JoinColumn(name="state_id", referencedColumnName="id")
      * @var State
      */
     protected $state;

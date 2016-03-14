@@ -207,8 +207,8 @@ class Repository extends ModelRepository
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array(
             'customer',
-            'IDENTITY(customer.defaultBillingAddress) as defaultBillingAddressId',
-            'IDENTITY(customer.defaultShippingAddress) as defaultShippingAddressId',
+            'IDENTITY(customer.defaultBillingAddress) as default_billing_address_id',
+            'IDENTITY(customer.defaultShippingAddress) as default_shipping_address_id',
             'billing',
             'shipping',
             'paymentData',
