@@ -140,9 +140,7 @@ class AddressService implements AddressServiceInterface
      */
     public function isDuplicate(array $data, $customerId)
     {
-        $existing = $this->modelManager->getRepository(Address::class)
-            ->getByUserQuery($customerId)
-            ->getResult(AbstractQuery::HYDRATE_ARRAY);
+        $existing = $this->modelManager->getRepository(Address::class)->getListArray($customerId);
 
         foreach ($existing as $row) {
             $row['country'] = $row['country']['id'];

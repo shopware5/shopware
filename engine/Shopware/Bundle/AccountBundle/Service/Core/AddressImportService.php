@@ -111,7 +111,7 @@ class AddressImportService implements AddressImportServiceInterface
         $data = $builder
             ->select($fields)
             ->from($table)
-            ->where('user_id = :customerId')
+            ->where('userID = :customerId')
             ->setParameter('customerId', $customerId)
             ->execute()
             ->fetch(\PDO::FETCH_ASSOC);
@@ -169,8 +169,8 @@ class AddressImportService implements AddressImportServiceInterface
             'street',
             'zipcode',
             'city',
-            'country_id as country',
-            'state_id as state',
+            'countryID as country',
+            'stateID as state',
             'additional_address_line1',
             'additional_address_line2'
         ];
@@ -191,7 +191,7 @@ class AddressImportService implements AddressImportServiceInterface
             ->select('*')
             ->from($table, 'address')
             ->innerJoin('address', $attributeTable, 'attribute', 'address.id = attribute.' . $attributeForeignKey)
-            ->where('address.user_id = :addressId')
+            ->where('address.userID = :addressId')
             ->setParameter('addressId', $address->getCustomer()->getId())
             ->execute()
             ->fetch(\PDO::FETCH_ASSOC);
