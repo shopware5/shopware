@@ -200,6 +200,8 @@ class Customer extends Resource
         } catch (\Exception $ex) {
         }
 
+        $this->getManager()->clear(CustomerModel::class);
+        $customer = $this->getManager()->find(CustomerModel::class, $customer->getId());
 
         return $customer;
     }

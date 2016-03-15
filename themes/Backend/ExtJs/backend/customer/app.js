@@ -74,8 +74,6 @@ Ext.define('Shopware.apps.Customer', {
     views:[
         'detail.Window',
         'detail.Base',
-        'detail.Billing',
-        'detail.Shipping',
         'detail.Debit',
         'detail.Comment',
         'detail.Additional' ,

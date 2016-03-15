@@ -127,12 +127,10 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
      * @param model
      */
     setStores: function(stores) {
-        var me = this, billing = null, shipping = null, state, countryStore;
+        var me = this;
 
         me.baseFieldSet.customerGroupCombo.bindStore(stores.getCustomerGroupStore);
         me.baseFieldSet.shopStoreCombo.bindStore(stores.getShopStore);
-        me.billingFieldSet.countryCombo.bindStore(stores.getCountryStore);
-        me.shippingFieldSet.countryCombo.bindStore(stores.getCountryStore);
         me.debitFieldSet.paymentCombo.bindStore(stores.getPaymentStore);
         me.paymentStore = stores.getPaymentStore;
 
@@ -143,68 +141,6 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
             me.orderGrid.paymentStatusStore = stores.getPaymentStatusStore;
         }
         me.detailForm.loadRecord(me.record);
-        var billingComboStateStore = Ext.create('Shopware.store.CountryState'),
-            shippingComboStateStore = Ext.create('Shopware.store.CountryState');
-
-        me.billingFieldSet.countryStateCombo.bindStore(billingComboStateStore);
-        me.shippingFieldSet.countryStateCombo.bindStore(shippingComboStateStore);
-
-        if (me.record instanceof Ext.data.Model &&
-            me.record.getBilling() instanceof Ext.data.Store &&
-            me.record.getBilling().first() instanceof Ext.data.Model) {
-
-            billing = me.record.getBilling().first();
-
-            if(billing.get('countryId')) {
-
-                billingComboStateStore.getProxy().extraParams.countryId = billing.get('countryId');
-                billingComboStateStore.load({
-                    callback: function() {
-                        if(billing.get('stateId')) {
-                            me.billingFieldSet.countryStateCombo.setValue(billing.get('stateId'));
-                            me.billingFieldSet.countryStateCombo.show();
-                        }
-                        else {
-                            me.billingFieldSet.countryStateCombo.setValue(null);
-                            me.billingFieldSet.countryStateCombo.hide();
-                            billing.set('stateId',null);
-                        }
-                    }
-                });
-            }
-        }
-        else {
-            me.billingFieldSet.countryStateCombo.setValue(null);
-        }
-
-        if (me.record instanceof Ext.data.Model &&
-                me.record.getShipping() instanceof Ext.data.Store &&
-                me.record.getShipping().first() instanceof Ext.data.Model) {
-
-            shipping = me.record.getShipping().first();
-
-            if(shipping.get('countryId')) {
-                shippingComboStateStore.getProxy().extraParams.countryId = shipping.get('countryId');
-                shippingComboStateStore.load({
-                    callback: function() {
-                        me.shippingFieldSet.countryStateCombo.setValue(shipping.get('stateId'));
-                        if(shipping.get('stateId')) {
-                            me.shippingFieldSet.countryStateCombo.setValue(shipping.get('stateId'));
-                            me.shippingFieldSet.countryStateCombo.show();
-                        }
-                        else {
-                            me.shippingFieldSet.countryStateCombo.setValue(null);
-                            me.shippingFieldSet.countryStateCombo.hide();
-                            shipping.set('stateId',null);
-                        }
-                    }
-                });
-            }
-        }
-        else {
-            me.shippingFieldSet.countryStateCombo.setValue(null);
-        }
-
 
         if (!me.record.get('id') ) {
             me.detailForm.getForm().clearInvalid();
@@ -273,7 +209,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
     },
 
     /**
-     * Creates the customer data tab which contains the different field sets like billing or shipping
+     * Creates the customer data tab which contains the different field sets
      * to edit or create a new customer.
      * @return [Ext.container.Container] - Contains the data and order tab
      */
@@ -294,9 +230,13 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
 
         me.baseFieldSet = Ext.create('Shopware.apps.Customer.view.detail.Base', { record: me.record });
         me.commentFieldSet = Ext.create('Shopware.apps.Customer.view.detail.Comment', { record: me.record });
-        me.billingFieldSet = Ext.create('Shopware.apps.Customer.view.detail.Billing', { record: me.record });
-        me.shippingFieldSet = Ext.create('Shopware.apps.Customer.view.detail.Shipping', { record: me.record });
         me.debitFieldSet = Ext.create('Shopware.apps.Customer.view.detail.Debit', { record: me.record });
+
+        if (me.record.get('id')) {
+            me.addressFieldSet = me.createAddressFieldSet();
+        } else {
+            me.addressFieldSet = me.createAddressForm();
+        }
 
         me.detailForm = Ext.create('Ext.form.Panel', {
             collapsible: false,
@@ -306,10 +246,9 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
             autoScroll:true,
             items:[
                 me.baseFieldSet,
-                me.commentFieldSet,
-                me.billingFieldSet,
-                me.shippingFieldSet,
-                me.debitFieldSet
+                me.addressFieldSet,
+                me.debitFieldSet,
+                me.commentFieldSet
             ],
             dockedItems: [{
                 xtype: 'toolbar',
@@ -468,6 +407,168 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
                 { xtype:'tbspacer', width:12 },
                 me.toDateField
             ]
+        });
+    },
+
+    createAddressFieldSet: function() {
+        var me = this;
+
+        me.billingPanel = me.createBillingContainer();
+        me.shippingPanel = me.createShippingContainer();
+
+        return me.addressContainer = Ext.create('Ext.container.Container', {
+            minWidth: 250,
+            layout: {
+                type: 'hbox',
+                align: 'stretch'
+            },
+            margin: '0 0 10 0',
+            items: [
+                me.billingPanel,
+                { width: 10, border: 0 },
+                me.shippingPanel
+            ]
+        });
+    },
+
+    /**
+     * Creates the Ext.panel.Panel for the billing information.
+     */
+    createBillingContainer: function() {
+        var me = this;
+
+        me.billingContainer = Ext.create('Ext.container.Container', {
+            tpl: me.createBillingTemplate(),
+            data: me.record.getBilling().first().getData()
+        });
+
+        return Ext.create('Ext.panel.Panel', {
+            title: '{s name="billingContainerTitle"}Default billing address{/s}',
+            bodyPadding: 10,
+            flex: 1,
+            style: {
+                background: '#fff'
+            },
+            paddingRight: 10,
+            items: [
+                me.billingContainer
+            ]
+        });
+    },
+
+    /**
+     * Creates the XTemplate for the billing information panel
+     *
+     * @return [Ext.XTemplate] generated Ext.XTemplate
+     */
+    createBillingTemplate:function () {
+        return new Ext.XTemplate(
+            '{literal}<tpl for=".">',
+                '<div class="customer-info-pnl">',
+                    '<div class="base-info">',
+                        '<p>',
+                            '<span>{company}</span>',
+                        '</p>',
+                        '<p>',
+                            '<span>{department}</span>',
+                        '</p>',
+                        '<p>',
+                            '<span>{firstName}</span>&nbsp;',
+                            '<span>{lastName}</span>',
+                        '</p>',
+                        '<p>',
+                            '<span>{street}</span>',
+                        '</p>',
+                        '<tpl if="additionalAddressLine1">',
+                            '<p>',
+                                '<span>{additionalAddressLine1}</span>',
+                            '</p>',
+                        '</tpl>',
+                        '<tpl if="additionalAddressLine2">',
+                            '<p>',
+                                '<span>{additionalAddressLine2}</span>',
+                            '</p>',
+                        '</tpl>',
+                        '<p>',
+                            '<span>{zipCode}</span>&nbsp;',
+                            '<span>{city}</span>',
+                        '</p>',
+                    '</div>',
+                '</div>',
+            '</tpl>{/literal}'
+        );
+    },
+
+    /**
+     * Creates the Ext.panel.Panel for the shipping information.
+     */
+    createShippingContainer: function() {
+        var me = this,
+            shipping = me.record.getShipping().first();
+
+        if (shipping === Ext.undefined) {
+            if(me.record.getBilling() === null || me.record.getBilling().first() === null) {
+                return;
+            }
+            shipping = me.record.getBilling().first();
+            if(shipping == null) {
+                return ;
+            }
+        }
+
+        me.shippingContainer = Ext.create('Ext.container.Container', {
+            tpl: me.createShippingTemplate(),
+            data: me.record.getShipping().first().getData()
+        });
+
+        return Ext.create('Ext.panel.Panel', {
+            title: '{s name="shippingContainerTitle"}Default shipping address{/s}',
+            bodyPadding: 10,
+            flex: 1,
+            marginLeft: 10,
+            style: 'padding: 0 8 0 0 !important;background: #fff;',
+            items: [
+                me.shippingContainer
+            ]
+        });
+    },
+
+    /**
+     * Creates the XTemplate for the billing information panel
+     *
+     * @return [Ext.XTemplate] generated Ext.XTemplate
+     */
+    createShippingTemplate:function () {
+        return this.createBillingTemplate();
+    },
+
+    /**
+     * Refresh address info panels
+     */
+    reloadRecord: function() {
+        var me = this;
+
+        me.record.store.load({
+            callback: function(updatedRecord) {
+                me.record = updatedRecord[0];
+
+                me.billingContainer.update(me.record.getBilling().first().raw);
+                me.shippingContainer.update(me.record.getShipping().first().raw);
+            }
+        });
+    },
+
+    /**
+     * Show address form for creation
+     *
+     * @returns Shopware.apps.Customer.view.address.detail.Address
+     */
+    createAddressForm: function() {
+        var me = this;
+
+        return me.addressForm = Ext.create('Shopware.apps.Customer.view.address.detail.Address', {
+            padding: 0,
+            record: Ext.create('Shopware.apps.Customer.model.Address')
         });
     }
 

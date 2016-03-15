@@ -38,15 +38,17 @@
                         <div class="addresses--content-item">
                             <div class="panel has--border is--rounded block">
                                 <div class="addresses--item-body panel--body is--wide">
-                                    {block name="frontend_address_content_item_default_container"}
-                                        <div class="addresses--item-default-container">
-                                            {if $sUserData.additional.user.default_shipping_address_id == $address.id}
-                                                <h3>{s name="AddressesTitleDefaultShippingAddress"}Default shipping address{/s}</h3>
-                                            {/if}
-                                            {if $sUserData.additional.user.default_billing_address_id == $address.id}
-                                                <h3>{s name="AddressesTitleDefaultBillingAddress"}Default billing address{/s}</h3>
-                                            {/if}
-                                        </div>
+                                    {block name="frontend_address_content_item_title"}
+                                        {if $sUserData.additional.user.default_shipping_address_id == $address.id || $sUserData.additional.user.default_billing_address_id == $address.id}
+                                            <div class="panel--title is--underline">
+                                                {if $sUserData.additional.user.default_shipping_address_id == $address.id}
+                                                    <div>{s name="AddressesTitleDefaultShippingAddress"}Default shipping address{/s}</div>
+                                                {/if}
+                                                {if $sUserData.additional.user.default_billing_address_id == $address.id}
+                                                    <div>{s name="AddressesTitleDefaultBillingAddress"}Default billing address{/s}</div>
+                                                {/if}
+                                            </div>
+                                        {/if}
                                     {/block}
 
                                     {block name="frontend_address_content_item_inner"}

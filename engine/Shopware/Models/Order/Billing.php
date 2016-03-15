@@ -659,6 +659,7 @@ class Billing extends ModelEntity
     {
         $this->setCompany((string) $address->getCompany());
         $this->setDepartment((string) $address->getDepartment());
+        $this->setSalutation((string) $address->getSalutation());
         $this->setFirstName((string) $address->getFirstname());
         $this->setLastName((string) $address->getLastname());
         $this->setStreet((string) $address->getStreet());

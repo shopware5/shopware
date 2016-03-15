@@ -161,6 +161,15 @@ class AddressService implements AddressServiceInterface
      */
     public function delete(Address $address)
     {
+        $preventDeletionOf = [
+            $address->getCustomer()->getDefaultShippingAddress()->getId(),
+            $address->getCustomer()->getDefaultBillingAddress()->getId()
+        ];
+
+        if (in_array($address->getId(), $preventDeletionOf)) {
+            throw new \RuntimeException("The address is defined as default billing or shipping address and cannot be removed.");
+        }
+
         $this->modelManager->remove($address);
         $this->modelManager->flush($address);
     }

@@ -109,6 +109,9 @@ In this document you will find a changelog of the important changes related to t
 * Removed `Enlight_Application::setPhpSettings()`
 * Removed `Enlight_Application::setIncludePaths()`
 * Removed `Enlight_Application::__callStatic()`
+* Removed the following models
+    * `Shopware.apps.Customer.view.detail.Billing`
+    * `Shopware.apps.Customer.view.detail.Shipping`
 
 ## 5.1.4
 * Customer logout will now regenerate the session id and clear the customers basket.
