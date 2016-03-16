@@ -1947,6 +1947,12 @@ class sAdmin
             $userObject["shipping"]["text5"],
             $userObject["shipping"]["text6"]
         );
+        $attributeParams = $this->eventManager->filter(
+            'Shopware_Modules_Admin_SaveRegisterShippingAttributes_FilterArray',
+            $attributeParams,
+            array('subject' => $this, 'user' => $userObject, 'id' => $userID)
+        );
+
         $saveAttributeData = $this->db->query($sqlAttributes, $attributeParams);
         $this->eventManager->notify(
             'Shopware_Modules_Admin_SaveRegisterShippingAttributes_Return',
