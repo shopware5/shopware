@@ -940,7 +940,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         ) {
             $errorMessages[] = $this->View()->fetch('string:'.$frontendNamespace->get(
                 'RegisterPasswordLength',
-                'Your password should contain at least {config name=\"MinPassword\"} characters'
+                'Your password should contain at least {config name="MinPassword"} characters'
             ));
             $errors['password'] = true;
             $errors['passwordConfirmation'] = true;
