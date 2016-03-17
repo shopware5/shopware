@@ -258,7 +258,7 @@ class Shopware_Tests_Controllers_Backend_OrderTest extends Enlight_Components_Te
                     'countryId' => 2,
                     'number' => '',
                     'phone' => '012345 / 6789',
-                    'fax' => '', 'vatId' => '',
+                    'vatId' => '',
                     'orderId' => 15,
                     'shopware.apps.order.model.order' => array( ),
                 ),

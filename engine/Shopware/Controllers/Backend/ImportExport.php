@@ -278,7 +278,6 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             'billing.zipCode as billing_zipcode',
             'billing.city as billing_city',
             'billing.phone',
-            'billing.fax',
             'billing.additionalAddressLine1 as billing_additional_address_line1',
             'billing.additionalAddressLine2 as billing_additional_address_line2',
             'billing.countryId as billing_countryID',
@@ -1359,7 +1358,6 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
 
                 'billing.vatId as ustid',
                 'billing.phone as phone',
-                'billing.fax as fax',
                 'customer.email as email',
                 'customer.groupKey as customergroup',
                 'customer.newsletter as newsletter',
@@ -3134,7 +3132,6 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             'customergroup'  => 'groupKey',
             'md5_password'   => 'rawPassword',
             'phone'          => 'billing_phone',
-            'fax'            => 'billing_fax',
             'customernumber' => 'billing_number',
             'accountmode'    => 'accountMode',
 

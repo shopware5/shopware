@@ -357,7 +357,6 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
                 'zipcode'       => array('required' => 1),
                 'city'          => array('required' => 1),
                 'phone'         => array('required' => $requirePhone),
-                'fax'           => array('required' => 0),
                 'country'       => array(
                     'required' => 1,
                     'in' => $countryIds

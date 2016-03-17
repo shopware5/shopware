@@ -1063,7 +1063,6 @@ class sOrderTest extends PHPUnit_Framework_TestCase
                 'userID' => '1',
                 'company' => '',
                 'phone' => '',
-                'fax' => '',
                 'department' => '',
                 'salutation' => 'mr',
                 'customernumber' => '20001',

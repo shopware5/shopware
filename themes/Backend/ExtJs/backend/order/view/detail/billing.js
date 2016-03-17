@@ -80,8 +80,7 @@ Ext.define('Shopware.apps.Order.view.detail.Billing', {
         phone:'{s name=address/phone}Phone{/s}',
         company:'{s name=address/company}Company{/s}',
         department:'{s name=address/department}Department{/s}',
-        vatId:'{s name=address/vat_id}VAT ID{/s}',
-        fax:'{s name=address/fax}Fax{/s}'
+        vatId:'{s name=address/vat_id}VAT ID{/s}'
     },
 
     /**
@@ -276,9 +275,6 @@ Ext.define('Shopware.apps.Order.view.detail.Billing', {
         }, {
             name:'billing[phone]',
             fieldLabel:me.snippets.phone
-        }, {
-            name:'billing[fax]',
-            fieldLabel:me.snippets.fax
         }];
     }
 });

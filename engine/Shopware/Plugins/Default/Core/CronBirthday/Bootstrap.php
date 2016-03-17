@@ -52,7 +52,6 @@ class Shopware_Plugins_Core_CronBirthday_Bootstrap extends Shopware_Components_P
                 zipcode,
                 city,
                 phone,
-                fax,
                 countryID,
                 ustid,
                 at.text1,

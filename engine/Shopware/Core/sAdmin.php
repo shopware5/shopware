@@ -530,7 +530,6 @@ class sAdmin
             'zipcode',
             'city',
             'phone',
-            'fax',
             'countryID',
             'stateID',
             'ustid',
@@ -1839,7 +1838,6 @@ class sAdmin
             $userObject["zipcode"],
             $userObject["city"],
             empty($userObject["phone"]) ? "" : $userObject["phone"],
-            empty($userObject["fax"]) ? "" : $userObject["fax"],
             $userObject["country"],
             empty($userObject["stateID"]) ? 0 : $userObject["stateID"] ,
             empty($userObject["ustid"]) ? "" : $userObject["ustid"],
@@ -1851,9 +1849,9 @@ class sAdmin
         $sqlBilling = "INSERT INTO s_user_billingaddress
             (userID, company, department, salutation, firstname, lastname,
             street, zipcode, city,phone,
-            fax, countryID, stateID, ustid, birthday, additional_address_line1, additional_address_line2)
+            countryID, stateID, ustid, birthday, additional_address_line1, additional_address_line2)
             VALUES
-            (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         // Trying to insert
         list($sqlBilling, $data) = $this->eventManager->filter(
