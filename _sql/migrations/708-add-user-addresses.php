@@ -9,8 +9,8 @@ class Migrations_Migration708 extends Shopware\Components\Migrations\AbstractMig
     public function up($modus)
     {
         $this->changeConfusingVatLabel();
-        $this->createAddressTables();
         $this->createDefaultShippingBillingRelations();
+        $this->createAddressTables();
     }
 
     private function createAddressTables()
@@ -83,14 +83,11 @@ SQL;
     private function createDefaultShippingBillingRelations()
     {
         $sql = <<<SQL
-
 ALTER TABLE `s_user`
 ADD `default_billing_address_id` int(11) DEFAULT NULL,
 ADD `default_shipping_address_id` int(11) DEFAULT NULL AFTER `default_billing_address_id`,
 ADD INDEX `default_billing_address_id` (`default_billing_address_id`),
-ADD INDEX `default_shipping_address_id` (`default_shipping_address_id`),
-ADD FOREIGN KEY (`default_billing_address_id`) REFERENCES `s_user_addresses` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE,
-ADD FOREIGN KEY (`default_shipping_address_id`) REFERENCES `s_user_addresses` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ADD INDEX `default_shipping_address_id` (`default_shipping_address_id`);
 SQL;
 
         $this->addSql($sql);

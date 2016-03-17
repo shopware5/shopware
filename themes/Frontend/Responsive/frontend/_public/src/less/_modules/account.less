@@ -432,6 +432,11 @@ It allows the user to directly see and change the important information of their
     .unitize(margin, 0);
     .unitize(padding-top, 45);
 
+    .addresses--item-body .panel--title {
+        .unitize-margin(0, 0, 20, 0);
+        padding-top: 0;
+    }
+
     .account--welcome {
         margin-bottom: 0;
     }
@@ -465,9 +470,12 @@ It allows the user to directly see and change the important information of their
         line-height: normal;
 
         .btn {
-            .unitize(font-size, 13);
             padding: 0;
-            color: @brand-primary;
+            color: @brand-secondary;
+
+            &:hover {
+                color: @brand-primary;
+            }
         }
     }
 

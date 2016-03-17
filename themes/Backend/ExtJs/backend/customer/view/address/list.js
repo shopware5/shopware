@@ -176,9 +176,9 @@ Ext.define('Shopware.apps.Customer.view.address.List', {
      */
     salutationRenderer: function (value) {
         if (value === 'mr') {
-            return '{s name=address/salutation_mr namespace=backend/customer/view/detail}Mr{/s}';
+            return '{s name=detail/label/salutation_mr namespace=backend/customer/view/address}Mr{/s}';
         } else {
-            return '{s name=address/salutation_ms namespace=backend/customer/view/detail}Mrs{/s}';
+            return '{s name=detail/label/salutation_ms namespace=backend/customer/view/address}Mrs{/s}';
         }
     },
 

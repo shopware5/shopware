@@ -161,4 +161,31 @@ class Shopware_Controllers_Backend_Address extends Shopware_Controllers_Backend_
 
         return array('success' => true, 'data' => $detail['data']);
     }
+
+    /**
+     * Use address service for deletion
+     *
+     * @param int $id
+     * @return array
+     */
+    public function delete($id)
+    {
+        if (empty($id)) {
+            return array('success' => false, 'error' => 'The id parameter contains no value.');
+        }
+
+        $model = $this->getManager()->find($this->model, $id);
+
+        if (!($model instanceof $this->model)) {
+            return array('success' => false, 'error' => 'The passed id parameter exists no more.');
+        }
+
+        try {
+            $this->addressService->delete($model);
+        } catch (\Exception $ex) {
+            return array('success' => false, 'error' => $ex->getMessage());
+        }
+
+        return array('success' => true);
+    }
 }
