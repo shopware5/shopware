@@ -685,8 +685,21 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
 
         $model->fromArray($data);
 
-        $manager->persist($model);
-        $manager->flush();
+        try {
+            $manager->persist($model);
+            $manager->flush();
+        } catch (\Exception $ex) {
+            switch ($name) {
+                case 'country':
+                    if ($ex instanceof \Doctrine\DBAL\DBALException && stripos($ex->getMessage(), "violation: 1451") !== false) {
+                        $this->View()->assign(array('success' => false, 'message' => 'A state marked to be deleted is still in use.'));
+                        return;
+                    }
+                    break;
+                default:
+                    throw $ex;
+            }
+        }
 
         $this->View()->assign(array('success' => true));
     }
@@ -773,8 +786,19 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
             return;
         }
 
-        $manager->remove($model);
-        $manager->flush();
+        try {
+            $manager->remove($model);
+            $manager->flush();
+        } catch (\Exception $ex) {
+            switch ($name) {
+                case 'country':
+                    $this->View()->assign(array('success' => false, 'message' => 'The country is still being used.'));
+                    return;
+                default:
+                    throw $ex;
+            }
+        }
+
 
         $this->View()->assign(array('success' => true));
     }
