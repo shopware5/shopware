@@ -301,7 +301,6 @@ return array(
             'zipcode' => '50000',
             'city' => 'Berlin',
             'phone' => '123456789',
-            'fax' => '',
             'countryID' => '2',
             'stateID' => '0',
             'ustid' => '',

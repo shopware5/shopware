@@ -1252,7 +1252,6 @@ class sOrder
             zipcode,
             city,
             phone,
-            fax,
             countryID,
             stateID,
             ustid,
@@ -1260,7 +1259,6 @@ class sOrder
             additional_address_line2
         )
         VALUES (
-            ?,
             ?,
             ?,
             ?,
@@ -1294,7 +1292,6 @@ class sOrder
             $address["zipcode"],
             $address["city"],
             $address["phone"],
-            $address["fax"],
             $address["countryID"],
             $address["stateID"],
             $address["ustid"],
@@ -1853,8 +1850,6 @@ SELECT
     `b`.`city` AS `billing_city`,
     `b`.`phone` AS `phone`,
     `b`.`phone` AS `billing_phone`,
-    `b`.`fax` AS `fax`,
-    `b`.`fax` AS `billing_fax`,
     `b`.`countryID` AS `billing_countryID`,
     `b`.`stateID` AS `billing_stateID`,
     `bc`.`countryname` AS `billing_country`,

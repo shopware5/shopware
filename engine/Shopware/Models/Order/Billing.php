@@ -165,13 +165,6 @@ class Billing extends ModelEntity
     private $phone = '';
 
     /**
-     * Contains the fax of the billing address
-     * @var string $fax
-     * @ORM\Column(name="fax", type="string", length=40, nullable=false)
-     */
-    private $fax = '';
-
-    /**
      * Contains the vat id of the billing address
      * @var string $vatId
      * @ORM\Column(name="ustid", type="string", length=50, nullable=false)
@@ -463,28 +456,6 @@ class Billing extends ModelEntity
     public function getPhone()
     {
         return $this->phone;
-    }
-
-    /**
-     * Setter function for the fax column property.
-     *
-     * @param string $fax
-     * @return Billing
-     */
-    public function setFax($fax)
-    {
-        $this->fax = $fax;
-        return $this;
-    }
-
-    /**
-     * Getter function for the fax column property.
-     *
-     * @return string
-     */
-    public function getFax()
-    {
-        return $this->fax;
     }
 
     /**

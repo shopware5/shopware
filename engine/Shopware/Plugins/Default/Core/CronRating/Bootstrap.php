@@ -167,8 +167,6 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
                 b.city AS billing_city,
                 b.phone AS phone,
                 b.phone AS billing_phone,
-                b.fax AS fax,
-                b.fax AS billing_fax,
                 b.countryID AS billing_countryID,
                 bc.countryname AS billing_country,
                 bc.countryiso AS billing_countryiso,

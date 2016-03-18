@@ -441,7 +441,6 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             'firstname'=>array('required'=>1),
             'lastname'=>array('required'=>1),
             'phone'=>array('required'=> $requirePhone),
-            'fax'=>array('required'=>0),
             'sValidation'=>array('required'=>0),
             'birthyear'=>array('required'=> $requireBirthday, 'date' => ['d' => 'birthday', 'm' => 'birthmonth', 'y' => 'birthyear']),
             'birthmonth'=>array('required'=> $requireBirthday, 'date' => ['d' => 'birthday', 'm' => 'birthmonth', 'y' => 'birthyear']),
