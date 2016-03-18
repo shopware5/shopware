@@ -120,7 +120,7 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
     {
         $userId = $this->get('session')->get('sUserId');
         $addressId = $this->Request()->getParam('id', null);
-        $address = $this->addressRepository->getOne($addressId, $userId);
+        $address = $this->addressRepository->getOneByUser($addressId, $userId);
 
         $form = $this->createForm(AddressFormType::class, $address, ['allow_extra_fields' => true]);
         $form->handleRequest($this->Request());
@@ -153,7 +153,7 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
         $userId = $this->get('session')->get('sUserId');
         $addressId = $this->Request()->getParam('id', null);
 
-        $address = $this->addressRepository->getOne($addressId, $userId);
+        $address = $this->addressRepository->getOneByUser($addressId, $userId);
 
         if ($this->Request()->isPost()) {
             $this->addressService->delete($address);
@@ -210,7 +210,7 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
         $userId = $this->get('session')->get('sUserId');
         $addressId = $this->Request()->getParam('addressId', null);
 
-        $address = $this->addressRepository->getOne($addressId, $userId);
+        $address = $this->addressRepository->getOneByUser($addressId, $userId);
 
         if (!$this->Request()->isPost()) {
             $this->redirect(['action' => 'index']);
@@ -230,7 +230,7 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
         $userId = $this->get('session')->get('sUserId');
         $addressId = $this->Request()->getParam('addressId', null);
 
-        $address = $this->addressRepository->getOne($addressId, $userId);
+        $address = $this->addressRepository->getOneByUser($addressId, $userId);
 
         if (!$this->Request()->isPost()) {
             $this->redirect(['action' => 'index']);

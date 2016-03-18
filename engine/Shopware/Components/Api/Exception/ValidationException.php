@@ -24,6 +24,10 @@
 
 namespace Shopware\Components\Api\Exception;
 
+use Symfony\Component\Form\FormErrorIterator;
+use Symfony\Component\Validator\ConstraintViolation;
+use Symfony\Component\Validator\ConstraintViolationList;
+
 /**
  * API Exception
  *
@@ -34,14 +38,14 @@ namespace Shopware\Components\Api\Exception;
 class ValidationException extends \Enlight_Exception
 {
     /**
-     * @var \Symfony\Component\Validator\ConstraintViolationList
+     * @var ConstraintViolationList
      */
     protected $violations = null;
 
     /**
-     * @param \Symfony\Component\Validator\ConstraintViolationList $violations
+     * @param ConstraintViolationList $violations
      */
-    public function __construct(\Symfony\Component\Validator\ConstraintViolationList $violations)
+    public function __construct(ConstraintViolationList $violations)
     {
         $this->setViolations($violations);
 
@@ -49,7 +53,7 @@ class ValidationException extends \Enlight_Exception
     }
 
     /**
-     * @param \Symfony\Component\Validator\ConstraintViolationList $violations
+     * @param ConstraintViolationList $violations
      */
     public function setViolations($violations)
     {
@@ -57,10 +61,36 @@ class ValidationException extends \Enlight_Exception
     }
 
     /**
-     * @return \Symfony\Component\Validator\ConstraintViolationList
+     * @return ConstraintViolationList
      */
     public function getViolations()
     {
         return $this->violations;
+    }
+
+    /**
+     * @param FormErrorIterator $errors
+     * @return ValidationException
+     */
+    public static function createFromFormError(FormErrorIterator $errors)
+    {
+        $violations = [];
+
+        foreach ($errors as $error) {
+            $violations[] = new ConstraintViolation(
+                $error->getMessage(),
+                $error->getMessageTemplate(),
+                $error->getMessageParameters(),
+                $error->getOrigin()->getRoot(),
+                $error->getOrigin()->getPropertyPath(),
+                $error->getOrigin()->getData(),
+                $error->getMessagePluralization(),
+                null,
+                null,
+                $error->getCause()
+            );
+        }
+
+        return new self(new ConstraintViolationList($violations));
     }
 }
