@@ -34,8 +34,7 @@ Ext.define('Shopware.apps.ProductStream.view.selected_list.Window', {
     title : '{s name=detail_window_title}Product stream details{/s}',
     height: '90%',
     width: '90%',
-    layout: { type: 'vbox', align: 'stretch'},
-    bodyPadding: 10,
+    layout: 'fit',
 
     initComponent: function() {
         var me = this;
@@ -48,17 +47,28 @@ Ext.define('Shopware.apps.ProductStream.view.selected_list.Window', {
     },
 
     loadRecord: function(record) {
-        this.settingsPanel.loadRecord(record);
+        var me = this;
+
+        me.formPanel.loadRecord(record);
+        me.settingsPanel.setSorting(record);
         if (record.get('id')) {
-            this.activateProductGrid(record);
+            me.activateProductGrid(record);
+            me.attributeForm.loadAttribute(record.get('id'));
         }
+
+        me.attributeForm.on('config-loaded', function() {
+            me.tabPanel.setActiveTab(0);
+            me.formPanel.translationPlugin.initTranslationFields(me.formPanel);
+        });
     },
 
     activateProductGrid: function(record) {
-        this.productGrid.streamId = record.get('id');
-        this.productGrid.store.getProxy().extraParams.streamId = record.get('id');
-        this.productGrid.store.load();
-        this.productGrid.enable();
+        var me = this;
+
+        me.productGrid.streamId = record.get('id');
+        me.productGrid.store.getProxy().extraParams.streamId = record.get('id');
+        me.productGrid.store.load();
+        me.productGrid.enable();
     },
 
     createToolbar: function() {
@@ -81,16 +91,50 @@ Ext.define('Shopware.apps.ProductStream.view.selected_list.Window', {
     },
 
     createItems: function() {
-        return [
-            this.createSettingPanel(),
-            this.createProductGrid()
-        ];
+        var me = this;
+
+        var container = Ext.create('Ext.container.Container', {
+            layout: { type: 'vbox', align: 'stretch'},
+            flex: 1,
+            title: '{s name="configuration_title"}{/s}',
+            padding: 10,
+            items: [
+                this.createSettingPanel(),
+                this.createProductGrid()
+            ]
+        });
+
+        me.tabPanel = Ext.create('Ext.tab.Panel', {
+            flex: 1,
+            items: [container]
+        });
+
+        me.formPanel = Ext.create('Ext.form.Panel', {
+            layout: 'fit',
+            items: [me.tabPanel],
+            flex: 1,
+            name: 'product-stream-main-form',
+            border: false,
+            plugins: [{
+                ptype: 'translation',
+                translationType: 'productStream'
+            }]
+        });
+
+        me.attributeForm = Ext.create('Shopware.apps.ProductStream.view.common.Attributes', {
+            tabPanel: me.tabPanel,
+            translationForm: me.formPanel
+        });
+        me.tabPanel.add(me.attributeForm);
+
+        return [me.formPanel];
     },
 
     createProductGrid: function() {
         this.productGrid = Ext.create('Shopware.apps.ProductStream.view.selected_list.Product', {
+            disabled: true,
             flex: 1,
-            disabled: true
+            margin: '20 0 0'
         });
         return this.productGrid;
     },
@@ -98,6 +142,11 @@ Ext.define('Shopware.apps.ProductStream.view.selected_list.Window', {
     createSettingPanel: function() {
         this.settingsPanel = Ext.create('Shopware.apps.ProductStream.view.common.Settings');
         return this.settingsPanel;
+    },
+
+    createAttributePanel: function() {
+        this.attributeForm = Ext.create('Shopware.apps.ProductStream.view.common.Attributes');
+        return this.attributeForm;
     }
 });
 //{/block}

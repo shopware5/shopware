@@ -41,10 +41,10 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
     title: '{s name=title/settings_tab}Settings{/s}',
     alias: 'widget.emotion-detail-settings',
     bodyPadding: 20,
+    cls: 'shopware-form',
     border: 0,
     bodyBorder: 0,
     autoScroll: true,
-    style: 'background: #f9fafa',
 
     // Default settings for all underlying items
     defaults: {
@@ -84,7 +84,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             emptyText: '{s name=settings/emotion_name_empty}My new emotion{/s}',
             name: 'name',
             allowBlank: false,
-            labelWidth: me.defaults.labelWidth
+            labelWidth: me.defaults.labelWidth + 20
         });
 
         me.activeComboBox = Ext.create('Ext.form.field.Checkbox', {
@@ -93,7 +93,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             name: 'active',
             inputValue: true,
             uncheckedValue:false,
-            labelWidth: me.defaults.labelWidth
+            labelWidth: me.defaults.labelWidth + 20
         });
 
         me.landingPageCheckbox = Ext.create('Ext.form.field.Checkbox', {
@@ -102,7 +102,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             name: 'isLandingPage',
             inputValue: true,
             uncheckedValue: false,
-            labelWidth: me.defaults.labelWidth,
+            labelWidth: me.defaults.labelWidth + 20,
             listeners: {
                 scope: me,
                 change: function(field, value) {
@@ -120,6 +120,15 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             }
         });
 
+        me.attributeForm = Ext.create('Shopware.attribute.Form', {
+            margin: '10 0 0',
+            table: 's_emotion_attributes'
+        });
+
+        if (me.emotion) {
+            me.attributeForm.loadAttribute(me.emotion.get('id'));
+        }
+
         me.items = [
             me.nameField,
             me.landingPageCheckbox,
@@ -127,7 +136,8 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             me.generalFieldSet,
             me.categoryFieldSet,
             me.landingPageFieldSet,
-            me.timingFieldSet
+            me.timingFieldSet,
+            me.attributeForm
         ];
 
         me.callParent(arguments);
@@ -160,7 +170,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             width: '100%',
             name: 'categories',
             fieldLabel: '{s name=settings/select_categories_field}Select categorie(s){/s}',
-            labelWidth: me.defaults.labelWidth - 20,
+            labelWidth: me.defaults.labelWidth ,
             store: me.categoryPathStore,
             valueField: 'id',
             displayField: 'name',
@@ -173,7 +183,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             name: 'showListing',
             inputValue: true,
             uncheckedValue: false,
-            labelWidth: me.defaults.labelWidth - 20
+            labelWidth: me.defaults.labelWidth
         });
 
         return Ext.create('Ext.form.FieldSet', {
@@ -200,7 +210,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             displayField: 'name',
             valueField: 'id',
             emptyText: '{s name=settings/select_grid_empty}Please select...{/s}',
-            labelWidth: me.defaults.labelWidth - 20,
+            labelWidth: me.defaults.labelWidth ,
             anchor: '100%'
         });
 
@@ -212,7 +222,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             queryMode: 'remote',
             store: Ext.create('Shopware.apps.Emotion.store.Templates').load(),
             emptyText: '{s name=settings/fieldset/select_template_empty}Please select...{/s}',
-            labelWidth: me.defaults.labelWidth - 20,
+            labelWidth: me.defaults.labelWidth ,
             anchor: '100%'
         });
 
@@ -224,7 +234,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             helpText: '{s name=settings/fieldset/position_number_info}{/s}',
             anchor: '100%',
             width: '100%',
-            labelWidth: me.defaults.labelWidth - 20,
+            labelWidth: me.defaults.labelWidth ,
             supportText: '{s name=settings/fieldset/position_number_help}{/s}'
         });
 
@@ -244,7 +254,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             valueField: 'value',
             fieldLabel: me.snippets.fields.responsive_adjustments,
             allowBlank: false,
-            labelWidth: me.defaults.labelWidth - 20,
+            labelWidth: me.defaults.labelWidth ,
             anchor: '100%',
             tpl: Ext.create('Ext.XTemplate',
                 '{literal}<tpl for=".">',
@@ -260,7 +270,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             vertical: false,
             items: me.createDeviceData(),
             fieldLabel: '{s name=settings/fieldset/select_device}Select device{/s}',
-            labelWidth: me.defaults.labelWidth - 20,
+            labelWidth: me.defaults.labelWidth ,
             listeners: {
                 scope: me,
                 change: function(comp, newVal, oldVal) {
@@ -284,7 +294,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             fieldLabel: '{s name=settings/label/fullscreen}{/s}',
             boxLabel: '{s name=settings/boxlabel/fullscreen}{/s}',
             name: 'fullscreen',
-            labelWidth: me.defaults.labelWidth - 20,
+            labelWidth: me.defaults.labelWidth ,
             anchor: '100%',
             listeners: {
                 scope: me,
@@ -362,7 +372,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             submitFormat: 'd.m.Y',
             fieldLabel: '{s name=settings/time_control/start_date}Start date{/s}',
             name: 'validFrom',
-            labelWidth: me.defaults.labelWidth - 20
+            labelWidth: me.defaults.labelWidth
         });
 
         var validTo = Ext.create('Ext.form.field.Date', {
@@ -370,7 +380,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             submitFormat: 'd.m.Y',
             fieldLabel: '{s name=settings/time_control/end_date}End date{/s}',
             name: 'validTo',
-            labelWidth: me.defaults.labelWidth - 20
+            labelWidth: me.defaults.labelWidth
         });
 
         var validFromTime = Ext.create('Ext.form.field.Time', {
@@ -380,7 +390,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             validationEvent: false,
             submitFormat: 'H:i',
             anchor: '100%',
-            labelWidth: me.defaults.labelWidth - 20
+            labelWidth: me.defaults.labelWidth
         });
 
         var validToTime = Ext.create('Ext.form.field.Time', {
@@ -389,7 +399,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             increment: 30,
             submitFormat: 'H:i',
             anchor: '100%',
-            labelWidth: me.defaults.labelWidth - 20
+            labelWidth: me.defaults.labelWidth
         });
 
         return {
@@ -450,33 +460,33 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
         var displayField = Ext.create('Ext.form.field.Display', {
             name: 'link',
             fieldLabel: '{s name=settings/link_action}Link to the landingpage{/s}',
-            labelWidth: me.defaults.labelWidth - 20
+            labelWidth: me.defaults.labelWidth
         });
 
         var mediaSelection = Ext.create('Shopware.MediaManager.MediaSelection', {
             anchor: '100%',
             fieldLabel: '{s name=settings/teaser_image}Teaser image{/s}',
-            labelWidth: me.defaults.labelWidth - 20,
+            labelWidth: me.defaults.labelWidth ,
             name: 'landingPageTeaser'
         });
 
         var seoTitle = Ext.create('Ext.form.field.Text', {
             name: 'seoTitle',
             fieldLabel: '{s name=settings/seo_title}SEO title{/s}',
-            labelWidth: me.defaults.labelWidth - 20
+            labelWidth: me.defaults.labelWidth
         });
 
         var seoKeywords = Ext.create('Ext.form.field.Text', {
             name: 'seoKeywords',
             fieldLabel: '{s name=settings/seo_keywords}SEO-Keywords{/s}',
-            labelWidth: me.defaults.labelWidth - 20
+            labelWidth: me.defaults.labelWidth
         });
 
         var seoDescription = Ext.create('Ext.form.field.TextArea', {
             maxLength:150,
             name: 'seoDescription',
             fieldLabel: '{s name=settings/seo_description}SEO-Description{/s}',
-            labelWidth: me.defaults.labelWidth - 20
+            labelWidth: me.defaults.labelWidth
         });
 
         var store = Ext.create('Ext.data.Store', {
@@ -496,7 +506,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
         me.positionSelection = Ext.create('Ext.form.field.ComboBox', {
             queryMode: 'local',
             fieldLabel: '{s name=settings/select_position}Select position{/s}',
-            labelWidth: me.defaults.labelWidth - 20,
+            labelWidth: me.defaults.labelWidth ,
             store: store,
             displayField: 'display',
             valueField: 'value',
@@ -528,7 +538,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
         me.parentLangingPage = Ext.create('Ext.form.field.ComboBox', {
             queryMode: 'remote',
             fieldLabel: '{s name=settings/master_landingpage}Master landingpage{/s}',
-            labelWidth: me.defaults.labelWidth - 20,
+            labelWidth: me.defaults.labelWidth ,
             displayField: 'name',
             valueField: 'id',
             name: 'parentId',

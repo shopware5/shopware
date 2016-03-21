@@ -131,20 +131,10 @@
 
 
             //individuall styling for the different image sizes
-            .article-thumb-wrap.small {
-                font-size: 11px;
-                width: 90px;
-                height: 70px;
-            }
             .article-thumb-wrap.middle {
                 font-size: 12px;
                 width: 175px;
                 height: 150px;
-            }
-            .article-thumb-wrap.big {
-                font-size: 13px;
-                width: 250px;
-                height: 200px;
             }
 
             //styling for the drag over element
@@ -159,14 +149,8 @@
                 background-position: left bottom, left top, 3px top;
             }
 
-            .article-thumb-wrap.drag-over.small:before {
-  		        height: 84px;
-            }
             .article-thumb-wrap.drag-over.middle:before {
                 height: 166px
-            }
-            .article-thumb-wrap.drag-over.big:before{
-                height: 214px;
             }
 	        //styling for the main image
             .article-thumb-wrap.main {

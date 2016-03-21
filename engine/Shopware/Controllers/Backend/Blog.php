@@ -251,7 +251,6 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
         $this->prepareTagAssociatedData($params, $blogModel);
         $params = $this->prepareAssignedArticlesAssociatedData($params);
         $params = $this->prepareAuthorAssociatedData($params);
-        $params = $this->prepareAttributeAssociatedData($params);
 
         unset($params["tags"]);
         $params["media"] = $this->prepareMediaDataForSaving($params["media"]);
@@ -475,18 +474,6 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
         }
 
         return $mediaModels;
-    }
-
-    /**
-     * This method prepares the attribute associated data for saving to the blog model
-     *
-     * @param $data
-     * @return array
-     */
-    protected function prepareAttributeAssociatedData($data)
-    {
-        $data['attribute'] = $data['attribute'][0];
-        return $data;
     }
 
     /**

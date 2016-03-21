@@ -55,11 +55,7 @@ Ext.define('Shopware.apps.Blog.model.Main', {
         { name : 'displayDate', type : 'date' },
         { name : 'numberOfComments', type : 'int' }
     ],
-	/**
-	* If the name of the field is 'id' extjs assumes autmagical that
-	* this field is an unique identifier.
-	*/
-    idProperty : 'id',
+
 	/**
 	* Configure the data communication
 	* @object

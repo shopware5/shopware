@@ -35,11 +35,13 @@ Ext.define('Shopware.apps.ProductStream.controller.Main', {
         { ref: 'conditionPanel', selector: 'product-stream-condition-panel' },
         { ref: 'previewGrid', selector: 'product-stream-preview-grid' },
         { ref: 'settingsPanel', selector: 'product-stream-settings' },
+        { ref: 'formPanel', selector: 'form[name=product-stream-main-form]' },
         { ref: 'shopCombo', selector: 'product-stream-preview-grid combo[name=shop]' },
         { ref: 'currencyCombo', selector: 'product-stream-preview-grid combo[name=currency]' },
         { ref: 'customerGroupCombo', selector: 'product-stream-preview-grid combo[name=customerGroup]' },
         { ref: 'productStreamGrid', selector: 'product-stream-listing-grid' },
-        { ref: 'productStreamDetailGrid', selector: 'product-stream-selected-list-grid' }
+        { ref: 'productStreamDetailGrid', selector: 'product-stream-selected-list-grid' },
+        { ref: 'attributeForm', selector: 'stream-attribute-form' }
     ],
 
     init: function() {
@@ -89,18 +91,18 @@ Ext.define('Shopware.apps.ProductStream.controller.Main', {
     saveConditionStream: function(record) {
         var me = this;
         var conditionPanel = me.getConditionPanel();
-        var settingsPanel = me.getSettingsPanel();
+        var formPanel = me.getFormPanel();
 
         var valid = (
             conditionPanel.getForm().isValid() == true
-            && settingsPanel.getForm().isValid() == true
+            && formPanel.getForm().isValid() == true
         );
 
         if (!valid) {
             return;
         }
 
-        settingsPanel.getForm().updateRecord(record);
+        formPanel.getForm().updateRecord(record);
         record.set('sorting', me.getSorting());
         record.set('conditions', me.getConditions());
 
@@ -113,6 +115,8 @@ Ext.define('Shopware.apps.ProductStream.controller.Main', {
             callback: function() {
                 var productGrid = me.getProductStreamGrid(),
                         store = productGrid.store;
+
+                me.saveAttributes(record);
 
                 store.reload({
                     callback: function() {
@@ -127,10 +131,18 @@ Ext.define('Shopware.apps.ProductStream.controller.Main', {
         });
     },
 
+    saveAttributes: function(record) {
+        var me = this;
+        var attributeForm = me.getAttributeForm();
+        attributeForm.saveAttribute(record.get('id'), function() {
+            attributeForm.loadAttribute(record.get('id'));
+        });
+    },
+
     saveSelectionStream: function(record) {
         var me = this;
 
-        var settingsPanel = me.getSettingsPanel();
+        var settingsPanel = me.getFormPanel();
 
         if (!settingsPanel.getForm().isValid()) {
             return;
@@ -147,10 +159,11 @@ Ext.define('Shopware.apps.ProductStream.controller.Main', {
         record.save({
             callback: function() {
                 var productGrid = me.getProductStreamGrid(),
-                        listStore = productGrid.store,
-                        detailGrid = me.getProductStreamDetailGrid();
+                    listStore = productGrid.store,
+                    detailGrid = me.getProductStreamDetailGrid();
 
                 detailGrid.streamId = record.get('id');
+                me.saveAttributes(record);
 
                 listStore.reload({
                     callback: function() {
@@ -289,6 +302,15 @@ Ext.define('Shopware.apps.ProductStream.controller.Main', {
                         } else {
                             showNotificationAndRefresh();
                         }
+
+                        Ext.Ajax.request({
+                            url: '{url controller=ProductStream action=copyStreamAttributes}',
+                            params: {
+                                sourceStreamId: record.get('id'),
+                                targetStreamId: newRecord.get('id')
+                            }
+                        });
+
                     }
                 });
             }, this, false, '{s name=stream_duplicate_copy}Copy of {/s}' + record.get('name'));

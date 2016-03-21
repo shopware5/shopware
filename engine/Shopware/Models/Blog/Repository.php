@@ -406,12 +406,11 @@ class Repository extends ModelRepository
     public function getBackedDetailQueryBuilder($filter)
     {
         $builder = $this->createQueryBuilder("blog");
-        $builder->select(array('blog', 'tags', 'media', 'mappingMedia', 'assignedArticles', 'assignedArticlesDetail', 'attribute' ))
+        $builder->select(array('blog', 'tags', 'media', 'mappingMedia', 'assignedArticles', 'assignedArticlesDetail' ))
                 ->leftJoin('blog.tags', 'tags')
                 ->leftJoin('blog.assignedArticles', 'assignedArticles')
                 ->leftJoin('assignedArticles.mainDetail', 'assignedArticlesDetail')
                 ->leftJoin('blog.media', 'mappingMedia')
-                ->leftJoin('blog.attribute', 'attribute')
                 ->leftJoin('mappingMedia.media', 'media')
                 ->addFilter($filter);
 

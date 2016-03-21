@@ -57,6 +57,7 @@ Ext.define('Shopware.apps.Site.controller.Tree', {
         { ref:'mainWindow', selector:'site-mainWindow' },
         { ref:'confirmationBox', selector:'site-confirmationBox' },
         { ref:'detailForm', selector:'site-form' },
+        { ref:'attributeForm', selector: 'site-mainWindow shopware-attribute-form' },
         { ref:'navigationTree', selector:'site-tree' },
         /*{if {acl_is_allowed privilege=deleteGroup}}*/
         { ref:'deleteGroupButton', selector:'site-tree button[action=onDeleteGroup]' },
@@ -130,6 +131,8 @@ Ext.define('Shopware.apps.Site.controller.Tree', {
 			groupStore = ddselector.fromStore,
 			selectedStore = ddselector.toStore;
 
+        me.getAttributeForm().setDisabled(true);
+
         //determine if the item is a group or a site
         if (record.data.parentId != 'root' || record.isLeaf()) {
 
@@ -160,6 +163,8 @@ Ext.define('Shopware.apps.Site.controller.Tree', {
             //hotfix find a better solution for this after beta
             //record.data.description = record.data.description.split("(")[0];
             form.loadRecord(record);
+
+            me.getAttributeForm().loadAttribute(record.get('helperId'));
 
             //build and set the embed code
             //the preceding '<' is necessary to display the string without interference from the script renderer

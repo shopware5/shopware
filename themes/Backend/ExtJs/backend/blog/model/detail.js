@@ -46,7 +46,7 @@ Ext.define('Shopware.apps.Blog.model.Detail', {
 	*/
     fields : [
 		//{block name="backend/blog/model/detail/fields"}{/block}
-        { name : 'id', type : 'int' },
+        { name : 'id', type : 'int', useNull: true, defaultValue: null },
         { name : 'title', type : 'string' },
         { name : 'shortDescription', type : 'string' },
         { name : 'description', type : 'string' },
@@ -61,11 +61,7 @@ Ext.define('Shopware.apps.Blog.model.Detail', {
         { name : 'displayDate', type: 'date', dateFormat: 'd.m.Y' },
         { name : 'displayTime', type: 'date', dateFormat: 'H:i' }
     ],
-	/**
-	* If the name of the field is 'id' extjs assumes automatically that
-	* this field is an unique identifier.
-	*/
-    idProperty : 'id',
+
 	/**
 	* Configure the data communication
 	* @object
@@ -85,8 +81,7 @@ Ext.define('Shopware.apps.Blog.model.Detail', {
     },
     associations: [
         { type: 'hasMany', model: 'Shopware.apps.Blog.model.Media', name: 'getMedia', associationKey: 'media' },
-        { type: 'hasMany', model: 'Shopware.apps.Blog.model.AssignedArticles', name: 'getAssignedArticles', associationKey: 'assignedArticles' },
-        { type:'hasMany', model:'Shopware.apps.Blog.model.Attribute', name:'getAttribute', associationKey:'attribute' }
+        { type: 'hasMany', model: 'Shopware.apps.Blog.model.AssignedArticles', name: 'getAssignedArticles', associationKey: 'assignedArticles' }
     ]
 
 });

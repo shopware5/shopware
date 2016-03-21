@@ -41,7 +41,7 @@ Ext.define('Shopware.apps.Supplier.view.main.Create', {
     alias : 'widget.supplier-main-create',
     layout : 'fit',
     title : '{s name=title}Supplier - Create{/s}',
-    width : 850,
+    width : '80%',
     height : '90%',
     autoScroll: true,
     stateful : true,
@@ -65,6 +65,21 @@ Ext.define('Shopware.apps.Supplier.view.main.Create', {
 
         me.callParent(arguments);
     },
+
+    /**
+     * Returns a new fieldset containing an attribute form
+     * @returns Ext.form.FieldSet
+     */
+    createAttributeForm: function () {
+        var me = this;
+
+        me.attributeForm = Ext.create('Shopware.attribute.Form', {
+            table: 's_articles_supplier_attributes',
+            allowTranslation: false
+        });
+        return me.attributeForm;
+    },
+
     /**
      * Returns the whole form to edit the supplier
      *
@@ -80,7 +95,7 @@ Ext.define('Shopware.apps.Supplier.view.main.Create', {
             width       : '100%',
             autoScroll: true,
             defaults : {
-                labelWidth  : 130,
+                labelWidth  : 155,
                 anchor      : '100%'
             },
             bodyPadding : 10,
@@ -89,7 +104,7 @@ Ext.define('Shopware.apps.Supplier.view.main.Create', {
                     alias:'widget.supplier-base-field-set',
                     title : '{s name=panel_base}Basic information{/s}',
                     defaults : {
-                        labelWidth  : 130,
+                        labelWidth  : 155,
                         anchor      : '100%'
                     },
                     items : [
@@ -136,7 +151,7 @@ Ext.define('Shopware.apps.Supplier.view.main.Create', {
                     collapsible: true,
                     collapsed: true,
                     defaults : {
-                        labelWidth  : 130,
+                        labelWidth  : 155,
                         anchor      : '100%'
                     },
                     title : '{s name=panel_seo}SEO information{/s}',
@@ -156,7 +171,8 @@ Ext.define('Shopware.apps.Supplier.view.main.Create', {
                             allowBlank  : true
                         }
                     ]
-                })
+                }),
+                me.createAttributeForm()
             ]
         });
     },
@@ -170,7 +186,7 @@ Ext.define('Shopware.apps.Supplier.view.main.Create', {
         return Ext.create('Shopware.form.field.TinyMCE', {
             name : 'description',
             fieldLabel : '{s name=description}Description{/s}',
-            labelWidth: 130
+            labelWidth: 155
         });
     },
     /**
@@ -209,7 +225,7 @@ Ext.define('Shopware.apps.Supplier.view.main.Create', {
             supportText     : '{s name=logo_support}Supplier logo selection via Media Manager. The selection is limited to one media.{/s}',
             multiSelect     : false,
             albumId: -12, // Default supplier albumId
-            labelWidth: 130
+            labelWidth: 155
         });
     }
 });

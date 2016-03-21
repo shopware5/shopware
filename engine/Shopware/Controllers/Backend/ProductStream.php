@@ -35,6 +35,21 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
     protected $model = 'Shopware\Models\ProductStream\ProductStream';
     protected $alias = 'stream';
 
+    public function copyStreamAttributesAction()
+    {
+        $sourceStreamId = $this->Request()->getParam('sourceStreamId');
+        $targetStreamId = $this->Request()->getParam('targetStreamId');
+
+        $persister = Shopware()->Container()->get('shopware_attribute.data_persister');
+        $persister->cloneAttribute(
+            's_product_streams_attributes',
+            $sourceStreamId,
+            $targetStreamId
+        );
+
+        $this->View()->assign('success', true);
+    }
+
     public function loadPreviewAction()
     {
         $conditions = $this->Request()->getParam('conditions');

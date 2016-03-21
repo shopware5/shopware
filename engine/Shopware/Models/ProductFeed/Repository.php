@@ -137,12 +137,11 @@ class Repository extends ModelRepository
     public function getDetailQueryBuilder($feedId)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(array('feeds', 'suppliers', 'categories', 'articles', 'attribute'))
+        $builder->select(array('feeds', 'suppliers', 'categories', 'articles'))
                 ->from('Shopware\Models\ProductFeed\ProductFeed', 'feeds')
                 ->leftJoin('feeds.categories', 'categories')
                 ->leftJoin('feeds.suppliers', 'suppliers')
                 ->leftJoin('feeds.articles', 'articles')
-                ->leftJoin('feeds.attribute', 'attribute')
                 ->where($builder->expr()->eq('feeds.id', '?1'))->setParameter(1, $feedId);
         return $builder;
     }

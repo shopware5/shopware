@@ -149,6 +149,12 @@ Ext.define('Shopware.apps.Payment.view.main.Window', {
             paymentStore: me.paymentStore
         });
 
+        me.attributeForm = Ext.create('Shopware.attribute.Form', {
+            table: 's_core_paymentmeans_attributes',
+            title: '{s namespace="backend/attributes/main" name="attribute_form_title"}{/s}',
+            bodyPadding: 10,
+            autoScroll: true
+        });
 
         return Ext.create('Ext.tab.Panel', {
             autoShow: false,
@@ -181,7 +187,7 @@ Ext.define('Shopware.apps.Payment.view.main.Window', {
                 autoRender: true,
                 title: '{s name=title_subshopSelection}Subshop selection{/s}',
                 items: [ me.subshopSelection ]
-            }],
+            }, me.attributeForm],
 
             listeners: {
                 tabchange: function(tabPanel, newTab, oldTab) {

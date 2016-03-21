@@ -56,7 +56,8 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
     refs:[
         { ref:'productFeedWindow', selector:'product_feed-feed-window' },
         { ref:'productFeedSaveButton', selector:'product_feed-feed-window button[action=save]' },
-        { ref:'categoryTree', selector : 'product_feed-feed-tab-category treepanel' }
+        { ref:'categoryTree', selector : 'product_feed-feed-tab-category treepanel' },
+        { ref:'attributeForm', selector: 'product_feed-feed-window shopware-attribute-form' }
     ],
 
     /**
@@ -306,6 +307,7 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
         var me = this,
             formPanel = me.getProductFeedWindow().formPanel,
             form = formPanel.getForm(),
+            attributeForm = me.getAttributeForm(),
             listStore = me.subApplication.getStore('List'),
             record = form.getRecord();
 
@@ -326,6 +328,9 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
             callback: function (self,operation) {
                 if (operation.success) {
                     listStore.load();
+                    var response = Ext.JSON.decode(operation.response.responseText);
+                    var data = response.data;
+                    attributeForm.saveAttribute(data.id);
                     Shopware.Notification.createGrowlMessage('',me.snippets.onSaveChangesSuccess, me.snippets.growlMessage);
                     me.getProductFeedWindow().destroy();
                 } else {

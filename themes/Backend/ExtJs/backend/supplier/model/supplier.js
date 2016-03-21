@@ -88,9 +88,6 @@ Ext.define('Shopware.apps.Supplier.model.Supplier', {
      */
     validations : [
         { field : 'name', type : 'length', min : 1 }
-    ],
-    associations: [
-        { type: 'hasMany', model: 'Shopware.apps.Supplier.model.Attribute', name: 'getAttributes', associationKey: 'attribute'}
     ]
 });
 //{/block}

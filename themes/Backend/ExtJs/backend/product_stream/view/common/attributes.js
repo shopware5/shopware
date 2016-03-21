@@ -21,33 +21,23 @@
  * our trademarks remain entirely with us.
  *
  * @category   Shopware
- * @package    ProductFeed
- * @subpackage Model
+ * @package    ProductStream
+ * @subpackage Controller
  * @version    $Id$
  * @author shopware AG
  */
 
-/**
- * Model for the attributes associations in the detail model
- */
-//{block name="backend/product_feed/model/attribute"}
-Ext.define('Shopware.apps.ProductFeed.model.Attribute', {
+//{namespace name="backend/attributes/main"}
 
-    /**
-     * Extends the standard ExtJS 4
-     * @string
-     */
-    extend: 'Ext.data.Model',
-
-    /**
-     * The fields used for this model
-     *
-     * @array
-     */
-    fields : [
-		//{block name="backend/product_feed/model/attribute/fields"}{/block}
-        { name: 'id',      type: 'int' },
-        { name: 'productFeedId', type: 'int', useNull: true }
-    ]
+Ext.define('Shopware.apps.ProductStream.view.common.Attributes', {
+    extend: 'Shopware.attribute.Form',
+    alias: 'widget.stream-attribute-form',
+    disabled: false,
+    title: '{s name="attribute_form_title"}{/s}',
+    bodyPadding: 20,
+    autoScroll: true,
+    border: '1 0 0 0',
+    width: 550,
+    allowTranslation: false,
+    table: 's_product_streams_attributes'
 });
-//{/block}

@@ -65,7 +65,8 @@ Ext.define('Shopware.apps.UserManager.controller.User', {
 
     refs: [
         { ref: 'userCreateWindow', selector: 'usermanager-user-create' },
-        { ref: 'userCreateForm', selector: 'usermanager-user-create form' }
+        { ref: 'userCreateForm', selector: 'usermanager-user-create form[name=main-form]' },
+        { ref: 'attributeForm', selector: 'usermanager-user-create shopware-attribute-form' }
     ],
 
 	/**
@@ -156,9 +157,12 @@ Ext.define('Shopware.apps.UserManager.controller.User', {
 
             record.save({
                 callback: function (record) {
+                    me.getAttributeForm().saveAttribute(record.get('id'));
+
                     formPnl.up('window').setLoading(false);
                     me.getStore('User').load();
                     formPnl.up('window').destroy();
+
                     Shopware.Notification.createGrowlMessage(
                             '{s name=user/Success}Successful{/s}',
                             Ext.String.format('{s name="user/editSuccessful"}User \'[0]\' was updated{/s}', formPnl.getForm().getValues().name),

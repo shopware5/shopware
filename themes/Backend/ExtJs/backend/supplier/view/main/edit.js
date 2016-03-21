@@ -41,7 +41,7 @@ Ext.define('Shopware.apps.Supplier.view.main.Edit', {
     alias : 'widget.supplier-main-edit',
     layout : 'fit',
     title : '{s name=title}Supplier - edit{/s}',
-    width : 850,
+    width : '80%',
     height : '90%',
     stateful : true,
     stateId : 'shopware-supplier-edit',
@@ -65,6 +65,7 @@ Ext.define('Shopware.apps.Supplier.view.main.Edit', {
 
         me.supplierInfoForm = me.getInfoForm();
         me.supplierInfoForm.getForm().loadRecord(this.record);
+        me.attributeForm.loadAttribute(this.record.getId());
 
         me.items = [me.supplierInfoForm];
 
@@ -123,6 +124,8 @@ Ext.define('Shopware.apps.Supplier.view.main.Edit', {
         };
     },
 
+
+
     /**
      * Return the entire form
      *
@@ -140,7 +143,7 @@ Ext.define('Shopware.apps.Supplier.view.main.Edit', {
             logoArray.push(me.deleteButton);
         }
 
-        return Ext.create('Ext.form.Panel', {
+        me.formPanel = Ext.create('Ext.form.Panel', {
             collapsible : false,
             split       : false,
             region      : 'center',
@@ -176,7 +179,7 @@ Ext.define('Shopware.apps.Supplier.view.main.Edit', {
                                     layout      : 'anchor',
                                     columnWidth : 0.8,
                                     defaults : {
-                                        labelWidth  : 130
+                                        labelWidth  : 155
                                     },
                                     items : me.topForm
                                 },
@@ -209,7 +212,7 @@ Ext.define('Shopware.apps.Supplier.view.main.Edit', {
                     collapsible: true,
                     collapsed: true,
                     defaults : {
-                        labelWidth  : 130,
+                        labelWidth  : 155,
                         anchor      : '100%'
                     },
                     title : '{s name=panel_seo}SEO information{/s}',
@@ -234,6 +237,15 @@ Ext.define('Shopware.apps.Supplier.view.main.Edit', {
                 })
             ]
         });
+
+        me.attributeForm = Ext.create('Shopware.attribute.Form', {
+            table: 's_articles_supplier_attributes',
+            allowTranslation: false,
+            translationForm: me.formPanel
+        });
+
+        me.formPanel.add(me.attributeForm);
+        return me.formPanel;
     },
     /**
      * Returns the HTML editor for the description
@@ -246,7 +258,7 @@ Ext.define('Shopware.apps.Supplier.view.main.Edit', {
             name : 'description',
             translatable: true,
             fieldLabel : '{s name=description}Description{/s}',
-            labelWidth  : 130
+            labelWidth  : 155
         });
     },
     /**
@@ -308,7 +320,7 @@ Ext.define('Shopware.apps.Supplier.view.main.Edit', {
             supportText     : '{s name=logo_support}Supplier logo selection via Media Manager. The selection is limited to one media.{/s}',
             multiSelect     : false,
             albumId: -12, // Default supplier albumId
-            labelWidth  : 130
+            labelWidth  : 155
         });
     },
 

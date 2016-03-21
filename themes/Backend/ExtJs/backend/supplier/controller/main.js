@@ -231,6 +231,8 @@ Ext.define('Shopware.apps.Supplier.controller.Main', {
         if (formBasis.isValid()) {
             record.save({
                 callback: function() {
+                    // save attributes
+                    win.attributeForm.saveAttribute(record.getId());
                     // reload the store
                     store.load();
                     // and close the window.

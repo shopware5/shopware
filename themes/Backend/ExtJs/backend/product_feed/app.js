@@ -67,7 +67,7 @@ Ext.define('Shopware.apps.ProductFeed', {
      * Requires models for sub-application
      * @array
      */
-    models:['Detail','Main','Category','CategoryForComboTree', 'Attribute', 'Shop'],
+    models:['Detail','Main','Category','CategoryForComboTree', 'Shop'],
 
     /**
      * Required views for this sub-application

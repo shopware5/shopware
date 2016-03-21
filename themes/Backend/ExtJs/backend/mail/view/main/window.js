@@ -38,7 +38,7 @@ Ext.define('Shopware.apps.Mail.view.main.Window', {
     alias : 'widget.mail-main-window',
     title : '{s name=title}Email templates{/s}',
     layout: 'border',
-    width: 860,
+    width: '70%',
     height: '90%',
     stateful: true,
     stateId: 'shopware-mail-window',

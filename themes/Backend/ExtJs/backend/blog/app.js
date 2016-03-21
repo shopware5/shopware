@@ -78,15 +78,14 @@ Ext.define('Shopware.apps.Blog', {
         'blog.detail.comments.InfoPanel',
         'blog.detail.sidebar.Options',
         'blog.detail.sidebar.AssignedArticles',
-        'blog.detail.sidebar.Seo',
-        'blog.detail.sidebar.Attributes'
+        'blog.detail.sidebar.Seo'
     ],
 
     /**
      * Requires models for sub-application
      * @array
      */
-    models:[ 'Main', 'Tree', 'Detail', 'Template', 'Media', 'AssignedArticles', 'Attribute', 'Comment' ],
+    models:[ 'Main', 'Tree', 'Detail', 'Template', 'Media', 'AssignedArticles', 'Comment' ],
     /**
      * Requires controllers for sub-application
      * @array

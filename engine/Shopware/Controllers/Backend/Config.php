@@ -317,8 +317,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                 break;
             case 'country':
                 $builder->leftJoin('country.area', 'area')
-                    ->leftJoin('country.attribute', 'attribute')
-                    ->addSelect('area', 'attribute');
+                    ->addSelect('area');
                 break;
             case 'widgetView':
                 $builder->leftJoin('widgetView.auth', 'auth')
@@ -330,9 +329,6 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                     ))
                     ->orderBy('widgetView.column')
                     ->addOrderBy('widgetView.position');
-                break;
-            case 'attribute':
-                $builder->orderBy('attribute.position');
                 break;
             default:
                 break;
@@ -508,8 +504,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
             case 'country':
                 $builder->leftJoin('country.area', 'area')
                     ->leftJoin('country.states', 'states')
-                    ->leftJoin('country.attribute', 'attribute')
-                    ->addSelect('area', 'states', 'attribute');
+                    ->addSelect('area', 'states');
                 break;
             case 'priceGroup':
                 $builder->leftJoin('priceGroup.discounts', 'discounts')
@@ -887,9 +882,6 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                     break;
                 case 'pageGroup':
                     $repository = 'Shopware\Models\Site\Group';
-                    break;
-                case 'attribute':
-                    $repository = 'Shopware\Models\Article\Element';
                     break;
                 case 'document':
                     $repository = 'Shopware\Models\Document\Document';
