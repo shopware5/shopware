@@ -47,9 +47,6 @@ Ext.define('Shopware.apps.Article.model.Download', {
         { name: 'name', type: 'string' },
         { name: 'file', type: 'string' },
         { name: 'size', type: 'float' }
-    ],
-    associations: [
-        { type: 'hasMany', model: 'Shopware.apps.Article.model.DownloadAttribute', name: 'getAttributes', associationKey: 'attribute'}
     ]
 });
 //{/block}

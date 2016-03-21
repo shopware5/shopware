@@ -55,10 +55,6 @@ Ext.define('Shopware.apps.Article.model.Esd', {
         { name: 'file' }
     ],
 
-    associations: [
-        { type: 'hasMany', model: 'Shopware.apps.Article.model.EsdAttribute', name: 'getAttributes', associationKey: 'attribute'}
-    ],
-
     /**
      * Configure the data communication
      * @object

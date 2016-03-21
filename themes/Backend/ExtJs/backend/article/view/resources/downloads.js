@@ -209,6 +209,10 @@ Ext.define('Shopware.apps.Article.view.resources.Downloads', {
             store: me.article.getDownload(),
             name: 'download-listing',
             height: 180,
+            plugins: [{
+                ptype: 'grid-attributes',
+                table: 's_articles_downloads_attributes'
+            }],
             columns: [
                 {
                     header: me.snippets.name,

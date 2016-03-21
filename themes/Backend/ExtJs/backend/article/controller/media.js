@@ -66,6 +66,7 @@ Ext.define('Shopware.apps.Article.controller.Media', {
      */
     refs:[
         { ref:'mediaList', selector:'article-detail-window article-image-list dataview[name=image-listing]' },
+        { ref:'mediaListComponent', selector:'article-detail-window article-image-list' },
         { ref:'previewButton', selector:'article-detail-window article-image-list button[action=previewImage]' },
         { ref:'removeButton', selector:'article-detail-window article-image-list button[action=removeImage]' },
         { ref:'mediaInfo', selector:'article-detail-window article-image-info' },
@@ -90,7 +91,8 @@ Ext.define('Shopware.apps.Article.controller.Media', {
                 mediaMoved: me.onMediaMoved,
                 markPreviewImage: me.onMarkPreviewImage,
                 removeImage: me.onRemoveImage,
-                openImageMapping: me.onOpenImageMapping
+                openImageMapping: me.onOpenImageMapping,
+                download: me.onDownload
             },
             'article-image-mapping-window': {
                 displayNewRuleWindow: me.onDisplayNewRuleWindow,
@@ -105,12 +107,7 @@ Ext.define('Shopware.apps.Article.controller.Media', {
                 fileUploaded: me.onFileUploaded
             },
             'article-detail-window article-image-info': {
-                download: me.onDownload,
-                saveImageSettings: me.onSaveImageSettings,
-                translateSettings: me.onTranslateSettings
-            },
-            'article-detail-window article-image-upload mediaselectionfield': {
-                selectMedia: me.onMediaAdded
+                saveImageSettings: me.onSaveImageSettings
             },
             'article-detail-window article-image-upload': {
                 mediaUpload: me.onMediaUpload
@@ -126,13 +123,20 @@ Ext.define('Shopware.apps.Article.controller.Media', {
      * @param record
      * @return Boolean
      */
-    onSaveImageSettings: function(form, record) {
+    onSaveImageSettings: function(form, record, callback) {
         var me = this;
+        var info = me.getMediaInfo();
+        var list = me.getMediaList();
 
         if (!form || !record) {
+            callback();
             return false;
         }
         form.getForm().updateRecord(record);
+
+        info.attributeForm.saveAttribute(record.get('id'), function() {
+            callback();
+        });
 
         return true;
     },
@@ -383,6 +387,7 @@ Ext.define('Shopware.apps.Article.controller.Media', {
         changeMain = (selected.get('main')===1);
 
         store.remove(selected);
+        mediaList.getSelectionModel().select(0);
         if (!changeMain) {
             return true;
         }
@@ -391,38 +396,6 @@ Ext.define('Shopware.apps.Article.controller.Media', {
         if (next instanceof Ext.data.Model) {
             next.set('main', 1);
         }
-    },
-
-    /**
-     * Fires after the user selects one or media in the media manager
-     * and presses the "apply selection"-button in the media manager.
-     *
-     * @event selectMedia
-     * @param [object] me - Shopware.MediaManager.DropZone
-     * @param [array] selected - Array of the selected Ext.data.Model's
-     * @param [object] selModel - Associated Ext.selection.Model
-     */
-    onMediaAdded: function(dropZone, images, selModel) {
-        var me = this,
-            mediaList = me.getMediaList(),
-            store = mediaList.getStore();
-
-        if (images.length === 0) {
-            return true;
-        }
-
-        Ext.each(images, function(item) {
-            var media = Ext.create('Shopware.apps.Article.model.Media', item.data);
-            media.set('path', item.get('name'));
-            media.set('main', 2);
-            media.set('mediaId', item.get('id'));
-
-            if (store.getCount() === 0) {
-                media.set('main', 1);
-            }
-            media.set('id', 0);
-            store.add(media);
-        });
     },
 
     /**
@@ -505,20 +478,44 @@ Ext.define('Shopware.apps.Article.controller.Media', {
      * @param [Ext.selection.DataViewModel] The selection data view model of the Ext.view.View
      * @param [Shopware.apps.Article.model.Media] The selected media
      */
-    onSelectMedia: function(dataViewModel, media, previewButton, removeButton, configButton) {
+    onSelectMedia: function(dataViewModel, media, previewButton, removeButton, configButton, downloadButton) {
         var me = this,
             infoView = me.getMediaInfo();
 
-        if (infoView.record) {
-            me.onSaveImageSettings(infoView.settingsForm, infoView.record);
+        if (!infoView.record) {
+            me.loadInfoView(dataViewModel, media, previewButton, removeButton, configButton, downloadButton);
+            return;
         }
+        var list = me.getMediaList();
+
+        list.setDisabled(true);
+        try {
+            me.onSaveImageSettings(infoView.settingsForm, infoView.record, function () {
+                me.loadInfoView(dataViewModel, media, previewButton, removeButton, configButton, downloadButton, function () {
+                    list.setDisabled(false);
+                });
+            });
+        } catch (e) {
+            list.setDisabled(false);
+        }
+    },
+
+    loadInfoView: function(dataViewModel, media, previewButton, removeButton, configButton, downloadButton, callback) {
+        var me = this;
+        var infoView = me.getMediaInfo();
+
+        callback = callback ? callback : Ext.emptyFn;
 
         if (media instanceof Ext.data.Model) {
             infoView.thumbnail.update(media.data);
-            infoView.loadRecord(media);
             infoView.record = media;
+            infoView.loadRecord(media);
+            infoView.settingsForm.loadRecord(media);
+            infoView.attributeForm.loadAttribute(media.get('id'), function() {
+                callback();
+            });
         }
-        me.disableImageButtons(dataViewModel, previewButton, removeButton, configButton);
+        me.disableImageButtons(dataViewModel, previewButton, removeButton, configButton, downloadButton);
     },
 
     /**
@@ -527,8 +524,8 @@ Ext.define('Shopware.apps.Article.controller.Media', {
      * @param [Ext.selection.DataViewModel] The selection data view model of the Ext.view.View
      * @param [Shopware.apps.Article.model.Media] The selected media
      */
-    onDeselectMedia: function(dataViewModel, media, previewButton, removeButton, configButton) {
-        this.disableImageButtons(dataViewModel, previewButton, removeButton, configButton);
+    onDeselectMedia: function(dataViewModel, media, previewButton, removeButton, configButton, downloadButton) {
+        this.disableImageButtons(dataViewModel, previewButton, removeButton, configButton, downloadButton);
     },
 
     /**
@@ -536,8 +533,10 @@ Ext.define('Shopware.apps.Article.controller.Media', {
      * @param dataViewModel
      * @param previewButton
      * @param removeButton
+     * @param configButton
+     * @param downloadButton
      */
-    disableImageButtons: function(dataViewModel, previewButton, removeButton, configButton) {
+    disableImageButtons: function(dataViewModel, previewButton, removeButton, configButton, downloadButton) {
         var me = this, selected = null,
             disabled = (dataViewModel.selected.length === 0);
 
@@ -551,8 +550,10 @@ Ext.define('Shopware.apps.Article.controller.Media', {
 
         if (!selected || !selected.get('id') > 0 || me.subApplication.splitViewActive) {
             configButton.setDisabled(true);
+            downloadButton.setDisabled(true);
         } else {
             configButton.setDisabled(disabled);
+            downloadButton.setDisabled(disabled);
         }
 
         if (!disabled) {
@@ -583,25 +584,6 @@ Ext.define('Shopware.apps.Article.controller.Media', {
         mediaStore.remove(draggedRecord);
         mediaStore.insert(index, draggedRecord);
         return true;
-    },
-
-    /**
-     * Event listener method which will be fired when the user wants
-     * to translate the image title.
-     *
-     * @public
-     * @event translateSettings
-     * @param [Ext.form.Panel] form
-     * @param [Showpare.apps.Article.model.Media] record
-     * @return void
-     */
-    onTranslateSettings: function(form, record) {
-        var me = this,
-            plugin = form.getPlugin('translation');
-
-        form.getForm().loadRecord(record);
-        plugin.onOpenTranslationWindow();
     }
-
 });
 //{/block}

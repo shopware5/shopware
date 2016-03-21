@@ -69,29 +69,22 @@ Ext.define('Shopware.apps.Article.view.image.List', {
     snippets: {
         title: '{s name=image/list/title}Assigned images{/s}',
         comboBox: '{s name=image/list/combo_box}Images per page{/s}',
-        previewButton: '{s name=image/list/preview_button}Mark selected image as preview image{/s}',
-        removeButton: '{s name=image/list/remove_button}Remove selected image{/s}',
+        previewButton: '{s name=image/list/preview_button}Mark as preview image{/s}',
+        removeButton: '{s name=image/list/remove_button}Remove image{/s}',
         configButton: '{s name=image/list/config_button}Open configuration{/s}',
-        mainImage:'{s name=image/list/main_image}Preview{/s}',
-        sizes: {
-            small: '{s name=image/list/size_small}Small{/s}',
-            middle: '{s name=image/list/size_medium}Medium{/s}',
-            big: '{s name=image/list/size_large}Large{/s}'
-        }
+        attributeButton: '{s name=image/list/attribute_button}Edit attributes{/s}',
+        downloadButton: '{s name=image/list/download_button}Download image{/s}',
+        mainImage:'{s name=image/list/main_image}Preview{/s}'
     },
 
     dragOverCls: 'drag-over',
 
     /**
-     * Internal helper property which decides which image size will be used in the image listing
+     * Indicates if there are attributes for article images
+     * @boolean
      */
-    imageSize: 1,
+    hasActiveAttributes: false,
 
-    /**
-     * The available image sizes.
-     * @array
-     */
-    sizes: [ 'small', 'middle', 'big' ],
     /**
      * Initializes the component and sets the neccessary
      * toolbars and items.
@@ -105,16 +98,31 @@ Ext.define('Shopware.apps.Article.view.image.List', {
 
         me.title = me.snippets.title;
         me.tbar = me.createActionToolbar();
+        me.dropZone = Ext.create('Shopware.apps.Article.view.image.DropZone', {
+            anchor: '100%',
+            padding: 20,
+            dropZoneConfig: { hideOnLegacy: true, focusable: false }
+        });
+
         me.items = [{
             xtype: 'container',
             style: 'background: #fff',
             autoScroll: true,
             items: [
+                me.dropZone,
                 me.createMediaView()
             ]
         }];
         me.registerEvents();
         me.callParent(arguments);
+
+        me.on('afterrender', function() {
+            if (me.mediaStore.getCount() && me.dataView.getSelectionModel().getSelection().length === 0) {
+                window.setTimeout(function() {
+                    me.dataView.getSelectionModel().select(0);
+                }, 1);
+            }
+        });
     },
 
     /**
@@ -169,7 +177,12 @@ Ext.define('Shopware.apps.Article.view.image.List', {
              *
              * @event
              */
-            'openImageMapping'
+            'openImageMapping',
+
+            /**
+             * Event will be fired when the user clicks the "download" button
+             */
+            'download'
 
     	);
     },
@@ -184,10 +197,10 @@ Ext.define('Shopware.apps.Article.view.image.List', {
         return new Ext.XTemplate(
             '{literal}<tpl for=".">',
                 '<tpl if="main===1">',
-                    '<div class="article-thumb-wrap main '+ me.sizes[me.imageSize] + '" >',
+                    '<div class="article-thumb-wrap main middle" >',
                 '</tpl>',
                 '<tpl if="main!=1">',
-                    '<div class="article-thumb-wrap '+ me.sizes[me.imageSize] + '" >',
+                    '<div class="article-thumb-wrap middle" >',
                 '</tpl>',
 
                     // If the type is image, then show the image
@@ -226,11 +239,11 @@ Ext.define('Shopware.apps.Article.view.image.List', {
         });
 
         me.dataView.getSelectionModel().on('select', function (dataViewModel, media) {
-            me.fireEvent('mediaSelect', dataViewModel, media, me.previewButton, me.removeButton, me.configButton);
+            me.fireEvent('mediaSelect', dataViewModel, media, me.previewButton, me.removeButton, me.configButton, me.downloadButton);
         });
 
         me.dataView.getSelectionModel().on('deselect', function (dataViewModel, media) {
-            me.fireEvent('mediaDeselect', dataViewModel, media, me.previewButton, me.removeButton, me.configButton);
+            me.fireEvent('mediaDeselect', dataViewModel, media, me.previewButton, me.removeButton, me.configButton, me.downloadButton);
         });
         me.initDragAndDrop();
 
@@ -320,24 +333,11 @@ Ext.define('Shopware.apps.Article.view.image.List', {
     createActionToolbar: function() {
         var me = this;
 
-        //the size slider handles the displayed thumbnail size in the image listing.
-        me.sizeSlider = Ext.create('Ext.slider.Single', {
-            width: 120,
-            value: 1,
-            animate: false,
-            fieldLabel: me.snippets.slider,
-            increment: 1,
-            minValue: 0,
-            maxValue: 2,
-            tipText: function(thumb){
-                return Ext.String.format('<b>[0]</b>', me.snippets.sizes[me.sizes[thumb.value]]);
-            },
-            listeners: {
-                changecomplete: function(slider, newValue) {
-                    me.imageSize = newValue;
-                    me.dataView.tpl = me.createMediaViewTemplate();
-                    me.dataView.refresh();
-                }
+        me.addButton = Ext.create('Ext.button.Button', {
+            text: 'Hinzufügen',
+            iconCls: 'sprite-plus-circle-frame',
+            handler: function() {
+                me.openMediaManager();
             }
         });
 
@@ -374,19 +374,58 @@ Ext.define('Shopware.apps.Article.view.image.List', {
             }
         });
 
+        //the download button, opens a popup with the original image
+        me.downloadButton = Ext.create('Ext.button.Button', {
+            text: me.snippets.downloadButton,
+            disabled: true,
+            iconCls:'sprite-drive-download',
+            handler: function() {
+                if (me.dataView.getSelectionModel().selected && me.dataView.getSelectionModel().selected.first()) {
+                    me.fireEvent('download', me.dataView.getSelectionModel().selected.first());
+                }
+            }
+        });
+
         return Ext.create('Ext.toolbar.Toolbar', {
             items: [
+                me.addButton,
                 me.previewButton,
-                { xtype:'tbspacer', width: 12 },
                 me.removeButton,
-                { xtype:'tbspacer', width: 12 },
                 me.configButton,
-                '->',
-                me.sizeSlider,
-                { xtype:'tbspacer', width:12 }
+                me.downloadButton
             ]
         });
-    }
+    },
 
+    openMediaManager: function() {
+        var me = this;
+
+        Shopware.app.Application.addSubApplication({
+            name: 'Shopware.apps.MediaManager',
+            layout: 'small',
+            eventScope: me,
+            selectionMode: true,
+            params: { albumId: -1 },
+            mediaSelectionCallback: me.onSelectMedia
+        });
+    },
+
+    onSelectMedia: function(button, window, selection) {
+        var me = this;
+
+        Ext.each(selection, function(item) {
+            var media = Ext.create('Shopware.apps.Article.model.Media', item.data);
+            media.set('path', item.get('name'));
+            media.set('main', 2);
+            media.set('mediaId', item.get('id'));
+
+            if (me.mediaStore.getCount() === 0) {
+                media.set('main', 1);
+            }
+            media.set('id', 0);
+            me.mediaStore.add(media);
+        });
+        window.close();
+    }
 });
 //{/block}
