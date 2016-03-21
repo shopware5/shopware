@@ -173,7 +173,7 @@
         <service id="ModelConfig" class="Shopware\Components\Model\Configuration">
             <argument>%shopware.Model%</argument>
             <argument type="service" id="cache" />
-            <argument type="service" id="shopware.hook_manager" />
+            <argument type="service" id="model_repository_factory" />
         </service>
 
         <service id="model_factory" class="Shopware\Components\DependencyInjection\Bridge\Models" />
@@ -205,6 +205,10 @@
         </service>
 
         <service id="model_event_manager" class="Doctrine\Common\EventManager" public="false" />
+
+        <service id="model_repository_factory" class="Shopware\Components\Model\ProxyAwareRepositoryFactory" public="false">
+            <argument type="service" id="Hooks" />
+        </service>
 
         <service id="EventSubscriber" class="Shopware\Components\Model\EventSubscriber" public="false">
             <argument type="service" id="shopware.event_manager" />
