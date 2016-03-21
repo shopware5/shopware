@@ -224,10 +224,24 @@ class sOrder
         $number = $this->db->fetchOne(
             "/*NO LIMIT*/ SELECT number FROM s_order_number WHERE name='invoice' FOR UPDATE"
         );
-        $this->db->executeUpdate(
-            "UPDATE s_order_number SET number = number + 1 WHERE name='invoice'"
-        );
-        $number += 1;
+
+        $doCount = 1;
+        do {
+            $this->db->executeUpdate(
+                "UPDATE s_order_number SET number = number + 1 WHERE name='invoice'"
+            );
+            $number += 1;
+
+            $doubleTap = $this->db()->select()
+                ->from('s_order', 'ordernumber')
+                ->where('ordernumber = :number')
+                ->limit(1);
+            $doubleTap = $this->db()->executeQuery($doubleTap, ['number' => $number]);
+            if ($doubleTap->rowCount() == 0 || $doCount > 3) {
+                break;
+            }
+            $doCount++;
+        } while(true);
 
         $number = $this->eventManager->filter(
             'Shopware_Modules_Order_GetOrdernumber_FilterOrdernumber',
