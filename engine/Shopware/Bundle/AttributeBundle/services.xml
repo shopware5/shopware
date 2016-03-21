@@ -1,0 +1,179 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="shopware_attribute.controller_subscriber" class="Shopware\Bundle\AttributeBundle\DependencyInjection\EventListener\ControllerSubscriber">
+            <tag name="shopware.event_subscriber" />
+        </service>
+
+        <service id="shopware_attribute.repository_registry" class="Shopware\Bundle\AttributeBundle\Repository\Registry">
+            <argument type="collection" />
+            <argument type="service" id="models" />
+        </service>
+
+        <service id="shopware_attribute.crud_service" class="Shopware\Bundle\AttributeBundle\Service\CrudService">
+            <argument type="service" id="models" />
+            <argument type="service" id="shopware_attribute.schema_operator" />
+            <argument type="service" id="shopware_attribute.table_mapping" />
+            <argument type="service" id="shopware_attribute.type_mapping" />
+        </service>
+
+        <service id="shopware_attribute.schema_operator" class="Shopware\Bundle\AttributeBundle\Service\SchemaOperator">
+            <argument type="service" id="dbal_connection" />
+            <argument type="service" id="shopware_attribute.table_mapping" />
+        </service>
+
+        <service id="shopware_attribute.table_mapping" class="Shopware\Bundle\AttributeBundle\Service\TableMapping">
+            <argument type="service" id="dbal_connection" />
+        </service>
+
+        <service id="shopware_attribute.type_mapping" class="Shopware\Bundle\AttributeBundle\Service\TypeMapping">
+            <argument type="service" id="dbal_connection" />
+            <argument type="service" id="snippets" />
+        </service>
+
+        <service id="shopware_attribute.data_loader" class="Shopware\Bundle\AttributeBundle\Service\DataLoader">
+            <argument type="service" id="dbal_connection" />
+            <argument type="service" id="shopware_attribute.table_mapping" />
+        </service>
+
+        <service id="shopware_attribute.data_persister" class="Shopware\Bundle\AttributeBundle\Service\DataPersister">
+            <argument type="service" id="dbal_connection" />
+            <argument type="service" id="shopware_attribute.table_mapping" />
+            <argument type="service" id="shopware_attribute.data_loader" />
+        </service>
+
+        <service id="shopware_attribute.media_repository" class="Shopware\Bundle\AttributeBundle\Repository\GenericRepository">
+            <argument>Shopware\Models\Media\Media</argument>
+            <argument type="service" id="models" />
+            <argument type="service" id="shopware_attribute.media_reader" />
+            <argument type="service" id="shopware_attribute.media_searcher" />
+            <tag name="attribute_search_repository" />
+        </service>
+
+        <service id="shopware_attribute.media_searcher" class="Shopware\Bundle\AttributeBundle\Repository\Searcher\GenericSearcher">
+            <argument>Shopware\Models\Media\Media</argument>
+            <argument type="service" id="models" />
+        </service>
+
+        <service id="shopware_attribute.media_reader" class="Shopware\Bundle\AttributeBundle\Repository\Reader\MediaReader">
+            <argument>Shopware\Models\Media\Media</argument>
+            <argument type="service" id="models" />
+            <argument type="service" id="shopware_media.media_service" />
+        </service>
+
+        <service id="shopware_attribute.blog_repository" class="Shopware\Bundle\AttributeBundle\Repository\GenericRepository">
+            <argument>Shopware\Models\Blog\Blog</argument>
+            <argument type="service" id="models" />
+            <argument type="service" id="shopware_attribute.blog_reader" />
+            <argument type="service" id="shopware_attribute.blog_searcher" />
+            <tag name="attribute_search_repository" />
+        </service>
+
+        <service id="shopware_attribute.blog_searcher" class="Shopware\Bundle\AttributeBundle\Repository\Searcher\GenericSearcher">
+            <argument>Shopware\Models\Blog\Blog</argument>
+            <argument type="service" id="models" />
+        </service>
+
+        <service id="shopware_attribute.blog_reader" class="Shopware\Bundle\AttributeBundle\Repository\Reader\BlogReader">
+            <argument>Shopware\Models\Blog\Blog</argument>
+            <argument type="service" id="models" />
+        </service>
+
+        <service id="shopware_attribute.product_repository" class="Shopware\Bundle\AttributeBundle\Repository\ProductRepository">
+            <argument>Shopware\Models\Article\Detail</argument>
+            <argument type="service" id="models" />
+            <argument type="service" id="shopware_attribute.product_reader" />
+            <argument type="service" id="shopware_attribute.product_searcher" />
+            <tag name="attribute_search_repository" />
+        </service>
+
+        <service id="shopware_attribute.product_searcher" class="Shopware\Bundle\AttributeBundle\Repository\Searcher\ProductSearcher">
+            <argument>Shopware\Models\Article\Detail</argument>
+            <argument type="service" id="models" />
+        </service>
+
+        <service id="shopware_attribute.product_reader" class="Shopware\Bundle\AttributeBundle\Repository\Reader\ProductReader">
+            <argument>Shopware\Models\Article\Detail</argument>
+            <argument type="service" id="models" />
+            <argument type="service" id="shopware_storefront.context_service" />
+            <argument type="service" id="shopware_storefront.additional_text_service" />
+        </service>
+
+        <service id="shopware_attribute.category_repository" class="Shopware\Bundle\AttributeBundle\Repository\GenericRepository">
+            <argument>Shopware\Models\Category\Category</argument>
+            <argument type="service" id="models" />
+            <argument type="service" id="shopware_attribute.category_reader" />
+            <argument type="service" id="shopware_attribute.category_searcher" />
+            <tag name="attribute_search_repository" />
+        </service>
+
+        <service id="shopware_attribute.category_searcher" class="Shopware\Bundle\AttributeBundle\Repository\Searcher\GenericSearcher">
+            <argument>Shopware\Models\Category\Category</argument>
+            <argument type="service" id="models" />
+        </service>
+
+        <service id="shopware_attribute.category_reader" class="Shopware\Bundle\AttributeBundle\Repository\Reader\CategoryReader">
+            <argument>Shopware\Models\Category\Category</argument>
+            <argument type="service" id="models" />
+        </service>
+
+        <service id="shopware_attribute.property_option_repository" class="Shopware\Bundle\AttributeBundle\Repository\GenericRepository">
+            <argument>Shopware\Models\Property\Value</argument>
+            <argument type="service" id="models" />
+            <argument type="service" id="shopware_attribute.property_option_reader" />
+            <argument type="service" id="shopware_attribute.property_option_searcher" />
+            <tag name="attribute_search_repository" />
+        </service>
+
+        <service id="shopware_attribute.property_option_searcher" class="Shopware\Bundle\AttributeBundle\Repository\Searcher\PropertyOptionSearcher">
+            <argument>Shopware\Models\Property\Value</argument>
+            <argument type="service" id="models" />
+        </service>
+
+        <service id="shopware_attribute.property_option_reader" class="Shopware\Bundle\AttributeBundle\Repository\Reader\PropertyOptionReader">
+            <argument>Shopware\Models\Property\Value</argument>
+            <argument type="service" id="models" />
+        </service>
+
+        <service id="shopware_attribute.customer_repository" class="Shopware\Bundle\AttributeBundle\Repository\GenericRepository">
+            <argument>Shopware\Models\Customer\Customer</argument>
+            <argument type="service" id="models" />
+            <argument type="service" id="shopware_attribute.customer_reader" />
+            <argument type="service" id="shopware_attribute.customer_searcher" />
+            <tag name="attribute_search_repository" />
+        </service>
+
+        <service id="shopware_attribute.customer_searcher" class="Shopware\Bundle\AttributeBundle\Repository\Searcher\CustomerSearcher">
+            <argument>Shopware\Models\Customer\Customer</argument>
+            <argument type="service" id="models" />
+        </service>
+
+        <service id="shopware_attribute.customer_reader" class="Shopware\Bundle\AttributeBundle\Repository\Reader\CustomerReader">
+            <argument>Shopware\Models\Customer\Customer</argument>
+            <argument type="service" id="models" />
+        </service>
+
+        <service id="shopware_attribute.premium_repository" class="Shopware\Bundle\AttributeBundle\Repository\GenericRepository">
+            <argument>Shopware\Models\Premium\Premium</argument>
+            <argument type="service" id="models" />
+            <argument type="service" id="shopware_attribute.premium_reader" />
+            <argument type="service" id="shopware_attribute.premium_searcher" />
+            <tag name="attribute_search_repository" />
+        </service>
+
+        <service id="shopware_attribute.premium_searcher" class="Shopware\Bundle\AttributeBundle\Repository\Searcher\PremiumSearcher">
+            <argument>Shopware\Models\Premium\Premium</argument>
+            <argument type="service" id="models" />
+        </service>
+
+        <service id="shopware_attribute.premium_reader" class="Shopware\Bundle\AttributeBundle\Repository\Reader\PremiumReader">
+            <argument>Shopware\Models\Premium\Premium</argument>
+            <argument type="service" id="models" />
+        </service>
+
+    </services>
+</container>
