@@ -109,7 +109,6 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
     public function createSetAction()
     {
         $params = $this->Request()->getPost();
-        $params['attribute'] = $params['attribute'][0];
 
         $group = new Group();
         $group->fromArray($params);
@@ -146,7 +145,6 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
         }
 
         $params = $this->Request()->getPost();
-        $params['attribute'] = $params['attribute'][0];
         $group->fromArray($params);
 
         try {

@@ -80,7 +80,7 @@ Ext.define('Shopware.apps.Property.view.main.GroupGrid', {
         });
 
         me.editor   = me.getRowEditorPlugin();
-        me.plugins    = [ me.getGridTranslationPlugin(), me.editor ];
+        me.plugins  = [me.editor];
         me.tbar     = me.getToolbar();
         me.columns  = me.getColumns();
         me.dockedItems = [ me.getPagingBar() ];
@@ -176,12 +176,6 @@ Ext.define('Shopware.apps.Property.view.main.GroupGrid', {
             dataIndex: 'name',
             flex: 2,
             renderer: 'htmlEncode',
-            translationEditor: {
-                xtype: 'textfield',
-                name: 'optionName',
-                fieldLabel: 'option',
-                allowBlank: false
-            },
             editor: {
                 allowBlank: false
             }
@@ -197,7 +191,7 @@ Ext.define('Shopware.apps.Property.view.main.GroupGrid', {
             }
         }, {
             xtype: 'actioncolumn',
-            width: 24,
+            width: 60,
             hideable: false,
             items: [{
                 iconCls: 'sprite-minus-circle-frame',
@@ -208,6 +202,11 @@ Ext.define('Shopware.apps.Property.view.main.GroupGrid', {
                     var record  = grid.getStore().getAt(rowIndex);
 
                     me.fireEvent('deleteGroup', record, grid);
+                }
+            }, {
+                iconCls: 'sprite-pencil',
+                handler: function (view, rowIndex, colIndex, item, opts, record) {
+                    me.fireEvent('editGroup', record);
                 }
             }]
         }];

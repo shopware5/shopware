@@ -37,13 +37,7 @@ Ext.define('Shopware.apps.Property.model.Option', {
      * Extends the standard ExtJS 4
      * @string
      */
-    extend: 'Shopware.data.Model',
-
-    configure: function() {
-        return {
-            detail: 'Shopware.apps.Property.view.detail.OptionContainer'
-        }
-    },
+    extend: 'Ext.data.Model',
 
     /**
      * The fields used for this model
