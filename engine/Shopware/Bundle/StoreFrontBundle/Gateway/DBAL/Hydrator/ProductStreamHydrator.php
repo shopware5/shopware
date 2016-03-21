@@ -35,12 +35,18 @@ use Shopware\Models;
 class ProductStreamHydrator extends Hydrator
 {
     /**
-     * @var array
+     * @var AttributeHydrator
      */
-    private $translationProductStreamFields = [
-        'name' => '__stream_name',
-        'description' => '__stream_description'
-    ];
+    private $attributeHydrator;
+
+    /**
+     * ProductStreamHydrator constructor.
+     * @param AttributeHydrator $attributeHydrator
+     */
+    public function __construct(AttributeHydrator $attributeHydrator)
+    {
+        $this->attributeHydrator = $attributeHydrator;
+    }
 
     /**
      * @param array $data
@@ -49,13 +55,7 @@ class ProductStreamHydrator extends Hydrator
     public function hydrate(array $data)
     {
         $productStream = new Struct\ProductStream();
-        $translation = $this->getTranslation(
-            $data,
-            '__stream_translation',
-            '__stream_translation_fallback',
-            $this->translationProductStreamFields
-        );
-
+        $translation = $this->getTranslation($data, '__stream');
         $data = array_merge($data, $translation);
 
         if (isset($data['__stream_id'])) {
@@ -73,34 +73,10 @@ class ProductStreamHydrator extends Hydrator
         if (isset($data['__stream_type'])) {
             $productStream->setType((int) $data['__stream_type']);
         }
+        if ($data['__productStreamAttribute_id']) {
+            $this->attributeHydrator->addAttribute($productStream, $data, 'productStreamAttribute', null, 'stream');
+        }
 
         return $productStream;
-    }
-
-    /**
-     * @param $data
-     * @param $arrayKey
-     * @param $fallbackArrayKey
-     * @param array $mapping
-     * @return array|mixed
-     */
-    private function getTranslation($data, $arrayKey, $fallbackArrayKey, $mapping)
-    {
-        if (!isset($data[$arrayKey])
-            || empty($data[$arrayKey])
-        ) {
-            $translation = [];
-        } else {
-            $translation = unserialize($data[$arrayKey]);
-        }
-
-        if (isset($data[$fallbackArrayKey])
-            && !empty($data[$fallbackArrayKey])
-        ) {
-            $fallbackTranslation = unserialize($data[$fallbackArrayKey]);
-            $translation += $fallbackTranslation;
-        }
-
-        return $this->convertArrayKeys($translation, $mapping);
     }
 }

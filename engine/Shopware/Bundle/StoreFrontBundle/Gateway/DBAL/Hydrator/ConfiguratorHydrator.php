@@ -104,12 +104,7 @@ class ConfiguratorHydrator extends Hydrator
     private function createGroup($data)
     {
         $group = new Struct\Configurator\Group();
-        $translation = $this->getTranslation(
-            $data,
-            '__configuratorGroup_translation',
-            '__configuratorGroup_translation_fallback',
-            ['name' => '__configuratorGroup_name', 'description' => '__configuratorGroup_description']
-        );
+        $translation = $this->getTranslation($data, '__configuratorGroup');
         $data = array_merge($data, $translation);
 
         $group->setId((int) $data['__configuratorGroup_id']);
@@ -126,48 +121,12 @@ class ConfiguratorHydrator extends Hydrator
     private function createOption($data)
     {
         $option = new Struct\Configurator\Option();
-        $translation = $this->getTranslation(
-            $data,
-            '__configuratorOption_translation',
-            '__configuratorOption_translation_fallback',
-            ['name' => '__configuratorOption_name']
-        );
+
+        $translation = $this->getTranslation($data, '__configuratorOption');
         $data = array_merge($data, $translation);
 
         $option->setId((int) $data['__configuratorOption_id']);
         $option->setName($data['__configuratorOption_name']);
-
         return $option;
-    }
-
-    /**
-     * @param $data
-     * @param $arrayKey
-     * @param $fallbackArrayKey
-     * @param $mapping
-     * @return array
-     */
-    private function getTranslation($data, $arrayKey, $fallbackArrayKey, $mapping)
-    {
-        if (!isset($data[$arrayKey])
-            || empty($data[$arrayKey])
-        ) {
-            $translation = [];
-        } else {
-            $translation = unserialize($data[$arrayKey]);
-        }
-
-        if (isset($data[$fallbackArrayKey])
-            && !empty($data[$fallbackArrayKey])
-        ) {
-            $fallbackTranslation = unserialize($data[$fallbackArrayKey]);
-            $translation += $fallbackTranslation;
-        }
-
-        if (empty($translation)) {
-            return [];
-        }
-
-        return $this->convertArrayKeys($translation, $mapping);
     }
 }

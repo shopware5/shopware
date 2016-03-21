@@ -445,10 +445,10 @@ class Shopware_Components_Translation
     }
 
     /**
-     * @param array $data
+     * @param string $data
      * @return array
      */
-    private function prepareArticleData(array $data)
+    private function prepareArticleData($data)
     {
         $data = unserialize($data);
         if (!empty($data['txtlangbeschreibung']) && strlen($data['txtlangbeschreibung']) > 1000) {

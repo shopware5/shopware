@@ -227,6 +227,7 @@
         <service id="CategoryDuplicator" class="Shopware\Components\CategoryHandling\CategoryDuplicator">
             <argument type="service" id="db_connection" />
             <argument type="service" id="CategoryDenormalization" />
+            <argument type="service" id="shopware_attribute.data_persister" />
         </service>
 
         <service id="CategoryDenormalization" class="Shopware\Components\Model\CategoryDenormalization">

@@ -108,8 +108,9 @@ class CountryGateway implements Gateway\CountryGatewayInterface
         $query = $this->connection->createQueryBuilder();
 
         $query->select($this->fieldHelper->getAreaFields());
-        $query->from('s_core_countries_areas', 'countryArea');
-        $query->where('countryArea.id IN (:ids)')
+
+        $query->from('s_core_countries_areas', 'countryArea')
+            ->where('countryArea.id IN (:ids)')
             ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
@@ -134,12 +135,11 @@ class CountryGateway implements Gateway\CountryGatewayInterface
 
         $query->select($this->fieldHelper->getCountryFields());
         $query->from('s_core_countries', 'country')
-            ->leftJoin('country', 's_core_countries_attributes', 'countryAttribute', 'countryAttribute.countryID = country.id');
+            ->leftJoin('country', 's_core_countries_attributes', 'countryAttribute', 'countryAttribute.countryID = country.id')
+            ->where('country.id IN (:ids)')
+            ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
         $this->fieldHelper->addCountryTranslation($query, $context);
-
-        $query->where('country.id IN (:ids)')
-            ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
@@ -163,13 +163,11 @@ class CountryGateway implements Gateway\CountryGatewayInterface
         $query->select($this->fieldHelper->getStateFields());
 
         $query->from('s_core_countries_states', 'countryState')
-            ->leftJoin('countryState', 's_core_countries_states_attributes', 'countryStateAttribute', 'countryStateAttribute.stateID = countryState.id');
+            ->leftJoin('countryState', 's_core_countries_states_attributes', 'countryStateAttribute', 'countryStateAttribute.stateID = countryState.id')
+            ->where('countryState.id IN (:ids)')
+            ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
         $this->fieldHelper->addCountryStateTranslation($query, $context);
-
-        $query->where('countryState.id IN (:ids)')
-            ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY)
-        ;
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();

@@ -59,19 +59,6 @@ class ProductHydrator extends Hydrator
     private $esdHydrator;
 
     /**
-     * @var array
-     */
-    private $translationMapping = [
-        'metaTitle' => '__product_metaTitle',
-        'txtArtikel' => '__product_name',
-        'txtshortdescription' => '__product_description',
-        'txtlangbeschreibung' => '__product_description_long',
-        'txtzusatztxt' => '__variant_additionaltext',
-        'txtkeywords' => '__product_keywords',
-        'txtpackunit' => '__unit_packunit',
-    ];
-
-    /**
      * @param AttributeHydrator $attributeHydrator
      * @param ManufacturerHydrator $manufacturerHydrator
      * @param TaxHydrator $taxHydrator
@@ -171,7 +158,7 @@ class ProductHydrator extends Hydrator
      * @param Struct\ListProduct $product
      * @param $data
      */
-    private function assignProductData(Struct\ListProduct $product, $data)
+    private function assignProductData(Struct\ListProduct $product, array $data)
     {
         $product->setName($data['__product_name']);
         $product->setShortDescription($data['__product_description']);
@@ -236,20 +223,13 @@ class ProductHydrator extends Hydrator
      * @param Struct\ListProduct $product
      * @param $data
      */
-    private function assignAttributeData(Struct\ListProduct $product, $data)
+    private function assignAttributeData(Struct\ListProduct $product, array $data)
     {
         $translation = $this->getProductTranslation($data);
-
-        $attribute = $this->attributeHydrator->hydrate(
-            $this->extractFields('__productAttribute_', $data)
-        );
-
-        foreach ($translation as $key => $value) {
-            if ($attribute->exists($key)) {
-                $attribute->set($key, $value);
-            }
-        }
-
+        $translation = $this->extractFields('__attribute_', $translation);
+        $attributeData = $this->extractFields('__productAttribute_', $data);
+        $attributeData = array_merge($attributeData, $translation);
+        $attribute = $this->attributeHydrator->hydrate($attributeData);
         $product->addAttribute('core', $attribute);
     }
 
@@ -257,67 +237,25 @@ class ProductHydrator extends Hydrator
      * @param $data
      * @return array
      */
-    private function getProductTranslation($data)
+    public function getProductTranslation(array $data)
     {
-        $translation = [];
-        if (isset($data['__product_translation_fallback'])) {
-            $translation = array_merge(
-                $translation,
-                $this->unserializeTranslation($data['__product_translation_fallback'])
-            );
-            if ($data['__product_main_detail_id'] != $data['__variant_id']) {
-                unset($translation['txtzusatztxt']);
-            }
-        }
-        if (isset($data['__product_translation'])) {
-            $translation = array_merge(
-                $translation,
-                $this->unserializeTranslation($data['__product_translation'])
-            );
-            if ($data['__product_main_detail_id'] != $data['__variant_id']) {
-                unset($translation['txtzusatztxt']);
-            }
-        }
-
-        if (isset($data['__variant_translation_fallback'])) {
-            $translation = array_merge(
-                $translation,
-                $this->unserializeTranslation($data['__variant_translation_fallback'])
-            );
-        }
-        if (isset($data['__variant_translation'])) {
-            $translation = array_merge(
-                $translation,
-                $this->unserializeTranslation($data['__variant_translation'])
-            );
-        }
-
-        foreach ($translation as $key => $value) {
-            if (strpos($key, 'attr') !== false) {
-                $new = '__productAttribute_' . $key;
-                $translation[$new] = $value;
-            }
-        }
+        $translation = $this->getTranslation($data, '__product', [], null, false);
+        $variant = $this->getTranslation($data, '__variant', [], null, false);
+        $translation = array_merge($translation, $variant);
 
         if (empty($translation)) {
             return $translation;
         }
 
-        return $this->convertArrayKeys(
-            $translation,
-            $this->translationMapping
-        );
-    }
-
-    /**
-     * Helper to unserialize translations
-     * In case unserialize() returns false (invalid input string), returns an empty array
-     *
-     * @param $serializedTranslation
-     * @return array
-     */
-    private function unserializeTranslation($serializedTranslation)
-    {
-        return @unserialize($serializedTranslation) ? : [];
+        $result = $this->convertArrayKeys($translation, [
+            'metaTitle' => '__product_metaTitle',
+            'txtArtikel' => '__product_name',
+            'txtshortdescription' => '__product_description',
+            'txtlangbeschreibung' => '__product_description_long',
+            'txtzusatztxt' => '__variant_additionaltext',
+            'txtkeywords' => '__product_keywords',
+            'txtpackunit' => '__unit_packunit',
+        ]);
+        return $result;
     }
 }

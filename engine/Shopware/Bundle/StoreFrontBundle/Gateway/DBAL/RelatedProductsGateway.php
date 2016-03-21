@@ -66,33 +66,13 @@ class RelatedProductsGateway implements Gateway\RelatedProductsGatewayInterface
 
         $query = $this->connection->createQueryBuilder();
 
-        $query->select(['product.id'])
-            ->addSelect('relatedVariant.ordernumber as number');
+        $query->select(['product.id', 'relatedVariant.ordernumber as number']);
 
-        $query->from('s_articles_relationships', 'relation');
-
-        $query->innerJoin(
-            'relation',
-            's_articles',
-            'product',
-            'product.id = relation.articleID'
-        );
-
-        $query->innerJoin(
-            'relation',
-            's_articles',
-            'relatedArticles',
-            'relatedArticles.id = relation.relatedArticle'
-        );
-
-        $query->innerJoin(
-            'relatedArticles',
-            's_articles_details',
-            'relatedVariant',
-            'relatedVariant.id = relatedArticles.main_detail_id'
-        );
-
-        $query->where('product.id IN (:ids)')
+        $query->from('s_articles_relationships', 'relation')
+            ->innerJoin('relation', 's_articles', 'product', 'product.id = relation.articleID')
+            ->innerJoin('relation', 's_articles', 'relatedArticles', 'relatedArticles.id = relation.relatedArticle')
+            ->innerJoin('relatedArticles', 's_articles_details', 'relatedVariant', 'relatedVariant.id = relatedArticles.main_detail_id')
+            ->where('product.id IN (:ids)')
             ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */

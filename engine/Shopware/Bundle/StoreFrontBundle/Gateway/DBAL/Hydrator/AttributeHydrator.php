@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 
+use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper;
 use Shopware\Bundle\StoreFrontBundle\Struct;
 
 /**
@@ -34,17 +35,63 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 class AttributeHydrator extends Hydrator
 {
     /**
+     * @var FieldHelper
+     */
+    private $fieldHelper;
+
+    /**
+     * AttributeHydrator constructor.
+     * @param FieldHelper $fieldHelper
+     */
+    public function __construct(FieldHelper $fieldHelper)
+    {
+        $this->fieldHelper = $fieldHelper;
+    }
+
+    /**
      * @param array $data
      * @return Struct\Attribute
      */
     public function hydrate(array $data)
     {
         $attribute = new Struct\Attribute();
+        $translation = $this->getTranslation($data, null);
+        $translation = $this->extractFields('___attribute_', $translation);
+        unset($data['translation']);
+        unset($data['translation_fallback']);
 
         foreach ($data as $key => $value) {
-            $attribute->set($key, $value);
+            if (isset($translation[$key])) {
+                $attribute->set($key, $translation[$key]);
+            } else {
+                $attribute->set($key, $value);
+            }
+        }
+        return $attribute;
+    }
+
+    /**
+     * @param Struct\Extendable $struct
+     * @param array $data
+     * @param string $arrayKey
+     * @param string $attributeKey
+     * @param null|string $translationKey
+     */
+    public function addAttribute(Struct\Extendable $struct, $data, $arrayKey, $attributeKey = null, $translationKey = null)
+    {
+        $arrayKey = '__' . $arrayKey . '_';
+        $attribute = $this->extractFields($arrayKey, $data);
+
+        if ($attributeKey === null) {
+            $attributeKey = 'core';
         }
 
-        return $attribute;
+        if ($translationKey) {
+            $translationKey = '__' . $translationKey . '_translation';
+            $attribute['translation'] = $data[$translationKey];
+            $attribute['translation_fallback'] = $data[$translationKey . '_fallback'];
+        }
+
+        $struct->addAttribute($attributeKey, $this->hydrate($attribute));
     }
 }
