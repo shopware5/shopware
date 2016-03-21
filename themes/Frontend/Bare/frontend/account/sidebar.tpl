@@ -74,7 +74,7 @@
 				{* Link to the user product notes *}
 				{block name="frontend_account_menu_link_notes"}
 					<li class="navigation--entry">
-						<a href="{url controller='note'}" title="{s name="AccountLinkNotepad"}{/s}" class="navigation--link">
+						<a href="{url controller='note'}" title="{s name="AccountLinkNotepad"}{/s}" class="navigation--link{if {controllerName} == 'note'} is--active{/if}">
 							{s name="AccountLinkNotepad"}{/s}
 						</a>
 					</li>
