@@ -232,11 +232,11 @@ class sOrder
             );
             $number += 1;
 
-            $doubleTap = $this->db()->select()
+            $doubleTap = $this->db->select()
                 ->from('s_order', 'ordernumber')
                 ->where('ordernumber = :number')
                 ->limit(1);
-            $doubleTap = $this->db()->executeQuery($doubleTap, ['number' => $number]);
+            $doubleTap = $this->db->executeQuery($doubleTap, ['number' => $number]);
             if ($doubleTap->rowCount() == 0 || $doCount > 3) {
                 break;
             }
