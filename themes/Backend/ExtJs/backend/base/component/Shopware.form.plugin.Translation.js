@@ -37,7 +37,6 @@
 Ext.define('Shopware.form.plugin.Translation',
 /** @lends Ext.AbstractPlugin# */
 {
-
     /**
      * Extends the abstact plugin component
      * @string
@@ -55,20 +54,6 @@ Ext.define('Shopware.form.plugin.Translation',
      * @string
      */
     alias: 'plugin.translation',
-
-    /**
-     * Property which holds the translatable form elements to pass them to the
-     * "Shopware.apps.Translation" sub application.
-     * @array
-     */
-    translatableFields: [],
-
-    /**
-     * Property which holds the translatable form field configuration to pass them
-     * to the "Shopware.apps.Translation" sub application.
-     * @array
-     */
-    translatableFieldsConfig: [],
 
     /**
      * Indicatates the type of the translation.
@@ -92,6 +77,11 @@ Ext.define('Shopware.form.plugin.Translation',
     translationKey: null,
 
     /**
+     * @boolean
+     */
+    translationMerge: false,
+
+    /**
      * Property which holds the generated icons for later cleanup
      * @array
      */
@@ -104,203 +94,190 @@ Ext.define('Shopware.form.plugin.Translation',
     uses: [ 'Ext.DomHelper', 'Ext.Element' ],
 
     /**
-     * Property which holds the client (e.g. the Ext.form.Panel)
-     * @default null
-     * @object
+     * Initials the plugin for the provided form
+     * @param form
      */
-    client: null,
-
-    /**
-     * The init method is invoked after initComponent method has been run for the client Component.
-     *
-     * @public
-     * @param [object] client - Ext.Component which calls the plugin
-     * @return void
-     */
-    init: function(client) {
+    init: function(form) {
         var me = this;
 
-        me.callParent(arguments);
+        form._translationConfig = {
+            translationType: me.translationType,
+            translationKey: me.translationKey,
+            translationCallback: me.translationCallback,
+            translationMerge: me.translationMerge
+        };
 
-        // Assign the client to the plugin scope
-        me.client = client;
-        me.client.on('afterrender', me.onGetTranslatableFields, me);
-        me.client.getForm().on('recordchange', me.onGetTranslatableFields, me);
+        form.on('afterrender', function() {
+            me.initTranslationFields(form);
+        });
+
+        form.getForm().on('recordchange', function() {
+            me.initTranslationFields(form);
+        });
+
+        form.translationPlugin = this;
+        me.callParent(arguments);
     },
 
     /**
-     * Removes clear previously generated icons
-     *
-     * @public
-     * @return void
+     * Validates if the form can be translated and initials the field globe icon
+     * @param form - Ext.form.Panel
      */
-    clear: function() {
+    initTranslationFields: function(form) {
         var me = this;
+        var config = form._translationConfig;
+        var record = form.getForm().getRecord();
 
-        // clear array
-        me.translatableFields.length = 0;
+        if (!config.translationKey && typeof record === 'undefined') {
+            return;
+        }
+        if (!config.translationKey && record.phantom) {
+            return;
+        }
 
-        // unset listeners and remove icon from dom
-        Ext.each(this.icons, function(icon) {
-            icon.removeListener('click');
-            icon.remove();
+        var fields = me.getTranslatableFields(form);
+        Ext.each(fields, function(field) {
+            me.createGlobeElement(form, field);
         });
     },
 
     /**
-     * Event listener method which will be fired when the client fires
-     * the "afterrender" event.
-     *
-     * Collects the translatable items and creates some sanitize.
-     *
-     * @event afterrender
-     * @public
-     * @return void
+     * Returns all fields of the provided form which are translatable
+     * @param form - Ext.form.Panel
+     * @returns { Array }
      */
-    onGetTranslatableFields: function() {
-        var me = this;
+    getTranslatableFields: function(form) {
+        var fields = [];
 
-        // clear previously generated icons
-        me.clear();
-
-        if (!me.translationKey && typeof me.client.getForm().getRecord() === 'undefined') {
-            return;
-        }
-
-        if (!me.translationKey && me.client.getForm().getRecord().phantom) {
-            return;
-        }
-
-        Ext.each(me.client.getForm().getFields().items, function(field) {
+        Ext.each(form.getForm().getFields().items, function(field) {
             var config = field.initialConfig;
-
-            if(config.translatable) {
-
-                // Always allow empty fields due to the fact that we're always having a fallback value
-                if(!config.allowBlank) {
-                    config.allowBlank = true;
-                }
-
-                // Allow overwrite of field label with a alternative label.
-                if(config.translationLabel) {
-                    config.fieldLabel = config.translationLabel;
-                }
-                // Allow overwrite of field name with a alternative name.
-                if(config.translationName) {
-                    config.name = config.translationName;
-                }
-                // If there's no label, set a non-breaking space
-                if(!config.fieldLabel) {
-                    config.fieldLabel = '&nbsp';
-                    config.labelSeparator = '';
-                }
-
-                // SW-3564 - Don't take disabled fields into account
-                if(!field.isDisabled()) {
-                    me.translatableFields.push(field);
-                }
-
-                // Inject the globe element into the component
-                if(field.getEl()) {
-                    me.createGlobeElement(field);
-                }
+            if (config.translatable && !field.isDisabled()) {
+                fields.push(field);
             }
         });
+        return fields;
     },
 
     /**
-     * Creates the translation indicator in the form elements.
+     * Creates the translation indicator in the form element.
      *
-     * @private
-     * @param [object] field - translatable Ext.form.Field
+     * @param field - Ext.form.Field
+     * @param form - Ext.form.Panel
      * @return void
      */
-    createGlobeElement: function(field) {
+    createGlobeElement: function(form, field) {
         var me = this, type, style, globeIcon;
 
-        type = me.getFieldType(field);
-        switch(type) {
-            case 'tinymce':
-                style = 'top: 3px; right: 3px';
-                break;
-            case 'codemirror':
-                style = 'top: 6px; right: 26px;z-index:999999';
-                break;
-            case 'textarea':
-                style = 'top: 6px; right: 6px';
-                break;
-            case 'trigger':
-                style = 'top: 6px; right: 26px';
-                break;
-            case 'textfield':
-            default:
-                style = 'top: 6px; right: 6px; z-index:1;';
-                break;
-        }
-
+        style = me.getGlobeElementStyle(field);
         globeIcon = new Ext.Element(document.createElement('span'));
-
         globeIcon.set({
             cls: Ext.baseCSSPrefix + 'translation-globe sprite-globe',
             style: 'position: absolute;width: 16px; height: 16px;display:block;cursor:pointer;'+style
         });
-        globeIcon.addListener('click', me.onOpenTranslationWindow, me);
 
+        globeIcon.addListener('click', function() {
+            me.openTranslationWindow(form);
+        });
 
-        field.getEl().setStyle('position', 'relative');
-        globeIcon.insertAfter(field.inputEl);
-        me.icons.push(globeIcon);
+        if (field.getEl()) {
+            field.getEl().setStyle('position', 'relative');
+        }
+
+        try {
+            if (field.globeIcon) {
+                field.globeIcon.removeListener('click');
+                field.globeIcon.remove();
+            }
+        } catch (e) { }
+
+        field.globeIcon = globeIcon;
+        if (Ext.isFunction(field.insertGlobeIcon)) {
+            field.insertGlobeIcon(globeIcon);
+        } else if (field.inputEl) {
+            globeIcon.insertAfter(field.inputEl);
+        }
     },
 
     /**
-     * Opens the translation sub application and pass
-     * the translatable field to the component
-     *
-     * @private
-     * @return void
+     * Returns custom styling for different field types.
+     * @param field - Ext.form.Field
+     * @returns string
      */
-    onOpenTranslationWindow: function() {
-        var me = this;
-
-        // Check if subapplications are supported
-        if(typeof(Shopware.app.Application.addSubApplication) !== 'function') {
-            Ext.Error.raise('Your ExtJS application does not support sub applications');
+    getGlobeElementStyle: function(field) {
+        switch(this.getFieldType(field)) {
+            case 'tinymce':
+                return 'top: 3px; right: 3px';
+            case 'codemirror':
+                return 'top: 6px; right: 26px;z-index:999999';
+            case 'textarea':
+                return 'top: 6px; right: 6px';
+            case 'trigger':
+                return 'top: 6px; right: 26px';
+            case 'textfield':
+            default:
+                return 'top: 6px; right: 6px; z-index:1;';
         }
+    },
 
-        var key = me.translationKey || me.client.getForm().getRecord().getId();
-        me.translatableFieldsConfig = me.getFieldValues(me.translatableFields);
+    /**
+     * Opens the translation module for the provided form
+     * @param form - Ext.form.Panel
+     */
+    openTranslationWindow: function(form) {
+        var me = this;
+        var config = form._translationConfig;
+        var key = config.translationKey || form.getForm().getRecord().getId();
+        var fields = me.createTranslationFields(form);
 
         Shopware.app.Application.addSubApplication({
             name: 'Shopware.apps.Translation',
             eventScope: me,
-            translationCallback: me.translationCallback,
-            translatableFields: me.translatableFieldsConfig,
-            translationType: me.translationType,
-            translationMerge: me.translationMerge,
+            translationCallback: config.translationCallback,
+            translatableFields: fields,
+            translationType: config.translationType,
+            translationMerge: config.translationMerge,
             translationKey: key
         });
     },
 
     /**
-     * Determines the values of the passed field array to
-     * set the value as the emptyText.
-     *
-     * @private
-     * @param [array] fields - the translatable fields
-     * @return [array] result - resulting field configuration
+     * Creates the translation fields for the translation module.
+     * @param form - Ext.form.Panel
+     * @returns { Array }
      */
-    getFieldValues: function(fields) {
+    createTranslationFields: function(form) {
+        var me = this;
+        var fields = me.getTranslatableFields(form);
         var result = [];
 
         Ext.each(fields, function(field) {
-            var value = field.getValue(),
-                config = field.initialConfig;
+            var config = Ext.clone(field.initialConfig);
 
-            if(!config.xtype) {
+            // Always allow empty fields due to the fact that we're always having a fallback value
+            if (!config.allowBlank) {
+                config.allowBlank = true;
+            }
+
+            // Allow overwrite of field label with an alternative label.
+            if (config.translationLabel) {
+                config.fieldLabel = config.translationLabel;
+            }
+            // Allow overwrite of field name with an alternative name.
+            if (config.translationName) {
+                config.name = config.translationName;
+            }
+            // If there's no label, set a non-breaking space
+            if (!config.fieldLabel) {
+                config.fieldLabel = '&nbsp';
+                config.labelSeparator = '';
+            }
+            config.labelWidth = 130;
+
+            if (!config.xtype) {
                 config.xtype = field.xtype;
             }
-            if(value) {
-                config.emptyText = value;
+            if (field.getValue()) {
+                config.emptyText = field.getValue();
             }
             result.push(config)
         });
@@ -309,14 +286,13 @@ Ext.define('Shopware.form.plugin.Translation',
     },
 
     /**
-     * Evalutes the field type.
+     * Evaluates the field type.
      *
-     * @private
-     * @param [object] field - Ext.form.Field
-     * @return [string|boolean] - field type
+     * @param field - Ext.form.Field
+     * @return { string|boolean } - field type
      */
     getFieldType: function(field) {
-        var type;
+        var type = null;
 
         Ext.each(field.alternateClassName, function(className) {
             if(className === 'Ext.form.TextField') {
@@ -340,23 +316,12 @@ Ext.define('Shopware.form.plugin.Translation',
                 || className === 'Ext.form.DateField'
                 || className === 'Ext.form.Picker'
                 || className === 'Ext.form.Spinner'
+                || className === 'Ext.form.NumberField'
+                || className === 'Ext.form.Number'
                 || className === 'Ext.form.TimeField') {
                 type = 'trigger';
             }
         });
-
         return type;
-    },
-
-    /**
-     * The plugin cleanup method which the owning Component calls at Component destruction time.
-     * Removes the class member before the Component will be destroyed.
-     *
-     * @public
-     * @return void
-     */
-    destroy: function() {
-        //this.destroyMembers('client', 'translatableFields', 'translationType', 'translationKey');
-        this.callParent(arguments);
     }
 });

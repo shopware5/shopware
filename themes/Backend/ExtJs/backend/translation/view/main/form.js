@@ -48,8 +48,7 @@ Ext.define('Shopware.apps.Translation.view.main.Form',
     defaultType: 'textfield',
     defaults: {
         labelStyle: 'font-weight: 700; text-align: right;',
-        layout: 'anchor',
-        labelWidth: 130,
+        labelWidth: 155,
         anchor: '100%'
     },
 
