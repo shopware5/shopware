@@ -111,10 +111,6 @@ Ext.define('Shopware.apps.Order.model.Position', {
             root:'data',
             totalProperty:'total'
         }
-    },
-    associations: [
-        { type:'hasMany', model:'Shopware.apps.Order.model.PositionAttribute', name:'getAttributes', associationKey:'attribute' }
-    ]
-
+    }
 });
 //{/block}

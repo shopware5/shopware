@@ -150,7 +150,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
             layout:'anchor',
             defaults:{
                 anchor:'95%',
-                labelWidth:150,
+                labelWidth:155,
                 minWidth:250,
                 xtype:'textfield'
             },
@@ -163,7 +163,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
             layout:'anchor',
             cls: Ext.baseCSSPrefix + 'field-set-container',
             defaults:{
-                labelWidth:150,
+                labelWidth:155,
                 xtype:'textfield'
             },
             items: me.createBaseFormRight()
@@ -192,7 +192,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
             editable:false,
             allowBlank:false,
             anchor:'95%',
-            labelWidth:150,
+            labelWidth:155,
             minWidth:250
         });
 
@@ -206,7 +206,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
             allowBlank:false,
             editable:false,
             anchor:'95%',
-            labelWidth:150,
+            labelWidth:155,
             minWidth:250,
             listeners: {
                 // When the selected job changes, validate the mail address again
@@ -226,7 +226,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
 
         me.customerMail = Ext.create('Ext.form.field.Text', {
             fieldLabel:me.snippets.email.label,
-            labelWidth:150,
+            labelWidth:155,
             name:'email',
             allowBlank:false,
             required:true,
@@ -307,7 +307,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
             fieldLabel:me.snippets.active.field,
             xtype:'checkbox',
             value: true,
-            labelWidth:100,
+            labelWidth:155,
             uncheckedValue:false,
             inputValue:true
         },  me.passwordContainer, me.confirmField ];
@@ -375,7 +375,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
             layout:'anchor',
             cls: Ext.baseCSSPrefix + 'password-container',
             defaults:{
-                labelWidth:150,
+                labelWidth:155,
                 validateOnBlur:true,
                 validateOnChange:false
             },

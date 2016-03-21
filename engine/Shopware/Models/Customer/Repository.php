@@ -212,9 +212,6 @@ class Repository extends ModelRepository
             'billing',
             'shipping',
             'paymentData',
-            'attribute',
-            'billingAttribute',
-            'shippingAttribute',
             'locale.language',
             'shop.name as shopName',
             $builder->expr()->count('doneOrders.id') . ' as orderCount',
@@ -230,9 +227,6 @@ class Repository extends ModelRepository
                 ->leftJoin('subShop.locale', 'locale')
                 ->leftJoin('customer.paymentData', 'paymentData', \Doctrine\ORM\Query\Expr\Join::WITH, 'paymentData.paymentMean = customer.paymentId')
                 ->leftJoin('customer.orders', 'doneOrders', \Doctrine\ORM\Query\Expr\Join::WITH, 'doneOrders.status <> -1 AND doneOrders.status <> 4')
-                ->leftJoin('billing.attribute', 'billingAttribute')
-                ->leftJoin('shipping.attribute', 'shippingAttribute')
-                ->leftJoin('customer.attribute', 'attribute')
                 ->where($builder->expr()->eq('customer.id', $customerId));
 
         $builder->groupBy('customer.id');
@@ -339,90 +333,6 @@ class Repository extends ModelRepository
         $builder->andWhere($builder->expr()->notIn('orders.status', array('-1', '4')));
 
         $this->addOrderBy($builder, $orderBy);
-        return $builder;
-    }
-
-    /**
-     * Returns an instance of the \Doctrine\ORM\Query object which search for the attributes of the passed
-     * shipping id.
-     * @param $shippingId
-     * @return \Doctrine\ORM\Query
-     */
-    public function getShippingAttributesQuery($shippingId)
-    {
-        $builder = $this->getShippingAttributesQueryBuilder($shippingId);
-        return $builder->getQuery();
-    }
-
-    /**
-     * Helper function to create the query builder for the "getShippingAttributesQuery" function.
-     * This function can be hooked to modify the query builder of the query object.
-     * @param $shippingId
-     * @return \Doctrine\ORM\QueryBuilder
-     */
-    public function getShippingAttributesQueryBuilder($shippingId)
-    {
-        $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(array('attribute'))
-                ->from('Shopware\Models\Attribute\CustomerShipping', 'attribute')
-                ->where('attribute.customerShippingId = ?1')
-                ->setParameter(1, $shippingId);
-        return $builder;
-    }
-
-    /**
-     * Returns an instance of the \Doctrine\ORM\Query object which search for the attributes of the passed
-     * billing id.
-     * @param $billingId
-     * @return \Doctrine\ORM\Query
-     */
-    public function getBillingAttributesQuery($billingId)
-    {
-        $builder = $this->getBillingAttributesQueryBuilder($billingId);
-        return $builder->getQuery();
-    }
-
-    /**
-     * Helper function to create the query builder for the "getBillingAttributesQuery" function.
-     * This function can be hooked to modify the query builder of the query object.
-     * @param $billingId
-     * @return \Doctrine\ORM\QueryBuilder
-     */
-    public function getBillingAttributesQueryBuilder($billingId)
-    {
-        $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(array('attribute'))
-                ->from('Shopware\Models\Attribute\CustomerBilling', 'attribute')
-                ->where('attribute.customerBillingId = ?1')
-                ->setParameter(1, $billingId);
-        return $builder;
-    }
-
-    /**
-     * Returns an instance of the \Doctrine\ORM\Query object which search for the attributes of the passed
-     * customer id.
-     * @param $customerId
-     * @return \Doctrine\ORM\Query
-     */
-    public function getAttributesQuery($customerId)
-    {
-        $builder = $this->getAttributesQueryBuilder($customerId);
-        return $builder->getQuery();
-    }
-
-    /**
-     * Helper function to create the query builder for the "getAttributesQuery" function.
-     * This function can be hooked to modify the query builder of the query object.
-     * @param $customerId
-     * @return \Doctrine\ORM\QueryBuilder
-     */
-    public function getAttributesQueryBuilder($customerId)
-    {
-        $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(array('attribute'))
-                ->from('Shopware\Models\Attribute\Customer', 'attribute')
-                ->where('attribute.customerId = ?1')
-                ->setParameter(1, $customerId);
         return $builder;
     }
 

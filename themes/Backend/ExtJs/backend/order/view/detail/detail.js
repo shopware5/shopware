@@ -52,7 +52,7 @@ Ext.define('Shopware.apps.Order.view.detail.Detail', {
     /**
      * An optional extra CSS class that will be added to this component's Element.
      */
-    cls: Ext.baseCSSPrefix + 'detail-panel',
+    cls: Ext.baseCSSPrefix + 'detail-panel shopware-form',
 
     /**
      * A shortcut for setting a padding style on the body element. The value can either be a number to be applied to all sides, or a normal css string describing padding.
@@ -93,11 +93,14 @@ Ext.define('Shopware.apps.Order.view.detail.Detail', {
         var me = this;
 
         me.registerEvents();
+        me.billingForm = Ext.create('Shopware.apps.Order.view.detail.Billing', { record: me.record, countriesStore: me.countriesStore });
+        me.shippingForm = Ext.create('Shopware.apps.Order.view.detail.Shipping', { record: me.record, paymentsStore: me.paymentsStore, countriesStore: me.countriesStore });
+
         me.items = [
             me.createNoticeContainer(),
             me.createShopContainer(),
-			Ext.create('Shopware.apps.Order.view.detail.Billing', { record: me.record, countriesStore: me.countriesStore }),
-			Ext.create('Shopware.apps.Order.view.detail.Shipping', { record: me.record, paymentsStore: me.paymentsStore, countriesStore: me.countriesStore }),
+            me.billingForm,
+            me.shippingForm,
 			Ext.create('Shopware.apps.Order.view.detail.Debit', { record: me.record, paymentsStore: me.paymentsStore })
         ];
         me.buttons = me.createButtons();
@@ -133,7 +136,22 @@ Ext.define('Shopware.apps.Order.view.detail.Detail', {
                 me.getForm().updateRecord(me.record);
                 me.fireEvent('saveDetails', me.record, {
                     callback: function(order) {
-                        me.fireEvent('updateForms', order, me.up('window'));
+                        var billingId = null;
+                        var shippingId = null;
+
+                        if (me.record && me.record.getBilling() && me.record.getBilling().first()) {
+                            billingId = me.record.getBilling().first().get('id');
+                        }
+
+                        if (me.record && me.record.getShipping() && me.record.getShipping().first()) {
+                            shippingId = me.record.getShipping().first().get('id');
+                        }
+
+                        me.billingForm.attributeForm.saveAttribute(billingId, function() {
+                            me.shippingForm.attributeForm.saveAttribute(shippingId, function() {
+                                me.fireEvent('updateForms', order, me.up('window'));
+                            })
+                        });
                     }
                 })
             }
@@ -197,7 +215,7 @@ Ext.define('Shopware.apps.Order.view.detail.Detail', {
                     margin: '0 0 10px',
                     anchor:'97%',
                     triggerAction:'all',
-                    labelWidth: 120,
+                    labelWidth: 155,
                     name:'shopId',
                     fieldLabel: me.snippets.shop.label,
                     store: me.shopsStore,

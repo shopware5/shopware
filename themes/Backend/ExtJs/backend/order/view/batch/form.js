@@ -147,7 +147,7 @@ Ext.define('Shopware.apps.Order.view.batch.Form', {
             layout: 'anchor',
             flex: 1,
             defaults: {
-                labelWidth: 150,
+                labelWidth: 155,
                 xtype: 'combobox',
                 anchor: '100%'
             },

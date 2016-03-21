@@ -74,6 +74,11 @@ Ext.define('Shopware.apps.Order.view.list.Document', {
         }
     },
 
+    plugins: [        {
+        ptype: 'grid-attributes',
+        table: 's_order_documents_attributes'
+    }],
+
     /**
 	 * The initComponent template method is an important initialization step for a Component.
      * It is intended to be implemented by each subclass of Ext.Component to provide any needed constructor logic.
