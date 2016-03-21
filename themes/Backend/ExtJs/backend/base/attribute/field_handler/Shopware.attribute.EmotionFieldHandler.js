@@ -1,4 +1,4 @@
-/*
+/**
  * Shopware 5
  * Copyright (c) shopware AG
  *
@@ -20,30 +20,16 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  *
- * @category   Shopware
- * @package    Base
- * @subpackage Component
- * @version    $Id$
- * @author shopware AG
+ * @category    Shopware
+ * @package     Base
+ * @subpackage  Attribute
+ * @version     $Id$
+ * @author      shopware AG
  */
-Ext.define('Shopware.apps.Base.view.element.Date', {
-    extend: 'Ext.form.field.Date',
-    alias: [
-        'widget.base-element-date',
-        'widget.base-element-datefield'
-    ],
 
-    setValue: function(value) {
-        this.callParent([this.formatValue(value)]);
-    },
-
-    formatValue: function(value) {
-        if(!value) {
-            return null;
-        } else if (typeof(value) == 'string') {
-            return new Date(value);
-        } else {
-            return value;
-        }
-    }
+Ext.define('Shopware.attribute.EmotionFieldHandler', {
+    extend: 'Shopware.attribute.AbstractEntityFieldHandler',
+    entity: "Shopware\\Models\\Emotion\\Emotion",
+    singleSelectionClass: 'Shopware.form.field.EmotionSingleSelection',
+    multiSelectionClass: 'Shopware.form.field.EmotionGrid'
 });

@@ -1,4 +1,4 @@
-/*
+/**
  * Shopware 5
  * Copyright (c) shopware AG
  *
@@ -20,30 +20,24 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  *
- * @category   Shopware
- * @package    Base
- * @subpackage Component
- * @version    $Id$
- * @author shopware AG
+ * @category    Shopware
+ * @package     Base
+ * @subpackage  Attribute
+ * @version     $Id$
+ * @author      shopware AG
  */
-Ext.define('Shopware.apps.Base.view.element.Date', {
-    extend: 'Ext.form.field.Date',
-    alias: [
-        'widget.base-element-date',
-        'widget.base-element-datefield'
-    ],
 
-    setValue: function(value) {
-        this.callParent([this.formatValue(value)]);
-    },
+Ext.define('Shopware.form.field.CategorySingleSelection', {
+    extend: 'Shopware.form.field.SingleSelection',
+    alias: 'widget.shopware-form-field-category-single-selection',
 
-    formatValue: function(value) {
-        if(!value) {
-            return null;
-        } else if (typeof(value) == 'string') {
-            return new Date(value);
-        } else {
-            return value;
+    getLabelOfObject: function(values) {
+        var parents = Ext.clone(values.parents);
+
+        if (!parents || parents.length <= 0) {
+            parents = [];
         }
+        parents.push(values.name);
+        return parents.join('>');
     }
 });

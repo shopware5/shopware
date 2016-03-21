@@ -1,4 +1,4 @@
-/*
+/**
  * Shopware 5
  * Copyright (c) shopware AG
  *
@@ -20,30 +20,29 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  *
- * @category   Shopware
- * @package    Base
- * @subpackage Component
- * @version    $Id$
- * @author shopware AG
+ * @category    Shopware
+ * @package     Base
+ * @subpackage  Attribute
+ * @version     $Id$
+ * @author      shopware AG
  */
-Ext.define('Shopware.apps.Base.view.element.Date', {
-    extend: 'Ext.form.field.Date',
-    alias: [
-        'widget.base-element-date',
-        'widget.base-element-datefield'
-    ],
 
-    setValue: function(value) {
-        this.callParent([this.formatValue(value)]);
+//{namespace name="backend/attributes/fields"}
+
+Ext.define('Shopware.form.field.MailGrid', {
+    extend: 'Shopware.form.field.Grid',
+    alias: 'widget.shopware-form-field-mail-grid',
+    createColumns: function() {
+        var me = this;
+        return [
+            me.createSortingColumn(),
+            { dataIndex: 'name', flex: 1 },
+            { dataIndex: 'subject', flex: 1 },
+            me.createActionColumn()
+        ];
     },
 
-    formatValue: function(value) {
-        if(!value) {
-            return null;
-        } else if (typeof(value) == 'string') {
-            return new Date(value);
-        } else {
-            return value;
-        }
+    createSearchField: function() {
+        return Ext.create('Shopware.form.field.MailSingleSelection', this.getComboConfig());
     }
 });

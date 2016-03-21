@@ -1,4 +1,4 @@
-/*
+/**
  * Shopware 5
  * Copyright (c) shopware AG
  *
@@ -20,30 +20,35 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  *
- * @category   Shopware
- * @package    Base
- * @subpackage Component
- * @version    $Id$
- * @author shopware AG
+ * @category    Shopware
+ * @package     Base
+ * @subpackage  Attribute
+ * @version     $Id$
+ * @author      shopware AG
  */
-Ext.define('Shopware.apps.Base.view.element.Date', {
-    extend: 'Ext.form.field.Date',
-    alias: [
-        'widget.base-element-date',
-        'widget.base-element-datefield'
-    ],
 
-    setValue: function(value) {
-        this.callParent([this.formatValue(value)]);
+//{namespace name="backend/attributes/fields"}
+
+Ext.define('Shopware.form.field.PremiumGrid', {
+    extend: 'Shopware.form.field.Grid',
+    alias: 'widget.shopware-form-field-premium-grid',
+    createColumns: function() {
+        var me = this;
+
+        return [
+            me.createSortingColumn(),
+            { dataIndex: 'orderNumberExport', flex: 1 },
+            { dataIndex: 'name', flex: 2, renderer: me.productRenderer },
+            { dataIndex: 'shop' },
+            me.createActionColumn()
+        ];
     },
 
-    formatValue: function(value) {
-        if(!value) {
-            return null;
-        } else if (typeof(value) == 'string') {
-            return new Date(value);
-        } else {
-            return value;
-        }
+    createSearchField: function() {
+        return Ext.create('Shopware.form.field.PremiumSingleSelection', this.getComboConfig());
+    },
+
+    productRenderer: function(value, meta, record) {
+        return '<b>'+record.get('number')+'</b> - ' + value;
     }
 });

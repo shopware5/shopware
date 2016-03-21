@@ -43,18 +43,26 @@ Ext.define('Shopware.apps.Base.view.element.DateTime', {
 
     initComponent: function() {
         var me = this;
-        if(!me.value) {
-            me.value = null;
-        } else if (typeof(me.value) == 'string') {
-            me.value = me.value.replace(' ', 'T');
-            me.value = new Date(me.value);
-        }
 
+        me.value = me.formatValue(me.value);
         me.buildField();
         me.callParent();
         me.dateField = me.down('datefield');
         me.timeField = me.down('timefield');
         me.initField();
+    },
+
+    formatValue: function(value) {
+        if(!value) {
+            return null;
+        } else if (typeof(value) == 'string') {
+            value = value.replace(' ', 'T');
+            value += '+00:00';
+            value = new Date(value);
+            return new Date((value.getTime() + (value.getTimezoneOffset() * 60 * 1000)));
+        } else {
+            return value;
+        }
     },
 
     //@private
@@ -75,9 +83,9 @@ Ext.define('Shopware.apps.Base.view.element.DateTime', {
             defaults: d,
             items: [Ext.apply({
                 xtype: 'datefield',
+                //format: 'Y-m-d',
                 disabled: me.disabled,
                 value: me.value,
-                readOnly: !!me.readOnly,
                 width: me.timePosition != 'below' ? 100 : undefined,
                 allowBlank: me.allowBlank,
                 listeners: {
@@ -87,9 +95,9 @@ Ext.define('Shopware.apps.Base.view.element.DateTime', {
                 isFormField: false // prevent submission
             }, me.dateCfg), Ext.apply({
                 xtype: 'timefield',
+                submitFormat: 'H:i:s',
                 disabled: me.disabled,
                 value: me.value,
-                readOnly: !!me.readOnly,
                 margin: me.timePosition != 'below' ? '0 0 0 3' : 0,
                 width: me.timePosition != 'below' ? 80 : undefined,
                 allowBlank: me.allowBlank,
@@ -141,6 +149,7 @@ Ext.define('Shopware.apps.Base.view.element.DateTime', {
     },
 
     setValue: function(value) {
+        value = this.formatValue(value);
         this.dateField.setValue(value);
         this.timeField.setValue(value);
     },
@@ -148,7 +157,9 @@ Ext.define('Shopware.apps.Base.view.element.DateTime', {
     getSubmitData: function() {
         var value = this.getValue();
         var format = this.getFormat();
-        return value ? Ext.Date.format(value, format) : null;
+        var result = { };
+        result[this.name]  = value ? Ext.Date.format(value, format) : null;
+        return result;
     },
 
     getFormat: function() {
