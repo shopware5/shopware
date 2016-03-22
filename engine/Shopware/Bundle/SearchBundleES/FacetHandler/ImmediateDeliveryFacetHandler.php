@@ -101,11 +101,11 @@ class ImmediateDeliveryFacetHandler implements HandlerInterface, ResultHydratorI
         if (!isset($elasticResult['aggregations'])) {
             return;
         }
-        if (!isset($elasticResult['aggregations']['agg_has_available_variant_filter'])) {
+        if (!isset($elasticResult['aggregations']['has_available_variant_filter'])) {
             return;
         }
 
-        $data = $elasticResult['aggregations']['agg_has_available_variant_filter']['agg_has_available_variant_count'];
+        $data = $elasticResult['aggregations']['has_available_variant_filter']['has_available_variant_count'];
 
         if ($data['value'] <= 0) {
             return;

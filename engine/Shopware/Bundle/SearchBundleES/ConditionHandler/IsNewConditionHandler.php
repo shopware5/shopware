@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundleES\ConditionHandler;
 
-use ONGR\ElasticsearchDSL\Filter\RangeFilter;
+use ONGR\ElasticsearchDSL\Query\RangeQuery;
 use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\SearchBundle\Condition\IsNewCondition;
 use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
@@ -72,7 +72,7 @@ class IsNewConditionHandler implements HandlerInterface
             'lte' => date('Y-m-d'),
         ];
 
-        $filter = new RangeFilter('formattedCreatedAt', $range);
+        $filter = new RangeQuery('formattedCreatedAt', $range);
 
         if ($criteria->hasBaseCondition($criteriaPart->getName())) {
             $search->addFilter($filter);
