@@ -423,7 +423,7 @@ Ext.define('Shopware.form.field.TinyMCE',
                     if (src && src.substr(0,5) != "media") {
                         return;
                     }
-                    
+
                     id = 'tinymce-editor-image-' + Shopware.ModuleManager.uuidGenerator.generate();
 
                     img.setAttribute('id', id);
@@ -684,10 +684,12 @@ Ext.define('Shopware.form.field.TinyMCE',
     setEditorValue: function(value, scope) {
         var me = scope;
 
-        if(!me.statics.initialized) {
-            Ext.Function.defer(function() {
+        if(!me.statics.initialized || !me.tinymce) {
+
+            me.on('afterrendereditor', function() {
                 me.setEditorValue(value, me);
-            }, 50);
+            }, me, { single: true });
+
             return false;
         }
 
