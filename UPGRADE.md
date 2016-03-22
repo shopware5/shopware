@@ -113,6 +113,7 @@ In this document you will find a changelog of the important changes related to t
     * `Shopware.apps.Customer.view.detail.Billing`
     * `Shopware.apps.Customer.view.detail.Shipping`
 * Removed fax field form billing addresses
+* Added `is--active`-class to wishlist-entry in the account-sidebar
 
 ## 5.1.4
 * Customer logout will now regenerate the session id and clear the customers basket.
