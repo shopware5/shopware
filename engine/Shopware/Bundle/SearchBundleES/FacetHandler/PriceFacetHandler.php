@@ -105,10 +105,10 @@ class PriceFacetHandler implements HandlerInterface, ResultHydratorInterface
         if (!isset($elasticResult['aggregations'])) {
             return;
         }
-        if (!isset($elasticResult['aggregations']['agg_price'])) {
+        if (!isset($elasticResult['aggregations']['price'])) {
             return;
         }
-        $data = $elasticResult['aggregations']['agg_price'];
+        $data = $elasticResult['aggregations']['price'];
 
         if ($data['count'] <= 0) {
             return;

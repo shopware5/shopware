@@ -96,11 +96,11 @@ class VoteAverageFacetHandler implements HandlerInterface, ResultHydratorInterfa
         if (!isset($elasticResult['aggregations'])) {
             return;
         }
-        if (!isset($elasticResult['aggregations']['agg_vote_average'])) {
+        if (!isset($elasticResult['aggregations']['vote_average'])) {
             return;
         }
 
-        $data = $elasticResult['aggregations']['agg_vote_average'];
+        $data = $elasticResult['aggregations']['vote_average'];
         if ($data['count'] <= 0) {
             return;
         }

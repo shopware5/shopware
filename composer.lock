@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "c774008601c8d85b47b98038ca085d7b",
-    "content-hash": "4984eb5156a6b21d110a570706cf7d57",
+    "hash": "259840ce137b2b3c7198ae222682bca5",
+    "content-hash": "2584137340d5b8535962660373be897e",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -715,16 +715,16 @@
         },
         {
             "name": "elasticsearch/elasticsearch",
-            "version": "v2.0.0",
+            "version": "v2.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elastic/elasticsearch-php.git",
-                "reference": "e9b6963dbb2864d33bf3c76df022a077c2cbda82"
+                "reference": "c1675245c0a6f789cbb80b3e0b333b9ef521a627"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elastic/elasticsearch-php/zipball/e9b6963dbb2864d33bf3c76df022a077c2cbda82",
-                "reference": "e9b6963dbb2864d33bf3c76df022a077c2cbda82",
+                "url": "https://api.github.com/repos/elastic/elasticsearch-php/zipball/c1675245c0a6f789cbb80b3e0b333b9ef521a627",
+                "reference": "c1675245c0a6f789cbb80b3e0b333b9ef521a627",
                 "shasum": ""
             },
             "require": {
@@ -735,8 +735,8 @@
             "require-dev": {
                 "athletic/athletic": "~0.1",
                 "cpliakas/git-wrapper": "~1.0",
-                "mockery/mockery": "dev-master@dev",
-                "phpunit/phpunit": "3.7.*",
+                "mockery/mockery": "0.9.4",
+                "phpunit/phpunit": "~4.7",
                 "symfony/yaml": "2.4.3 as 2.4.2",
                 "twig/twig": "1.*"
             },
@@ -765,7 +765,7 @@
                 "elasticsearch",
                 "search"
             ],
-            "time": "2015-08-28 19:01:19"
+            "time": "2016-03-18 16:31:37"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -1088,16 +1088,16 @@
         },
         {
             "name": "ongr/elasticsearch-dsl",
-            "version": "v1.1.0",
+            "version": "v2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ongr-io/ElasticsearchDSL.git",
-                "reference": "3617539ab8b028ab9d3f084468e362dc11a48243"
+                "reference": "df7a3d933bf270bf7b4fd27873eeeda2aeccbb1b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ongr-io/ElasticsearchDSL/zipball/3617539ab8b028ab9d3f084468e362dc11a48243",
-                "reference": "3617539ab8b028ab9d3f084468e362dc11a48243",
+                "url": "https://api.github.com/repos/ongr-io/ElasticsearchDSL/zipball/df7a3d933bf270bf7b4fd27873eeeda2aeccbb1b",
+                "reference": "df7a3d933bf270bf7b4fd27873eeeda2aeccbb1b",
                 "shasum": ""
             },
             "require": {
@@ -1111,6 +1111,11 @@
                 "squizlabs/php_codesniffer": "~2.0"
             },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0-dev"
+                }
+            },
             "autoload": {
                 "psr-4": {
                     "ONGR\\ElasticsearchDSL\\": "src/"
@@ -1128,7 +1133,7 @@
             ],
             "description": "Elasticsearch DSL library",
             "homepage": "http://ongr.io",
-            "time": "2015-12-28 11:19:50"
+            "time": "2016-03-03 11:20:49"
         },
         {
             "name": "oyejorge/less.php",
@@ -1325,12 +1330,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/config.git",
-                "reference": "cc75e0cf582c412e49ad4cd5f83bd0d8e6ff2b33"
+                "reference": "f21c97aec1b5302d2dc0d17047ea8f4e4ff93aae"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/config/zipball/cc75e0cf582c412e49ad4cd5f83bd0d8e6ff2b33",
-                "reference": "cc75e0cf582c412e49ad4cd5f83bd0d8e6ff2b33",
+                "reference": "f21c97aec1b5302d2dc0d17047ea8f4e4ff93aae",
                 "shasum": ""
             },
             "require": {
@@ -1712,12 +1717,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/form.git",
-                "reference": "e183d1ab59692a479e7e085223281b92a0b9e1ae"
+                "reference": "acf67de80790ee0f27949d37711bde000bc32d33"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/form/zipball/e183d1ab59692a479e7e085223281b92a0b9e1ae",
-                "reference": "e183d1ab59692a479e7e085223281b92a0b9e1ae",
+                "reference": "acf67de80790ee0f27949d37711bde000bc32d33",
                 "shasum": ""
             },
             "require": {
