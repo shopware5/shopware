@@ -139,6 +139,8 @@ Ext.define('Shopware.form.field.ProductStreamSelection', {
 
         icon.appendTo(iconCell);
         iconCell.insertBefore(inputCell);
+
+        me.callParent(arguments);
     },
 
     /**

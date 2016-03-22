@@ -694,6 +694,12 @@ Shopware 5 provides 11 integrated elements inside the shopping worlds that can b
     height: 100%;
     position: relative;
     overflow: auto;
+
+    .html--content {
+        :last-child {
+            margin-bottom: 0;
+        }
+    }
 }
 
 @media screen and(min-width: @tabletViewportWidth) {
