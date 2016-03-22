@@ -23,7 +23,7 @@ return [
     'language-selection_info_message'    => 'Deze taal verwijst alleen naar de installatie assistentie. Na de installatie kunt u uw winkel natuurlijk in meerdere talen instellen.',
     'language-selection_welcome_message' => <<<EOT
 <p>
-    U bent nog maar enkele klikken verwijderd om  deel uit te maken van de grote Shopware gemeenschap, wat momenteel uit meer dan 30.000 online handelaren wereldwijd bestaat!
+    U bent nog maar enkele klikken verwijderd om  deel uit te maken van de grote Shopware gemeenschap, wat momenteel uit meer dan 54.000 online handelaren wereldwijd bestaat!
 </p>
 <p>
     Daarnaast is ons supportteam vanzelfsprekend altijd aanspreekbaar. Contacteert u ons telefonisch onder <a href="tel:+492555928850">(+49) 2555 92 8850</a> of per email <a href="mailto:info@shopware.com">info@shopware.com</a> .
