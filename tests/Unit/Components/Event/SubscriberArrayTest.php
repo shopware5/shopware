@@ -27,21 +27,22 @@
  * @package   Shopware\Tests
  * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
  */
-class Shopware_Tests_Components_Event_SubscriberConfigTest extends \PHPUnit_Framework_TestCase
+class Shopware_Tests_Components_Event_SubscriberArrayTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Enlight_Event_Subscriber_Config
+     * @var \Enlight_Event_Subscriber_Array
      */
     protected $eventManager;
 
     public function setUp()
     {
-        $this->eventManager = new Enlight_Event_Subscriber_Config('test');
+        $this->eventManager = new Enlight_Event_Subscriber_Array();
     }
 
     public function testCanCreateInstance()
     {
-        $this->assertInstanceOf('Enlight_Event_Subscriber_Config', $this->eventManager);
+        $this->assertInstanceOf(Enlight_Event_Subscriber_Array::class, $this->eventManager);
+        $this->assertInstanceOf(Enlight_Event_Subscriber::class, $this->eventManager);
     }
 
     public function testAddSubscriber()

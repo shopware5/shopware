@@ -9,13 +9,12 @@ use Shopware\Tests\Service\TestCase;
 
 class SimilarProductsTest extends TestCase
 {
-
     /**
      * setting up test config
      */
     public static function setUpBeforeClass()
     {
-        Shopware()->Config()->offsetSet('similarlimit',3);
+        Shopware()->Config()->offsetSet('similarlimit', 3);
     }
 
     /**
@@ -23,7 +22,7 @@ class SimilarProductsTest extends TestCase
      */
     public static function tearDownAfterClass()
     {
-        Shopware()->Config()->offsetSet('similarlimit',0);
+        Shopware()->Config()->offsetSet('similarlimit', 0);
     }
 
     protected function getProduct(

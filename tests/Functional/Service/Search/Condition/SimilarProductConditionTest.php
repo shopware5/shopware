@@ -9,7 +9,6 @@ use Shopware\Tests\Service\TestCase;
 
 class SimilarProductConditionTest extends TestCase
 {
-
     protected function getProduct(
         $number,
         ProductContext $context,

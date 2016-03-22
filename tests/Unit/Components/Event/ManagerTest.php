@@ -44,7 +44,7 @@ class Shopware_Tests_Components_Event_ManagerTest extends \PHPUnit_Framework_Tes
 
     public function testCanCreateInstance()
     {
-        $this->assertInstanceOf('Enlight_Event_EventManager', $this->eventManager);
+        $this->assertInstanceOf(Enlight_Event_EventManager::class, $this->eventManager);
     }
 
     public function testAppendEventWithCallback()

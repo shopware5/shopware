@@ -1,4 +1,6 @@
 <?php
+use Shopware\Components\Password\Encoder\Sha256;
+
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -25,7 +27,7 @@
 class Shopware_Tests_Components_Hash_Hasher_Sha256Test extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Shopware\Components\Password\Encoder\Sha256
+     * @var Sha256
      */
     private $hasher;
 
@@ -37,7 +39,7 @@ class Shopware_Tests_Components_Hash_Hasher_Sha256Test extends PHPUnit_Framework
     {
         parent::setUp();
 
-        $this->hasher = new\Shopware\Components\Password\Encoder\Sha256(array(
+        $this->hasher = new Sha256(array(
             'iterations' => 2,
             'salt_len' => 22
         ));
@@ -48,7 +50,7 @@ class Shopware_Tests_Components_Hash_Hasher_Sha256Test extends PHPUnit_Framework
      */
     public function testIsAvailable()
     {
-        $this->assertInstanceOf('\Shopware\Components\Password\Encoder\Sha256', $this->hasher);
+        $this->assertInstanceOf(Sha256::class, $this->hasher);
     }
 
     /**
@@ -111,7 +113,7 @@ class Shopware_Tests_Components_Hash_Hasher_Sha256Test extends PHPUnit_Framework
     public function testRehash2()
     {
         $hash = $this->hasher->encodePassword('foobar');
-        $this->hasher = new\Shopware\Components\Password\Encoder\Sha256(array(
+        $this->hasher = new Sha256(array(
             'iterations' => 3,
             'salt_len'   => 22
         ));
