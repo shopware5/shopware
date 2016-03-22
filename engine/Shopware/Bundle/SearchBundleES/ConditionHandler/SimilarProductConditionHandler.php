@@ -25,10 +25,9 @@
 namespace Shopware\Bundle\SearchBundleES\ConditionHandler;
 
 use Doctrine\DBAL\Connection;
-use ONGR\ElasticsearchDSL\Filter\NotFilter;
-use ONGR\ElasticsearchDSL\Filter\TermFilter;
 use ONGR\ElasticsearchDSL\Query\BoolQuery;
 use ONGR\ElasticsearchDSL\Query\MultiMatchQuery;
+use ONGR\ElasticsearchDSL\Query\TermQuery;
 use ONGR\ElasticsearchDSL\Query\TermsQuery;
 use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\SearchBundle\Condition\SimilarProductCondition;
@@ -39,12 +38,17 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class SimilarProductConditionHandler implements HandlerInterface
 {
-    /** @var Connection $connection */
+    /**
+     * @var Connection
+     */
     protected $connection;
 
-    public function __construct($connection)
+    /**
+     * SimilarProductConditionHandler constructor.
+     * @param Connection $connection
+     */
+    public function __construct(Connection $connection)
     {
-        /** @var Connection $connection */
         $this->connection = $connection;
     }
 
@@ -65,7 +69,6 @@ class SimilarProductConditionHandler implements HandlerInterface
         Search $search,
         ShopContextInterface $context
     ) {
-
         /** @var SimilarProductCondition $criteriaPart */
         $productId = $criteriaPart->getProductId();
         $productName = $criteriaPart->getProductName();
@@ -79,15 +82,10 @@ class SimilarProductConditionHandler implements HandlerInterface
         $query->add($nameQuery, BoolQuery::SHOULD);
         $query->add($categoriesQuery, BoolQuery::MUST);
 
-        $not = new NotFilter(
-            new TermFilter(
-                'id',
-                $productId
-            )
-        );
+        $not = new BoolQuery();
+        $not->add(new TermQuery('id', $productId), BoolQuery::MUST_NOT);
 
         $search->addFilter($not);
-
         $search->addQuery($query);
     }
 

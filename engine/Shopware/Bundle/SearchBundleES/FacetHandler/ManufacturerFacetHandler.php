@@ -106,11 +106,11 @@ class ManufacturerFacetHandler implements HandlerInterface, ResultHydratorInterf
         Criteria $criteria,
         ShopContextInterface $context
     ) {
-        if (!isset($elasticResult['aggregations']['agg_manufacturer'])) {
+        if (!isset($elasticResult['aggregations']['manufacturer'])) {
             return;
         }
 
-        $buckets = $elasticResult['aggregations']['agg_manufacturer']['buckets'];
+        $buckets = $elasticResult['aggregations']['manufacturer']['buckets'];
 
         if (empty($buckets)) {
             return;
