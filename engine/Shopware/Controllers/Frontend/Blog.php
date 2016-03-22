@@ -251,7 +251,10 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
             'sFilterDate' => $this->getDateFilterData($blogCategoryIds, $filter),
             'sFilterAuthor' => $this->getAuthorFilterData($blogCategoryIds, $filter),
             'sFilterTags' => $this->getTagsFilterData($blogCategoryIds, $filter),
+
+            /** @deprecated since 5.1 will be removed in 5.2 - Use sCategoryContent instead */
             'sCategoryInfo' => $categoryContent,
+
             'sBlogArticles' => $blogArticles,
             'campaigns' => $campaigns
         );
