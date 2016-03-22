@@ -68,6 +68,19 @@ class Enlight_Controller_Request_RequestTestCase
     );
 
     /**
+     * Clear the global state
+     */
+    public function clearAll()
+    {
+        $this->clearCookies();
+        $this->clearHeaders();
+        $this->clearParams();
+        $this->clearPost();
+        $this->clearQuery();
+        $this->clearRawBody();
+    }
+
+    /**
      * Clear GET values
      *
      * @return Enlight_Controller_Request_RequestTestCase
