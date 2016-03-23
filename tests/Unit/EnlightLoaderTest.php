@@ -27,7 +27,7 @@
  * @package   Shopware\Tests
  * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
  */
-class Shopware_RegressionTests_Ticket4668 extends Enlight_Components_Test_Plugin_TestCase
+class EnlightLoaderTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Test enlight loader check file
@@ -36,5 +36,47 @@ class Shopware_RegressionTests_Ticket4668 extends Enlight_Components_Test_Plugin
     {
         $this->assertTrue(Enlight_Loader::checkFile('H:\Apache Group\Apache\htdocs\shopware.php'));
         $this->assertFalse(Enlight_Loader::checkFile('H:\Apache Group\Apache\htdocs\shopware.php'."\0"));
+    }
+
+    /**
+     *  Test case method
+     */
+    public function testAddIncludePath()
+    {
+        $old = Enlight_Loader::addIncludePath('.');
+        $new = Enlight_Loader::explodeIncludePath();
+        $last = array_pop($new);
+
+        Enlight_Loader::setIncludePath($old);
+
+        $this->assertEquals('.', $last);
+    }
+
+    /**
+     *  Test case method
+     */
+    public function testAddIncludePath2()
+    {
+        $old = Enlight_Loader::addIncludePath('.',  Enlight_Loader::POSITION_PREPEND);
+        $new = Enlight_Loader::explodeIncludePath();
+        $first = array_shift($new);
+
+        Enlight_Loader::setIncludePath($old);
+
+        $this->assertEquals('.', $first);
+    }
+
+    /**
+     *  Test case method
+     */
+    public function testAddIncludePath3()
+    {
+        $old = Enlight_Loader::addIncludePath('.', Enlight_Loader::POSITION_REMOVE);
+        $new = Enlight_Loader::explodeIncludePath();
+        $found = array_search('.', $new);
+
+        Enlight_Loader::setIncludePath($old);
+
+        $this->assertFalse($found);
     }
 }

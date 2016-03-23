@@ -22,11 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Components\Theme;
-
 use Shopware\Components\Theme\PathResolver;
 
-class PathResolverTest extends Base
+class PathResolverTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var PathResolver
@@ -35,8 +33,6 @@ class PathResolverTest extends Base
 
     protected function setUp()
     {
-        parent::setUp();
-
         $this->pathResolver = new PathResolver(
             '/my/root/dir',
             [],
