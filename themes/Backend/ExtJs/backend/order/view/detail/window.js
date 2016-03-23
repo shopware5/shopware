@@ -85,11 +85,6 @@ Ext.define('Shopware.apps.Order.view.detail.Window', {
      */
     stateId:'shopware-order-detail-window',
     /**
-     * Display no footer button for the detail window
-     * @boolean
-     */
-    footerButton:false,
-    /**
      * Contains all snippets for this component
      */
     snippets: {
