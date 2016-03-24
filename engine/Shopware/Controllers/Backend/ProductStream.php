@@ -206,25 +206,17 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
 
     public function getAttributesAction()
     {
-        /** @var Connection $connection */
-        $connection = $this->get('dbal_connection');
-        $schemaManager = $connection->getSchemaManager();
-        $tableColumns = $schemaManager->listTableColumns('s_articles_attributes');
-        $tableColumns = array_keys($tableColumns);
-
-        $query = $connection->createQueryBuilder();
-        $query->select(['name', 'label'])
-            ->from('s_core_engine_elements', 'attributes')
-            ->where('name IN (:attributeNames)')
-            ->setParameter(':attributeNames', $tableColumns, Connection::PARAM_STR_ARRAY);
-        $query = $query->execute();
-        $attributNames = $query->fetchAll(\PDO::FETCH_KEY_PAIR);
+        $service = Shopware()->Container()->get('shopware_attribute.crud_service');
+        $data = $service->getList('s_articles_attributes');
 
         $columns = [];
-        foreach ($tableColumns as $column) {
+        foreach ($data as $struct) {
+            if (!$struct->displayInBackend()) {
+                continue;
+            }
             $columns[] = [
-                'column' => $column,
-                'label' => isset($attributNames[$column]) ? $attributNames[$column] : $column
+                'column' => $struct->getColumnName(),
+                'label' => $struct->getLabel() ?: $struct->getColumnName()
             ];
         }
 
