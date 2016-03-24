@@ -403,7 +403,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
      */
     public function getTemplateSettingsAction()
     {
-        $categoryTemplates = explode(';', Shopware()->Config()->categoryTemplates);
+        $categoryTemplates = array_filter(explode(';', Shopware()->Config()->categoryTemplates));
         $data = array();
         foreach ($categoryTemplates as $templateConfigRaw) {
             list($template, $name) = explode(':', $templateConfigRaw);

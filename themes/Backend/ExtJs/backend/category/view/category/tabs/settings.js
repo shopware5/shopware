@@ -114,6 +114,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
         errorMessageWrongFileType : '{s name=view/error_message_wrong_file_type}Wrong file type selected.{/s}',
 
         defaultSettingsTemplateLabel : '{s name=view/settings_default_settings_template_label}Listing layout{/s}',
+        defaultSettingsTemplateLabelStandard: '{s name=view/settings_default_settings_template_standard}Standard{/s}',
         defaultSettingsHideTopLabel : '{s name=view/settings_default_settings_no_top_navigation_label}Do NOT show in top navigation.{/s}',
         defaultSettingsNoDesignSwitchLabel : '{s name=view/settings_default_settings_no_design_switch_label}Do NOT switch design.{/s}',
         defaultSettingsNoFilterLabel : '{s name=view/settings_default_settings_no_filter_label}Hide filters.{/s}',
@@ -351,13 +352,23 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
             allowBlank:true,
             name:'template',
             listeners: {
-                change: function (element, newValue) {
-                    if (newValue === null && me.form._record) {
-                        me.form._record.set('template', null);
+                scope: me,
+                change: function(combo) {
+                    var store = combo.getStore();
+                    if (!store.isLoading() && store.count() == 1) {
+                        me.disableTemplateComboBox(combo);
                     }
                 }
             }
         });
+
+        me.templateStore.on('load', function(store, records) {
+            var record = store.model.create({
+                template: '',
+                name: me.snippets.defaultSettingsTemplateLabelStandard
+            });
+            store.insert(0, record);
+        }, me);
 
         me.productLayoutField = Ext.create('Shopware.apps.Base.view.element.ProductBoxLayoutSelect', {
             name: 'productBoxLayout',
@@ -438,6 +449,19 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
                 items: me.getSettingsCheckboxes()
             }
         ];
+    },
+
+    /**
+     * Resets the combo to show standard
+     * value and disables edit mode in case
+     * that there are no basic templates set
+     * via global settings.
+     *
+     * @param combo
+     */
+    disableTemplateComboBox: function(combo) {
+        combo.setValue('');
+        combo.setReadOnly(true);
     },
 
     /**
