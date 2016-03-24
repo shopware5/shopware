@@ -159,7 +159,6 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         $viewAssignments = array(
             'sBanner' => Shopware()->Modules()->Marketing()->sBanner($categoryId),
             'sBreadcrumb' => $this->getBreadcrumb($categoryId),
-            'sCategoryInfo' => $categoryContent,
             'sCategoryContent' => $categoryContent,
             'campaigns' => $this->getCampaigns($categoryId),
             'activeFilterGroup' => $this->request->getQuery('sFilterGroup'),
