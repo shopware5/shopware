@@ -3104,7 +3104,6 @@ class sAdminTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers sAdmin::sGetDispatchBasket
-     * @group wip
      */
     public function testsGetDispatchBasket()
     {

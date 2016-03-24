@@ -30,40 +30,6 @@
 class Shopware_Tests_Controllers_Frontend_AccountTest extends Enlight_Components_Test_Controller_TestCase
 {
     /**
-     * test testPartnerStatistic controller action
-     *
-     * @group disable
-     * @return array|int|string $id
-     */
-    public function testPartnerStatistic()
-    {
-        //Login to the frontend
-        $this->Request()
-                ->setMethod('POST')
-                ->setPost('email', 'test@example.com')
-                ->setPost('password', 'shopware');
-        $this->dispatch('/account/login');
-        $this->assertTrue($this->Response()->isRedirect());
-        $this->reset();
-
-        //setting date range
-        $params['fromDate'] = '01.01.2000';
-        $params['toDate'] = '01.01.2222';
-        $this->Request()->setParams($params);
-        Shopware()->Session()->partnerId = 1;
-
-        $this->dispatch('/account/partnerStatistic');
-        $this->assertEquals('01.01.2000', $this->View()->partnerStatisticFromDate);
-        $this->assertEquals('01.01.2222', $this->View()->partnerStatisticToDate);
-        $chartData = $this->View()->sPartnerOrderChartData[0];
-
-        $this->assertInstanceOf('\DateTime', $chartData['date']);
-        $this->assertTrue(!empty($chartData['timeScale']));
-        $this->assertTrue(!empty($chartData['netTurnOver']));
-        $this->assertTrue($chartData['provision'] !== '0' ? !empty($chartData['provision']) : empty($chartData['provision']));
-    }
-
-    /**
      * Test if the download goes through php
      * @ticket SW-5226
      */
