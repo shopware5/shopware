@@ -88,23 +88,23 @@
 		<div class="paging">
 			<label>{s name='ListingPaging'}{/s}</label>
 			{if $sPages.previous}
-				<a href="{$sPages.previous|rewrite:$sCategoryInfo.name}" title="{s name='ListingLinkPrevious'}{/s}" class="navi prev">{s name="ListingTextPrevious"}&lt;{/s}</a>
+				<a href="{$sPages.previous|rewrite:$sCategoryContent.name}" title="{s name='ListingLinkPrevious'}{/s}" class="navi prev">{s name="ListingTextPrevious"}&lt;{/s}</a>
 			{/if}
 
 			{* Articles per page *}
 			{foreach from=$sPages.numbers item=page}
 				{if $page.value<$sPage+4 AND $page.value>$sPage-4}
 					{if $page.markup AND (!$sOffers OR $sPage)}
-						<a title="{$sCategoryInfo.name}" class="navi on">{$page.value}</a>
+						<a title="{$sCategoryContent.name}" class="navi on">{$page.value}</a>
 					{else}
-						<a href="{$page.link|rewrite:$sCategoryInfo.name}" class="navi">{$page.value}</a>
+						<a href="{$page.link|rewrite:$sCategoryContent.name}" class="navi">{$page.value}</a>
 					{/if}
 				{elseif $page.value==$sPage+4 OR $page.value==$sPage-4}
 					<div class="more">...</div>
 				{/if}
 			{/foreach}
 			{if $sPages.next}
-				<a href="{$sPages.next|rewrite:$sCategoryInfo.name}" title="{s name='ListingLinkNext'}{/s}" class="navi more">{s name="ListingTextNext"}&gt;{/s}</a>
+				<a href="{$sPages.next|rewrite:$sCategoryContent.name}" title="{s name='ListingLinkNext'}{/s}" class="navi more">{s name="ListingTextNext"}&gt;{/s}</a>
 			{/if}
 		</div>
 

@@ -4,7 +4,7 @@
 		{block name="frontend_listing_filter_properties_box"}
 			{if $sPropertiesGrouped|@count > 1 && $sCategoryContent.showFilterGroups}
 				{foreach from=$sPropertiesGrouped item=sPropertyGroup key=name}
-					<a href="{$sPropertyGroup.default.linkSelect}" title="{$sCategoryInfo.name}">
+					<a href="{$sPropertyGroup.default.linkSelect}" title="{$sCategoryContent.name}">
 						<div{if $activeFilterGroup == $name} class="active"{/if}>{$name|escape}</div>
 					</a>
 					{if $activeFilterGroup == $name}
@@ -19,13 +19,13 @@
 											</li>
 										{else}
 											<li><a href="{$optionValue.link}"
-												   title="{$sCategoryInfo.name}">{if $optionValue.valueTranslation}{$optionValue.valueTranslation|escape}{else}{$optionValue.value|escape}{/if} {if $optionValue.count > 0}({$optionValue.count}){/if}</a>
+												   title="{$sCategoryContent.name}">{if $optionValue.valueTranslation}{$optionValue.valueTranslation|escape}{else}{$optionValue.value|escape}{/if} {if $optionValue.count > 0}({$optionValue.count}){/if}</a>
 											</li>
 										{/if}
 									{/foreach}
 									{if $value.properties.active}
 										<li class="close"><a href="{$value.properties.linkRemoveProperty}"
-															 title="{$sCategoryInfo.name}">{s name='FilterLinkDefault'}{/s}</a>
+															 title="{$sCategoryContent.name}">{s name='FilterLinkDefault'}{/s}</a>
 										</li>
 									{/if}
 								</ul>
@@ -47,7 +47,7 @@
 										</li>
 									{else}
 										<li>
-											<a href="{$optionValue.link}" title="{$sCategoryInfo.name}">
+											<a href="{$optionValue.link}" title="{$sCategoryContent.name}">
 												{if $optionValue.valueTranslation}{$optionValue.valueTranslation|escape}{else}{$optionValue.value|escape}{/if} {if $optionValue.count > 0}({$optionValue.count}){/if}
 											</a>
 										</li>
@@ -55,7 +55,7 @@
 								{/foreach}
 								{if $value.properties.active}
 									<li class="close">
-										<a href="{$value.properties.linkRemoveProperty}" title="{$sCategoryInfo.name}">
+										<a href="{$value.properties.linkRemoveProperty}" title="{$sCategoryContent.name}">
 											{se name='FilterLinkDefault'}{/se}
 										</a>
 									</li>
