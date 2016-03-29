@@ -24,6 +24,8 @@
 
 namespace Shopware\Commands;
 
+use Enlight_Components_Cron_Manager;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -47,12 +49,17 @@ class CronRunCommand extends ShopwareCommand
 The <info>%command.name%</info> runs due cronjobs.
 EOF
             )
+            ->addArgument(
+                'cronjob',
+                InputArgument::OPTIONAL,
+                'If given, only run the cronjob which name matches the given name'
+            )
             ->addOption(
                 'force',
                 'f',
                 InputOption::VALUE_NONE,
                 'If given, the file will be overwritten if it already exists'
-             )
+            )
         ;
     }
 
@@ -64,15 +71,25 @@ EOF
         $this->registerErrorHandler($output);
         $this->container->load('plugins');
 
-        /** @var \Enlight_Components_Cron_Manager $manager */
+        /**
+         * @var Enlight_Components_Cron_Manager $manager
+         */
         $manager = $this->container->get('cron');
 
-        $stack = array();
-        while (($job = $manager->getNextJob($input->getOption('force'))) !== null && !isset($stack[$job->getId()])) {
-            $stack[$job->getId()] = true;
+        $cronjob = $input->getArgument('cronjob');
 
-            $output->writeln("Processing " . $job->getName());
+        if (!empty($cronjob)) {
+            $job = $manager->getJobByName($cronjob);
             $manager->runJob($job);
+        } else {
+            $stack = array();
+
+            while (($job = $manager->getNextJob($input->getOption('force'))) !== null && !isset($stack[$job->getId()])) {
+                $stack[$job->getId()] = true;
+
+                $output->writeln("Processing " . $job->getName());
+                $manager->runJob($job);
+            }
         }
     }
 }
