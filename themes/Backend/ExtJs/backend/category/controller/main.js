@@ -92,8 +92,6 @@ Ext.define('Shopware.apps.Category.controller.Main', {
         me.subApplication.DetailStore =  me.subApplication.getStore('Detail');
         me.subApplication.templateStore =  me.subApplication.getStore('Template');
 
-        me.subApplication.templateStore.load();
-
         // Stores for the product assignment
         me.subApplication.availableProductsStore = me.subApplication.getStore('AvailableProducts');
         me.subApplication.assignedProductsStore = me.subApplication.getStore('AssignedProducts');
