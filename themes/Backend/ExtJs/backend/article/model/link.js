@@ -49,10 +49,7 @@ Ext.define('Shopware.apps.Article.model.Link', {
         { name: 'name', type: 'string' },
         { name: 'link', type: 'string' },
         { name: 'target', type: 'boolean', defaultValue: true }
-
-    ],
-    associations: [
-        { type: 'hasMany', model: 'Shopware.apps.Article.model.LinkAttribute', name: 'getAttributes', associationKey: 'attribute'}
     ]
+
 });
 //{/block}

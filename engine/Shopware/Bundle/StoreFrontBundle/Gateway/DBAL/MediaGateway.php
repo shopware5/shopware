@@ -80,7 +80,7 @@ class MediaGateway implements Gateway\MediaGatewayInterface
      */
     public function getList($ids, Struct\ShopContextInterface $context)
     {
-        $query = $this->getQuery();
+        $query = $this->getQuery($context);
 
         $query->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
@@ -99,9 +99,10 @@ class MediaGateway implements Gateway\MediaGatewayInterface
     }
 
     /**
+     * @param Struct\ShopContextInterface $context
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
-    private function getQuery()
+    private function getQuery(Struct\ShopContextInterface $context)
     {
         $query = $this->connection->createQueryBuilder();
 
@@ -109,9 +110,10 @@ class MediaGateway implements Gateway\MediaGatewayInterface
 
         $query->from('s_media', 'media')
             ->innerJoin('media', 's_media_album_settings', 'mediaSettings', 'mediaSettings.albumID = media.albumID')
-            ->leftJoin('media', 's_media_attributes', 'mediaAttribute', 'mediaAttribute.mediaID = media.id');
+            ->leftJoin('media', 's_media_attributes', 'mediaAttribute', 'mediaAttribute.mediaID = media.id')
+            ->where('media.id IN (:ids)');
 
-        $query->where('media.id IN (:ids)');
+        $this->fieldHelper->addMediaTranslation($query, $context);
 
         return $query;
     }

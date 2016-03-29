@@ -114,7 +114,6 @@ Ext.define('Shopware.apps.Order', {
     models:[
         'OrderHistory',
         'Order',
-        'Attribute',
         'Billing',
         'Shipping',
         'Tax',
@@ -124,12 +123,8 @@ Ext.define('Shopware.apps.Order', {
         'Voucher',
         'Configuration',
         'Receipt',
-        'ReceiptAttribute',
         'Position',
-        'PositionAttribute',
         'Mail',
-        'BillingAttribute',
-        'ShippingAttribute',
         'DetailBatch',
         'ListBatch'
     ],

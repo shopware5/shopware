@@ -139,7 +139,7 @@ Ext.define('Shopware.apps.Order.view.detail.Shipping', {
             layout:'anchor',
             defaults:{
                 anchor:'95%',
-                labelWidth: 120,
+                labelWidth: 155,
                 minWidth:250,
                 labelStyle: 'font-weight: 700;',
                 style: {
@@ -156,7 +156,7 @@ Ext.define('Shopware.apps.Order.view.detail.Shipping', {
             layout:'anchor',
             defaults:{
                 anchor:'95%',
-                labelWidth: 120,
+                labelWidth: 155,
                 minWidth:250,
                 labelStyle: 'font-weight: 700;',
                 style: {
@@ -167,7 +167,20 @@ Ext.define('Shopware.apps.Order.view.detail.Shipping', {
             items:me.createRightElements()
         });
 
-        return [ leftContainer, rightContainer ];
+        me.attributeForm = Ext.create('Shopware.attribute.Form', {
+            name: 'shipping-attributes',
+            table: 's_order_shippingaddress_attributes',
+            columnWidth: 1
+        });
+
+        var id = null;
+        if (me.record && me.record.getShipping() && me.record.getShipping().first()) {
+            id = me.record.getShipping().first().get('id');
+        }
+
+        me.attributeForm.loadAttribute(id);
+
+        return [ leftContainer, rightContainer, me.attributeForm ];
     },
 
 
@@ -178,6 +191,8 @@ Ext.define('Shopware.apps.Order.view.detail.Shipping', {
      */
     createLeftElements:function () {
         var me = this;
+
+
         return [{
             xtype:'combobox',
             queryMode: 'local',
@@ -198,14 +213,11 @@ Ext.define('Shopware.apps.Order.view.detail.Shipping', {
             name:'shipping[lastName]',
             fieldLabel:me.snippets.lastName
         }, {
-            name:'shipping[street]',
-            fieldLabel:me.snippets.street
+            name:'shipping[company]',
+            fieldLabel:me.snippets.company
         }, {
-            name:'shipping[additionalAddressLine1]',
-            fieldLabel:me.snippets.additionalAddressLine1
-        }, {
-            name:'shipping[additionalAddressLine2]',
-            fieldLabel:me.snippets.additionalAddressLine2
+            name:'shipping[department]',
+            fieldLabel:me.snippets.department
         }];
     },
 
@@ -224,7 +236,7 @@ Ext.define('Shopware.apps.Order.view.detail.Shipping', {
             valueField: 'id',
             displayField: 'name',
             forceSelection: true,
-            labelWidth:120,
+            labelWidth:155,
             store: Ext.create('Shopware.store.CountryState'),
             minWidth: 250,
             editable: false,
@@ -242,7 +254,7 @@ Ext.define('Shopware.apps.Order.view.detail.Shipping', {
             displayField:'name',
             forceSelection: true,
             store:me.countriesStore,
-            labelWidth:120,
+            labelWidth:155,
             minWidth:250,
             required:true,
             editable:false,
@@ -254,23 +266,22 @@ Ext.define('Shopware.apps.Order.view.detail.Shipping', {
             }
         });
 
-        return [
-        {
+        return [{
+            name:'shipping[street]',
+            fieldLabel:me.snippets.street
+        }, {
+            name:'shipping[additionalAddressLine1]',
+            fieldLabel:me.snippets.additionalAddressLine1
+        }, {
+            name:'shipping[additionalAddressLine2]',
+            fieldLabel:me.snippets.additionalAddressLine2
+        }, {
             name:'shipping[zipCode]',
             fieldLabel:me.snippets.zipCode
         }, {
             name:'shipping[city]',
             fieldLabel:me.snippets.city
-        },
-        me.countryStateCombo,
-        me.countryCombo,
-        {
-            name:'shipping[company]',
-            fieldLabel:me.snippets.company
-        }, {
-            name:'shipping[department]',
-            fieldLabel:me.snippets.department
-        }];
+        }, me.countryStateCombo, me.countryCombo];
     }
 });
 //{/block}

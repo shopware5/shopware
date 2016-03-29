@@ -154,7 +154,7 @@ Ext.define('Shopware.apps.Order.view.list.Filter', {
             cls: Ext.baseCSSPrefix + 'filter-form',
             defaults:{
                 anchor:'98%',
-                labelWidth:120,
+                labelWidth:155,
                 minWidth:250,
                 xtype:'pagingcombo',
                 style: 'box-shadow: none;',

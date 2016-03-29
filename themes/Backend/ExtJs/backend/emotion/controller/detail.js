@@ -48,7 +48,8 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
         { ref: 'detailWindow', selector: 'emotion-detail-window' },
         { ref: 'settingsForm', selector: 'emotion-detail-window emotion-detail-settings' },
         { ref: 'listing', selector: 'emotion-main-window emotion-list-grid' },
-        { ref: 'deleteButton', selector: 'emotion-main-window button[action=emotion-list-toolbar-delete]' }
+        { ref: 'deleteButton', selector: 'emotion-main-window button[action=emotion-list-toolbar-delete]' },
+        { ref: 'attributeForm', selector: 'emotion-detail-window shopware-attribute-form' }
     ],
 
     snippets: {
@@ -312,13 +313,16 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
                     }
                     Shopware.Notification.createGrowlMessage(me.snippets.successTitle, message, me.snippets.growlMessage);
 
-                    me.loadEmotionRecord(record.get('id'), function(newRecord) {
-                        win.loadRecord(newRecord);
+                    me.getAttributeForm().saveAttribute(record.get('id'), function() {
+                        me.loadEmotionRecord(record.get('id'), function(newRecord) {
+                            win.loadRecord(newRecord);
+                        });
+
+                        gridStore.load();
+
+                        win.enableTabs();
                     });
 
-                    gridStore.load();
-
-                    win.enableTabs();
                 } else {
                     Shopware.Notification.createGrowlMessage(me.snippets.errorTitle, me.snippets.saveErrorMessage + '<br>' + rawData.message, me.snippets.growlMessage);
                 }

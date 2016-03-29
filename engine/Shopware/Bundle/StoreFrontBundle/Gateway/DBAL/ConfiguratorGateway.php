@@ -91,10 +91,8 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
             ->addSelect($this->fieldHelper->getConfiguratorOptionFields())
         ;
 
-        $this->fieldHelper->addConfiguratorTranslation(
-            $query,
-            $context
-        );
+        $this->fieldHelper->addConfiguratorGroupTranslation($query, $context);
+        $this->fieldHelper->addConfiguratorOptionTranslation($query, $context);
 
         $query->where('products.id = :id')
             ->setParameter(':id', $product->getId());
@@ -126,26 +124,16 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
 
         $query = $this->connection->createQueryBuilder();
 
-        $query->select(
-            [
+        $query->select([
             'optionRelation.option_id',
             '(' . $subQuery->getSQL() . ') as media_id'
-            ]
-        );
+        ]);
 
         $query->from('s_articles', 'product')
-            ->innerJoin(
-                'product',
-                's_article_configurator_set_option_relations',
-                'optionRelation',
-                'product.configurator_set_id = optionRelation.set_id'
-            );
-
-        $query->where('product.id = :articleId');
-
-        $query->groupBy('optionRelation.option_id');
-
-        $query->setParameter(':articleId', $product->getId());
+            ->innerJoin('product', 's_article_configurator_set_option_relations', 'optionRelation', 'product.configurator_set_id = optionRelation.set_id')
+            ->where('product.id = :articleId')
+            ->groupBy('optionRelation.option_id')
+            ->setParameter(':articleId', $product->getId());
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
@@ -178,36 +166,12 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
             "GROUP_CONCAT(DISTINCT assignedRelations.option_id, '' SEPARATOR '|') as combinations"
         ]);
 
-        $query->from('s_article_configurator_option_relations', 'relations');
-
-        $query->innerJoin(
-            'relations',
-            's_articles_details',
-            'variant',
-            'variant.id = relations.article_id
-             AND variant.articleID = :articleId
-             AND variant.active = 1'
-        );
-
-        $query->innerJoin(
-            'variant',
-            's_articles',
-            'product',
-            'product.id = variant.articleID AND
-            (product.laststock * variant.instock) >= (product.laststock * variant.minpurchase)'
-        );
-
-        $query->leftJoin(
-            'relations',
-            's_article_configurator_option_relations',
-            'assignedRelations',
-            'assignedRelations.article_id = relations.article_id
-             AND assignedRelations.option_id != relations.option_id'
-        );
-
-        $query->groupBy('relations.option_id');
-
-        $query->setParameter(':articleId', $product->getId());
+        $query->from('s_article_configurator_option_relations', 'relations')
+            ->innerJoin('relations', 's_articles_details', 'variant', 'variant.id = relations.article_id AND variant.articleID = :articleId AND variant.active = 1')
+            ->innerJoin('variant', 's_articles', 'product', 'product.id = variant.articleID AND (product.laststock * variant.instock) >= (product.laststock * variant.minpurchase)')
+            ->leftJoin('relations', 's_article_configurator_option_relations', 'assignedRelations', 'assignedRelations.article_id = relations.article_id AND assignedRelations.option_id != relations.option_id')
+            ->groupBy('relations.option_id')
+            ->setParameter(':articleId', $product->getId());
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
@@ -228,54 +192,17 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
     {
         $query = $this->connection->createQueryBuilder();
 
-        $query->from(
-            's_article_configurator_sets',
-            'configuratorSet'
-        );
-
-        $query->innerJoin(
-            'configuratorSet',
-            's_articles',
-            'products',
-            'products.configurator_set_id = configuratorSet.id'
-        );
-
-        $query->innerJoin(
-            'configuratorSet',
-            's_article_configurator_set_group_relations',
-            'groupRelation',
-            'groupRelation.set_id = configuratorSet.id'
-        );
-
-        $query->innerJoin(
-            'groupRelation',
-            's_article_configurator_groups',
-            'configuratorGroup',
-            'configuratorGroup.id = groupRelation.group_id'
-        );
-
-        $query->innerJoin(
-            'configuratorSet',
-            's_article_configurator_set_option_relations',
-            'optionRelation',
-            'optionRelation.set_id = configuratorSet.id'
-        );
-
-        $query->innerJoin(
-            'optionRelation',
-            's_article_configurator_options',
-            'configuratorOption',
-            'configuratorOption.id = optionRelation.option_id
-             AND
-             configuratorOption.group_id = configuratorGroup.id'
-        );
-
-        $query->addOrderBy('configuratorGroup.position')
+        $query->from('s_article_configurator_sets', 'configuratorSet')
+            ->innerJoin('configuratorSet', 's_articles', 'products', 'products.configurator_set_id = configuratorSet.id')
+            ->innerJoin('configuratorSet', 's_article_configurator_set_group_relations', 'groupRelation', 'groupRelation.set_id = configuratorSet.id')
+            ->innerJoin('groupRelation', 's_article_configurator_groups', 'configuratorGroup', 'configuratorGroup.id = groupRelation.group_id')
+            ->innerJoin('configuratorSet', 's_article_configurator_set_option_relations', 'optionRelation', 'optionRelation.set_id = configuratorSet.id')
+            ->innerJoin('optionRelation', 's_article_configurator_options', 'configuratorOption', 'configuratorOption.id = optionRelation.option_id AND configuratorOption.group_id = configuratorGroup.id')
+            ->addOrderBy('configuratorGroup.position')
             ->addOrderBy('configuratorGroup.name')
             ->addOrderBy('configuratorOption.position')
-            ->addOrderBy('configuratorOption.name');
-
-        $query->groupBy('configuratorOption.id');
+            ->addOrderBy('configuratorOption.name')
+            ->groupBy('configuratorOption.id');
 
         return $query;
     }

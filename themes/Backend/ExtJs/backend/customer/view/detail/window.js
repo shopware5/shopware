@@ -57,7 +57,8 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
      * Define the width of the window
      * @integer
      */
-    width:1020,
+    width:'80%',
+
     /**
      * Define the height of the window
      * @integer
@@ -238,6 +239,14 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
             me.addressFieldSet = me.createAddressForm();
         }
 
+        me.attributeForm = Ext.create('Shopware.attribute.Form', {
+            table: 's_user_attributes'
+        });
+
+        if (me.record) {
+            me.attributeForm.loadAttribute(me.record.get('id'));
+        }
+
         me.detailForm = Ext.create('Ext.form.Panel', {
             collapsible: false,
             region:'center',
@@ -248,7 +257,8 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
                 me.baseFieldSet,
                 me.addressFieldSet,
                 me.debitFieldSet,
-                me.commentFieldSet
+                me.commentFieldSet,
+                me.attributeForm
             ],
             dockedItems: [{
                 xtype: 'toolbar',

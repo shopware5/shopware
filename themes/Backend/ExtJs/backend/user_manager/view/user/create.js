@@ -44,9 +44,7 @@ Ext.define('Shopware.apps.UserManager.view.user.Create', {
     autoScroll:true,
     width       : 700,
     height: '90%',
-    bodyPadding : 5,
     modal: true,
-
     apiKeyField: null,
     lastApiKey: '',
 
@@ -65,6 +63,10 @@ Ext.define('Shopware.apps.UserManager.view.user.Create', {
         me.items = me.getUserTab();
 
         me.formPanel.loadRecord(me.record);
+        me.attributeForm.loadAttribute(null);
+        if (me.record.get('id')) {
+            me.attributeForm.loadAttribute(me.record.get('id'));
+        }
 
         me.addEvents('saveUser');
 
@@ -146,21 +148,28 @@ Ext.define('Shopware.apps.UserManager.view.user.Create', {
      * @return
      */
     getUserForm: function(){
+        var me = this;
+
+        me.attributeForm = Ext.create('Shopware.attribute.Form', {
+            table: 's_core_auth_attributes'
+        });
+
         this.formPanel = Ext.create('Ext.form.Panel', {
             border      : false,
             layout      : 'anchor',
             autoScroll:true,
+            name: 'main-form',
             title: '{s name="create_user/tab_user"}User{/s}',
             bodyPadding : 10,
             defaults    : {
-                labelWidth: '155px',
-                labelStyle: 'font-weight: 700; text-align: right;'
+                labelWidth: 155
             },
             items : [
                 this.getLoginFieldset(),
                 this.getApiFieldset(),
                 this.getUserBaseFieldset(),
-                this.getUserOptionsFieldset()
+                this.getUserOptionsFieldset(),
+                me.attributeForm
             ]
         });
         return this.formPanel;
@@ -175,8 +184,7 @@ Ext.define('Shopware.apps.UserManager.view.user.Create', {
             title: 'Login',
             bodyPadding : 10,
             defaults    : {
-                labelWidth: '155px',
-                labelStyle: 'font-weight: 700; text-align: right;'
+                labelWidth: 155
             },
             items: [{
                   // Implementiert das Column Layout
@@ -381,8 +389,7 @@ Ext.define('Shopware.apps.UserManager.view.user.Create', {
             title: '{s name=create_user/main_data}Main data{/s}',
             bodyPadding : 10,
             defaults    : {
-                labelWidth: '155px',
-                labelStyle: 'font-weight: 700; text-align: right;'
+                labelWidth: 155
             },
             items: [{
                   // Implementiert das Column Layout
@@ -474,8 +481,7 @@ Ext.define('Shopware.apps.UserManager.view.user.Create', {
                     title: '{s name=create_user/individual_user_options}Individual user options{/s}',
                     bodyPadding : 10,
                     defaults    : {
-                        labelWidth: '155px',
-                        labelStyle: 'font-weight: 700; text-align: right;'
+                        labelWidth: 155
                     },
                     items: [{
                         // Implementiert das Column Layout

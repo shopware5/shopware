@@ -99,10 +99,9 @@ class VariantMediaGateway implements Gateway\VariantMediaGatewayInterface
         $query = $this->getQuery($context);
 
         $query->andWhere('childImage.article_detail_id IN (:products)')
+            ->orderBy('image.main')
+            ->addOrderBy('image.position')
             ->setParameter(':products', $ids, Connection::PARAM_INT_ARRAY);
-
-        $query->orderBy('image.main')
-            ->addOrderBy('image.position');
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
@@ -134,10 +133,9 @@ class VariantMediaGateway implements Gateway\VariantMediaGatewayInterface
         $query = $this->getQuery($context);
 
         $query->andWhere('childImage.article_detail_id IN (:products)')
+            ->orderBy('image.main')
+            ->addOrderBy('image.position')
             ->setParameter(':products', $ids, Connection::PARAM_INT_ARRAY);
-
-        $query->orderBy('image.main')
-            ->addOrderBy('image.position');
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
@@ -166,17 +164,16 @@ class VariantMediaGateway implements Gateway\VariantMediaGatewayInterface
             ->addSelect($this->fieldHelper->getMediaFields())
             ->addSelect($this->fieldHelper->getImageFields());
 
-        $this->fieldHelper->addImageTranslation($query, $context);
-
         $query->from('s_articles_img', 'image')
             ->innerJoin('image', 's_media', 'media', 'image.media_id = media.id')
             ->innerJoin('media', 's_media_album_settings', 'mediaSettings', 'mediaSettings.albumID = media.albumID')
             ->innerJoin('image', 's_articles_img', 'childImage', 'childImage.parent_id = image.id')
             ->innerJoin('image', 's_articles_details', 'variant', 'variant.id = childImage.article_detail_id')
             ->leftJoin('image', 's_media_attributes', 'mediaAttribute', 'mediaAttribute.mediaID = image.media_id')
-            ->leftJoin('image', 's_articles_img_attributes', 'imageAttribute', 'imageAttribute.imageID = image.id')
-        ;
+            ->leftJoin('image', 's_articles_img_attributes', 'imageAttribute', 'imageAttribute.imageID = image.id');
 
+        $this->fieldHelper->addImageTranslation($query, $context);
+        $this->fieldHelper->addMediaTranslation($query, $context);
         return $query;
     }
 }

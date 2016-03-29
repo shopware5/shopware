@@ -151,7 +151,7 @@ Ext.define('Shopware.apps.Order.view.detail.Debit', {
             allowBlank:false,
             required:true,
             anchor:'97.5%',
-            labelWidth: 120,
+            labelWidth: 155,
             minWidth:250,
             labelStyle: 'font-weight: 700;',
             editable:false,
@@ -225,7 +225,7 @@ Ext.define('Shopware.apps.Order.view.detail.Debit', {
                 style: {
                     margin: '0 0 10px'
                 },
-                labelWidth: 120,
+                labelWidth: 155,
                 minWidth:250,
                 xtype:'textfield'
             },
@@ -237,7 +237,7 @@ Ext.define('Shopware.apps.Order.view.detail.Debit', {
             cls: Ext.baseCSSPrefix + 'field-set-container',
             defaults:{
                 anchor:'100%',
-                labelWidth:100,
+                labelWidth:155,
                 labelStyle: 'font-weight: 700;',
                 style: {
                     margin: '0 0 10px'

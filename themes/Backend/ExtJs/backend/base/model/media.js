@@ -52,7 +52,8 @@ Ext.define('Shopware.apps.Base.model.Media', {
         'userId',
         'width',
         'height',
-        'albumId'
+        'albumId',
+        'thumbnail'
     ]
 });
 //{/block}

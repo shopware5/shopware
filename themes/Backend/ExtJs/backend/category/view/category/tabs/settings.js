@@ -134,12 +134,6 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
         metaKeywords : '{s name=view/settings_meta_keywords_label}Meta keywords{/s}',
 
         attribute_title : '{s name=view/settings_attribute_title}Free text fields{/s}',
-        attribute1 : '{s name=view/settings_attribute1_label}Free text 1{/s}',
-        attribute2 : '{s name=view/settings_attribute2_label}Free text 2{/s}',
-        attribute3 : '{s name=view/settings_attribute3_label}Free text 3{/s}',
-        attribute4 : '{s name=view/settings_attribute4_label}Free text 4{/s}',
-        attribute5 : '{s name=view/settings_attribute5_label}Free text 5{/s}',
-        attribute6 : '{s name=view/settings_attribute6_label}Free text 6{/s}',
 
         categorySave : '{s name=view/settings_save}Save category{/s}',
 
@@ -179,7 +173,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
      */
     defaults: {
         anchor : '100%',
-        labelWidth:180
+        labelWidth:155
     },
 
     /**
@@ -345,7 +339,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
         me.templateComboBox = Ext.create('Ext.form.field.ComboBox', {
             fieldLabel:me.snippets.defaultSettingsTemplateLabel,
             store:me.templateStore,
-            labelWidth:180,
+            labelWidth:155,
             valueField:'template',
             displayField:'name',
             editable:true,
@@ -372,6 +366,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
 
         me.productLayoutField = Ext.create('Shopware.apps.Base.view.element.ProductBoxLayoutSelect', {
             name: 'productBoxLayout',
+            labelWidth: 155,
             storeConfig: {
                 displayExtendLayout: true,
                 displayBasicLayout: true,
@@ -382,8 +377,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
 
         me.streamSelection = Ext.create('Shopware.form.field.ProductStreamSelection', {
             name: 'streamId',
-            labelWidth: 180,
-            helpText: me.snippets.defaultSettingsProductStreamHelp
+            labelWidth: 155
         });
 
         return [
@@ -560,40 +554,15 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
      *
      * @return Ext.form.FieldSet
      */
-    getAttributes : function()
-    {
+    getAttributes : function() {
         var me = this;
-        return Ext.create('Ext.form.FieldSet',{
-            title: me.snippets.attribute_title,
-            collapsed: true,
-            collapsible: true,
-            anchor: '100%',
-            defaults : Ext.applyIf({
-                xtype : 'textfield'
-            }, me.defaults),
-            disabled : true,
-            items : [
-                {
-                    fieldLabel : me.snippets.attribute1,
-                     name : 'attribute[attribute1]'
-                }, {
-                    fieldLabel : me.snippets.attribute2,
-                     name : 'attribute[attribute2]'
-                }, {
-                    fieldLabel : me.snippets.attribute3,
-                     name : 'attribute[attribute3]'
-                }, {
-                    fieldLabel : me.snippets.attribute4,
-                     name : 'attribute[attribute4]'
-                }, {
-                    fieldLabel : me.snippets.attribute5,
-                     name : 'attribute[attribute5]'
-                }, {
-                    fieldLabel : me.snippets.attribute6,
-                     name : 'attribute[attribute6]'
-                }
-            ]
+
+        me.attributeForm = Ext.create('Shopware.attribute.Form', {
+            table: 's_categories_attributes',
+            allowTranslation: false,
+            fieldSetPadding: 0
         });
+        return me.attributeForm;
     },
 
     /**

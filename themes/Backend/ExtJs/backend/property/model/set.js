@@ -46,12 +46,12 @@ Ext.define('Shopware.apps.Property.model.Set', {
      */
     fields : [
 		//{block name="backend/property/model/set/fields"}{/block}
-        { name: 'id',         type: 'string' }, // id can be 2_4 for child elements
+        { name: 'id',         type: 'integer' },
         { name: 'name',       type: 'string' },
         { name: 'position',   type: 'integer' },
         { name: 'comparable', type: 'boolean' },
         { name: 'isOption',   type: 'boolean' },
-        { name: 'sortMode',   type: 'string' }
+        { name: 'sortMode',   type: 'integer' }
     ],
 
     /**
@@ -80,10 +80,6 @@ Ext.define('Shopware.apps.Property.model.Set', {
             type: 'json',
             root: 'data'
         }
-    },
-
-    associations: [
-        { type: 'hasMany', model: 'Shopware.apps.Property.model.Attribute', name: 'getAttributes', associationKey: 'attribute'}
-    ]
+    }
 });
 //{/block}

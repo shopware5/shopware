@@ -37,7 +37,11 @@ Ext.define('Shopware.apps.Config.view.form.CustomerGroup', {
         return [{
             xtype: 'config-base-table',
             store: 'form.CustomerGroup',
-            columns: me.getColumns()
+            columns: me.getColumns(),
+            plugins: [{
+                ptype: 'grid-attributes',
+                table: 's_core_customergroups_attributes'
+            }]
         },{
             xtype: 'config-customergroup-detail'
         }];

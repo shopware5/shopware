@@ -287,7 +287,6 @@ class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Back
         //save data of the article filter
         $params['articles'] = $this->prepareAssociationDataForSaving('articles', 'Shopware\Models\Article\Article', $params);
 
-        $params['attribute'] = $params['attribute'][0];
         $productFeed = $this->setDirty($productFeed, $params);
         $productFeed->fromArray($params);
 

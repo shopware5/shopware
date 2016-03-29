@@ -675,7 +675,6 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
             $params['stream'] = Shopware()->Models()->find('Shopware\Models\ProductStream\ProductStream', $params['streamId']);
         }
 
-        $params = $this->prepareAttributeAssociatedData($params);
         $params = $this->prepareCustomerGroupsAssociatedData($params);
         $params = $this->prepareMediaAssociatedData($params);
 
@@ -738,18 +737,6 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         }
         $data['customerGroups'] = $customerGroups;
 
-        return $data;
-    }
-
-    /**
-     * This method loads the article models for the passed ids in the "articles" parameter.
-     *
-     * @param $data
-     * @return array
-     */
-    protected function prepareAttributeAssociatedData($data)
-    {
-        $data['attribute'] = $data['attribute'][0];
         return $data;
     }
 

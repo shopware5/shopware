@@ -49,7 +49,8 @@ Ext.define('Shopware.apps.Shipping.controller.DefaultForm', {
         { ref : 'selectedCountryGrid', selector : 'shipping-view-edit-country-right-grid' },
         { ref : 'categoryDataBox', selector : 'shipping-view-edit-categories-boxselect' },
         { ref : 'categoryTree', selector : 'shipping-view-edit-categories-tree' },
-        { ref : 'advancedForm', selector : 'shipping-view-edit-advanced' }
+        { ref : 'advancedForm', selector : 'shipping-view-edit-advanced' },
+        { ref : 'attributeForm', selector: 'shopware-shipping-edit-panel shopware-attribute-form' }
     ],
     /**
      * Translations
@@ -94,6 +95,7 @@ Ext.define('Shopware.apps.Shipping.controller.DefaultForm', {
 
         var mainStore = me.getStore('Dispatch'),
             advancedForm = me.getAdvancedFormData(),
+            attributeForm = me.getAttributeForm(),
             record = form.getRecord();
 
         // resetting some ids, so that the updateRecord process will set them new.
@@ -137,6 +139,7 @@ Ext.define('Shopware.apps.Shipping.controller.DefaultForm', {
                         record.set('id', rawData.data.id);
                         record.set('clone', false);
                     }
+                    attributeForm.saveAttribute(rawData.data.id);
 					me.onCostsMatrixSave(button, rawData.data.id);
 				}
 				me.getStore('Dispatch').load();

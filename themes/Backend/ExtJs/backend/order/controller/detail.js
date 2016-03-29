@@ -367,12 +367,6 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
             taxId: me.subApplication.getStore('Tax').getAt(0).get('id'),
             statusId: 0
         });
-        var attribute = Ext.create('Shopware.apps.Order.model.PositionAttribute');
-        var store = Ext.create('Ext.data.Store', {
-            model: 'Shopware.apps.Order.model.PositionAttribute'
-        });
-        store.add(attribute);
-        position['getAttributesStore'] = store;
 
         grid.getStore().add(position);
         editor.startEdit(position, 0);
@@ -657,7 +651,7 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
                     order.set('invoiceAmount', rawData.data.invoiceAmount);
 
                     //Check if a status mail content created and create a model with the returned data and open the mail window.
-                    if (!Ext.isEmpty(rawData.data.mail.content)) {
+                    if (rawData && rawData.data && rawData.data.mail && rawData.data.mail.content) {
                         var mail = Ext.create('Shopware.apps.Order.model.Mail', rawData.data.mail);
                         me.showOrderMail(mail)
                     }

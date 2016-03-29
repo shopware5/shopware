@@ -133,7 +133,9 @@ class PropertyProvider implements PropertyProviderInterface
         ;
 
         $query->from('s_filter_options', 'propertyGroup')
+            ->leftJoin('propertyGroup', 's_filter_options_attributes', 'propertyGroupAttribute', 'propertyGroupAttribute.optionID = propertyGroup.id')
             ->innerJoin('propertyGroup', 's_filter_values', 'propertyOption', 'propertyOption.optionID = propertyGroup.id')
+            ->leftJoin('propertyOption', 's_filter_values_attributes', 'propertyOptionAttribute', 'propertyOptionAttribute.valueID = propertyOption.id')
             ->leftJoin('propertyOption', 's_media', 'media', 'propertyOption.media_id = media.id')
             ->leftJoin('media', 's_media_attributes', 'mediaAttribute', 'mediaAttribute.mediaID = media.id')
             ->leftJoin('media', 's_media_album_settings', 'mediaSettings', 'mediaSettings.albumID = media.albumID')
@@ -141,6 +143,7 @@ class PropertyProvider implements PropertyProviderInterface
 
         $this->fieldHelper->addPropertyGroupTranslation($query, $context);
         $this->fieldHelper->addPropertyOptionTranslation($query, $context);
+        $this->fieldHelper->addMediaTranslation($query, $context);
 
         $query->where('propertyGroup.id = :id');
 

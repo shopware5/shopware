@@ -52,7 +52,8 @@ Ext.define('Shopware.apps.Payment.controller.Payment', {
 
     refs: [
         { ref: 'mainWindow', selector: 'payment-main-window' },
-        { ref: 'surchargeGrid', selector: 'payment-main-surcharge' }
+        { ref: 'surchargeGrid', selector: 'payment-main-surcharge' },
+        { ref: 'attributeForm', selector: 'payment-main-window shopware-attribute-form' }
     ],
 
     /**
@@ -131,19 +132,16 @@ Ext.define('Shopware.apps.Payment.controller.Payment', {
             recordStore;
 
         switch (grid.xtype) {
-            //The formpanel and the surcharge-grid mustn't be affected
-            case 'payment-main-formpanel':
-                return;
-                break;
-            case 'payment-main-surcharge':
-                return;
-                break;
             case 'payment-main-countrylist':
                 recordStore = record.getCountriesStore;
                 break;
             case 'payment-main-subshoplist':
                 recordStore = record.getShopsStore;
                 break;
+            case 'payment-main-formpanel':
+            case 'payment-main-surcharge':
+            default:
+                return;
         }
 
         var store = grid.getStore().load({
@@ -179,6 +177,7 @@ Ext.define('Shopware.apps.Payment.controller.Payment', {
 		tabPanel.setDisabled(false);
 		tabPanel.setActiveTab(0);
 		formPanel.loadRecord(paymentModel);
+        this.getAttributeForm().loadAttribute(null);
 		btnSave.enable(true);
     },
 
@@ -256,6 +255,7 @@ Ext.define('Shopware.apps.Payment.controller.Payment', {
                     rawData = record.getProxy().getReader().rawData;
 
                 if(operation.success){
+                    me.getAttributeForm().saveAttribute(record.get('id'));
 					paymentStore.load();
 
 					//tabPanel, newTab, oldTab, formPanel
@@ -296,6 +296,7 @@ Ext.define('Shopware.apps.Payment.controller.Payment', {
         tabPanel.setActiveTab(0);
 
         form.loadRecord(record);
+        this.getAttributeForm().loadAttribute(record.get('id'));
     }
 });
 //{/block}

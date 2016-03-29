@@ -7,7 +7,7 @@ In this document you will find a changelog of the important changes related to t
 * Added CSRF protection to the backend which is enabled by default.
     * OptOut by implementing `CSRFWhitelistAware` interface
     * Added `X-CSRF-Token` to every ajax request
-    * Added `__csrf_token` param to every ExtJS form submit via override in `ExtJs/overrides/Ext.form.Base.js` 
+    * Added `__csrf_token` param to every ExtJS form submit via override in `ExtJs/overrides/Ext.form.Base.js`
     * See: https://developers.shopware.com/developers-guide/csrf-protection/
 * Update Symfony Components to version 2.8 LTS
 * Replace polyfill provided by `indigophp/hash-compat` with `symfony/polyfill-php56`
@@ -115,6 +115,7 @@ In this document you will find a changelog of the important changes related to t
 * Removed fax field form billing addresses
 * Updated `ongr/elasticsearch-dsl` to v2.0.0, see https://github.com/ongr-io/ElasticsearchDSL/blob/master/CHANGELOG.md#v200-2016-03-03 for BC breaks.
 * Renamed block 'frontend_blog_bookmarks_deliciosus' to 'frontend_blog_bookmarks_delicious'
+* Deprecated `\Shopware\Models\Article\Element`
 
 ## 5.1.4
 * Customer logout will now regenerate the session id and clear the customers basket.
@@ -148,6 +149,63 @@ In this document you will find a changelog of the important changes related to t
     * `frontend_index_footer_column_information_menu_headline`
     * `frontend_index_footer_column_newsletter_headline`
 * Removed out-of-stock variant selection due to problems
+* Removed the following backend models including their smarty blocks
+    * `Shopware.apps.Supplier.model.Attribute`
+    * `Shopware.apps.Customer.model.BillingAttributes`
+    * `Shopware.apps.Customer.model.ShippingAttributes`
+    * `Shopware.apps.Customer.model.Attribute`
+    * `Shopware.apps.Blog.model.Attribute`
+    * `Shopware.apps.Form.model.Attribute`
+    * `Shopware.apps.MediaManager.model.Attribute`
+    * `Shopware.apps.Property.model.Attribute`
+    * `Shopware.apps.Config.model.form.Attribute`
+    * `Shopware.apps.Voucher.model.Attribute`
+    * `Shopware.apps.Emotion.model.Attribute`
+    * `Shopware.apps.Banner.model.Attribute`
+    * `Shopware.apps.Order.model.Attribute`
+    * `Shopware.apps.Order.model.BillingAttribute`
+    * `Shopware.apps.Order.model.PositionAttribute`
+    * `Shopware.apps.Order.model.ReceiptAttribute`
+    * `Shopware.apps.Order.model.ShippingAttribute`
+* The following repository methods no longer select attributes or have been removed entirely
+    * `\Shopware\Models\Article\Repository::getSupplierQueryBuilder()`
+    * `\Shopware\Models\Customer\Repository::getCustomerDetailQueryBuilder()`
+    * `\Shopware\Models\Customer\Repository::getShippingAttributesQuery()`
+    * `\Shopware\Models\Customer\Repository::getShippingAttributesQueryBuilder()`
+    * `\Shopware\Models\Customer\Repository::getBillingAttributesQuery()`
+    * `\Shopware\Models\Customer\Repository::getBillingAttributesQueryBuilder()`
+    * `\Shopware\Models\Customer\Repository::getAttributesQuery()`
+    * `\Shopware\Models\Customer\Repository::getAttributesQueryBuilder()`
+    * `\Shopware\Models\Blog\Repository::getBackedDetailQueryBuilder()`
+    * `\Shopware\Models\Emotion\Repository::getEmotionDetailQueryBuilder()`
+    * `\Shopware\Models\ProductFeed\Repository::getDetailQueryBuilder()`
+    * `\Shopware\Models\Banner\Repository::getBannerMainQuery()`
+    * `\Shopware\Models\Order\Repository::getBackendOrdersQueryBuilder()`
+    * `\Shopware\Models\Order\Repository::getBackendAdditionalOrderDataQuery()`
+* Removed attribute associations from the following backend models
+    * `Shopware.apps.Supplier.model.Supplier`
+    * `Shopware.apps.Customer.model.Customer`
+    * `Shopware.apps.Blog.model.Detail`
+    * `Shopware.apps.Form.model.Form`
+    * `Shopware.apps.Property.model.Set`
+    * `Shopware.apps.MediaManager.model.Media`
+    * `Shopware.apps.Emotion.model.Emotion`
+    * `Shopware.apps.Config.model.form.Country`
+    * `Shopware.apps.Banner.model.BannerDetail`
+    * `Shopware.apps.Voucher.model.Detail`
+    * `Shopware.apps.Order.model.Receipt`
+    * `Shopware.apps.Order.model.Position`
+    * `Shopware.apps.Order.model.Order`
+* Removed the following backend files:
+    * `themes/Backend/ExtJs/backend/blog/view/blog/detail/sidebar/attributes.js`
+    * `themes/Backend/ExtJs/backend/config/store/form/attribute.js`
+    * `themes/Backend/ExtJs/backend/config/view/form/attribute.js`
+    * `themes/Backend/ExtJs/backend/config/model/form/attribute.js`
+* Changed position of `Shopware.apps.Customer.view.detail.Billing` fields
+* Changed position of `Shopware.apps.Customer.view.detail.Shipping` fields
+* Fixed Shopware.form.plugin.Translation, the plugin can now be used in multiple forms at the same time.
+    * Removed `clear`, `onOpenTranslationWindow`, `getFieldValues` and `onGetTranslatableFields` function
+* `\Shopware\Bundle\StoreFrontBundle\Gateway\GraduatedPricesGatewayInterface` requires now a provided `ShopContextInterface`
 
 ## 5.1.2
 * Out-of-stock variants on the detail page are now selectable

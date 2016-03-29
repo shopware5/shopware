@@ -425,7 +425,6 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
             $params['bindToSupplier'] = null;
         }
 
-        $params['attribute'] = $params['attribute'][0];
         $voucher->fromArray($params);
         $this->getManager()->persist($voucher);
         $this->getManager()->flush();

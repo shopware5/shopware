@@ -20,9 +20,6 @@ class TranslationTest extends TestCase
         );
     }
 
-
-
-
     public function testListProductTranslation()
     {
         $number = 'Translation-Test';

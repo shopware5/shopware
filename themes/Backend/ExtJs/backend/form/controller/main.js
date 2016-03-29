@@ -336,7 +336,6 @@ Ext.define('Shopware.apps.Form.controller.Main', {
             formPanel  = win.down('form'),
             form       = formPanel.getForm(),
             record     = form.getRecord(),
-            attributes,
             fieldStore = me.getStore('Field');
 
         if (!form.isValid()) {
@@ -345,8 +344,6 @@ Ext.define('Shopware.apps.Form.controller.Main', {
 
         if (record === undefined) {
             record = Ext.create('Shopware.apps.Form.model.Form');
-            attributes = Ext.create('Shopware.apps.Form.model.Attribute');
-            record.getAttributes().add(attributes);
         }
 
         form.updateRecord(record);
@@ -359,6 +356,7 @@ Ext.define('Shopware.apps.Form.controller.Main', {
                 // set extraparams
                 win.down('form-main-fieldgrid').setDisabled(false);
 
+                formPanel.attributeForm.saveAttribute(record.data.id);
                 fieldStore.getProxy().extraParams.formId = record.data.id;
                 fieldStore.load();
             }

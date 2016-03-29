@@ -105,7 +105,6 @@ class PropertyGateway implements Gateway\PropertyGatewayInterface
     {
         $query = $this->connection->createQueryBuilder();
 
-
         $query
             ->addSelect('relations.position as __relations_position')
             ->addSelect($this->fieldHelper->getPropertySetFields())
@@ -114,71 +113,31 @@ class PropertyGateway implements Gateway\PropertyGatewayInterface
             ->addSelect($this->fieldHelper->getMediaFields())
         ;
 
-        $query->from('s_filter', 'propertySet');
-
-        $query->innerJoin(
-            'propertySet',
-            's_filter_relations',
-            'relations',
-            'relations.groupID = propertySet.id'
-        );
-
-        $query->leftJoin(
-            'propertySet',
-            's_filter_attributes',
-            'propertySetAttribute',
-            'propertySetAttribute.filterID = propertySet.id'
-        );
-
-        $query->innerJoin(
-            'relations',
-            's_filter_options',
-            'propertyGroup',
-            'relations.optionID = propertyGroup.id
-             AND filterable = 1'
-        );
-
-        $query->innerJoin(
-            'propertyGroup',
-            's_filter_values',
-            'propertyOption',
-            'propertyOption.optionID = propertyGroup.id'
-        );
-
-        $query->leftJoin(
-            'propertyOption',
-            's_media',
-            'media',
-            'propertyOption.media_id = media.id'
-        );
-
-        $query->leftJoin(
-            'media',
-            's_media_attributes',
-            'mediaAttribute',
-            'mediaAttribute.mediaID = media.id'
-        );
-
-        $query->leftJoin(
-            'media',
-            's_media_album_settings',
-            'mediaSettings',
-            'mediaSettings.albumID = media.albumID'
-        );
-
-        $this->fieldHelper->addAllPropertyTranslations($query, $context);
-
-        $query->groupBy('propertyOption.id');
-
-        $query->where('propertyOption.id IN (:ids)')
+        $query->from('s_filter', 'propertySet')
+            ->innerJoin('propertySet', 's_filter_relations', 'relations', 'relations.groupID = propertySet.id')
+            ->leftJoin('propertySet', 's_filter_attributes', 'propertySetAttribute', 'propertySetAttribute.filterID = propertySet.id')
+            ->innerJoin('relations', 's_filter_options', 'propertyGroup', 'relations.optionID = propertyGroup.id AND filterable = 1')
+            ->leftJoin('propertyGroup', 's_filter_options_attributes', 'propertyGroupAttribute', 'propertyGroupAttribute.optionID = propertyGroup.id')
+            ->innerJoin('propertyGroup', 's_filter_values', 'propertyOption', 'propertyOption.optionID = propertyGroup.id')
+            ->leftJoin('propertyOption', 's_filter_values_attributes', 'propertyOptionAttribute', 'propertyOptionAttribute.valueID = propertyOption.id')
+            ->leftJoin('propertyOption', 's_media', 'media', 'propertyOption.media_id = media.id')
+            ->leftJoin('media', 's_media_attributes', 'mediaAttribute', 'mediaAttribute.mediaID = media.id')
+            ->leftJoin('media', 's_media_album_settings', 'mediaSettings', 'mediaSettings.albumID = media.albumID')
+            ->where('propertyOption.id IN (:ids)')
+            ->groupBy('propertyOption.id')
+            ->orderBy('propertySet.position')
             ->setParameter(':ids', $valueIds, Connection::PARAM_INT_ARRAY);
 
-        $query->orderBy('propertySet.position');
+        $this->fieldHelper->addMediaTranslation($query, $context);
+        $this->fieldHelper->addPropertySetTranslation($query, $context);
+        $this->fieldHelper->addPropertyGroupTranslation($query, $context);
+        $this->fieldHelper->addPropertyOptionTranslation($query, $context);
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
         $rows = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
-        return $this->propertyHydrator->hydrateValues($rows);
+        $result = $this->propertyHydrator->hydrateValues($rows);
+        return $result;
     }
 }

@@ -90,14 +90,8 @@ class ManufacturerGateway implements Gateway\ManufacturerGatewayInterface
         $query->addSelect($this->fieldHelper->getManufacturerFields());
 
         $query->from('s_articles_supplier', 'manufacturer')
-            ->leftJoin(
-                'manufacturer',
-                's_articles_supplier_attributes',
-                'manufacturerAttribute',
-                'manufacturerAttribute.supplierID = manufacturer.id'
-            );
-
-        $query->where('manufacturer.id IN (:ids)')
+            ->leftJoin('manufacturer', 's_articles_supplier_attributes', 'manufacturerAttribute', 'manufacturerAttribute.supplierID = manufacturer.id')
+            ->where('manufacturer.id IN (:ids)')
             ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
         $this->fieldHelper->addManufacturerTranslation($query, $context);

@@ -88,22 +88,16 @@ class RelatedProductStreamsGateway implements Gateway\RelatedProductStreamsGatew
 
         $query = $this->connection->createQueryBuilder();
 
-        $query->select(['relation.article_id']);
-        $query->addSelect($this->fieldHelper->getRelatedProductStreamFields());
+        $query->select(['relation.article_id'])
+            ->addSelect($this->fieldHelper->getRelatedProductStreamFields());
 
-        $query->from('s_product_streams_articles', 'relation');
-
-        $query->innerJoin(
-            'relation',
-            's_product_streams',
-            'stream',
-            'stream.id = relation.stream_id'
-        );
+        $query->from('s_product_streams_articles', 'relation')
+            ->innerJoin('relation', 's_product_streams', 'stream', 'stream.id = relation.stream_id')
+            ->leftJoin('stream', 's_product_streams_attributes', 'productStreamAttribute', 'productStreamAttribute.streamID = stream.id')
+            ->where('relation.article_id IN (:ids)')
+            ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
         $this->fieldHelper->addProductStreamTranslation($query, $context);
-
-        $query->where('relation.article_id IN (:ids)')
-            ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
@@ -111,9 +105,9 @@ class RelatedProductStreamsGateway implements Gateway\RelatedProductStreamsGatew
         $data = $statement->fetchAll(\PDO::FETCH_GROUP);
 
         $related = [];
-        foreach ($data as $productId => $data) {
+        foreach ($data as $productId => $productData) {
             $related[$productId] = [];
-            foreach ($data as $row) {
+            foreach ($productData as $row) {
                 $related[$productId][] = $this->hydrator->hydrate($row);
             }
         }

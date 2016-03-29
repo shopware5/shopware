@@ -52,6 +52,12 @@ class Esd extends ModelEntity
      */
     private $articleId;
 
+    /**
+     * @var integer $articleDetailId
+     *
+     * @ORM\Column(name="articleDetailsID", type="integer", nullable=false)
+     */
+    private $articleDetailId;
 
     /**
      * @var string $file

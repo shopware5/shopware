@@ -98,7 +98,7 @@ Ext.define('Shopware.apps.Property.view.main.SetGrid', {
         });
 
         me.editor = me.getRowEditorPlugin();
-        me.plugins = [ me.getGridTranslationPlugin(), me.editor ];
+        me.plugins = [me.editor];
         me.tbar = me.getToolbar();
         me.columns = me.getColumns();
         me.dockedItems = [ me.getPagingBar() ];
@@ -123,17 +123,6 @@ Ext.define('Shopware.apps.Property.view.main.SetGrid', {
                  */
                 'deleteOption'
         );
-    },
-
-    /**
-     * Creates new Grid-Translation Plugin
-     *
-     * @return [Shopware.grid.plugin.Translation]
-     */
-    getGridTranslationPlugin: function () {
-        return Ext.create('Shopware.grid.plugin.Translation', {
-            translationType: 'propertygroup'
-        });
     },
 
     /**
@@ -194,12 +183,6 @@ Ext.define('Shopware.apps.Property.view.main.SetGrid', {
             sortable: false,
             dataIndex: 'name',
             renderer: 'htmlEncode',
-            translationEditor: {
-                xtype: 'textfield',
-                name: 'groupName',
-                fieldLabel: 'groupName',
-                allowBlank: false
-            },
             editor: {
                 allowBlank: false
             }
@@ -239,7 +222,7 @@ Ext.define('Shopware.apps.Property.view.main.SetGrid', {
             editor: me.sortModeEditor
         }, {
             xtype: 'actioncolumn',
-            width: 32,
+            width: 60,
             hideable: false,
             items: [{
                 iconCls: 'sprite-minus-circle-frame',
@@ -270,6 +253,11 @@ Ext.define('Shopware.apps.Property.view.main.SetGrid', {
                 handler: function(tree, rowIndex) {
                     var node = tree.getStore().getAt(rowIndex);
                     me.fireEvent('removeOptionFromGroup', node, tree);
+                }
+            }, {
+                iconCls: 'sprite-pencil',
+                handler: function (view, rowIndex, colIndex, item, opts, record) {
+                    me.fireEvent('editSet', record);
                 }
             }]
         }];

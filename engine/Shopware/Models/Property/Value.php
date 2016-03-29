@@ -103,6 +103,13 @@ class Value extends ModelEntity
     private $media;
 
     /**
+     * INVERSE SIDE
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\PropertyValue", mappedBy="propertyValue", orphanRemoval=true, cascade={"persist"})
+     * @var \Shopware\Models\Attribute\PropertyValue
+     */
+    protected $attribute;
+
+    /**
      * Class constructor.
      *
      * @param \Shopware\Models\Property\Option $option
@@ -199,5 +206,22 @@ class Value extends ModelEntity
     public function setMedia($media)
     {
         $this->media = $media;
+    }
+
+    /**
+     * @return \Shopware\Models\Attribute\PropertyValue
+     */
+    public function getAttribute()
+    {
+        return $this->attribute;
+    }
+
+    /**
+     * @param \Shopware\Models\Attribute\PropertyValue|array|null $attribute
+     * @return \Shopware\Models\Attribute\PropertyValue
+     */
+    public function setAttribute($attribute)
+    {
+        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\PropertyValue', 'attribute', 'propertyValue');
     }
 }

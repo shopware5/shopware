@@ -71,10 +71,7 @@ class CustomerGroupHydrator extends Hydrator
         $customerGroup->setUseDiscount((bool) ($data['__customerGroup_mode']));
 
         if (!empty($data['__customerGroupAttribute_id'])) {
-            $attribute = $this->attributeHydrator->hydrate(
-                $this->extractFields('__customerGroupAttribute_', $data)
-            );
-            $customerGroup->addAttribute('core', $attribute);
+            $this->attributeHydrator->addAttribute($customerGroup, $data, 'customerGroupAttribute');
         }
 
         return $customerGroup;

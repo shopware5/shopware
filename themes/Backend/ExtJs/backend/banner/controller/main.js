@@ -151,6 +151,7 @@ Ext.define('Shopware.apps.Banner.controller.Main', {
     onSaveEditBanner : function(btn) {
         var win     = btn.up('window'),
             form    = win.down('form'),
+            attributeForm = win.down('shopware-attribute-form'),
             formBasis = form.getForm(),
             me      = this,
             store   = me.subApplication.bannerStore,
@@ -160,7 +161,11 @@ Ext.define('Shopware.apps.Banner.controller.Main', {
 
         if (formBasis.isValid()) {
             record.save({
-                callback: function() {
+                callback: function(self, operation) {
+                    var response = Ext.JSON.decode(operation.response.responseText);
+                    var data = response.data;
+                    attributeForm.saveAttribute(data.id);
+
                     Shopware.Msg.createGrowlMessage('', '{s name=saved_success}Banner has been saved.{/s}', '{s name=main_title}{/s}');
                     win.close();
                     store.load({

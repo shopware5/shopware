@@ -40,21 +40,6 @@ class CountryHydrator extends Hydrator
     private $attributeHydrator;
 
     /**
-     * @var array
-     */
-    private $translationCountryFields = [
-        'countryname' => '__country_countryname',
-        'notice' => '__country_notice'
-    ];
-
-    /**
-     * @var array
-     */
-    private $translationStateFields = [
-        'name' => '__countryState_name'
-    ];
-
-    /**
      * @param AttributeHydrator $attributeHydrator
      */
     public function __construct(AttributeHydrator $attributeHydrator)
@@ -69,11 +54,8 @@ class CountryHydrator extends Hydrator
     public function hydrateArea(array $data)
     {
         $area = new Struct\Country\Area();
-
         $area->setId((int) $data['__countryArea_id']);
-
         $area->setName($data['__countryArea_name']);
-
         return $area;
     }
 
@@ -84,18 +66,12 @@ class CountryHydrator extends Hydrator
     public function hydrateCountry(array $data)
     {
         $country = new Struct\Country();
-        $translation = $this->getTranslation(
-            $data,
-            '__country_translation',
-            '__country_translation_fallback',
-            $data['__country_id'],
-            $this->translationCountryFields
-        );
+        $id = (int) $data['__country_id'];
 
+        $translation = $this->getTranslation($data, '__country', [], $id);
         $data = array_merge($data, $translation);
 
-        $country->setId((int) $data['__country_id']);
-
+        $country->setId($id);
         $country->setName($data['__country_countryname']);
 
         if (isset($data['__country_countryiso'])) {
@@ -139,45 +115,10 @@ class CountryHydrator extends Hydrator
         }
 
         if ($data['__countryAttribute_id'] !== null) {
-            $attribute = $this->attributeHydrator->hydrate(
-                $this->extractFields('__countryAttribute_', $data)
-            );
-            $country->addAttribute('core', $attribute);
+            $this->attributeHydrator->addAttribute($country, $data, 'countryAttribute');
         }
 
         return $country;
-    }
-
-    /**
-     * @param $data
-     * @param $arrayKey
-     * @param $fallbackArrayKey
-     * @param $id
-     * @param array $mapping
-     * @return array|mixed
-     */
-    private function getTranslation($data, $arrayKey, $fallbackArrayKey, $id, $mapping = [])
-    {
-        if (!isset($data[$arrayKey])
-            || empty($data[$arrayKey])
-        ) {
-            $translation = [];
-        } else {
-            $translation = unserialize($data[$arrayKey]);
-        }
-
-        if (isset($data[$fallbackArrayKey])
-            && !empty($data[$fallbackArrayKey])
-        ) {
-            $fallbackTranslation = unserialize($data[$fallbackArrayKey]);
-            $translation += $fallbackTranslation;
-        }
-
-        if (empty($translation) || empty($translation[$id])) {
-            return [];
-        }
-
-        return $this->convertArrayKeys($translation[$id], $mapping);
     }
 
     /**
@@ -188,17 +129,12 @@ class CountryHydrator extends Hydrator
     {
         $state = new Struct\Country\State();
 
-        $translation = $this->getTranslation(
-            $data,
-            '__countryState_translation',
-            '__countryState_translation_fallback',
-            $data['__countryState_id'],
-            $this->translationStateFields
-        );
+        $id = (int) $data['__countryState_id'];
 
+        $translation = $this->getTranslation($data, '__countryState', [], $id);
         $data = array_merge($data, $translation);
 
-        $state->setId((int) $data['__countryState_id']);
+        $state->setId($id);
 
         if (isset($data['__countryState_name'])) {
             $state->setName($data['__countryState_name']);
@@ -209,10 +145,7 @@ class CountryHydrator extends Hydrator
         }
 
         if ($data['__countryStateAttribute_id'] !== null) {
-            $attribute = $this->attributeHydrator->hydrate(
-                $this->extractFields('__countryStateAttribute_', $data)
-            );
-            $state->addAttribute('core', $attribute);
+            $this->attributeHydrator->addAttribute($state, $data, 'countryStateAttribute');
         }
 
         return $state;

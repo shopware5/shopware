@@ -29,20 +29,13 @@
 //{namespace name=backend/product_stream/main}
 //{block name="backend/product_stream/view/common/settings"}
 Ext.define('Shopware.apps.ProductStream.view.common.Settings', {
-    extend: 'Ext.form.Panel',
+    extend: 'Ext.panel.Panel',
     alias: 'widget.product-stream-settings',
     title: '{s name=settings}Settings{/s}',
     height: 170,
-    margin: '0 0 10',
     bodyPadding: 10,
-    collapsible: true,
-    plugins: [{
-        ptype: 'translation',
-        pluginId: 'translation',
-        translationType: 'productStream',
-        translationMerge: false,
-        translationKey: null
-    }],
+    cls: 'shopware-form',
+    layout: 'anchor',
 
     initComponent: function() {
         var me = this;
@@ -51,11 +44,8 @@ Ext.define('Shopware.apps.ProductStream.view.common.Settings', {
         me.callParent(arguments);
     },
 
-    loadRecord: function(record) {
+    setSorting: function(record) {
         var me = this;
-
-        me.callParent(arguments);
-
         var sorting = record.get('sorting');
         if (!sorting) {
             return;

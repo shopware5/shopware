@@ -280,6 +280,8 @@ Ext.define('Shopware.apps.Article.controller.Detail', {
                     mainWindow.supplierStore.load();
                 }
 
+                mainWindow.attributeForm.saveAttribute(newArticle.get('mainDetailId'));
+
                 me.prepareArticleProperties(record, function() {
                     newArticle.getPrice().filter(lastFilter);
                     me.reconfigureAssociationComponents(newArticle);

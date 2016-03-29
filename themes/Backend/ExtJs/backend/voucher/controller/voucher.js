@@ -53,7 +53,8 @@ Ext.define('Shopware.apps.Voucher.controller.Voucher', {
         { ref:'hiddenFieldId', selector:'voucher-voucher-base_configuration hidden[name=id]' },
         { ref:'voucherBaseConfiguration', selector:'window voucher-voucher-base_configuration' },
         { ref:'numberFieldRedeemablePerCustomer', selector:'voucher-voucher-base_configuration numberfield[name=numOrder]' },
-        { ref:'numberFieldVoucherCount', selector:'voucher-voucher-base_configuration numberfield[name=numberOfUnits]' }
+        { ref:'numberFieldVoucherCount', selector:'voucher-voucher-base_configuration numberfield[name=numberOfUnits]' },
+        { ref:'attributeForm', selector:'voucher-voucher-window shopware-attribute-form' }
     ],
 
     /**
@@ -328,6 +329,7 @@ Ext.define('Shopware.apps.Voucher.controller.Voucher', {
         var me = this,
             formPanel = me.getVoucherBaseConfiguration(),
             form = formPanel.getForm(),
+            attributeForm = me.getAttributeForm(),
             record = form.getRecord();
         //check if all required fields are valid
         if (!form.isValid()) {
@@ -346,7 +348,14 @@ Ext.define('Shopware.apps.Voucher.controller.Voucher', {
         record.save({
             callback: function (self,operation) {
                 if (operation.success) {
-                    me.getHiddenFieldId().setValue(self.data.id);
+                    var response = Ext.JSON.decode(operation.response.responseText);
+                    var data = response.data;
+
+                    me.getHiddenFieldId().setValue(data.id);
+                    attributeForm.saveAttribute(data.id, function() {
+                        attributeForm.loadAttribute(data.id);
+                    });
+
                     Shopware.Notification.createGrowlMessage('',me.snippets.onSaveVoucherSuccess, me.snippets.growlMessage);
                     if (self.data.modus) {
                         me.getCodesGrid().enable();

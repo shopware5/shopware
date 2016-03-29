@@ -47,6 +47,8 @@ Ext.define('Shopware.apps.Order.view.detail.Configuration', {
      */
     layout: 'column',
 
+    cls: 'shopware-form',
+
     /**
      * List of short aliases for class names. Most useful for defining xtypes for widgets.
      * @string
@@ -58,7 +60,7 @@ Ext.define('Shopware.apps.Order.view.detail.Configuration', {
      * @object
      */
     formDefaults: {
-        labelWidth: 120,
+        labelWidth: 155,
         style: 'margin-bottom: 10px !important;',
         labelStyle: 'font-weight: 700;',
         anchor: '100%'

@@ -68,7 +68,6 @@ Ext.define('Shopware.apps.Order.model.Receipt', {
      * @array
      */
     associations:[
-        { type:'hasMany', model:'Shopware.apps.Order.model.ReceiptAttribute', name:'getAttributes', associationKey:'attributes' },
         { type:'hasMany', model:'Shopware.apps.Base.model.DocType', name:'getDocType', associationKey:'type' }
     ]
 

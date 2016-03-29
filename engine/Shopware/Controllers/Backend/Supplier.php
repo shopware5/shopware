@@ -171,7 +171,6 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
         }
 
         $params = $this->Request()->getParams();
-        $params['attribute'] = $params['attribute'][0];
 
         // set data to model and overwrite the image field
         $supplierModel->fromArray($params);

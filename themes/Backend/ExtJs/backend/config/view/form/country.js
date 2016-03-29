@@ -37,7 +37,11 @@ Ext.define('Shopware.apps.Config.view.form.Country', {
         return [{
             xtype: 'config-base-table',
             store: 'form.Country',
-            columns: me.getColumns()
+            columns: me.getColumns(),
+            plugins: [{
+                ptype: 'grid-attributes',
+                table: 's_core_countries_attributes'
+            }]
         },{
             xtype: 'config-base-detail',
             store: 'detail.Country',
@@ -156,6 +160,9 @@ Ext.define('Shopware.apps.Config.view.form.Country', {
                 pluginId: 'translation',
                 translationType: 'config_country_states',
                 translationMerge: true
+            }, {
+                ptype: 'grid-attributes',
+                table: 's_core_countries_states_attributes'
             }],
             columns: me.getStateColumns()
         }

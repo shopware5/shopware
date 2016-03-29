@@ -92,7 +92,7 @@ Ext.define('Shopware.apps.Emotion', {
      * Required models for the module (subapplication)
      * @array
      */
-    models: [ 'Emotion', 'EmotionElement', 'Component', 'Field', 'Attribute', 'BannerSlider', 'ManufacturerSlider', 'ArticleSlider', 'Grid' , 'Template'  ],
+    models: [ 'Emotion', 'EmotionElement', 'Component', 'Field', 'BannerSlider', 'ManufacturerSlider', 'ArticleSlider', 'Grid' , 'Template'  ],
 
     /**
      * Returns the main application window for this is expected

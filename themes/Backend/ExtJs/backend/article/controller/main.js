@@ -167,7 +167,6 @@ Ext.define('Shopware.apps.Article.controller.Main', {
             articleData = storeData.raw.article;
 
         var article = Ext.create('Shopware.apps.Article.model.Article', articleData),
-            attribute = Ext.create('Shopware.apps.Article.model.Attribute', articleData.attribute),
             detail = Ext.create('Shopware.apps.Article.model.Detail', articleData );
 
 
@@ -175,7 +174,6 @@ Ext.define('Shopware.apps.Article.controller.Main', {
         detail.set('kind', 1);
 
         article.getMainDetail().add(detail);
-        article.getAttribute().add(attribute);
         return article;
     },
 
@@ -229,7 +227,6 @@ Ext.define('Shopware.apps.Article.controller.Main', {
         stores['unit'] = data.getUnits();
         stores['properties'] = data.getProperties();
         stores['priceGroups'] = data.getPriceGroups();
-        stores['attributeFields'] = data.getAttributeFields();
 
         me.subApplication.firstCustomerGroup = data.getCustomerGroups().first();
 
@@ -312,154 +309,9 @@ Ext.define('Shopware.apps.Article.controller.Main', {
         stores['dependencyStore'] = dependencyStore;
         stores['priceVariationStore'] = priceVariationStore;
         stores['articleConfiguratorSet'] = articleConfiguratorSet;
-
         stores['categories'] = Ext.create('Shopware.apps.Article.store.CategoryTree').load();
 
         return stores;
-    },
-
-    /**
-     * Creates the field set with the additional article fields.
-     * @return Ext.form.FieldSet
-     */
-    createAdditionalFieldSet: function(attributeFields) {
-        var me = this, fields = [];
-
-        if (attributeFields && attributeFields.getCount() > 0) {
-            attributeFields.each(function(item) {
-                 fields.push(me.createAttributeField(item));
-            });
-        }
-
-        return Ext.create('Ext.form.FieldSet', {
-            layout: 'anchor',
-            cls: Ext.baseCSSPrefix + 'article-additional-fields-field-set',
-            defaults: {
-                labelWidth: 155,
-                anchor: '100%',
-                xtype: 'textfield'
-            },
-            title: me.snippets.additional.title,
-            items: fields
-        });
-    },
-
-    createAttributeField: function(fieldModel) {
-        var me = this, field = Ext.create('Ext.form.field.Text');
-
-        switch(fieldModel.get('type')) {
-            case 'text':
-                field = Ext.create('Ext.form.field.Text', {
-                    fieldLabel: fieldModel.get('label'),
-                    name: 'attribute[' + fieldModel.get('name') + ']',
-                    translationName: fieldModel.get('name'),
-                    translatable: fieldModel.get('translatable')
-                });
-                break;
-            case 'boolean':
-                field = Ext.create('Ext.form.field.Checkbox', {
-                    inputValue: true,
-                    uncheckedValue: false
-                });
-                break;
-            case 'select':
-                if (fieldModel.get('store') == "ArrayStore"){
-                    field = Ext.create('Ext.form.field.ComboBox', {
-                       store: Ext.create('Ext.data.ArrayStore',{
-                           fields: [
-                            'id','name'
-                           ],
-                           data: Ext.JSON.decode(fieldModel.get('default'))
-                       }),
-                       valueField: 'id',
-                       forceSelection: true,
-                       displayField: 'name'
-                   });
-
-                }else {
-                    field = Ext.create('Ext.form.field.ComboBox', {
-                        store: fieldModel.get('store'),
-                        valueField: 'id',
-                        forceSelection: true,
-                        displayField: 'name'
-                    });
-
-                }
-                break;
-            case 'date':
-                field = Ext.create('Ext.form.field.Date', {
-                    submitFormat: 'd.m.Y',
-                    setValue: function(value) {
-                        var me = this;
-
-                        var val = me.safeParse(value, me.submitFormat);
-                        if (val) {
-                            me.setRawValue(me.valueToRaw(val));
-                            return this;
-                        }
-
-                        return me.superclass.setValue.apply(this, arguments);
-                    }
-                });
-                break;
-            case 'number':
-                field = Ext.create('Ext.form.field.Number');
-                break;
-            case 'textarea':
-                field = Ext.create('Ext.form.field.TextArea', {
-                    fieldLabel: fieldModel.get('label'),
-                    name: 'attribute[' + fieldModel.get('name') + ']',
-                    translationName: fieldModel.get('name'),
-                    translatable: fieldModel.get('translatable')
-                });
-                break;
-            case 'time':
-                field = Ext.create('Ext.form.field.Time', {
-                    increment: 10,
-                    submitFormat: 'H:i',
-                    setValue: function(value) {
-                        var me = this;
-
-                        var val = me.safeParse(value, me.submitFormat);
-                        if (val) {
-                            return me.superclass.setValue.apply(this, [val]);
-                        } else {
-                            return me.superclass.setValue.apply(this, arguments);
-                        }
-                    }
-                });
-                break;
-            case 'html':
-                field = Ext.create('Ext.form.field.TinyMCE', {
-                    fieldLabel: fieldModel.get('label'),
-                    name: 'attribute[' + fieldModel.get('name') + ']',
-                    translationName: fieldModel.get('name'),
-                    translatable: fieldModel.get('translatable')
-                });
-                break;
-            case 'article':
-                field = Ext.create('Shopware.form.ArticleSearch', {
-                    store: fieldModel.get('store'),
-                    fieldLabel: fieldModel.get('label'),
-                    valueField: 'id',
-                    anchor: '100%',
-                    forceSelection: true,
-                    displayField: 'name'
-                });
-                break;
-            default:
-        }
-
-        Ext.apply(field, {
-            fieldLabel: fieldModel.get('label'),
-            allowBlank: (!fieldModel.get('required')),
-            value: fieldModel.get('default'),
-            anchor: '100%',
-            helpText: fieldModel.get('help'),
-            editable: true,
-            name: 'attribute[' + fieldModel.get('name') + ']'
-        });
-        return field;
     },
 
     /**
@@ -496,8 +348,6 @@ Ext.define('Shopware.apps.Article.controller.Main', {
                 article: article,
                 customerGroupStore: stores['customerGroups'],
                 shopStore: stores['shops'],
-                attributeFieldSet: me.createAdditionalFieldSet(stores['attributeFields']),
-                attributeFields: stores['attributeFields'],
                 unitStore: stores['unit'],
                 propertyStore: stores['properties'],
                 dependencyStore: stores['dependencyStore'],
@@ -564,6 +414,8 @@ Ext.define('Shopware.apps.Article.controller.Main', {
                 me.getController('Detail').reconfigureAssociationComponents(article);
                 mainWindow.changeTitle();
                 mainWindow.saveButton.setDisabled(false);
+
+                mainWindow.attributeForm.loadAttribute(article.get('mainDetailId'));
 
                 me.getMediaInfo().thumbnail.update();
                 me.getMediaInfo().loadRecord(Ext.create('Shopware.apps.Article.model.Media'));

@@ -77,7 +77,7 @@ Ext.define('Shopware.apps.Property', {
      * Required models
      * @array
      */
-    models: [ 'Option', 'Group','SetAssign', 'Set', 'Attribute' ],
+    models: [ 'Option', 'Group','SetAssign', 'Set' ],
 
     /**
      * Required views
@@ -90,7 +90,9 @@ Ext.define('Shopware.apps.Property', {
         'main.SetGrid',
         'main.SetAssignGrid',
         'detail.OptionWindow',
-        'detail.OptionContainer'
+        'detail.DetailWindow',
+        'detail.GroupWindow',
+        'detail.SetWindow',
     ],
 
     /**

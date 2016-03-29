@@ -78,7 +78,7 @@ Ext.define('Shopware.apps.Form', {
      * Required models
      * @array
      */
-    models: [ 'Form', 'Field', 'Attribute' ],
+    models: [ 'Form', 'Field' ],
 
     /**
      * Required views

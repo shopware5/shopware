@@ -53,6 +53,7 @@ Ext.define('Shopware.apps.Mail.controller.Main', {
         { ref: 'formPanel', selector: 'mail-main-form' },
         { ref: 'attachmentTree', selector: 'mail-main-attachments' },
         { ref: 'infoPanel', selector: 'mail-main-info' },
+        { ref: 'attributeForm', selector: 'mail-main-window shopware-attribute-form' },
 
         { ref: 'contentEditor', selector: 'mail-main-contentEditor' },
         { ref: 'tabPanel', selector: 'mail-main-form tabpanel' },
@@ -437,12 +438,14 @@ Ext.define('Shopware.apps.Mail.controller.Main', {
         formPanel.setLoading(true);
         record.save({
             success: function(record, operation) {
-                formPanel.setLoading(false);
-                me.loadRecord(record);
-                if (treeNeedsReload) {
-                    me.reloadTree();
-                }
-                Shopware.Notification.createGrowlMessage(me.snippets.saveSuccessTitle, me.snippets.saveSuccessMessage, me.snippets.growlMessage);
+                me.getAttributeForm().saveAttribute(record.get('id'), function() {
+                    formPanel.setLoading(false);
+                    me.loadRecord(record);
+                    if (treeNeedsReload) {
+                        me.reloadTree();
+                    }
+                    Shopware.Notification.createGrowlMessage(me.snippets.saveSuccessTitle, me.snippets.saveSuccessMessage, me.snippets.growlMessage);
+                });
             },
             failure: function() {
                 formPanel.setLoading(false);

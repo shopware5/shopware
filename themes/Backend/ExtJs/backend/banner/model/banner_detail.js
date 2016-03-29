@@ -70,10 +70,6 @@ Ext.define('Shopware.apps.Banner.model.BannerDetail', {
         { name : 'extension',       type: 'string' }
     ],
 
-    associations: [
-        { type: 'hasMany', model: 'Shopware.apps.Banner.model.Attribute', name: 'getAttribute', associationKey: 'attribute' }
-    ],
-
     /**
      * defines the field for the unique identifier - id is default.
      *

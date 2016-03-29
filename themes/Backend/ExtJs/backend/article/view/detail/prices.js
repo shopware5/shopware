@@ -79,6 +79,8 @@ Ext.define('Shopware.apps.Article.view.detail.Prices', {
         }
     },
 
+    attributeTable: 's_articles_prices_attributes',
+
     /**
 	 * The initComponent template method is an important initialization step for a Component.
      * It is intended to be implemented by each subclass of Ext.Component to provide any needed constructor logic.
@@ -206,6 +208,9 @@ Ext.define('Shopware.apps.Article.view.detail.Prices', {
             plugins: [{
                 ptype: 'cellediting',
                 clicksToEdit: 1
+            }, {
+                ptype: 'grid-attributes',
+                table: me.attributeTable
             }],
             defaults: {
                 align: 'right',
