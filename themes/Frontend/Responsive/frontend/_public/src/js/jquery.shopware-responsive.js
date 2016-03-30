@@ -122,7 +122,8 @@
         .addPlugin('*[data-infinite-scrolling="true"]', 'swInfiniteScrolling')
         .addPlugin('*[data-ajax-variants-container="true"]', 'swAjaxVariant')
         .addPlugin('*[data-subcategory-nav="true"]', 'swSubCategoryNav', ['xs', 's'])
-        .addPlugin('*[data-panel-auto-resizer="true"]', 'swPanelAutoResizer', {}, ['l', 'xl']);
+        .addPlugin('*[data-panel-auto-resizer="true"]', 'swPanelAutoResizer')
+        .addPlugin('*[data-address-selector="true"]', 'swAddressSelector');
 
     $(function($) {
 

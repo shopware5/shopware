@@ -116,6 +116,33 @@ In this document you will find a changelog of the important changes related to t
 * Updated `ongr/elasticsearch-dsl` to v2.0.0, see https://github.com/ongr-io/ElasticsearchDSL/blob/master/CHANGELOG.md#v200-2016-03-03 for BC breaks.
 * Renamed block 'frontend_blog_bookmarks_deliciosus' to 'frontend_blog_bookmarks_delicious'
 * Deprecated `\Shopware\Models\Article\Element`
+* Removed the following templates including their snippets and blocks
+    * `frontend/account/billing.tpl`
+    * `frontend/account/billing_checkout.tpl`
+    * `frontend/account/content_right.tpl`
+    * `frontend/account/select_address.tpl`
+    * `frontend/account/select_billing.tpl`
+    * `frontend/account/select_billing_checkout.tpl`
+    * `frontend/account/select_shipping.tpl`
+    * `frontend/account/select_shipping_checkout.tpl`
+    * `frontend/account/shipping.tpl`
+    * `frontend/account/shipping_checkout.tpl`
+    * `frontend/checkout/cart_left.tpl`
+    * `frontend/checkout/confirm_left.tpl`
+* Removed `sAdmin::sGetPreviousAddresses()`
+* Removed `sAdmin::sUpdateBilling()`
+* Removed `sAdmin::sUpdateShipping()`
+* Removed `sAdmin::sValidateStep1()`
+* Removed `sAdmin::sValidateStep2()`
+* Removed `sAdmin::sValidateStep2ShippingAddress()`
+* Removed `billingAction()` in `Controllers/Frontend/Account.php`
+* Removed `shippingAction()` in `Controllers/Frontend/Account.php`
+* Removed `saveBillingAction()` in `Controllers/Frontend/Account.php`
+* Removed `saveShippingAction()` in `Controllers/Frontend/Account.php`
+* Removed `selectBillingAction()` in `Controllers/Frontend/Account.php`
+* Removed `selectShippingAction()` in `Controllers/Frontend/Account.php`
+* Moved block `frontend_checkout_confirm_left_billing_address` outside panel body
+* Moved block `frontend_checkout_confirm_left_shipping_address` outside panel body
 
 ## 5.1.4
 * Customer logout will now regenerate the session id and clear the customers basket.

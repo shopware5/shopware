@@ -24,12 +24,10 @@
 
 namespace Shopware\Bundle\AccountBundle\Service\Core;
 
-use Doctrine\ORM\AbstractQuery;
 use Shopware\Bundle\AccountBundle\Service\AddressServiceInterface;
 use Shopware\Bundle\AccountBundle\Form\Account\AddressFormType;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Customer\Address;
-use Shopware\Models\Customer\Billing;
 use Shopware\Models\Customer\Customer;
 use Shopware\Models\Customer\Shipping;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -205,5 +203,35 @@ class AddressService implements AddressServiceInterface
         $shipping->fromAddress($address);
 
         $this->modelManager->flush([$customer, $shipping]);
+    }
+
+    /**
+     * Converts an address to the array key structure of a legacy billing or shipping address
+     *
+     * @param Address $address
+     * @return array
+     */
+    public function convertToLegacyArray(Address $address)
+    {
+        $output = [
+            'id' => $address->getId(),
+            'userID' => $address->getCustomer()->getId(),
+            'company' => $address->getCompany(),
+            'department' => $address->getDepartment(),
+            'salutation' => $address->getSalutation(),
+            'firstname' => $address->getFirstname(),
+            'lastname' => $address->getLastname(),
+            'street' => $address->getStreet(),
+            'zipcode' => $address->getZipcode(),
+            'city' => $address->getCity(),
+            'phone' => $address->getPhone(),
+            'countryID' => $address->getCountry()->getId(),
+            'stateID' => $address->getState() ? $address->getState()->getId() : null,
+            'ustid' => $address->getVatId(),
+            'additional_address_line1' => $address->getAdditionalAddressLine1(),
+            'additional_address_line2' => $address->getAdditionalAddressLine2(),
+        ];
+
+        return $output;
     }
 }

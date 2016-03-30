@@ -10341,9 +10341,9 @@ INSERT INTO `s_statistics_visitors` (`id`, `shopID`, `datum`, `pageimpressions`,
 (6, 1, '2012-08-31', 1109, 5);
 
 TRUNCATE TABLE `s_user`;
-INSERT INTO `s_user` (`id`, `password`, `email`, `active`, `accountmode`, `confirmationkey`, `paymentID`, `firstlogin`, `lastlogin`, `sessionID`, `newsletter`, `validation`, `affiliate`, `customergroup`, `paymentpreset`, `language`, `subshopID`, `referer`, `pricegroupID`, `internalcomment`, `failedlogins`, `lockeduntil`) VALUES
-(1, 'a256a310bc1e5db755fd392c524028a8', 'test@example.com', 1, 0, '', 5, '2011-11-23', '2012-01-04 14:12:05', 'uiorqd755gaar8dn89ukp178c7', 0, '', 0, 'EK', 0, '1', 1, '', NULL, '', 0, NULL),
-(2, '352db51c3ff06159d380d3d9935ec814', 'mustermann@b2b.de', 1, 0, '', 4, '2012-08-30', '2012-08-30 11:43:17', '66e9b10064a19b1fcf6eb9310c0753866c764836', 0, '0', 0, 'H', 4, '1', 1, '', NULL, '', 0, NULL);
+INSERT INTO `s_user` (`id`, `password`, `email`, `active`, `accountmode`, `confirmationkey`, `paymentID`, `firstlogin`, `lastlogin`, `sessionID`, `newsletter`, `validation`, `affiliate`, `customergroup`, `paymentpreset`, `language`, `subshopID`, `referer`, `pricegroupID`, `internalcomment`, `failedlogins`, `lockeduntil`, `default_billing_address_id`, `default_shipping_address_id`) VALUES
+(1, 'a256a310bc1e5db755fd392c524028a8', 'test@example.com', 1, 0, '', 5, '2011-11-23', '2012-01-04 14:12:05', 'uiorqd755gaar8dn89ukp178c7', 0, '', 0, 'EK', 0, '1', 1, '', NULL, '', 0, NULL, 1, 3),
+(2, '352db51c3ff06159d380d3d9935ec814', 'mustermann@b2b.de', 1, 0, '', 4, '2012-08-30', '2012-08-30 11:43:17', '66e9b10064a19b1fcf6eb9310c0753866c764836', 0, '0', 0, 'H', 4, '1', 1, '', NULL, '', 0, NULL, 2, 4);
 
 TRUNCATE TABLE `s_user_attributes`;
 TRUNCATE TABLE `s_user_billingaddress`;
@@ -10363,3 +10363,10 @@ INSERT INTO `s_user_shippingaddress` (`id`, `userID`, `company`, `department`, `
 TRUNCATE TABLE `s_user_shippingaddress_attributes`;
 
 UPDATE `s_articles_details` SET minpurchase = 1 WHERE minpurchase < 1;
+
+TRUNCATE TABLE `s_user_addresses`;
+INSERT INTO `s_user_addresses` (`id`, `user_id`, `company`, `department`, `salutation`, `firstname`, `lastname`, `street`, `zipcode`, `city`, `phone`, `country_id`, `state_id`, `ustid`) VALUES
+(1, 1, 'Muster GmbH', NULL, 'mr', 'Max', 'Mustermann', 'Musterstr. 55', '55555', 'Musterhausen', '05555 / 555555', 2, 3, NULL),
+(2, 2, 'B2B', 'Einkauf', NULL, 'Händler', 'Kundengruppe-Netto', 'Musterweg 1', '55555', 'Musterstadt', '012345 / 6789', 2, 3, NULL),
+(3, 1, 'shopware AG', NULL, 'mr', 'Max', 'Mustermann', 'Mustermannstraße 92', '48624', 'Schöppingen', NULL, 2, NULL, NULL),
+(4, 2, 'B2B', 'Einkauf', NULL, 'Händler', 'Kundengruppe-Netto', 'Musterweg 1', '00000', 'Musterstadt', NULL, 2, 3, NULL);

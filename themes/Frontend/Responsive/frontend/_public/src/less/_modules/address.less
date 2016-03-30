@@ -1,0 +1,76 @@
+/*
+Address
+================================
+Defines the styles for the address pages and the modals.
+*/
+.select-address--modal {
+
+  .header > .title {
+    .unitize(padding-left, 2%);
+    padding-left: 2%;
+  }
+
+  .content {
+    .clearfix();
+    .unitize(padding, 20);
+    display: block;
+
+    .modal--container {
+      .clearfix();
+      margin: -2% 0 0 -2%;
+
+      .modal--container-item {
+        padding: 2% 0 0 2%;
+        float: left;
+        width: 100%
+      }
+    }
+
+    .panel--actions {
+      .btn {
+        width: 100%;
+        text-align: center;
+
+        .js--loading {
+          .unitize-width(18);
+          .unitize-height(18);
+          .border-radius(100%);
+          .unitize(right, 6);
+          .unitize(top, 2);
+          .unitize-margin(8, 5, 8, 5);
+          .animation(keyframe--spin 1s linear infinite);
+          border: 2px solid @border-color;
+          border-top: 2px solid darken(@border-color, 50%);
+          display: block;
+          position: absolute;
+        }
+      }
+    }
+  }
+
+}
+
+@media screen and (min-width: @tabletViewportWidth) {
+  .select-address--modal {
+    .content {
+      .modal--container {
+        .modal--container-item {
+          width: 50%
+        }
+      }
+    }
+
+  }
+}
+
+@media screen and (min-width: @tabletLandscapeViewportWidth) {
+  .select-address--modal {
+    .content {
+      .modal--container {
+        .modal--container-item {
+          width: 33.3%
+        }
+      }
+    }
+  }
+}

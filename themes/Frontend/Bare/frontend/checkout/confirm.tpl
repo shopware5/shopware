@@ -217,49 +217,59 @@
         </div>
     {/block}
 
-    <div class="panel--group block-group information--panel-wrapper">
+    <div class="panel--group block-group information--panel-wrapper" data-panel-auto-resizer="true">
         {* Billing address *}
         {block name='frontend_checkout_confirm_billing_address_panel'}
-            <div class="panel has--border block information--panel billing--panel">
+            <div class="information--panel-item">
+                <div class="panel has--border block information--panel billing--panel">
 
-                {* Headline *}
-                {block name='frontend_checkout_confirm_left_billing_address_headline'}
-                    <div class="panel--title is--underline">
-                        {s name="ConfirmHeaderBilling" namespace="frontend/checkout/confirm_left"}{/s}
-                    </div>
-                {/block}
+                    {* Headline *}
+                    {block name='frontend_checkout_confirm_left_billing_address_headline'}
+                        <div class="panel--title is--underline">
+                            {s name="ConfirmHeaderBilling" namespace="frontend/checkout/confirm"}{/s}
+                        </div>
+                    {/block}
 
-                {* Content *}
-                <div class="panel--body is--wide">
+                    {* Content *}
                     {block name='frontend_checkout_confirm_left_billing_address'}
-                        {if $sUserData.billingaddress.company}
-                            <strong>{$sUserData.billingaddress.company}{if $sUserData.billingaddress.department}<br />{$sUserData.billingaddress.department}{/if}</strong>
-                            <br>
-                        {/if}
+                        <div class="panel--body is--wide">
+                            {if $sUserData.billingaddress.company}
+                                <strong>{$sUserData.billingaddress.company}{if $sUserData.billingaddress.department}<br />{$sUserData.billingaddress.department}{/if}</strong>
+                                <br>
+                            {/if}
 
-                        {if $sUserData.billingaddress.salutation eq "mr"}
-                            {s name="ConfirmSalutationMr" namespace="frontend/checkout/confirm_left"}{/s}
-                        {else}
-                            {s name="ConfirmSalutationMs" namespace="frontend/checkout/confirm_left"}{/s}
-                        {/if}
+                            {if $sUserData.billingaddress.salutation eq "mr"}
+                                {s name="ConfirmSalutationMr" namespace="frontend/checkout/confirm"}{/s}
+                            {else}
+                                {s name="ConfirmSalutationMs" namespace="frontend/checkout/confirm"}{/s}
+                            {/if}
 
-                        {$sUserData.billingaddress.firstname} {$sUserData.billingaddress.lastname}<br />
-                        {$sUserData.billingaddress.street}<br />
-                        {if $sUserData.billingaddress.additional_address_line1}{$sUserData.billingaddress.additional_address_line1}<br />{/if}
-                        {if $sUserData.billingaddress.additional_address_line2}{$sUserData.billingaddress.additional_address_line2}<br />{/if}
-                        {if {config name=showZipBeforeCity}}{$sUserData.billingaddress.zipcode} {$sUserData.billingaddress.city}{else}{$sUserData.billingaddress.city} {$sUserData.billingaddress.zipcode}{/if}<br />
-                        {if $sUserData.additional.state.statename}{$sUserData.additional.state.statename}<br />{/if}
-                        {$sUserData.additional.country.countryname}
+                            {$sUserData.billingaddress.firstname} {$sUserData.billingaddress.lastname}<br />
+                            {$sUserData.billingaddress.street}<br />
+                            {if $sUserData.billingaddress.additional_address_line1}{$sUserData.billingaddress.additional_address_line1}<br />{/if}
+                            {if $sUserData.billingaddress.additional_address_line2}{$sUserData.billingaddress.additional_address_line2}<br />{/if}
+                            {if {config name=showZipBeforeCity}}{$sUserData.billingaddress.zipcode} {$sUserData.billingaddress.city}{else}{$sUserData.billingaddress.city} {$sUserData.billingaddress.zipcode}{/if}<br />
+                            {if $sUserData.additional.state.statename}{$sUserData.additional.state.statename}<br />{/if}
+                            {$sUserData.additional.country.countryname}
+                        </div>
                     {/block}
 
                     {* Action buttons *}
                     {block name="frontend_checkout_confirm_left_billing_address_actions"}
-                        <div class="panel--actions">
-                            <a href="{url controller=account action=billing sTarget=checkout}" class="btn is--small">
-                                {s name="ConfirmLinkChangeBilling" namespace="frontend/checkout/confirm_left"}{/s}
+                        <div class="panel--actions is--wide">
+                            <a href="{url controller=address action=edit id=$activeBillingAddressId sTarget=checkout sTargetAction=confirm}"
+                               title="{s name="ConfirmAddressSelectButton"}Change address{/s}"
+                               class="btn">
+                                {s name="ConfirmAddressSelectButton"}Change address{/s}
                             </a>
-                            <a href="{url controller=account action=selectBilling sTarget=checkout}" class="btn is--small">
-                                {s name="ConfirmLinkSelectBilling" namespace="frontend/checkout/confirm_left"}{/s}
+                            <br/>
+                            <a href="{url controller=address}"
+                               data-address-selector="true"
+                               data-id="{$activeBillingAddressId}"
+                               data-title="{s name="ModalTitle" namespace="frontend/address/ajax_selector"}Change address{/s}"
+                               title="{s name="ConfirmAddressSelectLink"}{/s}"
+                               data-action="{url controller=checkout action=setAddress target=billing}">
+                                {s name="ConfirmAddressSelectLink"}{/s}
                             </a>
                         </div>
                     {/block}
@@ -269,45 +279,55 @@
 
         {* Shipping address *}
         {block name='frontend_checkout_confirm_shipping_address_panel'}
-            <div class="panel has--border block information--panel shipping--panel">
-                {block name='frontend_checkout_confirm_left_shipping_address_headline'}
-                    <div class="panel--title is--underline">
-                        {s name="ConfirmHeaderShipping" namespace="frontend/checkout/confirm_left"}{/s}
-                    </div>
-                {/block}
+            <div class="information--panel-item">
+                <div class="panel has--border block information--panel shipping--panel">
+                    {block name='frontend_checkout_confirm_left_shipping_address_headline'}
+                        <div class="panel--title is--underline">
+                            {s name="ConfirmHeaderShipping" namespace="frontend/checkout/confirm"}{/s}
+                        </div>
+                    {/block}
 
-                {* Content *}
-                <div class="panel--body is--wide">
+                    {* Content *}
                     {block name='frontend_checkout_confirm_left_shipping_address'}
-                        {if $sUserData.shippingaddress.company}
-                            <strong>{$sUserData.shippingaddress.company}{if $sUserData.shippingaddress.department}<br />{$sUserData.shippingaddress.department}{/if}</strong>
-                            <br>
-                        {/if}
+                        <div class="panel--body is--wide">
+                            {if $sUserData.shippingaddress.company}
+                                <strong>{$sUserData.shippingaddress.company}{if $sUserData.shippingaddress.department}<br />{$sUserData.shippingaddress.department}{/if}</strong>
+                                <br>
+                            {/if}
 
-                        {if $sUserData.shippingaddress.salutation eq "mr"}
-                            {s name="ConfirmSalutationMr" namespace="frontend/checkout/confirm_left"}{/s}
-                        {else}
-                            {s name="ConfirmSalutationMs" namespace="frontend/checkout/confirm_left"}{/s}
-                        {/if}
+                            {if $sUserData.shippingaddress.salutation eq "mr"}
+                                {s name="ConfirmSalutationMr" namespace="frontend/checkout/confirm"}{/s}
+                            {else}
+                                {s name="ConfirmSalutationMs" namespace="frontend/checkout/confirm"}{/s}
+                            {/if}
 
-                        {$sUserData.shippingaddress.firstname} {$sUserData.shippingaddress.lastname}<br/>
-                        {$sUserData.shippingaddress.street}<br />
-                        {if $sUserData.shippingaddress.additional_address_line1}{$sUserData.shippingaddress.additional_address_line1}<br />{/if}
-                        {if $sUserData.shippingaddress.additional_address_line2}{$sUserData.shippingaddress.additional_address_line2}<br />{/if}
-                        {if {config name=showZipBeforeCity}}{$sUserData.shippingaddress.zipcode} {$sUserData.shippingaddress.city}{else}{$sUserData.shippingaddress.city} {$sUserData.shippingaddress.zipcode}{/if}<br />
-                        {if $sUserData.additional.stateShipping.statename}{$sUserData.additional.stateShipping.statename}<br />{/if}
-                        {$sUserData.additional.countryShipping.countryname}
+                            {$sUserData.shippingaddress.firstname} {$sUserData.shippingaddress.lastname}<br/>
+                            {$sUserData.shippingaddress.street}<br />
+                            {if $sUserData.shippingaddress.additional_address_line1}{$sUserData.shippingaddress.additional_address_line1}<br />{/if}
+                            {if $sUserData.shippingaddress.additional_address_line2}{$sUserData.shippingaddress.additional_address_line2}<br />{/if}
+                            {if {config name=showZipBeforeCity}}{$sUserData.shippingaddress.zipcode} {$sUserData.shippingaddress.city}{else}{$sUserData.shippingaddress.city} {$sUserData.shippingaddress.zipcode}{/if}<br />
+                            {if $sUserData.additional.stateShipping.statename}{$sUserData.additional.stateShipping.statename}<br />{/if}
+                            {$sUserData.additional.countryShipping.countryname}
+                        </div>
                     {/block}
 
                     {* Action buttons *}
                     {block name="frontend_checkout_confirm_left_shipping_address_actions"}
-                        <div class="panel--actions">
-                            <a href="{url controller=account action=shipping sTarget=checkout}" class="btn is--small">
-                                {s name="ConfirmLinkChangeShipping" namespace="frontend/checkout/confirm_left"}{/s}
+                        <div class="panel--actions is--wide">
+                            <a href="{url controller=address action=edit id=$activeShippingAddressId sTarget=checkout sTargetAction=confirm}"
+                               title="{s name="ConfirmAddressSelectButton"}Change address{/s}"
+                               class="btn">
+                                {s name="ConfirmAddressSelectButton"}Change address{/s}
                             </a>
-
-                            <a href="{url controller=account action=selectShipping sTarget=checkout}" class="btn is--small">
-                                {s name="ConfirmLinkSelectShipping" namespace="frontend/checkout/confirm_left"}{/s}
+                            <br/>
+                            <a href="{url controller=address}"
+                               data-address-selector="true"
+                               data-target="shipping"
+                               data-id="{$activeShippingAddressId}"
+                               data-title="{s name="ModalTitle" namespace="frontend/address/ajax_selector"}Change address{/s}"
+                               title="{s name="ConfirmAddressSelectLink"}{/s}"
+                               data-action="{url controller=checkout action=setAddress target=shipping}">
+                                {s name="ConfirmAddressSelectLink"}{/s}
                             </a>
                         </div>
                     {/block}
@@ -317,37 +337,42 @@
 
         {* Payment method *}
         {block name='frontend_checkout_confirm_payment_method_panel'}
-            <div class="panel has--border block information--panel payment--panel">
+            <div class="information--panel-item">
+                <div class="panel has--border block information--panel payment--panel">
 
-                {block name='frontend_checkout_confirm_left_payment_method_headline'}
-                    <div class="panel--title is--underline payment--title">
-                        {s name="ConfirmHeaderPaymentShipping" namespace="frontend/checkout/confirm_left"}{/s}
-                    </div>
-                {/block}
-
-                <div class="panel--body is--wide payment--content">
-                    {block name='frontend_checkout_confirm_left_payment_method'}
-                        <p class="payment--method-info">
-                            <span class="payment--title is--bold">{s name="ConfirmInfoPaymentMethod" namespace="frontend/checkout/confirm_left"}{/s}</span>
-                            <span class="payment--description">{$sUserData.additional.payment.description}</span>
-                        </p>
-
-                        {if !$sUserData.additional.payment.esdactive && {config name="showEsd"}}
-                            <p class="payment--confirm-esd">{s name="ConfirmInfoInstantDownload" namespace="frontend/checkout/confirm_left"}{/s}</p>
-                        {/if}
+                    {block name='frontend_checkout_confirm_left_payment_method_headline'}
+                        <div class="panel--title is--underline payment--title">
+                            {s name="ConfirmHeaderPaymentShipping" namespace="frontend/checkout/confirm"}{/s}
+                        </div>
                     {/block}
 
-                    {block name='frontend_checkout_confirm_left_shipping_method'}
-                        <p class="shipping--method-info">
-                            <span class="shipping--title is--bold">{s name="ConfirmHeadDispatch"}{/s}</span>
-                            <span class="shipping--description" title="{$sDispatch.name}">{$sDispatch.name|truncate:25:"...":true}</span>
-                        </p>
+                    {block name='frontend_checkout_confirm_left_payment_content'}
+                        <div class="panel--body is--wide payment--content">
+                            {block name='frontend_checkout_confirm_left_payment_method'}
+                                <p class="payment--method-info">
+                                    <span class="payment--title is--bold">{s name="ConfirmInfoPaymentMethod" namespace="frontend/checkout/confirm"}{/s}</span>
+                                    <span class="payment--description">{$sUserData.additional.payment.description}</span>
+                                </p>
+
+                                {if !$sUserData.additional.payment.esdactive && {config name="showEsd"}}
+                                    <p class="payment--confirm-esd">{s name="ConfirmInfoInstantDownload" namespace="frontend/checkout/confirm"}{/s}</p>
+                                {/if}
+                            {/block}
+
+                            {block name='frontend_checkout_confirm_left_shipping_method'}
+                                <p class="shipping--method-info">
+                                    <span class="shipping--title is--bold">{s name="ConfirmHeadDispatch"}{/s}</span>
+                                    <span class="shipping--description" title="{$sDispatch.name}">{$sDispatch.name|truncate:25:"...":true}</span>
+                                </p>
+                            {/block}
+                        </div>
                     {/block}
+
                     {block name='frontend_checkout_confirm_left_payment_method_actions'}
                         {* Action buttons *}
-                        <div class="panel--actions payment--actions">
+                        <div class="panel--actions payment--actions is--wide">
                             <a href="{url controller=checkout action=shippingPayment sTarget=checkout}" class="btn is--small btn--change-payment">
-                                {s name="ConfirmLinkChangePayment" namespace="frontend/checkout/confirm_left"}{/s}
+                                {s name="ConfirmLinkChangePayment" namespace="frontend/checkout/confirm"}{/s}
                             </a>
                         </div>
                     {/block}

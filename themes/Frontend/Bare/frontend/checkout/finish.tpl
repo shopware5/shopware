@@ -116,7 +116,7 @@
 					<div class="finish--billing block panel has--border is--rounded">
 
 						{block name='frontend_checkout_finish_billing_address_title'}
-							<h2 class="panel--title is--underline">{s name="ConfirmHeaderBilling" namespace="frontend/checkout/confirm_left"}{/s}</h2>
+							<h2 class="panel--title is--underline">{s name="ConfirmHeaderBilling" namespace="frontend/checkout/confirm"}{/s}</h2>
 						{/block}
 
 						{block name='frontend_checkout_finish_billing_address_content'}
@@ -127,9 +127,9 @@
 								{/if}
 
 								{if $sUserData.billingaddress.salutation eq "mr"}
-									{s name="ConfirmSalutationMr" namespace="frontend/checkout/confirm_left"}{/s}
+									{s name="ConfirmSalutationMr" namespace="frontend/checkout/confirm"}{/s}
 								{else}
-									{s name="ConfirmSalutationMs" namespace="frontend/checkout/confirm_left"}{/s}
+									{s name="ConfirmSalutationMs" namespace="frontend/checkout/confirm"}{/s}
 								{/if}
 
 								{$sUserData.billingaddress.firstname} {$sUserData.billingaddress.lastname}<br />
@@ -148,7 +148,7 @@
 					<div class="finish--shipping block panel has--border is--rounded">
 
 						{block name='frontend_checkout_finish_shipping_address_title'}
-							<h2 class="panel--title is--underline">{s name="ConfirmHeaderShipping" namespace="frontend/checkout/confirm_left"}{/s}</h2>
+							<h2 class="panel--title is--underline">{s name="ConfirmHeaderShipping" namespace="frontend/checkout/confirm"}{/s}</h2>
 						{/block}
 
 						{block name='frontend_checkout_finish_shipping_address_content'}
@@ -159,9 +159,9 @@
 								{/if}
 
 								{if $sUserData.shippingaddress.salutation eq "mr"}
-									{s name="ConfirmSalutationMr" namespace="frontend/checkout/confirm_left"}{/s}
+									{s name="ConfirmSalutationMr" namespace="frontend/checkout/confirm"}{/s}
 								{else}
-									{s name="ConfirmSalutationMs" namespace="frontend/checkout/confirm_left"}{/s}
+									{s name="ConfirmSalutationMs" namespace="frontend/checkout/confirm"}{/s}
 								{/if}
 
 								{$sUserData.shippingaddress.firstname} {$sUserData.shippingaddress.lastname}<br/>
@@ -206,7 +206,7 @@
 								{* Payment method *}
 								{block name='frontend_checkout_finish_payment_method'}
 									{if $sPayment.description}
-										<span class="is--bold">{s name="ConfirmHeaderPayment" namespace="frontend/checkout/confirm_left"}{/s}:</span> {$sPayment.description}<br />
+										<span class="is--bold">{s name="ConfirmHeaderPayment" namespace="frontend/checkout/confirm"}{/s}:</span> {$sPayment.description}<br />
 									{/if}
 								{/block}
 

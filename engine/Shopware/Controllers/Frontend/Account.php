@@ -21,6 +21,10 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Shopware\Bundle\AccountBundle\Form\Account\EmailUpdateFormType;
+use Shopware\Bundle\AccountBundle\Form\Account\PasswordUpdateFormType;
+use Shopware\Bundle\AccountBundle\Form\Account\PersonalFormType;
+use Shopware\Bundle\AccountBundle\Form\Account\PersonalUpdateFormType;
 use Shopware\Models\Customer\Customer;
 
 /**
@@ -74,76 +78,6 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
     }
 
     /**
-     * Billing action method
-     *
-     * Read billing address data
-     */
-    public function billingAction()
-    {
-        $this->View()->sBillingPreviously = $this->admin->sGetPreviousAddresses('billing');
-        $this->View()->sCountryList = $this->admin->sGetCountryList();
-        $this->View()->sTarget = $this->Request()->getParam('sTarget', $this->Request()->getControllerName());
-
-        if (!empty($this->View()->sUserData['billingaddress'])) {
-            $address = $this->View()->sUserData['billingaddress'];
-            $address['country'] = $address['countryID'];
-            $address['country_state_'.$address['countryID']] = $address['stateID'];
-
-
-            unset($address['id'], $address['countryID']);
-            if (!empty($address['birthday'])) {
-                list($address['birthyear'], $address['birthmonth'], $address['birthday']) = explode('-', $address['birthday']);
-            }
-            if ($this->Request()->isPost()) {
-                $address = array_merge($address, $this->Request()->getPost());
-            }
-
-            $this->View()->sFormData = $address;
-        }
-
-        // If using the new template and we get a request to change address from the checkout page
-        // we need to use a different template
-        if ($this->View()->sTarget == 'checkout') {
-            $this->Request()->setControllerName('checkout');
-            return $this->View()->loadTemplate('frontend/account/billing_checkout.tpl');
-        }
-    }
-
-    /**
-     * Shipping action method
-     *
-     * Read shipping address data
-     */
-    public function shippingAction()
-    {
-        $this->View()->sShippingPreviously = $this->admin->sGetPreviousAddresses('shipping');
-        $this->View()->sCountryList = $this->admin->sGetCountryList();
-        $this->View()->sTarget = $this->Request()->getParam('sTarget', $this->Request()->getControllerName());
-
-        if (!empty($this->View()->sUserData['shippingaddress'])) {
-            if ($this->Request()->isPost()) {
-                $address = array_merge($this->View()->sUserData['shippingaddress'], $this->Request()->getPost());
-            } else {
-                $address = $this->View()->sUserData['shippingaddress'];
-            }
-
-            $address['country'] = $address['countryID'];
-            $address['country_shipping_state_'.$address['countryID']] = $address['stateID'];
-
-            unset($address['id'], $address['countryID']);
-
-            $this->View()->sFormData = $address;
-        }
-
-        // If using the new template and we get a request to change address from the checkout page
-        // we need to use a different template
-        if ($this->View()->sTarget == 'checkout') {
-            $this->Request()->setControllerName('checkout');
-            return $this->View()->loadTemplate('frontend/account/shipping_checkout.tpl');
-        }
-    }
-
-    /**
      * Payment action method
      *
      * Read and change payment mean and payment data
@@ -173,7 +107,6 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
             $this->View()->sFormData = $values;
         }
     }
-
 
     /**
      * Orders action method
@@ -331,251 +264,6 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
     }
 
     /**
-     * Save billing action
-     *
-     * Save billing address data
-     */
-    public function saveBillingAction()
-    {
-        if ($this->Request()->isPost()) {
-            $countryData = $this->admin->sGetCountryList();
-            $countryIds = array();
-
-            foreach ($countryData as $key => $country) {
-                $countryIds[$key] = $country['id'];
-            }
-
-            $requirePhone = (bool) (Shopware()->Config()->get('showPhoneNumberField')
-                && Shopware()->Config()->get('requirePhoneField'));
-
-            $rules = array(
-                'salutation'    => array('required' => 1),
-                'company'       => array('required' => 0),
-                'firstname'     => array('required' => 1),
-                'lastname'      => array('required' => 1),
-                'street'        => array('required' => 1),
-                'zipcode'       => array('required' => 1),
-                'city'          => array('required' => 1),
-                'phone'         => array('required' => $requirePhone),
-                'country'       => array(
-                    'required' => 1,
-                    'in' => $countryIds
-                ),
-                'department'    => array('required' => 0),
-                'shippingAddress'=>array('required' => 0),
-                'text1'         => array('required' => 0),
-                'text2'         => array('required' => 0),
-                'text3'         => array('required' => 0),
-                'text4'         => array('required' => 0),
-                'text5'         => array('required' => 0),
-                'text6'         => array('required' => 0),
-                'birthyear'     => array('required' => 0, 'date' => ['d' => 'birthday', 'm' => 'birthmonth', 'y' => 'birthyear']),
-                'birthmonth'    => array('required' => 0, 'date' => ['d' => 'birthday', 'm' => 'birthmonth', 'y' => 'birthyear']),
-                'birthday'      => array('required' => 0, 'date' => ['d' => 'birthday', 'm' => 'birthmonth', 'y' => 'birthyear']),
-                'additional_address_line1' => array(
-                    'required' => (Shopware()->Config()->requireAdditionAddressLine1 && Shopware()->Config()->showAdditionAddressLine1) ? 1 : 0
-                ),
-                'additional_address_line2' => array(
-                    'required' => (Shopware()->Config()->requireAdditionAddressLine2 && Shopware()->Config()->showAdditionAddressLine2) ? 1 : 0
-                )
-            );
-
-            $values = $this->Request()->getPost('register');
-
-            // State selection
-            if (!empty($values["billing"]["country"])) {
-                $stateSelectionRequired = Shopware()->Db()->fetchRow(
-                   "SELECT display_state_in_registration, force_state_in_registration
-                   FROM s_core_countries WHERE id = ?",
-                   array($values["billing"]["country"]))
-               ;
-
-                if ($stateSelectionRequired["display_state_in_registration"]) {
-                    $countryDataIndex = array_search($values["billing"]["country"], $countryIds);
-                    $statesIds = array_column($countryData[$countryDataIndex]['states'], 'id');
-
-                    // if not required, allow empty values
-                    if (!$stateSelectionRequired["force_state_in_registration"]) {
-                        $statesIds[] = "";
-                    }
-
-                    $rules["stateID"] = array(
-                        "required" => $stateSelectionRequired["force_state_in_registration"],
-                        'in' => $statesIds
-                    );
-                }
-
-                if (
-                    $stateSelectionRequired["display_state_in_registration"] != true
-                    && $stateSelectionRequired["force_state_in_registration"] != true
-                ) {
-                    $this->admin->sSYSTEM->_POST["register"]["billing"]["stateID"] = $values["billing"]["stateID"] = 0;
-                } else {
-                    $this->admin->sSYSTEM->_POST["register"]["billing"]["stateID"] = $values["billing"]["stateID"] = $values["billing"]["country_state_".$values["billing"]["country"]];
-                }
-
-                unset($values["billing"]["country_state_".$values["billing"]["country"]]);
-            }
-
-            if ($this->Request()->getParam('sSelectAddress')) {
-                $address = $this->admin->sGetPreviousAddresses('billing', $this->Request()->getParam('sSelectAddress'));
-                if (!empty($address['hash'])) {
-                    $address = array_merge($this->View()->sUserData['billingaddress'], $address);
-                    $this->admin->sSYSTEM->_POST = $address;
-                }
-            }
-
-            if (!empty($values['personal']['customer_type'])) {
-                if ($values['personal']['customer_type'] === 'private') {
-                    $values['billing']['company'] = '';
-                    $values['billing']['department'] = '';
-                    $values['billing']['ustid'] = '';
-                } else {
-                    $rules['company'] = array('required' => 1);
-                    $rules['ustid'] = array('required' => 0);
-                }
-            }
-
-            if (!empty($values)) {
-                $this->admin->sSYSTEM->_POST = array_merge($values['personal'], $values['billing'], $this->admin->sSYSTEM->_POST->toArray());
-            }
-
-
-            $checkData = $this->admin->sValidateStep2($rules, true);
-
-            if (!empty($checkData['sErrorMessages'])) {
-                $this->View()->sErrorFlag = $checkData['sErrorFlag'];
-                $this->View()->sErrorMessages = $checkData['sErrorMessages'];
-                return $this->forward('billing');
-            } else {
-                $this->admin->sUpdateBilling();
-            }
-        }
-        if (!$target = $this->Request()->getParam('sTarget')) {
-            $target = 'account';
-        }
-        $this->redirect(array('controller'=>$target, 'action'=>'index', 'success'=>'billing'));
-    }
-
-    /**
-     * Save shipping action
-     *
-     * Save shipping address data
-     */
-    public function saveShippingAction()
-    {
-        if ($this->Request()->isPost()) {
-            $countryData = $this->admin->sGetCountryList();
-            $countryIds = array();
-
-            foreach ($countryData as $key => $country) {
-                $countryIds[$key] = $country['id'];
-            }
-
-            $rules = array(
-                'salutation'        => array('required' => 1),
-                'company'           => array('required' => 0),
-                'firstname'         => array('required' => 1),
-                'lastname'          => array('required' => 1),
-                'street'            => array('required' => 1),
-                'zipcode'           => array('required' => 1),
-                'city'              => array('required' => 1),
-                'department'        => array('required' => 0),
-                'text1'             => array('required' => 0),
-                'text2'             => array('required' => 0),
-                'text3'             => array('required' => 0),
-                'text4'             => array('required' => 0),
-                'text5'             => array('required' => 0),
-                'text6'             => array('required' => 0),
-                'additional_address_line1' => array('required' => (Shopware()->Config()->requireAdditionAddressLine1 && Shopware()->Config()->showAdditionAddressLine1) ? 1 : 0),
-                'additional_address_line2' => array('required' => (Shopware()->Config()->requireAdditionAddressLine2 && Shopware()->Config()->showAdditionAddressLine2) ? 1 : 0)
-            );
-
-            if (Shopware()->Config()->get('sCOUNTRYSHIPPING')) {
-                $rules['country'] = array('required'=>1);
-            } else {
-                $rules['country'] = array('required'=>0);
-            }
-
-            if ($this->Request()->getParam('sSelectAddress')) {
-                $address = $this->admin->sGetPreviousAddresses('shipping', $this->Request()->getParam('sSelectAddress'));
-                if (!empty($address['hash'])) {
-                    $address = array_merge($this->View()->sUserData['shippingaddress'], $address);
-                    $this->admin->sSYSTEM->_POST = $address;
-                }
-            } else {
-                $this->admin->sSYSTEM->_POST =  $this->Request()->getPost();
-            }
-
-            $values = $this->Request()->getPost('register');
-
-            if (Shopware()->Config()->get('sCOUNTRYSHIPPING')) {
-                $rules['country'] = array(
-                    'required' => 1,
-                    'in' => $countryIds
-                );
-
-                // State selection
-                if (!empty($values["shipping"]["country"])) {
-                    $stateSelectionRequired = Shopware()->Db()->fetchRow("
-                    SELECT display_state_in_registration, force_state_in_registration
-                    FROM s_core_countries WHERE id = ?",
-                        array($values["shipping"]["country"])
-                    );
-
-                    if ($stateSelectionRequired["display_state_in_registration"]) {
-                        $countryDataIndex = array_search($values["shipping"]["country"], $countryIds);
-                        $statesIds = array_column($countryData[$countryDataIndex]['states'], 'id');
-
-                        // if not required, allow empty values
-                        if (!$stateSelectionRequired["force_state_in_registration"]) {
-                            $statesIds[] = "";
-                        }
-
-                        $rules["stateID"] = array(
-                            "required" => $stateSelectionRequired["force_state_in_registration"],
-                            'in' => $statesIds
-                        );
-                    }
-
-                    if (
-                        $stateSelectionRequired["display_state_in_registration"] == false
-                        && $stateSelectionRequired["force_state_in_registration"] == false
-                    ) {
-                        $this->admin->sSYSTEM->_POST["register"]["shipping"]["stateID"] = $values["shipping"]["stateID"] = 0;
-                    } else {
-                        $this->admin->sSYSTEM->_POST["register"]["shipping"]["stateID"] = $values["shipping"]["stateID"] = $values["shipping"]["country_shipping_state_".$values["shipping"]["country"]];
-                    }
-
-                    unset($values["shipping"]["country_shipping_state_".$values["shipping"]["country"]]);
-                }
-            }
-
-            if (!empty($values)) {
-                $this->admin->sSYSTEM->_POST = array_merge($values['shipping'], $this->admin->sSYSTEM->_POST->toArray());
-            }
-
-            $checkData = $this->admin->sValidateStep2ShippingAddress($rules, true);
-            if (!empty($checkData['sErrorMessages'])) {
-                $this->View()->sErrorFlag = $checkData['sErrorFlag'];
-                $this->View()->sErrorMessages = $checkData['sErrorMessages'];
-                return $this->forward('shipping');
-            } else {
-                $this->admin->sUpdateShipping();
-            }
-        }
-        if (!$target = $this->Request()->getParam('sTarget')) {
-            $target = 'account';
-        }
-        $targetAction = $this->Request()->getParam('sTargetAction', 'index');
-        $this->redirect(array(
-            'controller' => $target,
-            'action' => $targetAction,
-            'success' => 'shipping'
-        ));
-    }
-
-    /**
      * Save shipping action
      *
      * Save shipping address data
@@ -652,20 +340,44 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
     public function saveAccountAction()
     {
         if ($this->Request()->isPost()) {
-            $checkData = $this->admin->sValidateStep1(true);
-            if (!empty($checkData["sErrorMessages"])) {
-                foreach ($checkData["sErrorMessages"] as $key=>$error_message) {
-                    $checkData["sErrorMessages"][$key] = $this->View()->fetch('string:'.$error_message);
-                }
+            $data = $this->Request()->getPost();
+            $data['encoderName'] = $this->get('PasswordEncoder')->getDefaultPasswordEncoderName();
+
+            /** @var \Symfony\Component\Form\Form $form */
+            if (array_key_exists('password', $data)) {
+                $this->Request()->setPost('email', $this->get('session')->offsetGet('sUserMail'));
+                $form = $this->get('shopware.form.factory')->create(PasswordUpdateFormType::class, [], ['allow_extra_fields' => true]);
+            } else {
+                $form = $this->get('shopware.form.factory')->create(EmailUpdateFormType::class, [], ['allow_extra_fields' => true]);
             }
-            if (empty($checkData['sErrorMessages'])) {
+            
+            $form->submit($data);
+
+            $checkData = ['sErrorMessages' => [], 'sErrorFlag' => []];
+
+            if ($form->isValid()) {
                 $this->admin->sUpdateAccount();
                 $this->View()->sSuccessAction = 'account';
             } else {
-                $this->View()->sErrorFlag = $checkData['sErrorFlag'];
-                $this->View()->sErrorMessages = $checkData['sErrorMessages'];
+                foreach ($form->getErrors(true) as $error) {
+                    $message = $this->View()->fetch('string:'.$error->getMessage());
+                    $checkData['sErrorFlag'][$error->getOrigin()->getName()] = $message;
+                    $checkData['sErrorMessages'][] = $message;
+                }
+
+                if (array_key_exists('email', $data)) {
+                    $checkData['sErrorFlag']['email'] = true;
+                }
+
+                if (array_key_exists('password', $data)) {
+                    $checkData['sErrorFlag']['password'] = true;
+                }
             }
+
+            $this->View()->sErrorFlag = $checkData['sErrorFlag'];
+            $this->View()->sErrorMessages = $checkData['sErrorMessages'];
         }
+
         $this->forward('index');
     }
 
@@ -753,38 +465,6 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
                 $this->Front()->Plugins()->ViewRenderer()->setNoRender();
 
                 break;
-        }
-    }
-
-    /**
-     * Read saved billing address
-     */
-    public function selectBillingAction()
-    {
-        $this->View()->sTarget = $this->Request()->getParam('sTarget', $this->Request()->getControllerName());
-        $this->View()->sBillingAddresses = $this->admin->sGetPreviousAddresses('billing');
-
-        // If using the new template and we get a request to change address from the checkout page
-        // we need to use a different template
-        if ($this->View()->sTarget == 'checkout') {
-            $this->Request()->setControllerName('checkout');
-            return $this->View()->loadTemplate('frontend/account/select_billing_checkout.tpl');
-        }
-    }
-
-    /**
-     * Read saved shipping address
-     */
-    public function selectShippingAction()
-    {
-        $this->View()->sTarget = $this->Request()->getParam('sTarget', $this->Request()->getControllerName());
-        $this->View()->sShippingAddresses = $this->admin->sGetPreviousAddresses('shipping');
-
-        // If using the new template and we get a request to change address from the checkout page
-        // we need to use a different template
-        if ($this->View()->sTarget == 'checkout') {
-            $this->Request()->setControllerName('checkout');
-            return $this->View()->loadTemplate('frontend/account/select_shipping_checkout.tpl');
         }
     }
 

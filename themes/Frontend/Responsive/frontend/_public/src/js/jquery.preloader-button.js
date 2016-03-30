@@ -28,8 +28,7 @@
 
             me.applyDataAttributes();
 
-            me.opts.checkFormIsValid = me.checkForValiditySupport();
-
+            me.opts.checkFormIsValid = me.opts.checkFormIsValid && me.checkForValiditySupport();
             me._on(me.$el, 'click', $.proxy(me.onShowPreloader, me));
 
             $.publish('plugin/swPreloaderButton/onRegisterEvents', [ me ]);

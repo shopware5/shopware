@@ -52,11 +52,6 @@ It is displayed as the third step of the checkout process of Shopware and shows 
         }
     }
 
-    .panel--actions {
-        .unitize-margin(16, 0, 0, 0);
-        padding: 0;
-    }
-
     .column--unit-price {
         display: none
     }
@@ -277,28 +272,17 @@ It is displayed as the third step of the checkout process of Shopware and shows 
         }
 
         // Personal information panels like billing and shipping address
-        .information--panel {
-            .unitize-height(300);
-            margin: 0 2% 0 0;
-            width: 32%;
-            position: relative;
+        .information--panel-wrapper {
+            margin: -2% 0 0 -2%;
 
-            .panel--body {
-                position: static;
-            }
-
-            .panel--actions {
-                .clearfix();
-                .unitize(bottom, 20);
-                position: absolute;
-
-                .btn {
-                    float: left;
-                }
-            }
-
-            &:last-child {
+            .information--panel {
                 margin: 0;
+            }
+
+            .information--panel-item {
+                padding: 2% 0 0 2%;
+                width: 100%;
+                float: left;
             }
         }
 
@@ -349,6 +333,12 @@ It is displayed as the third step of the checkout process of Shopware and shows 
 
         .product--table .aggregation--list {
             padding-right: 10%;
+        }
+
+        .information--panel-wrapper {
+            .information--panel-item {
+                width: 33.3%;
+            }
         }
     }
 }

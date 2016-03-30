@@ -54,7 +54,7 @@ Feature: Checkout articles
     Scenario: I can change the shipping-country to a non-EU-country and back and pay via bill
         Given I proceed to order confirmation
         And   I change my shipping address:
-            | field   | register[shipping] |
+            | field   | address |
             | country | Schweiz            |
         Then  the aggregations should look like this:
             | label    | value   |
@@ -64,7 +64,7 @@ Feature: Checkout articles
         And   I should not see "MwSt."
 
         When  I change my shipping address:
-            | field   | register[shipping] |
+            | field   | address |
             | country | Deutschland        |
         Then  the aggregations should look like this:
             | label    | value   |

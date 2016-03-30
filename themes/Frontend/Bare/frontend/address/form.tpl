@@ -13,7 +13,7 @@
             {* Personal form *}
             {block name="frontend_address_form_form_inner"}
                 <div class="panel">
-                    <div class="panel--body is--wide account--addresses-form">
+                    <div class="panel--body is--wide">
 
                         {block name="frontend_address_form_fieldset_customer_type"}
                             <div class="addresses--customertype">
@@ -61,7 +61,7 @@
                                                placeholder="{s name='RegisterLabelDepartment' namespace="frontend/register/billing_fieldset"}{/s}"
                                                id="register_billing_department"
                                                value="{$formData.department|escape}"
-                                               class="addresses--field"/>
+                                               class="addresses--field{if $error_flags.department} has--error{/if}"/>
                                     </div>
                                 {/block}
 

@@ -18,27 +18,22 @@
             /**
              * CSS class selector for panel headers
              */
-            panelHeaderSelector: '.panel .panel--header',
+            panelHeaderSelector: '.panel--header',
 
             /**
              * CSS class selector for panel bodies
              */
-            panelBodySelector: '.panel .panel--body',
+            panelBodySelector: '.panel--body',
 
             /**
              * CSS class selector for panel actions
              */
-            panelFooterSelector: '.panel .panel--actions',
+            panelFooterSelector: '.panel--actions',
 
             /**
              * Maximal height, set to NULL (default) if it should not be limited
              */
-            maxHeight: null,
-
-            /**
-             * Calculate height for the number of columns per row
-             */
-            columns: 0
+            maxHeight: null
         },
 
         /**
@@ -50,20 +45,51 @@
          * Automatic resizing of header, body and footer
          */
         init: function() {
-            var me = this,
-                opts = me.opts;
+            var me = this;
 
             me.applyDataAttributes();
 
             me.$elChildren = me.$el.children();
+            window.StateManager.on('resize', $.proxy(me._onResize, me));
 
             $.publish('plugin/swPanelAutoResizer/onInit', [ me ]);
 
-            me.resize(opts.panelHeaderSelector);
-            me.resize(opts.panelBodySelector);
-            me.resize(opts.panelFooterSelector);
+            me._onResize();
 
             $.publish('plugin/swPanelAutoResizer/onAfterInit', [ me ]);
+        },
+
+        /**
+         * Calculate how many columns need to be sized properly
+         * based on their and their container's width
+         *
+         * @private
+         */
+        _calculateColumns: function() {
+            var me = this;
+            me._columns = Math.floor(me.$el.width() / me.$elChildren.first().width());
+        },
+
+        /**
+         * Recalculate the columns and resize all elements
+         *
+         * @private
+         */
+        _onResize: function() {
+            var me = this;
+
+            if (me._resizeTimeout) {
+                window.clearTimeout(me._resizeTimeout);
+            }
+
+            me._resizeTimeout = window.setTimeout(function() {
+                $.publish('plugin/swPanelAutoResizer/onResize', [ me ]);
+
+                me._calculateColumns();
+                me.resize();
+
+                $.publish('plugin/swPanelAutoResizer/afterResize', [ me ]);
+            }, 150);
         },
 
         /**
@@ -126,22 +152,29 @@
          */
         resize: function(selector) {
             var me = this,
-                opts = me.opts,
                 height = 0,
-                chunkItems = [];
+                chunkItems = [],
+                i = 0,
+                childrenCount = me.$elChildren.length;
+
+            // shortcut to resize all
+            if (typeof selector === 'undefined') {
+                me.resize(me.opts.panelHeaderSelector);
+                me.resize(me.opts.panelBodySelector);
+                me.resize(me.opts.panelFooterSelector);
+                return;
+            }
 
             $.publish('plugin/swPanelAutoResizer/onResize', [ me, selector ]);
 
-            if (opts.columns > 0) {
-                for (var i = 0; i < me.$elChildren.length; i += opts.columns) {
-                    chunkItems = me.$elChildren.slice(i, i + opts.columns).find(selector);
+            if (me._columns > 1) {
+                for (i; i < childrenCount; i += me._columns) {
+                    chunkItems = me.$elChildren.slice(i, i + me._columns).find(selector);
                     height = me.getMaxHeight(chunkItems);
                     me.setHeight(chunkItems, height);
                 }
             } else {
-                chunkItems = me.$elChildren.find(selector);
-                height = me.getMaxHeight(chunkItems);
-                me.setHeight(chunkItems, height);
+               me.destroy();
             }
 
             $.publish('plugin/swPanelAutoResizer/onAfterResize', [ me, selector ]);

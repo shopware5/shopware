@@ -24,17 +24,39 @@
 
 namespace Shopware\Bundle\FormBundle\Extension;
 
-use Symfony\Component\Form\AbstractExtension;
+use Shopware\Bundle\FormBundle\EnlightRequestHandler;
+use Symfony\Component\Form\AbstractTypeExtension;
+use Symfony\Component\Form\RequestHandlerInterface;
+use Symfony\Component\Form\FormBuilderInterface;
 
-class EnlightExtension extends AbstractExtension
+class EnlightRequestExtension extends AbstractTypeExtension
 {
     /**
-     * @inheritdoc
+     * @var RequestHandlerInterface
      */
-    protected function loadTypeExtensions()
+    private $requestHandler;
+
+    /**
+     * @param RequestHandlerInterface $requestHandler
+     */
+    public function __construct(RequestHandlerInterface $requestHandler = null)
     {
-        return [
-            new FormTypeEnlightExtension()
-        ];
+        $this->requestHandler = $requestHandler ?: new EnlightRequestHandler();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $builder->setRequestHandler($this->requestHandler);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExtendedType()
+    {
+        return 'Symfony\Component\Form\Extension\Core\Type\FormType';
     }
 }

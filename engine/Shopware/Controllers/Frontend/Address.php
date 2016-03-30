@@ -106,6 +106,16 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
                 $this->addressService->setDefaultShippingAddress($address);
             }
 
+            if ($this->Request()->getParam('sTarget', null)) {
+                $action = $this->Request()->getParam('sTargetAction', 'index') ? : 'index';
+                $this->redirect([
+                    'controller' => $this->Request()->getParam('sTarget'),
+                    'action' => $action,
+                    'success' => 'address'
+                ]);
+                return;
+            }
+
             $this->redirect(['action' => 'index', 'success' => 'create']);
             return;
         }
@@ -136,6 +146,16 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
 
             if (!empty($extraData['set_default_shipping'])) {
                 $this->addressService->setDefaultShippingAddress($address);
+            }
+
+            if ($this->Request()->getParam('sTarget')) {
+                $action = $this->Request()->getParam('sTargetAction', 'index') ? : 'index';
+                $this->redirect([
+                    'controller' => $this->Request()->getParam('sTarget'),
+                    'action' => $action,
+                    'success' => 'address'
+                ]);
+                return;
             }
 
             $this->redirect(['action' => 'index', 'success' => 'update']);
@@ -198,6 +218,8 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
         $viewData['error_messages'] = $errorMessages;
         $viewData['countryList'] = $this->admin->sGetCountryList();
         $viewData['formData'] = $formData;
+        $viewData['sTarget'] = $this->Request()->getParam('sTarget', null);
+        $viewData['sTargetAction'] = $this->Request()->getParam('sTargetAction', null);
 
         return $viewData;
     }
@@ -240,5 +262,31 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
         $this->addressService->setDefaultBillingAddress($address);
 
         $this->redirect(['action' => 'index', 'success' => 'default_billing']);
+    }
+
+    /**
+     * Selection of addresses for the current logged-in customer
+     */
+    public function ajaxSelectorAction()
+    {
+        $addressRepository = Shopware()->Models()->getRepository(Address::class);
+        $addresses = $addressRepository->getListArray($this->get('session')->get('sUserId'));
+        $activeAddressId = $this->Request()->getParam('id', null);
+        $target = $this->Request()->getParam('target', null);
+
+        if (empty($target)) {
+            $target = 'billing';
+        }
+
+        if (!empty($activeAddressId)) {
+            foreach ($addresses as $key => $address) {
+                if ($address['id'] == $activeAddressId) {
+                    unset($addresses[$key]);
+                }
+            }
+        }
+
+        $this->View()->assign('addresses', $addresses);
+        $this->View()->assign('addressTarget', $target);
     }
 }

@@ -24,24 +24,25 @@
 
 namespace Shopware\Bundle\FormBundle\Extension;
 
-use Shopware\Bundle\FormBundle\EnlightRequestHandler;
 use Symfony\Component\Form\AbstractTypeExtension;
-use Symfony\Component\Form\RequestHandlerInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormBuilderInterface;
 
-class FormTypeEnlightExtension extends AbstractTypeExtension
+class EventExtension extends AbstractTypeExtension
 {
     /**
-     * @var RequestHandlerInterface
+     * @var \Enlight_Event_EventManager
      */
-    private $requestHandler;
+    private $eventManager;
 
     /**
-     * @param RequestHandlerInterface $requestHandler
+     * FormTypeEventExtension constructor.
+     * @param \Enlight_Event_EventManager $eventManager
      */
-    public function __construct(RequestHandlerInterface $requestHandler = null)
+    public function __construct(\Enlight_Event_EventManager $eventManager)
     {
-        $this->requestHandler = $requestHandler ?: new EnlightRequestHandler();
+        $this->eventManager = $eventManager;
     }
 
     /**
@@ -49,14 +50,29 @@ class FormTypeEnlightExtension extends AbstractTypeExtension
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->setRequestHandler($this->requestHandler);
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'triggerEvent']);
     }
 
     /**
-     * {@inheritdoc}
+     * Returns the name of the type being extended.
+     *
+     * @return string The name of the type being extended
      */
     public function getExtendedType()
     {
         return 'Symfony\Component\Form\Extension\Core\Type\FormType';
+    }
+
+    /**
+     * Trigger general form builder event with reference of the form type
+     *
+     * @param FormEvent $event
+     */
+    public function triggerEvent(FormEvent $event)
+    {
+        $this->eventManager->notify('Shopware_Form_Builder', [
+            'reference' => $event->getForm()->getConfig()->getType()->getName(),
+            'builder' => $event->getForm()
+        ]);
     }
 }
