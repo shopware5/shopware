@@ -121,7 +121,7 @@
                     xhr.setRequestHeader('X-CSRF-Token', me.getToken());
 
                     if (typeof this.complete === 'function') {
-                        me.pendingRequests[xhr.url] = {
+                        me.pendingRequests[this.url] = {
                             context: this,
                             callback: this.complete
                         };
