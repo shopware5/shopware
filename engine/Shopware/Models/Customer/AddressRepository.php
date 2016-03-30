@@ -46,6 +46,27 @@ class AddressRepository extends ModelRepository
     }
 
     /**
+     * @param array $criteria
+     * @param array $orderBy
+     * @param int $limit
+     * @param int $offset
+     * @return \Doctrine\ORM\Query
+     */
+    public function getListQuery(array $criteria = [], array $orderBy = [], $limit = 25, $offset = 0)
+    {
+        return $this->getListQueryBuilder($criteria, $orderBy, $limit, $offset)->getQuery();
+    }
+
+    /**
+     * @param int $addressId
+     * @return \Doctrine\ORM\Query
+     */
+    public function getOne($addressId)
+    {
+        return $this->getDetailQueryBuilder($addressId)->getQuery();
+    }
+
+    /**
      * Helper method to create the query builder for the "getUserBillingQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
@@ -53,7 +74,7 @@ class AddressRepository extends ModelRepository
      * @param int $userId
      * @return Address
      */
-    public function getOne($addressId, $userId)
+    public function getOneByUser($addressId, $userId)
     {
         $builder = $this->getDetailQueryBuilder($addressId);
 
@@ -128,7 +149,7 @@ class AddressRepository extends ModelRepository
      * @param   null  $limit
      * @param   null  $offset
      *
-     * @return  \Doctrine\ORM\Query
+     * @return  \Doctrine\ORM\QueryBuilder
      */
     protected function getListQueryBuilder(array $filterBy = [], array $orderBy = [], $limit = null, $offset = null)
     {
