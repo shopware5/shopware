@@ -684,6 +684,10 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         unset($params['parentId']);
         unset($params['parent']);
 
+        if (!array_key_exists('template', $params)) {
+            $params['template'] = null;
+        }
+
         $categoryModel->fromArray($params);
         Shopware()->Models()->flush();
 

@@ -58,7 +58,24 @@ Ext.define('Shopware.apps.Category.model.Detail', {
         { name : 'metaDescription', type: 'string', useNull:true, defaultValue: null },
         { name : 'cmsHeadline', type: 'string', useNull:true, defaultValue: null },
         { name : 'cmsText', type: 'string', useNull:true, defaultValue: null },
-        { name : 'template', type: 'string', useNull:true, defaultValue: null },
+        {
+            name : 'template',
+            type: 'string',
+            useNull:true,
+            defaultValue: null,
+            convert: function(v, record) {
+                if (v == null) {
+                    return '';
+                }
+                return v;
+            },
+            serialize: function(v, record) {
+                if (v == '') {
+                    return null;
+                }
+                return v;
+            }
+        },
         { name : 'productBoxLayout', type: 'string', useNull:true, defaultValue: null },
         { name : 'noViewSelect', type: 'boolean' },
         { name : 'active', type: 'boolean' },
