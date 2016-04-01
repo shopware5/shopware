@@ -38,7 +38,7 @@ class FormFactory
      * @param DependencyInjectionExtension $dependencyInjectionExtension
      * @return FormFactoryInterface
      */
-    public function factory(ValidatorInterface $validator, DependencyInjectionExtension $dependencyInjectionExtension)
+    public static function factory(ValidatorInterface $validator, DependencyInjectionExtension $dependencyInjectionExtension)
     {
         return SymfonyForms::createFormFactoryBuilder()
             ->addExtension(new ValidatorExtension($validator))
