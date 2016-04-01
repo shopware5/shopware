@@ -3,6 +3,7 @@
 namespace Shopware\Tests\Service\Search\Facet;
 
 use Shopware\Bundle\SearchBundle\Facet\PriceFacet;
+use Shopware\Bundle\SearchBundle\FacetResult\RangeFacetResult;
 use Shopware\Bundle\SearchBundle\FacetResult\RangeFacetResultInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ProductContext;
 use Shopware\Models\Category\Category;
@@ -10,7 +11,7 @@ use Shopware\Tests\Service\TestCase;
 
 class PriceFacetTest extends TestCase
 {
-    protected function getContext($displayGross, $discount = null)
+    protected function getTestContext($displayGross, $discount = null)
     {
         $context = parent::getContext();
 
@@ -57,7 +58,7 @@ class PriceFacetTest extends TestCase
 
     public function testFacetWithCurrentCustomerGroupPrices()
     {
-        $context = $this->getContext(true, null);
+        $context = $this->getTestContext(true, null);
         $customerGroup = $context->getCurrentCustomerGroup();
         $fallback = $context->getFallbackCustomerGroup();
 
@@ -76,7 +77,7 @@ class PriceFacetTest extends TestCase
             $context
         );
 
-        /**@var $facet RangeFacetResultInterface*/
+        /**@var $facet RangeFacetResult */
         $facet = $result->getFacets()[0];
         $this->assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\RangeFacetResult', $facet);
 
@@ -87,7 +88,7 @@ class PriceFacetTest extends TestCase
 
     public function testFacetWithFallbackCustomerGroupPrices()
     {
-        $context = $this->getContext(true, null);
+        $context = $this->getTestContext(true, null);
         $fallback = $context->getFallbackCustomerGroup();
 
         $result = $this->search(
@@ -105,7 +106,7 @@ class PriceFacetTest extends TestCase
             $context
         );
 
-        /**@var $facet RangeFacetResultInterface*/
+        /**@var $facet RangeFacetResult*/
         $facet = $result->getFacets()[0];
 
         $this->assertEquals(105.00, $facet->getMin());
@@ -114,7 +115,7 @@ class PriceFacetTest extends TestCase
 
     public function testFacetWithMixedCustomerGroupPrices()
     {
-        $context = $this->getContext(true, null);
+        $context = $this->getTestContext(true, null);
         $customerGroup = $context->getCurrentCustomerGroup();
         $fallback = $context->getFallbackCustomerGroup();
 
@@ -132,7 +133,7 @@ class PriceFacetTest extends TestCase
             array(),
             $context
         );
-        /**@var $facet RangeFacetResultInterface*/
+        /**@var $facet RangeFacetResult*/
         $facet = $result->getFacets()[0];
 
         $this->assertEquals(100.00, $facet->getMin());
@@ -141,7 +142,7 @@ class PriceFacetTest extends TestCase
 
     public function testFacetWithCurrencyFactor()
     {
-        $context = $this->getContext(true, null);
+        $context = $this->getTestContext(true, null);
         $customerGroup = $context->getCurrentCustomerGroup();
         $fallback = $context->getFallbackCustomerGroup();
 
@@ -161,7 +162,7 @@ class PriceFacetTest extends TestCase
             array(),
             $context
         );
-        /**@var $facet RangeFacetResultInterface*/
+        /**@var $facet RangeFacetResult*/
         $facet = $result->getFacets()[0];
 
         $this->assertEquals(250.00, $facet->getMin());

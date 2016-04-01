@@ -56,7 +56,7 @@ class Shopware_Tests_Controllers_Backend_PremiumTest extends Enlight_Components_
     public function testGetPremiumArticles()
     {
         /** @var Enlight_Controller_Response_ResponseTestCase */
-        $response = $this->dispatch('backend/premium/getPremiumArticles');
+        $this->dispatch('backend/premium/getPremiumArticles');
         $this->assertTrue($this->View()->success);
 
         $jsonBody = $this->View()->getAssign();
@@ -89,7 +89,7 @@ class Shopware_Tests_Controllers_Backend_PremiumTest extends Enlight_Components_
     {
         $this->Request()->setMethod('POST')->setPost($this->premiumData);
 
-        $response = $this->dispatch('backend/premium/createPremiumArticle');
+        $this->dispatch('backend/premium/createPremiumArticle');
         $this->assertTrue($this->View()->success);
 
         $jsonBody = $this->View()->getAssign();
@@ -120,7 +120,7 @@ class Shopware_Tests_Controllers_Backend_PremiumTest extends Enlight_Components_
 
         $this->Request()->setMethod('POST')->setPost($premiumData);
 
-        $response = $this->dispatch('backend/premium/editPremiumArticle');
+        $this->dispatch('backend/premium/editPremiumArticle');
 
         $jsonBody = $this->View()->getAssign();
 
@@ -138,7 +138,7 @@ class Shopware_Tests_Controllers_Backend_PremiumTest extends Enlight_Components_
     {
         $this->Request()->setMethod('POST')->setPost(array('id'=>$lastId));
 
-        $response = $this->dispatch('backend/premium/deletePremiumArticle');
+        $this->dispatch('backend/premium/deletePremiumArticle');
 
         $jsonBody = $this->View()->getAssign();
 

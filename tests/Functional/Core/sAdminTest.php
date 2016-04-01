@@ -3051,18 +3051,18 @@ class sAdminTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers sAdmin::sGetPaymentmean
+     * @covers sAdmin::sGetPaymentMean
      */
     public function testsGetPaymentmean()
     {
         // Empty argument, return false
-        $this->assertFalse($this->module->sGetPaymentmean(''));
+        $this->assertFalse($this->module->sGetPaymentMean(''));
 
         // No matching payment mean, return empty array
-        $this->assertEquals(array('country_surcharge' => array()), $this->module->sGetPaymentmean(-1));
+        $this->assertEquals(array('country_surcharge' => array()), $this->module->sGetPaymentMean(-1));
 
         // Valid country returns valid data
-        $result = $this->module->sGetPaymentmean(
+        $result = $this->module->sGetPaymentMean(
             Shopware()->Db()->fetchOne('SELECT id FROM s_core_paymentmeans WHERE name = "prepayment"')
         );
 
@@ -3097,7 +3097,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
 
         // Fetching for id or iso code gives the same result
         $this->assertEquals(
-            $this->module->sGetPaymentmean($result['name']),
+            $this->module->sGetPaymentMean($result['name']),
             $result
         );
     }

@@ -179,7 +179,7 @@ class Shopware_Tests_Plugins_Core_PaymentMethods_SepaPaymentMethod extends Enlig
     {
         self::$sepaPaymentMethod->savePaymentData(1, $this->Request());
 
-        $lastPayment = self::$sepaPaymentMethod->getCurrentPaymentDataAsArray(1, $this->Request());
+        $lastPayment = self::$sepaPaymentMethod->getCurrentPaymentDataAsArray(1);
         $this->assertEquals(null, $lastPayment['sSepaBankName']);
         $this->assertEquals(null, $lastPayment['sSepaBic']);
         $this->assertEquals(null, $lastPayment['sSepaIban']);
@@ -201,7 +201,7 @@ class Shopware_Tests_Plugins_Core_PaymentMethods_SepaPaymentMethod extends Enlig
 
         self::$sepaPaymentMethod->savePaymentData(1, $this->Request());
 
-        $lastPayment = self::$sepaPaymentMethod->getCurrentPaymentDataAsArray(1, $this->Request());
+        $lastPayment = self::$sepaPaymentMethod->getCurrentPaymentDataAsArray(1);
         $this->assertEquals("Some Valid Bank Name", $lastPayment['sSepaBankName']);
         $this->assertEquals("Some Valid Bic", $lastPayment['sSepaBic']);
         $this->assertEquals("AL47212110090000000235698741", $lastPayment['sSepaIban']);

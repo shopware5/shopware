@@ -94,7 +94,7 @@ class Shopware_Tests_Models_Category_BlogCategoryTreeListQueryTest extends Enlig
     {
         foreach ($this->expected as $id => $expected) {
             $filter = array(array('property' => 'c.parentId', 'value' => $id));
-            $query = $this->getRepo()->getBlogCategoryTreeListQuery($filter, array());
+            $query = $this->getRepo()->getBlogCategoryTreeListQuery($filter);
             $data = $this->removeDates($query->getArrayResult());
             $this->assertEquals($data, $expected);
         }

@@ -234,7 +234,6 @@ class Shopware_Tests_Controllers_Backend_ProductFeedTest extends Enlight_Compone
      * test getSuppliers action
      *
      * @return void
-     * @internal param $id
      */
     public function testGetSuppliersAction()
     {
@@ -247,7 +246,6 @@ class Shopware_Tests_Controllers_Backend_ProductFeedTest extends Enlight_Compone
      * test getArticles action
      *
      * @return void
-     * @internal param $id
      */
     public function testGetArticlesAction()
     {

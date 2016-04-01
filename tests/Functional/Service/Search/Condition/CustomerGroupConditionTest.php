@@ -21,7 +21,7 @@ class CustomerGroupConditionTest extends TestCase
         $number,
         ProductContext $context,
         Category $category = null,
-        $customerGroups = array()
+        $customerGroups = null
     ) {
         $product = parent::getProduct($number, $context, $category);
 

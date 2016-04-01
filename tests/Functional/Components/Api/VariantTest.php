@@ -417,7 +417,6 @@ class VariantTest extends TestCase
      * @depends testVariantImageAssignByMediaId
      * @param $variantId
      * @return int
-     * @internal param $articleId
      */
     public function testVariantImageReset($variantId)
     {

@@ -118,14 +118,4 @@ class sArticlesTest extends Enlight_Components_Test_Controller_TestCase
         // a query to a not existing article should return 'false' and not throw an exception
         $this->assertFalse($result);
     }
-
-    private function assertArrayKeys($array, $expectedKeys)
-    {
-        $keys = array_keys($array);
-        $this->assertCount(count($expectedKeys), $keys, 'Array count do not match!');
-
-        foreach ($expectedKeys as $expectedKey) {
-            $this->assertEquals($expectedKey['value'], $keys[$expectedKey['index']], $expectedKey['message']);
-        }
-    }
 }

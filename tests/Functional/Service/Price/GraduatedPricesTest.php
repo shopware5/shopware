@@ -23,7 +23,8 @@ class GraduatedPricesTest extends TestCase
     protected function getProduct(
         $number,
         ProductContext $context,
-        Category $category = null
+        Category $category = null,
+        $additionally = null
     ) {
         $data = parent::getProduct($number, $context, $category);
 

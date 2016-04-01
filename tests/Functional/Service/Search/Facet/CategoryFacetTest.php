@@ -14,7 +14,7 @@ class CategoryFacetTest extends TestCase
         $number,
         ProductContext $context,
         Category $category = null,
-        $additionally
+        $additionally = null
     ) {
         return parent::getProduct($number, $context, $additionally);
     }

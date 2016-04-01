@@ -13,7 +13,8 @@ class ConfiguratorTest extends TestCase
     protected function getProduct(
         $number,
         ProductContext $context,
-        Category $category = null
+        Category $category = null,
+        $additionally = null
     ) {
         $product = parent::getProduct($number, $context, $category);
 

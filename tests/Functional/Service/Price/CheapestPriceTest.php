@@ -2,7 +2,6 @@
 
 namespace Shopware\Tests\Service\Price;
 
-use Shopware\Bundle\StoreFrontBundle\Struct\ProductContext;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Tests\Service\TestCase;
 

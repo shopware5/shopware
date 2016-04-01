@@ -35,7 +35,7 @@ class Shopware_Tests_Controllers_Frontend_BlogTest extends Enlight_Components_Te
         parent::setUp();
 
         $sql = "UPDATE `s_blog` SET `active` = '0' WHERE `id` =3;";
-        Shopware()->Db()->exec($sql, array());
+        Shopware()->Db()->exec($sql);
     }
 
     /**
@@ -46,7 +46,7 @@ class Shopware_Tests_Controllers_Frontend_BlogTest extends Enlight_Components_Te
         parent::tearDown();
 
         $sql = "UPDATE `s_blog` SET `active` = '1' WHERE `id` =3;";
-        Shopware()->Db()->exec($sql, array());
+        Shopware()->Db()->exec($sql);
     }
 
     /**
@@ -100,7 +100,7 @@ class Shopware_Tests_Controllers_Frontend_BlogTest extends Enlight_Components_Te
 
         //deactivate blog category
         $sql= "UPDATE `s_categories` SET `active` = '0' WHERE `id` =17";
-        Shopware()->Db()->exec($sql, array());
+        Shopware()->Db()->exec($sql);
 
         //should be redirected because blog category is inactive
         try {
@@ -121,6 +121,6 @@ class Shopware_Tests_Controllers_Frontend_BlogTest extends Enlight_Components_Te
 
         //activate blog category
         $sql= "UPDATE `s_categories` SET `active` = '1' WHERE `id` =17";
-        Shopware()->Db()->exec($sql, array());
+        Shopware()->Db()->exec($sql);
     }
 }

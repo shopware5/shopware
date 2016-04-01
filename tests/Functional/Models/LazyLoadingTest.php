@@ -44,7 +44,6 @@ class LazyLoadingTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->em = Shopware()->Models();
-        $this->em->getConfiguration()->setSQLLogger($this->logger);
     }
 
     private function generateRandomString($length = 10)

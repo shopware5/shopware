@@ -13,7 +13,7 @@ class SimilarProductConditionTest extends TestCase
         $number,
         ProductContext $context,
         Category $category = null,
-        Category $additionally
+        $additionally = null
     ) {
         return parent::getProduct($number, $context, $additionally);
     }

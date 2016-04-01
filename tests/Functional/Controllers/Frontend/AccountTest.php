@@ -45,7 +45,7 @@ class Shopware_Tests_Controllers_Frontend_AccountTest extends Enlight_Components
 
         $filePath = Shopware()->DocPath() . 'files/'.Shopware()->Config()->get('sESDKEY');
         $deleteFolderOnTearDown = !file_exists($filePath) ? $filePath : false;
-        mkdir($filePath, 0777);
+        @mkdir($filePath, 0777);
         file_put_contents($filePath . '/shopware_packshot_community_edition_72dpi_rgb.png', $loremIpsum);
 
         $this->Request()
@@ -71,7 +71,7 @@ class Shopware_Tests_Controllers_Frontend_AccountTest extends Enlight_Components
             $files = glob($deleteFolderOnTearDown . '/*'); // get all file names
             foreach ($files as $file) {
                 if (is_file($file)) {
-                    unlink($file);
+                    @unlink($file);
                 }
             }
             rmdir($deleteFolderOnTearDown);

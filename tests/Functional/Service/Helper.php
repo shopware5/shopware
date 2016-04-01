@@ -171,12 +171,10 @@ class Helper
      * @param null $priceCalculationService
      * @param null $mediaService
      * @param null $marketingService
-     * @param null $eventManager
      * @param null $voteService
      * @param null $categoryService
+     * @param null $config
      * @return StoreFrontBundle\Struct\ListProduct[]
-     * @throws \Exception
-     * @internal param null $config
      */
     public function getListProducts(
         $numbers,

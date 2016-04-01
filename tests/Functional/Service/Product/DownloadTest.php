@@ -16,8 +16,12 @@ class DownloadTest extends TestCase
      * @param \Shopware\Models\Category\Category $category
      * @return Article
      */
-    protected function getProduct($number, ProductContext $context, Category $category = null)
-    {
+    protected function getProduct(
+        $number,
+        ProductContext $context,
+        Category $category = null,
+        $additionally = null
+    ) {
         $product = parent::getProduct($number, $context, $category);
 
         $product['downloads'] = array(

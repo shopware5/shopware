@@ -28,7 +28,8 @@ class SimilarProductsTest extends TestCase
     protected function getProduct(
         $number,
         ProductContext $context,
-        Category $category = null
+        Category $category = null,
+        $additonally = null
     ) {
         $data = parent::getProduct($number, $context, $category);
 

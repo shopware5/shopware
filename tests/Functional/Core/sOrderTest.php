@@ -47,17 +47,6 @@ class sOrderTest extends PHPUnit_Framework_TestCase
         return $resource;
     }
 
-    /**
-     * @return \Shopware\Components\Api\Resource\Variant
-     */
-    private function getVariantResource()
-    {
-        $resource = new \Shopware\Components\Api\Resource\Variant();
-        $resource->setManager(Shopware()->Models());
-        $resource->setResultMode(1);
-        return $resource;
-    }
-
     public function setUp()
     {
         $this->module = Shopware()->Modules()->Order();
@@ -916,50 +905,6 @@ class sOrderTest extends PHPUnit_Framework_TestCase
 
         return $detailId;
     }
-
-    private function getSimpleArticleData()
-    {
-        return array(
-            'name' => 'Testartikel',
-            'description' => 'Test description',
-            'active' => true,
-            'lastStock' => true,
-            'mainDetail' => array(
-                'number' => 'swTEST' . uniqid(),
-                'inStock' => 15,
-                'active' => true,
-                'unitId' => 1,
-                'prices' => array(
-                    array(
-                        'customerGroupKey' => 'EK',
-                        'from' => 1,
-                        'to' => '-',
-                        'price' => 400,
-                    )
-                )
-            ),
-            'taxId' => 1,
-            'supplierId' => 2
-        );
-    }
-
-    private function getSimpleVariantData()
-    {
-        return array(
-            'number' => 'swTEST' . uniqid(),
-            'inStock' => 100,
-            'unitId' => 1,
-            'prices' => array(
-                array(
-                    'customerGroupKey' => 'EK',
-                    'from' => 1,
-                    'to' => '-',
-                    'price' => 400,
-                ),
-            )
-        );
-    }
-
 
     public function testEKOrder()
     {

@@ -277,7 +277,7 @@ class Shopware_Tests_Controllers_Backend_ImportExportTest extends Enlight_Compon
                 return (string) $x;
             } // for CDATA
             foreach ($xml as $key=>$value) {
-                $r[$key] = $this->simplexml2array($value);
+                $r[$key] = $this->simpleXml2array($value);
             }
             if (isset($a)) {
                 $r['@attributes'] = $a;
