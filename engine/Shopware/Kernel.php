@@ -43,6 +43,7 @@ use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
+use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Kernel as SymfonyKernel;
 use Symfony\Component\HttpFoundation\Cookie;
@@ -481,6 +482,19 @@ class Kernel implements HttpKernelInterface
 
         if (is_file($file = __DIR__ . '/Components/DependencyInjection/services_local.xml')) {
             $loader->load($file);
+        }
+
+        $finder = new Finder();
+        $finder
+            ->files()
+            ->name('services.xml')
+            ->in(__DIR__ . '/Plugins/Community/')
+            ->in(__DIR__ . '/Plugins/Default/')
+            ->in(__DIR__ . '/Plugins/Local/');
+
+        /** @var \Symfony\Component\Finder\SplFileInfo $file */
+        foreach ($finder as $file) {
+            $loader->load($file->getPathname());
         }
 
         $this->addShopwareConfig($container, 'shopware', $this->config);
