@@ -1051,7 +1051,7 @@ class Order extends ModelEntity
             }
 
             if ($this->net) {
-                $invoiceAmountNet += ($detail->getPrice() * $detail->getQuantity()) / 100 * (100 + $taxValue);
+                $invoiceAmountNet += round(($detail->getPrice() * $detail->getQuantity()) / 100 * (100 + $taxValue), 2);
             } else {
                 $invoiceAmountNet += ($detail->getPrice() * $detail->getQuantity()) / (100 + $taxValue) * 100;
             }
