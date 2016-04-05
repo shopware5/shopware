@@ -122,7 +122,6 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
         $controller = Zend_Json::encode($controller);
         $this->View()->assign('controller', $controller, true);
 
-        $this->View()->assign('product', '', true);
         $this->View()->assign('maxParameterLength', (int) ini_get('suhosin.get.max_value_length') + 0, true);
 
         $firstRunWizardEnabled = $this->isFirstRunWizardEnabled($identity);
@@ -135,14 +134,6 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
         }
         $this->View()->assign('sbpLogin', $sbpLogin, true);
         $this->View()->assign('firstRunWizardEnabled', $firstRunWizardEnabled, true);
-
-        if (Shopware()->Container()->initialized('License')) {
-            $l = Shopware()->License();
-            $m = 'SwagCommercial';
-            $o = $l->getLicenseInfo($m);
-            $r = isset($o['product']) ? $o['product'] : null;
-            $this->View()->assign('product', $r, true);
-        }
 
         /** @var Shopware_Components_Config $config */
         $config = $this->get('config');

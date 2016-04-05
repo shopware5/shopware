@@ -33,7 +33,6 @@ Ext.define('Shopware.apps.FirstRunWizard', {
 
     controllers: [
         'Main',
-        'LicensePluginHandler',
         'Config',
         'ShopwareId',
         'Localization',
