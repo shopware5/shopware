@@ -36,14 +36,17 @@ class ShopwareEdition
     const EE = 'EE'; // Enterprise - SwagEnterprisePlatform
     const EB = 'EB'; // (legacy) Enterprise Basic - SwagEnterprise
     const EC = 'EC'; // (legacy) Enterprise Premium - SwagEnterprisePremium/SwagEnterpriseCluster
+
     /**
      * @var string
      */
     public $edition;
+
     /**
      * @var string
      */
     public $licence;
+
     /**
      * @param  string            $edition
      * @param  string            $licence
@@ -55,6 +58,7 @@ class ShopwareEdition
         $this->edition = $edition;
         $this->licence = $licence;
     }
+
     /**
      * @return bool
      */
@@ -62,6 +66,7 @@ class ShopwareEdition
     {
         return $this->edition != self::CE;
     }
+
     /**
      * Returns a list of valid commercial product keys
      * @return array
@@ -76,6 +81,7 @@ class ShopwareEdition
             self::EC
         ];
     }
+    
     /**
      * @param $edition
      * @param $licence
