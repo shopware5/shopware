@@ -956,7 +956,7 @@ class sExport
                 pd.discount,
                 ROUND(CAST($pseudoprice*{$this->sCurrency["factor"]} AS DECIMAL(10,3)),2) as netpseudoprice,
                 ROUND(CAST($pseudoprice*(100+t.tax)*{$this->sCurrency["factor"]}/100 AS DECIMAL(10,3)),2) as pseudoprice,
-                $baseprice,
+                $baseprice as baseprice,
                 IF(file IS NULL,0,1) as esd
 
                 $sql_add_select
