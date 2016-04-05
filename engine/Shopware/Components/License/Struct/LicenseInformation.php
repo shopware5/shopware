@@ -34,22 +34,27 @@ class LicenseInformation
      * @var string e.G "Shopware Enterprise Cluster"
      */
     public $label;
+
     /**
      * @var string e.G "SwagCommercial"
      */
     public $module;
+
     /**
      * @var string e.g EC @see: ShopwareEdition::$validEditions
      */
     public $edition;
+
     /**
      * @var string e.G sth.test.shopware.in
      */
     public $host;
+
     /**
      * @var int e.g 1/2/3
      */
     public $type;
+
     /**
      * @var string License-Key
      */

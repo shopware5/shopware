@@ -34,10 +34,12 @@ class LicenseUnpackRequest
      * @var string
      */
     public $licenseKey;
+
     /**
      * @var string
      */
     public $host;
+    
     /**
      * @param string $licenseKey
      * @param string $host

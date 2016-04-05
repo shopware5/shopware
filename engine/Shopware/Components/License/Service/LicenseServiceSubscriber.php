@@ -33,6 +33,11 @@ use Shopware\Components\License\Struct\LicenseUnpackRequest;
 use Shopware\Components\License\Struct\ShopwareEdition;
 use Shopware\Components\Model\ModelManager;
 
+/**
+ * @category  Shopware
+ * @package   Shopware\Components\License\Service
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
+ */
 class LicenseServiceSubscriber implements SubscriberInterface
 {
     /**
