@@ -54,10 +54,6 @@
         "sensiolabs/behat-page-object-extension": "~2.0.0-rc1",
         "symfony/dom-crawler": "~2.8"
     },
-    "replace": {
-        "symfony/polyfill-php55": "~1.0",
-        "symfony/polyfill-mbstring": "~1.0"
-    },
     "include-path": [
         "engine/Library/"
     ],
