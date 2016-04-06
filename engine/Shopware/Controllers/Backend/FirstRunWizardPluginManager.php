@@ -9,21 +9,6 @@ use Shopware\Bundle\PluginInstallerBundle\Service\PluginStoreService;
 class Shopware_Controllers_Backend_FirstRunWizardPluginManager extends Shopware_Controllers_Backend_ExtJs
 {
     /**
-     * Checks if shop has licenses configured.
-     */
-    public function checkShopLicenceAction()
-    {
-        $licenseCount = $this->container->get('dbal_connection')
-            ->executeQuery('SELECT COUNT(DISTINCT id) FROM s_core_licenses')
-            ->fetchColumn();
-
-        $this->View()->assign(array(
-            'success' => false,
-            'data' => (bool) $licenseCount,
-        ));
-    }
-
-    /**
      * Loads integrated plugins from SBP
      */
     public function getIntegratedPluginsAction()
