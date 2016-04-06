@@ -779,6 +779,12 @@ class sAdmin
     private function regenerateSessionId()
     {
         $oldSessionId = session_id();
+
+        if ($this->eventManager->notifyUntil('Shopware_Modules_Admin_regenerateSessionId_Start',
+            ['subject' => $this, 'sessionId' => $oldSessionId])) {
+            return;
+        }
+
         session_regenerate_id(true);
         $newSessionId = session_id();
 
