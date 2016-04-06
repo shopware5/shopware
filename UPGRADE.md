@@ -2,6 +2,7 @@
 In this document you will find a changelog of the important changes related to the code base of Shopware.
 
 ## 5.1.5
+* Added new Event `Shopware_Modules_Admin_regenerateSessionId_Start` in sAdmin::regenerateSessionId
 * The smarty variable `sCategoryInfo` in Listing and Blog controllers is now deprecated and will be removed soon. Use `sCategoryContent` instead, it's a drop in replacement. 
 
 ## 5.1.4
