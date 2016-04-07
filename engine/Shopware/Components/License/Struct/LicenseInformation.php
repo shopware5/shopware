@@ -61,6 +61,26 @@ class LicenseInformation
     public $license;
 
     /**
+     * @var string the license version
+     */
+    public $version;
+
+    /**
+     * @var string the source which issued the license
+     */
+    public $source;
+
+    /**
+     * @var string when the license will expire
+     */
+    public $expiration;
+
+    /**
+     * @var string the issue date of the license
+     */
+    public $creation;
+
+    /**
      * @param array $values
      */
     public function __construct(array $values = [])

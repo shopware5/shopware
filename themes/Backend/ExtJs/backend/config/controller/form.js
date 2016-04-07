@@ -47,6 +47,7 @@ Ext.define('Shopware.apps.Config.controller.Form', {
         'form.Unit',
         'form.Country',
         'form.CountryArea',
+        'form.CoreLicense',
         'form.CustomerGroup',
         'form.PriceGroup',
         'form.Tax',
