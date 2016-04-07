@@ -709,12 +709,11 @@ class LegacyStructConverter
     {
         $result = [];
         foreach ($set->getGroups() as $group) {
-            $values = array_map(
-                function (StoreFrontBundle\Struct\Property\Option $option) {
-                    return $option->getName();
-                },
-                $group->getOptions()
-            );
+            $values = array();
+            foreach ($group->getOptions() as $option) {
+                /**@var $option StoreFrontBundle\Struct\Property\Option */
+                $values[$option->getId()] = $option->getName();
+            }
 
             $mediaValues = array();
             foreach ($group->getOptions() as $option) {
