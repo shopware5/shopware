@@ -25,7 +25,7 @@
 namespace Shopware\Components\Log\Handler;
 
 use Enlight_Controller_Request_Request as Request;
-use Enlight_Controller_Response_ResponseHttp as Response;
+use Enlight_Controller_Response_Response as Response;
 use Monolog\Handler\FirePHPHandler as BaseFirePHPHandler;
 
 /**
