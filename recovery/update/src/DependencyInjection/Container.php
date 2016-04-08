@@ -25,7 +25,6 @@
 
 namespace Shopware\Recovery\Update\DependencyInjection;
 
-use Shopware\Components\ConfigLoader;
 use Shopware\Components\Migrations\Manager as MigrationManager;
 use Shopware\Recovery\Common\DependencyInjection\Container as BaseContainer;
 use Shopware\Recovery\Common\Dump;
@@ -44,8 +43,7 @@ class Container extends BaseContainer
         $me = $this;
 
         $pimple['db'] = function () use ($me) {
-            $shopwareConfig = $me->get('shopware.config');
-            $conn = Utils::getConnection($shopwareConfig);
+            $conn = Utils::getConnection(SW_PATH);
 
             return $conn;
         };
@@ -95,25 +93,12 @@ class Container extends BaseContainer
             return $slim;
         };
 
-        $pimple['controller.batch'] = function () use ($me) {
+       $pimple['controller.batch'] = function () use ($me) {
             return new BatchController(
                 $me->get('slim.request'),
                 $me->get('slim.response'),
                 $me
             );
-        };
-
-        $pimple['shopware.config'] = function () use ($me) {
-            $env = $me->hasParameter('environment') ? $me->getParameter('environment') : 'production';
-
-            $configLoader = new ConfigLoader(
-                SW_PATH . '/',
-                $env,
-                'Shopware'
-            );
-            $config = $configLoader->loadConfig(SW_PATH . '/engine/Shopware/Configs/Default.php');
-
-            return $config;
         };
     }
 }
