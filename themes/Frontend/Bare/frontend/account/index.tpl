@@ -193,91 +193,112 @@
 			</div>
 		{/block}
 
-		{* Billing addresses *}
-		{block name="frontend_account_index_primary_billing"}
-			<div class="account--billing account--box panel has--border is--rounded">
+		{block name="frontend_account_index_addresses"}
+			<div data-panel-auto-resizer="true">
+				{* Billing addresses *}
+				{block name="frontend_account_index_primary_billing"}
+					<div class="account--billing account--box panel has--border is--rounded">
 
-				{block name="frontend_account_index_primary_billing_headline"}
-					<h2 class="panel--title is--underline">{s name="AccountHeaderPrimaryBilling"}{/s}</h2>
-				{/block}
+						{block name="frontend_account_index_primary_billing_headline"}
+							<h2 class="panel--title is--underline">{s name="AccountHeaderPrimaryBilling"}{/s}</h2>
+						{/block}
 
-				{block name="frontend_account_index_primary_billing_content"}
-					<div class="panel--body is--wide">
-						{if $sUserData.billingaddress.company}
-							<p>
-								{$sUserData.billingaddress.company}{if $sUserData.billingaddress.department} - {$sUserData.billingaddress.department}{/if}
-							</p>
-						{/if}
-						<p>
-							{if $sUserData.billingaddress.salutation eq "mr"}
-								{s name="AccountSalutationMr"}{/s}
-							{else}
-								{s name="AccountSalutationMs"}{/s}
-							{/if}
-							{$sUserData.billingaddress.firstname} {$sUserData.billingaddress.lastname}<br />
-							{$sUserData.billingaddress.street}<br />
-							{if $sUserData.billingaddress.additional_address_line1}{$sUserData.billingaddress.additional_address_line1}<br />{/if}
-							{if $sUserData.billingaddress.additional_address_line2}{$sUserData.billingaddress.additional_address_line2}<br />{/if}
-                            {if {config name=showZipBeforeCity}}{$sUserData.billingaddress.zipcode} {$sUserData.billingaddress.city}{else}{$sUserData.billingaddress.city} {$sUserData.billingaddress.zipcode}{/if}<br />
-							{if $sUserData.additional.state.statename}{$sUserData.additional.state.statename}<br />{/if}
-							{$sUserData.additional.country.countryname}
-						</p>
+						{block name="frontend_account_index_primary_billing_content"}
+							<div class="panel--body is--wide">
+								{if $sUserData.billingaddress.company}
+									<p>
+										{$sUserData.billingaddress.company}{if $sUserData.billingaddress.department} - {$sUserData.billingaddress.department}{/if}
+									</p>
+								{/if}
+								<p>
+									{if $sUserData.billingaddress.salutation eq "mr"}
+										{s name="AccountSalutationMr"}{/s}
+									{else}
+										{s name="AccountSalutationMs"}{/s}
+									{/if}
+									{$sUserData.billingaddress.firstname} {$sUserData.billingaddress.lastname}<br />
+									{$sUserData.billingaddress.street}<br />
+									{if $sUserData.billingaddress.additional_address_line1}{$sUserData.billingaddress.additional_address_line1}<br />{/if}
+									{if $sUserData.billingaddress.additional_address_line2}{$sUserData.billingaddress.additional_address_line2}<br />{/if}
+									{if {config name=showZipBeforeCity}}{$sUserData.billingaddress.zipcode} {$sUserData.billingaddress.city}{else}{$sUserData.billingaddress.city} {$sUserData.billingaddress.zipcode}{/if}<br />
+									{if $sUserData.additional.state.statename}{$sUserData.additional.state.statename}<br />{/if}
+									{$sUserData.additional.country.countryname}
+								</p>
+							</div>
+						{/block}
+
+						{block name="frontend_account_index_primary_billing_actions"}
+							<div class="panel--actions is--wide">
+								<a href="{url controller=address action=edit id=$sUserData.additional.user.default_billing_address_id sTarget=account}"
+								   title="{s name='AccountLinkChangeBilling'}{/s}"
+								   class="btn">
+									{s name="AccountLinkChangeBilling"}{/s}
+								</a>
+								<br/>
+								<a href="{url controller=address}"
+								   data-address-selector="true"
+								   data-target="billing"
+								   data-id="{$sUserData.additional.user.default_billing_address_id}"
+								   data-title="{s name="ModalTitle" namespace="frontend/address/ajax_selector"}Change address{/s}"
+								   title="{s name='AccountLinkChangeBilling'}{/s}"
+								   data-action="{url controller=address action=setDefaultBillingAddress}">
+									{s name="AccountLinkSelectBilling"}{/s}
+								</a>
+							</div>
+						{/block}
 					</div>
 				{/block}
 
-				{block name="frontend_account_index_primary_billing_actions"}
-					<div class="panel--actions is--wide">
-						<a href="{url action=selectBilling}" title="{"{s name='AccountLinkSelectBilling'}{/s}"|escape}" class="btn is--small">
-							{s name="AccountLinkSelectBilling"}{/s}
-						</a>
-						<a href="{url action=billing}" title="{"{s name='AccountLinkChangeBilling'}{/s}"|escape}" class="btn is--small">
-							{s name="AccountLinkChangeBilling"}{/s}
-						</a>
-					</div>
-				{/block}
-			</div>
-		{/block}
+				{* Shipping addresses *}
+				{block name="frontend_account_index_primary_shipping"}
+					<div class="account--shipping account--box panel has--border is--rounded">
 
-		{* Shipping addresses *}
-		{block name="frontend_account_index_primary_shipping"}
-			<div class="account--shipping account--box panel has--border is--rounded">
+						{block name="frontend_account_index_primary_shipping_headline"}
+							<h2 class="panel--title is--underline">{s name="AccountHeaderPrimaryShipping"}{/s}</h2>
+						{/block}
 
-				{block name="frontend_account_index_primary_shipping_headline"}
-					<h2 class="panel--title is--underline">{s name="AccountHeaderPrimaryShipping"}{/s}</h2>
-				{/block}
+						{block name="frontend_account_index_primary_shipping_content"}
+							<div class="panel--body is--wide">
+								{if $sUserData.shippingaddress.company}
+									<p>
+										{$sUserData.shippingaddress.company}{if $sUserData.shippingaddress.department} - {$sUserData.shippingaddress.department}{/if}
+									</p>
+								{/if}
+								<p>
+									{if $sUserData.shippingaddress.salutation eq "mr"}
+										{s name="AccountSalutationMr"}{/s}
+									{else}
+										{s name="AccountSalutationMs"}{/s}
+									{/if}
+									{$sUserData.shippingaddress.firstname} {$sUserData.shippingaddress.lastname}<br />
+									{$sUserData.shippingaddress.street}<br />
+									{if $sUserData.shippingaddress.additional_address_line1}{$sUserData.shippingaddress.additional_address_line1}<br />{/if}
+									{if $sUserData.shippingaddress.additional_address_line2}{$sUserData.shippingaddress.additional_address_line2}<br />{/if}
+									{if {config name=showZipBeforeCity}}{$sUserData.shippingaddress.zipcode} {$sUserData.shippingaddress.city}{else}{$sUserData.shippingaddress.city} {$sUserData.shippingaddress.zipcode}{/if}<br />
+									{if $sUserData.additional.stateShipping.statename}{$sUserData.additional.stateShipping.statename}<br />{/if}
+									{$sUserData.additional.countryShipping.countryname}
+								</p>
+							</div>
+						{/block}
 
-				{block name="frontend_account_index_primary_shipping_content"}
-					<div class="panel--body is--wide">
-						{if $sUserData.shippingaddress.company}
-							<p>
-								{$sUserData.shippingaddress.company}{if $sUserData.shippingaddress.department} - {$sUserData.shippingaddress.department}{/if}
-							</p>
-						{/if}
-						<p>
-							{if $sUserData.shippingaddress.salutation eq "mr"}
-								{s name="AccountSalutationMr"}{/s}
-							{else}
-								{s name="AccountSalutationMs"}{/s}
-							{/if}
-							{$sUserData.shippingaddress.firstname} {$sUserData.shippingaddress.lastname}<br />
-							{$sUserData.shippingaddress.street}<br />
-							{if $sUserData.shippingaddress.additional_address_line1}{$sUserData.shippingaddress.additional_address_line1}<br />{/if}
-							{if $sUserData.shippingaddress.additional_address_line2}{$sUserData.shippingaddress.additional_address_line2}<br />{/if}
-                            {if {config name=showZipBeforeCity}}{$sUserData.shippingaddress.zipcode} {$sUserData.shippingaddress.city}{else}{$sUserData.shippingaddress.city} {$sUserData.shippingaddress.zipcode}{/if}<br />
-							{if $sUserData.additional.stateShipping.statename}{$sUserData.additional.stateShipping.statename}<br />{/if}
-							{$sUserData.additional.countryShipping.countryname}
-						</p>
-					</div>
-				{/block}
-
-				{block name="frontend_account_index_primary_shipping_actions"}
-					<div class="panel--actions is--wide">
-						<a href="{url action=selectShipping}" title="{"{s name='AccountLinkSelectShipping'}{/s}"|escape}" class="btn is--small">
-							{s name="AccountLinkSelectShipping"}{/s}
-						</a>
-						<a href="{url action=shipping}" title="{"{s name='AccountLinkChangeShipping'}{/s}"|escape}" class="btn is--small">
-							{s name="AccountLinkChangeShipping"}{/s}
-						</a>
+						{block name="frontend_account_index_primary_shipping_actions"}
+							<div class="panel--actions is--wide">
+								<a href="{url controller=address action=edit id=$sUserData.additional.user.default_shipping_address_id sTarget=account}"
+								   title="{s name='AccountLinkChangeBilling'}{/s}"
+								   class="btn">
+									{s name="AccountLinkChangeShipping"}{/s}
+								</a>
+								<br/>
+								<a href="{url controller=address}"
+								   data-address-selector="true" data-target="shipping"
+								   data-id="{$sUserData.additional.user.default_shipping_address_id}"
+								   data-title="{s name="ModalTitle" namespace="frontend/address/ajax_selector"}Change address{/s}"
+								   title="{s name='AccountLinkChangeBilling'}{/s}"
+								   data-action="{url controller=address action=setDefaultShippingAddress}">
+									{s name="AccountLinkSelectBilling"}{/s}
+								</a>
+							</div>
+						{/block}
 					</div>
 				{/block}
 			</div>

@@ -125,7 +125,10 @@ class AddressImportService implements AddressImportServiceInterface
         }
 
         $this->modelManager->clear(Customer::class);
+
+        /** @var Customer $customer */
         $customer = $this->modelManager->find(Customer::class, $customerId);
+
         $data['country'] = $this->modelManager->find(Country::class, $data['country']);
         if (!empty($data['state'])) {
             $data['state'] = $this->modelManager->find(State::class, $data['state']);

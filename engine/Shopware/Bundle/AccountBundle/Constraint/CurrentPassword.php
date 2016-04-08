@@ -22,41 +22,27 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\AccountBundle\Service;
+namespace Shopware\Bundle\AccountBundle\Constraint;
 
-use Shopware\Models\Customer\Address;
+use Symfony\Component\Validator\Constraint;
 
-interface AddressImportServiceInterface
+class CurrentPassword extends Constraint
 {
     /**
-     * Imports address from s_user_billingaddress
-     *
-     * @param int $customerId
-     * @return Address|null
+     * @var string
      */
-    public function importCustomerBilling($customerId);
+    public $snippetKey = 'AccountCurrentPassword';
 
     /**
-     * Imports address from s_order_billingaddress
-     *
-     * @param int $customerId
-     * @return Address|null
+     * @var string
      */
-    public function importOrderBilling($customerId);
+    public $namespace = 'frontend';
 
     /**
-     * Imports address from s_user_shippingaddress
-     *
-     * @param int $customerId
-     * @return Address|null
+     * @return string
      */
-    public function importCustomerShipping($customerId);
-
-    /**
-     * Imports address from s_order_shippingaddress
-     *
-     * @param int $customerId
-     * @return Address|null
-     */
-    public function importOrderShipping($customerId);
+    public function validatedBy()
+    {
+        return 'CurrentPasswordValidator';
+    }
 }

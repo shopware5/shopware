@@ -27,8 +27,8 @@ class Account extends Page implements HelperSelectorInterface
             'payment' => 'div.account--payment.account--box strong',
             'logout' => 'div.account--menu-container a.link--logout',
             'registrationForm' => 'form.register--form',
-            'billingForm' => 'div.account--billing-form > form',
-            'shippingForm' => 'div.account--shipping-form > form',
+            'billingForm' => 'div.account--addresses-form form',
+            'shippingForm' => 'div.account--addresses-form form',
             'paymentForm' => 'div.account--payment-form > form',
             'passwordForm' => 'div.account--password > form',
             'emailForm' => 'div.account--email > form',
@@ -57,10 +57,11 @@ class Account extends Page implements HelperSelectorInterface
             'logoutLink'            => ['de' => 'Abmelden',                 'en' => 'Logout'],
 
             'changePaymentButton'   => ['de' => 'Ändern',                   'en' => 'Change'],
-            'changeBillingButton'   => ['de' => 'Ändern',                   'en' => 'Change'],
-            'changeShippingButton'  => ['de' => 'Ändern',                   'en' => 'Change'],
+            'changeBillingButton'   => ['de' => 'Adresse speichern',        'en' => 'Change address'],
+            'changeShippingButton'  => ['de' => 'Adresse speichern',        'en' => 'Change address'],
             'changePasswordButton'  => ['de' => 'Passwort ändern',          'en' => 'Change password'],
-            'changeEmailButton'     => ['de' => 'E-Mail ändern',            'en' => 'Change email']
+            'changeEmailButton'     => ['de' => 'E-Mail ändern',            'en' => 'Change email'],
+            'saveAddressButton'     => ['de' => 'Adresse speichern',        'en' => 'Save address']
         ];
     }
 
@@ -271,8 +272,8 @@ class Account extends Page implements HelperSelectorInterface
      */
     public function changeBillingAddress($values)
     {
-        Helper::fillForm($this, 'billingForm', $values);
-        Helper::pressNamedButton($this, 'changePaymentButton');
+        Helper::fillForm($this, 'addressForm', $values);
+        Helper::pressNamedButton($this, 'saveAddressButton');
     }
 
     /**
@@ -281,8 +282,8 @@ class Account extends Page implements HelperSelectorInterface
      */
     public function changeShippingAddress($values)
     {
-        Helper::fillForm($this, 'shippingForm', $values);
-        Helper::pressNamedButton($this, 'changePaymentButton');
+        Helper::fillForm($this, 'addressForm', $values);
+        Helper::pressNamedButton($this, 'saveAddressButton');
     }
 
     /**

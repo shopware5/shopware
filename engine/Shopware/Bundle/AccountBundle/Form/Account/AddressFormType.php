@@ -29,7 +29,6 @@ use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Country\Country;
 use Shopware\Models\Country\State;
 use Shopware\Models\Customer\Address;
-use Shopware_Components_Snippet_Manager;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -43,19 +42,9 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 class AddressFormType extends AbstractType
 {
     /**
-     * @var Shopware_Components_Snippet_Manager
-     */
-    private $snippetManager;
-
-    /**
      * @var \Shopware_Components_Config
      */
     private $config;
-
-    /**
-     * @var \Enlight_Event_EventManager
-     */
-    private $eventManager;
 
     /**
      * @var ModelManager
@@ -63,16 +52,12 @@ class AddressFormType extends AbstractType
     private $models;
 
     /**
-     * @param Shopware_Components_Snippet_Manager $snippetManager
      * @param \Shopware_Components_Config $config
-     * @param \Enlight_Event_EventManager $eventManager
      * @param ModelManager $models
      */
-    public function __construct(Shopware_Components_Snippet_Manager $snippetManager, \Shopware_Components_Config $config, \Enlight_Event_EventManager $eventManager, ModelManager $models)
+    public function __construct(\Shopware_Components_Config $config, ModelManager $models)
     {
-        $this->snippetManager = $snippetManager;
         $this->config = $config;
-        $this->eventManager = $eventManager;
         $this->models = $models;
     }
 
@@ -101,7 +86,9 @@ class AddressFormType extends AbstractType
             ]
         ]);
 
-        $builder->add('company', TextType::class);
+        $builder->add('company', TextType::class, [
+            'constraints' => $this->getCompanyConstraints()
+        ]);
 
         $builder->add('department', TextType::class);
 
@@ -152,8 +139,6 @@ class AddressFormType extends AbstractType
         // convert IDs to entities
         $builder->get('country')->addModelTransformer(new EntityTransformer($this->models, Country::class));
         $builder->get('state')->addModelTransformer(new EntityTransformer($this->models, State::class));
-
-        $this->eventManager->notify('Shopware_Form_Account_AddressForm_Builder', ['builder' => $builder]);
     }
 
     /**
@@ -259,6 +244,10 @@ class AddressFormType extends AbstractType
             /** @var Address $data */
             $data = $context->getRoot()->getData();
 
+            if (!$data->getCountry()) {
+                return;
+            }
+
             if ($data->getCountry()->getDisplayStateInRegistration() && $data->getCountry()->getForceStateInRegistration() && empty($value)) {
                 $notBlank = new NotBlank();
                 $context->buildViolation($notBlank->message)
@@ -268,6 +257,35 @@ class AddressFormType extends AbstractType
         };
 
         $constraints[] = new Callback(['callback' => $stateCallback]);
+
+        return $constraints;
+    }
+
+    /**
+     * @return Constraint[]
+     */
+    private function getCompanyConstraints()
+    {
+        $constraints = [];
+
+        $companyRequiredCallback = function ($value, ExecutionContextInterface $context) {
+            $extraData = $context->getRoot()->getExtraData();
+
+            if (empty($extraData['customer_type']) || $extraData['customer_type'] !== 'business') {
+                return;
+            }
+
+            if (!empty($value)) {
+                return;
+            }
+
+            $notBlank = new NotBlank();
+            $context->buildViolation($notBlank->message)
+                ->atPath($context->getPropertyPath())
+                ->addViolation();
+        };
+
+        $constraints[] = new Callback(['callback' => $companyRequiredCallback]);
 
         return $constraints;
     }

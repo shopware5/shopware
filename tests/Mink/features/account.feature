@@ -37,23 +37,24 @@ Feature: My account (without changing login data)
     Scenario Outline: I can change my shipping address
         When I follow "Lieferadresse ändern"
         And  I change my shipping address:
-            | field      | register[shipping] |
-            | salutation | <salutation>       |
-            | company    | <company>          |
-            | firstname  | <firstname>        |
-            | lastname   | <lastname>         |
-            | street     | <street>           |
-            | zipcode    | <zipcode>          |
-            | city       | <city>             |
-            | country    | <country>          |
+            | field         | address         |
+            | salutation    | <salutation>    |
+            | company       | <company>       |
+            | firstname     | <firstname>     |
+            | lastname      | <lastname>      |
+            | street        | <street>        |
+            | zipcode       | <zipcode>       |
+            | city          | <city>          |
+            | country       | <country>       |
+            | customer_type | <customer_type> |
 
-        Then I should see "Erfolgreich gespeichert"
+        Then I should see "Die Adresse wurde erfolgreich gespeichert"
         And  the "shipping" address should be "<company>, <firstname> <lastname>, <street>, <zipcode> <city>, <country>"
 
         Examples:
-            | salutation | company     | firstname | lastname   | street              | zipcode | city        | country     |
-            | ms         |             | Erika     | Musterfrau | Heidestraße 17 c    | 12345   | Köln        | Schweiz     |
-            | mr         | shopware AG | Max       | Mustermann | Mustermannstraße 92 | 48624   | Schöppingen | Deutschland |
+            | salutation | company     | firstname | lastname   | street              | zipcode | city        | country     | customer_type |
+            | ms         |             | Erika     | Musterfrau | Heidestraße 17 c    | 12345   | Köln        | Schweiz     | private       |
+            | mr         | shopware AG | Max       | Mustermann | Mustermannstraße 92 | 48624   | Schöppingen | Deutschland | business      |
 
     @payment
     Scenario Outline: I can change my payment method

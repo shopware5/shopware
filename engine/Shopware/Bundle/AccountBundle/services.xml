@@ -17,11 +17,40 @@
             <argument type="service" id="shopware_account.address_service" />
         </service>
 
+        <service id="shopware_account.constraint.current_password_validator" class="Shopware\Bundle\AccountBundle\Constraint\CurrentPasswordValidator">
+            <argument type="service" id="session" />
+            <argument type="service" id="service_container" />
+            <argument type="service" id="snippets" />
+            <tag name="validator.constraint_validator" alias="CurrentPasswordValidator" />
+        </service>
+
         <service id="shopware_account.form.addressform" class="Shopware\Bundle\AccountBundle\Form\Account\AddressFormType">
+            <argument type="service" id="config" />
+            <argument type="service" id="models" />
+            <tag name="form.type" />
+        </service>
+
+        <service id="shopware_account.form.personalform" class="Shopware\Bundle\AccountBundle\Form\Account\PersonalFormType">
             <argument type="service" id="snippets" />
             <argument type="service" id="config" />
-            <argument type="service" id="events" />
-            <argument type="service" id="models" />
+            <argument type="service" id="dbal_connection" />
+            <argument type="service" id="shopware_storefront.context_service" />
+            <argument type="service" id="service_container" />
+            <tag name="form.type" />
+        </service>
+
+        <service id="shopware_account.form.emailupdateform" class="Shopware\Bundle\AccountBundle\Form\Account\EmailUpdateFormType">
+            <argument type="service" id="snippets" />
+            <argument type="service" id="config" />
+            <argument type="service" id="dbal_connection" />
+            <argument type="service" id="service_container" />
+            <argument type="service" id="shopware_storefront.context_service" />
+            <tag name="form.type" />
+        </service>
+
+        <service id="shopware_account.form.passwordupdateform" class="Shopware\Bundle\AccountBundle\Form\Account\PasswordUpdateFormType">
+            <argument type="service" id="snippets" />
+            <argument type="service" id="config" />
             <tag name="form.type" />
         </service>
 

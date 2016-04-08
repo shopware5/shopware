@@ -24,7 +24,6 @@
 
 namespace Shopware\Bundle\FormBundle;
 
-use Shopware\Bundle\FormBundle\Extension\EnlightExtension;
 use Symfony\Component\Form\Extension\DependencyInjection\DependencyInjectionExtension;
 use Symfony\Component\Form\Extension\Validator\ValidatorExtension;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -42,7 +41,6 @@ class FormFactory
     {
         return SymfonyForms::createFormFactoryBuilder()
             ->addExtension(new ValidatorExtension($validator))
-            ->addExtension(new EnlightExtension())
             ->addExtension($dependencyInjectionExtension)
             ->getFormFactory();
     }

@@ -114,7 +114,6 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
 
         foreach ($widgets as $widget) {
             $this->setWidgetPosition($widget['id'], $widget['position'], $widget['column']);
-
         }
 
         $this->View()->assign(array('success' => true));
@@ -684,13 +683,13 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         $status = $params["status"];
 
         if (!$toMail || !$fromName || !$fromMail || !$subject || !$content || !$userId) {
-            $this->View()->assign(array('success' => false, 'message' => 'All required fiels needs to be filled.'));
+            $this->View()->assign(array('success' => false, 'message' => 'All required fields needs to be filled.'));
             return false;
         }
 
         $content = preg_replace('`<br(?: /)?>([\\n\\r])`', '$1', $params['content']);
 
-        $compiler = new Shopware_Components_StringCompiler($this->View());
+        $compiler = new Shopware_Components_StringCompiler($this->View()->Engine());
         $defaultContext = array(
             'sConfig' => Shopware()->Config(),
         );

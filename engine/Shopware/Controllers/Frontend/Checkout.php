@@ -232,6 +232,17 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         if (!empty($voucherErrors)) {
             $this->View()->assign('sVoucherError', $voucherErrors);
         }
+
+        if (empty($activeBillingAddressId = $this->session->offsetGet('checkoutBillingAddressId', null))) {
+            $activeBillingAddressId = $userData['additional']['user']['default_billing_address_id'];
+        }
+
+        if (empty($activeShippingAddressId = $this->session->offsetGet('checkoutShippingAddressId', null))) {
+            $activeShippingAddressId = $userData['additional']['user']['default_shipping_address_id'];
+        }
+
+        $this->View()->assign('activeBillingAddressId', $activeBillingAddressId);
+        $this->View()->assign('activeShippingAddressId', $activeShippingAddressId);
     }
 
     /**
@@ -317,6 +328,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         }
 
         $this->saveOrder();
+        $this->resetTemporaryAddresses();
 
         $this->View()->assign($this->session['sOrderVariables']->getArrayCopy());
     }
@@ -1584,5 +1596,26 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         }
 
         return $payment;
+    }
+
+    /**
+     * Sets a temporary session variable which holds an address for the current order
+     */
+    public function setAddressAction()
+    {
+        $this->View()->loadTemplate('');
+        $target = $this->Request()->getParam('target', 'shipping');
+        $sessionKey = $target == 'shipping' ? 'checkoutShippingAddressId' : 'checkoutBillingAddressId';
+
+        $this->session->offsetSet($sessionKey, $this->Request()->getParam('addressId', null));
+    }
+
+    /**
+     * Resets the temporary session address ids back to default
+     */
+    private function resetTemporaryAddresses()
+    {
+        $this->session->offsetSet('checkoutBillingAddressId', null);
+        $this->session->offsetSet('checkoutShippingAddressId', null);
     }
 }

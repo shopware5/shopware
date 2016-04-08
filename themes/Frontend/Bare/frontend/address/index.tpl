@@ -31,7 +31,7 @@
         {/block}
 
         {block name="frontend_address_content"}
-            <div class="addresses--content block-group" data-panel-auto-resizer="true" data-columns="2">
+            <div class="addresses--content block-group" data-panel-auto-resizer="true">
 
                 {foreach $addresses as $address}
                     {block name="frontend_address_content_item"}
@@ -65,7 +65,7 @@
                                             {$address.street}<br />
                                             {if $address.additionalAddressLine1}{$address.additionalAddressLine1}<br />{/if}
                                             {if $address.additionalAddressLine2}{$address.additionalAddressLine2}<br />{/if}
-                                            {if {config name=showZipBeforeCity}}{$address.zipCode} {$address.city}{else}{$address.city} {$address.zipCode}{/if}<br />
+                                            {if {config name=showZipBeforeCity}}{$address.zipcode} {$address.city}{else}{$address.city} {$address.zipcode}{/if}<br />
                                             {if $address.state.name}{$address.state.name}<br />{/if}
                                             {$address.country.name}
                                         </div>

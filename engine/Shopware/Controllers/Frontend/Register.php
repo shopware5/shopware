@@ -22,6 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Bundle\AccountBundle\Form\Account\AddressFormType;
+use Shopware\Bundle\AccountBundle\Form\Account\PersonalFormType;
+
 /**
  * Register controller
  */
@@ -135,6 +138,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         if ($this->request->isPost()) {
             $this->savePersonalAction();
             $this->saveBillingAction();
+
             if (!empty($this->post['billing']['shippingAddress'])) {
                 $this->saveShippingAction();
             }
@@ -420,42 +424,101 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
      */
     public function validatePersonal()
     {
-        $this->admin->sSYSTEM->_POST = $this->post['personal'];
+        $errorData = ['sErrorFlag' => [], 'sErrorMessages' => []];
 
-        $result = array();
+        $data = $this->Request()->getPost();
+        $personalData = $data['register']['personal'];
 
-        $checkData = $this->admin->sValidateStep1();
-        if (!empty($checkData['sErrorMessages'])) {
-            $result = $checkData;
+        // convert for personal form type
+        $personalData['birthday'] = [
+            'year' => $personalData['birthyear'],
+            'month' => $personalData['birthmonth'],
+            'day' => $personalData['birthday'],
+        ];
+
+        $personalData['encoderName'] = $this->get('PasswordEncoder')->getDefaultPasswordEncoderName();
+        
+        /** @var \Symfony\Component\Form\Form $form */
+        $form = $this->get('shopware.form.factory')->create(PersonalFormType::class, [], ['allow_extra_fields' => true]);
+        $form->submit($personalData);
+
+        if ($form->isValid() === false) {
+            $errorData['sErrorMessages'][] = $this->get('snippets')
+                ->getNamespace('frontend/account/internalMessages')
+                ->get('ErrorFillIn', 'Please fill in all red fields');
+
+            foreach ($form->getErrors(true) as $error) {
+                $field = $error->getOrigin()->getName();
+                $errorData['sErrorFlag'][$field] = $error->getMessage();
+
+                if (in_array($field, ['email', 'password'])) {
+                    $errorData['sErrorMessages'][] = $error->getMessage();
+                }
+            }
+
+            $register = $this->session->offsetGet('sRegister');
+            unset($register['auth']["email"]);
+            unset($register['auth']["password"]);
+            unset($register['auth']["encoderName"]);
+            $this->session->offsetSet('sRegister', $register);
         }
 
-        $requirePhone = (bool) (Shopware()->Config()->get('showPhoneNumberField')
-            && Shopware()->Config()->get('requirePhoneField'));
+        $formData = $form->getData();
+        $extraData = $form->getExtraData();
 
-        $requireBirthday = (bool) (Shopware()->Config()->get('showBirthdayField')
-            && Shopware()->Config()->get('requireBirthdayField'));
+        $this->setRegisterData($formData, $extraData);
 
-        $rules = array(
-            'customer_type'=>array('required'=>0),
-            'salutation'=>array('required'=>1),
-            'firstname'=>array('required'=>1),
-            'lastname'=>array('required'=>1),
-            'phone'=>array('required'=> $requirePhone),
-            'sValidation'=>array('required'=>0),
-            'birthyear'=>array('required'=> $requireBirthday, 'date' => ['d' => 'birthday', 'm' => 'birthmonth', 'y' => 'birthyear']),
-            'birthmonth'=>array('required'=> $requireBirthday, 'date' => ['d' => 'birthday', 'm' => 'birthmonth', 'y' => 'birthyear']),
-            'birthday'=>array('required'=> $requireBirthday, 'date' => ['d' => 'birthday', 'm' => 'birthmonth', 'y' => 'birthyear']),
-            'dpacheckbox'=>array('required'=>(Shopware()->Config()->get('ACTDPRCHECK'))?1:0)
-        );
-        $rules = Shopware()->Events()->filter('Shopware_Controllers_Frontend_Register_validatePersonal_FilterRules', $rules, array('subject'=>$this));
+        return $errorData;
+    }
 
-        $checkData = $this->admin->sValidateStep2($rules);
+    /**
+     * Set register related array values
+     *
+     * @param array $formData
+     * @param array $extraData
+     */
+    private function setRegisterData(array $formData, array $extraData = [])
+    {
+        $register = $this->session->offsetGet('sRegister');
 
-        if (!empty($checkData['sErrorMessages'])) {
-            $result = array_merge_recursive($result, $checkData);
+        // Email
+        $register['auth']['email'] = $formData['email'];
+
+        // Validation required
+        $register['billing']['sValidation'] = $extraData['sValidation'];
+
+        // Receive Newsletter yes / no
+        $register['auth']["receiveNewsletter"] = $extraData['receiveNewsletter'];
+
+        // Password
+        if ($formData['password']) {
+            $register['auth']['encoderName'] = Shopware()->Container()->get('PasswordEncoder')->getDefaultPasswordEncoderName();
+            $register['auth']['password'] = Shopware()->Container()->get('PasswordEncoder')->encodePassword(
+                $formData["password"],
+                $register['auth']['encoderName']
+            );
+        } else {
+            unset($register['auth']["password"]);
+            unset($register['auth']["encoderName"]);
         }
 
-        return $result;
+        // Skip account creation
+        if (!$extraData['skipLogin']) {
+            $register['auth']['accountmode'] = '0'; // Setting account mode to ACCOUNT
+        } else {
+            // Enforce the creation of an md5 hashed password for anonymous accounts
+            $register['auth']["password"] = md5(uniqid(rand()));
+            $register['auth']['encoderName'] = 'md5';
+            $register["auth"]["accountmode"] = "1"; // Setting account mode to NO_ACCOUNT
+        }
+
+        $register['billing']['salutation'] = $formData['salutation'];
+        $register['billing']['firstname'] = $formData['firstname'];
+        $register['billing']['lastname'] = $formData['lastname'];
+        $register['billing']['customer_type'] = $extraData['customer_type'];
+        $register['billing']['phone'] = $extraData['phone'];
+
+        $this->session->offsetSet('sRegister', $register);
     }
 
     /**
@@ -465,86 +528,53 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
      */
     public function validateBilling()
     {
-        $countryData = $this->admin->sGetCountryList();
-        $countryIds = array();
+        $errorData = ['sErrorFlag' => [], 'sErrorMessages' => []];
 
-        foreach ($countryData as $key => $country) {
-            $countryIds[$key] = $country['id'];
+        $data = $this->Request()->getPost();
+        $register = $this->session->offsetGet('sRegister');
+        $billingData = array_merge($register['billing'], $data['register']['billing']);
+        $billingData['customer_type'] = $data['register']['personal']['customer_type'];
+
+        // force business validation
+        if (!empty($data['register']['personal']['sValidation'])) {
+            $billingData['customer_type'] = 'business';
         }
 
-        $rules = array(
-            'company'       => array('required' => 0),
-            'street'        => array('required' => 1),
-            'zipcode'       => array('required' => 1),
-            'city'          => array('required' => 1),
-            'country'       => array(
-                'required' => 1,
-                'in' => $countryIds
-            ),
-            'department'    => array('required' => 0),
-            'shippingAddress' => array('required' => 0),
-            'additional_address_line1' => array(
-                'required' => (Shopware()->Config()->requireAdditionAddressLine1 && Shopware()->Config()->showAdditionAddressLine1) ? 1 : 0
-            ),
-            'additional_address_line2' => array(
-                'required' => (Shopware()->Config()->requireAdditionAddressLine2 && Shopware()->Config()->showAdditionAddressLine2) ? 1 : 0
-            ),
-            'text1'         => array('required' => 0),
-            'text2'         => array('required' => 0),
-            'text3'         => array('required' => 0),
-            'text4'         => array('required' => 0),
-            'text5'         => array('required' => 0),
-            'text6'         => array('required' => 0)
-        );
+        if (!empty($billingData['country_state_' . $billingData['country']])) {
+            $billingData['state'] = $billingData['country_state_' . $billingData['country']];
+            $billingData['stateID'] = $billingData['country_state_' . $billingData['country']];
+        }
 
-        // Check if state selection is required
-        if (!empty($this->post["billing"]["country"])) {
-            $stateSelectionRequired = Shopware()->Db()->fetchRow(
-                "SELECT display_state_in_registration, force_state_in_registration
-                FROM s_core_countries WHERE id = ?",
-                array($this->post["billing"]["country"])
-            );
+        $address = new \Shopware\Models\Customer\Address();
 
-            if ($stateSelectionRequired["display_state_in_registration"]) {
-                $countryDataIndex = array_search($this->post["billing"]["country"], $countryIds);
-                $statesIds = array_column($countryData[$countryDataIndex]['states'], 'id');
+        $form = Shopware()->Container()->get('shopware.form.factory')->create(AddressFormType::class, $address, ['allow_extra_fields' =>  true]);
+        $form->submit($billingData);
 
-                // if not required, allow empty values
-                if (!$stateSelectionRequired["force_state_in_registration"]) {
-                    $statesIds[] = "";
-                }
+        $register = $this->session->offsetGet('sRegister');
+        if ($form->isValid() === false) {
+            $errorData['sErrorMessages'][] = $this->get('snippets')
+                ->getNamespace('frontend/account/internalMessages')
+                ->get('ErrorFillIn', 'Please fill in all red fields');
 
-                $rules["stateID"] = array(
-                    "required" => $stateSelectionRequired["force_state_in_registration"],
-                    'in' => $statesIds
-                );
+            foreach ($form->getErrors(true) as $error) {
+                $errorData['sErrorFlag'][$error->getOrigin()->getName()] = $error->getMessage();
             }
 
-            $this->post["billing"]["stateID"] = $this->post["billing"]["country_state_".$this->post["billing"]["country"]];
+            foreach ($register['billing'] as $key => $value) {
+                unset($register['billing'][$key]);
+            }
+        } else {
+            foreach ($billingData as $key => $value) {
+                $register['billing'][$key] = $value;
+            }
+        }
+        $this->session->offsetSet('sRegister', $register);
 
-            unset($this->post["billing"]["country_state_".$this->post["billing"]["country"]]);
+        if (empty($errorData['sErrorMessages'])) {
+            $this->session['sCountry'] = $address->getCountry()->getId();
         }
 
-        if (!empty($this->post['personal']['sValidation'])) {
-            $this->post['personal']['customer_type'] = 'business';
-        }
-
-        if (!empty($this->post['personal']['customer_type']) && $this->post['personal']['customer_type'] == 'business') {
-            $rules['company'] = array('required'=>1);
-            $rules['ustid'] = array('required'=>(Shopware()->Config()->vatCheckRequired && Shopware()->Config()->vatCheckEndabled));
-        }
-        $rules = Shopware()->Events()->filter('Shopware_Controllers_Frontend_Register_validateBilling_FilterRules', $rules, array('subject'=>$this));
-
-        $this->admin->sSYSTEM->_POST = $this->post['billing'];
-
-        $checkData = $this->admin->sValidateStep2($rules, false);
-
-        if (empty($checkData['sErrorMessages'])) {
-            $this->session['sCountry'] = (int) $this->session['sRegister']['billing']['country'];
-        }
-
-
-        return $checkData;
+        return $errorData;
     }
 
     /**
@@ -554,77 +584,45 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
      */
     public function validateShipping()
     {
-        $countryData = $this->admin->sGetCountryList();
-        $countryIds = array();
+        $errorData = ['sErrorFlag' => [], 'sErrorMessages' => []];
+        $data = $this->Request()->getPost();
 
-        foreach ($countryData as $key => $country) {
-            $countryIds[$key] = $country['id'];
+        if (empty($data['register']['billing']['shippingAddress'])) {
+            return $errorData;
         }
 
-        $rules = array(
-            'salutation'    => array('required' => 1),
-            'company'       => array('required' => 0),
-            'firstname'     => array('required' => 1),
-            'lastname'      => array('required' => 1),
-            'street'        => array('required' => 1),
-            'zipcode'       => array('required' => 1),
-            'city'          => array('required' => 1),
-            'department'    => array('required' => 0),
-            'text1'         => array('required' => 0),
-            'text2'         => array('required' => 0),
-            'text3'         => array('required' => 0),
-            'text4'         => array('required' => 0),
-            'text5'         => array('required' => 0),
-            'text6'         => array('required' => 0),
-            'additional_address_line1' => array(
-                'required' => (Shopware()->Config()->requireAdditionAddressLine1 && Shopware()->Config()->showAdditionAddressLine1) ? 1 : 0
-            ),
-            'additional_address_line2' => array(
-                'required' => (Shopware()->Config()->requireAdditionAddressLine2 && Shopware()->Config()->showAdditionAddressLine2) ? 1 : 0
-            )
-        );
+        $shippingData = $data['register']['shipping'];
+        $address = new \Shopware\Models\Customer\Address();
 
-        if (Shopware()->Config()->get('sCOUNTRYSHIPPING')) {
-            $rules['country'] = array(
-                'required' => 1,
-                'in' => $countryIds
-            );
+        if (!empty($shippingData['country_shipping_state_' . $shippingData['country']])) {
+            $shippingData['state'] = $shippingData['country_shipping_state_' . $shippingData['country']];
+            $shippingData['stateID'] = $shippingData['country_shipping_state_' . $shippingData['country']];
+        }
 
-            // Check if state selection is required
-            if (!empty($this->post["shipping"]["country"])) {
-                $stateSelectionRequired = Shopware()->Db()->fetchRow(
-                    "SELECT display_state_in_registration, force_state_in_registration
-                    FROM s_core_countries WHERE id = ?",
-                    array($this->post["shipping"]["country"])
-                );
+        $form = Shopware()->Container()->get('shopware.form.factory')->create(AddressFormType::class, $address, ['allow_extra_fields' =>  true]);
+        $form->submit($shippingData);
 
-                if ($stateSelectionRequired["display_state_in_registration"]) {
-                    $countryDataIndex = array_search($this->post["shipping"]["country"], $countryIds);
-                    $statesIds = array_column($countryData[$countryDataIndex]['states'], 'id');
+        $register = $this->session->offsetGet('sRegister');
+        if ($form->isValid() === false) {
+            $errorData['sErrorMessages'][] = Shopware()->Container()->get('snippets')
+                ->getNamespace('frontend/account/internalMessages')
+                ->get('ErrorFillIn', 'Please fill in all red fields');
 
-                    // if not required, allow empty values
-                    if (!$stateSelectionRequired["force_state_in_registration"]) {
-                        $statesIds[] = "";
-                    }
+            foreach ($form->getErrors(true) as $error) {
+                $errorData['sErrorFlag'][$error->getOrigin()->getName()] = $error->getMessage();
+            }
 
-                    $rules["stateID"] = array(
-                        "required" => $stateSelectionRequired["force_state_in_registration"],
-                        'in' => $statesIds
-                    );
-                }
-
-                $this->post["shipping"]["stateID"] = $this->post["shipping"]["country_shipping_state_".$this->post["shipping"]["country"]];
-                unset($this->post["shipping"]["country_shipping_state_".$this->post["shipping"]["country"]]);
+            foreach ($register['shipping'] as $key => $value) {
+                unset($register['shipping'][$key]);
+            }
+        } else {
+            foreach ($shippingData as $key => $value) {
+                $register['shipping'][$key] = $value;
             }
         }
+        $this->session->offsetSet('sRegister', $register);
 
-        $rules = Shopware()->Events()->filter('Shopware_Controllers_Frontend_Register_validateShipping_FilterRules', $rules, array('subject'=>$this));
-
-        $this->admin->sSYSTEM->_POST = $this->post['shipping'];
-
-        $checkData = $this->admin->sValidateStep2ShippingAddress($rules);
-
-        return $checkData;
+        return $errorData;
     }
 
     /**

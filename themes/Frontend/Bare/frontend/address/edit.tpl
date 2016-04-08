@@ -20,7 +20,12 @@
         {/block}
 
         {block name="frontend_address_form_content"}
-            {include file="frontend/address/form.tpl" formAction="{url controller=address action=edit id=$formData.id}"}
+            {if $sTarget}
+                {$url={url controller=address action=edit id=$formData.id sTarget=$sTarget sTargetAction=$sTargetAction}}
+            {else}
+                {$url={url controller=address action=edit id=$formData.id}}
+            {/if}
+            {include file="frontend/address/form.tpl" formAction="{$url}"}
         {/block}
 
     </div>

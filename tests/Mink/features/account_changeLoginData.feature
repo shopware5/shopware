@@ -41,18 +41,18 @@ Feature: Successful changes of login data
         Given I log in successful as "<user>" with email "test@example.com" and password "shopware"
         When  I follow "Rechnungsadresse ändern"
         And   I change my billing address:
-            | field         | register[personal] | register[billing] |
-            | customer_type | <type>             |                   |
-            | salutation    | <salutation>       |                   |
-            | company       |                    | <company>         |
-            | firstname     | <firstname>        |                   |
-            | lastname      | <lastname>         |                   |
-            | street        |                    | <street>          |
-            | zipcode       |                    | <zipcode>         |
-            | city          |                    | <city>            |
-            | country       |                    | <country>         |
+            | field         | address      |
+            | customer_type | <type>       |
+            | salutation    | <salutation> |
+            | company       | <company>    |
+            | firstname     | <firstname>  |
+            | lastname      | <lastname>   |
+            | street        | <street>     |
+            | zipcode       | <zipcode>    |
+            | city          | <city>       |
+            | country       | <country>    |
 
-        Then  I should see "Erfolgreich gespeichert"
+        Then  I should see "Die Adresse wurde erfolgreich gespeichert."
         And   the "billing" address should be "<company>, <firstname> <lastname>, <street>, <zipcode> <city>, <country>"
 
         Examples:
@@ -89,7 +89,7 @@ Feature: Successful changes of login data
 
         Then  I should see "Diese E-Mail-Adresse ist bereits registriert"
         And   I should see "Bitte wählen Sie ein Passwort, welches aus mindestens 8 Zeichen besteht."
-        But   I should not see "Bitte füllen Sie alle rot markierten Felder aus"
+        But   I should see "Bitte füllen Sie alle rot markierten Felder aus"
 
         When  I register me:
             | field    | register[personal] |
@@ -97,13 +97,6 @@ Feature: Successful changes of login data
             | password | abcdefgh           |
 
         Then  I should see "Willkommen, Max Mustermann"
-
-        When  I follow the link "otherButton" of the element "AccountBilling"
-        Then  I should see "Nachdem Sie die erste Bestellung durchgeführt haben, können Sie hier auf vorherige Rechnungsadressen zugreifen."
-
-        When  I follow "Mein Konto"
-        And   I follow the link "otherButton" of the element "AccountShipping"
-        Then  I should see "Nachdem Sie die erste Bestellung durchgeführt haben, können Sie hier auf vorherige Lieferadressen zugreifen."
 
         When  I follow "Meine Bestellungen"
         Then  I should see "Sie haben noch keine Bestellung durchgeführt."
