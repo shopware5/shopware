@@ -15,9 +15,9 @@
                             <tr>
                                 <td height="180" valign="center" style="text-align:center;background-color:#fff;">
                                     <div align="center" style="overflow:hidden;">
-                                        <a target="_blank" href="{url controller=detail sArticle=$sArticle.articleID}" title="{$sArticle.articleName}">
+                                        <a target="_blank" href="{url controller=detail sArticle=$sArticle.articleID}" title="{$sArticle.articleName|escape}">
                                             {if $sArticle.image.source}
-                                                <img src="{$sArticle.image.thumbnails[0].source}" border="0" alt="{$sArticle.articleName|escape|truncate:155}">
+                                                <img style="max-height: 140px;max-width: 130px;" src="{$sArticle.image.thumbnails[0].source}" border="0" alt="{$sArticle.articleName|escape|truncate:155}">
                                             {else}
                                                 <img src="{link file='frontend/_public/src/img/no-picture.jpg' fullPath}" alt="{s name="ListingBoxNoPicture" namespace="frontend/listing/box_article"}{/s}" border="0"/>
                                             {/if}
@@ -27,12 +27,12 @@
                             </tr>
                             <tr>
                                 <td valign="top" style="color:#000; font-size:13px; background-color:#fff; height:5px; padding: 8px 10px 5px 10px; font-weight:bold;">
-                                    <a href="{url controller=detail sArticle=$sArticle.articleID}" target="_blank" title="{$sArticle.articleName}" style="color:#000000;text-decoration:underline;font-size:13px;">{$sArticle.articleName|truncate:20:"[..]"}</a>
+                                    <a href="{url controller=detail sArticle=$sArticle.articleID}" target="_blank" title="{$sArticle.articleName|escape}" style="color:#000000;text-decoration:underline;font-size:13px;">{$sArticle.articleName}</a>
                                 </td>
                             </tr>
                             <tr>
                                 <td height="50" valign="top" style="font-size:13px; color:#8c8c8c; padding: 0 10px 8px 10px;">
-                                    {$sArticle.description_long|truncate:80:"..."}
+                                    {$sArticle.description_long|strip_tags|truncate:80:"..."}
                                 </td>
                             </tr>
                             <tr>
