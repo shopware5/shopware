@@ -329,6 +329,15 @@ class Compiler
             $this->collectInheritanceCss($inheritances['custom'])
         );
 
+        $definitions = $this->eventManager->filter(
+            'Theme_Compiler_Collect_Less_Definitions_FilterResult',
+            $definitions,
+            array(
+                'shop' => $shop,
+                'template' => $template
+            )
+        );
+
         return $definitions;
     }
 
@@ -372,6 +381,15 @@ class Compiler
         $files = array_merge(
             $files,
             $this->collectInheritanceJavascript($inheritances['custom'])
+        );
+
+        $files = $this->eventManager->filter(
+            'Theme_Compiler_Collect_Javascript_Files_FilterResult',
+            $files,
+            array(
+                'shop' => $shop,
+                'template' => $template
+            )
         );
 
         return $files;
