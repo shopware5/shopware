@@ -55,7 +55,8 @@
          * @method onOpenSelection
          */
         onOpenSelection: function (event) {
-            var me = this;
+            var me = this,
+                sizing = 'content';
 
             event.preventDefault();
 
@@ -70,6 +71,10 @@
             $.loadingIndicator.open({
                 openOverlay: false
             });
+
+            if (window.StateManager._getCurrentDevice() === 'mobile') {
+                sizing = 'auto';
+            }
 
             $.publish('plugin/swAddressSelector/onBeforeAddressFetch', [ me, event ]);
 
@@ -88,6 +93,7 @@
                             width: '80%',
                             height: '80%',
                             additionalClass: 'select-address--modal',
+                            sizing: sizing,
                             title: me.opts.title
                         });
 

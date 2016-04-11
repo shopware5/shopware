@@ -146,6 +146,44 @@ It is displayed as the third step of the checkout process of Shopware and shows 
             white-space: nowrap;
         }
     }
+
+    .information--panel-item {
+        .clearfix();
+
+        .panel--body {
+            .clearfix();
+        }
+    }
+
+    .information--panel-address {
+
+        > .panel > .panel--body {
+            padding: 0;
+        }
+
+        .addresses--are-equal {
+            .shipping--panel {
+                .panel--body {
+                    text-align: center;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: @tabletLandscapeViewportWidth) {
+    .information--panel-address {
+        .addresses--are-equal {
+            .shipping--panel {
+                margin: 0;
+
+                .panel--body {
+                    .unitize(padding-top, 20);
+                    border-top: 1px solid #dadae5;
+                }
+            }
+        }
+    }
 }
 
 @media screen and (min-width: @phoneLandscapeViewportWidth) {
@@ -336,8 +374,27 @@ It is displayed as the third step of the checkout process of Shopware and shows 
         }
 
         .information--panel-wrapper {
+            .payment--panel {
+                .btn--change-payment {
+                    .unitize(bottom, 20);
+                    position: absolute;
+                }
+            }
+
             .information--panel-item {
                 width: 33.3%;
+            }
+            .information--panel-address {
+                width: 66.6%;
+
+                > .panel {
+                    margin: 0;
+
+                    .information--panel {
+                        width: 50%;
+                        float: left;
+                    }
+                }
             }
         }
     }
