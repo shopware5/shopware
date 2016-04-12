@@ -728,7 +728,7 @@ class sOrder
                              $this->db->quote((string) $basketRow["ob_attr5"]).",".
                              $this->db->quote((string) $basketRow["ob_attr6"]).
             ")";
-            $attributeSql = $this->eventManager->filter('Shopware_Modules_Order_SaveOrderAttributes_FilterDetailsSQL', $attributeSql, array('subject'=>$this, 'row'=>$basketRow, 'user'=>$this->sUserData, 'order'=>array("id"=>$orderID, "number"=>$orderNumber)));
+            $attributeSql = $this->eventManager->filter('Shopware_Modules_Order_SaveOrderAttributes_FilterDetailsSQL', $attributeSql, array('subject'=>$this, 'row'=>$basketRow, 'user'=>$this->sUserData, 'order'=>array("id"=>$orderID, "number"=>$orderNumber), 'orderDetailsId' => $orderdetailsID));
             $this->db->executeUpdate($attributeSql);
 
             $detailAttributes = $this->getOrderDetailAttributes($orderdetailsID);
