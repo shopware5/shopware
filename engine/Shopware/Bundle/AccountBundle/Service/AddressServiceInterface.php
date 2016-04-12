@@ -48,6 +48,14 @@ interface AddressServiceInterface
     public function delete(Address $address);
 
     /**
+     * Validates the given address with the current shop configuration
+     *
+     * @param Address $address
+     * @return bool
+     */
+    public function isValid(Address $address);
+
+    /**
      * Searches all customer addresses for the given data
      *
      * @param array $data

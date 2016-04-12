@@ -100,6 +100,34 @@ class AddressService implements AddressServiceInterface
     }
 
     /**
+     * @inheritdoc
+     */
+    public function isValid(Address $address)
+    {
+        $data = [
+            'company' => $address->getCompany(),
+            'department' => $address->getDepartment(),
+            'salutation' => $address->getSalutation(),
+            'firstname' => $address->getFirstname(),
+            'lastname' => $address->getLastname(),
+            'street' => $address->getStreet(),
+            'zipcode' => $address->getZipcode(),
+            'city' => $address->getCity(),
+            'phone' => $address->getPhone(),
+            'country' => $address->getCountry()->getId(),
+            'state' => $address->getState() ? $address->getState()->getId() : null,
+            'vatId' => $address->getVatId(),
+            'additionalAddressLine1' => $address->getAdditionalAddressLine1(),
+            'additionalAddressLine2' => $address->getAdditionalAddressLine2(),
+        ];
+
+        $form = $this->formFactory->create(AddressFormType::class, new Address(), ['allow_extra_fields' => true]);
+        $form->submit($data);
+
+        return $form->isValid();
+    }
+
+    /**
      * @param Address $address
      * @throws ValidatorException
      */

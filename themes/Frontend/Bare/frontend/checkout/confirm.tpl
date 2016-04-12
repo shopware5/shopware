@@ -340,6 +340,12 @@
                                                         {if {config name=showZipBeforeCity}}{$sUserData.billingaddress.zipcode} {$sUserData.billingaddress.city}{else}{$sUserData.billingaddress.city} {$sUserData.billingaddress.zipcode}{/if}<br />
                                                         {if $sUserData.additional.state.statename}{$sUserData.additional.state.statename}<br />{/if}
                                                         {$sUserData.additional.country.countryname}
+
+                                                        {block name="frontend_checkout_confirm_left_billing_address_invalid"}
+                                                            {if $invalidBillingAddress}
+                                                                {include file='frontend/_includes/messages.tpl' type="warning" content="{s name='ConfirmAddressInvalidBillingAddress'}{/s}"}
+                                                            {/if}
+                                                        {/block}
                                                     </div>
                                                 {/block}
 
@@ -400,6 +406,12 @@
                                                         {if {config name=showZipBeforeCity}}{$sUserData.shippingaddress.zipcode} {$sUserData.shippingaddress.city}{else}{$sUserData.shippingaddress.city} {$sUserData.shippingaddress.zipcode}{/if}<br />
                                                         {if $sUserData.additional.stateShipping.statename}{$sUserData.additional.stateShipping.statename}<br />{/if}
                                                         {$sUserData.additional.countryShipping.countryname}
+
+                                                        {block name="frontend_checkout_confirm_left_shipping_address_invalid"}
+                                                            {if $invalidShippingAddress}
+                                                                {include file='frontend/_includes/messages.tpl' type="warning" content="{s name='ConfirmAddressInvalidShippingAddress'}{/s}"}
+                                                            {/if}
+                                                        {/block}
                                                     </div>
                                                 {/block}
 
@@ -596,8 +608,15 @@
             {block name='frontend_checkout_confirm_confirm_table_actions'}
                 <div class="table--actions actions--bottom">
                     <div class="main--actions">
-                        {if !$sLaststock.hideBasket}
-
+                        {if $sLaststock.hideBasket}
+                            {block name='frontend_checkout_confirm_stockinfo'}
+                                {include file="frontend/_includes/messages.tpl" type="error" content="{s name='ConfirmErrorStock'}{/s}"}
+                            {/block}
+                        {elseif ($invalidBillingAddress || $invalidShippingAddress)}
+                            {block name='frontend_checkout_confirm_addressinfo'}
+                                {include file="frontend/_includes/messages.tpl" type="error" content="{s name='ConfirmErrorInvalidAddress'}{/s}"}
+                            {/block}
+                        {else}
                             {block name='frontend_checkout_confirm_submit'}
                                 {* Submit order button *}
                                 {if $sPayment.embediframe || $sPayment.action}
@@ -609,10 +628,6 @@
                                         {s name='ConfirmActionSubmit'}{/s}<i class="icon--arrow-right"></i>
                                     </button>
                                 {/if}
-                            {/block}
-                        {else}
-                            {block name='frontend_checkout_confirm_stockinfo'}
-                                {include file="frontend/_includes/messages.tpl" type="error" content="{s name='ConfirmErrorStock'}{/s}"}
                             {/block}
                         {/if}
                     </div>
