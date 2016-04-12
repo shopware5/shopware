@@ -715,7 +715,12 @@ class Component extends ModelEntity
                 function ($field) {return $field->getPosition();},
                 $this->getFields()->toArray()
             );
-            $this->maxFieldPositionValue = max($positions) ? : 0;
+
+            if (0 === count($positions)) {
+                $this->maxFieldPositionValue = 0;
+            } else {
+                $this->maxFieldPositionValue = max($positions);
+            }
         }
 
         return $this->maxFieldPositionValue;
