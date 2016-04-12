@@ -23,6 +23,7 @@
  */
 
 use Enlight_Controller_Request_Request as Request;
+use Shopware\Models\Customer\Address;
 
 /**
  * @category  Shopware
@@ -243,6 +244,9 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 
         $this->View()->assign('activeBillingAddressId', $activeBillingAddressId);
         $this->View()->assign('activeShippingAddressId', $activeShippingAddressId);
+
+        $this->View()->assign('invalidBillingAddress', !$this->isValidAddress($activeBillingAddressId));
+        $this->View()->assign('invalidShippingAddress', !$this->isValidAddress($activeShippingAddressId));
     }
 
     /**
@@ -321,6 +325,19 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
                     $namespace->get('VoucherFailureAlreadyUsed', 'This voucher was used in an previous order')
                 )]
             );
+        }
+
+        if (empty($activeBillingAddressId = $this->session->offsetGet('checkoutBillingAddressId', null))) {
+            $activeBillingAddressId = $this->View()->sUserData['additional']['user']['default_billing_address_id'];
+        }
+
+        if (empty($activeShippingAddressId = $this->session->offsetGet('checkoutShippingAddressId', null))) {
+            $activeShippingAddressId = $this->View()->sUserData['additional']['user']['default_shipping_address_id'];
+        }
+
+        if (!$this->isValidAddress($activeBillingAddressId) || !$this->isValidAddress($activeShippingAddressId)) {
+            $this->forward('confirm');
+            return;
         }
 
         if (!empty($this->session['sNewsletter'])) {
@@ -1622,5 +1639,18 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     {
         $this->session->offsetSet('checkoutBillingAddressId', null);
         $this->session->offsetSet('checkoutShippingAddressId', null);
+    }
+
+    /**
+     * Validates the given address id with current shop configuration
+     * 
+     * @param $addressId
+     * @return bool
+     */
+    private function isValidAddress($addressId)
+    {
+        $address = $this->get('models')->find(Address::class, $addressId);
+
+        return $this->get('shopware_account.address_service')->isValid($address);
     }
 }

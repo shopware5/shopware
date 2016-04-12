@@ -10367,6 +10367,6 @@ UPDATE `s_articles_details` SET minpurchase = 1 WHERE minpurchase < 1;
 TRUNCATE TABLE `s_user_addresses`;
 INSERT INTO `s_user_addresses` (`id`, `user_id`, `company`, `department`, `salutation`, `firstname`, `lastname`, `street`, `zipcode`, `city`, `phone`, `country_id`, `state_id`, `ustid`) VALUES
 (1, 1, 'Muster GmbH', NULL, 'mr', 'Max', 'Mustermann', 'Musterstr. 55', '55555', 'Musterhausen', '05555 / 555555', 2, 3, NULL),
-(2, 2, 'B2B', 'Einkauf', NULL, 'Händler', 'Kundengruppe-Netto', 'Musterweg 1', '55555', 'Musterstadt', '012345 / 6789', 2, 3, NULL),
+(2, 2, 'B2B', 'Einkauf', 'mr', 'Händler', 'Kundengruppe-Netto', 'Musterweg 1', '55555', 'Musterstadt', '012345 / 6789', 2, 3, NULL),
 (3, 1, 'shopware AG', NULL, 'mr', 'Max', 'Mustermann', 'Mustermannstraße 92', '48624', 'Schöppingen', NULL, 2, NULL, NULL),
-(4, 2, 'B2B', 'Einkauf', NULL, 'Händler', 'Kundengruppe-Netto', 'Musterweg 1', '00000', 'Musterstadt', NULL, 2, 3, NULL);
+(4, 2, 'B2B', 'Einkauf', 'mr', 'Händler', 'Kundengruppe-Netto', 'Musterweg 1', '00000', 'Musterstadt', NULL, 2, 3, NULL);
