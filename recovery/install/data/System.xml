@@ -5,7 +5,7 @@
 	</requirement>
 	<requirement>
 	 	<name>ionCube Loader</name><group>core</group><required>4.6</required>
-        <notice>The ionCube Loader is only required if you wish to use commercial plugins with the Shopware Community Edition, or if you have purchased the Cluster, Enterprise or Professional Edition of Shopware.</notice>
+		<notice>The ionCube Loader is only required if you wish to use encrypted third-party plugins.</notice>
     </requirement>
     <requirement>
         <name>eAccelerator</name><group>core</group><required>0</required>
