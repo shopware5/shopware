@@ -1,7 +1,6 @@
 # Shopware Upgrade Information
 In this document you will find a changelog of the important changes related to the code base of Shopware.
 
-
 ## 5.2.0 DEV
 * Increased minimum required PHP version to PHP >= 5.5.9.
 * Added CSRF protection to the backend which is enabled by default.
@@ -143,39 +142,6 @@ In this document you will find a changelog of the important changes related to t
 * Removed `selectShippingAction()` in `Controllers/Frontend/Account.php`
 * Moved block `frontend_checkout_confirm_left_billing_address` outside panel body
 * Moved block `frontend_checkout_confirm_left_shipping_address` outside panel body
-
-## 5.1.4
-* Customer logout will now regenerate the session id and clear the customers basket.
-* Added `IsNew` condition for product streams
-* Added `SimilarProducts` condition
-* Deprecated Method `Shopware\Bundle\StoreFrontBundle\Gateway\SimilarProductsGatewayInterface::getListByCategory` will be removed in shopware version 5.3
-* Deprecated Method `Shopware\Bundle\StoreFrontBundle\Gateway\SimilarProductsGatewayInterface::getByCategory` will be removed in shopware version 5.3
-* Added method `\Shopware\Models\Article\Repository::getSupplierListQueryBuilder()` to make the query builder extensible
-* Added index on `s_article_img_mapping_rules`.`mapping_id` and `s_article_img_mapping_rules`.`option_id`
-* Fixed `AND` search logic for search terms which not exist in the s_articles table.
-* Added order and payment state constants in `\Shopware\Models\Order\Status`
-* change email validation to a simple regex: `/^.+\@\S+\.\S+$/`. You can implement your own email validation by implementing the `EmailValidatorInterface`.
-* Optimized header lookups for `x-shopware-cache-id` will improve HTTP-Cache invalidation performance. Old behaviour can be restored by setting `lookup_optimization` to false
-* Moved the `div` element in block `frontend_index_left_switches` below `ul` element for W3C compatability in `themes/Frontend/Bare/frontend/index/sidebar.tpl`.
-* Added css rule in order to remove bottom border from last child of `.emotion--html > .html--content` so there is no scrollbar when only whitespace would overlap parent div
-* Enabled product streams for parent categories
-* Disabled the automatic detection of similar products for install customers. Enabling this option may decrease the shop performance.
-* Fixed the `removeListener` method in `Enlight_Event_Subscriber_Config`, `Enlight_Event_Subscriber_Array` and `Enlight_Event_EventManager`
-* Removed `engine/Shopware/Bundle/SearchBundleES/SimilarProductsService.php`
-* Added the possibility to configure the file and directory permissions for the `Local` CDN adapter.
-
-## 5.1.3
-* Switch Grunt to relativeUrls to unify the paths to less.php
-* Deprecated `Enlight_Application::getOption()` and `Enlight_Application::getOptions`
-* Renamed smarty block from `rontend_index_start` to `frontend_index_start` in `themes/Frontend/Bare/frontend/sitemap/index.tpl`
-* Added new global snippets before (`priceDiscountLabel`) and after (`priceDiscountInfo`) all pseudo prices for the possibility to provide more detailed information
-* Removed old snippet `reducedPrice` in `order_item_details.tpl` and `compare/col.tpl`.
-* Introduced smarty blocks for footer headlines in `themes/Frontend/Bare/frontend/index/footer-navigation.tpl`. New blocks:
-    * `frontend_index_footer_column_service_hotline_headline`
-    * `frontend_index_footer_column_service_menu_headline`
-    * `frontend_index_footer_column_information_menu_headline`
-    * `frontend_index_footer_column_newsletter_headline`
-* Removed out-of-stock variant selection due to problems
 * Removed the following backend models including their smarty blocks
     * `Shopware.apps.Supplier.model.Attribute`
     * `Shopware.apps.Customer.model.BillingAttributes`
@@ -233,6 +199,43 @@ In this document you will find a changelog of the important changes related to t
 * Fixed Shopware.form.plugin.Translation, the plugin can now be used in multiple forms at the same time.
     * Removed `clear`, `onOpenTranslationWindow`, `getFieldValues` and `onGetTranslatableFields` function
 * `\Shopware\Bundle\StoreFrontBundle\Gateway\GraduatedPricesGatewayInterface` requires now a provided `ShopContextInterface`
+
+
+## 5.1.5
+* The smarty variable `sCategoryInfo` in Listing and Blog controllers is now deprecated and will be removed soon. Use `sCategoryContent` instead, it's a drop in replacement. 
+
+## 5.1.4
+* Customer logout will now regenerate the session id and clear the customers basket.
+* Added `IsNew` condition for product streams
+* Added `SimilarProducts` condition
+* Deprecated Method `Shopware\Bundle\StoreFrontBundle\Gateway\SimilarProductsGatewayInterface::getListByCategory` will be removed in shopware version 5.3
+* Deprecated Method `Shopware\Bundle\StoreFrontBundle\Gateway\SimilarProductsGatewayInterface::getByCategory` will be removed in shopware version 5.3
+* Added method `\Shopware\Models\Article\Repository::getSupplierListQueryBuilder()` to make the query builder extensible
+* Added index on `s_article_img_mapping_rules`.`mapping_id` and `s_article_img_mapping_rules`.`option_id`
+* Fixed `AND` search logic for search terms which not exist in the s_articles table.
+* Added order and payment state constants in `\Shopware\Models\Order\Status`
+* change email validation to a simple regex: `/^.+\@\S+\.\S+$/`. You can implement your own email validation by implementing the `EmailValidatorInterface`.
+* Optimized header lookups for `x-shopware-cache-id` will improve HTTP-Cache invalidation performance. Old behaviour can be restored by setting `lookup_optimization` to false
+* Moved the `div` element in block `frontend_index_left_switches` below `ul` element for W3C compatability in `themes/Frontend/Bare/frontend/index/sidebar.tpl`.
+* Added css rule in order to remove bottom border from last child of `.emotion--html > .html--content` so there is no scrollbar when only whitespace would overlap parent div
+* Enabled product streams for parent categories
+* Disabled the automatic detection of similar products for install customers. Enabling this option may decrease the shop performance.
+* Fixed the `removeListener` method in `Enlight_Event_Subscriber_Config`, `Enlight_Event_Subscriber_Array` and `Enlight_Event_EventManager`
+* Removed `engine/Shopware/Bundle/SearchBundleES/SimilarProductsService.php`
+* Added the possibility to configure the file and directory permissions for the `Local` CDN adapter.
+
+## 5.1.3
+* Switch Grunt to relativeUrls to unify the paths to less.php
+* Deprecated `Enlight_Application::getOption()` and `Enlight_Application::getOptions`
+* Renamed smarty block from `rontend_index_start` to `frontend_index_start` in `themes/Frontend/Bare/frontend/sitemap/index.tpl`
+* Added new global snippets before (`priceDiscountLabel`) and after (`priceDiscountInfo`) all pseudo prices for the possibility to provide more detailed information
+* Removed old snippet `reducedPrice` in `order_item_details.tpl` and `compare/col.tpl`.
+* Introduced smarty blocks for footer headlines in `themes/Frontend/Bare/frontend/index/footer-navigation.tpl`. New blocks:
+    * `frontend_index_footer_column_service_hotline_headline`
+    * `frontend_index_footer_column_service_menu_headline`
+    * `frontend_index_footer_column_information_menu_headline`
+    * `frontend_index_footer_column_newsletter_headline`
+* Removed out-of-stock variant selection due to problems
 
 ## 5.1.2
 * Out-of-stock variants on the detail page are now selectable
