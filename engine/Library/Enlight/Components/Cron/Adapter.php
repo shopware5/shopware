@@ -82,6 +82,15 @@ interface Enlight_Components_Cron_Adapter
     public function getJobByName($name);
 
     /**
+     * Receives a single cron job by its action name
+     *
+     * @abstract
+     * @param String $action
+     * @return Enlight_Components_Cron_Job
+     */
+    public function getJobByAction($action);
+
+    /**
      * Adds a job to the crontab
      *
      * @abstract

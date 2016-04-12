@@ -63,6 +63,7 @@ EOF
         foreach ($manager->getAllJobs() as $job) {
             $rows[] = array(
                 $job->getName(),
+                $job->getAction(),
                 $job->getActive() ? 'Yes' : 'No',
                 $job->getInterval(),
                 $job->getNext(),
@@ -71,7 +72,7 @@ EOF
         }
 
         $table = $this->getHelperSet()->get('table');
-        $table->setHeaders(array('Name', 'Active', 'Interval', 'Next run', 'Last run'))
+        $table->setHeaders(array('Name', 'Action', 'Active', 'Interval', 'Next run', 'Last run'))
               ->setRows($rows);
 
         $table->render($output);

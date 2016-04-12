@@ -191,6 +191,21 @@ class Enlight_Components_Cron_Manager
     }
 
     /**
+     * Receives a single cron job by its action from the crontab
+     *
+     * @param String $action
+     * @return null|Enlight_Components_Cron_Job
+     */
+    public function getJobByAction($action)
+    {
+        $retVal = $this->adapter->getJobByAction((string) $action);
+        if (empty($retVal)) {
+            return null;
+        }
+        return $retVal;
+    }
+
+    /**
      * Adds an job to the crontab
      *
      * @param Enlight_Components_Cron_Job $job
