@@ -50,13 +50,31 @@
             me.applyDataAttributes();
 
             me.$elChildren = me.$el.children();
-            window.StateManager.on('resize', $.proxy(me._onResize, me));
+            $.subscribe(me.getEventName('plugin/swPanelAutoResizer/onAfterSetHeight'), $.proxy(me._onAfterSetHeight, me));
 
             $.publish('plugin/swPanelAutoResizer/onInit', [ me ]);
-
-            me._onResize();
-
+            me.update();
             $.publish('plugin/swPanelAutoResizer/onAfterInit', [ me ]);
+        },
+
+        /**
+         * Trigger a recalculation if the panel is nested any parent panel has been resized.
+         *
+         * @param event
+         * @param context
+         * @private
+         */
+        _onAfterSetHeight: function(event, context) {
+            var me = this;
+
+            if (me === context) {
+                return;
+            }
+
+            if (me.$el.closest(context.$el).length > 0) {
+                me._calculateColumns();
+                me.resize();
+            }
         },
 
         /**
@@ -66,8 +84,21 @@
          * @private
          */
         _calculateColumns: function() {
-            var me = this;
-            me._columns = Math.floor(me.$el.width() / me.$elChildren.first().width());
+            var me = this,
+                maxWidth = me.$el.width(),
+                width = 0,
+                columns = 0;
+
+            $.each(me.$elChildren, function(index, child) {
+                if (width >= maxWidth) {
+                    return;
+                }
+
+                width += $(child).width();
+                columns++;
+            });
+
+            me._columns = columns;
         },
 
         /**
@@ -75,7 +106,7 @@
          *
          * @private
          */
-        _onResize: function() {
+        update: function() {
             var me = this;
 
             if (me._resizeTimeout) {
@@ -83,12 +114,12 @@
             }
 
             me._resizeTimeout = window.setTimeout(function() {
-                $.publish('plugin/swPanelAutoResizer/onResize', [ me ]);
+                $.publish('plugin/swPanelAutoResizer/onUpdate', [ me ]);
 
                 me._calculateColumns();
                 me.resize();
 
-                $.publish('plugin/swPanelAutoResizer/afterResize', [ me ]);
+                $.publish('plugin/swPanelAutoResizer/afterUpdate', [ me ]);
             }, 150);
         },
 
@@ -107,8 +138,13 @@
 
             $.publish('plugin/swPanelAutoResizer/onGetMaxHeight', [ me ]);
 
+            // set heights to auto to recalculate the actual content height
             $elements.each(function(index, childElement) {
-                itemHeight = $(childElement).first().height();
+                $(childElement).css('height', 'auto');
+            });
+
+            $elements.each(function(index, childElement) {
+                itemHeight = $(childElement).height();
                 if (itemHeight > height) {
                     height = itemHeight;
                 }
@@ -169,12 +205,17 @@
 
             if (me._columns > 1) {
                 for (i; i < childrenCount; i += me._columns) {
-                    chunkItems = me.$elChildren.slice(i, i + me._columns).find(selector);
+                    chunkItems = me.$elChildren
+                        .slice(i, i + me._columns)
+                        .map(function(index, child) {
+                            return $(child).find(selector).first();
+                        });
+
                     height = me.getMaxHeight(chunkItems);
                     me.setHeight(chunkItems, height);
                 }
             } else {
-               me.destroy();
+               me.resetHeight();
             }
 
             $.publish('plugin/swPanelAutoResizer/onAfterResize', [ me, selector ]);
@@ -183,7 +224,7 @@
         /**
          * Sets the height back to 'auto' if the plugin gets disabled
          */
-        destroy: function() {
+        resetHeight: function() {
             var me = this,
                 opts = me.opts;
 
@@ -196,6 +237,17 @@
             me.$elChildren.find(allSelectorClass).each(function(index, childElement) {
                 $(childElement).css('height', 'auto');
             });
+        },
+
+        /**
+         * Destroy the plugin and reset it's modified attributes
+         */
+        destroy: function() {
+            var me = this;
+
+            me.resetHeight();
+            $.unsubscribe(me.getEventName('plugin/swPanelAutoResizer/onAfterSetHeight'));
+            me._destroy();
         }
 
     });

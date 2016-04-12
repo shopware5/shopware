@@ -2031,6 +2031,7 @@ class sAdmin
             $userData = $this->completeUserCountryData($userData);
         } catch (\Exception $ex) {
             // no need to overwrite default billing address
+            $this->session->offsetUnset('checkoutBillingAddressId');
         }
 
         return $userData;
@@ -2062,6 +2063,7 @@ class sAdmin
             $userData = $this->completeUserCountryData($userData, true);
         } catch (\Exception $ex) {
             // no need to overwrite default shipping address
+            $this->session->offsetUnset('checkoutShippingAddressId');
         }
 
         return $userData;
