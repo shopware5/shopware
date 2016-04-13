@@ -199,6 +199,7 @@ In this document you will find a changelog of the important changes related to t
 * Fixed Shopware.form.plugin.Translation, the plugin can now be used in multiple forms at the same time.
     * Removed `clear`, `onOpenTranslationWindow`, `getFieldValues` and `onGetTranslatableFields` function
 * `\Shopware\Bundle\StoreFrontBundle\Gateway\GraduatedPricesGatewayInterface` requires now a provided `ShopContextInterface`
+* Added a Partner Filter to Backend Order View
 
 
 ## 5.1.5

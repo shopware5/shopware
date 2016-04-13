@@ -1156,6 +1156,15 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     }
 
     /**
+     * Returns filterable partners
+     */
+    public function getPartnersAction()
+    {
+        $this->View()->success = true;
+        $this->View()->data = Shopware()->Db()->fetchAll('SELECT IFNULL((SELECT company FROM s_emarketing_partner WHERE idcode = partnerID), partnerID) as name, partnerID as `value` FROM s_order WHERE partnerID IS NOT NULL AND partnerID != "" GROUP BY partnerID');
+    }
+
+    /**
      * Internal helper function which insert the order detail association data into the passed data array
      * @param array $data
      * @return array
