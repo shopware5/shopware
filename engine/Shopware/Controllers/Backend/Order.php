@@ -1169,6 +1169,31 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     }
 
     /**
+     * Returns filterable partners
+     */
+    public function getPartnersAction()
+    {
+        $this->View()->success = true;
+        $limit = $this->Request()->getParam('limit', 20);
+        $offset = $this->Request()->getParam('start', 0);
+
+        $dbalBuilder = $this->get('dbal_connection')->createQueryBuilder();
+        $data = $dbalBuilder
+            ->addSelect('IFNULL((SELECT company FROM s_emarketing_partner WHERE idcode = partnerID), partnerID) as name')
+            ->addSelect('partnerID as `value`')
+            ->from('s_order')
+            ->where('partnerID IS NOT NULL')
+            ->andWhere('partnerID != ""')
+            ->groupBy('partnerID')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->execute()
+            ->fetchAll();
+
+        $this->View()->data = $data;
+    }
+
+    /**
      * Internal helper function which insert the order detail association data into the passed data array
      * @param array $data
      * @return array

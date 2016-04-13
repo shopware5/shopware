@@ -77,6 +77,7 @@ Ext.define('Shopware.apps.Order.view.list.Filter', {
         reset: '{s name=filter/reset}Reset filters{/s}',
         empty: '{s name=filter/empty}Display all{/s}',
         article: '{s name=filter/article}Article{/s}',
+        partner: '{s name=filter/partner}Partner{/s}',
         document: {
             title: '{s name=document/title}Documents{/s}',
             date: '{s name=document/date}Date{/s}',
@@ -169,7 +170,8 @@ Ext.define('Shopware.apps.Order.view.list.Filter', {
                 me.createDispatchField(),
                 me.createCustomerGroupField(),
                 me.createArticleSearch(),
-                me.createShopField()
+                me.createShopField(),
+                me.createPartnerField()
             ]
         });
         return me.filterForm;
@@ -290,6 +292,44 @@ Ext.define('Shopware.apps.Order.view.list.Filter', {
             displayField: 'name',
             emptyText: me.snippets.empty,
             fieldLabel: me.snippets.shop
+        });
+    },
+
+    createPartnerField: function() {
+        var me = this;
+
+        var store = Ext.create('Ext.data.Store', {
+            fields: [
+                {
+                    name: 'name',
+                    type: 'string'
+                },
+                {
+                    name: 'value',
+                    type: 'string'
+                }
+            ],
+            remoteSort: true,
+            remoteFilter: true,
+            pageSize: 10,
+            proxy: {
+                type: 'ajax',
+                url: '{url action=getPartners}',
+                reader: {
+                    type: 'json',
+                    root: 'data'
+                }
+            }
+        });
+
+        return Ext.create('Ext.form.field.ComboBox', {
+            name: 'orders.partnerId',
+            store: store,
+            displayField: 'name',
+            valueField: 'value',
+            queryMode: 'remote',
+            emptyText: me.snippets.empty,
+            fieldLabel: me.snippets.partner
         });
     },
 
