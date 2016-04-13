@@ -892,7 +892,11 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
         $regex = new \RegexIterator($directoryIterator,  '/^.+\.js$/i', \RecursiveRegexIterator::GET_MATCH);
         foreach ($regex as $file) {
             $path = 'backend/' . $file[0];
-            $view->extendsBlock('backend/Emotion/app', '{include file="'. $path .'"}', 'append');
+            $view->extendsBlock(
+                'backend/Emotion/app',
+                PHP_EOL . '{include file="'. $path .'"}',
+                'append'
+            );
         }
     }
 
