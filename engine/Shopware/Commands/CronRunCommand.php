@@ -24,6 +24,9 @@
 
 namespace Shopware\Commands;
 
+use Enlight_Components_Cron_Job;
+use Enlight_Components_Cron_Manager;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -47,12 +50,17 @@ class CronRunCommand extends ShopwareCommand
 The <info>%command.name%</info> runs due cronjobs.
 EOF
             )
+            ->addArgument(
+                'cronjob',
+                InputArgument::OPTIONAL,
+                "If given, only run the cronjob which action matches, e.g. 'Shopware_CronJob_ClearHttpCache'"
+            )
             ->addOption(
                 'force',
                 'f',
                 InputOption::VALUE_NONE,
-                'If given, the file will be overwritten if it already exists'
-             )
+                'If given, the cronjob(s) will be run regardless of scheduling'
+            )
         ;
     }
 
@@ -64,15 +72,71 @@ EOF
         $this->registerErrorHandler($output);
         $this->container->load('plugins');
 
-        /** @var \Enlight_Components_Cron_Manager $manager */
+        /** @var Enlight_Components_Cron_Manager $manager */
         $manager = $this->container->get('cron');
 
-        $stack = array();
-        while (($job = $manager->getNextJob($input->getOption('force'))) !== null && !isset($stack[$job->getId()])) {
-            $stack[$job->getId()] = true;
+        $cronjob = $input->getArgument('cronjob');
+        $force = $input->getOption('force');
 
+        if (!empty($cronjob)) {
+            try {
+                $this->runSingleCronjob($output, $manager, $cronjob, $force);
+            } catch (\RuntimeException $e) {
+                $output->writeln('<error>'.$e->getMessage().'</error>');
+                $output->writeln('Please use the action name of a cronjob. You can see existing cronjobs in shopware backend or via <info>sw:cron:list</info> command.');
+                return 1;
+            }
+            return 0;
+        }
+
+        $stack = array();
+
+        while (($job = $manager->getNextJob($force)) !== null && !isset($stack[$job->getId()])) {
+            $stack[$job->getId()] = true;
             $output->writeln("Processing " . $job->getName());
             $manager->runJob($job);
         }
+
+        return 0;
+    }
+
+    /**
+     * @param OutputInterface $output
+     * @param Enlight_Components_Cron_Manager $manager
+     * @param string $cronjob
+     * @param bool $force
+     */
+    private function runSingleCronjob(OutputInterface $output, Enlight_Components_Cron_Manager $manager, $cronjob, $force)
+    {
+        $job = $manager->getJobByAction($cronjob);
+
+        if ($job === null) {
+            throw new \RuntimeException('Cronjob does not exist');
+        }
+
+        if (!$this->allowRun($force, $job)) {
+            return;
+        }
+
+        $output->writeln("Processing " . $job->getName());
+        $manager->runJob($job);
+    }
+
+    /**
+     * @param boolean $force
+     * @param Enlight_Components_Cron_Job $job
+     * @return bool
+     */
+    private function allowRun($force, Enlight_Components_Cron_Job $job)
+    {
+        if ($force === true) {
+            return true;
+        }
+
+        /** @var \Zend_Date $nextRun */
+        $nextRun = $job->getNext();
+        $nextRun = new \DateTime($nextRun->getIso());
+
+        return ($nextRun <= new \DateTime());
     }
 }
