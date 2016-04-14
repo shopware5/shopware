@@ -427,5 +427,9 @@
         <service id="shopware.openssl_verificator" class="Shopware\Components\OpenSSLVerifier">
             <argument>%kernel.root_dir%/engine/Shopware/Components/HttpClient/public.key</argument>
         </service>
+
+        <service id="shopware.number_range_manager" class="Shopware\Components\NumberRangeManager">
+            <argument type="service" id="shopware.model_manager"/>
+        </service>
     </services>
 </container>

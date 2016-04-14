@@ -207,7 +207,11 @@ In this document you will find a changelog of the important changes related to t
 * Removed `saveAccount()` in `Controllers/Frontend/Account.php`
 * Moved field `birthday` from billing address to customer
 * Added validation of order number to `Shopware\Components\Api\Resource\Variant::prepareData()` to respond with meaningful error message for duplicate order numbers
-
+* Added service `shopware.number_range_manager` for safely retrieving the next number of a number range (`s_order_number`)
+* Changed the following methods to use the `shopware.number_range_manager` service for retrieving the next number of a range:
+    * `sAdmin::assignCustomerNumber()`
+    * `sOrder::sGetOrderNumber()`
+    * `Shopware_Components_Document::saveDocument()`
 
 ## 5.1.5
 * The smarty variable `sCategoryInfo` in Listing and Blog controllers is now deprecated and will be removed soon. Use `sCategoryContent` instead, it's a drop in replacement. 

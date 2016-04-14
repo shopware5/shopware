@@ -658,18 +658,14 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
                     $numberrange = "doc_".$typID;
                 }
 
-                $getNumber = Shopware()->Db()->fetchRow("
-                    SELECT `number`+1 as next FROM `s_order_number` WHERE `name` = ?", array($numberrange));
-
+                // Get the next number and save it in the document
+                $numberRangeManager = Shopware()->Container()->get('shopware.number_range_manager');
+                $nextNumber = $numberRangeManager->getNextNumber($numberrange);
                 Shopware()->Db()->query("
                     UPDATE `s_order_documents` SET `docID` = ? WHERE `ID` = ? LIMIT 1 ;
-                ", array($getNumber['next'], $rowID));
+                ", array($nextNumber, $rowID));
 
-                Shopware()->Db()->query("
-                    UPDATE `s_order_number` SET `number` = ? WHERE `name` = ? LIMIT 1 ;
-                ", array($getNumber['next'], $numberrange));
-
-                $bid = $getNumber["next"];
+                $bid = $nextNumber;
             }
         }
         $this->_documentID = $bid;
