@@ -123,7 +123,9 @@
         .addPlugin('*[data-ajax-variants-container="true"]', 'swAjaxVariant')
         .addPlugin('*[data-subcategory-nav="true"]', 'swSubCategoryNav', ['xs', 's'])
         .addPlugin('*[data-panel-auto-resizer="true"]', 'swPanelAutoResizer')
-        .addPlugin('*[data-address-selector="true"]', 'swAddressSelector');
+        .addPlugin('*[data-address-selection="true"]', 'swAddressSelection')
+        .addPlugin('*[data-address-editor="true"]', 'swAddressEditor')
+    ;
 
     $(function($) {
 

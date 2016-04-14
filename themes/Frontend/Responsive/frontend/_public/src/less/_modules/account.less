@@ -76,7 +76,7 @@ It allows the user to directly see and change the important information of their
     }
 }
 
-    // Account error message margin
+// Account error message margin
 .account--error,
 .account--success {
     .unitize-margin(0, 0, 10, 0);
@@ -91,7 +91,7 @@ It allows the user to directly see and change the important information of their
     .clearfix();
 }
 
-    // Change Address / Payment method
+// Change Address / Payment method
 .account--change-payment {
     &.register--content {
         display: block;
@@ -106,22 +106,6 @@ It allows the user to directly see and change the important information of their
     input[type="checkbox"] {
         .unitize-margin(0, 10, 0, 0);
     }
-}
-
-    // Select Address
-.account--addresses-content,
-.account--addresses-container {
-    .clearfix();
-}
-
-.account--addresses {
-    .clearfix();
-    width: 100%;
-}
-
-.address--container {
-    width: 100%;
-    padding: 2% 0 0 0;
 }
 
 .account--paging {
@@ -414,130 +398,6 @@ It allows the user to directly see and change the important information of their
     }
 }
 
-.account--content.account--addresses {
-    .unitize(margin, 0);
-    .unitize(padding-top, 45);
-
-    .addresses--item-body .panel--title {
-        .unitize-margin(0, 0, 20, 0);
-        padding-top: 0;
-    }
-
-    .account--welcome {
-        margin-bottom: 0;
-    }
-
-    &.account--addresses-form {
-        .alert {
-            .unitize-margin(20, 18, 20, 18);
-        }
-    }
-
-    .addresses--action {
-        .clearfix();
-        .unitize-margin(20, 20);
-
-        .addresses--submit {
-            width: 100%;
-            text-align: center;
-        }
-    }
-
-    .addresses--item-default-container {
-        .unitize(margin-bottom, 15);
-
-        h3 {
-            margin: 0;
-        }
-    }
-
-    .addresses--actions-set-defaults {
-        .unitize(margin-bottom, 10);
-        line-height: normal;
-
-        .btn {
-            padding: 0;
-            color: @brand-secondary;
-
-            &:hover {
-                color: @brand-primary;
-            }
-        }
-    }
-
-    .addresses--required-info {
-        .unitize-margin(0, 26, 16);
-        .unitize(font-size, 14);
-    }
-
-    .js--fancy-select {
-        .unitize(margin-bottom, 5);
-        width: 100%;
-    }
-
-    .addresses--field {
-        .unitize(margin-bottom, 10);
-        width: 100%;
-    }
-
-    .addresses--customertype {
-        display: block;
-    }
-
-    .addresses--zip-city {
-        .addresses--field-zipcode {
-            width: 28%;
-            float: left;
-        }
-
-        .addresses--field-city {
-            .clearfix();
-            width: 70%;
-            float: left;
-        }
-
-        .addresses--spacer {
-            margin-right: 2%;
-        }
-
-    }
-
-    &.addresses--delete {
-        .panel {
-            .unitize(margin-bottom, 20);
-        }
-    }
-
-    .addresses--delete-actions .btn.is--primary {
-        float: right;
-    }
-
-    .addresses--content {
-        .clearfix();
-
-        margin: -2% 0 0 -2%;
-    }
-
-    .addresses--content-item {
-        width: 100%;
-        float: left;
-        padding: 2% 0 0 2%;
-
-        .panel--actions {
-            display: table-cell;
-            vertical-align: bottom;
-        }
-    }
-
-    .addresses--item-create .btn {
-        text-align: center;
-    }
-
-    .addresses--item-actions form {
-        display: block;
-    }
-}
-
 @media screen and(min-width: @phoneLandscapeViewportWidth ) {
     .account--password-reset {
         .unitize(margin-top, 10);
@@ -638,12 +498,6 @@ It allows the user to directly see and change the important information of their
     }
 
     // Select Address
-    .address--container {
-        width: 50%;
-        float: left;
-        padding: 2% 0 0 2%;
-    }
-
     .account--orders-overview {
         .orders--table-header {
             display: block;
@@ -899,10 +753,6 @@ It allows the user to directly see and change the important information of their
             }
         }
     }
-
-    .account--addresses-container {
-        margin: -2% 0 0 -2%;
-    }
 }
 
 @media screen and(min-width: @tabletLandscapeViewportWidth) {
@@ -938,49 +788,6 @@ It allows the user to directly see and change the important information of their
     .account--payment {
         .panel--body {
             .unitize-height(120);
-        }
-    }
-
-    .account--addresses.account--content {
-
-        .addresses--field {
-            .unitize(margin-bottom, 15);
-            width: 70%;
-        }
-
-        .js--fancy-select {
-            width: 70%;
-        }
-
-        .addresses--customertype .js--fancy-select,
-        .addresses--salutation .js--fancy-select {
-            width: 40%;
-        }
-
-        .addresses--form-actions {
-            .clearfix();
-        }
-
-        .addresses--content-item {
-            width: 50%;
-        }
-
-        .addresses--zip-city {
-            .addresses--field-zipcode {
-                width: 18%;
-                float: left;
-            }
-
-            .addresses--field-city {
-                .clearfix();
-                width: 50%;
-                float: left;
-            }
-
-            .addresses--spacer {
-                margin-right: 2%;
-            }
-
         }
     }
 }

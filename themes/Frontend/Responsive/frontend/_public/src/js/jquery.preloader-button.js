@@ -71,6 +71,15 @@
 
                 $.publish('plugin/swPreloaderButton/onShowPreloader', [ me ]);
             }, 25);
+        },
+
+        /**
+         * Removes the loading indicator and re-enables the button
+         */
+        reset: function() {
+            var me = this;
+
+            me.$el.find('.' + me.opts.loaderCls).removeAttr('disabled').remove();
         }
     });
 })(jQuery, window);

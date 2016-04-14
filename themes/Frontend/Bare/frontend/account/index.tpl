@@ -236,12 +236,10 @@
 								</a>
 								<br/>
 								<a href="{url controller=address}"
-								   data-address-selector="true"
-								   data-target="billing"
+								   data-address-selection="true"
+								   data-setDefaultBillingAddress="1"
 								   data-id="{$sUserData.additional.user.default_billing_address_id}"
-								   data-title="{s name="ModalTitle" namespace="frontend/address/ajax_selector"}Change address{/s}"
-								   title="{s name='AccountLinkChangeBilling'}{/s}"
-								   data-action="{url controller=address action=setDefaultBillingAddress}">
+								   title="{s name='AccountLinkChangeBilling'}{/s}">
 									{s name="AccountLinkSelectBilling"}{/s}
 								</a>
 							</div>
@@ -290,11 +288,10 @@
 								</a>
 								<br/>
 								<a href="{url controller=address}"
-								   data-address-selector="true" data-target="shipping"
+								   data-address-selection="true"
+								   data-setDefaultShippingAddress="1"
 								   data-id="{$sUserData.additional.user.default_shipping_address_id}"
-								   data-title="{s name="ModalTitle" namespace="frontend/address/ajax_selector"}Change address{/s}"
-								   title="{s name='AccountLinkChangeBilling'}{/s}"
-								   data-action="{url controller=address action=setDefaultShippingAddress}">
+								   title="{s name='AccountLinkChangeBilling'}{/s}">
 									{s name="AccountLinkSelectBilling"}{/s}
 								</a>
 							</div>

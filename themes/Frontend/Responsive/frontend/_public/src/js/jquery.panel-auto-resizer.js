@@ -42,6 +42,11 @@
         $elChildren: null,
 
         /**
+         * If set to true, the modal will center after resizing
+         */
+        isModal: false,
+
+        /**
          * Automatic resizing of header, body and footer
          */
         init: function() {
@@ -50,6 +55,8 @@
             me.applyDataAttributes();
 
             me.$elChildren = me.$el.children();
+            me.isModal = me.$el.closest('.js--modal').length > 0;
+
             $.subscribe(me.getEventName('plugin/swPanelAutoResizer/onAfterSetHeight'), $.proxy(me._onAfterSetHeight, me));
 
             $.publish('plugin/swPanelAutoResizer/onInit', [ me ]);
@@ -87,14 +94,17 @@
             var me = this,
                 maxWidth = me.$el.width(),
                 width = 0,
-                columns = 0;
+                columns = 0,
+                childWidth = 0;
 
             $.each(me.$elChildren, function(index, child) {
-                if (width >= maxWidth) {
+                childWidth = $(child).width();
+
+                if ((width + childWidth) > maxWidth) {
                     return;
                 }
 
-                width += $(child).width();
+                width += childWidth;
                 columns++;
             });
 
@@ -218,7 +228,22 @@
                me.resetHeight();
             }
 
+            me._centerModal();
+
             $.publish('plugin/swPanelAutoResizer/onAfterResize', [ me, selector ]);
+        },
+
+        /**
+         * Call center() on modal
+         * 
+         * @private
+         */
+        _centerModal: function() {
+            if (this.isModal === false) {
+                return;
+            }
+
+            $.modal.center();
         },
 
         /**

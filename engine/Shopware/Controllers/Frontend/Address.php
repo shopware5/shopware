@@ -220,6 +220,7 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
         $viewData['formData'] = $formData;
         $viewData['sTarget'] = $this->Request()->getParam('sTarget', null);
         $viewData['sTargetAction'] = $this->Request()->getParam('sTargetAction', null);
+        $viewData['extraData'] = $this->Request()->getParam('extraData', []);
 
         return $viewData;
     }
@@ -267,16 +268,12 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
     /**
      * Selection of addresses for the current logged-in customer
      */
-    public function ajaxSelectorAction()
+    public function ajaxSelectionAction()
     {
         $addressRepository = Shopware()->Models()->getRepository(Address::class);
         $addresses = $addressRepository->getListArray($this->get('session')->get('sUserId'));
         $activeAddressId = $this->Request()->getParam('id', null);
-        $target = $this->Request()->getParam('target', null);
-
-        if (empty($target)) {
-            $target = 'billing';
-        }
+        $extraData = $this->Request()->getParam('extraData', []);
 
         if (!empty($activeAddressId)) {
             foreach ($addresses as $key => $address) {
@@ -287,6 +284,124 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
         }
 
         $this->View()->assign('addresses', $addresses);
-        $this->View()->assign('addressTarget', $target);
+        $this->View()->assign('activeAddressId', $activeAddressId);
+        $this->View()->assign('extraData', $extraData);
+    }
+
+    /**
+     * Show address form
+     */
+    public function ajaxEditorAction()
+    {
+        $userId = $this->get('session')->get('sUserId');
+        $addressId = $this->Request()->getParam('id', null);
+
+        if ($addressId) {
+            $address = $this->addressRepository->getOneByUser($addressId, $userId);
+        } else {
+            $address = new Address();
+        }
+
+        $form = $this->createForm(AddressFormType::class, $address, ['allow_extra_fields' => true]);
+        $this->View()->assign($this->getFormViewData($form));
+    }
+
+    /**
+     * Saves a new address and returns an envelope containing success and error indicators
+     *
+     * In addition, extraData[] can be send to do various actions after saving. See handleExtraData() for more
+     * information.
+     */
+    public function ajaxSaveAction()
+    {
+        $this->Front()->Plugins()->ViewRenderer()->setNoRender();
+        $response = ['success' => true, 'errors' => [], 'data' => []];
+
+        $userId = $this->get('session')->get('sUserId');
+        $addressId = $this->Request()->getPost('id', null);
+        $extraData = $this->Request()->getParam('extraData', []);
+
+        if ($this->Request()->getParam('saveAction') === 'update') {
+            $address = $this->addressRepository->getOneByUser($addressId, $userId);
+        } else {
+            $address = new Address();
+        }
+
+        $form = $this->createForm(AddressFormType::class, $address, ['allow_extra_fields' => true]);
+        $form->handleRequest($this->Request());
+        
+        if ($form->isValid()) {
+            if ($address->getId()) {
+                $address = $this->addressService->update($address);
+            } else {
+                $customer = $this->get('models')->find(Customer::class, $userId);
+                $address = $this->addressService->create($address, $customer);
+            }
+            
+            $this->handleExtraData($extraData, $address);
+
+            $addressView = $this->get('models')->toArray($address);
+            $addressView['country'] = $this->get('models')->toArray($address->getCountry());
+            $addressView['state'] = $this->get('models')->toArray($address->getState());
+            $addressView['attribute'] = $this->get('models')->toArray($address->getAttribute());
+            $response['data'] = $addressView;
+        } else {
+            foreach ($form->getErrors(true) as $error) {
+                $response['errors'][$error->getOrigin()->getName()] = $error->getMessage();
+            }
+        }
+
+        $response['success'] = empty($response['errors']);
+
+        $this->Response()->setHeader('Content-type', 'application/json', true);
+        $this->Response()->setBody(json_encode($response));
+    }
+
+    /**
+     * Do various actions based on extraData[] parameters
+     */
+    public function handleExtraAction()
+    {
+        $this->Front()->Plugins()->ViewRenderer()->setNoRender();
+
+        $address = $this->addressRepository->getOneByUser(
+            $this->Request()->getPost('id'),
+            $this->get('session')->get('sUserId')
+        );
+
+        $data = $this->Request()->getParam('extraData', []);
+        $this->handleExtraData($data, $address);
+    }
+
+    /**
+     * Handle extra data, sent by the api request to do various actions afterwards
+     *
+     * - sessionKey, set a session variable named the value of the submitted sessionKey containing the address id.
+     * - setDefaultBillingAddress, sets the address as new default billing address
+     * - setDefaultShippingAddress, sets the address as new default shipping address
+     *
+     * @param array $extraData
+     * @param Address $address
+     */
+    private function handleExtraData(array $extraData, Address $address)
+    {
+        if (!empty($extraData['sessionKey'])) {
+            $keys = explode(",", $extraData['sessionKey']);
+            foreach ($keys as $key) {
+                if (!$key) {
+                    continue;
+                }
+
+                $this->get('session')->offsetSet($key, $address->getId());
+            }
+        }
+
+        if (!empty($extraData['setDefaultBillingAddress'])) {
+            $this->addressService->setDefaultBillingAddress($address);
+        }
+
+        if (!empty($extraData['setDefaultShippingAddress'])) {
+            $this->addressService->setDefaultShippingAddress($address);
+        }
     }
 }

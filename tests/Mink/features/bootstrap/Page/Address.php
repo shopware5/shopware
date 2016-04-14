@@ -17,7 +17,7 @@ class Address extends Account implements HelperSelectorInterface
     public function getCssSelectors()
     {
         return [
-            'addressForm' => 'div.account--addresses-form form'
+            'addressForm' => 'div.account--address-form form'
         ];
     }
 }
