@@ -872,7 +872,7 @@ class sBasket
                 $surcharge = $minimumOrderSurcharge * $factor;
                 $surchargeName = $this->snippetManager
                     ->getNamespace('backend/static/discounts_surcharges')
-                    ->get('surcharge_name');
+                    ->get('surcharge_name', '#surcharge_name#');
 
                 $this->db->insert(
                     's_order_basket',
