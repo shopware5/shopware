@@ -81,7 +81,7 @@ EOF
         if (!empty($cronjob)) {
             try {
                 $this->runSingleCronjob($output, $manager, $cronjob, $force);
-            } catch (\RuntimeException $e) {
+            } catch (\Exception $e) {
                 $output->writeln('<error>'.$e->getMessage().'</error>');
                 $output->writeln('Please use the action name of a cronjob. You can see existing cronjobs in shopware backend or via <info>sw:cron:list</info> command.');
                 return 1;
@@ -108,11 +108,7 @@ EOF
      */
     private function runSingleCronjob(OutputInterface $output, Enlight_Components_Cron_Manager $manager, $cronjob, $force)
     {
-        $job = $manager->getJobByAction($cronjob);
-
-        if ($job === null) {
-            throw new \RuntimeException('Cronjob does not exist');
-        }
+        $job = $this->getJobByActionName($manager, $cronjob);
 
         if (!$this->allowRun($force, $job)) {
             return;
@@ -138,5 +134,36 @@ EOF
         $nextRun = new \DateTime($nextRun->getIso());
 
         return ($nextRun <= new \DateTime());
+    }
+
+    /**
+     * Tries to resolve a string to a cronjob action name.
+     * This is neccessary since Shopware currently renames
+     * a cronjob action after first run when it is in a
+     * unknown format
+     *
+     * @param Enlight_Components_Cron_Manager $manager
+     * @param string $action
+     * @return Enlight_Components_Cron_Job
+     * @throws \RuntimeException
+     */
+    private function getJobByActionName(Enlight_Components_Cron_Manager $manager, $action)
+    {
+        $job = $manager->getJobByAction($action);
+
+        if ($job != null) {
+            return $job;
+        }
+
+        if (strpos($action, 'Shopware_') !== 0) {
+            $action = str_replace(' ', '', ucwords(str_replace('_', ' ', $action)));
+            $job = $manager->getJobByAction('Shopware_CronJob_' . $action);
+        }
+
+        if ($job != null) {
+            return $job;
+        }
+
+        throw new \RuntimeException('Cron not found by given action name.');
     }
 }
