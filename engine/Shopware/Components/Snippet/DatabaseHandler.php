@@ -120,6 +120,10 @@ class DatabaseHandler
             } else {
                 continue;
             }
+            
+            if (DIRECTORY_SEPARATOR == '\\') {
+                $namespace = str_replace(DIRECTORY_SEPARATOR, '/', $namespace);
+            }
 
             $this->printNotice('<info>Importing ' . $namespace . ' namespace</info>');
 
@@ -244,6 +248,10 @@ class DatabaseHandler
                 $namespace = substr($filePath, 0, -4);
             } else {
                 continue;
+            }
+            
+            if (DIRECTORY_SEPARATOR == '\\') {
+                $namespace = str_replace(DIRECTORY_SEPARATOR, '/', $namespace);
             }
 
             $this->printNotice('<info>Processing ' . $namespace . ' namespace</info>');
