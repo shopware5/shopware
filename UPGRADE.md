@@ -203,6 +203,7 @@ In this document you will find a changelog of the important changes related to t
 * Moved `<form>` element in checkout confirm outside the agreement box to wrap around address and payment boxes
 * Removed smarty variable `sCategoryInfo` in listing and blog controllers. Use `sCategoryContent` instead. 
 * HttpCache: Added possibility to add multiple, comma separated proxy URLs
+* Allow using empty strings and booleans as default values when adding attribute fields using `Shopware\Components\Model\ModelManager::addAttribute()`
 
 ## 5.1.5
 * The smarty variable `sCategoryInfo` in Listing and Blog controllers is now deprecated and will be removed soon. Use `sCategoryContent` instead, it's a drop in replacement. 
