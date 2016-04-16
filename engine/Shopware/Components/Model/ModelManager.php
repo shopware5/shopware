@@ -329,8 +329,10 @@ class ModelManager extends EntityManager
 
         $null = ($nullable) ? " NULL " : " NOT NULL ";
 
-        if (is_string($default) && strlen($default) > 0) {
+        if (is_string($default)) {
             $defaultValue = "'". $default ."'";
+        } elseif (is_bool($default)) {
+            $defaultValue = ($default) ? 1 : 0;
         } elseif (is_null($default)) {
             $defaultValue = " NULL ";
         } else {
