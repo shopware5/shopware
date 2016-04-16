@@ -200,6 +200,7 @@ In this document you will find a changelog of the important changes related to t
     * Removed `clear`, `onOpenTranslationWindow`, `getFieldValues` and `onGetTranslatableFields` function
 * `\Shopware\Bundle\StoreFrontBundle\Gateway\GraduatedPricesGatewayInterface` requires now a provided `ShopContextInterface`
 * Moved `<form>` element in checkout confirm outside the agreement box to wrap around address and payment boxes
+* Added validation of order number to `Shopware\Components\Api\Resource\Variant::prepareData()` to respond with meaningful error message for duplicate order numbers
 
 
 ## 5.1.5

@@ -245,6 +245,28 @@ class VariantTest extends TestCase
 
     /**
      * @depends testCreateShouldBeSuccessful
+     * @expectedException \Shopware\Components\Api\Exception\CustomValidationException
+     * @param \Shopware\Models\Article\Article $article
+     */
+    public function testCreateWithExistingOrderNumberShouldThrowCustomValidationException(\Shopware\Models\Article\Article $article)
+    {
+        $testData = [
+            'articleId' => $article->getId(),
+            'number' => $article->getMainDetail()->getNumber(),
+            'prices' => [
+                [
+                    'customerGroupKey' => 'EK',
+                    'price' => 100,
+                    'basePrice' => 50
+                ]
+            ]
+        ];
+
+        $this->resource->create($testData);
+    }
+
+    /**
+     * @depends testCreateShouldBeSuccessful
      * @param \Shopware\Models\Article\Article $article
      * @return \Shopware\Models\Article\Article
      */
