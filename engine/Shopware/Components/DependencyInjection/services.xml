@@ -421,5 +421,9 @@
         </service>
 
         <service id="shopware_core.local_license_unpack_service" class="Shopware\Components\License\Service\LocalLicenseUnpackService" />
+
+        <service id="shopware.openssl_verificator" class="Shopware\Components\OpenSSLVerifier">
+            <argument>%kernel.root_dir%/engine/Shopware/Components/HttpClient/public.key</argument>
+        </service>
     </services>
 </container>
