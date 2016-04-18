@@ -9,6 +9,7 @@
             <argument type="service" id="http_client" />
             <argument>%shopware.store.apiEndpoint%</argument>
             <argument type="service" id="shopware_plugininstaller.plugin_installer_struct_hydrator" />
+            <argument type="service" id="shopware.openssl_verificator"/>
         </service>
 
         <service id="shopware.plugin_manager" alias="shopware_plugininstaller.plugin_manager" />
@@ -17,7 +18,6 @@
             <argument type="service" id="plugins"/>
             <argument>%shopware.plugin_directories%</argument>
         </service>
-
 
         <service id="shopware_plugininstaller.plugin_download_service" class="Shopware\Bundle\PluginInstallerBundle\Service\DownloadService">
             <argument>%kernel.root_dir%</argument>

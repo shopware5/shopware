@@ -35,6 +35,8 @@ use Shopware\Bundle\PluginInstallerBundle\Exception\StoreException;
 use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
 use Shopware\Components\HttpClient\HttpClientInterface;
 use Shopware\Components\HttpClient\RequestException;
+use Shopware\Components\HttpClient\Response;
+use Shopware\Components\OpenSSLVerifier;
 
 /**
  * @package Shopware\Bundle\PluginInstallerBundle
@@ -57,18 +59,26 @@ class StoreClient
     private $structHydrator;
 
     /**
+     * @var OpenSSLVerifier
+     */
+    private $openSSLVerifier;
+
+    /**
      * @param HttpClientInterface $httpClient
      * @param string $apiEndPoint
      * @param Struct\StructHydrator $structHydrator
+     * @param OpenSSLVerifier $openSSLVerifier
      */
     public function __construct(
         HttpClientInterface $httpClient,
         $apiEndPoint,
-        Struct\StructHydrator $structHydrator
+        Struct\StructHydrator $structHydrator,
+        OpenSSLVerifier $openSSLVerifier
     ) {
         $this->httpClient = $httpClient;
         $this->apiEndPoint = $apiEndPoint;
         $this->structHydrator = $structHydrator;
+        $this->openSSLVerifier = $openSSLVerifier;
     }
 
     /**
@@ -213,7 +223,7 @@ class StoreClient
      * @param AccessTokenStruct $accessToken
      * @param $resource
      * @param $params
-     * @return \Shopware\Components\HttpClient\Response
+     * @return Response
      * @throws \Exception
      */
     public function doAuthPostRequestRaw(
@@ -236,6 +246,7 @@ class StoreClient
     public function doPing()
     {
         $response = $this->httpClient->get($this->apiEndPoint.'/ping', ['timeout' => 7]);
+        $this->verifyResponseSignature($response);
 
         return json_decode($response->getBody(), true) ?: false;
     }
@@ -245,7 +256,7 @@ class StoreClient
      * @param array $params
      * @param array $headers
      * @param accessTokenStruct|null $token
-     * @return \Shopware\Components\HttpClient\Response
+     * @return Response
      * @throws \Exception
      * @internal param null|string $secret
      */
@@ -267,6 +278,7 @@ class StoreClient
 
         try {
             $response = $this->httpClient->get($url, $header);
+            $this->verifyResponseSignature($response);
         } catch (RequestException $e) {
             $this->handleRequestException($e);
         }
@@ -278,7 +290,7 @@ class StoreClient
      * @param $resource
      * @param array $params
      * @param AccessTokenStruct $token
-     * @return \Shopware\Components\HttpClient\Response
+     * @return Response
      * @throws StoreException
      * @throws \Exception
      */
@@ -296,6 +308,7 @@ class StoreClient
                 $header,
                 json_encode($params)
             );
+            $this->verifyResponseSignature($response);
         } catch (RequestException $e) {
             $this->handleRequestException($e);
         }
@@ -450,5 +463,27 @@ class StoreClient
             $httpCode,
             $requestException
         );
+    }
+
+    /**
+     * @param Response $response
+     */
+    private function verifyResponseSignature(Response $response)
+    {
+        $signature = $response->getHeader('x-shopware-signature');
+
+        if (empty($signature)) {
+            throw new \RuntimeException('Signature not found in x-shopware-signature header');
+        }
+
+        if (!$this->openSSLVerifier->isSystemSupported()) {
+            return;
+        }
+
+        if ($this->openSSLVerifier->isValid($response->getBody(), $signature)) {
+            return;
+        }
+
+        throw new \RuntimeException('Signature not valid');
     }
 }
