@@ -131,7 +131,7 @@ class CSRFTokenValidator implements SubscriberInterface
         $token = $session->offsetGet('X-CSRF-Token');
 
         if (!$token) {
-            $token = $this->generateToken($response);
+            $token = $this->generateToken();
         }
 
         if ($this->isWhitelisted($controller)) {
@@ -141,17 +141,16 @@ class CSRFTokenValidator implements SubscriberInterface
         if ($request->isPost()) {
             $requestToken = $request->getParam('__csrf_token') ? : $request->getHeader('X-CSRF-Token');
             if (!hash_equals($token, $requestToken)) {
-                $this->generateToken($response);
+                $this->generateToken();
                 throw new CSRFTokenValidationException("The provided X-CSRF-Token is invalid. Please go back, reload the page and try again.");
             }
         }
     }
 
     /**
-     * @param \Enlight_Controller_Response_ResponseHttp $response
      * @return string
      */
-    private function generateToken(\Enlight_Controller_Response_ResponseHttp $response)
+    private function generateToken()
     {
         $token = Random::getAlphanumericString(30);
         Shopware()->Session()->offsetSet('X-CSRF-Token', $token);

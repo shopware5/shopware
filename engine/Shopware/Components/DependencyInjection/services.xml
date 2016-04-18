@@ -160,7 +160,9 @@
          </service>
 
         <service id="shopware.event_manager" alias="events" />
-        <service id="events" class="Enlight_Event_EventManager" />
+        <service id="events" class="Shopware\Components\ContainerAwareEventManager">
+            <argument type="service" id="service_container"/>
+        </service>
 
         <service id="shopware.hook_manager" alias="Hooks" />
         <service id="Hooks" class="Enlight_Hook_HookManager">
@@ -385,7 +387,7 @@
             <argument type="service" id="shopware_storefront.context_service" />
         </service>
 
-        <service id="AttributeSubscriber" class="Shopware\Components\AttributeSubscriber" public="false">
+        <service id="AttributeSubscriber" class="Shopware\Components\AttributeSubscriber">
             <argument type="service" id="service_container" />
             <tag name="shopware.event_subscriber" />
         </service>
