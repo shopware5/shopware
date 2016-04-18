@@ -7,7 +7,7 @@
 
 {* Main content *}
 {block name="frontend_index_content"}
-    <div class="account--addresses account--content">
+    <div class="account--address account--content">
 
         {* Addresses headline *}
         {block name="frontend_address_headline"}
@@ -31,13 +31,13 @@
         {/block}
 
         {block name="frontend_address_content"}
-            <div class="addresses--content block-group" data-panel-auto-resizer="true">
+            <div class="address--content block-group" data-panel-auto-resizer="true">
 
                 {foreach $addresses as $address}
                     {block name="frontend_address_content_item"}
-                        <div class="addresses--content-item">
+                        <div class="address--content-item">
                             <div class="panel has--border is--rounded block">
-                                <div class="addresses--item-body panel--body is--wide">
+                                <div class="address--item-body panel--body is--wide">
                                     {block name="frontend_address_content_item_title"}
                                         {if $sUserData.additional.user.default_shipping_address_id == $address.id || $sUserData.additional.user.default_billing_address_id == $address.id}
                                             <div class="panel--title is--underline">
@@ -73,9 +73,9 @@
                                 </div>
 
                                 {block name="frontend_address_content_item_actions"}
-                                    <div class="addresses--item-actions panel--actions is--wide">
+                                    <div class="address--item-actions panel--actions is--wide">
                                         {block name="frontend_address_content_item_set_default"}
-                                            <div class="addresses--actions-set-defaults">
+                                            <div class="address--actions-set-defaults">
 
                                                 {block name="frontend_address_content_item_set_default_shipping"}
                                                     {if $sUserData.additional.user.default_shipping_address_id != $address.id}
@@ -120,7 +120,7 @@
                 {/foreach}
 
                 {block name="frontend_address_content_item_create"}
-                    <div class="addresses--content-item addresses--item-create block">
+                    <div class="address--content-item address--item-create block">
                         <a href="{url controller=address action=create}" title="{s name="AddressesContentItemActionCreate"}Create new address +{/s}" class="btn is--block is--primary">
                             {s name="AddressesContentItemActionCreate"}Create new address +{/s}
                         </a>

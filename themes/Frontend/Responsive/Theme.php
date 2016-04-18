@@ -105,7 +105,8 @@ class Theme extends \Shopware\Components\Theme
         'src/js/jquery.ajax-variant.js',
         'src/js/jquery.csrf-protection.js',
         'src/js/jquery.panel-auto-resizer.js',
-        'src/js/jquery.address-selector.js',
+        'src/js/jquery.address-selection.js',
+        'src/js/jquery.address-editor.js',
         'src/js/jquery.shopware-responsive.js'
     ];
 

@@ -8,7 +8,7 @@
 
 {* Main content *}
 {block name="frontend_index_content"}
-    <div class="account--addresses account--content addresses--delete">
+    <div class="account--address account--content address--delete">
 
         {* Addresses headline *}
         {block name="frontend_address_headline"}
@@ -55,7 +55,7 @@
             {/block}
 
             {block name="frontend_address_delete_actions"}
-                <div class="addresses--delete-actions">
+                <div class="address--delete-actions">
                     <form action="{url controller=address action=delete id=$address.id}" method="post">
 
                         {block name="frontend_address_delete_actions_cancel"}

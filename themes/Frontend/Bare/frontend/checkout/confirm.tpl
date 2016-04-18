@@ -224,7 +224,7 @@
                 <div class="information--panel-item information--panel-address">
                     <div class="panel has--border block">
                         {block name='frontend_checkout_confirm_information_addresses_equal_panel'}
-                            {if $activeBillingAddressId === $activeShippingAddressId}
+                            {if $activeBillingAddressId == $activeShippingAddressId}
                                 {block name='frontend_checkout_confirm_information_addresses_equal_panel_title'}
                                     <div class="panel--title is--underline">
                                         {s name='ConfirmAddressEqualTitle'}{/s}
@@ -264,6 +264,10 @@
                                                         {block name="frontend_checkout_confirm_information_addresses_equal_panel_billing_actions_change"}
                                                             <div>
                                                                 <a href="{url controller=address action=edit id=$activeBillingAddressId sTarget=checkout sTargetAction=confirm}"
+                                                                   data-address-editor="true"
+                                                                   data-id="{$activeBillingAddressId}"
+                                                                   data-sessionKey="checkoutBillingAddressId,checkoutShippingAddressId"
+                                                                   data-title="{s name="ConfirmAddressSelectButton"}Change address{/s}"
                                                                    title="{s name="ConfirmAddressSelectButton"}Change address{/s}"
                                                                    class="btn">
                                                                     {s name="ConfirmAddressSelectButton"}Change address{/s}
@@ -272,12 +276,10 @@
                                                         {/block}
                                                         {block name="frontend_checkout_confirm_information_addresses_equal_panel_billing_actions_select_address"}
                                                             <a href="{url controller=address}"
-                                                               data-address-selector="true"
-                                                               data-target="shipping"
-                                                               data-id="{$activeBillingAddressId}"
-                                                               data-title="{s name="ModalTitle" namespace="frontend/address/ajax_selector"}Change address{/s}"
                                                                title="{s name="ConfirmAddressSelectLink"}{/s}"
-                                                               data-action="{url controller=checkout action=setAddress target=both}">
+                                                               data-address-selection="true"
+                                                               data-sessionKey="checkoutBillingAddressId,checkoutShippingAddressId"
+                                                               data-id="{$activeBillingAddressId}">
                                                                 {s name="ConfirmAddressSelectLink"}{/s}
                                                             </a>
                                                         {/block}
@@ -292,11 +294,10 @@
                                                     <div class="panel--body is--wide">
                                                         <a href="{url controller=address}"
                                                            class="btn"
-                                                           data-address-selector="true"
+                                                           data-address-selection="true"
+                                                           data-sessionKey="checkoutShippingAddressId"
                                                            data-id="{$activeShippingAddressId}"
-                                                           data-title="{s name="ModalTitle" namespace="frontend/address/ajax_selector"}Change address{/s}"
-                                                           title="{s name="ConfirmAddressChooseDifferentShippingAddress"}{/s}"
-                                                           data-action="{url controller=checkout action=setAddress target=shipping}">
+                                                           title="{s name="ConfirmAddressChooseDifferentShippingAddress"}{/s}">
                                                             {s name="ConfirmAddressChooseDifferentShippingAddress"}{/s}
                                                         </a>
                                                     </div>
@@ -355,6 +356,10 @@
                                                         {block name="frontend_checkout_confirm_left_billing_address_actions_change"}
                                                             <div>
                                                                 <a href="{url controller=address action=edit id=$activeBillingAddressId sTarget=checkout sTargetAction=confirm}"
+                                                                   data-address-editor="true"
+                                                                   data-sessionKey="checkoutBillingAddressId"
+                                                                   data-id="{$activeBillingAddressId}"
+                                                                   data-title="{s name="ConfirmAddressSelectButton"}Change address{/s}"
                                                                    title="{s name="ConfirmAddressSelectButton"}Change address{/s}"
                                                                    class="btn">
                                                                     {s name="ConfirmAddressSelectButton"}Change address{/s}
@@ -363,11 +368,10 @@
                                                         {/block}
                                                         {block name="frontend_checkout_confirm_left_billing_address_actions_select_address"}
                                                             <a href="{url controller=address}"
-                                                               data-address-selector="true"
+                                                               data-address-selection="true"
+                                                               data-sessionKey="checkoutBillingAddressId"
                                                                data-id="{$activeBillingAddressId}"
-                                                               data-title="{s name="ModalTitle" namespace="frontend/address/ajax_selector"}Change address{/s}"
-                                                               title="{s name="ConfirmAddressSelectLink"}{/s}"
-                                                               data-action="{url controller=checkout action=setAddress target=billing}">
+                                                               title="{s name="ConfirmAddressSelectLink"}{/s}">
                                                                 {s name="ConfirmAddressSelectLink"}{/s}
                                                             </a>
                                                         {/block}
@@ -422,6 +426,10 @@
                                                             <div>
                                                                 <a href="{url controller=address action=edit id=$activeShippingAddressId sTarget=checkout sTargetAction=confirm}"
                                                                    title="{s name="ConfirmAddressSelectButton"}Change address{/s}"
+                                                                   data-title="{s name="ConfirmAddressSelectButton"}Change address{/s}"
+                                                                   data-address-editor="true"
+                                                                   data-id="{$activeShippingAddressId}"
+                                                                   data-sessionKey="checkoutShippingAddressId"
                                                                    class="btn">
                                                                     {s name="ConfirmAddressSelectButton"}Change address{/s}
                                                                 </a>
@@ -429,12 +437,10 @@
                                                         {/block}
                                                         {block name="frontend_checkout_confirm_left_shipping_address_actions_select_address"}
                                                             <a href="{url controller=address}"
-                                                               data-address-selector="true"
-                                                               data-target="shipping"
+                                                               data-address-selection="true"
+                                                               data-sessionKey="checkoutShippingAddressId"
                                                                data-id="{$activeShippingAddressId}"
-                                                               data-title="{s name="ModalTitle" namespace="frontend/address/ajax_selector"}Change address{/s}"
-                                                               title="{s name="ConfirmAddressSelectLink"}{/s}"
-                                                               data-action="{url controller=checkout action=setAddress target=shipping}">
+                                                               title="{s name="ConfirmAddressSelectLink"}{/s}">
                                                                 {s name="ConfirmAddressSelectLink"}{/s}
                                                             </a>
                                                         {/block}
