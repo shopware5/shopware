@@ -23,6 +23,24 @@
  */
 namespace Shopware\Recovery\Install\Service\Exceptions;
 
+use Shopware\Recovery\Install\Struct\LicenseInformation;
+
 class LicenseHostException extends \RuntimeException
 {
+    /** @var  LicenseInformation $licenseInformation */
+    private $licenseInformation;
+
+    public function __construct(LicenseInformation $licenseInformation, $message = '')
+    {
+        parent::__construct($message);
+        $this->licenseInformation = $licenseInformation;
+    }
+
+    /**
+     * @return LicenseInformation
+     */
+    public function getLicenseInformation()
+    {
+        return $this->licenseInformation;
+    }
 }

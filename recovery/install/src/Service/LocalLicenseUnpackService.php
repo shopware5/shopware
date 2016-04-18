@@ -59,7 +59,6 @@ class LocalLicenseUnpackService implements LicenseUnpackService
         if ($info === false) {
             throw new LicenseInvalidException("License key seems to be incorrect");
         }
-
         $info = @gzinflate($info);
         if ($info === false) {
             throw new LicenseInvalidException("License key seems to be incorrect");
@@ -90,19 +89,12 @@ class LocalLicenseUnpackService implements LicenseUnpackService
         }
 
         if ($info['host'] != $host) {
-            throw new LicenseHostException("License key is not valid for domain " . $request->host);
+            throw new LicenseHostException(new LicenseInformation($info), "License key is not valid for domain " . $request->host);
         }
 
-        $licenseInformation = new LicenseInformation([
-            'label'   => $info['label'],
-            'module'  => $info['module'],
-            'product' => $info['product'],
-            'host'    => $info['host'],
-            'type'    => $info['type'],
-            'license' => $info['license'],
-        ]);
+        $info += ['edition' => $info['product']];
 
-        return $licenseInformation;
+        return new LicenseInformation($info);
     }
 
     /**
@@ -116,9 +108,7 @@ class LocalLicenseUnpackService implements LicenseUnpackService
         if (empty($productKey)) {
             return false;
         }
-
         $validKeys = ShopwareEdition::getValidEditions();
-
         return in_array($productKey, $validKeys, true);
     }
 }
