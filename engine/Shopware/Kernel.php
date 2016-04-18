@@ -41,6 +41,7 @@ use Shopware\Components\ConfigLoader;
 use Shopware\Components\DependencyInjection\Container;
 use Symfony\Component\Config\ConfigCache;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
@@ -489,8 +490,8 @@ class Kernel implements HttpKernelInterface
         $this->addShopwareConfig($container, 'shopware', $this->config);
         $this->addResources($container);
 
-        $container->addCompilerPass(new EventListenerCompilerPass());
-        $container->addCompilerPass(new EventSubscriberCompilerPass());
+        $container->addCompilerPass(new EventListenerCompilerPass(), PassConfig::TYPE_BEFORE_REMOVING);
+        $container->addCompilerPass(new EventSubscriberCompilerPass(), PassConfig::TYPE_BEFORE_REMOVING);
         $container->addCompilerPass(new DoctrineEventSubscriberCompilerPass());
         $container->addCompilerPass(new DBALCompilerPass());
         $container->addCompilerPass(new CriteriaRequestHandlerCompilerPass());
