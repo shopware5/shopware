@@ -38,7 +38,7 @@
              *
              * @string width
              */
-            width: '80%',
+            width: 650,
 
             /**
              * Height of the selection

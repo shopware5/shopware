@@ -345,6 +345,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         }
 
         $this->saveOrder();
+        $this->saveDefaultAddresses();
         $this->resetTemporaryAddresses();
 
         $this->View()->assign($this->session['sOrderVariables']->getArrayCopy());
@@ -1637,8 +1638,48 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
      */
     private function resetTemporaryAddresses()
     {
-        $this->session->offsetSet('checkoutBillingAddressId', null);
-        $this->session->offsetSet('checkoutShippingAddressId', null);
+        $this->session->offsetUnset('checkoutBillingAddressId');
+        $this->session->offsetUnset('checkoutShippingAddressId');
+    }
+
+    /**
+     * Sets the default addresses for the user if he decided to use the temporary addresses as new default
+     */
+    private function saveDefaultAddresses()
+    {
+        $billingId = $this->session->offsetGet('checkoutBillingAddressId', false);
+        $shippingId = $this->session->offsetGet('checkoutShippingAddressId', false);
+        $setBoth = $this->Request()->getPost('setAsDefaultAddress', false);
+
+        if (!$this->Request()->getPost('setAsDefaultBillingAddress') && !$setBoth) {
+            $billingId = false;
+        }
+
+        if (!$this->Request()->getPost('setAsDefaultShippingAddress') && !$setBoth) {
+            $shippingId = false;
+        }
+
+        if ($billingId && $billingId != $this->View()->sUserData['additional']['user']['default_billing_address_id']) {
+            $address = $this->get('models')
+                ->getRepository(Address::class)
+                ->getOneByUser(
+                    $billingId,
+                    $this->View()->sUserData['additional']['user']['id']
+                );
+
+            $this->get('shopware_account.address_service')->setDefaultBillingAddress($address);
+        }
+
+        if ($shippingId && $shippingId != $this->View()->sUserData['additional']['user']['default_shipping_address_id']) {
+            $address = $this->get('models')
+                ->getRepository(Address::class)
+                ->getOneByUser(
+                    $shippingId,
+                    $this->View()->sUserData['additional']['user']['id']
+                );
+
+            $this->get('shopware_account.address_service')->setDefaultShippingAddress($address);
+        }
     }
 
     /**
