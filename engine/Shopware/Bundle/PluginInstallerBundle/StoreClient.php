@@ -231,6 +231,16 @@ class StoreClient
     }
 
     /**
+     * @return bool
+     */
+    public function doPing()
+    {
+        $response = $this->httpClient->get($this->apiEndPoint.'/ping', ['timeout' => 7]);
+
+        return json_decode($response->getBody(), true) ?: false;
+    }
+
+    /**
      * @param $resource
      * @param array $params
      * @param array $headers
