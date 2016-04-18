@@ -22,28 +22,29 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Recovery\Install\Service;
+namespace Shopware\Components;
 
-use Shopware\Recovery\Install\Struct\LicenseInformation;
+use Doctrine\DBAL\Connection;
+use Shopware\Components\License\Struct\LicenseInformation;
 
 /**
  * @category  Shopware
- * @package   Shopware\Recovery\Install\Service
+ * @package   Shopware\Components\Core
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class LicenseInstaller
 {
     /**
-     * @var \PDO
+     * @var Connection
      */
-    private $pdo;
+    private $connection;
 
     /**
-     * @param \PDO $pdo
+     * @param Connection $pdo
      */
-    public function __construct(\PDO $pdo)
+    public function __construct(Connection $pdo)
     {
-        $this->pdo = $pdo;
+        $this->connection = $pdo;
     }
 
     /**
@@ -55,7 +56,7 @@ class LicenseInstaller
         try {
             // Delete previous inserted licenses
             $sql = "DELETE FROM s_core_licenses WHERE module = 'SwagCommercial'";
-            $this->pdo->query($sql);
+            $this->connection->query($sql);
 
             // Insert new license
             $sql = <<<EOT
@@ -63,7 +64,7 @@ INSERT INTO s_core_licenses (module,host,label,license,version,type,source,added
 VALUES (:module,:host,:label,:license,:version,:type,:source,now(),:creation,:expiration,1)
 EOT;
 
-            $prepareStatement = $this->pdo->prepare($sql);
+            $prepareStatement = $this->connection->prepare($sql);
             $prepareStatement->execute([
                 ':module' => $license->module,
                 ':host' => $license->host,

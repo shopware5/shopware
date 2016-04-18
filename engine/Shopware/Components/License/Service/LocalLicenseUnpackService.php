@@ -23,6 +23,9 @@
  */
 namespace Shopware\Components\License\Service;
 
+use Shopware\Components\License\Service\Exceptions\LicenseHostException;
+use Shopware\Components\License\Service\Exceptions\LicenseInvalidException;
+use Shopware\Components\License\Service\Exceptions\LicenseProductKeyException;
 use Shopware\Components\License\Struct\LicenseInformation;
 use Shopware\Components\License\Struct\LicenseUnpackRequest;
 use Shopware\Components\License\Struct\ShopwareEdition;
@@ -36,57 +39,61 @@ class LocalLicenseUnpackService implements LicenseUnpackServiceInterface
 {
     /**
      * @param  LicenseUnpackRequest $request
+     * @throws LicenseHostException
+     * @throws LicenseProductKeyException
+     * @throws LicenseInvalidException
      * @return LicenseInformation
      */
     public function evaluateLicense(LicenseUnpackRequest $request)
     {
         $license = $request->licenseKey;
         $host    = $request->host;
+
         $license = str_replace('-------- LICENSE BEGIN ---------', '', $license);
         $license = str_replace('--------- LICENSE END ----------', '', $license);
         $license = preg_replace('#--.+?--#', '', (string) $license);
         $license = preg_replace('#[^A-Za-z0-9+/=]#', '', $license);
+
         $info = base64_decode($license);
         if ($info === false) {
-            // License can not be unpacked.
-            $this->throwException("License key seems to be incorrect");
+            throw new LicenseInvalidException("License key seems to be incorrect");
         }
         $info = @gzinflate($info);
         if ($info === false) {
-            // License can not be unpacked.
-            $this->throwException("License key seems to be incorrect");
+            throw new LicenseInvalidException("License key seems to be incorrect");
         }
+
         if (strlen($info) > (512 + 60) || strlen($info) < 100) {
-            // License too long / short.
-            $this->throwException("License key seems to be incorrect");
+            throw new LicenseInvalidException("License key seems to be incorrect");
         }
+
         $hash          = substr($info, 0, 20);
         $coreLicense   = substr($info, 20, 20);
         $moduleLicense = substr($info, 40, 20);
         $info          = substr($info, 60);
+
         if ($hash !== sha1($coreLicense . $info . $moduleLicense, true)) {
-            return false;
+            throw new LicenseInvalidException("License key seems to be incorrect");
         }
+
         $info = unserialize($info);
         if ($info === false) {
-            $this->throwException("License key seems to be incorrect");
+            throw new LicenseInvalidException("License key seems to be incorrect");
         }
+
         $info['license'] = $license;
+
         if (!$this->isValidProductKey($info['product'])) {
-            $this->throwException("License key does not match a commercial Shopware edition");
+            throw new LicenseProductKeyException("License key does not match a commercial Shopware edition");
         }
+
         if ($info['host'] != $host) {
-            $this->throwException("License key is not valid for domain " . $request->host);
+            throw new LicenseHostException(new LicenseInformation($info), "License key is not valid for domain " . $request->host);
         }
-        $licenseInformation = new LicenseInformation([
-            'label'   => $info['label'],
-            'module'  => $info['module'],
-            'edition' => $info['product'],
-            'host'    => $info['host'],
-            'type'    => $info['type'],
-            'license' => $info['license'],
-        ]);
-        return $licenseInformation;
+
+        $info += ['edition' => $info['product']];
+
+        return new LicenseInformation($info);
     }
 
     /**
@@ -102,14 +109,5 @@ class LocalLicenseUnpackService implements LicenseUnpackServiceInterface
         }
         $validKeys = ShopwareEdition::getValidEditions();
         return in_array($productKey, $validKeys, true);
-    }
-
-    /**
-     * @param $string
-     * @throws \RuntimeException
-     */
-    private function throwException($string)
-    {
-        throw new \RuntimeException($string);
     }
 }

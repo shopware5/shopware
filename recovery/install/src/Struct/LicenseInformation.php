@@ -44,7 +44,7 @@ class LicenseInformation extends Struct
     /**
      * @var string e.g EC @see: ShopwareEdition::$validEditions
      */
-    public $product;
+    public $edition;
 
     /**
      * @var string e.G sth.test.shopware.in
@@ -60,4 +60,24 @@ class LicenseInformation extends Struct
      * @var string License-Key
      */
     public $license;
+
+    /**
+     * @var string the license version
+     */
+    public $version;
+
+    /**
+     * @var string the source which issued the license
+     */
+    public $source;
+
+    /**
+     * @var string when the license will expire
+     */
+    public $expiration;
+
+    /**
+     * @var string the issue date of the license
+     */
+    public $creation;
 }
