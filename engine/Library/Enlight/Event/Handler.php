@@ -90,6 +90,12 @@ abstract class Enlight_Event_Handler
     }
 
     /**
+     * Getter method for the listener property.
+     * @return  callback
+     */
+    abstract public function getListener();
+
+    /**
      * Executes the event handler with the Enlight_Event_EventArgs.
      * @param   Enlight_Event_EventArgs $args
      * @return  mixed

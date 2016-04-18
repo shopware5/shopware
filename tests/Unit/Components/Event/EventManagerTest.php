@@ -24,6 +24,7 @@
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Enlight\Event\SubscriberInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * @category  Shopware
@@ -32,10 +33,7 @@ use Enlight\Event\SubscriberInterface;
  */
 class Shopware_Tests_Components_Event_ManagerTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var \Enlight_Event_EventManager
-     */
-    protected $eventManager;
+    private $eventManager;
 
     public function setUp()
     {
