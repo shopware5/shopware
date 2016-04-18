@@ -199,6 +199,11 @@ In this document you will find a changelog of the important changes related to t
 * Fixed Shopware.form.plugin.Translation, the plugin can now be used in multiple forms at the same time.
     * Removed `clear`, `onOpenTranslationWindow`, `getFieldValues` and `onGetTranslatableFields` function
 * `\Shopware\Bundle\StoreFrontBundle\Gateway\GraduatedPricesGatewayInterface` requires now a provided `ShopContextInterface`
+* Added service `shopware.number_range_manager` for safely retrieving the next number of a number range (`s_order_number`)
+* Changed the following methods to use the `shopware.number_range_manager` service for retrieving the next number of a range:
+    * `sAdmin::assignCustomerNumber()`
+    * `sOrder::sGetOrderNumber()`
+    * `Shopware_Components_Document::saveDocument()`
 
 
 ## 5.1.5
