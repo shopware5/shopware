@@ -132,10 +132,14 @@ class Shopware_Tests_Api_CustomerTest extends PHPUnit_Framework_TestCase
             "lastlogin"  => $lastlogin,
             "paymentId"  => 2,
 
+            "salutation" => "mr",
+            "firstname" => "Max",
+            "lastname"  => "Mustermann",
+            "birthday"  => $birthday,
+
             "billing" => array(
                 "firstName" => "Max",
                 "lastName"  => "Mustermann",
-                "birthday"  => $birthday,
             ),
 
             "shipping" => array(
@@ -201,10 +205,14 @@ class Shopware_Tests_Api_CustomerTest extends PHPUnit_Framework_TestCase
             "firstlogin" => $firstlogin,
             "lastlogin"  => $lastlogin,
 
+            "salutation" => "mr",
+            "firstname" => "Max",
+            "lastname"  => "Mustermann",
+            "birthday"  => $birthday,
+
             "billing" => array(
                 "firstName" => "Max",
                 "lastName"  => "Mustermann",
-                "birthday"  => $birthday,
             ),
 
             "shipping" => array(
@@ -279,10 +287,14 @@ class Shopware_Tests_Api_CustomerTest extends PHPUnit_Framework_TestCase
             "firstlogin" => $firstlogin,
             "lastlogin"  => $lastlogin,
 
+            "salutation" => "mr",
+            "firstname" => "Max",
+            "lastname"  => "Mustermann",
+            "birthday"  => $birthday,
+
             "billing" => array(
                 "firstName" => "Max",
                 "lastName"  => "Mustermann",
-                "birthday"  => $birthday,
             ),
 
             "shipping" => array(

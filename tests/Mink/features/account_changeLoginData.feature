@@ -7,8 +7,9 @@ Feature: Successful changes of login data
     @password @login
     Scenario Outline: I can change my password
         Given I log in successful as "Max Mustermann" with email "test@example.com" and password "<password>"
+        And   I follow "Persönliche Daten ändern"
         When  I change my password from "<password>" to "<new_password>"
-        Then  I should see "Zugangsdaten wurden erfolgreich gespeichert"
+        Then  I should see "Das Passwort wurde erfolgreich geändert."
 
         When  I log me out
         And   I follow "Mein Konto"
@@ -23,8 +24,9 @@ Feature: Successful changes of login data
     @email @login
     Scenario Outline: I can change my email
         Given I log in successful as "Max Mustermann" with email "<email>" and password "shopware"
+        And   I follow "Persönliche Daten ändern"
         When  I change my email with password "shopware" to "<new_email>"
-        Then  I should see "Zugangsdaten wurden erfolgreich gespeichert"
+        Then  I should see "Die E-Mail Adresse wurde erfolgreich geändert."
 
         When  I log me out
         And   I follow "Mein Konto"
@@ -58,7 +60,7 @@ Feature: Successful changes of login data
         Examples:
             | user             | type     | salutation | company     | firstname | lastname   | street              | zipcode | city        | country     |
             | Max Mustermann   | private  | ms         |             | Erika     | Musterfrau | Heidestraße 17 c    | 12345   | Köln        | Schweiz     |
-            | Erika Musterfrau | business | mr         | shopware AG | Max       | Mustermann | Mustermannstraße 92 | 48624   | Schöppingen | Deutschland |
+            | Max Mustermann   | business | mr         | shopware AG | Max       | Mustermann | Mustermannstraße 92 | 48624   | Schöppingen | Deutschland |
 
     @registration
     Scenario: I can create a new account
@@ -98,10 +100,10 @@ Feature: Successful changes of login data
 
         Then  I should see "Willkommen, Max Mustermann"
 
-        When  I follow "Meine Bestellungen"
+        When  I follow "Bestellungen"
         Then  I should see "Sie haben noch keine Bestellung durchgeführt."
 
-        When  I follow "Meine Sofortdownloads"
+        When  I follow "Sofortdownloads"
         Then  I should see "Sie haben noch keine Sofortdownloadartikel gekauft"
 
     @forgot @login
@@ -136,3 +138,20 @@ Feature: Successful changes of login data
         And   I go to the page "Account"
         And   I log in with email "test@example.com" and password "shopware"
         Then  I should see "Ihre Zugangsdaten konnten keinem Benutzer zugeordnet werden"
+
+    @profile
+    Scenario Outline: I can change my profile
+        Given I log in with email "test@example.com" and password "shopware"
+        When  I follow "Persönliche Daten ändern"
+        And   I change my profile with "<title>" "<salutation>" "<firstname>" "<lastname>"
+
+        Then  I should see "Die persönlichen Daten wurden erfolgreich gespeichert."
+        Then  I follow "Übersicht"
+        And   I should be welcome'd with with "Willkommen, <title> <firstname> <lastname>"
+
+        Examples:
+          | salutation | firstname | lastname   | title         |
+          | Herr       | Max       | Mustermann |               |
+          | Frau       | Erika     | Musterfrau | Prof. Dr. Dr. |
+          | Frau       | Elfriede  | Mustermann | Dr.           |
+          | Herr       | Max       | Mustermann |               |

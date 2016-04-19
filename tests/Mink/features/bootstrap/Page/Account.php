@@ -30,8 +30,12 @@ class Account extends Page implements HelperSelectorInterface
             'billingForm' => 'div.account--address-form form',
             'shippingForm' => 'div.account--address-form form',
             'paymentForm' => 'div.account--payment-form > form',
-            'passwordForm' => 'div.account--password > form',
-            'emailForm' => 'div.account--email > form',
+            'passwordForm' => 'div.profile-password--container > form',
+            'emailForm' => 'div.profile-email--container > form',
+            'profileForm' => 'div.account--profile > form',
+            'changePasswordButton' => 'div.profile-password--container button',
+            'changeEmailButton' => 'div.profile-email--container button',
+            'changeProfileButton' => 'div.account--profile > form button',
             'esdDownloads' => '.downloads--table-header ~ .panel--tr',
             'esdDownloadName' => '.download--name'
         ];
@@ -47,20 +51,18 @@ class Account extends Page implements HelperSelectorInterface
             'forgotPasswordLink'    => ['de' => 'Passwort vergessen?',      'en' => 'Forgot your password?'],
             'sendButton'            => ['de' => 'Weiter',                   'en' => 'Continue'],
 
-            'myAccountLink'         => ['de' => 'Mein Konto',               'en' => 'My account'],
-            'myOrdersLink'          => ['de' => 'Meine Bestellungen',       'en' => 'My orders'],
-            'myEsdDownloadsLink'    => ['de' => 'Meine Sofortdownloads',    'en' => 'My instant downloads'],
-            'changeBillingLink'     => ['de' => 'Rechnungsadresse ändern',  'en' => 'Change billing address'],
-            'changeShippingLink'    => ['de' => 'Lieferadresse ändern',     'en' => 'Change shipping address'],
-            'changePaymentLink'     => ['de' => 'Zahlungsart ändern',       'en' => 'Change payment method'],
+            'myAccountLink'         => ['de' => 'Übersicht',                'en' => 'Overview'],
+            'profileLink'           => ['de' => 'Persönliche Daten',        'en' => 'Profile'],
+            'addressesLink'         => ['de' => 'Adressen',                 'en' => 'Addresses'],
+            'myOrdersLink'          => ['de' => 'Bestellungen',             'en' => 'orders'],
+            'myEsdDownloadsLink'    => ['de' => 'Sofortdownloads',          'en' => 'Instant downloads'],
+            'changePaymentLink'     => ['de' => 'Zahlungsarten',            'en' => 'Payment methods'],
             'noteLink'              => ['de' => 'Merkzettel',               'en' => 'Wish list'],
             'logoutLink'            => ['de' => 'Abmelden',                 'en' => 'Logout'],
 
             'changePaymentButton'   => ['de' => 'Ändern',                   'en' => 'Change'],
             'changeBillingButton'   => ['de' => 'Adresse speichern',        'en' => 'Change address'],
             'changeShippingButton'  => ['de' => 'Adresse speichern',        'en' => 'Change address'],
-            'changePasswordButton'  => ['de' => 'Passwort ändern',          'en' => 'Change password'],
-            'changeEmailButton'     => ['de' => 'E-Mail ändern',            'en' => 'Change email'],
             'saveAddressButton'     => ['de' => 'Adresse speichern',        'en' => 'Save address']
         ];
     }
@@ -107,10 +109,10 @@ class Account extends Page implements HelperSelectorInterface
     {
         return (Helper::hasNamedLinks($this, [
                 'myAccountLink',
+                'profileLink',
+                'addressesLink',
                 'myOrdersLink',
                 'myEsdDownloadsLink',
-                'changeBillingLink',
-                'changeShippingLink',
                 'changePaymentLink',
                 'noteLink',
                 'logoutLink',
@@ -141,6 +143,7 @@ class Account extends Page implements HelperSelectorInterface
         return (
             $this->hasSelect('register[personal][customer_type]') &&
             $this->hasSelect('register[personal][salutation]') &&
+            $this->hasField('register[personal][title]') &&
             $this->hasField('register[personal][firstname]') &&
             $this->hasField('register[personal][lastname]') &&
             $this->hasField('register[personal][email]') &&
@@ -222,21 +225,21 @@ class Account extends Page implements HelperSelectorInterface
     {
         $data = [
             [
-                'field' => 'currentPassword',
+                'field' => 'password[currentPassword]',
                 'value' => $currentPassword
             ],
             [
-                'field' => 'password',
+                'field' => 'password[password]',
                 'value' => $password
             ],
             [
-                'field' => 'passwordConfirmation',
+                'field' => 'password[passwordConfirmation]',
                 'value' => ($passwordConfirmation !== null) ? $passwordConfirmation : $password
             ]
         ];
 
         Helper::fillForm($this, 'passwordForm', $data);
-        Helper::pressNamedButton($this, 'changePasswordButton');
+        $this->find('css', $this->getCssSelectors()['changePasswordButton'])->press();
     }
 
     /**
@@ -249,21 +252,21 @@ class Account extends Page implements HelperSelectorInterface
     {
         $data = [
             [
-                'field' => 'emailPassword',
+                'field' => 'email[currentPassword]',
                 'value' => $password
             ],
             [
-                'field' => 'email',
+                'field' => 'email[email]',
                 'value' => $email
             ],
             [
-                'field' => 'emailConfirmation',
+                'field' => 'email[emailConfirmation]',
                 'value' => ($emailConfirmation !== null) ? $emailConfirmation : $email
             ]
         ];
 
         Helper::fillForm($this, 'emailForm', $data);
-        Helper::pressNamedButton($this, 'changeEmailButton');
+        $this->find('css', $this->getCssSelectors()['changeEmailButton'])->press();
     }
 
     /**
@@ -543,5 +546,36 @@ class Account extends Page implements HelperSelectorInterface
         }
 
         Helper::throwException($messages);
+    }
+
+    /**
+     * @param string $title
+     * @param string $salutation
+     * @param string $firstname
+     * @param string $lastname
+     */
+    public function changeProfile($title, $salutation, $firstname, $lastname)
+    {
+        $data = [
+            [
+                'field' => 'profile[title]',
+                'value' => $title
+            ],
+            [
+                'field' => 'profile[salutation]',
+                'value' => $salutation
+            ],
+            [
+                'field' => 'profile[firstname]',
+                'value' => $firstname
+            ],
+            [
+                'field' => 'profile[lastname]',
+                'value' => $lastname
+            ]
+        ];
+
+        Helper::fillForm($this, 'profileForm', $data);
+        $this->find('css', $this->getCssSelectors()['changeProfileButton'])->press();
     }
 }

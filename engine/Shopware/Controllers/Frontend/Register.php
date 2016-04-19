@@ -429,15 +429,6 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         $data = $this->Request()->getPost();
         $personalData = $data['register']['personal'];
 
-        // convert for personal form type
-        $personalData['birthday'] = [
-            'year' => $personalData['birthyear'],
-            'month' => $personalData['birthmonth'],
-            'day' => $personalData['birthday'],
-        ];
-
-        $personalData['encoderName'] = $this->get('PasswordEncoder')->getDefaultPasswordEncoderName();
-        
         /** @var \Symfony\Component\Form\Form $form */
         $form = $this->get('shopware.form.factory')->create(PersonalFormType::class, [], ['allow_extra_fields' => true]);
         $form->submit($personalData);
@@ -489,6 +480,13 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
 
         // Receive Newsletter yes / no
         $register['auth']["receiveNewsletter"] = $extraData['receiveNewsletter'];
+
+        // personal data
+        $register['auth']['birthday'] = $formData['birthday'];
+        $register['auth']['salutation'] = $formData['salutation'];
+        $register['auth']['title'] = $formData['title'];
+        $register['auth']['firstname'] = $formData['firstname'];
+        $register['auth']['lastname'] = $formData['lastname'];
 
         // Password
         if ($formData['password']) {

@@ -76,9 +76,9 @@ class Repository extends ModelRepository
         $builder->select(array(
                 'customer.id',
                 'billing.number as number',
-                'billing.firstName as firstName',
+                'customer.firstname as firstname',
                 'customer.firstLogin as firstLogin',
-                'billing.lastName as lastName',
+                'customer.lastname as lastname',
                 'customergroups.name as customerGroup',
                 'billing.company as company',
                 'billing.zipCode as zipCode',
@@ -95,12 +95,12 @@ class Repository extends ModelRepository
 
         //filter the displayed columns with the passed filter string
         if (!empty($filter)) {
-            $fullNameExp = $builder->expr()->concat('billing.firstName', $builder->expr()->concat($builder->expr()->literal(' '), 'billing.lastName'));
-            $fullNameReversedExp = $builder->expr()->concat('billing.lastName', $builder->expr()->concat($builder->expr()->literal(' '), 'billing.firstName'));
+            $fullNameExp = $builder->expr()->concat('customer.firstname', $builder->expr()->concat($builder->expr()->literal(' '), 'customer.lastname'));
+            $fullNameReversedExp = $builder->expr()->concat('customer.lastname', $builder->expr()->concat($builder->expr()->literal(' '), 'customer.firstname'));
 
             $builder->where('billing.number LIKE ?1')           //Search only the beginning of the customer number.
-                    ->orWhere('billing.firstName LIKE ?2')      //Full text search for the first name of the customer
-                    ->orWhere('billing.lastName LIKE ?2')       //Full text search for the last name of the customer
+                    ->orWhere('customer.firstname LIKE ?2')      //Full text search for the first name of the customer
+                    ->orWhere('customer.lastname LIKE ?2')       //Full text search for the last name of the customer
                     ->orWhere($fullNameExp . ' LIKE ?2')        //Full text search for the full name of the customer
                     ->orWhere($fullNameReversedExp . ' LIKE ?2')//Full text search for the full name in reversed order of the customer
                     ->orWhere('customer.email LIKE ?2')         //Full text search for the customer email
@@ -150,12 +150,12 @@ class Repository extends ModelRepository
 
         //filter the displayed columns with the passed filter string
         if (!empty($filter)) {
-            $fullNameExp = $builder->expr()->concat('billing.firstName', $builder->expr()->concat($builder->expr()->literal(' '), 'billing.lastName'));
-            $fullNameReversedExp = $builder->expr()->concat('billing.lastName', $builder->expr()->concat($builder->expr()->literal(' '), 'billing.firstName'));
+            $fullNameExp = $builder->expr()->concat('customer.firstname', $builder->expr()->concat($builder->expr()->literal(' '), 'customer.lastname'));
+            $fullNameReversedExp = $builder->expr()->concat('customer.lastname', $builder->expr()->concat($builder->expr()->literal(' '), 'customer.firstname'));
 
             $builder->andWhere('billing.number LIKE ?1')        //Search only the beginning of the customer number.
-                    ->orWhere('billing.firstName LIKE ?2')      //Full text search for the first name of the customer
-                    ->orWhere('billing.lastName LIKE ?2')       //Full text search for the last name of the customer
+                    ->orWhere('customer.firstname LIKE ?2')      //Full text search for the first name of the customer
+                    ->orWhere('customer.lastname LIKE ?2')       //Full text search for the last name of the customer
                     ->orWhere($fullNameExp . ' LIKE ?2')        //Full text search for the full name of the customer
                     ->orWhere($fullNameReversedExp . ' LIKE ?2')//Full text search for the full name in reversed order of the customer
                     ->orWhere('customer.email LIKE ?2')         //Full text search for the customer email

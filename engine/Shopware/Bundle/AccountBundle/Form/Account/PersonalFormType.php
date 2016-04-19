@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\AccountBundle\Form\Account;
 
 use Doctrine\DBAL\Connection;
+use Shopware\Bundle\AccountBundle\Type\SalutationType;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\DependencyInjection\Container;
 use Shopware_Components_Snippet_Manager;
@@ -36,8 +37,6 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\Callback;
-use Symfony\Component\Validator\Constraints\Choice;
-use Symfony\Component\Validator\Constraints\Date;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\EqualTo;
 use Symfony\Component\Validator\Constraints\Length;
@@ -118,12 +117,13 @@ class PersonalFormType extends AbstractType
             'empty_data' => 'private'
         ]);
 
-        $builder->add('salutation', TextType::class, [
+        $builder->add('salutation', SalutationType::class, [
             'constraints' => [
-                new NotBlank(),
-                new Choice(['choices' => $this->getSalutationChoices()])
+                new NotBlank()
             ]
         ]);
+
+        $builder->add('title', TextType::class);
 
         $builder->add('firstname', TextType::class, [
             'constraints' => [
@@ -138,7 +138,6 @@ class PersonalFormType extends AbstractType
         ]);
 
         $builder->add('birthday', BirthdayType::class, [
-            'input' => 'array',
             'constraints' => $this->getBirthdayConstraints()
         ]);
 
@@ -146,14 +145,6 @@ class PersonalFormType extends AbstractType
             'empty_data' => 0,
             'constraints' => $this->getPrivacyConstraints()
         ]);
-    }
-
-    /**
-     * @return string[]
-     */
-    private function getSalutationChoices()
-    {
-        return ['mr', 'ms'];
     }
 
     /**
@@ -168,8 +159,7 @@ class PersonalFormType extends AbstractType
                 ->getNamespace('frontend/account/internalMessages')
                 ->get('DateFailure', 'Please enter a valid birthday');
 
-            $constraints[] = new NotBlank();
-            $constraints[] = new Date(['message' => $birthdayMessage]);
+            $constraints[] = new NotBlank(['message' => $birthdayMessage]);
         }
 
         return $constraints;
@@ -189,6 +179,9 @@ class PersonalFormType extends AbstractType
         return $constraints;
     }
 
+    /**
+     * @return Constraint[]
+     */
     private function getEmailConstraints()
     {
         $emailConfirmCallback = function ($value, ExecutionContextInterface $context) {
@@ -259,6 +252,9 @@ class PersonalFormType extends AbstractType
         ];
     }
 
+    /**
+     * @return Constraint[]
+     */
     private function getPasswordConstraints()
     {
         $minMessage = $this->snippetManager

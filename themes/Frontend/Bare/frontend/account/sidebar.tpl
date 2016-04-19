@@ -24,24 +24,13 @@
 					</li>
 				{/block}
 
-				{* Link to the user orders *}
-				{block name="frontend_account_menu_link_orders"}
+				{* Link to the account overview page *}
+				{block name="frontend_account_menu_link_profile"}
 					<li class="navigation--entry">
-						<a href="{url controller='account' action='orders'}" title="{s name="AccountLinkPreviousOrders"}{/s}" class="navigation--link{if $sAction == 'orders'} is--active{/if}">
-							{s name="AccountLinkPreviousOrders"}{/s}
+						<a href="{url controller='account' action=profile}" title="{s name="AccountLinkProfile"}{/s}" class="navigation--link{if {controllerName|lower} == 'account' && $sAction == 'profile'} is--active{/if}">
+							{s name="AccountLinkProfile"}{/s}
 						</a>
 					</li>
-				{/block}
-
-				{* Link to the user downloads *}
-				{block name="frontend_account_menu_link_downloads"}
-                    {if {config name=showEsd}}
-					    <li class="navigation--entry">
-						    <a href="{url controller='account' action='downloads'}" title="{s name="AccountLinkDownloads"}{/s}" class="navigation--link{if $sAction == 'downloads'} is--active{/if}">
-							    {s name="AccountLinkDownloads"}{/s}
-						    </a>
-					    </li>
-                    {/if}
 				{/block}
 
 				{* Link to the user addresses *}
@@ -60,6 +49,26 @@
 							{s name="AccountLinkPayment"}{/s}
 						</a>
 					</li>
+				{/block}
+
+				{* Link to the user orders *}
+				{block name="frontend_account_menu_link_orders"}
+					<li class="navigation--entry">
+						<a href="{url controller='account' action='orders'}" title="{s name="AccountLinkPreviousOrders"}{/s}" class="navigation--link{if $sAction == 'orders'} is--active{/if}">
+							{s name="AccountLinkPreviousOrders"}{/s}
+						</a>
+					</li>
+				{/block}
+
+				{* Link to the user downloads *}
+				{block name="frontend_account_menu_link_downloads"}
+                    {if {config name=showEsd}}
+					    <li class="navigation--entry">
+						    <a href="{url controller='account' action='downloads'}" title="{s name="AccountLinkDownloads"}{/s}" class="navigation--link{if $sAction == 'downloads'} is--active{/if}">
+							    {s name="AccountLinkDownloads"}{/s}
+						    </a>
+					    </li>
+                    {/if}
 				{/block}
 
 				{* Link to the user product notes *}

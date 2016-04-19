@@ -253,6 +253,45 @@ class Customer extends LazyFetchModelEntity
     private $lockedUntil = null;
 
     /**
+     * @var string $salutation
+     *
+     * @Assert\Choice(choices = {"mr", "ms"}, message = "Choose a valid salutation.")
+     *
+     * @ORM\Column(name="salutation", type="text", nullable=false)
+     */
+    private $salutation;
+
+    /**
+     * @var string $title
+     * @ORM\Column(name="title", type="text", nullable=false)
+     */
+    private $title;
+
+    /**
+     * @var string $firstname
+     *
+     * @Assert\NotBlank
+     *
+     * @ORM\Column(name="firstname", type="text", nullable=false)
+     */
+    private $firstname;
+
+    /**
+     * @var string $lastname
+     *
+     * @Assert\NotBlank
+     *
+     * @ORM\Column(name="lastname", type="text", nullable=false)
+     */
+    private $lastname;
+
+    /**
+     * @var \DateTime $birthday
+     * @ORM\Column(name="birthday", type="date", nullable=true)
+     */
+    private $birthday;
+
+    /**
      * INVERSE SIDE
      * The billing property is the inverse side of the association between customer and billing.
      * The association is joined over the billing userID field and the id field of the customer
@@ -1112,5 +1151,89 @@ class Customer extends LazyFetchModelEntity
     public function setDefaultShippingAddress(Address $defaultShippingAddress)
     {
         $this->defaultShippingAddress = $defaultShippingAddress;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSalutation()
+    {
+        return $this->salutation;
+    }
+
+    /**
+     * @param string $salutation
+     */
+    public function setSalutation($salutation)
+    {
+        $this->salutation = $salutation;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param string $title
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFirstname()
+    {
+        return $this->firstname;
+    }
+
+    /**
+     * @param string $firstname
+     */
+    public function setFirstname($firstname)
+    {
+        $this->firstname = $firstname;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLastname()
+    {
+        return $this->lastname;
+    }
+
+    /**
+     * @param string $lastname
+     */
+    public function setLastname($lastname)
+    {
+        $this->lastname = $lastname;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getBirthday()
+    {
+        return $this->birthday;
+    }
+
+    /**
+     * @param \DateTime|string $birthday
+     */
+    public function setBirthday($birthday = null)
+    {
+        if ($birthday instanceof \DateTime) {
+            $birthday = $birthday->format('Y-m-d');
+        }
+
+        $this->birthday = $birthday;
     }
 }

@@ -80,10 +80,14 @@ class CustomerTest extends TestCase
             "firstlogin" => $firstlogin,
             "lastlogin"  => $lastlogin,
 
+            "salutation" => "mr",
+            "firstname" => "Max",
+            "lastname"  => "Mustermann",
+            "birthday"  => $birthday,
+
             "billing" => array(
                 "firstName" => "Max",
                 "lastName"  => "Mustermann",
-                "birthday"  => $birthday,
                 "additionalAddressLine1"  => "Address Billing Addition 1",
                 "additionalAddressLine2"  => "Address Billing Addition 2",
                 "countryId" => "2",
@@ -407,10 +411,14 @@ class CustomerTest extends TestCase
             "firstlogin" => $firstlogin,
             "lastlogin"  => $lastlogin,
 
+            "salutation" => "mr",
+            "firstname" => "Max",
+            "lastname"  => "Mustermann",
+            "birthday"  => $birthday,
+
             "billing" => array(
                 "firstName" => "Max",
                 "lastName"  => "Mustermann",
-                "birthday"  => $birthday,
                 "countryId" => "2"
             ),
 
@@ -470,10 +478,14 @@ class CustomerTest extends TestCase
             "firstlogin" => $firstlogin,
             "lastlogin"  => $lastlogin,
 
+            "salutation" => "mr",
+            "firstname" => "Max",
+            "lastname"  => "Mustermann",
+            "birthday"  => $birthday,
+
             "billing" => array(
                 "firstName" => "Max",
                 "lastName"  => "Mustermann",
-                "birthday"  => $birthday,
                 "countryId" => "2"
             ),
 

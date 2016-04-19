@@ -7,7 +7,8 @@ Feature: My account (without changing login data)
 
     @password
     Scenario Outline: I can't change my password, when something is wrong
-        When  I change my password from "<password>" to "<new_password>" with confirmation "<confirmation>"
+        When  I follow "Persönliche Daten ändern"
+        And   I change my password from "<password>" to "<new_password>" with confirmation "<confirmation>"
         Then  I should see "<message>"
 
         Examples:
@@ -21,7 +22,8 @@ Feature: My account (without changing login data)
 
     @email
     Scenario Outline: I can't change my email, when something is wrong
-        When  I change my email with password "<password>" to "<new_email>" with confirmation "<confirmation>"
+        When  I follow "Persönliche Daten ändern"
+        And   I change my email with password "<password>" to "<new_email>" with confirmation "<confirmation>"
         Then  I should see "<message>"
 
         Examples:
@@ -92,8 +94,23 @@ Feature: My account (without changing login data)
 
     @configChange @esd
     Scenario: I can disable ESD-Articles in account
-        Given I should see "Meine Sofortdownloads"
+        Given I should see "Sofortdownloads"
         When  I disable the config "showEsd"
         And   I reload the page
         Then  I should see "Willkommen, Max Mustermann"
-        But   I should not see "Meine Sofortdownloads"
+        But   I should not see "Sofortdownloads"
+
+    @profile
+    Scenario Outline: I can't change my profile when something is wrong
+        Given I follow "Persönliche Daten ändern"
+        And   I change my profile with "" "<salutation>" "<firstname>" "<lastname>"
+        Then  I should see "Bitte füllen Sie alle rot markierten Felder aus"
+
+        Examples:
+        | salutation  | firstname     | lastname    |
+        |             |               |             |
+        | mr          |               |             |
+        | mr          | Max           |             |
+        |             |               | Mustermann  |
+        |             | Max           | Mustermann  |
+        |             | Max           |             |

@@ -620,77 +620,6 @@ class sAdmin
         return true;
     }
 
-    /**
-     * Update user's email address and password
-     * Used in the Frontend Account controller
-     *
-     * @throws Enlight_Exception On database error
-     * @return boolean If operation was successful
-     */
-    public function sUpdateAccount()
-    {
-        $postData = $this->front->Request()->getPost();
-        $userId = $this->session->offsetGet('sUserId');
-
-        $email = strtolower($postData["email"]);
-        $password = $postData["password"];
-        $passwordConfirmation = $postData["passwordConfirmation"];
-
-
-        if ($password && $passwordConfirmation) {
-            // If password is set, update it
-            $encoderName = $this->passwordEncoder->getDefaultPasswordEncoderName();
-            $password = $this->passwordEncoder->encodePassword($password, $encoderName);
-
-            $this->session->offsetSet('sUserMail', $email);
-            $this->session->offsetSet('sUserPassword', $password);
-            $sqlAccount = 'UPDATE s_user SET email = ?, password = ?, encoder = ? WHERE id = ?';
-            $sqlAccount = $this->eventManager->filter(
-                'Shopware_Modules_Admin_UpdateAccount_FilterPasswordSql',
-                $sqlAccount,
-                array(
-                    'email' => $email,
-                    'password' => $password,
-                    'encoder' => $encoderName,
-                    'subject' => $this,
-                    'id' => $userId
-                )
-            );
-
-            $this->db->query(
-                $sqlAccount,
-                array($email, $password, $encoderName, $userId)
-            );
-        } else {
-            // Just update email
-            $this->session->offsetSet('sUserMail', $email);
-            $sqlAccount = 'UPDATE s_user SET email=? WHERE id=?';
-            $sqlAccount = $this->eventManager->filter(
-                'Shopware_Modules_Admin_UpdateAccount_FilterEmailSql',
-                $sqlAccount,
-                array(
-                    'email' => $email,
-                    'password' => $password,
-                    'subject' => $this,
-                    'id' => $userId
-                )
-            );
-
-            $this->db->query(
-                $sqlAccount,
-                array($email, $userId)
-            );
-        }
-
-        if ($this->db->getErrorMessage()) {
-            throw new Enlight_Exception(
-                "sUpdateAccount #01: Could not save data (account)"
-                .$this->db->getErrorMessage()
-            );
-        }
-        return true;
-    }
-
     public function logout()
     {
         $this->moduleManager->Basket()->clearBasket();
@@ -1207,15 +1136,20 @@ class sAdmin
             $this->subshopId,
             empty($referer) ? "" : $referer,
             $userObject["auth"]["encoderName"],
+            $userObject['auth']['salutation'],
+            $userObject['auth']['title'],
+            $userObject['auth']['firstname'],
+            $userObject['auth']['lastname'],
+            $userObject['auth']['birthday'] ? $userObject['auth']['birthday']->format('Y-m-d') : null
         );
         $sql = '
             INSERT INTO s_user
             (
                 password, email, paymentID, active, accountmode,
                 validation, firstlogin, sessionID, affiliate, customergroup,
-                language, subshopID, referer, encoder
+                language, subshopID, referer, encoder, salutation, title, firstname, lastname, birthday
             )
-            VALUES (?,?,?,1,?,?,NOW(),?,?,?,?,?,?,?)
+            VALUES (?,?,?,1,?,?,NOW(),?,?,?,?,?,?,?,?,?,?,?,?)
         ';
 
         list($sql, $data) = $this->eventManager->filter(
@@ -1289,27 +1223,6 @@ class sAdmin
      */
     public function sSaveRegisterBilling($userID, $userObject)
     {
-        if (!is_numeric($userObject["billing"]["birthmonth"])) {
-            unset($userObject["billing"]["birthmonth"]);
-        }
-        if (!is_numeric($userObject["billing"]["birthday"])) {
-            unset($userObject["billing"]["birthday"]);
-        }
-        if (!is_numeric($userObject["billing"]["birthyear"])) {
-            unset($userObject["billing"]["birthyear"]);
-        }
-
-        if (!empty($userObject["billing"]["birthmonth"]) &&
-            !empty($userObject["billing"]["birthday"]) &&
-            !empty($userObject["billing"]["birthyear"])
-        ) {
-            $date = $userObject["billing"]["birthyear"] . "-" . $userObject["billing"]["birthmonth"]
-                . "-" . $userObject["billing"]["birthday"];
-
-            $date = date("Y-m-d", strtotime($date));
-        } else {
-            $date = "0000-00-00";
-        }
         $hasShippingAddress = count($userObject['shipping']) > 0;
         $userObject = $userObject["billing"];
         $data = array(
@@ -1326,7 +1239,6 @@ class sAdmin
             $userObject["country"],
             empty($userObject["stateID"]) ? 0 : $userObject["stateID"] ,
             empty($userObject["ustid"]) ? "" : $userObject["ustid"],
-            $date,
             empty($userObject["additional_address_line1"]) ? null : $userObject["additional_address_line1"],
             empty($userObject["additional_address_line2"]) ? null : $userObject["additional_address_line2"]
         );
@@ -1334,9 +1246,9 @@ class sAdmin
         $sqlBilling = "INSERT INTO s_user_billingaddress
             (userID, company, department, salutation, firstname, lastname,
             street, zipcode, city,phone,
-            countryID, stateID, ustid, birthday, additional_address_line1, additional_address_line2)
+            countryID, stateID, ustid, additional_address_line1, additional_address_line2)
             VALUES
-            (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
         // Trying to insert
         list($sqlBilling, $data) = $this->eventManager->filter(

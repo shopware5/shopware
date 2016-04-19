@@ -23,8 +23,7 @@
  */
 use Shopware\Bundle\AccountBundle\Form\Account\EmailUpdateFormType;
 use Shopware\Bundle\AccountBundle\Form\Account\PasswordUpdateFormType;
-use Shopware\Bundle\AccountBundle\Form\Account\PersonalFormType;
-use Shopware\Bundle\AccountBundle\Form\Account\PersonalUpdateFormType;
+use Shopware\Bundle\AccountBundle\Form\Account\ProfileUpdateFormType;
 use Shopware\Models\Customer\Customer;
 
 /**
@@ -38,11 +37,17 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
     protected $admin;
 
     /**
+     * @var \Shopware\Bundle\AccountBundle\Service\CustomerServiceInterface
+     */
+    protected $customerService;
+
+    /**
      * Init controller method
      */
     public function init()
     {
         $this->admin = Shopware()->Modules()->Admin();
+        $this->customerService = Shopware()->Container()->get('shopware_account.customer_service');
     }
 
     /**
@@ -328,56 +333,6 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
             $this->View()->sSuccessAction = $successMessage;
             $this->container->get('session')->offsetSet('sNewsletter', $status);
         }
-        $this->forward('index');
-    }
-
-    /**
-     * Save account action
-     *
-     * Save account address data and create error messages
-     *
-     */
-    public function saveAccountAction()
-    {
-        if ($this->Request()->isPost()) {
-            $data = $this->Request()->getPost();
-            $data['encoderName'] = $this->get('PasswordEncoder')->getDefaultPasswordEncoderName();
-
-            /** @var \Symfony\Component\Form\Form $form */
-            if (array_key_exists('password', $data)) {
-                $this->Request()->setPost('email', $this->get('session')->offsetGet('sUserMail'));
-                $form = $this->get('shopware.form.factory')->create(PasswordUpdateFormType::class, [], ['allow_extra_fields' => true]);
-            } else {
-                $form = $this->get('shopware.form.factory')->create(EmailUpdateFormType::class, [], ['allow_extra_fields' => true]);
-            }
-            
-            $form->submit($data);
-
-            $checkData = ['sErrorMessages' => [], 'sErrorFlag' => []];
-
-            if ($form->isValid()) {
-                $this->admin->sUpdateAccount();
-                $this->View()->sSuccessAction = 'account';
-            } else {
-                foreach ($form->getErrors(true) as $error) {
-                    $message = $this->View()->fetch('string:'.$error->getMessage());
-                    $checkData['sErrorFlag'][$error->getOrigin()->getName()] = $message;
-                    $checkData['sErrorMessages'][] = $message;
-                }
-
-                if (array_key_exists('email', $data)) {
-                    $checkData['sErrorFlag']['email'] = true;
-                }
-
-                if (array_key_exists('password', $data)) {
-                    $checkData['sErrorFlag']['password'] = true;
-                }
-            }
-
-            $this->View()->sErrorFlag = $checkData['sErrorFlag'];
-            $this->View()->sErrorMessages = $checkData['sErrorMessages'];
-        }
-
         $this->forward('index');
     }
 
@@ -692,5 +647,125 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
     protected function refreshBasket()
     {
         Shopware()->Modules()->Basket()->sRefreshBasket();
+    }
+
+    /**
+     * Profile forms for main data, password and email
+     */
+    public function profileAction()
+    {
+        $errorFlags = [];
+        $errorMessages = [];
+        $postData = $this->Request()->getPost() ?: [];
+
+        $defaultData = [
+            'profile' => [
+                'salutation' => $this->View()->sUserData['additional']['user']['salutation'],
+                'title' => $this->View()->sUserData['additional']['user']['title'],
+                'firstname' => $this->View()->sUserData['additional']['user']['firstname'],
+                'lastname' => $this->View()->sUserData['additional']['user']['lastname'],
+                'birthday' => [
+                    'day' => null,
+                    'month' => null,
+                    'year' => null
+                ]
+            ]
+        ];
+
+        if (!empty($this->View()->sUserData['additional']['user']['birthday'])) {
+            $datetime = new \DateTime($this->View()->sUserData['additional']['user']['birthday']);
+            $defaultData['profile']['birthday']['year'] = $datetime->format('Y');
+            $defaultData['profile']['birthday']['month'] = $datetime->format('m');
+            $defaultData['profile']['birthday']['day'] = $datetime->format('d');
+        }
+
+        $formData = array_merge($defaultData, $postData);
+
+        if ($this->Request()->getParam('errors')) {
+            foreach ($this->Request()->getParam('errors') as $error) {
+                $message = $this->View()->fetch('string:'.$error->getMessage());
+                $errorFlags[$error->getOrigin()->getName()] = true;
+                $errorMessages[] = $message;
+            }
+
+            $errorMessages = array_unique($errorMessages);
+        }
+
+        $this->View()->assign('form_data', $formData);
+        $this->View()->assign('errorFlags', $errorFlags);
+        $this->View()->assign('errorMessages', $errorMessages);
+        $this->View()->assign('success', $this->Request()->getParam('success'));
+        $this->View()->assign('section', $this->Request()->getParam('section'));
+    }
+
+    /**
+     * Endpoint for changing the main profile data
+     */
+    public function saveProfileAction()
+    {
+        $userId = $this->get('session')->get('sUserId');
+        /** @var Customer $customer */
+        $customer = $this->get('models')->find(Customer::class, $userId);
+
+        $form = $this->createForm(ProfileUpdateFormType::class, [], ['allow_extra_fields' => true]);
+        $form->handleRequest($this->Request());
+
+        if ($form->isValid()) {
+            $customer->fromArray($form->getData(), ['firstname', 'lastname', 'salutation', 'title', 'birthday']);
+            $this->customerService->update($customer);
+
+            $this->redirect(['controller' => 'account', 'action' => 'profile', 'success' => true, 'section' => 'profile']);
+            return;
+        }
+
+        $this->forward('profile', 'account', 'frontend', ['section' => 'profile', 'errors' => $form->getErrors(true)]);
+    }
+
+    /**
+     * Endpoint for changing the email
+     */
+    public function saveEmailAction()
+    {
+        $userId = $this->get('session')->get('sUserId');
+        /** @var Customer $customer */
+        $customer = $this->get('models')->find(Customer::class, $userId);
+
+        $form = $this->createForm(EmailUpdateFormType::class, [], ['allow_extra_fields' => true]);
+        $form->handleRequest($this->Request());
+
+        if ($form->isValid()) {
+            $customer->setEmail($form->getData()['email']);
+            $this->customerService->update($customer);
+            $this->get('session')->offsetSet('sUserMail', $customer->getEmail());
+
+            $this->redirect(['controller' => 'account', 'action' => 'profile', 'success' => true, 'section' => 'email']);
+            return;
+        }
+
+        $this->forward('profile', 'account', 'frontend', ['section' => 'email', 'errors' => $form->getErrors(true)]);
+    }
+
+    /**
+     * Endpoint for changing the password
+     */
+    public function savePasswordAction()
+    {
+        $userId = $this->get('session')->get('sUserId');
+        /** @var Customer $customer */
+        $customer = $this->get('models')->find(Customer::class, $userId);
+
+        $form = $this->createForm(PasswordUpdateFormType::class, [], ['allow_extra_fields' => true]);
+        $form->handleRequest($this->Request());
+
+        if ($form->isValid()) {
+            $customer->setPassword($form->getData()['password']);
+            $this->customerService->update($customer);
+            $this->get('session')->offsetSet('sUserPassword', $customer->getPassword());
+
+            $this->redirect(['controller' => 'account', 'action' => 'profile', 'success' => true, 'section' => 'password']);
+            return;
+        }
+
+        $this->forward('profile', 'account', 'frontend', ['section' => 'password', 'errors' => $form->getErrors(true)]);
     }
 }

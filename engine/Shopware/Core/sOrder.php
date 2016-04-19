@@ -1427,8 +1427,8 @@ class sOrder
             ", array($checkMail));
 
             $advertiser = $this->db->fetchRow("
-            SELECT email, firstname, lastname FROM s_user, s_user_billingaddress
-            WHERE s_user_billingaddress.userID = s_user.id AND s_user.id=?
+            SELECT email, firstname, lastname FROM s_user
+            WHERE s_user.id=?
             ", array($checkIfUserFound["sender"]));
 
             if (!$advertiser) {
@@ -1895,7 +1895,6 @@ SELECT
     `sa`.`text5` AS `shipping_text5`,
     `sa`.`text6` AS `shipping_text6`,
     `u`.*,
-       ub.birthday,
        `g`.`id` AS `preisgruppe`,
        `g`.`tax` AS `billing_net`
 FROM

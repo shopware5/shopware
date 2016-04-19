@@ -200,7 +200,6 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
                 sa.text5 AS shipping_text5,
                 sa.text6 AS shipping_text6,
                 u.*,
-                   ub.birthday,
                    g.id AS preisgruppe,
                    g.tax AS billing_net
             FROM

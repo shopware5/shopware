@@ -2209,10 +2209,14 @@ class sBasketTest extends PHPUnit_Framework_TestCase
 
             "lastlogin"  => $lastLogin,
 
+            "salutation" => "mr",
+            "firstname" => "Max",
+            "lastname"  => "Mustermann",
+            "birthday"  => $birthday,
+
             "billing" => array(
                 "firstName" => "Max",
                 "lastName"  => "Mustermann",
-                "birthday"  => $birthday,
                 "attribute" => array(
                     'text1' => 'Freitext1',
                     'text2' => 'Freitext2',

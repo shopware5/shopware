@@ -28,6 +28,7 @@ use Shopware\Bundle\AccountBundle\Constraint\CurrentPassword;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Constraints\Length;
@@ -75,7 +76,19 @@ class PasswordUpdateFormType extends AbstractType
             'constraints' => $this->getPasswordConstraints()
         ]);
 
-        $builder->add('passwordConfirmation', PasswordType::class);
+        $builder->add('passwordConfirmation', PasswordType::class, [
+            'constraints' => [
+                new NotBlank(['message' => null])
+            ]
+        ]);
+    }
+
+    /**
+     * @return string
+     */
+    public function getBlockPrefix()
+    {
+        return 'password';
     }
 
     /**
@@ -83,7 +96,7 @@ class PasswordUpdateFormType extends AbstractType
      */
     private function getPasswordConstraints()
     {
-        $minMessage = $this->snippetManager->getNamespace("frontend")->get('RegisterPasswordLength', '', true);
+        $minMessage = $this->snippetManager->getNamespace("frontend")->get('RegisterPasswordLength');
 
         $passwordEqualCallback = function ($value, ExecutionContextInterface $context) {
             $data = $context->getRoot()->getData();
@@ -96,6 +109,10 @@ class PasswordUpdateFormType extends AbstractType
                 $context->buildViolation($equalMessage)
                     ->atPath($context->getPropertyPath())
                     ->addViolation();
+
+                $error = new FormError("");
+                $error->setOrigin($context->getRoot()->get('passwordConfirmation'));
+                $context->getRoot()->addError($error);
             }
         };
 

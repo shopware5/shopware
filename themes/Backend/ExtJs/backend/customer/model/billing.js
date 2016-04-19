@@ -47,7 +47,6 @@ Ext.define('Shopware.apps.Customer.model.Billing', {
      */
     fields:[
 		//{block name="backend/customer/model/billing/fields"}{/block}
-        { name:'birthday', type:'date', dateFormat:'d.m.Y' },
         { name:'stateId', type:'int', useNull:true }
     ],
 

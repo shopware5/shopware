@@ -107,7 +107,16 @@ class EmailUpdateFormType extends AbstractType
             'constraints' => $this->getEmailConstraints()
         ]);
 
-        $builder->add('emailConfirmation', EmailType::class);
+        $builder->add('emailConfirmation', EmailType::class, [
+            'constraints' => [
+                new NotBlank(['message' => null])
+            ]
+        ]);
+    }
+
+    public function getBlockPrefix()
+    {
+        return 'email';
     }
 
     /**
