@@ -201,6 +201,7 @@ In this document you will find a changelog of the important changes related to t
 * `\Shopware\Bundle\StoreFrontBundle\Gateway\GraduatedPricesGatewayInterface` requires now a provided `ShopContextInterface`
 * Categories of `Shopware\Components\Api\Resource\Article::getArticleCategories($articleId)` are no longer indexed by category id
 * Moved `<form>` element in checkout confirm outside the agreement box to wrap around address and payment boxes
+* Allow uploading file when creating `media` using the REST API
 
 
 ## 5.1.5

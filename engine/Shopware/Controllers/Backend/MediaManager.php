@@ -39,7 +39,7 @@ use Shopware\Models\Media\Media as Media;
  */
 class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Backend_ExtJs
 {
-    protected $blackList = array(
+    public static $fileUploadBlacklist = [
         'php',
         'php3',
         'php4',
@@ -54,7 +54,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         'py',
         'rb',
         'exe'
-    );
+    ];
 
     /**
      * Entity Manager
@@ -549,7 +549,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
 
         $fileInfo = pathinfo($file->getClientOriginalName());
         $extension = $fileInfo['extension'];
-        if (in_array(strtolower($extension), $this->blackList)) {
+        if (in_array(strtolower($extension), static::$fileUploadBlacklist)) {
             unlink($file->getPathname());
             unlink($file);
             die(json_encode(array('success' => false, 'blacklist' => true, 'extension' => $extension)));
