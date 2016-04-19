@@ -22,6 +22,10 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\Api\Exception as ApiException;
+use Symfony\Component\HttpFoundation\FileBag;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+
 class Shopware_Controllers_Api_Media extends Shopware_Controllers_Api_Rest
 {
     /**
@@ -74,7 +78,33 @@ class Shopware_Controllers_Api_Media extends Shopware_Controllers_Api_Rest
      */
     public function postAction()
     {
-        $media = $this->resource->create($this->Request()->getPost());
+        $params = $this->Request()->getPost();
+        // Check for a POSTed file
+        if (isset($_FILES['file'])) {
+            if ($_FILES['file']['error'] !== UPLOAD_ERR_OK) {
+                throw new \Exception(sprintf('Could not upload file "%s"', $_FILES['file']['name']));
+            }
+
+            // Load the file and check its type and name
+            $fileBag = new FileBag($_FILES);
+            $file = $fileBag->get('file');
+            $fileExtension = pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION);
+            if (in_array(strtolower($fileExtension), \Shopware_Controllers_Backend_MediaManager::$fileUploadBlacklist)) {
+                unlink($file->getPathName());
+                throw new ApiException\CustomValidationException(sprintf('The type of the uploaded file "%s" is not supported', $_FILES['file']['name']));
+            }
+            $fileName = $file->getClientOriginalName();
+            if (isset($params['name']) && !empty($params['name'])) {
+                // Use the provided name to overwrite the file name, but keep the extensions to allow
+                // automatic detection of the file type
+                $fileName = $params['name'] . '.' . $fileExtension;
+            }
+
+            $params['name'] = $this->resource->getUniqueFileName($file->getPathName(), $fileName);
+            $params['file'] = new UploadedFile($file->getPathName(), $params['name']);
+        }
+
+        $media = $this->resource->create($params);
 
         $location = $this->apiBaseUrl . 'media/' . $media->getId();
         $data = array(
