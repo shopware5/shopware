@@ -192,6 +192,10 @@ class Shopware_Tests_Api_MediaTest extends PHPUnit_Framework_TestCase
 
         $this->assertGreaterThan(0, $identifier);
 
+        // Check userId
+        $media = Shopware()->Models()->find('Shopware\Models\Media\Media', $identifier);
+        $this->assertGreaterThan(0, $media->getUserId());
+
         return $identifier;
     }
 
