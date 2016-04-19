@@ -201,7 +201,7 @@ In this document you will find a changelog of the important changes related to t
 * `\Shopware\Bundle\StoreFrontBundle\Gateway\GraduatedPricesGatewayInterface` requires now a provided `ShopContextInterface`
 * Categories of `Shopware\Components\Api\Resource\Article::getArticleCategories($articleId)` are no longer indexed by category id
 * Moved `<form>` element in checkout confirm outside the agreement box to wrap around address and payment boxes
-
+* Grunt now using [grunt-chokidar](https://github.com/JimRobs/grunt-chokidar) instead of [grunt-contrib-watch](https://github.com/gruntjs/grunt-contrib-watch) for watching files, in order to catch events like file-adds. Also speed-up of watch-task.
 
 ## 5.1.5
 * The smarty variable `sCategoryInfo` in Listing and Blog controllers is now deprecated and will be removed soon. Use `sCategoryContent` instead, it's a drop in replacement. 
