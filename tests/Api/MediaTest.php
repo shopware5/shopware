@@ -24,6 +24,9 @@
 
 class Shopware_Tests_Api_MediaTest extends PHPUnit_Framework_TestCase
 {
+    const UPLOAD_FILE_NAME = 'test-bild';
+    const UPLOAD_OVERWRITTEN_FILE_NAME = 'a-different-file-name';
+
     public $apiBaseUrl = '';
 
     /**
@@ -237,6 +240,129 @@ class Shopware_Tests_Api_MediaTest extends PHPUnit_Framework_TestCase
 
         $this->assertArrayHasKey('success', $result);
         $this->assertTrue($result['success']);
+    }
+
+    public function testPostMediaWithFileUploadShouldBeSuccessful()
+    {
+        $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/media');
+
+        $fileSource = __DIR__ . '/fixtures/'.self::UPLOAD_FILE_NAME.'.jpg';
+        $requestData = array(
+            'album'  => -1,
+            'description' => 'flipflops'
+        );
+
+        $client->setFileUpload($fileSource, 'file');
+        $client->setParameterPost($requestData);
+        $response = $client->request('POST');
+
+        $this->assertEquals(201, $response->getStatus());
+        $this->assertEquals('application/json', $response->getHeader('Content-Type'));
+        $this->assertNull(
+            $response->getHeader('Set-Cookie'),
+            'There should be no set-cookie header set.'
+        );
+
+        $result = $response->getBody();
+        $result = Zend_Json::decode($result);
+
+        $this->assertArrayHasKey('success', $result);
+        $this->assertTrue($result['success']);
+
+        $location   = $response->getHeader('Location');
+        $identifier = (int) array_pop(explode('/', $location));
+
+        $this->assertGreaterThan(0, $identifier);
+
+        return $identifier;
+    }
+
+    /**
+     * @depends testPostMediaWithFileUploadShouldBeSuccessful
+     */
+    public function testGetMediaWithUploadedFileByIdShouldBeSuccessful($identifier)
+    {
+        $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/media/' . $identifier);
+        $result = $client->request('GET');
+
+        $this->assertEquals('application/json', $result->getHeader('Content-Type'));
+        $this->assertEquals(null, $result->getHeader('Set-Cookie'));
+        $this->assertEquals(200, $result->getStatus());
+
+        $result = $result->getBody();
+        $result = Zend_Json::decode($result);
+
+        $this->assertArrayHasKey('success', $result);
+        $this->assertTrue($result['success']);
+
+        $this->assertArrayHasKey('data', $result);
+
+        $data = $result['data'];
+        $this->assertInternalType('array', $data);
+        $this->assertArrayHasKey('name', $data);
+        $this->assertEquals(0, strpos($data['name'], self::UPLOAD_FILE_NAME));
+    }
+
+    public function testPostMediaWithFileUploadAndOverwrittenNameShouldBeSuccessful()
+    {
+        $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/media');
+
+        $fileSource = __DIR__ . '/fixtures/'.self::UPLOAD_FILE_NAME.'.jpg';
+        $requestData = array(
+            'album'  => -1,
+            'description' => 'flipflops',
+            'name' => self::UPLOAD_OVERWRITTEN_FILE_NAME
+        );
+
+        $client->setFileUpload($fileSource, 'file');
+        $client->setParameterPost($requestData);
+        $response = $client->request('POST');
+
+        $this->assertEquals(201, $response->getStatus());
+        $this->assertEquals('application/json', $response->getHeader('Content-Type'));
+        $this->assertNull(
+            $response->getHeader('Set-Cookie'),
+            'There should be no set-cookie header set.'
+        );
+
+        $result = $response->getBody();
+        $result = Zend_Json::decode($result);
+
+        $this->assertArrayHasKey('success', $result);
+        $this->assertTrue($result['success']);
+
+        $location   = $response->getHeader('Location');
+        $identifier = (int) array_pop(explode('/', $location));
+
+        $this->assertGreaterThan(0, $identifier);
+
+        return $identifier;
+    }
+
+    /**
+     * @depends testPostMediaWithFileUploadAndOverwrittenNameShouldBeSuccessful
+     */
+    public function testGetMediaWithUploadedFileAndOverwrittenNameByIdShouldBeSuccessful($identifier)
+    {
+        $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/media/' . $identifier);
+        $result = $client->request('GET');
+
+        $this->assertEquals('application/json', $result->getHeader('Content-Type'));
+        $this->assertEquals(null, $result->getHeader('Set-Cookie'));
+        $this->assertEquals(200, $result->getStatus());
+
+        $result = $result->getBody();
+        $result = Zend_Json::decode($result);
+
+        $this->assertArrayHasKey('success', $result);
+        $this->assertTrue($result['success']);
+
+        $this->assertArrayHasKey('data', $result);
+
+        $data = $result['data'];
+        $this->assertInternalType('array', $data);
+        $this->assertArrayHasKey('name', $data);
+        $this->assertEquals(0, strpos($data['name'], self::UPLOAD_OVERWRITTEN_FILE_NAME));
     }
 
     public function testDeleteMediaWithInvalidIdShouldFailWithMessage()
