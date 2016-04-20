@@ -38,6 +38,7 @@ use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\BasketStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\LicenceStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\ListingResultStruct;
+use Shopware\Bundle\PluginInstallerBundle\Struct\UpdateResultStruct;
 use ShopwarePlugins\PluginManager\Components\PluginCategoryService;
 use ShopwarePlugins\SwagUpdate\Components\Steps\FinishResult;
 
@@ -360,17 +361,21 @@ class Shopware_Controllers_Backend_PluginManager
             $this->View()->assign('success', false);
             return;
         }
+        $subscriptionService = $this->container->get('shopware_plugininstaller.subscription_service');
+        $secret = $subscriptionService->getShopSecret();
+        $domain = empty($secret) ? null : $this->getDomain();
 
         $plugins = $this->get('shopware_plugininstaller.plugin_service_local')->getPluginsForUpdateCheck();
 
         $context = new UpdateListingRequest(
             $this->getLocale(),
             $this->getVersion(),
-            $this->getDomain(),
+            $domain,
             $plugins
         );
 
         try {
+            /** @var UpdateResultStruct $updates */
             $updates = $this->get('shopware_plugininstaller.plugin_service_view')->getUpdates($context);
         } catch (Exception $e) {
             $this->handleException($e);
@@ -379,7 +384,8 @@ class Shopware_Controllers_Backend_PluginManager
 
         $this->View()->assign([
             'success' => true,
-            'data' => array_values($updates)
+            'data' => array_values($updates->getPlugins()),
+            'loginRecommended' => empty($secret) && $updates->isGtcAcceptanceRequired()
         ]);
     }
 

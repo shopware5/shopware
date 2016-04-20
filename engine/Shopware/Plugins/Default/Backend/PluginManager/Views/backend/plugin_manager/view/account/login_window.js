@@ -39,7 +39,7 @@ Ext.define('Shopware.apps.PluginManager.view.account.LoginWindow', {
      */
     snippets: {
         title: '{s name=account/title}Shopware ID{/s}',
-        descriptionMessage: '{s name=account/description_message}Here you can create you personal Shopware ID. The Shopware ID will give you access to your Shopware account in our forum, wiki and other community resources. It will also grant you access to our plugin store, where you can find many more plugins that will help you easily customize your shop to your needs.{/s}'
+        descriptionMessage: '{s name=account/description_message}Please login with your existing Shopware ID or register your shop, to access the complete functional range of the PluginManager. <br>The Shopware ID is your username and will give you access to your Shopware account and our Community Store, the central marketplace for all shopware extensions.{/s}'
     },
 
     cls: 'plugin-manager-login-window',
