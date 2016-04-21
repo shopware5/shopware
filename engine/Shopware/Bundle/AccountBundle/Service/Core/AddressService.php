@@ -263,6 +263,14 @@ class AddressService implements AddressServiceInterface
             'additional_address_line2' => $address->getAdditionalAddressLine2(),
         ];
 
+        if ($address->getAttribute()) {
+            $data = $this->modelManager->toArray($address->getAttribute());
+            unset($data['id'], $data['address_id'], $data['shippingID'], $data['billingID']);
+
+            $output['attributes'] = $data;
+            $output = array_merge($data, $output);
+        }
+
         return $output;
     }
 }

@@ -120,7 +120,7 @@ class AddressImportService implements AddressImportServiceInterface
             throw new \RuntimeException('No address to import found in '.$table.'.');
         }
 
-        if ($this->addressService->isDuplicate($data, $customerId)) {
+        if ($this->isDuplicate($data, $customerId)) {
             throw new \RuntimeException('The address in '.$table.' seems to be a duplicate of an existing address.');
         }
 
@@ -205,7 +205,52 @@ class AddressImportService implements AddressImportServiceInterface
         }
 
         unset($data['id'], $data['address_id'], $data['shippingID'], $data['billingID']);
+        $this->saveAttribute($address, $data);
+    }
 
-        $this->addressService->saveAttribute($address, $data);
+
+    /**
+     * Searches all customer addresses for the given data
+     *
+     * @param array $data
+     * @param int $customerId
+     * @return bool
+     */
+    private function isDuplicate(array $data, $customerId)
+    {
+        $existing = $this->modelManager->getRepository(Address::class)->getListArray($customerId);
+
+        foreach ($existing as $row) {
+            $row['country'] = $row['country']['id'];
+            $row['state'] = $row['state'] ? $row['state']['id'] : null;
+            unset($row['id']);
+
+            $diff = array_diff($row, $data);
+            if (empty($diff)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param Address $address
+     * @param array $data
+     * @return \Shopware\Models\Attribute\CustomerAddress
+     */
+    private function saveAttribute(Address $address, array $data = [])
+    {
+        $attribute = $address->getAttribute();
+        if (!$attribute) {
+            $attribute = new \Shopware\Models\Attribute\CustomerAddress();
+            $attribute->setCustomerAddress($address);
+            $this->modelManager->persist($attribute);
+        }
+
+        $attribute->fromArray($data);
+        $this->modelManager->flush($attribute);
+
+        return $attribute;
     }
 }

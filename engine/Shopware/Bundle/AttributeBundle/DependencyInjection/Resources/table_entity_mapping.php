@@ -307,5 +307,13 @@ return [
         'foreignKey' => 'voucherid',
         'coreAttributes' => [],
         'dependingTables' => []
+    ],
+    's_user_addresses_attributes' => [
+        'readOnly' => false,
+        'model' => 'Shopware\Models\Attribute\CustomerAddress',
+        'identifiers' => ['id', 'address_id'],
+        'foreignKey' => 'address_id',
+        'coreAttributes' => ['text1', 'text2', 'text3', 'text4', 'text5', 'text6'],
+        'dependingTables' => ['s_user_billingaddress', 's_user_shippingaddress', 's_order_billingaddress', 's_order_shippingaddress']
     ]
 ];

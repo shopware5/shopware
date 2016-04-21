@@ -64,20 +64,6 @@ class sOrderTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($next, $current + 1);
     }
 
-    public function testGetOrderAttributes()
-    {
-        $orderId = $this->createDummyOrder();
-        $this->createDummyPosition($orderId);
-        $this->createDummyPosition($orderId);
-        $this->createDummyPosition($orderId);
-
-        $attributes = $this->invokeMethod($this->module, 'getOrderAttributes', array($orderId));
-
-        $this->assertNotEmpty($attributes);
-        $this->assertArrayHasKey('attribute1', $attributes);
-        $this->assertArrayHasKey('orderID', $attributes);
-    }
-
     /**
      * @covers sOrder::sendMail()
      * @ticket SW-8261
@@ -122,21 +108,6 @@ class sOrderTest extends PHPUnit_Framework_TestCase
         $context = $args->get('context');
         $this->assertInternalType('array', $context['sPaymentTable']);
         $this->assertCount(0, $context['sPaymentTable']);
-    }
-
-
-    public function testGetOrderDetailAttributes()
-    {
-        $orderId = $this->createDummyOrder();
-        $this->createDummyPosition($orderId);
-        $this->createDummyPosition($orderId);
-        $detailId = $this->createDummyPosition($orderId);
-
-        $attributes = $this->invokeMethod($this->module, 'getOrderDetailAttributes', array($detailId));
-
-        $this->assertNotEmpty($attributes);
-        $this->assertArrayHasKey('attribute1', $attributes);
-        $this->assertArrayHasKey('detailID', $attributes);
     }
 
     public function testTransactionExistTrue()

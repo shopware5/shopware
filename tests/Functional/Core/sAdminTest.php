@@ -1059,28 +1059,44 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             'text3' => 'text3',
             'text4' => 'text4',
             'text5' => 'text5',
-            'text6' => 'text6'
+            'text6' => 'text6',
+
+            'attributes' => [
+                'text1' => 'text1',
+                'text2' => 'text2',
+                'text3' => 'text3',
+                'text4' => 'text4',
+                'text5' => 'text5',
+                'text6' => 'text6'
+            ]
         );
 
         $result = $this->module->sSaveRegisterBilling($userId, array('billing' => $testData, 'shipping' => $testData));
         $this->assertGreaterThan(0, $result);
 
-        $savedData = Shopware()->Db()->fetchRow('
-            SELECT *
-
-            FROM s_user_billingaddress
-            LEFT JOIN s_user_billingaddress_attributes
-            ON s_user_billingaddress.id = s_user_billingaddress_attributes.billingID
-
-            WHERE s_user_billingaddress.id = ?
-        ', array($result));
+        $savedData = Shopware()->Db()->fetchRow('SELECT * FROM s_user_billingaddress WHERE id = ?', [$result]);
+        $savedAttributes = Shopware()->Db()->fetchRow('SELECT * FROM s_user_billingaddress_attributes WHERE billingID = ?', [$result]);
 
         // Prepare demo data for comparison
+        $testAttributes = $testData['attributes'];
         $testData['countryID'] = $testData['country'];
         unset($testData['country']);
+        $testData['birthday'] = mktime(
+            0, 0, 0,
+            (int) $testData['birthmonth'],
+            (int) $testData['birthday'],
+            (int) $testData['birthyear']
+        );
+        $testData['birthday'] = '1956-02-21';
+
+        unset($testData['attributes'], $testData['country'], $testData['birthmonth'], $testData['birthyear']);
 
         foreach ($testData as $name => $value) {
             $this->assertEquals($savedData[$name], $value);
+        }
+
+        foreach ($testAttributes as $name => $value) {
+            $this->assertEquals($savedAttributes[$name], $value);
         }
 
         Shopware()->Db()->delete('s_user_billingaddress_attributes', 'billingID = '.$result);
@@ -1115,33 +1131,33 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             'country' => '2',
             'stateID' => '3',
 
-            'text1' => 'text1',
-            'text2' => 'text2',
-            'text3' => 'text3',
-            'text4' => 'text4',
-            'text5' => 'text5',
-            'text6' => 'text6'
+            'attributes' => [
+                'text1' => 'text1',
+                'text2' => 'text2',
+                'text3' => 'text3',
+                'text4' => 'text4',
+                'text5' => 'text5',
+                'text6' => 'text6'
+            ]
         );
 
         $result = $this->module->sSaveRegisterShipping($userId, array('shipping' => $testData, 'billing' => $testData));
         $this->assertGreaterThan(0, $result);
 
-        $savedData = Shopware()->Db()->fetchRow('
-            SELECT *
-
-            FROM s_user_shippingaddress
-            LEFT JOIN s_user_shippingaddress_attributes
-            ON s_user_shippingaddress.id = s_user_shippingaddress_attributes.shippingID
-
-            WHERE s_user_shippingaddress.id = ?
-        ', array($result));
+        $savedData = Shopware()->Db()->fetchRow('SELECT * FROM s_user_shippingaddress WHERE id = ?', [$result]);
+        $savedAttributes = Shopware()->Db()->fetchRow('SELECT * FROM s_user_shippingaddress_attributes WHERE shippingID = ?', [$result]);
 
         // Prepare demo data for comparison
+        $testAttributes = $testData['attributes'];
         $testData['countryID'] = $testData['country'];
-        unset($testData['country']);
+        unset($testData['country'], $testData['attributes']);
 
         foreach ($testData as $name => $value) {
             $this->assertEquals($savedData[$name], $value);
+        }
+
+        foreach ($testAttributes as $name => $value) {
+            $this->assertEquals($savedAttributes[$name], $value);
         }
 
         Shopware()->Db()->delete('s_user_shippingaddress_attributes', 'shippingID = '.$result);
@@ -1604,13 +1620,6 @@ class sAdminTest extends PHPUnit_Framework_TestCase
 
         $expectedData = array(
             'billingaddress' => array(
-                'customerBillingId' => $customer->getBilling()->getId(),
-                'text1' => 'Freitext1',
-                'text2' => 'Freitext2',
-                'text3' => null,
-                'text4' => null,
-                'text5' => null,
-                'text6' => null,
                 'id' => $customer->getBilling()->getId(),
                 'userID' => $customer->getId(),
                 'company' => '',
@@ -1628,7 +1637,15 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                 'ustid' => '',
                 'title' => null,
                 'additional_address_line1' => 'IT-Department',
-                'additional_address_line2' => 'Second Floor'
+                'additional_address_line2' => 'Second Floor',
+                'attributes' => [
+                    'text1' => 'Freitext1',
+                    'text2' => 'Freitext2',
+                    'text3' => null,
+                    'text4' => null,
+                    'text5' => null,
+                    'text6' => null
+                ]
             ),
             'additional' => array(
                 'country' => array(
@@ -1725,13 +1742,6 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                 ),
             ),
             'shippingaddress' => array(
-                'customerShippingId' => $customer->getShipping()->getId(),
-                'text1' => 'Freitext1',
-                'text2' => 'Freitext2',
-                'text3' => null,
-                'text4' => null,
-                'text5' => null,
-                'text6' => null,
                 'id' => $customer->getShipping()->getId(),
                 'userID' => $customer->getId(),
                 'company' => 'Widgets Inc.',
@@ -1746,7 +1756,15 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                 'stateID' => null,
                 'title' => null,
                 'additional_address_line1' => 'Sales-Department',
-                'additional_address_line2' => 'Third Floor'
+                'additional_address_line2' => 'Third Floor',
+                'attributes' => [
+                    'text1' => 'Freitext1',
+                    'text2' => 'Freitext2',
+                    'text3' => null,
+                    'text4' => null,
+                    'text5' => null,
+                    'text6' => null
+                ]
             ),
         );
 

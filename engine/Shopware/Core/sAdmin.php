@@ -179,6 +179,8 @@ class sAdmin
         $this->subshopId = $this->contextService->getShopContext()->getShop()->getParentId();
         $this->addressImportService = $addressImportService ? : Shopware()->Container()->get('shopware_account.address_import_service');
         $this->addressService = $addressService ? : Shopware()->Container()->get('shopware_account.address_service');
+        $this->attributeLoader = Shopware()->Container()->get('shopware_attribute.data_loader');
+        $this->attributePersister = Shopware()->Container()->get('shopware_attribute.data_persister');
         $this->numberRangeIncrementer = $numberRangeIncrementer ? : Shopware()->Container()->get('shopware.number_range_incrementer');
     }
 
@@ -1173,23 +1175,7 @@ class sAdmin
         );
 
         $userId = $this->db->lastInsertId();
-
-        $sql = "
-            INSERT INTO s_user_attributes (userID) VALUES (?)
-        ";
-        $data = array($userId);
-
-        list($sql, $data) = $this->eventManager->filter(
-            'Shopware_Modules_Admin_SaveRegisterMainDataAttributes_FilterSql',
-            array($sql, $data),
-            array('subject' => $this)
-        );
-        $saveAttributeData = $this->db->query($sql, $data);
-
-        $this->eventManager->notify(
-            'Shopware_Modules_Admin_SaveRegisterMainDataAttributes_Return',
-            array('subject' => $this, 'insertObject' => $saveAttributeData)
-        );
+        $this->attributePersister->persist([], 's_user_attributes', $userId);
 
         return $userId;
     }
@@ -1273,30 +1259,7 @@ class sAdmin
 
         // New attributes table
         $billingID = $this->db->lastInsertId();
-        $attributeData = array(
-            $billingID,
-            empty($userObject["text1"]) ? "" : $userObject["text1"],
-            empty($userObject["text2"]) ? "" : $userObject["text2"],
-            empty($userObject["text3"]) ? "" : $userObject["text3"],
-            empty($userObject["text4"]) ? "" : $userObject["text4"],
-            empty($userObject["text5"]) ? "" : $userObject["text5"],
-            empty($userObject["text6"]) ? "" : $userObject["text6"],
-        );
-        $sqlAttribute = "INSERT INTO s_user_billingaddress_attributes
-                 (billingID, text1, text2, text3, text4, text5, text6)
-                 VALUES
-                 (?,?,?,?,?,?,?)";
-
-        list($sqlAttribute, $attributeData) = $this->eventManager->filter(
-            'Shopware_Modules_Admin_SaveRegisterBillingAttributes_FilterSql',
-            array($sqlAttribute, $attributeData),
-            array('subject' => $this)
-        );
-        $saveAttributeData = $this->db->query($sqlAttribute, $attributeData);
-        $this->eventManager->notify(
-            'Shopware_Modules_Admin_SaveRegisterBillingAttributes_Return',
-            array('subject' => $this, 'insertObject' => $saveAttributeData)
-        );
+        $this->attributePersister->persist($userObject['attributes'], 's_user_billingaddress_attributes', $billingID);
 
         try {
             $address = $this->addressImportService->importCustomerBilling($userID);
@@ -1361,30 +1324,7 @@ class sAdmin
 
         // New attributes table
         $shippingId = $this->db->lastInsertId();
-        $sqlAttributes = "INSERT INTO s_user_shippingaddress_attributes
-                 (shippingID, text1, text2, text3, text4, text5, text6)
-                 VALUES
-                 (?, ?, ?, ?, ?, ?, ?)";
-
-        $sqlAttributes = $this->eventManager->filter(
-            'Shopware_Modules_Admin_SaveRegisterShippingAttributes_FilterSql',
-            $sqlAttributes,
-            array('subject' => $this, 'user' => $userObject, 'id' => $userID)
-        );
-        $attributeParams = array(
-            $shippingId,
-            $userObject["shipping"]["text1"],
-            $userObject["shipping"]["text2"],
-            $userObject["shipping"]["text3"],
-            $userObject["shipping"]["text4"],
-            $userObject["shipping"]["text5"],
-            $userObject["shipping"]["text6"]
-        );
-        $saveAttributeData = $this->db->query($sqlAttributes, $attributeParams);
-        $this->eventManager->notify(
-            'Shopware_Modules_Admin_SaveRegisterShippingAttributes_Return',
-            array('subject' => $this, 'insertObject' => $saveAttributeData)
-        );
+        $this->attributePersister->persist($userObject['shipping']['attributes'], 's_user_shippingaddress_attributes', $shippingId);
 
         try {
             $address = $this->addressImportService->importCustomerShipping($userID);
@@ -2027,59 +1967,6 @@ SQL;
         }
 
         return $userData;
-    }
-
-    /**
-     * Returns the given user's shipping address attributes
-     *
-     * @param $userId User id
-     * @return array The given user's shipping address attributes
-     */
-    private function getUserShippingAddressAttributes($userId)
-    {
-        $builder = Shopware()->Models()->createQueryBuilder();
-        $attributes = $builder->select(array('attributes'))
-            ->from('Shopware\Models\Attribute\CustomerShipping', 'attributes')
-            ->innerJoin('attributes.customerShipping', 'shipping')
-            ->where('shipping.customerId = :userId')
-            ->setParameter('userId', $userId)
-            ->setFirstResult(0)
-            ->setMaxResults(1)
-            ->getQuery()
-            ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-
-        if (!is_array($attributes)) {
-            return array();
-        } else {
-            unset($attributes['id']);
-            return $attributes;
-        }
-    }
-
-    /**
-     * Returns the given user's attributes
-     *
-     * @param $userId User id
-     * @return array The given user's attributes
-     */
-    private function getUserAttributes($userId)
-    {
-        $builder = Shopware()->Models()->createQueryBuilder();
-        $attributes = $builder->select(array('attributes'))
-            ->from('Shopware\Models\Attribute\Customer', 'attributes')
-            ->where('attributes.customerId = :userId')
-            ->setParameter('userId', $userId)
-            ->setFirstResult(0)
-            ->setMaxResults(1)
-            ->getQuery()
-            ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-
-        if (!is_array($attributes)) {
-            return array();
-        } else {
-            unset($attributes['id']);
-            return $attributes;
-        }
     }
 
     /**
@@ -3909,7 +3796,7 @@ SQL;
             array($userId)
         );
         $additional = $additional ? : array();
-        $attributes = $this->getUserAttributes($userId);
+        $attributes = $this->attributeLoader->load('s_user_attributes', $userId) ? : [];
         $userData["additional"]["user"] = array_merge($attributes, $additional);
         return $userData;
     }
@@ -3925,13 +3812,11 @@ SQL;
      */
     private function getUserShippingData($userId, $userData, $countryQuery)
     {
-        $shipping = $this->db->fetchRow(
-            "SELECT * FROM s_user_shippingaddress WHERE userID = ?",
-            array($userId)
-        );
-        $shipping = $shipping ? : array();
-        $attributes = $this->getUserShippingAddressAttributes($userId);
-        $userData["shippingaddress"] = array_merge($attributes, $shipping);
+        $shipping = $this->db->fetchRow("SELECT * FROM s_user_shippingaddress WHERE userID = ?", [$userId]);
+        $shipping['attributes'] = $this->attributeLoader->load('s_user_shippingaddress_attributes', $shipping['id']) ?: [];
+        unset($shipping['attributes']['shippingID'], $shipping['attributes']['id']);
+
+        $userData["shippingaddress"] = $shipping;
 
         // If shipping address is not available, billing address is coeval the shipping address
         $countryShipping = $this->config->get('sCOUNTRYSHIPPING');
@@ -3992,35 +3877,16 @@ SQL;
      */
     private function getUserBillingData($userId, $userData)
     {
-        $billing = $this->db->fetchRow(
-            'SELECT * FROM s_user_billingaddress WHERE userID = ?',
-            array($userId)
-        );
-        $billing = $billing ? : array();
+        $billing = $this->db->fetchRow('SELECT * FROM s_user_billingaddress WHERE userID = ?', [$userId]);
+        $billing['attributes'] = $this->attributeLoader->load('s_user_billingaddress_attributes', $billing['id']) ?: [];
+        unset($billing['attributes']['billingID'], $billing['attributes']['id']);
 
-        $builder = Shopware()->Models()->createQueryBuilder();
-        $attributes = $builder->select(array('attributes'))
-            ->from('Shopware\Models\Attribute\CustomerBilling', 'attributes')
-            ->innerJoin('attributes.customerBilling', 'billing')
-            ->where('billing.customerId = :userId')
-            ->setParameter('userId', $userId)
-            ->setFirstResult(0)
-            ->setMaxResults(1)
-            ->getQuery()
-            ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-        if (!is_array($attributes)) {
-            $attributes = array();
-        } else {
-            unset($attributes['id']);
-        }
-
-        $userData["billingaddress"] = array_merge($attributes, $billing);
-
-        if (empty($userData["billingaddress"]['customernumber'])
-            && $this->config->get('sSHOPWAREMANAGEDCUSTOMERNUMBERS')
-        ) {
+        if (empty($billing['customernumber']) && $this->config->get('sSHOPWAREMANAGEDCUSTOMERNUMBERS')) {
             $this->assignCustomerNumber($userId);
         }
+
+        $userData["billingaddress"] = $billing;
+
         return $userData;
     }
 

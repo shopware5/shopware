@@ -141,7 +141,7 @@ class TypeMapping
 
         $result = [];
         foreach ($entities as $entity) {
-            $result[] = ['entity' => $entity, 'label' => $snippets->get($entity, $entity)];
+            $result[] = ['entity' => $entity, 'label' => $snippets->get($entity)];
         }
         return $result;
     }

@@ -56,22 +56,6 @@ interface AddressServiceInterface
     public function isValid(Address $address);
 
     /**
-     * Searches all customer addresses for the given data
-     *
-     * @param array $data
-     * @param int $customerId
-     * @return bool
-     */
-    public function isDuplicate(array $data, $customerId);
-
-    /**
-     * @param Address $address
-     * @param array $data
-     * @return \Shopware\Models\Attribute\CustomerAddress
-     */
-    public function saveAttribute(Address $address, array $data = []);
-
-    /**
      * Sets the address to the default billing address in the customer model
      *
      * @param Address $address
