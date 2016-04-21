@@ -16,16 +16,22 @@ class Shopware_Controllers_Backend_FirstRunWizardPluginManager extends Shopware_
         /** @var PluginStoreService $firstRunWizardPluginStore */
         $firstRunWizardPluginStore = $this->container->get('first_run_wizard_plugin_store');
 
+        $isoFromRequest = $this->Request()->get('iso');
+
+        $isoCode = $isoFromRequest ? $isoFromRequest : $this->getCurrentLocale()->getName();
+
+        $isoCode = substr($isoCode, -2);
+
         try {
             /** @var PluginStruct[] $plugins */
             $plugins = $firstRunWizardPluginStore->getIntegratedPlugins(
-                $this->getCurrentLocale(),
+                $isoCode,
                 $this->getVersion()
             );
         } catch (Exception $e) {
             $this->View()->assign(array(
-                'success' => false,
-                'message' => $e->getMessage()
+                'success' => true,
+                'data' => []
             ));
             return;
         }
@@ -52,8 +58,8 @@ class Shopware_Controllers_Backend_FirstRunWizardPluginManager extends Shopware_
             );
         } catch (Exception $e) {
             $this->View()->assign(array(
-                'success' => false,
-                'message' => $e->getMessage()
+                'success' => true,
+                'data' => []
             ));
             return;
         }
@@ -81,8 +87,8 @@ class Shopware_Controllers_Backend_FirstRunWizardPluginManager extends Shopware_
             );
         } catch (Exception $e) {
             $this->View()->assign(array(
-                'success' => false,
-                'message' => $e->getMessage()
+                'success' => true,
+                'data' => []
             ));
             return;
         }
@@ -112,8 +118,8 @@ class Shopware_Controllers_Backend_FirstRunWizardPluginManager extends Shopware_
             );
         } catch (Exception $e) {
             $this->View()->assign(array(
-                'success' => false,
-                'message' => $e->getMessage()
+                'success' => true,
+                'data' => []
             ));
             return;
         }
@@ -140,8 +146,8 @@ class Shopware_Controllers_Backend_FirstRunWizardPluginManager extends Shopware_
             );
         } catch (Exception $e) {
             $this->View()->assign(array(
-                'success' => false,
-                'message' => $e->getMessage()
+                'success' => true,
+                'data' => []
             ));
             return;
         }
@@ -149,6 +155,32 @@ class Shopware_Controllers_Backend_FirstRunWizardPluginManager extends Shopware_
         $this->View()->assign(array(
             'success' => true,
             'data' => $localizations
+        ));
+    }
+
+    /**
+     * Loads localizations list from SBP
+     */
+    public function getIntegratedPluginsCountriesAction()
+    {
+        /** @var PluginStoreService $firstRunWizardPluginStore */
+        $firstRunWizardPluginStore = $this->container->get('first_run_wizard_plugin_store');
+
+        $locale = $this->getCurrentLocale();
+
+        try {
+            $countries = $firstRunWizardPluginStore->getIntegratedPluginsCountries($locale);
+        } catch (Exception $e) {
+            $this->View()->assign(array(
+                'success' => true,
+                'data' => []
+            ));
+            return;
+        }
+
+        $this->View()->assign(array(
+            'success' => true,
+            'data' => $countries
         ));
     }
 

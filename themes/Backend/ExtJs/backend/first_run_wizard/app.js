@@ -23,12 +23,14 @@ Ext.define('Shopware.apps.FirstRunWizard', {
         'DemoPlugin',
         'LocalizationPlugin',
         'Localization',
-        'Locale'
+        'Locale',
+        'IntegratedPluginsCountries'
     ],
 
     models: [
         'Localization',
-        'Locale'
+        'Locale',
+        'IntegratedPluginsCountries'
     ],
 
     controllers: [
@@ -36,6 +38,7 @@ Ext.define('Shopware.apps.FirstRunWizard', {
         'Config',
         'ShopwareId',
         'Localization',
+        'Recommendation',
         'Home'
     ],
 
