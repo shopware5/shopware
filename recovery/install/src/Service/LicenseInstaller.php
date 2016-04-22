@@ -72,11 +72,24 @@ EOT;
                 ':version' => $license->version,
                 ':type' => $license->type,
                 ':source' => $license->source,
-                ':creation' => $license->creation,
-                ':expiration' => $license->expiration,
+                ':creation' => $this->checkDate($license->creation),
+                ':expiration' => $this->checkDate($license->expiration),
             ]);
         } catch (\PDOException $e) {
             throw new \RuntimeException("Could not insert license into database", 0, $e);
         }
+    }
+
+    /**
+     * Checks if a date string is plausible.
+     * If not, returns null. Otherwise the string.
+     *
+     * @param string $date
+     * @return string|null
+     */
+    private function checkDate($date)
+    {
+        $dateCheck = strtotime($date);
+        return is_int($dateCheck) && $dateCheck > 0 ? $date : null;
     }
 }
