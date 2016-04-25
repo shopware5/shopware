@@ -489,10 +489,12 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         }
 
         if ($this->Request()->getParam('sAddAccessories')) {
+
             $this->forward('addAccessories');
         } else {
             $this->forward($this->Request()->getParam('sTargetAction', 'cart'));
         }
+
     }
 
     /**
@@ -1363,6 +1365,20 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         $defaultDispatch = array_shift($supportedDispatches);
         $this->session['sDispatch'] = $defaultDispatch['id'];
         return $this->session['sDispatch'];
+    }
+
+    /**
+     * Ajax add article action
+     *
+     * This action will get redirected from the default addArticleAction
+     * when the request was an AJAX request.
+     *
+     * The json padding will be set so that the content type will get to
+     * 'text/javascript' so the template can be returned via jsonp
+     */
+    public function ajaxAddArticleAction()
+    {
+        Shopware()->Plugins()->Controller()->Json()->setPadding();
     }
 
     /**
