@@ -52,10 +52,6 @@ class Shopware_Tests_Components_TemplateMailTest extends Enlight_Components_Test
                 ->method('getRepository')
                 ->will($this->returnSelf());
 
-        $manager->expects($this->any())
-                ->method('findOneBy')
-                ->will($this->returnValue(false));
-
         $this->mail = new Shopware_Components_TemplateMail();
         $this->mail->setShop(Shopware()->Shop());
         $this->mail->setModelManager($manager);

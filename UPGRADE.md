@@ -2,7 +2,7 @@
 In this document you will find a changelog of the important changes related to the code base of Shopware.
 
 ## 5.2.0 DEV
-* Increased minimum required PHP version to PHP >= 5.5.9.
+* Increased minimum required PHP version to PHP >= 5.6.4.
 * Added CSRF protection to the backend which is enabled by default.
     * OptOut by implementing `CSRFWhitelistAware` interface
     * Added `X-CSRF-Token` to every ajax request
@@ -201,9 +201,7 @@ In this document you will find a changelog of the important changes related to t
 * `\Shopware\Bundle\StoreFrontBundle\Gateway\GraduatedPricesGatewayInterface` requires now a provided `ShopContextInterface`
 * Categories of `Shopware\Components\Api\Resource\Article::getArticleCategories($articleId)` are no longer indexed by category id
 * Moved `<form>` element in checkout confirm outside the agreement box to wrap around address and payment boxes
-* Removed smarty variable `sCategoryInfo` in listing and blog controllers. Use `sCategoryContent` instead.
-* Added creation of custom `__construct()` method to `Shopware\Components\Model\Generator`, which initializes any default values of properties when generating attribute models
-
+* Removed smarty variable `sCategoryInfo` in listing and blog controllers. Use `sCategoryContent` instead. 
 
 ## 5.1.5
 * The smarty variable `sCategoryInfo` in Listing and Blog controllers is now deprecated and will be removed soon. Use `sCategoryContent` instead, it's a drop in replacement. 

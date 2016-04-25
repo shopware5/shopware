@@ -23,14 +23,14 @@
  */
 
 // Check the minimum required php version
-if (version_compare(PHP_VERSION, '5.5.9', '<')) {
+if (version_compare(PHP_VERSION, '5.6.4', '<')) {
     header('Content-type: text/html; charset=utf-8', true, 503);
 
     echo '<h2>Error</h2>';
-    echo 'Your server is running PHP version ' . PHP_VERSION . ' but Shopware 5 requires at least PHP 5.5.9';
+    echo 'Your server is running PHP version ' . PHP_VERSION . ' but Shopware 5 requires at least PHP 5.6.4';
 
     echo '<h2>Fehler</h2>';
-    echo 'Auf Ihrem Server läuft PHP version ' . PHP_VERSION . ', Shopware 5 benötigt mindestens PHP 5.5.9';
+    echo 'Auf Ihrem Server läuft PHP version ' . PHP_VERSION . ', Shopware 5 benötigt mindestens PHP 5.6.4';
 
     return;
 }

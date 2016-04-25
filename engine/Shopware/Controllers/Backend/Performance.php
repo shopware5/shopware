@@ -33,8 +33,8 @@ use Shopware\Models\Plugin\Plugin;
  */
 class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Backend_ExtJs
 {
-    const PHP_RECOMMENDED_VERSION = '5.6.0';
-    const PHP_MINIMUM_VERSION     = '5.5.9';
+    const PHP_RECOMMENDED_VERSION = '7.0.0';
+    const PHP_MINIMUM_VERSION     = '5.6.4';
 
     const PERFORMANCE_VALID       = 1;
     const PERFORMANCE_WARNING     = 2;

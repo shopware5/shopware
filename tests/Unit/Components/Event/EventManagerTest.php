@@ -141,9 +141,6 @@ class Shopware_Tests_Components_Event_ManagerTest extends \PHPUnit_Framework_Tes
         $this->assertEquals('baz', $result->get(2));
     }
 
-    /**
-     * @expectedException \Enlight_Event_Exception
-     */
     public function testExceptionIsThrownOnInvalidEventArgs()
     {
         $event = new Enlight_Event_Handler_Default(
@@ -153,6 +150,8 @@ class Shopware_Tests_Components_Event_ManagerTest extends \PHPUnit_Framework_Tes
         );
 
         $this->eventManager->registerListener($event);
+
+        $this->expectException(\Enlight_Event_Exception::class);
 
         $this->eventManager->collect(
             'Example',
