@@ -47,21 +47,20 @@ class Db
         Configuration $config,
         EventManager $eventManager
     ) {
-        $connectionParams = array(
-            'dbname' => $options['dbname'],
-            'user' => $options['username'],
-            'password' => $options['password'],
-            'host' => $options['host'],
-            'driver' => $options['adapter'],
-            'charset' => $options['charset'],
-            'wrapperClass' => isset($options['wrapperClass']) ? $options['wrapperClass'] : null,
-        );
+        $options['driver'] = $options['adapter'];
+        $options['user'] = $options['username'];
 
-        $connectionParams['driverOptions'] = [
-            \PDO::MYSQL_ATTR_INIT_COMMAND => "SET @@session.sql_mode = '';",  // Reset sql_mode "STRICT_TRANS_TABLES" that will be default in MySQL 5.6
-        ];
+        unset($options['username']);
+        unset($options['adapter']);
 
-        $conn = \Doctrine\DBAL\DriverManager::getConnection($connectionParams, $config, $eventManager);
+
+        if (!isset($options['driverOptions'])) {
+            $options['driverOptions'] = [];
+        }
+
+        $options['driverOptions'][\PDO::MYSQL_ATTR_INIT_COMMAND] = "SET @@session.sql_mode = '';";  // Reset sql_mode "STRICT_TRANS_TABLES" that will be default in MySQL 5.6
+
+        $conn = \Doctrine\DBAL\DriverManager::getConnection($options, $config, $eventManager);
 
         return $conn;
     }
@@ -73,6 +72,8 @@ class Db
      */
     public static function createEnlightDbAdapter(Connection $connection, array $options)
     {
+        $options = ['dbname' => $options['dbname'], 'username' => null, 'password' => null];
+
         $db = \Enlight_Components_Db_Adapter_Pdo_Mysql::createFromDbalConnectionAndConfig($connection, $options);
 
         \Zend_Db_Table_Abstract::setDefaultAdapter($db);
