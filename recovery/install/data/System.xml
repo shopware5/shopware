@@ -36,9 +36,6 @@
 	<requirement>
 	 	<name>curl</name><group>extension</group><required>7.0.0</required>
 	</requirement>
-    <requirement>
-        <name>soap</name><group>extension</group><required>1</required>
-    </requirement>
 	<requirement>
 	 	<name>openssl</name><group>extension</group><required>1</required>
 	</requirement>
