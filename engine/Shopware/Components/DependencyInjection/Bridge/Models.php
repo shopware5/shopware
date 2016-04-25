@@ -26,9 +26,9 @@ namespace Shopware\Components\DependencyInjection\Bridge;
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\EventManager;
+use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
-use Doctrine\ORM\ORMException;
 use Shopware\Components\Model\Configuration;
 use Shopware\Components\Model\LazyFetchModelEntity;
 use Shopware\Components\Model\ModelManager;
@@ -48,18 +48,19 @@ class Models
     /**
      * Creates the entity manager for the application.
      *
-     * @param EventManager $eventManager
-     * @param Configuration $config
-     * @param \Enlight_Loader $loader
-     * @param \Pdo $db
-     * @param AnnotationDriver $modelAnnotation
+     * @param EventManager      $eventManager
+     * @param Configuration     $config
+     * @param \Enlight_Loader   $loader
+     * @param Connection        $connection
+     * @param AnnotationDriver  $modelAnnotation
+     *
      * @return ModelManager
      */
     public function factory(
         EventManager $eventManager,
         Configuration $config,
         \Enlight_Loader $loader,
-        \PDO $db,
+        Connection $connection,
         // annotation driver is not really used here but has to be loaded first
         AnnotationDriver $modelAnnotation
     ) {
@@ -68,19 +69,11 @@ class Models
             $config->getAttributeDir()
         );
 
-        // now create the entity manager and use the connection
-        // settings we defined in our application.ini
-        $conn = DriverManager::getConnection(
-            array('pdo' => $db),
-            $config,
-            $eventManager
-        );
-
-        $conn->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');
-        $conn->getDatabasePlatform()->registerDoctrineTypeMapping('bit', 'boolean');
+        $connection->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');
+        $connection->getDatabasePlatform()->registerDoctrineTypeMapping('bit', 'boolean');
 
         $entityManager = ModelManager::createInstance(
-            $conn,
+            $connection,
             $config,
             $eventManager
         );

@@ -130,10 +130,9 @@
         </service>
 
         <service id="shopware.db" alias="db"/>
-        <service id="db_factory" class="Shopware\Components\DependencyInjection\Bridge\Db" />
         <service id="db" class="Enlight_Components_Db_Adapter_Pdo_Mysql">
-            <factory service="db_factory" method="factory" />
-            <argument>%shopware.db.adapter%</argument>
+            <factory class="Shopware\Components\DependencyInjection\Bridge\Db" method="createEnlightDbAdapter" />
+            <argument type="service" id="dbal_connection"/>
             <argument>%shopware.db%</argument>
         </service>
 
@@ -186,7 +185,7 @@
             <argument type="service" id="model_event_manager" />
             <argument type="service" id="shopware.model_config" />
             <argument type="service" id="shopware.loader" />
-            <argument type="service" id="db_connection" />
+            <argument type="service" id="dbal_connection" />
             <argument type="service" id="shopware.model_annotations" />
          </service>
 
@@ -195,7 +194,10 @@
         </service>
 
         <service id="dbal_connection" class="Doctrine\DBAL\Connection">
-            <factory service="models" method="getConnection" />
+            <factory class="Shopware\Components\DependencyInjection\Bridge\Db" method="createDbalConnection" />
+            <argument>%shopware.db%</argument>
+            <argument type="service" id="ModelConfig"/>
+            <argument type="service" id="model_event_manager"/>
         </service>
 
         <service id="model_annotations_factory" class="Shopware\Components\DependencyInjection\Bridge\ModelAnnotation" />
@@ -222,7 +224,7 @@
         </service>
 
         <service id="CategorySubscriber" class="Shopware\Components\Model\CategorySubscriber">
-            <argument type="service" id="CategoryDenormalization" />
+            <argument type="service" id="service_container" />
             <tag name="doctrine.event_subscriber" />
         </service>
 
