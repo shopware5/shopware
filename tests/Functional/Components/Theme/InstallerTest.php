@@ -44,10 +44,6 @@ class InstallerTest extends Base
             ->method('getRepository')
             ->will($this->returnSelf());
 
-        $entityManager->expects($this->any())
-            ->method('findOneBy')
-            ->will($this->returnValue(null));
-
         $configurator = $this->getConfigurator();
 
         $installer = new \Shopware\Components\Theme\Installer(

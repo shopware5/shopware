@@ -28,7 +28,6 @@ use Prophecy\Argument;
 use Shopware\Components\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-
 /**
  * @category  Shopware
  * @package   Components\DependencyInjection
@@ -67,19 +66,16 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->container->has('some'));
     }
 
-    /**
-     * @expectedException \Exception
-     */
     public function testGetOnNonExistentWithDefaultBehaviour()
     {
+        $this->expectException(\Exception::class);
+
         $this->container->get('foo');
     }
 
-    /**
-     * @expectedException \Exception
-     */
     public function testGetOnNonExistentWithExceptionBehaviour()
     {
+        $this->expectException(\Exception::class);
         $this->container->get('foo', ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE);
     }
 
@@ -128,9 +124,6 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('stdClass', $this->container->get('alias'));
     }
 
-    /**
-     * @expectedException \Exception
-     */
     public function testEventsAreEmitedDuringServiceInitialisationWhenUsingUnknownServices()
     {
         $service = $this->prophesize(\Enlight_Event_EventManager::class);
@@ -142,7 +135,9 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $service = $service->reveal();
         $this->container->set('events', $service);
 
-        $this->assertInstanceOf('stdClass', $this->container->get('Foo'));
+        $this->expectException(\Exception::class);
+
+        $this->container->get('Foo');
     }
 }
 

@@ -374,22 +374,20 @@ class Shopware_Tests_Components_Model_CategoryDenormalizationTest extends PHPUni
         $this->assertEquals($expected, $result);
     }
 
-    /**
-     * @expectedException \Exception
-     */
     public function testLimitShouldThrowExceptionIfLimitIsLessThanOne()
     {
         $statement = 'SELECT * FROM example';
 
+        $this->expectException(\Exception::class);
+
         $this->component->limit($statement, 0, 20);
     }
 
-    /**
-     * @expectedException \Exception
-     */
     public function testLimitShouldThrowExceptionIfOffsetIsLessThanOne()
     {
         $statement = 'SELECT * FROM example';
+
+        $this->expectException(\Exception::class);
 
         $this->component->limit($statement, 5, -1);
     }
