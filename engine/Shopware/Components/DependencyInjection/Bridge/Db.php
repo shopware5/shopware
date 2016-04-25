@@ -48,12 +48,13 @@ class Db
         EventManager $eventManager
     ) {
         $connectionParams = array(
-            'dbname'    => $options['dbname'],
-            'user'      => $options['username'],
-            'password'  => $options['password'],
-            'host'      => $options['host'],
-            'driver'    => $options['adapter'],
-            'charset'   => $options['charset'],
+            'dbname' => $options['dbname'],
+            'user' => $options['username'],
+            'password' => $options['password'],
+            'host' => $options['host'],
+            'driver' => $options['adapter'],
+            'charset' => $options['charset'],
+            'wrapperClass' => isset($options['wrapperClass']) ? $options['wrapperClass'] : null,
         );
 
         $connectionParams['driverOptions'] = [
