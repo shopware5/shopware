@@ -177,7 +177,7 @@ Ext.define('Shopware.apps.Performance.controller.Settings', {
 
                 if ( operation.success === true ) {
                 	// Load the returned data
-                    me.injectConfig(record);
+                    me.loadConfigStore();
                     Shopware.Notification.createGrowlMessage(me.snippets.successTitle, me.snippets.successMessage, me.snippets.growlMessage);
                 } else {
                     Shopware.Notification.createGrowlMessage(me.snippets.errorTitle, me.snippets.errorMessage + '<br> ' + rawData.message, me.snippets.growlMessage)
