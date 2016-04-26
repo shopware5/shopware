@@ -460,7 +460,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
             }
         }
 
-        return $emotion->getElements()->toArray();
+        return $emotion->getElements() ?: array();
     }
 
     /**
