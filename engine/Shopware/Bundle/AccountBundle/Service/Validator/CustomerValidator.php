@@ -24,18 +24,15 @@
 
 namespace Shopware\Bundle\AccountBundle\Service\Validator;
 
-use Doctrine\DBAL\Connection;
+use Shopware\Bundle\AccountBundle\Constraint\UniqueEmail;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\Api\Exception\ValidationException;
-use Shopware\Components\DependencyInjection\Container;
 use Shopware\Models\Customer\Customer;
-use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Constraints\Choice;
 use Symfony\Component\Validator\Constraints\Date;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\ConstraintValidatorInterface;
-use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
@@ -55,16 +52,6 @@ class CustomerValidator implements CustomerValidatorInterface
     private $context;
 
     /**
-     * @var Container
-     */
-    private $container;
-
-    /**
-     * @var Connection
-     */
-    private $connection;
-
-    /**
      * @var \Shopware_Components_Config
      */
     private $config;
@@ -73,21 +60,15 @@ class CustomerValidator implements CustomerValidatorInterface
      * CustomerValidator constructor.
      * @param ValidatorInterface $validator
      * @param ContextServiceInterface $context
-     * @param Container $container
-     * @param Connection $connection
      * @param \Shopware_Components_Config $config
      */
     public function __construct(
         ValidatorInterface $validator,
         ContextServiceInterface $context,
-        Container $container,
-        Connection $connection,
         \Shopware_Components_Config $config
     ) {
         $this->validator = $validator;
         $this->context = $context;
-        $this->container = $container;
-        $this->connection = $connection;
         $this->config = $config;
     }
 
@@ -123,39 +104,13 @@ class CustomerValidator implements CustomerValidatorInterface
      */
     private function getEmailConstraints($customerId = null)
     {
-        $emailUniqueCallback = function ($value, ExecutionContextInterface $context) use ($customerId) {
-            $shopContext = $this->context->getShopContext();
-            $mainShop = $this->container->get('Shop')->getMain() !== null ? $this->container->get('Shop')->getMain() : $this->container->get('Shop');
-            $builder = $this->connection->createQueryBuilder();
-
-            $builder->select(1)
-                ->from('s_user')
-                ->andWhere('email = :email')
-                ->andWhere('accountmode != 1')
-                ->setParameter('email', $value);
-
-            if ($customerId) {
-                $builder->andWhere('id != :userId')->setParameter('userId', $customerId);
-            }
-
-            if ($mainShop->getCustomerScope()) {
-                $subshopId = $shopContext->getShop()->getParentId();
-                $builder->andWhere('subshopID = :subshopId')->setParameter('subshopId', $subshopId);
-            }
-
-            $exists = $builder->execute()->rowCount() > 0;
-
-            if ($exists) {
-                $context->buildViolation('The email must be unique.')
-                    ->atPath($context->getPropertyPath())
-                    ->addViolation();
-            }
-        };
-
         return [
             new NotBlank(),
             new Email(),
-            new Callback(['callback' => $emailUniqueCallback])
+            new UniqueEmail([
+                'shop' => $this->context->getShopContext()->getShop(),
+                'customerId' => $customerId
+            ])
         ];
     }
 

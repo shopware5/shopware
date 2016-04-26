@@ -40,16 +40,11 @@ abstract class ModelEntity
      * $model->setShipping($shippingModel->fromArray($shippingData));
      *
      * @param array $array
-     * @param array $fillable optional property whitelist for mass-assignment
      * @return ModelEntity
      */
-    public function fromArray(array $array = array(), array $fillable = [])
+    public function fromArray(array $array = array())
     {
         foreach ($array as $key => $value) {
-            if (count($fillable) && !in_array($key, $fillable)) {
-                continue;
-            }
-
             $method = 'set' . ucfirst($key);
             if (method_exists($this, $method)) {
                 $this->$method($value);

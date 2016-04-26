@@ -24,10 +24,7 @@
 
 namespace Shopware\Bundle\AccountBundle\Form\Account;
 
-use Doctrine\DBAL\Connection;
 use Shopware\Bundle\AccountBundle\Type\SalutationType;
-use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
-use Shopware\Components\DependencyInjection\Container;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -53,40 +50,15 @@ class ProfileUpdateFormType extends AbstractType
     protected $config;
 
     /**
-     * @var Connection
-     */
-    protected $connection;
-
-    /**
-     * @var Container
-     */
-    private $container;
-
-    /**
-     * @var ContextServiceInterface
-     */
-    private $context;
-
-    /**
      * @param \Shopware_Components_Snippet_Manager $snippetManager
      * @param \Shopware_Components_Config $config
-     * @param Connection $connection
-     * @param Container $container
-     * @param ContextServiceInterface $context
-     * @internal param ContextServiceInterface $context
      */
     public function __construct(
         \Shopware_Components_Snippet_Manager $snippetManager,
-        \Shopware_Components_Config $config,
-        Connection $connection,
-        Container $container,
-        ContextServiceInterface $context
+        \Shopware_Components_Config $config
     ) {
         $this->snippetManager = $snippetManager;
         $this->config = $config;
-        $this->connection = $connection;
-        $this->container = $container;
-        $this->context = $context;
     }
 
     /**
@@ -136,13 +108,20 @@ class ProfileUpdateFormType extends AbstractType
         $constraints = [];
 
         if ($this->config->get('showBirthdayField') && $this->config->get('requireBirthdayField')) {
-            $birthdayMessage = $this->snippetManager
-                ->getNamespace('frontend/account/internalMessages')
-                ->get('DateFailure', 'Please enter a valid birthday');
-
-            $constraints[] = new NotBlank(['message' => $birthdayMessage]);
+            $constraints[] = new NotBlank([
+                'message' => $this->getSnippet(PersonalFormType::SNIPPET_BIRTHDAY)
+            ]);
         }
 
         return $constraints;
+    }
+
+    /**
+     * @param array $snippet with namespace, name and default value
+     * @return string
+     */
+    private function getSnippet(array $snippet)
+    {
+        return $this->snippetManager->getNamespace($snippet['namespace'])->get($snippet['name'], $snippet['default'], true);
     }
 }

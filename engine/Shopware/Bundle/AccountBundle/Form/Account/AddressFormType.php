@@ -213,8 +213,6 @@ class AddressFormType extends AbstractType
                 $context->buildViolation($notBlank->message)
                     ->atPath($context->getPropertyPath())
                     ->addViolation();
-
-
             };
 
             $constraints[] = new Callback(['callback' => $vatCallback]);

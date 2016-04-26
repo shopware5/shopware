@@ -25,15 +25,13 @@
 namespace Shopware\Bundle\AccountBundle\Form\Account;
 
 use Shopware\Bundle\AccountBundle\Constraint\CurrentPassword;
+use Shopware\Bundle\AccountBundle\Constraint\Repeated;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormError;
 use Symfony\Component\Validator\Constraint;
-use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * Form reflects the needed fields for changing the password address in the account
@@ -96,30 +94,15 @@ class PasswordUpdateFormType extends AbstractType
      */
     private function getPasswordConstraints()
     {
-        $minMessage = $this->snippetManager->getNamespace("frontend")->get('RegisterPasswordLength');
-
-        $passwordEqualCallback = function ($value, ExecutionContextInterface $context) {
-            $data = $context->getRoot()->getData();
-
-            if ($data['password'] != $data['passwordConfirmation']) {
-                $equalMessage = $this->snippetManager
-                    ->getNamespace("frontend")
-                    ->get('AccountPasswordNotEqual', 'The passwords are not equal', true);
-
-                $context->buildViolation($equalMessage)
-                    ->atPath($context->getPropertyPath())
-                    ->addViolation();
-
-                $error = new FormError("");
-                $error->setOrigin($context->getRoot()->get('passwordConfirmation'));
-                $context->getRoot()->addError($error);
-            }
-        };
+        $message = $this->getSnippet(PersonalFormType::SNIPPET_PASSWORD_LENGTH);
 
         return [
-            new NotBlank(['message' => $minMessage]),
-            new Length(['min' => $this->config->get('sMINPASSWORD'), 'minMessage' => $minMessage]),
-            new Callback(['callback' => $passwordEqualCallback])
+            new NotBlank(['message' => $message]),
+            new Length(['min' => $this->config->get('sMINPASSWORD'), 'minMessage' => $message]),
+            new Repeated([
+                'field' => 'passwordConfirmation',
+                'message' => $this->getSnippet(PersonalFormType::SNIPPET_PASSWORD_CONFIRMATION)
+            ])
         ];
     }
 
@@ -135,5 +118,14 @@ class PasswordUpdateFormType extends AbstractType
         }
 
         return $constraints;
+    }
+
+    /**
+     * @param array $snippet with namespace, name and default value
+     * @return string
+     */
+    private function getSnippet(array $snippet)
+    {
+        return $this->snippetManager->getNamespace($snippet['namespace'])->get($snippet['name'], $snippet['default'], true);
     }
 }
