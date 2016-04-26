@@ -91,6 +91,33 @@ class Repository extends ModelRepository
     }
 
     /**
+     * @param array|null $filter
+     * @param array|null $order
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getCountriesWithStatesQueryBuilder($filter = null, $order = null)
+    {
+        $builder = $this->getEntityManager()->createQueryBuilder();
+
+        $builder->select(
+            'countries',
+            'states'
+        );
+        $builder->from('Shopware\Models\Country\Country', 'countries')
+        ->leftJoin('countries.states', 'states');
+
+        if ($filter !== null) {
+            $builder->addFilter($filter);
+        }
+
+        if ($order !== null) {
+            $builder->addOrderBy($order);
+        }
+
+        return $builder;
+    }
+
+    /**
      * Returns an instance of \Doctrine\ORM\Query object which selects a
      * list of countries for the passed area id.
      * @param $areaId
