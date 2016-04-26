@@ -26,6 +26,7 @@ namespace   Shopware\Models\Country;
 
 use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  *
@@ -190,6 +191,14 @@ class Country extends ModelEntity
      * @ORM\Column(name="areaID", type="integer", nullable=false)
      */
     private $areaId;
+
+    public function __construct()
+    {
+        $this->displayStateInRegistration = false;
+        $this->forceStateInRegistration = false;
+        $this->payments = new ArrayCollection();
+        $this->states = new ArrayCollection();
+    }
 
     /**
      * Get id
