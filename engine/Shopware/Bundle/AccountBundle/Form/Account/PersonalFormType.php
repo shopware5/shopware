@@ -24,9 +24,10 @@
 
 namespace Shopware\Bundle\AccountBundle\Form\Account;
 
-use Doctrine\DBAL\Connection;
+use Shopware\Bundle\AccountBundle\Constraint\Repeated;
+use Shopware\Bundle\AccountBundle\Constraint\UniqueEmail;
+use Shopware\Bundle\AccountBundle\Type\SalutationType;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
-use Shopware\Components\DependencyInjection\Container;
 use Shopware_Components_Snippet_Manager;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
@@ -34,15 +35,13 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Validator\Constraint;
-use Symfony\Component\Validator\Constraints\Callback;
-use Symfony\Component\Validator\Constraints\Choice;
-use Symfony\Component\Validator\Constraints\Date;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\EqualTo;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * Form reflects the personal fields for the registration, including auth
@@ -51,6 +50,36 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
  */
 class PersonalFormType extends AbstractType
 {
+    const SNIPPET_PASSWORD_CONFIRMATION = [
+        'namespace' => 'frontend',
+        'name' => 'AccountPasswordNotEqual',
+        'default' => 'The passwords are not equal'
+    ];
+
+    const SNIPPET_PASSWORD_LENGTH = [
+        'namespace' => 'frontend',
+        'name' => 'RegisterPasswordLength',
+        'default' => ''
+    ];
+
+    const SNIPPET_EMAIL_CONFIRMATION = [
+        'namespace' => 'frontend/account/internalMessages',
+        'name' => 'MailFailureNotEqual',
+        'default' => 'The mail addresses entered are not equal'
+    ];
+
+    const SNIPPET_MAIL_FAILURE = [
+        'namespace' => 'frontend/account/internalMessages',
+        'name' => 'MailFailure',
+        'default' => 'Please enter a valid mail address'
+    ];
+
+    const SNIPPET_BIRTHDAY = [
+        'namespace' => 'frontend/account/internalMessages',
+        'name' => 'DateFailure',
+        'default' => 'Please enter a valid birthday'
+    ];
+
     /**
      * @var Shopware_Components_Snippet_Manager
      */
@@ -62,39 +91,23 @@ class PersonalFormType extends AbstractType
     private $config;
 
     /**
-     * @var Connection
-     */
-    private $connection;
-
-    /**
      * @var ContextServiceInterface
      */
     private $context;
 
     /**
-     * @var Container
-     */
-    private $container;
-
-    /**
      * @param Shopware_Components_Snippet_Manager $snippetManager
      * @param \Shopware_Components_Config $config
-     * @param Connection $connection
      * @param ContextServiceInterface $context
-     * @param Container $container
      */
     public function __construct(
         Shopware_Components_Snippet_Manager $snippetManager,
         \Shopware_Components_Config $config,
-        Connection $connection,
-        ContextServiceInterface $context,
-        Container $container
+        ContextServiceInterface $context
     ) {
         $this->snippetManager = $snippetManager;
         $this->config = $config;
-        $this->connection = $connection;
         $this->context = $context;
-        $this->container = $container;
     }
 
     /**
@@ -104,26 +117,44 @@ class PersonalFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('email', EmailType::class, [
-            'constraints' => $this->getEmailConstraints()
+            'constraints' => [new NotBlank(), new Email()]
         ]);
+
+        $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
+            $form = $event->getForm();
+            $data = $event->getData();
+            if ($form->has('email')) {
+                $form->remove('email');
+            }
+
+            $form->add('email', EmailType::class, [
+                'constraints' => $this->getEmailConstraints($data['skipLogin'])
+            ]);
+        });
+
+        if ($this->config->get('doubleemailvalidation')) {
+            $builder->add('emailConfirmation', EmailType::class, ['constraints' => [new NotBlank(), new Email()]]);
+        }
 
         $builder->add('password', PasswordType::class, [
             'constraints' => $this->getPasswordConstraints()
         ]);
 
-        $builder->add('emailConfirmation', EmailType::class);
-        $builder->add('passwordConfirmation', PasswordType::class);
+        if ($this->config->get('doublepasswordvalidation')) {
+            $builder->add('passwordConfirmation', PasswordType::class);
+        }
 
         $builder->add('customer_type', TextType::class, [
             'empty_data' => 'private'
         ]);
 
-        $builder->add('salutation', TextType::class, [
+        $builder->add('salutation', SalutationType::class, [
             'constraints' => [
-                new NotBlank(),
-                new Choice(['choices' => $this->getSalutationChoices()])
+                new NotBlank()
             ]
         ]);
+
+        $builder->add('title', TextType::class);
 
         $builder->add('firstname', TextType::class, [
             'constraints' => [
@@ -138,7 +169,6 @@ class PersonalFormType extends AbstractType
         ]);
 
         $builder->add('birthday', BirthdayType::class, [
-            'input' => 'array',
             'constraints' => $this->getBirthdayConstraints()
         ]);
 
@@ -149,14 +179,6 @@ class PersonalFormType extends AbstractType
     }
 
     /**
-     * @return string[]
-     */
-    private function getSalutationChoices()
-    {
-        return ['mr', 'ms'];
-    }
-
-    /**
      * @return Constraint[]
      */
     private function getBirthdayConstraints()
@@ -164,12 +186,9 @@ class PersonalFormType extends AbstractType
         $constraints = [];
 
         if ($this->config->get('showBirthdayField') && $this->config->get('requireBirthdayField')) {
-            $birthdayMessage = $this->snippetManager
-                ->getNamespace('frontend/account/internalMessages')
-                ->get('DateFailure', 'Please enter a valid birthday');
-
-            $constraints[] = new NotBlank();
-            $constraints[] = new Date(['message' => $birthdayMessage]);
+            $constraints[] = new NotBlank([
+                'message' => $this->getSnippet(self::SNIPPET_BIRTHDAY)
+            ]);
         }
 
         return $constraints;
@@ -189,99 +208,61 @@ class PersonalFormType extends AbstractType
         return $constraints;
     }
 
-    private function getEmailConstraints()
+    /**
+     * @param boolean $skipUnique
+     * @return Constraint[]
+     */
+    private function getEmailConstraints($skipUnique)
     {
-        $emailConfirmCallback = function ($value, ExecutionContextInterface $context) {
+        $message = $this->getSnippet(self::SNIPPET_MAIL_FAILURE);
 
-            $data = $context->getRoot()->getData();
-
-            $email = trim(strtolower($data['email']));
-            $emailConfirmation = trim(strtolower($data['emailConfirmation']));
-
-            if ($this->config->get('doubleemailvalidation') && $email != $emailConfirmation) {
-                $equalMessage = $this->snippetManager
-                    ->getNamespace('frontend/account/internalMessages')
-                    ->get('MailFailureNotEqual', 'The mail addresses entered are not equal');
-
-                $context->buildViolation($equalMessage)
-                    ->atPath('emailConfirmation')
-                    ->addViolation();
-            }
-        };
-
-        $emailUniqueCallback = function ($value, ExecutionContextInterface $context) {
-
-            $extraData = $context->getRoot()->getExtraData();
-
-            if (!empty($extraData['skipLogin'])) {
-                return;
-            }
-
-            $mainShop = $this->container->get('Shop')->getMain() !== null ? $this->container->get('Shop')->getMain() : $this->container->get('Shop');
-
-            $builder = $this->connection->createQueryBuilder();
-            $builder->select(1)
-                ->from('s_user')
-                ->andWhere('email = :email')
-                ->andWhere('accountmode != 1')
-                ->setParameter('email', $value);
-
-            if ($mainShop->getCustomerScope()) {
-                $subshopId = $this->context->getShopContext()->getShop()->getParentId();
-                $builder
-                    ->andWhere('subshopID = :subshopId')
-                    ->setParameter('subshopId', $subshopId);
-            }
-
-            $exists = $builder->execute()->rowCount() > 0;
-
-            if ($exists) {
-                $emailMessage = $this->snippetManager
-                    ->getNamespace('frontend/account/internalMessages')
-                    ->get('MailFailureAlreadyRegistered', 'This mail address is already registered');
-
-                $context->buildViolation($emailMessage)
-                    ->atPath($context->getPropertyPath())
-                    ->addViolation();
-            }
-
-        };
-
-        $emailMessage = $this->snippetManager
-            ->getNamespace('frontend/account/internalMessages')
-            ->get('MailFailure', 'Please enter a valid mail address');
-
-        return [
-            new NotBlank(),
-            new Email(['message' => $emailMessage]),
-            new Callback(['callback' => $emailConfirmCallback]),
-            new Callback(['callback' => $emailUniqueCallback])
+        $constraints = [
+            new NotBlank(['message' => $message]),
+            new Email(['message' => $message]),
         ];
+
+        if (!$skipUnique) {
+            $constraints[] = new UniqueEmail(['shop' => $this->context->getShopContext()->getShop()]);
+        }
+
+        if ($this->config->get('doubleemailvalidation')) {
+            $constraints[] = new Repeated([
+                'field' => 'emailConfirmation',
+                'message' => $this->getSnippet(self::SNIPPET_EMAIL_CONFIRMATION)
+            ]);
+        }
+
+        return $constraints;
     }
 
+    /**
+     * @return Constraint[]
+     */
     private function getPasswordConstraints()
     {
-        $minMessage = $this->snippetManager
-            ->getNamespace("frontend")
-            ->get('RegisterPasswordLength', '', true);
-
-        $passwordEqualCallback = function ($value, ExecutionContextInterface $context) {
-            $data = $context->getRoot()->getData();
-
-            if ($this->config->get('doublepasswordvalidation') && $data['password'] != $data['passwordConfirmation']) {
-                $equalMessage = $this->snippetManager
-                    ->getNamespace("frontend")
-                    ->get('AccountPasswordNotEqual', 'The passwords are not equal', true);
-
-                $context->buildViolation($equalMessage)
-                    ->atPath($context->getPropertyPath())
-                    ->addViolation();
-            }
-        };
-
-        return [
-            new Length(['min' => $this->config->get('sMINPASSWORD'), 'minMessage' => $minMessage]),
-            new Callback(['callback' => $passwordEqualCallback])
+        $constraints = [
+            new Length([
+                'min' => $this->config->get('sMINPASSWORD'),
+                'minMessage' => $this->getSnippet(self::SNIPPET_PASSWORD_LENGTH)
+            ]),
         ];
+
+        if ($this->config->get('doublepasswordvalidation')) {
+            $constraints[] = new Repeated([
+                'field' => 'passwordConfirmation',
+                'message' => $this->getSnippet(self::SNIPPET_PASSWORD_CONFIRMATION)
+            ]);
+        }
+
+        return $constraints;
+    }
+
+    /**
+     * @param array $snippet with namespace, name and default value
+     * @return string
+     */
+    private function getSnippet(array $snippet)
+    {
+        return $this->snippetManager->getNamespace($snippet['namespace'])->get($snippet['name'], $snippet['default'], true);
     }
 }

@@ -52,7 +52,12 @@ Ext.define('Shopware.apps.Customer.model.Customer', {
         { name:'orderCount', type:'int' },
         { name:'canceledOrderAmount', type:'float' },
         { name:'shopName', type:'string' },
-        { name:'language', type:'string' }
+        { name:'language', type:'string' },
+        { name:'birthday', type:'date', dateFormat:'d.m.Y' },
+        { name:'title', type:'string' },
+        { name:'salutation', type:'string' },
+        { name:'firstname', type:'string' },
+        { name:'lastname', type:'string' }
     ],
 
     /**

@@ -36,12 +36,6 @@
         // Search field
         .addPlugin('*[data-search="true"]', 'swSearch')
 
-        // Scroll plugin
-        .addPlugin('.btn--password, .btn--email', 'swScrollAnimate', ['xs', 's', 'm'])
-
-        // Collapse panel
-        .addPlugin('.btn--password, .btn--email', 'swCollapsePanel', ['l', 'xl'])
-
         // Slide panel
         .addPlugin('.footer--column .column--headline', 'swCollapsePanel', {
             contentSiblingSelector: '.column--content'

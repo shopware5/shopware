@@ -161,11 +161,11 @@ Ext.define('Shopware.apps.Customer.view.list.List', {
             flex:1.5
         }, {
             header:me.snippets.columns.firstName,
-            dataIndex:'firstName',
+            dataIndex:'firstname',
             flex: 1
         }, {
             header:me.snippets.columns.lastName,
-            dataIndex:'lastName',
+            dataIndex:'lastname',
             flex: 1
         }, {
             header:me.snippets.columns.date,

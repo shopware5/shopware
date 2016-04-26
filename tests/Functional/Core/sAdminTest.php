@@ -295,40 +295,6 @@ class sAdminTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers sAdmin::sUpdateAccount
-     */
-    public function testsUpdateAccount()
-    {
-        // Test no user id
-        $this->assertTrue($this->module->sUpdateAccount());
-
-        $customer = $this->createDummyCustomer();
-        $this->session->offsetSet('sUserId', $customer->getId());
-        $this->front->Request()->setPost('email', uniqid() . 'test@foobar.com');
-
-        $this->assertTrue($this->module->sUpdateAccount());
-
-        // Test that email was updated
-        $this->assertNotEquals(
-            $customer->getEmail(),
-            Shopware()->Db()->fetchOne('SELECT email FROM s_user WHERE id = ?', array($customer->getId()))
-        );
-
-        $this->front->Request()->setPost('password', uniqid() . 'password');
-        $this->front->Request()->setPost('passwordConfirmation', $this->front->Request()->getPost('password'));
-
-        $this->assertTrue($this->module->sUpdateAccount());
-
-        // Test that password was updated
-        $this->assertNotEquals(
-            $customer->getPassword(),
-            Shopware()->Db()->fetchOne('SELECT password FROM s_user WHERE id = ?', array($customer->getId()))
-        );
-
-        $this->deleteDummyCustomer($customer);
-    }
-
-    /**
      * @covers sAdmin::sLogin
      */
     public function testsLogin()
@@ -1088,10 +1054,6 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             'stateID' => '3',
             'ustid' => 'Testustid',
 
-            'birthyear' => '1956',
-            'birthmonth' => '2',
-            'birthday' => '21',
-
             'text1' => 'text1',
             'text2' => 'text2',
             'text3' => 'text3',
@@ -1116,15 +1078,6 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         // Prepare demo data for comparison
         $testData['countryID'] = $testData['country'];
         unset($testData['country']);
-        $testData['birthday'] = mktime(
-            0, 0, 0,
-            (int) $testData['birthmonth'],
-            (int) $testData['birthday'],
-            (int) $testData['birthyear']
-        );
-        $testData['birthday'] = '1956-02-21';
-        unset($testData['birthmonth']);
-        unset($testData['birthyear']);
 
         foreach ($testData as $name => $value) {
             $this->assertEquals($savedData[$name], $value);
@@ -1673,7 +1626,6 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                 'countryID' => '2',
                 'stateID' => null,
                 'ustid' => '',
-                'birthday' => '1986-12-20',
                 'additional_address_line1' => 'IT-Department',
                 'additional_address_line2' => 'Second Floor'
             ),
@@ -1722,7 +1674,12 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                     'failedlogins' => '0',
                     'lockeduntil' => null,
                     'default_billing_address_id' => $customer->getDefaultBillingAddress() ? $customer->getDefaultBillingAddress()->getId() : null,
-                    'default_shipping_address_id' => $customer->getDefaultShippingAddress() ? $customer->getDefaultShippingAddress()->getId() : null
+                    'default_shipping_address_id' => $customer->getDefaultShippingAddress() ? $customer->getDefaultShippingAddress()->getId() : null,
+                    'birthday' => '1986-12-20',
+                    'firstname' => 'Max',
+                    'lastname' => 'Mustermann',
+                    'salutation' => 'mr',
+                    'title' => null
                 ),
                 'countryShipping' => array(
                     'id' => '4',
@@ -2792,10 +2749,14 @@ class sAdminTest extends PHPUnit_Framework_TestCase
 
             "lastlogin"  => $lastLogin,
 
+            "salutation" => "mr",
+            "firstname" => "Max",
+            "lastname"  => "Mustermann",
+            "birthday"  => $birthday,
+
             "billing" => array(
                 "firstName" => "Max",
                 "lastName"  => "Mustermann",
-                "birthday"  => $birthday,
                 "attribute" => array(
                     'text1' => 'Freitext1',
                     'text2' => 'Freitext2',

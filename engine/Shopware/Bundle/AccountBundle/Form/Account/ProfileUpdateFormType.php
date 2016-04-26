@@ -24,16 +24,12 @@
 
 namespace Shopware\Bundle\AccountBundle\Form\Account;
 
-use Shopware\Bundle\AccountBundle\Constraint\CurrentPassword;
-use Shopware\Bundle\AccountBundle\Constraint\Repeated;
-use Shopware\Bundle\AccountBundle\Constraint\UniqueEmail;
-use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
+use Shopware\Bundle\AccountBundle\Type\SalutationType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraint;
-use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
@@ -41,7 +37,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
  *
  * @package Shopware\Bundle\AccountBundle\Form\Account
  */
-class EmailUpdateFormType extends AbstractType
+class ProfileUpdateFormType extends AbstractType
 {
     /**
      * @var \Shopware_Components_Snippet_Manager
@@ -54,23 +50,15 @@ class EmailUpdateFormType extends AbstractType
     protected $config;
 
     /**
-     * @var ContextServiceInterface
-     */
-    private $context;
-
-    /**
      * @param \Shopware_Components_Snippet_Manager $snippetManager
      * @param \Shopware_Components_Config $config
-     * @param ContextServiceInterface $context
      */
     public function __construct(
         \Shopware_Components_Snippet_Manager $snippetManager,
-        \Shopware_Components_Config $config,
-        ContextServiceInterface $context
+        \Shopware_Components_Config $config
     ) {
         $this->snippetManager = $snippetManager;
         $this->config = $config;
-        $this->context = $context;
     }
 
     /**
@@ -79,48 +67,50 @@ class EmailUpdateFormType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('currentPassword', PasswordType::class, [
-            'constraints' => $this->getCurrentPasswordConstraints()
+        $builder->add('salutation', SalutationType::class, [
+            'constraints' => [
+                new NotBlank(),
+            ]
         ]);
 
-        $builder->add('email', EmailType::class, [
-            'constraints' => $this->getEmailConstraints()
+        $builder->add('title', TextType::class);
+
+        $builder->add('firstname', TextType::class, [
+            'constraints' => [
+                new NotBlank()
+            ]
         ]);
-        $builder->add('emailConfirmation', EmailType::class);
+
+        $builder->add('lastname', TextType::class, [
+            'constraints' => [
+                new NotBlank()
+            ]
+        ]);
+
+        $builder->add('birthday', BirthdayType::class, [
+            'constraints' => $this->getBirthdayConstraints()
+        ]);
     }
 
+    /**
+     * @return string
+     */
     public function getBlockPrefix()
     {
-        return 'email';
+        return 'profile';
     }
 
     /**
      * @return Constraint[]
      */
-    private function getEmailConstraints()
-    {
-        $message = $this->getSnippet(PersonalFormType::SNIPPET_MAIL_FAILURE);
-
-        return [
-            new NotBlank(['message' => $message]),
-            new Email(['message' => $message]),
-            new UniqueEmail(['shop' => $this->context->getShopContext()->getShop()]),
-            new Repeated([
-                'field' => 'emailConfirmation',
-                'message' => $this->getSnippet(PersonalFormType::SNIPPET_EMAIL_CONFIRMATION)
-            ])
-        ];
-    }
-
-    /**
-     * @return Constraint[]
-     */
-    private function getCurrentPasswordConstraints()
+    private function getBirthdayConstraints()
     {
         $constraints = [];
 
-        if ($this->config->get('accountPasswordCheck')) {
-            $constraints[] = new CurrentPassword();
+        if ($this->config->get('showBirthdayField') && $this->config->get('requireBirthdayField')) {
+            $constraints[] = new NotBlank([
+                'message' => $this->getSnippet(PersonalFormType::SNIPPET_BIRTHDAY)
+            ]);
         }
 
         return $constraints;

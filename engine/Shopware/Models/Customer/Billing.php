@@ -160,13 +160,6 @@ class Billing extends ModelEntity
     protected $vatId = '';
 
     /**
-     * Contains the birthday of the customer
-     * @var \DateTime $birthday
-     * @ORM\Column(name="birthday", type="date", nullable=true)
-     */
-    protected $birthday;
-
-    /**
      * Contains the additional address line data
      *
      * @var string $additionalAddressLine1
@@ -477,33 +470,6 @@ class Billing extends ModelEntity
     }
 
     /**
-     * Setter function for the birthday column property.
-     * The parameter expects an \DateTime object or a date string, which will
-     * be converted to an \DateTime object.
-     *
-     * @param string|\DateTime $birthday
-     * @return Billing
-     */
-    public function setBirthday($birthday)
-    {
-        if (!$birthday instanceof \DateTime && is_string($birthday)) {
-            $birthday = new \DateTime($birthday);
-        }
-        $this->birthday = $birthday;
-        return $this;
-    }
-
-    /**
-     * Getter function of the birthday column property.
-     *
-     * @return \DateTime
-     */
-    public function getBirthday()
-    {
-        return $this->birthday;
-    }
-
-    /**
      * @return \Shopware\Models\Attribute\CustomerBilling
      */
     public function getAttribute()
@@ -550,7 +516,6 @@ class Billing extends ModelEntity
 
     /**
      * Event listener method which is fired when the model will be saved.
-     * Checks if the birthday property is null and initials it.
      * @ORM\PrePersist
      */
     public function onSave()

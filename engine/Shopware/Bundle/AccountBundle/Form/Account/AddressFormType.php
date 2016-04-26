@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\AccountBundle\Form\Account;
 
+use Shopware\Bundle\AccountBundle\Type\SalutationType;
 use Shopware\Bundle\FormBundle\Transformer\EntityTransformer;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Country\Country;
@@ -35,7 +36,6 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\Callback;
-use Symfony\Component\Validator\Constraints\Choice;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
@@ -67,10 +67,9 @@ class AddressFormType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('salutation', TextType::class, [
+        $builder->add('salutation', SalutationType::class, [
             'constraints' => [
-                new NotBlank(),
-                new Choice(['choices' => $this->getSalutationChoices()])
+                new NotBlank()
             ]
         ]);
 
@@ -214,22 +213,12 @@ class AddressFormType extends AbstractType
                 $context->buildViolation($notBlank->message)
                     ->atPath($context->getPropertyPath())
                     ->addViolation();
-
-
             };
 
             $constraints[] = new Callback(['callback' => $vatCallback]);
         }
 
         return $constraints;
-    }
-
-    /**
-     * @return string[]
-     */
-    private function getSalutationChoices()
-    {
-        return ['mr', 'ms'];
     }
 
     /**

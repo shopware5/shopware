@@ -17,7 +17,9 @@ It allows the user to directly see and change the important information of their
 }
 
 .account--content,
-.payment_logo_debit {
+.payment_logo_debit,
+.account-address--container,
+.account-info--container {
     .clearfix();
 }
 
@@ -398,6 +400,95 @@ It allows the user to directly see and change the important information of their
     }
 }
 
+.account--profile {
+    .unitize(margin, 0);
+    .unitize(padding-top, 20);
+
+    .profile--email-password-container {
+        .clearfix();
+    }
+
+    .profile-password--container {
+        float: right;
+        width: 100%;
+    }
+
+    .profile-email--container {
+        float: left;
+        width: 100%;
+    }
+
+    .alert {
+        .unitize(margin-bottom, 20);
+    }
+
+    .js--loading {
+        .unitize-width(18);
+        .unitize-height(18);
+        .border-radius(100%);
+        .unitize-margin(0, 0, 0, 5);
+        .unitize(top, 4);
+        .animation(keyframe--spin 1s linear infinite);
+        border: 2px solid @border-color;
+        border-top: 2px solid darken(@border-color, 50%);
+        display: inline-block;
+        position: relative;
+    }
+
+    .panel {
+        .unitize(margin-bottom, 20);
+    }
+
+    .required-info {
+        .unitize(font-size, 14);
+    }
+
+    .js--fancy-select {
+        .unitize(margin-bottom, 10);
+        width: 100%;
+    }
+
+    .profile--field {
+        .unitize(margin-bottom, 10);
+        width: 100%;
+    }
+
+    .profile--zip-city {
+        .profile--field-zipcode {
+            width: 28%;
+            float: left;
+        }
+
+        .profile--field-city {
+            .clearfix();
+            width: 70%;
+            float: left;
+        }
+    }
+
+    .birthday--label {
+        .unitize-margin(0, 0, 5, 0);
+        display: block;
+        font-weight: bold;
+    }
+
+    .profile--birthdate {
+        .clearfix();
+
+        .js--fancy-select {
+            .unitize(margin-bottom, 15);
+            width: 100%;
+            float: left;
+        }
+
+        .profile--birthyear,
+        .profile--birthyear .js--fancy-select {
+            .unitize(margin-right, 0);
+        }
+
+    }
+}
+
 @media screen and(min-width: @phoneLandscapeViewportWidth ) {
     .account--password-reset {
         .unitize(margin-top, 10);
@@ -753,6 +844,34 @@ It allows the user to directly see and change the important information of their
             }
         }
     }
+
+    .account--profile {
+        .unitize(margin, 0);
+        .unitize(padding-top, 30);
+
+        .js--fancy-select {
+            .unitize(margin-bottom, 15);
+
+            .profile--birthday {
+                margin-right: 2%;
+            }
+        }
+
+        .profile--field {
+            .unitize(margin-bottom, 15);
+        }
+
+        .js--fancy-select {
+            .unitize-width(290);
+        }
+
+        .profile--birthdate {
+            .js--fancy-select {
+                width: 32%;
+                margin-right: 2%;
+            }
+        }
+    }
 }
 
 @media screen and(min-width: @tabletLandscapeViewportWidth) {
@@ -770,12 +889,14 @@ It allows the user to directly see and change the important information of their
     }
 
     .account--email,
-    .account--password {
+    .account--password,
+    .account--userdata {
         display: none;
     }
 
     .account--email,
     .account--password,
+    .account--userdata,
     .account--newsletter {
         clear: both;
     }
@@ -788,6 +909,19 @@ It allows the user to directly see and change the important information of their
     .account--payment {
         .panel--body {
             .unitize-height(120);
+        }
+    }
+
+    .account--profile {
+        .profile-password--container {
+            float: right;
+            width: 49%;
+        }
+
+        .profile-email--container {
+            float: left;
+            width: 49%;
+            margin-right: 2%;
         }
     }
 }

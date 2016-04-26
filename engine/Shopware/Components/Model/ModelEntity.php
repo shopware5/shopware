@@ -40,7 +40,7 @@ abstract class ModelEntity
      * $model->setShipping($shippingModel->fromArray($shippingData));
      *
      * @param array $array
-     * @return \Shopware\Components\Model\ModelEntity
+     * @return ModelEntity
      */
     public function fromArray(array $array = array())
     {

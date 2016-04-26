@@ -27,6 +27,7 @@ namespace Shopware\Bundle\AccountBundle\Service\Core;
 use Shopware\Bundle\AccountBundle\Service\AddressServiceInterface;
 use Shopware\Bundle\AccountBundle\Form\Account\AddressFormType;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Models\Attribute\CustomerAddress;
 use Shopware\Models\Customer\Address;
 use Shopware\Models\Customer\Customer;
 use Shopware\Models\Customer\Shipping;
@@ -144,13 +145,13 @@ class AddressService implements AddressServiceInterface
     /**
      * @param Address $address
      * @param array $data
-     * @return \Shopware\Models\Attribute\CustomerAddress
+     * @return CustomerAddress
      */
     public function saveAttribute(Address $address, array $data = [])
     {
         $attribute = $address->getAttribute();
         if (!$attribute) {
-            $attribute = new \Shopware\Models\Attribute\CustomerAddress();
+            $attribute = new CustomerAddress();
             $attribute->setCustomerAddress($address);
             $this->modelManager->persist($attribute);
         }

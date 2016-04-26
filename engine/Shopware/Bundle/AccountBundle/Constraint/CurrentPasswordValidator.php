@@ -82,8 +82,13 @@ class CurrentPasswordValidator extends ConstraintValidator
 
         $extraData = $this->context->getRoot()->getExtraData();
         $sessionPassword = $this->session->offsetGet('sUserPassword');
+        $encoderName = $extraData['encoderName'];
 
-        if ($this->container->get('PasswordEncoder')->isPasswordValid($value, $sessionPassword, $extraData['encoderName']) === false) {
+        if (empty($encoderName)) {
+            $encoderName = $this->container->get('PasswordEncoder')->getDefaultPasswordEncoderName();
+        }
+
+        if ($this->container->get('PasswordEncoder')->isPasswordValid($value, $sessionPassword, $encoderName) === false) {
             $errorMessage = $this->snippets
                 ->getNamespace($constraint->namespace)
                 ->get($constraint->snippetKey);

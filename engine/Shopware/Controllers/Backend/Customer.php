@@ -556,11 +556,11 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         );
 
         $data = array_merge($orderInfo, $data[0]);
-        $birthday = $data['billing']['birthday'];
+        $birthday = $data['birthday'];
 
         /** @var $birthday \DateTime */
         if ($birthday instanceof \DateTime) {
-            $data['billing']['birthday'] = $birthday->format('d.m.Y');
+            $data['birthday'] = $birthday->format('d.m.Y');
         }
 
         return $data;
