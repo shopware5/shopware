@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Shopware\Models\Plugin\Plugin;
 
 /**
  * Shopware Config Controller
@@ -273,7 +274,32 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
             ));
         }
 
-        $this->View()->assign(array('success' => true));
+        if ($this->Request()->has('id')) {
+            $technicalName = Shopware()->Container()->get('dbal_connection')->fetchColumn('SELECT name FROM s_core_plugins WHERE id = (SELECT plugin_id FROM s_core_config_forms WHERE id = ?)', [$this->Request()->getParam('id')]);
+            if (!empty($technicalName)) {
+                $plugin = Shopware()->Container()->get('shopware_plugininstaller.plugin_manager')->getPluginByName($technicalName);
+                
+                if ($plugin instanceof Plugin && $plugin->getActive()) {
+                    $pluginBootstrap = Shopware()->Container()->get('shopware_plugininstaller.plugin_manager')->getPluginBootstrap($plugin);
+                    $result = $pluginBootstrap->saveConfig($elements);
+
+                    $success = (is_bool($result) && $result || isset($result['success']) && $result['success']);
+                    $resultArray = [
+                        'success' => $success,
+                    ];
+
+                    if (is_array($result)) {
+                        $resultArray = array_merge($resultArray, $result);
+                    }
+
+                    $this->View()->assign($resultArray);
+
+                    return;
+                }
+            }
+        }
+
+        $this->View()->assign(['success' => true]);
     }
 
     /**

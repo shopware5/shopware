@@ -147,8 +147,8 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
     saveConfiguration: function(plugin, form) {
         var me = this;
 
-        form.onSaveForm(form, false, function() {
-
+        form.onSaveForm(form, false, function(form, records, operation) {
+            me.handleCrudResponse(records.proxy.getReader().jsonData, plugin);
         });
     },
 
