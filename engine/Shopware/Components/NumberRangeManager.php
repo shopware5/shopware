@@ -24,7 +24,7 @@
 
 namespace Shopware\Components;
 
-use Shopware\Components\Model\ModelManager;
+use Doctrine\DBAL\Connection;
 
 /**
  * @category  Shopware
@@ -34,33 +34,16 @@ use Shopware\Components\Model\ModelManager;
 class NumberRangeManager
 {
     /**
-     * @var ModelManager The entity manager
+     * @var Connection
      */
-    private $em;
+    private $connection;
 
     /**
-     * @param ModelManager $em
+     * @param Connection $connection
      */
-    public function __construct(ModelManager $em)
+    public function __construct(Connection $connection)
     {
-        $this->em = $em;
-    }
-
-    /**
-     * @param string $name
-     * @return int
-     * @throws \Exception
-     */
-    public function getCurrentNumber($name)
-    {
-        $numberRange = $this->em->getRepository('Shopware\Models\Order\Number')->findOneBy([
-            'name' => $name
-        ]);
-        if (!$numberRange) {
-            throw new \Exception('Number range with name "' . $name . '" does not exist.');
-        }
-
-        return $numberRange->getNumber();
+        $this->connection = $connection;
     }
 
     /**
@@ -71,38 +54,33 @@ class NumberRangeManager
      *
      * @param string $name
      * @return int
-     * @throws \Exception
+     * @throws \RuntimeException
      */
     public function getNextNumber($name)
     {
-        // Begin a new transaction
-        $this->em->getConnection()->beginTransaction();
+        $this->connection->beginTransaction();
         try {
-            // Select the number range with the given name using the 'PESSIMISTIC_WRITE' lock mode,
-            // which results in a 'SELECT ... FOR UPDATE' query
-            $builder = $this->em->createQueryBuilder();
-            $builder->select('numberRange')
-                ->from('Shopware\Models\Order\Number', 'numberRange')
-                ->where('numberRange.name = :name')
-                ->setParameter('name', $name);
-            $query = $builder->getQuery();
-            $query->setLockMode(\Doctrine\DBAL\LockMode::PESSIMISTIC_WRITE);
-            $numberRange = $query->getOneOrNullResult();
-            if (!$numberRange) {
-                $this->em->getConnection()->rollBack();
-                throw new \Exception(sprintf('Number range with name "%s" does not exist.', $name));
+            $number = $this->connection->fetchColumn(
+                '/*NO LIMIT*/ SELECT number FROM s_order_number WHERE name = ? FOR UPDATE',
+                [$name]
+            );
+
+            if ($number === false) {
+                throw new \RuntimeException(sprintf('Number range with name "%s" does not exist.', $name));
             }
 
-            // Increase the number by one and write it back to the database
-            $nextNumber = $numberRange->getNumber() + 1;
-            $numberRange->setNumber($nextNumber);
-            $this->em->flush($numberRange);
-            $this->em->getConnection()->commit();
-        } catch (Exception $e) {
-            $this->em->getConnection()->rollBack();
+            $this->connection->executeUpdate(
+                'UPDATE s_order_number SET number = number + 1 WHERE name = ?',
+                [$name]
+            );
+
+            $number += 1;
+            $this->connection->commit();
+        } catch (\Exception $e) {
+            $this->connection->rollBack();
             throw $e;
         }
 
-        return $nextNumber;
+        return $number;
     }
 }

@@ -34,51 +34,42 @@ use Shopware\Components\NumberRangeManager;
 class NumberRangeManagerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Shopware\Components\Model\ModelManager
+     * @var \Doctrine\DBAL\Connection
      */
-    public $em;
-
-    /**
-     * @var \Zend_Db_Adapter_Pdo_Abstract
-     */
-    public $db;
+    public $connection;
 
     public function setUp()
     {
         parent::setUp();
 
-        $this->em = Shopware()->Models();
-        $this->db = Shopware()->Db();
-    }
-
-    public function testGetCurrentNumber()
-    {
-        // Fetch actual number from DB
-        $rangeName = 'invoice';
-        $expectedNumber = $this->db->fetchOne(
-           'SELECT number
-            FROM s_order_number
-            WHERE name = ?',
-            array(
-                $rangeName
-            )
-        );
-
-        $manager = new NumberRangeManager($this->em);
-
-        $currentNumber = $manager->getCurrentNumber($rangeName);
-
-        $this->assertEquals($expectedNumber, $currentNumber);
+        $this->connection = Shopware()->Container()->get('dbal_connection');
     }
 
     public function testGetNextNumber()
     {
-        $manager = new NumberRangeManager($this->em);
-
+        // Fetch actual number from DB
         $rangeName = 'invoice';
-        $currentNumber = $manager->getCurrentNumber($rangeName);
-        $nextNumber = $manager->getNextNumber($rangeName);
+        $expectedNumber = $this->connection->fetchColumn(
+            'SELECT number
+            FROM s_order_number
+            WHERE name = ?',
+            [
+                $rangeName
+            ]
+        );
+        $expectedNumber += 1;
 
-        $this->assertEquals(($currentNumber + 1), $nextNumber);
+        $manager = new NumberRangeManager($this->connection);
+
+        $this->assertEquals($expectedNumber, $manager->getNextNumber($rangeName));
+    }
+
+    public function testGetNextNumberWithInvalidName()
+    {
+        $manager = new NumberRangeManager($this->connection);
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Number range with name "invalid" does not exist.');
+        $manager->getNextNumber('invalid');
     }
 }

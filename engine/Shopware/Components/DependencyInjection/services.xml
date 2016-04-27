@@ -429,7 +429,7 @@
         </service>
 
         <service id="shopware.number_range_manager" class="Shopware\Components\NumberRangeManager">
-            <argument type="service" id="shopware.model_manager"/>
+            <argument type="service" id="dbal_connection"/>
         </service>
     </services>
 </container>
