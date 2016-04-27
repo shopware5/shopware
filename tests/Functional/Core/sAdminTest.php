@@ -1054,13 +1054,6 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             'stateID' => '3',
             'ustid' => 'Testustid',
 
-            'text1' => 'text1',
-            'text2' => 'text2',
-            'text3' => 'text3',
-            'text4' => 'text4',
-            'text5' => 'text5',
-            'text6' => 'text6',
-
             'attributes' => [
                 'text1' => 'text1',
                 'text2' => 'text2',
@@ -1080,16 +1073,8 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         // Prepare demo data for comparison
         $testAttributes = $testData['attributes'];
         $testData['countryID'] = $testData['country'];
-        unset($testData['country']);
-        $testData['birthday'] = mktime(
-            0, 0, 0,
-            (int) $testData['birthmonth'],
-            (int) $testData['birthday'],
-            (int) $testData['birthyear']
-        );
-        $testData['birthday'] = '1956-02-21';
-
-        unset($testData['attributes'], $testData['country'], $testData['birthmonth'], $testData['birthyear']);
+        
+        unset($testData['attributes'], $testData['country']);
 
         foreach ($testData as $name => $value) {
             $this->assertEquals($savedData[$name], $value);

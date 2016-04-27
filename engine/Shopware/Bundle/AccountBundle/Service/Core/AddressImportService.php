@@ -27,6 +27,8 @@ namespace Shopware\Bundle\AccountBundle\Service\Core;
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\AccountBundle\Service\AddressImportServiceInterface;
 use Shopware\Bundle\AccountBundle\Service\AddressServiceInterface;
+use Shopware\Bundle\AttributeBundle\Service\DataLoader;
+use Shopware\Bundle\AttributeBundle\Service\DataPersister;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Country\Country;
 use Shopware\Models\Country\State;
@@ -51,6 +53,16 @@ class AddressImportService implements AddressImportServiceInterface
     private $addressService;
 
     /**
+     * @var DataLoader
+     */
+    private $attributeLoader;
+
+    /**
+     * @var DataPersister
+     */
+    private $attributePersister;
+
+    /**
      * AddressService constructor.
      * @param Connection $connection
      * @param ModelManager $modelManager
@@ -61,6 +73,8 @@ class AddressImportService implements AddressImportServiceInterface
         $this->connection = $connection;
         $this->modelManager = $modelManager;
         $this->addressService = $addressService;
+        $this->attributeLoader = Shopware()->Container()->get('shopware_attribute.data_loader');
+        $this->attributePersister = Shopware()->Container()->get('shopware_attribute.data_persister');
     }
 
     /**
@@ -107,6 +121,7 @@ class AddressImportService implements AddressImportServiceInterface
     {
         $builder = $this->connection->createQueryBuilder();
         $fields = strpos($table, 'shipping') ? $this->getShippingAddressFields() : $this->getBillingAddressFields();
+        $attributesTable = $table . '_attributes';
 
         $data = $builder
             ->select($fields)
@@ -115,6 +130,9 @@ class AddressImportService implements AddressImportServiceInterface
             ->setParameter('customerId', $customerId)
             ->execute()
             ->fetch(\PDO::FETCH_ASSOC);
+
+        $addressId = $data['id'];
+        unset($data['id']);
 
         if (empty($data)) {
             throw new \RuntimeException('No address to import found in '.$table.'.');
@@ -139,7 +157,8 @@ class AddressImportService implements AddressImportServiceInterface
         $address = new Address();
         $address->fromArray($data);
         $address = $this->addressService->create($address, $customer);
-        $this->importLegacyAddressAttributes($table, $address);
+        $attributes = $this->attributeLoader->load($attributesTable, $addressId);
+        $this->attributePersister->persist($attributes, 's_user_addresses_attributes', $address->getId());
 
         return $address;
     }
@@ -164,6 +183,7 @@ class AddressImportService implements AddressImportServiceInterface
     private function getShippingAddressFields()
     {
         return [
+            'id',
             'company',
             'department',
             'salutation',
@@ -179,35 +199,6 @@ class AddressImportService implements AddressImportServiceInterface
             'additional_address_line2'
         ];
     }
-
-    /**
-     * @param string $table
-     * @param Address $address
-     */
-    private function importLegacyAddressAttributes($table, Address $address)
-    {
-        $attributeTable = $table . '_attributes';
-        $attributeForeignKey = strpos($table, 'shipping') ? 'shippingID' : 'billingID';
-
-        $builder = $this->connection->createQueryBuilder();
-
-        $data = $builder
-            ->select('*')
-            ->from($table, 'address')
-            ->innerJoin('address', $attributeTable, 'attribute', 'address.id = attribute.' . $attributeForeignKey)
-            ->where('address.userID = :addressId')
-            ->setParameter('addressId', $address->getCustomer()->getId())
-            ->execute()
-            ->fetch(\PDO::FETCH_ASSOC);
-
-        if (empty($data)) {
-            return;
-        }
-
-        unset($data['id'], $data['address_id'], $data['shippingID'], $data['billingID']);
-        $this->saveAttribute($address, $data);
-    }
-
 
     /**
      * Searches all customer addresses for the given data
@@ -232,25 +223,5 @@ class AddressImportService implements AddressImportServiceInterface
         }
 
         return false;
-    }
-
-    /**
-     * @param Address $address
-     * @param array $data
-     * @return \Shopware\Models\Attribute\CustomerAddress
-     */
-    private function saveAttribute(Address $address, array $data = [])
-    {
-        $attribute = $address->getAttribute();
-        if (!$attribute) {
-            $attribute = new \Shopware\Models\Attribute\CustomerAddress();
-            $attribute->setCustomerAddress($address);
-            $this->modelManager->persist($attribute);
-        }
-
-        $attribute->fromArray($data);
-        $this->modelManager->flush($attribute);
-
-        return $attribute;
     }
 }

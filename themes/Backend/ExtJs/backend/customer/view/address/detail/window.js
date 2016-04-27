@@ -97,7 +97,21 @@ Ext.define('Shopware.apps.Customer.view.address.detail.Window', {
      * @param window
      */
     onSaveSuccessful: function(controller, record, window) {
-        window.attributeForm.saveAttribute(record.get('id'));
+        var me = this;
+
+        window.attributeForm.saveAttribute(record.get('id'), function(success) {
+
+            if(!success){
+                return;
+            }
+
+            Ext.Ajax.request({
+                url: '{url controller=Address action=syncAttribute}',
+                params: {
+                    id: record.get('id')
+                }
+            });
+        });
     }
 });
 //{/block}

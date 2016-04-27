@@ -1209,6 +1209,10 @@ class sOrder
     /**
      * Save order billing address
      * @access public
+     * @param array $address
+     * @param int $id
+     * @return int
+     * @throws Exception
      */
     public function sSaveBillingAddress($address, $id)
     {
@@ -1235,54 +1239,71 @@ class sOrder
             title
         )
         VALUES (
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?
+            :userID,
+            :orderID,
+            :customernumber,
+            :company,
+            :department,
+            :salutation,
+            :firstname,
+            :lastname,
+            :street,
+            :zipcode,
+            :city,
+            :phone,
+            :countryID,
+            :stateID,
+            :ustid,
+            :additional_address_line1,
+            :additional_address_line2,
+            :title
             )
         ";
         $sql = $this->eventManager->filter('Shopware_Modules_Order_SaveBilling_FilterSQL', $sql, array('subject'=>$this, 'address'=>$address, 'id'=>$id));
         $array = array(
-            $address["userID"],
-            $id,
-            (string) $address["customernumber"],
-            (string) $address["company"],
-            (string) $address["department"],
-            (string) $address["salutation"],
-            (string) $address["firstname"],
-            (string) $address["lastname"],
-            (string) $address["street"],
-            (string) $address["zipcode"],
-            (string) $address["city"],
-            (string) $address["phone"],
-            $address["countryID"],
-            $address["stateID"],
-            $address["ustid"],
-            $address["additional_address_line1"],
-            $address["additional_address_line2"],
-            $address["title"]
+            ':userID' => $address["userID"],
+            ':orderID' => $id,
+            ':customernumber' => (string) $address["customernumber"],
+            ':company' => (string) $address["company"],
+            ':department' => (string) $address["department"],
+            ':salutation' => (string) $address["salutation"],
+            ':firstname' => (string) $address["firstname"],
+            ':lastname' => (string) $address["lastname"],
+            ':street' => (string) $address["street"],
+            ':zipcode' => (string) $address["zipcode"],
+            ':city' => (string) $address["city"],
+            ':phone' => (string) $address["phone"],
+            ':countryID' => $address["countryID"],
+            ':stateID' => $address["stateID"],
+            ':ustid' => $address["ustid"],
+            ':additional_address_line1' => $address["additional_address_line1"],
+            ':additional_address_line2' => $address["additional_address_line2"],
+            ':title' => $address["title"]
         );
         $array = $this->eventManager->filter('Shopware_Modules_Order_SaveBilling_FilterArray', $array, array('subject'=>$this, 'address'=>$address, 'id'=>$id));
         $result = $this->db->executeUpdate($sql, $array);
 
-
-        //new attribute tables
         $billingID = $this->db->lastInsertId();
-        $this->attributePersister->persist($address['attributes'], 's_order_billingaddress_attributes', $billingID);
+
+        $billingAddressId = null;
+
+        if ($this->session !== null) {
+            $billingAddressId = $this->session->get('checkoutBillingAddressId');
+        }
+
+        if ($billingAddressId === null) {
+            /** @var \Shopware\Models\Customer\Customer $customer */
+            $customer = Shopware()->Models()->find('Shopware\Models\Customer\Customer', $address['userID']);
+            $billingAddressId = $customer->getDefaultBillingAddress()->getId();
+        }
+
+        $attributes = $this->attributeLoader->load('s_user_addresses_attributes', $billingAddressId);
+
+        if (!is_array($attributes)) {
+            $attributes = [];
+        }
+
+        $this->attributePersister->persist($attributes, 's_order_billingaddress_attributes', $billingID);
 
         return $result;
     }
@@ -1290,6 +1311,10 @@ class sOrder
     /**
      * save order shipping address
      * @access public
+     * @param array $address
+     * @param int $id
+     * @return int
+     * @throws Exception
      */
     public function sSaveShippingAddress($address, $id)
     {
@@ -1313,47 +1338,61 @@ class sOrder
             title
         )
         VALUES (
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?
+            :userID,
+            :orderID,
+            :company,
+            :department,
+            :salutation,
+            :firstname,
+            :lastname,
+            :street,
+            :zipcode,
+            :city,
+            :countryID,
+            :stateID,
+            :additional_address_line1,
+            :additional_address_line2,
+            :title
             )
         ";
         $sql = $this->eventManager->filter('Shopware_Modules_Order_SaveShipping_FilterSQL', $sql, array('subject'=>$this, 'address'=>$address, 'id'=>$id));
         $array = array(
-            $address["userID"],
-            $id,
-            (string) $address["company"],
-            (string) $address["department"],
-            (string) $address["salutation"],
-            (string) $address["firstname"],
-            (string) $address["lastname"],
-            (string) $address["street"],
-            (string) $address["zipcode"],
-            (string) $address["city"],
-            $address["countryID"],
-            $address["stateID"],
-            (string) $address["additional_address_line1"],
-            (string) $address["additional_address_line2"],            
-            (string) $address["title"]
+            ':userID' => $address["userID"],
+            ':orderID' => $id,
+            ':company' => (string) $address["company"],
+            ':department' => (string) $address["department"],
+            ':salutation' => (string) $address["salutation"],
+            ':firstname' => (string) $address["firstname"],
+            ':lastname' => (string) $address["lastname"],
+            ':street' => (string) $address["street"],
+            ':zipcode' => (string) $address["zipcode"],
+            ':city' => (string) $address["city"],
+            ':countryID' => $address["countryID"],
+            ':stateID' => $address["stateID"],
+            ':additional_address_line1' => (string) $address["additional_address_line1"],
+            ':additional_address_line2' => (string) $address["additional_address_line2"],
+            ':title' => (string) $address["title"]
         );
         $array = $this->eventManager->filter('Shopware_Modules_Order_SaveShipping_FilterArray', $array, array('subject'=>$this, 'address'=>$address, 'id'=>$id));
         $result = $this->db->executeUpdate($sql, $array);
 
-        //new attribute table
         $shippingId = $this->db->lastInsertId();
-        $this->attributePersister->persist($address['attributes'], 's_order_shippingaddress_attributes', $shippingId);
+
+        $shippingAddressId = null;
+
+        if ($this->session !== null) {
+            $shippingAddressId = $this->session->get('checkoutShippingAddressId');
+        }
+
+        if ($shippingAddressId === null) {
+            /** @var \Shopware\Models\Customer\Customer $customer */
+            $customer = Shopware()->Models()->getRepository('Shopware\Models\Customer\Customer')->find($address['userID']);
+            $shippingAddressId = $customer->getDefaultShippingAddress()->getId();
+        }
+
+        $attributes = $this->attributeLoader->load('s_user_addresses_attributes', $shippingAddressId) ?: [];
+
+        $this->attributePersister->persist($attributes, 's_order_shippingaddress_attributes', $shippingId);
 
         return $result;
     }

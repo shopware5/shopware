@@ -88,11 +88,17 @@ class AddressService implements AddressServiceInterface
         $this->validate($address);
 
         if ($address->getCustomer()->getDefaultBillingAddress()->getId() == $address->getId()) {
-            $address->getCustomer()->getBilling()->fromAddress($address);
+            $billingAddress = $address->getCustomer()->getBilling();
+            if ($billingAddress !== null) {
+                $billingAddress->fromAddress($address);
+            }
         }
 
         if ($address->getCustomer()->getDefaultShippingAddress()->getId() == $address->getId()) {
-            $address->getCustomer()->getShipping()->fromAddress($address);
+            $shippingAddress = $address->getCustomer()->getShipping();
+            if ($shippingAddress !== null) {
+                $shippingAddress->fromAddress($address);
+            }
         }
 
         $this->modelManager->flush();
@@ -213,6 +219,8 @@ class AddressService implements AddressServiceInterface
         $billing = $customer->getBilling();
         $billing->fromAddress($address);
 
+        $this->update($address);
+
         $this->modelManager->flush([$customer, $billing]);
     }
 
@@ -231,6 +239,8 @@ class AddressService implements AddressServiceInterface
             $this->modelManager->persist($shipping);
         }
         $shipping->fromAddress($address);
+
+        $this->update($address);
 
         $this->modelManager->flush([$customer, $shipping]);
     }
@@ -261,14 +271,13 @@ class AddressService implements AddressServiceInterface
             'ustid' => $address->getVatId(),
             'additional_address_line1' => $address->getAdditionalAddressLine1(),
             'additional_address_line2' => $address->getAdditionalAddressLine2(),
+            'attributes' => []
         ];
 
         if ($address->getAttribute()) {
             $data = $this->modelManager->toArray($address->getAttribute());
-            unset($data['id'], $data['address_id'], $data['shippingID'], $data['billingID']);
 
             $output['attributes'] = $data;
-            $output = array_merge($data, $output);
         }
 
         return $output;

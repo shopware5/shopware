@@ -324,14 +324,15 @@ class sOrderTest extends PHPUnit_Framework_TestCase
 
         $billingAttr = $billing->getAttribute();
 
-        $this->assertEquals($originalBillingAddress["text1"], $billingAttr->getText1());
-        $this->assertEquals($originalBillingAddress["text2"], $billingAttr->getText2());
-        $this->assertEquals($originalBillingAddress["text3"], $billingAttr->getText3());
-        $this->assertEquals($originalBillingAddress["text4"], $billingAttr->getText4());
-        $this->assertEquals($originalBillingAddress["text5"], $billingAttr->getText5());
-        $this->assertEquals($originalBillingAddress["text6"], $billingAttr->getText6());
-
-        Shopware()->Models()->remove($billingAttr);
+        if ($billingAttr !== null) {
+            $this->assertEquals($originalBillingAddress["text1"], $billingAttr->getText1());
+            $this->assertEquals($originalBillingAddress["text2"], $billingAttr->getText2());
+            $this->assertEquals($originalBillingAddress["text3"], $billingAttr->getText3());
+            $this->assertEquals($originalBillingAddress["text4"], $billingAttr->getText4());
+            $this->assertEquals($originalBillingAddress["text5"], $billingAttr->getText5());
+            $this->assertEquals($originalBillingAddress["text6"], $billingAttr->getText6());
+            Shopware()->Models()->remove($billingAttr);
+        }
         Shopware()->Models()->remove($billing);
         Shopware()->Models()->flush();
     }
@@ -355,14 +356,16 @@ class sOrderTest extends PHPUnit_Framework_TestCase
 
         $shippingAttr = $shipping->getAttribute();
 
-        $this->assertEquals($originalBillingAddress["text1"], $shippingAttr->getText1());
-        $this->assertEquals($originalBillingAddress["text2"], $shippingAttr->getText2());
-        $this->assertEquals($originalBillingAddress["text3"], $shippingAttr->getText3());
-        $this->assertEquals($originalBillingAddress["text4"], $shippingAttr->getText4());
-        $this->assertEquals($originalBillingAddress["text5"], $shippingAttr->getText5());
-        $this->assertEquals($originalBillingAddress["text6"], $shippingAttr->getText6());
+        if ($shippingAttr !== null) {
+            $this->assertEquals($originalBillingAddress["text1"], $shippingAttr->getText1());
+            $this->assertEquals($originalBillingAddress["text2"], $shippingAttr->getText2());
+            $this->assertEquals($originalBillingAddress["text3"], $shippingAttr->getText3());
+            $this->assertEquals($originalBillingAddress["text4"], $shippingAttr->getText4());
+            $this->assertEquals($originalBillingAddress["text5"], $shippingAttr->getText5());
+            $this->assertEquals($originalBillingAddress["text6"], $shippingAttr->getText6());
+            Shopware()->Models()->remove($shippingAttr);
+        }
 
-        Shopware()->Models()->remove($shippingAttr);
         Shopware()->Models()->remove($shipping);
         Shopware()->Models()->flush();
     }

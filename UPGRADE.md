@@ -241,6 +241,10 @@ In this document you will find a changelog of the important changes related to t
 * Removed event `Shopware_Modules_Admin_SaveRegisterBillingAttributes_Return`
 * Removed event `Shopware_Modules_Admin_SaveRegisterMainDataAttributes_FilterSql`
 * Removed event `Shopware_Modules_Admin_SaveRegisterMainDataAttributes_Return`
+* The filter event `Shopware_Modules_Order_SaveBilling_FilterArray` now contains an associative array instead of one with numeric keys.
+* The filter event `Shopware_Modules_Order_SaveBilling_FilterSQL` now uses named parameters in the query instead of question marks.
+* The filter event `Shopware_Modules_Order_SaveShipping_FilterArray` now contains an associative array instead of one with numeric keys.
+* The filter event `Shopware_Modules_Order_SaveShipping_FilterSQL` now uses named parameters in the query instead of question marks.
 
 
 ## 5.1.6
