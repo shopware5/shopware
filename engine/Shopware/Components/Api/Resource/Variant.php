@@ -435,6 +435,7 @@ class Variant extends Resource implements BatchInterface
      * @param ArticleModel $article
      * @param Detail $variant
      * @return array|mixed
+     * @throws \Shopware\Components\Api\Exception\CustomValidationException
      */
     protected function prepareData(array $data, ArticleModel $article, Detail $variant)
     {
@@ -456,6 +457,16 @@ class Variant extends Resource implements BatchInterface
         }
         if (isset($data['images'])) {
             $data = $this->prepareImageAssociation($data, $article, $variant);
+        }
+
+        if (!empty($data['number']) && $data['number'] !== $variant->getNumber()) {
+            $connection = Shopware()->Container()->get('dbal_connection');
+
+            // Number changed, hence make sure it does not already exist in another variant
+            $exists = $connection->fetchColumn('SELECT id FROM s_articles_details WHERE ordernumber = ?', [$data['number']]);
+            if ($exists) {
+                throw new ApiException\CustomValidationException(sprintf('A variant with the given order number "%s" already exists.', $data['number']));
+            }
         }
 
         return $data;
