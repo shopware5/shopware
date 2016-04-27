@@ -64,6 +64,8 @@ Ext.define('Shopware.apps.Base.view.element.Select', {
             eval('me.store = ' + me.store + ';');
             // Remove value field for reasons of compatibility
             me.valueField = me.displayField;
+        } else if (typeof(me.store) === 'string') {
+            me.store = me.getStoreById(me.store);
         }
 
         me.callParent(arguments);
@@ -86,5 +88,50 @@ Ext.define('Shopware.apps.Base.view.element.Select', {
         }
 
         me.callParent(arguments);
+    },
+
+    /**
+     * Tries to find the customised copy of the store specified by the given 'storeId'.
+     * If such a store does not exist, the respective original store for the 'storeId'
+     * is looked up and its settings are copied to a new store, which is then loaded.
+     * This has two advantages: Firstly we only have to load the customized store once
+     * for all config elements and secondly we don't run into problems when e.g. using
+     * a Shopware 'base' store, which is also used by a plugin that e.g. changed the
+     * base store's settings like 'pageSize'.
+     *
+     * @param string storeId
+     * @return Ext.data.Store|null
+     */
+    getStoreById: function(storeId) {
+        // Try to find the customised store with the respective ID
+        var customisedStoreId = 'Shopware.apps.Base.view.element.Select.store.' + storeId;
+        var store = Ext.data.StoreManager.lookup(customisedStoreId);
+        if (store) {
+            return store;
+        }
+
+        // Customised store has not been created yet, hence create one by copying
+        // the settings of the original store
+        var originalStore = Ext.data.StoreManager.lookup(storeId);
+        if (!originalStore) {
+            return null;
+        }
+        store = Ext.create('Ext.data.Store', {
+            storeId: customisedStoreId,
+            model: originalStore.model.getName(),
+            pageSize: 1000,
+            autoLoad: true,
+            proxy: {
+                type: originalStore.getProxy().type,
+                url: originalStore.getProxy().url,
+                reader: {
+                    type: originalStore.getProxy().reader.type,
+                    root: originalStore.getProxy().reader.root,
+                    totalProperty: originalStore.getProxy().reader.totalProperty
+                }
+            }
+        });
+
+        return store;
     }
 });

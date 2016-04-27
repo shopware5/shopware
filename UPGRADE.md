@@ -206,6 +206,7 @@ In this document you will find a changelog of the important changes related to t
 * Removed `sAdmin::sUpdateAccount()`
 * Removed `saveAccount()` in `Controllers/Frontend/Account.php`
 * Moved field `birthday` from billing address to customer
+* Added support for loading stores by ID in the base combo box `Shopware.apps.Base.view.element.Select`
 
 ## 5.1.5
 * The smarty variable `sCategoryInfo` in Listing and Blog controllers is now deprecated and will be removed soon. Use `sCategoryContent` instead, it's a drop in replacement. 
