@@ -24,6 +24,7 @@
 
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
+use Shopware\Components\NumberRangeManagerInterface;
 
 /**
  * Deprecated Shopware Class that handle frontend orders
@@ -188,7 +189,7 @@ class sOrder
     private $contextService;
 
     /**
-     * @var NumberRangeManager
+     * @var NumberRangeManagerInterface
      */
     private $numberRangeManager;
 

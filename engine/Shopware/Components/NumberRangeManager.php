@@ -31,7 +31,7 @@ use Doctrine\DBAL\Connection;
  * @package   Shopware\Components\NumberRangeManager
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class NumberRangeManager
+class NumberRangeManager implements NumberRangeManagerInterface
 {
     /**
      * @var Connection
@@ -47,14 +47,7 @@ class NumberRangeManager
     }
 
     /**
-     * Fetches the number range with the given name and increases its value by one to the get
-     * the next number, which is than written back to the database. The fetch and update are performed
-     * within a transaction using 'locking reads' to block all other transactions from overwriting the
-     * value until the update is committed. Finally the next number is returned.
-     *
-     * @param string $name
-     * @return int
-     * @throws \RuntimeException
+     * @inheritdoc
      */
     public function getNextNumber($name)
     {

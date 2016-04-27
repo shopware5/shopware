@@ -25,6 +25,7 @@
 use Shopware\Bundle\AccountBundle\Service\AddressServiceInterface;
 use Shopware\Bundle\AccountBundle\Service\AddressImportServiceInterface;
 use Shopware\Bundle\StoreFrontBundle;
+use Shopware\Components\NumberRangeManagerInterface;
 use Shopware\Components\Validator\EmailValidatorInterface;
 use Shopware\Components\NumberRangeManager;
 use Shopware\Models\Customer\Address;
@@ -141,7 +142,7 @@ class sAdmin
     private $addressService;
 
     /**
-     * @var NumberRangeManager
+     * @var NumberRangeManagerInterface
      */
     private $numberRangeManager;
 
@@ -159,7 +160,7 @@ class sAdmin
         EmailValidatorInterface                          $emailValidator        = null,
         AddressImportServiceInterface                    $addressImportService  = null,
         AddressServiceInterface                          $addressService        = null,
-        NumberRangeManager                               $numberRangeManager    = null
+        NumberRangeManagerInterface                      $numberRangeManager    = null
     ) {
         $this->db = $db ? : Shopware()->Db();
         $this->eventManager = $eventManager ? : Shopware()->Events();

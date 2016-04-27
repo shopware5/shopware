@@ -22,6 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\NumberRangeManagerInterface;
+
 include_once(Shopware()->DocPath() . "engine/Library/Mpdf/mpdf.php");
 
 /**
@@ -658,9 +660,12 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
                     $numberrange = "doc_".$typID;
                 }
 
-                // Get the next number and save it in the document
+                /** @var NumberRangeManagerInterface $numberRangeManager */
                 $numberRangeManager = Shopware()->Container()->get('shopware.number_range_manager');
+
+                // Get the next number and save it in the document
                 $nextNumber = $numberRangeManager->getNextNumber($numberrange);
+
                 Shopware()->Db()->query("
                     UPDATE `s_order_documents` SET `docID` = ? WHERE `ID` = ? LIMIT 1 ;
                 ", array($nextNumber, $rowID));

@@ -25,6 +25,7 @@
 namespace Shopware\Tests\Components;
 
 use Shopware\Components\NumberRangeManager;
+use Shopware\Components\NumberRangeManagerInterface;
 
 /**
  * @category  Shopware
@@ -43,6 +44,12 @@ class NumberRangeManagerTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
 
         $this->connection = Shopware()->Container()->get('dbal_connection');
+    }
+
+    public function testItShouldImplementInterface()
+    {
+        $manager = new NumberRangeManager($this->connection);
+        $this->assertInstanceOf(NumberRangeManagerInterface::class, $manager);
     }
 
     public function testGetNextNumber()
