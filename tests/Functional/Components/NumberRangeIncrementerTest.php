@@ -24,15 +24,15 @@
 
 namespace Shopware\Tests\Components;
 
-use Shopware\Components\NumberRangeManager;
-use Shopware\Components\NumberRangeManagerInterface;
+use Shopware\Components\NumberRangeIncrementer;
+use Shopware\Components\NumberRangeIncrementerInterface;
 
 /**
  * @category  Shopware
  * @package   Shopware\Tests\Components
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class NumberRangeManagerTest extends \PHPUnit_Framework_TestCase
+class NumberRangeIncrementerTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Doctrine\DBAL\Connection
@@ -48,11 +48,11 @@ class NumberRangeManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testItShouldImplementInterface()
     {
-        $manager = new NumberRangeManager($this->connection);
-        $this->assertInstanceOf(NumberRangeManagerInterface::class, $manager);
+        $manager = new NumberRangeIncrementer($this->connection);
+        $this->assertInstanceOf(NumberRangeIncrementerInterface::class, $manager);
     }
 
-    public function testGetNextNumber()
+    public function testIncrement()
     {
         // Fetch actual number from DB
         $rangeName = 'invoice';
@@ -66,17 +66,17 @@ class NumberRangeManagerTest extends \PHPUnit_Framework_TestCase
         );
         $expectedNumber += 1;
 
-        $manager = new NumberRangeManager($this->connection);
+        $manager = new NumberRangeIncrementer($this->connection);
 
-        $this->assertEquals($expectedNumber, $manager->getNextNumber($rangeName));
+        $this->assertEquals($expectedNumber, $manager->increment($rangeName));
     }
 
-    public function testGetNextNumberWithInvalidName()
+    public function testIncrementWithInvalidName()
     {
-        $manager = new NumberRangeManager($this->connection);
+        $manager = new NumberRangeIncrementer($this->connection);
 
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('Number range with name "invalid" does not exist.');
-        $manager->getNextNumber('invalid');
+        $manager->increment('invalid');
     }
 }

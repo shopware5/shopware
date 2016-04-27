@@ -25,10 +25,10 @@ namespace Shopware\Components;
 
 /**
  * @category  Shopware
- * @package   Shopware\Components\NumberRangeManager
+ * @package   Shopware\Components\NumberRangeIncrementer
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-interface NumberRangeManagerInterface
+interface NumberRangeIncrementerInterface
 {
     /**
      * Fetches the number range with the given name and increases its value by one to the get
@@ -40,5 +40,5 @@ interface NumberRangeManagerInterface
      * @return int
      * @throws \RuntimeException
      */
-    public function getNextNumber($name);
+    public function increment($name);
 }

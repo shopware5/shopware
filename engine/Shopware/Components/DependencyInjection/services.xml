@@ -428,7 +428,7 @@
             <argument>%kernel.root_dir%/engine/Shopware/Components/HttpClient/public.key</argument>
         </service>
 
-        <service id="shopware.number_range_manager" class="Shopware\Components\NumberRangeManager">
+        <service id="shopware.number_range_incrementer" class="Shopware\Components\NumberRangeIncrementer">
             <argument type="service" id="dbal_connection"/>
         </service>
     </services>

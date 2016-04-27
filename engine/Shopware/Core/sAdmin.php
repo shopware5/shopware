@@ -25,9 +25,8 @@
 use Shopware\Bundle\AccountBundle\Service\AddressServiceInterface;
 use Shopware\Bundle\AccountBundle\Service\AddressImportServiceInterface;
 use Shopware\Bundle\StoreFrontBundle;
-use Shopware\Components\NumberRangeManagerInterface;
+use Shopware\Components\NumberRangeIncrementerInterface;
 use Shopware\Components\Validator\EmailValidatorInterface;
-use Shopware\Components\NumberRangeManager;
 use Shopware\Models\Customer\Address;
 
 /**
@@ -142,9 +141,9 @@ class sAdmin
     private $addressService;
 
     /**
-     * @var NumberRangeManagerInterface
+     * @var NumberRangeIncrementerInterface
      */
-    private $numberRangeManager;
+    private $numberRangeIncrementer;
 
     public function __construct(
         Enlight_Components_Db_Adapter_Pdo_Mysql          $db                    = null,
@@ -160,7 +159,7 @@ class sAdmin
         EmailValidatorInterface                          $emailValidator        = null,
         AddressImportServiceInterface                    $addressImportService  = null,
         AddressServiceInterface                          $addressService        = null,
-        NumberRangeManagerInterface                      $numberRangeManager    = null
+        NumberRangeIncrementerInterface                  $numberRangeIncrementer    = null
     ) {
         $this->db = $db ? : Shopware()->Db();
         $this->eventManager = $eventManager ? : Shopware()->Events();
@@ -180,7 +179,7 @@ class sAdmin
         $this->subshopId = $this->contextService->getShopContext()->getShop()->getParentId();
         $this->addressImportService = $addressImportService ? : Shopware()->Container()->get('shopware_account.address_import_service');
         $this->addressService = $addressService ? : Shopware()->Container()->get('shopware_account.address_service');
-        $this->numberRangeManager = $numberRangeManager ? : Shopware()->Container()->get('shopware.number_range_manager');
+        $this->numberRangeIncrementer = $numberRangeIncrementer ? : Shopware()->Container()->get('shopware.number_range_incrementer');
     }
 
     /**
@@ -4408,7 +4407,7 @@ SQL;
      */
     private function assignCustomerNumber($userId)
     {
-        $nextNumber = $this->numberRangeManager->getNextNumber('user');
+        $nextNumber = $this->numberRangeIncrementer->increment('user');
         $this->db->query(
            'UPDATE s_user_billingaddress
             SET customernumber = ?

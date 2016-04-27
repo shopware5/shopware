@@ -24,7 +24,7 @@
 
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
-use Shopware\Components\NumberRangeManagerInterface;
+use Shopware\Components\NumberRangeIncrementerInterface;
 
 /**
  * Deprecated Shopware Class that handle frontend orders
@@ -189,9 +189,9 @@ class sOrder
     private $contextService;
 
     /**
-     * @var NumberRangeManagerInterface
+     * @var NumberRangeIncrementerInterface
      */
-    private $numberRangeManager;
+    private $numberRangeIncrementer;
 
     /**
      * Class constructor.
@@ -205,7 +205,7 @@ class sOrder
         $this->db = Shopware()->Db();
         $this->eventManager = Shopware()->Events();
         $this->config = Shopware()->Config();
-        $this->numberRangeManager = Shopware()->Container()->get('shopware.number_range_manager');
+        $this->numberRangeIncrementer = Shopware()->Container()->get('shopware.number_range_incrementer');
 
         $this->contextService = $contextService ? : Shopware()->Container()->get('shopware_storefront.context_service');
     }
@@ -228,7 +228,7 @@ class sOrder
      */
     public function sGetOrderNumber()
     {
-        $number = $this->numberRangeManager->getNextNumber('invoice');
+        $number = $this->numberRangeIncrementer->increment('invoice');
         $number = $this->eventManager->filter(
             'Shopware_Modules_Order_GetOrdernumber_FilterOrdernumber',
             $number,

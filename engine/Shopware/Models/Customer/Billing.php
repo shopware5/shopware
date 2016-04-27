@@ -26,7 +26,7 @@ namespace   Shopware\Models\Customer;
 
 use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
-use Shopware\Components\NumberRangeManagerInterface;
+use Shopware\Components\NumberRangeIncrementerInterface;
 
 /**
  * Shopware customer billing model represents a single billing address of a customer.
@@ -522,9 +522,9 @@ class Billing extends ModelEntity
     public function onSave()
     {
         if (empty($this->number) && Shopware()->Config()->get('shopwareManagedCustomerNumbers') == 1) {
-            /** @var NumberRangeManagerInterface $numberRangeManager */
-            $numberRangeManager = Shopware()->Container()->get('shopware.number_range_manager');
-            $this->number = $numberRangeManager->getNextNumber('user');
+            /** @var NumberRangeIncrementerInterface $incrementer */
+            $incrementer = Shopware()->Container()->get('shopware.number_range_incrementer');
+            $this->number = $incrementer->increment('user');
         }
     }
 
