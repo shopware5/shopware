@@ -102,9 +102,11 @@ Ext.define('Shopware.apps.PluginManager.controller.Main', {
 
         updatePage.updateStore.load({
             callback: function(records, operation, success) {
-                var result = Ext.JSON.decode(operation.response.responseText);
-                if (result.loginRecommended) {
-                    Shopware.app.Application.fireEvent('open-login', function() {});
+                if (operation.response && operation.response.responseText) {
+                    var result = Ext.JSON.decode(operation.response.responseText);
+                    if (result.loginRecommended) {
+                        Shopware.app.Application.fireEvent('open-login', function() {});
+                    }
                 }
 
                 if (records) {
