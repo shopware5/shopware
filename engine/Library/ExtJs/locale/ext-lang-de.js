@@ -586,19 +586,13 @@ Ext.onReady(function() {
             expired_soon_subscription_warning: 'Es laufen [0] Plugin Subscription(s) aus. <a target="_blank" href="https://account.shopware.com">Account aufrufen</a><br /><br /><b>Bald abgelaufene Plugins:</b><br />[1]',
             expired_soon_subscription_days_warning: ' Tage',
             invalid_licence: 'Lizenz von [0] Plugin(s) sind ungültig. <a target="_blank" href="https://account.shopware.com">Account aufrufen</a><br /><br /><b>Ungültige Lizenzen:</b><br />[1]',
-            shop_license_upgrade : 'Das Lizenzupgrade für den Shop wurde noch nicht ausgeführt. <a target="_blank" href="https://account.shopware.com">Account aufrufen</a>'
-        }
-    });
-
-    Ext.define('Shopware.notification.de.ExpiredLicence', {
-        override: 'Shopware.notification.ExpiredLicence',
-
-        snippets: {
-            licenses_expired : 'Pluginlizenzen laufen ab',
-            license_expired : 'Pluginlizenz läuft ab',
-            licenses_expired_long : 'Folgende Pluginlizenzen laufen ab',
-            license_expired_long : 'Folgende Pluginlizenz läuft ab',
-            license_expired_line_text : '[0] läuft am [1] ab'
+            shop_license_upgrade : 'Das Lizenzupgrade für den Shop wurde noch nicht ausgeführt. <a target="_blank" href="https://account.shopware.com">Account aufrufen</a>',
+            no_license: 'Möglicherweise sind Sie Opfer einer Produktfälschung geworden. <a target="_blank" href="https://account.shopware.com">Account aufrufen</a><br /><br /><b>Für die folgenden Plugins liegt keine gültige Lizenz vor:</b><br />[1]',
+            expiring_license: 'Ablaufende Lizenz(en)',
+            expired_license: 'Abgelaufene Lizenz(en)',
+            expiring_license_warning: 'Es laufen [0]x Plugin Lizenz(en) aus.<br /><br /><b>Bald abgelaufene Lizenz(en):</b><br />[1]',
+            expired_license_warning: 'Es sind [0] Plugin Lizenz(en) abgelaufen.<br /><br /><b>Abgelaufene Lizenz(en):</b><br/>[1]',
+            confirm_plugin_deactivation: 'Wollen Sie jetzt den Plugin Manager öffnen?'
         }
     });
 });

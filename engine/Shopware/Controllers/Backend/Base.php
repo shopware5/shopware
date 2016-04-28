@@ -96,22 +96,6 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
     }
 
     /**
-     * Get all expired plugins
-     * return data as json to the view
-     */
-    public function getExpiredLicencesAction()
-    {
-        $subscriptionService = $this->container->get('shopware_plugininstaller.subscription_service');
-        $licences = $subscriptionService->getExpiredPluginLicenses();
-
-        if (empty($licences)) {
-            $this->View()->assign('success', false);
-        } else {
-            $this->View()->assign(['success' => true, 'data' => $licences]);
-        }
-    }
-
-    /**
      * Returns all supported detail status as an array. The status are used on the detail
      * page in the position grid to edit or create an order position.
      */

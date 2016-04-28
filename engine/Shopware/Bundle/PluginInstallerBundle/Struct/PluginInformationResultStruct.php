@@ -21,27 +21,56 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
-namespace Shopware\Components\License\Service;
 
-use Shopware\Components\License\Struct\LicenseInformation;
-use Shopware\Components\License\Struct\LicenseUnpackRequest;
+namespace Shopware\Bundle\PluginInstallerBundle\Struct;
 
 /**
- * @category  Shopware
- * @package   Shopware\Components\License\Service
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
+ * Class PluginInformationResultStruct
+ * @package Shopware\Bundle\PluginInstallerBundle\Struct
  */
-interface LicenseUnpackServiceInterface
+class PluginInformationResultStruct implements \JsonSerializable
 {
     /**
-     * @param  LicenseUnpackRequest $request
-     * @return LicenseInformation
+     * @var PluginInformationStruct[]
      */
-    public function evaluateLicense(LicenseUnpackRequest $request);
+    private $plugins;
 
     /**
-     * @param string $license
-     * @return array
+     * @var boolean
      */
-    public function readLicenseInfo($license);
+    private $isShopUpgraded;
+
+    /**
+     * @param PluginInformationStruct[] $plugins
+     * @param bool $isShopUpgraded
+     */
+    public function __construct(array $plugins, $isShopUpgraded = true)
+    {
+        $this->plugins = $plugins;
+        $this->isShopUpgraded = $isShopUpgraded;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function jsonSerialize()
+    {
+        return get_object_vars($this);
+    }
+
+    /**
+     * @return PluginInformationStruct[]
+     */
+    public function getPlugins()
+    {
+        return $this->plugins;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function IsShopUpgraded()
+    {
+        return $this->isShopUpgraded;
+    }
 }

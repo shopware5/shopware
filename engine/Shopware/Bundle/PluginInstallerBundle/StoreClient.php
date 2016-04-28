@@ -186,14 +186,16 @@ class StoreClient
     /**
      * @param string $resource
      * @param array $params
+     * @param array $headers
      * @return array
      * @throws \Exception
      */
-    public function doPostRequest($resource, $params)
+    public function doPostRequest($resource, $params, $headers = [])
     {
         $response = $this->postRequest(
             $resource,
-            $params
+            $params,
+            $headers
         );
         return json_decode($response->getBody(), true);
     }
@@ -213,6 +215,7 @@ class StoreClient
         $response = $this->postRequest(
             $resource,
             $params,
+            [],
             $accessToken
         );
 
@@ -234,6 +237,7 @@ class StoreClient
         $response = $this->postRequest(
             $resource,
             $params,
+            [],
             $accessToken
         );
 
@@ -289,12 +293,13 @@ class StoreClient
     /**
      * @param $resource
      * @param array $params
+     * @param array $headers
      * @param AccessTokenStruct $token
      * @return Response
      * @throws StoreException
      * @throws \Exception
      */
-    private function postRequest($resource, $params = [], AccessTokenStruct $token = null)
+    private function postRequest($resource, $params = [], $headers = [], AccessTokenStruct $token = null)
     {
         $url = $this->apiEndPoint . $resource;
 
@@ -302,6 +307,11 @@ class StoreClient
         if ($token) {
             $header['X-Shopware-Token'] = $token->getToken();
         }
+
+        if (count($headers) > 0) {
+            $header = array_merge($header, $headers);
+        }
+
         try {
             $response = $this->httpClient->post(
                 $url,

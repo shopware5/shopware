@@ -57,7 +57,7 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
                     editor: null
                 },
                 version: {
-                    width: 30,
+                    width: 60,
                     header: '{s name="version"}Version{/s}',
                     groupable: false,
                     editor: null

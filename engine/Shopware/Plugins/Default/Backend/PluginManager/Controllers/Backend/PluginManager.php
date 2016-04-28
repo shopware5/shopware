@@ -38,6 +38,8 @@ use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\BasketStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\LicenceStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\ListingResultStruct;
+use Shopware\Bundle\PluginInstallerBundle\Struct\PluginInformationResultStruct;
+use Shopware\Bundle\PluginInstallerBundle\Struct\PluginInformationStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\UpdateResultStruct;
 use ShopwarePlugins\PluginManager\Components\PluginCategoryService;
 use ShopwarePlugins\SwagUpdate\Components\Steps\FinishResult;
@@ -182,16 +184,22 @@ class Shopware_Controllers_Backend_PluginManager
     /**
      * Returns not upgraded plugins, "hacked" plugins, plugins which loose subscription to json-view
      */
-    public function getPluginsSubscriptionStateAction()
+    public function getPluginInformationAction()
     {
         $subscriptionService = $this->container->get('shopware_plugininstaller.subscription_service');
-        $pluginStates = $subscriptionService->getPluginsSubscription($this->Response(), $this->Request());
+        $pluginLicenseService = $this->container->get('shopware_plugininstaller.plugin_licence_service');
+        $pluginInformation = $subscriptionService->getPluginInformation($this->Response(), $this->Request());
 
-        if ($pluginStates === false) {
-            $this->View()->assign('success', false);
-        } else {
-            $this->View()->assign(['success' => true, 'data' => $pluginStates]);
+        if ($pluginInformation === false) {
+            try {
+                $pluginInformationStructs = $pluginLicenseService->getExpiringLicenses();
+                $pluginInformation = new PluginInformationResultStruct($pluginInformationStructs);
+            } catch (\Exception $e) {
+                $this->View()->assign(['succes' => false, 'message' => $e->getMessage()]);
+                return;
+            }
         }
+        $this->View()->assign(['success' => true, 'data' => $pluginInformation]);
     }
 
     public function storeListingAction()
