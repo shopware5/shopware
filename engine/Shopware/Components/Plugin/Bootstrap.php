@@ -188,6 +188,17 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     }
 
     /**
+     * Save plugin config method
+     *
+     * @param array $elements
+     *
+     * @return bool|bool
+     */
+    public function saveConfig($elements) {
+        return true;
+    }
+
+    /**
      * Enable plugin method
      *
      * @return bool

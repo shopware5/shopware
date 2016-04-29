@@ -400,7 +400,7 @@ Ext.define('Shopware.form.PluginPanel',
                     win.destroy();
                 }
                 if(callback) {
-                    callback.apply(me, records, operation);
+                    callback(me, records, operation);
                 }
             },
             failure:function (records, operation) {
