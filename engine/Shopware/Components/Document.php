@@ -22,6 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\NumberRangeIncrementerInterface;
+
 include_once(Shopware()->DocPath() . "engine/Library/Mpdf/mpdf.php");
 
 /**
@@ -658,18 +660,17 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
                     $numberrange = "doc_".$typID;
                 }
 
-                $getNumber = Shopware()->Db()->fetchRow("
-                    SELECT `number`+1 as next FROM `s_order_number` WHERE `name` = ?", array($numberrange));
+                /** @var NumberRangeIncrementerInterface $incrementer */
+                $incrementer = Shopware()->Container()->get('shopware.number_range_incrementer');
+
+                // Get the next number and save it in the document
+                $nextNumber = $incrementer->increment($numberrange);
 
                 Shopware()->Db()->query("
                     UPDATE `s_order_documents` SET `docID` = ? WHERE `ID` = ? LIMIT 1 ;
-                ", array($getNumber['next'], $rowID));
+                ", array($nextNumber, $rowID));
 
-                Shopware()->Db()->query("
-                    UPDATE `s_order_number` SET `number` = ? WHERE `name` = ? LIMIT 1 ;
-                ", array($getNumber['next'], $numberrange));
-
-                $bid = $getNumber["next"];
+                $bid = $nextNumber;
             }
         }
         $this->_documentID = $bid;

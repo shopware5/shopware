@@ -24,6 +24,7 @@
 
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
+use Shopware\Components\NumberRangeIncrementerInterface;
 
 /**
  * Deprecated Shopware Class that handle frontend orders
@@ -188,6 +189,11 @@ class sOrder
     private $contextService;
 
     /**
+     * @var NumberRangeIncrementerInterface
+     */
+    private $numberRangeIncrementer;
+
+    /**
      * Class constructor.
      * Injects all dependencies which are required for this class.
      * @param ContextServiceInterface $contextService
@@ -199,6 +205,7 @@ class sOrder
         $this->db = Shopware()->Db();
         $this->eventManager = Shopware()->Events();
         $this->config = Shopware()->Config();
+        $this->numberRangeIncrementer = Shopware()->Container()->get('shopware.number_range_incrementer');
 
         $this->contextService = $contextService ? : Shopware()->Container()->get('shopware_storefront.context_service');
     }
@@ -221,21 +228,7 @@ class sOrder
      */
     public function sGetOrderNumber()
     {
-        $this->db->beginTransaction();
-        try {
-            $number = $this->db->fetchOne(
-                "/*NO LIMIT*/ SELECT number FROM s_order_number WHERE name='invoice' FOR UPDATE"
-            );
-            $this->db->executeUpdate(
-                "UPDATE s_order_number SET number = number + 1 WHERE name='invoice'"
-            );
-            $number += 1;
-            $this->db->commit();
-        } catch (Exception $e) {
-            $this->db->rollBack();
-            throw $e;
-        }
-
+        $number = $this->numberRangeIncrementer->increment('invoice');
         $number = $this->eventManager->filter(
             'Shopware_Modules_Order_GetOrdernumber_FilterOrdernumber',
             $number,

@@ -25,6 +25,7 @@
 use Shopware\Bundle\AccountBundle\Service\AddressServiceInterface;
 use Shopware\Bundle\AccountBundle\Service\AddressImportServiceInterface;
 use Shopware\Bundle\StoreFrontBundle;
+use Shopware\Components\NumberRangeIncrementerInterface;
 use Shopware\Components\Validator\EmailValidatorInterface;
 use Shopware\Models\Customer\Address;
 
@@ -139,6 +140,11 @@ class sAdmin
      */
     private $addressService;
 
+    /**
+     * @var NumberRangeIncrementerInterface
+     */
+    private $numberRangeIncrementer;
+
     public function __construct(
         Enlight_Components_Db_Adapter_Pdo_Mysql          $db                    = null,
         Enlight_Event_EventManager                       $eventManager          = null,
@@ -152,7 +158,8 @@ class sAdmin
         StoreFrontBundle\Service\ContextServiceInterface $contextService        = null,
         EmailValidatorInterface                          $emailValidator        = null,
         AddressImportServiceInterface                    $addressImportService  = null,
-        AddressServiceInterface                          $addressService        = null
+        AddressServiceInterface                          $addressService        = null,
+        NumberRangeIncrementerInterface                  $numberRangeIncrementer    = null
     ) {
         $this->db = $db ? : Shopware()->Db();
         $this->eventManager = $eventManager ? : Shopware()->Events();
@@ -172,6 +179,7 @@ class sAdmin
         $this->subshopId = $this->contextService->getShopContext()->getShop()->getParentId();
         $this->addressImportService = $addressImportService ? : Shopware()->Container()->get('shopware_account.address_import_service');
         $this->addressService = $addressService ? : Shopware()->Container()->get('shopware_account.address_service');
+        $this->numberRangeIncrementer = $numberRangeIncrementer ? : Shopware()->Container()->get('shopware.number_range_incrementer');
     }
 
     /**
@@ -4392,27 +4400,22 @@ SQL;
     }
 
     /**
-     * Assigns the next CustomerNumber from s_order_number
-     * to given $userId and updates s_order_number
-     * in an atomic operation.
+     * Assigns the next available customer ('user') number to the customer
+     * with the given ID.
      *
      * @param int $userId
      */
     private function assignCustomerNumber($userId)
     {
-        $sql = <<<SQL
-UPDATE
-    s_order_number,
-    s_user_billingaddress
-SET
-    s_order_number.number = s_order_number.number+1,
-    s_user_billingaddress.customernumber = s_order_number.number
-WHERE
-    s_order_number.name = 'user'
-AND
-    s_user_billingaddress.userID = ?
-SQL;
-
-        $this->db->query($sql, array($userId));
+        $nextNumber = $this->numberRangeIncrementer->increment('user');
+        $this->db->query(
+           'UPDATE s_user_billingaddress
+            SET customernumber = ?
+            WHERE userID = ?',
+            [
+                $nextNumber,
+                $userId
+            ]
+        );
     }
 }
