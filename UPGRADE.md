@@ -212,9 +212,12 @@ In this document you will find a changelog of the important changes related to t
     * `sAdmin::assignCustomerNumber()`
     * `sOrder::sGetOrderNumber()`
     * `Shopware_Components_Document::saveDocument()`
+* Removed pseudo second argument on `Shopware\Models\Menu\Repository::findOneBy()` and deprecated methodes:
+    * `addItem`
+    * `save`
 
 ## 5.1.5
-* The smarty variable `sCategoryInfo` in Listing and Blog controllers is now deprecated and will be removed soon. Use `sCategoryContent` instead, it's a drop in replacement. 
+* The smarty variable `sCategoryInfo` in Listing and Blog controllers is now deprecated and will be removed soon. Use `sCategoryContent` instead, it's a drop in replacement.
 
 ## 5.1.4
 * Customer logout will now regenerate the session id and clear the customers basket.
