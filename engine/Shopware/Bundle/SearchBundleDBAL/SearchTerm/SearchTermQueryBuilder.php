@@ -182,6 +182,7 @@ class SearchTermQueryBuilder implements SearchTermQueryBuilderInterface
         $subQuery->select(['srd.articleID', 'SUM(srd.relevance) as relevance', 'COUNT(DISTINCT term) as termCount']);
         $subQuery->from("(" . $tablesSql . ')', 'srd')
             ->groupBy('srd.articleID')
+            ->orderBy('relevance', 'DESC')
             ->setMaxResults(5000);
 
         $query = $this->connection->createQueryBuilder();
