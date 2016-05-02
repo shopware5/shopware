@@ -78,6 +78,7 @@ Ext.define('Shopware.apps.Order', {
         'detail.Debit',
         'detail.OrderHistory',
         'detail.Configuration',
+        'detail.Dispatch',
         'list.Filter',
         'list.List',
         'list.Navigation',
@@ -126,7 +127,8 @@ Ext.define('Shopware.apps.Order', {
         'Position',
         'Mail',
         'DetailBatch',
-        'ListBatch'
+        'ListBatch',
+        'Dispatch',
     ],
 
     /**
