@@ -365,6 +365,20 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         }
         $data['noCacheControllers'] = implode("\n", $lines);
 
+        $data['HttpCache:proxy'] = implode(
+            ',',
+            array_map(
+                function ($url) {
+                    $url = trim($url);
+                    if (empty($url) || strpos($url, '://') !== false) {
+                        return $url;
+                    }
+                    return 'http://' . $url;
+                },
+                explode(',', $data['HttpCache:proxy'])
+            )
+        );
+
         unset($data['id']);
 
         return $data;
@@ -445,6 +459,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
             return $defaultValue;
         }
 
+        /** @var \Shopware\Models\Config\Element $element */
         $element = $elementRepository->findOneBy(array('name' => $config, 'form' => $form));
 
         if (!$element) {
