@@ -55,7 +55,6 @@ class Theme extends \Shopware\Components\Theme
         'vendors/js/jquery.transit/jquery.transit.js',
         'vendors/js/jquery.event.move/jquery.event.move.js',
         'vendors/js/jquery.event.swipe/jquery.event.swipe.js',
-        'vendors/js/masonry/masonry.pkgd.min.js',
 
         // Shopware specific plugins
         'src/js/jquery.ie-fixes.js',

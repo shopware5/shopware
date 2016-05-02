@@ -54,7 +54,7 @@ Ext.define('Shopware.apps.Emotion.controller.Templates', {
     ],
 
     snippets: {
-            title: '{s name=global/title}Emotions{/s}',
+            title: '{s name=global/title}Shopping worlds{/s}',
             copie: '{s name=global/copie}Copie{/s}',
             edited: '{s name=global/edited}The template [0] was successfully edited.{/s}',
             duplicated: '{s name=global/duplicated}The template [0] was successfully duplicated.{/s}',

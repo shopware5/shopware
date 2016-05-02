@@ -46,12 +46,11 @@ Ext.define('Shopware.apps.Emotion.model.Emotion', {
      * @array
      */
     fields: [
-		//{block name="backend/emotion/model/emotion/fields"}{/block}
+        //{block name="backend/emotion/model/emotion/fields"}{/block}
         { name: 'id', type: 'int' },
         { name: 'parentId', type: 'int', useNull: true, defaultValue: null },
         { name: 'groupingState', type: 'string' },
 
-        { name: 'gridId', type: 'int', useNull: true },
         { name: 'templateId', type: 'int', useNull: true, defaultValue: 1 },
         { name: 'active', type: 'boolean' },
         { name: 'showListing', type: 'boolean' },
@@ -60,32 +59,38 @@ Ext.define('Shopware.apps.Emotion.model.Emotion', {
         { name: 'position', type: 'int', useNull: false, defaultValue: 1 },
         { name: 'device', type: 'string' },
         { name: 'fullscreen', type: 'int' },
-        { name: 'rows', type: 'int' },
-        { name: 'categoryId', type: 'int', useNull: true },
+
+        { name: 'rows', type: 'int', defaultValue: 20 },
+        { name: 'cols', type: 'int', defaultValue: 4 },
+        { name: 'cellSpacing', type: 'int', defaultValue: 10 },
+        { name: 'cellHeight', type: 'int', defaultValue: 185 },
+        { name: 'articleHeight', type: 'int', defaultValue: 2 },
+
         { name: 'validFrom', type: 'date', dateFormat: 'd.m.Y', useNull: true },
         { name: 'validTo', type: 'date', dateFormat: 'd.m.Y', useNull: true },
         { name: 'validToTime', type: 'date', dateFormat: 'H:i', useNull: true },
         { name: 'validFromTime', type: 'date', dateFormat: 'H:i', useNull: true },
         { name: 'userId', type: 'int' },
-        { name: 'createDate', type: 'date', dateFormat: 'd.m.Y', useNull: true  },
-        { name: 'modified', type: 'date', dateFormat: 'd.m.Y', useNull: true },
-        { name: 'template', type: 'string' },
+        { name: 'createDate', type: 'date', useNull: true },
+        { name: 'modified', type: 'date', useNull: true },
+        { name: 'template', type: 'string', defaultValue: 'Standard' },
 
         { name: 'isLandingPage', type: 'boolean' },
         { name: 'link', type: 'string' },
-        { name: 'landingPageTeaser', type: 'string' },
         { name: 'seoTitle', type: 'string' },
         { name: 'seoKeywords', type: 'string' },
         { name: 'seoDescription', type: 'string' },
         { name: 'categoriesNames', type: 'string' },
         { name: 'categories', type: 'array' },
-        { name: 'landingPageBlock', type: 'string' },
-        { name: 'mode', type: 'string', defaultValue: 'masonry' }
+        { name: 'shops', type: 'array' },
+        { name: 'mode', type: 'string', defaultValue: 'fluid' },
+        { name: 'emotionGroup', persist: false },
+        { name: 'selectedCategory', persist: false }
     ],
+
     associations: [
         { type: 'hasMany', model: 'Shopware.apps.Emotion.model.EmotionElement', name: 'getElements', associationKey: 'elements'},
-        { type: 'hasMany', model: 'Shopware.apps.Emotion.model.Grid', name: 'getGrid', associationKey: 'grid' }
-        //{  type: 'hasMany', model: 'Shopware.apps.Base.model.Category', name: 'getCategory', associationKey: 'category'}
+        { type: 'hasMany', model: 'Shopware.apps.Emotion.model.Attribute', name: 'getAttributes', associationKey: 'attribute'}
     ],
     /**
      * Configure the data communication

@@ -6284,18 +6284,18 @@ INSERT INTO `s_emarketing_voucher_codes` (`id`, `voucherID`, `userID`, `code`, `
 (100, 4, NULL, '23A7CBA5', 0);
 
 TRUNCATE TABLE `s_emotion`;
-INSERT INTO `s_emotion` (`id`, `active`, `name`, `cols`, `cell_height`, `article_height`, `rows`, `valid_from`, `valid_to`, `userID`, `show_listing`, `is_landingpage`, `landingpage_block`, `landingpage_teaser`, `seo_title`, `seo_keywords`, `seo_description`, `create_date`, `modified`, `grid_id`, `template_id`, `device`, `fullscreen`, `mode`, `position`, `parent_id`) VALUES
-(1,	1,	'Meine Startseite',	4,	185,	2,	20,	NULL,	NULL,	55,	0,	0,	'',	'',	'',	'',	'',	'2012-08-29 08:41:30',	'2012-08-31 11:04:08',	2,	1,	'0,1,2,3,4',	0,	'masonry',	1,	NULL),
-(2,	1,	'Genusswelten',	3,	185,	2,	20,	NULL,	NULL,	57,	0,	0,	'',	'',	'',	'',	'',	'2012-08-29 10:17:44',	'2012-08-31 11:32:22',	1,	1,	'0,1,2,3,4',	0,	'masonry',	1,	NULL),
-(3,	1,	'Freizeitwelten',	3,	185,	2,	20,	NULL,	NULL,	51,	0,	0,	'',	'',	'',	'',	'',	'2012-08-30 10:01:28',	'2012-08-30 17:17:59',	1,	1,	'0,1,2,3,4',	0,	'masonry',	1,	NULL),
-(4,	1,	'Wohnwelten',	3,	185,	2,	20,	NULL,	NULL,	51,	0,	0,	'',	'',	'',	'',	'',	'2012-08-30 10:25:14',	'2012-08-31 11:59:00',	1,	1,	'0,1,2,3,4',	0,	'masonry',	1,	NULL),
-(5,	1,	'Stop The Water While Using Me',	4,	185,	2,	20,	NULL,	NULL,	60,	0,	1,	'leftMiddle',	'media/image/testbild.jpg',	'',	'',	'',	'2012-08-30 14:19:51',	'2012-08-30 16:12:15',	2,	1,	'0,1,2,3,4',	0,	'masonry',	1,	NULL),
-(6,	1,	'The Deli Garage',	4,	185,	2,	20,	NULL,	NULL,	57,	0,	1,	'leftMiddle',	'media/image/testbild.jpg',	'',	'',	'',	'2012-08-30 15:25:01',	'2012-08-31 12:10:33',	2,	1,	'0,1,2,3,4',	0,	'masonry',	1,	NULL),
-(7,	1,	'Sommerwelten',	4,	185,	2,	20,	NULL,	NULL,	51,	0,	0,	'',	'',	'',	'',	'',	'2012-08-30 17:20:14',	'2012-08-31 12:36:20',	2,	1,	'0,1,2,3,4',	0,	'masonry',	1,	NULL),
-(8,	1,	'Beispiele',	4,	185,	2,	20,	NULL,	NULL,	59,	0,	0,	'',	'',	'',	'',	'',	'2012-08-30 17:55:11',	'2012-08-31 11:46:27',	2,	1,	'0,1,2,3,4',	0,	'masonry',	1,	NULL),
-(9,	1,	'Passend für Ihren Sommerurlaub',	4,	185,	2,	20,	NULL,	NULL,	57,	0,	1,	'leftMiddle',	'',	'',	'',	'',	'2012-08-30 18:21:14',	'2012-08-31 11:01:16',	2,	1,	'0,1,2,3,4',	0,	'masonry',	1,	NULL),
-(10,	1,	'English',	4,	185,	2,	20,	NULL,	NULL,	53,	0,	0,	'',	'',	'',	'',	'',	'2012-08-31 08:45:10',	'2012-08-31 12:35:55',	2,	1,	'0,1,2,3,4',	0,	'masonry',	1,	NULL),
-(12,	1,	'in Kürze verfügbar',	4,	185,	2,	20,	NULL,	NULL,	52,	0,	0,	'',	'',	'',	'',	'',	'2012-08-31 09:50:53',	'2012-08-31 11:57:10',	2,	1,	'0,1,2,3,4',	0,	'masonry',	1,	NULL);
+INSERT INTO `s_emotion` (`id`, `active`, `name`, `cols`, `cell_spacing`, `cell_height`, `article_height`, `rows`, `valid_from`, `valid_to`, `userID`, `show_listing`, `is_landingpage`, `seo_title`, `seo_keywords`, `seo_description`, `create_date`, `modified`, `template_id`, `device`, `fullscreen`, `mode`, `position`, `parent_id`) VALUES
+(1, 1, 'Meine Startseite', 4, 10, 185, 2, 20, NULL, NULL, 55, 0, 0, '', '', '', '2012-08-29 08:41:30', '2012-08-31 11:04:08', 1, '0,1,2,3,4', 0, 'masonry', 1, NULL),
+(2, 1, 'Genusswelten', 3, 10, 185, 2, 20, NULL, NULL, 57, 0, 0, '', '', '', '2012-08-29 10:17:44', '2012-08-31 11:32:22', 1, '0,1,2,3,4', 0, 'masonry', 1, NULL),
+(3, 1, 'Freizeitwelten', 3, 10, 185, 2, 20, NULL, NULL, 51, 0, 0, '', '', '', '2012-08-30 10:01:28', '2012-08-30 17:17:59', 1, '0,1,2,3,4', 0, 'masonry', 1, NULL),
+(4, 1, 'Wohnwelten', 3, 10, 185, 2, 20, NULL, NULL, 51, 0, 0, '', '', '', '2012-08-30 10:25:14', '2012-08-31 11:59:00', 1, '0,1,2,3,4', 0, 'masonry', 1, NULL),
+(5, 1, 'Stop The Water While Using Me', 4, 10, 185, 2, 20, NULL, NULL, 60, 0, 1, '', '', '', '2012-08-30 14:19:51', '2012-08-30 16:12:15', 1, '0,1,2,3,4', 0, 'masonry', 1, NULL),
+(6, 1, 'The Deli Garage', 4, 10, 185, 2, 20, NULL, NULL, 57, 0, 1, '', '', '', '2012-08-30 15:25:01', '2012-08-31 12:10:33', 1, '0,1,2,3,4', 0, 'masonry', 1, NULL),
+(7, 1, 'Sommerwelten', 4, 10, 185, 2, 20, NULL, NULL, 51, 0, 0, '', '', '', '2012-08-30 17:20:14', '2012-08-31 12:36:20', 1, '0,1,2,3,4', 0, 'masonry', 1, NULL),
+(8, 1, 'Beispiele', 4, 10, 185, 2, 20, NULL, NULL, 59, 0, 0, '', '', '', '2012-08-30 17:55:11', '2012-08-31 11:46:27', 1, '0,1,2,3,4', 0, 'masonry', 1, NULL),
+(9, 1, 'Passend für Ihren Sommerurlaub', 4, 10, 185, 2, 20, NULL, NULL, 57, 0, 1, '', '', '', '2012-08-30 18:21:14', '2012-08-31 11:01:16', 1, '0,1,2,3,4', 0, 'masonry', 1, NULL),
+(10, 1, 'English', 4, 10, 185, 2, 20, NULL, NULL, 53, 0, 0, '', '', '', '2012-08-31 08:45:10', '2012-08-31 12:35:55', 1, '0,1,2,3,4', 0, 'masonry', 1, NULL),
+(12, 1, 'in Kürze verfügbar', 4, 10, 185, 2, 20, NULL, NULL, 52, 0, 0, '', '', '', '2012-08-31 09:50:53', '2012-08-31 11:57:10', 1, '0,1,2,3,4', 0, 'masonry', 1, NULL);
 
 TRUNCATE TABLE `s_emotion_attributes`;
 TRUNCATE TABLE `s_emotion_categories`;
@@ -6625,12 +6625,6 @@ INSERT INTO `s_emotion_element_value` (`id`, `emotionID`, `elementID`, `componen
 (4258, 7, 1511, 4, 5, 'SW10159'),
 (4259, 7, 1511, 4, 8, 'selected_article'),
 (4260, 7, 1512, 6, 12, '3');
-
-TRUNCATE TABLE `s_emotion_grid`;
-INSERT INTO `s_emotion_grid` (`id`, `name`, `cols`, `rows`, `cell_height`, `article_height`, `gutter`) VALUES
-(1, '3-Spaltig', 3, 20, 185, 2, 10),
-(2, '4-Spaltig', 4, 20, 185, 2, 10);
-
 
 TRUNCATE TABLE `s_emotion_templates`;
 INSERT INTO `s_emotion_templates` (`id`, `name`, `file`) VALUES
@@ -10370,3 +10364,8 @@ INSERT INTO `s_user_addresses` (`id`, `user_id`, `company`, `department`, `salut
 (2, 2, 'B2B', 'Einkauf', 'mr', 'Händler', 'Kundengruppe-Netto', 'Musterweg 1', '55555', 'Musterstadt', '012345 / 6789', 2, 3, NULL),
 (3, 1, 'shopware AG', NULL, 'mr', 'Max', 'Mustermann', 'Mustermannstraße 92', '48624', 'Schöppingen', NULL, 2, NULL, NULL),
 (4, 2, 'B2B', 'Einkauf', 'mr', 'Händler', 'Kundengruppe-Netto', 'Musterweg 1', '00000', 'Musterstadt', NULL, 2, 3, NULL);
+
+TRUNCATE s_emotion_shops;
+INSERT INTO `s_emotion_shops` (`id`, `emotion_id`, `shop_id`) VALUES
+(1, 5, 1),
+(2, 9, 1);

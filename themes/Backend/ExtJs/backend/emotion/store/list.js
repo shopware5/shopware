@@ -65,7 +65,7 @@ Ext.define('Shopware.apps.Emotion.store.List', {
     batch:true,
 
     groupers: [{
-        property: 'groupingState',
+        property: 'emotionGroup',
         direction: 'ASC'
     }],
 

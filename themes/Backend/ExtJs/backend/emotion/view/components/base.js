@@ -69,6 +69,15 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
         }
         me.items.push(me.elementFieldset);
         me.items.push(me.globalSettingsFieldset);
+
+        me.plugins = [{
+            ptype: 'translation',
+            pluginId: 'translation',
+            translationType: 'emotionElement',
+            translationMerge: false,
+            translationKey: me.settings.record.get('id')
+        }];
+
         me.callParent(arguments);
         me.loadElementData(me.getSettings('record').get('data'));
     },
@@ -136,7 +145,8 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
                 allowBlank: (item.get('allowBlank') ? true : false),
                 value: item.get('defaultValue') || '',
                 labelWidth: 100,
-                boxLabel: boxLabel
+                boxLabel: boxLabel,
+                translatable: item.get('translatable')
             });
         });
 
@@ -155,12 +165,12 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
         me.cssClassField = Ext.create('Ext.form.field.Text', {
             fieldLabel: '{s name=base/css_class}CSS class{/s}',
             supportText: '{s name=base/support_text}Multiple classes can be added by separating them with a whitespace.{/s}',
-            name: 'name',
+            name: 'cssClass',
             cls: 'css-field',
             anchor: '100%',
             allowBlank: true,
             labelWidth: 100,
-            value: record.get('cssClass'),
+            value: record.get('cssClass') || '',
             validator: function(value) {
                 if (!value) {
                     return true;
