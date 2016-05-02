@@ -140,6 +140,7 @@ Ext.define('Shopware.apps.Order.view.detail.Window', {
                     title: me.snippets.details,
                     record: me.record,
                     paymentsStore: me.paymentsStore,
+                    dispatchesStore: me.dispatchesStore,
                     shopsStore: me.shopsStore,
                     countriesStore: me.countriesStore
                 }), Ext.create('Shopware.apps.Order.view.detail.Communication',{

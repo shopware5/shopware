@@ -148,6 +148,7 @@ Ext.define('Shopware.apps.Order.controller.Main', {
                     me.shopsStore = storeData.getShops();
                     me.countriesStore = storeData.getCountries();
                     me.paymentsStore = storeData.getPayments();
+                    me.dispatchesStore = storeData.getDispatches();
                     me.documentTypesStore = storeData.getDocumentTypes();
 
                     billingStore = record.getBilling();
@@ -180,6 +181,7 @@ Ext.define('Shopware.apps.Order.controller.Main', {
                         shopsStore: me.shopsStore,
                         countriesStore: me.countriesStore,
                         paymentsStore: me.paymentsStore,
+                        dispatchesStore: me.dispatchesStore,
                         documentTypesStore: me.documentTypesStore
 
                     });
