@@ -222,91 +222,65 @@
                 <div class="panel--group block-group information--panel-wrapper" data-panel-auto-resizer="true">
 
                     {block name='frontend_checkout_confirm_information_addresses'}
-                        <div class="information--panel-item information--panel-address">
-                            <div class="panel has--border block">
-                                {block name='frontend_checkout_confirm_information_addresses_equal_panel'}
-                                    {if $activeBillingAddressId == $activeShippingAddressId}
-                                        {block name='frontend_checkout_confirm_information_addresses_equal_panel_title'}
-                                            <div class="panel--title is--underline">
-                                                {s name='ConfirmAddressEqualTitle'}{/s}
-                                            </div>
-                                        {/block}
 
-                                        {block name='frontend_checkout_confirm_information_addresses_equal_panel_body'}
-                                            <div class="panel--body addresses--are-equal">
-                                                {block name='frontend_checkout_confirm_information_addresses_equal_panel_billing'}
-                                                    <div class="panel block information--panel billing--panel">
-                                                        {* Content *}
-                                                        {block name='frontend_checkout_confirm_left_billing_address'}
-                                                            <div class="panel--body is--wide">
-                                                                {if $sUserData.billingaddress.company}
-                                                                    <strong>{$sUserData.billingaddress.company}{if $sUserData.billingaddress.department}<br />{$sUserData.billingaddress.department}{/if}</strong>
-                                                                    <br>
-                                                                {/if}
+                        {if $activeBillingAddressId == $activeShippingAddressId}
 
-                                                                {if $sUserData.billingaddress.salutation eq "mr"}
-                                                                    {s name="ConfirmSalutationMr" namespace="frontend/checkout/confirm"}{/s}
+                            {* Equal Billing & Shipping *}
+                            {block name='frontend_checkout_confirm_information_addresses_equal'}
+                                <div class="information--panel-item information--panel-address">
+
+                                    {block name='frontend_checkout_confirm_information_addresses_equal_panel'}
+                                        <div class="panel has--border is--rounded block information--panel">
+
+                                            {block name='frontend_checkout_confirm_information_addresses_equal_panel_title'}
+                                                <div class="panel--title is--underline">
+                                                    {s name='ConfirmAddressEqualTitle'}{/s}
+                                                </div>
+                                            {/block}
+
+                                            {block name='frontend_checkout_confirm_information_addresses_equal_panel_body'}
+                                                <div class="panel--body is--wide">
+
+                                                    {block name='frontend_checkout_confirm_information_addresses_equal_panel_billing'}
+                                                        <div class="billing--panel">
+                                                            {if $sUserData.billingaddress.company}
+                                                                <strong>{$sUserData.billingaddress.company}{if $sUserData.billingaddress.department}<br />{$sUserData.billingaddress.department}{/if}</strong>
+                                                                <br />
+                                                            {/if}
+
+                                                            {if $sUserData.billingaddress.salutation eq "mr"}
+                                                                {s name="ConfirmSalutationMr" namespace="frontend/checkout/confirm"}{/s}
+                                                            {else}
+                                                                {s name="ConfirmSalutationMs" namespace="frontend/checkout/confirm"}{/s}
+                                                            {/if}
+
+                                                            {$sUserData.billingaddress.firstname} {$sUserData.billingaddress.lastname}<br/>
+                                                            {$sUserData.billingaddress.street}<br />
+                                                            {if $sUserData.billingaddress.additional_address_line1}{$sUserData.billingaddress.additional_address_line1}<br />{/if}
+                                                            {if $sUserData.billingaddress.additional_address_line2}{$sUserData.billingaddress.additional_address_line2}<br />{/if}
+                                                            {if {config name=showZipBeforeCity}}{$sUserData.billingaddress.zipcode} {$sUserData.billingaddress.city}{else}{$sUserData.billingaddress.city} {$sUserData.billingaddress.zipcode}{/if}<br />
+                                                            {if $sUserData.additional.state.name}{$sUserData.additional.state.name}<br />{/if}
+                                                            {$sUserData.additional.country.countryname}
+
+                                                            {block name="frontend_checkout_confirm_information_addresses_equal_panel_billing_invalid_data"}
+                                                                {if $invalidBillingAddress}
+                                                                    {include file='frontend/_includes/messages.tpl' type="warning" content="{s name='ConfirmAddressInvalidAddress'}{/s}"}
                                                                 {else}
-                                                                    {s name="ConfirmSalutationMs" namespace="frontend/checkout/confirm"}{/s}
+                                                                    {block name="frontend_checkout_confirm_information_addresses_equal_panel_billing_set_as_default"}
+                                                                        {if $activeBillingAddressId != $sUserData.additional.user.default_billing_address_id || $activeShippingAddressId != $sUserData.additional.user.default_shipping_address_id}
+                                                                            <div class="set-default">
+                                                                                <input type="checkbox" name="setAsDefaultAddress" id="set_as_default" value="1" /> <label for="set_as_default">{s name="ConfirmUseForFutureOrders"}{/s}</label>
+                                                                            </div>
+                                                                        {/if}
+                                                                    {/block}
                                                                 {/if}
+                                                            {/block}
+                                                        </div>
+                                                    {/block}
 
-                                                                {$sUserData.billingaddress.firstname} {$sUserData.billingaddress.lastname}<br/>
-                                                                {$sUserData.billingaddress.street}<br />
-                                                                {if $sUserData.billingaddress.additional_address_line1}{$sUserData.billingaddress.additional_address_line1}<br />{/if}
-                                                                {if $sUserData.billingaddress.additional_address_line2}{$sUserData.billingaddress.additional_address_line2}<br />{/if}
-                                                                {if {config name=showZipBeforeCity}}{$sUserData.billingaddress.zipcode} {$sUserData.billingaddress.city}{else}{$sUserData.billingaddress.city} {$sUserData.billingaddress.zipcode}{/if}<br />
-                                                                {if $sUserData.additional.state.statename}{$sUserData.additional.state.statename}<br />{/if}
-                                                                {$sUserData.additional.country.countryname}
-
-                                                                {block name="frontend_checkout_confirm_left_billing_address_invalid"}
-                                                                    {if $invalidBillingAddress}
-                                                                        {include file='frontend/_includes/messages.tpl' type="warning" content="{s name='ConfirmAddressInvalidAddress'}{/s}"}
-                                                                    {else}
-                                                                        {block name="frontend_checkout_confirm_information_addresses_equal_panel_billing_set_as_default"}
-                                                                            {if $activeBillingAddressId != $sUserData.additional.user.default_billing_address_id || $activeShippingAddressId != $sUserData.additional.user.default_shipping_address_id}
-                                                                                <div class="set-default">
-                                                                                    <input type="checkbox" name="setAsDefaultAddress" id="set_as_default" value="1" /> <label for="set_as_default">{s name="ConfirmUseForFutureOrders"}{/s}</label>
-                                                                                </div>
-                                                                            {/if}
-                                                                        {/block}
-                                                                    {/if}
-                                                                {/block}
-                                                            </div>
-                                                        {/block}
-
-                                                        {block name='frontend_checkout_confirm_information_addresses_equal_panel_billing_actions'}
-                                                            <div class="panel--actions is--wide">
-                                                                {block name="frontend_checkout_confirm_information_addresses_equal_panel_billing_actions_change"}
-                                                                    <div>
-                                                                        <a href="{url controller=address action=edit id=$activeBillingAddressId sTarget=checkout sTargetAction=confirm}"
-                                                                           data-address-editor="true"
-                                                                           data-id="{$activeBillingAddressId}"
-                                                                           data-sessionKey="checkoutBillingAddressId,checkoutShippingAddressId"
-                                                                           data-title="{s name="ConfirmAddressSelectButton"}Change address{/s}"
-                                                                           title="{s name="ConfirmAddressSelectButton"}Change address{/s}"
-                                                                           class="btn">
-                                                                            {s name="ConfirmAddressSelectButton"}Change address{/s}
-                                                                        </a>
-                                                                    </div>
-                                                                {/block}
-                                                                {block name="frontend_checkout_confirm_information_addresses_equal_panel_billing_actions_select_address"}
-                                                                    <a href="{url controller=address}"
-                                                                       title="{s name="ConfirmAddressSelectLink"}{/s}"
-                                                                       data-address-selection="true"
-                                                                       data-sessionKey="checkoutBillingAddressId,checkoutShippingAddressId"
-                                                                       data-id="{$activeBillingAddressId}">
-                                                                        {s name="ConfirmAddressSelectLink"}{/s}
-                                                                    </a>
-                                                                {/block}
-                                                            </div>
-                                                        {/block}
-                                                    </div>
-                                                {/block}
-
-                                                {block name='frontend_checkout_confirm_information_addresses_equal_panel_shipping'}
-                                                    <div class="panel block information--panel shipping--panel">
-                                                        {block name='frontend_checkout_confirm_information_addresses_equal_panel_shipping_body'}
-                                                            <div class="panel--body is--wide">
+                                                    {block name='frontend_checkout_confirm_information_addresses_equal_panel_shipping'}
+                                                        <div class="shipping--panel">
+                                                            {block name='frontend_checkout_confirm_information_addresses_equal_panel_shipping_select_address'}
                                                                 <a href="{url controller=address}"
                                                                    class="btn"
                                                                    data-address-selection="true"
@@ -315,176 +289,222 @@
                                                                    title="{s name="ConfirmAddressChooseDifferentShippingAddress"}{/s}">
                                                                     {s name="ConfirmAddressChooseDifferentShippingAddress"}{/s}
                                                                 </a>
-                                                            </div>
-                                                        {/block}
-                                                    </div>
-                                                {/block}
-                                            </div>
-                                        {/block}
-                                    {else}
-                                        {block name='frontend_checkout_confirm_information_addresses_panel'}
-                                            <div class="panel--body" data-panel-auto-resizer="true">
-                                                {* Billing address *}
-                                                {block name='frontend_checkout_confirm_billing_address_panel'}
-                                                    <div class="panel block information--panel billing--panel">
+                                                            {/block}
+                                                        </div>
+                                                    {/block}
+                                                </div>
 
-                                                        {* Headline *}
-                                                        {block name='frontend_checkout_confirm_left_billing_address_headline'}
-                                                            <div class="panel--title is--underline">
-                                                                {s name="ConfirmHeaderBilling" namespace="frontend/checkout/confirm"}{/s}
-                                                            </div>
-                                                        {/block}
+                                                {block name='frontend_checkout_confirm_information_addresses_equal_panel_actions'}
+                                                    <div class="panel--actions is--wide">
+                                                        {block name="frontend_checkout_confirm_information_addresses_equal_panel_actions_change"}
+                                                            <div>
+                                                                <a href="{url controller=address action=edit id=$activeBillingAddressId sTarget=checkout sTargetAction=confirm}"
+                                                                   data-address-editor="true"
+                                                                   data-id="{$activeBillingAddressId}"
+                                                                   data-sessionKey="checkoutBillingAddressId,checkoutShippingAddressId"
+                                                                   data-title="{s name="ConfirmAddressSelectButton"}Change address{/s}"
+                                                                   title="{s name="ConfirmAddressSelectButton"}Change address{/s}"
+                                                                   class="btn">
+                                                                    {s name="ConfirmAddressSelectButton"}Change address{/s}
+                                                                </a>
 
-                                                        {* Content *}
-                                                        {block name='frontend_checkout_confirm_left_billing_address'}
-                                                            <div class="panel--body is--wide">
-                                                                {if $sUserData.billingaddress.company}
-                                                                    <strong>{$sUserData.billingaddress.company}{if $sUserData.billingaddress.department}<br />{$sUserData.billingaddress.department}{/if}</strong>
-                                                                    <br>
-                                                                {/if}
-
-                                                                {if $sUserData.billingaddress.salutation eq "mr"}
-                                                                    {s name="ConfirmSalutationMr" namespace="frontend/checkout/confirm"}{/s}
-                                                                {else}
-                                                                    {s name="ConfirmSalutationMs" namespace="frontend/checkout/confirm"}{/s}
-                                                                {/if}
-
-                                                                {$sUserData.billingaddress.firstname} {$sUserData.billingaddress.lastname}<br />
-                                                                {$sUserData.billingaddress.street}<br />
-                                                                {if $sUserData.billingaddress.additional_address_line1}{$sUserData.billingaddress.additional_address_line1}<br />{/if}
-                                                                {if $sUserData.billingaddress.additional_address_line2}{$sUserData.billingaddress.additional_address_line2}<br />{/if}
-                                                                {if {config name=showZipBeforeCity}}{$sUserData.billingaddress.zipcode} {$sUserData.billingaddress.city}{else}{$sUserData.billingaddress.city} {$sUserData.billingaddress.zipcode}{/if}<br />
-                                                                {if $sUserData.additional.state.statename}{$sUserData.additional.state.statename}<br />{/if}
-                                                                {$sUserData.additional.country.countryname}
-
-                                                                {block name="frontend_checkout_confirm_left_billing_address_invalid"}
-                                                                    {if $invalidBillingAddress}
-                                                                        {include file='frontend/_includes/messages.tpl' type="warning" content="{s name='ConfirmAddressInvalidBillingAddress'}{/s}"}
-                                                                    {else}
-                                                                        {block name="frontend_checkout_confirm_left_billing_address_set_as_default"}
-                                                                            {if $activeBillingAddressId != $sUserData.additional.user.default_billing_address_id}
-                                                                                <div class="set-default">
-                                                                                    <input type="checkbox" name="setAsDefaultBillingAddress" id="set_as_default_billing" value="1" /> <label for="set_as_default_billing">{s name="ConfirmUseForFutureOrders"}{/s}</label>
-                                                                                </div>
-                                                                            {/if}
-                                                                        {/block}
-                                                                    {/if}
-                                                                {/block}
-                                                            </div>
-                                                        {/block}
-
-                                                        {* Action buttons *}
-                                                        {block name="frontend_checkout_confirm_left_billing_address_actions"}
-                                                            <div class="panel--actions is--wide">
-                                                                {block name="frontend_checkout_confirm_left_billing_address_actions_change"}
-                                                                    <div>
-                                                                        <a href="{url controller=address action=edit id=$activeBillingAddressId sTarget=checkout sTargetAction=confirm}"
-                                                                           data-address-editor="true"
-                                                                           data-sessionKey="checkoutBillingAddressId"
-                                                                           data-id="{$activeBillingAddressId}"
-                                                                           data-title="{s name="ConfirmAddressSelectButton"}Change address{/s}"
-                                                                           title="{s name="ConfirmAddressSelectButton"}Change address{/s}"
-                                                                           class="btn">
-                                                                            {s name="ConfirmAddressSelectButton"}Change address{/s}
-                                                                        </a>
-                                                                    </div>
-                                                                {/block}
-                                                                {block name="frontend_checkout_confirm_left_billing_address_actions_select_address"}
+                                                                {block name='frontend_checkout_confirm_information_addresses_equal_panel_shipping_select_address'}
                                                                     <a href="{url controller=address}"
-                                                                       data-address-selection="true"
-                                                                       data-sessionKey="checkoutBillingAddressId"
-                                                                       data-id="{$activeBillingAddressId}"
-                                                                       title="{s name="ConfirmAddressSelectLink"}{/s}">
-                                                                        {s name="ConfirmAddressSelectLink"}{/s}
-                                                                    </a>
-                                                                {/block}
-                                                            </div>
-                                                        {/block}
-                                                    </div>
-                                                {/block}
-
-                                                {* Shipping address *}
-                                                {block name='frontend_checkout_confirm_shipping_address_panel'}
-                                                    <div class="panel block information--panel shipping--panel">
-                                                        {block name='frontend_checkout_confirm_left_shipping_address_headline'}
-                                                            <div class="panel--title is--underline">
-                                                                {s name="ConfirmHeaderShipping" namespace="frontend/checkout/confirm"}{/s}
-                                                            </div>
-                                                        {/block}
-
-                                                        {* Content *}
-                                                        {block name='frontend_checkout_confirm_left_shipping_address'}
-                                                            <div class="panel--body is--wide">
-                                                                {if $sUserData.shippingaddress.company}
-                                                                    <strong>{$sUserData.shippingaddress.company}{if $sUserData.shippingaddress.department}<br />{$sUserData.shippingaddress.department}{/if}</strong>
-                                                                    <br>
-                                                                {/if}
-
-                                                                {if $sUserData.shippingaddress.salutation eq "mr"}
-                                                                    {s name="ConfirmSalutationMr" namespace="frontend/checkout/confirm"}{/s}
-                                                                {else}
-                                                                    {s name="ConfirmSalutationMs" namespace="frontend/checkout/confirm"}{/s}
-                                                                {/if}
-
-                                                                {$sUserData.shippingaddress.firstname} {$sUserData.shippingaddress.lastname}<br/>
-                                                                {$sUserData.shippingaddress.street}<br />
-                                                                {if $sUserData.shippingaddress.additional_address_line1}{$sUserData.shippingaddress.additional_address_line1}<br />{/if}
-                                                                {if $sUserData.shippingaddress.additional_address_line2}{$sUserData.shippingaddress.additional_address_line2}<br />{/if}
-                                                                {if {config name=showZipBeforeCity}}{$sUserData.shippingaddress.zipcode} {$sUserData.shippingaddress.city}{else}{$sUserData.shippingaddress.city} {$sUserData.shippingaddress.zipcode}{/if}<br />
-                                                                {if $sUserData.additional.stateShipping.statename}{$sUserData.additional.stateShipping.statename}<br />{/if}
-                                                                {$sUserData.additional.countryShipping.countryname}
-
-                                                                {block name="frontend_checkout_confirm_left_shipping_address_invalid"}
-                                                                    {if $invalidShippingAddress}
-                                                                        {include file='frontend/_includes/messages.tpl' type="warning" content="{s name='ConfirmAddressInvalidShippingAddress'}{/s}"}
-                                                                    {else}
-                                                                        {block name="frontend_checkout_confirm_left_shipping_address_set_as_default"}
-                                                                            {if $activeShippingAddressId != $sUserData.additional.user.default_shipping_address_id}
-                                                                                <div class="set-default">
-                                                                                    <input type="checkbox" name="setAsDefaultShippingAddress" id="set_as_default_shipping" value="1" /> <label for="set_as_default_shipping">{s name="ConfirmUseForFutureOrders"}{/s}</label>
-                                                                                </div>
-                                                                            {/if}
-                                                                        {/block}
-                                                                    {/if}
-                                                                {/block}
-                                                            </div>
-                                                        {/block}
-
-                                                        {* Action buttons *}
-                                                        {block name="frontend_checkout_confirm_left_shipping_address_actions"}
-                                                            <div class="panel--actions is--wide">
-                                                                {block name="frontend_checkout_confirm_left_shipping_address_actions_change"}
-                                                                    <div>
-                                                                        <a href="{url controller=address action=edit id=$activeShippingAddressId sTarget=checkout sTargetAction=confirm}"
-                                                                           title="{s name="ConfirmAddressSelectButton"}Change address{/s}"
-                                                                           data-title="{s name="ConfirmAddressSelectButton"}Change address{/s}"
-                                                                           data-address-editor="true"
-                                                                           data-id="{$activeShippingAddressId}"
-                                                                           data-sessionKey="checkoutShippingAddressId"
-                                                                           class="btn">
-                                                                            {s name="ConfirmAddressSelectButton"}Change address{/s}
-                                                                        </a>
-                                                                    </div>
-                                                                {/block}
-                                                                {block name="frontend_checkout_confirm_left_shipping_address_actions_select_address"}
-                                                                    <a href="{url controller=address}"
+                                                                       class="btn choose-different-address"
                                                                        data-address-selection="true"
                                                                        data-sessionKey="checkoutShippingAddressId"
                                                                        data-id="{$activeShippingAddressId}"
-                                                                       title="{s name="ConfirmAddressSelectLink"}{/s}">
-                                                                        {s name="ConfirmAddressSelectLink"}{/s}
+                                                                       title="{s name="ConfirmAddressChooseDifferentShippingAddress"}{/s}">
+                                                                        {s name="ConfirmAddressChooseDifferentShippingAddress"}{/s}
                                                                     </a>
                                                                 {/block}
                                                             </div>
                                                         {/block}
+                                                        {block name="frontend_checkout_confirm_information_addresses_equal_panel_actions_select_address"}
+                                                            <a href="{url controller=address}"
+                                                               title="{s name="ConfirmAddressSelectLink"}{/s}"
+                                                               data-address-selection="true"
+                                                               data-sessionKey="checkoutBillingAddressId,checkoutShippingAddressId"
+                                                               data-id="{$activeBillingAddressId}">
+                                                                {s name="ConfirmAddressSelectLink"}{/s}
+                                                            </a>
+                                                        {/block}
                                                     </div>
                                                 {/block}
-                                            </div>
-                                        {/block}
-                                    {/if}
-                                {/block}
-                            </div>
-                        </div>
+                                            {/block}
+                                        </div>
+                                    {/block}
+                                </div>
+                            {/block}
+
+                        {else}
+
+                            {* Separate Billing & Shipping *}
+                            {block name='frontend_checkout_confirm_information_addresses_billing'}
+                                <div class="information--panel-item information--panel-item-billing">
+                                    {* Billing address *}
+                                    {block name='frontend_checkout_confirm_information_addresses_billing_panel'}
+                                        <div class="panel has--border block information--panel billing--panel">
+
+                                            {* Headline *}
+                                            {block name='frontend_checkout_confirm_information_addresses_billing_panel_title'}
+                                                <div class="panel--title is--underline">
+                                                    {s name="ConfirmHeaderBilling" namespace="frontend/checkout/confirm"}{/s}
+                                                </div>
+                                            {/block}
+
+                                            {* Content *}
+                                            {block name='frontend_checkout_confirm_information_addresses_billing_panel_body'}
+                                                <div class="panel--body is--wide">
+                                                    {if $sUserData.billingaddress.company}
+                                                        <strong>{$sUserData.billingaddress.company}{if $sUserData.billingaddress.department}<br />{$sUserData.billingaddress.department}{/if}</strong>
+                                                        <br />
+                                                    {/if}
+
+                                                    {if $sUserData.billingaddress.salutation eq "mr"}
+                                                        {s name="ConfirmSalutationMr" namespace="frontend/checkout/confirm"}{/s}
+                                                    {else}
+                                                        {s name="ConfirmSalutationMs" namespace="frontend/checkout/confirm"}{/s}
+                                                    {/if}
+
+                                                    {$sUserData.billingaddress.firstname} {$sUserData.billingaddress.lastname}<br />
+                                                    {$sUserData.billingaddress.street}<br />
+                                                    {if $sUserData.billingaddress.additional_address_line1}{$sUserData.billingaddress.additional_address_line1}<br />{/if}
+                                                    {if $sUserData.billingaddress.additional_address_line2}{$sUserData.billingaddress.additional_address_line2}<br />{/if}
+                                                    {if {config name=showZipBeforeCity}}{$sUserData.billingaddress.zipcode} {$sUserData.billingaddress.city}{else}{$sUserData.billingaddress.city} {$sUserData.billingaddress.zipcode}{/if}<br />
+                                                    {if $sUserData.additional.state.name}{$sUserData.additional.state.name}<br />{/if}
+                                                    {$sUserData.additional.country.countryname}
+
+                                                    {block name="frontend_checkout_confirm_information_addresses_billing_panel_body_invalid_data"}
+                                                        {if $invalidBillingAddress}
+                                                            {include file='frontend/_includes/messages.tpl' type="warning" content="{s name='ConfirmAddressInvalidBillingAddress'}{/s}"}
+                                                        {else}
+                                                            {block name="frontend_checkout_confirm_information_addresses_billing_panel_body_set_as_default"}
+                                                                {if $activeBillingAddressId != $sUserData.additional.user.default_billing_address_id}
+                                                                    <div class="set-default">
+                                                                        <input type="checkbox" name="setAsDefaultBillingAddress" id="set_as_default_billing" value="1" /> <label for="set_as_default_billing">{s name="ConfirmUseForFutureOrders"}{/s}</label>
+                                                                    </div>
+                                                                {/if}
+                                                            {/block}
+                                                        {/if}
+                                                    {/block}
+                                                </div>
+                                            {/block}
+
+                                            {* Action buttons *}
+                                            {block name="frontend_checkout_confirm_information_addresses_billing_panel_actions"}
+                                                <div class="panel--actions is--wide">
+                                                    {block name="frontend_checkout_confirm_information_addresses_billing_panel_actions_change"}
+                                                        <div>
+                                                            <a href="{url controller=address action=edit id=$activeBillingAddressId sTarget=checkout sTargetAction=confirm}"
+                                                               data-address-editor="true"
+                                                               data-sessionKey="checkoutBillingAddressId"
+                                                               data-id="{$activeBillingAddressId}"
+                                                               data-title="{s name="ConfirmAddressSelectButton"}Change address{/s}"
+                                                               title="{s name="ConfirmAddressSelectButton"}Change address{/s}"
+                                                               class="btn">
+                                                                {s name="ConfirmAddressSelectButton"}Change address{/s}
+                                                            </a>
+                                                        </div>
+                                                    {/block}
+                                                    {block name="frontend_checkout_confirm_information_addresses_billing_panel_actions_select_address"}
+                                                        <a href="{url controller=address}"
+                                                           data-address-selection="true"
+                                                           data-sessionKey="checkoutBillingAddressId"
+                                                           data-id="{$activeBillingAddressId}"
+                                                           title="{s name="ConfirmAddressSelectLink"}{/s}">
+                                                            {s name="ConfirmAddressSelectLink"}{/s}
+                                                        </a>
+                                                    {/block}
+                                                </div>
+                                            {/block}
+                                        </div>
+                                    {/block}
+                                </div>
+                            {/block}
+
+                            {block name='frontend_checkout_confirm_information_addresses_shipping'}
+                                <div class="information--panel-item information--panel-item-shipping">
+                                    {block name='frontend_checkout_confirm_information_addresses_shipping_panel'}
+                                        <div class="panel has--border block information--panel shipping--panel">
+
+                                            {* Headline *}
+                                            {block name='frontend_checkout_confirm_information_addresses_shipping_panel_title'}
+                                                <div class="panel--title is--underline">
+                                                    {s name="ConfirmHeaderShipping" namespace="frontend/checkout/confirm"}{/s}
+                                                </div>
+                                            {/block}
+
+                                            {* Content *}
+                                            {block name='frontend_checkout_confirm_information_addresses_shipping_panel_body'}
+                                                <div class="panel--body is--wide">
+                                                    {if $sUserData.shippingaddress.company}
+                                                        <strong>{$sUserData.shippingaddress.company}{if $sUserData.shippingaddress.department}<br />{$sUserData.shippingaddress.department}{/if}</strong>
+                                                        <br />
+                                                    {/if}
+
+                                                    {if $sUserData.shippingaddress.salutation eq "mr"}
+                                                        {s name="ConfirmSalutationMr" namespace="frontend/checkout/confirm"}{/s}
+                                                    {else}
+                                                        {s name="ConfirmSalutationMs" namespace="frontend/checkout/confirm"}{/s}
+                                                    {/if}
+
+                                                    {$sUserData.shippingaddress.firstname} {$sUserData.shippingaddress.lastname}<br/>
+                                                    {$sUserData.shippingaddress.street}<br />
+                                                    {if $sUserData.shippingaddress.additional_address_line1}{$sUserData.shippingaddress.additional_address_line1}<br />{/if}
+                                                    {if $sUserData.shippingaddress.additional_address_line2}{$sUserData.shippingaddress.additional_address_line2}<br />{/if}
+                                                    {if {config name=showZipBeforeCity}}{$sUserData.shippingaddress.zipcode} {$sUserData.shippingaddress.city}{else}{$sUserData.shippingaddress.city} {$sUserData.shippingaddress.zipcode}{/if}<br />
+                                                    {if $sUserData.additional.stateShipping.name}{$sUserData.additional.stateShipping.name}<br />{/if}
+                                                    {$sUserData.additional.countryShipping.countryname}
+
+                                                    {block name="frontend_checkout_confirm_information_addresses_shipping_panel_body_invalid_data"}
+                                                        {if $invalidShippingAddress}
+                                                            {include file='frontend/_includes/messages.tpl' type="warning" content="{s name='ConfirmAddressInvalidShippingAddress'}{/s}"}
+                                                        {else}
+                                                            {block name="frontend_checkout_confirm_information_addresses_shipping_panel_body_set_as_default"}
+                                                                {if $activeShippingAddressId != $sUserData.additional.user.default_shipping_address_id}
+                                                                    <div class="set-default">
+                                                                        <input type="checkbox" name="setAsDefaultShippingAddress" id="set_as_default_shipping" value="1" /> <label for="set_as_default_shipping">{s name="ConfirmUseForFutureOrders"}{/s}</label>
+                                                                    </div>
+                                                                {/if}
+                                                            {/block}
+                                                        {/if}
+                                                    {/block}
+                                                </div>
+                                            {/block}
+
+                                            {* Action buttons *}
+                                            {block name="frontend_checkout_confirm_information_addresses_shipping_panel_actions"}
+                                                <div class="panel--actions is--wide">
+                                                    {block name="frontend_checkout_confirm_information_addresses_shipping_panel_actions_change"}
+                                                        <div>
+                                                            <a href="{url controller=address action=edit id=$activeShippingAddressId sTarget=checkout sTargetAction=confirm}"
+                                                               title="{s name="ConfirmAddressSelectButton"}Change address{/s}"
+                                                               data-title="{s name="ConfirmAddressSelectButton"}Change address{/s}"
+                                                               data-address-editor="true"
+                                                               data-id="{$activeShippingAddressId}"
+                                                               data-sessionKey="checkoutShippingAddressId"
+                                                               class="btn">
+                                                                {s name="ConfirmAddressSelectButton"}Change address{/s}
+                                                            </a>
+                                                        </div>
+                                                    {/block}
+                                                    {block name="frontend_checkout_confirm_information_addresses_shipping_panel_actions_select_address"}
+                                                        <a href="{url controller=address}"
+                                                           data-address-selection="true"
+                                                           data-sessionKey="checkoutShippingAddressId"
+                                                           data-id="{$activeShippingAddressId}"
+                                                           title="{s name="ConfirmAddressSelectLink"}{/s}">
+                                                            {s name="ConfirmAddressSelectLink"}{/s}
+                                                        </a>
+                                                    {/block}
+                                                </div>
+                                            {/block}
+                                        </div>
+                                    {/block}
+                                </div>
+                            {/block}
+                        {/if}
                     {/block}
 
                     {* Payment method *}
@@ -503,7 +523,7 @@
                                         <div class="panel--body is--wide payment--content">
                                             {block name='frontend_checkout_confirm_left_payment_method'}
                                                 <p class="payment--method-info">
-                                                    <span class="payment--title is--bold">{s name="ConfirmInfoPaymentMethod" namespace="frontend/checkout/confirm"}{/s}</span>
+                                                    <strong class="payment--title">{s name="ConfirmInfoPaymentMethod" namespace="frontend/checkout/confirm"}{/s}</strong>
                                                     <span class="payment--description">{$sUserData.additional.payment.description}</span>
                                                 </p>
 
@@ -514,17 +534,19 @@
 
                                             {block name='frontend_checkout_confirm_left_shipping_method'}
                                                 <p class="shipping--method-info">
-                                                    <span class="shipping--title is--bold">{s name="ConfirmHeadDispatch"}{/s}</span>
+                                                    <strong class="shipping--title">{s name="ConfirmHeadDispatch"}{/s}</strong>
                                                     <span class="shipping--description" title="{$sDispatch.name}">{$sDispatch.name|truncate:25:"...":true}</span>
                                                 </p>
                                             {/block}
+                                        </div>
+                                    {/block}
 
-                                            {block name='frontend_checkout_confirm_left_payment_method_actions'}
-                                                {* Action buttons *}
-                                                <a href="{url controller=checkout action=shippingPayment sTarget=checkout}" class="btn is--small btn--change-payment">
-                                                    {s name="ConfirmLinkChangePayment" namespace="frontend/checkout/confirm"}{/s}
-                                                </a>
-                                            {/block}
+                                    {block name='frontend_checkout_confirm_left_payment_method_actions'}
+                                        <div class="panel--actions is--wide">
+                                            {* Action buttons *}
+                                            <a href="{url controller=checkout action=shippingPayment sTarget=checkout}" class="btn is--small btn--change-payment">
+                                                {s name="ConfirmLinkChangePayment" namespace="frontend/checkout/confirm"}{/s}
+                                            </a>
                                         </div>
                                     {/block}
                                 </div>
