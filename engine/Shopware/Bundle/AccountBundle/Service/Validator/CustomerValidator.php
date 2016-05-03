@@ -80,7 +80,7 @@ class CustomerValidator implements CustomerValidatorInterface
     {
         $this->validateField($customer->getFirstname(), [new NotBlank()]);
         $this->validateField($customer->getLastname(), [new NotBlank()]);
-        $this->validateField($customer->getSalutation(), [new NotBlank(), new Choice(['choices' => ['mr', 'ms']])]);
+        $this->validateField($customer->getSalutation(), $this->getSalutationConstraints());
         $this->validateField($customer->getEmail(), $this->getEmailConstraints($customer->getId()));
         $this->validateField($customer->getBirthday(), $this->getBirthdayConstraints());
     }
@@ -126,5 +126,14 @@ class CustomerValidator implements CustomerValidatorInterface
         }
 
         return $birthdayConstraints;
+    }
+
+    /**
+     * @return array
+     */
+    private function getSalutationConstraints()
+    {
+        $salutations = explode(',', $this->config->get('shopsalutations'));
+        return [new NotBlank(), new Choice(['choices' => $salutations])];
     }
 }

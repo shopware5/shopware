@@ -103,7 +103,7 @@ Feature: My account (without changing login data)
     @profile
     Scenario Outline: I can't change my profile when something is wrong
         Given I follow "Persönliche Daten ändern"
-        And   I change my profile with "" "<salutation>" "<firstname>" "<lastname>"
+        And   I change my profile with "<salutation>" "<firstname>" "<lastname>"
         Then  I should see "Bitte füllen Sie alle rot markierten Felder aus"
 
         Examples:

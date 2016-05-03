@@ -86,7 +86,11 @@ td.head  {
 			<div id="head_sender">
 				<p class="sender">{$Containers.Header_Sender.value}</p>
 				{$User.$address.company}<br />
-				{$User.$address.firstname} {$User.$address.lastname}<br />			
+				{$User.$address.salutation|salutation}
+				{if {config name="displayprofiletitle"}}
+					{$User.$address.title}<br/>
+				{/if}
+				{$User.$address.firstname} {$User.$address.lastname}<br />
 				{$User.$address.street}<br />
 				{block name="document_index_address_additionalAddressLines"}
 					{if {config name=showAdditionAddressLine1}}

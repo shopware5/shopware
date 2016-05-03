@@ -139,12 +139,10 @@
 															<br />
 														{/if}
 
-														{if $sAddresses.billing.salutation eq "mr"}
-															{s name="ConfirmSalutationMr" namespace="frontend/checkout/confirm"}{/s}
-														{else}
-															{s name="ConfirmSalutationMs" namespace="frontend/checkout/confirm"}{/s}
+														{$sAddresses.billing.salutation|salutation}
+														{if {config name="displayprofiletitle"}}
+															{$sAddresses.billing.title}<br/>
 														{/if}
-
 														{$sAddresses.billing.firstname} {$sAddresses.billing.lastname}<br />
 														{$sAddresses.billing.street}<br />
 														{if $sAddresses.billing.additional_address_line1}{$sAddresses.billing.additional_address_line1}<br />{/if}
@@ -185,12 +183,10 @@
 													<br />
 												{/if}
 
-												{if $sAddresses.billing.salutation eq "mr"}
-													{s name="ConfirmSalutationMr" namespace="frontend/checkout/confirm"}{/s}
-												{else}
-													{s name="ConfirmSalutationMs" namespace="frontend/checkout/confirm"}{/s}
+												{$sAddresses.billing.salutation|salutation}
+												{if {config name="displayprofiletitle"}}
+													{$sAddresses.billing.title}<br/>
 												{/if}
-
 												{$sAddresses.billing.firstname} {$sAddresses.billing.lastname}<br />
 												{$sAddresses.billing.street}<br />
 												{if $sAddresses.billing.additional_address_line1}{$sAddresses.billing.additional_address_line1}<br />{/if}
@@ -225,12 +221,10 @@
 													<br />
 												{/if}
 
-												{if $sAddresses.shipping.salutation eq "mr"}
-													{s name="ConfirmSalutationMr" namespace="frontend/checkout/confirm"}{/s}
-												{else}
-													{s name="ConfirmSalutationMs" namespace="frontend/checkout/confirm"}{/s}
+												{$sAddresses.shipping.salutation|salutation}
+												{if {config name="displayprofiletitle"}}
+													{$sAddresses.shipping.title}<br/>
 												{/if}
-
 												{$sAddresses.shipping.firstname} {$sAddresses.shipping.lastname}<br />
 												{$sAddresses.shipping.street}<br />
 												{if $sAddresses.shipping.additional_address_line1}{$sAddresses.shipping.additional_address_line1}<br />{/if}

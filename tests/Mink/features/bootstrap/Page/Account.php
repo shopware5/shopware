@@ -143,7 +143,6 @@ class Account extends Page implements HelperSelectorInterface
         return (
             $this->hasSelect('register[personal][customer_type]') &&
             $this->hasSelect('register[personal][salutation]') &&
-            $this->hasField('register[personal][title]') &&
             $this->hasField('register[personal][firstname]') &&
             $this->hasField('register[personal][lastname]') &&
             $this->hasField('register[personal][email]') &&
@@ -554,13 +553,9 @@ class Account extends Page implements HelperSelectorInterface
      * @param string $firstname
      * @param string $lastname
      */
-    public function changeProfile($title, $salutation, $firstname, $lastname)
+    public function changeProfile($salutation, $firstname, $lastname)
     {
         $data = [
-            [
-                'field' => 'profile[title]',
-                'value' => $title
-            ],
             [
                 'field' => 'profile[salutation]',
                 'value' => $salutation

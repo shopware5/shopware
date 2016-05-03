@@ -93,15 +93,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
             label:'{s name=base/customer_number}Customer number{/s}',
             helpTitle: '{s name=base/customer_number_help_title}Customer number generation{/s}',
             helpText: '{s name=base/customer_number_help_text}If the parameter sShopwareManagedCustomerNumbers is set to 1 in the shopware configuration, the customer number will be set automatically when the customer is saved and the field is not editable.{/s}'
-        },
-        field_title: '{s name=base/field_title}Title{/s}',
-        salutation: {
-            label: '{s name=base/salutation}Salutation{/s}',
-            mr: '{s name=base/salutation_mr}Mr{/s}',
-            ms: '{s name=base/salutation_ms}Mrs{/s}'
-        },
-        firstname: '{s name=base/firstname}Firstname{/s}',
-        lastname: '{s name=base/lastname}Lastname{/s}'
+        }
     },
 
 
@@ -254,49 +246,6 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
             }
         });
 
-        me.customerSalutation = Ext.create('Ext.form.field.ComboBox', {
-            triggerAction: 'all',
-            fieldLabel: me.snippets.salutation.label,
-            labelWidth: 155,
-            name: 'salutation',
-            valueField: 'text',
-            displayField: 'snippet',
-            mode: 'local',
-            editable: false,
-            allowBlank: false,
-            store: new Ext.data.SimpleStore({
-                fields: ['text', 'snippet'],
-                data: [
-                    ['mr', me.snippets.salutation.mr],
-                    ['ms', me.snippets.salutation.ms]
-                ]
-            })
-        });
-
-        me.customerTitle = Ext.create('Ext.form.field.Text', {
-            fieldLabel: me.snippets.field_title,
-            labelWidth: 155,
-            name: 'title',
-            allowBlank: true
-        });
-
-        me.customerFirstname = Ext.create('Ext.form.field.Text', {
-            fieldLabel: me.snippets.firstname,
-            labelWidth: 155,
-            name: 'firstname',
-            allowBlank: false,
-            required: true
-        });
-
-
-        me.customerLastname = Ext.create('Ext.form.field.Text', {
-            fieldLabel: me.snippets.lastname,
-            labelWidth: 155,
-            name: 'lastname',
-            allowBlank: false,
-            required: true
-        });
-
         return [
             me.customerMail,
             me.customerGroupCombo,
@@ -310,11 +259,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
                 helpText: me.snippets.number.helpText,
                 helpWidth: 360,
                 helpTitle: me.snippets.number.helpTitle
-            },
-            me.customerSalutation,
-            me.customerTitle,
-            me.customerFirstname,
-            me.customerLastname
+            }
         ];
     },
 

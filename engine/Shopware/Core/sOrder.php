@@ -1257,9 +1257,11 @@ class sOrder
             stateID,
             ustid,
             additional_address_line1,
-            additional_address_line2
+            additional_address_line2,
+            title
         )
         VALUES (
+            ?,
             ?,
             ?,
             ?,
@@ -1297,7 +1299,8 @@ class sOrder
             $address["stateID"],
             $address["ustid"],
             $address["additional_address_line1"],
-            $address["additional_address_line2"]
+            $address["additional_address_line2"],
+            $address["title"]
         );
         $array = $this->eventManager->filter('Shopware_Modules_Order_SaveBilling_FilterArray', $array, array('subject'=>$this, 'address'=>$address, 'id'=>$id));
         $result = $this->db->executeUpdate($sql, $array);
@@ -1344,9 +1347,11 @@ class sOrder
             countryID,
             stateID,
             additional_address_line1,
-            additional_address_line2
+            additional_address_line2,
+            title
         )
         VALUES (
+            ?,
             ?,
             ?,
             ?,
@@ -1378,7 +1383,8 @@ class sOrder
             $address["countryID"],
             $address["stateID"],
             $address["additional_address_line1"],
-            $address["additional_address_line2"]
+            $address["additional_address_line2"],
+            $address["title"]
         );
         $array = $this->eventManager->filter('Shopware_Modules_Order_SaveShipping_FilterArray', $array, array('subject'=>$this, 'address'=>$address, 'id'=>$id));
         $result = $this->db->executeUpdate($sql, $array);

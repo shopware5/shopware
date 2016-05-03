@@ -120,11 +120,6 @@ Ext.define('Shopware.apps.Customer.view.address.List', {
                 header: me.snippets.header.vatId,
                 flex: 1
             },
-            salutation: {
-                header: me.snippets.header.salutation,
-                renderer: me.salutationRenderer,
-                flex: 1
-            },
             firstname: {
                 header: me.snippets.header.name,
                 renderer: me.nameRenderer,
@@ -165,20 +160,6 @@ Ext.define('Shopware.apps.Customer.view.address.List', {
         return {
             columns: columns,
             detailWindow: 'Shopware.apps.Customer.view.address.detail.Window'
-        }
-    },
-
-    /**
-     * Output the correct snippet
-     *
-     * @param value
-     * @returns { String }
-     */
-    salutationRenderer: function (value) {
-        if (value === 'mr') {
-            return '{s name=detail/label/salutation_mr namespace=backend/customer/view/address}Mr{/s}';
-        } else {
-            return '{s name=detail/label/salutation_ms namespace=backend/customer/view/address}Mrs{/s}';
         }
     },
 

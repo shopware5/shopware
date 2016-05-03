@@ -167,6 +167,7 @@ class AddressImportService implements AddressImportServiceInterface
             'company',
             'department',
             'salutation',
+            'title',
             'firstname',
             'lastname',
             'street',

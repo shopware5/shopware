@@ -37,6 +37,8 @@
 
                                 {* Salutation *}
                                 {block name='frontend_account_profile_profile_input_salutation'}
+                                    {getSalutations variable="salutations"}
+
                                     <div class="profile--salutation field--select">
                                         <select name="profile[salutation]"
                                                 required="required"
@@ -44,22 +46,26 @@
                                                 class="is--required{if $errorFlags.salutation} has--error{/if}">
 
                                             <option value="" disabled="disabled"{if $form_data.profile.salutation eq ""} selected="selected"{/if}>{s name='RegisterPlaceholderSalutation' namespace="frontend/register/personal_fieldset"}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}</option>
-                                            <option value="mr"{if $form_data.profile.salutation eq "mr"} selected="selected"{/if}>{s name='RegisterLabelMr' namespace="frontend/register/personal_fieldset"}{/s}</option>
-                                            <option value="ms"{if $form_data.profile.salutation eq "ms"} selected="selected"{/if}>{s name='RegisterLabelMs' namespace="frontend/register/personal_fieldset"}{/s}</option>
+
+                                            {foreach $salutations as $key => $label}
+                                                <option value="{$key}"{if $form_data.profile.salutation eq $key} selected="selected"{/if}>{$label}</option>
+                                            {/foreach}
                                         </select>
                                     </div>
                                 {/block}
 
                                 {* Title *}
                                 {block name='frontend_account_profile_profile_input_title'}
-                                    <div class="profile--title">
-                                        <input autocomplete="section-personal title"
-                                               name="profile[title]"
-                                               type="text"
-                                               placeholder="{s name='RegisterPlaceholderTitle' namespace="frontend/register/personal_fieldset"}{/s}"
-                                               value="{$form_data.profile.title|escape}"
-                                               class="profile--field{if $errorFlags.title} has--error{/if}" />
-                                    </div>
+                                    {if {config name="displayprofiletitle"}}
+                                        <div class="profile--title">
+                                            <input autocomplete="section-personal title"
+                                                   name="profile[title]"
+                                                   type="text"
+                                                   placeholder="{s name='RegisterPlaceholderTitle' namespace="frontend/register/personal_fieldset"}{/s}"
+                                                   value="{$form_data.profile.title|escape}"
+                                                   class="profile--field{if $errorFlags.title} has--error{/if}" />
+                                        </div>
+                                    {/if}
                                 {/block}
 
                                 {* Firstname *}

@@ -250,12 +250,16 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                     continue;
                 }
 
+                $valueData['value'] = $this->prepareValue($elementData, $valueData['value']);
+
                 $value = new Shopware\Models\Config\Value();
                 $value->setElement($element);
                 $value->setShop($shop);
                 $value->setValue($valueData['value']);
                 $values[$shop->getId()] = $value;
             }
+
+            $this->beforeSaveElement($elementData);
 
             $values = Shopware()->Events()->filter('Shopware_Controllers_Backend_Config_Before_Save_Config_Element', $values, array(
                 'subject' => $this,
@@ -1116,5 +1120,80 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         }
 
         $this->View()->assign(array('success' => true));
+    }
+
+    /**
+     * @param array $elementData
+     * @return bool
+     */
+    private function beforeSaveElement($elementData)
+    {
+        switch ($elementData['name']) {
+            case 'shopsalutations':
+                $this->createSalutationSnippets($elementData);
+                break;
+        }
+
+        return true;
+    }
+
+    /**
+     * @return int[] indexed by shop id
+     */
+    private function getShopLocaleMapping()
+    {
+        $connection = Shopware()->Container()->get('dbal_connection');
+        $query = $connection->createQueryBuilder();
+        $query->select(['id, IFNULL(main_id, id)']);
+        $query->from('s_core_shops');
+        return $query->execute()->fetchAll(PDO::FETCH_KEY_PAIR);
+    }
+
+    /**
+     * @param array $elementData
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    private function createSalutationSnippets($elementData)
+    {
+        $connection = Shopware()->Container()->get('dbal_connection');
+
+        $shops = $this->getShopLocaleMapping();
+
+        $query = $connection->prepare('INSERT IGNORE INTO s_core_snippets (namespace, shopID, localeID, name, created) VALUES (:namespace, :shopId, :localeId, :name, :created)');
+
+        $salutations = [];
+        foreach ($elementData['values'] as $value) {
+            $salutations = array_merge($salutations, explode(',', $value['value']));
+        }
+        $salutations = array_unique($salutations);
+
+        $date = new DateTime();
+        foreach ($shops as $localeId => $shopId) {
+            foreach ($salutations as $salutation) {
+                $query->execute([
+                    ':created' => $date->format('Y-m-d H:i:s'),
+                    ':namespace' => 'frontend/salutation',
+                    ':name' => trim($salutation),
+                    ':shopId' => $shopId,
+                    ':localeId' => $localeId
+                ]);
+            }
+        }
+    }
+
+    /**
+     * @param array $elementData
+     * @param mixed $value
+     * @return mixed
+     */
+    private function prepareValue($elementData, $value)
+    {
+        switch ($elementData['name']) {
+            case 'shopsalutations':
+                $values = explode(',', $value);
+                $value = implode(',', array_map('trim', $values));
+                break;
+        }
+        return $value;
     }
 }

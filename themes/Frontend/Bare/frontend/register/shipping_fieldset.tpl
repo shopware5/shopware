@@ -2,12 +2,15 @@
 	<h2 class="panel--title is--underline">{s name='RegisterShippingHeadline'}{/s}</h2>
 	<div class="panel--body is--wide">
 		{* Salutation *}
+		{getSalutations variable="salutations"}
+
 		{block name='frontend_register_shipping_fieldset_input_salutation'}
 			<div class="register--salutation field--select">
 				<select name="register[shipping][salutation]" id="salutation2" class="normal is--required{if $error_flags.salutation} has--error{/if}">
                     <option value="" disabled="disabled"{if $form_data.salutation eq ""} selected="selected"{/if}>{s name='RegisterShippingPlaceholderSalutation'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}</option>
-					<option value="mr" {if $form_data.salutation eq "mr"}selected="selected"{/if}>{s name='RegisterShippingLabelMr'}{/s}</option>
-					<option value="ms" {if $form_data.salutation eq "ms"}selected="selected"{/if}>{s name='RegisterShippingLabelMrs'}{/s}</option>
+					{foreach $salutations as $key => $label}
+						<option value="{$key}"{if $form_data.salutation eq $key} selected="selected"{/if}>{$label}</option>
+					{/foreach}
 				</select>
 			</div>
 		{/block}

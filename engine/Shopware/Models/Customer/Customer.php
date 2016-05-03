@@ -255,7 +255,7 @@ class Customer extends LazyFetchModelEntity
     /**
      * @var string $salutation
      *
-     * @Assert\Choice(choices = {"mr", "ms"}, message = "Choose a valid salutation.")
+     * @Assert\NotBlank
      *
      * @ORM\Column(name="salutation", type="text", nullable=false)
      */

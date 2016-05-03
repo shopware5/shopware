@@ -36,10 +36,9 @@
                                 <p>{$address.company}{if $address.department} - {$address.department}{/if}</p>
                             {/if}
 
-                            {if $address.salutation eq "mr"}
-                                {s name="RegisterLabelMr" namespace="frontend/register/personal_fieldset"}{/s}
-                            {else}
-                                {s name="RegisterLabelMs" namespace="frontend/register/personal_fieldset"}{/s}
+                            {$address.salutation|salutation}
+                            {if {config name="displayprofiletitle"}}
+                                {$address.title}<br/>
                             {/if}
                             {$address.firstname} {$address.lastname}<br />
                             {$address.street}<br />

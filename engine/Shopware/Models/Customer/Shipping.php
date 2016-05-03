@@ -89,6 +89,12 @@ class Shipping extends ModelEntity
     private $salutation = '';
 
     /**
+     * @var string
+     * @ORM\Column(name="title", type="string", length=100, nullable=true)
+     */
+    protected $title;
+
+    /**
      * Contains the first name of the shipping address
      * @var string $firstName
      * @ORM\Column(name="firstname", type="string", length=50, nullable=false)
@@ -496,11 +502,28 @@ class Shipping extends ModelEntity
         $this->setAdditionalAddressLine1((string) $address->getAdditionalAddressLine1());
         $this->setAdditionalAddressLine2((string) $address->getAdditionalAddressLine2());
         $this->setCountryId($address->getCountry()->getId());
+        $this->setTitle($address->getTitle());
 
         if ($address->getState()) {
             $this->setStateId($address->getState()->getId());
         } else {
             $this->setStateId(null);
         }
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param string $title
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
     }
 }

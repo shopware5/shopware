@@ -150,6 +150,7 @@
 {include file='backend/base/store/product_box_layout.js'}
 {include file='backend/base/store/page_not_found_destination_options.js'}
 {include file='backend/base/store/attribute_config.js'}
+{include file='backend/base/store/salutation.js'}
 
 
 {* Include shopware related components *}

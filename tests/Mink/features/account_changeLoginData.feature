@@ -143,15 +143,15 @@ Feature: Successful changes of login data
     Scenario Outline: I can change my profile
         Given I log in with email "test@example.com" and password "shopware"
         When  I follow "Persönliche Daten ändern"
-        And   I change my profile with "<title>" "<salutation>" "<firstname>" "<lastname>"
+        And   I change my profile with "<salutation>" "<firstname>" "<lastname>"
 
         Then  I should see "Die persönlichen Daten wurden erfolgreich gespeichert."
         Then  I follow "Übersicht"
-        And   I should be welcome'd with with "Willkommen, <title> <firstname> <lastname>"
+        And   I should be welcome'd with with "Willkommen, <firstname> <lastname>"
 
         Examples:
-          | salutation | firstname | lastname   | title         |
-          | Herr       | Max       | Mustermann |               |
-          | Frau       | Erika     | Musterfrau | Prof. Dr. Dr. |
-          | Frau       | Elfriede  | Mustermann | Dr.           |
-          | Herr       | Max       | Mustermann |               |
+          | salutation | firstname | lastname   |
+          | Herr       | Max       | Mustermann |
+          | Frau       | Erika     | Musterfrau |
+          | Frau       | Elfriede  | Mustermann |
+          | Herr       | Max       | Mustermann |

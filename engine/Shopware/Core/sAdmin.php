@@ -1420,11 +1420,11 @@ class sAdmin
             'sConfig'   => $this->config,
         );
 
-        $namespace = $this->snippetManager->getNamespace('frontend/account/index');
+        $namespace = $this->snippetManager->getNamespace('frontend/salutation');
         $register = $this->session->offsetGet('sRegister');
         foreach ($register["billing"] as $key => $value) {
             if ($key == "salutation") {
-                $value = ($value == "ms") ? $namespace->get('AccountSalutationMs', 'Ms') : $namespace->get('AccountSalutationMr', 'Mr');
+                $value = $namespace->get($value);
             }
 
             $context[$key] = $value;

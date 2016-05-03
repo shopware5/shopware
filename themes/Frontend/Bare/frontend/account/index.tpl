@@ -36,7 +36,13 @@
 		{block name="frontend_account_index_welcome"}
 			<div class="account--welcome panel">
 				{block name="frontend_account_index_welcome_headline"}
-					<h1 class="panel--title">{s name='AccountHeaderWelcome'}{/s}, {$sUserData.additional.user.title} {$sUserData.additional.user.firstname} {$sUserData.additional.user.lastname}</h1>
+					<h1 class="panel--title">{s name='AccountHeaderWelcome'}{/s},
+						{if {config name="displayprofiletitle"}}
+							{$sUserData.additional.user.title}
+						{/if}
+						{$sUserData.additional.user.firstname}
+						{$sUserData.additional.user.lastname}
+					</h1>
 				{/block}
 
 				{block name="frontend_account_index_welcome_content"}
@@ -59,12 +65,10 @@
 					{block name="frontend_account_index_info_content"}
 						<div class="panel--body is--wide">
 							<p>
-								{if $sUserData.additional.user.salutation eq "mr"}
-									{s name="AccountSalutationMr"}{/s}
-								{else}
-									{s name="AccountSalutationMs"}{/s}
+								{$sUserData.additional.user.salutation|salutation}
+								{if {config name="displayprofiletitle"}}
+									{$sUserData.additional.user.title}<br/>
 								{/if}
-								{$sUserData.additional.user.title}<br/>
 								{$sUserData.additional.user.firstname} {$sUserData.additional.user.lastname}<br />
 								{if $sUserData.additional.user.birthday}
 									{$sUserData.additional.user.birthday|date:'dd.MM.y'}<br />
@@ -137,10 +141,9 @@
 									</p>
 								{/if}
 								<p>
-									{if $sUserData.billingaddress.salutation eq "mr"}
-										{s name="AccountSalutationMr"}{/s}
-									{else}
-										{s name="AccountSalutationMs"}{/s}
+									{$sUserData.billingaddress.salutation|salutation}
+									{if {config name="displayprofiletitle"}}
+										{$sUserData.billingaddress.title}<br/>
 									{/if}
 									{$sUserData.billingaddress.firstname} {$sUserData.billingaddress.lastname}<br />
 									{$sUserData.billingaddress.street}<br />
@@ -189,10 +192,9 @@
 									</p>
 								{/if}
 								<p>
-									{if $sUserData.shippingaddress.salutation eq "mr"}
-										{s name="AccountSalutationMr"}{/s}
-									{else}
-										{s name="AccountSalutationMs"}{/s}
+									{$sUserData.shippingaddress.salutation|salutation}
+									{if {config name="displayprofiletitle"}}
+										{$sUserData.shippingaddress.title}<br/>
 									{/if}
 									{$sUserData.shippingaddress.firstname} {$sUserData.shippingaddress.lastname}<br />
 									{$sUserData.shippingaddress.street}<br />
