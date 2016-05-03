@@ -213,9 +213,27 @@ In this document you will find a changelog of the important changes related to t
     * `sOrder::sGetOrderNumber()`
     * `Shopware_Components_Document::saveDocument()`
 * HttpCache: Added possibility to add multiple, comma separated proxy URLs
+* Removed `landingPageTeaser` and `landingPageBlock` fields from emotion shopping worlds.
+* Removed unnecessary method `getCampaignByCategoryQuery()` from `Models/Emotion/Repository.php`.
+* Removed template blocks for campaign boxes corresponding to the removed emotion fields.
+    * `frontend_index_left_campaigns_top`
+    * `frontend_index_left_campaigns_middle`
+    * `frontend_index_left_campaigns_bottom`
+    * `frontend_blog_index_campaign_top`
+    * `frontend_blog_index_campaign_middle`
+    * `frontend_blog_index_campaign_bottom`
+* Removed unnecessary template file for campaign boxes `frontend/campaign/box.tpl`.
+* Removed third party jQuery plugin dependency `masonry`.
+* Deprecated `initMasonryGrid` method and `plugin/swEmotion/onInitMasonryGrid` event in `jquery.emotion.js`
+* Removed shopping world mode `masonry`. The fallback is the new mode `fluid`.
+* Replaced old LESS mixin `createColumnSizes` for new grid mixins `createGrid` and `createColumns` in `_components/emotion.less`.
+* Added new blocks to `widgets/emotion/index.tpl` for better overriding of the configuration.
+    * `widgets/emotion/index/config`
+    * `widgets/emotion/index/attributes`
+    * `widgets/emotion/index/element/config`
 
 ## 5.1.5
-* The smarty variable `sCategoryInfo` in Listing and Blog controllers is now deprecated and will be removed soon. Use `sCategoryContent` instead, it's a drop in replacement.
+* The smarty variable `sCategoryInfo` in Listing and Blog controllers is now deprecated and will be removed soon. Use `sCategoryContent` instead, it's a drop in replacement. 
 
 ## 5.1.4
 * Customer logout will now regenerate the session id and clear the customers basket.

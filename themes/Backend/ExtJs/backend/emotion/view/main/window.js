@@ -21,30 +21,24 @@
  * our trademarks remain entirely with us.
  *
  * @category   Shopware
- * @package    UserManager
+ * @package    Emotion
  * @subpackage View
  * @version    $Id$
- * @author shopware AG
+ * @author     shopware AG
  */
 
 //{namespace name=backend/emotion/view/main}
 
-/**
- * Shopware UI - Media Manager Main Window
- *
- * This file contains the business logic for the User Manager module. The module
- * handles the whole administration of the backend users.
- */
 //{block name="backend/emotion/view/main/window"}
 Ext.define('Shopware.apps.Emotion.view.main.Window', {
-	extend: 'Enlight.app.Window',
+    extend: 'Enlight.app.Window',
     title: '{s name=window/title}Emotion{/s}',
     alias: 'widget.emotion-main-window',
     border: false,
     autoShow: true,
     layout: 'border',
     height: '90%',
-    width: 990,
+    width: '80%',
     stateful: true,
     stateId: 'emotion-main-window',
 
@@ -55,9 +49,7 @@ Ext.define('Shopware.apps.Emotion.view.main.Window', {
     snippets: {
         tab: {
             overview: '{s name=window/tab/overview}Overview{/s}',
-            custom_grids: '{s name=window/tab/custom_grids}Grids management{/s}',
-            custom_templates: '{s name=window/tab/custom_templates}Templates management{/s}',
-            expert_settings: '{s name=window/tab/expert_settings}Expert settings{/s}'
+            custom_templates: '{s name=window/tab/custom_templates}Templates management{/s}'
         },
         tree: {
             title: '{s name=list/tree/title}Categories{/s}'
@@ -87,9 +79,9 @@ Ext.define('Shopware.apps.Emotion.view.main.Window', {
         me.categoryStore = Ext.create('Shopware.store.CategoryTree');
 
         me.items = [
-            me.createTabPanel(),
-            me.createSidebarPanel()
-        ],
+            me.createSidebarPanel(),
+            me.createTabPanel()
+        ];
 
         me.callParent(arguments);
     },
@@ -103,8 +95,8 @@ Ext.define('Shopware.apps.Emotion.view.main.Window', {
     createSidebarPanel: function() {
         var me = this;
 
-        me.sidebarPanel = Ext.create('Ext.panel.Panel', {
-            title: '{s name=sidebar/title}Kategorien{/s}',
+        return me.sidebarPanel = Ext.create('Ext.panel.Panel', {
+            title: me.snippets.filter.title,
             collapsible: true,
             width: 230,
             layout: {
@@ -118,15 +110,12 @@ Ext.define('Shopware.apps.Emotion.view.main.Window', {
                 me.createFilterPanel()
             ]
         });
-
-        return me.sidebarPanel;
     },
 
     createFilterPanel: function() {
         var me = this;
 
         return Ext.create('Ext.form.Panel', {
-            title: me.snippets.filter.title,
             bodyPadding: 5,
             items: [{
                 xtype: 'radiogroup',
@@ -137,6 +126,10 @@ Ext.define('Shopware.apps.Emotion.view.main.Window', {
                                 store = me.gridPanel.getStore();
 
                             store.getProxy().extraParams.filterBy = newValue.filter;
+                            if (newValue.filter == 'onlyLandingpage') {
+                                me.categoryTree.getSelectionModel().deselectAll();
+                                store.getProxy().extraParams.categoryId = null;
+                            }
                             store.load();
                         },
                         scope: me
@@ -207,12 +200,12 @@ Ext.define('Shopware.apps.Emotion.view.main.Window', {
     /**
      * Creates the category tree
      *
-     * @return [Ext.tree.Panel]
+     * @return { Ext.tree.Panel }
      */
     createTree: function() {
         var me = this;
 
-        var tree = Ext.create('Ext.tree.Panel', {
+        return me.categoryTree = Ext.create('Ext.tree.Panel', {
             rootVisible: true,
             flex: 1,
             expanded: true,
@@ -225,7 +218,7 @@ Ext.define('Shopware.apps.Emotion.view.main.Window', {
             listeners: {
                 itemclick: {
                     fn: function(view, record) {
-                        var me    = this,
+                        var me = this,
                             store = me.gridPanel.getStore();
 
                         if (record.get('id') === 'root') {
@@ -233,24 +226,15 @@ Ext.define('Shopware.apps.Emotion.view.main.Window', {
                         } else {
                             store.getProxy().extraParams.categoryId = record.get('id');
                         }
-
                         //scroll the store to first page
                         store.currentPage = 1;
-                        store.load({
-                            callback: function() {
-                            }
-                        });
+                        store.load();
                     },
                     scope: me
                 }
             }
         });
-
-        return tree;
     },
-
-
-
 
     /**
      * Creates the tab panel which holds off the different
@@ -261,13 +245,14 @@ Ext.define('Shopware.apps.Emotion.view.main.Window', {
     createTabPanel: function() {
         var me = this;
 
-        me.tabPanel = Ext.create('Ext.tab.Panel', {
+        return me.tabPanel = Ext.create('Ext.tab.Panel', {
             width: 760,
             region: 'center',
-            items: [ me.createOverviewTab(), me.createExpertSettingsTab() ]
+            items: [
+                me.createOverviewTab(),
+                me.createCustomTemplatesTab()
+            ]
         });
-
-        return me.tabPanel;
     },
 
     /**
@@ -282,10 +267,11 @@ Ext.define('Shopware.apps.Emotion.view.main.Window', {
         var me = this;
 
         me.gridPanel = Ext.create('Shopware.apps.Emotion.view.list.Grid', {
-            region: 'center'
+            region: 'center',
+            categoryTree: me.categoryTree
         });
 
-        me.overviewContainer = Ext.create('Ext.container.Container', {
+        return me.overviewContainer = Ext.create('Ext.container.Container', {
             layout: 'border',
             title: me.snippets.tab.overview,
             items: [{
@@ -293,50 +279,6 @@ Ext.define('Shopware.apps.Emotion.view.main.Window', {
                 region: 'north'
             }, me.gridPanel ]
         });
-
-        return me.overviewContainer;
-    },
-
-    /**
-     * Creates the container which represents the expert settings tab.
-     *
-     * The tab contains the custom grids and custom templates tabs.
-     *
-     * @returns { Ext.tab.Panel }
-     */
-    createExpertSettingsTab: function() {
-        var me = this;
-
-        me.expertSettingsTabPanel = Ext.create('Ext.tab.Panel', {
-            title: me.snippets.tab.expert_settings,
-            items: [ me.createCustomGridsTab(), me.createCustomTemplatesTab() ]
-        });
-
-        return me.expertSettingsTabPanel;
-    },
-
-    /**
-     * Creates the container which represents the custom grids tab.
-     *
-     * @returns { Ext.container.Container }
-     */
-    createCustomGridsTab: function() {
-        var me = this;
-
-        me.customGridsContainer = Ext.create('Ext.container.Container', {
-            layout: 'border',
-            title: me.snippets.tab.custom_grids,
-            items: [{
-                xtype: 'emotion-grids-toolbar',
-                region: 'north'
-            }, {
-                xtype: 'emotion-grids-list',
-                region: 'center',
-                store: Ext.create('Shopware.apps.Emotion.store.Grids').load()
-            }]
-        });
-
-        return me.customGridsContainer;
     },
 
     /**
@@ -347,7 +289,7 @@ Ext.define('Shopware.apps.Emotion.view.main.Window', {
     createCustomTemplatesTab: function() {
         var me = this;
 
-        me.customTemplatesTab = Ext.create('Ext.container.Container', {
+        return me.customTemplatesTab = Ext.create('Ext.container.Container', {
             layout: 'border',
             title: me.snippets.tab.custom_templates,
             items: [{
@@ -358,8 +300,6 @@ Ext.define('Shopware.apps.Emotion.view.main.Window', {
                 region: 'center'
             }]
         });
-
-        return me.customTemplatesTab;
     }
 });
 //{/block}

@@ -1,5 +1,5 @@
 {block name="frontend_widgets_manufacturer_slider"}
-    <div class="emotion--manufacturer panel has--border">
+    <div class="emotion--manufacturer panel{if !$Data.no_border} has--border{/if}">
 
         {* Manufacturer title *}
         {block name="frontend_widgets_manufacturer_slider_title"}

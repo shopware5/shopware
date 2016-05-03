@@ -38,11 +38,6 @@ class Shopware_Controllers_Widgets_Campaign extends Shopware_Controllers_Widgets
         $emotionId = (int) $this->Request()->getParam('emotionId');
         $query = $repository->getEmotionById($emotionId);
         $emotion = $query->getQuery()->getArrayResult();
-        $emotion['rows'] = $emotion['grid']['rows'];
-        $emotion['cols'] = $emotion['grid']['cols'];
-        $emotion['cellHeight'] = $emotion['grid']['cellHeight'];
-        $emotion['articleHeight'] = $emotion['grid']['articleHeight'];
-        $emotion['gutter'] = $emotion['grid']['gutter'];
         return $emotion;
     }
 

@@ -30,9 +30,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * Shopware Emotion Model - Template
  *
- * @category  Shopware
- * @package   Shopware\Models\Emotion
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
+ * @category   Shopware
+ * @package    Shopware\Models
+ * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  * @ORM\Entity
  * @ORM\Table(name="s_emotion_templates")
@@ -111,7 +111,7 @@ class Template extends ModelEntity
     }
 
     /**
-     * @return
+     * @return string
      */
     public function getFile()
     {
@@ -119,7 +119,7 @@ class Template extends ModelEntity
     }
 
     /**
-     * @param  $file
+     * @param string $file
      */
     public function setFile($file)
     {

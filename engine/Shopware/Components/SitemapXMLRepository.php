@@ -28,6 +28,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\ORM\QueryBuilder;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\Model\ModelManager;
+use Shopware_Components_Translation;
 
 /**
  * @category  Shopware
@@ -347,18 +348,18 @@ class SitemapXMLRepository
      */
     private function readLandingPageUrls()
     {
-        $categoryId = $this->contextService->getShopContext()->getShop()->getCategory()->getId();
-
         $emotionRepository = $this->em->getRepository('Shopware\Models\Emotion\Emotion');
 
-        $builder = $emotionRepository->getCampaignsByCategoryId($categoryId);
+        $shopId = $this->contextService->getShopContext()->getShop()->getId();
+
+        $builder = $emotionRepository->getCampaignsByShopId($shopId);
         $campaigns = $builder->getQuery()->getArrayResult();
 
         foreach ($campaigns as &$campaign) {
-            $campaign['show'] = $this->filterCampaign($campaign[0]['validFrom'], $campaign[0]['validTo']);
+            $campaign['show'] = $this->filterCampaign($campaign['validFrom'], $campaign['validTo']);
             $campaign['urlParams'] = array(
                 'sViewport' => 'campaign',
-                'emotionId' => $campaign[0]['id'],
+                'emotionId' => $campaign['id'],
             );
         }
 

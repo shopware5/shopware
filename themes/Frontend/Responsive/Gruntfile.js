@@ -55,17 +55,6 @@ module.exports = function (grunt) {
                     flatten: true
                 }]
             },
-            'masonry': {
-                files: [{
-                    expand: true,
-                    src: [
-                        nodeDir + '/masonry-layout/dist/masonry.pkgd.min.js',
-                        nodeDir + '/masonry-layout/README.mdown'
-                    ],
-                    dest: vendorDir + '/js/masonry',
-                    flatten: true
-                }]
-            },
             'normalize-less': {
                 files: [{
                     expand: true,

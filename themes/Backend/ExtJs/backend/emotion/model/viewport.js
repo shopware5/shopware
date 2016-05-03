@@ -1,4 +1,3 @@
-<?php
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -20,24 +19,30 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- */
-
-namespace   Shopware\Models\Emotion\Library;
-
-use Shopware\Components\Model\ModelRepository;
-
-/**
- * Repository for the \Shopware\Models\Emotion\Library\Component model.
- * The repository is responsible for all CRUD function around component library.
- * The component library is used for shopware backend modules like the emotion
- * module.
  *
- * @category   Shopware
- * @package    Shopware_Models
- * @subpackage Emotion
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
- * @license    http://shopware.de/license
+ * @category    Shopware
+ * @package     Emotion
+ * @subpackage  View
+ * @version     $Id$
+ * @author      shopware AG
  */
-class Repository extends ModelRepository
-{
-}
+
+//{block name="backend/emotion/model/viewport"}
+Ext.define('Shopware.apps.Emotion.model.Viewport', {
+
+    extend: 'Ext.data.Model',
+
+    fields: [
+        //{block name="backend/emotion/model/viewport/fields"}{/block}
+        { name: 'id', type: 'int' },
+        { name: 'elementId', type: 'int' },
+        { name: 'emotionId', type: 'int' },
+        { name: 'alias', type: 'string' },
+        { name: 'startRow', type: 'int', defaultValue: 1 },
+        { name: 'startCol', type: 'int', defaultValue: 1 },
+        { name: 'endRow', type: 'int', defaultValue: 1 },
+        { name: 'endCol', type: 'int', defaultValue: 1 },
+        { name: 'visible', type: 'boolean', defaultValue: false }
+    ]
+});
+//{/block}

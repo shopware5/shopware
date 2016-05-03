@@ -43,7 +43,7 @@ Ext.define('Shopware.apps.Emotion.model.Attribute', {
      * @array
      */
     fields: [
-		//{block name="backend/emotion/model/attribute/fields"}{/block}
+        //{block name="backend/emotion/model/attribute/fields"}{/block}
         { name: 'id', type: 'int' },
         { name: 'emotionId', type: 'int', useNull: true }
     ]

@@ -24,6 +24,7 @@
 
 namespace   Shopware\Models\Emotion;
 
+use Doctrine\DBAL\Connection;
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Model\QueryBuilder;
 
@@ -74,21 +75,16 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->getConnection()->createQueryBuilder();
         $builder->select([
-                'SQL_CALC_FOUND_ROWS emotions.id',
-                'emotions.name',
-                'emotions.active',
-                'emotions.device',
-                'emotions.is_landingpage as isLandingPage',
-                'emotions.parent_id as parentId',
-                'emotions.modified',
-                'GROUP_CONCAT(categories.description ORDER BY categories.description ASC) AS categoriesNames',
-                "(
-              CASE
-                WHEN (emotions.is_landingpage = 1 AND emotions.parent_id IS NOT NULL) THEN parent.name
-                WHEN (emotions.is_landingpage = 1 AND emotions.parent_id IS NULL)     THEN emotions.name
-                ELSE GROUP_CONCAT(categories.description)
-              END
-            ) as groupingState"
+            'SQL_CALC_FOUND_ROWS emotions.id',
+            'emotions.name',
+            'emotions.active',
+            'emotions.mode',
+            'emotions.device',
+            'emotions.position',
+            'emotions.is_landingpage as isLandingPage',
+            'emotions.parent_id as parentId',
+            'emotions.modified',
+            'GROUP_CONCAT(categories.description ORDER BY categories.description ASC) AS categoriesNames'
         ]);
 
         $builder->from('s_emotion', 'emotions')
@@ -97,14 +93,13 @@ class Repository extends ModelRepository
             ->leftJoin('emotions', 's_emotion', 'parent', 'parent.id = emotions.parent_id');
 
         $builder->groupBy('emotions.id')
-            ->addOrderBy('emotions.is_landingpage', 'ASC')
-            ->addOrderBy('groupingState', 'ASC')
-            ->addOrderBy('emotions.parent_id', 'ASC')
-        ;
+            ->addOrderBy('emotionGroup')
+            ->addOrderBy('emotions.position')
+            ->addOrderBy('emotions.id');
 
         // filter by search
         if (!empty($filter) && $filter[0]["property"] == "filter" && !empty($filter[0]["value"])) {
-            $builder->andWhere('emotions.name LIKE :search')
+            $builder->andWhere('emotions.name LIKE :search OR categories.description LIKE :search')
                 ->setParameter(':search', '%'.$filter[0]["value"].'%');
         }
 
@@ -158,9 +153,32 @@ class Repository extends ModelRepository
         if (!empty($categoryId) && $categoryId != 'NaN') {
             $path = '%|' . $categoryId . '|%';
 
-            $builder->andWhere('categories.path LIKE :category OR categories.id = :categoryId')
+            $builder
+                ->addSelect([
+                    '(
+                    CASE
+                        WHEN (selectedCategory.id IS NOT NULL AND emotions.is_landingpage = 0) THEN -10
+                        WHEN (emotions.is_landingpage = 1 AND emotions.parent_id IS NOT NULL) THEN parent.name
+                        WHEN (emotions.is_landingpage = 1 AND emotions.parent_id IS NULL)     THEN emotions.name
+                        ELSE -5
+                    END
+                    ) as emotionGroup'
+                ])
+                ->leftJoin('emotions', 's_emotion_categories', 'selectedCategory', 'emotions.id = selectedCategory.emotion_id AND selectedCategory.category_id = :categoryId')
+                ->andWhere('categories.path LIKE :category OR categories.id = :categoryId')
+                ->andWhere('emotions.is_landingpage = 0')
                 ->setParameter(':category', $path)
                 ->setParameter(':categoryId', $categoryId);
+        } else {
+            $builder->addSelect('(
+                CASE
+                    WHEN (emotions.is_landingpage = 1 AND emotions.parent_id IS NOT NULL) THEN parent.name
+                    WHEN (emotions.is_landingpage = 1 AND emotions.parent_id IS NULL)     THEN emotions.name
+                    WHEN (emotions.is_landingpage = 1) THEN -10
+                    ELSE -15
+                END
+                ) as emotionGroup'
+            );
         }
 
         return $builder;
@@ -239,14 +257,15 @@ class Repository extends ModelRepository
     public function getEmotionDetailQueryBuilder($emotionId)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(array('emotions', 'elements', 'component', 'fields', 'categories', 'grid', 'template'))
+        $builder->select(array('emotions', 'elements', 'component', 'fields', 'attribute', 'categories', 'shops', 'template'))
             ->from('Shopware\Models\Emotion\Emotion', 'emotions')
-            ->leftJoin('emotions.grid', 'grid')
             ->leftJoin('emotions.template', 'template')
             ->leftJoin('emotions.elements', 'elements')
+            ->leftJoin('emotions.attribute', 'attribute')
             ->leftJoin('elements.component', 'component')
             ->leftJoin('component.fields', 'fields')
             ->leftJoin('emotions.categories', 'categories')
+            ->leftJoin('emotions.shops', 'shops')
             ->where('emotions.id = ?1')
             ->setParameter(1, $emotionId);
 
@@ -278,7 +297,7 @@ class Repository extends ModelRepository
     public function getElementDataQueryBuilder($elementId, $componentId)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(array('data.value', 'field.name', 'field.id', 'field.valueType'))
+        $builder->select(array('data.id', 'data.value', 'field.id as fieldId', 'field.name', 'field.valueType'))
             ->from('Shopware\Models\Emotion\Data', 'data')
             ->join('data.field', 'field')
             ->leftJoin('field.component', 'component')
@@ -286,6 +305,41 @@ class Repository extends ModelRepository
             ->andWhere('data.elementId = ?2')
             ->setParameter(1, $componentId)
             ->setParameter(2, $elementId);
+
+        return $builder;
+    }
+
+    /**
+     * @param int[] $elementIds
+     * @return array[] indexed by elementId
+     */
+    public function getElementsViewports($elementIds)
+    {
+        $viewportsQuery = $this->getElementViewportsQueryBuilder($elementIds);
+        $viewportsData = $viewportsQuery->getQuery()->getArrayResult();
+
+        $viewports = [];
+
+        foreach($viewportsData as $viewport) {
+            $elementId = $viewport['elementId'];
+            $viewports[$elementId][] = $viewport;
+        }
+
+        return $viewports;
+    }
+
+    /**
+     * @param int[] $elementIds
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    private function getElementViewportsQueryBuilder($elementIds)
+    {
+        /** @var QueryBuilder $builder */
+        $builder = $this->getEntityManager()->createQueryBuilder();
+        $builder->select(['viewports'])
+            ->from('Shopware\Models\Emotion\ElementViewport', 'viewports')
+            ->where('viewports.elementId IN (?1)')
+            ->setParameter(1, $elementIds, Connection::PARAM_INT_ARRAY);
 
         return $builder;
     }
@@ -339,8 +393,7 @@ class Repository extends ModelRepository
     public function getCategoryEmotionsQueryBuilder($categoryId)
     {
         $builder = $this->getCategoryBaseEmotionsQueryBuilder($categoryId);
-        $builder->select(array('emotions', 'grid', 'template'))
-                ->leftJoin('emotions.grid', 'grid')
+        $builder->select(array('emotions', 'template'))
                 ->leftJoin('emotions.template', 'template');
 
         return $builder;
@@ -397,28 +450,6 @@ class Repository extends ModelRepository
     }
 
     /**
-     * @param integer $categoryId
-     * @return \Doctrine\ORM\Query
-     */
-    public function getCampaignByCategoryQuery($categoryId)
-    {
-        $builder = $this->createQueryBuilder('emotions');
-        $builder->select(array('emotions'))
-            ->innerJoin('emotions.categories', 'categories')
-            ->where('categories.id = ?1')
-            ->andWhere('emotions.parentId IS NULL')
-            ->andWhere('(emotions.validFrom <= :now OR emotions.validFrom IS NULL)')
-            ->andWhere('(emotions.validTo >= :now OR emotions.validTo IS NULL)')
-            ->andWhere('emotions.isLandingPage = 1 ')
-            ->andWhere('emotions.parentId IS NULL')
-            ->andWhere('emotions.active = 1 ')
-            ->setParameter(1, $categoryId)
-            ->setParameter('now', new \DateTime());
-
-        return $builder->getQuery();
-    }
-
-    /**
      * @return \Doctrine\ORM\QueryBuilder
      * @param $offset
      * @param $limit
@@ -426,10 +457,10 @@ class Repository extends ModelRepository
     public function getCampaigns($offset=null, $limit=null)
     {
         $builder = $this->createQueryBuilder('emotions');
-        $builder->select(array('emotions', 'categories.id AS categoryId', 'attribute'))
-            ->innerJoin('emotions.categories', 'categories')
+        $builder->select(array('emotions', 'attribute', 'shops'))
+            ->innerJoin('emotions.shops', 'shops')
             ->leftJoin('emotions.attribute', 'attribute')
-            ->where('emotions.isLandingPage = 1 ')
+            ->where('emotions.isLandingPage = 1')
             ->andWhere('emotions.active = 1');
 
         $builder->setFirstResult($offset)
@@ -439,22 +470,15 @@ class Repository extends ModelRepository
     }
 
     /**
-     * Returns the builder selecting only Campaigns of the given shop category
-     * @param $categoryId
+     * @param $shopId
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getCampaignsByCategoryId($categoryId)
+    public function getCampaignsByShopId($shopId)
     {
         $builder = $this->getCampaigns();
-        $builder->andWhere('emotions.parentId IS NULL');
-        $builder->andWhere(
-            $builder->expr()->orX(
-                $builder->expr()->eq('categories.id', ':categoryId'), // = 3
-                $builder->expr()->like('categories.path', ':categoryPath') //like '%|3|
-            )
-        )
-            ->setParameter('categoryId', $categoryId)
-            ->setParameter('categoryPath', '%|' . $categoryId . '|');
+        $builder->andWhere('shops.id = :shopId')
+            ->andWhere('emotions.parentId IS NULL')
+            ->setParameter('shopId', $shopId);
 
         return $builder;
     }
@@ -466,10 +490,9 @@ class Repository extends ModelRepository
     public function getEmotionById($id)
     {
         $builder = $this->createQueryBuilder('emotions');
-        $builder->select(array('emotions', 'elements', 'component', 'grid', 'template'))
+        $builder->select(array('emotions', 'elements', 'component', 'template'))
             ->leftJoin('emotions.elements', 'elements')
             ->leftJoin('elements.component', 'component')
-            ->leftJoin('emotions.grid', 'grid')
             ->leftJoin('emotions.template', 'template')
             ->where('emotions.id = ?1')
             ->andWhere('(emotions.validFrom <= :now OR emotions.validFrom IS NULL)')
