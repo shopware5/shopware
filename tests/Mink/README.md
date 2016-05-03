@@ -9,6 +9,15 @@ Copy configuration template and adjust `base_url`:
 cp behat.yml.dist behat.yml
 ```
 
+Disable frontend CSRF protection in your config.php
+
+```
+'csrfProtection' => [
+    'frontend' => false,
+    'backend' => true
+],
+```
+
 ### Run entire testsuite
 ```
 $ ./behat --profile=responsive --tags="~javascript"
