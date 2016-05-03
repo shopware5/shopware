@@ -282,15 +282,21 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             return $this->forward('confirm');
         }
 
-        $this->View()->assign($this->session['sOrderVariables']->getArrayCopy());
+        $orderVariables = $this->session['sOrderVariables']->getArrayCopy();
+
+        if (!empty($orderVariables['sOrderNumber'])) {
+            $orderVariables['sAddresses']['billing'] = $this->getOrderAddress($orderVariables['sOrderNumber'], 'billing');
+            $orderVariables['sAddresses']['shipping'] = $this->getOrderAddress($orderVariables['sOrderNumber'], 'shipping');
+            $orderVariables['sAddresses']['equal'] = $this->areAddressesEqual($orderVariables['sAddresses']['billing'], $orderVariables['sAddresses']['shipping']);
+        }
+
+        $this->View()->assign($orderVariables);
 
         if ($this->basket->sCountBasket() <= 0) {
-            $this->View()->assign($this->session['sOrderVariables']->getArrayCopy());
             return;
         }
 
         if (!empty($this->View()->sUserData['additional']['payment']['embediframe'])) {
-            $this->View()->assign($this->session['sOrderVariables']->getArrayCopy());
             return;
         }
 
@@ -348,7 +354,13 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         $this->saveDefaultAddresses();
         $this->resetTemporaryAddresses();
 
-        $this->View()->assign($this->session['sOrderVariables']->getArrayCopy());
+        $orderVariables = $this->session['sOrderVariables']->getArrayCopy();
+
+        $orderVariables['sAddresses']['billing'] = $this->getOrderAddress($orderVariables['sOrderNumber'], 'billing');
+        $orderVariables['sAddresses']['shipping'] = $this->getOrderAddress($orderVariables['sOrderNumber'], 'shipping');
+        $orderVariables['sAddresses']['equal'] = $this->areAddressesEqual($orderVariables['sAddresses']['billing'], $orderVariables['sAddresses']['shipping']);
+
+        $this->View()->assign($orderVariables);
     }
 
     /**
@@ -489,12 +501,10 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         }
 
         if ($this->Request()->getParam('sAddAccessories')) {
-
             $this->forward('addAccessories');
         } else {
             $this->forward($this->Request()->getParam('sTargetAction', 'cart'));
         }
-
     }
 
     /**
@@ -1709,5 +1719,50 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         $address = $this->get('models')->find(Address::class, $addressId);
 
         return $this->get('shopware_account.address_service')->isValid($address);
+    }
+
+    /**
+     * @param int $orderNumber
+     * @param string $source
+     * @return array
+     */
+    private function getOrderAddress($orderNumber, $source)
+    {
+        /** @var \Doctrine\DBAL\Query\QueryBuilder $builder */
+        $builder = $this->get('dbal_connection')->createQueryBuilder();
+        $context = $this->get('shopware_storefront.context_service')->getShopContext();
+
+        $sourceTable = $source === 'billing' ? 's_order_billingaddress' : 's_order_shippingaddress';
+
+        $address = $builder->select(['address.*'])
+            ->from($sourceTable, 'address')
+            ->join('address', 's_order', '', 'address.orderID = s_order.id AND s_order.ordernumber = :orderNumber')
+            ->setParameter('orderNumber', $orderNumber)
+            ->execute()
+            ->fetch();
+
+
+        $countryStruct = $this->get('shopware_storefront.country_gateway')->getCountry($address['countryID'], $context);
+        $stateStruct = $this->get('shopware_storefront.country_gateway')->getState($address['stateID'], $context);
+
+        $address['country'] = json_decode(json_encode($countryStruct), true);
+        $address['state'] = json_decode(json_encode($stateStruct), true);
+
+        return $address;
+    }
+
+    /**
+     * @param array $addressA
+     * @param array $addressB
+     * @return bool
+     */
+    private function areAddressesEqual(array $addressA, array $addressB)
+    {
+        $unset = ['id', 'customernumber', 'phone', 'ustid'];
+        foreach ($unset as $key) {
+            unset($addressA[$key], $addressB[$key]);
+        }
+
+        return count(array_diff($addressA, $addressB)) == 0;
     }
 }

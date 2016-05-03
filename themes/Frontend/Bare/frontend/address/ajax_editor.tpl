@@ -1,7 +1,13 @@
 {block name="frontend_address_editor_modal"}
     <div data-register="true" class="panel">
         {block name="frontend_address_editor_modal_title"}
-            <div class="panel--title is--underline">{s name="AddressesTitleEdit" namespace="frontend/address/index"}{/s}</div>
+            <div class="panel--title is--underline">
+                {if $formData.id}
+                        {s name="AddressesTitleEdit" namespace="frontend/address/index"}{/s}
+                    {else}
+                        {s name="AddressesTitleCreate" namespace="frontend/address/index"}{/s}
+                {/if}
+            </div>
         {/block}
         {block name="frontend_address_editor_modal_body"}
             <div class="panel--body address-editor--body">

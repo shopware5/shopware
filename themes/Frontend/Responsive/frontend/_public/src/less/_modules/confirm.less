@@ -159,17 +159,12 @@ It is displayed as the third step of the checkout process of Shopware and shows 
         }
     }
 
-    .information--panel-address {
+    .information--panel-item.information--panel-address {
+        .shipping--panel {
+            text-align: center;
 
-        > .panel > .panel--body {
-            padding: 0;
-        }
-
-        .addresses--are-equal {
-            .shipping--panel {
-                .panel--body {
-                    text-align: center;
-                }
+            .btn {
+                display: none;
             }
         }
     }
@@ -180,14 +175,27 @@ It is displayed as the third step of the checkout process of Shopware and shows 
 }
 
 @media screen and (max-width: @phoneLandscapeViewportWidth) {
-    .information--panel-address {
-        .addresses--are-equal {
-            .shipping--panel {
-                margin: 0;
+    .confirm--content {
+        .information--panel-item {
+            .information--panel-address {
+
+                .shipping--panel {
+                    .unitize(margin-top, 20);
+                    .unitize(padding-top, 20);
+
+                    .btn {
+                        text-align: center;
+                    }
+                }
+
+                .panel--actions {
+                    .choose-different-address {
+                        display: inline-block;
+                    }
+                }
 
                 .panel--body {
-                    .unitize(padding-top, 20);
-                    border-top: 1px solid #dadae5;
+                    padding-bottom: 0;
                 }
             }
         }
@@ -378,6 +386,57 @@ It is displayed as the third step of the checkout process of Shopware and shows 
         .relevant--info {
             display: block;
         }
+
+        .information--panel-wrapper {
+            .information--panel-item-billing {
+                width: 50%;
+
+                .panel {
+                    border-right: 0;
+                    border-top-right-radius: 0;
+                    border-bottom-right-radius: 0;
+                }
+            }
+
+            .information--panel-item-shipping {
+                padding-left: 0;
+                width: 50%;
+
+                .panel {
+                    border-left: 0;
+                    border-top-left-radius: 0;
+                    border-bottom-left-radius: 0;
+                }
+            }
+        }
+
+        .information--panel-item.information--panel-address {
+            .panel--actions {
+                .choose-different-address {
+                    display: none;
+                }
+            }
+
+            .shipping--panel {
+                .btn {
+                    display: inline-block;
+                }
+            }
+
+            .panel--body {
+                .clearfix();
+
+                .billing--panel {
+                    float: left;
+                    width: 50%;
+                }
+
+                .shipping--panel {
+                    float: right;
+                    width: 50%;
+                }
+            }
+        }
     }
 }
 
@@ -394,6 +453,10 @@ It is displayed as the third step of the checkout process of Shopware and shows 
 
         .information--panel-wrapper {
             .payment--panel {
+                .panel--actions {
+                    position: relative;
+                }
+
                 .btn--change-payment {
                     .unitize(bottom, 20);
                     position: absolute;
