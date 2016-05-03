@@ -5,6 +5,7 @@ In this document you will find a changelog of the important changes related to t
 * The interface `Enlight_Components_Cron_Adapter` in `engine/Library/Enlight/Components/Cron/Adapter.php` got a new method `getJobByAction`. For default implementation see `engine/Library/Enlight/Components/Cron/Adapter/DBAL.php`.
 
 ## 5.1.5
+* Added new Event `Shopware_Modules_Admin_regenerateSessionId_Start` in sAdmin::regenerateSessionId
 * The smarty variable `sCategoryInfo` in Listing and Blog controllers is now deprecated and will be removed soon. Use `sCategoryContent` instead, it's a drop in replacement. 
 
 ## 5.1.4
