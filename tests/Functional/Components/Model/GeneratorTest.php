@@ -81,6 +81,15 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testDefaultInitializationEmptyString()
+    {
+        $this->addAndEvaluateInitialization(
+            'VARCHAR(255)',
+            '',
+            '""'
+        );
+    }
+
     public function testDefaultInitializationInteger()
     {
         $default = 123;
@@ -95,12 +104,30 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $this->addAndEvaluateInitialization(
             'TINYINT(1)',
-            1,
+            true,
             'true'
         );
     }
 
     public function testDefaultInitializationBooleanFalse()
+    {
+        $this->addAndEvaluateInitialization(
+            'TINYINT(1)',
+            false,
+            'false'
+        );
+    }
+
+    public function testDefaultInitializationBooleanTrueAsInt()
+    {
+        $this->addAndEvaluateInitialization(
+            'TINYINT(1)',
+            1,
+            'true'
+        );
+    }
+
+    public function testDefaultInitializationBooleanFalseAsInt()
     {
         $this->addAndEvaluateInitialization(
             'TINYINT(1)',
