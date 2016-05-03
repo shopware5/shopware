@@ -41,6 +41,7 @@ Ext.define('Shopware.apps.PluginManager.model.Licence', {
         { name: 'creationDate', type: 'datetime' },
         { name: 'expirationDate', type: 'datetime' },
         { name: 'licenseKey', type: 'string' },
+        { name: 'licenseCheck', type: 'boolean', defaultValue: false, persist: false},
         { name: 'binaryLink', type: 'string' },
         { name: 'binaryVersion', type: 'string' },
 

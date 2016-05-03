@@ -67,6 +67,11 @@ class LicenceStruct implements \JsonSerializable
     private $licenseKey;
 
     /**
+     * @var bool
+     */
+    private $licenseCheck = false;
+
+    /**
      * @var PriceStruct
      */
     private $priceModel;
@@ -265,5 +270,21 @@ class LicenceStruct implements \JsonSerializable
     public function setIconPath($iconPath)
     {
         $this->iconPath = $iconPath;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function hasLicenseCheck()
+    {
+        return $this->licenseCheck;
+    }
+
+    /**
+     * @param boolean $licenseCheck
+     */
+    public function setLicenseCheck($licenseCheck)
+    {
+        $this->licenseCheck = $licenseCheck;
     }
 }
