@@ -213,6 +213,7 @@ In this document you will find a changelog of the important changes related to t
     * `sOrder::sGetOrderNumber()`
     * `Shopware_Components_Document::saveDocument()`
 * HttpCache: Added possibility to add multiple, comma separated proxy URLs
+* Added combobox to the backend order details module for changing the `dispatch` of an order
 
 ## 5.1.5
 * The smarty variable `sCategoryInfo` in Listing and Blog controllers is now deprecated and will be removed soon. Use `sCategoryContent` instead, it's a drop in replacement.
