@@ -201,11 +201,21 @@ In this document you will find a changelog of the important changes related to t
 * `\Shopware\Bundle\StoreFrontBundle\Gateway\GraduatedPricesGatewayInterface` requires now a provided `ShopContextInterface`
 * Categories of `Shopware\Components\Api\Resource\Article::getArticleCategories($articleId)` are no longer indexed by category id
 * Moved `<form>` element in checkout confirm outside the agreement box to wrap around address and payment boxes
-* Removed smarty variable `sCategoryInfo` in listing and blog controllers. Use `sCategoryContent` instead. 
+* Removed smarty variable `sCategoryInfo` in listing and blog controllers. Use `sCategoryContent` instead.
+* Added creation of custom `__construct()` method to `Shopware\Components\Model\Generator`, which initializes any default values of properties when generating attribute models
+* Removed `sAdmin::sUpdateAccount()`
+* Removed `saveAccount()` in `Controllers/Frontend/Account.php`
+* Moved field `birthday` from billing address to customer
+* Added validation of order number to `Shopware\Components\Api\Resource\Variant::prepareData()` to respond with meaningful error message for duplicate order numbers
+* Added service `shopware.number_range_manager` for safely retrieving the next number of a number range (`s_order_number`)
+* Changed the following methods to use the `shopware.number_range_manager` service for retrieving the next number of a range:
+    * `sAdmin::assignCustomerNumber()`
+    * `sOrder::sGetOrderNumber()`
+    * `Shopware_Components_Document::saveDocument()`
 * HttpCache: Added possibility to add multiple, comma separated proxy URLs
 
 ## 5.1.5
-* The smarty variable `sCategoryInfo` in Listing and Blog controllers is now deprecated and will be removed soon. Use `sCategoryContent` instead, it's a drop in replacement. 
+* The smarty variable `sCategoryInfo` in Listing and Blog controllers is now deprecated and will be removed soon. Use `sCategoryContent` instead, it's a drop in replacement.
 
 ## 5.1.4
 * Customer logout will now regenerate the session id and clear the customers basket.
