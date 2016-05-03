@@ -145,7 +145,11 @@ class Hydrator
         if (!isset($data[$key]) || empty($data[$key])) {
             return [];
         }
+
         $translation = unserialize($data[$key]);
+        if (!$translation) {
+            return [];
+        }
 
         if ($id === null) {
             return $translation;
