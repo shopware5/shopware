@@ -563,7 +563,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         $sql = "SELECT DISTINCT s_user.active AS active, customergroup,
             validation, email, s_core_customergroups.description AS customergroup_name,
             validation AS customergroup_id, s_user.id AS id, lastlogin AS date,
-            company AS company_name, customernumber, CONCAT(firstname,' ',lastname) AS customer
+            company AS company_name, customernumber, CONCAT(s_user.firstname,' ',s_user.lastname) AS customer
         FROM s_user
         LEFT JOIN s_core_customergroups
             ON groupkey = validation,
