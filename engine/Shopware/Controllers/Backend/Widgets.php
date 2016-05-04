@@ -741,11 +741,16 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         }
 
         $result = [];
-        $xml = new \SimpleXMLElement(file_get_contents('https://' . $lang . '.shopware.com/news/?sRss=1', false, stream_context_create([
-            'http' => [
-                'timeout' => 20
-            ]
-        ])));
+
+        try {
+            $xml = new \SimpleXMLElement(file_get_contents('https://' . $lang . '.shopware.com/news/?sRss=1', false, stream_context_create([
+                'http' => [
+                    'timeout' => 20
+                ]
+            ])));
+        } catch (\Exception $e) {
+            return [];
+        }
 
         /**
          * @var \SimpleXMLElement $news

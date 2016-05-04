@@ -104,6 +104,7 @@ DirectoryIndex shopware.php
    php_flag session.auto_start off
    php_flag suhosin.session.cryptua off
    php_flag zend.ze1_compatibility_mode off
+   php_value always_populate_raw_post_data -1
 </IfModule>
 
 #   AddType x-mapp-php5 .php
