@@ -1488,12 +1488,12 @@ class sBasket
      * Add product to cart
      * Used in multiple locations
      *
-     * @param int $id Order number (s_articles_details.ordernumber)
+     * @param string $ordernumber Order number (s_articles_details.ordernumber)
      * @param int $quantity Amount
      * @throws Enlight_Exception If no price could be determined, or a database error occurs
      * @return int|false Id of the inserted basket entry, or false on failure
      */
-    public function sAddArticle($id, $quantity = 1)
+    public function sAddArticle($ordernumber, $quantity = 1)
     {
         $sessionId = $this->session->get('sessionId');
         if ($this->session->get('Bot') || empty($sessionId)) {
@@ -1510,7 +1510,7 @@ class sBasket
                 'Shopware_Modules_Basket_AddArticle_Start',
                 array(
                     'subject' => $this,
-                    'id' => $id,
+                    'id' => $ordernumber,
                     "quantity" => $quantity
                 )
             )
@@ -1518,7 +1518,7 @@ class sBasket
             return false;
         }
 
-        $article = $this->getArticleForAddArticle($id);
+        $article = $this->getArticleForAddArticle($ordernumber);
 
         if (!$article) {
             return false;
@@ -2644,10 +2644,10 @@ class sBasket
     /**
      * Get article data for sAddArticle
      *
-     * @param int $id Article ordernumber
+     * @param string $ordernumber Article ordernumber
      * @return array|false Article data, or false if none found
      */
-    private function getArticleForAddArticle($id)
+    private function getArticleForAddArticle($ordernumber)
     {
         $sql = "
             SELECT s_articles.id AS articleID, s_articles.main_detail_id, name AS articleName, taxID,
@@ -2667,13 +2667,13 @@ class sBasket
 
         $article = $this->db->fetchRow(
             $sql,
-            array($id, $this->sSYSTEM->sUSERGROUPDATA["id"])
+            array($ordernumber, $this->sSYSTEM->sUSERGROUPDATA["id"])
         );
 
         $article = $this->eventManager->filter('Shopware_Modules_Basket_getArticleForAddArticle_FilterArticle',
             $article,
             array(
-                "id" => $id,
+                "id" => $ordernumber,
                 'subject'=> $this,
                 "partner" => $this->sSYSTEM->_SESSION["sPartner"]
             )
