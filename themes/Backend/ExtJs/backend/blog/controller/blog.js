@@ -445,6 +445,8 @@ Ext.define('Shopware.apps.Blog.controller.Blog', {
                     listStore.load();
                     //to remove all red flags
                     Shopware.Notification.createGrowlMessage('',me.snippets.onSaveChangesSuccess, me.snippets.growlMessage);
+
+                    me.getDetailWindow().close();
                 } else {
                     Shopware.Notification.createGrowlMessage('',me.snippets.onSaveChangesError, me.snippets.growlMessage);
                 }
