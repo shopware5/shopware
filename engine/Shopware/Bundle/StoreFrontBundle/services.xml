@@ -75,6 +75,8 @@
         <service id="shopware_storefront.similar_products_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\SimilarProductsService">
             <argument type="service" id="shopware_storefront.similar_products_gateway"/>
             <argument type="service" id="shopware_storefront.list_product_service"/>
+            <argument type="service" id="shopware_search.product_search"/>
+            <argument type="service" id="shopware_search.store_front_criteria_factory"/>
             <argument type="service" id="config" />
         </service>
 

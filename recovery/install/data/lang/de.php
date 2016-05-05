@@ -23,7 +23,7 @@ return [
     'language-selection_info_message'    => 'Diese Sprachauswahl bezieht sich lediglich auf den Installationsassistenten. Im Anschluss an die Installation können Sie Ihren Shop natürlich wahlweise in vielen anderen Sprachen betreiben.',
     'language-selection_welcome_message' => <<<EOT
 <p>
-    Sie sind nur noch wenige Klicks davon entfernt, Teil der großen Shopware Community zu werden, welche aktuell aus über 30.000 Onlinehändlern weltweit besteht!
+    Sie sind nur noch wenige Klicks davon entfernt, Teil der großen Shopware Community zu werden, welche aktuell aus über 54.000 Onlinehändlern weltweit besteht!
 </p>
 <p>
     Darüber hinaus steht Ihnen unser Support-Team selbstverständlich jederzeit für Fragen zur Verfügung. Kontaktieren Sie uns einfach unter Tel. <a href="tel:+492555928850">(+49) 2555 92 8850</a> oder E-Mail <a href="mailto:info@shopware.com">info@shopware.com</a> .

@@ -59,7 +59,7 @@ class PluginConfigListCommand extends ShopwareCommand
                 'Name of the plugin to list config.'
             )
             ->setHelp(<<<EOF
-The <info>%command.name%</info> lists a pluginc configuration.
+The <info>%command.name%</info> lists a plugin configuration.
 EOF
             );
         ;

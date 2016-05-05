@@ -22,41 +22,53 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\SearchBundleES\Subscriber;
+namespace Shopware\Bundle\SearchBundle\Condition;
 
-use Enlight\Event\SubscriberInterface;
-use Shopware\Components\DependencyInjection\Container;
+use Assert\Assertion;
+use Shopware\Bundle\SearchBundle\ConditionInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 
-class ServiceSubscriber implements SubscriberInterface
+class SimilarProductCondition implements ConditionInterface
 {
-    /**
-     * @var Container
-     */
-    private $container;
+    /** @var string $productName */
+    protected $productName;
+
+    /** @var int $productId */
+    private $productId;
 
     /**
-     * @param Container $container
+     * @param int $productId
+     * @param string $productName
+     * @throws \Exception
      */
-    public function __construct(Container $container)
+    public function __construct($productId, $productName)
     {
-        $this->container = $container;
+        Assertion::integerish($productId);
+        $this->productId = $productId;
+        $this->productName = $productName;
     }
 
     /**
-     * {@inheritdoc}
+     * @return int
      */
-    public static function getSubscribedEvents()
+    public function getProductId()
     {
-        return [
-            'Enlight_Bootstrap_AfterInitResource_shopware_search.product_number_search'        => ['registerProductNumberSearch', -5000]
-        ];
+        return $this->productId;
     }
 
-    public function registerProductNumberSearch()
+    /**
+     * @return string
+     */
+    public function getName()
     {
-        $this->container->set(
-            'shopware_search.product_number_search',
-            $this->container->get('shopware_search_es.product_number_search')
-        );
+        return 'similar_products';
+    }
+
+    /**
+     * @return string
+     */
+    public function getProductName()
+    {
+        return $this->productName;
     }
 }

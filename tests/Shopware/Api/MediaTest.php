@@ -166,7 +166,7 @@ class Shopware_Tests_Api_MediaTest extends PHPUnit_Framework_TestCase
 
         $requestData = array(
             'album'  => -1,
-            'file'   => 'http://lorempixel.com/640/480/food/',
+            'file'   => 'http://assets.shopware.com/sw_logo_white.png',
             'description' => 'flipflops'
         );
         $requestData = Zend_Json::encode($requestData);

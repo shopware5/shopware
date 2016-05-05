@@ -301,11 +301,10 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
             columnDefinition = {
                 dataIndex: column.alias,
                 header: me.getTranslationForColumnHead(column.alias),
-                hidden: !column.show,
                 /*{if {acl_is_allowed resource=article privilege=save}}*/
                 editor: me.getEditorForColumn(column),
                 /*{/if}*/
-//                sortable: false
+                hidden: !column.show
             };
 
             if (xtype = me.getXtypeForColumn(column)) {

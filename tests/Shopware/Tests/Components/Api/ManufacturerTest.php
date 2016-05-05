@@ -43,7 +43,7 @@ class Shopware_Tests_Components_Api_ManufacturerTest extends Shopware_Tests_Comp
             "description" => "foobar description with exceptionell long text",
             "link" => "http://shopware.com",
             "image" => [
-                "link" => "http://lorempixel.com/640/480/sports/"
+                "link" => "http://assets.shopware.com/sw_logo_white.png"
             ],
 
             "metaTitle" => "test, test",

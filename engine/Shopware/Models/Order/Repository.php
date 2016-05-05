@@ -477,7 +477,7 @@ class Repository extends ModelRepository
                         break;
                     case "from":
                         $tmp = new \DateTime($filter['value']);
-                        $builder->andWhere('orders.orderTime > :orderTimeFrom');
+                        $builder->andWhere('orders.orderTime >= :orderTimeFrom');
                         $builder->setParameter('orderTimeFrom', $tmp->format('Ymd'));
                         break;
                     case "to":

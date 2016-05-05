@@ -915,11 +915,14 @@ class sRewriteTable
         $sql = $this->getSeoArticleQuery();
         $sql = $this->db->limit($sql, $limit, $offset);
 
+        $shopFallbackId = (Shopware()->Shop()->getFallback() instanceof \Shopware\Models\Shop\Shop) ? Shopware()->Shop()->getFallback()->getId() : null;
+
         $result = $this->db->fetchAll(
             $sql,
             array(
                 Shopware()->Shop()->get('parentID'),
                 Shopware()->Shop()->getId(),
+                $shopFallbackId,
                 $lastUpdate
             )
         );
@@ -970,7 +973,7 @@ class sRewriteTable
     {
         return "
             SELECT a.*, d.ordernumber, d.suppliernumber, s.name as supplier, datum as date,
-                d.releasedate, changetime as changed, metaTitle, ct.objectdata, at.attr1, at.attr2,
+                d.releasedate, changetime as changed, metaTitle, ct.objectdata, ctf.objectdata as objectdataFallback, at.attr1, at.attr2,
                 at.attr3, at.attr4, at.attr5, at.attr6, at.attr7, at.attr8, at.attr9,
                 at.attr10,at.attr11, at.attr12, at.attr13, at.attr14, at.attr15, at.attr16,
                 at.attr17, at.attr18, at.attr19, at.attr20
@@ -993,6 +996,11 @@ class sRewriteTable
                 ON ct.objectkey=a.id
                 AND ct.objectlanguage=?
                 AND ct.objecttype='article'
+
+            LEFT JOIN s_core_translations ctf
+                ON ctf.objectkey=a.id
+                AND ctf.objectlanguage=?
+                AND ctf.objecttype='article'
 
             LEFT JOIN s_articles_supplier s
                 ON s.id=a.supplierID
@@ -1305,30 +1313,64 @@ class sRewriteTable
     public function mapArticleTranslationObjectData($articles)
     {
         foreach ($articles as &$article) {
-            if (empty($article['objectdata'])) {
-                unset($article['objectdata']);
+            if (empty($article['objectdata']) && empty($article['objectdataFallback'])) {
+                unset($article['objectdata'], $article['objectdataFallback']);
                 continue;
             }
 
-            $data = unserialize($article['objectdata']);
-            if (!$data) {
+            $objectData = unserialize($article['objectdata']);
+            $objectDataFallback = unserialize($article['objectdataFallback']);
+
+            if (empty($objectData)) {
+                $objectData = [];
+            }
+
+            if (empty($objectDataFallback)) {
+                $objectDataFallback = [];
+            }
+
+            if (empty($objectData) && empty($objectDataFallback)) {
                 continue;
             }
 
-            $data['name'] = (!empty($data['txtArtikel'])) ? $data['txtArtikel'] : $article['name'];
-            $data['description_long'] = (!empty($data['txtlangbeschreibung'])) ? $data['txtlangbeschreibung'] : $article['description_long'];
-            $data['description'] = (!empty($data['txtshortdescription'])) ? $data['txtshortdescription'] : $article['description'];
-            $data['keywords'] = (!empty($data['txtkeywords'])) ? $data['txtkeywords'] : $article['keywords'];
+            unset($article['objectdata'], $article['objectdataFallback']);
 
-            unset($article['objectdata']);
-            unset($data['txtArtikel']);
-            unset($data['txtlangbeschreibung']);
-            unset($data['txtlangbeschreibung']);
-            unset($data['txtkeywords']);
-
-            $article = array_merge($article, $data);
+            $article = $this->mapArticleObjectFields($article, $objectData, $objectDataFallback, [
+                'name' => 'txtArtikel',
+                'description_long' => 'txtlangbeschreibung',
+                'description' => 'txtshortdescription',
+                'keywords' => 'keywords',
+            ]);
         }
 
         return $articles;
+    }
+
+    /**
+     * map article core translation including fallback fields for given article
+     *
+     * @param array $article
+     * @param array $objectData
+     * @param array $objectDataFallback
+     * @param array $fieldMappings array(articleFieldName => objectDataFieldName)
+     * @return array $article
+     */
+    private function mapArticleObjectFields(
+        array $article,
+        array $objectData,
+        array $objectDataFallback,
+        array $fieldMappings
+    ) {
+        foreach ($fieldMappings as $articleFieldName => $objectDataFieldName) {
+            if (!empty($objectData[$objectDataFieldName])) {
+                $article[$articleFieldName] = $objectData[$objectDataFieldName];
+                continue;
+            }
+
+            if (!empty($objectDataFallback[$objectDataFieldName])) {
+                $article[$articleFieldName] = $objectDataFallback[$objectDataFieldName];
+            }
+        }
+        return $article;
     }
 }

@@ -1210,21 +1210,9 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             unset($data['tax']);
         }
 
-        $articleDetails = null;
-        // Add articleId if it's not provided by the client
-        if ($data['articleId'] == 0 && !empty($data['articleNumber'])) {
-            $detailRepo = Shopware()->Models()->getRepository('Shopware\Models\Article\Detail');
-            /** @var \Shopware\Models\Article\Detail $articleDetails */
-            $articleDetails = $detailRepo->findOneBy(array('number' => $data['articleNumber']));
-            if ($articleDetails) {
-                $data['articleId'] = $articleDetails->getArticle()->getId();
-            }
-        }
-        if (!$articleDetails && $data['articleId']) {
-            /** @var \Shopware\Models\Article\Detail $articleDetails */
-            $articleDetails = Shopware()->Models()->getRepository('Shopware\Models\Article\Detail')
-                ->findOneBy(array('number' => $data['articleNumber']));
-        }
+        /** @var \Shopware\Models\Article\Detail $articleDetails */
+        $articleDetails = Shopware()->Models()->getRepository('Shopware\Models\Article\Detail')
+            ->findOneBy(array('number' => $data['articleNumber']));
 
         //Load ean, unit and pack unit (translate if needed)
         if ($articleDetails) {

@@ -274,7 +274,7 @@ class CheckoutContext extends SubContext
                 'supplierId' => $manufacturer['id'],
                 'categories' => [$category],
                 'images' => [
-                    ['link' => 'http://lorempixel.com/640/480/sports/']
+                    ['link' => 'http://assets.shopware.com/sw_logo_white.png']
                 ]
             ];
 
