@@ -83,7 +83,7 @@ class VariantTest extends TestCase
 
 
             'mainDetail' => array(
-                'number' => 'swTEST' . uniqid(),
+                'number' => 'swTEST' . uniqid(rand()),
                 'inStock' => 15,
                 'unitId' => 1,
 
@@ -134,7 +134,7 @@ class VariantTest extends TestCase
 
             'variants' => array(
                 array(
-                    'number' => 'swTEST.variant.' . uniqid(),
+                    'number' => 'swTEST.variant.' . uniqid(rand()),
                     'inStock' => 17,
                     'unitId' => 1,
 
@@ -175,7 +175,7 @@ class VariantTest extends TestCase
 
                 ),
                 array(
-                    'number' => 'swTEST.variant.' . uniqid(),
+                    'number' => 'swTEST.variant.' . uniqid(rand()),
                     'inStock' => 17,
                     'unitId' => 1,
 
@@ -582,7 +582,7 @@ class VariantTest extends TestCase
     private function getSimpleVariantData()
     {
         return array(
-            'number' => 'swTEST' . uniqid(),
+            'number' => 'swTEST' . uniqid(rand()),
             'inStock' => 100,
             'unitId' => 1,
             'prices' => array(
@@ -748,7 +748,7 @@ class VariantTest extends TestCase
             $options = $this->getVariantOptionsOfSet($configuratorSet);
 
             unset($options[0]['optionId']);
-            $name = 'New-' . uniqid();
+            $name = 'New-' . uniqid(rand());
             $names[] = $name;
             $options[0]['option'] = $name;
             $create['configuratorOptions'] = $options;

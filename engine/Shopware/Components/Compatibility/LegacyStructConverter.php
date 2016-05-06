@@ -129,7 +129,7 @@ class LegacyStructConverter
     public function convertStateStruct(StoreFrontBundle\Struct\Country\State $state)
     {
         $data = json_decode(json_encode($state), true);
-        $data += ['shortcode' => $state->getCode(),];
+        $data += ['shortcode' => $state->getCode()];
         return $data;
     }
 

@@ -79,7 +79,13 @@ class CustomerValidator implements CustomerValidatorInterface
         $this->validateField($customer->getFirstname(), [new NotBlank()]);
         $this->validateField($customer->getLastname(), [new NotBlank()]);
         $this->validateField($customer->getSalutation(), $this->getSalutationConstraints());
-        $this->validateField($customer->getEmail(), $this->getEmailConstraints($customer));
+        $this->validateField($customer->getEmail(), [
+            new CustomerEmail([
+                'shop' => $this->context->getShopContext()->getShop(),
+                'customerId' => $customer->getId(),
+                'accountMode' => $customer->getAccountMode()
+            ])
+        ]);
     }
 
     /**
@@ -93,21 +99,6 @@ class CustomerValidator implements CustomerValidatorInterface
         if ($violations->count()) {
             throw new ValidationException($violations);
         }
-    }
-
-    /**
-     * @param Customer $customer
-     * @return \Symfony\Component\Validator\ConstraintValidatorInterface[]
-     */
-    private function getEmailConstraints(Customer $customer)
-    {
-        return [
-            new CustomerEmail([
-                'shop' => $this->context->getShopContext()->getShop(),
-                'customerId' => $customer->getId(),
-                'accountMode' => $customer->getAccountMode()
-            ])
-        ];
     }
 
     /**

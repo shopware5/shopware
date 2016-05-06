@@ -1,13 +1,34 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
-namespace Shopware\Bundle\AccountBundle\Service\Core;
+namespace Shopware\Bundle\AccountBundle\Service;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\AccountBundle\Service\AddressServiceInterface;
-use Shopware\Bundle\AccountBundle\Service\RegisterServiceInterface;
 use Shopware\Bundle\AccountBundle\Service\Validator\CustomerValidatorInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
+use Shopware\Components\Model\ModelEntity;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\NumberRangeIncrementerInterface;
 use Shopware\Components\Password\Manager;
@@ -54,6 +75,11 @@ class RegisterService implements RegisterServiceInterface
     private $addressService;
 
     /**
+     * @var array
+     */
+    private $createdEntities = [];
+
+    /**
      * RegisterService constructor.
      * @param ModelManager $modelManager
      * @param CustomerValidatorInterface $validator
@@ -86,6 +112,7 @@ class RegisterService implements RegisterServiceInterface
      * @param Customer $customer
      * @param Address $billing
      * @param Address|null $shipping
+     * @throws \Exception
      */
     public function register(
         Shop $shop,
@@ -93,20 +120,29 @@ class RegisterService implements RegisterServiceInterface
         Address $billing,
         Address $shipping = null
     ) {
-        $this->saveCustomer($shop, $customer);
+        try {
+            $this->saveCustomer($shop, $customer);
+            $this->addCreatedEntity($customer);
 
-        $this->addressService->create($billing, $customer);
+            $this->addressService->create($billing, $customer);
+            $this->addCreatedEntity($billing);
 
-        $this->addressService->setDefaultBillingAddress($billing);
+            $this->addressService->setDefaultBillingAddress($billing);
 
-        if ($shipping !== null) {
-            $this->addressService->create($shipping, $customer);
-            $this->addressService->setDefaultShippingAddress($shipping);
-        } else {
-            $this->addressService->setDefaultShippingAddress($billing);
+            if ($shipping !== null) {
+                $this->addressService->create($shipping, $customer);
+                $this->addressService->setDefaultShippingAddress($shipping);
+                $this->addCreatedEntity($shipping);
+            } else {
+                $this->addressService->setDefaultShippingAddress($billing);
+            }
+
+            $this->saveReferer($customer);
+            $this->resetCreatedEntityList();
+        } catch (\Exception $ex) {
+            $this->rollback();
+            throw $ex;
         }
-
-        $this->saveReferer($customer);
     }
 
     /**
@@ -185,6 +221,7 @@ class RegisterService implements RegisterServiceInterface
         $this->validator->validate($customer);
         $this->modelManager->persist($customer);
         $this->modelManager->flush($customer);
+        $this->modelManager->refresh($customer);
     }
 
     /**
@@ -194,5 +231,33 @@ class RegisterService implements RegisterServiceInterface
     private function getPartnerId(Customer $customer)
     {
         return (int) $this->connection->fetchColumn('SELECT id FROM s_emarketing_partner WHERE idcode = ?', [$customer->getAffiliate()]);
+    }
+
+    /**
+     * In case of an error, rollback the entity creation to prevent zombie data
+     */
+    private function rollback()
+    {
+        foreach ($this->createdEntities as $entityName => $ids) {
+            foreach ($ids as $id) {
+                $this->modelManager->remove($this->modelManager->find($entityName, $id));
+            }
+        }
+
+        $this->modelManager->flush();
+        $this->resetCreatedEntityList();
+    }
+
+    /**
+     * @param ModelEntity $entity
+     */
+    private function addCreatedEntity(ModelEntity $entity)
+    {
+        $this->createdEntities[get_class($entity)][] = $entity->getId();
+    }
+
+    private function resetCreatedEntityList()
+    {
+        $this->createdEntities = [];
     }
 }

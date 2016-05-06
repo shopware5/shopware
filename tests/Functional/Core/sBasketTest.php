@@ -83,7 +83,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
     {
         // Test with empty session, expect empty array
         $this->assertEquals(array(), $this->module->sGetAmount());
-        $this->module->sSYSTEM->sSESSION_ID = uniqid();
+        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
 
         $this->db->insert(
@@ -118,7 +118,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
         );
 
         // Create session id
-        $this->module->sSYSTEM->sSESSION_ID = uniqid();
+        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
 
         // Fetch an article in stock with stock control
@@ -247,7 +247,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
         );
 
         // Create session id
-        $this->module->sSYSTEM->sSESSION_ID = uniqid();
+        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
 
         // Add two articles to the basket
@@ -391,7 +391,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->module->sInsertPremium());
 
         // Create session id
-        $this->module->sSYSTEM->sSESSION_ID = uniqid();
+        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
 
         // Test with session, expect true
@@ -544,7 +544,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($this->module->getMaxTax());
 
         // Create session id
-        $this->module->sSYSTEM->sSESSION_ID = uniqid();
+        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
 
         // Test with session and empty basket, expect false
@@ -614,7 +614,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
         );
 
         // Create session id and try again, same results
-        $this->module->sSYSTEM->sSESSION_ID = uniqid();
+        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
         $result = $this->module->sAddVoucher('');
         $this->assertInternalType('array', $result);
@@ -633,7 +633,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
             'numberofunits' => 1,
             'value' => 10,
             'minimumcharge' => 10,
-            'ordercode' => uniqid(),
+            'ordercode' => uniqid(rand()),
             'modus' => 0
         );
         // Try with valid voucher code, empty basket
@@ -641,7 +641,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
             's_emarketing_vouchers',
             $voucherData
         );
-        $this->module->sSYSTEM->sSESSION_ID = uniqid();
+        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
         $result = $this->module->sAddVoucher('testOne');
         $this->assertInternalType('array', $result);
@@ -751,7 +751,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
             'numberofunits' => 10,
             'value' => 10,
             'minimumcharge' => 10,
-            'ordercode' => uniqid(),
+            'ordercode' => uniqid(rand()),
             'modus' => 1,
             'taxconfig' => 'none'
         );
@@ -763,7 +763,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
 
         $voucherCodeData = array(
             'voucherID' => $voucherId,
-            'code' => uniqid(),
+            'code' => uniqid(rand()),
             'userID' => null,
             'cashed' => 0
         );
@@ -774,7 +774,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
 
         $customer = $this->createDummyCustomer();
         $this->session['sUserId'] = $customer->getId();
-        $this->module->sSYSTEM->sSESSION_ID = uniqid();
+        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
 
         // Test with one-time code, fail due to minimum amount (cart is empty)
@@ -875,7 +875,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
             'numorder' => 1,
             'value' => 10,
             'minimumcharge' => 10,
-            'ordercode' => uniqid(),
+            'ordercode' => uniqid(rand()),
             'modus' => 0,
             'subshopID' => 3,
             'taxconfig' => $tax['id'],
@@ -887,7 +887,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
 
         $customer = $this->createDummyCustomer();
         $this->session['sUserId'] = $customer->getId();
-        $this->module->sSYSTEM->sSESSION_ID = uniqid();
+        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
 
         // Add one article to the basket with enough value to use discount
@@ -964,7 +964,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
             'numorder' => 1,
             'value' => 10,
             'minimumcharge' => 10,
-            'ordercode' => uniqid(),
+            'ordercode' => uniqid(rand()),
             'modus' => 0,
             'subshopID' => 3
         );
@@ -980,7 +980,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
             'numorder' => 1,
             'value' => 10,
             'minimumcharge' => 10,
-            'ordercode' => uniqid(),
+            'ordercode' => uniqid(rand()),
             'modus' => 0,
             'subshopID' => 3
         );
@@ -991,7 +991,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
 
         $customer = $this->createDummyCustomer();
         $this->session['sUserId'] = $customer->getId();
-        $this->module->sSYSTEM->sSESSION_ID = uniqid();
+        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
 
         // Add one article to the basket with enough value to use discount
@@ -1067,7 +1067,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
             'numorder' => 1,
             'value' => 10,
             'minimumcharge' => 10,
-            'ordercode' => uniqid(),
+            'ordercode' => uniqid(rand()),
             'modus' => 0,
             'customergroup' => $randomCustomerGroup[0]['id']
         );
@@ -1085,7 +1085,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
         );
         $this->module->sSYSTEM->sUSERGROUPDATA['id'] = $randomCustomerGroup[1]['id'];
         $this->session['sUserId'] = $customer->getId();
-        $this->module->sSYSTEM->sSESSION_ID = uniqid();
+        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
 
         // Add one article to the basket with enough value to use discount
@@ -1165,7 +1165,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
             'numorder' => 1,
             'value' => 10,
             'minimumcharge' => 10,
-            'ordercode' => uniqid(),
+            'ordercode' => uniqid(rand()),
             'modus' => 0,
             'restrictarticles' => $randomArticles[0]['ordernumber']
         );
@@ -1177,7 +1177,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
 
         $customer = $this->createDummyCustomer();
         $this->session['sUserId'] = $customer->getId();
-        $this->module->sSYSTEM->sSESSION_ID = uniqid();
+        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
 
         // Add one article to the basket with enough value to use discount
@@ -1263,7 +1263,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
             'numorder' => 1,
             'value' => 10,
             'minimumcharge' => 10,
-            'ordercode' => uniqid(),
+            'ordercode' => uniqid(rand()),
             'modus' => 0,
             'bindtosupplier' => $randomArticleOne['supplierID']
         );
@@ -1275,7 +1275,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
 
         $customer = $this->createDummyCustomer();
         $this->session['sUserId'] = $customer->getId();
-        $this->module->sSYSTEM->sSESSION_ID = uniqid();
+        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
 
         // Add first article to the basket with enough value to use discount, should fail
@@ -1353,7 +1353,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
             ORDER BY RAND() LIMIT 2'
         );
 
-        $this->module->sSYSTEM->sSESSION_ID = uniqid();
+        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
 
         // Test with empty basket, empty
@@ -1438,7 +1438,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
         // Test with empty cart, expect 10
         $this->assertEquals(10, $this->module->sCheckMinimumCharge());
 
-        $this->module->sSYSTEM->sSESSION_ID = uniqid();
+        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
 
         // Add one article to the basket with enough value to use discount
@@ -1503,7 +1503,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
             )
         );
 
-        $this->module->sSYSTEM->sSESSION_ID = uniqid();
+        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
 
         // Add one article to the basket with value lower that minimumordersurcharge
@@ -1589,7 +1589,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
             array('id = ?' => $customer->getId())
         );
         $this->session['sUserId'] = $customer->getId();
-        $this->module->sSYSTEM->sSESSION_ID = uniqid();
+        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
 
         // Empty basket, expect false
@@ -1664,7 +1664,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
         // Test with empty basket
         $this->assertEquals(array(), $this->module->sGetBasket());
 
-        $this->module->sSYSTEM->sSESSION_ID = uniqid();
+        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
 
         // Add one article to the basket with low amount
@@ -1920,7 +1920,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
         // Null args, false result
         $this->assertFalse($this->module->sUpdateArticle(null, null));
 
-        $this->module->sSYSTEM->sSESSION_ID = uniqid();
+        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
         // Get random article
         $randomArticle = $this->db->fetchRow(
@@ -1973,7 +1973,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
         // No session, expect false
         $this->assertFalse($this->module->sCheckForESD());
 
-        $this->module->sSYSTEM->sSESSION_ID = uniqid();
+        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
 
         // Get random non-esd article and add it to the basket
@@ -2041,7 +2041,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
         // No session, expect false
         $this->assertFalse($this->module->sDeleteBasket());
 
-        $this->module->sSYSTEM->sSESSION_ID = uniqid();
+        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
 
         $this->assertNull($this->module->sDeleteBasket());
@@ -2084,7 +2084,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
         // Random id, expect null
         $this->assertNull($this->module->sDeleteArticle(9999999));
 
-        $this->module->sSYSTEM->sSESSION_ID = uniqid();
+        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
 
         // Get random article and add it to the basket
@@ -2119,7 +2119,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
         // No id, expect false
         $this->assertFalse($this->module->sAddArticle(null));
 
-        $this->module->sSYSTEM->sSESSION_ID = uniqid();
+        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
 
         // Get random article with stock controll and add it to the basket
@@ -2211,7 +2211,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
 
         $testData = array(
             "password" => "fooobar",
-            "email"    => uniqid() . 'test@foobar.com',
+            "email"    => uniqid(rand()) . 'test@foobar.com',
 
             "lastlogin"  => $lastLogin,
 

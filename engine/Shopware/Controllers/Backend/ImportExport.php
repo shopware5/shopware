@@ -23,6 +23,7 @@
  */
 
 use Shopware\Components\CSRFWhitelistAware;
+use Shopware\Models\Customer\Customer;
 use Shopware\Models\Newsletter\Address;
 use Shopware\Models\Newsletter\ContactData;
 use Shopware\Models\Newsletter\Group;
@@ -265,7 +266,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         }
 
         $select = array(
-            'billing.number as customernumber',
+            'customer.number as customernumber',
             'customer.email',
             'customer.hashPassword as password',
             'customer.hashPassword as md5_password',
@@ -1329,7 +1330,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 'details.esdArticle as esd',
                 'details.mode as modus',
 
-                'customerBilling.number as customernumber',
+                'customer.number as customernumber',
 
                 'billing.company as billing_company',
                 'billing.department as billing_department',
@@ -3092,17 +3093,13 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
 
         // if no user was found by email, its save to find one via customernumber
         if (!$customerModel && !empty($customerData['customernumber'])) {
-            /** \Shopware\Models\Customer\Billing $billingModel */
-            $billingModel = Shopware()->Models()->getRepository('\Shopware\Models\Customer\Billing')->findOneBy(array('number' => $customerData['customernumber']));
-            if ($billingModel) {
-                /** \Shopware\Models\Customer\Customer $customerModel */
-                $customerModel = $billingModel->getCustomer();
-            }
+            $repo = Shopware()->Container()->get('models')->getRepository(Customer::class);
+            $customerModel = $repo->findOneBy(['number' => $customerData['customernumber']]);
         }
 
         if (!$customerModel) {
             /** \Shopware\Models\Customer\Customer $customerModel */
-            $customerModel = new \Shopware\Models\Customer\Customer();
+            $customerModel = new Customer();
         }
 
         $customerData = $this->prepareCustomerData($customerData);

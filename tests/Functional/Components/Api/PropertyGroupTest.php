@@ -142,7 +142,7 @@ class PropertyGroupTest extends TestCase
     public function testUpdateShouldBeSuccessful($id)
     {
         $testData = array(
-            'name'   => uniqid() . 'testProperty',
+            'name'   => uniqid(rand()) . 'testProperty',
             'sortmode'   => 99,
         );
 

@@ -441,7 +441,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
     {
         $context = $this->get('shopware_storefront.context_service')->getShopContext();
         $service = $this->get('shopware_storefront.location_service');
-        $countries = $service->getAvailableCountries($context);
+        $countries = $service->getCountries($context);
         return $this->get('legacy_struct_converter')->convertCountryStructList($countries);
     }
 

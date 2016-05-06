@@ -43,7 +43,7 @@ class CustomerReader extends GenericReader
             'billing.firstName',
             'billing.lastName',
             'billing.company',
-            'billing.number',
+            'entity.number',
             'grp.name as customerGroup'
         ]);
         $query->from(Customer::class, 'entity', $this->getIdentifierField());

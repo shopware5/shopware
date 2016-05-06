@@ -67,7 +67,7 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
 
     private function createCustomer()
     {
-        $this->customerNumber = uniqid();
+        $this->customerNumber = uniqid(rand());
 
         Shopware()->Db()->insert(
             's_user',
@@ -93,7 +93,6 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
             'userID'         => $this->userId,
             'company'        => 'PHPUNIT',
             'salutation'     => 'mr',
-            'customernumber' => $this->customerNumber,
             'countryID'      => 2,
             'stateID'        => 3,
         ));

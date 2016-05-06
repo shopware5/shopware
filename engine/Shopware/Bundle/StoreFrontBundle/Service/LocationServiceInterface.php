@@ -13,5 +13,5 @@ interface LocationServiceInterface
      * @param ShopContextInterface $context
      * @return Country[] indexed by country id
      */
-    public function getAvailableCountries(ShopContextInterface $context);
+    public function getCountries(ShopContextInterface $context);
 }

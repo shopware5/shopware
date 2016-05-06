@@ -929,7 +929,7 @@ class Helper
     {
         return array_merge(
             array(
-                'number' => 'Variant-' . uniqid(),
+                'number' => 'Variant-' . uniqid(rand()),
                 'supplierNumber' => 'kn12lk3nkl213',
                 'active' => 1,
                 'inStock' => 222,

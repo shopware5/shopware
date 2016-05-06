@@ -261,7 +261,9 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
             );
         }
 
-        $this->forward('index', 'register', null, ['sTarget' => $this->Request()->getParam('sTarget')]);
+        $this->forward('index', 'register', 'frontend', [
+            'sTarget' => $this->Request()->getParam('sTarget')
+        ]);
     }
 
     /**

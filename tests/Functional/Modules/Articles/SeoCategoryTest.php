@@ -88,7 +88,7 @@ class Shopware_Tests_Modules_Articles_SeoCategoryTest extends Enlight_Components
             'description' => 'Test description',
             'active' => true,
             'mainDetail' => array(
-                'number' => 'swTEST' . uniqid(),
+                'number' => 'swTEST' . uniqid(rand()),
                 'inStock' => 15,
                 'unitId' => 1,
                 'prices' => array(

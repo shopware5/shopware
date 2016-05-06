@@ -265,7 +265,7 @@ class Repository extends ModelRepository
         $builder->select(array(
             'customer.id as id',
             'customer.number as customerNumber',
-            "CONCAT(CONCAT(billing.firstName, ' '), billing.lastName) as fullName",
+            "CONCAT(CONCAT(customer.firstname, ' '), customer.lastname) as fullName",
             'billing.company as company',
             'customer.email as email'
         ));
@@ -273,7 +273,7 @@ class Repository extends ModelRepository
                 ->leftJoin('customer.billing', 'billing')
                 ->where("customer.accountMode = 0")
                 ->andWhere("customer.email = ?0")
-                ->orWhere("billing.number = ?1")
+                ->orWhere("customer.number = ?1")
                 ->orWhere("customer.id = ?2");
         $builder->setParameter(0, $mappingValue);
         $builder->setParameter(1, $mappingValue);

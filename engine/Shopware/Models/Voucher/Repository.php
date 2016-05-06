@@ -72,21 +72,20 @@ class Repository extends ModelRepository
             "codes.customerId as customerId",
             "codes.code as code",
             "codes.cashed as cashed",
-            "billing.firstName as firstName",
-            "billing.lastName as lastName",
-            "billing.number as number"
+            "customer.firstname as firstName",
+            "customer.lastname as lastName",
+            "customer.number as number"
         ));
         $builder->from('Shopware\Models\Voucher\Code', 'codes')
                 ->leftJoin("codes.customer", "customer")
-                ->leftJoin("customer.billing", "billing")
                 ->where("codes.voucherId = ?1")
                 ->setParameter(1, $voucherId);
         //search for values
         if (!empty($filter)) {
             $builder->andWhere('codes.code LIKE ?2')
-                ->orWhere('billing.firstName LIKE ?2')
-                ->orWhere('billing.lastName LIKE ?2')
-                ->orWhere('billing.number LIKE ?2')
+                ->orWhere('customer.firstname LIKE ?2')
+                ->orWhere('customer.lastname LIKE ?2')
+                ->orWhere('customer.number LIKE ?2')
                 ->setParameter(2, '%' . $filter . '%');
         }
         if (!empty($order)) {

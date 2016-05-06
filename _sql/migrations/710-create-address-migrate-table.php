@@ -12,6 +12,8 @@ class Migrations_Migration710 extends Shopware\Components\Migrations\AbstractMig
             return;
         }
 
+        $this->removeCompanySalutation();
+
         $this->createMigrationFields();
 
         $sql = <<<SQL
@@ -56,5 +58,13 @@ ALTER TABLE `s_user_addresses`
 SQL;
 
         $this->addSql($sql);
+    }
+
+    private function removeCompanySalutation()
+    {
+        $this->addSql("UPDATE `s_user_billingaddress` SET salutation = 'mr' WHERE salutation = 'company';");
+        $this->addSql("UPDATE `s_user_shippingaddress` SET salutation = 'mr' WHERE salutation = 'company';");
+        $this->addSql("UPDATE `s_order_billingaddress` SET salutation = 'mr' WHERE salutation = 'company';");
+        $this->addSql("UPDATE `s_order_shippingaddress` SET salutation = 'mr' WHERE salutation = 'company';");
     }
 }

@@ -2218,7 +2218,7 @@ SQL;
      */
     public function sRiskCUSTOMERNR($user, $order, $value)
     {
-        return ($user["billingaddress"]["customernumber"] == $value && !empty($value));
+        return ($user["additional"]["user"]["customernumber"] == $value && !empty($value));
     }
 
     /**

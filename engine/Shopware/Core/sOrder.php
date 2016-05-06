@@ -25,6 +25,7 @@
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\NumberRangeIncrementerInterface;
+use Shopware\Models\Customer\Customer;
 
 /**
  * Deprecated Shopware Class that handle frontend orders
@@ -1226,6 +1227,9 @@ class sOrder
      */
     public function sSaveBillingAddress($address, $id)
     {
+        /** @var Customer $customer */
+        $customer = Shopware()->Container()->get('models')->find(Customer::class, $address['userID']);
+
         $sql = "
         INSERT INTO s_order_billingaddress
         (
@@ -1273,7 +1277,7 @@ class sOrder
         $array = array(
             ':userID' => $address["userID"],
             ':orderID' => $id,
-            ':customernumber' => (string) $address["customernumber"],
+            ':customernumber' => $customer->getNumber(),
             ':company' => (string) $address["company"],
             ':department' => (string) $address["department"],
             ':salutation' => (string) $address["salutation"],
@@ -1302,8 +1306,6 @@ class sOrder
         }
 
         if ($billingAddressId === null) {
-            /** @var \Shopware\Models\Customer\Customer $customer */
-            $customer = Shopware()->Models()->find('Shopware\Models\Customer\Customer', $address['userID']);
             $billingAddressId = $customer->getDefaultBillingAddress()->getId();
         }
 
@@ -1395,7 +1397,7 @@ class sOrder
         }
 
         if ($shippingAddressId === null) {
-            /** @var \Shopware\Models\Customer\Customer $customer */
+            /** @var Customer $customer */
             $customer = Shopware()->Models()->getRepository('Shopware\Models\Customer\Customer')->find($address['userID']);
             $shippingAddressId = $customer->getDefaultShippingAddress()->getId();
         }

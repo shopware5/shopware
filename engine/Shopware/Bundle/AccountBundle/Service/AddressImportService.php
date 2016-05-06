@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\AccountBundle\Service\Core;
+namespace Shopware\Bundle\AccountBundle\Service;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\AccountBundle\Service\AddressImportServiceInterface;
@@ -156,7 +156,7 @@ class AddressImportService implements AddressImportServiceInterface
 
         $address = new Address();
         $address->fromArray($data);
-        $address = $this->addressService->create($address, $customer);
+        $this->addressService->create($address, $customer);
         $attributes = $this->attributeLoader->load($attributesTable, $addressId);
         $this->attributePersister->persist($attributes, 's_user_addresses_attributes', $address->getId());
 

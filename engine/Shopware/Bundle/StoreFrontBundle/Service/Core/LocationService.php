@@ -37,7 +37,7 @@ class LocationService implements LocationServiceInterface
      * @param ShopContextInterface $context
      * @return Country[] indexed by id
      */
-    public function getAvailableCountries(ShopContextInterface $context)
+    public function getCountries(ShopContextInterface $context)
     {
         $ids = $this->getCountryIds();
         $countries = $this->gateway->getCountries($ids, $context);

@@ -254,7 +254,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
                 /*{if {config name=shopwareManagedCustomerNumbers}==1}*/
                 xtype: 'displayfield',
                 /*{/if}*/
-                name: 'billing[number]',
+                name: 'number',
                 fieldLabel: me.snippets.number.label,
                 helpText: me.snippets.number.helpText,
                 helpWidth: 360,

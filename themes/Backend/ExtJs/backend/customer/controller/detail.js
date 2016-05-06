@@ -144,7 +144,7 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
                     rawData = record.getProxy().getReader().rawData;
 
                 if ( operation.success === true ) {
-                    var number = record['getBillingStore'].first().get('number');
+                    var number = record.get('number');
                     Shopware.Notification.createGrowlMessage(me.snippets.account.successTitle, Ext.String.format(me.snippets.account.successText, number), me.snippets.growlMessage);
 
                     infoView.tpl = tpl;
@@ -391,8 +391,7 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
                         addressModel.save();
                     }
 
-                    var billing = model.getBilling().first();
-                    number = billing.get('number');
+                    number = model.get('number');
 
                     Shopware.Notification.createGrowlMessage(
                         me.snippets.password.successTitle,

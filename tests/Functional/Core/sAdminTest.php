@@ -230,7 +230,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
      */
     public function testsUpdateNewsletter()
     {
-        $email = uniqid() . 'test@foobar.com';
+        $email = uniqid(rand()) . 'test@foobar.com';
 
         // Test insertion
         $this->assertTrue($this->module->sUpdateNewsletter(true, $email));
@@ -323,8 +323,8 @@ class sAdminTest extends PHPUnit_Framework_TestCase
 
         // Test with wrong data, get error
         $this->front->Request()->setPost(array(
-            'email' => uniqid() . 'test',
-            'password' => uniqid() . 'test',
+            'email' => uniqid(rand()) . 'test',
+            'password' => uniqid(rand()) . 'test',
         ));
         $result = $this->module->sLogin();
         $this->assertInternalType('array', $result);
@@ -364,7 +364,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
 
         $this->front->Request()->setPost(array(
             'email' => $customer->getEmail(),
-            'passwordMD5' => uniqid(),
+            'passwordMD5' => uniqid(rand()),
         ));
         $result = $this->module->sLogin(true);
         $this->assertInternalType('array', $result);
@@ -993,7 +993,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
 
         // Inject demo data
         $orderData = array(
-            'ordernumber' => uniqid(),
+            'ordernumber' => uniqid(rand()),
             'userID' => $customer->getId(),
             'invoice_amount' => '37.99',
             'invoice_amount_net' => '31.92',
@@ -1119,7 +1119,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $customer = $demoData['customer'];
         $oldOrderId = $demoData['orderId'];
         $orderEsdId = $demoData['orderEsdId'];
-        $orderNumber = uniqid();
+        $orderNumber = uniqid(rand());
 
         // Add another order to the customer
         $orderData = array(
@@ -1231,11 +1231,11 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($customer->getEmail(), $this->module->sGetUserMailById());
 
         // Test sGetUserByMail with null and expected cases
-        $this->assertNull($this->module->sGetUserByMail(uniqid()));
+        $this->assertNull($this->module->sGetUserByMail(uniqid(rand())));
         $this->assertEquals($customer->getId(), $this->module->sGetUserByMail($customer->getEmail()));
 
         // Test sGetUserNameById with null and expected cases
-        $this->assertEmpty($this->module->sGetUserNameById(uniqid()));
+        $this->assertEmpty($this->module->sGetUserNameById(uniqid(rand())));
         $this->assertEquals(
             array('firstname' => 'Max', 'lastname' => 'Mustermann'),
             $this->module->sGetUserNameById($customer->getId())
@@ -1318,6 +1318,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->session->offsetUnset('sState');
 
         $result = $this->module->sGetUserData();
+
         $expectedData = array(
             'billingaddress' => array(
                 'id' => $customer->getBilling()->getId(),
@@ -1325,7 +1326,6 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                 'company' => '',
                 'department' => '',
                 'salutation' => '',
-                'customernumber' => $customer->getBilling()->getNumber(),
                 'firstname' => 'Max',
                 'lastname' => 'Mustermann',
                 'street' => 'Kraftweg, 22',
@@ -1376,7 +1376,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                     'accountmode' => '0',
                     'confirmationkey' => '',
                     'paymentID' => '0',
-                    'customernumber' => '',
+                    'customernumber' => $customer->getNumber(),
                     'firstlogin' => $customer->getFirstLogin()->format('Y-m-d'),
                     'lastlogin' => $customer->getLastLogin()->format('Y-m-d H:i:s'),
                     'sessionID' => '',
@@ -1392,7 +1392,6 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                     'internalcomment' => '',
                     'failedlogins' => '0',
                     'lockeduntil' => null,
-                    'customernumber' => '',
                     'default_billing_address_id' => $customer->getDefaultBillingAddress() ? $customer->getDefaultBillingAddress()->getId() : null,
                     'default_shipping_address_id' => $customer->getDefaultShippingAddress() ? $customer->getDefaultShippingAddress()->getId() : null,
                     'birthday' => '1986-12-20',
@@ -1526,7 +1525,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
 
         // Inject demo data
         $orderData = array(
-            'ordernumber' => uniqid(),
+            'ordernumber' => uniqid(rand()),
             'userID' => $customer->getId(),
             'invoice_amount' => '37.99',
             'invoice_amount_net' => '31.92',
@@ -1712,7 +1711,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($this->module->sManageRisks(2, $basket, $user));
         Shopware()->Db()->delete('s_core_rulesets', 'id >= '.$firstTestRuleId);
 
-        $this->module->sSYSTEM->sSESSION_ID = uniqid();
+        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
         $this->basketModule->sAddArticle('SW10118.8');
 
@@ -1900,7 +1899,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             array(
                 'paymentID' => 2,
                 'rule1' => 'CUSTOMERNR',
-                'value1' => $customer->getBilling()->getNumber()
+                'value1' => $customer->getNumber()
             )
         );
         $this->assertTrue($this->module->sManageRisks(2, $fullBasket, $user));
@@ -2066,10 +2065,10 @@ class sAdminTest extends PHPUnit_Framework_TestCase
      */
     public function testsNewsletterSubscription()
     {
-        $validAddress = uniqid().'@shopware.com';
+        $validAddress = uniqid(rand()).'@shopware.com';
 
         // Test unsubscribe with non existing email, fail
-        $result = $this->module->sNewsletterSubscription(uniqid().'@shopware.com', true);
+        $result = $this->module->sNewsletterSubscription(uniqid(rand()).'@shopware.com', true);
         $this->assertEquals(
             array(
                 'code' => 4,
@@ -2342,7 +2341,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         // No basket, return false
         $this->assertFalse($this->module->sGetDispatchBasket());
 
-        $this->module->sSYSTEM->sSESSION_ID = uniqid();
+        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
         $this->basketModule->sAddArticle('SW10118.8');
 
@@ -2382,7 +2381,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         // No basket, return empty array,
         $this->assertEquals(array(), $this->module->sGetPremiumDispatches());
 
-        $this->module->sSYSTEM->sSESSION_ID = uniqid();
+        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
         $this->basketModule->sAddArticle('SW10118.8');
 
@@ -2406,7 +2405,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         // No basket, return false,
         $this->assertFalse($this->module->sGetPremiumDispatchSurcharge(null));
 
-        $this->module->sSYSTEM->sSESSION_ID = uniqid();
+        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
         $this->basketModule->sAddArticle('SW10010');
         $fullBasket = $this->module->sGetDispatchBasket();
@@ -2431,7 +2430,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             }
         }
 
-        $this->module->sSYSTEM->sSESSION_ID = uniqid();
+        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
         $this->basketModule->sAddArticle('SW10010');
 
@@ -2467,8 +2466,8 @@ class sAdminTest extends PHPUnit_Framework_TestCase
 
         $testData = array(
             "password" => "fooobar",
-            "email"    => uniqid() . 'test@foobar.com',
-
+            "email"    => uniqid(rand()) . 'test@foobar.com',
+            "customernumber" => 'dummy customer number',
             "lastlogin"  => $lastLogin,
 
             "salutation" => "mr",

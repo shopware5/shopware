@@ -26,6 +26,10 @@ namespace Shopware\Tests\Components\Api;
 
 use Shopware\Components\Api\Resource\Address;
 
+/**
+ * Class AddressTest
+ * @package Shopware\Tests\Components\Api
+ */
 class AddressTest extends TestCase
 {
     /**
@@ -95,7 +99,7 @@ class AddressTest extends TestCase
     public function testUpdateShouldBeSuccessful($id)
     {
         $testData = array(
-            'lastname'   => uniqid() . ' new lastname',
+            'lastname'   => uniqid(rand()) . ' new lastname',
             'zipcode'   => '98765'
         );
 

@@ -61,8 +61,7 @@ class Customer extends Resource
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(array('customer.id'))
                 ->from('\Shopware\Models\Customer\Customer', 'customer')
-                ->leftJoin('customer.billing', 'billing')
-                ->where('billing.number = ?1')
+                ->where('customer.number = ?1')
                 ->setParameter(1, $number);
 
         $id = $builder->getQuery()->getOneOrNullResult();
@@ -328,6 +327,11 @@ class Customer extends Resource
             }
         }
 
+        $number = $this->getCustomerNumber($params, $customer);
+        if ($number !== null) {
+            $params['number'] = $number;
+        }
+
         if (isset($params['groupKey'])) {
             $params['group'] = Shopware()->Models()->getRepository('Shopware\Models\Customer\Group')->findOneBy(array('key' => $params['groupKey']));
             if (!$params['group']) {
@@ -502,5 +506,24 @@ class Customer extends Resource
         $customer = $query->getArrayResult();
 
         return empty($customer);
+    }
+
+    /**
+     * @param array $params
+     * @param CustomerModel|null $customer
+     * @return string
+     * @throws \Exception
+     */
+    private function getCustomerNumber($params, CustomerModel $customer = null)
+    {
+        if (array_key_exists('number', $params)) {
+            return $params['number'];
+        }
+        if ($customer && $customer->getNumber()) {
+            return $customer->getNumber();
+        }
+
+        $incrementer = Shopware()->Container()->get('shopware.number_range_incrementer');
+        return $incrementer->increment('user');
     }
 }

@@ -157,7 +157,7 @@ class CategoryTest extends TestCase
     {
         $testData = array(
             'active'  => true,
-            'name'   => uniqid() . 'testkategorie',
+            'name'   => uniqid(rand()) . 'testkategorie',
             "attribute" => array(1 => "nase")
         );
 
@@ -220,8 +220,8 @@ class CategoryTest extends TestCase
     {
         $parts = array(
             'Deutsch',
-            'Foo' . uniqid(),
-            'Bar' . uniqid(),
+            'Foo' . uniqid(rand()),
+            'Bar' . uniqid(rand()),
         );
 
         $path = implode('|', $parts);

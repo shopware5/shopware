@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\AccountBundle\Service\Core;
+namespace Shopware\Bundle\AccountBundle\Service;
 
 use Shopware\Bundle\AccountBundle\Service\AddressServiceInterface;
 use Shopware\Bundle\AccountBundle\Form\Account\AddressFormType;
@@ -78,7 +78,8 @@ class AddressService implements AddressServiceInterface
 
         $this->modelManager->flush([$address, $customer]);
 
-        return $address;
+        $this->modelManager->refresh($address);
+        $this->modelManager->refresh($customer);
     }
 
     /**
@@ -103,14 +104,37 @@ class AddressService implements AddressServiceInterface
         }
 
         $this->modelManager->flush();
-
-        return $address;
+        $this->modelManager->refresh($address);
     }
 
     /**
      * @inheritdoc
      */
     public function isValid(Address $address)
+    {
+        $form = $this->validateData($address);
+
+        return $form->isValid();
+    }
+
+    /**
+     * @param Address $address
+     * @throws ValidatorException
+     */
+    private function validate(Address $address)
+    {
+        $form = $this->validateData($address);
+
+        if (!$form->isValid()) {
+            throw new ValidatorException($form->getErrors(true, false));
+        }
+    }
+
+    /**
+     * @param Address $address
+     * @return \Symfony\Component\Form\FormInterface
+     */
+    private function validateData(Address $address)
     {
         $data = [
             'company' => $address->getCompany(),
@@ -123,31 +147,17 @@ class AddressService implements AddressServiceInterface
             'zipcode' => $address->getZipcode(),
             'city' => $address->getCity(),
             'phone' => $address->getPhone(),
-            'country' => $address->getCountry()->getId(),
+            'country' => $address->getCountry() ? $address->getCountry()->getId() : null,
             'state' => $address->getState() ? $address->getState()->getId() : null,
             'vatId' => $address->getVatId(),
             'additionalAddressLine1' => $address->getAdditionalAddressLine1(),
             'additionalAddressLine2' => $address->getAdditionalAddressLine2(),
         ];
 
-        $form = $this->formFactory->create(AddressFormType::class, new Address());
+        $form = $this->formFactory->create(AddressFormType::class, new Address(), ['allow_extra_fields' => true]);
         $form->submit($data);
 
-        return $form->isValid();
-    }
-
-    /**
-     * @param Address $address
-     * @throws ValidatorException
-     */
-    private function validate(Address $address)
-    {
-        $form = $this->formFactory->create(AddressFormType::class, $address);
-        $form->submit(null, false);
-
-        if (!$form->isValid()) {
-            throw new ValidatorException($form->getErrors(true, false));
-        }
+        return $form;
     }
 
     /**
@@ -224,7 +234,6 @@ class AddressService implements AddressServiceInterface
             $this->modelManager->persist($billing);
         }
 
-        $billing->setNumber($customer->getNumber());
         $billing->fromAddress($address);
 
         $this->update($address);

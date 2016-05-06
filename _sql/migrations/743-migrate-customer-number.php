@@ -1,6 +1,6 @@
 <?php
 
-class Migrations_Migration742 extends Shopware\Components\Migrations\AbstractMigration
+class Migrations_Migration743 extends Shopware\Components\Migrations\AbstractMigration
 {
     public function up($modus)
     {
@@ -13,5 +13,7 @@ UPDATE s_user user,
 SET user.customernumber = billing.customernumber
 WHERE user.id = billing.userID;
         ");
+
+        $this->addSql("ALTER TABLE `s_user_billingaddress` DROP `customernumber`;");
     }
 }

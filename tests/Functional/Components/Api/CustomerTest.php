@@ -75,8 +75,8 @@ class CustomerTest extends TestCase
 
         $testData = array(
             "password" => "fooobar",
-            "email"    => uniqid() . 'test@foobar.com',
-
+            "email"    => uniqid(rand()) . 'test@foobar.com',
+            "number"   => 'testnumber' . uniqid(),
             "firstlogin" => $firstlogin,
             "lastlogin"  => $lastlogin,
 
@@ -165,7 +165,7 @@ class CustomerTest extends TestCase
     {
         $this->resource->setResultMode(Resource::HYDRATE_OBJECT);
         $customer = $this->resource->getOne($id);
-        $number = $customer->getBilling()->getNumber();
+        $number = $customer->getNumber();
 
         $customer = $this->resource->getOneByNumber($number);
         $this->assertEquals($id, $customer->getId());
@@ -238,7 +238,7 @@ class CustomerTest extends TestCase
     {
         $testData = array(
             'active'  => true,
-            'email'   => uniqid() . 'update@foobar.com',
+            'email'   => uniqid(rand()) . 'update@foobar.com',
             'billing' => array(
                 'firstName' => 'Max Update',
                 'lastName'  => 'Mustermann Update',
@@ -303,11 +303,11 @@ class CustomerTest extends TestCase
     {
         $this->resource->setResultMode(Resource::HYDRATE_OBJECT);
         $customer = $this->resource->getOne($id);
-        $number = $customer->getBilling()->getNumber();
+        $number = $customer->getNumber();
 
         $testData = array(
             'active'  => true,
-            'email'   => uniqid() . 'update@foobar.com',
+            'email'   => uniqid(rand()) . 'update@foobar.com',
             'billing' => array(
                 'firstName' => 'Max Update',
                 'lastName'  => 'Mustermann Update',
@@ -406,7 +406,7 @@ class CustomerTest extends TestCase
         $requestData = array(
             "password" => "fooobar",
             "active"   => true,
-            "email"    => uniqid() . 'test1@foobar.com',
+            "email"    => uniqid(rand()) . 'test1@foobar.com',
 
             "firstlogin" => $firstlogin,
             "lastlogin"  => $lastlogin,
@@ -473,7 +473,7 @@ class CustomerTest extends TestCase
         $requestData = array(
             "password" => "fooobar",
             "active"   => true,
-            "email"    => uniqid() . 'test2@foobar.com',
+            "email"    => uniqid(rand()) . 'test2@foobar.com',
 
             "firstlogin" => $firstlogin,
             "lastlogin"  => $lastlogin,

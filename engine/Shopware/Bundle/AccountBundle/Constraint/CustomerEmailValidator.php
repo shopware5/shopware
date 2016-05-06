@@ -27,6 +27,7 @@ namespace Shopware\Bundle\AccountBundle\Constraint;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
+use Shopware\Components\Validator\EmailValidatorInterface;
 use Shopware\Models\Customer\Customer;
 use Shopware_Components_Snippet_Manager;
 use Symfony\Component\Validator\Constraint;
@@ -59,15 +60,23 @@ class CustomerEmailValidator extends ConstraintValidator
     private $connection;
 
     /**
+     * @var EmailValidatorInterface
+     */
+    private $emailValidator;
+
+    /**
      * @param Shopware_Components_Snippet_Manager $snippets
      * @param Connection $connection
+     * @param EmailValidatorInterface $emailValidator
      */
     public function __construct(
         Shopware_Components_Snippet_Manager $snippets,
-        Connection $connection
+        Connection $connection,
+        EmailValidatorInterface $emailValidator
     ) {
         $this->snippets = $snippets;
         $this->connection = $connection;
+        $this->emailValidator = $emailValidator;
     }
 
     /**
@@ -89,9 +98,11 @@ class CustomerEmailValidator extends ConstraintValidator
             $this->addError($this->getSnippet(self::SNIPPET_MAIL_FAILURE));
         }
 
-        $this->validateEmailFormat($email);
+        if (!$this->emailValidator->isValid($email)) {
+            $this->addError($this->getSnippet(self::SNIPPET_MAIL_FAILURE));
+        }
 
-        if (!$this->isFastLogin($constraint) && $this->isEmailExist($email, $shop, $customerId)) {
+        if (!$this->isFastLogin($constraint) && $this->isExistingEmail($email, $shop, $customerId)) {
             $this->addError($this->getSnippet(self::SNIPPET_MAIL_DUPLICATE));
         }
     }
@@ -121,7 +132,7 @@ class CustomerEmailValidator extends ConstraintValidator
      * @param null|int $customerId
      * @return QueryBuilder
      */
-    private function isEmailExist($value, Shop $shop, $customerId = null)
+    private function isExistingEmail($value, Shop $shop, $customerId = null)
     {
         $builder = $this->connection->createQueryBuilder();
         $builder->select(1);
@@ -151,20 +162,5 @@ class CustomerEmailValidator extends ConstraintValidator
     private function getSnippet(array $snippet)
     {
         return $this->snippets->getNamespace($snippet['namespace'])->get($snippet['name'], $snippet['default'], true);
-    }
-
-    /**
-     * @param string $email
-     */
-    private function validateEmailFormat($email)
-    {
-        $validator = new EmailValidator();
-        $validator->initialize($this->context);
-
-        $emailConstraint = new Email([
-            'message' => $this->getSnippet(self::SNIPPET_MAIL_FAILURE)
-        ]);
-
-        $validator->validate($email, $emailConstraint);
     }
 }

@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\AccountBundle\Service\Core;
+namespace Shopware\Bundle\AccountBundle\Service;
 
 use Shopware\Bundle\AccountBundle\Service\CustomerServiceInterface;
 use Shopware\Bundle\AccountBundle\Service\Validator\CustomerValidatorInterface;
@@ -67,7 +67,6 @@ class CustomerService implements CustomerServiceInterface
     {
         $this->validator->validate($customer);
         $this->modelManager->flush($customer);
-
-        return $customer;
+        $this->modelManager->refresh($customer);
     }
 }

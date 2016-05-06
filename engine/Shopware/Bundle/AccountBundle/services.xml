@@ -6,18 +6,18 @@
 
     <services>
 
-        <service id="shopware_account.address_service" class="Shopware\Bundle\AccountBundle\Service\Core\AddressService">
+        <service id="shopware_account.address_service" class="Shopware\Bundle\AccountBundle\Service\AddressService">
             <argument type="service" id="models" />
             <argument type="service" id="shopware.form.factory" />
         </service>
 
-        <service id="shopware_account.address_import_service" class="Shopware\Bundle\AccountBundle\Service\Core\AddressImportService">
+        <service id="shopware_account.address_import_service" class="Shopware\Bundle\AccountBundle\Service\AddressImportService">
             <argument type="service" id="dbal_connection" />
             <argument type="service" id="models" />
             <argument type="service" id="shopware_account.address_service" />
         </service>
 
-        <service id="shopware_account.customer_service" class="Shopware\Bundle\AccountBundle\Service\Core\CustomerService">
+        <service id="shopware_account.customer_service" class="Shopware\Bundle\AccountBundle\Service\CustomerService">
             <argument type="service" id="models" />
             <argument type="service" id="shopware_account.customer_validator" />
         </service>
@@ -30,8 +30,8 @@
 
         <service id="shopware_account.constraint.current_password_validator" class="Shopware\Bundle\AccountBundle\Constraint\CurrentPasswordValidator">
             <argument type="service" id="session" />
-            <argument type="service" id="service_container" />
             <argument type="service" id="snippets" />
+            <argument type="service" id="PasswordEncoder" />
             <tag name="validator.constraint_validator" alias="CurrentPasswordValidator" />
         </service>
 
@@ -93,10 +93,11 @@
         <service id="shopware_account.constraint.customer_email_validator" class="Shopware\Bundle\AccountBundle\Constraint\CustomerEmailValidator">
             <argument type="service" id="snippets" />
             <argument type="service" id="dbal_connection" />
+            <argument type="service" id="validator.email" />
             <tag name="validator.constraint_validator" alias="CustomerEmailValidator" />
         </service>
 
-        <service id="shopware_account.register_service" class="Shopware\Bundle\AccountBundle\Service\Core\RegisterService">
+        <service id="shopware_account.register_service" class="Shopware\Bundle\AccountBundle\Service\RegisterService">
             <argument type="service" id="models"/>
             <argument type="service" id="shopware_account.customer_validator"/>
             <argument type="service" id="config"/>

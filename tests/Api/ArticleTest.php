@@ -134,13 +134,13 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit_Framework_TestCase
                 array(
                     'value' => 'testWert',
                     'option' => array(
-                        'name' => 'neueOption'.uniqid()
+                        'name' => 'neueOption'.uniqid(rand())
                     )
                 )
             ),
 
             'mainDetail' => array(
-                'number' => 'swTEST' . uniqid(),
+                'number' => 'swTEST' . uniqid(rand()),
                 'inStock' => 15,
                 'unitId' => 1,
 
@@ -195,7 +195,7 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit_Framework_TestCase
 
             'variants' => array(
                 array(
-                    'number' => 'swTEST.variant.' . uniqid(),
+                    'number' => 'swTEST.variant.' . uniqid(rand()),
                     'inStock' => 17,
                     // create a new unit
                     'unit' => array(
@@ -240,7 +240,7 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit_Framework_TestCase
                     )
                 ),
                 array(
-                    'number' => 'swTEST.variant.' . uniqid(),
+                    'number' => 'swTEST.variant.' . uniqid(rand()),
                     'inStock' => 17,
                     // create a new unit
                     'unit' => array(
@@ -763,13 +763,13 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit_Framework_TestCase
                   array(
                       'value' => 'testWert',
                       'option' => array(
-                          'name' => 'neueOption'.uniqid()
+                          'name' => 'neueOption'.uniqid(rand())
                       )
                   )
               ),
 
               'mainDetail' => array(
-                  'number' => 'swTEST' . uniqid(),
+                  'number' => 'swTEST' . uniqid(rand()),
                   'inStock' => 15,
                   'unitId' => 1,
 

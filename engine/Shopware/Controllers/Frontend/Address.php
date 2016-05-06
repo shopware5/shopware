@@ -332,10 +332,10 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
         
         if ($form->isValid()) {
             if ($address->getId()) {
-                $address = $this->addressService->update($address);
+                $this->addressService->update($address);
             } else {
                 $customer = $this->get('models')->find(Customer::class, $userId);
-                $address = $this->addressService->create($address, $customer);
+                $this->addressService->create($address, $customer);
             }
             
             $this->handleExtraData($extraData, $address);
