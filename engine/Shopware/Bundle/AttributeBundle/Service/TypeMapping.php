@@ -135,12 +135,13 @@ class TypeMapping
             'Shopware\Models\Voucher\Voucher',
             'Shopware\Models\ProductFeed\ProductFeed',
             'Shopware\Models\Newsletter\Newsletter',
-            'Shopware\Models\Partner\Partner'
+            'Shopware\Models\Partner\Partner',
+            'Shopware\Models\Shop\Shop'
         ];
 
         $result = [];
         foreach ($entities as $entity) {
-            $result[] = ['entity' => $entity, 'label' => $snippets->get($entity, 'asd')];
+            $result[] = ['entity' => $entity, 'label' => $snippets->get($entity, $entity)];
         }
         return $result;
     }
