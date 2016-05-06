@@ -39,6 +39,7 @@ class CustomerReader extends GenericReader
         $query->select([
             'entity.id',
             'entity.email',
+            'entity.active',
             'billing.firstName',
             'billing.lastName',
             'billing.company',
