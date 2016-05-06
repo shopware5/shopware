@@ -1626,6 +1626,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                 'countryID' => '2',
                 'stateID' => null,
                 'ustid' => '',
+                'title' => null,
                 'additional_address_line1' => 'IT-Department',
                 'additional_address_line2' => 'Second Floor'
             ),
@@ -1743,6 +1744,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                 'city' => '',
                 'countryID' => '4',
                 'stateID' => null,
+                'title' => null,
                 'additional_address_line1' => 'Sales-Department',
                 'additional_address_line2' => 'Third Floor'
             ),

@@ -9,16 +9,25 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 class SalutationType extends AbstractType
 {
     /**
+     * @var \Shopware_Components_Config
+     */
+    private $config;
+
+    /**
+     * @param \Shopware_Components_Config $config
+     */
+    public function __construct(\Shopware_Components_Config $config)
+    {
+        $this->config = $config;
+    }
+
+    /**
      * @param OptionsResolver $resolver
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults([
-            'choices' => [
-                'mr' => 'mr',
-                'ms' => 'ms'
-            ]
-        ]);
+        $salutations = explode(',', $this->config->get('shopsalutations'));
+        $resolver->setDefaults(['choices' => array_flip($salutations)]);
     }
 
     /**

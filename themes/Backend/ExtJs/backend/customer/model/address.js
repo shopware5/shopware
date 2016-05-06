@@ -55,6 +55,7 @@ Ext.define('Shopware.apps.Customer.model.Address', {
         { name:'department', type:'string', useNull: true, },
         { name:'vatId', type:'string', useNull: true },
         { name:'salutation', type:'string' },
+        { name:'title', type:'string' },
         { name:'firstname', type:'string' },
         { name:'lastname', type:'string' },
         { name:'street', type:'string' },

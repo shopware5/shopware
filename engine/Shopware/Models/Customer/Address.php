@@ -98,6 +98,12 @@ class Address extends ModelEntity
     protected $firstname;
 
     /**
+     * @var string
+     * @ORM\Column(name="title", type="string", length=100, nullable=true)
+     */
+    protected $title;
+
+    /**
      * Contains the last name of the address
      * @var string $lastname
      * @ORM\Column(name="lastname", type="string", length=60, nullable=false)
@@ -502,5 +508,21 @@ class Address extends ModelEntity
     public function setState(State $state = null)
     {
         $this->state = $state;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param string $title
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
     }
 }

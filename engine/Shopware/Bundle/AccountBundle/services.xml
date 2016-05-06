@@ -46,6 +46,7 @@
         </service>
 
         <service id="shopware_account.type.salutation_type" class="Shopware\Bundle\AccountBundle\Type\SalutationType">
+            <argument type="service" id="config" />
             <tag name="form.type" />
         </service>
 

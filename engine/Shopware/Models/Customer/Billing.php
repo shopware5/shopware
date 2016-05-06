@@ -105,6 +105,12 @@ class Billing extends ModelEntity
     protected $salutation = '';
 
     /**
+     * @var string
+     * @ORM\Column(name="title", type="string", length=100, nullable=true)
+     */
+    protected $title;
+
+    /**
      * Contains the unique customer number
      * @var string $number
      * @ORM\Column(name="customernumber", type="string", length=30, nullable=true)
@@ -604,11 +610,27 @@ class Billing extends ModelEntity
         $this->setCountryId($address->getCountry()->getId());
         $this->setPhone((string) $address->getPhone());
         $this->setVatId((string) $address->getVatId());
-
+        $this->setTitle($address->getTitle());
         if ($address->getState()) {
             $this->setStateId($address->getState()->getId());
         } else {
             $this->setStateId(null);
         }
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param string $title
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
     }
 }

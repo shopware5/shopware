@@ -516,6 +516,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
 
         $register['billing']['salutation'] = $formData['salutation'];
         $register['billing']['firstname'] = $formData['firstname'];
+        $register['billing']['title'] = $formData['title'];
         $register['billing']['lastname'] = $formData['lastname'];
         $register['billing']['customer_type'] = $extraData['customer_type'];
         $register['billing']['phone'] = $extraData['phone'];

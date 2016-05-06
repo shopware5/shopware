@@ -83,18 +83,37 @@
                 {* Salutation *}
                 {block name='frontend_address_form_input_salutation'}
                     <div class="address--salutation field--select">
+
+                        {getSalutations variable="salutations"}
+
                         <select name="{$inputPrefix}[salutation]"
                                 id="salutation"
                                 required="required"
                                 aria-required="true"
                                 class="is--required{if $error_flags.salutation} has--error{/if}">
                             <option value="" disabled="disabled"{if $formData.salutation eq ""} selected="selected"{/if}>{s name='RegisterPlaceholderSalutation' namespace="frontend/register/personal_fieldset"}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}</option>
-                            <option value="mr"{if $formData.salutation eq "mr"} selected="selected"{/if}>{s name='RegisterLabelMr' namespace="frontend/register/personal_fieldset"}{/s}</option>
-                            <option value="ms"{if $formData.salutation eq "ms"} selected="selected"{/if}>{s name='RegisterLabelMs' namespace="frontend/register/personal_fieldset"}{/s}</option>
+
+                            {foreach $salutations as $key => $label}
+                                <option value="{$key}"{if $formData.salutation eq $key} selected="selected"{/if}>{$label}</option>
+                            {/foreach}
                         </select>
                     </div>
                 {/block}
 
+                {* Title *}
+                {block name='frontend_register_personal_fieldset_input_title'}
+                    {if {config name="displayprofiletitle"}}
+                        <div class="register--title">
+                            <input autocomplete="section-personal title"
+                                   name="{$inputPrefix}[title]"
+                                   type="text"
+                                   placeholder="{s name='RegisterPlaceholderTitle' namespace="frontend/register/personal_fieldset"}{/s}"
+                                   id="title"
+                                   value="{$formData.title|escape}"
+                                   class="address--field{if $error_flags.title} has--error{/if}" />
+                        </div>
+                    {/if}
+                {/block}
 
                 {* Firstname *}
                 {block name='frontend_address_form_input_firstname'}

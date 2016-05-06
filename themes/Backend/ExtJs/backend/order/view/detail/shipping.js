@@ -73,6 +73,7 @@ Ext.define('Shopware.apps.Order.view.detail.Shipping', {
      */
     snippets:{
         title:'{s name=shipping/title}Alternative shipping address{/s}',
+        titleField:'{s name=address/title_field}Title{/s}',
         firstName:'{s name=address/first_name}First name{/s}',
         lastName:'{s name=address/last_name}Last name{/s}',
         street:'{s name=address/street}street{/s}',
@@ -82,8 +83,6 @@ Ext.define('Shopware.apps.Order.view.detail.Shipping', {
         additionalAddressLine2:'{s name=address/additionalAddressLine2}Additional address line 2{/s}',
         salutation:{
             label:'{s name=address/salutation}Salutation{/s}',
-            mr:'{s name=address/salutation_mr}Mr{/s}',
-            ms:'{s name=address/salutation_ms}Mrs{/s}'
         },
         country:'{s name=address/country}Country{/s}',
         state:'{s name=address/state}State{/s}',
@@ -106,11 +105,6 @@ Ext.define('Shopware.apps.Order.view.detail.Shipping', {
     initComponent:function () {
         var me = this;
         me.title = me.snippets.title;
-        me.salutationData = [
-            ['mr', me.snippets.salutation.mr],
-            ['ms', me.snippets.salutation.ms]
-        ];
-
         me.items = me.createElements();
         me.addEvents(
                 /**
@@ -199,14 +193,16 @@ Ext.define('Shopware.apps.Order.view.detail.Shipping', {
             triggerAction:'all',
             name:'shipping[salutation]',
             fieldLabel:me.snippets.salutation.label,
-            valueField:'text',
-            displayField:'snippet',
             mode:'local',
             editable:false,
-            store:new Ext.data.SimpleStore({
-                fields:['text', 'snippet'], data:me.salutationData
-            })
+            valueField: 'key',
+            displayField: 'label',
+            store: Ext.create('Shopware.apps.Base.store.Salutation').load()
         }, {
+            name:'shipping[title]',
+            fieldLabel:me.snippets.titleField,
+            allowBlank: true
+        },{
             name:'shipping[firstName]',
             fieldLabel:me.snippets.firstName
         }, {

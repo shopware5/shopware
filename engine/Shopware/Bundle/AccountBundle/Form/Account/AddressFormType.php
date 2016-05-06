@@ -85,6 +85,8 @@ class AddressFormType extends AbstractType
             ]
         ]);
 
+        $builder->add('title', TextType::class);
+
         $builder->add('company', TextType::class, [
             'constraints' => $this->getCompanyConstraints()
         ]);

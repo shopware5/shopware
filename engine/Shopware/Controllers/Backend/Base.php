@@ -1075,4 +1075,43 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
             $this->Response()->setBody("");
         }
     }
+
+    public function getSalutationsAction()
+    {
+        $value = $this->getAvailableSalutationKeys();
+
+        $namespace = Shopware()->Container()->get('snippets')->getNamespace('frontend/salutation');
+        $salutations = [];
+        foreach ($value as $key) {
+            $salutations[] = ['key' => $key, 'label' => $namespace->get($key, $key)];
+        }
+
+        $this->View()->assign('data', $salutations);
+    }
+
+    /**
+     * @return array
+     */
+    private function getAvailableSalutationKeys()
+    {
+        $builder = Shopware()->Container()->get('models')->createQueryBuilder();
+        $builder->select(['element', 'values'])
+            ->from('Shopware\Models\Config\Element', 'element')
+            ->leftJoin('element.values', 'values')
+            ->where('element.name = :name')
+            ->setParameter('name', 'shopsalutations');
+
+        $data = $builder->getQuery()->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+
+        $value = explode(',', $data['value']);
+        if (!empty($data['values'])) {
+            $value = [];
+        }
+
+        foreach ($data['values'] as $shopValue) {
+            $value = array_merge($value, explode(',', $shopValue['value']));
+        }
+        $value = array_unique(array_filter($value));
+        return $value;
+    }
 }

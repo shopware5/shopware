@@ -248,12 +248,10 @@
                                                                 <br />
                                                             {/if}
 
-                                                            {if $sUserData.billingaddress.salutation eq "mr"}
-                                                                {s name="ConfirmSalutationMr" namespace="frontend/checkout/confirm"}{/s}
-                                                            {else}
-                                                                {s name="ConfirmSalutationMs" namespace="frontend/checkout/confirm"}{/s}
+                                                            {$sUserData.billingaddress.salutation|salutation}
+                                                            {if {config name="displayprofiletitle"}}
+                                                                {$sUserData.billingaddress.title}<br/>
                                                             {/if}
-
                                                             {$sUserData.billingaddress.firstname} {$sUserData.billingaddress.lastname}<br/>
                                                             {$sUserData.billingaddress.street}<br />
                                                             {if $sUserData.billingaddress.additional_address_line1}{$sUserData.billingaddress.additional_address_line1}<br />{/if}
@@ -360,13 +358,10 @@
                                                         <strong>{$sUserData.billingaddress.company}{if $sUserData.billingaddress.department}<br />{$sUserData.billingaddress.department}{/if}</strong>
                                                         <br />
                                                     {/if}
-
-                                                    {if $sUserData.billingaddress.salutation eq "mr"}
-                                                        {s name="ConfirmSalutationMr" namespace="frontend/checkout/confirm"}{/s}
-                                                    {else}
-                                                        {s name="ConfirmSalutationMs" namespace="frontend/checkout/confirm"}{/s}
+                                                    {$sUserData.billingaddress.salutation|salutation}
+                                                    {if {config name="displayprofiletitle"}}
+                                                        {$sUserData.billingaddress.title}<br/>
                                                     {/if}
-
                                                     {$sUserData.billingaddress.firstname} {$sUserData.billingaddress.lastname}<br />
                                                     {$sUserData.billingaddress.street}<br />
                                                     {if $sUserData.billingaddress.additional_address_line1}{$sUserData.billingaddress.additional_address_line1}<br />{/if}
@@ -443,12 +438,10 @@
                                                         <br />
                                                     {/if}
 
-                                                    {if $sUserData.shippingaddress.salutation eq "mr"}
-                                                        {s name="ConfirmSalutationMr" namespace="frontend/checkout/confirm"}{/s}
-                                                    {else}
-                                                        {s name="ConfirmSalutationMs" namespace="frontend/checkout/confirm"}{/s}
+                                                    {$sUserData.shippingaddress.salutation|salutation}
+                                                    {if {config name="displayprofiletitle"}}
+                                                        {$sUserData.shippingaddress.title}<br/>
                                                     {/if}
-
                                                     {$sUserData.shippingaddress.firstname} {$sUserData.shippingaddress.lastname}<br/>
                                                     {$sUserData.shippingaddress.street}<br />
                                                     {if $sUserData.shippingaddress.additional_address_line1}{$sUserData.shippingaddress.additional_address_line1}<br />{/if}

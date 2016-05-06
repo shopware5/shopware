@@ -61,6 +61,7 @@ Ext.define('Shopware.apps.Customer.model.Shipping', {
         this.set('company', address.get('company'));
         this.set('department', address.get('department'));
         this.set('salutation', address.get('salutation'));
+        this.set('title', address.get('title'));
         this.set('firstName', address.get('firstname'));
         this.set('lastName', address.get('lastname'));
         this.set('street', address.get('street'));

@@ -159,11 +159,11 @@ class AccountContext extends SubContext
     }
 
     /**
-     * @Given /^I change my profile with "([^"]*)" "([^"]*)" "([^"]*)" "([^"]*)"$/
+     * @Given /^I change my profile with "([^"]*)" "([^"]*)" "([^"]*)"$/
      */
-    public function iChangeMyProfileWith($title, $salutation, $firstname, $lastname)
+    public function iChangeMyProfileWith($salutation, $firstname, $lastname)
     {
-        $this->getPage('Account')->changeProfile($title, $salutation, $firstname, $lastname);
+        $this->getPage('Account')->changeProfile($salutation, $firstname, $lastname);
     }
 
     /**

@@ -27,20 +27,27 @@
 
 		{* Salutation *}
 		{block name='frontend_register_personal_fieldset_salutation'}
+
+			{getSalutations variable="salutations"}
+
 			<div class="register--salutation field--select">
 				<select name="register[personal][salutation]" id="salutation" required="required" aria-required="true" class="is--required{if $error_flags.salutation} has--error{/if}">
                     <option value="" disabled="disabled"{if $form_data.salutation eq ""} selected="selected"{/if}>{s name='RegisterPlaceholderSalutation'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}</option>
-					<option value="mr"{if $form_data.salutation eq "mr"} selected="selected"{/if}>{s name='RegisterLabelMr'}{/s}</option>
-					<option value="ms"{if $form_data.salutation eq "ms"} selected="selected"{/if}>{s name='RegisterLabelMs'}{/s}</option>
+
+					{foreach $salutations as $key => $label}
+						<option value="{$key}"{if $form_data.salutation eq $key} selected="selected"{/if}>{$label}</option>
+					{/foreach}
 				</select>
 			</div>
 		{/block}
 
 		{* Title *}
 		{block name='frontend_register_personal_fieldset_input_title'}
-			<div class="register--title">
-				<input autocomplete="section-personal title" name="register[personal][title]" type="text" placeholder="{s name='RegisterPlaceholderTitle'}{/s}" id="title" value="{$form_data.title|escape}" class="register--field{if $error_flags.title} has--error{/if}" />
-			</div>
+			{if {config name="displayprofiletitle"}}
+				<div class="register--title">
+					<input autocomplete="section-personal title" name="register[personal][title]" type="text" placeholder="{s name='RegisterPlaceholderTitle'}{/s}" id="title" value="{$form_data.title|escape}" class="register--field{if $error_flags.title} has--error{/if}" />
+				</div>
+			{/if}
 		{/block}
 
 		{* Firstname *}

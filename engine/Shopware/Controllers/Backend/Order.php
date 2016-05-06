@@ -351,6 +351,8 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         //returns the customer data
         $orders = $paginator->getIterator()->getArrayCopy();
 
+        $namespace = Shopware()->Container()->get('snippets')->getNamespace('frontend/salutation');
+
         foreach ($orders as $key => $order) {
             $additionalOrderDataQuery = $this->getRepository()->getBackendAdditionalOrderDataQuery($order['number']);
             $additionalOrderData = $additionalOrderDataQuery->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
@@ -362,6 +364,9 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             $order['debit'] = $order['customer']['debit'];
 
             $order['customerEmail'] = $order['customer']['email'];
+
+            $order['billing']['salutationSnippet'] = $namespace->get($order['billing']['salutation']);
+            $order['shipping']['salutationSnippet'] = $namespace->get($order['shipping']['salutation']);
 
             //find the instock of the article
             foreach ($order["details"] as &$orderDetail) {

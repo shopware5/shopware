@@ -563,6 +563,10 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             $data['birthday'] = $birthday->format('d.m.Y');
         }
 
+        $namespace = Shopware()->Container()->get('snippets')->getNamespace('frontend/salutation');
+        $data['billing']['salutationSnippet'] = $namespace->get($data['billing']['salutation']);
+        $data['shipping']['salutationSnippet'] = $namespace->get($data['shipping']['salutation']);
+
         return $data;
     }
 
