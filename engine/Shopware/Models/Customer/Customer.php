@@ -406,6 +406,11 @@ class Customer extends LazyFetchModelEntity
     protected $defaultShippingAddress;
 
     /**
+     * @var array
+     */
+    protected $additional;
+
+    /**
      * Class constructor. Initials the orders array and the date fields.
      */
     public function __construct()
@@ -1235,5 +1240,21 @@ class Customer extends LazyFetchModelEntity
         }
 
         $this->birthday = $birthday;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAdditional()
+    {
+        return $this->additional;
+    }
+
+    /**
+     * @param array $additional
+     */
+    public function setAdditional($additional)
+    {
+        $this->additional = $additional;
     }
 }

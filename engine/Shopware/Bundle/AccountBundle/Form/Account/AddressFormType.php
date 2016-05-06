@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\AccountBundle\Form\Account;
 
+use Shopware\Models\Attribute\CustomerAddress as AddressAttribute;
 use Shopware\Bundle\AccountBundle\Type\SalutationType;
 use Shopware\Bundle\FormBundle\Transformer\EntityTransformer;
 use Shopware\Components\Model\ModelManager;
@@ -140,6 +141,17 @@ class AddressFormType extends AbstractType
         // convert IDs to entities
         $builder->get('country')->addModelTransformer(new EntityTransformer($this->models, Country::class));
         $builder->get('state')->addModelTransformer(new EntityTransformer($this->models, State::class));
+
+        $builder->add('attribute', AttributeFormType::class, [
+            'data_class' => AddressAttribute::class
+        ]);
+
+        //dynamic field which contains multiple values
+        //used for extendable data which has not to persist over attributes
+        $builder->add('additional', null, [
+            'compound' => true,
+            'allow_extra_fields' => true
+        ]);
     }
 
     /**

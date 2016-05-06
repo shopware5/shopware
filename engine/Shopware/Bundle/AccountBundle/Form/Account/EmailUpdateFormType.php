@@ -24,8 +24,9 @@
 
 namespace Shopware\Bundle\AccountBundle\Form\Account;
 
+use Shopware\Models\Attribute\Customer as CustomerAttribute;
 use Shopware\Bundle\AccountBundle\Constraint\CurrentPassword;
-use Shopware\Bundle\AccountBundle\Constraint\Repeated;
+use Shopware\Bundle\FormBundle\Constraint\Repeated;
 use Shopware\Bundle\AccountBundle\Constraint\UniqueEmail;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Symfony\Component\Form\AbstractType;
@@ -80,13 +81,26 @@ class EmailUpdateFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('currentPassword', PasswordType::class, [
+            'mapped' => false,
             'constraints' => $this->getCurrentPasswordConstraints()
         ]);
 
         $builder->add('email', EmailType::class, [
             'constraints' => $this->getEmailConstraints()
         ]);
-        $builder->add('emailConfirmation', EmailType::class);
+
+        $builder->add('emailConfirmation', EmailType::class, [
+            'mapped' => false
+        ]);
+
+        $builder->add('attribute', AttributeFormType::class, [
+            'data_class' => CustomerAttribute::class
+        ]);
+
+        $builder->add('additional', null, [
+            'compound' => true,
+            'allow_extra_fields' => true
+        ]);
     }
 
     public function getBlockPrefix()

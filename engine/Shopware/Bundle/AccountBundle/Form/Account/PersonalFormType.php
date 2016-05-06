@@ -24,7 +24,8 @@
 
 namespace Shopware\Bundle\AccountBundle\Form\Account;
 
-use Shopware\Bundle\AccountBundle\Constraint\Repeated;
+use Shopware\Models\Attribute\Customer as CustomerAttribute;
+use Shopware\Bundle\FormBundle\Constraint\Repeated;
 use Shopware\Bundle\AccountBundle\Constraint\UniqueEmail;
 use Shopware\Bundle\AccountBundle\Type\SalutationType;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
@@ -175,6 +176,15 @@ class PersonalFormType extends AbstractType
         $builder->add('dpacheckbox', TextType::class, [
             'empty_data' => 0,
             'constraints' => $this->getPrivacyConstraints()
+        ]);
+
+        $builder->add('attribute', AttributeFormType::class, [
+            'data_class' => CustomerAttribute::class
+        ]);
+
+        $builder->add('additional', null, [
+            'compound' => true,
+            'allow_extra_fields' => true
         ]);
     }
 
