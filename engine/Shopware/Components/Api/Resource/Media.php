@@ -291,7 +291,7 @@ class Media extends Resource
         $name = pathinfo($link, PATHINFO_FILENAME);
         $path = $this->load($link, $name);
         $name = pathinfo($path, PATHINFO_FILENAME);
-        $ext = pathinfo($link, PATHINFO_EXTENSION);
+        $ext = strtolower(pathinfo($link, PATHINFO_EXTENSION));
         if($ext == 'mp3'){
             $full = $path.'.'.$ext;
             $file = new UploadedFile($path, $full);
