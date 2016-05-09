@@ -447,24 +447,34 @@
                 me.initFullscreen();
             }
 
-            if (me.opts.gridMode === 'masonry') {
-                me.initMasonryGrid();
-            }
-
-            if (me.opts.gridMode === 'fluid') {
-                me.initFluidGrid();
-            }
-
-            if (me.opts.gridMode === 'resize') {
-                me.initScaleGrid();
-            }
-
-            if (me.opts.gridMode !== 'resize') {
-                me.setContainerSpacing();
-            }
+            me.initMode(me.opts.gridMode);
 
             me.initElements();
             me.registerEvents();
+        },
+
+        /**
+         * Initializes the grid mode by the given option.
+         * Searches for a method with the name pattern 'init' + Name + 'Grid'.
+         * This enables you to extend the plugin with additional grid types by adding the necessary init method.
+         * If there is no corresponding method for the grid type, the mode "fluid" will be used as default.
+         *
+         * @param {string} gridMode
+         */
+        initMode: function(gridMode) {
+            var me = this,
+                mode = gridMode || me.opts.gridMode,
+                modeMethod = 'init' + mode.charAt(0).toUpperCase() + mode.slice(1) + 'Grid';
+
+            if (typeof me[modeMethod] === 'function') {
+                me[modeMethod]();
+            } else {
+                me.initFluidGrid();
+            }
+
+            if (mode !== 'resize') {
+                me.setContainerSpacing();
+            }
         },
 
         /**
@@ -543,7 +553,7 @@
         /**
          * Initializes the grid for the resize mode.
          */
-        initScaleGrid: function() {
+        initResizeGrid: function() {
             var me = this;
 
             me.baseWidth = ~~me.opts.baseWidth;
