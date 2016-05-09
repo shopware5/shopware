@@ -945,14 +945,14 @@ Ext.define('Shopware.apps.Emotion.view.detail.Grid', {
         var me = this,
             cell = cellSize || me.getCurrentCellSize();
 
-        return cell.width * columns + (columns - 1) * me.emotion.get('cellSpacing');
+        return cell.width * columns + (columns - 1) * me.settings.cellSpacing;
     },
 
     getHeightFromRows: function(rows, cellSize) {
         var me = this,
             cell = cellSize || me.getCurrentCellSize();
 
-        return cell.height * rows + (rows - 1) * me.emotion.get('cellSpacing');
+        return cell.height * rows + (rows - 1) * me.settings.cellSpacing;
     },
 
     getCellPosition: function(row, col) {
