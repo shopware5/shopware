@@ -1,32 +1,31 @@
 {block name="backend/index/menu/function"}
 	{function name=backend_menu level=0}
         [{foreach $menu as $category}
-            {if ($category->onclick || $category->action || $category->hasChildren()) && {acl_is_allowed privilege=read resource=$category->controller|lower}}
-                {if $category->isVisible()} {
-                        {if $level === 0}{if $category->hasChildren()}xtype: 'hoverbutton',{else}xtype: 'button',{/if}{/if}
-                        {$name = null}
-                        {if $category->controller}{$name = $category->controller}{/if}
-                        {if $category->action && $category->action != 'Index'}{$name = "{$category->controller}/{$category->action}"}{/if}
-                        text: "{if $name}{$category->label|unescape|snippet:$name:'backend/index/view/main'}{else}{$category->label|unescape}{/if}{if $category->shortcut}&nbsp;<span class='shortcut'>({$category->shortcut|snippet:$name:'backend/index/view/shortcuts'})</span>{/if}",
-                        {if $category->controller && $category->action}handler: function() {
-                            Shopware.app.Application.addSubApplication({
-                                name: 'Shopware.apps.{$category->controller}',
-                                localizedName: "{if $name}{$category->label|unescape|snippet:$name:'backend/index/view/main'}{else}{$category->label|unescape}{/if}"
-                                {if $category->action && $category->action != 'Index'}, action: '{$category->action}'{/if}
-                            });
-                        },
-                        {/if}
-                        {if $category->onclick}handler: function() { {$category->onclick} },{/if}
-                        {if $category->label|unescape|substr:-1 == '*'}cls: Ext.baseCSSPrefix +'deprecated-menu-item', overCls: Ext.baseCSSPrefix +'deprecated-menu-item-active',{/if}
-                        iconCls: "{$category->class}"{if $category->hasChildren()},
-                        menu: Ext.create('Ext.menu.Menu', {
-                            shadow: false, cls: 'shopware-ui-main-menu',
-                            showSeparator: false, plain: true, ui: 'shopware-ui', margin: '0 0 0 2',
-                            items: {call name=backend_menu menu=$category->getChildren() level=$level+1}
-                        })
-                        {/if}
-                    }{if !$category@last},{ xtype: 'tbspacer', width: 6 }, { xtype: 'tbseparator' }, { xtype: 'tbspacer', width: 6 }, {/if}
+            {if ($category['onclick'] || $category['action'] || $category['children']) && {acl_is_allowed privilege=read resource=$category['controller']|lower}}
+                {
+                {if $level === 0}{if $category['children']}xtype: 'hoverbutton',{else}xtype: 'button',{/if}{/if}
+                {$name = null}
+                {if $category['controller']}{$name = $category['controller']}{/if}
+                {if $category['action'] && $category['action'] != 'Index'}{$name = "{$category['controller']}/{$category['action']}"}{/if}
+                text: "{if $name}{$category['label']|unescape|snippet:$name:'backend/index/view/main'}{else}{$category['label']|unescape}{/if}{if $category['shortcut']}&nbsp;<span class='shortcut'>({$category['shortcut']|snippet:$name:'backend/index/view/shortcuts'})</span>{/if}",
+                {if $category['controller'] && $category['action']}handler: function() {
+                    Shopware.app.Application.addSubApplication({
+                    name: 'Shopware.apps.{$category['controller']}',
+                    localizedName: "{if $name}{$category['label']|unescape|snippet:$name:'backend/index/view/main'}{else}{$category['label']|unescape}{/if}"
+                    {if $category['action'] && $category['action'] != 'Index'}, action: '{$category['action']}'{/if}
+                    });
+                    },
                 {/if}
+                {if $category['onclick']}handler: function() { {$category['onclick']} },{/if}
+                {if $category['label']|unescape|substr:-1 == '*'}cls: Ext.baseCSSPrefix +'deprecated-menu-item', overCls: Ext.baseCSSPrefix +'deprecated-menu-item-active',{/if}
+                iconCls: "{$category['class']}"{if $category['children']},
+                menu: Ext.create('Ext.menu.Menu', {
+                shadow: false, cls: 'shopware-ui-main-menu',
+                showSeparator: false, plain: true, ui: 'shopware-ui', margin: '0 0 0 2',
+                items: {call name=backend_menu menu=$category['children'] level=$level+1}
+                })
+            {/if}
+                }{if !$category@last},{ xtype: 'tbspacer', width: 6 }, { xtype: 'tbseparator' }, { xtype: 'tbspacer', width: 6 }, {/if}
             {/if}
         {/foreach}]
 	{/function}
