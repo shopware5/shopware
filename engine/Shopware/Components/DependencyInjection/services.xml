@@ -23,8 +23,7 @@
         </service>
 
         <service id="snippet_resource"
-                 class="Enlight_Components_Snippet_Resource"
-                 public="false">
+                 class="Enlight_Components_Snippet_Resource">
             <argument type="service" id="snippets"/>
             <argument>%shopware.snippet.showSnippetPlaceholder%</argument>
         </service>
