@@ -259,6 +259,9 @@ Defines the styles for the address pages and the modals.
 
 @media screen and(min-width: @desktopViewportWidth) {
     .address-manager--modal.address-manager--selection {
+        // Restrict the width of the modal box in desktop mode to fit the shop width
+        .unitize-max-width(1145);
+
         .content {
             .modal--container {
                 .modal--container-item {
