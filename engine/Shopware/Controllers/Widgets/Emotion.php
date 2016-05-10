@@ -58,7 +58,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $preview = $this->Request()->getParam('preview', false);
 
         $elementIds = [];
-        foreach($emotions as $emotion) {
+        foreach ($emotions as $emotion) {
             $elementIds += array_column($emotion['elements'], 'id');
         }
 

@@ -1113,7 +1113,6 @@ class sRewriteTable
         $routerCampaignTemplate = $this->config->get('routerCampaignTemplate');
 
         foreach ($campaigns as $campaign) {
-
             $translation = $translator->readWithFallback($languageId, $fallbackId, 'emotion', $campaign['id']);
 
             $campaign = array_merge($campaign, $translation);

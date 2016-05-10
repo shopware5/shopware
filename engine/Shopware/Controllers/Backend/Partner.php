@@ -147,7 +147,7 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
             $data = $dataQuery->getArrayResult();
 
             $summaryQuery = $repository->getStatisticListQuery($order, $offset, $limit, $partnerId, true, $fromDate, $toDate);
-            $summaryData = $summaryQuery->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+            $summaryData = $summaryQuery->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
 
             $this->View()->assign(
                 array(
@@ -205,7 +205,7 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
         $repository = Shopware()->Models()->Partner();
 
         $dataQuery = $repository->getDetailQuery($filter);
-        $data = $dataQuery->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        $data = $dataQuery->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
 
         $this->View()->assign(array('success' => true, 'data' => $data));
     }
@@ -264,7 +264,7 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
 
             $filter = array(array("property" => "id", "value" => $partnerModel->getId()));
             $dataQuery = $repository->getDetailQuery($filter);
-            $data = $dataQuery->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+            $data = $dataQuery->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
 
             $this->View()->assign(array('success' => true, 'data' => $data));
         } catch (Exception $e) {
@@ -284,7 +284,7 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
         /** @var $repository \Shopware\Models\Partner\Repository */
         $repository = Shopware()->Models()->Partner();
         $dataQuery = $repository->getCustomerForMappingQuery($mapCustomerAccountValue);
-        $customerData = $dataQuery->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        $customerData = $dataQuery->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
         $userId = $customerData["id"];
         unset($customerData["id"]);
         if (!empty($customerData)) {

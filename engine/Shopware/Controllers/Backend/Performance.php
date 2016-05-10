@@ -22,10 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
-use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
-use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Plugin\Plugin;
 
 /**

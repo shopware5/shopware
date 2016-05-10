@@ -23,7 +23,6 @@
  */
 namespace Shopware\Components\License\Service;
 
-use Doctrine\DBAL\Connection;
 use Enlight_View_Default;
 use Enlight_Event_EventArgs;
 use Enlight\Event\SubscriberInterface;
@@ -31,7 +30,6 @@ use Shopware\Components\DependencyInjection\Container;
 use Shopware\Components\License\Struct\LicenseInformation;
 use Shopware\Components\License\Struct\LicenseUnpackRequest;
 use Shopware\Components\License\Struct\ShopwareEdition;
-use Shopware\Components\Model\ModelManager;
 
 /**
  * @category  Shopware

@@ -320,7 +320,7 @@ class Repository extends ModelRepository
 
         $viewports = [];
 
-        foreach($viewportsData as $viewport) {
+        foreach ($viewportsData as $viewport) {
             $elementId = $viewport['elementId'];
             $viewports[$elementId][] = $viewport;
         }

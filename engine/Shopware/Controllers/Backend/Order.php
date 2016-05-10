@@ -28,7 +28,6 @@ use Shopware\Models\Order\Billing as Billing;
 use Shopware\Models\Order\Shipping as Shipping;
 use Shopware\Models\Order\Detail as Detail;
 use Shopware\Models\Order\Document\Document as Document;
-use Doctrine\Common\Collections\ArrayCollection as ArrayCollection;
 
 /**
  * Backend Controller for the order backend module.

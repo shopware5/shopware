@@ -224,7 +224,6 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
         $campaigns = $builder->getQuery()->getArrayResult();
 
         foreach ($campaigns as &$campaign) {
-
             $translation = $translator->readWithFallback($shopId, $fallbackId, 'emotion', $campaign['id']);
 
             $translation['seo_title'] = $translation['seoTitle'];

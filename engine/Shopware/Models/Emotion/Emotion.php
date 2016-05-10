@@ -26,7 +26,6 @@ namespace Shopware\Models\Emotion;
 
 use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
-use Shopware\Models\Emotion\Template;
 
 /**
  * The Shopware Emotion Model enables you to adapt the view of a category individually according to a grid system.

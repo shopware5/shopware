@@ -22,7 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Models\Emotion\Library\Component;
 use Shopware\Models\Config\ElementTranslation;
 use Shopware\Models\Config\FormTranslation;

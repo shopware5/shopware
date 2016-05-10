@@ -26,7 +26,6 @@ namespace Shopware\Components;
 
 use Enlight\Event\SubscriberInterface;
 use Enlight_Components_Session_Namespace as Session;
-use Enlight_Controller_Request_Request as Request;
 use Enlight_Controller_ActionEventArgs as ActionEventArgs;
 use Shopware\Components\DependencyInjection\Container;
 

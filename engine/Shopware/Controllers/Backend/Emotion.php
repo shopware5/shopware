@@ -201,7 +201,6 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         $viewports = $repository->getElementsViewports($elementIds);
 
         foreach ($emotion['elements'] as &$element) {
-
             $elementQuery = $repository->getElementDataQuery($element['id'], $element['componentId']);
             $componentData = $elementQuery->getArrayResult();
             $data = array();
@@ -535,7 +534,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
      */
     private function createElementViewports(Emotion $emotion, array $element, array $elementViewports)
     {
-        foreach($elementViewports as &$viewport) {
+        foreach ($elementViewports as &$viewport) {
             $viewport['emotion'] = $emotion;
         }
 

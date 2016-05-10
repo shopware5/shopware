@@ -28,7 +28,6 @@ use Doctrine\DBAL\Connection;
 use Doctrine\ORM\QueryBuilder;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\Model\ModelManager;
-use Shopware_Components_Translation;
 
 /**
  * @category  Shopware

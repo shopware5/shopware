@@ -22,9 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Models\Article\Detail as Detail;
-use Doctrine\ORM\AbstractQuery;
-
 /**
  * Shopware Backend Controller for the Notification Module
  *

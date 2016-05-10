@@ -25,13 +25,11 @@
 namespace Shopware\Commands;
 
 use Shopware\Components\Model\CategoryDenormalization;
-use Shopware\Components\Model\ModelManager;
 use Symfony\Component\Console\Helper\ProgressHelper;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Shopware\Commands\ShopwareCommand;
 
 /**
  * RebuildCategoryTreeCommand builds up the ro category tree of shopware

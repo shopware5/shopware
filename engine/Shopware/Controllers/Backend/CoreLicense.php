@@ -32,7 +32,6 @@ use Shopware\Components\LicenseInstaller;
  */
 class Shopware_Controllers_Backend_CoreLicense extends Shopware_Controllers_Backend_ExtJs
 {
-
     /** @var array Contains the possible Exception names thrown by LocalLicenseUnpackService */
     private $licenseException = [
         'LicenseHostException',

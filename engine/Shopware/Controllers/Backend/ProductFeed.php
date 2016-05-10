@@ -23,7 +23,6 @@
  */
 
 use Shopware\Models\ProductFeed\ProductFeed as ProductFeed;
-use Doctrine\ORM\AbstractQuery;
 
 /**
  * Shopware Backend Controller for the Voucher Module

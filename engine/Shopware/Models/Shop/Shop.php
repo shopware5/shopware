@@ -704,10 +704,10 @@ class Shop extends ModelEntity
 
         /** @var $pluginNamespace  \Shopware_Components_Plugin_Namespace */
           foreach ($plugins as $pluginNamespace) {
-            if ($pluginNamespace instanceof \Shopware_Components_Plugin_Namespace) {
-                $pluginNamespace->setShop($this);
-            }
-        }
+              if ($pluginNamespace instanceof \Shopware_Components_Plugin_Namespace) {
+                  $pluginNamespace->setShop($this);
+              }
+          }
 
         $container->get('shopware_storefront.context_service')->initializeShopContext();
 

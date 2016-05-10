@@ -1054,8 +1054,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
     protected function getQueryPaginator(
         \Doctrine\ORM\QueryBuilder $builder,
         $hydrationMode = \Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY
-    )
-    {
+    ) {
         $query = $builder->getQuery();
         $query->setHydrationMode($hydrationMode);
         return $this->getManager()->createPaginator($query);
