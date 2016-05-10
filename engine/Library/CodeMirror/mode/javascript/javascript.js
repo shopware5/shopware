@@ -13,6 +13,11 @@
 })(function(CodeMirror) {
     "use strict";
 
+    function expressionAllowed(stream, state, backUp) {
+        return /^(?:operator|sof|keyword c|case|new|[\[{}\(,;:]|=>)$/.test(state.lastType) ||
+            (state.lastType == "quasi" && /\{\s*$/.test(stream.string.slice(0, stream.pos - (backUp || 0))))
+    }
+
     CodeMirror.defineMode("javascript", function(config, parserConfig) {
         var indentUnit = config.indentUnit;
         var statementIndent = parserConfig.statementIndent;
@@ -126,8 +131,7 @@
                 } else if (stream.eat("/")) {
                     stream.skipToEnd();
                     return ret("comment", "comment");
-                } else if (/^(?:operator|sof|keyword c|case|new|[\[{}\(,;:])$/.test(state.lastType) ||
-                    (state.lastType == "quasi" && /\{\s*$/.test(stream.string.slice(0, stream.pos - 1)))) {
+                } else if (expressionAllowed(stream, state, 1)) {
                     readRegexp(stream);
                     stream.match(/^\b(([gimyu])(?![gimyu]*\2))+\b/);
                     return ret("regexp", "string-2");
@@ -533,6 +537,7 @@
             }
             if (type == "variable") cx.marked = "property";
             if (type == "spread") return cont(pattern);
+            if (type == "}") return pass();
             return cont(expect(":"), pattern, maybeAssign);
         }
         function maybeAssign(_type, value) {
@@ -655,7 +660,7 @@
                     lexical: new JSLexical((basecolumn || 0) - indentUnit, 0, "block", false),
                     localVars: parserConfig.localVars,
                     context: parserConfig.localVars && {vars: parserConfig.localVars},
-                    indented: 0
+                    indented: basecolumn || 0
                 };
                 if (parserConfig.globalVars && typeof parserConfig.globalVars == "object")
                     state.globalVars = parserConfig.globalVars;
@@ -711,11 +716,17 @@
 
             helperType: jsonMode ? "json" : "javascript",
             jsonldMode: jsonldMode,
-            jsonMode: jsonMode
+            jsonMode: jsonMode,
+
+            expressionAllowed: expressionAllowed,
+            skipExpression: function(state) {
+                var top = state.cc[state.cc.length - 1]
+                if (top == expression || top == expressionNoComma) state.cc.pop()
+            }
         };
     });
 
-    //CodeMirror.registerHelper("wordChars", "javascript", /[\w$]/);
+    CodeMirror.registerHelper("wordChars", "javascript", /[\w$]/);
 
     CodeMirror.defineMIME("text/javascript", "javascript");
     CodeMirror.defineMIME("text/ecmascript", "javascript");
