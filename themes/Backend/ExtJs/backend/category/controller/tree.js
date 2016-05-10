@@ -254,6 +254,9 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
                     restrictionView;
 
                 me.detailRecord = records[0];
+
+                settingForm.attributeForm.loadAttribute(me.detailRecord.get('id'));
+
                 //first reset the old data of this form
                 settingForm.getForm().reset();
                 // change fieldset header

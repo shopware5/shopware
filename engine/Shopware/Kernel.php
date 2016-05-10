@@ -24,13 +24,16 @@
 
 namespace Shopware;
 
+use Shopware\Bundle\AttributeBundle\DependencyInjection\Compiler\SearchRepositoryCompilerPass;
 use Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\SettingsCompilerPass;
 use Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\SynchronizerCompilerPass;
 use Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\DataIndexerCompilerPass;
 use Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\MappingCompilerPass;
+use Shopware\Bundle\FormBundle\DependencyInjection\CompilerPass\FormPass;
 use Shopware\Bundle\SearchBundle\DependencyInjection\Compiler\CriteriaRequestHandlerCompilerPass;
 use Shopware\Bundle\SearchBundleDBAL\DependencyInjection\Compiler\DBALCompilerPass;
 use Shopware\Bundle\SearchBundleES\DependencyInjection\CompilerPass\SearchHandlerCompilerPass;
+use Shopware\Bundle\FormBundle\DependencyInjection\CompilerPass\AddConstraintValidatorsPass;
 use Shopware\Components\DependencyInjection\Compiler\DoctrineEventSubscriberCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\EventListenerCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\EventSubscriberCompilerPass;
@@ -38,6 +41,7 @@ use Shopware\Components\ConfigLoader;
 use Shopware\Components\DependencyInjection\Container;
 use Symfony\Component\Config\ConfigCache;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
@@ -300,11 +304,8 @@ class Kernel implements HttpKernelInterface
      */
     protected function initializeShopware()
     {
-        $this->shopware = new \Shopware(
-            $this->environment,
-            $this->config,
-            $this->container
-        );
+        $this->shopware = new \Shopware($this->container);
+        $this->container->setApplication($this->shopware);
     }
 
     /**
@@ -474,6 +475,9 @@ class Kernel implements HttpKernelInterface
         $loader->load('PluginInstallerBundle/services.xml');
         $loader->load('ESIndexingBundle/services.xml');
         $loader->load('MediaBundle/services.xml');
+        $loader->load('FormBundle/services.xml');
+        $loader->load('AccountBundle/services.xml');
+        $loader->load('AttributeBundle/services.xml');
 
         if ($this->isElasticSearchEnabled()) {
             $loader->load('SearchBundleES/services.xml');
@@ -486,8 +490,8 @@ class Kernel implements HttpKernelInterface
         $this->addShopwareConfig($container, 'shopware', $this->config);
         $this->addResources($container);
 
-        $container->addCompilerPass(new EventListenerCompilerPass());
-        $container->addCompilerPass(new EventSubscriberCompilerPass());
+        $container->addCompilerPass(new EventListenerCompilerPass(), PassConfig::TYPE_BEFORE_REMOVING);
+        $container->addCompilerPass(new EventSubscriberCompilerPass(), PassConfig::TYPE_BEFORE_REMOVING);
         $container->addCompilerPass(new DoctrineEventSubscriberCompilerPass());
         $container->addCompilerPass(new DBALCompilerPass());
         $container->addCompilerPass(new CriteriaRequestHandlerCompilerPass());
@@ -495,6 +499,9 @@ class Kernel implements HttpKernelInterface
         $container->addCompilerPass(new SynchronizerCompilerPass());
         $container->addCompilerPass(new DataIndexerCompilerPass());
         $container->addCompilerPass(new SettingsCompilerPass());
+        $container->addCompilerPass(new FormPass());
+        $container->addCompilerPass(new AddConstraintValidatorsPass());
+        $container->addCompilerPass(new SearchRepositoryCompilerPass());
 
         if ($this->isElasticSearchEnabled()) {
             $container->addCompilerPass(new SearchHandlerCompilerPass());
@@ -574,10 +581,13 @@ class Kernel implements HttpKernelInterface
     }
 
     /**
+     * @deprecated since 5.2, to be removed in 5.3
      * @return \Shopware
      */
     public function getShopware()
     {
+        trigger_error('Shopware\Kernel::getShopware() is deprecated since version 5.2 and will be removed in 5.3.', E_USER_DEPRECATED);
+
         return $this->shopware;
     }
 

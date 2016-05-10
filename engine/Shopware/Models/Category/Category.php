@@ -192,15 +192,6 @@ class Category extends ModelEntity
     private $path = '';
 
     /**
-     * Flag shows if the category filterable
-     *
-     * @var integer $showFilterGroups
-     *
-     * @ORM\Column(name="showfiltergroups", type="boolean", nullable=false)
-     */
-    private $showFilterGroups = true;
-
-    /**
      * Is this category based outside from the shop?
      *
      * @var string $external
@@ -738,29 +729,6 @@ class Category extends ModelEntity
     public function setBlog($blog)
     {
         $this->blog = $blog;
-    }
-
-    /**
-     * Set the flag if filter groups should be displayed
-     *
-     * @param boolean $showFilterGroups
-     * @return Category
-     */
-    public function setShowFilterGroups($showFilterGroups)
-    {
-        $this->showFilterGroups = (bool) $showFilterGroups;
-
-        return $this;
-    }
-
-    /**
-     * Get the flag if the filter groups should be displayed
-     *
-     * @return boolean
-     */
-    public function getShowFilterGroups()
-    {
-        return $this->showFilterGroups;
     }
 
     /**

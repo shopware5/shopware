@@ -26,6 +26,7 @@ namespace   Shopware\Models\Order;
 
 use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Models\Customer\Address;
 
 /**
  * Shopware order billing model represents a single billing address of an order.
@@ -115,6 +116,12 @@ class Billing extends ModelEntity
     private $salutation = '';
 
     /**
+     * @var string
+     * @ORM\Column(name="title", type="string", length=100, nullable=true)
+     */
+    protected $title;
+
+    /**
      * Contains the unique customer number
      * @var string $number
      * @ORM\Column(name="customernumber", type="string", length=30, nullable=true)
@@ -162,13 +169,6 @@ class Billing extends ModelEntity
      * @ORM\Column(name="phone", type="string", length=40, nullable=false)
      */
     private $phone = '';
-
-    /**
-     * Contains the fax of the billing address
-     * @var string $fax
-     * @ORM\Column(name="fax", type="string", length=40, nullable=false)
-     */
-    private $fax = '';
 
     /**
      * Contains the vat id of the billing address
@@ -465,28 +465,6 @@ class Billing extends ModelEntity
     }
 
     /**
-     * Setter function for the fax column property.
-     *
-     * @param string $fax
-     * @return Billing
-     */
-    public function setFax($fax)
-    {
-        $this->fax = $fax;
-        return $this;
-    }
-
-    /**
-     * Getter function for the fax column property.
-     *
-     * @return string
-     */
-    public function getFax()
-    {
-        return $this->fax;
-    }
-
-    /**
      * Setter function for the vatId column property.
      * The vatId will be saved in the ustId table field.
      *
@@ -647,5 +625,50 @@ class Billing extends ModelEntity
     public function getAdditionalAddressLine1()
     {
         return $this->additionalAddressLine1;
+    }
+
+    /**
+     * Transfer values from the new address object
+     *
+     * @param Address $address
+     */
+    public function fromAddress(Address $address)
+    {
+        $this->setCompany((string) $address->getCompany());
+        $this->setDepartment((string) $address->getDepartment());
+        $this->setSalutation((string) $address->getSalutation());
+        $this->setFirstName((string) $address->getFirstname());
+        $this->setLastName((string) $address->getLastname());
+        $this->setStreet((string) $address->getStreet());
+        $this->setCity((string) $address->getCity());
+        $this->setZipCode((string) $address->getZipcode());
+        $this->setAdditionalAddressLine1((string) $address->getAdditionalAddressLine1());
+        $this->setAdditionalAddressLine2((string) $address->getAdditionalAddressLine2());
+        $this->setCountry($address->getCountry());
+        $this->setPhone((string) $address->getPhone());
+        $this->setVatId((string) $address->getVatId());
+        $this->setTitle($address->getTitle());
+
+        if ($address->getState()) {
+            $this->setState($address->getState());
+        } else {
+            $this->setState(null);
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param string $title
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
     }
 }

@@ -40,22 +40,28 @@ class EventListenerCompilerPass implements CompilerPassInterface
             return;
         }
 
-        $definition = $container->getDefinition(
-            'events'
-        );
+        $definition = $container->getDefinition('events');
 
-        $taggedServices = $container->findTaggedServiceIds(
-            'shopware.event_listener'
-        );
+        foreach ($container->findTaggedServiceIds('shopware.event_listener') as $id => $events) {
+            $def = $container->getDefinition($id);
+            if (!$def->isPublic()) {
+                throw new \InvalidArgumentException(sprintf('The service "%s" must be public as event listeners are lazy-loaded.', $id));
+            }
+            if ($def->isAbstract()) {
+                throw new \InvalidArgumentException(sprintf('The service "%s" must not be abstract as event listeners are lazy-loaded.', $id));
+            }
 
-        foreach ($taggedServices as $id => $tagAttributes) {
-            foreach ($tagAttributes as $attributes) {
-                $callback = array(new Reference($id), $attributes["method"]);
+            foreach ($events as $event) {
+                $priority = isset($event['priority']) ? $event['priority'] : 0;
+                if (!isset($event['event'])) {
+                    throw new \InvalidArgumentException(sprintf('Service "%s" must define the "event" attribute on "%s" tags.', $id, 'shopware.event_listener'));
+                }
 
-                $definition->addMethodCall(
-                    'addListener',
-                    array($attributes['event'], $callback)
-                );
+                if (!isset($event['method'])) {
+                    throw new \InvalidArgumentException(sprintf('Service "%s" must define the "method" attribute on "%s" tags.', $id, 'shopware.event_listener'));
+                }
+
+                $definition->addMethodCall('addListenerService', [$event['event'], [$id, $event['method']], $priority]);
             }
         }
     }

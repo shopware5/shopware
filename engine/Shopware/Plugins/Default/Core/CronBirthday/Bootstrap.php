@@ -44,15 +44,14 @@ class Shopware_Plugins_Core_CronBirthday_Bootstrap extends Shopware_Components_P
                 userID,
                 company,
                 department,
-                salutation,
+                u.salutation,
                 customernumber,
-                firstname,
-                lastname,
+                u.firstname,
+                u.lastname,
                 street,
                 zipcode,
                 city,
                 phone,
-                fax,
                 countryID,
                 ustid,
                 at.text1,
@@ -131,7 +130,7 @@ class Shopware_Plugins_Core_CronBirthday_Bootstrap extends Shopware_Components_P
             $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
             $shopId = is_numeric($user['language']) ? $user['language'] : $user['subshopID'];
             $shop = $repository->getActiveById($shopId);
-            $shop->registerResources(Shopware()->Bootstrap());
+            $shop->registerResources();
 
             //language 	subshopID
             $context = array(

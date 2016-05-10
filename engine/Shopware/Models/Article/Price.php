@@ -124,7 +124,7 @@ class Price extends LazyFetchModelEntity
 
     /**
      * INVERSE SIDE
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticlePrice", mappedBy="articlePrice", cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticlePrice", orphanRemoval=true, mappedBy="articlePrice", cascade={"persist"})
      * @var \Shopware\Models\Attribute\ArticlePrice
      */
     protected $attribute;

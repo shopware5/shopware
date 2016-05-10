@@ -28,6 +28,7 @@ use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
 use Shopware\Bundle\SearchBundle\Sorting\PriceSorting;
 use Shopware\Bundle\SearchBundle\Sorting\ReleaseDateSorting;
 use Shopware\Bundle\SearchBundle\SortingInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Components\Model\Query\SqlWalker;
 use Shopware\Models\Emotion\Repository;
 
@@ -47,6 +48,18 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         /**@var $repository Repository */
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Emotion\Emotion');
         $emotions = $this->getEmotion($repository);
+        /** @var ShopContext $shopContext */
+        $shopContext = $this->get('shopware_storefront.context_service')->getShopContext();
+        $shopId = $shopContext->getShop()->getId();
+        $translator = new Shopware_Components_Translation();
+        $fallbackId = $shopContext->getShop()->getFallbackId();
+
+        $elementIds = [];
+        foreach($emotions as $emotion) {
+            $elementIds += array_column($emotion['elements'], 'id');
+        }
+
+        $viewports = $repository->getElementsViewports($elementIds);
 
         //iterate all emotions to select the element data.
         foreach ($emotions as &$emotion) {
@@ -54,9 +67,26 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             $emotion['device'] = explode(',', $emotion['device']);
             $categoryId = $this->Request()->getParam('categoryId') ?: $emotion['categories'][0]['id'];
 
+            // Mapping for the grid settings
+            $emotion['grid'] = [
+                'cols' => $emotion['cols'],
+                'rows' => $emotion['rows'],
+                'gutter' => $emotion['cellSpacing'],
+                'cellHeight' => $emotion['cellHeight'],
+                'articleHeight' => $emotion['articleHeight']
+            ];
+
             //for each emotion we have to iterate the elements to get the element data.
             foreach ($emotion['elements'] as &$element) {
-                $element['data'] = $this->handleElement($element, $repository, $categoryId);
+                $data = $this->handleElement($element, $repository, $categoryId);
+                $translation = $translator->readWithFallback($shopId, $fallbackId, 'emotionElement', $element['id']);
+                $element['data'] = array_merge($data, $translation);
+
+                $element['viewports'] = [];
+
+                if (isset($viewports[$element['id']])) {
+                    $element['viewports'] = $viewports[$element['id']];
+                }
             }
         }
 
@@ -90,12 +120,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $emotions = $query->getArrayResult();
 
         foreach ($emotions as &$emotion) {
-            $emotion['cols'] = $emotion['grid']['cols'];
             $emotion['elements'] = $repository->getEmotionElementsQuery($emotion['id'])->getQuery()->getArrayResult();
-
-            $emotion['cellHeight'] = $emotion['grid']['cellHeight'];
-            $emotion['articleHeight'] = $emotion['grid']['articleHeight'];
-            $emotion['gutter'] = $emotion['grid']['gutter'];
         }
 
         return $emotions;
@@ -190,7 +215,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             $data[$entry['name']] = $value;
         }
 
-        $data = Enlight()->Events()->filter(
+        $data = Shopware()->Events()->filter(
             'Shopware_Controllers_Widgets_Emotion_AddElement',
             $data,
             array('subject' => $this, 'element' => $element)
@@ -214,37 +239,29 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
      */
     private function getArticle($data, $categoryId, $element)
     {
-        if ($data["article_type"] == "newcomer") {
-            // new product
-            $data = array_merge(
-                $data,
-                Shopware()->Modules()->Articles()->sGetPromotionById('new', $categoryId, 0, false)
-            );
-        } elseif ($data["article_type"] == "topseller") {
-            // top product
-            $temp = Shopware()->Modules()->Articles()->sGetPromotionById('top', $categoryId, 0, false);
-            if (empty($temp["articleID"])) {
-                $data = array_merge(
-                    $data,
-                    Shopware()->Modules()->Articles()->sGetPromotionById('random', $categoryId, 0, false)
-                );
-            } else {
-                $data = array_merge($data, $temp);
-            }
-        } elseif ($data["article_type"] == "random_article") {
-            // random product
-            $data = array_merge(
-                $data,
-                Shopware()->Modules()->Articles()->sGetPromotionById('random', $categoryId, 0, false)
-            );
-        } else {
-            // Fix product
-            $data = array_merge($data, $this->articleByNumber($data["article"]));
+        $categoryId = empty($data['article_category']) ? $categoryId : $data['article_category'];
+        $type = empty($data['article_type']) ? 'selected_article' : $data['article_type'];
+
+        if ($type == 'selected_article' && !empty($data['article'])) {
+            return array_merge($data, $this->articleByNumber($data['article']));
         }
 
-        if (isset($data['sVoteAverange']) && !empty($data['sVoteAverange'])) {
-            // the listing pages use a 0 - 5 based average
-            $data['sVoteAverange']['averange'] = $data['sVoteAverange']['averange'] / 2;
+        if ($type == 'newcomer') {
+            return array_merge($data, Shopware()->Modules()->Articles()->sGetPromotionById('new', $categoryId, 0, false));
+        }
+
+        if ($type == 'topseller') {
+            $article = Shopware()->Modules()->Articles()->sGetPromotionById('top', $categoryId, 0, false);
+
+            if (empty($article['articleID'])) {
+                return array_merge($data, Shopware()->Modules()->Articles()->sGetPromotionById('random', $categoryId, 0, false));
+            } else {
+                return array_merge($data, $article);
+            }
+        }
+
+        if ($type == 'random_article') {
+            return array_merge($data, Shopware()->Modules()->Articles()->sGetPromotionById('random', $categoryId, 0, false));
         }
 
         return $data;
@@ -278,11 +295,6 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
         if (isset($data['blog_entry_selection']) && $data['blog_entry_selection']) {
             $category = $data['blog_entry_selection'];
-        }
-
-        // If the blog element is already set but didn't have any thumbnail size, we need to set it here...
-        if (!isset($data['thumbnail_size'])) {
-            $data['thumbnail_size'] = 3;
         }
 
         if ($category === null) {
@@ -363,17 +375,6 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
                 $mediaData = Shopware()->Container()->get('legacy_struct_converter')->convertMediaStruct($struct);
                 $entry['media'] = $mediaData;
-
-                if (Shopware()->Shop()->getTemplate()->getVersion() < 3) {
-                    $thumbs = [];
-                    foreach ($entry['media']['thumbnails'] as $thumb) {
-                        $thumbs[] = str_replace($imageDir, '', $thumb);
-                    }
-                    $entry['media'] = [
-                        'path' => str_replace($imageDir, '', $mediaData['source']),
-                        'thumbnails' => $thumbs
-                    ];
-                }
             }
         }
 
@@ -440,25 +441,12 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
                 $result = $this->getRandomBlogEntry($data["category_selection"]);
 
                 $data['image'] = $result['media'];
-
-                if (Shopware()->Shop()->getTemplate()->getVersion() < 3) {
-                    if (!empty($result['media']['thumbnails'])) {
-                        $data['image'] = $result['media']['thumbnails'][2];
-                        $data['images'] = $result['media']['thumbnails'];
-                    } else {
-                        $data['image'] = $result['media']['path'];
-                    }
-                }
             } else {
                 // Get random article from selected $category
                 $temp = Shopware()->Modules()->Articles()->sGetPromotionById('random', $data["category_selection"], 0, true);
 
                 $data['image'] = $temp['image'];
                 $data['images'] = $temp['images'];
-                if (Shopware()->Shop()->getTemplate()->getVersion() < 3) {
-                    $data['images'] = $temp['image']['src'];
-                    $data["image"] = $temp["image"]["src"][2];
-                }
             }
         } else {
             $mediaId = Shopware()->Db()->fetchOne('SELECT id FROM s_media WHERE path = ?', [$data['image']]);
@@ -469,11 +457,6 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
             } else {
                 $data['media'] = [];
             }
-        }
-
-        // @deprecated since 5.1 will be removed in 5.2
-        if (!is_array($data['image'])) {
-            $data['image'] = $mediaService->getUrl($data['image']);
         }
 
         return $data;
@@ -564,9 +547,6 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
                 'width' => $mediaData['width'],
                 'height' => $mediaData['height']
             );
-
-            // @deprecated since 5.1 will be removed in 5.2
-            $data['file'] = $mediaService->getUrl($data['file']);
         }
 
         $data['bannerMapping'] = $mappings;
@@ -630,7 +610,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
                     $query['sCategory'] = $category;
                 }
 
-                $value["link"] = Shopware()->Router()->assemble($query);
+                $value["link"] = Shopware()->Container()->get('router')->assemble($query);
             }
         }
 
@@ -726,7 +706,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
                     'streamId' => $data['article_slider_stream'],
                 );
 
-                $data["ajaxFeed"] = Shopware()->Router()->assemble($query);
+                $data["ajaxFeed"] = Shopware()->Container()->get('router')->assemble($query);
 
                 break;
             case "selected_article":
@@ -758,7 +738,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
                     'action' => 'emotionArticleSlider',
                     'sort' => $data["article_slider_type"]
                 );
-                $data["ajaxFeed"] = Shopware()->Router()->assemble($query);
+                $data["ajaxFeed"] = Shopware()->Container()->get('router')->assemble($query);
                 break;
             default;
                 // Prevent the slider form endless loading
@@ -807,7 +787,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
         /** @var $result ProductSearchResult */
         $result = Shopware()->Container()->get('shopware_search.product_search')->search($criteria, $context);
-        $data = $this->mapData($result, $category);
+        $data = Shopware()->Container()->get('legacy_struct_converter')->convertListProductStructList($result->getProducts());
 
         $count = $result->getTotalCount();
         if ($limit != 0) {
@@ -833,21 +813,16 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
     {
         $emotionId = $this->Request()->getParam('emotionId');
 
-        // fetch devices on responsive template or load full emotions for older templates.
-        $templateVersion = Shopware()->Shop()->getTemplate()->getVersion();
+        $emotion = $this->get('emotion_device_configuration')->getById($emotionId);
 
-        if ($templateVersion >= 3) {
-            $emotion = $this->get('emotion_device_configuration')->getById($emotionId);
+        // The user can preview the emotion for every device.
+        $emotion['devices'] = '0,1,2,3,4';
 
-            $viewAssignments['emotion'] = $emotion;
-            $viewAssignments['hasEmotion'] = (!empty($emotion));
+        $viewAssignments['emotion'] = $emotion;
+        $viewAssignments['hasEmotion'] = (!empty($emotion));
 
-            $viewAssignments['showListing'] = (bool) max(array_column($emotion, 'showListing'));
-        } else {
-            //check category emotions
-            $emotion = $this->get('emotion_device_configuration')->getById($emotionId);
-            $viewAssignments['hasEmotion'] = !empty($emotion);
-        }
+        $viewAssignments['showListing'] = (bool) max(array_column($emotion, 'showListing'));
+
 
         $showListing = (empty($emotion) || !empty($emotion['show_listing']));
         $viewAssignments['showListing'] = $showListing;
@@ -894,7 +869,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
         /** @var $result ProductSearchResult */
         $result = Shopware()->Container()->get('shopware_search.product_search')->search($criteria, $context);
-        $data = $this->mapData($result, $category);
+        $data = Shopware()->Container()->get('legacy_struct_converter')->convertListProductStructList($result->getProducts());
 
         $count = $result->getTotalCount();
 
@@ -934,30 +909,6 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $this->View()->assign('pages', $values["pages"] > $maxPages ? $maxPages : $values["pages"]);
         $this->View()->assign('sPerPage', $limit);
         $this->View()->assign('productBoxLayout', $this->Request()->getParam('productBoxLayout', 'emotion'));
-    }
-
-    /**
-     * @param ProductSearchResult $result
-     * @param int $category
-     * @return array
-     */
-    private function mapData(ProductSearchResult $result, $category)
-    {
-        $data = [];
-        foreach ($result->getProducts() as $product) {
-            $article = Shopware()->Container()->get('legacy_struct_converter')->convertListProductStruct($product);
-            $article = Shopware()->Container()->get('legacy_event_manager')->firePromotionByIdEvents(
-                $article,
-                $category,
-                Shopware()->Modules()->Articles()
-            );
-
-            if ($article) {
-                $data[] = $article;
-            }
-        }
-
-        return $data;
     }
 
     /**

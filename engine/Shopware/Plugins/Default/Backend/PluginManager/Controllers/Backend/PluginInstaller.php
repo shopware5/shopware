@@ -22,13 +22,14 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
 use Shopware\Bundle\PluginInstallerBundle\Service\PluginExtractor;
 use Shopware\Components\Model\ModelRepository;
+use Shopware\Models\Plugin\Plugin;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\FileBag;
 
-class Shopware_Controllers_Backend_PluginInstaller
-    extends Shopware_Controllers_Backend_ExtJs
+class Shopware_Controllers_Backend_PluginInstaller extends Shopware_Controllers_Backend_ExtJs
 {
     protected $model = 'Shopware\Models\Plugin\Plugin';
 
@@ -44,12 +45,12 @@ class Shopware_Controllers_Backend_PluginInstaller
     {
         $plugin = $this->getPluginModel($this->Request()->getParam('technicalName'));
 
-        if (!$plugin instanceof Shopware\Models\Plugin\Plugin) {
+        if (!$plugin instanceof Plugin) {
             $this->get('shopware_plugininstaller.plugin_manager')->refreshPluginList();
             $plugin = $this->getPluginModel($this->Request()->getParam('technicalName'));
         }
 
-        if (!$plugin instanceof \Shopware\Models\Plugin\Plugin) {
+        if (!$plugin instanceof Plugin) {
             $this->View()->assign([
                 'success' => false,
                 'message' => sprintf('Plugin not found %s', $this->Request()->getParam('technicalName'))
@@ -145,8 +146,10 @@ class Shopware_Controllers_Backend_PluginInstaller
 
     public function deletePluginAction()
     {
-        $directory = Shopware()->Container()->get('shopware_plugininstaller.plugin_manager')
-            ->getPluginPath($this->Request()->getParam('technicalName'));
+        /** @var InstallerService $pluginManager */
+        $pluginManager  = $this->get('shopware_plugininstaller.plugin_manager');
+
+        $directory = $pluginManager->getPluginPath($this->Request()->getParam('technicalName'));
 
         $plugin = $this->getPluginModel($this->Request()->getParam('technicalName'));
 
@@ -192,8 +195,8 @@ class Shopware_Controllers_Backend_PluginInstaller
 
     public function uploadAction()
     {
-        $root = Shopware()->Container()->getParameter('kernel.root_dir');
-        $root .= '/engine/Shopware/Plugins/Community';
+        $pluginDirectories = Shopware()->Container()->getParameter('shopware.plugin_directories');
+        $root = $pluginDirectories['Community'];
 
         if (!is_writable($root)) {
             $this->View()->assign([
@@ -221,7 +224,7 @@ class Shopware_Controllers_Backend_PluginInstaller
         if ($information['extension'] !== 'zip') {
             $this->View()->assign([
                 'success' => false,
-                'message' => 'Wrong archive extension %s. Zip archive expected'
+                'message' => sprintf('Wrong archive extension %s. Zip archive expected', $information['extension'])
             ]);
             unlink($file->getPathname());
             unlink($file);
@@ -243,8 +246,8 @@ class Shopware_Controllers_Backend_PluginInstaller
         } catch (Exception $e) {
             $this->View()->assign(
                 [
-                'success' => false,
-                'message' => $e->getMessage()
+                    'success' => false,
+                    'message' => $e->getMessage()
                 ]
             );
             unlink($path);
@@ -261,8 +264,8 @@ class Shopware_Controllers_Backend_PluginInstaller
     }
 
     /**
-     * @param $technicalName
-     * @return \Shopware\Models\Plugin\Plugin
+     * @param string $technicalName
+     * @return Plugin
      */
     public function getPluginModel($technicalName)
     {
@@ -270,7 +273,7 @@ class Shopware_Controllers_Backend_PluginInstaller
     }
 
     /**
-     * @param $path
+     * @param string $path
      * @return array
      */
     private function removeDirectory($path)

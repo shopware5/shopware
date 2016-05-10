@@ -77,7 +77,7 @@ Ext.define('Shopware.apps.Mail', {
      * Required models
      * @array
      */
-    models: [ 'Mail', 'Attachment', 'Attribute' ],
+    models: [ 'Mail', 'Attachment' ],
 
     /**
      * Required views

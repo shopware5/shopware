@@ -42,10 +42,12 @@ Ext.define('Shopware.apps.Banner.view.main.BannerFormAdd', {
     cls         : 'addWindow',
     autoShow    : true,
     border      : 0,
-    width       : 700,
-    height      : 350,
-    bodyPadding : 5,
     title: '{s name=form_add/title}Create a new banner for category: [0]{/s}',
+    height : 510,
+    layout: {
+        type: 'vbox',
+        align: 'stretch'
+    },
 
     /**
      * Initializes the component by setting the form panel and the buttons
@@ -84,6 +86,7 @@ Ext.define('Shopware.apps.Banner.view.main.BannerFormAdd', {
             name        : 'description',
             anchor      : '100%',
             allowBlank  : false,
+            labelWidth: 155,
             fieldLabel  : '{s name=form_add/description}Description{/s}',
             supportText : '{s name=form_add/description_support}Description of the banner e.g. Jackets-Winter-Special2013{/s}'
         });
@@ -92,6 +95,7 @@ Ext.define('Shopware.apps.Banner.view.main.BannerFormAdd', {
         linkField = Ext.create('Ext.form.field.Text', {
             name        : 'link',
             anchor      : '100%',
+            labelWidth: 155,
             fieldLabel  : '{s name=form_add/link}Link{/s}',
             supportText : '{s name=form_add/link_support}Link which will be called up if the banner has been clicked.{/s}'
         });
@@ -109,6 +113,7 @@ Ext.define('Shopware.apps.Banner.view.main.BannerFormAdd', {
             fieldLabel:'{s name=form_add/link_target/field}Link target{/s}',
             store: store,
             valueField:'value',
+            labelWidth: 155,
             displayField:'display',
             editable:false
         });
@@ -120,6 +125,7 @@ Ext.define('Shopware.apps.Banner.view.main.BannerFormAdd', {
         // Media selection field
         dropZone = Ext.create('Shopware.MediaManager.MediaSelection', {
             fieldLabel      : '{s name=form_add/banner}Banner{/s}',
+            labelWidth: 155,
             name            : 'media-manager-selection',
             supportText     : '{s name=form_add/banner_support}Banner image selection via the Media Manager. The selection is limited to one media.{/s}',
             multiSelect     : false,
@@ -129,14 +135,20 @@ Ext.define('Shopware.apps.Banner.view.main.BannerFormAdd', {
             validTypeErrorFunction : me.getExtensionErrorCallback()
         });
 
+        me.attributeForm = Ext.create('Shopware.attribute.Form', {
+            table: 's_emarketing_banners_attributes',
+            disabled: false
+        });
+
         // Actual form panel
         me.formPanel = Ext.create('Ext.form.Panel', {
             border      : false,
-            layout      : 'anchor',
-            defaults    : {
-                    labelStyle: 'font-weight: 700; text-align: right;'
-            },
-            items       : [ descField, linkField, me.linkTarget, validFrom, validUntil, dropZone ]
+            layout: 'anchor',
+            bodyPadding : 10,
+            flex: 1,
+            autoScroll: true,
+            defaults    : { anchor: '100%' },
+            items       : [ descField, linkField, me.linkTarget, validFrom, validUntil, dropZone, me.attributeForm ]
         });
         me.formPanel.add(me.createHiddenFields());
 
@@ -199,6 +211,7 @@ Ext.define('Shopware.apps.Banner.view.main.BannerFormAdd', {
                 name        : 'validFromDate',
                 supportText : '{s name=form_add/from_support}Format: dd.mm.jjjj{/s}',
                 columnWidth : .6,
+                labelWidth: 155,
                 minValue    : new Date(),
                 value       : new Date(),
                 allowBlank  : true,
@@ -213,9 +226,6 @@ Ext.define('Shopware.apps.Banner.view.main.BannerFormAdd', {
         return Ext.create('Ext.container.Container', {
             layout      : 'column',
             anchor      : '100%',
-            defaults: {
-                labelStyle  : 'font-weight: 700; text-align: right;'
-            },
             items   : [
                 ,me.validFromField,
             {
@@ -242,6 +252,7 @@ Ext.define('Shopware.apps.Banner.view.main.BannerFormAdd', {
             submitFormat: 'd.m.Y',
             fieldLabel  : '{s name=form_add/to_date_label}Active till{/s}',
             name        : 'validToDate',
+            labelWidth: 155,
             supportText : '{s name=form_add/to_date_support}Format jjjj.mm.tt{/s}',
             columnWidth : .60,
             allowBlank  : true,
@@ -255,9 +266,6 @@ Ext.define('Shopware.apps.Banner.view.main.BannerFormAdd', {
         return Ext.create('Ext.container.Container', {
             layout      : 'column',
             anchor      : '100%',
-            defaults        : {
-                labelStyle  : 'font-weight: 700; text-align: right;'
-            },
             items       : [
                 me.validToField,
             {

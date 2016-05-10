@@ -71,7 +71,7 @@ Ext.define('Shopware.apps.MediaManager', {
      * Requires models for sub-application
      * @array
      */
-    models:['Album', 'Media', 'Attribute'],
+    models:['Album', 'Media'],
 
     /**
      * Required views for this sub-application

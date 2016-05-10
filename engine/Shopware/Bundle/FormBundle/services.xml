@@ -1,0 +1,45 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+
+        <service id="shopware.form.factory" class="Symfony\Component\Form\FormFactoryInterface">
+            <factory class="Shopware\Bundle\FormBundle\FormFactory" method="factory" />
+            <argument type="service" id="validator" />
+            <argument type="service" id="form.extension" />
+        </service>
+
+        <service id="shopware.form.extension.event" class="Shopware\Bundle\FormBundle\Extension\EventExtension">
+            <argument type="service" id="events" />
+            <tag name="form.type_extension" extended-type="Symfony\Component\Form\Extension\Core\Type\FormType" />
+        </service>
+
+        <service id="shopware.form.extension.enlight" class="Shopware\Bundle\FormBundle\Extension\EnlightRequestExtension">
+            <tag name="form.type_extension" extended-type="Symfony\Component\Form\Extension\Core\Type\FormType" />
+        </service>
+
+        <service id="form.extension" class="Symfony\Component\Form\Extension\DependencyInjection\DependencyInjectionExtension" public="false">
+            <argument type="service" id="service_container" />
+            <!-- All services with tag "form.type" are inserted here by FormPass -->
+            <argument type="collection" />
+            <!-- All services with tag "form.type_extension" are inserted here by FormPass -->
+            <argument type="collection" />
+            <!-- All services with tag "form.type_guesser" are inserted here by FormPass -->
+            <argument type="collection" />
+        </service>
+
+        <service id="shopware.form.constraint.exists" class="Shopware\Bundle\FormBundle\Constraints\ExistsValidator">
+            <argument type="service" id="dbal_connection" />
+            <tag name="validator.constraint_validator" alias="shopware.form.constraint.exists" />
+        </service>
+
+        <service id="shopware.form.constraint.unique" class="Shopware\Bundle\FormBundle\Constraints\UniqueValidator">
+            <argument type="service" id="dbal_connection" />
+            <tag name="validator.constraint_validator" alias="shopware.form.constraint.unique" />
+        </service>
+
+    </services>
+</container>

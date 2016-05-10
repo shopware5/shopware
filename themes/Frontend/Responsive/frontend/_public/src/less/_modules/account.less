@@ -9,7 +9,7 @@ It allows the user to directly see and change the important information of their
 */
 
 .account--content {
-	.unitize-margin(10, 0, 0, 0);
+    .unitize-margin(10, 0, 0, 0);
 }
 
 .partner-statistic .panel--title {
@@ -17,7 +17,9 @@ It allows the user to directly see and change the important information of their
 }
 
 .account--content,
-.payment_logo_debit {
+.payment_logo_debit,
+.account-address--container,
+.account-info--container {
     .clearfix();
 }
 
@@ -76,7 +78,7 @@ It allows the user to directly see and change the important information of their
     }
 }
 
-    // Account error message margin
+// Account error message margin
 .account--error,
 .account--success {
     .unitize-margin(0, 0, 10, 0);
@@ -91,25 +93,11 @@ It allows the user to directly see and change the important information of their
     .clearfix();
 }
 
-    // Change Address / Payment method
-.account--change-billing,
-.account--change-shipping,
+// Change Address / Payment method
 .account--change-payment {
     &.register--content {
         display: block;
         width: 100%
-    }
-}
-
-.account--billing-address,
-.account--shipping-address {
-    .panel--body {
-        .unitize(height, 200)
-    }
-
-    .billing--actions,
-    .shipping--actions {
-        .unitize-padding(20, 0);
     }
 }
 
@@ -120,22 +108,6 @@ It allows the user to directly see and change the important information of their
     input[type="checkbox"] {
         .unitize-margin(0, 10, 0, 0);
     }
-}
-
-    // Select Address
-.account--addresses-content,
-.account--addresses-container {
-    .clearfix();
-}
-
-.account--addresses {
-    .clearfix();
-    width: 100%;
-}
-
-.address--container {
-    width: 100%;
-    padding: 2% 0 0 0;
 }
 
 .account--paging {
@@ -152,7 +124,7 @@ It allows the user to directly see and change the important information of their
 .account--orders-overview {
     border: 1px solid @panel-border;
 
-	p { .unitize(font-size, 14); }
+    p { .unitize(font-size, 14); }
 
     .orders--table-header {
         display: none;
@@ -320,20 +292,20 @@ It allows the user to directly see and change the important information of their
     .unitize(top, 8);
     display: inline-block;
     position: relative;
-    
+
     &.status--0,  //The order has not been processed yet.
     &.status--1,  //The order is in process
     &.status--3,  //Partially completed
     &.status--6 { //The order has been sent in part
         background: @highlight-info;
     }
-    
+
     &.status--2,  //Completed
     &.status--5,  //Ready for shipping
     &.status--7 { //The order has been sent
         background: @highlight-success;
     }
-    
+
     &.status--4,  //The order has been cancelled
     &.status--8 { //Clarification needed
         background: @highlight-error;
@@ -428,6 +400,95 @@ It allows the user to directly see and change the important information of their
     }
 }
 
+.account--profile {
+    .unitize(margin, 0);
+    .unitize(padding-top, 20);
+
+    .profile--email-password-container {
+        .clearfix();
+    }
+
+    .profile-password--container {
+        float: right;
+        width: 100%;
+    }
+
+    .profile-email--container {
+        float: left;
+        width: 100%;
+    }
+
+    .alert {
+        .unitize(margin-bottom, 20);
+    }
+
+    .js--loading {
+        .unitize-width(18);
+        .unitize-height(18);
+        .border-radius(100%);
+        .unitize-margin(0, 0, 0, 5);
+        .unitize(top, 4);
+        .animation(keyframe--spin 1s linear infinite);
+        border: 2px solid @border-color;
+        border-top: 2px solid darken(@border-color, 50%);
+        display: inline-block;
+        position: relative;
+    }
+
+    .panel {
+        .unitize(margin-bottom, 20);
+    }
+
+    .required-info {
+        .unitize(font-size, 14);
+    }
+
+    .js--fancy-select {
+        .unitize(margin-bottom, 10);
+        width: 100%;
+    }
+
+    .profile--field {
+        .unitize(margin-bottom, 10);
+        width: 100%;
+    }
+
+    .profile--zip-city {
+        .profile--field-zipcode {
+            width: 28%;
+            float: left;
+        }
+
+        .profile--field-city {
+            .clearfix();
+            width: 70%;
+            float: left;
+        }
+    }
+
+    .birthday--label {
+        .unitize-margin(0, 0, 5, 0);
+        display: block;
+        font-weight: bold;
+    }
+
+    .profile--birthdate {
+        .clearfix();
+
+        .js--fancy-select {
+            .unitize(margin-bottom, 15);
+            width: 100%;
+            float: left;
+        }
+
+        .profile--birthyear,
+        .profile--birthyear .js--fancy-select {
+            .unitize(margin-right, 0);
+        }
+
+    }
+}
+
 @media screen and(min-width: @phoneLandscapeViewportWidth ) {
     .account--password-reset {
         .unitize(margin-top, 10);
@@ -459,11 +520,11 @@ It allows the user to directly see and change the important information of their
 @media screen and(min-width: @tabletViewportWidth) {
 
     .account--content {
-		.unitize-margin(30, 0, 0, 0);
+        .unitize-margin(30, 0, 0, 0);
 
-		&.is--wide {
-			width: 100%;
-		}
+        &.is--wide {
+            width: 100%;
+        }
     }
 
     .account--password-reset {
@@ -528,12 +589,6 @@ It allows the user to directly see and change the important information of their
     }
 
     // Select Address
-    .address--container {
-        width: 50%;
-        float: left;
-        padding: 2% 0 0 2%;
-    }
-
     .account--orders-overview {
         .orders--table-header {
             display: block;
@@ -790,53 +845,85 @@ It allows the user to directly see and change the important information of their
         }
     }
 
-    .account--addresses-container {
-        margin: -2% 0 0 -2%;
+    .account--profile {
+        .unitize(margin, 0);
+        .unitize(padding-top, 30);
+
+        .js--fancy-select {
+            .unitize(margin-bottom, 15);
+
+            .profile--birthday {
+                margin-right: 2%;
+            }
+        }
+
+        .profile--field {
+            .unitize(margin-bottom, 15);
+        }
+
+        .js--fancy-select {
+            .unitize-width(290);
+        }
+
+        .profile--birthdate {
+            .js--fancy-select {
+                width: 32%;
+                margin-right: 2%;
+            }
+        }
     }
 }
 
 @media screen and(min-width: @tabletLandscapeViewportWidth) {
 
-	.account--info,
-	.account--billing {
-		width: 49%;
-		float: left;
-	}
+    .account--info,
+    .account--billing {
+        width: 49%;
+        float: left;
+    }
 
-	.account--payment,
-	.account--shipping {
-		width: 49%;
-		float: right;
-	}
+    .account--payment,
+    .account--shipping {
+        width: 49%;
+        float: right;
+    }
 
-	.account--email,
-	.account--password {
-		display: none;
-	}
+    .account--email,
+    .account--password,
+    .account--userdata {
+        display: none;
+    }
 
-	.account--email,
-	.account--password,
-	.account--newsletter {
-		clear: both;
-	}
+    .account--email,
+    .account--password,
+    .account--userdata,
+    .account--newsletter {
+        clear: both;
+    }
 
     .account--password-reset {
         .unitize-margin(20, 0, 0, 0);
     }
 
-	.account--info,
-	.account--payment {
-		.panel--body {
-			.unitize-height(120);
-		}
-	}
+    .account--info,
+    .account--payment {
+        .panel--body {
+            .unitize-height(120);
+        }
+    }
 
-	.account--billing,
-	.account--shipping {
-		.panel--body {
-			.unitize-height(220);
-		}
-	}
+    .account--profile {
+        .profile-password--container {
+            float: right;
+            width: 49%;
+        }
+
+        .profile-email--container {
+            float: left;
+            width: 49%;
+            margin-right: 2%;
+        }
+    }
 }
 
 @media screen and(min-width: @desktopViewportWidth) {

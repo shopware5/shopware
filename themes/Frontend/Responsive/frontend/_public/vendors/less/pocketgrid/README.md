@@ -1,10 +1,5 @@
-# PocketGrid
-
-**New: PocketGrid 1.0.0 released!**
-
-**Official PocketGrid website**: http://arnaudleray.github.io/pocketgrid/  
-<a href="http://arnaudleray.github.io/pocketgrid/"><img src="http://arnaudleray.github.io/pocketgrid/images/screenshot.png" height="200px" alt="New website"></a>
-
+## PocketGrid LESS port
+Unofficial LESS port of [Pocketgrid](http://arnaudleray.github.io/pocketgrid/), a pure CSS responsive and semantic grid system.
 
 PocketGrid is the smallest responsive grid system having so many features:
 - **Lightweight**: about 0.5kB!
@@ -57,7 +52,8 @@ Note: If you want to use a complete CSS framework like Twitter Bootstrap, it's d
 
 ## Author
 
-**Arnaud Leray**
+* **Arnaud Leray**
+* **shopware AG *(LESS port)***
 
 ## Copyright and license
 

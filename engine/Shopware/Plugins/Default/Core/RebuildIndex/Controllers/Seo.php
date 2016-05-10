@@ -35,7 +35,7 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
      */
     public function SeoIndex()
     {
-        return Shopware()->SeoIndex();
+        return Shopware()->Container()->get('SeoIndex');
     }
 
     /**

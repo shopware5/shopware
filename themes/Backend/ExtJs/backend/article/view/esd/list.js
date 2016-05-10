@@ -76,6 +76,16 @@ Ext.define('Shopware.apps.Article.view.esd.List', {
     },
 
     /**
+     * Add attributes plugin
+     */
+    plugins: [
+        {
+            ptype: 'grid-attributes',
+            table: 's_articles_esd_attributes'
+        }
+    ],
+
+    /**
      * Initialize the Shopware.apps.Article.view.esd.List and defines the necessary default configuration
      * @return void
      */

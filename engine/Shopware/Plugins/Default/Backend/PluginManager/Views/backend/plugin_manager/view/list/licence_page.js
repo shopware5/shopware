@@ -174,7 +174,7 @@ Ext.define('Shopware.apps.PluginManager.view.list.LicencePage', {
             iconCls: 'sprite-key',
             tooltip: '{s name="import_licence"}Import license{/s}',
             getClass: function(value, metaData, record) {
-                if (!record.get('licenseKey')) {
+                if (!record.get('licenseCheck')) {
                     return Ext.baseCSSPrefix + 'hidden';
                 }
             },

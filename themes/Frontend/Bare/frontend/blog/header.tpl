@@ -6,8 +6,6 @@
         {$sArticle.metaTitle|escapeHtml} | {{config name=sShopname}|escapeHtml}
     {elseif $sCategoryContent.metaTitle}
         {$sCategoryContent.metaTitle|escapeHtml} | {{config name=sShopname}|escapeHtml}
-    {elseif $sCategoryContent.title}
-        {$sCategoryContent.title|escapeHtml}
     {else}
         {$smarty.block.parent}
     {/if}

@@ -198,3 +198,7 @@
 		overflow-y: auto !important;
 	}
 }
+
+.#{$prefix}grid-row.vertical-alignment {
+	vertical-align: middle !important;
+}

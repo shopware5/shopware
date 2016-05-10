@@ -49,7 +49,10 @@ Ext.define('Shopware.apps.Shipping.view.edit.Panel', {
      * Layout is border
      * @string
      */
-    layout : 'border',
+    layout : {
+        type: 'vbox',
+        align: 'stretch'
+    },
 
     /**
      * Title of the Edit Window
@@ -71,7 +74,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.Panel', {
      * Width of the window
      * @string
      */
-   width       : 990,
+    width       : 990,
 
     /**
      * Height of the window
@@ -149,6 +152,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.Panel', {
 
         if (me.editRecord) {
             me.formPanel.loadRecord(me.editRecord);
+            me.attributeForm.loadAttribute(me.editRecord.get('id'));
         }
 
         me.items = [ me.formPanel, me.tabPanel ];
@@ -180,8 +184,9 @@ Ext.define('Shopware.apps.Shipping.view.edit.Panel', {
 
         var fieldSet = Ext.create('Ext.form.FieldSet', {
             title: '{s name=dispatch_main_form_title}Configuration{/s}',
+            height: 300,
             layout: 'column',
-            bodyPadding: '12 8',
+            bodyPadding: 10,
             defaults : {
                 labelStyle  : 'font-weight: 700; text-align: right;',
                 anchor      : '100%',
@@ -228,18 +233,26 @@ Ext.define('Shopware.apps.Shipping.view.edit.Panel', {
         advancedTab.record = me.editRecord;
         advancedTab.loadRecord(me.editRecord);
 
+        me.attributeForm = Ext.create('Shopware.attribute.Form', {
+            title: '{s namespace="backend/attributes/main" name="attribute_form_title"}{/s}',
+            table: 's_premium_dispatch_attributes',
+            bodyPadding: 10,
+            autoScroll: true
+        });
+
         var panels = [
             me.createDispatchMatrixTab(),
             me.createPaymentTab(),
             me.createCountryTab(),
             me.createCategoriesTreeTab(),
-            advancedTab
+            advancedTab,
+            me.attributeForm
         ];
 
         return Ext.create('Ext.tab.Panel', {
             region: 'south',
-            height: 255,
             activeTab: 0,
+            flex: 1,
             items: panels
         });
     },

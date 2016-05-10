@@ -414,7 +414,7 @@ class sExport
 
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Currency');
         $shop->setCurrency($repository->find($this->sCurrency['id']));
-        $shop->registerResources(Shopware()->Bootstrap());
+        $shop->registerResources();
 
         $this->shop = $shop;
 

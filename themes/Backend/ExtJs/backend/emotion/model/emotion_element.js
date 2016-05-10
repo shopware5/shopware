@@ -20,11 +20,11 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  *
- * @category   Shopware
- * @package    Emotion
- * @subpackage Main
- * @version    $Id$
- * @author shopware AG
+ * @category    Shopware
+ * @package     Emotion
+ * @subpackage  View
+ * @version     $Id$
+ * @author      shopware AG
  */
 
 /**
@@ -32,6 +32,7 @@
  */
 //{block name="backend/emotion/model/element"}
 Ext.define('Shopware.apps.Emotion.model.EmotionElement', {
+
     /**
      * Extends the standard Ext Model
      * @string
@@ -43,19 +44,21 @@ Ext.define('Shopware.apps.Emotion.model.EmotionElement', {
      * @array
      */
     fields: [
-		//{block name="backend/emotion/model/element/fields"}{/block}
+        //{block name="backend/emotion/model/element/fields"}{/block}
         { name: 'id', type: 'int' },
         { name: 'emotionId', type: 'int' },
         { name: 'componentId', type: 'int' },
-        { name: 'startRow', type: 'int' },
-        { name: 'startCol', type: 'int' },
-        { name: 'endRow', type: 'int' },
-        { name: 'endCol', type: 'int' },
+        { name: 'startRow', type: 'int', defaultValue: 1 },
+        { name: 'startCol', type: 'int', defaultValue: 1 },
+        { name: 'endRow', type: 'int', defaultValue: 1 },
+        { name: 'endCol', type: 'int', defaultValue: 1 },
+        { name: 'cssClass', type: 'string' },
         { name: 'data' }
     ],
-    associations: [
-        { type: 'hasMany', model: 'Shopware.apps.Emotion.model.Component', name: 'getComponent', associationKey: 'component'}
-    ]
 
+    associations: [
+        { type: 'hasMany', model: 'Shopware.apps.Emotion.model.Component', name: 'getComponent', associationKey: 'component'},
+        { type: 'hasMany', model: 'Shopware.apps.Emotion.model.Viewport', name: 'getViewports', associationKey: 'viewports'}
+    ]
 });
 //{/block}

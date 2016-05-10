@@ -34,14 +34,6 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 class UnitHydrator extends Hydrator
 {
     /**
-     * @var array
-     */
-    private $translationMapping = [
-        'unit' => '__unit_unit',
-        'description' => '__unit_description'
-    ];
-
-    /**
      * @param array $data
      * @return \Shopware\Bundle\StoreFrontBundle\Struct\Product\Unit
      */
@@ -55,42 +47,6 @@ class UnitHydrator extends Hydrator
     }
 
     /**
-     * Extracts and unserialize the unit translation
-     *
-     * @param $data
-     * @return array|mixed
-     */
-    private function getTranslation($data)
-    {
-        $translation = [];
-
-        if (isset($data['__unit_translation']) && !empty($data['__unit_translation'])) {
-            $result = unserialize($data['__unit_translation']) ? : [];
-
-            if (isset($result[$data['__unit_id']])) {
-                $translation = $result[$data['__unit_id']] ? : [];
-            }
-        }
-
-        if (isset($data['__unit_translation_fallback'])
-            && !empty($data['__unit_translation_fallback'])
-        ) {
-            $fallbackResult = unserialize($data['__unit_translation_fallback']) ? : [];
-            $fallbackTranslation = $fallbackResult[$data['__unit_id']] ? : [];
-            $translation += $fallbackTranslation;
-        }
-
-        if (empty($translation)) {
-            return [];
-        }
-
-        return $this->convertArrayKeys(
-            $translation,
-            $this->translationMapping
-        );
-    }
-
-    /**
      * Assigns the passed data array to the passed unit instance.
      *
      * @param Struct\Product\Unit $unit
@@ -98,11 +54,12 @@ class UnitHydrator extends Hydrator
      */
     private function assignUnitData(Struct\Product\Unit $unit, array $data)
     {
-        $translation = $this->getTranslation($data);
+        $id = (int) $data['__unit_id'];
+        $translation = $this->getTranslation($data, '__unit', [], $id);
         $data = array_merge($data, $translation);
 
         if (isset($data['__unit_id'])) {
-            $unit->setId((int) $data['__unit_id']);
+            $unit->setId($id);
         }
 
         if (isset($data['__unit_description'])) {

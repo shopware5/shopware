@@ -18,8 +18,35 @@
 				{* Link to the account overview page *}
 				{block name="frontend_account_menu_link_overview"}
 					<li class="navigation--entry">
-						<a href="{url controller='account'}" title="{s name="AccountLinkOverview"}{/s}" class="navigation--link{if $sAction == 'index'} is--active{/if}">
+						<a href="{url controller='account'}" title="{s name="AccountLinkOverview"}{/s}" class="navigation--link{if {controllerName|lower} == 'account' && $sAction == 'index'} is--active{/if}">
 							{s name="AccountLinkOverview"}{/s}
+						</a>
+					</li>
+				{/block}
+
+				{* Link to the account overview page *}
+				{block name="frontend_account_menu_link_profile"}
+					<li class="navigation--entry">
+						<a href="{url controller='account' action=profile}" title="{s name="AccountLinkProfile"}{/s}" class="navigation--link{if {controllerName|lower} == 'account' && $sAction == 'profile'} is--active{/if}">
+							{s name="AccountLinkProfile"}{/s}
+						</a>
+					</li>
+				{/block}
+
+				{* Link to the user addresses *}
+				{block name="frontend_account_menu_link_addresses"}
+					<li class="navigation--entry">
+						<a href="{url controller='address' action='index'}" title="{s name="AccountLinkAddresses"}My addresses{/s}" class="navigation--link{if {controllerName} == 'address'} is--active{/if}">
+							{s name="AccountLinkAddresses"}My addresses{/s}
+						</a>
+					</li>
+				{/block}
+
+				{* Link to the user payment method settings *}
+				{block name="frontend_account_menu_link_payment"}
+					<li class="navigation--entry">
+						<a href="{url controller='account' action='payment'}" title="{s name="AccountLinkPayment"}{/s}" class="navigation--link{if $sAction == 'payment'} is--active{/if}">
+							{s name="AccountLinkPayment"}{/s}
 						</a>
 					</li>
 				{/block}
@@ -42,33 +69,6 @@
 						    </a>
 					    </li>
                     {/if}
-				{/block}
-
-				{* Link to the user billing address settings *}
-				{block name="frontend_account_menu_link_billing"}
-					<li class="navigation--entry">
-						<a href="{url controller='account' action='billing'}" title="{s name="AccountLinkBillingAddress"}{/s}" class="navigation--link{if $sAction == 'billing'} is--active{/if}">
-							{s name="AccountLinkBillingAddress"}{/s}
-						</a>
-					</li>
-				{/block}
-
-				{* Linkt to the user shipping address settings *}
-				{block name="frontend_account_menu_link_shipping"}
-					<li class="navigation--entry">
-						<a href="{url controller='account' action='shipping'}" title="{s name="AccountLinkShippingAddress"}{/s}" class="navigation--link{if $sAction == 'shipping'} is--active{/if}">
-							{s name="AccountLinkShippingAddress"}{/s}
-						</a>
-					</li>
-				{/block}
-
-				{* Link to the user payment method settings *}
-				{block name="frontend_account_menu_link_payment"}
-					<li class="navigation--entry">
-						<a href="{url controller='account' action='payment'}" title="{s name="AccountLinkPayment"}{/s}" class="navigation--link{if $sAction == 'payment'} is--active{/if}">
-							{s name="AccountLinkPayment"}{/s}
-						</a>
-					</li>
 				{/block}
 
 				{* Link to the user product notes *}

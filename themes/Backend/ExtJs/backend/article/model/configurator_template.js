@@ -72,7 +72,6 @@ Ext.define('Shopware.apps.Article.model.ConfiguratorTemplate', {
     ],
     associations: [
         { type: 'hasMany', model: 'Shopware.apps.Article.model.Price', name: 'getPrice', associationKey: 'prices' },
-        { type: 'hasMany', model: 'Shopware.apps.Article.model.Attribute', name: 'getAttribute', associationKey: 'attribute' }
     ]
 });
 //{/block}

@@ -64,10 +64,10 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
             $shop = $repository->getActiveById($shopId);
             $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Currency');
             $shop->setCurrency($repository->find($order["currencyID"]));
-            $shop->registerResources(Shopware()->Bootstrap());
+            $shop->registerResources();
 
             foreach ($positions[$orderId] as &$position) {
-                $position["link"] = Shopware()->Router()->assemble(array(
+                $position["link"] = Shopware()->Container()->get('router')->assemble(array(
                     'module' => 'frontend', 'sViewport' => 'detail',
                     'sArticle' => $position["articleID"]
                 ));
@@ -167,8 +167,6 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
                 b.city AS billing_city,
                 b.phone AS phone,
                 b.phone AS billing_phone,
-                b.fax AS fax,
-                b.fax AS billing_fax,
                 b.countryID AS billing_countryID,
                 bc.countryname AS billing_country,
                 bc.countryiso AS billing_countryiso,
@@ -202,7 +200,6 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
                 sa.text5 AS shipping_text5,
                 sa.text6 AS shipping_text6,
                 u.*,
-                   ub.birthday,
                    g.id AS preisgruppe,
                    g.tax AS billing_net
             FROM

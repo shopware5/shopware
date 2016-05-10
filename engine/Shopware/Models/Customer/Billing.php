@@ -26,6 +26,7 @@ namespace   Shopware\Models\Customer;
 
 use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\NumberRangeIncrementerInterface;
 
 /**
  * Shopware customer billing model represents a single billing address of a customer.
@@ -104,6 +105,12 @@ class Billing extends ModelEntity
     protected $salutation = '';
 
     /**
+     * @var string
+     * @ORM\Column(name="title", type="string", length=100, nullable=true)
+     */
+    protected $title;
+
+    /**
      * Contains the unique customer number
      * @var string $number
      * @ORM\Column(name="customernumber", type="string", length=30, nullable=true)
@@ -153,25 +160,11 @@ class Billing extends ModelEntity
     protected $phone = '';
 
     /**
-     * Contains the fax of the billing address
-     * @var string $fax
-     * @ORM\Column(name="fax", type="string", length=40, nullable=false)
-     */
-    protected $fax = '';
-
-    /**
      * Contains the vat id of the billing address
      * @var string $vatId
      * @ORM\Column(name="ustid", type="string", length=50, nullable=false)
      */
     protected $vatId = '';
-
-    /**
-     * Contains the birthday of the customer
-     * @var \DateTime $birthday
-     * @ORM\Column(name="birthday", type="date", nullable=true)
-     */
-    protected $birthday;
 
     /**
      * Contains the additional address line data
@@ -438,28 +431,6 @@ class Billing extends ModelEntity
     }
 
     /**
-     * Setter function for the fax column property.
-     *
-     * @param string $fax
-     * @return Billing
-     */
-    public function setFax($fax)
-    {
-        $this->fax = $fax;
-        return $this;
-    }
-
-    /**
-     * Getter function for the fax column property.
-     *
-     * @return string
-     */
-    public function getFax()
-    {
-        return $this->fax;
-    }
-
-    /**
      * Setter function for the countryId column property.
      *
      * @param $countryId
@@ -503,33 +474,6 @@ class Billing extends ModelEntity
     public function getVatId()
     {
         return $this->vatId;
-    }
-
-    /**
-     * Setter function for the birthday column property.
-     * The parameter expects an \DateTime object or a date string, which will
-     * be converted to an \DateTime object.
-     *
-     * @param string|\DateTime $birthday
-     * @return Billing
-     */
-    public function setBirthday($birthday)
-    {
-        if (!$birthday instanceof \DateTime && is_string($birthday)) {
-            $birthday = new \DateTime($birthday);
-        }
-        $this->birthday = $birthday;
-        return $this;
-    }
-
-    /**
-     * Getter function of the birthday column property.
-     *
-     * @return \DateTime
-     */
-    public function getBirthday()
-    {
-        return $this->birthday;
     }
 
     /**
@@ -579,20 +523,14 @@ class Billing extends ModelEntity
 
     /**
      * Event listener method which is fired when the model will be saved.
-     * Checks if the birthday property is null and initials it.
      * @ORM\PrePersist
      */
     public function onSave()
     {
         if (empty($this->number) && Shopware()->Config()->get('shopwareManagedCustomerNumbers') == 1) {
-            //get next customer number
-            $sql= "SELECT MAX(number) FROM s_order_number WHERE name = 'user'";
-            $lastNumber = Shopware()->Db()->fetchOne($sql);
-            $this->number = $lastNumber + 1;
-
-            //update the last used customer number
-            $sql = "UPDATE s_order_number SET number = ? WHERE name = 'user'";
-            Shopware()->Db()->query($sql, array($this->number));
+            /** @var NumberRangeIncrementerInterface $incrementer */
+            $incrementer = Shopware()->Container()->get('shopware.number_range_incrementer');
+            $this->number = $incrementer->increment('user');
         }
     }
 
@@ -650,5 +588,49 @@ class Billing extends ModelEntity
     public function getAdditionalAddressLine1()
     {
         return $this->additionalAddressLine1;
+    }
+
+    /**
+     * Transfer values from the new address object
+     *
+     * @param Address $address
+     */
+    public function fromAddress(Address $address)
+    {
+        $this->setCompany((string) $address->getCompany());
+        $this->setDepartment((string) $address->getDepartment());
+        $this->setSalutation((string) $address->getSalutation());
+        $this->setFirstName((string) $address->getFirstname());
+        $this->setLastName((string) $address->getLastname());
+        $this->setStreet((string) $address->getStreet());
+        $this->setCity((string) $address->getCity());
+        $this->setZipCode((string) $address->getZipcode());
+        $this->setAdditionalAddressLine1((string) $address->getAdditionalAddressLine1());
+        $this->setAdditionalAddressLine2((string) $address->getAdditionalAddressLine2());
+        $this->setCountryId($address->getCountry()->getId());
+        $this->setPhone((string) $address->getPhone());
+        $this->setVatId((string) $address->getVatId());
+        $this->setTitle($address->getTitle());
+        if ($address->getState()) {
+            $this->setStateId($address->getState()->getId());
+        } else {
+            $this->setStateId(null);
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param string $title
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
     }
 }

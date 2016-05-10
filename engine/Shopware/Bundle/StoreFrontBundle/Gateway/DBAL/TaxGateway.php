@@ -131,37 +131,29 @@ class TaxGateway implements Gateway\TaxGatewayInterface
         Struct\Country $country = null,
         Struct\Country\State $state = null
     ) {
-        $query = $this->connection->createQueryBuilder();
-
-        $query->select($this->fieldHelper->getTaxRuleFields());
-
-        $query->from('s_core_tax_rules', 'taxRule');
-
         $areaId = ($area) ? $area->getId() : null;
         $countryId = ($country) ? $country->getId() : null;
         $stateId = ($state) ? $state->getId() : null;
 
-        $query->andWhere('(taxRule.areaID = :area OR taxRule.areaID IS NULL)')
-            ->setParameter(':area', $areaId);
+        $query = $this->connection->createQueryBuilder();
+        $query->select($this->fieldHelper->getTaxRuleFields());
 
-        $query->andWhere('(taxRule.countryID = :country OR taxRule.countryID IS NULL)')
-            ->setParameter(':country', $countryId);
-
-        $query->andWhere('(taxRule.stateID = :state OR taxRule.stateID IS NULL)')
-            ->setParameter(':state', $stateId);
-
-        $query->andWhere('(taxRule.customer_groupID = :customerGroup OR taxRule.customer_groupID IS NULL)')
-            ->setParameter(':customerGroup', $customerGroup->getId());
-
-        $query->andWhere('taxRule.groupID = :taxId')
-            ->andWhere('taxRule.active = 1');
-
-        $query->orderBy('taxRule.customer_groupID', 'DESC')
+        $query->from('s_core_tax_rules', 'taxRule')
+            ->andWhere('(taxRule.areaID = :area OR taxRule.areaID IS NULL)')
+            ->andWhere('(taxRule.countryID = :country OR taxRule.countryID IS NULL)')
+            ->andWhere('(taxRule.stateID = :state OR taxRule.stateID IS NULL)')
+            ->andWhere('(taxRule.customer_groupID = :customerGroup OR taxRule.customer_groupID IS NULL)')
+            ->andWhere('taxRule.groupID = :taxId')
+            ->andWhere('taxRule.active = 1')
+            ->orderBy('taxRule.customer_groupID', 'DESC')
             ->addOrderBy('taxRule.areaID', 'DESC')
             ->addOrderBy('taxRule.countryID', 'DESC')
-            ->addOrderBy('taxRule.stateID', 'DESC');
-
-        $query->setFirstResult(0)
+            ->addOrderBy('taxRule.stateID', 'DESC')
+            ->setParameter(':area', $areaId)
+            ->setParameter(':country', $countryId)
+            ->setParameter(':state', $stateId)
+            ->setParameter(':customerGroup', $customerGroup->getId())
+            ->setFirstResult(0)
             ->setMaxResults(1);
 
         return $query;

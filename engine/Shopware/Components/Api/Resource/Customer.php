@@ -103,14 +103,13 @@ class Customer extends Resource
 
         $builder = $this->getRepository()
                 ->createQueryBuilder('customer')
-                ->select('customer', 'attribute', 'billing', 'billingAttribute', 'shipping', 'shippingAttribute', 'debit', 'paymentData')
+                ->select('customer', 'attribute', 'billing', 'billingAttribute', 'shipping', 'shippingAttribute', 'paymentData')
                 ->leftJoin('customer.attribute', 'attribute')
                 ->leftJoin('customer.billing', 'billing')
                 ->leftJoin('customer.paymentData', 'paymentData', \Doctrine\ORM\Query\Expr\Join::WITH, 'paymentData.paymentMean = customer.paymentId')
                 ->leftJoin('billing.attribute', 'billingAttribute')
                 ->leftJoin('customer.shipping', 'shipping')
                 ->leftJoin('shipping.attribute', 'shippingAttribute')
-                ->leftJoin('customer.debit', 'debit')
                 ->where('customer.id = ?1')
                 ->setParameter(1, $id);
 
@@ -188,6 +187,21 @@ class Customer extends Resource
 
         $this->getManager()->persist($customer);
         $this->flush();
+
+        $addressImportService = $this->getContainer()->get('shopware_account.address_import_service');
+
+        try {
+            $addressImportService->importCustomerBilling($customer->getId());
+        } catch (\Exception $ex) {
+        }
+
+        try {
+            $addressImportService->importCustomerShipping($customer->getId());
+        } catch (\Exception $ex) {
+        }
+
+        $this->getManager()->clear(CustomerModel::class);
+        $customer = $this->getManager()->find(CustomerModel::class, $customer->getId());
 
         return $customer;
     }

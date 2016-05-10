@@ -34,11 +34,8 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\DBAL\Connection;
 use Doctrine\Common\Util\Inflector;
 use Doctrine\Common\EventManager;
-use Symfony\Component\Translation\Translator;
-use Symfony\Component\Validator\ConstraintValidatorFactory;
-use Symfony\Component\Validator\Mapping\ClassMetadataFactory;
-use Symfony\Component\Validator\Mapping\Loader\AnnotationLoader;
-use Symfony\Component\Validator\Validator;
+use Symfony\Component\Validator\ConstraintViolationListInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * Global Manager which is responsible for initializing the adapter classes.
@@ -49,11 +46,6 @@ use Symfony\Component\Validator\Validator;
  */
 class ModelManager extends EntityManager
 {
-    /**
-     * @var \Symfony\Component\Validator\Validator
-     */
-    protected $validator;
-
     /**
      * Debug mode flag for the query builders.
      * @var bool
@@ -108,40 +100,6 @@ class ModelManager extends EntityManager
     }
 
     /**
-     * The EntityRepository instances.
-     *
-     * @var array
-     */
-    private $repositories = array();
-
-    /**
-     * Gets the repository for an entity class.
-     *
-     * @param string $entityName The name of the entity.
-     * @return ModelRepository The repository class.
-     */
-    public function getRepository($entityName)
-    {
-        $entityName = ltrim($entityName, '\\');
-
-        if (!isset($this->repositories[$entityName])) {
-            $metadata = $this->getClassMetadata($entityName);
-            $repositoryClassName = $metadata->customRepositoryClassName;
-
-            if ($repositoryClassName === null) {
-                $repositoryClassName = $this->getConfiguration()->getDefaultRepositoryClassName();
-            }
-
-            $repositoryClassName = $this->getConfiguration()
-                ->getHookManager()->getProxy($repositoryClassName);
-
-            $this->repositories[$entityName] = new $repositoryClassName($this, $metadata);
-        }
-
-        return $this->repositories[$entityName];
-    }
-
-    /**
      * Serialize an entity to an array
      *
      * @author      Boris Guéry <guery.b@gmail.com>
@@ -153,6 +111,10 @@ class ModelManager extends EntityManager
      */
     protected function serializeEntity($entity)
     {
+        if ($entity === null) {
+            return [];
+        }
+
         if ($entity instanceof \Doctrine\ORM\Proxy\Proxy) {
             /** @var $entity \Doctrine\ORM\Proxy\Proxy */
             $entity->__load();
@@ -214,10 +176,10 @@ class ModelManager extends EntityManager
     /**
      * Returns the total count of the passed query builder.
      *
-     * @param \Doctrine\ORM\Query $query
+     * @param Query $query
      * @return int|null
      */
-    public function getQueryCount(\Doctrine\ORM\Query $query)
+    public function getQueryCount(Query $query)
     {
         $pagination = $this->createPaginator($query);
 
@@ -236,7 +198,7 @@ class ModelManager extends EntityManager
      * @param Query $query
      * @return Paginator
      */
-    public function createPaginator(\Doctrine\ORM\Query $query)
+    public function createPaginator(Query $query)
     {
         $paginator = new Paginator($query);
         $paginator->setUseOutputWalkers(false);
@@ -253,25 +215,16 @@ class ModelManager extends EntityManager
     }
 
     /**
-     * @return Validator
+     * @return ValidatorInterface
      */
     public function getValidator()
     {
-        if (null === $this->validator) {
-            $reader = $this->getConfiguration()->getAnnotationsReader();
-            $this->validator = new Validator(
-                new ClassMetadataFactory(new AnnotationLoader($reader)),
-                new ConstraintValidatorFactory(),
-                new Translator('en_us')
-            );
-        }
-
-        return $this->validator;
+        return Shopware()->Container()->get('validator');
     }
 
     /**
      * @param $object
-     * @return \Symfony\Component\Validator\ConstraintViolationList
+     * @return ConstraintViolationListInterface
      */
     public function validate($object)
     {
@@ -451,7 +404,7 @@ class ModelManager extends EntityManager
     /**
      * Helper function to add mysql specified command to increase the sql performance.
      *
-     * @param \Doctrine\ORM\Query $query
+     * @param Query $query
      * @param null $index Name of the forced index
      * @param bool $straightJoin true or false. Allow to add STRAIGHT_JOIN select condition
      * @param bool $sqlNoCache

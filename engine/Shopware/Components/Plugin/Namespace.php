@@ -44,6 +44,25 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
     protected $configStorage = array();
 
     /**
+     * @var array
+     */
+    private $pluginDirectories;
+
+    /**
+     * Shopware_Components_Plugin_Namespace constructor.
+     *
+     * @param string $name
+     * @param Enlight_Config|null $storage
+     * @param array $pluginDirectories
+     */
+    public function __construct($name, $storage, array $pluginDirectories)
+    {
+        $this->pluginDirectories = $pluginDirectories;
+
+        parent::__construct($name, $storage);
+    }
+
+    /**
      * @return Enlight_Config
      */
     protected function initStorage()
@@ -94,9 +113,9 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
      */
     protected function buildPath($namespace, $pluginName, $pluginSource)
     {
-        return $this->Application()->AppPath(implode('_', array(
-            'Plugins', $pluginSource, $namespace, $pluginName
-        )));
+        $baseDir = $this->pluginDirectories[$pluginSource];
+
+        return $baseDir . DIRECTORY_SEPARATOR .  $namespace . DIRECTORY_SEPARATOR . $pluginName . DIRECTORY_SEPARATOR;
     }
 
     /**
@@ -252,8 +271,10 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
     }
 
     /**
-     * @param $name
-     * @param $config
+     * This is used to install a new plugin
+     *
+     * @param string $name
+     * @param Enlight_Config $config
      * @return \Shopware_Components_Plugin_Bootstrap
      */
     public function initPlugin($name, $config)
@@ -262,6 +283,7 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
 
         /** @var $plugin Shopware_Components_Plugin_Bootstrap */
         $plugin = new $class($name, $config);
+
         return $plugin;
     }
 

@@ -1606,9 +1606,8 @@ class Repository extends ModelRepository
     public function getSupplierQueryBuilder($supplierId)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(array('supplier', 'attribute'))
+        $builder->select(array('supplier'))
                 ->from('Shopware\Models\Article\Supplier', 'supplier')
-                ->leftJoin('supplier.attribute', 'attribute')
                 ->where('supplier.id = ?1')
                 ->setParameter(1, $supplierId);
 

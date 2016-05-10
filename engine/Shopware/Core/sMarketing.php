@@ -289,9 +289,6 @@ class sMarketing
                 );
                 $getAffectedBanners["link"] = Shopware()->Front()->Router()->assemble($query);
             }
-
-            // @deprecated since 5.1 will be removed in 5.2
-            $getAffectedBanners['img'] = $mediaService->getUrl($getAffectedBanners['img']);
         }
         if ($limit == 1) {
             $getBanners = $getBanners[0];
@@ -643,7 +640,7 @@ class sMarketing
             WHERE promotionID=$id
             ORDER BY position
             ";
-            $sql = Enlight()->Events()->filter('Shopware_Modules_Marketing_MailCampaignsGetDetail_FilterSQL', $sql,
+            $sql = Shopware()->Events()->filter('Shopware_Modules_Marketing_MailCampaignsGetDetail_FilterSQL', $sql,
                 array(
                     'subject' => $this,
                     'id' => $id

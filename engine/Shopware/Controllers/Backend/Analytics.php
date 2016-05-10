@@ -21,6 +21,8 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
+use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Models\Analytics\Repository;
 
 /**
@@ -30,7 +32,7 @@ use Shopware\Models\Analytics\Repository;
  * @package   Shopware\Controllers\Backend
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backend_ExtJs
+class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
     protected $dateFields = array(
         'date', 'displayDate',  'firstLogin', 'birthday', 'orderTime'
@@ -96,6 +98,38 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         );
 
         $this->View()->assign('analyticsCurrency', $currency);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getWhitelistedCSRFActions()
+    {
+        return [
+            'getOverview',
+            'getRating',
+            'getReferrerRevenue',
+            'getPartnerRevenue',
+            'getCustomerGroupAmount',
+            'getReferrerVisitors',
+            'getArticleSales',
+            'getCustomers',
+            'getCustomerAge',
+            'getMonth',
+            'getCalendarWeeks',
+            'getWeekdays',
+            'getTime',
+            'getCategories',
+            'getCountries',
+            'getPayment',
+            'getShippingMethods',
+            'getVendors',
+            'getDevice',
+            'getSearchTerms',
+            'getVisitors',
+            'getArticleImpressions',
+            'getReferrerSearchTerms'
+        ];
     }
 
     /**
@@ -325,7 +359,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     public function getReferrerRevenueAction()
     {
         $shop = $this->getManager()->getRepository('Shopware\Models\Shop\Shop')->getActiveDefault();
-        $shop->registerResources(Shopware()->Bootstrap());
+        $shop->registerResources();
 
         $result = $this->getRepository()->getReferrerRevenue(
             $shop,
@@ -500,10 +534,8 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
                 case "mr":
                     $customers[$week]['male']++;
                     break;
-                case "ms":
-                    $customers[$week]['female']++;
-                    break;
                 default:
+                    $customers[$week]['female']++;
                     break;
             }
 

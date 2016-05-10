@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundleES\ConditionHandler;
 
-use ONGR\ElasticsearchDSL\Filter\RangeFilter;
+use ONGR\ElasticsearchDSL\Query\RangeQuery;
 use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\ESIndexingBundle\FieldMappingInterface;
 use Shopware\Bundle\SearchBundle\Condition\PriceCondition;
@@ -77,7 +77,7 @@ class PriceConditionHandler implements HandlerInterface
             $range['lte'] = $criteriaPart->getMaxPrice();
         }
 
-        $filter = new RangeFilter($field, $range);
+        $filter = new RangeQuery($field, $range);
 
         if ($criteria->hasBaseCondition($criteriaPart->getName())) {
             $search->addFilter($filter);

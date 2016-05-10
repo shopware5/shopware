@@ -41,11 +41,10 @@ class ManufacturerHydrator extends Hydrator
     /**
      * @var array
      */
-    private $translationMapping = [
-        'description' => '__manufacturer_description',
-        'metaTitle' => '__manufacturer_meta_title',
-        'metaDescription' => '__manufacturer_meta_description',
-        'metaKeywords' => '__manufacturer_meta_keywords',
+    private $mapping = [
+        'metaTitle' => 'meta_title',
+        'metaDescription' => 'meta_description',
+        'metaKeywords' => 'meta_keywords',
     ];
 
     /**
@@ -62,17 +61,8 @@ class ManufacturerHydrator extends Hydrator
      */
     public function hydrate(array $data)
     {
-        $translation = $this->getTranslation($data);
-        $data = array_merge($data, $translation);
-
         $manufacturer = new Struct\Product\Manufacturer();
-
         $this->assignData($manufacturer, $data);
-
-        if (isset($data['__manufacturerAttribute_id'])) {
-            $this->assignAttribute($manufacturer, $data);
-        }
-
         return $manufacturer;
     }
 
@@ -82,6 +72,9 @@ class ManufacturerHydrator extends Hydrator
      */
     private function assignData(Struct\Product\Manufacturer $manufacturer, array $data)
     {
+        $translation = $this->getTranslation($data, '__manufacturer', $this->mapping);
+        $data = array_merge($data, $translation);
+
         if (isset($data['__manufacturer_id'])) {
             $manufacturer->setId((int) $data['__manufacturer_id']);
         }
@@ -113,49 +106,9 @@ class ManufacturerHydrator extends Hydrator
         if (isset($data['__manufacturer_img'])) {
             $manufacturer->setCoverFile($data['__manufacturer_img']);
         }
-    }
 
-    /**
-     * @param Struct\Product\Manufacturer $manufacturer
-     * @param array $data
-     */
-    private function assignAttribute(Struct\Product\Manufacturer $manufacturer, array $data)
-    {
-        $attribute = $this->attributeHydrator->hydrate(
-            $this->extractFields('__manufacturerAttribute_', $data)
-        );
-
-        $manufacturer->addAttribute('core', $attribute);
-    }
-
-    /**
-     * @param $data
-     * @return array|mixed
-     */
-    private function getTranslation($data)
-    {
-        if (!isset($data['__manufacturer_translation'])
-            || empty($data['__manufacturer_translation'])
-        ) {
-            $translation = [];
-        } else {
-            $translation = unserialize($data['__manufacturer_translation']);
+        if (isset($data['__manufacturerAttribute_id'])) {
+            $this->attributeHydrator->addAttribute($manufacturer, $data, 'manufacturerAttribute', null, 'manufacturer');
         }
-
-        if (isset($data['__manufacturer_translation_fallback'])
-            && !empty($data['__manufacturer_translation_fallback'])
-        ) {
-            $fallbackTranslation = unserialize($data['__manufacturer_translation_fallback']);
-            $translation += $fallbackTranslation;
-        }
-
-        if (empty($translation)) {
-            return [];
-        }
-
-        return $this->convertArrayKeys(
-            $translation,
-            $this->translationMapping
-        );
     }
 }

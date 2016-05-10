@@ -184,12 +184,6 @@ class Form extends ModelEntity
             // update owning side
             $clonedField->setForm($clonedForm);
         }
-        $originalAtrribute = $this->getAttribute();
-        if (null !== $originalAtrribute) {
-            $clonedAttribute = clone $originalAtrribute;
-            $clonedAttribute->setForm($clonedForm);
-            $clonedForm->setAttribute($clonedAttribute);
-        }
         return $clonedForm;
     }
 

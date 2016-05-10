@@ -1,1 +1,0 @@
-{extends file='newsletter/alt/index.tpl'}

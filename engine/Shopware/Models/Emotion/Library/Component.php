@@ -30,25 +30,11 @@ use Doctrine\ORM\Mapping as ORM;
 use Shopware\Models\Plugin\Plugin;
 
 /**
- *
- * Associations:
- * <code>
- *
- * </code>
- *
- *
- * Indices:
- * <code>
- *
- * </code>
- *
  * @category   Shopware
- * @package    Models
- * @subpackage Emotion
- * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
- * @license    http://enlight.de/license     New BSD License
+ * @package    Shopware\Models
+ * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
- * @ORM\Entity(repositoryClass="Repository")
+ * @ORM\Entity
  * @ORM\Table(name="s_library_component")
  */
 class Component extends ModelEntity
@@ -362,6 +348,7 @@ class Component extends ModelEntity
             'displayField' => '',
             'valueField' => '',
             'allowBlank' => false,
+            'translatable' => false,
             'position' => $this->getMaxPositionValue()
         );
 

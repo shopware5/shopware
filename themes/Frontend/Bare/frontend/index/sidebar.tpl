@@ -1,32 +1,28 @@
 <aside class="sidebar-main off-canvas">
 
-	{* Campaign left top *}
-	{block name='frontend_index_left_campaigns_top'}
-		{include file="frontend/campaign/box.tpl" campaignsData=$campaigns.leftTop}
-	{/block}
+    {* Mobile specific menu actions *}
+    {block name="frontend_index_left_navigation_smartphone"}
+        <div class="navigation--smartphone">
+            <ul class="navigation--list ">
 
-	{* Mobile specific menu actions *}
-	{block name="frontend_index_left_navigation_smartphone"}
-		<div class="navigation--smartphone">
-			<ul class="navigation--list ">
+                {* Trigger to close the off canvas menu *}
+                {block name="frontend_index_left_categories_close_menu"}
+                    <li class="navigation--entry entry--close-off-canvas">
+                        <a href="#close-categories-menu" title="{s namespace='frontend/index/menu_left' name="IndexActionCloseMenu"}{/s}" class="navigation--link">
+                            {s namespace='frontend/index/menu_left' name="IndexActionCloseMenu"}{/s} <i class="icon--arrow-right"></i>
+                        </a>
+                    </li>
+                {/block}
 
-				{* Trigger to close the off canvas menu *}
-				{block name="frontend_index_left_categories_close_menu"}
-					<li class="navigation--entry entry--close-off-canvas">
-						<a href="#close-categories-menu" title="{s namespace='frontend/index/menu_left' name="IndexActionCloseMenu"}{/s}" class="navigation--link">
-							{s namespace='frontend/index/menu_left' name="IndexActionCloseMenu"}{/s} <i class="icon--arrow-right"></i>
-						</a>
-					</li>
-				{/block}
-			</ul>
-            {* Switches for currency and language on mobile devices *}
-            {block name="frontend_index_left_switches"}
-                <div class="mobile--switches">
-                    {action module=widgets controller=index action=shopMenu}
-                </div>
-            {/block}
-		</div>
-	{/block}
+                {* Switches for currency and language on mobile devices *}
+                {block name="frontend_index_left_switches"}
+                    <div class="mobile--switches">
+                        {action module=widgets controller=index action=shopMenu}
+                    </div>
+                {/block}
+            </ul>
+        </div>
+    {/block}
 
     {* if sCategoryContent is not available use sArticle.categoryID *}
     {if isset($sCategoryContent) && $sCategoryContent.id}
@@ -63,20 +59,9 @@
             {/block}
         {/block}
 
-        {* Campaign left middle *}
-        {block name='frontend_index_left_campaigns_middle'}
-            {include file="frontend/campaign/box.tpl" campaignsData=$campaigns.leftMiddle}
-        {/block}
-
         {* Static sites *}
         {block name='frontend_index_left_menu'}
             {include file='frontend/index/sites-navigation.tpl'}
         {/block}
-
-        {* Campaign left bottom *}
-        {block name='frontend_index_left_campaigns_bottom'}
-            {include file="frontend/campaign/box.tpl" campaignsData=$campaigns.leftBottom}
-        {/block}
-
     </div>
 </aside>

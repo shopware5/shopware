@@ -48,9 +48,8 @@ Ext.define('Shopware.apps.Form.view.main.Formpanel', {
         /*{if !{acl_is_allowed privilege=createupdate}}*/
         readOnly: true,
         /*{/if}*/
-        labelStyle: 'font-weight: 700; text-align: right;',
         layout: 'anchor',
-        labelWidth: 130,
+        labelWidth: 155,
         anchor: '99%'
     },
 
@@ -117,6 +116,15 @@ Ext.define('Shopware.apps.Form.view.main.Formpanel', {
             variableHint = '{s name=support_text_variables}Available Variables{/s}: ' + names.join(', ');
         }
 
+        me.attributeForm = Ext.create('Shopware.attribute.Form', {
+            table: 's_cms_support_attributes',
+            margin: '20 0 0',
+            disabled: false
+        });
+        if (me.record) {
+            me.attributeForm.loadAttribute(me.record.get('id'));
+        }
+
         return [{
             fieldLabel:'{s name=label_name}Name{/s}',
             name       : 'name',
@@ -181,7 +189,7 @@ Ext.define('Shopware.apps.Form.view.main.Formpanel', {
         }, {
             xtype: 'hidden',
             name: 'id'
-        }];
+        }, me.attributeForm];
     }
 });
 //{/block}

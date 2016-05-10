@@ -86,16 +86,12 @@ class PriceGroupDiscountGateway implements Gateway\PriceGroupDiscountGatewayInte
             ->addSelect($this->fieldHelper->getPriceGroupFields());
 
         $query->from('s_core_pricegroups_discounts', 'priceGroupDiscount')
-            ->innerJoin('priceGroupDiscount', 's_core_pricegroups', 'priceGroup', 'priceGroup.id = priceGroupDiscount.groupID');
-
-        $query->andWhere('priceGroupDiscount.customergroupID = :customerGroup');
-
-        $query->groupBy('priceGroupDiscount.id');
-
-        $query->orderBy('priceGroupDiscount.groupID')
-            ->addOrderBy('priceGroupDiscount.discountstart');
-
-        $query->setParameter(':customerGroup', $customerGroup->getId());
+            ->innerJoin('priceGroupDiscount', 's_core_pricegroups', 'priceGroup', 'priceGroup.id = priceGroupDiscount.groupID')
+            ->andWhere('priceGroupDiscount.customergroupID = :customerGroup')
+            ->groupBy('priceGroupDiscount.id')
+            ->orderBy('priceGroupDiscount.groupID')
+            ->addOrderBy('priceGroupDiscount.discountstart')
+            ->setParameter(':customerGroup', $customerGroup->getId());
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();

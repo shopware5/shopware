@@ -6,7 +6,7 @@ Feature: Checkout articles (scenario origin is cart with one product in it)
             | number  | name            | quantity |
             | SW10181 | Reisekoffer Set | 1        |
 
-    @fastOrder @payment @delivery @noEmotion
+    @fastOrder @payment @delivery
     Scenario Outline: I can finish my order with different payment and delivery methods
         Given I proceed to checkout as:
             | field      | register[personal] | register[billing] |
@@ -38,7 +38,7 @@ Feature: Checkout articles (scenario origin is cart with one product in it)
             | 3             | 14             | 9,90 €        | 147,89 € |
             | 4             | 14             | 9,90 €        | 152,89 € |
 
-    @fastOrder @payment @shipping @noEmotion
+    @fastOrder @payment @shipping
     Scenario: I can finish my order with different payment and delivery methods
         Given I proceed to checkout as:
             | field      | register[personal] | register[billing] |

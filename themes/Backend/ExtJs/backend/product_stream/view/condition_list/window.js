@@ -31,12 +31,10 @@
 Ext.define('Shopware.apps.ProductStream.view.condition_list.Window', {
     extend: 'Enlight.app.Window',
     alias: 'widget.product-stream-detail-window',
-
     title : '{s name=detail_window_title}Product stream details{/s}',
     height: '90%',
     width: '90%',
-    layout: { type: 'vbox', align: 'stretch'},
-    bodyPadding: 10,
+    layout: 'fit',
 
     initComponent: function() {
         var me = this;
@@ -51,9 +49,11 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.Window', {
     loadRecord: function(record) {
         var me = this;
 
-        me.settingsPanel.loadRecord(record);
+        me.formPanel.loadRecord(record);
+        me.settingsPanel.setSorting(record);
         me.conditionPanel.removeAll();
         me.conditionPanel.loadConditions(record);
+        me.attributeForm.loadAttribute(record.get('id'));
     },
 
     createToolbar: function() {
@@ -75,31 +75,59 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.Window', {
     },
 
     createItems: function() {
-        var me = this,
-            items = [];
-
-        items.push(me.createSettingPanel());
+        var me = this, container;
 
         me.previewGrid = Ext.create('Shopware.apps.ProductStream.view.condition_list.PreviewGrid', {
-            flex: 3
+            flex: 1
         });
-
         me.conditionPanel = Ext.create('Shopware.apps.ProductStream.view.condition_list.ConditionPanel', {
-            flex: 2,
+            flex: 1,
             margin: '0 10 0 0'
         });
 
-        var container = Ext.create('Ext.container.Container', {
-            layout: { type: 'hbox', align: 'stretch'},
+        container = Ext.create('Ext.container.Container', {
+            layout: { type: 'vbox', align: 'stretch'},
             flex: 1,
+            padding: 10,
+            title: '{s name="configuration_title"}{/s}',
             items: [
-                me.conditionPanel,
-                me.previewGrid
+                me.createSettingPanel(),
+                {
+                    xtype: 'container',
+                    flex: 1,
+                    margin: '10 0 0',
+                    layout: { type: 'hbox', align: 'stretch' },
+                    items: [
+                        me.conditionPanel,
+                        me.previewGrid
+                    ]
+                }
             ]
         });
 
-        items.push(container);
-        return items;
+        me.tabPanel = Ext.create('Ext.tab.Panel', {
+            flex: 1,
+            items: [container]
+        });
+
+        me.formPanel = Ext.create('Ext.form.Panel', {
+            layout: 'fit',
+            items: [me.tabPanel],
+            name: 'product-stream-main-form',
+            border: false,
+            plugins: [{
+                ptype: 'translation',
+                translationType: 'productStream'
+            }]
+        });
+
+        me.attributeForm = Ext.create('Shopware.apps.ProductStream.view.common.Attributes', {
+            tabPanel: me.tabPanel,
+            translationForm: me.formPanel
+        });
+        me.tabPanel.add(me.attributeForm);
+
+        return [me.formPanel];
     },
 
     createSettingPanel: function() {

@@ -35,15 +35,15 @@ class SitemapContext extends SubContext
             $links = $entries->getHash();
         }
 
-        /** @var \Shopware\Tests\Mink\Page\Emotion\Sitemap $page */
+        /** @var \Shopware\Tests\Mink\Page\Sitemap $page */
         $page = $this->getPage('Sitemap');
 
-        /** @var \Shopware\Tests\Mink\Element\Emotion\SitemapGroup $groups */
+        /** @var \Shopware\Tests\Mink\Element\SitemapGroup $groups */
         $groups = $this->getMultipleElement($page, 'SitemapGroup');
 
         $sitemapGroup = $name;
 
-        /** @var \Shopware\Tests\Mink\Element\Emotion\SitemapGroup $group */
+        /** @var \Shopware\Tests\Mink\Element\SitemapGroup $group */
         foreach ($groups as $group) {
             if ($group->getTitle() === $name) {
                 $sitemapGroup = $group;

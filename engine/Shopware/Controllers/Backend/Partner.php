@@ -22,6 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Models\Partner\Partner as Partner;
 use Doctrine\ORM\AbstractQuery;
 
@@ -32,7 +33,7 @@ use Doctrine\ORM\AbstractQuery;
  * Displays all data in an Ext.grid.Panel and allows to delete,
  * add and edit items. On the detail page the partner data are displayed and can be edited
  */
-class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_ExtJs
+class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
     /**
      * Registers the different acl permission for the different controller actions.
@@ -78,6 +79,17 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
             $this->Front()->Plugins()->Json()->setRenderer(false);
             $this->Front()->Plugins()->ViewRenderer()->setNoRender();
         }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getWhitelistedCSRFActions()
+    {
+        return [
+            'redirectToPartnerLink',
+            'downloadStatistic'
+        ];
     }
 
     /**
@@ -356,7 +368,12 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
 
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
         $shop = $repository->getActiveDefault();
-        $shop->registerResources(Shopware()->Bootstrap());
+
+        if (!$shop instanceof \Shopware\Models\Shop\Shop) {
+            throw new Exception("Invalid shop provided.");
+        }
+
+        $shop->registerResources();
 
         $url = $this->Front()->Router()->assemble(array('module' => 'frontend', 'controller' => 'index'));
 

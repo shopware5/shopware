@@ -73,8 +73,6 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
             return;
         }
 
-        /** @var $repository Shopware\Models\Shop\Repository */
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
         $shop = $this->getShopByRequest($request);
 
         if (!$shop->getHost()) {
@@ -92,14 +90,6 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
         }
         if (!$shop->getSecureHost()) {
             $shop->setSecureHost($shop->getHost());
-        }
-
-        $main = $shop->getMain() !== null ? $shop->getMain() : $shop;
-        if (!$main->getDefault()) {
-            $main = $repository->getActiveDefault();
-            $shop->setTemplate($main->getTemplate());
-            $shop->setHost($main->getHost());
-            $shop->setSecureHost($main->getSecureHost() ?: $main->getHost());
         }
 
         // Read original base path for resources
@@ -126,7 +116,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
         }
 
         $this->validateShop($shop);
-        $shop->registerResources(Shopware()->Bootstrap());
+        $shop->registerResources();
     }
 
     /**
@@ -223,8 +213,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
         $request = $args->getRequest();
         $response = $args->getResponse();
 
-        $bootstrap = $this->Application()->Bootstrap();
-        if ($bootstrap->issetResource('Shop')) {
+        if (Shopware()->Container()->initialized('Shop')) {
             /** @var DetachedShop $shop */
             $shop = $this->Application()->Shop();
 
@@ -271,7 +260,8 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
      */
     protected function upgradeShop($request, $response)
     {
-        $bootstrap = $this->Application()->Bootstrap();
+        $container = $this->Application()->Container();
+
         /** @var $shop DetachedShop */
         $shop = $this->Application()->Shop();
 
@@ -372,7 +362,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
             $template = $session->template;
             $template = $repository->findOneBy(array('template' => $template));
 
-            $bootstrap->getResource('Template')->setTemplateDir(array());
+            $container->get('Template')->setTemplateDir(array());
 
             if ($template !== null) {
                 $shop->setTemplate($template);
@@ -384,10 +374,10 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
         }
 
         // Save upgrades
-        $shop->registerResources($bootstrap);
+        $shop->registerResources();
 
         if ($request->isSecure()) {
-            $template = $bootstrap->getResource('Template');
+            $template = $container->get('Template');
             $template->setCompileId($template->getCompileId() . '_secure');
         }
     }

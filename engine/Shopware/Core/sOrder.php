@@ -24,6 +24,7 @@
 
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
+use Shopware\Components\NumberRangeIncrementerInterface;
 
 /**
  * Deprecated Shopware Class that handle frontend orders
@@ -188,6 +189,11 @@ class sOrder
     private $contextService;
 
     /**
+     * @var NumberRangeIncrementerInterface
+     */
+    private $numberRangeIncrementer;
+
+    /**
      * Class constructor.
      * Injects all dependencies which are required for this class.
      * @param ContextServiceInterface $contextService
@@ -199,6 +205,7 @@ class sOrder
         $this->db = Shopware()->Db();
         $this->eventManager = Shopware()->Events();
         $this->config = Shopware()->Config();
+        $this->numberRangeIncrementer = Shopware()->Container()->get('shopware.number_range_incrementer');
 
         $this->contextService = $contextService ? : Shopware()->Container()->get('shopware_storefront.context_service');
     }
@@ -221,21 +228,7 @@ class sOrder
      */
     public function sGetOrderNumber()
     {
-        $this->db->beginTransaction();
-        try {
-            $number = $this->db->fetchOne(
-                "/*NO LIMIT*/ SELECT number FROM s_order_number WHERE name='invoice' FOR UPDATE"
-            );
-            $this->db->executeUpdate(
-                "UPDATE s_order_number SET number = number + 1 WHERE name='invoice'"
-            );
-            $number += 1;
-            $this->db->commit();
-        } catch (Exception $e) {
-            $this->db->rollBack();
-            throw $e;
-        }
-
+        $number = $this->numberRangeIncrementer->increment('invoice');
         $number = $this->eventManager->filter(
             'Shopware_Modules_Order_GetOrdernumber_FilterOrdernumber',
             $number,
@@ -254,22 +247,6 @@ class sOrder
      */
     public function handleESDOrder($basketRow, $orderID, $orderDetailsID)
     {
-        $this->sManageEsdOrder($basketRow, $orderID, $orderDetailsID);
-
-        return $basketRow;
-    }
-
-    /**
-     * @deprecated since SW 5.0.4, will be removed in SW 5.2, use handleESDOrder() instead
-     *
-     * @param $basketRow
-     * @param $orderID
-     * @param $orderdetailsID
-     * @throws Enlight_Exception
-     * @throws Zend_Db_Adapter_Exception
-     */
-    public function sManageEsdOrder(&$basketRow, $orderID, $orderdetailsID)
-    {
         $quantity = $basketRow["quantity"];
         $basketRow['assignedSerials'] = array();
 
@@ -277,7 +254,7 @@ class sOrder
         $esdArticle = $this->getVariantEsd($basketRow["ordernumber"]);
 
         if (!$esdArticle["id"]) {
-            return;
+            return $basketRow;
         }
 
         if (!$esdArticle["serials"]) {
@@ -287,10 +264,10 @@ class sOrder
                 'esdID' => $esdArticle["id"],
                 'userID' => $this->sUserData["additional"]["user"]["id"],
                 'orderID' => $orderID,
-                'orderdetailsID' => $orderdetailsID,
+                'orderdetailsID' => $orderDetailsID,
                 'datum' => new Zend_Db_Expr('NOW()'),
             ));
-            return;
+            return $basketRow;
         }
 
         $availableSerials = $this->getAvailableSerialsOfEsd($esdArticle["id"]);
@@ -315,7 +292,7 @@ class sOrder
 
         // Check if enough serials are available, if not, an email has been sent, and we can return
         if (count($availableSerials) < $quantity) {
-            return;
+            return $basketRow;
         }
 
         for ($i = 1; $i <= $quantity; $i++) {
@@ -330,10 +307,12 @@ class sOrder
                 'esdID' => $esdArticle["id"],
                 'userID' => $this->sUserData["additional"]["user"]["id"],
                 'orderID' => $orderID,
-                'orderdetailsID' => $orderdetailsID,
+                'orderdetailsID' => $orderDetailsID,
                 'datum' => new Zend_Db_Expr('NOW()'),
             ));
         }
+
+        return $basketRow;
     }
 
     /**
@@ -1274,12 +1253,12 @@ class sOrder
             zipcode,
             city,
             phone,
-            fax,
             countryID,
             stateID,
             ustid,
             additional_address_line1,
-            additional_address_line2
+            additional_address_line2,
+            title
         )
         VALUES (
             ?,
@@ -1316,12 +1295,12 @@ class sOrder
             $address["zipcode"],
             $address["city"],
             $address["phone"],
-            $address["fax"],
             $address["countryID"],
             $address["stateID"],
             $address["ustid"],
             $address["additional_address_line1"],
-            $address["additional_address_line2"]
+            $address["additional_address_line2"],
+            $address["title"]
         );
         $array = $this->eventManager->filter('Shopware_Modules_Order_SaveBilling_FilterArray', $array, array('subject'=>$this, 'address'=>$address, 'id'=>$id));
         $result = $this->db->executeUpdate($sql, $array);
@@ -1368,9 +1347,11 @@ class sOrder
             countryID,
             stateID,
             additional_address_line1,
-            additional_address_line2
+            additional_address_line2,
+            title
         )
         VALUES (
+            ?,
             ?,
             ?,
             ?,
@@ -1402,7 +1383,8 @@ class sOrder
             $address["countryID"],
             $address["stateID"],
             $address["additional_address_line1"],
-            $address["additional_address_line2"]
+            $address["additional_address_line2"],
+            $address["title"]
         );
         $array = $this->eventManager->filter('Shopware_Modules_Order_SaveShipping_FilterArray', $array, array('subject'=>$this, 'address'=>$address, 'id'=>$id));
         $result = $this->db->executeUpdate($sql, $array);
@@ -1444,8 +1426,8 @@ class sOrder
             ", array($checkMail));
 
             $advertiser = $this->db->fetchRow("
-            SELECT email, firstname, lastname FROM s_user, s_user_billingaddress
-            WHERE s_user_billingaddress.userID = s_user.id AND s_user.id=?
+            SELECT email, firstname, lastname FROM s_user
+            WHERE s_user.id=?
             ", array($checkIfUserFound["sender"]));
 
             if (!$advertiser) {
@@ -1524,7 +1506,7 @@ class sOrder
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
         $shopId = is_numeric($order['language']) ? $order['language'] : $order['subshopID'];
         $shop = $repository->getActiveById($shopId);
-        $shop->registerResources(Shopware()->Bootstrap());
+        $shop->registerResources();
 
         $order['status_description'] = Shopware()->Snippets()->getNamespace('backend/static/order_status')->get(
             $order['status_name'],
@@ -1869,12 +1851,12 @@ SELECT
     `b`.`firstname` AS `billing_firstname`,
     `b`.`lastname` AS `billing_lastname`,
     `b`.`street` AS `billing_street`,
+    `b`.`additional_address_line1` AS `billing_additional_address_line1`,
+    `b`.`additional_address_line2` AS `billing_additional_address_line2`,
     `b`.`zipcode` AS `billing_zipcode`,
     `b`.`city` AS `billing_city`,
     `b`.`phone` AS `phone`,
     `b`.`phone` AS `billing_phone`,
-    `b`.`fax` AS `fax`,
-    `b`.`fax` AS `billing_fax`,
     `b`.`countryID` AS `billing_countryID`,
     `b`.`stateID` AS `billing_stateID`,
     `bc`.`countryname` AS `billing_country`,
@@ -1895,6 +1877,8 @@ SELECT
     `s`.`firstname` AS `shipping_firstname`,
     `s`.`lastname` AS `shipping_lastname`,
     `s`.`street` AS `shipping_street`,
+    `s`.`additional_address_line1` AS `shipping_additional_address_line1`,
+    `s`.`additional_address_line2` AS `shipping_additional_address_line2`,
     `s`.`zipcode` AS `shipping_zipcode`,
     `s`.`city` AS `shipping_city`,
     `s`.`stateID` AS `shipping_stateID`,
@@ -1910,7 +1894,6 @@ SELECT
     `sa`.`text5` AS `shipping_text5`,
     `sa`.`text6` AS `shipping_text6`,
     `u`.*,
-       ub.birthday,
        `g`.`id` AS `preisgruppe`,
        `g`.`tax` AS `billing_net`
 FROM

@@ -39,7 +39,6 @@ use Doctrine\ORM\Mapping as ORM;
  * <code>
  *   - Billing  =>  Shopware\Models\Customer\Billing    [1:1] [s_user_billingaddress]
  *   - Shipping =>  Shopware\Models\Customer\Shipping   [1:1] [s_user_shippingaddress]
- *   - Debit    =>  Shopware\Models\Customer\Debit      [1:1] [s_user_debit]
  *   - Group    =>  Shopware\Models\Customer\Group      [n:1] [s_core_customergroups]
  *   - Shop     =>  Shopware\Models\Shop\Shop           [n:1] [s_core_shops]
  *   - Orders   =>  Shopware\Models\Order\Order         [1:n] [s_order]
@@ -254,6 +253,45 @@ class Customer extends LazyFetchModelEntity
     private $lockedUntil = null;
 
     /**
+     * @var string $salutation
+     *
+     * @Assert\NotBlank
+     *
+     * @ORM\Column(name="salutation", type="text", nullable=false)
+     */
+    private $salutation;
+
+    /**
+     * @var string $title
+     * @ORM\Column(name="title", type="text", nullable=false)
+     */
+    private $title;
+
+    /**
+     * @var string $firstname
+     *
+     * @Assert\NotBlank
+     *
+     * @ORM\Column(name="firstname", type="text", nullable=false)
+     */
+    private $firstname;
+
+    /**
+     * @var string $lastname
+     *
+     * @Assert\NotBlank
+     *
+     * @ORM\Column(name="lastname", type="text", nullable=false)
+     */
+    private $lastname;
+
+    /**
+     * @var \DateTime $birthday
+     * @ORM\Column(name="birthday", type="date", nullable=true)
+     */
+    private $birthday;
+
+    /**
      * INVERSE SIDE
      * The billing property is the inverse side of the association between customer and billing.
      * The association is joined over the billing userID field and the id field of the customer
@@ -276,17 +314,6 @@ class Customer extends LazyFetchModelEntity
      * @ORM\OneToOne(targetEntity="Shopware\Models\Customer\Shipping", mappedBy="customer", orphanRemoval=true, cascade={"persist"})
      */
     protected $shipping;
-
-    /**
-     * INVERSE SIDE
-     * The debit property is the inverse side of the association between customer and debit.
-     * The association is joined over the debit userID field and the id field of the customer.
-     *
-     * @var \Shopware\Models\Customer\Debit
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Customer\Debit", mappedBy="customer", orphanRemoval=true, cascade={"persist"})
-     * @Assert\Valid
-     */
-    protected $debit;
 
     /**
      * OWNING SIDE
@@ -359,6 +386,24 @@ class Customer extends LazyFetchModelEntity
      * @ORM\OneToMany(targetEntity="Shopware\Models\Customer\PaymentData", mappedBy="customer", orphanRemoval=true, cascade={"persist"})
      */
     protected $paymentData;
+
+    /**
+     * OWNING SIDE
+     *
+     * @var \Shopware\Models\Customer\Address $defaultBillingAddress
+     * @ORM\ManyToOne(targetEntity="\Shopware\Models\Customer\Address", inversedBy="customer")
+     * @ORM\JoinColumn(name="default_billing_address_id", referencedColumnName="id")
+     */
+    protected $defaultBillingAddress;
+
+    /**
+     * OWNING SIDE
+     *
+     * @var \Shopware\Models\Customer\Address $defaultShippingAddress
+     * @ORM\ManyToOne(targetEntity="\Shopware\Models\Customer\Address", inversedBy="customer")
+     * @ORM\JoinColumn(name="default_shipping_address_id", referencedColumnName="id")
+     */
+    protected $defaultShippingAddress;
 
     /**
      * Class constructor. Initials the orders array and the date fields.
@@ -918,35 +963,6 @@ class Customer extends LazyFetchModelEntity
         return $this->setManyToOne($group, '\Shopware\Models\Customer\Group', 'group');
     }
 
-
-    /**
-     * Returns the instance of the Shopware\Models\Customer\Debit model which
-     * contains all data about the customer debit. The association is defined over
-     * the Customer.debit property (INVERSE SIDE) and the Debit.customer (OWNING SIDE) property.
-     * The debit data is joined over the s_user_debit.userID field.
-     *
-     * @return \Shopware\Models\Customer\Debit
-     */
-    public function getDebit()
-    {
-        return $this->debit;
-    }
-
-    /**
-     * Setter function for the debit association property which contains an instance of the Shopware\Models\Customer\Debit model which
-     * contains all data about the customer debit. The association is defined over
-     * the Customer.debit property (INVERSE SIDE) and the Debit.customer (OWNING SIDE) property.
-     * The debit data is joined over the s_user_debit.userID field.
-     *
-     * @param \Shopware\Models\Customer\Debit|array|null $debit
-     * @return \Shopware\Models\Customer\Debit
-     */
-    public function setDebit($debit)
-    {
-        return $this->setOneToOne($debit, '\Shopware\Models\Customer\Debit', 'debit', 'customer');
-    }
-
-
     /**
      * Returns the instance of the Shopware\Models\Customer\Shipping model which
      * contains all data about the customer shipping address. The association is defined over
@@ -1102,5 +1118,122 @@ class Customer extends LazyFetchModelEntity
     public function getGroupKey()
     {
         return $this->groupKey;
+    }
+
+
+    /**
+     * @return Address
+     */
+    public function getDefaultBillingAddress()
+    {
+        return $this->defaultBillingAddress;
+    }
+
+    /**
+     * @param Address $defaultBillingAddress
+     */
+    public function setDefaultBillingAddress(Address $defaultBillingAddress)
+    {
+        $this->defaultBillingAddress = $defaultBillingAddress;
+    }
+
+    /**
+     * @return Address
+     */
+    public function getDefaultShippingAddress()
+    {
+        return $this->defaultShippingAddress;
+    }
+
+    /**
+     * @param Address $defaultShippingAddress
+     */
+    public function setDefaultShippingAddress(Address $defaultShippingAddress)
+    {
+        $this->defaultShippingAddress = $defaultShippingAddress;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSalutation()
+    {
+        return $this->salutation;
+    }
+
+    /**
+     * @param string $salutation
+     */
+    public function setSalutation($salutation)
+    {
+        $this->salutation = $salutation;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param string $title
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFirstname()
+    {
+        return $this->firstname;
+    }
+
+    /**
+     * @param string $firstname
+     */
+    public function setFirstname($firstname)
+    {
+        $this->firstname = $firstname;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLastname()
+    {
+        return $this->lastname;
+    }
+
+    /**
+     * @param string $lastname
+     */
+    public function setLastname($lastname)
+    {
+        $this->lastname = $lastname;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getBirthday()
+    {
+        return $this->birthday;
+    }
+
+    /**
+     * @param \DateTime|string $birthday
+     */
+    public function setBirthday($birthday = null)
+    {
+        if ($birthday instanceof \DateTime) {
+            $birthday = $birthday->format('Y-m-d');
+        }
+
+        $this->birthday = $birthday;
     }
 }

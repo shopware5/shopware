@@ -123,7 +123,6 @@ class LegacyStructConverter
             'productBoxLayout' => $category->getProductBoxLayout(),
             'blog' => $category->isBlog(),
             'path' => $category->getPath(),
-            'showFilterGroups' => $category->displayPropertySets(),
             'external' => $category->getExternalLink(),
             'hideFilter' => !$category->displayFacets(),
             'hideTop' => !$category->displayInNavigation(),
@@ -248,9 +247,6 @@ class LegacyStructConverter
 
         if ($product->getVoteAverage()) {
             $promotion['sVoteAverage'] = $this->convertVoteAverageStruct($product->getVoteAverage());
-
-            /** @deprecated sVoteAverange value, use sVoteAverage instead */
-            $promotion['sVoteAverange'] = $promotion['sVoteAverage'];
         }
 
         $promotion['prices'] = [];
@@ -391,15 +387,9 @@ class LegacyStructConverter
 
         $data['sVoteAverage'] = array('average' => 0, 'count' => 0);
 
-        /** @deprecated averange value, use average instead */
-        $data['sVoteAverage']['averange'] = 0;
-
         if ($product->getVoteAverage()) {
             $data['sVoteAverage'] = $this->convertVoteAverageStruct($product->getVoteAverage());
         }
-
-        /** @deprecated sVoteAverange value, use sVoteAverage instead */
-        $data['sVoteAverange'] = $data['sVoteAverage'];
 
         if ($product->getPropertySet()) {
             $data['filtergroupID'] = $product->getPropertySet()->getId();
@@ -478,9 +468,6 @@ class LegacyStructConverter
         );
 
         $data['attributes'] = $average->getAttributes();
-
-        /** @deprecated averange value, use average instead */
-        $data['averange'] = $data['average'];
 
         return $data;
     }

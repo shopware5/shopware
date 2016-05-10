@@ -22,6 +22,11 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\CSRFWhitelistAware;
+use Shopware\Models\Newsletter\Address;
+use Shopware\Models\Newsletter\ContactData;
+use Shopware\Models\Newsletter\Group;
+
 /**
  * Backend Controller for the Import/Export backend module
  *
@@ -30,11 +35,7 @@
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 
-use Shopware\Models\Newsletter\Address;
-use Shopware\Models\Newsletter\ContactData;
-use Shopware\Models\Newsletter\Group;
-
-class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Backend_ExtJs
+class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
     /**
      * Inits ACL-Permissions
@@ -52,6 +53,25 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         $this->addAclPermission('exportOrders', 'export', 'Insufficient Permissions');
 
         $this->addAclPermission('import', 'import', 'Insufficient Permissions');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getWhitelistedCSRFActions()
+    {
+        return [
+            'exportCustomers',
+            'exportArticles',
+            'exportInStock',
+            'exportNotInStock',
+            'exportPrices',
+            'exportNewsletter',
+            'exportCategories',
+            'exportArticleImages',
+            'exportOrders',
+            'import'
+        ];
     }
 
     /**
@@ -258,7 +278,6 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             'billing.zipCode as billing_zipcode',
             'billing.city as billing_city',
             'billing.phone',
-            'billing.fax',
             'billing.additionalAddressLine1 as billing_additional_address_line1',
             'billing.additionalAddressLine2 as billing_additional_address_line2',
             'billing.countryId as billing_countryID',
@@ -591,7 +610,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         }
 
         $shop = $this->getManager()->getRepository('Shopware\Models\Shop\Shop')->getActiveDefault();
-        $shop->registerResources(Shopware()->Bootstrap());
+        $shop->registerResources();
 
         $imagePath = 'http://'. $shop->getHost() . $shop->getBasePath()  . '/media/image/';
 
@@ -1339,7 +1358,6 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
 
                 'billing.vatId as ustid',
                 'billing.phone as phone',
-                'billing.fax as fax',
                 'customer.email as email',
                 'customer.groupKey as customergroup',
                 'customer.newsletter as newsletter',
@@ -3114,7 +3132,6 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             'customergroup'  => 'groupKey',
             'md5_password'   => 'rawPassword',
             'phone'          => 'billing_phone',
-            'fax'            => 'billing_fax',
             'customernumber' => 'billing_number',
             'accountmode'    => 'accountMode',
 
@@ -3229,7 +3246,6 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 c.template,
                 c.active,
                 c.blog,
-                c.showfiltergroups,
                 c.external,
                 c.hidefilter
                 $attributesSelect

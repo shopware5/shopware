@@ -214,7 +214,7 @@ Ext.define('Shopware.apps.Order.view.list.List', {
 
         var pageSize = Ext.create('Ext.form.field.ComboBox', {
             fieldLabel: me.snippets.paging.pageSize,
-            labelWidth: 120,
+            labelWidth: 155,
             cls: Ext.baseCSSPrefix + 'page-size',
             queryMode: 'local',
             width: 180,

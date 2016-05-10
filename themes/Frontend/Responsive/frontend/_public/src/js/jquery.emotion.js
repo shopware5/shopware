@@ -340,7 +340,7 @@
             /**
              * The grid mode of the emotion grid.
              *
-             * @property gridMode ( resize | masonry )
+             * @property gridMode ( resize | fluid )
              * @type {string}
              */
             gridMode: 'resize',
@@ -386,14 +386,6 @@
              * @type {number}
              */
             cellSpacing: 10,
-
-            /**
-             * The duration for the masonry animation.
-             *
-             * @property transitionDuration
-             * @type {string}
-             */
-            transitionDuration: '0.25s',
 
             /**
              * The DOM selector for the emotion elements.
@@ -455,16 +447,34 @@
                 me.initFullscreen();
             }
 
-            if (me.opts.gridMode === 'masonry') {
-                me.initMasonryGrid();
-            }
-
-            if (me.opts.gridMode === 'resize') {
-                me.initScaleGrid();
-            }
+            me.initMode(me.opts.gridMode);
 
             me.initElements();
             me.registerEvents();
+        },
+
+        /**
+         * Initializes the grid mode by the given option.
+         * Searches for a method with the name pattern 'init' + Name + 'Grid'.
+         * This enables you to extend the plugin with additional grid types by adding the necessary init method.
+         * If there is no corresponding method for the grid type, the mode "fluid" will be used as default.
+         *
+         * @param {string} gridMode
+         */
+        initMode: function(gridMode) {
+            var me = this,
+                mode = gridMode || me.opts.gridMode,
+                modeMethod = 'init' + mode.charAt(0).toUpperCase() + mode.slice(1) + 'Grid';
+
+            if (typeof me[modeMethod] === 'function') {
+                me[modeMethod]();
+            } else {
+                me.initFluidGrid();
+            }
+
+            if (mode !== 'resize') {
+                me.setContainerSpacing();
+            }
         },
 
         /**
@@ -497,6 +507,7 @@
 
             $body.addClass('is--no-sidebar');
             me.$contentMain.addClass('is--fullscreen');
+            me.$wrapper.addClass('is--fullscreen');
 
             $.publish('plugin/swEmotion/onInitFullscreen', [ me ]);
         },
@@ -509,44 +520,51 @@
 
             if (showSidebar) $body.removeClass('is--no-sidebar');
             me.$contentMain.removeClass('is--fullscreen');
+            me.$wrapper.removeClass('is--fullscreen');
 
             $.publish('plugin/swEmotion/onRemoveFullscreen', [ me, showSidebar ]);
         },
 
         /**
-         * Initializes the grid for the masonry type.
+         * @deprecated The masonry mode was removed with version 5.2
          */
         initMasonryGrid: function() {
             var me = this;
 
-            me.$el.css({
-                'margin-left': -me.remSpacing + 'rem'
-            });
-
-            me.$el.masonry({
-                'gutter': 0, // Gutter space is managed via css
-                'itemSelector': me.opts.itemSelector,
-                'transitionDuration': me.opts.transitionDuration,
-                'columnWidth': me.$gridSizer[0]
-            });
+            /**
+             * It will fallback to the new fluid mode
+             */
+            me.initFluidGrid();
 
             $.publish('plugin/swEmotion/onInitMasonryGrid', [ me ]);
         },
 
         /**
-         * Initializes the grid for the resizing type.
+         * Initializes the grid for the fluid mode.
          */
-        initScaleGrid: function() {
+        initFluidGrid: function() {
+            var me = this;
+
+            me.setElementPositions();
+
+            $.publish('plugin/swEmotion/onInitFluidGrid', [ me ]);
+        },
+
+        /**
+         * Initializes the grid for the resize mode.
+         */
+        initResizeGrid: function() {
             var me = this;
 
             me.baseWidth = ~~me.opts.baseWidth;
-            me.ratio = me.baseWidth / me.$el.outerHeight();
 
             me.$el.css('width', me.baseWidth + me.opts.cellSpacing);
 
             if (!me.opts.fullscreen) {
                 me.$wrapper.css('max-width', me.baseWidth);
             }
+
+            me.setElementPositions();
 
             me.scale();
 
@@ -559,7 +577,7 @@
         registerEvents: function() {
             var me = this;
 
-            StateManager.on('resize', $.proxy(me.onResize, me));
+            window.StateManager.on('resize', $.proxy(me.onResize, me));
 
             if (me.opts.fullscreen) {
                 $.subscribe('plugin/swEmotionLoader/onShowEmotion', $.proxy(me.onShow, me));
@@ -577,6 +595,10 @@
 
             if (me.opts.gridMode === 'resize') {
                 me.scale();
+            }
+
+            if (me.opts.gridMode === 'resize' || me.opts.gridMode === 'fluid') {
+                me.setElementPositions();
             }
 
             me.$bannerElements.trigger('emotionResize');
@@ -606,14 +628,56 @@
         },
 
         /**
+         * Adds the negative spacing to the container for the grid spacing.
+         */
+        setContainerSpacing: function() {
+            var me = this;
+
+            me.$el.css({
+                'margin-left': -me.remSpacing + 'rem'
+            });
+
+            $.publish('plugin/swEmotion/onSetContainerSpacing', [ me ]);
+        },
+
+        /**
+         * Sets the correct position styling for all elements based on the viewport.
+         */
+        setElementPositions: function() {
+            var me = this,
+                state = window.StateManager.getCurrentState(),
+                $sizer = me.$el.find('.emotion--sizer-' + state),
+                clsPrefix = '-' + state,
+                i = 1;
+
+            if ($sizer.length <= 0) {
+                $sizer = me.$el.find('.emotion--sizer');
+                clsPrefix = '';
+            }
+
+            var rows = ~~$sizer.attr('data-rows');
+
+            for (i; i <= rows; i++) {
+                var height = 100 / rows * i,
+                    top = 100 / rows * (i - 1);
+
+                me.$elements.filter('.row' + clsPrefix + '-' + i).css('height', height + '%');
+                me.$elements.filter('.start-row' + clsPrefix + '-' + i).css('top', top + '%');
+            }
+
+            $.publish('plugin/swEmotion/onSetElementPositions', [ me ]);
+        },
+
+        /**
          * Scales the emotion grid via css3 transformation for resize mode.
          */
         scale: function() {
             var me = this,
                 width = (me.opts.fullscreen) ? $window.outerWidth() : me.$wrapper.outerWidth(),
+                ratio = me.baseWidth / me.$el.outerHeight(),
                 factor = width / me.baseWidth,
                 containerStyle = me.$el.get(0).style,
-                wrapperHeight = width / me.ratio;
+                wrapperHeight = width / ratio;
 
             $.extend(containerStyle, {
                 'MsTransform': 'scale('+ factor +') translateX(' + -me.remSpacing + 'rem)',

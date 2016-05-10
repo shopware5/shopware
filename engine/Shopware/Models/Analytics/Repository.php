@@ -1336,13 +1336,12 @@ class Repository
         $builder = $builder = $this->connection->createQueryBuilder();
         $builder->select(array(
             'users.firstlogin as firstLogin',
-            'billing.birthday'
+            'users.birthday'
         ))
             ->from('s_user', 'users')
-            ->innerJoin('users', 's_user_billingaddress', 'billing', 'billing.userID = users.id')
-            ->andWhere('billing.birthday IS NOT NULL')
-            ->andWhere("billing.birthday != '0000-00-00'")
-            ->orderBy('birthday', 'DESC');
+            ->andWhere('users.birthday IS NOT NULL')
+            ->andWhere("users.birthday != '0000-00-00'")
+            ->orderBy('users.birthday', 'DESC');
 
         $this->addDateRangeCondition($builder, $from, $to, 'users.firstlogin');
 
@@ -1350,7 +1349,7 @@ class Repository
             foreach ($shopIds as $shopId) {
                 $shopId = (int) $shopId;
                 $builder->addSelect(
-                    "IF(users.subshopID = {$shopId}, billing.birthday, NULL) as birthday" . $shopId
+                    "IF(users.subshopID = {$shopId}, users.birthday, NULL) as birthday" . $shopId
                 );
             }
         }

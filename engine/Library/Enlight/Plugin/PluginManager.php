@@ -30,7 +30,6 @@
  * Depending on the namespace the plugins automatically read from a directory structure or instantiate
  * by a passed config.
  * The Enlight_Plugin_PluginCollection serves as an array of registered plugins or namespaces.
- * For additional plugins the Enlight_Bootstrap serves as basic class.
  *
  * @category   Enlight
  * @package    Enlight_Plugin
@@ -77,7 +76,7 @@ class Enlight_Plugin_PluginManager extends Enlight_Plugin_PluginCollection
      * Setter for the application property.
      *
      * @param  Enlight_Application $application
-     * @return Enlight_Bootstrap
+     * @return Enlight_Plugin_PluginManager
      */
     public function setApplication(Enlight_Application $application)
     {

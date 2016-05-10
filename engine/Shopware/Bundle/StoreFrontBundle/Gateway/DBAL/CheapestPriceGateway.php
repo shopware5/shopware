@@ -113,13 +113,14 @@ class CheapestPriceGateway implements Gateway\CheapestPriceGatewayInterface
             ->innerJoin('price', 's_articles_details', 'variant', 'variant.id = price.articledetailsID')
             ->innerJoin('variant', 's_articles', 'product', 'product.id = variant.articleID')
             ->leftJoin('variant', 's_core_units', 'unit', 'unit.id = variant.unitID')
-            ->leftJoin('price', 's_articles_prices_attributes', 'priceAttribute', 'priceAttribute.priceID = price.id');
+            ->leftJoin('price', 's_articles_prices_attributes', 'priceAttribute', 'priceAttribute.priceID = price.id')
+            ->andWhere('price.id IN (:ids)')
+            ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
         $this->fieldHelper->addUnitTranslation($query, $context);
+        $this->fieldHelper->addProductTranslation($query, $context);
         $this->fieldHelper->addVariantTranslation($query, $context);
-
-        $query->andWhere('price.id IN (:ids)')
-            ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
+        $this->fieldHelper->addPriceTranslation($query, $context);
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
@@ -131,7 +132,6 @@ class CheapestPriceGateway implements Gateway\CheapestPriceGatewayInterface
             $product = $row['__price_articleID'];
             $prices[$product] = $this->priceHydrator->hydrateCheapestPrice($row);
         }
-
         return $prices;
     }
 

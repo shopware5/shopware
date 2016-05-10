@@ -53,20 +53,14 @@ class LinkHydrator extends Hydrator
     public function hydrate(array $data)
     {
         $link = new Struct\Product\Link();
-
         $link->setId((int) $data['__link_id']);
-
         $link->setDescription($data['__link_description']);
-
         $link->setLink($data['__link_link']);
-
         $link->setTarget($data['__link_target']);
 
         if (!empty($data['__linkAttribute_id'])) {
-            $attribute = $this->extractFields('__linkAttribute_', $data);
-            $link->addAttribute('core', $this->attributeHydrator->hydrate($attribute));
+            $this->attributeHydrator->addAttribute($link, $data, 'linkAttribute');
         }
-
         return $link;
     }
 }

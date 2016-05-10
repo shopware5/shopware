@@ -150,8 +150,6 @@ Ext.define('Shopware.apps.Article.view.variant.Detail', {
         additional: {
             title:'{s name=detail/additional_fields/title}Additional fields{/s}',
             comment:'{s name=detail/additional_fields/comment}Comment{/s}',
-            attribute1:'{s name=detail/additional_fields/free_text_1}Free text 1{/s}',
-            attribute2:'{s name=detail/additional_fields/free_text_2}Free text 2{/s}'
         },
         data:'{s name=variant/list/toolbar/data}Apply standard data{/s}',
         save:'{s name=detail/save_button}Save article{/s}',
@@ -184,6 +182,7 @@ Ext.define('Shopware.apps.Article.view.variant.Detail', {
 
         if (me.record) {
             me.formPanel.loadRecord(me.record);
+            me.attributeForm.loadAttribute(me.record.get('id'));
             me.setTitle(Ext.String.format(me.snippets.title, me.record.get('additionalText')));
         } else {
             me.setTitle(Ext.String.format(me.snippets.title, '-'));
@@ -323,6 +322,14 @@ Ext.define('Shopware.apps.Article.view.variant.Detail', {
             }]
         });
 
+        me.attributeForm = Ext.create('Shopware.attribute.Form', {
+            table: 's_articles_attributes',
+            allowTranslation: false,
+            translationForm: me.formPanel
+        });
+
+        me.formPanel.add(me.attributeForm);
+
         return [me.formPanel];
     },
 
@@ -353,7 +360,7 @@ Ext.define('Shopware.apps.Article.view.variant.Detail', {
         var basePriceFieldSet = me.createBasePriceFieldSet();
         var settingFieldSet = me.createSettingsFieldSet();
 
-        return [ buttonContainer, baseFieldSet, priceFieldSet, basePriceFieldSet, settingFieldSet, me.attributeFieldSet ];
+        return [ buttonContainer, baseFieldSet, priceFieldSet, basePriceFieldSet, settingFieldSet];
     },
 
     /**
@@ -604,6 +611,5 @@ Ext.define('Shopware.apps.Article.view.variant.Detail', {
             }]
         });
     }
-
 });
 //{/block}

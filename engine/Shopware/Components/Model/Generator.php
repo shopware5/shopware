@@ -123,6 +123,16 @@ class %className% extends ModelEntity
     ';
 
     /**
+     * Definitition of a constructor for initializing properties.
+     */
+    const CONSTRUCTOR = '
+    public function __construct()
+    {
+        %propertyInitializations%
+    }
+    ';
+
+    /**
      * Definition of the standard shopware getter and setter
      * functions of a single model column property.
      */
@@ -358,6 +368,9 @@ class %className% extends ModelEntity
         //after the normal column properties created, we can add the association properties.
         $associationProperties = $this->getAssociationProperties($table);
 
+        // Add the constructor
+        $constructor = $this->getConstructor($table);
+
         //now all properties are declared, but the properties needs getter and setter function to get access from extern
         $columnFunctions = $this->getColumnsFunctions($table);
 
@@ -372,6 +385,7 @@ class %className% extends ModelEntity
             $classHeader,
             implode("\n", $columnProperties),
             implode("\n", $associationProperties),
+            $constructor,
             implode("\n", $columnFunctions),
             implode("\n", $associationFunctions),
             '}'
@@ -660,6 +674,64 @@ class %className% extends ModelEntity
         $source = str_replace('%localColumn%', $localColumn[0], $source);
         $source = str_replace('%foreignColumn%', $foreignColumn[0], $source);
         $source = str_replace('%property%', lcfirst($className), $source);
+        return $source;
+    }
+
+    /**
+     * Creates the source code for the custom constructor, which initializes all
+     * not-null properties with their respective default vaulue.
+     *
+     * @param $table \Doctrine\DBAL\Schema\Table
+     * @return string
+     */
+    protected function getConstructor($table)
+    {
+        // Create the property initializations
+        $initializations = array();
+        foreach ($table->getColumns() as $column) {
+            if ($column->getDefault() === null || $this->isPrimaryColumn($table, $column)) {
+                continue;
+            }
+
+            // Make sure not to set default values for foreign key properties
+            $isForeignKeyColumn = false;
+            foreach ($table->getForeignKeys() as $foreignKey) {
+                if (in_array($column->getName(), $foreignKey->getLocalColumns())) {
+                    $isForeignKeyColumn = true;
+                    break;
+                }
+            }
+            if ($isForeignKeyColumn) {
+                continue;
+            }
+
+            // Determine property name, type and default value
+            $property = $this->getPropertyNameOfColumnName($table, $column);
+            $type = $this->getPropertyTypeOfColumnType($column);
+            $default = $column->getDefault();
+            switch ($type) {
+                case 'string':
+                    $default = '"'.$default.'"';
+                    break;
+                case 'boolean':
+                    $default = ($default) ? 'true' : 'false';
+                    break;
+                case 'date':
+                case 'datetime':
+                    $default = 'new \DateTime("'.$default.'")';
+            }
+
+            $initializations[] = '$this->'.lcfirst($property).' = '.$default.';';
+        }
+        if (count($initializations) === 0) {
+            // No need for a constructor
+            return '';
+        }
+
+        // Compile the source snippet
+        $source = self::CONSTRUCTOR;
+        $source = str_replace('%propertyInitializations%', implode("\n        ", $initializations), $source);
+
         return $source;
     }
 

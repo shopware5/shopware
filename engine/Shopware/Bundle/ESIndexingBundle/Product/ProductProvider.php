@@ -256,6 +256,7 @@ class ProductProvider implements ProductProviderInterface
             ->leftJoin('propertyOption', 's_media', 'media', 'propertyOption.media_id = media.id')
             ->leftJoin('media', 's_media_attributes', 'mediaAttribute', 'mediaAttribute.mediaID = media.id')
             ->leftJoin('media', 's_media_album_settings', 'mediaSettings', 'mediaSettings.albumID = media.albumID')
+            ->leftJoin('propertyOption', 's_filter_values_attributes', 'propertyOptionAttribute', 'propertyOptionAttribute.valueID = propertyOption.id')
             ->where('filterArticles.articleID IN (:ids)')
             ->addOrderBy('filterArticles.articleID')
             ->addOrderBy('propertyOption.value')
@@ -264,6 +265,7 @@ class ProductProvider implements ProductProviderInterface
         ;
 
         $this->fieldHelper->addPropertyOptionTranslation($query, $context);
+        $this->fieldHelper->addMediaTranslation($query, $context);
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();

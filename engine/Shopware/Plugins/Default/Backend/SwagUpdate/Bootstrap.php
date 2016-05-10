@@ -206,13 +206,11 @@ class Shopware_Plugins_Backend_SwagUpdate_Bootstrap extends Shopware_Components_
      */
     public function onInitUpdateCheck()
     {
-        $publicKey = trim(file_get_contents(__DIR__ . '/Resources/public.key'));
-
         return new \ShopwarePlugins\SwagUpdate\Components\UpdateCheck(
             $this->Config()->get('update-api-endpoint'),
             $this->Config()->get('update-channel'),
             $this->Config()->get('update-verify-signature'),
-            $publicKey
+            Shopware()->Container()->get('shopware.openssl_verificator')
         );
     }
 }

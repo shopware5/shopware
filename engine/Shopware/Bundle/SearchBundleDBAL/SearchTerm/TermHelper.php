@@ -58,11 +58,7 @@ class TermHelper implements TermHelperInterface
             $string
         );
 
-        if (function_exists('mb_strtolower')) {
-            $string = mb_strtolower(html_entity_decode($string), 'UTF-8');
-        } else {
-            $string = strtolower(html_entity_decode($string));
-        }
+        $string = mb_strtolower(html_entity_decode($string), 'UTF-8');
 
         // Remove not required chars from string
         $string = trim(preg_replace("/[^\pL_0-9]/u", " ", $string));

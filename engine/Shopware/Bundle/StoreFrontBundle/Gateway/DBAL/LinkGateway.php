@@ -92,31 +92,23 @@ class LinkGateway implements Gateway\LinkGatewayInterface
         $ids = array_unique($ids);
 
         $query = $this->connection->createQueryBuilder();
-
         $query->select($this->fieldHelper->getLinkFields());
 
         $query->from('s_articles_information', 'link')
-            ->leftJoin(
-                'link',
-                's_articles_information_attributes',
-                'linkAttribute',
-                'linkAttribute.informationID = link.id'
-            );
-
-        $query->where('link.articleID IN (:ids)')
+            ->leftJoin('link', 's_articles_information_attributes', 'linkAttribute', 'linkAttribute.informationID = link.id')
+            ->where('link.articleID IN (:ids)')
             ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
+
+        $this->fieldHelper->addLinkTranslation($query, $context);
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
 
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
-
         $links = [];
         foreach ($data as $row) {
             $key = $row['__link_articleID'];
-
             $link = $this->linkHydrator->hydrate($row);
-
             $links[$key][] = $link;
         }
 

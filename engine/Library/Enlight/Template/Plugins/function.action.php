@@ -37,7 +37,7 @@
 function smarty_function_action($params, Enlight_Template_Default $template)
 {
     /** @var $front Enlight_Controller_Front */
-    $front = Enlight_Application::Instance()->Front();
+    $front = Shopware()->Front();
     $dispatcher = clone $front->Dispatcher();
 
     $modules = $dispatcher->getControllerDirectory();

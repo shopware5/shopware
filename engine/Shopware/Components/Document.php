@@ -22,7 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-include_once(Shopware()->OldPath() . "engine/Library/Mpdf/mpdf.php");
+use Shopware\Components\NumberRangeIncrementerInterface;
+
+include_once(Shopware()->DocPath() . "engine/Library/Mpdf/mpdf.php");
 
 /**
  * Shopware document generator
@@ -235,10 +237,8 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
         if (!empty($this->_subshop['doc_template_id'])) {
             $template = Shopware()->Container()->get('models')->find('Shopware\Models\Shop\Template', $this->_subshop['doc_template_id']);
 
-            if ($template->getVersion() >= 3) {
-                $inheritance = Shopware()->Container()->get('theme_inheritance')->getTemplateDirectories($template);
-                $this->_template->setTemplateDir($inheritance);
-            }
+            $inheritance = Shopware()->Container()->get('theme_inheritance')->getTemplateDirectories($template);
+            $this->_template->setTemplateDir($inheritance);
         }
 
         $data = $this->_template->fetch("documents/".$this->_document["template"], $this->_view);
@@ -252,7 +252,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
                 $mpdf->Output();
                 exit;
             } else {
-                $path = Shopware()->OldPath()."files/documents"."/".$this->_documentHash.".pdf";
+                $path = Shopware()->DocPath()."files/documents"."/".$this->_documentHash.".pdf";
                 $mpdf = new mPDF("utf-8", "A4", "", "", $this->_document["left"], $this->_document["right"], $this->_document["top"], $this->_document["bottom"]);
                 $mpdf->WriteHTML($data);
                 $mpdf->Output($path, "F");
@@ -530,7 +530,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
             $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Currency');
             $shop->setCurrency($repository->find($this->_order->order->currencyID));
         }
-        $shop->registerResources(Shopware()->Bootstrap());
+        $shop->registerResources();
     }
 
     /**
@@ -660,18 +660,17 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
                     $numberrange = "doc_".$typID;
                 }
 
-                $getNumber = Shopware()->Db()->fetchRow("
-                    SELECT `number`+1 as next FROM `s_order_number` WHERE `name` = ?", array($numberrange));
+                /** @var NumberRangeIncrementerInterface $incrementer */
+                $incrementer = Shopware()->Container()->get('shopware.number_range_incrementer');
+
+                // Get the next number and save it in the document
+                $nextNumber = $incrementer->increment($numberrange);
 
                 Shopware()->Db()->query("
                     UPDATE `s_order_documents` SET `docID` = ? WHERE `ID` = ? LIMIT 1 ;
-                ", array($getNumber['next'], $rowID));
+                ", array($nextNumber, $rowID));
 
-                Shopware()->Db()->query("
-                    UPDATE `s_order_number` SET `number` = ? WHERE `name` = ? LIMIT 1 ;
-                ", array($getNumber['next'], $numberrange));
-
-                $bid = $getNumber["next"];
+                $bid = $nextNumber;
             }
         }
         $this->_documentID = $bid;

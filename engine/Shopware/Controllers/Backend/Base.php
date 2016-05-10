@@ -21,7 +21,9 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Doctrine\DBAL\Connection;
+use Shopware\Components\CSRFWhitelistAware;
 
 /**
  * Backend Controller for the Shopware global configured stores.
@@ -38,7 +40,7 @@ use Doctrine\DBAL\Connection;
  *  - Locales
  *  - User
  */
-class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_ExtJs
+class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
     /**
      * Initials the script renderer and handles the json request.
@@ -59,6 +61,16 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         } else {
             parent::init();
         }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getWhitelistedCSRFActions()
+    {
+        return [
+            'index'
+        ];
     }
 
    /**
@@ -854,12 +866,10 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
                 'template' => $template->getTemplate()
             );
 
-            if ($template->getVersion() >= 3) {
-                $data = $this->get('theme_service')->translateTheme(
-                    $template,
-                    $data
-                );
-            }
+            $data = $this->get('theme_service')->translateTheme(
+                $template,
+                $data
+            );
 
             $result[] = $data;
         }
@@ -1066,23 +1076,42 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         }
     }
 
-    /**
-     * Returns all shops with an active emotion template
-     *
-     * @deprecated since 5.1.2 will be removed in 5.2
-     */
-    public function getShopsWithEmotionTemplatesAction()
+    public function getSalutationsAction()
     {
-        /** @var \Doctrine\DBAL\Connection $connection */
-        $connection = $this->get('dbal_connection');
+        $value = $this->getAvailableSalutationKeys();
 
-        $query = $connection->createQueryBuilder();
-        $query->select('shop.name')
-            ->from('s_core_shops', 'shop')
-            ->innerJoin('shop', 's_core_templates', 'template', 'template.id = shop.template_id')
-            ->where('template.version < 3');
+        $namespace = Shopware()->Container()->get('snippets')->getNamespace('frontend/salutation');
+        $salutations = [];
+        foreach ($value as $key) {
+            $salutations[] = ['key' => $key, 'label' => $namespace->get($key, $key)];
+        }
 
-        $data = $query->execute()->fetchAll(PDO::FETCH_COLUMN);
-        $this->View()->assign(['success' => true, 'data' => $data]);
+        $this->View()->assign('data', $salutations);
+    }
+
+    /**
+     * @return array
+     */
+    private function getAvailableSalutationKeys()
+    {
+        $builder = Shopware()->Container()->get('models')->createQueryBuilder();
+        $builder->select(['element', 'values'])
+            ->from('Shopware\Models\Config\Element', 'element')
+            ->leftJoin('element.values', 'values')
+            ->where('element.name = :name')
+            ->setParameter('name', 'shopsalutations');
+
+        $data = $builder->getQuery()->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+
+        $value = explode(',', $data['value']);
+        if (!empty($data['values'])) {
+            $value = [];
+        }
+
+        foreach ($data['values'] as $shopValue) {
+            $value = array_merge($value, explode(',', $shopValue['value']));
+        }
+        $value = array_unique(array_filter($value));
+        return $value;
     }
 }

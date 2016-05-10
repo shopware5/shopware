@@ -96,15 +96,11 @@ class DownloadGateway implements Gateway\DownloadGatewayInterface
         $query->select($this->fieldHelper->getDownloadFields());
 
         $query->from('s_articles_downloads', 'download')
-            ->leftJoin(
-                'download',
-                's_articles_downloads_attributes',
-                'downloadAttribute',
-                'downloadAttribute.downloadID = download.id'
-            );
-
-        $query->where('download.articleID IN (:ids)')
+            ->leftJoin('download', 's_articles_downloads_attributes', 'downloadAttribute', 'downloadAttribute.downloadID = download.id')
+            ->where('download.articleID IN (:ids)')
             ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
+
+        $this->fieldHelper->addDownloadTranslation($query, $context);
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();

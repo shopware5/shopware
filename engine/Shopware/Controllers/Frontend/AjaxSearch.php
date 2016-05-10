@@ -49,7 +49,7 @@ class Shopware_Controllers_Frontend_AjaxSearch extends Enlight_Controller_Action
      */
     public function indexAction()
     {
-        Enlight()->Plugins()->Controller()->Json()->setPadding();
+        Shopware()->Plugins()->Controller()->Json()->setPadding();
 
         $this->View()->loadTemplate('frontend/search/ajax.tpl');
 
@@ -88,10 +88,6 @@ class Shopware_Controllers_Frontend_AjaxSearch extends Enlight_Controller_Action
             $article = $this->get('legacy_struct_converter')->convertListProductStruct(
                 $product
             );
-
-            if ($article['sVoteAverange']['averange']) {
-                $article['sVoteAverange']['averange'] /= 2;
-            }
 
             $article['link'] = $this->Front()->Router()->assemble(array(
                 'controller' => 'detail',

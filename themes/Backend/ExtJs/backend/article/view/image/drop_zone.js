@@ -124,8 +124,7 @@ Ext.define('Shopware.apps.Article.view.image.DropZone', {
             checkType: false,
             checkAmount: false,
             enablePreviewImage: false,
-            dropZoneText: me.snippets.dropZone,
-            height: 100
+            dropZoneText: me.snippets.dropZone
         };
 
         defaultConfig = Ext.apply(defaultConfig, me.dropZoneConfig);
