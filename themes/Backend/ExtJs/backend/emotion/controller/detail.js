@@ -286,7 +286,8 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
         var me = this,
             settings = me.getSettingsForm(),
             layout = me.getLayoutForm(),
-            win = me.getDetailWindow();
+            win = me.getDetailWindow(),
+            activeTab = win.sidebar.items.indexOf(win.sidebar.getActiveTab());
 
         if (Ext.isObject(preview)) {
             preview = false;
@@ -297,10 +298,8 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
 
         if (!settings.getForm().isValid() || !layout.getForm().isValid()) {
             Shopware.Notification.createGrowlMessage(me.snippets.errorTitle, me.snippets.onSaveChangesNotValid);
-            return;
+            return false;
         }
-
-        // win.setLoading(true);
 
         record.save({
             callback: function(item) {
@@ -325,8 +324,10 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
 
                     Shopware.Notification.createGrowlMessage(me.snippets.successTitle, message, me.snippets.growlMessage);
 
+                    win.showPreview = false;
+
                     me.loadEmotionRecord(record.get('id'), function(newRecord) {
-                        win.loadEmotion(newRecord);
+                        win.loadEmotion(newRecord, activeTab);
                     });
 
                     gridStore.load();
@@ -337,10 +338,10 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
                         me.snippets.growlMessage
                     );
                 }
-
-                // win.setLoading(false);
             }
         });
+
+        return true;
     },
 
     onEditEmotion: function(scope, view, rowIndex, colIndex) {
@@ -489,10 +490,17 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
 
     onPreview: function(view, viewport, emotion) {
         var me = this,
+            layoutForm = me.getLayoutForm(),
             gridPanel = me.getDesignerGrid(),
             previewPanel = me.getDesignerPreview();
 
-        me.onSaveEmotion(emotion, true);
+        if (!me.onSaveEmotion(emotion, true)) {
+            gridPanel.designer.activePreview = false;
+            gridPanel.refresh();
+            return false;
+        }
+
+        layoutForm.setDisabled(true);
 
         previewPanel.showPreview(viewport);
         gridPanel.hide();
@@ -500,8 +508,11 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
 
     closePreview: function() {
         var me = this,
+            layoutForm = me.getLayoutForm(),
             gridPanel = me.getDesignerGrid(),
             previewPanel = me.getDesignerPreview();
+
+        layoutForm.setDisabled(false);
 
         previewPanel.hidePreview();
         gridPanel.show();

@@ -514,13 +514,13 @@ Ext.define('Shopware.apps.Emotion.view.detail.elements.Base', {
             return;
         }
 
-        Ext.create('Ext.resizer.Resizer', {
+        me.gridResizer = Ext.create('Ext.resizer.Resizer', {
             el: me,
             handles: handles,
             minHeight: cellSize.height,
             minWidth: cellSize.width,
             maxHeight: (cellSize.height + cellSpacing) * rows - cellSpacing,
-            maxWidth: (cellSize.width + cellSpacing) * cols -cellSpacing,
+            maxWidth: (cellSize.width + cellSpacing) * cols - cellSpacing,
             target: me,
             constrainTo: me.gridView.getEl().down('.x-designer-grid'),
             listeners: {
@@ -567,8 +567,8 @@ Ext.define('Shopware.apps.Emotion.view.detail.elements.Base', {
             element = resizer.target,
             cellSize = me.gridView.getCurrentCellSize(),
             cellSpacing = me.gridView.emotion.get('cellSpacing'),
-            cols = Math.round(width / (cellSize.width + cellSpacing)),
-            rows = Math.round(height / (cellSize.height + cellSpacing)),
+            cols = Math.round((width + cellSpacing) / (cellSize.width + cellSpacing)),
+            rows = Math.round((height + cellSpacing) / (cellSize.height + cellSpacing)),
             startRow, startCol, endRow, endCol;
 
         cols = Math.max(cols, me.minCols);
@@ -606,8 +606,8 @@ Ext.define('Shopware.apps.Emotion.view.detail.elements.Base', {
             element = resizer.target,
             cellSize = me.gridView.getCurrentCellSize(),
             cellSpacing = me.gridView.emotion.get('cellSpacing'),
-            cols = Math.round(width / (cellSize.width + cellSpacing)),
-            rows = Math.round(height / (cellSize.height + cellSpacing)),
+            cols = Math.round((width + cellSpacing) / (cellSize.width + cellSpacing)),
+            rows = Math.round((height + cellSpacing) / (cellSize.height + cellSpacing)),
             startRow, startCol, endRow, endCol;
 
         // Remove resizing class

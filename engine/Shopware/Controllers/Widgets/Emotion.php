@@ -48,11 +48,14 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         /**@var $repository Repository */
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Emotion\Emotion');
         $emotions = $this->getEmotion($repository);
+
         /** @var ShopContext $shopContext */
         $shopContext = $this->get('shopware_storefront.context_service')->getShopContext();
         $shopId = $shopContext->getShop()->getId();
         $translator = new Shopware_Components_Translation();
         $fallbackId = $shopContext->getShop()->getFallbackId();
+
+        $preview = $this->Request()->getParam('preview', false);
 
         $elementIds = [];
         foreach($emotions as $emotion) {
@@ -75,6 +78,11 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
                 'cellHeight' => $emotion['cellHeight'],
                 'articleHeight' => $emotion['articleHeight']
             ];
+
+            // The preview only shows the normal size.
+            if ($preview) {
+                $emotion['fullscreen'] = false;
+            }
 
             //for each emotion we have to iterate the elements to get the element data.
             foreach ($emotion['elements'] as &$element) {

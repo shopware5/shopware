@@ -211,23 +211,21 @@ Ext.define('Shopware.apps.Emotion.view.detail.Grid', {
             }
         });
 
-        if (me.settings.sections !== null) {
-            el.on({
-                'click': {
-                    scope: me,
-                    delegate: '.' + Ext.baseCSSPrefix + 'designer-add-section-btn',
-                    fn: Ext.bind(me.onAddSection, me)
-                }
-            });
+        el.on({
+            'click': {
+                scope: me,
+                delegate: '.' + Ext.baseCSSPrefix + 'designer-add-section-btn',
+                fn: Ext.bind(me.onAddSection, me)
+            }
+        });
 
-            el.on({
-                'click': {
-                    scope: me,
-                    delegate: '.' + Ext.baseCSSPrefix + 'designer-remove-section-btn',
-                    fn: Ext.bind(me.onRemoveSection, me)
-                }
-            });
-        }
+        el.on({
+            'click': {
+                scope: me,
+                delegate: '.' + Ext.baseCSSPrefix + 'designer-remove-section-btn',
+                fn: Ext.bind(me.onRemoveSection, me)
+            }
+        });
     },
 
     onAddRow: function(event) {
@@ -349,9 +347,17 @@ Ext.define('Shopware.apps.Emotion.view.detail.Grid', {
                         cls = Ext.baseCSSPrefix + 'designer-grid-row',
                         columns = me.getColumns(settings, rowIndex),
                         buttons = me.getRowButtons(settings, rowIndex),
-                        rowButtons = (settings.rowButtons) ? buttons.addBtn + buttons.removeBtn : '',
                         style = 'margin-left: ' + -settings.cellSpacing  + 'px;',
-                        rowContent = Ext.String.format('<div style="[0]">[1]</div>', style, columns);
+                        rowContent = Ext.String.format('<div style="[0]">[1]</div>', style, columns),
+                        rowButtons = '';
+
+                    if (settings.rowButtons) {
+                        rowButtons += buttons.addBtn;
+
+                        if (settings.rows > 1)  {
+                            rowButtons += buttons.removeBtn;
+                        }
+                    }
 
                     return Ext.String.format('<div class="[0]" data-row="[1]">[2][3]</div>',
                         cls, rowIndex, rowContent, rowButtons, rowContent
@@ -680,7 +686,11 @@ Ext.define('Shopware.apps.Emotion.view.detail.Grid', {
 
         Ext.each(affectedElementRecords, function(element) {
             element.setGridSettings({
-                'visible': false
+                startRow: 1,
+                startCol: 1,
+                endRow: 1,
+                endCol: 1,
+                visible: false
             }, me.stateConnections);
         });
 
@@ -945,14 +955,14 @@ Ext.define('Shopware.apps.Emotion.view.detail.Grid', {
         var me = this,
             cell = cellSize || me.getCurrentCellSize();
 
-        return cell.width * columns + (columns - 1) * me.emotion.get('cellSpacing');
+        return cell.width * columns + (columns - 1) * me.settings.cellSpacing;
     },
 
     getHeightFromRows: function(rows, cellSize) {
         var me = this,
             cell = cellSize || me.getCurrentCellSize();
 
-        return cell.height * rows + (rows - 1) * me.emotion.get('cellSpacing');
+        return cell.height * rows + (rows - 1) * me.settings.cellSpacing;
     },
 
     getCellPosition: function(row, col) {
