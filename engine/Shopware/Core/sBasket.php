@@ -2085,7 +2085,7 @@ class sBasket
 
             // Get additional basket meta data for each product
             if ($getArticles[$key]["modus"] == 0) {
-                $tempArticle = $this->moduleManager->Articles()->sGetProductByOrdernumber($getArticles[$key]['ordernumber']);
+                $tempArticle = $this->moduleManager->Articles()->sGetArticleById(0, null, $getArticles[$key]['ordernumber']);
 
                 if (empty($tempArticle)) {
                     $getArticles[$key]["additional_details"] = array("properties" => array());
