@@ -152,7 +152,6 @@ Ext.define('Shopware.apps.Emotion.view.detail.Window', {
                     action: 'emotion-detail-settings-save',
                     handler: function () {
                         me.fireEvent('saveEmotion', me.emotion);
-                        me.designer.fireEvent('closePreview');
                     }
                 }
             ]

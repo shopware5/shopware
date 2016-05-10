@@ -300,8 +300,6 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
             return;
         }
 
-        // win.setLoading(true);
-
         record.save({
             callback: function(item) {
                 var rawData = item.proxy.getReader().rawData;
@@ -325,6 +323,8 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
 
                     Shopware.Notification.createGrowlMessage(me.snippets.successTitle, message, me.snippets.growlMessage);
 
+                    win.showPreview = false;
+
                     me.loadEmotionRecord(record.get('id'), function(newRecord) {
                         win.loadEmotion(newRecord);
                     });
@@ -337,8 +337,6 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
                         me.snippets.growlMessage
                     );
                 }
-
-                // win.setLoading(false);
             }
         });
     },
@@ -489,8 +487,11 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
 
     onPreview: function(view, viewport, emotion) {
         var me = this,
+            layoutForm = me.getLayoutForm(),
             gridPanel = me.getDesignerGrid(),
             previewPanel = me.getDesignerPreview();
+
+        layoutForm.setDisabled(true);
 
         me.onSaveEmotion(emotion, true);
 
@@ -500,8 +501,11 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
 
     closePreview: function() {
         var me = this,
+            layoutForm = me.getLayoutForm(),
             gridPanel = me.getDesignerGrid(),
             previewPanel = me.getDesignerPreview();
+
+        layoutForm.setDisabled(false);
 
         previewPanel.hidePreview();
         gridPanel.show();
