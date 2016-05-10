@@ -211,23 +211,21 @@ Ext.define('Shopware.apps.Emotion.view.detail.Grid', {
             }
         });
 
-        if (me.settings.sections !== null) {
-            el.on({
-                'click': {
-                    scope: me,
-                    delegate: '.' + Ext.baseCSSPrefix + 'designer-add-section-btn',
-                    fn: Ext.bind(me.onAddSection, me)
-                }
-            });
+        el.on({
+            'click': {
+                scope: me,
+                delegate: '.' + Ext.baseCSSPrefix + 'designer-add-section-btn',
+                fn: Ext.bind(me.onAddSection, me)
+            }
+        });
 
-            el.on({
-                'click': {
-                    scope: me,
-                    delegate: '.' + Ext.baseCSSPrefix + 'designer-remove-section-btn',
-                    fn: Ext.bind(me.onRemoveSection, me)
-                }
-            });
-        }
+        el.on({
+            'click': {
+                scope: me,
+                delegate: '.' + Ext.baseCSSPrefix + 'designer-remove-section-btn',
+                fn: Ext.bind(me.onRemoveSection, me)
+            }
+        });
     },
 
     onAddRow: function(event) {
