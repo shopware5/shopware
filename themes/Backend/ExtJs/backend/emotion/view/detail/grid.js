@@ -688,7 +688,11 @@ Ext.define('Shopware.apps.Emotion.view.detail.Grid', {
 
         Ext.each(affectedElementRecords, function(element) {
             element.setGridSettings({
-                'visible': false
+                startRow: 1,
+                startCol: 1,
+                endRow: 1,
+                endCol: 1,
+                visible: false
             }, me.stateConnections);
         });
 
