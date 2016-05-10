@@ -106,7 +106,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Window', {
         );
     },
 
-    loadEmotion: function(emotion) {
+    loadEmotion: function(emotion, activeTab) {
         var me = this;
 
         try {
@@ -118,6 +118,10 @@ Ext.define('Shopware.apps.Emotion.view.detail.Window', {
 
             me.removeAll();
             me.add(me.createItems());
+
+            if (Ext.isDefined(activeTab)) {
+                me.sidebar.setActiveTab(activeTab);
+            }
 
         } catch (e) {
             Shopware.Notification.createGrowlMessage(

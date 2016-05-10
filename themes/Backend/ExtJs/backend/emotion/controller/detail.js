@@ -286,7 +286,8 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
         var me = this,
             settings = me.getSettingsForm(),
             layout = me.getLayoutForm(),
-            win = me.getDetailWindow();
+            win = me.getDetailWindow(),
+            activeTab = win.sidebar.items.indexOf(win.sidebar.getActiveTab());
 
         if (Ext.isObject(preview)) {
             preview = false;
@@ -326,7 +327,7 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
                     win.showPreview = false;
 
                     me.loadEmotionRecord(record.get('id'), function(newRecord) {
-                        win.loadEmotion(newRecord);
+                        win.loadEmotion(newRecord, activeTab);
                     });
 
                     gridStore.load();
