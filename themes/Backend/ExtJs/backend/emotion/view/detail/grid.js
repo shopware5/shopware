@@ -349,9 +349,17 @@ Ext.define('Shopware.apps.Emotion.view.detail.Grid', {
                         cls = Ext.baseCSSPrefix + 'designer-grid-row',
                         columns = me.getColumns(settings, rowIndex),
                         buttons = me.getRowButtons(settings, rowIndex),
-                        rowButtons = (settings.rowButtons) ? buttons.addBtn + buttons.removeBtn : '',
                         style = 'margin-left: ' + -settings.cellSpacing  + 'px;',
-                        rowContent = Ext.String.format('<div style="[0]">[1]</div>', style, columns);
+                        rowContent = Ext.String.format('<div style="[0]">[1]</div>', style, columns),
+                        rowButtons = '';
+
+                    if (settings.rowButtons) {
+                        rowButtons += buttons.addBtn;
+
+                        if (settings.rows > 1)  {
+                            rowButtons += buttons.removeBtn;
+                        }
+                    }
 
                     return Ext.String.format('<div class="[0]" data-row="[1]">[2][3]</div>',
                         cls, rowIndex, rowContent, rowButtons, rowContent
