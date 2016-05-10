@@ -45,6 +45,7 @@ Ext.define('Shopware.form.field.Grid', {
     maxHeight: 230,
     hideHeaders: true,
     baseBodyCls: Ext.baseCSSPrefix + 'form-item-body shopware-multi-selection-form-item-body',
+    separator: '|',
 
     /**
      * @required
@@ -268,7 +269,7 @@ Ext.define('Shopware.form.field.Grid', {
             return null;
         }
 
-        return Ext.JSON.encode(recordData);
+        return me.separator + recordData.join(me.separator) + me.separator;
     },
 
     setValue: function(value) {
@@ -278,17 +279,22 @@ Ext.define('Shopware.form.field.Grid', {
         if (!value) {
             return;
         }
+
         try {
-            var ids = Ext.JSON.decode(value);
+            var ids = value.split(me.separator);
+            ids = ids.filter(function(value) {
+                return value.length > 0;
+            });
         } catch (e) {
             return;
         }
+
         if (!ids || ids.length <= 0) {
             return;
         }
 
         me.store.load({
-            params: { ids: value }
+            params: { ids: Ext.JSON.encode(ids) }
         });
     },
 
