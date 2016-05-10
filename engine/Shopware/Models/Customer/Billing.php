@@ -527,10 +527,8 @@ class Billing extends ModelEntity
      */
     public function onSave()
     {
-        if (empty($this->number) && Shopware()->Config()->get('shopwareManagedCustomerNumbers') == 1) {
-            /** @var NumberRangeIncrementerInterface $incrementer */
-            $incrementer = Shopware()->Container()->get('shopware.number_range_incrementer');
-            $this->number = $incrementer->increment('user');
+        if (empty($this->number) && $this->getCustomer()) {
+            $this->number = $this->getCustomer()->getNumber();
         }
     }
 

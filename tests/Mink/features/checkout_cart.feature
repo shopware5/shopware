@@ -9,15 +9,15 @@ Feature: Checkout articles (scenario origin is cart with one product in it)
     @fastOrder @payment @delivery
     Scenario Outline: I can finish my order with different payment and delivery methods
         Given I proceed to checkout as:
-            | field      | register[personal] | register[billing] |
-            | salutation | mr                 |                   |
-            | firstname  | Max                |                   |
-            | lastname   | Mustermann         |                   |
-            | skipLogin  | 1                  |                   |
-            | email      | test@example.de    |                   |
-            | street     |                    | Musterstr. 55     |
-            | zipcode    |                    | 55555             |
-            | city       |                    | Musterhausen      |
+            | field       | register[personal] | register[billing] |
+            | salutation  | mr                 |                   |
+            | firstname   | Max                |                   |
+            | lastname    | Mustermann         |                   |
+            | accountmode | 1                  |                   |
+            | email       | test@example.de    |                   |
+            | street      |                    | Musterstr. 55     |
+            | zipcode     |                    | 55555             |
+            | city        |                    | Musterhausen      |
         And   I change the payment method to <paymentMethod>:
             | field     | value            |
             | sDispatch | <shippingMethod> |
@@ -41,15 +41,15 @@ Feature: Checkout articles (scenario origin is cart with one product in it)
     @fastOrder @payment @shipping
     Scenario: I can finish my order with different payment and delivery methods
         Given I proceed to checkout as:
-            | field      | register[personal] | register[billing] |
-            | salutation | mr                 |                   |
-            | firstname  | Max                |                   |
-            | lastname   | Mustermann         |                   |
-            | skipLogin  | 1                  |                   |
-            | email      | test@example.de    |                   |
-            | street     |                    | Musterstr. 55     |
-            | zipcode    |                    | 55555             |
-            | city       |                    | Musterhausen      |
+            | field       | register[personal] | register[billing] |
+            | salutation  | mr                 |                   |
+            | firstname   | Max                |                   |
+            | lastname    | Mustermann         |                   |
+            | accountmode | 1                  |                   |
+            | email       | test@example.de    |                   |
+            | street      |                    | Musterstr. 55     |
+            | zipcode     |                    | 55555             |
+            | city        |                    | Musterhausen      |
         And   I change the payment method to 2:
             | field            | value          |
             | sDebitAccount    | 123456789      |

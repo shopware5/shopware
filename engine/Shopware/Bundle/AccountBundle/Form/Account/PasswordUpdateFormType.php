@@ -24,15 +24,15 @@
 
 namespace Shopware\Bundle\AccountBundle\Form\Account;
 
+use Shopware\Bundle\AccountBundle\Constraint\Password;
 use Shopware\Models\Attribute\Customer as CustomerAttribute;
 use Shopware\Bundle\AccountBundle\Constraint\CurrentPassword;
-use Shopware\Bundle\FormBundle\Constraint\Repeated;
+use Shopware\Models\Customer\Customer;
+use Shopware_Components_Config;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Validator\Constraint;
-use Symfony\Component\Validator\Constraints\Length;
-use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Form reflects the needed fields for changing the password address in the account
@@ -40,25 +40,27 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 class PasswordUpdateFormType extends AbstractType
 {
     /**
-     * @var \Shopware_Components_Snippet_Manager
-     */
-    protected $snippetManager;
-
-    /**
-     * @var \Shopware_Components_Config
+     * @var Shopware_Components_Config
      */
     protected $config;
 
     /**
-     * @param \Shopware_Components_Snippet_Manager $snippetManager
-     * @param \Shopware_Components_Config $config
+     * @param Shopware_Components_Config $config
      */
-    public function __construct(
-        \Shopware_Components_Snippet_Manager $snippetManager,
-        \Shopware_Components_Config $config
-    ) {
-        $this->snippetManager = $snippetManager;
+    public function __construct(Shopware_Components_Config $config)
+    {
         $this->config = $config;
+    }
+
+    /**
+     * @param OptionsResolver $resolver
+     */
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults([
+            'data_class' => Customer::class,
+            'allow_extra_fields' => true
+        ]);
     }
 
     /**
@@ -67,20 +69,19 @@ class PasswordUpdateFormType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('currentPassword', PasswordType::class, [
-            'mapped' => false,
-            'constraints' => $this->getCurrentPasswordConstraints()
-        ]);
+        if ($this->config->get('accountPasswordCheck')) {
+            $builder->add('currentPassword', PasswordType::class, [
+                'mapped' => false,
+                'constraints' => [new CurrentPassword()]
+            ]);
+        }
 
         $builder->add('password', PasswordType::class, [
-            'constraints' => $this->getPasswordConstraints()
+            'constraints' => [new Password()]
         ]);
 
         $builder->add('passwordConfirmation', PasswordType::class, [
-            'mapped' => false,
-            'constraints' => [
-                new NotBlank(['message' => null])
-            ]
+            'mapped' => false
         ]);
 
         $builder->add('attribute', AttributeFormType::class, [
@@ -99,45 +100,5 @@ class PasswordUpdateFormType extends AbstractType
     public function getBlockPrefix()
     {
         return 'password';
-    }
-
-    /**
-     * @return Constraint[]
-     */
-    private function getPasswordConstraints()
-    {
-        $message = $this->getSnippet(PersonalFormType::SNIPPET_PASSWORD_LENGTH);
-
-        return [
-            new NotBlank(['message' => $message]),
-            new Length(['min' => $this->config->get('sMINPASSWORD'), 'minMessage' => $message]),
-            new Repeated([
-                'field' => 'passwordConfirmation',
-                'message' => $this->getSnippet(PersonalFormType::SNIPPET_PASSWORD_CONFIRMATION)
-            ])
-        ];
-    }
-
-    /**
-     * @return Constraint[]
-     */
-    private function getCurrentPasswordConstraints()
-    {
-        $constraints = [];
-
-        if ($this->config->get('accountPasswordCheck')) {
-            $constraints[] = new CurrentPassword();
-        }
-
-        return $constraints;
-    }
-
-    /**
-     * @param array $snippet with namespace, name and default value
-     * @return string
-     */
-    private function getSnippet(array $snippet)
-    {
-        return $this->snippetManager->getNamespace($snippet['namespace'])->get($snippet['name'], $snippet['default'], true);
     }
 }

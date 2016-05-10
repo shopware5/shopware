@@ -97,7 +97,7 @@ class Account extends Page implements HelperSelectorInterface
             return false;
         }
 
-        $message = ['You are not on Account page!', 'Current URL: ' . $this->getSession()->getCurrentUrl()];
+        $message = ['You are not on Account page! Action:' . $action, 'Current URL: ' . $this->getSession()->getCurrentUrl()];
         Helper::throwException($message);
     }
 
@@ -150,7 +150,7 @@ class Account extends Page implements HelperSelectorInterface
 
             $this->hasField('register[billing][company]') &&
             $this->hasField('register[billing][department]') &&
-            $this->hasField('register[billing][ustid]') &&
+            $this->hasField('register[billing][vatId]') &&
 
             $this->hasField('register[billing][street]') &&
             $this->hasField('register[billing][zipcode]') &&

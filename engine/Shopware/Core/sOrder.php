@@ -1846,7 +1846,7 @@ SELECT
     `b`.`company` AS `billing_company`,
     `b`.`department` AS `billing_department`,
     `b`.`salutation` AS `billing_salutation`,
-    `ub`.`customernumber`,
+    `u`.`customernumber`,
     `b`.`firstname` AS `billing_firstname`,
     `b`.`lastname` AS `billing_lastname`,
     `b`.`street` AS `billing_street`,

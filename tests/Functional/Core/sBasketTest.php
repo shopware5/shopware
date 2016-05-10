@@ -56,7 +56,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
         parent::setUp();
 
         Shopware()->Front()->setRequest(new Enlight_Controller_Request_RequestHttp());
-
+        Shopware()->Container()->get('models')->clear();
         $this->snippetManager = Shopware()->Snippets();
         $this->db = Shopware()->Db();
         $this->module = Shopware()->Modules()->Basket();
@@ -68,6 +68,12 @@ class sBasketTest extends PHPUnit_Framework_TestCase
         $this->module->sSYSTEM->sCONFIG = &$this->config;
         $this->module->sSYSTEM->sCurrency = Shopware()->Db()->fetchRow('SELECT * FROM s_core_currencies WHERE currency LIKE "EUR"');
         $this->module->sSYSTEM->sSESSION_ID = null;
+    }
+
+    protected function tearDown()
+    {
+        parent::tearDown();
+        Shopware()->Container()->get('models')->clear();
     }
 
     /**

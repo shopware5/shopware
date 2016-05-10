@@ -120,10 +120,11 @@ class CountryGateway implements Gateway\CountryGatewayInterface
 
         $areas = [];
         foreach ($data as $row) {
-            $areas[] = $this->countryHydrator->hydrateArea($row);
+            $area = $this->countryHydrator->hydrateArea($row);
+            $areas[$area->getId()] = $area;
         }
 
-        return $areas;
+        return $this->sortByIds($ids, $areas);
     }
 
     /**
@@ -148,10 +149,11 @@ class CountryGateway implements Gateway\CountryGatewayInterface
 
         $countries = [];
         foreach ($data as $row) {
-            $countries[] = $this->countryHydrator->hydrateCountry($row);
+            $country = $this->countryHydrator->hydrateCountry($row);
+            $countries[$country->getId()] = $country;
         }
 
-        return $countries;
+        return $this->sortByIds($ids, $countries);
     }
 
     /**
@@ -159,15 +161,10 @@ class CountryGateway implements Gateway\CountryGatewayInterface
      */
     public function getStates(array $ids, Struct\ShopContextInterface $context)
     {
-        $query = $this->connection->createQueryBuilder();
-        $query->select($this->fieldHelper->getStateFields());
+        $query = $this->createStateQuery($context);
 
-        $query->from('s_core_countries_states', 'countryState')
-            ->leftJoin('countryState', 's_core_countries_states_attributes', 'countryStateAttribute', 'countryStateAttribute.stateID = countryState.id')
-            ->where('countryState.id IN (:ids)')
+        $query->where('countryState.id IN (:ids)')
             ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
-
-        $this->fieldHelper->addCountryStateTranslation($query, $context);
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
@@ -176,9 +173,66 @@ class CountryGateway implements Gateway\CountryGatewayInterface
 
         $states = [];
         foreach ($data as $row) {
-            $states[] = $this->countryHydrator->hydrateState($row);
+            $state = $this->countryHydrator->hydrateState($row);
+            $states[$state->getId()] = $state;
+        }
+
+        return $this->sortByIds($ids, $states);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getCountryStates($countryIds, Struct\ShopContextInterface $context)
+    {
+        $query = $this->createStateQuery($context);
+
+        $query->where('countryState.countryID IN (:ids)')
+            ->setParameter(':ids', $countryIds, Connection::PARAM_INT_ARRAY);
+
+        $data = $query->execute()->fetchAll(\PDO::FETCH_ASSOC);
+
+        $states = [];
+        foreach ($data as $row) {
+            $countryId = (int) $row['__countryState_countryID'];
+            $state = $this->countryHydrator->hydrateState($row);
+            $states[$countryId][$state->getId()] = $state;
         }
 
         return $states;
+    }
+
+
+    /**
+     * @param int[] $ids
+     * @param array $data
+     * @return array
+     */
+    private function sortByIds($ids, $data)
+    {
+        $sorted = [];
+        foreach ($ids as $id) {
+            if (isset($data[$id])) {
+                $sorted[$id] = $data[$id];
+            }
+        }
+
+        return $sorted;
+    }
+
+    /**
+     * @param Struct\ShopContextInterface $context
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    private function createStateQuery(Struct\ShopContextInterface $context)
+    {
+        $query = $this->connection->createQueryBuilder();
+        $query->select($this->fieldHelper->getStateFields());
+
+        $query->from('s_core_countries_states', 'countryState')
+            ->leftJoin('countryState', 's_core_countries_states_attributes', 'countryStateAttribute', 'countryStateAttribute.stateID = countryState.id');
+
+        $this->fieldHelper->addCountryStateTranslation($query, $context);
+        return $query;
     }
 }

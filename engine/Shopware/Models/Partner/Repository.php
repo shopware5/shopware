@@ -163,7 +163,7 @@ class Repository extends ModelRepository
                 'billing.company as customerCompany',
                 'billing.firstName as customerFirstName',
                 'billing.lastName as customerLastName',
-                'billing.number as customerNumber',
+                'customer.number as customerNumber',
                 'orderState.description as orderStatus',
                 'orderState.id as orderStatusId'
             ))
@@ -264,7 +264,7 @@ class Repository extends ModelRepository
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array(
             'customer.id as id',
-            'billing.number as customerNumber',
+            'customer.number as customerNumber',
             "CONCAT(CONCAT(billing.firstName, ' '), billing.lastName) as fullName",
             'billing.company as company',
             'customer.email as email'

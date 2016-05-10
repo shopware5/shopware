@@ -24,18 +24,16 @@
 
 namespace Shopware\Bundle\AccountBundle\Form\Account;
 
+use Shopware\Bundle\AccountBundle\Constraint\FormEmail;
 use Shopware\Models\Attribute\Customer as CustomerAttribute;
 use Shopware\Bundle\AccountBundle\Constraint\CurrentPassword;
-use Shopware\Bundle\FormBundle\Constraint\Repeated;
-use Shopware\Bundle\AccountBundle\Constraint\UniqueEmail;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
+use Shopware\Models\Customer\Customer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Validator\Constraint;
-use Symfony\Component\Validator\Constraints\Email;
-use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Form reflects the needed fields for changing the email address in the account
@@ -75,23 +73,46 @@ class EmailUpdateFormType extends AbstractType
     }
 
     /**
+     * @param OptionsResolver $resolver
+     */
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults([
+            'data_class' => Customer::class,
+            'allow_extra_fields' => true
+        ]);
+    }
+
+    /**
+     * @return string
+     */
+    public function getBlockPrefix()
+    {
+        return 'email';
+    }
+
+    /**
      * @param FormBuilderInterface $builder
      * @param array $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('currentPassword', PasswordType::class, [
-            'mapped' => false,
-            'constraints' => $this->getCurrentPasswordConstraints()
-        ]);
-
         $builder->add('email', EmailType::class, [
-            'constraints' => $this->getEmailConstraints()
+            'constraints' => [
+                new FormEmail(['shop' => $this->context->getShopContext()->getShop()])
+            ]
         ]);
 
         $builder->add('emailConfirmation', EmailType::class, [
             'mapped' => false
         ]);
+
+        if ($this->config->get('accountPasswordCheck')) {
+            $builder->add('currentPassword', PasswordType::class, [
+                'mapped' => false,
+                'constraints' => [new CurrentPassword()]
+            ]);
+        }
 
         $builder->add('attribute', AttributeFormType::class, [
             'data_class' => CustomerAttribute::class
@@ -101,51 +122,5 @@ class EmailUpdateFormType extends AbstractType
             'compound' => true,
             'allow_extra_fields' => true
         ]);
-    }
-
-    public function getBlockPrefix()
-    {
-        return 'email';
-    }
-
-    /**
-     * @return Constraint[]
-     */
-    private function getEmailConstraints()
-    {
-        $message = $this->getSnippet(PersonalFormType::SNIPPET_MAIL_FAILURE);
-
-        return [
-            new NotBlank(['message' => $message]),
-            new Email(['message' => $message]),
-            new UniqueEmail(['shop' => $this->context->getShopContext()->getShop()]),
-            new Repeated([
-                'field' => 'emailConfirmation',
-                'message' => $this->getSnippet(PersonalFormType::SNIPPET_EMAIL_CONFIRMATION)
-            ])
-        ];
-    }
-
-    /**
-     * @return Constraint[]
-     */
-    private function getCurrentPasswordConstraints()
-    {
-        $constraints = [];
-
-        if ($this->config->get('accountPasswordCheck')) {
-            $constraints[] = new CurrentPassword();
-        }
-
-        return $constraints;
-    }
-
-    /**
-     * @param array $snippet with namespace, name and default value
-     * @return string
-     */
-    private function getSnippet(array $snippet)
-    {
-        return $this->snippetManager->getNamespace($snippet['namespace'])->get($snippet['name'], $snippet['default'], true);
     }
 }

@@ -25,10 +25,12 @@
 namespace Shopware\Bundle\AccountBundle\Form\Account;
 
 use Shopware\Bundle\AccountBundle\Type\SalutationType;
+use Shopware\Models\Customer\Customer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
@@ -62,29 +64,34 @@ class ProfileUpdateFormType extends AbstractType
     }
 
     /**
+     * @param OptionsResolver $resolver
+     */
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults([
+            'data_class' => Customer::class,
+            'allow_extra_fields' => true
+        ]);
+    }
+
+    /**
      * @param FormBuilderInterface $builder
      * @param array $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('salutation', SalutationType::class, [
-            'constraints' => [
-                new NotBlank(),
-            ]
+            'constraints' => [new NotBlank(['message' => null])]
         ]);
 
         $builder->add('title', TextType::class);
 
         $builder->add('firstname', TextType::class, [
-            'constraints' => [
-                new NotBlank()
-            ]
+            'constraints' => [new NotBlank(['message' => null])]
         ]);
 
         $builder->add('lastname', TextType::class, [
-            'constraints' => [
-                new NotBlank()
-            ]
+            'constraints' => [new NotBlank(['message' => null])]
         ]);
 
         $builder->add('birthday', BirthdayType::class, [

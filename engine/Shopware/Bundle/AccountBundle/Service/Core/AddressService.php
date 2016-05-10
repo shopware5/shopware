@@ -29,6 +29,7 @@ use Shopware\Bundle\AccountBundle\Form\Account\AddressFormType;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Attribute\CustomerAddress;
 use Shopware\Models\Customer\Address;
+use Shopware\Models\Customer\Billing;
 use Shopware\Models\Customer\Customer;
 use Shopware\Models\Customer\Shipping;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -129,7 +130,7 @@ class AddressService implements AddressServiceInterface
             'additionalAddressLine2' => $address->getAdditionalAddressLine2(),
         ];
 
-        $form = $this->formFactory->create(AddressFormType::class, new Address(), ['allow_extra_fields' => true]);
+        $form = $this->formFactory->create(AddressFormType::class, new Address());
         $form->submit($data);
 
         return $form->isValid();
@@ -141,7 +142,7 @@ class AddressService implements AddressServiceInterface
      */
     private function validate(Address $address)
     {
-        $form = $this->formFactory->create(AddressFormType::class, $address, ['allow_extra_fields' => true]);
+        $form = $this->formFactory->create(AddressFormType::class, $address);
         $form->submit(null, false);
 
         if (!$form->isValid()) {
@@ -217,6 +218,13 @@ class AddressService implements AddressServiceInterface
         $customer->setDefaultBillingAddress($address);
 
         $billing = $customer->getBilling();
+        if (!$billing) {
+            $billing = new Billing();
+            $billing->setCustomer($customer);
+            $this->modelManager->persist($billing);
+        }
+
+        $billing->setNumber($customer->getNumber());
         $billing->fromAddress($address);
 
         $this->update($address);
@@ -253,7 +261,9 @@ class AddressService implements AddressServiceInterface
      */
     public function convertToLegacyArray(Address $address)
     {
-        $output = [
+        $output = $this->modelManager->toArray($address);
+
+        $output = array_merge($output, [
             'id' => $address->getId(),
             'userID' => $address->getCustomer()->getId(),
             'company' => $address->getCompany(),
@@ -272,7 +282,7 @@ class AddressService implements AddressServiceInterface
             'additional_address_line1' => $address->getAdditionalAddressLine1(),
             'additional_address_line2' => $address->getAdditionalAddressLine2(),
             'attributes' => []
-        ];
+        ]);
 
         if ($address->getAttribute()) {
             $data = $this->modelManager->toArray($address->getAttribute());

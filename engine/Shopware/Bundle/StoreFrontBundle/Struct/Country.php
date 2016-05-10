@@ -24,6 +24,8 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
+use Shopware\Bundle\StoreFrontBundle\Struct\Country\State;
+
 /**
  * @category  Shopware
  * @package   Shopware\Bundle\StoreFrontBundle\Struct
@@ -55,6 +57,16 @@ class Country extends Extendable implements \JsonSerializable
      * @var string
      */
     protected $description;
+
+    /**
+     * @var int
+     */
+    protected $position;
+
+    /**
+     * @var boolean
+     */
+    protected $active;
 
     /**
      * @var string
@@ -90,6 +102,11 @@ class Country extends Extendable implements \JsonSerializable
      * @var boolean
      */
     protected $requiresStateSelection;
+
+    /**
+     * @var State[] indexed by id
+     */
+    protected $states;
 
     /**
      * @param int $id
@@ -289,5 +306,53 @@ class Country extends Extendable implements \JsonSerializable
     public function jsonSerialize()
     {
         return get_object_vars($this);
+    }
+
+    /**
+     * @return Country\State[]
+     */
+    public function getStates()
+    {
+        return $this->states;
+    }
+
+    /**
+     * @param Country\State[] $states
+     */
+    public function setStates($states)
+    {
+        $this->states = $states;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPosition()
+    {
+        return $this->position;
+    }
+
+    /**
+     * @param int $position
+     */
+    public function setPosition($position)
+    {
+        $this->position = $position;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isActive()
+    {
+        return $this->active;
+    }
+
+    /**
+     * @param boolean $active
+     */
+    public function setActive($active)
+    {
+        $this->active = $active;
     }
 }
