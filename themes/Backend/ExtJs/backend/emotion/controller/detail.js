@@ -298,7 +298,7 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
 
         if (!settings.getForm().isValid() || !layout.getForm().isValid()) {
             Shopware.Notification.createGrowlMessage(me.snippets.errorTitle, me.snippets.onSaveChangesNotValid);
-            return;
+            return false;
         }
 
         record.save({
@@ -340,6 +340,8 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
                 }
             }
         });
+
+        return true;
     },
 
     onEditEmotion: function(scope, view, rowIndex, colIndex) {
@@ -492,9 +494,13 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
             gridPanel = me.getDesignerGrid(),
             previewPanel = me.getDesignerPreview();
 
-        layoutForm.setDisabled(true);
+        if (!me.onSaveEmotion(emotion, true)) {
+            gridPanel.designer.activePreview = false;
+            gridPanel.refresh();
+            return false;
+        }
 
-        me.onSaveEmotion(emotion, true);
+        layoutForm.setDisabled(true);
 
         previewPanel.showPreview(viewport);
         gridPanel.hide();
