@@ -270,6 +270,7 @@
 {include file='backend/base/attribute/field/Shopware.form.field.PremiumSingleSelection.js'}
 {include file='backend/base/attribute/field/Shopware.form.field.ProductStreamGrid.js'}
 {include file='backend/base/attribute/field/Shopware.form.field.ProductStreamSingleSelection.js'}
+{include file='backend/base/attribute/field/Shopware.form.field.ShopGrid.js'}
 
 
 {include file='backend/base/attribute/field_handler/Shopware.attribute.AbstractEntityFieldHandler.js'}
@@ -290,3 +291,4 @@
 {include file='backend/base/attribute/field_handler/Shopware.attribute.EmotionFieldHandler.js'}
 {include file='backend/base/attribute/field_handler/Shopware.attribute.PremiumFieldHandler.js'}
 {include file='backend/base/attribute/field_handler/Shopware.attribute.ProductStreamFieldHandler.js'}
+{include file='backend/base/attribute/field_handler/Shopware.attribute.ShopFieldHandler.js'}

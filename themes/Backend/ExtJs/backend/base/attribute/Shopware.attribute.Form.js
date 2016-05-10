@@ -365,6 +365,7 @@ Ext.define('Shopware.attribute.Form', {
 
     registerTypeHandlers: function() {
         return [
+            Ext.create('Shopware.attribute.ShopFieldHandler'),
             Ext.create('Shopware.attribute.ProductStreamFieldHandler'),
             Ext.create('Shopware.attribute.PremiumFieldHandler'),
             Ext.create('Shopware.attribute.EmotionFieldHandler'),
