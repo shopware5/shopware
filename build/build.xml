@@ -106,10 +106,11 @@
     <target name="build-create-admin-account">
         <exec executable="${script.php}" dir="${basedir}/bin" failonerror="true">
             <arg line="console sw:admin:create"/>
-            <arg value="--name='Demo user'"/>
-            <arg value="--email='demo@example.com'"/>
-            <arg value="--username='demo'"/>
-            <arg value="--password='demo'"/>
+            <arg value="--name=Demo user"/>
+            <arg value="--email=demo@example.com"/>
+            <arg value="--username=demo"/>
+            <arg value="--password=demo"/>
+            <arg value="--locale=de_DE"/>
         </exec>
     </target>
 
