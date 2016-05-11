@@ -88,16 +88,12 @@ Ext.define('Shopware.apps.Emotion.view.components.ArticleSlider', {
             me.maxCountField.hide();
             me.categoryFilter.hide();
             me.articleFieldset.show();
-            me.rotateSpeed.show().enable();
-            me.rotation.show().enable();
             me.streamSelection.allowBlank = true;
             me.categoryFilter.allowBlank = true;
         } else if (me.articleType.getValue() == 'product_stream') {
             me.maxCountField.hide();
             me.categoryFilter.hide();
             me.articleFieldset.hide();
-            me.rotateSpeed.show().enable();
-            me.rotation.show().enable();
             me.streamSelection.show();
             me.streamSelection.allowBlank = false;
             me.categoryFilter.allowBlank = true;
@@ -105,8 +101,6 @@ Ext.define('Shopware.apps.Emotion.view.components.ArticleSlider', {
             me.maxCountField.show();
             me.categoryFilter.show();
             me.articleFieldset.hide();
-            me.rotateSpeed.hide().disable();
-            me.rotation.hide().disable();
             me.streamSelection.allowBlank = true;
             me.categoryFilter.allowBlank = false;
         }
@@ -126,16 +120,12 @@ Ext.define('Shopware.apps.Emotion.view.components.ArticleSlider', {
             me.maxCountField.hide();
             me.categoryFilter.hide();
             me.articleFieldset.show();
-            me.rotateSpeed.show().enable();
-            me.rotation.show().enable();
             me.streamSelection.allowBlank = true;
             me.categoryFilter.allowBlank = true;
         } else if (newValue == 'product_stream') {
             me.maxCountField.hide();
             me.categoryFilter.hide();
             me.articleFieldset.hide();
-            me.rotateSpeed.show().enable();
-            me.rotation.show().enable();
             me.streamSelection.show();
             me.streamSelection.allowBlank = false;
             me.categoryFilter.allowBlank = true;
@@ -143,8 +133,6 @@ Ext.define('Shopware.apps.Emotion.view.components.ArticleSlider', {
             me.maxCountField.show();
             me.categoryFilter.show();
             me.articleFieldset.hide();
-            me.rotateSpeed.hide().disable();
-            me.rotation.hide().disable();
             me.streamSelection.allowBlank = true;
             me.categoryFilter.allowBlank = false;
         }
