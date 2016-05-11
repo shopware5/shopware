@@ -30,17 +30,6 @@ AND ap.`pricegroup` = (
 SQL;
         $this->addSql($sql);
 
-        // Set the old 'baseprice' of all price rows to the new respective 'purchaseprice'
-        $sql = <<<SQL
-UPDATE `s_articles_prices` AS ap
-JOIN `s_articles_details` AS ad
-    ON ad.`id` = ap.`articledetailsID`
-SET
-    ap.`baseprice` = ad.`purchaseprice`;
-SQL;
-        $this->addSql($sql);
-
-
         // Remove the old 'baseprice' field from 's_article_configurator_template_prices'
         $sql = <<<SQL
 ALTER TABLE `s_article_configurator_template_prices`
