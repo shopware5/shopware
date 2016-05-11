@@ -39,19 +39,19 @@
 class Enlight_Plugin_PluginManager extends Enlight_Plugin_PluginCollection
 {
     /**
-     * Instance of the Enlight_Application.
+     * Instance of the Shopware.
      *
-     * @var Enlight_Application
+     * @var Shopware
      */
     protected $application;
 
     /**
-     * The Enlight_Plugin_PluginManager class constructor expects an instance of the Enlight_Application, which
+     * The Enlight_Plugin_PluginManager class constructor expects an instance of the Shopware, which
      * is set in the internal property.
      *
-     * @param Enlight_Application $application
+     * @param Shopware $application
      */
-    public function __construct(Enlight_Application $application)
+    public function __construct(Shopware $application)
     {
         $this->setApplication($application);
         parent::__construct();
@@ -75,10 +75,10 @@ class Enlight_Plugin_PluginManager extends Enlight_Plugin_PluginCollection
     /**
      * Setter for the application property.
      *
-     * @param  Enlight_Application $application
+     * @param  Shopware $application
      * @return Enlight_Plugin_PluginManager
      */
-    public function setApplication(Enlight_Application $application)
+    public function setApplication(Shopware $application)
     {
         $this->application = $application;
         return $this;
@@ -87,7 +87,7 @@ class Enlight_Plugin_PluginManager extends Enlight_Plugin_PluginCollection
     /**
      * Returns the application instance.
      *
-     * @return Enlight_Application
+     * @return Shopware
      */
     public function Application()
     {
