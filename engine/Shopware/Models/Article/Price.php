@@ -34,6 +34,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity(repositoryClass="Repository")
  * @ORM\Table(name="s_articles_prices")
+ * @ORM\HasLifecycleCallbacks
  */
 class Price extends LazyFetchModelEntity
 {
@@ -93,6 +94,7 @@ class Price extends LazyFetchModelEntity
 
     /**
      * @var float $basePrice
+     * @deprecated 5.2.0 No longer used by internal code, use Shopware\Models\Article\Detail::purchasePrice instead.
      *
      * @ORM\Column(name="baseprice", type="float", nullable=false)
      */
@@ -248,6 +250,11 @@ class Price extends LazyFetchModelEntity
     {
         $this->detail = $detail;
 
+        // Use the detail's 'purchasePrice' as 'basePrice'
+        if ($detail !== null) {
+            $this->basePrice = $detail->getPurchasePrice();
+        }
+
         return $this;
     }
 
@@ -310,6 +317,7 @@ class Price extends LazyFetchModelEntity
     /**
      * Set basePrice
      *
+     * @deprecated 5.2.0 No longer used by internal code, use Shopware\Models\Article\Detail::setPurchasePrice() instead.
      * @param  float $basePrice
      * @return Price
      */
@@ -317,12 +325,27 @@ class Price extends LazyFetchModelEntity
     {
         $this->basePrice = $basePrice;
 
+        if ($this->getDetail() !== null) {
+            // Set the article details 'purchasePrice' to the new 'basePrice' if necessary
+            if ($this->getDetail()->getPurchasePrice() != $basePrice) {
+                $this->getDetail()->setPurchasePrice($basePrice);
+            }
+
+            // Set the base price of all other 'price' entities of the same article detail to the new 'basePrice'
+            foreach ($this->getDetail()->getPrices() as $price) {
+                if ($price !== $this) {
+                    $price->setBasePrice($basePrice);
+                }
+            }
+        }
+
         return $this;
     }
 
     /**
      * Get basePrice
      *
+     * @deprecated 5.2.0 No longer used by internal code, use Shopware\Models\Article\Detail::getPurchasePrice() instead.
      * @return float
      */
     public function getBasePrice()
@@ -368,5 +391,27 @@ class Price extends LazyFetchModelEntity
     public function setAttribute($attribute)
     {
         return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\ArticlePrice', 'attribute', 'articlePrice');
+    }
+
+    /**
+     * Checks the change set for the 'basePrice' and, if present, makes sure that the associated
+     * article detail entity is flushed too. To break flush-cycles, the article detail's change set is
+     * checked and it is only flushed, if its 'purchasePrice' is not already part of the change set.
+     *
+     * @ORM\PreUpdate
+     */
+    public function beforeUpdate()
+    {
+        $unitOfWork = Shopware()->Models()->getUnitOfWork();
+        $changeSet = $unitOfWork->getEntityChangeSet($this);
+        if (isset($changeSet['basePrice']) && $this->getDetail() !== null) {
+            // 'basePrice' has changed, hence flush the article detail to save the changed 'purchasePrice' field,
+            // but only if the article detail entity is not already part of the ongoing flush (e.g. when passing
+            // the price entity to 'flush()')
+            $changeSet = $unitOfWork->getEntityChangeSet($this->getDetail());
+            if (!isset($changeSet['purchasePrice'])) {
+                Shopware()->Models()->flush($this->getDetail());
+            }
+        }
     }
 }

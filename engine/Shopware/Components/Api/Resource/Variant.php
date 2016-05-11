@@ -450,6 +450,10 @@ class Variant extends Resource implements BatchInterface
             );
         }
 
+        if (isset($data['purchasePrice']) && is_string($data['purchasePrice'])) {
+            $data['purchasePrice'] = floatval(str_replace(',', '.', $data['purchasePrice']));
+        }
+
         $data = $this->prepareAttributeAssociation($data, $article, $variant);
 
         if (isset($data['configuratorOptions'])) {

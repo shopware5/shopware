@@ -627,6 +627,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 REPLACE(ROUND(p.pseudoprice*(100+t.tax)/100,2),'.',',') as pseudoprice,
                 REPLACE(ROUND(p.pseudoprice,2),'.',',') as net_pseudoprice,
                 REPLACE(ROUND(p.baseprice,2),'.',',') as baseprice,
+                REPLACE(ROUND(d.purchaseprice,2),'.',',') as purchaseprice,
                 a.active,
                 d.instock,
                 d.stockmin,
@@ -2194,6 +2195,13 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 'baseprice'        => $articleData['baseprice'],
                 'percent'          => $articleData['percent'],
             ));
+
+            // Save legacy 'baseprice' in new 'purchaseprice' field of 's_articles_details'
+            Shopware()->Db()->update(
+                's_articles_details',
+                ['id' => $article['detailId']],
+                ['purchaseprice' => $articleData['baseprice']]
+            );
             $total++;
         }
 
@@ -2649,6 +2657,11 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         // unset legacy attributes
         unset($articleData['attributegroupID']);
         unset($articleData['attributevalues']);
+
+        // Check for legacy purchase price ('baseprice')
+        if (isset($articleData['baseprice'])) {
+            $articleData['purchaseprice'] = $this->sValFloat($articleData['baseprice']);
+        }
 
         $updateData = $this->mapFields($articleData, $articleMapping, array('taxId', 'tax', 'supplierId', 'supplier', 'whitelist', 'translations', 'baseprice', 'pseudoprice'));
         $detailData = $this->mapFields($articleData, $articleDetailMapping);

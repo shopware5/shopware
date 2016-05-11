@@ -256,8 +256,7 @@ class VariantTest extends TestCase
             'prices' => [
                 [
                     'customerGroupKey' => 'EK',
-                    'price' => 100,
-                    'basePrice' => 50
+                    'price' => 100
                 ]
             ]
         ];
