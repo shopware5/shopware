@@ -821,25 +821,25 @@ div[id^=emotion-detail-window] {
         text-align: center;
 
         .#{$prefix}emotion-element-delete {
-            height: 16px; width: 18px;
+            height: 14px; width: 14px;
             display: inline-block;
-            background: url("../themes/images/icons/core-icon-set-new.png") -35px -36px no-repeat transparent;
+            background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAABvklEQVQokXWQ70tTYRTHv+e5d/Nubmn9EUJF0VoihTmnwjCikZIYjAKh/yqFwhchVAgRBP2wJoWEbDT64XrXe3+kc153n3NOL9qdd6IHnjff7+dzODxUHx+7lzzTt2gcx23sbD0aePt+ASdMfWJsLtV/7rGwDZq7uyX6U7zTdGPxBACIiDT/bs8NvPvwpEsazz9M9p1dMMYYALBByzdQxIQthC2gYrxUen4jnyuF0kY+V/JS6XmomCMOLv0aHbnvpdJPyRg3hFXE+o29BwBwWkcA8DN3c6Yn2btIRLEOoBoAwPHssLlfOv+xvERh+GNkeCruJZ5FweioatDyD2YvfFp9AQAULb8P3yjGerwlIsS7JbSCQ3/m4urn5TBzuwFhYaugrn2AqqoKR6MOUbs+dMtx3ecg8k46Fao+Wzt96cva6474bWiwYBznJQiJIxAH7dVdmTDfvbz29Q1VB69OGOMsg5CMAE0RLgLAaR1Vr2W2AfRHjtpX1duZ9eoKAFSyV0aJ6BWA3gizY5h5i5nRfg1mOxlKAJBZr64w28n/XYfbNMJ2StjWhe2msC1kK7Xy8X/JVmplYVtoM7+F7fQ/uu37+s7YmQwAAAAASUVORK5CYII=') top left no-repeat;
             vertical-align: text-bottom;
             cursor: pointer;
         }
         .#{$prefix}emotion-element-pencil {
-            height: 16px; width: 16px;
+            height: 16px; width: 14px;
             display: inline-block;
             margin-right: 10px;
-            background: url("../themes/images/icons/core-icon-set-new.png") -36px -216px no-repeat transparent;
+            background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAQCAYAAAAmlE46AAABvUlEQVQokY3QsWtTYRQF8HPv+/K+5GVIHaT6qIO0m4012fwDRHBQVzuKDkoqiDgIrqKDImKlzu0mLiKI0k0quElERQStpDapoIhJaZL33nevw2vEaNJ45/uDcw7hP65xv7TLBP5nTWTNdZPy3nOvIhqJFkrM1nzwcplJgCDd5KtrR0UzCpLHT9g3kxAFCGDfGyf2P+0IGwulG541RyEKJQAEEAESu9WhURv3Ds16ucwSmDgVABFBYrfhOtHUQFifnymzNS+IOdsDAKCiLdeOpsNKtfZP1PU7xXEy/BSKLEQAojQmNHLt+FhYqdYAoA/W7x7MgGkZwG6oQjXtBVKRbnI2rFRXer99UBUPGVTsGwOAdN31cK66+Ofvb7h+e/oaEY7r9uy0DcW5B+Hc66t/VzIA8OXWgVkQrqRIQaA0purLuNk+NWhAelwpczP2tw5PbVprep0IAD6qaHni4pvmIMhi7OmNrYJdfr8HrY4HFYWKftdEjgxDAMAdF5zJBnkkmQKer+3Ht5aNNJGTE5ferg5DKeTCjA0CZHMB8pZ+1FpjF/ZdfreyEwIAw7kxm09+1gNsnj9x89mjUaB3vwDGHrRDPVF+QgAAAABJRU5ErkJggg==') top left no-repeat;
             vertical-align: text-bottom;
             cursor: pointer;
         }
         .#{$prefix}emotion-element-visibility {
-            height: 16px; width: 17px;
+            height: 17px; width: 17px;
             display: inline-block;
             margin-right: 10px;
-            background: url("../themes/images/icons/core-icon-set-new.png") -35px -1584px no-repeat transparent;
+            background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAARCAYAAAA7bUf6AAACwklEQVQ4jYWTX2gWZBTGz/OoG0UMTSKUpvlvXriQVPJCBUesjXCydMZctbH4RDcjYuY/gpBgaUwSoemG+jV0zmZjzgU6579wF27+wamJjAjKLoSgLiS9yO85xwv36edSPDcvh/d3znue931e2Ij4uOvmdBJ1AAtB1gPsIzkI4h+A3WbW0FiYeyuzZnRmUtVxbY4rdcGCo4AwRMwEo88iDIFJQHwCcoqZLXlmE5fuAfgrIgbIaEZEb3LpTE/8NPQqg4vBWIaIrpoTf8wjMNuAZGNhbsDMrPxA/zqSXwIsOlgxr3+kxJGx+thvAyDfIrhhV9HkBq74vm+SS/WSclypnOc1GJ54j0vmrq9qen6fONqlBBjZiDjbXr2w18xsZetAAuQsghtbV879r/LwYBbIBoBXWpbnt+wpydub6B6qjIhFRLxJl4Zcuu2uLRknTXPpMynV8UHbxZfc1eHSp+6a+ohxLXfpXXcdw9PGXZHsA8hdINYQ/BvkeIBNIGpby+dGmqvuvFELcgxKvjt+HUCAnH205p1HQNm+c9kgfgWZS/BPkNMOfTj/fnq/8vDgCyDvAgAlTXfXGy69lgZKm09luad+dCnXpZt6uLaU7z8/KkPyBFcKLt2lS79IMpcWZQA7XSpxqcmlfHc1uVIV7tqecSd5wy90le6pH4aTe48BP+HS5+6q7VxV4C7VStrg0pk0I+lnl7a4VAczs8KGjhyAr5Ac21NXevl5PilLnqsGUExyVXvVgjs0Mzu5vuyOS8ddulS0vXNT8bddfFaD95pPb3Yp6dL7kvLMMv6OS50RsZHEVkS8bmZrinccfZFAFshxAG+DXODS14gwEN8cSSy+ZGb2hE8K6ttqQG4jeQDgbpCXAWSTNIA9ID8C2Uigt3tt8b503f/MVlDfxrNfVPjbW9tngOwH8TLBf0E29dSVrn+axAfmeYDt3rSZmAAAAABJRU5ErkJggg==') top left no-repeat;
             vertical-align: text-bottom;
             cursor: pointer;
         }
@@ -877,10 +877,13 @@ div[id^=emotion-detail-window] {
         .#{$prefix}emotion-article-element-preview,
         .#{$prefix}emotion-article-slider-preview,
         .#{$prefix}emotion-category-teaser-preview,
+        .#{$prefix}emotion-manufacturer-preview,
         .#{$prefix}emotion-iframe-preview {
+            height: 100%;
             padding: 15px;
             font-size: 14px;
             color: #7bacd0;
+            overflow: hidden;
         }
 
         .#{$prefix}emotion-preview-title {
