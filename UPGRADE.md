@@ -234,6 +234,7 @@ In this document you will find a changelog of the important changes related to t
 * Changed markup and styling on checkout confirm and finish page
 * Support arbitrary namespaces for doctrine entities instead of the `Shopware\CustomModels` namespace.
 * Deprecated `Shopware()->Models()->__call()`
+* Removed unused database fields `s_core_config_elements.filters`, `s_core_config_elements.validators`, `s_core_config_forms.scope`
 
 ## 5.1.6
 * The interface `Enlight_Components_Cron_Adapter` in `engine/Library/Enlight/Components/Cron/Adapter.php` got a new method `getJobByAction`. For default implementation see `engine/Library/Enlight/Components/Cron/Adapter/DBAL.php`.
