@@ -235,10 +235,10 @@ In this document you will find a changelog of the important changes related to t
 * Support arbitrary namespaces for doctrine entities instead of the `Shopware\CustomModels` namespace.
 * Deprecated `Shopware()->Models()->__call()`
 * Removed unused database fields `s_core_config_elements.filters`, `s_core_config_elements.validators`, `s_core_config_forms.scope`
+* Removed deprecated `\Shopware\Models\Menu\Repository::save()` and `\Shopware\Models\Menu\Repository::addItem()`
 
 ## 5.1.6
 * The interface `Enlight_Components_Cron_Adapter` in `engine/Library/Enlight/Components/Cron/Adapter.php` got a new method `getJobByAction`. For default implementation see `engine/Library/Enlight/Components/Cron/Adapter/DBAL.php`.
-
 
 ## 5.1.5
 * The smarty variable `sCategoryInfo` in Listing and Blog controllers is now deprecated and will be removed soon. Use `sCategoryContent` instead, it's a drop in replacement.
