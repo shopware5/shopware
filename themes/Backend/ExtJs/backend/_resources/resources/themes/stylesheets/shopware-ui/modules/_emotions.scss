@@ -495,8 +495,8 @@ div[id^=emotion-detail-window] {
     .#{$prefix}designer-viewport-line {
         position: absolute;
         top: -5px; left: 0;
-        padding: 5px 0;
-        height: 16px;
+        padding: 5px 0 0 0;
+        height: 11px;
         border: 0 solid;
         opacity: 0;
 
@@ -568,9 +568,9 @@ div[id^=emotion-detail-window] {
     min-height: 120px;
     width: 100%;
     margin: 0;
-    background: #ffffff;
+    background: #f2f2f2;
     z-index: 1000;
-    border-top: 1px solid #a4b5c0 !important;
+    border-bottom: 1px solid #d7d7d7 !important;
 
     .#{$prefix}emotion-element {
         width: 150px;

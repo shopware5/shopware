@@ -297,7 +297,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
 
         return me.hiddenElements = Ext.create('Ext.container.Container', {
             cls: Ext.baseCSSPrefix + 'viewport-hidden-elements',
-            dock: 'bottom',
+            dock: 'top',
             overflowX: 'auto',
             overflowY: 'hidden',
             hidden: true
