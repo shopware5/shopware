@@ -4,10 +4,6 @@ class Migrations_Migration737 extends Shopware\Components\Migrations\AbstractMig
 {
     public function up($modus)
     {
-        if ($modus === self::MODUS_INSTALL) {
-            return;
-        }
-
         // Create 'purchaseprice' field in 's_articles_details'
         $sql = <<<SQL
 ALTER TABLE `s_articles_details`
