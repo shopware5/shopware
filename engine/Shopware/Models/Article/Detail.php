@@ -641,14 +641,6 @@ class Detail extends ModelEntity
     public function setPurchasePrice($purchasePrice)
     {
         $this->purchasePrice = $purchasePrice;
-
-        // Set the 'basePrice' of all 'price' entities to the new 'purchasePrice' if necessary
-        foreach ($this->getPrices() as $price) {
-            if ($price->getBasePrice() != $purchasePrice) {
-                $price->setBasePrice($purchasePrice);
-            }
-        }
-
         return $this;
     }
 
@@ -935,29 +927,5 @@ class Detail extends ModelEntity
     public function setImages($images)
     {
         return $this->setOneToMany($images, '\Shopware\Models\Article\Image', 'images', 'articleDetail');
-    }
-
-    /**
-     * Checks the change set for the 'purchasePrice' and, if present, makes sure that all associated
-     * price entities is flushed too. To break flush-cycles, the prices' change sets are checked
-     * and they are only flushed, if their 'basePrice' is not already part of the change set.
-     *
-     * @ORM\PreUpdate
-     */
-    public function beforeUpdate()
-    {
-        $unitOfWork = Shopware()->Models()->getUnitOfWork();
-        $changeSet = $unitOfWork->getEntityChangeSet($this);
-        if (isset($changeSet['purchasePrice'])) {
-            // 'purchasePrice' has changed, hence flush all prices' to save the changed 'basePrice' fields,
-            // if the price entities are not already part of the ongoing flush (e.g. when passing the article
-            // detail entity to 'flush()')
-            foreach ($this->getPrices() as $price) {
-                $changeSet = $unitOfWork->getEntityChangeSet($price);
-                if (!isset($changeSet['basePrice'])) {
-                    Shopware()->Models()->flush($price);
-                }
-            }
-        }
     }
 }
