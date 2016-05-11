@@ -450,6 +450,10 @@ class Variant extends Resource implements BatchInterface
             );
         }
 
+        if (isset($data['purchasePrice']) && is_string($data['purchasePrice'])) {
+            $data['purchasePrice'] = floatval(str_replace(',', '.', $data['purchasePrice']));
+        }
+
         $data = $this->prepareAttributeAssociation($data, $article, $variant);
 
         if (isset($data['configuratorOptions'])) {
@@ -732,7 +736,7 @@ class Variant extends Resource implements BatchInterface
             }
         }
 
-        foreach (['price', 'basePrice', 'pseudoPrice', 'percent'] as $key) {
+        foreach (['price', 'pseudoPrice', 'percent'] as $key) {
             if (array_key_exists($key, $priceData)) {
                 $priceData[$key] = floatval(str_replace(",", ".", $priceData[$key]));
             }

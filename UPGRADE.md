@@ -245,7 +245,10 @@ In this document you will find a changelog of the important changes related to t
 * The filter event `Shopware_Modules_Order_SaveBilling_FilterSQL` now uses named parameters in the query instead of question marks.
 * The filter event `Shopware_Modules_Order_SaveShipping_FilterArray` now contains an associative array instead of one with numeric keys.
 * The filter event `Shopware_Modules_Order_SaveShipping_FilterSQL` now uses named parameters in the query instead of question marks.
-
+* Added field `purchasePrice` to `Shopware\Models\Article\Detail`
+* Deprecated field `basePrice` of `Shopware\Models\Article\Price`
+* Removed `Shopware\Models\Article\Price::getBasePrice()` and `Shopware\Models\Article\Price::setBasePrice()`
+* Removed field `basePrice` from `Shopware\Models\Article\Configurator\Template\Price`
 
 ## 5.1.6
 * The interface `Enlight_Components_Cron_Adapter` in `engine/Library/Enlight/Components/Cron/Adapter.php` got a new method `getJobByAction`. For default implementation see `engine/Library/Enlight/Components/Cron/Adapter/DBAL.php`.

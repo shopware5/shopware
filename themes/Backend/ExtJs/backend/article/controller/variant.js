@@ -1499,7 +1499,6 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
 
         var newPrice = Ext.create('Shopware.apps.Article.model.Price', {
             pseudoPrice: 0,
-            basePrice: 0,
             percent: 0,
             customerGroupKey: me.subApplication.firstCustomerGroup.get('key')
         });

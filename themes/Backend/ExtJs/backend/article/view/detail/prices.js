@@ -72,8 +72,7 @@ Ext.define('Shopware.apps.Article.view.detail.Prices', {
                 to: '{s name=detail/price/to}To{/s}',
                 price: '{s name=detail/price/price}Price{/s}',
                 percent: '{s name=detail/price/percent}Percent discount{/s}',
-                pseudoPrice: '{s name=detail/price/pseudo_price}Pseudo price{/s}',
-                basePrice: '{s name=detail/price/base_price}Purchase price{/s}'
+                pseudoPrice: '{s name=detail/price/pseudo_price}Pseudo price{/s}'
             },
             any:'{s name=detail/price/any}Arbitrary{/s}'
         }
@@ -177,7 +176,6 @@ Ext.define('Shopware.apps.Article.view.detail.Prices', {
                 to: me.snippets.any,
                 price: 0,
                 pseudoPrice: 0,
-                basePrice: 0,
                 percent: 0,
                 customerGroupKey: firstGroup.get('key')
             });
@@ -281,15 +279,6 @@ Ext.define('Shopware.apps.Article.view.detail.Prices', {
                 xtype: 'numbercolumn',
                 header: me.snippets.grid.columns.pseudoPrice,
                 dataIndex: 'pseudoPrice',
-                editor: {
-                    xtype: 'numberfield',
-                    decimalPrecision: 2,
-                    minValue: 0
-                }
-            }, {
-                xtype: 'numbercolumn',
-                header: me.snippets.grid.columns.basePrice,
-                dataIndex: 'basePrice',
                 editor: {
                     xtype: 'numberfield',
                     decimalPrecision: 2,

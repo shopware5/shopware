@@ -808,11 +808,9 @@ class sExport
             ";
             $pricefield = "IFNULL(p2.price, p.price)";
             $pseudoprice = "IFNULL(p2.pseudoprice, p.pseudoprice)";
-            $baseprice = "IFNULL(p2.baseprice, p.baseprice)";
         } else {
             $pricefield = "p.price";
             $pseudoprice = "p.pseudoprice";
-            $baseprice = "p.baseprice";
         }
 
 
@@ -956,7 +954,6 @@ class sExport
                 pd.discount,
                 ROUND(CAST($pseudoprice*{$this->sCurrency["factor"]} AS DECIMAL(10,3)),2) as netpseudoprice,
                 ROUND(CAST($pseudoprice*(100+t.tax)*{$this->sCurrency["factor"]}/100 AS DECIMAL(10,3)),2) as pseudoprice,
-                $baseprice,
                 IF(file IS NULL,0,1) as esd
 
                 $sql_add_select

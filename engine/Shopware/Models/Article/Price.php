@@ -93,6 +93,7 @@ class Price extends LazyFetchModelEntity
 
     /**
      * @var float $basePrice
+     * @deprecated 5.2.0 No longer used by internal code, use Shopware\Models\Article\Detail::purchasePrice instead.
      *
      * @ORM\Column(name="baseprice", type="float", nullable=false)
      */
@@ -305,29 +306,6 @@ class Price extends LazyFetchModelEntity
     public function getPseudoPrice()
     {
         return $this->pseudoPrice;
-    }
-
-    /**
-     * Set basePrice
-     *
-     * @param  float $basePrice
-     * @return Price
-     */
-    public function setBasePrice($basePrice)
-    {
-        $this->basePrice = $basePrice;
-
-        return $this;
-    }
-
-    /**
-     * Get basePrice
-     *
-     * @return float
-     */
-    public function getBasePrice()
-    {
-        return $this->basePrice;
     }
 
     /**

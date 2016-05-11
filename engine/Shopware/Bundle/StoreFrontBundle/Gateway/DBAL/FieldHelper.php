@@ -301,7 +301,6 @@ class FieldHelper
             'price.articledetailsID as __price_articledetailsID',
             'price.price as __price_price',
             'price.pseudoprice as __price_pseudoprice',
-            'price.baseprice as __price_baseprice',
             'price.percent as __price_percent',
         ];
 
