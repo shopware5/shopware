@@ -235,6 +235,7 @@ In this document you will find a changelog of the important changes related to t
 * Support arbitrary namespaces for doctrine entities instead of the `Shopware\CustomModels` namespace.
 * Added field `purchasePrice` to `Shopware\Models\Article\Detail`
 * Deprecated field `basePrice` of `Shopware\Models\Article\Price`
+* Removed `Shopware\Models\Article\Price::getBasePrice()` and `Shopware\Models\Article\Price::setBasePrice()`
 * Removed field `basePrice` from `Shopware\Models\Article\Configurator\Template\Price`
 
 ## 5.1.6

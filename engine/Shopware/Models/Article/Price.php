@@ -310,31 +310,6 @@ class Price extends LazyFetchModelEntity
     }
 
     /**
-     * Set basePrice
-     *
-     * @deprecated 5.2.0 No longer used by internal code, use Shopware\Models\Article\Detail::setPurchasePrice() instead.
-     * @param  float $basePrice
-     * @return Price
-     */
-    public function setBasePrice($basePrice)
-    {
-        $this->basePrice = $basePrice;
-
-        return $this;
-    }
-
-    /**
-     * Get basePrice
-     *
-     * @deprecated 5.2.0 No longer used by internal code, use Shopware\Models\Article\Detail::getPurchasePrice() instead.
-     * @return float
-     */
-    public function getBasePrice()
-    {
-        return $this->basePrice;
-    }
-
-    /**
      * Set percent
      *
      * @param  float $percent
