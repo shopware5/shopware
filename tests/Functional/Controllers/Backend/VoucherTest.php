@@ -69,7 +69,7 @@ class Shopware_Tests_Controllers_Backend_VoucherTest extends Enlight_Components_
         parent::setUp();
 
         $this->manager    = Shopware()->Models();
-        $this->repository = Shopware()->Models()->Voucher();
+        $this->repository = Shopware()->Models()->getRepository(\Shopware\Models\Voucher\Voucher::class);
 
         // disable auth and acl
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();

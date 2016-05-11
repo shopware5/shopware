@@ -70,7 +70,7 @@ class Shopware_Tests_Controllers_Backend_PartnerTest extends Enlight_Components_
         parent::setUp();
 
         $this->manager    = Shopware()->Models();
-        $this->repository = Shopware()->Models()->Partner();
+        $this->repository = Shopware()->Models()->getRepository(\Shopware\Models\Partner\Partner::class);
 
         // disable auth and acl
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();

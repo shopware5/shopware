@@ -207,7 +207,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         $toDate = $toDate->add(new DateInterval('P1D'));
 
         /** @var $repository \Shopware\Models\Partner\Repository */
-        $repository = Shopware()->Models()->Partner();
+        $repository = Shopware()->Models()->getRepository(\Shopware\Models\Partner\Partner::class);
 
         //get the information of the partner chart
         $userCurrencyFactor = Shopware()->Shop()->getCurrency()->getFactor();

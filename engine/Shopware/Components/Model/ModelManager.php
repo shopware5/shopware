@@ -85,17 +85,22 @@ class ModelManager extends EntityManager
     /**
      * Magic method to build this liquid interface ...
      *
+     * @deprecated since 5.2, to be removed in 5.3
      * @param   string $name
      * @param   array|null $args
      * @return  ModelRepository
      */
     public function __call($name, $args)
     {
-        /** @todo make path custom able */
+        $backTrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1)[0];
+        $string = sprintf("Shopware()->Models()->__call() is deprecated since version 5.2 and will be removed in 5.3. File %s:%s", $backTrace['file'], $backTrace['line']);
+        trigger_error($string, E_USER_DEPRECATED);
+
         if (strpos($name, '\\') === false) {
             $name = $name .'\\' . $name;
         }
         $name = 'Shopware\\Models\\' . $name;
+
         return $this->getRepository($name);
     }
 
