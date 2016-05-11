@@ -297,7 +297,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
 
         return me.hiddenElements = Ext.create('Ext.container.Container', {
             cls: Ext.baseCSSPrefix + 'viewport-hidden-elements',
-            dock: 'bottom',
+            dock: 'top',
             overflowX: 'auto',
             overflowY: 'hidden',
             hidden: true
@@ -338,9 +338,11 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
                     '<div class="x-designer-viewports">',
                         '<tpl for=".">',
                             '<div class="x-designer-viewport">',
-                                '<div class="x-designer-viewport-btn viewport-{alias}">',
+                                '<div class="{[this.getViewportBtnCls(values.alias)]}">',
                                     '<div class="{[this.getLabelCls(values.alias)]}" data-viewport="{alias}">{label}</div>',
-                                    '<div class="{[this.getCounterCls(values.alias, values.hiddenCounter)]}" data-viewport="{alias}" data-qtip="{[this.getHiddenElTooltip()]}" data-qalign="b-t">{hiddenCounter}</div>',
+                                    '<div class="{[this.getCounterCls(values.alias, values.hiddenCounter)]}" data-viewport="{alias}" data-qtip="{[this.getHiddenElTooltip()]}" data-qalign="b-t">',
+                                        '<span class="counter--value">{hiddenCounter}</span>',
+                                    '</div>',
                                     '<div class="{[this.getConnectCls(values.alias)]}" data-viewport="{alias}" data-qtip="{[this.getConnectTooltip(values.alias)]}" data-qalign="b-t"></div>',
                                 '</div>',
                             '</div>',
@@ -379,14 +381,18 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
                     return cls;
                 },
 
-                getLabelCls: function(alias) {
-                    var cls = 'x-designer-viewport-label';
+                getViewportBtnCls: function(alias) {
+                    var cls = 'x-designer-viewport-btn viewport-' + alias;
 
                     if (alias === me.grid.state) {
                         cls += ' is--active';
                     }
 
                     return cls;
+                },
+
+                getLabelCls: function() {
+                    return 'x-designer-viewport-label';
                 },
 
                 getCounterCls: function(alias, counter) {
@@ -404,7 +410,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
                 },
 
                 getConnectCls: function(alias) {
-                    var cls = 'x-viewport-connect-trigger';
+                    var cls = 'x-viewport-connect-trigger trigger-' + alias;
 
                     if (alias === me.grid.state) {
                         cls += ' is--master';

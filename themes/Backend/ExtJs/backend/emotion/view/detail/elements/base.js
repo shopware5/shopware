@@ -39,7 +39,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.elements.Base', {
 
     compCls: 'base-element',
 
-    icon: '',
+    icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAYAAADhAJiYAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAHBJREFUeNpi7Ju95D8DBaAoNYYRmU+peUwMgwyMOmjUQaMOGnXQqIMGu4NYqG0get02GmWjaYhUMOzaQyw0NNsRmOMOEBmqDkBq/2iiHnXQqINGHTTqoFEHjTpotIFGGTAANiuIVksPB/UPiygDCDAAYIwS2uYlRscAAAAASUVORK5CYII=',
 
     minRows: 1,
 

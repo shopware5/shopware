@@ -40,7 +40,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Layout', {
     border: 0,
     bodyBorder: 0,
     autoScroll: true,
-    style: 'background: #f9fafa',
+    style: 'background: #f0f2f4',
 
     defaults: {
         labelWidth: 120,
