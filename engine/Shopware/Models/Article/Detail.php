@@ -33,7 +33,6 @@ use Doctrine\Common\Collections\ArrayCollection;
  *
  * @ORM\Entity(repositoryClass="Repository")
  * @ORM\Table(name="s_articles_details")
- * @ORM\HasLifecycleCallbacks
  */
 class Detail extends ModelEntity
 {

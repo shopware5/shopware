@@ -34,7 +34,6 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Entity(repositoryClass="Repository")
  * @ORM\Table(name="s_articles_prices")
- * @ORM\HasLifecycleCallbacks
  */
 class Price extends LazyFetchModelEntity
 {
