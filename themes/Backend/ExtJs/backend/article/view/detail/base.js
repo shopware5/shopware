@@ -77,6 +77,7 @@ Ext.define('Shopware.apps.Article.view.detail.Base', {
         template: '{s name=detail/base/template}Template{/s}',
         priceGroupActive: '{s name=detail/base/price_group_active}Active price group{/s}',
         priceGroup: '{s name=detail/base/price_group_select}Select price group{/s}',
+        purchasePrice: '{s name=detail/base/purchase_price}Purchase price{/s}',
         numberValidation: '{s name=detail/base/number_validation}The inserted article number already exists!{/s}',
         mainDetailAdditionalText: '{s name=detail/base/main_detail_additional_text}Varianten-Zusatztext{/s}',
         regexNumberValidation: '{s name=detail/base/regex_number_validation}The inserted article number contains illegal characters!{/s}'
@@ -325,7 +326,14 @@ Ext.define('Shopware.apps.Article.view.detail.Base', {
                     me.priceGroupComboBox.validateValue(me.priceGroupComboBox.getValue());
                 }
             }
-        }, me.priceGroupComboBox ]
+        }, me.priceGroupComboBox, {
+            xtype: 'numberfield',
+            name: 'mainDetail[purchasePrice]',
+            dataIndex: 'mainDetail[purchasePrice]',
+            fieldLabel: me.snippets.purchasePrice,
+            minValue: 0,
+            step: 0.01
+        }]
     }
 });
 //{/block}

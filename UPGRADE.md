@@ -233,6 +233,9 @@ In this document you will find a changelog of the important changes related to t
     * `widgets/emotion/index/element/config`
 * Changed markup and styling on checkout confirm and finish page
 * Support arbitrary namespaces for doctrine entities instead of the `Shopware\CustomModels` namespace.
+* Added field `purchasePrice` to `Shopware\Models\Article\Detail`
+* Deprecated field `basePrice` of `Shopware\Models\Article\Price`
+* Removed field `basePrice` from `Shopware\Models\Article\Configurator\Template\Price`
 
 ## 5.1.6
 * The interface `Enlight_Components_Cron_Adapter` in `engine/Library/Enlight/Components/Cron/Adapter.php` got a new method `getJobByAction`. For default implementation see `engine/Library/Enlight/Components/Cron/Adapter/DBAL.php`.
