@@ -221,7 +221,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
                         break;
                 }
 
-                if ($entry['name'] === 'file') {
+                if ($entry['name'] === 'file' || $entry['name'] === 'image') {
                     $value = $mediaService->getUrl($value);
                 }
 
