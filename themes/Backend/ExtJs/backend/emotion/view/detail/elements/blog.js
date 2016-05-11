@@ -37,12 +37,6 @@ Ext.define('Shopware.apps.Emotion.view.detail.elements.Blog', {
 
     componentCls: 'blog-element',
 
-    icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAjCAYAAAD8BaggAAABXklEQVRYhe2WMUvEMBiGn9Mu5yCCoLg5CA4qiNwqurgKLm4XnLI4ScBBBBdxyx/IpLk/oJxOLv4Boc6CgxzugssJcg62UIrVcsnFCn2gNC3tywN5W76GNp0BfnlVsj017MtRGgLEHmRargGpUKxke9M1TJtODMy7ZIy5Svgm+u6mNnYCOAXWgFvgTEnhu2vlhYBj4CBZbwA94CKEUNGWLeWuV0YtklIkdJNZD4DrAC5AgZCSwgDbwAmwrqS4CyVU1CGUFF2gG0ok5X989j+hjZ0E9oBl4Bk4V1L0RiakjR0HDoF9YA54Au6BR2Aa2E3OKUfa2BklxZt3IW1sE7gCtjK3F5KjiGY+x4V8h2ZzMsGpfKnfgYchcj48uAA5ISXFC7DqK3wYKrtlrWS4cmUR6LsERHyNr+A46SX0M3k1NX9CQxsbZHgvS+X+QzW/UXeoxpVQHdpRUlyWebByHfoEqSVJc3vLCEQAAAAASUVORK5CYII=',
-
-    createPreview: function() {
-        var me = this;
-
-        //console.log('createPreview', me.record.get('data'));
-    }
+    icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAjCAYAAAD8BaggAAABXklEQVRYhe2WMUvEMBiGn9Mu5yCCoLg5CA4qiNwqurgKLm4XnLI4ScBBBBdxyx/IpLk/oJxOLv4Boc6CgxzugssJcg62UIrVcsnFCn2gNC3tywN5W76GNp0BfnlVsj017MtRGgLEHmRargGpUKxke9M1TJtODMy7ZIy5Svgm+u6mNnYCOAXWgFvgTEnhu2vlhYBj4CBZbwA94CKEUNGWLeWuV0YtklIkdJNZD4DrAC5AgZCSwgDbwAmwrqS4CyVU1CGUFF2gG0ok5X989j+hjZ0E9oBl4Bk4V1L0RiakjR0HDoF9YA54Au6BR2Aa2E3OKUfa2BklxZt3IW1sE7gCtjK3F5KjiGY+x4V8h2ZzMsGpfKnfgYchcj48uAA5ISXFC7DqK3wYKrtlrWS4cmUR6LsERHyNr+A46SX0M3k1NX9CQxsbZHgvS+X+QzW/UXeoxpVQHdpRUlyWebByHfoEqSVJc3vLCEQAAAAASUVORK5CYII='
 });
 //{/block}
