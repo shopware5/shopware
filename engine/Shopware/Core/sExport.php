@@ -907,7 +907,6 @@ class sExport
                 IF(a.datum!='0000-00-00',a.datum,'') as `added`,
                 IF(d.releasedate!='0000-00-00',d.releasedate,'') as `releasedate`,
                 a.active as active,
-                d.purchaseprice as baseprice,
 
                 d.id as `articledetailsID`,
                 IF(v.ordernumber IS NOT NULL,v.ordernumber,d.ordernumber) as ordernumber,

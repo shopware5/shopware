@@ -176,7 +176,6 @@ Ext.define('Shopware.apps.Article.view.detail.Prices', {
                 to: me.snippets.any,
                 price: 0,
                 pseudoPrice: 0,
-                basePrice: 0,
                 percent: 0,
                 customerGroupKey: firstGroup.get('key')
             });

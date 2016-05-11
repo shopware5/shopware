@@ -626,7 +626,6 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 REPLACE(p.price,'.',',') as net_price,
                 REPLACE(ROUND(p.pseudoprice*(100+t.tax)/100,2),'.',',') as pseudoprice,
                 REPLACE(ROUND(p.pseudoprice,2),'.',',') as net_pseudoprice,
-                REPLACE(ROUND(p.baseprice,2),'.',',') as baseprice,
                 REPLACE(ROUND(d.purchaseprice,2),'.',',') as purchaseprice,
                 a.active,
                 d.instock,
@@ -1017,7 +1016,6 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             p.pricegroup as pricegroup,
             IF(p.`from`=1,NULL,p.`from`) as `from`,
             REPLACE(ROUND(p.pseudoprice*(100+t.tax)/100,2),'.',',') as pseudoprice,
-            REPLACE(ROUND(p.baseprice,2),'.',',') as baseprice,
             a.name as `_name`,
             d.additionaltext as `_additionaltext`,
             s.name as `_supplier`
@@ -2127,7 +2125,6 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
 
             $articleData['price']       = floatval(str_replace(',', '.', $articleData['price']));
             $articleData['pseudoprice'] = floatval(str_replace(',', '.', $articleData['pseudoprice']));
-            $articleData['baseprice']   = floatval(str_replace(',', '.', $articleData['baseprice']));
 
             if (!empty($customergroups[$articleData['pricegroup']]['taxinput'])) {
                 $articleData['price'] = $articleData['price']/(100+$tax)*100;
@@ -2137,12 +2134,6 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 } else {
                     $articleData['pseudoprice'] = 0;
                 }
-            }
-
-            if (isset($articleData['baseprice'])) {
-                $articleData['baseprice'] = $this->sValFloat($articleData['baseprice']);
-            } else {
-                $articleData['baseprice'] = 0;
             }
 
             if (isset($articleData['percent'])) {
@@ -2192,16 +2183,8 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 'to'               => 'beliebig',
                 'price'            => $articleData['price'],
                 'pseudoprice'      => $articleData['pseudoprice'],
-                'baseprice'        => $articleData['baseprice'],
                 'percent'          => $articleData['percent'],
             ));
-
-            // Save legacy 'baseprice' in new 'purchaseprice' field of 's_articles_details'
-            Shopware()->Db()->update(
-                's_articles_details',
-                ['id' => $article['detailId']],
-                ['purchaseprice' => $articleData['baseprice']]
-            );
             $total++;
         }
 
@@ -2580,7 +2563,6 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                     'to'               => 'beliebig',
                     'price'            => $price,
                     'pseudoprice'      => 0,
-                    'baseprice'        => 0,
                     'percent'          => 0
                 ));
             }
@@ -2661,9 +2643,10 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         // Check for legacy purchase price ('baseprice')
         if (isset($articleData['baseprice'])) {
             $articleData['purchaseprice'] = $this->sValFloat($articleData['baseprice']);
+            unset($articleData['baseprice']);
         }
 
-        $updateData = $this->mapFields($articleData, $articleMapping, array('taxId', 'tax', 'supplierId', 'supplier', 'whitelist', 'translations', 'baseprice', 'pseudoprice'));
+        $updateData = $this->mapFields($articleData, $articleMapping, array('taxId', 'tax', 'supplierId', 'supplier', 'whitelist', 'translations', 'pseudoprice'));
         $detailData = $this->mapFields($articleData, $articleDetailMapping);
 
         if (!empty($articleData['categorypaths'])) {
@@ -2682,7 +2665,6 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
 
         $prices = array(
             'price' => 'price',
-            'baseprice' => 'basePrice',
             'pseudoprice' => 'pseudoPrice'
         );
         $detailData['prices'] = array();
