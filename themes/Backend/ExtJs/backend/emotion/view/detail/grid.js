@@ -109,6 +109,8 @@ Ext.define('Shopware.apps.Emotion.view.detail.Grid', {
 
         me.settings = me.getSettings();
 
+        me.fixEmotionRows();
+
         me.store = me.createStore();
         me.tpl = me.createGridTemplate();
 
@@ -756,6 +758,35 @@ Ext.define('Shopware.apps.Emotion.view.detail.Grid', {
         });
 
         me.toolbar.refresh();
+    },
+
+    /**
+     * Fixes the row setting of the emotion world if the rows don't match the elements.
+     */
+    fixEmotionRows: function() {
+        var me = this,
+            viewports, endRow,
+            rows = me.emotion.get('rows'),
+            elements = me.emotion.getElements();
+
+        elements.each(function(elementRecord) {
+            viewports = elementRecord.getViewports();
+
+            viewports.each(function(viewport) {
+                endRow = viewport.get('endRow');
+
+                if (endRow > rows) {
+                    rows = endRow;
+                }
+            });
+        });
+
+        if (me.settings.sections !== null && (rows % me.settings.sections) > 0) {
+            rows += rows % me.settings.sections;
+        }
+
+        me.emotion.set('rows', rows);
+        me.settings['rows'] = rows;
     },
 
     /**
