@@ -75,9 +75,6 @@ class Configuration extends BaseConfiguration
 
         $this->setAttributeDir($options['attributeDir']);
 
-        $this->addEntityNamespace('Shopware', 'Shopware\Models');
-        $this->addEntityNamespace('Custom', 'Shopware\CustomModels');
-
         Type::overrideType('datetime', 'Shopware\Components\Model\DBAL\Types\DateTimeStringType');
         Type::overrideType('date', 'Shopware\Components\Model\DBAL\Types\DateStringType');
         Type::overrideType('array', 'Shopware\Components\Model\DBAL\Types\AllowInvalidArrayType');

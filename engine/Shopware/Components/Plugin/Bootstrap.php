@@ -781,11 +781,6 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
             'Shopware\CustomModels',
             $this->Path() . 'Models/'
         );
-        $this->Application()->ModelAnnotations()->addPaths(
-            array(
-                $this->Path() . 'Models/'
-            )
-        );
     }
 
 

@@ -24,14 +24,11 @@
 
 namespace Shopware\Components\DependencyInjection\Bridge;
 
-use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Shopware\Components\Model\Configuration;
 
 /**
  * Service class to initialize the doctrine annotation driver.
- * This driver is used to register the different model namespaces
- * Shopware\Models and Shopware\CustomModels.
  *
  * @category  Shopware
  * @package   Shopware\Components\DependencyInjection\Bridge
@@ -50,20 +47,13 @@ class ModelAnnotation
     {
         $annotationDriver = new AnnotationDriver(
             $config->getAnnotationsReader(),
-            array(
+            [
                 $modelPath,
                 $config->getAttributeDir(),
-            )
+            ]
         );
 
-        // create a driver chain for metadata reading
-        $driverChain = new MappingDriverChain();
-
-        // register annotation driver for our application
-        $driverChain->addDriver($annotationDriver, 'Shopware\\Models\\');
-        $driverChain->addDriver($annotationDriver, 'Shopware\\CustomModels\\');
-
-        $config->setMetadataDriverImpl($driverChain);
+        $config->setMetadataDriverImpl($annotationDriver);
 
         return $annotationDriver;
     }
