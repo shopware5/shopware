@@ -136,7 +136,7 @@ class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Back
     {
         try {
             /** @var $repository \Shopware\Models\ProductFeed\Repository */
-            $repository = Shopware()->Models()->ProductFeed();
+            $repository = Shopware()->Models()->getRepository(ProductFeed::class);
             $dataQuery = $repository->getListQuery(
                 $this->Request()->getParam('sort', array()),
                 $this->Request()->getParam('start'),
@@ -172,7 +172,7 @@ class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Back
     private function getFeed($id)
     {
         /** @var $repository \Shopware\Models\ProductFeed\Repository */
-        $repository = Shopware()->Models()->ProductFeed();
+        $repository = Shopware()->Models()->getRepository(ProductFeed::class);
         $dataQuery = $repository->getDetailQuery($id);
         $feed = $dataQuery->getArrayResult();
         return $feed[0];
@@ -252,7 +252,7 @@ class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Back
         $feedId = $params["id"];
         if (!empty($feedId)) {
             //edit Product Feed
-            $productFeed = Shopware()->Models()->ProductFeed()->find($feedId);
+            $productFeed = Shopware()->Models()->getRepository(ProductFeed::class)->find($feedId);
             //clear all previous associations
             $productFeed->getCategories()->clear();
             $productFeed->getSuppliers()->clear();
@@ -359,7 +359,7 @@ class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Back
     {
         try {
             /**@var $model \Shopware\Models\ProductFeed\ProductFeed*/
-            $model = Shopware()->Models()->ProductFeed()->find($this->Request()->id);
+            $model = Shopware()->Models()->getRepository(ProductFeed::class)->find($this->Request()->id);
             Shopware()->Models()->remove($model);
             Shopware()->Models()->flush();
             $this->View()->assign(array('success' => true, 'data' => $this->Request()->getParams()));

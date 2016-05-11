@@ -85,7 +85,7 @@ class Shopware_Tests_Models_Category_BlogCategoryTreeListQueryTest extends Enlig
     protected function getRepo()
     {
         if ($this->repo === null) {
-            $this->repo = Shopware()->Models()->Category();
+            $this->repo = Shopware()->Models()->getRepository(\Shopware\Models\Category\Category::class);
         }
         return $this->repo;
     }

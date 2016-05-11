@@ -247,7 +247,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
     public function getCategoriesAction()
     {
         /** @var $repository \Shopware\Models\Category\Repository */
-        $repository = Shopware()->Models()->Category();
+        $repository = Shopware()->Models()->getRepository(\Shopware\Models\Category\Category::class);
 
         $query = $repository->getListQuery(
             $this->Request()->getParam('filter', array()),

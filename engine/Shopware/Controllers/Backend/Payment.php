@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Shopware\Models\Payment\Payment;
 
 /**
  * Shopware Payment Controller
@@ -97,7 +98,7 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
      */
     public function getPaymentsAction()
     {
-        $this->repository = Shopware()->Models()->Payment();
+        $this->repository = Shopware()->Models()->getRepository(Payment::class);
 
         $query = $this->repository->getListQuery();
         $results = $query->getArrayResult();
@@ -179,7 +180,7 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
                 $params['source'] = null;
             }
 
-            $paymentModel = new \Shopware\Models\Payment\Payment();
+            $paymentModel = new Payment();
             $params['attribute'] = $params['attribute'][0];
             $countries = $params['countries'];
             $countryArray = array();
@@ -208,7 +209,7 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
     {
         try {
             $id = $this->Request()->getParam('id', null);
-            /**@var $payment \Shopware\Models\Payment\Payment  */
+            /**@var $payment Payment  */
             $payment = Shopware()->Models()->find('Shopware\Models\Payment\Payment', $id);
             $action = $payment->getAction();
             $data = $this->Request()->getParams();
@@ -278,9 +279,9 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
             $this->View()->assign(array("success" => false, 'errorMsg' => 'Empty Post Request'));
             return;
         }
-        $repository = Shopware()->Models()->Payment();
+        $repository = Shopware()->Models()->getRepository(Payment::class);
         $id = $this->Request()->get('id');
-        /**@var $model \Shopware\Models\Payment\Payment  */
+        /**@var $model Payment  */
         $model = $repository->find($id);
         if ($model->getSource() == 1) {
             try {

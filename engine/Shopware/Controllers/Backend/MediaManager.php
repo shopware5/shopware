@@ -229,7 +229,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         }
 
         /** @var $repository \Shopware\Models\Media\Repository */
-        $repository = Shopware()->Models()->Media();
+        $repository = Shopware()->Models()->getRepository(Media::class);
         $query = $repository->getAlbumMediaQuery($albumID, $filter, $order, $offset, $limit, $validTypes);
 
         $paginator = $this->getModelManager()->createPaginator($query);
@@ -856,7 +856,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
     private function getAlbumNodeProperties(\Shopware\Models\Media\Album $album)
     {
         /** @var $repository \Shopware\Models\Media\Repository */
-        $repository = Shopware()->Models()->Media();
+        $repository = Shopware()->Models()->getRepository(Media::class);
         $query = $repository->getAlbumMediaQuery($album->getId());
 
         $paginator = $this->getModelManager()->createPaginator($query);
