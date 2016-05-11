@@ -22,41 +22,43 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\AccountBundle\Type;
+namespace Shopware\Bundle\FormBundle\Constraint;
 
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Validator\Constraint;
 
-class SalutationType extends AbstractType
+class Repeated extends Constraint
 {
     /**
-     * @var \Shopware_Components_Config
+     * @var string
      */
-    private $config;
+    protected $field;
 
     /**
-     * @param \Shopware_Components_Config $config
+     * @var string
      */
-    public function __construct(\Shopware_Components_Config $config)
-    {
-        $this->config = $config;
-    }
+    protected $message;
 
     /**
-     * @param OptionsResolver $resolver
+     * @return string
      */
-    public function configureOptions(OptionsResolver $resolver)
+    public function getField()
     {
-        $salutations = explode(',', $this->config->get('shopsalutations'));
-        $resolver->setDefaults(['choices' => array_flip($salutations)]);
+        return $this->field;
     }
 
     /**
      * @return string
      */
-    public function getParent()
+    public function getMessage()
     {
-        return ChoiceType::class;
+        return $this->message;
+    }
+
+    /**
+     * @return string
+     */
+    public function validatedBy()
+    {
+        return 'RepeatedValidator';
     }
 }

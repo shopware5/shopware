@@ -704,16 +704,15 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
     public function saveProfileAction()
     {
         $userId = $this->get('session')->get('sUserId');
+
         /** @var Customer $customer */
         $customer = $this->get('models')->find(Customer::class, $userId);
 
-        $form = $this->createForm(ProfileUpdateFormType::class, [], ['allow_extra_fields' => true]);
+        $form = $this->createForm(ProfileUpdateFormType::class, $customer, ['allow_extra_fields' => true]);
         $form->handleRequest($this->Request());
 
         if ($form->isValid()) {
-            $customer->fromArray($form->getData(), ['firstname', 'lastname', 'salutation', 'title', 'birthday']);
             $this->customerService->update($customer);
-
             $this->redirect(['controller' => 'account', 'action' => 'profile', 'success' => true, 'section' => 'profile']);
             return;
         }
@@ -727,14 +726,14 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
     public function saveEmailAction()
     {
         $userId = $this->get('session')->get('sUserId');
+
         /** @var Customer $customer */
         $customer = $this->get('models')->find(Customer::class, $userId);
 
-        $form = $this->createForm(EmailUpdateFormType::class, [], ['allow_extra_fields' => true]);
+        $form = $this->createForm(EmailUpdateFormType::class, $customer, ['allow_extra_fields' => true]);
         $form->handleRequest($this->Request());
 
         if ($form->isValid()) {
-            $customer->setEmail($form->getData()['email']);
             $this->customerService->update($customer);
             $this->get('session')->offsetSet('sUserMail', $customer->getEmail());
 
@@ -754,11 +753,10 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         /** @var Customer $customer */
         $customer = $this->get('models')->find(Customer::class, $userId);
 
-        $form = $this->createForm(PasswordUpdateFormType::class, [], ['allow_extra_fields' => true]);
+        $form = $this->createForm(PasswordUpdateFormType::class, $customer, ['allow_extra_fields' => true]);
         $form->handleRequest($this->Request());
 
         if ($form->isValid()) {
-            $customer->setPassword($form->getData()['password']);
             $this->customerService->update($customer);
             $this->get('session')->offsetSet('sUserPassword', $customer->getPassword());
 
