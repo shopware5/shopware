@@ -3,13 +3,15 @@ In this document you will find a changelog of the important changes related to t
 
 ## 5.2.0 DEV
 * Increased minimum required PHP version to PHP >= 5.6.4.
-* Added CSRF protection to the backend which is enabled by default.
-    * OptOut by implementing `CSRFWhitelistAware` interface
+* Added CSRF protection to frontend and backend which is enabled by default.
+    * OptOut by implementing `Shopware\Components\CSRFWhitelistAware` interface
     * Added `X-CSRF-Token` to every ajax request
+    * Added `__csrf_token` to every html form in frontend
     * Added `__csrf_token` param to every ExtJS form submit via override in `ExtJs/overrides/Ext.form.Base.js`
+    * Added `csrfProtection` config options to disable CSRF protection
     * See: https://developers.shopware.com/developers-guide/csrf-protection/
-* Update Symfony Components to version 2.8 LTS
-* Replace polyfill provided by `indigophp/hash-compat` with `symfony/polyfill-php56`
+* Updated Symfony Components to version 2.8 LTS
+* Replaced polyfill provided by `indigophp/hash-compat` with `symfony/polyfill-php56`
 * Added polyfill for `random_bytes()` and `random_int()` via `paragonie/random_compat`
 * Removed `client_check` and `referer_check` from the config in favor of the CSRF protection.
 * Removed session variables `__SW_REFERER` and `__SW_CLIENT`
@@ -19,16 +21,9 @@ In this document you will find a changelog of the important changes related to t
     * Added new `css_class` column to the `s_emotion_elements` table.
 * Removed deprecated columns `s_filter_values.value_numeric` and `s_filter_options.default`
 * Updated `monolog/monolog` to version 1.17.2
-* Add CSRF protection to frontend and backend which is enabled by default.
-    * OptOut by implementing `CSRFWhitelistAware` interface
-    * Add `X-CSRF-Token` to every ajax request
-    * Add `__csrf_token` to every html form in frontend
-    * Add `csrfProtection` config options to disable CSRF protection
-    * See: https://developers.shopware.com/developers-guide/csrf-protection/
-    * Special thanks to: [ltepner](https://github.com/ltepner)
-* Add HTML code widget for the shopping worlds which lets the user enter actual Smarty & JavaScript code which will be included like it is
+* Added HTML code widget for the shopping worlds which lets the user enter actual Smarty & JavaScript code which will be included like it is
     * The Smarty code has access to all globally available Smarty variables
-* Add the following fields to status emails:
+* Added the following fields to status emails:
     * `billing_additional_address_line1`
     * `billing_additional_address_line2`
     * `shipping_additional_address_line1`
