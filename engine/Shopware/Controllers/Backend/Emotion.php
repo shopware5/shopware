@@ -474,7 +474,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         $emotion->setPosition(!empty($data['position']) ? $data['position'] : 1);
         $emotion->setShowListing(!empty($data['showListing']));
         $emotion->setFullscreen(!empty($data['fullscreen']));
-        $emotion->setDevice(!empty($data['device']) ? $data['device'] : null);
+        $emotion->setDevice((!empty($data['device']) || $data['device'] === '0') ? $data['device'] : null);
         $emotion->setMode($data['mode']);
         $emotion->setRows($data['rows']);
         $emotion->setCols($data['cols']);
