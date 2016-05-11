@@ -69,7 +69,7 @@ class LicenceStruct implements \JsonSerializable
     /**
      * @var bool
      */
-    private $licenseCheck = false;
+    private $isLicenseCheckEnabled = false;
 
     /**
      * @var PriceStruct
@@ -275,16 +275,16 @@ class LicenceStruct implements \JsonSerializable
     /**
      * @return boolean
      */
-    public function hasLicenseCheck()
+    public function isLicenseCheckEnabled()
     {
-        return $this->licenseCheck;
+        return $this->isLicenseCheckEnabled;
     }
 
     /**
-     * @param boolean $licenseCheck
+     * @param boolean $isLicenseCheckEnabled
      */
-    public function setLicenseCheck($licenseCheck)
+    public function setIsLicenseCheckEnabled($isLicenseCheckEnabled)
     {
-        $this->licenseCheck = $licenseCheck;
+        $this->isLicenseCheckEnabled = $isLicenseCheckEnabled;
     }
 }
