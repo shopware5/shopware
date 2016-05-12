@@ -22,12 +22,26 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Models\Config\Element;
+
 /**
- *
- * @deprecated Use the \Shopware\Models\Config\Form model
+ * @deprecated Use the \Shopware\Models\Config\Element
  */
-class Shopware_Components_Form extends Zend_Form
+final class Shopware_Components_Form
 {
-    const SCOPE_SHOP = 1;
-    const SCOPE_LOCALE = 2;
+    const SCOPE_SHOP = Element::SCOPE_SHOP;
+    const SCOPE_LOCALE = Element::SCOPE_LOCALE;
+
+    /**
+     * Private constructor to simulate Final Abstract Class.
+     */
+    private function __construct()
+    {
+        // this class should not be instantiated or extended
+    }
+
+    private function __clone()
+    {
+        // this class should not be instantiated or extended
+    }
 }

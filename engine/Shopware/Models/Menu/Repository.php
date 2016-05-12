@@ -26,35 +26,6 @@ namespace Shopware\Models\Menu;
 
 use Shopware\Components\Model\ModelRepository;
 
-/**
- */
 class Repository extends ModelRepository
 {
-    /**
-     * @deprecated Will be executed automatically.
-     */
-    public function save()
-    {
-    }
-
-    /**
-     * @deprecated Will be executed automatically.
-     * @param $item
-     */
-    public function addItem($item)
-    {
-    }
-
-    /**
-     * @param   array $criteria
-     * @return  object|\Shopware\Models\Menu\Menu
-     */
-    public function findOneBy(array $criteria)
-    {
-        if (func_num_args() === 2) {
-            return parent::findOneBy(array(func_get_arg(0) => func_get_arg(1)));
-        } else {
-            return parent::findOneBy($criteria);
-        }
-    }
 }
