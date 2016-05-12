@@ -40,6 +40,7 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
     refs: [
         { ref: 'mainWindow', selector: 'emotion-main-window' },
         { ref: 'detailWindow', selector: 'emotion-detail-window' },
+        { ref: 'sidebar', selector: 'emotion-detail-window tabpanel[name=sidebar]' },
         { ref: 'settingsForm', selector: 'emotion-detail-window emotion-detail-settings' },
         { ref: 'layoutForm', selector: 'emotion-detail-window emotion-detail-layout' },
         { ref: 'designerGrid', selector: 'emotion-detail-window emotion-detail-grid' },
@@ -285,6 +286,8 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
     onSaveEmotion: function(record, preview) {
         var me = this,
             settings = me.getSettingsForm(),
+            attributeForm = me.getAttributeForm(),
+            sidebar = me.getSidebar(),
             layout = me.getLayoutForm(),
             win = me.getDetailWindow(),
             activeTab = win.sidebar.items.indexOf(win.sidebar.getActiveTab());
@@ -296,10 +299,18 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
         settings.getForm().updateRecord(record);
         layout.getForm().updateRecord(record);
 
-        if (!settings.getForm().isValid() || !layout.getForm().isValid()) {
+        if (!settings.getForm().isValid()) {
+            sidebar.setActiveTab(0);
             Shopware.Notification.createGrowlMessage(me.snippets.errorTitle, me.snippets.onSaveChangesNotValid);
             return false;
         }
+
+        if (!layout.getForm().isValid()) {
+            sidebar.setActiveTab(1);
+            Shopware.Notification.createGrowlMessage(me.snippets.errorTitle, me.snippets.onSaveChangesNotValid);
+            return false;
+        }
+
 
         record.save({
             callback: function(item) {
@@ -326,8 +337,10 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
 
                     win.showPreview = false;
 
-                    me.loadEmotionRecord(record.get('id'), function(newRecord) {
-                        win.loadEmotion(newRecord, activeTab);
+                    attributeForm.saveAttribute(record.get('id'), function() {
+                        me.loadEmotionRecord(record.get('id'), function(newRecord) {
+                            win.loadEmotion(newRecord, activeTab);
+                        });
                     });
 
                     gridStore.load();

@@ -86,14 +86,6 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
     initComponent: function() {
         var me = this;
 
-        me.plugins = [{
-            ptype: 'translation',
-            pluginId: 'translation',
-            translationType: 'emotion',
-            translationMerge: false,
-            translationKey: me.emotion.get('id')
-        }];
-
         me.mainFieldset = me.createMainFieldset();
         me.generalFieldSet = me.createGeneralFieldSet();
         me.landingPageFieldSet = me.createLandingPageFieldset();
