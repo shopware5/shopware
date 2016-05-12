@@ -348,7 +348,7 @@ class Element extends ModelEntity
 
         $this->emotionId = null;
 
-        $dataArray = array();
+        $dataArray = [];
         foreach ($this->data as $data) {
             $newData = clone $data;
 
@@ -358,5 +358,16 @@ class Element extends ModelEntity
         }
 
         $this->data = $dataArray;
+
+        $viewportData = [];
+        foreach ($this->viewports as $viewport) {
+            $newViewport = clone $viewport;
+
+            $newViewport->setElement($this);
+
+            $viewportData[] = $newViewport;
+        }
+
+        $this->viewports = $viewportData;
     }
 }

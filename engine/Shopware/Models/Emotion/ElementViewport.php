@@ -128,6 +128,15 @@ class ElementViewport extends ModelEntity
      */
     protected $emotion;
 
+    public function __clone()
+    {
+        $this->id = null;
+
+        $this->emotionId = null;
+
+        $this->elementId = null;
+    }
+
     /**
      * @return int
      */
