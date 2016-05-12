@@ -202,6 +202,16 @@ class sOrder
     private $numberRangeIncrementer;
 
     /**
+     * @var Shopware\Bundle\AttributeBundle\Service\DataLoader
+     */
+    private $attributeLoader;
+
+    /**
+     * @var Shopware\Bundle\AttributeBundle\Service\DataPersister
+     */
+    private $attributePersister;
+
+    /**
      * Class constructor.
      * Injects all dependencies which are required for this class.
      * @param ContextServiceInterface $contextService

@@ -145,6 +145,16 @@ class sAdmin
      */
     private $numberRangeIncrementer;
 
+    /**
+     * @var Shopware\Bundle\AttributeBundle\Service\DataLoader
+     */
+    private $attributeLoader;
+
+    /**
+     * @var Shopware\Bundle\AttributeBundle\Service\DataPersister
+     */
+    private $attributePersister;
+
     public function __construct(
         Enlight_Components_Db_Adapter_Pdo_Mysql          $db                    = null,
         Enlight_Event_EventManager                       $eventManager          = null,
