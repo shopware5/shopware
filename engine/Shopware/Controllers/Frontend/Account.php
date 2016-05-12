@@ -334,11 +334,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         // If using the new template, the 'GET' action will be handled
         // in the Register controller (unified login/register page)
         if (Shopware()->Shop()->getTemplate()->getVersion() >= 3) {
-            $this->forward(array(
-                'action' => 'index',
-                'controller' => 'register',
-                'sTarget' => $this->View()->sTarget
-            ));
+			$this->forward('index', 'register', NULL, array('sTarget' => $this->View()->sTarget));
         }
     }
 
