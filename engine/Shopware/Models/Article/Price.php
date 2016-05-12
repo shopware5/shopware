@@ -92,14 +92,6 @@ class Price extends LazyFetchModelEntity
     private $pseudoPrice = 0;
 
     /**
-     * @var float $basePrice
-     * @deprecated 5.2.0 No longer used by internal code, use Shopware\Models\Article\Detail::purchasePrice instead.
-     *
-     * @ORM\Column(name="baseprice", type="float", nullable=false)
-     */
-    private $basePrice = 0;
-
-    /**
      * @var float $percent
      *
      * @ORM\Column(name="percent", type="float", nullable=false)
