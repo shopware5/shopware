@@ -245,10 +245,6 @@ In this document you will find a changelog of the important changes related to t
 * The filter event `Shopware_Modules_Order_SaveBilling_FilterSQL` now uses named parameters in the query instead of question marks.
 * The filter event `Shopware_Modules_Order_SaveShipping_FilterArray` now contains an associative array instead of one with numeric keys.
 * The filter event `Shopware_Modules_Order_SaveShipping_FilterSQL` now uses named parameters in the query instead of question marks.
-* Added field `purchasePrice` to `Shopware\Models\Article\Detail`
-* Deprecated field `basePrice` of `Shopware\Models\Article\Price`
-* Removed `Shopware\Models\Article\Price::getBasePrice()` and `Shopware\Models\Article\Price::setBasePrice()`
-* Removed field `basePrice` from `Shopware\Models\Article\Configurator\Template\Price`
 * Moved `s_articles_prices.baseprice` to `s_articles_details.purchaseprice`
     * Added new database field `s_articles_details.purchaseprice`.
     * Added property `purchasePrice` to `Shopware\Models\Article\Detail`.
