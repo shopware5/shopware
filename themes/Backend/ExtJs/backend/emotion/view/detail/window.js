@@ -168,11 +168,6 @@ Ext.define('Shopware.apps.Emotion.view.detail.Window', {
         me.sidebar = Ext.create('Ext.tab.Panel', {
             flex: 1,
             name: 'sidebar',
-            style: {
-                borderStyle: 'solid',
-                borderColor: '#a4b5c0',
-                borderWidth: '0 1px 0 0'
-            },
             items: [
                 me.createSettingsTab(),
                 me.createLayoutTab(),
@@ -250,7 +245,8 @@ Ext.define('Shopware.apps.Emotion.view.detail.Window', {
 
         return Ext.create('Shopware.attribute.Form', {
             table: 's_emotion_attributes',
-            bodyPadding: 10,
+            bodyPadding: 20,
+            fieldSetPadding: 5,
             style: 'background: rgb(240, 242, 244)',
             title: '{s namespace="backend/attributes/main" name="attribute_form_title"}{/s}',
             translationForm: me.mainForm
