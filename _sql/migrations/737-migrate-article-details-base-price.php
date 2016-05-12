@@ -4,9 +4,11 @@ class Migrations_Migration737 extends Shopware\Components\Migrations\AbstractMig
 {
     public function up($modus)
     {
-        // Create 'purchaseprice' field in 's_articles_details'
+        // Create 'purchaseprice' fields in 's_articles_details' and 's_article_configurator_template'
         $sql = <<<SQL
 ALTER TABLE `s_articles_details`
+    ADD `purchaseprice` double NOT NULL DEFAULT '0';
+ALTER TABLE `s_article_configurator_templates`
     ADD `purchaseprice` double NOT NULL DEFAULT '0';
 SQL;
         $this->addSql($sql);
