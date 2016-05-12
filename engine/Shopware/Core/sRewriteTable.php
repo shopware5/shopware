@@ -1109,22 +1109,39 @@ class sRewriteTable
         }
 
         $campaigns = $queryBuilder->getQuery()->getArrayResult();
-
         $routerCampaignTemplate = $this->config->get('routerCampaignTemplate');
 
         foreach ($campaigns as $campaign) {
-            $translation = $translator->readWithFallback($languageId, $fallbackId, 'emotion', $campaign['id']);
-
-            $campaign = array_merge($campaign, $translation);
-
-            $this->data->assign('campaign', $campaign);
-
-            $path = $this->template->fetch('string:' . $routerCampaignTemplate, $this->data);
-            $path = $this->sCleanupPath($path, false);
-
-            $org_path = 'sViewport=campaign&emotionId=' . $campaign['id'];
-            $this->sInsertUrl($org_path, $path);
+            $this->sCreateRewriteTableForSingleCampaign($translator, $languageId, $fallbackId, $campaign, $routerCampaignTemplate);
         }
+    }
+
+    /**
+     * @param Shopware_Components_Translation $translator
+     * @param int $languageId
+     * @param int $fallbackId
+     * @param array $campaign
+     * @throws Exception
+     * @throws SmartyException
+     */
+    public function sCreateRewriteTableForSingleCampaign(
+        Shopware_Components_Translation $translator,
+        $shopId,
+        $fallbackShopId,
+        array $campaign,
+        $routerCampaignTemplate
+    ) {
+        $translation = $translator->readWithFallback($shopId, $fallbackShopId, 'emotion', $campaign['id']);
+        
+        $campaign = array_merge($campaign, $translation);
+
+        $this->data->assign('campaign', $campaign);
+
+        $path = $this->template->fetch('string:' . $routerCampaignTemplate, $this->data);
+        $path = $this->sCleanupPath($path, false);
+
+        $org_path = 'sViewport=campaign&emotionId=' . $campaign['id'];
+        $this->sInsertUrl($org_path, $path);
     }
 
     /**

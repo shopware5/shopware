@@ -64,7 +64,6 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             productsListingBoxLabel: '{s name="settings/productListingBoxLabel"}{/s}',
             positionLabel: '{s name="settings/fieldset/position_number"}{/s}',
             positionHelpText: '{s name="settings/fieldset/position_number_help"}{/s}',
-            landingPageLinkLabel: '{s name="settings/link_action"}{/s}',
             landingPageTitleLabel: '{s name=settings/seo_title}{/s}',
             landingPageKeywordsLabel: '{s name=settings/seo_keywords}{/s}',
             landingPageDescLabel: '{s name=settings/seo_description}{/s}',
@@ -202,27 +201,20 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
     },
 
     createLandingPageFieldset: function() {
-        var me = this;
+        var me = this,
+            store;
 
         me.landingPageFields = {};
 
-        me.landingPageFields.shopsField = Ext.create('Ext.ux.form.field.BoxSelect', {
-            name: 'shops',
-            emptyText: me.snippets.fields.shopSelectionLabel,
-            store: me.shopStore,
-            valueField: 'id',
-            displayField: 'name',
-            width: '100%',
-            margin: '10 3 10 0',
-            labelWidth: me.defaults.labelWidth
-        });
-
-        me.landingPageFields.displayField = Ext.create('Ext.form.field.Text', {
-            name: 'link',
-            readOnly: true,
-            fieldLabel: me.snippets.fields.landingPageLinkLabel,
-            labelWidth: me.defaults.labelWidth
-        });
+        store = me.emotion.getShops();
+        if (!store) {
+            store = Ext.create('Ext.data.Store', {
+                model: 'Shopware.apps.Emotion.model.EmotionShop'
+            });
+            me.emotion['getShopsStore'] = store;
+        }
+        
+        me.landingPageFields.shopGrid = me.createShopSelectionGrid(store);
 
         me.landingPageFields.seoTitle = Ext.create('Ext.form.field.Text', {
             name: 'seoTitle',
@@ -251,8 +243,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             layout: 'anchor',
             defaults: me.defaults,
             items: [
-                me.landingPageFields.displayField,
-                me.landingPageFields.shopsField,
+                me.landingPageFields.shopGrid,
                 me.landingPageFields.seoTitle,
                 me.landingPageFields.seoKeywords,
                 me.landingPageFields.seoDescription
@@ -295,6 +286,77 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
                 me.landingPageFields.parentLandingPage,
                 me.landingPageFields.configuration
             ]
+        });
+    },
+
+    createShopSelectionGrid: function(store) {
+        var me = this;
+
+        return Ext.create('Shopware.form.field.ShopGrid', {
+            store: store,
+            searchStore: me.shopStore,
+            allowSorting: false,
+            height: 130,
+            initializeStore: function() {
+                return store;
+            },
+            createSearchField: function() {
+                var config = this.getComboConfig();
+                Ext.merge(config, {
+                    getComboConfig: function() {
+                        return {
+                            valueField: 'id',
+                            queryMode: 'remote',
+                            emptyText: me.snippets.fields.shopSelectionLabel,
+                            store: this.store,
+                            isFormField: false,
+                            pageSize: this.store.pageSize,
+                            labelWidth: 180,
+                            minChars: 2
+                        };
+                    }
+                });
+                return Ext.create('Shopware.form.field.SingleSelection', config);
+            },
+            createGrid: function() {
+                var me = this;
+
+                return Ext.create('Ext.grid.Panel', {
+                    columns: me.createColumns(),
+                    store: me.store,
+                    border: false,
+                    flex: 1,
+                    hideHeaders: true,
+                    plugins: [
+                        Ext.create('Ext.grid.plugin.CellEditing', {
+                            clicksToEdit: 1,
+                            autoCancel: false
+                        })
+                    ]
+                });
+            },
+            createColumns: function() {
+                var me = this;
+                return [
+                    { dataIndex: 'name', flex: 1 },
+                    {
+                        dataIndex: 'seoUrl',
+                        flex: 2,
+                        editor: {
+                            xtype: 'textfield',
+                            readOnly: true,
+                            selectOnFocus: true
+                        },
+                        renderer: function(value, metaData) {
+                            if (value) {
+                                metaData.tdAttr = 'data-qtip="' + value + '"';
+                                return value;
+                            }
+                        }
+                    },
+                    me.createActionColumn()
+                ];
+            }
         });
     },
 

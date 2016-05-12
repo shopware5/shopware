@@ -70,14 +70,19 @@ Ext.define('Shopware.form.field.Grid', {
     initComponent: function() {
         var me = this;
 
-        var store = me.store;
-        me.store = Ext.create('Ext.data.Store', {
-            model: store.model,
-            proxy: store.getProxy()
-        });
+        me.store = me.initializeStore();
 
         me.items = me.createItems();
         me.callParent(arguments);
+    },
+
+    initializeStore: function() {
+        var me = this;
+
+        return Ext.create('Ext.data.Store', {
+            model: me.store.model,
+            proxy: me.store.getProxy()
+        });
     },
 
     createItems: function() {

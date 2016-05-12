@@ -82,7 +82,6 @@ Ext.define('Shopware.apps.Emotion.model.Emotion', {
         { name: 'seoDescription', type: 'string' },
         { name: 'categoriesNames', type: 'string' },
         { name: 'categories', type: 'array' },
-        { name: 'shops', type: 'array' },
         { name: 'mode', type: 'string', defaultValue: 'fluid' },
         { name: 'emotionGroup', persist: false },
         { name: 'selectedCategory', persist: false }
@@ -90,7 +89,8 @@ Ext.define('Shopware.apps.Emotion.model.Emotion', {
 
     associations: [
         { type: 'hasMany', model: 'Shopware.apps.Emotion.model.EmotionElement', name: 'getElements', associationKey: 'elements'},
-        { type: 'hasMany', model: 'Shopware.apps.Emotion.model.Attribute', name: 'getAttributes', associationKey: 'attribute'}
+        { type: 'hasMany', model: 'Shopware.apps.Emotion.model.Attribute', name: 'getAttributes', associationKey: 'attribute'},
+        { type: 'hasMany', model: 'Shopware.apps.Emotion.model.EmotionShop', name:'getShops', associationKey:'shops'}
     ],
     /**
      * Configure the data communication
