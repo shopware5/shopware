@@ -165,10 +165,9 @@ Ext.define('Shopware.apps.Emotion.view.detail.Window', {
     createSidebar: function () {
         var me = this;
 
-        return me.sidebar = Ext.create('Ext.tab.Panel', {
-            region: 'west',
-            width: '25%',
-            minWidth: 450,
+        me.sidebar = Ext.create('Ext.tab.Panel', {
+            flex: 1,
+            name: 'sidebar',
             style: {
                 borderStyle: 'solid',
                 borderColor: '#a4b5c0',
@@ -180,6 +179,29 @@ Ext.define('Shopware.apps.Emotion.view.detail.Window', {
                 me.createWidgetTab()
             ]
         });
+
+        me.mainForm = Ext.create('Ext.form.Panel', {
+            items: [me.sidebar],
+            border: false,
+            layout: { type: 'hbox', align: 'stretch' },
+            region: 'west',
+            width: '25%',
+            minWidth: 450,
+            plugins: [{
+                ptype: 'translation',
+                pluginId: 'translation',
+                translationType: 'emotion',
+                translationMerge: false,
+                translationKey: me.emotion.get('id')
+            }]
+        });
+        me.attributeForm = me.createAttributeTab();
+        me.sidebar.add(me.attributeForm);
+        me.mainForm.loadRecord(me.emotion);
+
+        me.attributeForm.loadAttribute(me.emotion.get('id'));
+
+        return me.mainForm;
     },
 
     createSettingsTab: function() {
@@ -220,6 +242,18 @@ Ext.define('Shopware.apps.Emotion.view.detail.Window', {
             emotion: me.emotion,
             mainWindow: me,
             activePreview: me.showPreview
+        });
+    },
+
+    createAttributeTab: function() {
+        var me = this;
+
+        return Ext.create('Shopware.attribute.Form', {
+            table: 's_emotion_attributes',
+            bodyPadding: 10,
+            style: 'background: rgb(240, 242, 244)',
+            title: '{s namespace="backend/attributes/main" name="attribute_form_title"}{/s}',
+            translationForm: me.mainForm
         });
     }
 });
