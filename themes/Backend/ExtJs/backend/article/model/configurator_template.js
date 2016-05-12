@@ -68,7 +68,8 @@ Ext.define('Shopware.apps.Article.model.ConfiguratorTemplate', {
         { name: 'unitId', type: 'int', useNull: true },
         { name: 'purchaseUnit', type: 'float', useNull: true },
         { name: 'referenceUnit', type: 'float', useNull: true},
-        { name: 'packUnit', type: 'string', useNull: true }
+        { name: 'packUnit', type: 'string', useNull: true },
+        { name: 'purchasePrice', type: 'float', useNull: false }
     ],
     associations: [
         { type: 'hasMany', model: 'Shopware.apps.Article.model.Price', name: 'getPrice', associationKey: 'prices' },

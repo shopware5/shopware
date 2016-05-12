@@ -117,7 +117,8 @@ Ext.define('Shopware.apps.Article.view.variant.Detail', {
             activeBox: '{s name=detail/base/active_box}Product can be purchases{/s}',
             numberValidation: '{s name=detail/base/number_validation}The inserted article number already exists!{/s}',
             additionalText: '{s name=detail/base/additional_text}Additional text{/s}',
-            additionalTextSupport: '{s name=detail/base/additional_text_support}If left empty, an automatic text will be generated using the configurator options. This behaviour can be configured.{/s}'
+            additionalTextSupport: '{s name=detail/base/additional_text_support}If left empty, an automatic text will be generated using the configurator options. This behaviour can be configured.{/s}',
+            purchasePrice: '{s name=detail/base/purchase_price}Purchase price{/s}'
         },
         basePrice: {
             title:'{s name=detail/base_price/title}Base price calculation{/s}',
@@ -409,6 +410,12 @@ Ext.define('Shopware.apps.Article.view.variant.Detail', {
                 boxLabel: me.snippets.baseFieldSet.activeBox,
                 inputValue: true,
                 uncheckedValue:false
+            }, {
+                xtype: 'numberfield',
+                name: 'purchasePrice',
+                fieldLabel: me.snippets.baseFieldSet.purchasePrice,
+                minValue: 0,
+                step: 0.01
             }]
         });
     },

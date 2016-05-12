@@ -531,6 +531,9 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             $mainData['referenceUnit'] = $mainDetail->getReferenceUnit();
             $mainData['packUnit'] = $mainDetail->getPackUnit();
         }
+        if ($mapping['purchasePrice']) {
+            $mainData['purchasePrice'] = $mainDetail->getPurchasePrice();
+        }
 
         return $mainData;
     }
@@ -2473,7 +2476,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         //create the new variant data
         $variantData = array(
             'active' => 1,
-            'configuratorOptions' => $optionsModels
+            'configuratorOptions' => $optionsModels,
+            'purchasePrice' => $detailData['purchasePrice']
         );
 
         if ($mergeType == 1 && $counter == 0) {

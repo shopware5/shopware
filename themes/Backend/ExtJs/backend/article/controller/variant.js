@@ -1499,7 +1499,6 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
 
         var newPrice = Ext.create('Shopware.apps.Article.model.Price', {
             pseudoPrice: 0,
-            basePrice: 0,
             percent: 0,
             customerGroupKey: me.subApplication.firstCustomerGroup.get('key')
         });
@@ -1914,6 +1913,7 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
         window.destroy();
         if (record.get('prices') === false &&
             record.get('basePrice') === false &&
+            record.get('purchasePrice') === false &&
             record.get('attributes') === false &&
             record.get('settings') === false &&
             record.get('translations') === false) {
