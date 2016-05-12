@@ -1913,6 +1913,7 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
         window.destroy();
         if (record.get('prices') === false &&
             record.get('basePrice') === false &&
+            record.get('purchasePrice') === false &&
             record.get('attributes') === false &&
             record.get('settings') === false &&
             record.get('translations') === false) {

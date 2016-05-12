@@ -11,6 +11,13 @@ ALTER TABLE `s_articles_details`
 SQL;
         $this->addSql($sql);
 
+        // Create 'purchaseprice' field in 's_article_configurator_template'
+        $sql = <<<SQL
+ALTER TABLE `s_article_configurator_templates`
+    ADD `purchaseprice` double NOT NULL DEFAULT '0';
+SQL;
+        $this->addSql($sql);
+
         // Migrate existing 'baseprice' to 'purchaseprice' using the prices of the default shop's customer group
         // and having a 'from' value of 1
         $sql = <<<SQL
