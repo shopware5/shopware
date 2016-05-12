@@ -253,6 +253,7 @@ In this document you will find a changelog of the important changes related to t
     * Deprecated database field `s_articles_prices.baseprice`. All data is left intact but this field is not used in shopware anymore and will be dropped in a future version.
     * Removed property `basePrice` of `Shopware\Models\Article\Configurator\Template\Price`.
     * Removed database field `s_article_configurator_template_prices.baseprice`.
+* Removed unused class `Shopware_Components_Menu_Item` and `Shopware_Components_Menu_SaveHandler_DbTable`
 
 ## 5.1.6
 * The interface `Enlight_Components_Cron_Adapter` in `engine/Library/Enlight/Components/Cron/Adapter.php` got a new method `getJobByAction`. For default implementation see `engine/Library/Enlight/Components/Cron/Adapter/DBAL.php`.
