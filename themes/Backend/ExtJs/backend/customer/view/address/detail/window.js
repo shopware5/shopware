@@ -36,8 +36,82 @@
 Ext.define('Shopware.apps.Customer.view.address.detail.Window', {
     extend: 'Shopware.window.Detail',
     alias: 'widget.customer-address-detail-window',
-    height: 560,
+    height: 600,
     width: '80%',
-    title: '{s name="detail/window/title"}Address details{/s}'
+    title: '{s name="detail/window/title"}Address details{/s}',
+
+    initComponent: function() {
+        var me = this;
+
+        me.callParent(arguments);
+
+        if (me.record && me.record.get('id')) {
+            me.attributeForm.loadAttribute(me.record.get('id'));
+        }
+
+        Shopware.app.Application.on('address-save-successfully', me.onSaveSuccessful);
+    },
+
+    /**
+     * Set title of first tab and add attribute tab
+     *
+     * @returns array
+     */
+    createTabItems: function() {
+        var me = this,
+            items = me.callParent(arguments);
+
+        items[0].title = me.title;
+        items.push(me.createAttributesTab());
+
+        return items;
+    },
+
+    /**
+     * Create the attribute tab
+     *
+     * @returns Ext.container.Container
+     */
+    createAttributesTab: function() {
+        var me = this;
+
+        me.attributeForm = Ext.create('Shopware.attribute.Form', {
+            allowTranslation: false,
+            table: 's_user_addresses_attributes'
+        });
+
+        return Ext.create('Ext.container.Container', {
+            title: '{s namespace="backend/attributes/main" name="attribute_form_title"}{/s}',
+            padding: 20,
+            items: [
+                me.attributeForm
+            ]
+        });
+    },
+
+    /**
+     * Save attributes after saving the record
+     *
+     * @param controller
+     * @param record
+     * @param window
+     */
+    onSaveSuccessful: function(controller, record, window) {
+        var me = this;
+
+        window.attributeForm.saveAttribute(record.get('id'), function(success) {
+
+            if(!success){
+                return;
+            }
+
+            Ext.Ajax.request({
+                url: '{url controller=Address action=syncAttribute}',
+                params: {
+                    id: record.get('id')
+                }
+            });
+        });
+    }
 });
 //{/block}

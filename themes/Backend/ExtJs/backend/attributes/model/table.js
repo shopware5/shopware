@@ -42,7 +42,8 @@ Ext.define('Shopware.apps.Attributes.model.Table', {
         s_article_configurator_templates_attributes: '{s name="table/s_article_configurator_templates_attributes"}{/s}',
         s_article_configurator_template_prices_attributes: '{s name="table/s_article_configurator_template_prices_attributes"}{/s}',
         s_core_auth_attributes: '{s name="table/s_core_auth_attributes"}{/s}',
-        s_emarketing_vouchers_attributes: '{s name="table/s_emarketing_vouchers_attributes"}{/s}'
+        s_emarketing_vouchers_attributes: '{s name="table/s_emarketing_vouchers_attributes"}{/s}',
+        s_user_addresses_attributes: '{s name="table/s_user_addresses_attributes"}{/s}'
     },
 
     fields: [

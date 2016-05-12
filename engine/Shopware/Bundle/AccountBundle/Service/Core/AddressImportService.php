@@ -27,6 +27,8 @@ namespace Shopware\Bundle\AccountBundle\Service\Core;
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\AccountBundle\Service\AddressImportServiceInterface;
 use Shopware\Bundle\AccountBundle\Service\AddressServiceInterface;
+use Shopware\Bundle\AttributeBundle\Service\DataLoader;
+use Shopware\Bundle\AttributeBundle\Service\DataPersister;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Country\Country;
 use Shopware\Models\Country\State;
@@ -51,6 +53,16 @@ class AddressImportService implements AddressImportServiceInterface
     private $addressService;
 
     /**
+     * @var DataLoader
+     */
+    private $attributeLoader;
+
+    /**
+     * @var DataPersister
+     */
+    private $attributePersister;
+
+    /**
      * AddressService constructor.
      * @param Connection $connection
      * @param ModelManager $modelManager
@@ -61,6 +73,8 @@ class AddressImportService implements AddressImportServiceInterface
         $this->connection = $connection;
         $this->modelManager = $modelManager;
         $this->addressService = $addressService;
+        $this->attributeLoader = Shopware()->Container()->get('shopware_attribute.data_loader');
+        $this->attributePersister = Shopware()->Container()->get('shopware_attribute.data_persister');
     }
 
     /**
@@ -107,6 +121,7 @@ class AddressImportService implements AddressImportServiceInterface
     {
         $builder = $this->connection->createQueryBuilder();
         $fields = strpos($table, 'shipping') ? $this->getShippingAddressFields() : $this->getBillingAddressFields();
+        $attributesTable = $table . '_attributes';
 
         $data = $builder
             ->select($fields)
@@ -116,11 +131,14 @@ class AddressImportService implements AddressImportServiceInterface
             ->execute()
             ->fetch(\PDO::FETCH_ASSOC);
 
+        $addressId = $data['id'];
+        unset($data['id']);
+
         if (empty($data)) {
             throw new \RuntimeException('No address to import found in '.$table.'.');
         }
 
-        if ($this->addressService->isDuplicate($data, $customerId)) {
+        if ($this->isDuplicate($data, $customerId)) {
             throw new \RuntimeException('The address in '.$table.' seems to be a duplicate of an existing address.');
         }
 
@@ -139,7 +157,8 @@ class AddressImportService implements AddressImportServiceInterface
         $address = new Address();
         $address->fromArray($data);
         $address = $this->addressService->create($address, $customer);
-        $this->importLegacyAddressAttributes($table, $address);
+        $attributes = $this->attributeLoader->load($attributesTable, $addressId);
+        $this->attributePersister->persist($attributes, 's_user_addresses_attributes', $address->getId());
 
         return $address;
     }
@@ -164,6 +183,7 @@ class AddressImportService implements AddressImportServiceInterface
     private function getShippingAddressFields()
     {
         return [
+            'id',
             'company',
             'department',
             'salutation',
@@ -181,31 +201,27 @@ class AddressImportService implements AddressImportServiceInterface
     }
 
     /**
-     * @param string $table
-     * @param Address $address
+     * Searches all customer addresses for the given data
+     *
+     * @param array $data
+     * @param int $customerId
+     * @return bool
      */
-    private function importLegacyAddressAttributes($table, Address $address)
+    private function isDuplicate(array $data, $customerId)
     {
-        $attributeTable = $table . '_attributes';
-        $attributeForeignKey = strpos($table, 'shipping') ? 'shippingID' : 'billingID';
+        $existing = $this->modelManager->getRepository(Address::class)->getListArray($customerId);
 
-        $builder = $this->connection->createQueryBuilder();
+        foreach ($existing as $row) {
+            $row['country'] = $row['country']['id'];
+            $row['state'] = $row['state'] ? $row['state']['id'] : null;
+            unset($row['id']);
 
-        $data = $builder
-            ->select('*')
-            ->from($table, 'address')
-            ->innerJoin('address', $attributeTable, 'attribute', 'address.id = attribute.' . $attributeForeignKey)
-            ->where('address.userID = :addressId')
-            ->setParameter('addressId', $address->getCustomer()->getId())
-            ->execute()
-            ->fetch(\PDO::FETCH_ASSOC);
-
-        if (empty($data)) {
-            return;
+            $diff = array_diff($row, $data);
+            if (empty($diff)) {
+                return true;
+            }
         }
 
-        unset($data['id'], $data['address_id'], $data['shippingID'], $data['billingID']);
-
-        $this->addressService->saveAttribute($address, $data);
+        return false;
     }
 }

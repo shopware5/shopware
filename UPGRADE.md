@@ -231,6 +231,21 @@ In this document you will find a changelog of the important changes related to t
 * Deprecated `Shopware()->Models()->__call()`
 * Removed unused database fields `s_core_config_elements.filters`, `s_core_config_elements.validators`, `s_core_config_forms.scope`
 * Removed deprecated `\Shopware\Models\Menu\Repository::save()` and `\Shopware\Models\Menu\Repository::addItem()`
+* Removed event `Shopware_Modules_Order_SaveOrderAttributes_FilterSQL`
+* Removed event `Shopware_Modules_Order_SaveOrderAttributes_FilterDetailsSQL`
+* Removed event `Shopware_Modules_Order_SaveBillingAttributes_FilterSQL`
+* Removed event `Shopware_Modules_Order_SaveBillingAttributes_FilterArray`
+* Removed event `Shopware_Modules_Admin_SaveRegisterShippingAttributes_FilterSql`
+* Removed event `Shopware_Modules_Admin_SaveRegisterShippingAttributes_Return`
+* Removed event `Shopware_Modules_Admin_SaveRegisterBillingAttributes_FilterSql`
+* Removed event `Shopware_Modules_Admin_SaveRegisterBillingAttributes_Return`
+* Removed event `Shopware_Modules_Admin_SaveRegisterMainDataAttributes_FilterSql`
+* Removed event `Shopware_Modules_Admin_SaveRegisterMainDataAttributes_Return`
+* The filter event `Shopware_Modules_Order_SaveBilling_FilterArray` now contains an associative array instead of one with numeric keys.
+* The filter event `Shopware_Modules_Order_SaveBilling_FilterSQL` now uses named parameters in the query instead of question marks.
+* The filter event `Shopware_Modules_Order_SaveShipping_FilterArray` now contains an associative array instead of one with numeric keys.
+* The filter event `Shopware_Modules_Order_SaveShipping_FilterSQL` now uses named parameters in the query instead of question marks.
+
 
 ## 5.1.6
 * The interface `Enlight_Components_Cron_Adapter` in `engine/Library/Enlight/Components/Cron/Adapter.php` got a new method `getJobByAction`. For default implementation see `engine/Library/Enlight/Components/Cron/Adapter/DBAL.php`.

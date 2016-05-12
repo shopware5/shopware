@@ -104,6 +104,21 @@ class Shopware_Controllers_Backend_Address extends Shopware_Controllers_Backend_
     }
 
     /**
+     * Transfers the address attributes to the according legacy tables.
+     *
+     * Intended to be called from shopware backend via ajax with request parameter `id`.
+     */
+    public function syncAttributeAction()
+    {
+        $customerAddressId = $this->Request()->getParam('id');
+        if (!$customerAddressId) {
+            return;
+        }
+        $address = $this->getManager()->getRepository('Shopware\Models\Customer\Address')->find($customerAddressId);
+        Shopware()->Container()->get('shopware_account.address_service')->update($address);
+    }
+
+    /**
      * Override save method to make use of symfony form and custom data mapping
      * If isDefaultBillingAddress or isDefaultShippingAddress, the appropriate action will be made
      *

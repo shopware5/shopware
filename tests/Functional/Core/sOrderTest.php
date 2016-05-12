@@ -64,20 +64,6 @@ class sOrderTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($next, $current + 1);
     }
 
-    public function testGetOrderAttributes()
-    {
-        $orderId = $this->createDummyOrder();
-        $this->createDummyPosition($orderId);
-        $this->createDummyPosition($orderId);
-        $this->createDummyPosition($orderId);
-
-        $attributes = $this->invokeMethod($this->module, 'getOrderAttributes', array($orderId));
-
-        $this->assertNotEmpty($attributes);
-        $this->assertArrayHasKey('attribute1', $attributes);
-        $this->assertArrayHasKey('orderID', $attributes);
-    }
-
     /**
      * @covers sOrder::sendMail()
      * @ticket SW-8261
@@ -122,21 +108,6 @@ class sOrderTest extends PHPUnit_Framework_TestCase
         $context = $args->get('context');
         $this->assertInternalType('array', $context['sPaymentTable']);
         $this->assertCount(0, $context['sPaymentTable']);
-    }
-
-
-    public function testGetOrderDetailAttributes()
-    {
-        $orderId = $this->createDummyOrder();
-        $this->createDummyPosition($orderId);
-        $this->createDummyPosition($orderId);
-        $detailId = $this->createDummyPosition($orderId);
-
-        $attributes = $this->invokeMethod($this->module, 'getOrderDetailAttributes', array($detailId));
-
-        $this->assertNotEmpty($attributes);
-        $this->assertArrayHasKey('attribute1', $attributes);
-        $this->assertArrayHasKey('detailID', $attributes);
     }
 
     public function testTransactionExistTrue()
@@ -353,14 +324,15 @@ class sOrderTest extends PHPUnit_Framework_TestCase
 
         $billingAttr = $billing->getAttribute();
 
-        $this->assertEquals($originalBillingAddress["text1"], $billingAttr->getText1());
-        $this->assertEquals($originalBillingAddress["text2"], $billingAttr->getText2());
-        $this->assertEquals($originalBillingAddress["text3"], $billingAttr->getText3());
-        $this->assertEquals($originalBillingAddress["text4"], $billingAttr->getText4());
-        $this->assertEquals($originalBillingAddress["text5"], $billingAttr->getText5());
-        $this->assertEquals($originalBillingAddress["text6"], $billingAttr->getText6());
-
-        Shopware()->Models()->remove($billingAttr);
+        if ($billingAttr !== null) {
+            $this->assertEquals($originalBillingAddress["text1"], $billingAttr->getText1());
+            $this->assertEquals($originalBillingAddress["text2"], $billingAttr->getText2());
+            $this->assertEquals($originalBillingAddress["text3"], $billingAttr->getText3());
+            $this->assertEquals($originalBillingAddress["text4"], $billingAttr->getText4());
+            $this->assertEquals($originalBillingAddress["text5"], $billingAttr->getText5());
+            $this->assertEquals($originalBillingAddress["text6"], $billingAttr->getText6());
+            Shopware()->Models()->remove($billingAttr);
+        }
         Shopware()->Models()->remove($billing);
         Shopware()->Models()->flush();
     }
@@ -384,14 +356,16 @@ class sOrderTest extends PHPUnit_Framework_TestCase
 
         $shippingAttr = $shipping->getAttribute();
 
-        $this->assertEquals($originalBillingAddress["text1"], $shippingAttr->getText1());
-        $this->assertEquals($originalBillingAddress["text2"], $shippingAttr->getText2());
-        $this->assertEquals($originalBillingAddress["text3"], $shippingAttr->getText3());
-        $this->assertEquals($originalBillingAddress["text4"], $shippingAttr->getText4());
-        $this->assertEquals($originalBillingAddress["text5"], $shippingAttr->getText5());
-        $this->assertEquals($originalBillingAddress["text6"], $shippingAttr->getText6());
+        if ($shippingAttr !== null) {
+            $this->assertEquals($originalBillingAddress["text1"], $shippingAttr->getText1());
+            $this->assertEquals($originalBillingAddress["text2"], $shippingAttr->getText2());
+            $this->assertEquals($originalBillingAddress["text3"], $shippingAttr->getText3());
+            $this->assertEquals($originalBillingAddress["text4"], $shippingAttr->getText4());
+            $this->assertEquals($originalBillingAddress["text5"], $shippingAttr->getText5());
+            $this->assertEquals($originalBillingAddress["text6"], $shippingAttr->getText6());
+            Shopware()->Models()->remove($shippingAttr);
+        }
 
-        Shopware()->Models()->remove($shippingAttr);
         Shopware()->Models()->remove($shipping);
         Shopware()->Models()->flush();
     }

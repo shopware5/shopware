@@ -173,7 +173,7 @@ class Billing extends ModelEntity
     /**
      * Contains the vat id of the billing address
      * @var string $vatId
-     * @ORM\Column(name="ustid", type="string", length=50, nullable=false)
+     * @ORM\Column(name="ustid", type="string", length=50, nullable=true)
      */
     private $vatId = '';
 
@@ -654,6 +654,9 @@ class Billing extends ModelEntity
         } else {
             $this->setState(null);
         }
+
+        $attributeData = Shopware()->Models()->toArray($address->getAttribute());
+        $this->setAttribute($attributeData);
     }
 
     /**
