@@ -177,7 +177,6 @@
 {include file='backend/base/component/Shopware.component.Preloader.js'}
 {include file='backend/base/component/Shopware.component.IconPreloader.js'}
 {include file='backend/base/component/Shopware.global.ErrorReporter.js'}
-{include file='backend/base/component/Shopware.notification.ExpiredLicence.js'}
 {include file='backend/base/component/Shopware.notification.SubscriptionWarning.js'}
 {include file='backend/base/component/Shopware.component.ValidatePassword.js'}
 

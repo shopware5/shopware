@@ -41,7 +41,6 @@ class LocalLicenseUnpackService implements LicenseUnpackServiceInterface
      * @param  LicenseUnpackRequest $request
      * @throws LicenseHostException
      * @throws LicenseProductKeyException
-     * @throws LicenseInvalidException
      * @return LicenseInformation
      */
     public function evaluateLicense(LicenseUnpackRequest $request)
@@ -49,6 +48,30 @@ class LocalLicenseUnpackService implements LicenseUnpackServiceInterface
         $license = $request->licenseKey;
         $host    = $request->host;
 
+        $info = $this->readLicenseInfo($license);
+
+        if (!$this->isValidProductKey($info['product'])) {
+            throw new LicenseProductKeyException("License key does not match a commercial Shopware edition");
+        }
+
+        if ($info['host'] != $host) {
+            throw new LicenseHostException(new LicenseInformation($info), "License key is not valid for domain " . $request->host);
+        }
+
+        $info['edition'] = $info['product'];
+        unset($info['moduleLicense']);
+        unset($info['coreLicense']);
+
+        return new LicenseInformation($info);
+    }
+
+    /**
+     * @param string $license
+     * @throws LicenseInvalidException
+     * @return array
+     */
+    public function readLicenseInfo($license)
+    {
         $license = str_replace('-------- LICENSE BEGIN ---------', '', $license);
         $license = str_replace('--------- LICENSE END ----------', '', $license);
         $license = preg_replace('#--.+?--#', '', (string) $license);
@@ -81,19 +104,11 @@ class LocalLicenseUnpackService implements LicenseUnpackServiceInterface
             throw new LicenseInvalidException("License key seems to be incorrect");
         }
 
-        $info['license'] = $license;
+        $info['license']       = $license;
+        $info['moduleLicense'] = $moduleLicense;
+        $info['coreLicense']   = $coreLicense;
 
-        if (!$this->isValidProductKey($info['product'])) {
-            throw new LicenseProductKeyException("License key does not match a commercial Shopware edition");
-        }
-
-        if ($info['host'] != $host) {
-            throw new LicenseHostException(new LicenseInformation($info), "License key is not valid for domain " . $request->host);
-        }
-
-        $info += ['edition' => $info['product']];
-
-        return new LicenseInformation($info);
+        return $info;
     }
 
     /**
