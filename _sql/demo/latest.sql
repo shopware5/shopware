@@ -7436,9 +7436,9 @@ INSERT INTO `s_order_basket_attributes` (`id`, `basketID`, `attribute1`, `attrib
 (32, 667, '', NULL, NULL, NULL, NULL, NULL);
 
 TRUNCATE TABLE `s_order_billingaddress`;
-INSERT INTO `s_order_billingaddress` (`id`, `userID`, `orderID`, `company`, `department`, `salutation`, `customernumber`, `firstname`, `lastname`, `street`, `zipcode`, `city`, `phone`, `countryID`, `stateID`, `ustid`) VALUES
-(1, 2, 15, 'B2B', 'Einkauf', 'company', '', 'Händler', 'Kundengruppe-Netto', 'Musterweg 1', '00000', 'Musterstadt', '012345 / 6789', 2, 3, ''),
-(2, 1, 57, 'shopware AG', '', 'mr', '', 'Max', 'Mustermann', 'Mustermannstraße 92', '48624', 'Schöppingen', '', 2, 3, '');
+INSERT INTO `s_order_billingaddress` (`id`, `userID`, `orderID`, `company`, `department`, `salutation`, `firstname`, `lastname`, `street`, `zipcode`, `city`, `phone`, `countryID`, `stateID`, `ustid`) VALUES
+(1, 2, 15, 'B2B', 'Einkauf', 'company', 'Händler', 'Kundengruppe-Netto', 'Musterweg 1', '00000', 'Musterstadt', '012345 / 6789', 2, 3, ''),
+(2, 1, 57, 'shopware AG', '', 'mr', 'Max', 'Mustermann', 'Mustermannstraße 92', '48624', 'Schöppingen', '', 2, 3, '');
 
 TRUNCATE TABLE `s_order_billingaddress_attributes`;
 INSERT INTO `s_order_billingaddress_attributes` (`id`, `billingID`, `text1`, `text2`, `text3`, `text4`, `text5`, `text6`) VALUES

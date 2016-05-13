@@ -31,8 +31,6 @@ use Shopware\Components\Validator\EmailValidatorInterface;
 use Shopware\Models\Customer\Customer;
 use Shopware_Components_Snippet_Manager;
 use Symfony\Component\Validator\Constraint;
-use Symfony\Component\Validator\Constraints\Email;
-use Symfony\Component\Validator\Constraints\EmailValidator;
 use Symfony\Component\Validator\ConstraintValidator;
 
 class CustomerEmailValidator extends ConstraintValidator

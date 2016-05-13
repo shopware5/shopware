@@ -24,7 +24,6 @@
 
 namespace Shopware\Bundle\AccountBundle\Constraint;
 
-use Shopware\Components\DependencyInjection\Container;
 use Shopware\Components\Password\Manager;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;

@@ -24,7 +24,6 @@
 
 namespace Shopware\Bundle\AccountBundle\Service;
 
-use Shopware\Bundle\AccountBundle\Service\CustomerServiceInterface;
 use Shopware\Bundle\AccountBundle\Service\Validator\CustomerValidatorInterface;
 use Shopware\Components\Api\Exception\ValidationException;
 use Shopware\Components\Model\ModelManager;

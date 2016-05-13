@@ -43,9 +43,6 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
     {
         $this->reset();
 
-        // reset model container
-        Shopware()->Container()->reset('shopware_account.address_service');
-
         $this->Request()->setMethod($method);
 
         if ($method === 'POST') {

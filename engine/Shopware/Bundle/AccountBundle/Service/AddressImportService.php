@@ -25,8 +25,6 @@
 namespace Shopware\Bundle\AccountBundle\Service;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\AccountBundle\Service\AddressImportServiceInterface;
-use Shopware\Bundle\AccountBundle\Service\AddressServiceInterface;
 use Shopware\Bundle\AttributeBundle\Service\DataLoader;
 use Shopware\Bundle\AttributeBundle\Service\DataPersister;
 use Shopware\Components\Model\ModelManager;

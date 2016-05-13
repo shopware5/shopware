@@ -24,7 +24,6 @@
 
 namespace Shopware\Bundle\AccountBundle\Service;
 
-use Shopware\Bundle\AccountBundle\Service\AddressServiceInterface;
 use Shopware\Bundle\AccountBundle\Form\Account\AddressFormType;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Attribute\CustomerAddress;

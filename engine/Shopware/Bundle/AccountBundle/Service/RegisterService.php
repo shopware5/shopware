@@ -28,7 +28,6 @@ use Doctrine\DBAL\Connection;
 use Shopware\Bundle\AccountBundle\Service\Validator\CustomerValidatorInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
-use Shopware\Components\Model\ModelEntity;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\NumberRangeIncrementerInterface;
 use Shopware\Components\Password\Manager;
@@ -75,11 +74,6 @@ class RegisterService implements RegisterServiceInterface
     private $addressService;
 
     /**
-     * @var array
-     */
-    private $createdEntities = [];
-
-    /**
      * RegisterService constructor.
      * @param ModelManager $modelManager
      * @param CustomerValidatorInterface $validator
@@ -120,27 +114,26 @@ class RegisterService implements RegisterServiceInterface
         Address $billing,
         Address $shipping = null
     ) {
+        $this->modelManager->beginTransaction();
+
         try {
             $this->saveCustomer($shop, $customer);
-            $this->addCreatedEntity($customer);
 
             $this->addressService->create($billing, $customer);
-            $this->addCreatedEntity($billing);
-
             $this->addressService->setDefaultBillingAddress($billing);
 
             if ($shipping !== null) {
                 $this->addressService->create($shipping, $customer);
                 $this->addressService->setDefaultShippingAddress($shipping);
-                $this->addCreatedEntity($shipping);
             } else {
                 $this->addressService->setDefaultShippingAddress($billing);
             }
 
             $this->saveReferer($customer);
-            $this->resetCreatedEntityList();
+
+            $this->modelManager->commit();
         } catch (\Exception $ex) {
-            $this->rollback();
+            $this->modelManager->rollback();
             throw $ex;
         }
     }
@@ -231,33 +224,5 @@ class RegisterService implements RegisterServiceInterface
     private function getPartnerId(Customer $customer)
     {
         return (int) $this->connection->fetchColumn('SELECT id FROM s_emarketing_partner WHERE idcode = ?', [$customer->getAffiliate()]);
-    }
-
-    /**
-     * In case of an error, rollback the entity creation to prevent zombie data
-     */
-    private function rollback()
-    {
-        foreach ($this->createdEntities as $entityName => $ids) {
-            foreach ($ids as $id) {
-                $this->modelManager->remove($this->modelManager->find($entityName, $id));
-            }
-        }
-
-        $this->modelManager->flush();
-        $this->resetCreatedEntityList();
-    }
-
-    /**
-     * @param ModelEntity $entity
-     */
-    private function addCreatedEntity(ModelEntity $entity)
-    {
-        $this->createdEntities[get_class($entity)][] = $entity->getId();
-    }
-
-    private function resetCreatedEntityList()
-    {
-        $this->createdEntities = [];
     }
 }
