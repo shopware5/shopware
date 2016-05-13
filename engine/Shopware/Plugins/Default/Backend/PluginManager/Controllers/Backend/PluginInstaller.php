@@ -31,7 +31,19 @@ use Symfony\Component\HttpFoundation\FileBag;
 
 class Shopware_Controllers_Backend_PluginInstaller extends Shopware_Controllers_Backend_ExtJs
 {
-    protected $model = 'Shopware\Models\Plugin\Plugin';
+    protected $model = Plugin::class;
+
+    /**
+     * @var InstallerService
+     */
+    private $pluginManager;
+
+    public function preDispatch()
+    {
+        parent::preDispatch();
+
+        $this->pluginManager = $this->get('shopware_plugininstaller.plugin_manager');
+    }
 
     /**
      * @return ModelRepository
@@ -46,7 +58,7 @@ class Shopware_Controllers_Backend_PluginInstaller extends Shopware_Controllers_
         $plugin = $this->getPluginModel($this->Request()->getParam('technicalName'));
 
         if (!$plugin instanceof Plugin) {
-            $this->get('shopware_plugininstaller.plugin_manager')->refreshPluginList();
+            $this->pluginManager->refreshPluginList();
             $plugin = $this->getPluginModel($this->Request()->getParam('technicalName'));
         }
 
@@ -59,7 +71,7 @@ class Shopware_Controllers_Backend_PluginInstaller extends Shopware_Controllers_
         }
 
         try {
-            $result = $this->get('shopware_plugininstaller.plugin_manager')->installPlugin($plugin);
+            $result = $this->pluginManager->installPlugin($plugin);
 
             if ($result === true || $result === false) {
                 $result = ['success' => $result];
@@ -85,9 +97,9 @@ class Shopware_Controllers_Backend_PluginInstaller extends Shopware_Controllers_
 
         try {
             if ($plugin->getInstalled()) {
-                $result = $this->get('shopware_plugininstaller.plugin_manager')->updatePlugin($plugin);
+                $result = $this->pluginManager->updatePlugin($plugin);
             } else {
-                $result = $this->get('shopware_plugininstaller.plugin_manager')->installPlugin($plugin);
+                $result = $this->pluginManager->installPlugin($plugin);
             }
         } catch (Exception $e) {
             $this->View()->assign([
@@ -114,7 +126,7 @@ class Shopware_Controllers_Backend_PluginInstaller extends Shopware_Controllers_
         $plugin = $this->getPluginModel($this->Request()->getParam('technicalName'));
 
         try {
-            $result = $this->get('shopware_plugininstaller.plugin_manager')->uninstallPlugin($plugin);
+            $result = $this->pluginManager->uninstallPlugin($plugin);
 
             if ($result === true || $result === false) {
                 $result = ['success' => $result];
@@ -130,7 +142,7 @@ class Shopware_Controllers_Backend_PluginInstaller extends Shopware_Controllers_
         $plugin = $this->getPluginModel($this->Request()->getParam('technicalName'));
 
         try {
-            $result = $this->get('shopware_plugininstaller.plugin_manager')->uninstallPlugin(
+            $result = $this->pluginManager->uninstallPlugin(
                 $plugin,
                 !$plugin->hasCapabilitySecureUninstall()
             );
@@ -146,10 +158,7 @@ class Shopware_Controllers_Backend_PluginInstaller extends Shopware_Controllers_
 
     public function deletePluginAction()
     {
-        /** @var InstallerService $pluginManager */
-        $pluginManager  = $this->get('shopware_plugininstaller.plugin_manager');
-
-        $directory = $pluginManager->getPluginPath($this->Request()->getParam('technicalName'));
+        $directory = $this->pluginManager->getPluginPath($this->Request()->getParam('technicalName'));
 
         $plugin = $this->getPluginModel($this->Request()->getParam('technicalName'));
 
@@ -174,7 +183,7 @@ class Shopware_Controllers_Backend_PluginInstaller extends Shopware_Controllers_
         $plugin = $this->getPluginModel($this->Request()->getParam('technicalName'));
 
         try {
-            $result = $this->get('shopware_plugininstaller.plugin_manager')->activatePlugin($plugin);
+            $result = $this->pluginManager->activatePlugin($plugin);
             $this->View()->assign($result);
         } catch (Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
@@ -186,7 +195,7 @@ class Shopware_Controllers_Backend_PluginInstaller extends Shopware_Controllers_
         $plugin = $this->getPluginModel($this->Request()->getParam('technicalName'));
 
         try {
-            $result = $this->get('shopware_plugininstaller.plugin_manager')->deactivatePlugin($plugin);
+            $result = $this->pluginManager->deactivatePlugin($plugin);
             $this->View()->assign($result);
         } catch (Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
@@ -285,7 +294,7 @@ class Shopware_Controllers_Backend_PluginInstaller extends Shopware_Controllers_
             if ($file->isDir()) {
                 $returns[] = rmdir($file->getRealPath());
             } else {
-                $returns[] =unlink($file->getRealPath());
+                $returns[] = unlink($file->getRealPath());
             }
         }
         $returns[] = rmdir($path);
