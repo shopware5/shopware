@@ -4370,6 +4370,18 @@ class sAdmin
                     $getOrderDetails[$orderDetailsKey]['referenceprice'] = $tmpArticle['referenceprice'];
                 }
 
+                if (!empty($tmpArticle['minpurchase'])) {
+                    $getOrderDetails[$orderDetailsKey]['minpurchase'] = $tmpArticle['minpurchase'];
+                }
+
+                if (!empty($tmpArticle['maxpurchase'])) {
+                    $getOrderDetails[$orderDetailsKey]['maxpurchase'] = $tmpArticle['maxpurchase'];
+                }
+
+                if (!empty($tmpArticle['purchasesteps'])) {
+                    $getOrderDetails[$orderDetailsKey]['purchasesteps'] = $tmpArticle['purchasesteps'];
+                }
+
                 if (!empty($tmpArticle['sUnit']) && is_array($tmpArticle['sUnit'])) {
                     $getOrderDetails[$orderDetailsKey]['sUnit'] = $tmpArticle['sUnit'];
                 }
@@ -4380,6 +4392,14 @@ class sAdmin
 
                 if (!empty($tmpArticle['pseudoprice'])) {
                     $getOrderDetails[$orderDetailsKey]['currentPseudoprice'] = $tmpArticle['pseudoprice'];
+                }
+
+                if (!empty($tmpArticle['laststock'])) {
+                    $getOrderDetails[$orderDetailsKey]['laststock'] = $tmpArticle['laststock'];
+                }
+
+                if (!empty($tmpArticle['instock'])) {
+                    $getOrderDetails[$orderDetailsKey]['instock'] = $tmpArticle['instock'];
                 }
 
                 $getOrderDetails[$orderDetailsKey]['currentHas_pseudoprice'] = $tmpArticle['has_pseudoprice'];
