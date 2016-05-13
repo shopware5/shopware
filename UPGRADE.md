@@ -254,6 +254,11 @@ In this document you will find a changelog of the important changes related to t
     * Removed property `basePrice` of `Shopware\Models\Article\Configurator\Template\Price`.
     * Removed database field `s_article_configurator_template_prices.baseprice`.
 * Removed unused class `Shopware_Components_Menu_Item` and `Shopware_Components_Menu_SaveHandler_DbTable`
+* Removed database fields
+    * `s_core_menu.hyperlink`
+    * `s_core_menu.style`
+    * `s_core_menu.resourceID`
+* Removed method `Shopware\Models\Menu\Menu::setStyle()` and `Shopware\Models\Menu\Menu::getStyle()`
 
 ## 5.1.6
 * The interface `Enlight_Components_Cron_Adapter` in `engine/Library/Enlight/Components/Cron/Adapter.php` got a new method `getJobByAction`. For default implementation see `engine/Library/Enlight/Components/Cron/Adapter/DBAL.php`.
