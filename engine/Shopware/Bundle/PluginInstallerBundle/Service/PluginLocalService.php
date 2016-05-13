@@ -149,8 +149,6 @@ class PluginLocalService
     {
         foreach ($plugins as &$row) {
             $row['iconPath'] = $this->getIconOfPlugin(
-                $row['source'],
-                $row['namespace'],
                 $row['name']
             );
         }
@@ -175,18 +173,15 @@ class PluginLocalService
     }
 
     /**
-     * @param string $source
-     * @param string $namespace
      * @param string $name
      * @return bool|string
      */
-    private function getIconOfPlugin($source, $namespace, $name)
+    private function getIconOfPlugin($name)
     {
-        $pluginDirectories = Shopware()->Container()->getParameter('shopware.plugin_directories');
         $rootDir = Shopware()->Container()->getParameter('kernel.root_dir');
 
-        $baseDir = $pluginDirectories[$source];
-        $path = $baseDir . $namespace . '/' . $name . '/plugin.png';
+        $path = Shopware()->Container()->get('shopware_plugininstaller.plugin_manager')->getPluginPath($name);
+        $path .= '/plugin.png';
 
         $relativePath = str_replace($rootDir, '', $path);
         $front = Shopware()->Container()->get('front');

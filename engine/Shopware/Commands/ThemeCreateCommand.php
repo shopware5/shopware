@@ -98,9 +98,6 @@ EOF
     {
         $arguments = $input->getArguments();
 
-        // Disable error reporting for shopware menu legacy hack
-        $this->registerErrorHandler($output);
-
         /** @var Installer $themeInstaller */
         $themeInstaller = $this->container->get('theme_installer');
         $themeInstaller->synchronize();
