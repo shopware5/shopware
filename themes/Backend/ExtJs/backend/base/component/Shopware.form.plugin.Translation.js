@@ -258,6 +258,11 @@ Ext.define('Shopware.form.plugin.Translation',
                 config.allowBlank = true;
             }
 
+            //reset all field listeners to prevent cross module side effects
+            if (config.listeners) {
+                config.listeners = { };
+            }
+
             // Allow overwrite of field label with an alternative label.
             if (config.translationLabel) {
                 config.fieldLabel = config.translationLabel;
