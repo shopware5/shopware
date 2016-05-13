@@ -75,7 +75,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             $this->session['sRegister'] = array();
         }
 
-        if (in_array($this->Request()->getActionName(), array('ajax_validate_password', 'ajax_validate_billing', 'ajax_validate_email'))) {
+        if (in_array($this->Request()->getActionName(), array('ajaxValidatePassword', 'ajaxValidateBilling', 'ajaxValidateEmail'))) {
             Shopware()->Plugins()->Controller()->ViewRenderer()->setNoRender();
         }
     }
