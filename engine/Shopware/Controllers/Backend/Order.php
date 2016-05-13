@@ -193,7 +193,8 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     public function getWhitelistedCSRFActions()
     {
         return [
-            'openPdf'
+            'openPdf',
+            'createDocument'
         ];
     }
 
