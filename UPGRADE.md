@@ -259,6 +259,9 @@ In this document you will find a changelog of the important changes related to t
     * `s_core_menu.style`
     * `s_core_menu.resourceID`
 * Removed method `Shopware\Models\Menu\Menu::setStyle()` and `Shopware\Models\Menu\Menu::getStyle()`
+* Removed class `Shopware_Models_Payment`
+* Removed class `Shopware_Models_PaymentManager`
+* Removed `Shopware_Plugins_Frontend_Payment_Bootstrap`, Service: `Shopware()->Payments()`
 
 ## 5.1.6
 * The interface `Enlight_Components_Cron_Adapter` in `engine/Library/Enlight/Components/Cron/Adapter.php` got a new method `getJobByAction`. For default implementation see `engine/Library/Enlight/Components/Cron/Adapter/DBAL.php`.
