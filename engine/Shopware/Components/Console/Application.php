@@ -138,6 +138,12 @@ class Application extends BaseApplication
             DoctrineConsoleRunner::addCommands($this);
 
             $this->registerEventCommands();
+
+            foreach ($this->kernel->getPlugins() as $plugin) {
+                if ($plugin instanceof \Shopware\Components\Plugin) {
+                    $plugin->registerCommands($this);
+                }
+            }
         } catch (\Exception $e) {
             $formatter = $this->getHelperSet()->get('formatter');
             $output->writeln($formatter->formatBlock('WARNING! ' . $e->getMessage() . " in ". $e->getFile(), 'error'));

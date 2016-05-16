@@ -24,31 +24,20 @@
 
 namespace Shopware\Bundle\PluginInstallerBundle\Service;
 
-class PluginExtractor
+/**
+ * @package Shopware\Bundle\PluginInstallerBundle\Service
+ */
+class LegacyPluginExtractor
 {
-    /**
-     * @var string
-     */
-    private $pluginDir;
-
-    /**
-     * @param $pluginDir
-     */
-    public function __construct($pluginDir)
-    {
-        $this->pluginDir = $pluginDir;
-    }
-
     /**
      * Extracts the provided zip file to the provided destination
      *
      * @param \ZipArchive $archive
+     * @param string $destination
      * @throws \Exception
      */
-    public function extract($archive)
+    public function extract($archive, $destination)
     {
-        $destination = $this->pluginDir;
-
         if (!is_writable($destination)) {
             throw new \Exception(
                 'Destination directory is not writable'
@@ -72,7 +61,8 @@ class PluginExtractor
      */
     private function validatePluginZip(\ZipArchive $archive)
     {
-        $prefix = $this->getPluginPrefix($archive);
+        $prefix = $this->getLegacyPluginPrefix($archive);
+
         $this->assertValid($archive, $prefix);
     }
 
@@ -94,13 +84,21 @@ class PluginExtractor
      * @param \ZipArchive $archive
      * @return string
      */
-    private function getPluginPrefix(\ZipArchive $archive)
+    private function getLegacyPluginPrefix(\ZipArchive $archive)
     {
-        $entry = $archive->statIndex(0);
+        $segments = $archive->statIndex(0);
+        $segments = array_filter(explode('/', $segments['name']));
 
-        $pluginName = rtrim($entry['name'], '/');
+        if (!in_array($segments[0], ['Frontend', 'Backend', 'Core'])) {
+            throw new \RuntimeException('Uploaded zip archive contains no plugin namespace directory');
+        }
 
-        return $pluginName;
+        if (count($segments) <= 1) {
+            $segments = $archive->statIndex(1);
+            $segments = array_filter(explode('/', $segments['name']));
+        }
+
+        return implode('/', $segments);
     }
 
     /**

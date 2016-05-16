@@ -399,6 +399,18 @@
             <argument type="service" id="dbal_connection" />
         </service>
 
+        <service id="shopware.plugin.config_writer" class="Shopware\Components\Plugin\ConfigWriter">
+            <argument type="service" id="models" />
+        </service>
+
+        <service id="shopware.plugin.cached_config_reader" class="Shopware\Components\Plugin\CachedConfigReader">
+            <argument type="service" id="shopware.plugin.config_reader" />
+        </service>
+
+        <service id="shopware.plugin.config_reader" class="Shopware\Components\Plugin\DBALConfigReader">
+            <argument type="service" id="dbal_connection" />
+        </service>
+
         <service id="shopware_product_stream.criteria_factory" class="Shopware\Components\ProductStream\CriteriaFactory">
             <argument type="service" id="shopware_search.store_front_criteria_factory" />
         </service>

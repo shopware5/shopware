@@ -25,13 +25,11 @@
 namespace Shopware\Bundle\PluginInstallerBundle\Service;
 
 use Shopware\Components\Model\ModelManager;
-use Shopware\Models\Config\Value;
+use Shopware\Components\Plugin\ConfigReader;
+use Shopware\Components\Plugin\ConfigWriter;
 use Shopware\Models\Plugin\Plugin;
 use Shopware\Models\Shop\Shop;
 
-/**
- * @package Shopware\Bundle\PluginInstallerBundle\Service
- */
 class InstallerService
 {
     /**
@@ -40,28 +38,46 @@ class InstallerService
     private $em;
 
     /**
-     * @var \Enlight_Plugin_PluginManager
+     * @var \Shopware\Components\Model\ModelRepository
      */
-    private $plugins;
+    private $pluginRepository;
 
     /**
-     * @var array
+     * @var \Shopware\Models\Shop\Repository
      */
-    private $pluginDirectories;
+    private $shopRepository;
+
+    /**
+     * @var ConfigReader
+     */
+    private $configReader;
+
+    /**
+     * @var ConfigWriter
+     */
+    private $configWriter;
 
     /**
      * @param ModelManager $em
-     * @param \Enlight_Plugin_PluginManager $plugins
-     * @param array $pluginDirectories
+     * @param PluginInstaller $pluginInstaller
+     * @param LegacyPluginInstaller $legacyPluginInstaller
+     * @param ConfigWriter $configWriter
+     * @param ConfigReader $configReader
      */
     public function __construct(
         ModelManager $em,
-        \Enlight_Plugin_PluginManager $plugins,
-        array $pluginDirectories
+        PluginInstaller $pluginInstaller,
+        LegacyPluginInstaller $legacyPluginInstaller,
+        ConfigWriter $configWriter,
+        ConfigReader $configReader
     ) {
-        $this->plugins = $plugins;
         $this->em = $em;
-        $this->pluginDirectories = $pluginDirectories;
+        $this->pluginInstaller = $pluginInstaller;
+        $this->legacyPluginInstaller = $legacyPluginInstaller;
+        $this->configWriter = $configWriter;
+        $this->configReader = $configReader;
+        $this->pluginRepository = $this->em->getRepository(Plugin::class);
+        $this->shopRepository = $this->em->getRepository(Shop::class);
     }
 
     /**
@@ -73,9 +89,11 @@ class InstallerService
     {
         $plugin = $this->getPluginByName($pluginName);
 
-        $baseDir = $this->pluginDirectories[$plugin->getSource()];
-
-        return $baseDir . $plugin->getNamespace() . DIRECTORY_SEPARATOR . $plugin->getName() . DIRECTORY_SEPARATOR;
+        if ($this->isNewPlugin($plugin)) {
+            return $this->pluginInstaller->getPluginPath($plugin);
+        } else {
+            return $this->legacyPluginInstaller->getPluginPath($plugin);
+        }
     }
 
     /**
@@ -85,10 +103,8 @@ class InstallerService
      */
     public function getPluginByName($pluginName)
     {
-        $repository = $this->em->getRepository('Shopware\Models\Plugin\Plugin');
-
         /** @var Plugin $plugin */
-        $plugin = $repository->findOneBy(['name' => $pluginName, 'capabilityEnable' => 1]);
+        $plugin = $this->pluginRepository->findOneBy(['name' => $pluginName, 'capabilityEnable' => 1]);
 
         if ($plugin === null) {
             throw new \Exception(sprintf('Unknown plugin: %s.', $pluginName));
@@ -105,13 +121,7 @@ class InstallerService
      */
     public function getPluginBootstrap(Plugin $plugin)
     {
-        $namespace = $this->plugins->get($plugin->getNamespace());
-        if ($namespace === null) {
-            return null;
-        }
-        $plugin = $namespace->get($plugin->getName());
-
-        return $plugin;
+        return $this->legacyPluginInstaller->getPluginBootstrap($plugin);
     }
 
     /**
@@ -122,30 +132,14 @@ class InstallerService
     public function installPlugin(Plugin $plugin)
     {
         if ($plugin->getInstalled()) {
-            return;
+            return true;
         }
 
-        $bootstrap = $this->getPluginBootstrap($plugin);
-
-        /** @var $namespace \Shopware_Components_Plugin_Namespace */
-        $namespace = $bootstrap->Collection();
-
-        try {
-            $result = $namespace->installPlugin($bootstrap);
-        } catch (\Exception $e) {
-            throw new \Exception(sprintf("Unable to install, got exception:\n%s\n", $e->getMessage()), 0, $e);
+        if ($this->isNewPlugin($plugin)) {
+            return $this->pluginInstaller->installPlugin($plugin);
+        } else {
+            return $this->legacyPluginInstaller->installPlugin($plugin);
         }
-
-        $success = (is_bool($result) && $result || isset($result['success']) && $result['success']);
-        if (!$success) {
-            if (isset($result['message'])) {
-                throw new \Exception(sprintf("Unable to install, got message:\n%s\n", $result['message']));
-            } else {
-                throw new \Exception(sprintf('Unable to install %s, an unknown error occured.', $plugin->getName()));
-            }
-        }
-
-        return $result;
     }
 
     /**
@@ -157,30 +151,14 @@ class InstallerService
     public function uninstallPlugin(Plugin $plugin, $removeData = true)
     {
         if (!$plugin->getInstalled()) {
-            return;
+            return true;
         }
 
-        $bootstrap = $this->getPluginBootstrap($plugin);
-
-        /** @var $namespace \Shopware_Components_Plugin_Namespace */
-        $namespace = $bootstrap->Collection();
-
-        try {
-            $result = $namespace->uninstallPlugin($bootstrap, $removeData);
-        } catch (\Exception $e) {
-            throw new \Exception(sprintf("Unable to uninstall, got exception:\n%s\n", $e->getMessage()), 0, $e);
+        if ($this->isNewPlugin($plugin)) {
+            return $this->pluginInstaller->uninstallPlugin($plugin, $removeData);
+        } else {
+            return $this->legacyPluginInstaller->uninstallPlugin($plugin, $removeData);
         }
-
-        $success = (is_bool($result) && $result || isset($result['success']) && $result['success']);
-        if (!$success) {
-            if (isset($result['message'])) {
-                throw new \Exception(sprintf("Unable to uninstall, got message:\n%s\n", $result['message']));
-            } else {
-                throw new \Exception(sprintf('Unable to uninstall %s, an unknown error occured.', $plugin->getName()));
-            }
-        }
-
-        return $result;
     }
 
     /**
@@ -191,29 +169,14 @@ class InstallerService
     public function updatePlugin(Plugin $plugin)
     {
         if (!$plugin->getUpdateVersion()) {
-            return;
+            return true;
         }
 
-        $bootstrap = $this->getPluginBootstrap($plugin);
-
-        /** @var $namespace \Shopware_Components_Plugin_Namespace */
-        $namespace = $bootstrap->Collection();
-
-        try {
-            $result = $namespace->updatePlugin($bootstrap);
-        } catch (\Exception $e) {
-            throw new \Exception(sprintf("Unable to update, got exception:\n%s\n", $e->getMessage()), 0, $e);
+        if ($this->isNewPlugin($plugin)) {
+            return $this->pluginInstaller->updatePlugin($plugin);
+        } else {
+            return $this->legacyPluginInstaller->updatePlugin($plugin);
         }
-
-        $success = (is_bool($result) && $result || isset($result['success']) && $result['success']);
-        if (!$success) {
-            if (isset($result['message'])) {
-                throw new \Exception(sprintf("Unable to update, got message:\n%s\n", $result['message']));
-            } else {
-                throw new \Exception(sprintf('Unable to update %s, an unknown error occured.', $plugin->getName()));
-            }
-        }
-        return $result;
     }
 
     /**
@@ -224,24 +187,18 @@ class InstallerService
     public function activatePlugin(Plugin $plugin)
     {
         if ($plugin->getActive()) {
-            return;
+            return true;
         }
 
         if (!$plugin->getInstalled()) {
             throw new \Exception('Plugin has to be installed first.');
         }
 
-        $bootstrap = $this->getPluginBootstrap($plugin);
-        $result = $bootstrap->enable();
-        $result = is_bool($result) ? ['success' => $result] : $result;
-
-        if ($result['success'] == false) {
-            throw new \Exception('Not allowed to enable plugin.');
+        if ($this->isNewPlugin($plugin)) {
+            return $this->pluginInstaller->activatePlugin($plugin);
+        } else {
+            return $this->legacyPluginInstaller->activatePlugin($plugin);
         }
-
-        $plugin->setActive(true);
-        $this->em->flush($plugin);
-        return $result;
     }
 
     /**
@@ -252,20 +209,14 @@ class InstallerService
     public function deactivatePlugin(Plugin $plugin)
     {
         if (!$plugin->getActive()) {
-            return;
+            return true;
         }
 
-        $bootstrap = $this->getPluginBootstrap($plugin);
-        $result = $bootstrap->disable();
-        $result = is_bool($result) ? ['success' => $result] : $result;
-
-        if ($result['success'] == false) {
-            throw new \Exception('Not allowed to disable plugin.');
+        if ($this->isNewPlugin($plugin)) {
+            return $this->pluginInstaller->deactivatePlugin($plugin);
+        } else {
+            return $this->legacyPluginInstaller->activatePlugin($plugin);
         }
-
-        $plugin->setActive(false);
-        $this->em->flush($plugin);
-        return $result;
     }
 
     /**
@@ -275,12 +226,7 @@ class InstallerService
      */
     public function getPluginConfig(Plugin $plugin, Shop $shop = null)
     {
-        $namespace = $this->plugins->get($plugin->getNamespace());
-
-        /** @var \Shopware_Components_Plugin_Namespace $namespace */
-        $config = $namespace->getConfig($plugin->getName(), $shop);
-
-        return $config->toArray();
+        return $this->configReader->getByPluginName($plugin->getName(), $shop);
     }
 
     /**
@@ -291,13 +237,10 @@ class InstallerService
     public function savePluginConfig(Plugin $plugin, $elements, Shop $shop = null)
     {
         if ($shop === null) {
-            $shopRepository  = $this->em->getRepository('Shopware\Models\Shop\Shop');
-            $shop = $shopRepository->find($shopRepository->getActiveDefault()->getId());
+            $shop = $this->shopRepository->find($this->shopRepository->getActiveDefault()->getId());
         }
 
-        foreach ($elements as $name => $value) {
-            $this->saveConfigElement($plugin, $name, $value, $shop);
-        }
+        $this->configWriter->savePluginConfig($plugin, $elements, $shop);
     }
 
     /**
@@ -310,125 +253,43 @@ class InstallerService
     public function saveConfigElement(Plugin $plugin, $name, $value, Shop $shop = null)
     {
         if ($shop === null) {
-            $shopRepository  = $this->em->getRepository('Shopware\Models\Shop\Shop');
-            $shop = $shopRepository->find($shopRepository->getActiveDefault()->getId());
+            $shop = $this->shopRepository->find($this->shopRepository->getActiveDefault()->getId());
         }
 
-        $elementRepository = $this->em->getRepository('Shopware\Models\Config\Element');
-        $formRepository    = $this->em->getRepository('Shopware\Models\Config\Form');
-        $valueRepository   = $this->em->getRepository('Shopware\Models\Config\Value');
+        $this->configWriter->saveConfigElement($plugin, $name, $value, $shop);
+    }
 
-        /** @var $form \Shopware\Models\Config\Form*/
-        $form = $formRepository->findOneBy(['pluginId' => $plugin->getId()]);
+    public function refreshPluginList()
+    {
+        $refreshDate = new \DateTimeImmutable();
 
-        /** @var $element \Shopware\Models\Config\Element */
-        $element = $elementRepository->findOneBy(['form' => $form, 'name' => $name]);
-        if (!$element) {
-            throw new \Exception(sprintf('Config element "%s" not found.', $name));
-        }
+        $this->pluginInstaller->refreshPluginList($refreshDate);
+        $this->legacyPluginInstaller->refreshPluginList($refreshDate);
 
-        if ($element->getScope() == 0) {
-            // todo prevent subshop updates
-        }
-
-        $defaultValue = $element->getValue();
-        $valueModel = $valueRepository->findOneBy(['shop' => $shop, 'element' => $element]);
-
-        if (!$valueModel) {
-            if ($value == $defaultValue || $value === null) {
-                return;
-            }
-
-            $valueModel = new Value();
-            $valueModel->setElement($element);
-            $valueModel->setShop($shop);
-            $valueModel->setValue($value);
-            $this->em->persist($valueModel);
-            $this->em->flush($valueModel);
-
-            return;
-        }
-
-        if ($value == $defaultValue || $value === null) {
-            $this->em->remove($valueModel);
-        } else {
-            $valueModel->setValue($value);
-        }
-        $this->em->flush($valueModel);
+        $this->cleanupPlugins($refreshDate);
     }
 
     /**
-     *
+     * @param \DateTimeInterface $refreshDate
      */
-    public function refreshPluginList()
+    private function cleanupPlugins(\DateTimeInterface $refreshDate)
     {
-        $refreshed = \Zend_Date::now();
-        $repository   = $this->em->getRepository('Shopware\Models\Plugin\Plugin');
-
-        /** @var $collection \Shopware_Components_Plugin_Namespace */
-        foreach ($this->plugins as $namespace => $collection) {
-            if (!$collection instanceof \Shopware_Components_Plugin_Namespace) {
-                continue;
-            }
-
-            $pluginDirectories = Shopware()->Container()->getParameter('shopware.plugin_directories');
-            foreach ($pluginDirectories as $source => $path) {
-                $path = $path . $namespace;
-                if (!is_dir($path)) {
-                    continue;
-                }
-
-                foreach (new \DirectoryIterator($path) as $dir) {
-                    if (!$dir->isDir() || $dir->isDot()) {
-                        continue;
-                    }
-                    $file = $dir->getPathname() . DIRECTORY_SEPARATOR . 'Bootstrap.php';
-                    if (!file_exists($file)) {
-                        continue;
-                    }
-
-                    $name = $dir->getFilename();
-                    $plugin = $collection->get($name);
-
-                    if ($this->validateIonCube($file)) {
-                        throw new \Exception(sprintf(
-                            'Plugin %s is encrypted but ioncube Loader extension is not installed',
-                            $name
-                        ));
-                    }
-
-                    if ($plugin === null) {
-                        $plugin = $collection->initPlugin($name, new \Enlight_Config([
-                            'source' => $source,
-                            'path' => $dir->getPathname() . DIRECTORY_SEPARATOR
-                        ]));
-                    }
-                    $collection->registerPlugin($plugin);
-                }
-            }
-        }
-
-        $sql = 'SELECT id, refresh_date FROM s_core_plugins WHERE refresh_date<?';
-        $pluginIds = Shopware()->Db()->fetchCol($sql, [$refreshed]);
+        $sql = 'SELECT id FROM s_core_plugins WHERE refresh_date < ?';
+        $pluginIds = $this->em->getConnection()->fetchAll($sql, [$refreshDate], ['datetime']);
+        $pluginIds = array_column($pluginIds, 'id');
         foreach ($pluginIds as $pluginId) {
-            $plugin = $repository->find($pluginId);
+            $plugin = $this->pluginRepository->find($pluginId);
             $this->em->remove($plugin);
         }
         $this->em->flush();
     }
 
     /**
-     * @param string $file
+     * @param Plugin $plugin
      * @return bool
      */
-    private function validateIonCube($file)
+    private function isNewPlugin(Plugin $plugin)
     {
-        if (extension_loaded('ionCube Loader')) {
-            return false;
-        }
-
-        $content = file_get_contents($file);
-        $pos = strpos($content, 'if(!extension_loaded(\'ionCube Loader\')){$__oc=strtolower(');
-        return ($pos > 0);
+        return $plugin->getNamespace() === "ShopwarePlugins";
     }
 }

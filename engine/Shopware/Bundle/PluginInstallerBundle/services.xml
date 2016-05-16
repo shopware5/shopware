@@ -12,11 +12,24 @@
             <argument type="service" id="shopware.openssl_verificator"/>
         </service>
 
-        <service id="shopware.plugin_manager" alias="shopware_plugininstaller.plugin_manager" />
-        <service id="shopware_plugininstaller.plugin_manager" class="Shopware\Bundle\PluginInstallerBundle\Service\InstallerService">
+        <service id="shopware_plugininstaller.plugin_installer" class="Shopware\Bundle\PluginInstallerBundle\Service\PluginInstaller">
+            <argument type="service" id="models"/>
+        </service>
+
+        <service id="shopware_plugininstaller.legacy_plugin_installer" class="Shopware\Bundle\PluginInstallerBundle\Service\LegacyPluginInstaller">
             <argument type="service" id="models"/>
             <argument type="service" id="plugins"/>
             <argument>%shopware.plugin_directories%</argument>
+        </service>
+
+
+        <service id="shopware.plugin_manager" alias="shopware_plugininstaller.plugin_manager" />
+        <service id="shopware_plugininstaller.plugin_manager" class="Shopware\Bundle\PluginInstallerBundle\Service\InstallerService">
+            <argument type="service" id="models"/>
+            <argument type="service" id="shopware_plugininstaller.plugin_installer"/>
+            <argument type="service" id="shopware_plugininstaller.legacy_plugin_installer"/>
+            <argument type="service" id="shopware.plugin.config_writer"/>
+            <argument type="service" id="shopware.plugin.config_reader"/>
         </service>
 
         <service id="shopware_plugininstaller.plugin_download_service" class="Shopware\Bundle\PluginInstallerBundle\Service\DownloadService">
