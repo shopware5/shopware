@@ -61,7 +61,7 @@ class FormSynchronizer
 
     /**
      * @param Plugin $plugin
-     * @param $config $form
+     * @param array $config
      */
     public function synchronize(Plugin $plugin, array $config)
     {

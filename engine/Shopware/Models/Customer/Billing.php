@@ -404,7 +404,7 @@ class Billing extends ModelEntity
     /**
      * Setter function for the countryId column property.
      *
-     * @param $countryId
+     * @param int $countryId
      * @return Billing
      */
     public function setCountryId($countryId)

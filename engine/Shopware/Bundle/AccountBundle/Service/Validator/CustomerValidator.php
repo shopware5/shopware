@@ -89,7 +89,7 @@ class CustomerValidator implements CustomerValidatorInterface
     }
 
     /**
-     * @param mixed $value
+     * @param string $value
      * @param ConstraintValidatorInterface[] $constraints
      * @throws ValidationException
      */
@@ -102,7 +102,7 @@ class CustomerValidator implements CustomerValidatorInterface
     }
 
     /**
-     * @return array
+     * @return ConstraintValidatorInterface[]
      */
     private function getSalutationConstraints()
     {

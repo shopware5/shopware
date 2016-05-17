@@ -105,6 +105,9 @@ class PasswordValidator extends ConstraintValidator
         }
     }
 
+    /**
+     * @param string $message
+     */
     private function addError($message)
     {
         $this->context->buildViolation($message)

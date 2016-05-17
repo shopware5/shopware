@@ -58,6 +58,16 @@ class InstallerService
     private $configWriter;
 
     /**
+     * @var LegacyPluginInstaller
+     */
+    private $legacyPluginInstaller;
+
+    /**
+     * @var PluginInstaller
+     */
+    private $pluginInstaller;
+
+    /**
      * @param ModelManager $em
      * @param PluginInstaller $pluginInstaller
      * @param LegacyPluginInstaller $legacyPluginInstaller
@@ -237,6 +247,7 @@ class InstallerService
     public function savePluginConfig(Plugin $plugin, $elements, Shop $shop = null)
     {
         if ($shop === null) {
+            /** @var Shop $shop */
             $shop = $this->shopRepository->find($this->shopRepository->getActiveDefault()->getId());
         }
 
@@ -253,6 +264,7 @@ class InstallerService
     public function saveConfigElement(Plugin $plugin, $name, $value, Shop $shop = null)
     {
         if ($shop === null) {
+            /** @var Shop $shop */
             $shop = $this->shopRepository->find($this->shopRepository->getActiveDefault()->getId());
         }
 

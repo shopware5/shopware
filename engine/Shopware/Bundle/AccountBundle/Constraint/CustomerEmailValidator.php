@@ -127,8 +127,8 @@ class CustomerEmailValidator extends ConstraintValidator
     /**
      * @param string $value
      * @param Shop $shop
-     * @param null|int $customerId
-     * @return QueryBuilder
+     * @param int $customerId
+     * @return boolean
      */
     private function isExistingEmail($value, Shop $shop, $customerId = null)
     {
