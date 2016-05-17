@@ -21,6 +21,7 @@
         "ext-gd": "*",
         "symfony/http-kernel": "2.8.6",
         "symfony/config": "2.8.6",
+        "symfony/class-loader": "2.8.6",
         "symfony/dependency-injection": "2.8.6",
         "symfony/validator": "2.8.6",
         "symfony/filesystem": "2.8.6",
