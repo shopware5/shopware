@@ -100,10 +100,6 @@ Ext.define('Shopware.apps.Emotion.view.detail.Layout', {
         );
 
         me.callParent(arguments);
-
-        me.loadRecord(me.emotion);
-
-        me.setDevices();
     },
 
     createLayoutFieldset: function() {
