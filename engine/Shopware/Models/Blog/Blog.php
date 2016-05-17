@@ -192,7 +192,6 @@ class Blog extends ModelEntity
     public function __construct()
     {
         $this->media = new ArrayCollection();
-        $this->similar = new ArrayCollection();
         $this->comments = new ArrayCollection();
         $this->tags = new ArrayCollection();
         $this->assignedArticles = new ArrayCollection();

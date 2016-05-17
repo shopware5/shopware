@@ -56,6 +56,11 @@ class ProductConfigurationGateway implements Gateway\ProductConfigurationGateway
     private $fieldHelper;
 
     /**
+     * @var Connection
+     */
+    private $connection;
+
+    /**
      * @param Connection $connection
      * @param FieldHelper $fieldHelper
      * @param Hydrator\ConfiguratorHydrator $configuratorHydrator

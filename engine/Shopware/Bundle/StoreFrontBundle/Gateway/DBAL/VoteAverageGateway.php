@@ -41,6 +41,11 @@ class VoteAverageGateway implements Gateway\VoteAverageGatewayInterface
     private $voteHydrator;
 
     /**
+     * @var Connection
+     */
+    private $connection;
+
+    /**
      * @param Connection $connection
      * @param Hydrator\VoteHydrator $voteHydrator
      */

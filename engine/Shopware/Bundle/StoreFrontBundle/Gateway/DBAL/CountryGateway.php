@@ -56,6 +56,11 @@ class CountryGateway implements Gateway\CountryGatewayInterface
     private $fieldHelper;
 
     /**
+     * @var Connection
+     */
+    private $connection;
+
+    /**
      * @param Connection $connection
      * @param FieldHelper $fieldHelper
      * @param Hydrator\CountryHydrator $countryHydrator

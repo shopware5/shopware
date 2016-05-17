@@ -36,6 +36,11 @@ use Shopware\Bundle\StoreFrontBundle\Gateway;
 class RelatedProductsGateway implements Gateway\RelatedProductsGatewayInterface
 {
     /**
+     * @var Connection
+     */
+    private $connection;
+
+    /**
      * @param Connection $connection
      */
     public function __construct(Connection $connection)

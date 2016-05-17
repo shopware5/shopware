@@ -56,6 +56,11 @@ class LinkGateway implements Gateway\LinkGatewayInterface
     private $fieldHelper;
 
     /**
+     * @var Connection
+     */
+    private $connection;
+
+    /**
      * @param Connection $connection
      * @param FieldHelper $fieldHelper
      * @param Hydrator\LinkHydrator $linkHydrator

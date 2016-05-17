@@ -56,6 +56,11 @@ class PriceGroupDiscountGateway implements Gateway\PriceGroupDiscountGatewayInte
     private $fieldHelper;
 
     /**
+     * @var Connection
+     */
+    private $connection;
+
+    /**
      * @param Connection $connection
      * @param FieldHelper $fieldHelper
      * @param Hydrator\PriceHydrator $priceHydrator

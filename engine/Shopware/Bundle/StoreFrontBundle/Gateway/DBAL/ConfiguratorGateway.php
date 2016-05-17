@@ -62,6 +62,11 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
     private $mediaGateway;
 
     /**
+     * @var Connection
+     */
+    private $connection;
+
+    /**
      * @param Connection $connection
      * @param FieldHelper $fieldHelper
      * @param Hydrator\ConfiguratorHydrator $configuratorHydrator

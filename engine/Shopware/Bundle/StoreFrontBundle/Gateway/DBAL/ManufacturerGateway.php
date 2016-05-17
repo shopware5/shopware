@@ -56,6 +56,11 @@ class ManufacturerGateway implements Gateway\ManufacturerGatewayInterface
     private $fieldHelper;
 
     /**
+     * @var Connection
+     */
+    private $connection;
+
+    /**
      * @param Connection $connection
      * @param FieldHelper $fieldHelper
      * @param Hydrator\ManufacturerHydrator $manufacturerHydrator

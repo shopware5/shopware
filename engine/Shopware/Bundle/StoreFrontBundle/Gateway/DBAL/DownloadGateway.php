@@ -56,6 +56,11 @@ class DownloadGateway implements Gateway\DownloadGatewayInterface
     private $fieldHelper;
 
     /**
+     * @var Connection
+     */
+    private $connection;
+
+    /**
      * @param Connection $connection
      * @param FieldHelper $fieldHelper
      * @param Hydrator\DownloadHydrator $downloadHydrator

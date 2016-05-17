@@ -90,6 +90,11 @@ class ContextService implements Service\ContextServiceInterface
     private $currencyGateway;
 
     /**
+     * @var Gateway\CountryGatewayInterface
+     */
+    private $countryGateway;
+
+    /**
      * @param Container $container
      * @param Gateway\CustomerGroupGatewayInterface $customerGroupGateway
      * @param Gateway\TaxGatewayInterface $taxGateway

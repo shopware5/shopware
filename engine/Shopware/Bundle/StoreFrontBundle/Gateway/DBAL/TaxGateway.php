@@ -56,6 +56,11 @@ class TaxGateway implements Gateway\TaxGatewayInterface
     private $fieldHelper;
 
     /**
+     * @var Connection
+     */
+    private $connection;
+
+    /**
      * @param Connection $connection
      * @param FieldHelper $fieldHelper
      * @param Hydrator\TaxHydrator $taxHydrator

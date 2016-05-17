@@ -40,10 +40,5 @@
             <argument type="service" id="dbal_connection" />
             <tag name="validator.constraint_validator" alias="shopware.form.constraint.unique" />
         </service>
-
-        <service id="shopware.form.constraint.repeated_validator" class="Shopware\Bundle\FormBundle\Constraint\RepeatedValidator">
-            <tag name="validator.constraint_validator" alias="RepeatedValidator" />
-        </service>
-
     </services>
 </container>

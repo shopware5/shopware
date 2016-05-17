@@ -61,6 +61,11 @@ class CheapestPriceGateway implements Gateway\CheapestPriceGatewayInterface
     private $config;
 
     /**
+     * @var Connection
+     */
+    private $connection;
+
+    /**
      * @param Connection $connection
      * @param FieldHelper $fieldHelper
      * @param Hydrator\PriceHydrator $priceHydrator
