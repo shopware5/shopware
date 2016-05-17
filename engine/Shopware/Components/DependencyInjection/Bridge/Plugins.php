@@ -50,8 +50,16 @@ class Plugins
     ) {
         $pluginManager = new \Enlight_Plugin_PluginManager($application);
 
+        $configReader = $container->get('shopware.plugin.cached_config_reader');
+
         foreach (['Core', 'Frontend', 'Backend'] as $namespace) {
-            $namespace = new \Shopware_Components_Plugin_Namespace($namespace, null, $pluginDirectories);
+            $namespace = new \Shopware_Components_Plugin_Namespace(
+                $namespace,
+                null,
+                $pluginDirectories,
+                $configReader
+            );
+
             $pluginManager->registerNamespace($namespace);
             $eventManager->registerSubscriber($namespace->Subscriber());
         }
