@@ -916,6 +916,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
         me.variantListing.customerGroupStore = stores['customerGroups'];
 
         me.attributeForm.loadAttribute(article.get('mainDetailId'));
+        me.attributeForm.disableForm(false);
 
         if(me.subApp.splitViewActive) {
             me.variantTab.setDisabled(true);
