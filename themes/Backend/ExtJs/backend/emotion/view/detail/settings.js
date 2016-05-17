@@ -99,8 +99,6 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
         ];
 
         me.callParent(arguments);
-
-        me.loadRecord(me.emotion);
     },
 
     createMainFieldset: function() {
