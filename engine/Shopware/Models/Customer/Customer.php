@@ -59,6 +59,12 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Customer extends LazyFetchModelEntity
 {
+    const ACCOUNT_MODE_CUSTOMER = 0;
+    const ACCOUNT_MODE_FAST_LOGIN = 1;
+
+    const CUSTOMER_TYPE_PRIVATE = 'private';
+    const CUSTOMER_TYPE_BUSINESS = 'business';
+
     /**
      * The id property is an identifier property which means
      * doctrine associations can be defined over this field
@@ -277,6 +283,13 @@ class Customer extends LazyFetchModelEntity
     private $firstname;
 
     /**
+     * Contains the unique customer number
+     * @var string $number
+     * @ORM\Column(name="customernumber", type="string", length=30, nullable=true)
+     */
+    protected $number = '';
+
+    /**
      * @var string $lastname
      *
      * @Assert\NotBlank
@@ -364,7 +377,6 @@ class Customer extends LazyFetchModelEntity
      */
     protected $priceGroup;
 
-
     /**
      * INVERSE SIDE
      *
@@ -404,6 +416,11 @@ class Customer extends LazyFetchModelEntity
      * @ORM\JoinColumn(name="default_shipping_address_id", referencedColumnName="id")
      */
     protected $defaultShippingAddress;
+
+    /**
+     * @var string
+     */
+    private $customerType;
 
     /**
      * @var array
@@ -1240,6 +1257,54 @@ class Customer extends LazyFetchModelEntity
         }
 
         $this->birthday = $birthday;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEncoderName()
+    {
+        return $this->encoderName;
+    }
+
+    /**
+     * @param string $encoderName
+     */
+    public function setEncoderName($encoderName)
+    {
+        $this->encoderName = $encoderName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNumber()
+    {
+        return $this->number;
+    }
+
+    /**
+     * @param string $number
+     */
+    public function setNumber($number)
+    {
+        $this->number = $number;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCustomerType()
+    {
+        return $this->customerType;
+    }
+
+    /**
+     * @param string $customerType
+     */
+    public function setCustomerType($customerType)
+    {
+        $this->customerType = $customerType;
     }
 
     /**

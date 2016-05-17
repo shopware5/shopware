@@ -63,6 +63,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
+        Shopware()->Container()->get('models')->clear();
         Shopware()->Front()->setRequest(new Enlight_Controller_Request_RequestHttp());
 
         $this->module = Shopware()->Modules()->Admin();
@@ -75,6 +76,12 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->systemModule->sCurrency = Shopware()->Db()->fetchRow('SELECT * FROM s_core_currencies WHERE currency LIKE "EUR"');
         $this->systemModule->sSESSION_ID = null;
         $this->session->offsetSet('sessionId', null);
+    }
+
+    protected function tearDown()
+    {
+        parent::tearDown();
+        Shopware()->Container()->get('models')->clear();
     }
 
     /**
@@ -223,7 +230,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
      */
     public function testsUpdateNewsletter()
     {
-        $email = uniqid() . 'test@foobar.com';
+        $email = uniqid(rand()) . 'test@foobar.com';
 
         // Test insertion
         $this->assertTrue($this->module->sUpdateNewsletter(true, $email));
@@ -316,8 +323,8 @@ class sAdminTest extends PHPUnit_Framework_TestCase
 
         // Test with wrong data, get error
         $this->front->Request()->setPost(array(
-            'email' => uniqid() . 'test',
-            'password' => uniqid() . 'test',
+            'email' => uniqid(rand()) . 'test',
+            'password' => uniqid(rand()) . 'test',
         ));
         $result = $this->module->sLogin();
         $this->assertInternalType('array', $result);
@@ -357,7 +364,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
 
         $this->front->Request()->setPost(array(
             'email' => $customer->getEmail(),
-            'passwordMD5' => uniqid(),
+            'passwordMD5' => uniqid(rand()),
         ));
         $result = $this->module->sLogin(true);
         $this->assertInternalType('array', $result);
@@ -973,298 +980,6 @@ class sAdminTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers sAdmin::sSaveRegisterMainData
-     * @expectedException Zend_Db_Statement_Exception
-     */
-    public function testsSaveRegisterMainDataWithEmptyData()
-    {
-        $this->module->sSaveRegisterMainData(array());
-    }
-
-    /**
-     * @covers sAdmin::sSaveRegisterMainData
-     */
-    public function testsSaveRegisterMainData()
-    {
-        $password = Shopware()->PasswordEncoder()->encodePassword(
-            'foo',
-            'bcrypt'
-        );
-        $testData = array(
-            'auth' => array(
-                'password' => $password,
-                'email' => uniqid() . 'test@foobar.com',
-                'accountmode' => 1,
-                'encoderName' => 'bcrypt'
-            ),
-            'payment' => array(
-                'object' => array(
-                    'id' => 2
-                )
-            )
-        );
-        $this->module->sSYSTEM->sSESSION_ID = uniqid();
-        $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
-
-
-        $result = $this->module->sSaveRegisterMainData($testData);
-
-        /** @var $customer Shopware\Models\Customer\Customer */
-
-        $customer = Shopware()->Db()->fetchRow(
-            'SELECT * FROM s_user WHERE id = ?',
-            array($result)
-        );
-
-        $this->assertEquals($testData['auth']['email'], $customer['email']);
-        $this->assertEquals($customer['password'], $password);
-        $this->assertEquals($testData['auth']['accountmode'], $customer['accountmode']);
-        $this->assertEquals(2, $customer['paymentID']);
-
-        return $result;
-    }
-
-    /**
-     * @covers sAdmin::sSaveRegisterBilling
-     * @depends testsSaveRegisterMainData
-     * @expectedException Zend_Db_Statement_Exception
-     */
-    public function testsSaveRegisterBillingWithEmptyData($userId)
-    {
-        $this->module->sSaveRegisterBilling($userId, array());
-    }
-
-    /**
-     * @covers sAdmin::sSaveRegisterBilling
-     * @depends testsSaveRegisterMainData
-     */
-    public function testsSaveRegisterBilling($userId)
-    {
-        $testData = array(
-            'company' => 'Testcompany',
-            'department' => 'Testdepartment',
-            'salutation' => 'Testsalutation',
-            'firstname' => 'Testfirstname',
-            'lastname' => 'Testlastname',
-            'street' => 'Teststreet',
-            'zipcode' => 'Testzipcode',
-            'city' => 'Testcity',
-            'phone' => 'Testphone',
-            'country' => '2',
-            'stateID' => '3',
-            'ustid' => 'Testustid',
-
-            'attributes' => [
-                'text1' => 'text1',
-                'text2' => 'text2',
-                'text3' => 'text3',
-                'text4' => 'text4',
-                'text5' => 'text5',
-                'text6' => 'text6'
-            ]
-        );
-
-        $result = $this->module->sSaveRegisterBilling($userId, array('billing' => $testData, 'shipping' => $testData));
-        $this->assertGreaterThan(0, $result);
-
-        $savedData = Shopware()->Db()->fetchRow('SELECT * FROM s_user_billingaddress WHERE id = ?', [$result]);
-        $savedAttributes = Shopware()->Db()->fetchRow('SELECT * FROM s_user_billingaddress_attributes WHERE billingID = ?', [$result]);
-
-        // Prepare demo data for comparison
-        $testAttributes = $testData['attributes'];
-        $testData['countryID'] = $testData['country'];
-        
-        unset($testData['attributes'], $testData['country']);
-
-        foreach ($testData as $name => $value) {
-            $this->assertEquals($savedData[$name], $value);
-        }
-
-        foreach ($testAttributes as $name => $value) {
-            $this->assertEquals($savedAttributes[$name], $value);
-        }
-
-        Shopware()->Db()->delete('s_user_billingaddress_attributes', 'billingID = '.$result);
-        Shopware()->Db()->delete('s_user_billingaddress', 'userID = '.$userId);
-    }
-
-    /**
-     * @covers sAdmin::sSaveRegisterShipping
-     * @depends testsSaveRegisterMainData
-     * @expectedException Zend_Db_Statement_Exception
-     */
-    public function testsSaveRegisterShippingWithEmptyData($userId)
-    {
-        $this->module->sSaveRegisterShipping($userId, array());
-    }
-
-    /**
-     * @covers sAdmin::sSaveRegisterShipping
-     * @depends testsSaveRegisterMainData
-     */
-    public function testsSaveRegisterShipping($userId)
-    {
-        $testData = array(
-            'company' => 'Testcompany',
-            'department' => 'Testdepartment',
-            'salutation' => 'Testsalutation',
-            'firstname' => 'Testfirstname',
-            'lastname' => 'Testlastname',
-            'street' => 'Teststreet',
-            'zipcode' => 'Testzipcode',
-            'city' => 'Testcity',
-            'country' => '2',
-            'stateID' => '3',
-
-            'attributes' => [
-                'text1' => 'text1',
-                'text2' => 'text2',
-                'text3' => 'text3',
-                'text4' => 'text4',
-                'text5' => 'text5',
-                'text6' => 'text6'
-            ]
-        );
-
-        $result = $this->module->sSaveRegisterShipping($userId, array('shipping' => $testData, 'billing' => $testData));
-        $this->assertGreaterThan(0, $result);
-
-        $savedData = Shopware()->Db()->fetchRow('SELECT * FROM s_user_shippingaddress WHERE id = ?', [$result]);
-        $savedAttributes = Shopware()->Db()->fetchRow('SELECT * FROM s_user_shippingaddress_attributes WHERE shippingID = ?', [$result]);
-
-        // Prepare demo data for comparison
-        $testAttributes = $testData['attributes'];
-        $testData['countryID'] = $testData['country'];
-        unset($testData['country'], $testData['attributes']);
-
-        foreach ($testData as $name => $value) {
-            $this->assertEquals($savedData[$name], $value);
-        }
-
-        foreach ($testAttributes as $name => $value) {
-            $this->assertEquals($savedAttributes[$name], $value);
-        }
-
-        Shopware()->Db()->delete('s_user_shippingaddress_attributes', 'shippingID = '.$result);
-        Shopware()->Db()->delete('s_user_shippingaddress', 'userID = '.$userId);
-        Shopware()->Db()->delete('s_user_attributes', 'userID = '.$userId);
-        Shopware()->Db()->delete('s_user', 'id = '.$userId);
-    }
-
-    /**
-     * @covers sAdmin::sSaveRegisterNewsletter
-     */
-    public function testsSaveRegisterNewsletter()
-    {
-        // Test basic scenario
-        $email = uniqid() . 'test@foobar.com';
-        $result = Shopware()->Db()->fetchOne(
-            'SELECT id FROM s_campaigns_mailaddresses WHERE email = ?',
-            array($email)
-        );
-        $this->assertFalse($result);
-
-        $testData = array(
-            'auth' => array(
-                'email' =>  $email,
-            ),
-        );
-        $this->module->sSaveRegisterNewsletter($testData);
-        $result = Shopware()->Db()->fetchOne(
-            'SELECT id FROM s_campaigns_mailaddresses WHERE email = ?',
-            array($email)
-        );
-        $this->assertGreaterThan(0, $result);
-
-        // Test that duplicates are not changed
-        $this->module->sSaveRegisterNewsletter($testData);
-        $result = Shopware()->Db()->fetchOne(
-            'SELECT id FROM s_campaigns_mailaddresses WHERE email = ?',
-            array($email)
-        );
-        $this->assertGreaterThan(0, $result);
-    }
-
-    /**
-     * @covers sAdmin::sSaveRegister
-     */
-    public function testsSaveRegisterWithRegistrationFinished()
-    {
-        $customer = $this->createDummyCustomer();
-
-        $this->session->offsetSet('sRegisterFinished', true);
-        $this->session->offsetSet('sUserMail', $customer->getEmail());
-        $this->session->offsetSet('sUserPassword', $customer->getPassword());
-        $this->session->offsetSet('sOneTimeAccount', true);
-        $this->assertTrue($this->module->sSaveRegister());
-        $this->assertNotEmpty($this->session->offsetGet('sUserId'));
-
-        $this->deleteDummyCustomer($customer);
-    }
-
-    /**
-     * @covers sAdmin::sSaveRegister
-     * @expectedException Enlight_Exception
-     */
-    public function testsSaveRegisterWithNoData()
-    {
-        $this->assertTrue($this->module->sSaveRegister());
-        $this->assertNotEmpty($this->session->offsetGet('sUserId'));
-    }
-
-    /**
-     * @covers sAdmin::sSaveRegister
-     */
-    public function testsSaveRegister()
-    {
-        // Prepare all needed test structures for login
-        $testData = array(
-            'auth' => array(
-                'email' => uniqid() . 'test@foobar.com',
-                'password' => 'fooobar',
-                'accountmode' => 1,
-                'encoderName' => 'bcrypt'
-            ),
-            'billing' => array(
-                'salutation' => 'testsalutation',
-                'firstname' => 'testfirstname',
-                'lastname' => 'testlastname',
-                'street' => 'teststreet',
-                'zipcode' => 'testzipcode',
-                'city' => 'testcity',
-                'country' => '2'
-            ),
-            'payment' => array(
-                'object' => array(
-                    'id' => 2
-                )
-            )
-        );
-        $this->module->sSYSTEM->sSESSION_ID = uniqid();
-        $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
-
-        $this->session->offsetSet('sRegister', $testData);
-
-        // Test that login was successful
-        $this->assertEmpty($this->session->offsetGet('sUserId'));
-        $this->assertFalse($this->module->sCheckUser());
-        $this->assertTrue($this->module->sSaveRegister());
-        $userId = $this->session->offsetGet('sUserId');
-        $this->assertEquals(
-            $userId,
-            Shopware()->Db()->fetchOne('SELECT id FROM s_user WHERE id = ?', array($userId))
-        );
-        $this->assertNotEmpty($this->session->offsetGet('sUserId'));
-        $this->assertTrue($this->module->sCheckUser());
-
-        // Logout and delete data
-        Shopware()->Session()->unsetAll();
-
-        Shopware()->Db()->delete('s_user_attributes', 'userID = '.$userId);
-        Shopware()->Db()->delete('s_user', 'id = '.$userId);
-    }
-
-    /**
      * @covers sAdmin::sGetDownloads
      */
     public function testsGetDownloads()
@@ -1278,7 +993,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
 
         // Inject demo data
         $orderData = array(
-            'ordernumber' => uniqid(),
+            'ordernumber' => uniqid(rand()),
             'userID' => $customer->getId(),
             'invoice_amount' => '37.99',
             'invoice_amount_net' => '31.92',
@@ -1404,7 +1119,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $customer = $demoData['customer'];
         $oldOrderId = $demoData['orderId'];
         $orderEsdId = $demoData['orderEsdId'];
-        $orderNumber = uniqid();
+        $orderNumber = uniqid(rand());
 
         // Add another order to the customer
         $orderData = array(
@@ -1516,11 +1231,11 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($customer->getEmail(), $this->module->sGetUserMailById());
 
         // Test sGetUserByMail with null and expected cases
-        $this->assertNull($this->module->sGetUserByMail(uniqid()));
+        $this->assertNull($this->module->sGetUserByMail(uniqid(rand())));
         $this->assertEquals($customer->getId(), $this->module->sGetUserByMail($customer->getEmail()));
 
         // Test sGetUserNameById with null and expected cases
-        $this->assertEmpty($this->module->sGetUserNameById(uniqid()));
+        $this->assertEmpty($this->module->sGetUserNameById(uniqid(rand())));
         $this->assertEquals(
             array('firstname' => 'Max', 'lastname' => 'Mustermann'),
             $this->module->sGetUserNameById($customer->getId())
@@ -1600,6 +1315,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
     {
         $customer = $this->createDummyCustomer();
         $this->session->offsetSet('sUserId', $customer->getId());
+        $this->session->offsetUnset('sState');
 
         $result = $this->module->sGetUserData();
 
@@ -1610,7 +1326,6 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                 'company' => '',
                 'department' => '',
                 'salutation' => '',
-                'customernumber' => $customer->getBilling()->getNumber(),
                 'firstname' => 'Max',
                 'lastname' => 'Mustermann',
                 'street' => 'Kraftweg, 22',
@@ -1661,6 +1376,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                     'accountmode' => '0',
                     'confirmationkey' => '',
                     'paymentID' => '0',
+                    'customernumber' => $customer->getNumber(),
                     'firstlogin' => $customer->getFirstLogin()->format('Y-m-d'),
                     'lastlogin' => $customer->getLastLogin()->format('Y-m-d H:i:s'),
                     'sessionID' => '',
@@ -1809,7 +1525,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
 
         // Inject demo data
         $orderData = array(
-            'ordernumber' => uniqid(),
+            'ordernumber' => uniqid(rand()),
             'userID' => $customer->getId(),
             'invoice_amount' => '37.99',
             'invoice_amount_net' => '31.92',
@@ -1995,7 +1711,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($this->module->sManageRisks(2, $basket, $user));
         Shopware()->Db()->delete('s_core_rulesets', 'id >= '.$firstTestRuleId);
 
-        $this->module->sSYSTEM->sSESSION_ID = uniqid();
+        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
         $this->basketModule->sAddArticle('SW10118.8');
 
@@ -2183,7 +1899,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             array(
                 'paymentID' => 2,
                 'rule1' => 'CUSTOMERNR',
-                'value1' => $customer->getBilling()->getNumber()
+                'value1' => $customer->getNumber()
             )
         );
         $this->assertTrue($this->module->sManageRisks(2, $fullBasket, $user));
@@ -2349,10 +2065,10 @@ class sAdminTest extends PHPUnit_Framework_TestCase
      */
     public function testsNewsletterSubscription()
     {
-        $validAddress = uniqid().'@shopware.com';
+        $validAddress = uniqid(rand()).'@shopware.com';
 
         // Test unsubscribe with non existing email, fail
-        $result = $this->module->sNewsletterSubscription(uniqid().'@shopware.com', true);
+        $result = $this->module->sNewsletterSubscription(uniqid(rand()).'@shopware.com', true);
         $this->assertEquals(
             array(
                 'code' => 4,
@@ -2625,7 +2341,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         // No basket, return false
         $this->assertFalse($this->module->sGetDispatchBasket());
 
-        $this->module->sSYSTEM->sSESSION_ID = uniqid();
+        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
         $this->basketModule->sAddArticle('SW10118.8');
 
@@ -2665,7 +2381,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         // No basket, return empty array,
         $this->assertEquals(array(), $this->module->sGetPremiumDispatches());
 
-        $this->module->sSYSTEM->sSESSION_ID = uniqid();
+        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
         $this->basketModule->sAddArticle('SW10118.8');
 
@@ -2689,7 +2405,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         // No basket, return false,
         $this->assertFalse($this->module->sGetPremiumDispatchSurcharge(null));
 
-        $this->module->sSYSTEM->sSESSION_ID = uniqid();
+        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
         $this->basketModule->sAddArticle('SW10010');
         $fullBasket = $this->module->sGetDispatchBasket();
@@ -2714,7 +2430,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             }
         }
 
-        $this->module->sSYSTEM->sSESSION_ID = uniqid();
+        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
         $this->basketModule->sAddArticle('SW10010');
 
@@ -2750,8 +2466,8 @@ class sAdminTest extends PHPUnit_Framework_TestCase
 
         $testData = array(
             "password" => "fooobar",
-            "email"    => uniqid() . 'test@foobar.com',
-
+            "email"    => uniqid(rand()) . 'test@foobar.com',
+            "customernumber" => 'dummy customer number',
             "lastlogin"  => $lastLogin,
 
             "salutation" => "mr",

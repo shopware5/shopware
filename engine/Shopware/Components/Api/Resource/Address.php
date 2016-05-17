@@ -130,7 +130,7 @@ class Address extends Resource
 
         $form = $this->getContainer()
             ->get('shopware.form.factory')
-            ->create(AddressFormType::class, $address, ['allow_extra_fields' => true]);
+            ->create(AddressFormType::class, $address);
 
         $form->submit($params, true);
 
@@ -176,7 +176,7 @@ class Address extends Resource
 
         $form = $this->getContainer()
             ->get('shopware.form.factory')
-            ->create(AddressFormType::class, $address, ['allow_extra_fields' => true]);
+            ->create(AddressFormType::class, $address);
 
         $form->submit($params, false);
 

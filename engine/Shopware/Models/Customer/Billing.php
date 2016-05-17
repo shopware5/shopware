@@ -26,9 +26,9 @@ namespace   Shopware\Models\Customer;
 
 use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
-use Shopware\Components\NumberRangeIncrementerInterface;
 
 /**
+ * @deprecated Since 5.2 removed in 5.3 use \Shopware\Models\Customer\Address
  * Shopware customer billing model represents a single billing address of a customer.
  *
  * The Shopware customer billing model represents a row of the s_user_billingaddress table.
@@ -109,13 +109,6 @@ class Billing extends ModelEntity
      * @ORM\Column(name="title", type="string", length=100, nullable=true)
      */
     protected $title;
-
-    /**
-     * Contains the unique customer number
-     * @var string $number
-     * @ORM\Column(name="customernumber", type="string", length=30, nullable=true)
-     */
-    protected $number = '';
 
     /**
      * Contains the first name of the billing address
@@ -274,28 +267,6 @@ class Billing extends ModelEntity
     public function getSalutation()
     {
         return $this->salutation;
-    }
-
-    /**
-     * Setter function for the customer number column property.
-     *
-     * @param string $number
-     * @return Billing
-     */
-    public function setNumber($number)
-    {
-        $this->number = $number;
-        return $this;
-    }
-
-    /**
-     * Getter function for the customer number column property.
-     *
-     * @return string
-     */
-    public function getNumber()
-    {
-        return $this->number;
     }
 
     /**
@@ -519,19 +490,6 @@ class Billing extends ModelEntity
     {
         $this->customer = $customer;
         return $this;
-    }
-
-    /**
-     * Event listener method which is fired when the model will be saved.
-     * @ORM\PrePersist
-     */
-    public function onSave()
-    {
-        if (empty($this->number) && Shopware()->Config()->get('shopwareManagedCustomerNumbers') == 1) {
-            /** @var NumberRangeIncrementerInterface $incrementer */
-            $incrementer = Shopware()->Container()->get('shopware.number_range_incrementer');
-            $this->number = $incrementer->increment('user');
-        }
     }
 
     /**

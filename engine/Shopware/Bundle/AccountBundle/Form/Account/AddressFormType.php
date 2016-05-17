@@ -31,14 +31,17 @@ use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Country\Country;
 use Shopware\Models\Country\State;
 use Shopware\Models\Customer\Address;
+use Shopware\Models\Customer\Customer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraint;
-use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 class AddressFormType extends AbstractType
 {
@@ -63,68 +66,63 @@ class AddressFormType extends AbstractType
     }
 
     /**
+     * @param OptionsResolver $resolver
+     */
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults([
+            'data_class' => Address::class,
+            'allow_extra_fields' => true
+        ]);
+    }
+
+    /**
+     * @return string
+     */
+    public function getBlockPrefix()
+    {
+        return 'address';
+    }
+
+    /**
      * @param FormBuilderInterface $builder
      * @param array $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('salutation', SalutationType::class, [
-            'constraints' => [
-                new NotBlank()
-            ]
+            'constraints' => [new NotBlank(['message' => null])]
         ]);
 
         $builder->add('firstname', TextType::class, [
-            'constraints' => [
-                new NotBlank()
-            ]
+            'constraints' => [new NotBlank(['message' => null])]
         ]);
 
         $builder->add('lastname', TextType::class, [
-            'constraints' => [
-                new NotBlank()
-            ]
+            'constraints' => [new NotBlank(['message' => null])]
         ]);
 
         $builder->add('title', TextType::class);
-
-        $builder->add('company', TextType::class, [
-            'constraints' => $this->getCompanyConstraints()
-        ]);
-
+        $builder->add('company', TextType::class);
         $builder->add('department', TextType::class);
-
-        $builder->add('vatId', TextType::class, [
-            'constraints' => $this->getVatConstraints()
-        ]);
+        $builder->add('vatId', TextType::class);
 
         $builder->add('street', TextType::class, [
-            'constraints' => [
-                new NotBlank()
-            ]
+            'constraints' => [new NotBlank(['message' => null])]
         ]);
 
         $builder->add('zipcode', TextType::class, [
-            'constraints' => [
-                new NotBlank()
-            ]
+            'constraints' => [new NotBlank(['message' => null])]
         ]);
 
         $builder->add('city', TextType::class, [
-            'constraints' => [
-                new NotBlank()
-            ]
+            'constraints' => [new NotBlank(['message' => null])]
         ]);
 
         $builder->add('country', IntegerType::class, [
-            'constraints' => [
-                new NotBlank()
-            ]
+            'constraints' => [new NotBlank(['message' => null])]
         ]);
-
-        $builder->add('state', IntegerType::class, [
-            'constraints' => $this->getStateConstraints()
-        ]);
+        $builder->add('state', IntegerType::class);
 
         $builder->add('phone', TextType::class, [
             'constraints' => $this->getPhoneConstraints()
@@ -152,14 +150,13 @@ class AddressFormType extends AbstractType
             'compound' => true,
             'allow_extra_fields' => true
         ]);
-    }
 
-    /**
-     * @return string
-     */
-    public function getBlockPrefix()
-    {
-        return 'address';
+        $this->addCountryStateValidation($builder);
+        $this->addCompanyValidation($builder);
+
+        if ($this->config->offsetGet('vatcheckrequired')) {
+            $this->addVatIdValidation($builder);
+        }
     }
 
     /**
@@ -170,7 +167,7 @@ class AddressFormType extends AbstractType
         $constraints = [];
 
         if ($this->config->offsetGet('showphonenumberfield') && $this->config->offsetGet('requirePhoneField')) {
-            $constraints[] = new NotBlank();
+            $constraints[] = new NotBlank(['message' => null]);
         }
 
         return $constraints;
@@ -184,7 +181,7 @@ class AddressFormType extends AbstractType
         $constraints = [];
 
         if ($this->config->offsetGet('showAdditionAddressLine1') && $this->config->offsetGet('requireAdditionAddressLine1')) {
-            $constraints[] = new NotBlank();
+            $constraints[] = new NotBlank(['message' => null]);
         }
 
         return $constraints;
@@ -198,98 +195,77 @@ class AddressFormType extends AbstractType
         $constraints = [];
 
         if ($this->config->offsetGet('showAdditionAddressLine2') && $this->config->offsetGet('requireAdditionAddressLine2')) {
-            $constraints[] = new NotBlank();
+            $constraints[] = new NotBlank(['message' => null]);
         }
 
         return $constraints;
     }
 
     /**
-     * @return Constraint[]
+     * @param FormBuilderInterface $builder
      */
-    private function getVatConstraints()
+    private function addCompanyValidation(FormBuilderInterface $builder)
     {
-        $constraints = [];
+        $builder->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event) {
+            $form = $event->getForm();
 
-        if ($this->config->offsetGet('vatcheckrequired')) {
-            $vatCallback = function ($value, ExecutionContextInterface $context) {
-                $extraData = $context->getRoot()->getExtraData();
-
-                if (empty($extraData['customer_type']) || $extraData['customer_type'] !== 'business') {
-                    return;
-                }
-
-                if (!empty($value)) {
-                    return;
-                }
-
-                $notBlank = new NotBlank();
-                $context->buildViolation($notBlank->message)
-                    ->atPath($context->getPropertyPath())
-                    ->addViolation();
-            };
-
-            $constraints[] = new Callback(['callback' => $vatCallback]);
-        }
-
-        return $constraints;
-    }
-
-    /**
-     * @return Constraint[]
-     */
-    private function getStateConstraints()
-    {
-        $constraints = [];
-
-        $stateCallback = function ($value, ExecutionContextInterface $context) {
+            $extra = $form->getExtraData();
 
             /** @var Address $data */
-            $data = $context->getRoot()->getData();
+            $data = $form->getData();
 
-            if (!$data->getCountry()) {
+            if ($extra['customer_type'] !== Customer::CUSTOMER_TYPE_BUSINESS || !empty($data->getCompany())) {
                 return;
             }
 
-            if ($data->getCountry()->getDisplayStateInRegistration() && $data->getCountry()->getForceStateInRegistration() && empty($value)) {
-                $notBlank = new NotBlank();
-                $context->buildViolation($notBlank->message)
-                    ->atPath($context->getPropertyPath())
-                    ->addViolation();
-            }
-        };
-
-        $constraints[] = new Callback(['callback' => $stateCallback]);
-
-        return $constraints;
+            $notBlank = new NotBlank(['message' => null]);
+            $error = new FormError($notBlank->message);
+            $error->setOrigin($form->get('company'));
+            $form->addError($error);
+        });
     }
 
     /**
-     * @return Constraint[]
+     * @param FormBuilderInterface $builder
      */
-    private function getCompanyConstraints()
+    private function addVatIdValidation(FormBuilderInterface $builder)
     {
-        $constraints = [];
+        $builder->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event) {
+            $form = $event->getForm();
 
-        $companyRequiredCallback = function ($value, ExecutionContextInterface $context) {
-            $extraData = $context->getRoot()->getExtraData();
+            $extra = $form->getExtraData();
 
-            if (empty($extraData['customer_type']) || $extraData['customer_type'] !== 'business') {
+            /** @var Address $data */
+            $data = $form->getData();
+
+            if ($extra['customer_type'] !== Customer::CUSTOMER_TYPE_BUSINESS || !empty($data->getVatId())) {
                 return;
             }
 
-            if (!empty($value)) {
-                return;
+            $notBlank = new NotBlank(['message' => null]);
+            $error = new FormError($notBlank->message);
+            $error->setOrigin($form->get('vatId'));
+            $form->addError($error);
+        });
+    }
+
+    /**
+     * @param FormBuilderInterface $builder
+     */
+    private function addCountryStateValidation(FormBuilderInterface $builder)
+    {
+        $builder->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event) {
+            $form = $event->getForm();
+
+            /** @var Address $data */
+            $data = $event->getData();
+
+            if ($data->getCountry() && $data->getCountry()->getForceStateInRegistration() && !$data->getState()) {
+                $notBlank = new NotBlank(['message' => null]);
+                $error = new FormError($notBlank->message);
+                $error->setOrigin($form->get('state'));
+                $form->addError($error);
             }
-
-            $notBlank = new NotBlank();
-            $context->buildViolation($notBlank->message)
-                ->atPath($context->getPropertyPath())
-                ->addViolation();
-        };
-
-        $constraints[] = new Callback(['callback' => $companyRequiredCallback]);
-
-        return $constraints;
+        });
     }
 }

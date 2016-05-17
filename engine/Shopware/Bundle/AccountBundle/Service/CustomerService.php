@@ -22,9 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\AccountBundle\Service\Core;
+namespace Shopware\Bundle\AccountBundle\Service;
 
-use Shopware\Bundle\AccountBundle\Service\CustomerServiceInterface;
 use Shopware\Bundle\AccountBundle\Service\Validator\CustomerValidatorInterface;
 use Shopware\Components\Api\Exception\ValidationException;
 use Shopware\Components\Model\ModelManager;
@@ -52,10 +51,8 @@ class CustomerService implements CustomerServiceInterface
      * @param ModelManager $modelManager
      * @param CustomerValidatorInterface $validator
      */
-    public function __construct(
-        ModelManager $modelManager,
-        CustomerValidatorInterface $validator
-    ) {
+    public function __construct(ModelManager $modelManager, CustomerValidatorInterface $validator)
+    {
         $this->modelManager = $modelManager;
         $this->validator = $validator;
     }
@@ -69,7 +66,6 @@ class CustomerService implements CustomerServiceInterface
     {
         $this->validator->validate($customer);
         $this->modelManager->flush($customer);
-
-        return $customer;
+        $this->modelManager->refresh($customer);
     }
 }

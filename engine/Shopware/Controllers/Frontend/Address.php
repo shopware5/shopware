@@ -87,7 +87,7 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
     public function createAction()
     {
         $address = new Address();
-        $form = $this->createForm(AddressFormType::class, $address, ['allow_extra_fields' => true]);
+        $form = $this->createForm(AddressFormType::class, $address);
         $form->handleRequest($this->Request());
 
         if ($form->isValid()) {
@@ -132,7 +132,7 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
         $addressId = $this->Request()->getParam('id', null);
         $address = $this->addressRepository->getOneByUser($addressId, $userId);
 
-        $form = $this->createForm(AddressFormType::class, $address, ['allow_extra_fields' => true]);
+        $form = $this->createForm(AddressFormType::class, $address);
         $form->handleRequest($this->Request());
 
         if ($form->isValid()) {
@@ -302,7 +302,7 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
             $address = new Address();
         }
 
-        $form = $this->createForm(AddressFormType::class, $address, ['allow_extra_fields' => true]);
+        $form = $this->createForm(AddressFormType::class, $address);
         $this->View()->assign($this->getFormViewData($form));
     }
 
@@ -327,15 +327,15 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
             $address = new Address();
         }
 
-        $form = $this->createForm(AddressFormType::class, $address, ['allow_extra_fields' => true]);
+        $form = $this->createForm(AddressFormType::class, $address);
         $form->handleRequest($this->Request());
         
         if ($form->isValid()) {
             if ($address->getId()) {
-                $address = $this->addressService->update($address);
+                $this->addressService->update($address);
             } else {
                 $customer = $this->get('models')->find(Customer::class, $userId);
-                $address = $this->addressService->create($address, $customer);
+                $this->addressService->create($address, $customer);
             }
             
             $this->handleExtraData($extraData, $address);

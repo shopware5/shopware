@@ -586,7 +586,7 @@
         onValidateSuccess: function (action, $input, result) {
             var me = this,
                 errorFlags,
-                errorMessages;
+                errorMessages = [];
 
             $('#' + action + '--message').remove();
 
@@ -594,8 +594,13 @@
                 return;
             }
 
-            errorFlags = result.error_flags;
-            errorMessages = result.error_messages;
+            errorFlags = result;
+            for (var key in result) {
+                //fields with `false` are now valid
+                if (result[key]) {
+                    errorMessages.push(result[key]);
+                }
+            }
 
             if (errorFlags) {
                 me.updateFieldFlags(errorFlags);

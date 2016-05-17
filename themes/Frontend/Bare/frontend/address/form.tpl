@@ -44,10 +44,12 @@
                             <input autocomplete="section-billing billing organization"
                                    name="{$inputPrefix}[company]"
                                    type="text"
-                                   placeholder="{s name='RegisterPlaceholderCompany' namespace="frontend/register/billing_fieldset"}{/s}"
+                                   required="required"
+                                   aria-required="true"
+                                   placeholder="{s name='RegisterPlaceholderCompany' namespace="frontend/register/billing_fieldset"}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}"
                                    id="register_billing_company"
                                    value="{$formData.company|escape}"
-                                   class="address--field {if $error_flags.company} has--error{/if}"/>
+                                   class="address--field {if $error_flags.company} has--error{/if} is--required"/>
                         </div>
                     {/block}
 

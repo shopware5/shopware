@@ -6,6 +6,7 @@
 
     <services>
         <service id="application"     synthetic="true" />
+        <service id="PasswordEncoder" synthetic="true" />
 
         <service id="bootstrap" class="Shopware_Bootstrap">
             <argument type="service" id="service_container"/>

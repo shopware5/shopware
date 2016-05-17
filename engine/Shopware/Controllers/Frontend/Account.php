@@ -261,11 +261,9 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
             );
         }
 
-        $this->forward(array(
-            'action' => 'index',
-            'controller' => 'register',
-            'sTarget' => $this->View()->sTarget
-        ));
+        $this->forward('index', 'register', 'frontend', [
+            'sTarget' => $this->Request()->getParam('sTarget')
+        ]);
     }
 
     /**
@@ -708,7 +706,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         /** @var Customer $customer */
         $customer = $this->get('models')->find(Customer::class, $userId);
 
-        $form = $this->createForm(ProfileUpdateFormType::class, $customer, ['allow_extra_fields' => true]);
+        $form = $this->createForm(ProfileUpdateFormType::class, $customer);
         $form->handleRequest($this->Request());
 
         if ($form->isValid()) {
@@ -730,7 +728,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         /** @var Customer $customer */
         $customer = $this->get('models')->find(Customer::class, $userId);
 
-        $form = $this->createForm(EmailUpdateFormType::class, $customer, ['allow_extra_fields' => true]);
+        $form = $this->createForm(EmailUpdateFormType::class, $customer);
         $form->handleRequest($this->Request());
 
         if ($form->isValid()) {
@@ -753,7 +751,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         /** @var Customer $customer */
         $customer = $this->get('models')->find(Customer::class, $userId);
 
-        $form = $this->createForm(PasswordUpdateFormType::class, $customer, ['allow_extra_fields' => true]);
+        $form = $this->createForm(PasswordUpdateFormType::class, $customer);
         $form->handleRequest($this->Request());
 
         if ($form->isValid()) {

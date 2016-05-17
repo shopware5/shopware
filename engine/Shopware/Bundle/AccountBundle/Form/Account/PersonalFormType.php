@@ -24,11 +24,12 @@
 
 namespace Shopware\Bundle\AccountBundle\Form\Account;
 
+use Shopware\Bundle\AccountBundle\Constraint\FormEmail;
+use Shopware\Bundle\AccountBundle\Constraint\Password;
 use Shopware\Models\Attribute\Customer as CustomerAttribute;
-use Shopware\Bundle\FormBundle\Constraint\Repeated;
-use Shopware\Bundle\AccountBundle\Constraint\UniqueEmail;
 use Shopware\Bundle\AccountBundle\Type\SalutationType;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
+use Shopware\Models\Customer\Customer;
 use Shopware_Components_Snippet_Manager;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
@@ -36,12 +37,9 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraint;
-use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\EqualTo;
-use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
@@ -51,30 +49,6 @@ use Symfony\Component\Validator\Constraints\NotBlank;
  */
 class PersonalFormType extends AbstractType
 {
-    const SNIPPET_PASSWORD_CONFIRMATION = [
-        'namespace' => 'frontend',
-        'name' => 'AccountPasswordNotEqual',
-        'default' => 'The passwords are not equal'
-    ];
-
-    const SNIPPET_PASSWORD_LENGTH = [
-        'namespace' => 'frontend',
-        'name' => 'RegisterPasswordLength',
-        'default' => ''
-    ];
-
-    const SNIPPET_EMAIL_CONFIRMATION = [
-        'namespace' => 'frontend/account/internalMessages',
-        'name' => 'MailFailureNotEqual',
-        'default' => 'The mail addresses entered are not equal'
-    ];
-
-    const SNIPPET_MAIL_FAILURE = [
-        'namespace' => 'frontend/account/internalMessages',
-        'name' => 'MailFailure',
-        'default' => 'Please enter a valid mail address'
-    ];
-
     const SNIPPET_BIRTHDAY = [
         'namespace' => 'frontend/account/internalMessages',
         'name' => 'DateFailure',
@@ -112,68 +86,80 @@ class PersonalFormType extends AbstractType
     }
 
     /**
+     * @return string
+     */
+    public function getBlockPrefix()
+    {
+        return 'personal';
+    }
+
+    /**
+     * @param OptionsResolver $resolver
+     */
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults([
+            'data_class' => Customer::class,
+            'allow_extra_fields' => true
+        ]);
+    }
+
+    /**
      * @param FormBuilderInterface $builder
      * @param array $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('email', EmailType::class, [
-            'constraints' => [new NotBlank(), new Email()]
+            'constraints' => [
+                new FormEmail(['shop' => $this->context->getShopContext()->getShop()])
+            ]
         ]);
 
-        $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
-            $form = $event->getForm();
-            $data = $event->getData();
-            if ($form->has('email')) {
-                $form->remove('email');
-            }
-
-            $form->add('email', EmailType::class, [
-                'constraints' => $this->getEmailConstraints($data['skipLogin'])
-            ]);
-        });
-
-        if ($this->config->get('doubleemailvalidation')) {
-            $builder->add('emailConfirmation', EmailType::class, ['constraints' => [new NotBlank(), new Email()]]);
-        }
-
         $builder->add('password', PasswordType::class, [
-            'constraints' => $this->getPasswordConstraints()
+            'constraints' => [new Password()]
         ]);
 
         if ($this->config->get('doublepasswordvalidation')) {
-            $builder->add('passwordConfirmation', PasswordType::class);
+            $builder->add('passwordConfirmation', PasswordType::class, [
+                'mapped' => false
+            ]);
+        }
+
+        if ($this->config->get('doubleemailvalidation')) {
+            $builder->add('emailConfirmation', EmailType::class, [
+                'mapped' => false
+            ]);
         }
 
         $builder->add('customer_type', TextType::class, [
-            'empty_data' => 'private'
+            'data' => 'private'
         ]);
 
         $builder->add('salutation', SalutationType::class, [
-            'constraints' => [
-                new NotBlank()
-            ]
+            'constraints' => [new NotBlank(['message' => null])]
         ]);
 
         $builder->add('title', TextType::class);
 
         $builder->add('firstname', TextType::class, [
-            'constraints' => [
-                new NotBlank()
-            ]
+            'constraints' => [new NotBlank(['message' => null])]
         ]);
 
         $builder->add('lastname', TextType::class, [
-            'constraints' => [
-                new NotBlank()
-            ]
+            'constraints' => [new NotBlank(['message' => null])]
         ]);
 
         $builder->add('birthday', BirthdayType::class, [
             'constraints' => $this->getBirthdayConstraints()
         ]);
 
+        $builder->add('accountmode', TextType::class, [
+            'empty_data' => Customer::ACCOUNT_MODE_CUSTOMER
+        ]);
+
         $builder->add('dpacheckbox', TextType::class, [
+            'mapped' => false,
             'empty_data' => 0,
             'constraints' => $this->getPrivacyConstraints()
         ]);
@@ -213,55 +199,6 @@ class PersonalFormType extends AbstractType
 
         if ($this->config->get('ACTDPRCHECK')) {
             $constraints[] = new EqualTo(['value' => 1]);
-        }
-
-        return $constraints;
-    }
-
-    /**
-     * @param boolean $skipUnique
-     * @return Constraint[]
-     */
-    private function getEmailConstraints($skipUnique)
-    {
-        $message = $this->getSnippet(self::SNIPPET_MAIL_FAILURE);
-
-        $constraints = [
-            new NotBlank(['message' => $message]),
-            new Email(['message' => $message]),
-        ];
-
-        if (!$skipUnique) {
-            $constraints[] = new UniqueEmail(['shop' => $this->context->getShopContext()->getShop()]);
-        }
-
-        if ($this->config->get('doubleemailvalidation')) {
-            $constraints[] = new Repeated([
-                'field' => 'emailConfirmation',
-                'message' => $this->getSnippet(self::SNIPPET_EMAIL_CONFIRMATION)
-            ]);
-        }
-
-        return $constraints;
-    }
-
-    /**
-     * @return Constraint[]
-     */
-    private function getPasswordConstraints()
-    {
-        $constraints = [
-            new Length([
-                'min' => $this->config->get('sMINPASSWORD'),
-                'minMessage' => $this->getSnippet(self::SNIPPET_PASSWORD_LENGTH)
-            ]),
-        ];
-
-        if ($this->config->get('doublepasswordvalidation')) {
-            $constraints[] = new Repeated([
-                'field' => 'passwordConfirmation',
-                'message' => $this->getSnippet(self::SNIPPET_PASSWORD_CONFIRMATION)
-            ]);
         }
 
         return $constraints;

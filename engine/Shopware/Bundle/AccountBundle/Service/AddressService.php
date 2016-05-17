@@ -22,13 +22,13 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\AccountBundle\Service\Core;
+namespace Shopware\Bundle\AccountBundle\Service;
 
-use Shopware\Bundle\AccountBundle\Service\AddressServiceInterface;
 use Shopware\Bundle\AccountBundle\Form\Account\AddressFormType;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Attribute\CustomerAddress;
 use Shopware\Models\Customer\Address;
+use Shopware\Models\Customer\Billing;
 use Shopware\Models\Customer\Customer;
 use Shopware\Models\Customer\Shipping;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -77,7 +77,8 @@ class AddressService implements AddressServiceInterface
 
         $this->modelManager->flush([$address, $customer]);
 
-        return $address;
+        $this->modelManager->refresh($address);
+        $this->modelManager->refresh($customer);
     }
 
     /**
@@ -102,14 +103,37 @@ class AddressService implements AddressServiceInterface
         }
 
         $this->modelManager->flush();
-
-        return $address;
+        $this->modelManager->refresh($address);
     }
 
     /**
      * @inheritdoc
      */
     public function isValid(Address $address)
+    {
+        $form = $this->validateData($address);
+
+        return $form->isValid();
+    }
+
+    /**
+     * @param Address $address
+     * @throws ValidatorException
+     */
+    private function validate(Address $address)
+    {
+        $form = $this->validateData($address);
+
+        if (!$form->isValid()) {
+            throw new ValidatorException($form->getErrors(true, false));
+        }
+    }
+
+    /**
+     * @param Address $address
+     * @return \Symfony\Component\Form\FormInterface
+     */
+    private function validateData(Address $address)
     {
         $data = [
             'company' => $address->getCompany(),
@@ -122,7 +146,7 @@ class AddressService implements AddressServiceInterface
             'zipcode' => $address->getZipcode(),
             'city' => $address->getCity(),
             'phone' => $address->getPhone(),
-            'country' => $address->getCountry()->getId(),
+            'country' => $address->getCountry() ? $address->getCountry()->getId() : null,
             'state' => $address->getState() ? $address->getState()->getId() : null,
             'vatId' => $address->getVatId(),
             'additionalAddressLine1' => $address->getAdditionalAddressLine1(),
@@ -132,21 +156,7 @@ class AddressService implements AddressServiceInterface
         $form = $this->formFactory->create(AddressFormType::class, new Address(), ['allow_extra_fields' => true]);
         $form->submit($data);
 
-        return $form->isValid();
-    }
-
-    /**
-     * @param Address $address
-     * @throws ValidatorException
-     */
-    private function validate(Address $address)
-    {
-        $form = $this->formFactory->create(AddressFormType::class, $address, ['allow_extra_fields' => true]);
-        $form->submit(null, false);
-
-        if (!$form->isValid()) {
-            throw new ValidatorException($form->getErrors(true, false));
-        }
+        return $form;
     }
 
     /**
@@ -217,6 +227,12 @@ class AddressService implements AddressServiceInterface
         $customer->setDefaultBillingAddress($address);
 
         $billing = $customer->getBilling();
+        if (!$billing) {
+            $billing = new Billing();
+            $billing->setCustomer($customer);
+            $this->modelManager->persist($billing);
+        }
+
         $billing->fromAddress($address);
 
         $this->update($address);
@@ -253,7 +269,9 @@ class AddressService implements AddressServiceInterface
      */
     public function convertToLegacyArray(Address $address)
     {
-        $output = [
+        $output = $this->modelManager->toArray($address);
+
+        $output = array_merge($output, [
             'id' => $address->getId(),
             'userID' => $address->getCustomer()->getId(),
             'company' => $address->getCompany(),
@@ -272,7 +290,7 @@ class AddressService implements AddressServiceInterface
             'additional_address_line1' => $address->getAdditionalAddressLine1(),
             'additional_address_line2' => $address->getAdditionalAddressLine2(),
             'attributes' => []
-        ];
+        ]);
 
         if ($address->getAttribute()) {
             $data = $this->modelManager->toArray($address->getAttribute());

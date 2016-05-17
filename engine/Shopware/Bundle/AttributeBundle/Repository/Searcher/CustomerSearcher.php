@@ -55,10 +55,9 @@ class CustomerSearcher extends GenericSearcher
     {
         return [
             'entity.email',
-            'billing.number',
+            'entity.number',
             'billing.firstName',
             'billing.lastName',
-            'billing.number',
             'billing.company',
             'customerGroup.name'
         ];

@@ -322,7 +322,7 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
             FROM s_user_billingaddress b, s_user u
             WHERE (
                 email LIKE $search
-                OR customernumber LIKE $search2
+                OR u.customernumber LIKE $search2
                 OR TRIM(CONCAT(b.company,' ', b.department)) LIKE $search
                 OR TRIM(CONCAT(b.firstname,' ',b.lastname)) LIKE $search
             )

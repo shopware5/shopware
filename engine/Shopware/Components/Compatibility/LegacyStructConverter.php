@@ -75,6 +75,65 @@ class LegacyStructConverter
     }
 
     /**
+     * @param StoreFrontBundle\Struct\Country[] $countries
+     * @return array
+     */
+    public function convertCountryStructList($countries)
+    {
+        return array_map([$this, 'convertCountryStruct'], $countries);
+    }
+
+    /**
+     * @param StoreFrontBundle\Struct\Country $country
+     * @return array
+     */
+    public function convertCountryStruct(StoreFrontBundle\Struct\Country $country)
+    {
+        $data = json_decode(json_encode($country), true);
+        $data = array_merge($data, [
+            'countryname' => $country->getName(),
+            'countryiso' => $country->getIso(),
+            'countryen' => $country->getEn(),
+            'position' => $country->getPosition(),
+            'shippingfree' => $country->isShippingFree(),
+            'taxfree' => $country->isTaxFree(),
+            'taxfree_ustid' => $country->isTaxFreeForVatId(),
+            'taxfree_ustid_checked' => $country->checkVatId(),
+            'active' => $country->isActive(),
+            'iso3' => $country->getIso3(),
+            'display_state_in_registration' => $country->displayStateSelection(),
+            'force_state_in_registration' => $country->requiresStateSelection(),
+            'states' => []
+        ]);
+
+        if ($country->displayStateSelection()) {
+            $data['states'] = $this->convertStateStructList($country->getStates());
+        }
+
+        return $data;
+    }
+
+    /**
+     * @param StoreFrontBundle\Struct\Country\State[] $states
+     * @return array
+     */
+    public function convertStateStructList($states)
+    {
+        return array_map([$this, 'convertStateStruct'], $states);
+    }
+
+    /**
+     * @param StoreFrontBundle\Struct\Country\State $state
+     * @return array
+     */
+    public function convertStateStruct(StoreFrontBundle\Struct\Country\State $state)
+    {
+        $data = json_decode(json_encode($state), true);
+        $data += ['shortcode' => $state->getCode()];
+        return $data;
+    }
+
+    /**
      * Converts a configurator group struct which used for default or selection configurators.
      *
      * @param StoreFrontBundle\Struct\Configurator\Group $group

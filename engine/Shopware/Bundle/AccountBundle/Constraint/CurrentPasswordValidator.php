@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\AccountBundle\Constraint;
 
-use Shopware\Components\DependencyInjection\Container;
+use Shopware\Components\Password\Manager;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
@@ -42,29 +42,29 @@ class CurrentPasswordValidator extends ConstraintValidator
     private $session;
 
     /**
-     * @var Container
-     */
-    private $container;
-
-    /**
      * @var \Enlight_Components_Snippet_Manager
      */
     private $snippets;
 
     /**
+     * @var Manager
+     */
+    private $passwordManager;
+
+    /**
      * CurrentPasswordValidator constructor.
      * @param \Enlight_Components_Session_Namespace $session
-     * @param Container $container
      * @param \Enlight_Components_Snippet_Manager $snippets
+     * @param Manager $passwordManager
      */
     public function __construct(
         \Enlight_Components_Session_Namespace $session,
-        Container $container,
-        \Enlight_Components_Snippet_Manager $snippets
+        \Enlight_Components_Snippet_Manager $snippets,
+        Manager $passwordManager
     ) {
         $this->session = $session;
-        $this->container = $container;
         $this->snippets = $snippets;
+        $this->passwordManager = $passwordManager;
     }
 
     /**
@@ -85,10 +85,10 @@ class CurrentPasswordValidator extends ConstraintValidator
         $encoderName = $extraData['encoderName'];
 
         if (empty($encoderName)) {
-            $encoderName = $this->container->get('PasswordEncoder')->getDefaultPasswordEncoderName();
+            $encoderName = $this->passwordManager->getDefaultPasswordEncoderName();
         }
 
-        if ($this->container->get('PasswordEncoder')->isPasswordValid($value, $sessionPassword, $encoderName) === false) {
+        if ($this->passwordManager->isPasswordValid($value, $sessionPassword, $encoderName) === false) {
             $errorMessage = $this->snippets
                 ->getNamespace($constraint->namespace)
                 ->get($constraint->snippetKey);

@@ -22,52 +22,19 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\AccountBundle\Constraint;
+namespace Shopware\Bundle\AccountBundle\Service;
 
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
-use Symfony\Component\Validator\Constraint;
+use Shopware\Models\Customer\Address;
+use Shopware\Models\Customer\Customer;
 
-class UniqueEmail extends Constraint
+interface RegisterServiceInterface
 {
     /**
-     * @var Shop
+     * @param Shop $shop
+     * @param Customer $customer
+     * @param Address $billing
+     * @param Address|null $shipping
      */
-    protected $shop;
-
-    /**
-     * @var null|int
-     */
-    protected $customerId;
-
-    /**
-     * @param null|array $options
-     */
-    public function __construct($options = null)
-    {
-        parent::__construct($options);
-    }
-
-    /**
-     * @return Shop
-     */
-    public function getShop()
-    {
-        return $this->shop;
-    }
-
-    /**
-     * @return string
-     */
-    public function validatedBy()
-    {
-        return 'UniqueEmailValidator';
-    }
-
-    /**
-     * @return null|int
-     */
-    public function getCustomerId()
-    {
-        return $this->customerId;
-    }
+    public function register(Shop $shop, Customer $customer, Address $billing, Address $shipping = null);
 }

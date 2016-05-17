@@ -69,12 +69,12 @@ class ArticleTest extends TestCase
                 array(
                     'value' => 'testWert',
                     'option' => array(
-                        'name' => 'neueOption' . uniqid()
+                        'name' => 'neueOption' . uniqid(rand())
                     )
                 )
             ),
             'mainDetail' => array(
-                'number' => 'swTEST' . uniqid(),
+                'number' => 'swTEST' . uniqid(rand()),
                 'inStock' => 15,
                 'unitId' => 1,
                 'attribute' => array(
@@ -118,7 +118,7 @@ class ArticleTest extends TestCase
             ),
             'variants' => array(
                 array(
-                    'number' => 'swTEST.variant.' . uniqid(),
+                    'number' => 'swTEST.variant.' . uniqid(rand()),
                     'inStock' => 17,
                     // create a new unit
                     'unit' => array(
@@ -244,7 +244,7 @@ class ArticleTest extends TestCase
                 array(
                     'value' => 'testWert',
                     'option' => array(
-                        'name' => 'neueOption' . uniqid()
+                        'name' => 'neueOption' . uniqid(rand())
                     )
                 )
             ),
@@ -260,7 +260,7 @@ class ArticleTest extends TestCase
                 )
             ),
             'mainDetail' => array(
-                'number' => 'swTEST' . uniqid(),
+                'number' => 'swTEST' . uniqid(rand()),
                 'inStock' => 15,
                 'unitId' => 1,
                 'attribute' => array(
@@ -304,7 +304,7 @@ class ArticleTest extends TestCase
             ),
             'variants' => array(
                 array(
-                    'number' => 'swTEST.variant.' . uniqid(),
+                    'number' => 'swTEST.variant.' . uniqid(rand()),
                     'inStock' => 17,
                     // create a new unit
                     'unit' => array(
@@ -506,7 +506,7 @@ class ArticleTest extends TestCase
                 array(
                     'value' => 'testWert',
                     'option' => array(
-                        'name' => 'neueOption' . uniqid()
+                        'name' => 'neueOption' . uniqid(rand())
                     )
                 )
             ),
@@ -516,7 +516,7 @@ class ArticleTest extends TestCase
                 )
             ),
             'mainDetail' => array(
-                'number' => 'swTEST' . uniqid(),
+                'number' => 'swTEST' . uniqid(rand()),
                 'inStock' => 15,
                 'unitId' => 1,
                 'attribute' => array(
@@ -561,7 +561,7 @@ class ArticleTest extends TestCase
             ),
             'variants' => array(
                 array(
-                    'number' => 'swTEST.variant.' . uniqid(),
+                    'number' => 'swTEST.variant.' . uniqid(rand()),
                     'inStock' => 17,
                     // create a new unit
                     'unit' => array(
@@ -673,12 +673,12 @@ class ArticleTest extends TestCase
                 array(
                     'value' => 'testWert',
                     'option' => array(
-                        'name' => 'neueOption' . uniqid()
+                        'name' => 'neueOption' . uniqid(rand())
                     )
                 )
             ),
             'mainDetail' => array(
-                'number' => 'swConfigSetMainTest' . uniqid(),
+                'number' => 'swConfigSetMainTest' . uniqid(rand()),
                 'inStock' => 15,
                 'unitId' => 1,
                 'attribute' => array(
@@ -728,7 +728,7 @@ class ArticleTest extends TestCase
             ),
             'variants' => array(
                 array(
-                    'number' => 'swConfigSetMainTest.variant.' . uniqid(),
+                    'number' => 'swConfigSetMainTest.variant.' . uniqid(rand()),
                     'inStock' => 17,
                     // create a new unit
                     'unit' => array(
@@ -771,7 +771,7 @@ class ArticleTest extends TestCase
                     )
                 ),
                 array(
-                    'number' => 'swConfigSetMainTest.variant.' . uniqid(),
+                    'number' => 'swConfigSetMainTest.variant.' . uniqid(rand()),
                     'inStock' => 18,
                     // create another new unit
                     'unit' => array(
@@ -1559,7 +1559,7 @@ class ArticleTest extends TestCase
     {
         $configurator = $this->getSimpleConfiguratorSet(2, 5);
         $variantOptions = $this->getVariantOptionsOfSet($configurator);
-        $variantNumber = 'swVariant' . uniqid();
+        $variantNumber = 'swVariant' . uniqid(rand());
 
         $testData = array(
             'name' => 'Testartikel',
@@ -1569,7 +1569,7 @@ class ArticleTest extends TestCase
             'taxId' => 1,
             'supplierId' => 1,
             'mainDetail' => array(
-                'number' => 'swTEST' . uniqid(),
+                'number' => 'swTEST' . uniqid(rand()),
                 'inStock' => 15,
                 'unitId' => 1,
                 'prices' => array(
@@ -1968,7 +1968,7 @@ class ArticleTest extends TestCase
     {
         $data = $this->getSimpleTestData();
 
-        $optionName = 'newOption' . uniqid();
+        $optionName = 'newOption' . uniqid(rand());
         $properties = array(
             array(
                 'option' => array('name' => $optionName),
@@ -2083,7 +2083,7 @@ class ArticleTest extends TestCase
 
     public function testUpdateWithMultiplePropertiesAndNewGroup()
     {
-        $optionName = 'newOption' . uniqid();
+        $optionName = 'newOption' . uniqid(rand());
         $properties = array(
             array(
                 'option' => array('name' => $optionName),
@@ -2586,7 +2586,7 @@ class ArticleTest extends TestCase
             'description' => 'Test description',
             'active' => true,
             'mainDetail' => array(
-                'number' => 'swTEST' . uniqid(),
+                'number' => 'swTEST' . uniqid(rand()),
                 'inStock' => 15,
                 'unitId' => 1,
                 'prices' => array(
@@ -2653,7 +2653,7 @@ class ArticleTest extends TestCase
     private function getSimpleVariantData()
     {
         return array(
-            'number' => 'swTEST' . uniqid(),
+            'number' => 'swTEST' . uniqid(rand()),
             'inStock' => 100,
             'unitId' => 1,
             'prices' => array(
@@ -2776,7 +2776,7 @@ class ArticleTest extends TestCase
 
     public function testCategoryAssignment()
     {
-        $number = 'CategoryAssignment' . uniqid();
+        $number = 'CategoryAssignment' . uniqid(rand());
 
         $data = $this->getSimpleTestData();
         $data['mainDetail']['number'] = $number;

@@ -262,6 +262,50 @@ In this document you will find a changelog of the important changes related to t
 * Removed class `Shopware_Models_Payment`
 * Removed class `Shopware_Models_PaymentManager`
 * Removed `Shopware_Plugins_Frontend_Payment_Bootstrap`, Service: `Shopware()->Payments()`
+* Removed following methods:
+    * \Shopware_Controllers_Frontend_Register::saveRegister
+    * \Shopware_Controllers_Frontend_Register::personalAction
+    * \Shopware_Controllers_Frontend_Register::savePersonalAction
+    * \Shopware_Controllers_Frontend_Register::billingAction
+    * \Shopware_Controllers_Frontend_Register::saveBillingAction
+    * \Shopware_Controllers_Frontend_Register::shippingAction
+    * \Shopware_Controllers_Frontend_Register::saveShippingAction
+    * \Shopware_Controllers_Frontend_Register::paymentAction
+    * \Shopware_Controllers_Frontend_Register::savePaymentAction
+    * \Shopware_Controllers_Frontend_Register::validatePersonal
+    * \Shopware_Controllers_Frontend_Register::setRegisterData
+    * \Shopware_Controllers_Frontend_Register::validateBilling
+    * \Shopware_Controllers_Frontend_Register::validateShipping
+    * \Shopware_Controllers_Frontend_Register::validatePayment
+    * \sAdmin::sSaveRegisterMainData
+    * \sAdmin::sSaveRegisterNewsletter
+    * \sAdmin::sSaveRegisterBilling
+    * \sAdmin::sSaveRegisterShipping
+    * \sAdmin::sSaveRegister
+    * \sAdmin::validateRegistrationFields
+    * \sAdmin::assignCustomerNumber
+    * \sAdmin::logRegistrationMailException
+* Removed the following events:
+    * Shopware_Modules_Admin_SaveRegisterMainData_FilterSql
+    * Shopware_Modules_Admin_SaveRegisterMainData_Return
+    * Shopware_Modules_Admin_SaveRegisterMainData_Return
+    * Shopware_Modules_Admin_SaveRegisterBilling_FilterSql
+    * Shopware_Modules_Admin_SaveRegisterBilling_Return
+    * Shopware_Modules_Admin_SaveRegisterShipping_FilterSql
+    * Shopware_Modules_Admin_SaveRegisterShipping_Return
+    * Shopware_Modules_Admin_SaveRegister_Start
+    * Shopware_Modules_Admin_SaveRegister_GetCustomerNumber
+    * Shopware_Modules_Admin_SaveRegister_FilterNeededFields
+    * Shopware_Modules_Admin_SaveRegister_FilterErrors
+* Shopware_Modules_Admin_SaveRegister_Successful contains no more subject
+* Changed following registration templates
+    * frontend/register/index.tpl
+    * frontend/register/shipping_fieldset.tpl
+    * frontend/register/personal_fieldset.tpl
+    * frontend/register/error_messages.tpl
+    * frontend/register/billing_fieldset.tpl
+* Moved s_user_billingaddress.customernumber to s_user table
+* Removed \Shopware\Models\Customer\Billing::number property
 
 ## 5.1.6
 * The interface `Enlight_Components_Cron_Adapter` in `engine/Library/Enlight/Components/Cron/Adapter.php` got a new method `getJobByAction`. For default implementation see `engine/Library/Enlight/Components/Cron/Adapter/DBAL.php`.

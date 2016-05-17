@@ -6,18 +6,18 @@
 
     <services>
 
-        <service id="shopware_account.address_service" class="Shopware\Bundle\AccountBundle\Service\Core\AddressService">
+        <service id="shopware_account.address_service" class="Shopware\Bundle\AccountBundle\Service\AddressService">
             <argument type="service" id="models" />
             <argument type="service" id="shopware.form.factory" />
         </service>
 
-        <service id="shopware_account.address_import_service" class="Shopware\Bundle\AccountBundle\Service\Core\AddressImportService">
+        <service id="shopware_account.address_import_service" class="Shopware\Bundle\AccountBundle\Service\AddressImportService">
             <argument type="service" id="dbal_connection" />
             <argument type="service" id="models" />
             <argument type="service" id="shopware_account.address_service" />
         </service>
 
-        <service id="shopware_account.customer_service" class="Shopware\Bundle\AccountBundle\Service\Core\CustomerService">
+        <service id="shopware_account.customer_service" class="Shopware\Bundle\AccountBundle\Service\CustomerService">
             <argument type="service" id="models" />
             <argument type="service" id="shopware_account.customer_validator" />
         </service>
@@ -30,15 +30,9 @@
 
         <service id="shopware_account.constraint.current_password_validator" class="Shopware\Bundle\AccountBundle\Constraint\CurrentPasswordValidator">
             <argument type="service" id="session" />
-            <argument type="service" id="service_container" />
             <argument type="service" id="snippets" />
+            <argument type="service" id="PasswordEncoder" />
             <tag name="validator.constraint_validator" alias="CurrentPasswordValidator" />
-        </service>
-
-        <service id="shopware_account.constraint.unique_email_validator" class="Shopware\Bundle\AccountBundle\Constraint\UniqueEmailValidator">
-            <argument type="service" id="snippets" />
-            <argument type="service" id="dbal_connection" />
-            <tag name="validator.constraint_validator" alias="UniqueEmailValidator" />
         </service>
 
         <service id="shopware_account.type.salutation_type" class="Shopware\Bundle\AccountBundle\Type\SalutationType">
@@ -80,10 +74,37 @@
         </service>
 
         <service id="shopware_account.form.passwordupdateform" class="Shopware\Bundle\AccountBundle\Form\Account\PasswordUpdateFormType">
-            <argument type="service" id="snippets" />
             <argument type="service" id="config" />
             <tag name="form.type" />
         </service>
 
+        <service id="shopware_account.constraint.password_validator" class="Shopware\Bundle\AccountBundle\Constraint\PasswordValidator">
+            <argument type="service" id="snippets" />
+            <argument type="service" id="config" />
+            <tag name="validator.constraint_validator" alias="PasswordValidator" />
+        </service>
+
+        <service id="shopware_account.constraint.form_email_validator" class="Shopware\Bundle\AccountBundle\Constraint\FormEmailValidator">
+            <argument type="service" id="snippets" />
+            <argument type="service" id="shopware_account.constraint.customer_email_validator" />
+            <tag name="validator.constraint_validator" alias="FormEmailValidator" />
+        </service>
+
+        <service id="shopware_account.constraint.customer_email_validator" class="Shopware\Bundle\AccountBundle\Constraint\CustomerEmailValidator">
+            <argument type="service" id="snippets" />
+            <argument type="service" id="dbal_connection" />
+            <argument type="service" id="validator.email" />
+            <tag name="validator.constraint_validator" alias="CustomerEmailValidator" />
+        </service>
+
+        <service id="shopware_account.register_service" class="Shopware\Bundle\AccountBundle\Service\RegisterService">
+            <argument type="service" id="models"/>
+            <argument type="service" id="shopware_account.customer_validator"/>
+            <argument type="service" id="config"/>
+            <argument type="service" id="PasswordEncoder"/>
+            <argument type="service" id="shopware.number_range_incrementer"/>
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="shopware_account.address_service"/>
+        </service>
     </services>
 </container>

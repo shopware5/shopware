@@ -32,13 +32,11 @@ interface AddressServiceInterface
     /**
      * @param Address $address
      * @param Customer $customer
-     * @return Address
      */
     public function create(Address $address, Customer $customer);
 
     /**
      * @param Address $address
-     * @return Address
      */
     public function update(Address $address);
 

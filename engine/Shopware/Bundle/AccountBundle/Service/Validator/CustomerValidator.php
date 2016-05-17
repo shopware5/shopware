@@ -24,13 +24,11 @@
 
 namespace Shopware\Bundle\AccountBundle\Service\Validator;
 
-use Shopware\Bundle\AccountBundle\Constraint\UniqueEmail;
+use Shopware\Bundle\AccountBundle\Constraint\CustomerEmail;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\Api\Exception\ValidationException;
 use Shopware\Models\Customer\Customer;
 use Symfony\Component\Validator\Constraints\Choice;
-use Symfony\Component\Validator\Constraints\Date;
-use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\ConstraintValidatorInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -81,8 +79,13 @@ class CustomerValidator implements CustomerValidatorInterface
         $this->validateField($customer->getFirstname(), [new NotBlank()]);
         $this->validateField($customer->getLastname(), [new NotBlank()]);
         $this->validateField($customer->getSalutation(), $this->getSalutationConstraints());
-        $this->validateField($customer->getEmail(), $this->getEmailConstraints($customer->getId()));
-        $this->validateField($customer->getBirthday(), $this->getBirthdayConstraints());
+        $this->validateField($customer->getEmail(), [
+            new CustomerEmail([
+                'shop' => $this->context->getShopContext()->getShop(),
+                'customerId' => $customer->getId(),
+                'accountMode' => $customer->getAccountMode()
+            ])
+        ]);
     }
 
     /**
@@ -96,36 +99,6 @@ class CustomerValidator implements CustomerValidatorInterface
         if ($violations->count()) {
             throw new ValidationException($violations);
         }
-    }
-
-    /**
-     * @param int|null $customerId
-     * @return \Symfony\Component\Validator\ConstraintValidatorInterface[]
-     */
-    private function getEmailConstraints($customerId = null)
-    {
-        return [
-            new NotBlank(),
-            new Email(),
-            new UniqueEmail([
-                'shop' => $this->context->getShopContext()->getShop(),
-                'customerId' => $customerId
-            ])
-        ];
-    }
-
-    /**
-     * @return ConstraintValidatorInterface[]
-     */
-    private function getBirthdayConstraints()
-    {
-        $birthdayConstraints = [new Date()];
-
-        if ($this->config->get('showBirthdayField') && $this->config->get('requireBirthdayField')) {
-            $birthdayConstraints[] = new NotBlank();
-        }
-
-        return $birthdayConstraints;
     }
 
     /**

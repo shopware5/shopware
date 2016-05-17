@@ -45,7 +45,7 @@ class Shopware_Plugins_Core_CronBirthday_Bootstrap extends Shopware_Components_P
                 company,
                 department,
                 u.salutation,
-                customernumber,
+                u.customernumber,
                 u.firstname,
                 u.lastname,
                 street,

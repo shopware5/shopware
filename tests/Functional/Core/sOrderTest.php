@@ -316,7 +316,6 @@ class sOrderTest extends PHPUnit_Framework_TestCase
         $billing = Shopware()->Models()->getRepository('Shopware\Models\Order\Billing')->findOneBy(array('order' => $orderNumber));
 
         $this->assertEquals($originalBillingAddress["userID"], $billing->getCustomer()->getId());
-        $this->assertEquals($originalBillingAddress["customernumber"], $billing->getNumber());
         $this->assertEquals($originalBillingAddress["company"], $billing->getCompany());
         $this->assertEquals($originalBillingAddress["firstname"], $billing->getFirstName());
         $this->assertEquals($originalBillingAddress["lastname"], $billing->getLastName());
@@ -741,7 +740,7 @@ class sOrderTest extends PHPUnit_Framework_TestCase
 
     private function getRandomUser()
     {
-        $user = Shopware()->Db()->fetchRow("SELECT * FROM s_user ORDER BY RAND() LIMIT 1");
+        $user = Shopware()->Db()->fetchRow("SELECT * FROM s_user WHERE id = 1 LIMIT 1");
 
         $billing = Shopware()->Db()->fetchRow(
             "SELECT * FROM s_user_billingaddress WHERE userID = :id",
@@ -789,6 +788,7 @@ class sOrderTest extends PHPUnit_Framework_TestCase
         Shopware()->Session()->sUserGroupData = $customerGroup;
 
         return array(
+            'user' => $user,
             'billingaddress' => $billing,
             'shippingaddress' => $shipping,
             'customerGroup' => $customerGroup,
@@ -805,7 +805,7 @@ class sOrderTest extends PHPUnit_Framework_TestCase
 
     protected function createDummyOrder()
     {
-        $number = 'SW-' . uniqid();
+        $number = 'SW-' . uniqid(rand());
         Shopware()->Db()->insert('s_order', array(
             'id' => null,
             'userID' => 1,
@@ -984,7 +984,6 @@ class sOrderTest extends PHPUnit_Framework_TestCase
                 'phone' => '',
                 'department' => '',
                 'salutation' => 'mr',
-                'customernumber' => '20001',
                 'firstname' => 'Max',
                 'lastname' => 'Mustermann',
                 'street' => 'Musterstr. 55',
@@ -1015,6 +1014,7 @@ class sOrderTest extends PHPUnit_Framework_TestCase
                 'user' => array(
                     'id' => '1',
                     'email' => 'test@example.com',
+                    'customernumber' => '20001',
                     'active' => '1',
                     'accountmode' => '0',
                     'confirmationkey' => '',

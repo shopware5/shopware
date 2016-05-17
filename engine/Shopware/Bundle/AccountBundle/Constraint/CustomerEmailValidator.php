@@ -27,12 +27,26 @@ namespace Shopware\Bundle\AccountBundle\Constraint;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
+use Shopware\Components\Validator\EmailValidatorInterface;
+use Shopware\Models\Customer\Customer;
 use Shopware_Components_Snippet_Manager;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
-class UniqueEmailValidator extends ConstraintValidator
+class CustomerEmailValidator extends ConstraintValidator
 {
+    const SNIPPET_MAIL_FAILURE = [
+        'namespace' => 'frontend/account/internalMessages',
+        'name' => 'MailFailure',
+        'default' => 'Please enter a valid mail address'
+    ];
+
+    const SNIPPET_MAIL_DUPLICATE = [
+        'namespace' => 'frontend/account/internalMessages',
+        'name' => 'MailFailureAlreadyRegistered',
+        'default' => 'This mail address is already registered'
+    ];
+
     /**
      * @var Shopware_Components_Snippet_Manager
      */
@@ -44,41 +58,70 @@ class UniqueEmailValidator extends ConstraintValidator
     private $connection;
 
     /**
+     * @var EmailValidatorInterface
+     */
+    private $emailValidator;
+
+    /**
      * @param Shopware_Components_Snippet_Manager $snippets
      * @param Connection $connection
+     * @param EmailValidatorInterface $emailValidator
      */
     public function __construct(
         Shopware_Components_Snippet_Manager $snippets,
-        Connection $connection
+        Connection $connection,
+        EmailValidatorInterface $emailValidator
     ) {
         $this->snippets = $snippets;
         $this->connection = $connection;
+        $this->emailValidator = $emailValidator;
     }
 
     /**
-     * @param string $value
+     * @param string $email
      * @param Constraint $constraint
      */
-    public function validate($value, Constraint $constraint)
+    public function validate($email, Constraint $constraint)
     {
-        if (!$constraint instanceof UniqueEmail) {
+        if (!$constraint instanceof CustomerEmail) {
             return;
         }
 
-        $builder = $this->createQueryBuilder($value, $constraint->getShop(), $constraint->getCustomerId());
+        /** @var CustomerEmail $constraint */
+        $shop = $constraint->getShop();
 
-        $exists = $builder->execute()->rowCount() > 0;
-        if (!$exists) {
-            return;
+        $customerId = $constraint->getCustomerId();
+
+        if (empty($email)) {
+            $this->addError($this->getSnippet(self::SNIPPET_MAIL_FAILURE));
         }
 
-        $emailMessage = $this->snippets
-            ->getNamespace('frontend/account/internalMessages')
-            ->get('MailFailureAlreadyRegistered', 'This mail address is already registered');
+        if (!$this->emailValidator->isValid($email)) {
+            $this->addError($this->getSnippet(self::SNIPPET_MAIL_FAILURE));
+        }
 
-        $this->context->buildViolation($emailMessage)
-            ->atPath($this->context->getPropertyPath())
+        if (!$this->isFastLogin($constraint) && $this->isExistingEmail($email, $shop, $customerId)) {
+            $this->addError($this->getSnippet(self::SNIPPET_MAIL_DUPLICATE));
+        }
+    }
+
+    /**
+     * @param string $message
+     */
+    private function addError($message)
+    {
+        $this->context
+            ->buildViolation($message)
             ->addViolation();
+    }
+
+    /**
+     * @param CustomerEmail $constraint
+     * @return bool
+     */
+    private function isFastLogin(CustomerEmail $constraint)
+    {
+        return $constraint->getAccountMode() == Customer::ACCOUNT_MODE_FAST_LOGIN;
     }
 
     /**
@@ -87,13 +130,13 @@ class UniqueEmailValidator extends ConstraintValidator
      * @param null|int $customerId
      * @return QueryBuilder
      */
-    private function createQueryBuilder($value, Shop $shop, $customerId = null)
+    private function isExistingEmail($value, Shop $shop, $customerId = null)
     {
         $builder = $this->connection->createQueryBuilder();
         $builder->select(1);
         $builder->from('s_user');
         $builder->andWhere('email = :email');
-        $builder->andWhere('accountmode != 1');
+        $builder->andWhere('accountmode != ' . Customer::ACCOUNT_MODE_FAST_LOGIN);
         $builder->setParameter('email', $value);
 
         if ($shop->hasCustomerScope()) {
@@ -106,6 +149,16 @@ class UniqueEmailValidator extends ConstraintValidator
             $builder->setParameter('userId', $customerId);
         }
 
-        return $builder;
+        $id = $builder->execute()->fetch(\PDO::FETCH_COLUMN);
+        return ($id == 1);
+    }
+
+    /**
+     * @param array $snippet with namespace, name and default value
+     * @return string
+     */
+    private function getSnippet(array $snippet)
+    {
+        return $this->snippets->getNamespace($snippet['namespace'])->get($snippet['name'], $snippet['default'], true);
     }
 }

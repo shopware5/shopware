@@ -34,7 +34,6 @@ interface CustomerServiceInterface
 {
     /**
      * @param Customer $customer
-     * @return Customer
      */
     public function update(Customer $customer);
 }

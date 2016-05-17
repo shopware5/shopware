@@ -374,6 +374,9 @@
             <argument type="service" id="dbal_connection" />
         </service>
 
-
+        <service id="shopware_storefront.location_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\LocationService">
+            <argument type="service" id="shopware_storefront.country_gateway" />
+            <argument type="service" id="dbal_connection" />
+        </service>
     </services>
 </container>

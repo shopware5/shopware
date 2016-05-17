@@ -22,36 +22,24 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\FormBundle\Constraint;
+namespace Shopware\Bundle\AccountBundle\Constraint;
 
+use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 use Symfony\Component\Validator\Constraint;
 
-class Repeated extends Constraint
+class FormEmail extends Constraint
 {
     /**
-     * @var string
+     * @var Shop
      */
-    protected $field;
+    protected $shop;
 
     /**
-     * @var string
+     * @return Shop
      */
-    protected $message;
-
-    /**
-     * @return string
-     */
-    public function getField()
+    public function getShop()
     {
-        return $this->field;
-    }
-
-    /**
-     * @return string
-     */
-    public function getMessage()
-    {
-        return $this->message;
+        return $this->shop;
     }
 
     /**
@@ -59,6 +47,6 @@ class Repeated extends Constraint
      */
     public function validatedBy()
     {
-        return 'RepeatedValidator';
+        return 'FormEmailValidator';
     }
 }
