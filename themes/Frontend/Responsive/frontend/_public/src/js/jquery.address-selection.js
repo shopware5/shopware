@@ -122,7 +122,7 @@
             $.overlay.open({ closeOnClick: false });
             $.loadingIndicator.open({ openOverlay: false });
 
-            $.publish('plugin/swAddressSelection/onBeforeAddressFetch', [ me, event ]);
+            $.publish('plugin/swAddressSelection/onBeforeAddressFetch', [ me ]);
 
             // Ajax request to fetch available addresses
             $.ajax({
@@ -145,7 +145,7 @@
                         $.unsubscribe(me.getEventName('plugin/swModal/onOpen'));
                     });
 
-                    $.publish('plugin/swAddressSelection/onAddressFetchSuccess', [ me, event, data ]);
+                    $.publish('plugin/swAddressSelection/onAddressFetchSuccess', [ me, data ]);
                 }
             });
         },
@@ -197,7 +197,7 @@
 
                     event.preventDefault();
 
-                    $.publish('plugin/swAddressSelection/onBeforeSave', [ me, event, $target ]);
+                    $.publish('plugin/swAddressSelection/onBeforeSave', [ me, $target ]);
 
                     // send data to api endpoint
                     $.ajax({

@@ -138,8 +138,6 @@
                     }
                 };
 
-            event.preventDefault();
-
             if (window.StateManager._getCurrentDevice() === 'mobile') {
                 sizing = 'auto';
             }
@@ -170,7 +168,7 @@
                         $.unsubscribe(me.getEventName('plugin/swModal/onOpen'));
                     });
 
-                    $.publish('plugin/swAddressEditor/onAddressFetchSuccess', [ me, event, data ]);
+                    $.publish('plugin/swAddressEditor/onAddressFetchSuccess', [ me, data ]);
                 }
             });
 
@@ -248,7 +246,7 @@
                         actionData[this.name] = this.value;
                     });
 
-                    $.publish('plugin/swAddressEditor/onBeforeSave', [ me, event, actionData ]);
+                    $.publish('plugin/swAddressEditor/onBeforeSave', [ me, actionData ]);
 
                     // send data to api endpoint
                     $.ajax({
