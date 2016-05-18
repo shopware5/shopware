@@ -9,6 +9,7 @@ In this document you will find a changelog of the important changes related to t
     * Added `__csrf_token` to every html form in frontend
     * Added `__csrf_token` param to every ExtJS form submit via override in `ExtJs/overrides/Ext.form.Base.js`
     * Added `csrfProtection` config options to disable CSRF protection
+    * Special thanks to: [ltepner](https://github.com/ltepner)
     * See: https://developers.shopware.com/developers-guide/csrf-protection/
 * Updated Symfony Components to version 2.8 LTS
 * Replaced polyfill provided by `indigophp/hash-compat` with `symfony/polyfill-php56`
