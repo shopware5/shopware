@@ -550,6 +550,9 @@ Ext.define('Shopware.window.Detail', {
         me.formPanel = Ext.create('Ext.form.Panel', {
             items: items,
             flex: 1,
+            defaults: {
+                cls: 'shopware-form'
+            },
             layout: {
                 type: 'hbox',
                 align: 'stretch'

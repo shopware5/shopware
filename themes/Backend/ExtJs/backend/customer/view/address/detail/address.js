@@ -83,13 +83,19 @@ Ext.define('Shopware.apps.Customer.view.address.detail.Address', {
                     title: me.snippets.fieldset.company,
                     fields: {
                         company: {
-                            fieldLabel: me.snippets.fields.company
+                            fieldLabel: me.snippets.fields.company,
+                            labelWidth: 155,
+                            anchor: '95%'
                         },
                         department: {
-                            fieldLabel: me.snippets.fields.department
+                            fieldLabel: me.snippets.fields.department,
+                            labelWidth: 155,
+                            anchor: '95%'
                         },
                         vatId: {
-                            fieldLabel: me.snippets.fields.vatId
+                            fieldLabel: me.snippets.fields.vatId,
+                            labelWidth: 155,
+                            anchor: '95%'
                         }
                     }
                 },
@@ -104,44 +110,66 @@ Ext.define('Shopware.apps.Customer.view.address.detail.Address', {
                             allowBlank: false,
                             valueField: 'key',
                             displayField: 'label',
+                            labelWidth: 155,
+                            anchor: '95%',
                             store: Ext.create('Shopware.apps.Base.store.Salutation').load()
                         },
-                        title: me.snippets.fields.title,
+                        title: {
+                            fieldLabel: me.snippets.fields.title,
+                            labelWidth: 155,
+                            anchor: '95%'
+                        },
                         firstname: {
                             allowBlank: false,
-                            fieldLabel: me.snippets.fields.firstname
+                            fieldLabel: me.snippets.fields.firstname,
+                            labelWidth: 155,
+                            anchor: '95%'
                         },
                         lastname: {
                             allowBlank: false,
-                            fieldLabel: me.snippets.fields.lastname
+                            fieldLabel: me.snippets.fields.lastname,
+                            labelWidth: 155,
+                            anchor: '95%'
                         },
                         street: {
                             allowBlank: false,
-                            fieldLabel: me.snippets.fields.street
+                            fieldLabel: me.snippets.fields.street,
+                            labelWidth: 155,
+                            anchor: '95%'
                         },
                         additionalAddressLine1: {
                             /*{if {config name=showAdditionAddressLine1} && {config name=requireAdditionAddressLine1}}*/
                             allowBlank: false,
                             /*{/if}*/
-                            fieldLabel: me.snippets.fields.additionalAddressLine1
+                            fieldLabel: me.snippets.fields.additionalAddressLine1,
+                            labelWidth: 155,
+                            anchor: '95%'
                         },
                         additionalAddressLine2: {
                             /*{if {config name=showAdditionAddressLine2} && {config name=requireAdditionAddressLine2}}*/
                             allowBlank: false,
                             /*{/if}*/
-                            fieldLabel: me.snippets.fields.additionalAddressLine2
+                            fieldLabel: me.snippets.fields.additionalAddressLine2,
+                            labelWidth: 155,
+                            anchor: '95%'
                         },
                         zipcode: {
                             allowBlank: false,
-                            fieldLabel: me.snippets.fields.zipcode
+                            fieldLabel: me.snippets.fields.zipcode,
+                            labelWidth: 155,
+                            anchor: '95%'
                         },
                         city: {
                             allowBlank: false,
-                            fieldLabel: me.snippets.fields.city
+                            fieldLabel: me.snippets.fields.city,
+                            labelWidth: 155,
+                            anchor: '95%'
                         },
                         country_id: {
                             allowBlank: false,
                             fieldLabel: me.snippets.fields.country,
+                            labelWidth: 155,
+                            anchor: '95%',
                             listeners: {
                                 change: me.onCountryChanged,
                                 scope: me
@@ -149,13 +177,17 @@ Ext.define('Shopware.apps.Customer.view.address.detail.Address', {
                         },
                         state_id: {
                             store: me.countryStateStore,
-                            fieldLabel: me.snippets.fields.state
+                            fieldLabel: me.snippets.fields.state,
+                            labelWidth: 155,
+                            anchor: '95%'
                         },
                         phone: {
                             /*{if {config name=showphonenumberfield} && {config name=requirePhoneField}}*/
                             allowBlank: false,
                             /*{/if}*/
-                            fieldLabel: me.snippets.fields.phone
+                            fieldLabel: me.snippets.fields.phone,
+                            labelWidth: 155,
+                            anchor: '95%'
                         }
                     }
                 },
@@ -167,14 +199,18 @@ Ext.define('Shopware.apps.Customer.view.address.detail.Address', {
                             uncheckedValue: false,
                             inputValue: true,
                             boxLabel: me.snippets.fields.setDefaultBillingAddress,
-                            fieldLabel: null
+                            fieldLabel: null,
+                            labelWidth: 155,
+                            anchor: '95%'
                         },
                         setDefaultShippingAddress: {
                             xtype: 'checkbox',
                             uncheckedValue: false,
                             inputValue: true,
                             boxLabel: me.snippets.fields.setDefaultShippingAddress,
-                            fieldLabel: null
+                            fieldLabel: null,
+                            labelWidth: 155,
+                            anchor: '95%'
                         }
                     }
                 }

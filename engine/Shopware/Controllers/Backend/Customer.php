@@ -23,6 +23,7 @@
  */
 
 use Shopware\Components\CSRFWhitelistAware;
+use Shopware\Components\NumberRangeIncrementerInterface;
 use Shopware\Models\Customer\Customer as Customer;
 use Shopware\Models\Customer\PaymentData;
 
@@ -517,6 +518,12 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         //encode the password with md5
         if (!empty($password)) {
             $customer->setPassword($password);
+        }
+
+        if (!$customer->getNumber() && Shopware()->Config()->get('shopwareManagedCustomerNumbers')) {
+            /** @var NumberRangeIncrementerInterface $incrementer */
+            $incrementer = Shopware()->Container()->get('shopware.number_range_incrementer');
+            $customer->setNumber($incrementer->increment('user'));
         }
 
         $this->getManager()->persist($customer);

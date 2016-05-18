@@ -97,11 +97,10 @@ Ext.define('Shopware.apps.Customer.view.address.detail.Window', {
      * @param window
      */
     onSaveSuccessful: function(controller, record, window) {
-        var me = this;
-
         window.attributeForm.saveAttribute(record.get('id'), function(success) {
 
             if(!success){
+                window.close();
                 return;
             }
 
@@ -109,6 +108,11 @@ Ext.define('Shopware.apps.Customer.view.address.detail.Window', {
                 url: '{url controller=Address action=syncAttribute}',
                 params: {
                     id: record.get('id')
+                },
+                callback: function(options, success) {
+                    if (success) {
+                        window.close();
+                    }
                 }
             });
         });

@@ -58,7 +58,8 @@ Ext.define('Shopware.apps.Customer.model.Customer', {
         { name:'salutation', type:'string' },
         { name:'firstname', type:'string' },
         { name:'lastname', type:'string' },
-        { name:'title', type:'string' }
+        { name:'title', type:'string' },
+        { name:'number', type: 'string' }
     ],
 
     /**
