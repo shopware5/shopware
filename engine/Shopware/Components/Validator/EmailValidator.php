@@ -24,8 +24,6 @@
 
 namespace Shopware\Components\Validator;
 
-use Egulias\EmailValidator\EmailValidator as BaseEmailValidator;
-
 /**
  * The Validator\EmailValidator class is used to validate emails addresses consistently across the system
  *
@@ -40,13 +38,8 @@ class EmailValidator implements EmailValidatorInterface
      */
     public function isValid($emailAddress)
     {
-        /**
-         * Creates a new instance of the underlying validator class
-         * on each validation request to avoid problems related to
-         * state in the validator implementation
-         */
-        $baseValidator = new BaseEmailValidator();
-
-        return $baseValidator->isValid($emailAddress, false, true);
+        // Inspired by the regex used in symfony/validator
+        // See: https://github.com/symfony/validator/blob/dae70b74fe173461395cfd61a5c5245e05e511f5/Constraints/EmailValidator.php#L72
+        return (boolean)preg_match('/^\S+\@\S+\.\S+$/', $emailAddress);
     }
 }

@@ -142,6 +142,11 @@
             <tag name="condition_handler_dbal"/>
         </service>
 
+        <service id="shopware_searchdbal.is_new_condition_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\IsNewConditionHandler">
+            <argument type="service" id="config" />
+            <tag name="condition_handler_dbal"/>
+        </service>
+
         <service id="shopware_searchdbal.release_date_condition_handler" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\ReleaseDateConditionHandler">
             <tag name="condition_handler_dbal"/>
         </service>
@@ -194,6 +199,10 @@
 
         <service id="shopware_searchdbal.price_condition_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\PriceConditionHandler" >
             <argument type="service" id="shopware_searchdbal.search_price_helper_dbal" />
+            <tag name="condition_handler_dbal"/>
+        </service>
+
+        <service id="shopware_searchdbal.similar_products_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\SimilarProductConditionHandler">
             <tag name="condition_handler_dbal"/>
         </service>
 

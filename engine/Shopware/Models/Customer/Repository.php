@@ -119,6 +119,10 @@ class Repository extends ModelRepository
                     ->setParameter(4, $customerGroup);
         }
 
+        if (empty($orderBy)) {
+            $orderBy = array(array('property' => 'customer.id', 'direction' => 'DESC'));
+        }
+
         $this->addOrderBy($builder, $orderBy);
         return $builder;
     }

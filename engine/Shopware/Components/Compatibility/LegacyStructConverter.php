@@ -253,6 +253,24 @@ class LegacyStructConverter
             $promotion['sVoteAverange'] = $promotion['sVoteAverage'];
         }
 
+        $promotion['prices'] = [];
+        foreach ($product->getPrices() as $price) {
+            $priceData = $this->convertPriceStruct($price);
+
+            $priceData = array_merge($priceData, array(
+                'has_pseudoprice' => $price->getCalculatedPseudoPrice() > $price->getCalculatedPrice(),
+                'price' => $this->sFormatPrice($price->getCalculatedPrice()),
+                'price_numeric' => $price->getCalculatedPrice(),
+                'pseudoprice' => $this->sFormatPrice($price->getCalculatedPseudoPrice()),
+                'pseudoprice_numeric' => $price->getCalculatedPseudoPrice(),
+                'pricegroup' => $price->getCustomerGroup()->getKey(),
+                'purchaseunit' => $price->getUnit()->getPurchaseUnit(),
+                'maxpurchase' => $price->getUnit()->getMaxPurchase()
+            ));
+
+            $promotion['prices'][] = $priceData;
+        }
+
         $promotion["linkBasket"] = $this->config->get('baseFile') .
             "?sViewport=basket&sAdd=" . $promotion["ordernumber"];
 
@@ -389,12 +407,21 @@ class LegacyStructConverter
         }
 
         foreach ($product->getDownloads() as $download) {
-            $data['sDownloads'][] = array(
+            $temp = array(
                 'id' => $download->getId(),
                 'description' => $download->getDescription(),
                 'filename' => $this->mediaService->getUrl($download->getFile()),
-                'size' => $download->getSize()
+                'size' => $download->getSize(),
             );
+
+            $attributes = [];
+
+            if ($download->hasAttribute('core')) {
+                $attributes = $download->getAttribute('core')->toArray();
+            }
+
+            $temp['attributes'] = $attributes;
+            $data['sDownloads'][] = $temp;
         }
 
         foreach ($product->getLinks() as $link) {
@@ -533,10 +560,9 @@ class LegacyStructConverter
         $thumbnails = [];
 
         foreach ($media->getThumbnails() as $thumbnail) {
-            $retina = null;
             $thumbnails[] = [
                 'source' => $thumbnail->getSource(),
-                'retinaSource' => $retina,
+                'retinaSource' => $thumbnail->getRetinaSource(),
                 'sourceSet' => $this->getSourceSet($thumbnail),
                 'maxWidth' => $thumbnail->getMaxWidth(),
                 'maxHeight' => $thumbnail->getMaxHeight()

@@ -10,9 +10,9 @@
 {* Canonical link *}
 {block name='frontend_index_header_canonical'}
 
-    {if {config name=seoIndexPaginationLinks} 
-        && $showListing 
-        && $criteria 
+    {if {config name=seoIndexPaginationLinks}
+        && $showListing
+        && $criteria
         && ceil($sNumberArticles / $criteria->getLimit()) > 1
     }
         {* Count of available product pages *}
@@ -29,7 +29,7 @@
 {* Title *}
 {block name='frontend_index_header_title'}{strip}
     {if $sCategoryContent.metaTitle}
-        {$sCategoryContent.metaTitle} | {config name=sShopname}
+        {$sCategoryContent.metaTitle|escapeHtml} | {config name=sShopname}
     {elseif $sCategoryContent.title}
         {$sCategoryContent.title}
     {else}

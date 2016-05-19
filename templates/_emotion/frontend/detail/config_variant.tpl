@@ -22,12 +22,13 @@
 
 											{block name='frontend_detail_configurator_variant_group_option_input'}
 												<input type="radio"
-													   class="option--input{if !$option.selectable} is--disabled{/if}"
+													   class="option--input"
 													   id="group[{$option.groupID}]"
 													   name="group[{$option.groupID}]"
 													   value="{$option.optionID}"
 													   data-auto-submit="true"
-													   {if $option.selected}checked="checked"{/if} />
+													   {if !$option.selectable}disabled="disabled"{/if}
+													   {if $option.selected && $option.selectable}checked="checked"{/if} />
 											{/block}
 
 											{block name='frontend_detail_configurator_variant_group_option_label'}

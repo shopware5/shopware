@@ -1678,6 +1678,17 @@ class sBasket
     }
 
     /**
+     * Clear basket for current user
+     */
+    public function clearBasket()
+    {
+        $this->db->executeUpdate(
+            'DELETE FROM s_order_basket WHERE sessionID= :sessionId',
+            ['sessionId' => $this->session->get('sessionId')]
+        );
+    }
+
+    /**
      * Refresh basket after login / currency change
      * Used in multiple locations
      */

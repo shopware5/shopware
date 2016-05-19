@@ -82,7 +82,7 @@ Ext.define('Shopware.apps.Config.model.form.Shop', {
         { name: 'fallbackId', convert: function(v, record) {
             return v || record.raw && record.raw.fallback && record.raw.fallback.id;
         }, useNull: true },
-        { name: 'deletable', type: 'boolean', convert: function(v, r) { return r.data.id > 2; } }
+        { name: 'deletable', type: 'boolean', convert: function(v, r) { return r.data.id > 1; } }
     ],
 
     associations: [{

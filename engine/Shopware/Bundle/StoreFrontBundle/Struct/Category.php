@@ -403,7 +403,7 @@ class Category extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @return \int[]
+     * @return int[]
      */
     public function getBlockedCustomerGroupIds()
     {
@@ -411,7 +411,7 @@ class Category extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @param \int[] $blockedCustomerGroupIds
+     * @param int[] $blockedCustomerGroupIds
      */
     public function setBlockedCustomerGroupIds(array $blockedCustomerGroupIds)
     {

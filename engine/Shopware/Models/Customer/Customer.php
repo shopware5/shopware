@@ -139,7 +139,7 @@ class Customer extends LazyFetchModelEntity
      * Contains the customer email address which is used to send the order confirmation mail
      * or the newsletter.
      * @var string $email
-     * @Assert\Email(strict=true)
+     * @Assert\Email(strict=false)
      * @Assert\NotBlank
      * @ORM\Column(name="email", type="string", length=70, nullable=false)
      */

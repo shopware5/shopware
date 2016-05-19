@@ -80,7 +80,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.Grid', {
     initComponent: function() {
         var me = this;
 
-        me.addEvents('showDetails');
+        me.addEvents('showDetail');
 
         me.columns = me.createColumns();
         me.store = me.mediaStore;

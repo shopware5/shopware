@@ -379,7 +379,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
      */
     public function onInitResourceBackendSession(Enlight_Event_EventArgs $args)
     {
-        $options = $this->Application()->getOption('backendSession', array());
+        $options = Shopware()->Container()->getParameter('shopware.backendsession');
 
         $refererCheck = (bool) $options['referer_check'];
         $clientCheck = (bool) $options['client_check'];
@@ -500,7 +500,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
      */
     protected function getCurrentLocale()
     {
-        $options = $this->Application()->getOption('backendSession', array());
+        $options = Shopware()->Container()->getParameter('shopware.backendsession');
         $options = $this->prepareSessionOptions($options);
 
         Enlight_Components_Session::setOptions($options);

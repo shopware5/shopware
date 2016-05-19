@@ -299,6 +299,8 @@ class CustomerGroup extends Resource
                 $discounts[] = $discountModel;
             }
             $params['discounts'] = $discounts;
+        } else {
+            $params['discounts'] = [];
         }
 
         return $params;

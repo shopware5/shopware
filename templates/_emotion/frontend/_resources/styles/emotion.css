@@ -3816,16 +3816,23 @@ body #content .banner-slider-emotion .ajaxSlider .slide_navigation {
     color: #333333;
     border-color: #333333;
 }
+#buybox .configurator--variant .option--input:hover ~ label.is--disabled {
+    color: #999999;
+    border-color: #DFDFDF;
+}
 #buybox .configurator--variant .option--input:checked ~ label {
     color: #E1540F;
     border-color: #E1540F;
 }
-#buybox .configurator--variant .option--input.is--disabled ~ label {
+#buybox .configurator--variant .option--input:disabled ~ label {
     -khtml-opacity: 0.5;
     -moz-opacity: 0.5;
     -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
     filter: alpha(opacity = 50);
     opacity: 0.5;
+}
+#buybox .configurator--variant .option--input:disabled {
+    cursor: default;
 }
 #buybox .configurator--variant .option--label {
     display: block;

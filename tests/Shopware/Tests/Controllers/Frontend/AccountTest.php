@@ -64,50 +64,6 @@ class Shopware_Tests_Controllers_Frontend_AccountTest extends Enlight_Components
     }
 
     /**
-     * SW-8258 - check if email addresses with new domains like .berlin are valid
-     */
-    public function testValidEmailAddresses()
-    {
-        $emailAddresses = array(
-            // old domains
-            'test@example.de',
-            'test@example.com',
-            'test@example.org',
-
-            // new released domains
-            'test@example.berlin',
-            'test@example.email',
-            'test@example.systems',
-
-            // new non released domains
-            'test@example.active',
-            'test@example.love',
-            'test@example.video',
-
-            'test@example'
-        );
-
-        $invalidEmailAddresses = array(
-            'test',
-            'test@.de',
-            '@example',
-            '@example.de',
-            '@.',
-            ' @ .de',
-        );
-
-        $validator = Shopware()->Container()->get('validator.email');
-
-        foreach($emailAddresses as $email) {
-            $this->assertTrue($validator->isValid($email));
-        }
-
-        foreach($invalidEmailAddresses as $email) {
-            $this->assertFalse($validator->isValid($email));
-        }
-    }
-
-    /**
      * Test if the download goes through php
      * @ticket SW-5226
      */

@@ -4,7 +4,7 @@
     <form name="basket_change_quantity{$sBasketItem.id}" method="post" action="{url action='changeQuantity' sTargetAction=$sTargetAction}">
 
         {if $sBasketItem.additional_details.sConfigurator}
-            {$detailLink={url controller=detail sArticle=$sBasketItem.articleID number=$sBasketItem.ordernumber}}
+            {$detailLink={url controller=detail sArticle=$sBasketItem.articleID number=$sBasketItem.ordernumber forceSecure}}
         {else}
             {$detailLink=$sBasketItem.linkDetails}
         {/if}
@@ -28,9 +28,9 @@
 
 												{if $image.thumbnails[0]}
 													<a href="{$detailLink}" title="{$sBasketItem.articlename|strip_tags}" class="table--media-link"
-                                                        {if {config name=detailmodal} && {controllerAction} === 'confirm'}
+                                                        {if {config name=detailmodal} && {controllerAction|lower} === 'confirm'}
                                                        data-modalbox="true"
-                                                       data-content="{url controller="detail" action="productQuickView" ordernumber="{$sBasketItem.ordernumber}" fullPath}"
+                                                       data-content="{url controller="detail" action="productQuickView" ordernumber="{$sBasketItem.ordernumber}" fullPath forceSecure}"
                                                        data-mode="ajax"
                                                        data-width="750"
                                                        data-sizing="content"
@@ -62,10 +62,11 @@
 
                         {* Product name *}
                         {block name='frontend_checkout_cart_item_details_title'}
+
                             <a class="content--title" href="{$detailLink}" title="{$sBasketItem.articlename|strip_tags|escape}"
-                                {if {config name=detailmodal} && {controllerAction} === 'confirm'}
+                                {if {config name=detailmodal} && {controllerAction|lower} === 'confirm'}
                                data-modalbox="true"
-                               data-content="{url controller="detail" action="productQuickView" ordernumber="{$sBasketItem.ordernumber}" fullPath}"
+                               data-content="{url controller="detail" action="productQuickView" ordernumber="{$sBasketItem.ordernumber}" fullPath forceSecure}"
                                data-mode="ajax"
                                data-width="750"
                                data-sizing="content"

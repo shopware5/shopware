@@ -1,7 +1,7 @@
 {* Sorting filter which will be included in the "listing/listing_actions.tpl" *}
 {namespace name="frontend/listing/listing_actions"}
 
-<form class="action--sort action--content block" method="get" data-action-form="true" action="">
+<form class="action--sort action--content block" method="get" data-action-form="true">
 
     {* Necessary to reset the page to the first one *}
     <input type="hidden" name="{$shortParameters.sPage}" value="1">

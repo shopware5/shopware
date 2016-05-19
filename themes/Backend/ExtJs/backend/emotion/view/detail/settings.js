@@ -474,7 +474,8 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
 
         var seoTitle = Ext.create('Ext.form.field.Text', {
             name: 'seoTitle',
-            fieldLabel: '{s name=settings/seo_title}SEO title{/s}'
+            fieldLabel: '{s name=settings/seo_title}SEO title{/s}',
+            labelWidth: me.defaults.labelWidth - 20
         });
 
         var seoKeywords = Ext.create('Ext.form.field.Text', {

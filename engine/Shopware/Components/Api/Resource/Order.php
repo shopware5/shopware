@@ -129,7 +129,8 @@ class Order extends Resource
         $builder->addOrderBy($orderBy);
         $builder->setFirstResult($offset)
                 ->setMaxResults($limit);
-
+        $builder->addSelect(['partial customer.{id,email}']);
+        $builder->leftJoin('orders.customer', 'customer');
         $query = $builder->getQuery();
 
         $query->setHydrationMode($this->getResultMode());

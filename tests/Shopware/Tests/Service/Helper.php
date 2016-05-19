@@ -173,9 +173,10 @@ class Helper
      * @param null $marketingService
      * @param null $eventManager
      * @param null $voteService
-     * @param null $config
+     * @param null $categoryService
      * @return StoreFrontBundle\Struct\ListProduct[]
      * @throws \Exception
+     * @internal param null $config
      */
     public function getListProducts(
         $numbers,
@@ -186,10 +187,9 @@ class Helper
         $priceCalculationService = null,
         $mediaService = null,
         $marketingService = null,
-        $eventManager = null,
         $voteService = null,
-        $categoryService = null
-
+        $categoryService = null,
+        $config = null
     ) {
         if ($productGateway === null) {
             $productGateway = Shopware()->Container()->get('shopware_storefront.list_product_gateway');
@@ -209,14 +209,14 @@ class Helper
         if ($marketingService === null) {
             $marketingService = Shopware()->Container()->get('shopware_storefront.marketing_service');
         }
-        if ($eventManager === null) {
-            $eventManager = Shopware()->Container()->get('events');
-        }
         if ($voteService === null) {
             $voteService = Shopware()->Container()->get('shopware_storefront.vote_service');
         }
         if ($categoryService === null) {
             $categoryService = Shopware()->Container()->get('shopware_storefront.category_service');
+        }
+        if ($config === null) {
+            $config = Shopware()->Config();
         }
 
         $service = new StoreFrontBundle\Service\Core\ListProductService(
@@ -227,8 +227,8 @@ class Helper
             $mediaService,
             $marketingService,
             $voteService,
-            $eventManager,
-            $categoryService
+            $categoryService,
+            $config
         );
 
         return $service->getList($numbers, $context);

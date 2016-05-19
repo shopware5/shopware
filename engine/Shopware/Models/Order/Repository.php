@@ -184,6 +184,8 @@ class Repository extends ModelRepository
             'detailAttribute',
             'documentAttribute',
             'shippingAttribute',
+            'paymentAttribute',
+            'dispatchAttribute',
             'subShop',
             'locale',
             'debit'
@@ -204,6 +206,8 @@ class Repository extends ModelRepository
                 ->leftJoin('orders.shipping', 'shipping')
                 ->leftJoin('orders.shop', 'shop')
                 ->leftJoin('orders.dispatch', 'dispatch')
+                ->leftJoin('payment.attribute', 'paymentAttribute')
+                ->leftJoin('dispatch.attribute', 'dispatchAttribute')
                 ->leftJoin('billing.attribute', 'billingAttribute')
                 ->leftJoin('shipping.attribute', 'shippingAttribute')
                 ->leftJoin('details.attribute', 'detailAttribute')
@@ -473,7 +477,7 @@ class Repository extends ModelRepository
                         break;
                     case "from":
                         $tmp = new \DateTime($filter['value']);
-                        $builder->andWhere('orders.orderTime > :orderTimeFrom');
+                        $builder->andWhere('orders.orderTime >= :orderTimeFrom');
                         $builder->setParameter('orderTimeFrom', $tmp->format('Ymd'));
                         break;
                     case "to":

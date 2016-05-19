@@ -1687,15 +1687,7 @@ class Repository extends ModelRepository
     }
 
     /**
-     * Retrieves the following fields
-     * - id             Integer
-     * - name           String
-     * - image          String
-     * - link           String
-     * - description    String
-     *
-     * The filter param will be uses to search for a part of the suppliers name or description.
-     *
+     * Returns an instance of the \Doctrine\ORM\Query object which select a list of supplier.
      *
      * @param array $filter
      * @param   array $orderBy
@@ -1704,6 +1696,26 @@ class Repository extends ModelRepository
      * @return  \Doctrine\ORM\Query
      */
     public function getSupplierListQuery($filter = null, array $orderBy, $limit = null, $offset = null)
+    {
+        $builder = $this->getSupplierListQueryBuilder($filter, $orderBy);
+
+        if ($limit !== null) {
+            $builder->setFirstResult($offset)
+                ->setMaxResults($limit);
+        }
+
+        return $builder->getQuery();
+    }
+
+    /**
+     * Helper function to create the query builder for the "getSupplierListQuery" function.
+     * This function can be hooked to modify the query builder of the query object.
+     *
+     * @param   array $filter
+     * @param   array $orderBy
+     * @return  \Doctrine\ORM\QueryBuilder
+     */
+    public function getSupplierListQueryBuilder($filter = null, array $orderBy)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array(
@@ -1720,8 +1732,9 @@ class Repository extends ModelRepository
 
         if (is_array($filter) && ('name' == $filter[0]['property'])) {
             //filter the displayed columns with the passed filter
-            $builder->where("supplier.name LIKE ?1") //Search only the beginning of the customer number.
-                    ->orWhere("supplier.description LIKE ?1"); //Full text search for the first name of the customer
+            $builder
+                ->where("supplier.name LIKE ?1") //Search only the beginning of the customer number.
+                ->orWhere("supplier.description LIKE ?1"); //Full text search for the first name of the customer
 
             //set the filter parameter for the different columns.
             $builder->setParameter(1, '%' . $filter[0]['value'] . '%');
@@ -1729,10 +1742,7 @@ class Repository extends ModelRepository
 
         $builder->addOrderBy($orderBy);
 
-        $builder->setFirstResult($offset)
-                ->setMaxResults($limit);
-
-        return $builder->getQuery();
+        return $builder;
     }
 
     /**

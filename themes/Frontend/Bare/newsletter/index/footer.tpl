@@ -30,7 +30,7 @@
   <tr>
     <td width="20" style="font-size:13px;margin:0;padding:0;padding-left:10px;">&rArr;&nbsp;</td>
     <td style="font-size:13px;margin:0;padding:0;">
-	<a href="{url module='frontend' controller='newsletter'}" target="_blank" style="color:#000 !important;">
+	<a href="{url module='frontend' controller='newsletter' sUnsubscribe=1}" target="_blank" style="color:#000 !important;">
 		{s name='NewsletterFooterLinkUnsubscribe'}{/s}</a>
     </td>
   </tr>
