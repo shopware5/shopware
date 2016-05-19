@@ -469,7 +469,7 @@ Ext.onReady(function() {
         }
     });
     Ext.apply(Ext.form.VTypes, {
-        passwordText : "Das Feld Passwort is nicht gültig"
+        passwordText : "Das Feld Passwort ist nicht gültig"
     });
     Ext.apply(Ext.form.field.VTypes, {
         missingValidationErrorText: 'Die vType Validierung braucht eine ValidationErrorMsg-Eigenschaft'
