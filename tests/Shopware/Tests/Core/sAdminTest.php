@@ -1537,7 +1537,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             'stateID' => '3',
             'ustid' => 'Testustid',
 
-            'birthyear' => '1999',
+            'birthyear' => '1956',
             'birthmonth' => '2',
             'birthday' => '21',
 
@@ -1571,7 +1571,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             (int) $testData['birthday'],
             (int) $testData['birthyear']
         );
-        $testData['birthday'] = '1999-02-21';
+        $testData['birthday'] = '1956-02-21';
         unset($testData['birthmonth']);
         unset($testData['birthyear']);
 
@@ -2272,7 +2272,6 @@ class sAdminTest extends PHPUnit_Framework_TestCase
      * @covers sAdmin::sRiskARTICLESFROM
      * @covers sAdmin::sRiskLASTORDERSLESS
      * @covers sAdmin::sRiskPREGSTREET
-     * @covers sAdmin::sRiskBILLINGPREGSTREET
      * @covers sAdmin::sRiskDIFFER
      * @covers sAdmin::sRiskCUSTOMERNR
      * @covers sAdmin::sRiskLASTNAME

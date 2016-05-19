@@ -28,20 +28,33 @@ class PreCommitChecks
             return (int) 0;
         }
 
+        $beforeRef = $this->getRef();
         $this->stashTree();
+        $afterRef = $this->getRef();
+
+        if ($beforeRef == $afterRef) {
+            echo 'No Changes' . PHP_EOL;
+            return (int) 0;
+        }
 
         echo 'Running PHP lint' . PHP_EOL;
         if (!$this->phpLint($fileList)) {
-            echo 'There are some PHP syntax errors!' . PHP_EOL;
+            echo 'ERROR: There are some PHP syntax errors!' . PHP_EOL;
         }
 
         if ($this->isPHPCSFixerAvailable()) {
             echo 'Checking code style' . PHP_EOL;
             if (!$this->checkCodeStyle($fileList)) {
-                echo "Your commit does not comply with Shopware's coding standards." . PHP_EOL;
+                echo "ERROR: Your commit does not comply with Shopware's coding standards." . PHP_EOL;
             }
         } else {
-            echo "PHP-CS-Fixer is NOT installed. Please install globally (http://cs.sensiolabs.org/)." . PHP_EOL;
+            echo "ERROR: PHP-CS-Fixer is NOT installed. Please install globally (http://cs.sensiolabs.org/)." . PHP_EOL;
+            $this->error = true;
+        }
+
+        echo "Checking for duplicate migration numbers." . PHP_EOL;
+        if (($duplicateMigrationId = $this->hasDuplicateMigrations()) !== false) {
+            echo "ERROR: You are using the migration number ".$duplicateMigrationId." multiple times." . PHP_EOL;
             $this->error = true;
         }
 
@@ -90,18 +103,23 @@ class PreCommitChecks
     private function checkCodeStyle(array $files)
     {
         $succeed = true;
+        $misses = [];
 
         foreach ($files as $file) {
             $output = [];
             $return = null;
             exec("php-cs-fixer fix -v --dry-run --level=psr2 " . escapeshellarg($file), $output, $return);
             if ($return != 0) {
-                echo "Code style error at " . $file . ":" . PHP_EOL;
-                echo implode(PHP_EOL, $output) . PHP_EOL;
-                echo "   To fix, run: php-cs-fixer fix -v --level=psr2 " . escapeshellarg($file) . PHP_EOL;
+                $misses[$file] = "php-cs-fixer fix -v --level=psr2 " . escapeshellarg($file);
                 $this->error = true;
                 $succeed = false;
             }
+        }
+
+        if ($succeed === false) {
+            echo "Code style error in folling files:" . PHP_EOL . implode(PHP_EOL, array_keys($misses)) . PHP_EOL . PHP_EOL;
+            echo "To fix, run: " . PHP_EOL . implode(PHP_EOL, $misses). PHP_EOL;
+            echo PHP_EOL;
         }
 
         return $succeed;
@@ -131,6 +149,17 @@ class PreCommitChecks
     }
 
     /**
+     * @return string
+     */
+    private function getRef()
+    {
+        $output = [];
+        exec("git rev-parse --verify -q refs/stash", $output);
+        $output = implode(PHP_EOL, $output) . PHP_EOL;
+        return trim($output);
+    }
+
+    /**
      * @return bool
      */
     private function isRebase()
@@ -145,7 +174,7 @@ class PreCommitChecks
      */
     private function stashTree()
     {
-        exec("git stash -q --keep-index");
+        exec("git stash save --keep-index --include-untracked -q");
     }
 
     /**
@@ -153,7 +182,22 @@ class PreCommitChecks
      */
     private function unstashTree()
     {
-        exec("git stash pop -q");
+        exec("git stash pop -q --index");
+    }
+
+    /**
+     * Check for duplicated migrations
+     *
+     * @return string|false
+     */
+    private function hasDuplicateMigrations()
+    {
+        exec('find ./_sql/migrations -type f | cut -d\/ -f4 | cut -d\- -f1 | sort | uniq -d', $output);
+        if (count($output)) {
+            return current($output);
+        }
+
+        return false;
     }
 }
 

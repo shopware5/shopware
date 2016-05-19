@@ -403,6 +403,10 @@ Ext.define('Shopware.detail.Controller', {
 
             Shopware.app.Application.fireEvent(me.getEventName('save-exception'), me, data, window, record, form);
 
+            if (data.error) {
+                Shopware.Notification.createGrowlMessage('', data.error);
+            }
+
             //check if the response text contains field violations
             if (data.violations && data.violations.length > 0) {
                 //if violations exists, create a growl message and try to focus the fields.

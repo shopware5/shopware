@@ -19,8 +19,7 @@ class CheckoutBilling extends Element implements \Shopware\Tests\Mink\HelperSele
     protected $selector = array('css' => 'div.invoice-address');
 
     /**
-     * Returns an array of all css selectors of the element/page
-     * @return string[]
+     * @inheritdoc
      */
     public function getCssSelectors()
     {
@@ -30,14 +29,13 @@ class CheckoutBilling extends Element implements \Shopware\Tests\Mink\HelperSele
     }
 
     /**
-     * Returns an array of all named selectors of the element/page
-     * @return array[]
+     * @inheritdoc
      */
     public function getNamedSelectors()
     {
         return [
             'changeButton'  => ['de' => 'Ändern', 'en' => 'Change'],
-            'otherButton'  => ['de' => 'Andere', 'en' => 'Change']
+            'otherButton'  => ['de' => 'Andere', 'en' => 'Others']
         ];
     }
 }

@@ -82,7 +82,7 @@ class PriceCalculationService implements Service\PriceCalculationServiceInterfac
              */
             $rule = clone $product->getCheapestPriceRule();
             $product->setCheapestUnitPrice(
-                $this->calculateCheapestPrice($product, $rule, $context)
+                $this->calculatePriceStruct($rule, $tax, $context)
             );
         }
 
@@ -111,96 +111,8 @@ class PriceCalculationService implements Service\PriceCalculationServiceInterfac
         $priceRule->setPseudoPrice(
             $priceRule->getUnit()->getMinPurchase() * $priceRule->getPseudoPrice()
         );
-
-        return $this->calculateCheapestPrice($product, $priceRule, $context);
-    }
-
-    /**
-     * Reduces the passed price with a configured
-     * price group discount for the min purchase of the
-     * prices unit.
-     *
-     * @param Struct\ListProduct $product
-     * @param Struct\Product\PriceRule $priceRule
-     * @param Struct\ProductContextInterface $context
-     * @return Struct\Product\Price
-     */
-    private function calculateCheapestPrice(
-        Struct\ListProduct $product,
-        Struct\Product\PriceRule $priceRule,
-        Struct\ProductContextInterface $context
-    ) {
         $tax = $context->getTaxRule($product->getTax()->getId());
-
-        //check for price group discounts.
-        if (!$product->getPriceGroup() || !$product->isPriceGroupActive()) {
-            return $this->calculatePriceStruct($priceRule, $tax, $context);
-        }
-
-        //selects the highest price group discount, for the passed quantity.
-        $discount = $this->getHighestQuantityDiscount(
-            $product,
-            $context,
-            $priceRule->getUnit()->getMinPurchase()
-        );
-
-        if ($discount) {
-            $priceRule->setPrice(
-                $priceRule->getPrice() / 100 * (100 - $discount->getPercent())
-            );
-        }
-
         return $this->calculatePriceStruct($priceRule, $tax, $context);
-    }
-
-    /**
-     * Returns the highest price group discount for the provided product.
-     *
-     * The price groups are stored in the provided context object.
-     * If the product has no configured price group or the price group has no discount defined for the
-     * current customer group, the function returns null.
-     *
-     * @param Struct\ListProduct $product
-     * @param Struct\ProductContextInterface $context
-     * @param $quantity
-     * @return null|Struct\Product\PriceDiscount
-     */
-    private function getHighestQuantityDiscount(Struct\ListProduct $product, Struct\ProductContextInterface $context, $quantity)
-    {
-        if (!$product->getPriceGroup()) {
-            return null;
-        }
-
-        $priceGroups = $context->getPriceGroups();
-        if (empty($priceGroups)) {
-            return null;
-        }
-
-        $id = $product->getPriceGroup()->getId();
-        if (!isset($priceGroups[$id])) {
-            return null;
-        }
-
-        $priceGroup = $priceGroups[$id];
-
-        /**@var $highest Struct\Product\PriceDiscount*/
-        $highest = null;
-        foreach ($priceGroup->getDiscounts() as $discount) {
-            if ($discount->getQuantity() > $quantity) {
-                continue;
-            }
-
-            if (!$highest) {
-                $highest = $discount;
-                continue;
-            }
-
-            if ($highest->getPercent() < $discount->getPercent()) {
-                $highest = $discount;
-            }
-        }
-
-        return $highest;
     }
 
     /**

@@ -144,6 +144,28 @@ Ext.define('Shopware.apps.Config.view.tax.Rule', {
         store.load({
             filters: filters
         });
+
+        me.checkFieldState(record);
+    },
+
+    checkFieldState: function(record) {
+        var me = this,
+            fieldsToDisable = [];
+
+        if (!record.get('countryId')) {
+            fieldsToDisable.push('stateId');
+        }
+
+        if (!record.get('areaId')) {
+            fieldsToDisable.push('countryId');
+        }
+
+        Ext.each(me.columns, function(col) {
+            if (col.dataIndex) {
+                var newState = fieldsToDisable.indexOf(col.dataIndex) >= 0;
+                col.getEditor().setDisabled(newState);
+            }
+        });
     },
 
     onComboRenderer: function(value, metadata, record, rowIndex, colIndex) {

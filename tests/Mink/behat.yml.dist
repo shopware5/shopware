@@ -1,41 +1,61 @@
 default:
-    paths:
-        features: features
-        bootstrap: %behat.paths.features%/bootstrap
-    context:
-        class: Shopware\Tests\Mink\FeatureContext
     extensions:
-        Shopware\Behat\ShopwareExtension\Extension: ~
-        Behat\MinkExtension\Extension:
+        SensioLabs\Behat\PageObjectExtension: ~
+        Shopware\Behat\ShopwareExtension: ~
+        Behat\MinkExtension:
             ## defined in buildscript
             #base_url: 'http://localhost/shopware/'
             default_session: 'goutte'
             javascript_session: 'selenium2'
             goutte: ~
             selenium2:
-                wd_host: "http://localhost:4444/wd/hub"
+                wd_host: "http://selenium:4444/wd/hub"
             browser_name: firefox
 
+    gherkin:
+      filters:
+        tags: ~@knownFailing
+
+    suites:
+        default:
+            paths:    [ %paths.base%/features ]
+            contexts:
+                - Behat\MinkExtension\Context\MinkContext
+                - Shopware\Tests\Mink\FeatureContext
+                - Shopware\Tests\Mink\BackendContext
+                - Shopware\Tests\Mink\AccountContext
+                - Shopware\Tests\Mink\BlogContext
+                - Shopware\Tests\Mink\CheckoutContext
+                - Shopware\Tests\Mink\DetailContext
+                - Shopware\Tests\Mink\FormContext
+                - Shopware\Tests\Mink\ListingContext
+                - Shopware\Tests\Mink\NoteContext
+                - Shopware\Tests\Mink\SeoContext
+                - Shopware\Tests\Mink\ShopwareContext
+                - Shopware\Tests\Mink\SitemapContext
+                - Shopware\Tests\Mink\SpecialContext
+                - Shopware\Tests\Mink\TransformContext
+
 responsive:
-    filters:
-        tags: "~@noResponsive&&~jsResponsive&&~@javascript&&~@knownFailing"
     extensions:
-        SensioLabs\Behat\PageObjectExtension\Extension:
+        SensioLabs\Behat\PageObjectExtension:
             namespaces:
                 page: Shopware\Tests\Mink\Page\Responsive
                 element: Shopware\Tests\Mink\Element\Responsive
-    context:
-        parameters:
-            template: "Responsive"
+    suites:
+        default:
+            filters:
+                tags: ~@noResponsive
+            template: Responsive
 
 emotion:
-    filters:
-        tags: "~@noEmotion&&~jsEmotion&&~@javascript&&~@knownFailing"
     extensions:
-        SensioLabs\Behat\PageObjectExtension\Extension:
+        SensioLabs\Behat\PageObjectExtension:
             namespaces:
                 page: Shopware\Tests\Mink\Page\Emotion
                 element: Shopware\Tests\Mink\Element\Emotion
-    context:
-        parameters:
-            template: "emotion_orange"
+    suites:
+        default:
+            filters:
+                tags: ~@noEmotion
+            template: emotion_orange

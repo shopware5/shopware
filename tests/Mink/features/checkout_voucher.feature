@@ -71,17 +71,17 @@ Feature: Checkout articles with voucher
 
         When  I add the article "SW10142" to my basket
         Then  the aggregations should look like this:
-            | label | value   |
+            | label | value    |
             | total | 106,88 € |
 
         When  I add the voucher "absolut" to my basket
         Then  the aggregations should look like this:
-            | label | value   |
+            | label | value    |
             | total | 101,88 € |
 
         When  I remove the voucher
         Then  the aggregations should look like this:
-            | label | value   |
+            | label | value    |
             | total | 106,88 € |
 
         When  I remove the article on position 2

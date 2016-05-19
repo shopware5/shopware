@@ -27,7 +27,7 @@
  * @package   Shopware\Tests
  * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
  */
-class Shopware_Tests_Components_Hash_HasherBcryptTest extends Enlight_Components_Test_TestCase
+class Shopware_Tests_Components_Hash_HasherBcryptTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var \Shopware\Components\Password\Encoder\Bcrypt
@@ -52,7 +52,6 @@ class Shopware_Tests_Components_Hash_HasherBcryptTest extends Enlight_Components
                 'Brypt Hasher is not compatible with current system.'
             );
         }
-
     }
 
     /**

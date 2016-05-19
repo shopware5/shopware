@@ -24,24 +24,27 @@
 
 namespace Shopware\Behat\ShopwareExtension\Context\Initializer;
 
+use Behat\Behat\Context\Context;
+use Behat\Behat\Context\Initializer\ContextInitializer;
+use Behat\Behat\EventDispatcher\Event\ExampleTested;
+use Behat\Behat\EventDispatcher\Event\ScenarioTested;
+use Shopware\Behat\ShopwareExtension\Context\KernelAwareContext;
+use Shopware\Kernel;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
-use Behat\Behat\Context\Initializer\InitializerInterface;
-use Behat\Behat\Context\ContextInterface;
-use Behat\Behat\Event\ScenarioEvent;
-use Behat\Behat\Event\OutlineEvent;
-use Shopware\Behat\ShopwareExtension\Context\KernelAwareInterface;
 
-class KernelAwareInitializer implements InitializerInterface, EventSubscriberInterface
+final class KernelAwareInitializer implements ContextInitializer, EventSubscriberInterface
 {
+    /**
+     * @var Kernel
+     */
     private $kernel;
 
     /**
      * Initializes initializer.
      *
-     * @param HttpKernelInterface $kernel
+     * @param Kernel $kernel
      */
-    public function __construct(HttpKernelInterface $kernel)
+    public function __construct(Kernel $kernel)
     {
         $this->kernel = $kernel;
     }
@@ -52,52 +55,28 @@ class KernelAwareInitializer implements InitializerInterface, EventSubscriberInt
     public static function getSubscribedEvents()
     {
         return array(
-            'beforeScenario'       => array('bootKernel', 15),
-            'beforeOutlineExample' => array('bootKernel', 15),
-            'afterScenario'        => array('shutdownKernel', -15),
-            'afterOutlineExample'  => array('shutdownKernel', -15)
+            ScenarioTested::BEFORE => array('bootKernel', 15),
+            ExampleTested::BEFORE  => array('bootKernel', 15),
         );
     }
 
     /**
      * {@inheritdoc}
      */
-    public function supports(ContextInterface $context)
+    public function initializeContext(Context $context)
     {
-        if ($context instanceof KernelAwareInterface) {
-            return true;
+        if (!$context instanceof KernelAwareContext) {
+            return;
         }
 
-        return false;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function initialize(ContextInterface $context)
-    {
         $context->setKernel($this->kernel);
     }
 
     /**
      * Boots HttpKernel before each scenario.
-     *
-     * @param ScenarioEvent|OutlineEvent $event
      */
-    public function bootKernel($event)
+    public function bootKernel()
     {
         $this->kernel->boot();
-    }
-
-    /**
-     * Stops HttpKernel after each scenario.
-     *
-     * @param ScenarioEvent|OutlineEvent $event
-     */
-    public function shutdownKernel($event)
-    {
-        if (method_exists($this->kernel, 'shutdown')) {
-            $this->kernel->shutdown();
-        }
     }
 }

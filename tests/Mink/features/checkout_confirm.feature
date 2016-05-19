@@ -111,13 +111,13 @@ Feature: Checkout articles (scenario origin is checkout confirm page logged in a
         When  I proceed to checkout
         Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware Demo!"
 
-    Examples:
-        | paymentMethod | shippingMethodId | shippingMethodName | shippingCosts | totalSum |
-        | 3             | 9                | Nachnahme          | 3,90 €        | 226,75 € |
-        | 4             | 9                | Rechnung           | 3,90 €        | 231,75 € |
-        | 5             | 14               | Vorkasse           | 9,90 €        | 232,75 € |
-        | 3             | 14               | Nachnahme          | 9,90 €        | 232,75 € |
-        | 4             | 14               | Rechnung           | 9,90 €        | 237,75 € |
+        Examples:
+            | paymentMethod | shippingMethodId | shippingMethodName | shippingCosts | totalSum |
+            | 3             | 9                | Nachnahme          | 3,90 €        | 226,75 € |
+            | 4             | 9                | Rechnung           | 3,90 €        | 231,75 € |
+            | 5             | 14               | Vorkasse           | 9,90 €        | 232,75 € |
+            | 3             | 14               | Nachnahme          | 9,90 €        | 232,75 € |
+            | 4             | 14               | Rechnung           | 9,90 €        | 237,75 € |
 
     @delivery @payment
     Scenario Outline: I can change the shipping method to Express and pay via debit
@@ -139,10 +139,10 @@ Feature: Checkout articles (scenario origin is checkout confirm page logged in a
         When  I proceed to checkout
         Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware Demo!"
 
-    Examples:
-        | shippingMethod | shippingCosts | totalSum |
-        | 9              | 3,90 €        | 204,46 € |
-        | 14             | 9,90 €        | 210,46 € |
+        Examples:
+            | shippingMethod | shippingCosts | totalSum |
+            | 9              | 3,90 €        | 204,46 € |
+            | 14             | 9,90 €        | 210,46 € |
 
     @configChange
     Scenario: I can customize the checkout confirm page

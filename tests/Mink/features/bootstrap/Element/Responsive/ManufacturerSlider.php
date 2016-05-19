@@ -17,8 +17,7 @@ class ManufacturerSlider extends \Shopware\Tests\Mink\Element\Emotion\Manufactur
     protected $selector = ['css' => 'div.emotion--manufacturer'];
 
     /**
-     * Returns an array of all css selectors of the element/page
-     * @return string[]
+     * @inheritdoc
      */
     public function getCssSelectors()
     {

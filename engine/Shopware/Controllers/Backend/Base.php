@@ -1065,4 +1065,24 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
             $this->Response()->setBody("");
         }
     }
+
+    /**
+     * Returns all shops with an active emotion template
+     *
+     * @deprecated since 5.1.2 will be removed in 5.2
+     */
+    public function getShopsWithEmotionTemplatesAction()
+    {
+        /** @var \Doctrine\DBAL\Connection $connection */
+        $connection = $this->get('dbal_connection');
+
+        $query = $connection->createQueryBuilder();
+        $query->select('shop.name')
+            ->from('s_core_shops', 'shop')
+            ->innerJoin('shop', 's_core_templates', 'template', 'template.id = shop.template_id')
+            ->where('template.version < 3');
+
+        $data = $query->execute()->fetchAll(PDO::FETCH_COLUMN);
+        $this->View()->assign(['success' => true, 'data' => $data]);
+    }
 }

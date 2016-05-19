@@ -19,8 +19,7 @@ class BlogComment extends MultipleElement
     protected $selector = array('css' => 'div.comment_outer');
 
     /**
-     * Returns an array of all css selectors of the element/page
-     * @return string[]
+     * @inheritdoc
      */
     public function getCssSelectors()
     {
@@ -53,8 +52,7 @@ class BlogComment extends MultipleElement
 
         $elements = Helper::findElements($this, $locators);
 
-        foreach($elements as $locator => $element)
-        {
+        foreach ($elements as $locator => $element) {
             $funcName = 'get'.ucfirst($locator);
             $return[$locator] = $this->$funcName($element);
         }
@@ -106,5 +104,4 @@ class BlogComment extends MultipleElement
     {
         return $element->getText();
     }
-
 }

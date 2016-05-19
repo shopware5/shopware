@@ -201,6 +201,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
         $from = $template->fetch('string:' . $mailing['sendermail'], $template);
         $fromName = $template->fetch('string:' . $mailing['sendername'], $template);
 
+        /** @var \Enlight_Components_Mail $mail */
         $mail = clone Shopware()->Mail();
         $mail->setFrom($from, $fromName);
 
@@ -441,11 +442,14 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action
         if (!empty($id)) {
             $where = Shopware()->Db()->quoteInto('cm.id=?', $id);
         } else {
-            $where = 'cm.status=1';
+            $where = 'cm.status=1 ';
         }
         $sql = 'SELECT cm.*, ct.path as template
         FROM s_campaigns_mailings cm, s_campaigns_templates ct
-        WHERE ct.id=cm.templateID AND '.$where;
+        WHERE ct.id=cm.templateID
+        AND '.$where . '
+        AND (`timed_delivery` <= NOW()
+        OR `timed_delivery` IS NULL)';
 
         $mailing = Shopware()->Db()->fetchRow($sql);
         return $mailing;

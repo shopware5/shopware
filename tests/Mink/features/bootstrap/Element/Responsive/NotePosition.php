@@ -17,8 +17,7 @@ class NotePosition extends \Shopware\Tests\Mink\Element\Emotion\NotePosition
     protected $selector = ['css' => 'div.note--item'];
 
     /**
-     * Returns an array of all css selectors of the element/page
-     * @return array
+     * @inheritdoc
      */
     public function getCssSelectors()
     {
@@ -34,8 +33,7 @@ class NotePosition extends \Shopware\Tests\Mink\Element\Emotion\NotePosition
     }
 
     /**
-     * Returns an array of all named selectors of the element/page
-     * @return array
+     * @inheritdoc
      */
     public function getNamedSelectors()
     {

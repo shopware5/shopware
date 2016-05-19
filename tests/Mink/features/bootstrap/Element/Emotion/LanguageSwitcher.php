@@ -3,6 +3,7 @@
 namespace Shopware\Tests\Mink\Element\Emotion;
 
 use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
+use Shopware\Tests\Mink\Helper;
 
 /**
  * Element: LanguageSwitcher
@@ -11,29 +12,43 @@ use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
  * Available retrievable properties:
  * - address (Element[], please use Account::checkAddress())
  */
-class LanguageSwitcher extends Element
+class LanguageSwitcher extends Element implements \Shopware\Tests\Mink\HelperSelectorInterface
 {
     /**
      * @var array $selector
      */
     protected $selector = array('css' => 'div#topbar > div.topbar_lang select.lang_select');
 
-    public $cssLocators = [
-        'languages' => 'option'
-    ];
+    /**
+     * @inheritdoc
+     */
+    public function getCssSelectors()
+    {
+        return [
+            'languages' => 'option'
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getNamedSelectors()
+    {
+        return [];
+    }
 
     /**
      * Returns the current language
      * Use this only for asserts. If you only need the current language, use Helper::getCurrentLanguage().
      * @return string
-     * @deprecated
      */
     public function getCurrentLanguage()
     {
         $languageKeys = array(1 => 'de', 2 => 'en');
 
-        $languages = $this->findAll('css', $this->cssLocators['languages']);
+        $languages = $this->findAll('css', Helper::getRequiredSelector($this, 'languages'));
 
+        /** @var Element $language */
         foreach ($languages as $language) {
             if ($language->getAttribute('selected')) {
                 return $languageKeys[$language->getAttribute('value')];
@@ -51,6 +66,6 @@ class LanguageSwitcher extends Element
     public function setLanguage($language)
     {
         $this->selectOption($language);
+        Helper::setCurrentLanguage($language);
     }
-
 }

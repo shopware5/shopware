@@ -53,13 +53,6 @@
 .store-plugin:nth-child(3n+0) {
     border-right: 0 none;
 }
-
-.store-plugin.dummy {
-    .meta-information, .image, .store-plugin-rating, .badge-container {
-        opacity: 0.3;
-    }
-}
-
 .store-plugin {
     border-right: 1px solid #d3e0e6;
     border-top: 1px solid #d3e0e6;

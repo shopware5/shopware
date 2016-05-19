@@ -2,87 +2,96 @@
 
 namespace Shopware\Tests\Mink;
 
-use Behat\Behat\Event\OutlineExampleEvent;
-use Behat\MinkExtension\Context\MinkContext;
-use Shopware\Behat\ShopwareExtension\Context\KernelAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
-use Symfony\Component\HttpKernel\KernelInterface;
-use Behat\Behat\Event\SuiteEvent;
+use Behat\Behat\Context\SnippetAcceptingContext;
+use Behat\Behat\Hook\Scope\AfterStepScope;
+use Behat\Mink\Driver\BrowserKitDriver;
+use Behat\Mink\Exception\Exception as MinkException;
+use Behat\Behat\Hook\Scope\BeforeScenarioScope;
+use Behat\Behat\Hook\Scope\ScenarioScope;
+use Behat\Mink\Driver\Selenium2Driver;
+use Behat\Mink\Session;
+use Behat\Testwork\Hook\Scope\BeforeSuiteScope;
+use Behat\Testwork\Suite\Suite;
+use Behat\Testwork\Tester\Result\TestResult;
+use Doctrine\DBAL\Connection;
 
-class FeatureContext extends MinkContext implements KernelAwareInterface
+class FeatureContext extends SubContext implements SnippetAcceptingContext
 {
-    /**
-     * @var KernelInterface
-     */
-    private $kernel;
-    /**
-     * @var KernelInterface
-     */
-    private static $statickernel;
-
-    /**
-     * @var string
-     */
-    private static $template;
-
     /**
      * @var array
      */
-    private $dirtyConfigElements;
+    protected $dirtyConfigElements;
+
+    protected static $isPrepared = false;
+    protected static $lastScenarioLine = 0;
+
+    /**
+     * @var Suite
+     */
+    protected static $suite;
 
     /**
      * Initializes context.
      * Every scenario gets it's own context object.
-     *
-     * @param array $parameters context parameters (set them up through behat.yml)
      */
-    public function __construct(array $parameters)
+    public function __construct()
     {
-        if (!isset($parameters['template'])) {
+        if (!self::$suite->hasSetting('template')) {
             throw new \RuntimeException("Template not set. Please start testsuite using the --profile argument.");
         }
 
-        self::$template = $parameters['template'];
-        $this->dirtyConfigElements = array();
+        $this->registerErrorHandler();
 
-        $this->useContext('shopware', new ShopwareContext($parameters));
-        $this->useContext('account', new AccountContext($parameters));
-        $this->useContext('checkout', new CheckoutContext($parameters));
-        $this->useContext('listing', new ListingContext($parameters));
-        $this->useContext('detail', new DetailContext($parameters));
-        $this->useContext('note', new NoteContext($parameters));
-        $this->useContext('form', new FormContext($parameters));
-        $this->useContext('blog', new BlogContext($parameters));
-        $this->useContext('sitemap', new SitemapContext($parameters));
-        $this->useContext('special', new SpecialContext($parameters));
-        $this->useContext('seo', new SeoContext($parameters));
-        $this->useContext('basicSettings', new BasicSettingsContext($parameters));
+        $this->dirtyConfigElements = array();
     }
 
     /**
      * @BeforeSuite
      */
-    public static function prepare(SuiteEvent $event)
+    public static function setup(BeforeSuiteScope $scope)
     {
-        $em = self::$statickernel->getContainer()->get('models');
+        self::$suite = $scope->getSuite();
+    }
+
+    /**
+     * @BeforeScenario
+     */
+    public function before(BeforeScenarioScope $scope)
+    {
+        if (!self::$isPrepared) {
+            $this->prepare();
+            self::$isPrepared = true;
+        }
+
+        // Scenario skips a line so it's not a new example
+        if ($scope->getScenario()->getLine() !== self::$lastScenarioLine + 1) {
+            $this->reset();
+        }
+
+        self::$lastScenarioLine = $scope->getScenario()->getLine();
+        return;
+    }
+
+    private function prepare()
+    {
+        $em = $this->getService('models');
         $em->generateAttributeModels();
 
         //refresh s_core_templates
-        $last = error_reporting(0);
-        self::$statickernel->getContainer()->get('theme_installer')->synchronize();
-        error_reporting($last);
+        $this->registerErrorHandler();
+        $this->getService('theme_installer')->synchronize();
+        restore_error_handler();
 
         //get the template id
         $sql = sprintf(
             'SELECT id FROM `s_core_templates` WHERE template = "%s"',
-            self::$template
+            self::$suite->getSetting('template')
         );
 
-        $templateId = self::$statickernel->getContainer()->get('db')->fetchOne($sql);
+        $templateId = $this->getService('db')->fetchOne($sql);
         if (!$templateId) {
             throw new \RuntimeException(
-                sprintf("Unable to find template by name %s", self::$template)
+                sprintf("Unable to find template by name %s", self::$suite->getSetting('template'))
             );
         }
 
@@ -91,28 +100,25 @@ class FeatureContext extends MinkContext implements KernelAwareInterface
             UPDATE `s_core_shops` SET `template_id`= $templateId WHERE `id` = 1;
             UPDATE `s_core_paymentmeans` SET `active`= 1;
 EOD;
-        self::$statickernel->getContainer()->get('db')->exec($sql);
+        $this->getService('db')->exec($sql);
+
+        Helper::setCurrentLanguage('de');
 
         /** @var \Shopware\Bundle\PluginInstallerBundle\Service\InstallerService $pluginManager */
-        $pluginManager = self::$statickernel->getContainer()->get('shopware.plugin_manager');
+        $pluginManager = $this->getService('shopware_plugininstaller.plugin_manager');
 
         // hack to prevent behat error handler kicking in.
-        $oldErrorReporting = error_reporting(0);
+        $this->registerErrorHandler();
         $pluginManager->refreshPluginList();
-        error_reporting($oldErrorReporting);
+        restore_error_handler();
 
         $plugin = $pluginManager->getPluginByName('Notification');
         $pluginManager->installPlugin($plugin);
         $pluginManager->activatePlugin($plugin);
     }
 
-    /** @BeforeScenario */
-    public function before($event)
+    private function reset()
     {
-        if ($event instanceof OutlineExampleEvent && $event->getIteration()) {
-            return;
-        }
-
         $password = md5('shopware');
 
         $sql = <<<"EOD"
@@ -121,8 +127,9 @@ EOD;
             TRUNCATE s_order_basket_attributes;
             TRUNCATE s_order_notes;
             TRUNCATE s_order_comparisons;
+            DELETE FROM s_user WHERE id > 2;
 EOD;
-        $this->getContainer()->get('db')->exec($sql);
+        $this->getService('db')->exec($sql);
     }
 
     /**
@@ -134,39 +141,159 @@ EOD;
     }
 
     /**
-     * @BeforeScenario @jsEmotion
+     * Resize Browser Window. Works only with Selenium2Driver.
+     *
+     * @BeforeScenario
      */
-    public function emotionJs()
+    public function setupWindowSize()
     {
-        if (self::$template === 'Emotion') {
-            $this->getMink()->setDefaultSessionName('selenium2');
+        $driver = $this->getSession()->getDriver();
+        if (!$driver instanceof Selenium2Driver) {
+            return;
         }
+
+        $this->getSession()->resizeWindow(1440, 900, 'current');
     }
 
     /**
-     * @BeforeScenario @jsResponsive
+     * Take screenshot when step fails. Works only with Selenium2Driver.
+     *
+     * @AfterStep
+     * @param AfterStepScope $scope
      */
-    public function responsiveJs()
+    public function takeScreenshotAfterFailedStep(AfterStepScope $scope)
     {
-        if (self::$template === 'Responsive') {
-            $this->getMink()->setDefaultSessionName('selenium2');
+        if (TestResult::FAILED === $scope->getTestResult()->getResultCode()) {
+            $this->takeScreenshot();
+            $this->logRequest();
         }
     }
+
+    private function logRequest()
+    {
+        $session = $this->getSession();
+        $log = sprintf('Current page: %d %s', $this->getStatusCode(), $session->getCurrentUrl()) . "\n";
+        $log .= $this->getRequestDataLogMessage($session);
+        $log .= $this->getResponseHeadersLogMessage($session);
+        $log .= $this->getRequestContentLogMessage($session);
+        $this->saveLog($log, 'log');
+    }
+
+    /**
+     * @param string $content
+     * @param string $type
+     */
+    private function saveLog($content, $type)
+    {
+        $logDir = $this->getService('kernel')->getRootdir() . '/build/logs/mink';
+
+        $currentDateAsString = date('YmdHis');
+
+        $path = sprintf("%s/behat-%s.%s", $logDir, $currentDateAsString, $type);
+        if (!file_put_contents($path, $content)) {
+            throw new \RuntimeException(sprintf('Failed while trying to write log in "%s".', $path));
+        }
+    }
+
+
+    /**
+     * @return int|null
+     */
+    private function getStatusCode()
+    {
+        try {
+            return $this->getSession()->getStatusCode();
+        } catch (MinkException $exception) {
+            return null;
+        }
+    }
+    /**
+     * @param Session $session
+     *
+     * @return string|null
+     */
+    private function getRequestDataLogMessage(Session $session)
+    {
+        $driver = $session->getDriver();
+        if (!$driver instanceof BrowserKitDriver) {
+            return null;
+        }
+        try {
+            return 'Request:' . "\n" . print_r($driver->getClient()->getRequest(), true) . "\n";
+        } catch (MinkException $exception) {
+            return null;
+        }
+    }
+    /**
+     * @param Session $session
+     *
+     * @return string|null
+     */
+    private function getResponseHeadersLogMessage(Session $session)
+    {
+        try {
+            return 'Response headers:' . "\n" . print_r($session->getResponseHeaders(), true) . "\n";
+        } catch (MinkException $exception) {
+            return null;
+        }
+    }
+    /**
+     * @param Session $session
+     *
+     * @return string|null
+     */
+    private function getRequestContentLogMessage(Session $session)
+    {
+        try {
+            return 'Response content:' . "\n" . $session->getPage()->getContent() . "\n";
+        } catch (MinkException $exception) {
+            return null;
+        }
+    }
+
+    private function takeScreenshot()
+    {
+        $driver = $this->getSession()->getDriver();
+        if (!$driver instanceof Selenium2Driver) {
+            return;
+        }
+
+        $filePath = $this->getService('kernel')->getRootdir() . '/build/logs/mink';
+
+        $this->saveScreenshot(null, $filePath);
+    }
+
+    /**
+     * Save a screenshot of the current window to the file system.
+     *
+     * @param string $filename Desired filename, defaults to
+     *                         <browser_name>_<ISO 8601 date>_<randomId>.png
+     * @param string $filepath Desired filepath, defaults to
+     *                         upload_tmp_dir, falls back to sys_get_temp_dir()
+     */
+    public function saveScreenshot($filename = null, $filepath = null)
+    {
+        // Under Cygwin, uniqid with more_entropy must be set to true.
+        // No effect in other environments.
+        $filename = $filename ?: sprintf('%s_%s_%s.%s', $this->getMinkParameter('browser_name'), date('c'), uniqid('', true), 'png');
+        $filepath = $filepath ? $filepath : (ini_get('upload_tmp_dir') ? ini_get('upload_tmp_dir') : sys_get_temp_dir());
+        file_put_contents($filepath . '/' . $filename, $this->getSession()->getScreenshot());
+    }
+
 
     /**
      * @param string $configName
      * @param mixed $value
-     * @throws \Exception
      */
     public function changeConfigValue($configName, $value)
     {
-        //get the template id
-        $sql = sprintf(
-            'SELECT `id` FROM `s_core_config_elements` WHERE `name` = "%s"',
-            $configName
+        /** @var Connection $dbal */
+        $dbal = $this->getService('dbal_connection');
+        $configId = $dbal->fetchColumn(
+            'SELECT `id` FROM `s_core_config_elements` WHERE `name` = ?',
+            [$configName]
         );
 
-        $configId = $this->getContainer()->get('db')->fetchOne($sql);
         if (!$configId) {
             $message = sprintf('Configuration "%s" doesn\'t exist!', $configName);
             Helper::throwException($message);
@@ -175,10 +302,13 @@ EOD;
         $this->dirtyConfigElements[] = $configId;
 
         /** @var \Shopware\Components\ConfigWriter $configWriter */
-        $configWriter = $this->getContainer()->get('config_writer');
+        $configWriter = $this->getService('config_writer');
 
         $configWriter->save($configName, $value, null, 1);
         $configWriter->save($configName, $value, null, 2);
+
+        $config = $this->getService('config');
+        $config->offsetSet($configName, $value);
 
         $this->clearCache();
     }
@@ -188,16 +318,15 @@ EOD;
      */
     public function clearConfigValues()
     {
-        if(!$this->dirtyConfigElements) {
+        if (!$this->dirtyConfigElements) {
             return;
         }
 
         $dirtyElements = implode(',', $this->dirtyConfigElements);
-        $this->dirtyConfigElements = array();
+        $this->dirtyConfigElements = [];
 
         $sql = sprintf('DELETE FROM `s_core_config_values` WHERE `element_id` IN (%s)', $dirtyElements);
-
-        $this->getContainer()->get('db')->exec($sql);
+        $this->getService('db')->exec($sql);
 
         $this->clearCache();
     }
@@ -205,52 +334,45 @@ EOD;
     /**
      * @BeforeScenario @configChange
      */
-    public function clearCache(\Behat\Behat\Event\ScenarioEvent $event = null)
+    public function clearCache(ScenarioScope $scope = null)
     {
-        /** @var \Shopware\Components\CacheManager $cacheManager */
-        $cacheManager = $this->getContainer()->get('shopware.cache_manager');
-
-        $templateCache = $cacheManager->getTemplateCacheInfo();
-        if (!array_key_exists('message', $templateCache)) {
-            $cacheManager->clearHttpCache();
-            $cacheManager->clearTemplateCache();
-        }
-
+        $cacheManager = $this->getService('shopware.cache_manager');
         $cacheManager->clearConfigCache();
-        $cacheManager->clearSearchCache();
-        $cacheManager->clearProxyCache();
-
-        if($event) {
-            sleep(5);
-        }
+        $cacheManager->clearTemplateCache();
     }
 
-    /**
-     * Sets Kernel instance.
-     *
-     * @param HttpKernelInterface $kernel HttpKernel instance
-     */
-    public function setKernel(HttpKernelInterface $kernel)
+    public function registerErrorHandler()
     {
-        $this->kernel = $kernel;
-        self::$statickernel = $kernel;
-    }
+        error_reporting(-1);
+        $errorNameMap = array(
+            E_ERROR             => 'E_ERROR',
+            E_WARNING           => 'E_WARNING',
+            E_PARSE             => 'E_PARSE',
+            E_NOTICE            => 'E_NOTICE',
+            E_CORE_ERROR        => 'E_CORE_ERROR',
+            E_CORE_WARNING      => 'E_CORE_WARNING',
+            E_COMPILE_ERROR     => 'E_COMPILE_ERROR',
+            E_COMPILE_WARNING   => 'E_COMPILE_WARNING',
+            E_USER_ERROR        => 'E_USER_ERROR',
+            E_USER_WARNING      => 'E_USER_WARNING',
+            E_USER_NOTICE       => 'E_USER_NOTICE',
+            E_STRICT            => 'E_STRICT',
+            E_RECOVERABLE_ERROR => 'E_RECOVERABLE_ERROR',
+            E_DEPRECATED        => 'E_DEPRECATED',
+            E_USER_DEPRECATED   => 'E_USER_DEPRECATED',
+            E_ALL               => 'E_ALL',
+        );
 
-    /**
-     * @return \Shopware\Kernel
-     */
-    public function getKernel()
-    {
-        return $this->kernel;
-    }
+        set_error_handler(function ($errno, $errstr, $errfile, $errline) use ($errorNameMap) {
 
-    /**
-     * Returns HttpKernel service container.
-     *
-     * @return ContainerInterface
-     */
-    public function getContainer()
-    {
-        return $this->kernel->getContainer();
+            $filepath = $this->getService('kernel')->getRootdir() . '/build/logs/mink';
+
+            // No effect in other environments.
+            $filename = sprintf('errors_%s_%s.%s', date('c'), uniqid('', true), 'log');
+            $filepath = $filepath .'/'.$filename;
+            file_put_contents($filepath, $errorNameMap[$errno].': '.$errstr, FILE_APPEND);
+
+            return true;
+        });
     }
 }

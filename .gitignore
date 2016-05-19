@@ -16,7 +16,8 @@ Thumbs.db
 
 # Composer
 /composer.phar
-/vendor/
+/vendor/*
+!/vendor/.htaccess
 
 # Internal Repositories
 /internal

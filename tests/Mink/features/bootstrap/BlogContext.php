@@ -14,7 +14,7 @@ class BlogContext extends SubContext
      */
     public function iAmOnTheBlogCategory($categoryId)
     {
-        $this->getPage('Blog')->open(array('categoryId' => $categoryId));
+        $this->getPage('Blog')->open(['categoryId' => $categoryId]);
     }
 
     /**
@@ -24,11 +24,10 @@ class BlogContext extends SubContext
     {
         /** @var Blog $page */
         $page = $this->getPage('Blog');
-        $language = Helper::getCurrentLanguage($page);
 
         /** @var BlogBox $blogBox */
         $blogBox = $this->getMultipleElement($page, 'BlogBox', $position);
-        Helper::clickNamedLink($blogBox, 'readMore', $language);
+        Helper::clickNamedLink($blogBox, 'readMore');
     }
 
     /**
@@ -45,7 +44,7 @@ class BlogContext extends SubContext
     public function theShopOwnerActivateMyLatestComment()
     {
         $sql = 'UPDATE `s_blog_comments` SET `active`= 1 ORDER BY id DESC LIMIT 1';
-        $this->getContainer()->get('db')->exec($sql);
+        $this->getService('db')->exec($sql);
         $this->getSession()->reload();
     }
 

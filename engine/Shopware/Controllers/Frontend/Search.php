@@ -146,7 +146,7 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
         $term = trim(strip_tags(htmlspecialchars_decode(stripslashes($term))));
 
         //we have to strip the / otherwise broken urls would be created e.g. wrong pager urls
-        $term = str_replace("/", "", $term);
+        $term = str_replace("/", " ", $term);
 
         return $term;
     }

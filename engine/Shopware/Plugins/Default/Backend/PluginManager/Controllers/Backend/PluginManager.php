@@ -55,7 +55,10 @@ class Shopware_Controllers_Backend_PluginManager
                 $this->getCategoryService()->synchronize();
             }
 
-            $this->get('shopware_plugininstaller.plugin_manager')->refreshPluginList();
+            try {
+                $this->get('shopware_plugininstaller.plugin_manager')->refreshPluginList();
+            } catch (Exception $e) {
+            }
         }
 
         parent::preDispatch();
@@ -248,7 +251,12 @@ class Shopware_Controllers_Backend_PluginManager
 
     public function localListingAction()
     {
-        $this->get('shopware_plugininstaller.plugin_manager')->refreshPluginList();
+        $error = null;
+        try {
+            $this->get('shopware_plugininstaller.plugin_manager')->refreshPluginList();
+        } catch (Exception $e) {
+            $error = $e->getMessage();
+        }
 
         $context = new ListingRequest(
             $this->getLocale(),
@@ -269,7 +277,8 @@ class Shopware_Controllers_Backend_PluginManager
 
         $this->View()->assign([
             'success' => true,
-            'data' => array_values($plugins)
+            'data' => array_values($plugins),
+            'error' => $error
         ]);
     }
 

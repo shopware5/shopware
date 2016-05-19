@@ -10,17 +10,19 @@
 
                         {* Description tab *}
                         {block name="frontend_detail_tabs_description"}
-                            <a href="#" class="tab--link" title="{s name='DetailTabsDescription'}{/s}">{s name='DetailTabsDescription'}{/s}</a>
+                            <a href="#" class="tab--link" title="{s name='DetailTabsDescription'}{/s}" data-tabName="description">{s name='DetailTabsDescription'}{/s}</a>
                         {/block}
 
                         {* Rating tab *}
                         {block name="frontend_detail_tabs_rating"}
-                            <a href="#" class="tab--link" title="{s name='DetailTabsRating'}{/s}">
-                                {s name='DetailTabsRating'}{/s}
-                                {block name="frontend_detail_tabs_navigation_rating_count"}
-                                    <span class="product--rating-count">{$sArticle.sVoteAverage.count}</span>
-                                {/block}
-                            </a>
+                            {if !{config name=VoteDisable}}
+                                <a href="#" class="tab--link" title="{s name='DetailTabsRating'}{/s}" data-tabName="rating">
+                                    {s name='DetailTabsRating'}{/s}
+                                    {block name="frontend_detail_tabs_navigation_rating_count"}
+                                        <span class="product--rating-count">{$sArticle.sVoteAverage.count}</span>
+                                    {/block}
+                                </a>
+                            {/if}
                         {/block}
                     {/block}
                 </div>

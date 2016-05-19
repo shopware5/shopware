@@ -25,8 +25,7 @@ class Article extends \Shopware\Tests\Mink\Element\Emotion\Article
     protected $selector = ['css' => 'div.emotion--product'];
 
     /**
-     * Returns an array of all css selectors of the element/page
-     * @return string[]
+     * @inheritdoc
      */
     public function getCssSelectors()
     {

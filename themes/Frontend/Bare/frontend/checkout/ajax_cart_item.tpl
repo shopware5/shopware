@@ -97,7 +97,8 @@
 
     {* Article name *}
     {block name='frontend_checkout_ajax_cart_articlename'}
-		{if $basketItem.modus != 4}
+        {$useAnchor = ($basketItem.modus != 4 && $basketItem.modus != 2)}
+		{if $useAnchor}
         	<a class="item--link" href="{$detailLink}" title="{$basketItem.articlename|escape}">
 		{else}
 			<div class="item--link">
@@ -121,7 +122,7 @@
 			{block name="frontend_checkout_ajax_cart_articlename_price"}
 				<span class="item--price">{if $basketItem.amount}{$basketItem.amount|currency}{else}{s name="AjaxCartInfoFree" namespace="frontend/checkout/ajax_cart"}{/s}{/if}*</span>
 			{/block}
-		{if $basketItem.modus != 4}
+		{if $useAnchor}
 			</a>
 		{else}
 			</div>

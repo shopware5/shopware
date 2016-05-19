@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 //{namespace name=backend/product_stream/main}
-
+//{block name="backend/product_stream/controller/main"}
 Ext.define('Shopware.apps.ProductStream.controller.Main', {
     extend: 'Enlight.app.Controller',
 
@@ -60,7 +60,8 @@ Ext.define('Shopware.apps.ProductStream.controller.Main', {
             },
             'product-stream-listing-grid': {
                 'open-selected-list-window': me.openSelectedListWindow,
-                'stream-delete-item': me.onDeleteItem
+                'stream-delete-item': me.onDeleteItem,
+                'stream-duplicate-item': me.onDuplicateItem
             }
         });
 
@@ -240,5 +241,57 @@ Ext.define('Shopware.apps.ProductStream.controller.Main', {
         };
 
         return sortData;
+    },
+
+    onDuplicateItem: function(grid, record) {
+        var showNotificationAndRefresh = function() {
+            Shopware.Notification.createGrowlMessage(
+                    '{s name=stream_saved_title}Product stream{/s}',
+                    '{s name=stream_saved_description}Stream saved{/s}'
+            );
+            grid.getStore().load();
+        };
+
+        Ext.MessageBox.prompt(
+            '{s name=stream_duplicate_title}Duplicate Product Stream{/s}',
+            '{s name=stream_duplicate_prompt}New name{/s}:',
+            function (result, value) {
+                if (result !== "ok" || !value) {
+                    return;
+                }
+
+                value = Ext.String.trim(value);
+
+                if (value.length === 0) {
+                    return;
+                }
+
+                var duplicatedRecord = JSON.parse(JSON.stringify(record.data));
+                duplicatedRecord.name = value;
+                duplicatedRecord.conditions = JSON.parse(duplicatedRecord.conditions);
+                duplicatedRecord.sorting = JSON.parse(duplicatedRecord.sorting);
+                delete duplicatedRecord.id;
+
+                duplicatedRecord = Ext.create('Shopware.apps.ProductStream.model.Stream', duplicatedRecord);
+                duplicatedRecord.save({
+                    success: function (newRecord) {
+                        if (newRecord.get('type') == 2) {
+                            Ext.Ajax.request({
+                                url: '{url controller=ProductStream action=copySelectedProducts}',
+                                params: {
+                                    sourceStreamId: record.get('id'),
+                                    targetStreamId: newRecord.get('id')
+                                },
+                                success: function() {
+                                    showNotificationAndRefresh();
+                                }
+                            });
+                        } else {
+                            showNotificationAndRefresh();
+                        }
+                    }
+                });
+            }, this, false, '{s name=stream_duplicate_copy}Copy of {/s}' + record.get('name'));
     }
 });
+//{/block}

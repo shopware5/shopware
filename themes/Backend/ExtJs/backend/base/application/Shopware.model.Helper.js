@@ -365,6 +365,7 @@ Ext.define('Shopware.model.Helper', {
      */
     applyDateFieldConfig: function (field) {
         field.xtype = 'datefield';
+        field.format = 'd.m.Y';
         return field;
     },
 

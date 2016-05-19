@@ -1,4 +1,4 @@
-@emotion @jsResponsive
+@emotion @javascript
 Feature: Emotion
 
     Background:
@@ -6,6 +6,7 @@ Feature: Emotion
 
     @slider @banner @blog
     Scenario: Check the frontpage emotions
+        When  the emotion world has loaded
         Then  I should see a banner slider:
             | image               |
             | beach1503f8532d4648 |
@@ -44,6 +45,7 @@ Feature: Emotion
     @banner @category-teaser @slider
     Scenario: Check emotions on category "Genusswelten"
         When  I follow "Genusswelten"
+        And   the emotion world has loaded
 
         Then  I should see a banner with image "genuss_top_banner"
 
@@ -62,8 +64,10 @@ Feature: Emotion
 
     @banner @youtube @article @html
     Scenario: Check landing page "Stop The Water While Using Me"
-        When follow "Sommerwelten"
-        And  I follow the link of the element "Banner" on position 3
+        When  I follow "Sommerwelten"
+        And   the emotion world has loaded
+        And   I follow the link of the element "Banner" on position 3
+        And   the emotion world has loaded
 
         Then  I should see a banner with image "teaserbanner_stopthewater_landing.png"
 

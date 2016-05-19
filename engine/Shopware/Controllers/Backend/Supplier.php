@@ -66,7 +66,7 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
             return;
         }
 
-        $id            = (int) $this->Request()->get('id');
+        $id = (int)$this->Request()->get('id');
         $supplierModel = Shopware()->Models()->find('Shopware\Models\Article\Supplier', $id);
 
         Shopware()->Models()->remove($supplierModel);
@@ -97,8 +97,8 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
         }
 
         $filter = $this->Request()->getParam('filter', null);
-        $sort   = $this->Request()->getParam('sort', array(array('property' => 'name')));
-        $limit  = $this->Request()->getParam('limit', 20);
+        $sort = $this->Request()->getParam('sort', array(array('property' => 'name')));
+        $limit = $this->Request()->getParam('limit', 20);
         $offset = $this->Request()->getParam('start', 0);
 
         $query = $this->getRepository()->getSupplierListQuery($filter, $sort, $limit, $offset);
@@ -114,8 +114,8 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
 
         $this->View()->assign(array(
             'success' => !empty($suppliers),
-            'data'    => $suppliers,
-            'total'   => $total
+            'data' => $suppliers,
+            'total' => $total
         ));
     }
 
@@ -163,14 +163,14 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
             return;
         }
 
-        $id = (int) $this->Request()->get('id');
+        $id = (int)$this->Request()->get('id');
         if ($id > 0) {
             $supplierModel = Shopware()->Models()->find('Shopware\Models\Article\Supplier', $id);
         } else {
             $supplierModel = new \Shopware\Models\Article\Supplier();
         }
 
-        $params              = $this->Request()->getParams();
+        $params = $this->Request()->getParams();
         $params['attribute'] = $params['attribute'][0];
 
         // set data to model and overwrite the image field
@@ -198,18 +198,10 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
             return;
         }
 
-        try {
-            $manager = Shopware()->Models();
-            $manager->persist($supplierModel);
-            $manager->flush();
-            $params['id'] = $supplierModel->getId();
-        } catch (Exception $e) {
-            $errorMsg = $e->getMessage();
-            $this->View()->assign(array('success' => false, 'errorMsg' => $errorMsg));
-
-            return;
-        }
-
+        $manager = Shopware()->Models();
+        $manager->persist($supplierModel);
+        $manager->flush();
+        $params['id'] = $supplierModel->getId();
         $this->View()->assign(array('success' => true, 'data' => $params));
 
         return;
@@ -246,8 +238,8 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
     public function getAllSupplier()
     {
         $filter = $this->Request()->getParam('filter', null);
-        $sort   = $this->Request()->getParam('sort', array(array('property' => 'name')));
-        $limit  = $this->Request()->getParam('limit', 20);
+        $sort = $this->Request()->getParam('sort', array(array('property' => 'name')));
+        $limit = $this->Request()->getParam('limit', 20);
         $offset = $this->Request()->getParam('start', 0);
 
         $query = $this->getRepository()->getSupplierListQuery($filter, $sort, $limit, $offset);
@@ -269,7 +261,7 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
     {
         $namespace = Shopware()->Snippets()->getNamespace('backend/supplier');
 
-        $this->addAclPermission('getSuppliersAction',   'read',   $namespace->get('no_list_rights', 'Read access denied.'));
+        $this->addAclPermission('getSuppliersAction', 'read', $namespace->get('no_list_rights', 'Read access denied.'));
         $this->addAclPermission('deleteSupplierAction', 'delete', $namespace->get('no_list_rights', 'Delete access denied.'));
         $this->addAclPermission('updateSupplierAction', 'update', $namespace->get('no_update_rights', 'Update access denied.'));
         $this->addAclPermission('createSupplierAction', 'create', $namespace->get('no_create_rights', 'Create access denied.'));

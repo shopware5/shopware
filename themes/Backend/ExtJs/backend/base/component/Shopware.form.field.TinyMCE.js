@@ -225,10 +225,6 @@ Ext.define('Shopware.form.field.TinyMCE',
         var me = this;
         me.callParent(arguments);
 
-        // Checks if the TinyMCE object is available in the DOM
-        if(window.tinymce) {
-            me.statics.initialized = true;
-        }
         // Register additional events
         me.registerEvents();
     },
@@ -361,6 +357,8 @@ Ext.define('Shopware.form.field.TinyMCE',
         // (e.g. in order to click the save button in the ExtJS window).
         // This solution still as some drawbacks as it image-resize-actions won't trigger a undo-step usually.
         me.tinymce.onInit.add(function(ed, evt) {
+            me.statics.initialized = true;
+
             var dom = ed.dom,
                 doc = ed.getDoc(),
                 el = doc.content_editable ? ed.getBody() : (tinymce.isGecko ? doc : ed.getWin());
@@ -394,6 +392,12 @@ Ext.define('Shopware.form.field.TinyMCE',
                     me.tinymce.setContent(me.emptyText);
                 }
             });
+
+            me.changeSniffer = window.setInterval(function() {
+                var value = me.tinymce.getContent();
+                value = me.replaceImagePathsWithSmartyPlugin(value);
+                me.setRawValue(value);
+            }, 300);
         });
 
         // Render the TinyMCE editor
@@ -401,14 +405,6 @@ Ext.define('Shopware.form.field.TinyMCE',
 
         // Fire the "afterrendereditor" event
         me.fireEvent('afterrendereditor', me, me.tinymce, input.id, me.config.editor);
-
-        window.setTimeout(function() {
-            me.changeSniffer = window.setInterval(function() {
-                var value = me.tinymce.getContent();
-                value = me.replaceImagePathsWithSmartyPlugin(value);
-                me.setRawValue(value);
-            }, 300);
-        }, 500);
     },
 
     _findImagesInDOMContent: function(content) {
@@ -420,6 +416,21 @@ Ext.define('Shopware.form.field.TinyMCE',
                 var src = img.getAttribute('data-src'),
                     id = img.getAttribute('id');
 
+                // update case
+                if (!id) {
+                    src = img.getAttribute('src');
+
+                    if (src && src.substr(0,5) != "media") {
+                        return;
+                    }
+
+                    id = 'tinymce-editor-image-' + Shopware.ModuleManager.uuidGenerator.generate();
+
+                    img.setAttribute('id', id);
+                    img.setAttribute('data-src', src);
+                    img.classList.add(id);
+                }
+
                 filteredImages.push({ src: src, id: id, image: img });
             }
         });
@@ -427,11 +438,14 @@ Ext.define('Shopware.form.field.TinyMCE',
         return filteredImages;
     },
 
-    replaceImagePathsWithSmartyPlugin: function(values) {
+    replaceImagePathsWithSmartyPlugin: function(rawContent) {
         var me = this,
-            rawContent = values,
             tpl = "{ldelim}media path='[0]'{rdelim}",
             content, images, html;
+
+        if (!me.isValidContent(rawContent)) {
+            return rawContent;
+        }
 
         // Create a DOM using the content of the tinymce
         content = me.HTMLBlobToDomElements(rawContent);
@@ -456,11 +470,9 @@ Ext.define('Shopware.form.field.TinyMCE',
     },
 
     replaceSmartyPluginWithImagePaths: function(rawContent) {
-        var me = this,
-            content,
-            images;
+        var me = this, content, images;
 
-        if (typeof rawContent === 'undefined') {
+        if (!me.isValidContent(rawContent)) {
             return rawContent;
         }
 
@@ -478,12 +490,16 @@ Ext.define('Shopware.form.field.TinyMCE',
         return rawContent;
     },
 
-    replacePlaceholderWithImage: function(values) {
+    replacePlaceholderWithImage: function(rawContent) {
         var me = this,
             imagesToLoad = [],
-            content = me.HTMLBlobToDomElements(values),
-            params = '';
+            content, params = '';
 
+        if (!me.isValidContent(rawContent)) {
+            return rawContent;
+        }
+
+        content = me.HTMLBlobToDomElements(rawContent);
         imagesToLoad = me._findImagesInDOMContent(content);
 
         Ext.each(imagesToLoad, function(img) {
@@ -512,6 +528,10 @@ Ext.define('Shopware.form.field.TinyMCE',
                 me.tinymce.setContent(html);
             }
         });
+    },
+
+    isValidContent: function(content) {
+        return (Ext.isDefined(content) && content !== null && content.length && content.length > 0);
     },
 
     HTMLBlobToDomElements: function(html) {
@@ -664,10 +684,12 @@ Ext.define('Shopware.form.field.TinyMCE',
     setEditorValue: function(value, scope) {
         var me = scope;
 
-        if(!me.tinymce) {
-            Ext.Function.defer(function() {
+        if(!me.statics.initialized || !me.tinymce) {
+
+            me.on('afterrendereditor', function() {
                 me.setEditorValue(value, me);
-            }, 50);
+            }, me, { single: true });
+
             return false;
         }
 

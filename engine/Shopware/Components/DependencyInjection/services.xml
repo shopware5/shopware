@@ -393,6 +393,9 @@
             <argument type="service" id="dbal_connection" />
         </service>
 
+        <service id="shopware_product_stream.facet_filter" class="Shopware\Components\ProductStream\FacetFilter" >
+            <argument type="service" id="config" />
+        </service>
 
     </services>
 </container>

@@ -113,7 +113,7 @@ class ProductQueryFactory
     public function createUnitIdQuery($unitIds, $limit = null)
     {
         $dbal = $this->createQuery($limit)
-            ->andWhere('product.unitID IN (:unitIds)')
+            ->andWhere('variant.unitID IN (:unitIds)')
             ->setParameter(':unitIds', $unitIds, Connection::PARAM_INT_ARRAY);
 
         return new LastIdQuery($dbal);

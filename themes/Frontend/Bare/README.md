@@ -7,7 +7,7 @@ Frameworks are great, but sometimes they make things more complicated than they 
 
 
 ## Bug reporting
-If you find any bugs in the theme, please use our public tracker at [http://jira.shopware.de/jira](http://jira.shopware.de/jira) to report them.
+If you find any bugs in the theme, please use our public tracker at [https://issues.shopware.com](https://issues.shopware.com) to report them.
 
 
 ## License

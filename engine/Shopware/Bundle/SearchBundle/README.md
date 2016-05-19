@@ -2,7 +2,7 @@
 
 - **License**: Dual license AGPL v3 / Proprietary
 - **Github Repository**: <https://github.com/ShopwareAG/shopware-4>
-- **Issue-Tracker**: <http://jira.shopware.de/jira>
+- **Issue-Tracker**: <https://issues.shopware.com>
 
 ## How to use
 The usage of the Shopware\Bundle\SearchBundle\ProductSearch and Shopware\Bundle\SearchBundle\ProductNumberSearch are equal. Only the result object is different.

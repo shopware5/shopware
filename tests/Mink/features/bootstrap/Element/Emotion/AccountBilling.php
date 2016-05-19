@@ -20,8 +20,7 @@ class AccountBilling extends Element implements \Shopware\Tests\Mink\HelperSelec
     protected $selector = ['css' => 'div.billing > div.inner_container'];
 
     /**
-     * Returns an array of all css selectors of the element/page
-     * @return string[]
+     * @inheritdoc
      */
     public function getCssSelectors()
     {
@@ -31,8 +30,7 @@ class AccountBilling extends Element implements \Shopware\Tests\Mink\HelperSelec
     }
 
     /**
-     * Returns an array of all named selectors of the element/page
-     * @return array[]
+     * @inheritdoc
      */
     public function getNamedSelectors()
     {

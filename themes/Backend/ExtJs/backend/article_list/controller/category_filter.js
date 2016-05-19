@@ -47,7 +47,8 @@ Ext.define('Shopware.apps.ArticleList.controller.CategoryFilter', {
 
         me.control({
             'multi-edit-category-tree': {
-                filterByCategory: me.onFilterByCategory
+                'filterByCategory': me.onFilterByCategory,
+                'showVariants': me.onShowVariants
             }
         });
 
@@ -75,6 +76,11 @@ Ext.define('Shopware.apps.ArticleList.controller.CategoryFilter', {
         }
 
         me.getController('Suggest').loadFilter(filterString, me.getFilterNameByConfig(categoryId, showVariants));
+    },
+
+    onShowVariants: function(isActive) {
+        var me = this;
+        me.getMainGrid().detailActiveColumn.setVisible(isActive);
     },
 
     /**

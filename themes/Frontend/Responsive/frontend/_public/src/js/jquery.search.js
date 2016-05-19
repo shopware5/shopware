@@ -245,6 +245,14 @@
              */
             me.keyupTimeout = 0;
 
+            /**
+             * Indicates if the form is already submitted
+             *
+             * @type {boolean}
+             * @private
+             */
+            me._isSubmitting = false;
+
             me.registerListeners();
         },
 
@@ -257,11 +265,13 @@
         registerListeners: function () {
             var me = this,
                 opts = me.opts,
-                $searchField = me.$searchField;
+                $searchField = me.$searchField,
+                $formElement = me.$searchField.closest('form');
 
             me._on($searchField, 'keyup', $.proxy(me.onKeyUp, me));
             me._on($searchField, 'keydown', $.proxy(me.onKeyDown, me));
             me._on(me.$toggleSearchBtn, 'click', $.proxy(me.onClickSearchEntry, me));
+            me._on($formElement, 'submit', $.proxy(me.onSubmit, me));
 
             if (msPointerEnabled) {
                 me.$results.on('click', opts.resultLinkSelector, function (event) {
@@ -340,6 +350,22 @@
             }
 
             me.keyupTimeout = window.setTimeout($.proxy(me.triggerSearchRequest, me, term), opts.searchDelay);
+        },
+
+        /**
+         * Blocks further submit events to throttle requests to the server
+         *
+         * @param event
+         */
+        onSubmit: function (event) {
+            var me = this;
+
+            if (me._isSubmitting) {
+                event.preventDefault();
+                return;
+            }
+
+            me._isSubmitting = true;
         },
 
         /**

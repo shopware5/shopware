@@ -152,99 +152,19 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
         $eventArgs->set('request', $this->Request());
         $eventArgs->set('response', $this->Response());
 
+        /**
+         * Notify plugins of router startup
+         */
+        $this->eventManager->notify(
+            'Enlight_Controller_Front_RouteStartup',
+            $eventArgs
+        );
+
+        /**
+         * Route request to controller/action, if a router is provided
+         */
         try {
-            /**
-             * Notify plugins of router startup
-             */
-            $this->eventManager->notify(
-                'Enlight_Controller_Front_RouteStartup',
-                $eventArgs
-            );
-
-            /**
-             * Route request to controller/action, if a router is provided
-             */
-            try {
-                $this->router->route($this->request);
-            } catch (Exception $e) {
-                if ($this->throwExceptions()) {
-                    throw $e;
-                }
-                $this->response->setException($e);
-            }
-
-            /**
-             * Notify plugins of router completion
-             */
-            $this->eventManager->notify(
-                'Enlight_Controller_Front_RouteShutdown',
-                $eventArgs
-            );
-
-            /**
-             * Early exit the dispatch if we have a redirect
-             */
-            if ($this->response->isRedirect()) {
-                return $this->response;
-            }
-
-            /**
-             * Notify plugins of dispatch loop startup
-             */
-            $this->eventManager->notify(
-                'Enlight_Controller_Front_DispatchLoopStartup',
-                $eventArgs
-            );
-
-            /**
-             *  Attempts to dispatch the controller/action. If the $this->request
-             *  indicates that it needs to be dispatched, it moves to the next
-             *  action in the request.
-             */
-            do {
-                $this->request->setDispatched(true);
-
-                /**
-                 * Notify plugins of dispatch startup
-                 */
-                try {
-                    $this->eventManager->notify(
-                        'Enlight_Controller_Front_PreDispatch',
-                        $eventArgs
-                    );
-
-                    /**
-                     * Skip requested action if preDispatch() has reset it
-                     */
-                    if (!$this->request->isDispatched()) {
-                        continue;
-                    }
-
-                    /**
-                     * Dispatch request
-                     */
-                    try {
-                        $this->dispatcher->dispatch($this->request, $this->response);
-                    } catch (Exception $e) {
-                        if ($this->throwExceptions()) {
-                            throw $e;
-                        }
-                        $this->response->setException($e);
-                    }
-                } catch (Exception $e) {
-                    if ($this->throwExceptions()) {
-                        throw $e;
-                    }
-                    $this->response->setException($e);
-                }
-                /**
-                 * Notify plugins of dispatch completion
-                 */
-                $this->eventManager->notify(
-                    'Enlight_Controller_Front_PostDispatch',
-                    $eventArgs
-                );
-            } while (!$this->request->isDispatched());
+            $this->router->route($this->request);
         } catch (Exception $e) {
             if ($this->throwExceptions()) {
                 throw $e;
@@ -253,19 +173,85 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
         }
 
         /**
-         * Notify plugins of dispatch loop completion
+         * Notify plugins of router completion
          */
-        try {
+        $this->eventManager->notify(
+            'Enlight_Controller_Front_RouteShutdown',
+            $eventArgs
+        );
+
+        /**
+         * Early exit the dispatch if we have a redirect
+         */
+        if ($this->response->isRedirect()) {
+            return $this->response;
+        }
+
+        /**
+         * Notify plugins of dispatch loop startup
+         */
+        $this->eventManager->notify(
+            'Enlight_Controller_Front_DispatchLoopStartup',
+            $eventArgs
+        );
+
+        /**
+         * Attempts to dispatch the controller/action. If the $this->request
+         * indicates that it needs to be dispatched, it moves to the next
+         * action in the request.
+         */
+        do {
+            $this->request->setDispatched(true);
+
+            /**
+             * Notify plugins of dispatch startup
+             */
+            try {
+                $this->eventManager->notify(
+                    'Enlight_Controller_Front_PreDispatch',
+                    $eventArgs
+                );
+
+                /**
+                 * Skip requested action if preDispatch() has reset it
+                 */
+                if (!$this->request->isDispatched()) {
+                    continue;
+                }
+
+                /**
+                 * Dispatch request
+                 */
+                try {
+                    $this->dispatcher->dispatch($this->request, $this->response);
+                } catch (Exception $e) {
+                    if ($this->throwExceptions()) {
+                        throw $e;
+                    }
+                    $this->response->setException($e);
+                }
+            } catch (Exception $e) {
+                if ($this->throwExceptions()) {
+                    throw $e;
+                }
+                $this->response->setException($e);
+            }
+            /**
+             * Notify plugins of dispatch completion
+             */
             $this->eventManager->notify(
-                'Enlight_Controller_Front_DispatchLoopShutdown',
+                'Enlight_Controller_Front_PostDispatch',
                 $eventArgs
             );
-        } catch (Exception $e) {
-            if ($this->throwExceptions()) {
-                throw $e;
-            }
-            $this->response->setException($e);
-        }
+        } while (!$this->request->isDispatched());
+
+        /**
+         * Notify plugins of dispatch loop completion
+         */
+        $this->eventManager->notify(
+            'Enlight_Controller_Front_DispatchLoopShutdown',
+            $eventArgs
+        );
 
         return $this->response;
     }

@@ -113,11 +113,6 @@ Ext.define('Shopware.apps.MediaManager.view.album.Setting', {
 
         me.formPanel.getForm().loadRecord(me.settings);
 
-        // Check if the record is a default folder
-        if(id < 0) {
-            me.albumNameField.setDisabled(true);
-        }
-
         me.callParent(arguments);
     },
 

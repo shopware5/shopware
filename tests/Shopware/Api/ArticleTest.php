@@ -1,4 +1,27 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
+
 class Shopware_Tests_Api_ArticleTest extends PHPUnit_Framework_TestCase
 {
     public $apiBaseUrl = '';
@@ -167,8 +190,8 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit_Framework_TestCase
             ),
 
             'images' => array(
-                array('link' => 'http://lorempixel.com/640/480/food/'),
-                array('link' => 'http://lorempixel.com/640/480/food/')
+                array('link' => 'http://assets.shopware.com/sw_logo_white.png'),
+                array('link' => 'http://assets.shopware.com/sw_logo_white.png')
             ),
 
             'variants' => array(
@@ -545,6 +568,84 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit_Framework_TestCase
 
             $oldMain = $result['data']['mainDetail']['number'];
         }
+    }
+
+    /**
+     * @depends testPostArticlesShouldBeSuccessful
+     */
+    public function testReplaceArticleImagesWithUrlAndMediaId($articleId)
+    {
+        $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/articles/' . $articleId);
+
+        $requestData = array(
+            '__options_images' => [
+                'replace' => 1
+            ],
+            'images' => [
+                [
+                    'mediaId' => 44
+                ],
+                [
+                    'link' => 'http://assets.shopware.com/sw_logo_white.png'
+                ],
+                [
+                    'mediaId' => 46
+                ],
+
+            ]
+        );
+        $requestData = Zend_Json::encode($requestData);
+
+        $client->setRawData($requestData, 'application/json; charset=UTF-8');
+        $response = $client->request('PUT');
+
+        $this->assertEquals(200, $response->getStatus());
+
+        $result = $response->getBody();
+        $result = Zend_Json::decode($result);
+
+        $this->assertArrayHasKey('success', $result);
+        $this->assertTrue($result['success']);
+
+        $this->assertArrayHasKey('data', $result);
+
+        $data = $result['data'];
+        $this->assertInternalType('array', $data);
+        $this->assertEquals($articleId, $data['id']);
+    }
+
+    /**
+     * @depends testPostArticlesShouldBeSuccessful
+     */
+    public function testReplaceArticleImagesWithInvalidPayload($articleId)
+    {
+        $client = $this->getHttpClient()->setUri($this->apiBaseUrl . '/articles/' . $articleId);
+
+        $requestData = array(
+            '__options_images' => [
+                'replace' => 1
+            ],
+            'images' => [
+                [
+                    'id' => 999999,
+                    'mediaId' => 44
+                ]
+            ]
+        );
+        $requestData = Zend_Json::encode($requestData);
+
+        $client->setRawData($requestData, 'application/json; charset=UTF-8');
+        $response = $client->request('PUT');
+
+        $this->assertEquals(400, $response->getStatus());
+
+        $result = $response->getBody();
+        $result = Zend_Json::decode($result);
+
+        $this->assertArrayHasKey('success', $result);
+        $this->assertFalse($result['success']);
+
+        $this->assertArrayHasKey('message', $result);
     }
 
     /**

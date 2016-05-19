@@ -155,6 +155,16 @@ class Supplier extends ModelEntity
     }
 
     /**
+     * Sets the primary key
+     *
+     * @param $id
+     */
+    public function setPrimaryIdentifier($id)
+    {
+        $this->id = (int) $id;
+    }
+
+    /**
      * Get id
      *
      * @return integer

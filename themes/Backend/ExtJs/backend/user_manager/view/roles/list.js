@@ -43,13 +43,13 @@ Ext.define('Shopware.apps.UserManager.view.roles.List', {
     height: '100%',
     selType: 'rowmodel',
 
-    createDockedToolBar: function(){
-          return [{
-                dock: 'bottom',
-                xtype: 'pagingtoolbar',
-                displayInfo: true,
-                store: this.roleStore
-          }];
+    createDockedToolBar: function () {
+        return [{
+            dock: 'bottom',
+            xtype: 'pagingtoolbar',
+            displayInfo: true,
+            store: this.roleStore
+        }];
     },
 
     /**
@@ -157,13 +157,19 @@ Ext.define('Shopware.apps.UserManager.view.roles.List', {
     onEditRow: function(editor, event) {
         var store = event.store;
 
-        editor.grid.setLoading(true);
-        store.sync({
-            callback: function() {
-                editor.grid.setLoading(false);
-            }
+        Shopware.app.Application.fireEvent('Shopware.ValidatePassword', function() {
+
+            editor.grid.setLoading(true);
+            store.sync({
+                callback: function () {
+                    editor.grid.setLoading(false);
+                }
+            });
+            Shopware.Notification.createGrowlMessage('{s name=user/Success}Successful{/s}', '{s name=roles_list/updatedSuccesfully}Role has been updated{/s}', '{s name="user/userManager"}User Manager{/s}');
+
+        }, function() {
+            event.record.reject();
         });
-        Shopware.Notification.createGrowlMessage('{s name=user/Success}Successful{/s}', '{s name=roles_list/updatedSuccesfully}Role has been updated{/s}', '{s name="user/userManager"}User Manager{/s}');
     }
 });
 //{/block}

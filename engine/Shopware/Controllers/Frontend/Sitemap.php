@@ -224,8 +224,7 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
                     $campaign[0]['id'],
                     $campaign[0]['name'],
                     'campaign',
-                    'emotionId',
-                    array('sCategory' => $campaign['categoryId'])
+                    'emotionId'
                 )
             );
         }

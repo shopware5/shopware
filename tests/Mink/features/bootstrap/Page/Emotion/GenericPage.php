@@ -7,100 +7,46 @@ use Shopware\Tests\Mink\HelperSelectorInterface;
 
 class GenericPage extends Page implements HelperSelectorInterface
 {
-    public $cssLocator = array(
-        'canonical' => 'link[rel=canonical]',
-        'next' => 'link[rel=next]',
-        'prev' => 'link[rel=prev]',
-        'robots' => 'meta[name=robots]'
-    );
-
     /**
-     * Returns an array of all css selectors of the element/page
-     * @return array
+     * @inheritdoc
      */
     public function getCssSelectors()
     {
-        return array(
+        return [
             'canonical' => 'link[rel=canonical]',
             'next' => 'link[rel=next]',
             'prev' => 'link[rel=prev]',
             'robots' => 'meta[name=robots]'
-        );
+        ];
     }
 
     /**
-     * Returns an array of all named selectors of the element/page
-     * @return array
+     * @inheritdoc
      */
     public function getNamedSelectors()
     {
-        return array();
+        return [];
     }
 
     /**
-     * Checks if the canonical link matches the given path and query
-     * Fails validation if the matches are not exact for either argument
-     * If null arguments are provided, no canonical link is expected, and validation
-     * will fail if one is found
-     *
-     * @param $path
-     * @param $query
-     */
-    public function checkCanonical($path = null, $query = array())
-    {
-        $locator = 'canonical';
-
-        $this->checkLink($locator, $path, $query);
-    }
-
-    /**
-     * Checks if the next page link matches the given path and query
+     * Checks if the canonical/next/prev links matches the given path and query
      * Fails validation if the matches are not exact for either argument
      * If null arguments are provided, no next page link is expected, and validation
      * will fail if one is found
-     *
-     * @param $path
-     * @param $query
-     */
-    public function checkPaginationNext($path = null, $query = array())
-    {
-        $locator = 'next';
-
-        $this->checkLink($locator, $path, $query);
-    }
-
-    /**
-     * Checks if the prev page link matches the given path and query
-     * Fails validation if the matches are not exact for either argument
-     * If null arguments are provided, no next page link is expected, and validation
-     * will fail if one is found
-     *
-     * @param $path
-     * @param $query
-     */
-    public function checkPaginationPrev($path = null, $query = array())
-    {
-        $locator = 'prev';
-
-        $this->checkLink($locator, $path, $query);
-    }
-
-    /**
-     * Helper method to check canonical/next/prev links
      *
      * @param locator
      * @param $path
      * @param $query
      */
-    private function checkLink($locator, $path = null, $query = array())
+    public function checkLink($locator, $path = null, $query = [])
     {
-        $elements = Helper::findElements($this, array($locator), false);
+        $elements = Helper::findElements($this, [$locator], false);
         $linkElement = $elements[$locator];
 
         if ($path !== null && empty($linkElement)) {
-            Helper::throwException(array("Link expected but not found while looking for " . $locator));
+            Helper::throwException(["Link expected but not found while looking for " . $locator]);
         } elseif ($path === null && !empty($linkElement)) {
-            Helper::throwException(array("Link not expected but found while looking for " . $locator));
+            Helper::throwException(["Link not expected but found while looking for " . $locator]);
         } elseif ($path === null && empty($linkElement)) {
             return;
         }
@@ -122,7 +68,7 @@ class GenericPage extends Page implements HelperSelectorInterface
                 $expectedUrl
             );
 
-            Helper::throwException(array($message));
+            Helper::throwException([$message]);
         }
     }
 
@@ -131,11 +77,9 @@ class GenericPage extends Page implements HelperSelectorInterface
      *
      * @param $content
      */
-    public function checkRobots($content = array())
+    public function checkRobots($content = [])
     {
-        $locator = array('robots');
-
-        $elements = Helper::findElements($this, $locator);
+        $elements = Helper::findElements($this, ['robots']);
         $robotsElement = $elements['robots'];
         $robotsValue = $robotsElement->getAttribute('content');
         $robotsParts = explode(',', $robotsValue);
@@ -143,7 +87,7 @@ class GenericPage extends Page implements HelperSelectorInterface
         $robotsParts = array_map('trim', $robotsParts);
 
         if (empty($robotsParts)) {
-            Helper::throwException(array('Missing robots data'));
+            Helper::throwException(['Missing robots data']);
         }
 
         if ($robotsParts != $content) {
@@ -153,7 +97,7 @@ class GenericPage extends Page implements HelperSelectorInterface
                 implode(', ', $content)
             );
 
-            Helper::throwException(array($message));
+            Helper::throwException([$message]);
         }
     }
 }

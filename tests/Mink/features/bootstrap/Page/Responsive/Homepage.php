@@ -9,15 +9,14 @@ use Shopware\Tests\Mink\Helper;
 class Homepage extends \Shopware\Tests\Mink\Page\Emotion\Homepage
 {
     /**
-     * Returns an array of all css selectors of the element/page
-     * @return array
+     * @inheritdoc
      */
     public function getCssSelectors()
     {
-        return array(
+        return [
             'newsletterForm' => 'form.newsletter--form',
             'newsletterFormSubmit' => 'form.newsletter--form button[type="submit"]'
-        );
+        ];
     }
 
     /**
@@ -37,11 +36,11 @@ class Homepage extends \Shopware\Tests\Mink\Page\Emotion\Homepage
      */
     public function changeCurrency($currency)
     {
-        if(!$this->getSession()->getDriver() instanceof Selenium2Driver) {
+        if (!$this->getDriver() instanceof Selenium2Driver) {
             Helper::throwException('Changing the currency in Responsive template requires Javascript!');
         }
 
-        $valid = array('EUR' => '€ EUR', 'USD' => '$ USD');
+        $valid = ['EUR' => '€ EUR', 'USD' => '$ USD'];
         $this->selectFieldOption('__currency', $valid[$currency]);
     }
 }

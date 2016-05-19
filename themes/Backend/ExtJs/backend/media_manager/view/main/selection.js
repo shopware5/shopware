@@ -134,11 +134,16 @@ Ext.define('Shopware.apps.MediaManager.view.main.Selection', {
             action: 'mediamanager-selection-window-apply-selection',
             handler: function(btn) {
                 if (Ext.isFunction(me.selectionHandler)) {
+                    // set selectionModel based on current view layout
+                    var selectionModel = me.mediaView.dataView.getSelectionModel();
+                    if (me.mediaView.selectedLayout === 'table') {
+                        selectionModel = me.mediaView.down('mediamanager-media-grid').getSelectionModel();
+                    }
                     me.selectionHandler.call(
                         me.eventScope,
                         btn,
                         me,
-                        me.mediaView.dataView.getSelectionModel().getSelection()
+                        selectionModel.getSelection()
                     );
                 }
             }

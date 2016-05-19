@@ -1,6 +1,93 @@
 # Shopware Upgrade Information
 In this document you will find a changelog of the important changes related to the code base of Shopware.
 
+## 5.1.6
+* The interface `Enlight_Components_Cron_Adapter` in `engine/Library/Enlight/Components/Cron/Adapter.php` got a new method `getJobByAction`. For default implementation see `engine/Library/Enlight/Components/Cron/Adapter/DBAL.php`.
+
+## 5.1.5
+* The smarty variable `sCategoryInfo` in Listing and Blog controllers is now deprecated and will be removed soon. Use `sCategoryContent` instead, it's a drop in replacement. 
+
+## 5.1.4
+* Customer logout will now regenerate the session id and clear the customers basket.
+* Added `IsNew` condition for product streams
+* Added `SimilarProducts` condition
+* Deprecated Method `Shopware\Bundle\StoreFrontBundle\Gateway\SimilarProductsGatewayInterface::getListByCategory` will be removed in shopware version 5.3
+* Deprecated Method `Shopware\Bundle\StoreFrontBundle\Gateway\SimilarProductsGatewayInterface::getByCategory` will be removed in shopware version 5.3
+* Added method `\Shopware\Models\Article\Repository::getSupplierListQueryBuilder()` to make the query builder extensible
+* Added index on `s_article_img_mapping_rules`.`mapping_id` and `s_article_img_mapping_rules`.`option_id`
+* Fixed `AND` search logic for search terms which not exist in the s_articles table.
+* Added order and payment state constants in `\Shopware\Models\Order\Status`
+* change email validation to a simple regex: `/^.+\@\S+\.\S+$/`. You can implement your own email validation by implementing the `EmailValidatorInterface`.
+* Optimized header lookups for `x-shopware-cache-id` will improve HTTP-Cache invalidation performance. Old behaviour can be restored by setting `lookup_optimization` to false
+* Moved the `div` element in block `frontend_index_left_switches` below `ul` element for W3C compatability in `themes/Frontend/Bare/frontend/index/sidebar.tpl`.
+* Added css rule in order to remove bottom border from last child of `.emotion--html > .html--content` so there is no scrollbar when only whitespace would overlap parent div
+* Enabled product streams for parent categories
+* Disabled the automatic detection of similar products for install customers. Enabling this option may decrease the shop performance.
+* Fixed the `removeListener` method in `Enlight_Event_Subscriber_Config`, `Enlight_Event_Subscriber_Array` and `Enlight_Event_EventManager`
+* Removed `engine/Shopware/Bundle/SearchBundleES/SimilarProductsService.php`
+* Added the possibility to configure the file and directory permissions for the `Local` CDN adapter.
+
+## 5.1.3
+* Switch Grunt to relativeUrls to unify the paths to less.php
+* Deprecated `Enlight_Application::getOption()` and `Enlight_Application::getOptions`
+* Renamed smarty block from `rontend_index_start` to `frontend_index_start` in `themes/Frontend/Bare/frontend/sitemap/index.tpl`
+* Added new global snippets before (`priceDiscountLabel`) and after (`priceDiscountInfo`) all pseudo prices for the possibility to provide more detailed information
+* Removed old snippet `reducedPrice` in `order_item_details.tpl` and `compare/col.tpl`.
+* Introduced smarty blocks for footer headlines in `themes/Frontend/Bare/frontend/index/footer-navigation.tpl`. New blocks:
+    * `frontend_index_footer_column_service_hotline_headline`
+    * `frontend_index_footer_column_service_menu_headline`
+    * `frontend_index_footer_column_information_menu_headline`
+    * `frontend_index_footer_column_newsletter_headline`
+* Removed out-of-stock variant selection due to problems
+
+## 5.1.2
+* Out-of-stock variants on the detail page are now selectable
+* `ProductNumberService::getAvailableNumber()` now returns the provided product variant to allow deep linking of out-of-stock variants
+* Added new configuration property to shopware themes, to configure the inheritance position before or after plugins.
+* Added new smarty blocks `frontend_index_left_menu_entries` and `frontend_index_left_menu_container` to `index/sites-navigation.tpl`.
+* Removed usage of the deprecated `Doctrine\Common\Annotations\FileCacheReader`. Removed methods:
+    * `\Shopware\Components\CacheManager::getDoctrineFileCacheInfo()`
+    * `\Shopware\Components\Model\Configuration::setFileCacheDir()`
+    * `\Shopware\Components\Model\Configuration::getFileCacheDir()`
+* Added `timed_delivery` column in `s_campaigns_mailings` for automatic newsletter delivering.
+* Added new Smarty blocks to the `index/index.tpl` file
+    * `frontend_index_body_classes`
+    * `frontend_index_page_wrap`
+    * `frontend_index_header_navigation`
+    * `frontend_index_container_ajax_cart`
+    * `frontend_index_content_main`
+* Removed `extendsTemplate()` method in the AdvancedMenu plugin. Now the template uses the normal `{extends}` action.
+* Moved template file of the AdvancedMenu plugin from the plugin directory to the normal index directory.
+* Moved content for the AdvancedMenu to separate include file.
+* Added new Smarty block for extending the complete AdvancedMenu template `frontend_plugins_advanced_menu_outer`.
+* Removed obsolete config options `displayFiltersOnDetailPage` and `propertySorting`
+* Add sub shop validation in \Shopware\Bundle\StoreFrontBundle\Service\Core\ListProductService
+* Add getProductsCategories function to \Shopware\Bundle\StoreFrontBundle\Service\CategoryServiceInterface and \Shopware\Bundle\StoreFrontBundle\Gateway\CategoryGatewayInterface which returns all categories of the provided products.
+* Removed duplicate content in `frontend/detail/data.tpl` for block prices
+* Marked unnecessary block `frontend_detail_data_price_info` as deprecated
+* Added seo title for landing pages
+* Added config option to force the selection of a payment method in checkout
+* Deprecated table column `s_filter_values.value_numeric`
+* `\Shopware\Bundle\SearchBundleDBAL\PriceHelper::getSelection()` now requires a `ProductContext` instead of a `ShopContext`
+* Changed type of `\Shopware\Models\Article\Detail::$active` to `boolean` (was `integer`)
+* Emotions can be assigned to multiple categories. Author: Christiansen <t.christiansen@reply.de> via GitHub.
+* Allow clearing caches after plugin update
+* Added Event `Shopware_Modules_Admin_Execute_Risk_Rule_[RuleName]` to provide checks for custom risk rules
+* Added sValidation parameter to the frontend/register/login.tpl url to redirect to same login page in case the login validation failed.
+* Default media albums are now editable in their name. The negative ids are still compatible and fix for development checks and assignments.
+* Add constants for default album ids in \Shopware\Models\Media\Album
+* Replaced `FuzzyLikeThisFieldQuery` with `MultiMatchQuery` in ES Product Search implementation. Should now be compatible to versions >= 1.6
+* Removed deprecated Google Analytics config form and s_core_plugins entry.
+* Removed config option `fuzzysearchresultsperpage`, use `articlesPerPage` instead.
+
+## 5.1.1
+* Added new smarty block `frontend_detail_index_tabs_cross_selling` in the detail/ajax.tpl to prevent problems with custom themes
+* Renamed block `backend/order/view/detail/communication` in `backend/order/view/detail/configuration.js` to `backend/order/view/detail/configuration`. The name was duplicated in another file and was renamed to match the correct file.
+
+## 5.1.0
+* Added event `Shopware_Plugin_Collect_MediaXTypes` to collect media related x_type fields for which the value needs to be normalized
+* Updated Behat to v3.0 and other related libraries
+
 ## 5.1.0 RC3
 * Activated media fallback by default so that old media paths get resolved to the new location
 
@@ -198,7 +285,6 @@ In this document you will find a changelog of the important changes related to t
 ## 5.0.4
 * Change file extension of `Shopware_Components_Convert_Excel::generateXML` to .xls
 * Fixed jsonrenderer for backend order batchprocessing
-
 
 ## 5.0.3
 * The variant API resource now supports the getList method. It will return all variants with prices and attributes. You can optionally calculate the gross price by using the "considerTaxInput" parameter.
@@ -935,5 +1021,3 @@ For further information have a look at the following wiki article:
 
 - GER: <http://wiki.shopware.de/_detail_1342.html>
 - ENG: <http://en.wiki.shopware.de/_detail_1398.html>
-
-

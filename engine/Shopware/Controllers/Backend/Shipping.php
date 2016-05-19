@@ -246,10 +246,11 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
      */
     public function getShippingCostsAction()
     {
+        $this->deleteDispatchWithDeletedShops();
         $dispatchID = $this->Request()->getParam('dispatchID', null);
         $limit      = $this->Request()->getParam('limit', 20);
         $offset     = $this->Request()->getParam('start', 0);
-        $sort       = $this->Request()->getParam('sort', array(array('property' => 'dispatch.name', 'direction' => 'ASC')));
+        $sort       = $this->Request()->getParam('sort', [['property' => 'dispatch.name', 'direction' => 'ASC']]);
 
         $filter = $this->Request()->getParam('filter', null);
         if (is_array($filter) && isset($filter[0]['value'])) {
@@ -269,7 +270,26 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
         $shippingCosts = $paginator->getIterator()->getArrayCopy();
         $shippingCosts = $this->convertShippingCostsDates($shippingCosts);
 
-        $this->View()->assign(array('success' => true, 'data' => $shippingCosts, 'total' => $totalResult));
+        $this->View()->assign(['success' => true, 'data' => $shippingCosts, 'total' => $totalResult]);
+    }
+
+    /**
+     * Deletes dispatch configurations which are associated to deleted shops.
+     */
+    private function deleteDispatchWithDeletedShops()
+    {
+        $builder = $this->getRepository()->getDispatchWithDeletedShopsQuery();
+        /** @var Shopware\Models\Dispatch\Dispatch[] $result */
+        $result  = $builder->getResult();
+
+        $modelManager = Shopware()->Container()->get('models');
+
+        /** @var Shopware\Models\Dispatch\Dispatch $dispatch */
+        foreach ($result as $dispatch) {
+            $modelManager->remove($dispatch);
+        }
+
+        $modelManager->flush();
     }
 
     /**
@@ -281,7 +301,7 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
     {
         $limit      = $this->Request()->getParam('limit', 20);
         $offset     = $this->Request()->getParam('start', 0);
-        $sort       = $this->Request()->getParam('sort', array(array('property' => 'dispatch.name', 'direction' => 'ASC')));
+        $sort       = $this->Request()->getParam('sort', [['property' => 'dispatch.name', 'direction' => 'ASC']]);
 
         $filter = $this->Request()->getParam('filter', null);
         if (is_array($filter) && isset($filter[0]['value'])) {
@@ -297,7 +317,7 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
         $shippingCosts = $paginator->getIterator()->getArrayCopy();
         $shippingCosts = $this->convertShippingCostsDates($shippingCosts);
 
-        $this->View()->assign(array('success' => true, 'data' => $shippingCosts, 'total' => $totalResult));
+        $this->View()->assign(['success' => true, 'data' => $shippingCosts, 'total' => $totalResult]);
     }
 
     /**
@@ -311,29 +331,29 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
     {
         switch ($calculationType) {
             case 1:
-                return array(
+                return [
                     'decimalPrecision' => 2,
                     'minChange' => 0.01,
                     'startValue' => 0
-                );
+                ];
                 break;
 
             case 2:
             case 3:
-                return array(
+                return [
                     'decimalPrecision' => 0,
                     'minChange' => 1,
                     'startValue' => 1
-                );
+                ];
                 break;
 
             case 0:
             default:
-                return array(
+                return [
                     'decimalPrecision' => 3,
                     'minChange' => 0.001,
                     'startValue' => 0
-                );
+                ];
                 break;
         }
     }
@@ -399,15 +419,15 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
     {
         $costsId = $this->Request()->getParam('id', null);
         if (null === $costsId) {
-            $this->View()->assign(array('success' => false, 'errorMsg' => 'No ID given to delete'));
+            $this->View()->assign(['success' => false, 'errorMsg' => 'No ID given to delete']);
         }
         try {
             $costsModel = Shopware()->Models()->find('Shopware\Models\Dispatch\ShippingCost', $costsId);
             $this->getManager()->remove($costsModel);
             $this->getManager()->flush();
-            $this->View()->assign(array('success' => true));
+            $this->View()->assign(['success' => true]);
         } catch (Exception $e) {
-            $this->View()->assign(array('success' => false, 'errorMsg' => $e->getMessage()));
+            $this->View()->assign(['success' => false, 'errorMsg' => $e->getMessage()]);
         }
     }
 
@@ -434,7 +454,7 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
     {
         try {
             //get posted dispatch
-            $dispatches = $this->Request()->getParam('dispatches', array(array('id' => $this->Request()->getParam('id'))));
+            $dispatches = $this->Request()->getParam('dispatches', [['id' => $this->Request()->getParam('id')]]);
 
             //iterate the customers and add the remove action
             foreach ($dispatches as $dispatch) {
@@ -444,16 +464,16 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
             }
             //Performs all of the collected actions.
             $this->getManager()->flush();
-            $this->View()->assign(array(
+            $this->View()->assign([
                 'success' => true,
-                'data' => $this->Request()->getParams())
-            );
+                'data' => $this->Request()->getParams()
+            ]);
         } catch (Exception $e) {
-            $this->View()->assign(array(
+            $this->View()->assign([
                 'success' => false,
                 'data' => $this->Request()->getParams(),
-                'message' => $e->getMessage())
-            );
+                'message' => $e->getMessage()
+            ]);
         }
     }
 
@@ -479,7 +499,7 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
     {
         $data = null;
         if (!$this->Request()->isPost()) {
-            $this->View()->assign(array('success' => false, 'errorMsg' => 'Empty Post Request'));
+            $this->View()->assign(['success' => false, 'errorMsg' => 'Empty Post Request']);
             return;
         }
         $dispatchId = (int) $this->Request()->getParam('dispatchId');
@@ -491,17 +511,17 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
         }
 
         if (!is_array($costsMatrix)) {
-            $this->View()->assign(array('success' => false, 'errorMsg' => 'Empty data set.'));
+            $this->View()->assign(['success' => false, 'errorMsg' => 'Empty data set.']);
             return;
         }
         if ($dispatchId <= 0) {
-            $this->View()->assign(array('success' => false, 'errorMsg' => 'No dispatch id given.'));
+            $this->View()->assign(['success' => false, 'errorMsg' => 'No dispatch id given.']);
             return;
         }
 
         $dispatch = Shopware()->Models()->find("Shopware\Models\Dispatch\Dispatch", $dispatchId);
         if (!($dispatch instanceof \Shopware\Models\Dispatch\Dispatch)) {
-            $this->View()->assign(array('success' => false, 'errorMsg' => 'No valid dispatch ID.'));
+            $this->View()->assign(['success' => false, 'errorMsg' => 'No valid dispatch ID.']);
             return;
         }
 
@@ -522,13 +542,13 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
                 $data[] = $this->getManager()->toArray($shippingCostModel);
             } catch (Exception $e) {
                 $errorMsg = $e->getMessage();
-                $this->View()->assign(array('success' => false, 'errorMsg' => $errorMsg));
+                $this->View()->assign(['success' => false, 'errorMsg' => $errorMsg]);
                 return;
             }
         }
         $manager->flush();
 
-        $this->View()->assign(array('success' => true, 'data' => $data));
+        $this->View()->assign(['success' => true, 'data' => $data]);
     }
 
      /**
@@ -540,14 +560,14 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
     {
         $limit = $this->Request()->getParam('limit', 20);
         $offset = $this->Request()->getParam('start', 0);
-        $sort = $this->Request()->getParam('sort', array());
-        $filter = $this->Request()->getParam('filter', array());
+        $sort = $this->Request()->getParam('sort', []);
+        $filter = $this->Request()->getParam('filter', []);
 
         $query = $this->getRepository()->getPaymentQuery($filter, $sort, $limit, $offset);
 
         $result = $query->getArrayResult();
         $totalResult = $this->getManager()->getQueryCount($query);
-        $this->View()->assign(array('success' => true, 'data' => $result, 'total' => $totalResult));
+        $this->View()->assign(['success' => true, 'data' => $result, 'total' => $totalResult]);
     }
     /**
      * Get all countires who are selected for this dispatch id
@@ -558,14 +578,14 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
     {
         $limit  = $this->Request()->getParam('limit', 999);
         $offset = $this->Request()->getParam('start', 0);
-        $sort   = $this->Request()->getParam('sort', array());
-        $filter = $this->Request()->getParam('filter', array());
+        $sort   = $this->Request()->getParam('sort', []);
+        $filter = $this->Request()->getParam('filter', []);
 
         $query = $this->getRepository()->getCountryQuery($filter, $sort, 999, $offset);
 
         $result = $query->getArrayResult();
         $totalResult = $this->getManager()->getQueryCount($query);
-        $this->View()->assign(array('success' => true, 'data' => $result, 'total' => $totalResult));
+        $this->View()->assign(['success' => true, 'data' => $result, 'total' => $totalResult]);
     }
 
     /**

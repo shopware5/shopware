@@ -67,7 +67,6 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
             $this->cacheManager->getTemplateCacheInfo(),
             $this->cacheManager->getThemeCacheInfo(),
             $this->cacheManager->getShopwareProxyCacheInfo(),
-            $this->cacheManager->getDoctrineFileCacheInfo(),
             $this->cacheManager->getDoctrineProxyCacheInfo()
         );
 
@@ -165,25 +164,18 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
             return;
         }
 
-        try {
-            if ($shop->getMain()) {
-                $shop = $shop->getMain();
-            }
-
-            /** @var $compiler \Shopware\Components\Theme\Compiler */
-            $compiler = $this->container->get('theme_compiler');
-            $compiler->compileJavascript('new', $shop->getTemplate(), $shop);
-            $compiler->compileLess('new', $shop->getTemplate(), $shop);
-
-            $this->View()->assign(array(
-                'success' => true
-            ));
-        } catch (\Exception $e) {
-            $this->View()->assign(array(
-                'success' => false,
-                'message' => $e->getMessage()
-            ));
+        if ($shop->getMain()) {
+            $shop = $shop->getMain();
         }
+
+        /** @var $compiler \Shopware\Components\Theme\Compiler */
+        $compiler = $this->container->get('theme_compiler');
+        $compiler->compileJavascript('new', $shop->getTemplate(), $shop);
+        $compiler->compileLess('new', $shop->getTemplate(), $shop);
+
+        $this->View()->assign(array(
+            'success' => true
+        ));
     }
 
     public function moveThemeFilesAction()

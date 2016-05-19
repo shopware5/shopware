@@ -1,5 +1,5 @@
 <?php
-namespace  Shopware\Tests\Mink\Page\Emotion;
+namespace Shopware\Tests\Mink\Page\Emotion;
 
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use Shopware\Tests\Mink\Helper;
@@ -13,42 +13,89 @@ class Form extends Page implements HelperSelectorInterface
     protected $path = 'shopware.php?sViewport=ticket&sFid={formId}';
 
     /**
-     * Returns an array of all css selectors of the element/page
-     * @return array
+     * @inheritdoc
      */
     public function getCssSelectors()
     {
-        return array(
+        return [
             'captchaPlaceholder' => 'div.captcha-placeholder',
             'captchaImage' => 'div.captcha-placeholder img',
-            'captchaHidden' => 'div.captcha-placeholder input'
-        );
+            'captchaHidden' => 'div.captcha-placeholder input',
+            'inquiryForm' => 'form#support'
+        ];
     }
 
     /**
-     * Returns an array of all named selectors of the element/page
-     * @return array
+     * @inheritdoc
      */
     public function getNamedSelectors()
     {
-        return array();
+        return [
+            'submitButton' => ['de' => 'Senden', 'en' => 'Send']
+        ];
     }
 
+    /**
+     * Verify if we're on an expected page. Throw an exception if not.
+     * @throws \Exception
+     */
+    public function verifyPage()
+    {
+        $errors = [];
+
+        if (!$this->hasField("sCaptcha")) {
+            $errors[] = "- captcha input field not found!";
+        }
+
+        if (!Helper::hasNamedButton($this, 'submitButton')) {
+            $errors[] = "- submit button not found!";
+        }
+
+        if (!$errors) {
+            return;
+        }
+
+        $message = ['You are not on a form page:'];
+        $message = array_merge($message, $errors);
+        $message[] = 'Current URL: ' . $this->getSession()->getCurrentUrl();
+        Helper::throwException($message);
+    }
+
+    /**
+     * Checks, whether a captcha exists and has loaded correctly
+     * @throws \Exception
+     */
     public function checkCaptcha()
     {
-        $locators = array('captchaPlaceholder', 'captchaImage', 'captchaHidden');
-        $element = Helper::findElements($this, $locators);
+        $placeholderSelector = Helper::getRequiredSelector($this, 'captchaPlaceholder');
+
+        if (!$this->getSession()->wait(5000, "$('$placeholderSelector').children().length > 0")) {
+            $message = 'The captcha was not loaded or does not exist!';
+            Helper::throwException($message);
+        }
+
+        $element = Helper::findElements($this, ['captchaPlaceholder', 'captchaImage', 'captchaHidden']);
 
         $captchaPlaceholder = $element['captchaPlaceholder']->getAttribute('data-src');
         $captchaImage = $element['captchaImage']->getAttribute('src');
         $captchaHidden = $element['captchaHidden']->getValue();
 
-        if (($captchaPlaceholder !== '/shopware/widgets/Captcha/refreshCaptcha')
+        if ((strpos($captchaPlaceholder, '/widgets/Captcha/refreshCaptcha') === false)
             || (strpos($captchaImage, 'data:image/png;base64') === false)
             || (empty($captchaHidden))
         ) {
-            $message = 'There is no capture in this form!';
+            $message = 'The captcha was not loaded correctly!';
             Helper::throwException($message);
         }
+    }
+
+    /**
+     * Fills the fields of the inquiry form with $data and submits it
+     * @param array $data
+     */
+    public function submitInquiryForm(array $data)
+    {
+        Helper::fillForm($this, 'inquiryForm', $data);
+        Helper::pressNamedButton($this, 'submitButton');
     }
 }

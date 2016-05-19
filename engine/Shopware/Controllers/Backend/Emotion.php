@@ -22,6 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
+use Doctrine\Common\Collections\ArrayCollection;
+
 class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_ExtJs
 {
     /**
@@ -165,8 +167,6 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
 
         if (!empty($emotion["isLandingPage"])) {
             $emotion["link"] = "shopware.php?sViewport=campaign&emotionId=".$emotion["id"];
-        } else {
-            $emotion["categoryId"] = !empty($emotion["categories"][0]["id"]) ? $emotion["categories"][0]["id"] : 0;
         }
 
         $validFrom = $emotion['validFrom'];
@@ -313,18 +313,14 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
             $data['modified'] = new \DateTime();
             $data['elements'] = $this->fillElements($emotion, $data);
 
-            if ($data['isLandingPage']) {
-                if (empty($data['categories'])) {
-                    $data['categories'] = null;
-                } else {
-                    $categories = array();
-                    foreach ($data['categories'] as $category) {
-                        $categories[] = Shopware()->Models()->find('Shopware\Models\Category\Category', $category);
-                    }
-                    $data['categories'] = $categories;
-                }
+            if (empty($data['categories'])) {
+                $data['categories'] = null;
             } else {
-                $data['categories'] = array(Shopware()->Models()->find('Shopware\Models\Category\Category', $data['categoryId']));
+                $categories = array();
+                foreach ($data['categories'] as $category) {
+                    $categories[] = Shopware()->Models()->find('Shopware\Models\Category\Category', $category);
+                }
+                $data['categories'] = $categories;
             }
 
             unset($data['user']);
@@ -419,6 +415,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     {
         $elements= array();
         $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaFields = $this->getMediaXTypes();
 
         foreach ($data['elements'] as $elementData) {
             $element = new \Shopware\Models\Emotion\Element();
@@ -452,7 +449,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
                         break;
                 }
 
-                if ($field->getName() == 'file' || $field->getName() == 'image' || $field->getName() == 'fallback_picture') {
+                if (in_array($field->getXType(), $mediaFields)) {
                     $value = $mediaService->normalize($value);
                 }
 
@@ -1284,5 +1281,22 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         return $builder->getQuery()->getOneOrNullResult(
             \Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY
         );
+    }
+
+    /**
+     * Collects all media related x_types which needs to be normalized
+     *
+     * @return array
+     */
+    private function getMediaXTypes()
+    {
+        $mediaFields = new ArrayCollection([
+            'mediaselectionfield',
+            'mediatextfield'
+        ]);
+
+        $mediaFields = $this->get('events')->collect('Shopware_Plugin_Collect_MediaXTypes', $mediaFields);
+
+        return $mediaFields->toArray();
     }
 }

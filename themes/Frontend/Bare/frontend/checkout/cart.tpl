@@ -2,7 +2,7 @@
 
 {* Title *}
 {block name='frontend_index_header_title'}
-    {s name="CartTitle"}{/s} | {config name=shopName}
+    {s name="CartTitle"}{/s} | {{config name=shopName}|escapeHtml}
 {/block}
 
 {* Hide breadcrumb *}
@@ -62,7 +62,7 @@
                                     {* Forward to the checkout *}
                                     {if !$sMinimumSurcharge && !($sDispatchNoOrder && !$sDispatches)}
                                         {block name="frontend_checkout_actions_checkout"}
-                                            <a href="{url action=confirm}"
+                                            <a href="{if {config name=always_select_payment}}{url controller='checkout' action='shippingPayment'}{else}{url controller='checkout' action='confirm'}{/if}"
                                                title="{"{s name='CheckoutActionsLinkProceedShort' namespace="frontend/checkout/actions"}{/s}"|escape}"
                                                class="btn btn--checkout-proceed is--primary right is--icon-right is--large">
                                                 {s name="CheckoutActionsLinkProceedShort" namespace="frontend/checkout/actions"}{/s}
@@ -139,7 +139,7 @@
                                     {* Forward to the checkout *}
                                     {if !$sMinimumSurcharge && !($sDispatchNoOrder && !$sDispatches)}
                                         {block name="frontend_checkout_actions_confirm_bottom_checkout"}
-                                            <a href="{url action=confirm}"
+                                            <a href="{if {config name=always_select_payment}}{url controller='checkout' action='shippingPayment'}{else}{url controller='checkout' action='confirm'}{/if}"
                                                title="{"{s name='CheckoutActionsLinkProceedShort' namespace="frontend/checkout/actions"}{/s}"|escape}"
                                                class="btn btn--checkout-proceed is--primary right is--icon-right is--large">
                                                 {s name="CheckoutActionsLinkProceedShort" namespace="frontend/checkout/actions"}{/s}

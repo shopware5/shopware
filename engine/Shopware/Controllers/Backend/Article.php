@@ -21,6 +21,12 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Shopware\Bundle\StoreFrontBundle\Service\AdditionalTextServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
+use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
+use Shopware\Models\Shop\Repository;
+use Shopware\Models\Shop\Shop;
 
 /**
  * @category  Shopware
@@ -37,7 +43,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
     /**
      * Repository for the shop model
-     * @var \Shopware\Models\Shop\Repository
+     * @var Repository
      */
     protected $shopRepository = null;
 
@@ -111,6 +117,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $this->addAclPermission("save", "save", "Insufficient Permissions");
         $this->addAclPermission("delete", "delete", "Insufficient Permissions");
     }
+
     /**
      * Disable template engine for all actions
      */
@@ -140,7 +147,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     protected function getManager()
     {
         if ($this->manager === null) {
-            $this->manager= Shopware()->Models();
+            $this->manager = Shopware()->Models();
         }
 
         return $this->manager;
@@ -251,6 +258,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
         return $this->configuratorGroupRepository;
     }
+
     /**
      * Helper function to get access to the configuratorOption repository.
      * @return \Shopware\Components\Model\ModelRepository
@@ -299,7 +307,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     {
         $data = $this->Request()->getParams();
         if ($this->Request()->has('id')) {
-            $article = $this->getRepository()->find((int) $this->Request()->getParam('id'));
+            $article = $this->getRepository()->find((int)$this->Request()->getParam('id'));
         } else {
             $article = new \Shopware\Models\Article\Article();
         }
@@ -311,81 +319,74 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     public function saveConfiguratorSetAction()
     {
-        try {
-            $data = $this->Request()->getParams();
-            $id = (int) $data['id'];
-            $articleId = (int) $data['articleId'];
+        $data = $this->Request()->getParams();
+        $id = (int)$data['id'];
+        $articleId = (int)$data['articleId'];
 
-            if (!empty($articleId)) {
-                $article = Shopware()->Models()->find('Shopware\Models\Article\Article', $articleId);
-                if ($article->getConfiguratorSet()->getId() !== $id) {
-                    Shopware()->Models()->remove($article->getConfiguratorSet());
-                    Shopware()->Models()->flush();
-                }
-            }
-
-            if (!empty($id) && $id > 0) {
-                $configuratorSet = Shopware()->Models()->find('Shopware\Models\Article\Configurator\Set', $id);
-            } else {
-                $configuratorSet = new \Shopware\Models\Article\Configurator\Set();
-            }
-            if (!$configuratorSet) {
-                $this->View()->assign(array(
-                    'success' => false,
-                    'noId' => true
-                ));
-
-                return;
-            }
-
-            $groups = array();
-            foreach ($data['groups'] as $groupData) {
-                if (!empty($groupData['id']) && $groupData['active']) {
-                    $group = Shopware()->Models()->find('Shopware\Models\Article\Configurator\Group', $groupData['id']);
-                    $group->setPosition($groupData['position']);
-                    $groups[] = $group;
-                }
-            }
-            $data['groups'] = $groups;
-
-            $options = array();
-            foreach ($data['options'] as $optionData) {
-                if (!empty($optionData['id']) && $optionData['active']) {
-                    $option = Shopware()->Models()->find('Shopware\Models\Article\Configurator\Option', $optionData['id']);
-                    $option->setPosition($optionData['position']);
-                    $options[] = $option;
-                }
-            }
-            $data['options'] = $options;
-            if ($configuratorSet->getOptions()) {
-                $configuratorSet->getOptions()->clear();
-            }
-            if ($configuratorSet->getGroups()) {
-                $configuratorSet->getGroups()->clear();
-            }
-            $configuratorSet->fromArray($data);
-            Shopware()->Models()->persist($configuratorSet);
-            Shopware()->Models()->flush();
-
-            if (!empty($articleId)) {
-                /**@var $article \Shopware\Models\Article\Article*/
-                $article = Shopware()->Models()->find('Shopware\Models\Article\Article', $articleId);
-                $article->setConfiguratorSet($configuratorSet);
-                Shopware()->Models()->persist($article);
+        if (!empty($articleId)) {
+            $article = Shopware()->Models()->find('Shopware\Models\Article\Article', $articleId);
+            if ($article->getConfiguratorSet()->getId() !== $id) {
+                Shopware()->Models()->remove($article->getConfiguratorSet());
                 Shopware()->Models()->flush();
             }
+        }
 
-            $data = $this->getRepository()->getConfiguratorSetQuery($configuratorSet->getId())->getArrayResult();
-            $this->View()->assign(array(
-                'success' => true,
-                'data' => $data
-            ));
-        } catch (Exception $e) {
+        if (!empty($id) && $id > 0) {
+            $configuratorSet = Shopware()->Models()->find('Shopware\Models\Article\Configurator\Set', $id);
+        } else {
+            $configuratorSet = new \Shopware\Models\Article\Configurator\Set();
+        }
+        if (!$configuratorSet) {
             $this->View()->assign(array(
                 'success' => false,
-                'message' => $e->getMessage()
+                'noId' => true
             ));
+
+            return;
         }
+
+        $groups = array();
+        foreach ($data['groups'] as $groupData) {
+            if (!empty($groupData['id']) && $groupData['active']) {
+                $group = Shopware()->Models()->find('Shopware\Models\Article\Configurator\Group', $groupData['id']);
+                $group->setPosition($groupData['position']);
+                $groups[] = $group;
+            }
+        }
+        $data['groups'] = $groups;
+
+        $options = array();
+        foreach ($data['options'] as $optionData) {
+            if (!empty($optionData['id']) && $optionData['active']) {
+                $option = Shopware()->Models()->find('Shopware\Models\Article\Configurator\Option', $optionData['id']);
+                $option->setPosition($optionData['position']);
+                $options[] = $option;
+            }
+        }
+        $data['options'] = $options;
+        if ($configuratorSet->getOptions()) {
+            $configuratorSet->getOptions()->clear();
+        }
+        if ($configuratorSet->getGroups()) {
+            $configuratorSet->getGroups()->clear();
+        }
+        $configuratorSet->fromArray($data);
+        Shopware()->Models()->persist($configuratorSet);
+        Shopware()->Models()->flush();
+
+        if (!empty($articleId)) {
+            /**@var $article \Shopware\Models\Article\Article */
+            $article = Shopware()->Models()->find('Shopware\Models\Article\Article', $articleId);
+            $article->setConfiguratorSet($configuratorSet);
+            Shopware()->Models()->persist($article);
+            Shopware()->Models()->flush();
+        }
+
+        $data = $this->getRepository()->getConfiguratorSetQuery($configuratorSet->getId())->getArrayResult();
+        $this->View()->assign(array(
+            'success' => true,
+            'data' => $data
+        ));
     }
 
     /**
@@ -394,38 +395,31 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     public function acceptMainDataAction()
     {
-        try {
-            $data = $this->Request()->getParams();
-            $articleId = (int) $data['articleId'];
-            if (empty($articleId)) {
-                $this->View()->assign(array('success' => false, 'noId' => true));
+        $data = $this->Request()->getParams();
+        $articleId = (int)$data['articleId'];
+        if (empty($articleId)) {
+            $this->View()->assign(array('success' => false, 'noId' => true));
 
-                return;
-            }
-
-            /**@var $article \Shopware\Models\Article\Article*/
-            $article = Shopware()->Models()->find('Shopware\Models\Article\Article', $articleId);
-            $mainDetail = $article->getMainDetail();
-            $mainData = $this->getMappingData($mainDetail, $data);
-            $variants = $this->getVariantsForMapping($articleId, $mainDetail, $data);
-            if (!empty($variants)) {
-                /**@var $variant \Shopware\Models\Article\Detail*/
-                foreach ($variants as $variant) {
-                    $variant->fromArray($mainData);
-                    Shopware()->Models()->persist($variant);
-                }
-                Shopware()->Models()->flush();
-                if ($data['translations']) {
-                    $this->overrideVariantTranslations($articleId, $variants);
-                }
-            }
-            $this->View()->assign(array('success' => true));
-        } catch (Exception $e) {
-            $this->View()->assign(array(
-                'success' => false,
-                'message' => $e->getMessage()
-            ));
+            return;
         }
+
+        /**@var $article \Shopware\Models\Article\Article */
+        $article = Shopware()->Models()->find('Shopware\Models\Article\Article', $articleId);
+        $mainDetail = $article->getMainDetail();
+        $mainData = $this->getMappingData($mainDetail, $data);
+        $variants = $this->getVariantsForMapping($articleId, $mainDetail, $data);
+        if (!empty($variants)) {
+            /**@var $variant \Shopware\Models\Article\Detail */
+            foreach ($variants as $variant) {
+                $variant->fromArray($mainData);
+                Shopware()->Models()->persist($variant);
+            }
+            Shopware()->Models()->flush();
+            if ($data['translations']) {
+                $this->overrideVariantTranslations($articleId, $variants);
+            }
+        }
+        $this->View()->assign(array('success' => true));
     }
 
     /**
@@ -440,11 +434,11 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     {
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(array('details'))
-                ->from('Shopware\Models\Article\Detail', 'details')
-                ->where('details.id != ?1')
-                ->andWhere('details.articleId = ?2')
-                ->setParameter(1, $mainDetail->getId())
-                ->setParameter(2, $articleId);
+            ->from('Shopware\Models\Article\Detail', 'details')
+            ->where('details.id != ?1')
+            ->andWhere('details.articleId = ?2')
+            ->setParameter(1, $mainDetail->getId())
+            ->setParameter(2, $articleId);
 
         if (!empty($mapping['variants'])) {
             $ids = array();
@@ -453,10 +447,10 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             }
             if (!empty($ids)) {
                 $builder->andWhere('details.id IN (?3)')
-                        ->setParameter(3, $ids);
+                    ->setParameter(3, $ids);
             }
         }
-        $variants =$builder->getQuery()->getResult();
+        $variants = $builder->getQuery()->getResult();
 
         return $variants;
     }
@@ -486,15 +480,15 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         if ($mapping['attributes']) {
             $builder = Shopware()->Models()->createQueryBuilder();
             $mainData['attribute'] = $builder->select(array('attributes'))
-                    ->from('Shopware\Models\Attribute\Article', 'attributes')
-                    ->where('attributes.articleId = ?1')
-                    ->andHaving('attributes.articleDetailId = :detailId')
-                    ->setParameter(1, $mainDetail->getArticle()->getId())
-                    ->setParameter('detailId', $mainDetail->getId())
-                    ->setFirstResult(0)
-                    ->setMaxResults(1)
-                    ->getQuery()
-                    ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+                ->from('Shopware\Models\Attribute\Article', 'attributes')
+                ->where('attributes.articleId = ?1')
+                ->andHaving('attributes.articleDetailId = :detailId')
+                ->setParameter(1, $mainDetail->getArticle()->getId())
+                ->setParameter('detailId', $mainDetail->getId())
+                ->setFirstResult(0)
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
             unset($mainData['attribute']['id']);
             unset($mainData['attribute']['articleId']);
@@ -505,12 +499,12 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         if ($mapping['prices']) {
             $builder = Shopware()->Models()->createQueryBuilder();
             $prices = $builder->select(array('prices', 'customerGroup'))
-                              ->from('Shopware\Models\Article\Price', 'prices')
-                              ->innerJoin('prices.customerGroup', 'customerGroup')
-                              ->where('prices.articleDetailsId = ?1')
-                              ->setParameter(1, $mainDetail->getId())
-                              ->getQuery()
-                              ->getArrayResult();
+                ->from('Shopware\Models\Article\Price', 'prices')
+                ->innerJoin('prices.customerGroup', 'customerGroup')
+                ->where('prices.articleDetailsId = ?1')
+                ->setParameter(1, $mainDetail->getId())
+                ->getQuery()
+                ->getArrayResult();
 
             foreach ($prices as $key => $price) {
                 unset($price['id']);
@@ -579,65 +573,58 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     public function duplicateArticleAction()
     {
-        try {
-            $articleId = $this->Request()->getParam('articleId', null);
+        $articleId = $this->Request()->getParam('articleId', null);
 
-            if (empty($articleId)) {
-                $this->View()->assign(array(
-                    'success' => false,
-                    'noId' => true
-                ));
-            }
+        if (empty($articleId)) {
+            $this->View()->assign(array(
+                'success' => false,
+                'noId' => true
+            ));
+        }
 
-            /**
-             * @var $article Shopware\Models\Article\Article
-             */
-            $article = Shopware()->Models()->find('Shopware\Models\Article\Article', $articleId);
-            if ($article->getConfiguratorSet() !== null) {
-                $isConfigurator = true;
-                $mailDetailId   = $article->getMainDetail()->getId();
-            } else {
-                $isConfigurator = false;
-                $mailDetailId   = null;
-            }
+        /**
+         * @var $article Shopware\Models\Article\Article
+         */
+        $article = Shopware()->Models()->find('Shopware\Models\Article\Article', $articleId);
+        if ($article->getConfiguratorSet() !== null) {
+            $isConfigurator = true;
+            $mailDetailId = $article->getMainDetail()->getId();
+        } else {
+            $isConfigurator = false;
+            $mailDetailId = null;
+        }
 
-            $this->duplicateArticleData($articleId);
-            $newArticleId = Shopware()->Db()->lastInsertId('s_articles');
-            $this->duplicateArticleCategories($articleId, $newArticleId);
-            $this->duplicateArticleCustomerGroups($articleId, $newArticleId);
-            $this->duplicateArticleRelated($articleId, $newArticleId);
-            $this->duplicateArticleSimilar($articleId, $newArticleId);
-            $this->duplicateArticleTranslations($articleId, $newArticleId);
-            $this->duplicateArticleDetails($articleId, $newArticleId, $mailDetailId);
-            $this->duplicateArticleLinks($articleId, $newArticleId);
-            $this->duplicateArticleImages($articleId, $newArticleId);
-            $this->duplicateArticleProperties($articleId, $newArticleId);
-            $this->duplicateArticleDownloads($articleId, $newArticleId);
-            $setId = $this->duplicateArticleConfigurator($articleId);
+        $this->duplicateArticleData($articleId);
+        $newArticleId = Shopware()->Db()->lastInsertId('s_articles');
+        $this->duplicateArticleCategories($articleId, $newArticleId);
+        $this->duplicateArticleCustomerGroups($articleId, $newArticleId);
+        $this->duplicateArticleRelated($articleId, $newArticleId);
+        $this->duplicateArticleSimilar($articleId, $newArticleId);
+        $this->duplicateArticleTranslations($articleId, $newArticleId);
+        $this->duplicateArticleDetails($articleId, $newArticleId, $mailDetailId);
+        $this->duplicateArticleLinks($articleId, $newArticleId);
+        $this->duplicateArticleImages($articleId, $newArticleId);
+        $this->duplicateArticleProperties($articleId, $newArticleId);
+        $this->duplicateArticleDownloads($articleId, $newArticleId);
+        $setId = $this->duplicateArticleConfigurator($articleId);
 
-            $sql= "UPDATE s_articles, s_articles_details SET main_detail_id = s_articles_details.id
+        $sql = "UPDATE s_articles, s_articles_details SET main_detail_id = s_articles_details.id
                     WHERE s_articles_details.articleID = s_articles.id
                     AND s_articles.id = ?
                     AND s_articles_details.kind = 1";
-            Shopware()->Db()->query($sql, array($newArticleId));
+        Shopware()->Db()->query($sql, array($newArticleId));
 
-            if ($setId !== null) {
-                $sql= "UPDATE s_articles SET configurator_set_id = ?
+        if ($setId !== null) {
+            $sql = "UPDATE s_articles SET configurator_set_id = ?
                         WHERE s_articles.id = ?";
-                Shopware()->Db()->query($sql, array($setId, $newArticleId));
-            }
-
-            $this->View()->assign(array(
-                'success' => true,
-                'articleId' => $newArticleId,
-                'isConfigurator' => $isConfigurator
-            ));
-        } catch (Exception $e) {
-            $this->View()->assign(array(
-                'success' => false,
-                'message' => $e->getMessage()
-            ));
+            Shopware()->Db()->query($sql, array($setId, $newArticleId));
         }
+
+        $this->View()->assign(array(
+            'success' => true,
+            'articleId' => $newArticleId,
+            'isConfigurator' => $isConfigurator
+        ));
     }
 
     /**
@@ -646,7 +633,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     protected function duplicateArticleData($articleId)
     {
-        $sql= "INSERT INTO s_articles
+        $sql = "INSERT INTO s_articles
                SELECT NULL,
                    supplierID, CONCAT(name, '-', 'Copy'), description, description_long, shippingtime, datum, active, taxID, pseudosales, topseller, metaTitle, keywords, changetime, pricegroupID, pricegroupActive, filtergroupID, laststock, crossbundlelook, notification, template, mode, NULL, available_from, available_to, NULL
                FROM s_articles as source
@@ -684,7 +671,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     protected function duplicateArticleCustomerGroups($articleId, $newArticleId)
     {
-        $sql= "INSERT INTO s_articles_avoid_customergroups
+        $sql = "INSERT INTO s_articles_avoid_customergroups
                SELECT ?, customergroupID
                FROM s_articles_avoid_customergroups as source
                WHERE source.articleID = ?
@@ -700,7 +687,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     protected function duplicateArticleRelated($articleId, $newArticleId)
     {
-        $sql= "INSERT INTO s_articles_relationships
+        $sql = "INSERT INTO s_articles_relationships
                SELECT NULL, ?, relatedarticle
                FROM s_articles_relationships as source
                WHERE source.articleID = ?
@@ -716,7 +703,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     protected function duplicateArticleSimilar($articleId, $newArticleId)
     {
-        $sql= "INSERT INTO s_articles_similar
+        $sql = "INSERT INTO s_articles_similar
                SELECT NULL, ?, relatedarticle
                FROM s_articles_similar as source
                WHERE source.articleID = ?
@@ -736,12 +723,12 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
         $builder = Shopware()->Models()->createQueryBuilder();
         $links = $builder->select(array('links', 'attribute'))
-                ->from('Shopware\Models\Article\Link', 'links')
-                ->leftJoin('links.attribute', 'attribute')
-                ->where('links.articleId = ?1')
-                ->setParameter(1, $articleId)
-                ->getQuery()
-                ->getArrayResult();
+            ->from('Shopware\Models\Article\Link', 'links')
+            ->leftJoin('links.attribute', 'attribute')
+            ->where('links.articleId = ?1')
+            ->setParameter(1, $articleId)
+            ->getQuery()
+            ->getArrayResult();
 
         foreach ($links as $data) {
             $link = new \Shopware\Models\Article\Link();
@@ -782,12 +769,12 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
         $builder = Shopware()->Models()->createQueryBuilder();
         $downloads = $builder->select(array('downloads', 'attribute'))
-                ->from('Shopware\Models\Article\Download', 'downloads')
-                ->leftJoin('downloads.attribute', 'attribute')
-                ->where('downloads.articleId = ?1')
-                ->setParameter(1, $articleId)
-                ->getQuery()
-                ->getArrayResult();
+            ->from('Shopware\Models\Article\Download', 'downloads')
+            ->leftJoin('downloads.attribute', 'attribute')
+            ->where('downloads.articleId = ?1')
+            ->setParameter(1, $articleId)
+            ->getQuery()
+            ->getArrayResult();
 
         foreach ($downloads as $data) {
             $download = new \Shopware\Models\Article\Download();
@@ -810,17 +797,17 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
         $builder = Shopware()->Models()->createQueryBuilder();
         $images = $builder->select(array('images', 'media', 'attribute', 'mappings', 'rules', 'option'))
-                ->from('Shopware\Models\Article\Image', 'images')
-                ->leftJoin('images.attribute', 'attribute')
-                ->leftJoin('images.mappings', 'mappings')
-                ->leftJoin('images.media', 'media')
-                ->leftJoin('mappings.rules', 'rules')
-                ->leftJoin('rules.option', 'option')
-                ->where('images.articleId = ?1')
-                ->andWhere('images.parentId IS NULL')
-                ->setParameter(1, $articleId)
-                ->getQuery()
-                ->getArrayResult();
+            ->from('Shopware\Models\Article\Image', 'images')
+            ->leftJoin('images.attribute', 'attribute')
+            ->leftJoin('images.mappings', 'mappings')
+            ->leftJoin('images.media', 'media')
+            ->leftJoin('mappings.rules', 'rules')
+            ->leftJoin('rules.option', 'option')
+            ->where('images.articleId = ?1')
+            ->andWhere('images.parentId IS NULL')
+            ->setParameter(1, $articleId)
+            ->getQuery()
+            ->getArrayResult();
 
         foreach ($images as &$data) {
             if (!empty($data['mappings'])) {
@@ -861,7 +848,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     protected function duplicateArticleProperties($articleId, $newArticleId)
     {
-        $sql= "INSERT INTO s_filter_articles
+        $sql = "INSERT INTO s_filter_articles
                SELECT ?, valueID
                FROM s_filter_articles as source
                WHERE source.articleID = ?
@@ -882,22 +869,22 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $article = Shopware()->Models()->find('Shopware\Models\Article\Article', $newArticleId);
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(array('details', 'prices', 'attribute', 'images'))
-                ->from('Shopware\Models\Article\Detail', 'details')
-                ->leftJoin('details.prices', 'prices')
-                ->leftJoin('details.attribute', 'attribute')
-                ->leftJoin('details.images', 'images')
-                ->where('details.articleId = ?1');
+            ->from('Shopware\Models\Article\Detail', 'details')
+            ->leftJoin('details.prices', 'prices')
+            ->leftJoin('details.attribute', 'attribute')
+            ->leftJoin('details.images', 'images')
+            ->where('details.articleId = ?1');
 
         if ($mailDetailId !== null) {
             $builder->andWhere('details.id = ?2');
             $details = $builder->setParameter(1, $articleId)
-                               ->setParameter(2, $mailDetailId)
-                               ->getQuery()
-                               ->getArrayResult();
+                ->setParameter(2, $mailDetailId)
+                ->getQuery()
+                ->getArrayResult();
         } else {
             $details = $builder->setParameter(1, $articleId)
-                               ->getQuery()
-                               ->getArrayResult();
+                ->getQuery()
+                ->getArrayResult();
         }
 
         $newArticleData = $this->getNewArticleData();
@@ -956,7 +943,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     {
         $unique = uniqid();
 
-        /**@var $oldArticle \Shopware\Models\Article\Article*/
+        /**@var $oldArticle \Shopware\Models\Article\Article */
         $oldArticle = Shopware()->Models()->find('Shopware\Models\Article\Article', $articleId);
         if (!$oldArticle->getConfiguratorSet()) {
             return null;
@@ -964,33 +951,33 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
         $oldSetId = $oldArticle->getConfiguratorSet()->getId();
 
-        $sql= "INSERT INTO s_article_configurator_sets
-                SELECT NULL, CONCAT(name, '-', '". $unique ."'), public, type
+        $sql = "INSERT INTO s_article_configurator_sets
+                SELECT NULL, CONCAT(name, '-', '" . $unique . "'), public, type
                 FROM s_article_configurator_sets as source
                 WHERE source.id = ?";
 
         Shopware()->Db()->query($sql, array($oldSetId));
         $newSetId = Shopware()->Db()->lastInsertId('s_article_configurator_sets');
 
-        $sql= "INSERT INTO s_article_configurator_set_group_relations
+        $sql = "INSERT INTO s_article_configurator_set_group_relations
                 SELECT ?, group_id
                 FROM s_article_configurator_set_group_relations as source
                 WHERE source.set_id = ?";
         Shopware()->Db()->query($sql, array($newSetId, $oldSetId));
 
-        $sql= "INSERT INTO s_article_configurator_set_option_relations
+        $sql = "INSERT INTO s_article_configurator_set_option_relations
                 SELECT ?, option_id
                 FROM s_article_configurator_set_option_relations as source
                 WHERE source.set_id = ?";
         Shopware()->Db()->query($sql, array($newSetId, $oldSetId));
 
-        $sql= "INSERT INTO s_article_configurator_dependencies
+        $sql = "INSERT INTO s_article_configurator_dependencies
                 SELECT NULL, ?, parent_id, child_id
                 FROM s_article_configurator_dependencies as source
                 WHERE source.configurator_set_id = ?";
         Shopware()->Db()->query($sql, array($newSetId, $oldSetId));
 
-        $sql= "INSERT INTO s_article_configurator_price_variations
+        $sql = "INSERT INTO s_article_configurator_price_variations
                 SELECT NULL, ?, variation, options, is_gross
                 FROM s_article_configurator_price_variations as source
                 WHERE source.configurator_set_id = ?";
@@ -1004,25 +991,18 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     public function deleteAllVariantsAction()
     {
-        try {
-            $articleId = (int) $this->Request()->getParam('articleId');
-            if (empty($articleId)) {
-                $this->View()->assign(array(
-                    'success' => false
-                ));
+        $articleId = (int)$this->Request()->getParam('articleId');
+        if (empty($articleId)) {
+            $this->View()->assign(array(
+                'success' => false
+            ));
 
-                return;
-            }
-            $this->removeAllConfiguratorVariants($articleId);
-            $this->View()->assign(array(
-                'success' => true
-            ));
-        } catch (Exception $e) {
-            $this->View()->assign(array(
-                'success' => false,
-                'message' => $e->getMessage()
-            ));
+            return;
         }
+        $this->removeAllConfiguratorVariants($articleId);
+        $this->View()->assign(array(
+            'success' => true
+        ));
     }
 
     /**
@@ -1033,14 +1013,14 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     {
         $builder = Shopware()->Models()->createQueryBuilder();
         $details = $builder->select(array('details', 'configuratorOptions'))
-                ->from('Shopware\Models\Article\Detail', 'details')
-                ->innerJoin('details.configuratorOptions', 'configuratorOptions')
-                ->where('details.articleId = ?1')
-                ->setParameter(1, $articleId)
-                ->getQuery()
-                ->getArrayResult();
+            ->from('Shopware\Models\Article\Detail', 'details')
+            ->innerJoin('details.configuratorOptions', 'configuratorOptions')
+            ->where('details.articleId = ?1')
+            ->setParameter(1, $articleId)
+            ->getQuery()
+            ->getArrayResult();
 
-        /**@var $article \Shopware\Models\Article\Article*/
+        /**@var $article \Shopware\Models\Article\Article */
         $article = $this->getRepository()->find($articleId);
         $mainDetailId = $article->getMainDetail()->getId();
 
@@ -1065,85 +1045,78 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->delete('Shopware\Models\Attribute\Article', 'details')
-                ->andWhere('details.articleDetailId IN (?1)')
-                ->setParameter(1, $detailIds)
-                ->getQuery()
-                ->execute();
+            ->andWhere('details.articleDetailId IN (?1)')
+            ->setParameter(1, $detailIds)
+            ->getQuery()
+            ->execute();
 
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->delete('Shopware\Models\Article\Detail', 'details')
-                ->andWhere('details.id IN (?1)')
-                ->setParameter(1, $detailIds)
-                ->getQuery()
-                ->execute();
+            ->andWhere('details.id IN (?1)')
+            ->setParameter(1, $detailIds)
+            ->getQuery()
+            ->execute();
 
-        $sql= "DELETE FROM s_article_configurator_option_relations WHERE article_id IN (?)";
+        $sql = "DELETE FROM s_article_configurator_option_relations WHERE article_id IN (?)";
         Shopware()->Db()->query($sql, array(implode(',', $detailIds)));
 
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->delete('Shopware\Models\Article\Price', 'prices')
-                ->andWhere('prices.articleDetailsId IN (?1)')
-                ->setParameter(1, $detailIds)
-                ->getQuery()
-                ->execute();
+            ->andWhere('prices.articleDetailsId IN (?1)')
+            ->setParameter(1, $detailIds)
+            ->getQuery()
+            ->execute();
     }
 
     public function saveMediaMappingAction()
     {
-        try {
-            $imageId = (int) $this->Request()->getParam('id', null);
-            $mappings = $this->Request()->getParam('mappings');
+        $imageId = (int)$this->Request()->getParam('id', null);
+        $mappings = $this->Request()->getParam('mappings');
 
-            if (empty($imageId) || $imageId <= 0) {
-                $this->View()->assign(array('success' => false, 'noId' => true));
+        if (empty($imageId) || $imageId <= 0) {
+            $this->View()->assign(array('success' => false, 'noId' => true));
 
-                return;
-            }
-
-            $query = $this->getRepository()->getArticleImageDataQuery($imageId);
-            $image = $query->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
-            $imageData = $query->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-            $this->getRepository()->getDeleteImageChildrenQuery($imageId)->execute();
-
-            $mappingModels = array();
-            foreach ($mappings as $mappingData) {
-                if (empty($mappingData['rules'])) {
-                    continue;
-                }
-                if (empty($mappingData['id'])) {
-                    $mapping = new \Shopware\Models\Article\Image\Mapping();
-                } else {
-                    $mapping = Shopware()->Models()->find('Shopware\Models\Article\Image\Mapping', $mappingData['id']);
-                }
-
-                $mapping->getRules()->clear();
-                $options = array();
-                foreach ($mappingData['rules'] as $ruleData) {
-                    $rule = new \Shopware\Models\Article\Image\Rule();
-                    $option = Shopware()->Models()->getReference('Shopware\Models\Article\Configurator\Option', $ruleData['optionId']);
-                    $rule->setMapping($mapping);
-                    $rule->setOption($option);
-                    $mapping->getRules()->add($rule);
-                    $options[] = $option;
-                }
-                $mapping->setImage($image);
-                Shopware()->Models()->persist($mapping);
-                $this->createImagesForOptions($options, $imageData, $image);
-                $mappingModels[] = $mapping;
-            }
-            $image->setMappings($mappingModels);
-            Shopware()->Models()->persist($image);
-            Shopware()->Models()->flush();
-
-            $result = $this->getRepository()->getArticleImageQuery($imageId)->getArrayResult();
-
-            $this->View()->assign(array('success' => true, 'data' => $result));
-        } catch (Exception $e) {
-            $this->View()->assign(array(
-                'success' => false,
-                'message' => $e->getMessage()
-            ));
+            return;
         }
+
+        $query = $this->getRepository()->getArticleImageDataQuery($imageId);
+        $image = $query->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
+        $imageData = $query->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        $this->getRepository()->getDeleteImageChildrenQuery($imageId)->execute();
+
+        $mappingModels = array();
+        foreach ($mappings as $mappingData) {
+            if (empty($mappingData['rules'])) {
+                continue;
+            }
+            if (empty($mappingData['id'])) {
+                $mapping = new \Shopware\Models\Article\Image\Mapping();
+            } else {
+                $mapping = Shopware()->Models()->find('Shopware\Models\Article\Image\Mapping', $mappingData['id']);
+            }
+
+            $mapping->getRules()->clear();
+            $options = array();
+            foreach ($mappingData['rules'] as $ruleData) {
+                $rule = new \Shopware\Models\Article\Image\Rule();
+                $option = Shopware()->Models()->getReference('Shopware\Models\Article\Configurator\Option', $ruleData['optionId']);
+                $rule->setMapping($mapping);
+                $rule->setOption($option);
+                $mapping->getRules()->add($rule);
+                $options[] = $option;
+            }
+            $mapping->setImage($image);
+            Shopware()->Models()->persist($mapping);
+            $this->createImagesForOptions($options, $imageData, $image);
+            $mappingModels[] = $mapping;
+        }
+        $image->setMappings($mappingModels);
+        Shopware()->Models()->persist($image);
+        Shopware()->Models()->flush();
+
+        $result = $this->getRepository()->getArticleImageQuery($imageId)->getArrayResult();
+
+        $this->View()->assign(array('success' => true, 'data' => $result));
     }
 
     /**
@@ -1159,15 +1132,15 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
         $join = '';
         foreach ($options as $option) {
-            $alias = 'alias'. $option->getId();
-            $join = $join . ' INNER JOIN s_article_configurator_option_relations alias'. $option->getId() .
-                    ' ON ' . $alias . '.option_id = ' . $option->getId() .
-                    ' AND ' . $alias . '.article_id = d.id ';
+            $alias = 'alias' . $option->getId();
+            $join = $join . ' INNER JOIN s_article_configurator_option_relations alias' . $option->getId() .
+                ' ON ' . $alias . '.option_id = ' . $option->getId() .
+                ' AND ' . $alias . '.article_id = d.id ';
         }
         $sql = "SELECT d.id
                 FROM s_articles_details d
         " . $join . "
-        WHERE d.articleID = " . (int) $articleId;
+        WHERE d.articleID = " . (int)$articleId;
 
         $details = Shopware()->Db()->fetchCol($sql);
 
@@ -1188,27 +1161,20 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     public function saveDetailAction()
     {
-        try {
-            $data = $this->Request()->getParams();
-            $id = (int) $this->Request()->getParam('id');
+        $data = $this->Request()->getParams();
+        $id = (int)$this->Request()->getParam('id');
 
-            if ($id > 0) {
-                $detail = $this->getArticleDetailRepository()->find($id);
-            } else {
-                $detail = new \Shopware\Models\Article\Detail();
-            }
-            $detail = $this->saveDetail($data, $detail);
-            $data['id'] = $detail->getId();
-            $this->View()->assign(array(
-                'success' => true,
-                'data' => $data
-            ));
-        } catch (Exception $e) {
-            $this->View()->assign(array(
-                'success' => false,
-                'message' => $e->getMessage()
-            ));
+        if ($id > 0) {
+            $detail = $this->getArticleDetailRepository()->find($id);
+        } else {
+            $detail = new \Shopware\Models\Article\Detail();
         }
+        $detail = $this->saveDetail($data, $detail);
+        $data['id'] = $detail->getId();
+        $this->View()->assign(array(
+            'success' => true,
+            'data' => $data
+        ));
     }
 
     /**
@@ -1332,42 +1298,35 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     public function saveConfiguratorDependencyAction()
     {
-        try {
-            $data = $this->Request()->getParams();
-            $id = (int) $this->Request()->getParam('id');
-            if ($id > 0) {
-                $dependency = $this->getConfiguratorDependencyRepository()->find($id);
-            } else {
-                $dependency = new \Shopware\Models\Article\Configurator\Dependency();
-            }
-
-            $data['childOption'] = $this->getConfiguratorOptionRepository()->find($data['childId']);
-            $data['parentOption'] = $this->getConfiguratorOptionRepository()->find($data['parentId']);
-            $data['configuratorSet'] = $this->getConfiguratorSetRepository()->find($data['configuratorSetId']);
-            $dependency->fromArray($data);
-            Shopware()->Models()->persist($dependency);
-            Shopware()->Models()->flush();
-
-            $builder = Shopware()->Models()->createQueryBuilder();
-            $data = $builder->select(array('dependency', 'dependencyParent', 'dependencyChild'))
-                    ->from('Shopware\Models\Article\Configurator\Dependency', 'dependency')
-                    ->leftJoin('dependency.parentOption', 'dependencyParent')
-                    ->leftJoin('dependency.childOption', 'dependencyChild')
-                    ->where('dependency.id = ?1')
-                    ->setParameter(1, $dependency->getId())
-                    ->getQuery()
-                    ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-
-            $this->View()->assign(array(
-                'success' => true,
-                'data' => $data
-            ));
-        } catch (Exception $e) {
-            $this->View()->assign(array(
-                'success' => false,
-                'message' => $e->getMessage()
-            ));
+        $data = $this->Request()->getParams();
+        $id = (int)$this->Request()->getParam('id');
+        if ($id > 0) {
+            $dependency = $this->getConfiguratorDependencyRepository()->find($id);
+        } else {
+            $dependency = new \Shopware\Models\Article\Configurator\Dependency();
         }
+
+        $data['childOption'] = $this->getConfiguratorOptionRepository()->find($data['childId']);
+        $data['parentOption'] = $this->getConfiguratorOptionRepository()->find($data['parentId']);
+        $data['configuratorSet'] = $this->getConfiguratorSetRepository()->find($data['configuratorSetId']);
+        $dependency->fromArray($data);
+        Shopware()->Models()->persist($dependency);
+        Shopware()->Models()->flush();
+
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $data = $builder->select(array('dependency', 'dependencyParent', 'dependencyChild'))
+            ->from('Shopware\Models\Article\Configurator\Dependency', 'dependency')
+            ->leftJoin('dependency.parentOption', 'dependencyParent')
+            ->leftJoin('dependency.childOption', 'dependencyChild')
+            ->where('dependency.id = ?1')
+            ->setParameter(1, $dependency->getId())
+            ->getQuery()
+            ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+
+        $this->View()->assign(array(
+            'success' => true,
+            'data' => $data
+        ));
     }
 
     /**
@@ -1391,28 +1350,21 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     public function deleteConfiguratorDependencyAction()
     {
-        try {
-            $id = (int) $this->Request()->getParam('id');
-            if (empty($id)) {
-                $this->View()->assign(array(
-                    'success' => false,
-                    'message' => 'No valid dependency id passed'
-                ));
-
-                return;
-            }
-            $model = Shopware()->Models()->find('Shopware\Models\Article\Configurator\Dependency', $id);
-            Shopware()->Models()->remove($model);
-            Shopware()->Models()->flush();
-            $this->View()->assign(array(
-                'success' => true
-            ));
-        } catch (Exception $e) {
+        $id = (int)$this->Request()->getParam('id');
+        if (empty($id)) {
             $this->View()->assign(array(
                 'success' => false,
-                'message' => $e->getMessage()
+                'message' => 'No valid dependency id passed'
             ));
+
+            return;
         }
+        $model = Shopware()->Models()->find('Shopware\Models\Article\Configurator\Dependency', $id);
+        Shopware()->Models()->remove($model);
+        Shopware()->Models()->flush();
+        $this->View()->assign(array(
+            'success' => true
+        ));
     }
 
     /**
@@ -1423,29 +1375,20 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     protected function saveArticle($data, $article)
     {
-        try {
-            $data = $this->prepareAssociatedData($data, $article);
-            $article->fromArray($data);
+        $data = $this->prepareAssociatedData($data, $article);
+        $article->fromArray($data);
 
-            Shopware()->Models()->persist($article);
-            Shopware()->Models()->flush();
-            if (empty($data['id']) && !empty($data['autoNumber'])) {
-                $this->increaseAutoNumber($data['autoNumber'], $article->getMainDetail()->getNumber());
-            }
-
-            $savedArticle = $this->getArticle($article->getId());
-            $this->View()->assign(array(
-                'success' => true,
-                'data' => $savedArticle
-            ));
-        } catch (Exception $e) {
-            $this->View()->assign(array(
-                'success' => false,
-                'message' => $e->getMessage()
-            ));
-
-            return;
+        Shopware()->Models()->persist($article);
+        Shopware()->Models()->flush();
+        if (empty($data['id']) && !empty($data['autoNumber'])) {
+            $this->increaseAutoNumber($data['autoNumber'], $article->getMainDetail()->getNumber());
         }
+
+        $savedArticle = $this->getArticle($article->getId());
+        $this->View()->assign(array(
+            'success' => true,
+            'data' => $savedArticle
+        ));
     }
 
     /**
@@ -1508,13 +1451,13 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     public function getPropertyListAction()
     {
         $articleId = $this->Request()->getParam('articleId');
-        $propertyGroupId =  $this->Request()->getParam('propertyGroupId');
+        $propertyGroupId = $this->Request()->getParam('propertyGroupId');
 
         $builder = Shopware()->Models()->createQueryBuilder()
             ->from('Shopware\Models\Property\Option', 'po')
             ->join('po.groups', 'pg', 'with', 'pg.id = :propertyGroupId')
             ->setParameter('propertyGroupId', $propertyGroupId)
-            ->select(array( 'PARTIAL po.{id,name}' ));
+            ->select(array('PARTIAL po.{id,name}'));
 
         $query = $builder->getQuery();
         $options = array();
@@ -1544,8 +1487,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         }
 
         $this->View()->assign(array(
-            'data' =>  array_values($options),
-            'total' =>  count($options),
+            'data' => array_values($options),
+            'total' => count($options),
             'success' => true
         ));
     }
@@ -1553,7 +1496,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     public function createPropertyValueAction()
     {
         $groupId = $this->Request()->getParam('groupId', null);
-        $value   = $this->Request()->getParam('value');
+        $value = $this->Request()->getParam('value');
 
         if (!$groupId) {
             return $this->View()->assign(['success' => false, 'message' => 'No property group selected!']);
@@ -1569,13 +1512,9 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             return $this->View()->assign(['success' => false, 'message' => 'No property group selected!']);
         }
 
-        try {
-            $option = new \Shopware\Models\Property\Value($group, $value);
-            $entityManager->persist($option);
-            $entityManager->flush($option);
-        } catch (Exception $e) {
-            return $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
-        }
+        $option = new \Shopware\Models\Property\Value($group, $value);
+        $entityManager->persist($option);
+        $entityManager->flush($option);
 
         $this->View()->assign([
             'success' => true,
@@ -1594,9 +1533,9 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
         $builder = Shopware()->Models()->getDBALQueryBuilder();
         $builder->select(array(
-                'filterValues.id AS id',
-                'filterValues.value AS value',
-                'filterOptions.id AS optionId'))
+            'filterValues.id AS id',
+            'filterValues.value AS value',
+            'filterOptions.id AS optionId'))
             ->from('s_filter_values', 'filterValues')
             ->innerJoin('filterValues', 's_filter_options', 'filterOptions', 'filterValues.optionID = filterOptions.id')
             ->innerJoin('filterOptions', 's_filter_relations', 'filterRelations', 'filterOptions.id = filterRelations.optionID')
@@ -1712,10 +1651,10 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $builder = Shopware()->Models()->createQueryBuilder();
 
         return $builder->select(array('elements'))
-                ->from('Shopware\Models\Article\Element', 'elements')
-                ->orderBy('elements.position')
-                ->getQuery()
-                ->getArrayResult();
+            ->from('Shopware\Models\Article\Element', 'elements')
+            ->orderBy('elements.position')
+            ->getQuery()
+            ->getArrayResult();
     }
 
     /**
@@ -1729,8 +1668,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     protected function getArticleData($articleId)
     {
         return $this->getRepository()
-                    ->getArticleBaseDataQuery($articleId)
-                    ->getArrayResult();
+            ->getArticleBaseDataQuery($articleId)
+            ->getArrayResult();
     }
 
     /**
@@ -1745,9 +1684,9 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     {
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(array('categories.id'))
-                ->from('Shopware\Models\Category\Category', 'categories', 'categories.id')
-                ->andWhere(':articleId MEMBER OF categories.articles')
-                ->setParameters(array('articleId' => $articleId));
+            ->from('Shopware\Models\Category\Category', 'categories', 'categories.id')
+            ->andWhere(':articleId MEMBER OF categories.articles')
+            ->setParameters(array('articleId' => $articleId));
 
         $result = $builder->getQuery()->getArrayResult();
         if (empty($result)) {
@@ -1757,7 +1696,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $categories = array();
         foreach ($result as $item) {
             $categories[] = array(
-                'id'   => $item['id'],
+                'id' => $item['id'],
                 'name' => $this->getCategoryRepository()->getPathById($item['id'], 'name', '>')
             );
         }
@@ -1790,8 +1729,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     public function getArticleSimilars($articleId)
     {
         $result = $this->getRepository()
-                ->getArticleSimilarsQuery($articleId)
-                ->getArrayResult();
+            ->getArticleSimilarsQuery($articleId)
+            ->getArrayResult();
 
         if (empty($result[0]['similar'])) {
             return array();
@@ -1812,7 +1751,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             ->getArticleRelatedProductStreamsQuery($articleId)
             ->getArrayResult();
 
-        return $result ? : [];
+        return $result ?: [];
     }
 
     /**
@@ -1826,8 +1765,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     public function getArticleRelated($articleId)
     {
         $result = $this->getRepository()
-                ->getArticleRelatedQuery($articleId)
-                ->getArrayResult();
+            ->getArticleRelatedQuery($articleId)
+            ->getArrayResult();
 
         if (empty($result[0]['related'])) {
             return array();
@@ -1848,17 +1787,17 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     {
         $mediaService = Shopware()->Container()->get('shopware_media.media_service');
         $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->select(array( 'images', 'imageAttribute', 'imageMapping', 'mappingRule', 'ruleOption'))
-                ->from('Shopware\Models\Article\Image', 'images')
-                ->leftJoin('images.article', 'article')
-                ->leftJoin('images.attribute', 'imageAttribute')
-                ->leftJoin('images.mappings', 'imageMapping')
-                ->leftJoin('imageMapping.rules', 'mappingRule')
-                ->leftJoin('mappingRule.option', 'ruleOption')
-                ->where('article.id = :articleId')
-                ->andWhere('images.parentId IS NULL')
-                ->orderBy('images.position')
-                ->setParameters(array('articleId' => $articleId));
+        $builder->select(array('images', 'imageAttribute', 'imageMapping', 'mappingRule', 'ruleOption'))
+            ->from('Shopware\Models\Article\Image', 'images')
+            ->leftJoin('images.article', 'article')
+            ->leftJoin('images.attribute', 'imageAttribute')
+            ->leftJoin('images.mappings', 'imageMapping')
+            ->leftJoin('imageMapping.rules', 'mappingRule')
+            ->leftJoin('mappingRule.option', 'ruleOption')
+            ->where('article.id = :articleId')
+            ->andWhere('images.parentId IS NULL')
+            ->orderBy('images.position')
+            ->setParameters(array('articleId' => $articleId));
 
         $result = $builder->getQuery()->getArrayResult();
 
@@ -1881,8 +1820,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     public function getArticleLinks($articleId)
     {
         $result = $this->getRepository()
-                ->getArticleLinksQuery($articleId)
-                ->getArrayResult();
+            ->getArticleLinksQuery($articleId)
+            ->getArrayResult();
 
         if (empty($result[0]['links'])) {
             return array();
@@ -1909,8 +1848,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     public function getArticleDownloads($articleId)
     {
         $result = $this->getRepository()
-                ->getArticleDownloadsQuery($articleId)
-                ->getArrayResult();
+            ->getArticleDownloadsQuery($articleId)
+            ->getArrayResult();
 
         if (empty($result[0]['downloads'])) {
             return array();
@@ -1931,8 +1870,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     public function getArticleCustomerGroups($articleId)
     {
         $result = $this->getRepository()
-                ->getArticleCustomerGroupsQuery($articleId)
-                ->getArrayResult();
+            ->getArticleCustomerGroupsQuery($articleId)
+            ->getArrayResult();
 
         if (empty($result[0]['customerGroups'])) {
             return array();
@@ -1954,15 +1893,15 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     {
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(array('configuratorSet', 'groups', 'options'))
-                ->from('Shopware\Models\Article\Configurator\Set', 'configuratorSet')
-                ->innerJoin('configuratorSet.articles', 'article')
-                ->leftJoin('configuratorSet.groups', 'groups')
-                ->leftJoin('configuratorSet.options', 'options')
-                ->addOrderBy('groups.position', 'ASC')
-                ->addOrderBy('options.groupId', 'ASC')
-                ->addOrderBy('options.position', 'ASC')
-                ->where('article.id = :articleId')
-                ->setParameters(array('articleId' => $articleId));
+            ->from('Shopware\Models\Article\Configurator\Set', 'configuratorSet')
+            ->innerJoin('configuratorSet.articles', 'article')
+            ->leftJoin('configuratorSet.groups', 'groups')
+            ->leftJoin('configuratorSet.options', 'options')
+            ->addOrderBy('groups.position', 'ASC')
+            ->addOrderBy('options.groupId', 'ASC')
+            ->addOrderBy('options.position', 'ASC')
+            ->where('article.id = :articleId')
+            ->setParameters(array('articleId' => $articleId));
 
         $result = $builder->getQuery()->getArrayResult();
 
@@ -1981,8 +1920,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     public function getArticleDependencies($configuratorSetId)
     {
         return $this->getRepository()
-                    ->getConfiguratorDependenciesQuery($configuratorSetId)
-                    ->getArrayResult();
+            ->getConfiguratorDependenciesQuery($configuratorSetId)
+            ->getArrayResult();
     }
 
     /**
@@ -2084,7 +2023,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         }
         $articleId = $this->Request()->getParam('articleId');
 
-        /**@var $article \Shopware\Models\Article\Article*/
+        /**@var $article \Shopware\Models\Article\Article */
         $article = Shopware()->Models()->find('Shopware\Models\Article\Article', $articleId);
         $tax = array(
             'tax' => $article->getTax()->getTax()
@@ -2150,8 +2089,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         foreach ($prices as $key => $price) {
             $customerGroup = $price['customerGroup'];
             if ($customerGroup['taxInput']) {
-                $price['price'] = $price['price'] / 100 * (100 + $tax['tax']) ;
-                $price['pseudoPrice'] = $price['pseudoPrice'] / 100 * (100 + $tax['tax']) ;
+                $price['price'] = $price['price'] / 100 * (100 + $tax['tax']);
+                $price['pseudoPrice'] = $price['pseudoPrice'] / 100 * (100 + $tax['tax']);
             }
             $prices[$key] = $price;
         }
@@ -2169,8 +2108,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     protected function getPrices($id, $tax)
     {
         $prices = $this->getRepository()
-                       ->getPricesQuery($id)
-                       ->getArrayResult();
+            ->getPricesQuery($id)
+            ->getArrayResult();
 
         return $this->formatPricesFromNetToGross($prices, $tax);
     }
@@ -2181,30 +2120,23 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     public function saveConfiguratorGroupAction()
     {
-        try {
-            $id = (int) $this->Request()->getParam('id');
-            if (!empty($id)) {
-                $group = Shopware()->Models()->find('Shopware\Models\Article\Configurator\Group', $id);
-            } else {
-                $group = new \Shopware\Models\Article\Configurator\Group();
-            }
-            $data = $this->Request()->getParams();
-            unset($data['options']);
-            $group->fromArray($data);
-            Shopware()->Models()->persist($group);
-            Shopware()->Models()->flush();
-            $data['id'] = $group->getId();
-
-            $this->View()->assign(array(
-                'success' => true,
-                'data' => $data
-            ));
-        } catch (Exception $e) {
-            $this->View()->assign(array(
-                'success' => false,
-                'message' => $e->getMessage()
-            ));
+        $id = (int)$this->Request()->getParam('id');
+        if (!empty($id)) {
+            $group = Shopware()->Models()->find('Shopware\Models\Article\Configurator\Group', $id);
+        } else {
+            $group = new \Shopware\Models\Article\Configurator\Group();
         }
+        $data = $this->Request()->getParams();
+        unset($data['options']);
+        $group->fromArray($data);
+        Shopware()->Models()->persist($group);
+        Shopware()->Models()->flush();
+        $data['id'] = $group->getId();
+
+        $this->View()->assign(array(
+            'success' => true,
+            'data' => $data
+        ));
     }
 
     /**
@@ -2213,34 +2145,27 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     public function saveConfiguratorOptionAction()
     {
-        try {
-            $id = (int) $this->Request()->getParam('id');
-            if (!empty($id)) {
-                $option = Shopware()->Models()->find('Shopware\Models\Article\Configurator\Option', $id);
-            } else {
-                $option = new \Shopware\Models\Article\Configurator\Option();
-            }
-            $data = $this->Request()->getParams();
-            if (empty($data['groupId'])) {
-                return;
-            }
-            $data['group'] = Shopware()->Models()->find('Shopware\Models\Article\Configurator\Group', $data['groupId']);
-
-            $option->fromArray($data);
-            Shopware()->Models()->persist($option);
-            Shopware()->Models()->flush();
-            $data['id'] = $option->getId();
-
-            $this->View()->assign(array(
-                'success' => true,
-                'data' => $data
-            ));
-        } catch (Exception $e) {
-            $this->View()->assign(array(
-                'success' => false,
-                'message' => $e->getMessage()
-            ));
+        $id = (int)$this->Request()->getParam('id');
+        if (!empty($id)) {
+            $option = Shopware()->Models()->find('Shopware\Models\Article\Configurator\Option', $id);
+        } else {
+            $option = new \Shopware\Models\Article\Configurator\Option();
         }
+        $data = $this->Request()->getParams();
+        if (empty($data['groupId'])) {
+            return;
+        }
+        $data['group'] = Shopware()->Models()->find('Shopware\Models\Article\Configurator\Group', $data['groupId']);
+
+        $option->fromArray($data);
+        Shopware()->Models()->persist($option);
+        Shopware()->Models()->flush();
+        $data['id'] = $option->getId();
+
+        $this->View()->assign(array(
+            'success' => true,
+            'data' => $data
+        ));
     }
 
     /**
@@ -2279,7 +2204,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             //if some options active, we save the group and the options in an internal array
             if (!empty($options)) {
                 $activeGroups[] = array('id' => $group['id'], 'options' => $options);
-                $groupPositions[$group['id']] = (int) $group['position'];
+                $groupPositions[$group['id']] = (int)$group['position'];
                 $originals[] = $group['id'];
             }
         }
@@ -2327,7 +2252,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         }
 
         //concat the sql statement
-        $sql= 'SELECT ' . implode(",\n", $selectSql) . ' ' . implode("\n", $groupSql) . ' ' . $whereSql . $orderBy .  ' LIMIT ' . $offset . ',' . $limit;
+        $sql = 'SELECT ' . implode(",\n", $selectSql) . ' ' . implode("\n", $groupSql) . ' ' . $whereSql . $orderBy . ' LIMIT ' . $offset . ',' . $limit;
 
         return array(
             'sql' => $sql,
@@ -2369,109 +2294,102 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     public function createConfiguratorVariantsAction()
     {
-        try {
-            //first get the id parameter of the request object
-            $articleId = $this->Request()->getParam('articleId', 1);
-            $groups = $this->Request()->getParam('groups');
-            $offset = $this->Request()->getParam('offset', 0);
-            $limit = $this->Request()->getParam('limit', 50);
+        //first get the id parameter of the request object
+        $articleId = $this->Request()->getParam('articleId', 1);
+        $groups = $this->Request()->getParam('groups');
+        $offset = $this->Request()->getParam('offset', 0);
+        $limit = $this->Request()->getParam('limit', 50);
 
-            //the merge type defines if all variants has to been regenerated or if only new variants will be added.
-            //1 => Regenerate all variants
-            //2 => Merge variants
-            $mergeType = $this->Request()->getParam('mergeType', 1);
+        //the merge type defines if all variants has to been regenerated or if only new variants will be added.
+        //1 => Regenerate all variants
+        //2 => Merge variants
+        $mergeType = $this->Request()->getParam('mergeType', 1);
 
-            /**@var $article \Shopware\Models\Article\Article*/
-            $article = $this->getRepository()->find($articleId);
+        /**@var $article \Shopware\Models\Article\Article */
+        $article = $this->getRepository()->find($articleId);
 
-            $generatorData = $this->prepareGeneratorData($groups, $offset, $limit);
+        $generatorData = $this->prepareGeneratorData($groups, $offset, $limit);
 
-            $detailData = $this->getDetailDataForVariantGeneration($article);
+        $detailData = $this->getDetailDataForVariantGeneration($article);
 
-            if ($offset === 0 && $mergeType == 1) {
-                $this->removeAllConfiguratorVariants($articleId);
-            } elseif ($offset === 0 && $mergeType == 2) {
-                $this->deleteVariantsForAllDeactivatedOptions($article, $generatorData['allOptions']);
+        if ($offset === 0 && $mergeType == 1) {
+            $this->removeAllConfiguratorVariants($articleId);
+        } elseif ($offset === 0 && $mergeType == 2) {
+            $this->deleteVariantsForAllDeactivatedOptions($article, $generatorData['allOptions']);
+        }
+
+        Shopware()->Models()->clear();
+        $article = $this->getRepository()->find($articleId);
+        $detailData = $this->setDetailDataReferences($detailData, $article);
+
+        $configuratorSet = $article->getConfiguratorSet();
+        $dependencies = $this->getRepository()->getConfiguratorDependenciesQuery($configuratorSet->getId())->getArrayResult();
+        $priceVariations = $this->getRepository()->getConfiguratorPriceVariationsQuery($configuratorSet->getId())->getArrayResult();
+
+        if (empty($generatorData)) {
+            return;
+        }
+
+        $sql = $generatorData['sql'];
+        $originals = $generatorData['originals'];
+        $variants = Shopware()->Db()->fetchAll($sql);
+
+        $counter = 1;
+        if ($mergeType === 1) {
+            $counter = $offset;
+        }
+        $allOptions = $this->getRepository()->getAllConfiguratorOptionsIndexedByIdQuery()->getResult();
+
+        //iterate all selected variants to insert them into the database
+        foreach ($variants as $variant) {
+            $variantData = $this->prepareVariantData($variant, $detailData, $counter, $dependencies, $priceVariations, $allOptions, $originals, $article, $mergeType);
+            if ($variantData === false) {
+                continue;
             }
 
-            Shopware()->Models()->clear();
-            $article = $this->getRepository()->find($articleId);
-            $detailData = $this->setDetailDataReferences($detailData, $article);
+            //merge the data with the original main detail data
+            $data = array_merge($detailData, $variantData);
 
-            $configuratorSet = $article->getConfiguratorSet();
-            $dependencies = $this->getRepository()->getConfiguratorDependenciesQuery($configuratorSet->getId())->getArrayResult();
-            $priceVariations = $this->getRepository()->getConfiguratorPriceVariationsQuery($configuratorSet->getId())->getArrayResult();
-
-            if (empty($generatorData)) {
-                return;
+            //use only the main detail of the article as base object, if the merge type is set to "Override" and the current variant is the first generated variant.
+            if ($offset === 0 && $mergeType === 1) {
+                $detail = $article->getMainDetail();
+            } else {
+                $detail = new \Shopware\Models\Article\Detail();
+                Shopware()->Models()->persist($detail);
             }
 
-            $sql = $generatorData['sql'];
-            $originals = $generatorData['originals'];
-            $variants = Shopware()->Db()->fetchAll($sql);
-
-            $counter = 1;
-            if ($mergeType === 1) {
-                $counter = $offset;
-            }
-            $allOptions = $this->getRepository()->getAllConfiguratorOptionsIndexedByIdQuery()->getResult();
-
-            //iterate all selected variants to insert them into the database
-            foreach ($variants as $variant) {
-                $variantData = $this->prepareVariantData($variant, $detailData, $counter, $dependencies, $priceVariations, $allOptions, $originals, $article, $mergeType);
-                if ($variantData === false) {
-                    continue;
-                }
-
-                //merge the data with the original main detail data
-                $data = array_merge($detailData, $variantData);
-
-                //use only the main detail of the article as base object, if the merge type is set to "Override" and the current variant is the first generated variant.
-                if ($offset === 0 && $mergeType === 1) {
-                    $detail = $article->getMainDetail();
-                } else {
-                    $detail = new \Shopware\Models\Article\Detail();
-                    Shopware()->Models()->persist($detail);
-                }
-
-                $detail->fromArray($data);
-                $detail->setArticle($article);
-                Shopware()->Models()->flush();
-
-                $this->copyConfigurationTemplateTranslations($detailData, $detail);
-                $offset++;
-            }
-
-            Shopware()->Models()->clear();
-
-            $article = $this->getRepository()->find($articleId);
-
-            //check if the main detail variant was deleted
-            if ($article->getMainDetail() === null) {
-                $newMainDetail = $this->getArticleDetailRepository()->findOneBy(array('articleId' => $articleId));
-                $article->setMainDetail($newMainDetail);
-            }
-
+            $detail->fromArray($data);
+            $detail->setArticle($article);
             Shopware()->Models()->flush();
 
-            $article = $this->getArticle($articleId);
-            $this->View()->assign(array(
-                'success' => true,
-                'data' => $article
-            ));
-        } catch (Exception $e) {
-            $this->View()->assign(array(
-                'success' => false,
-                'message' => $e->getMessage()
-            ));
+            $this->copyConfigurationTemplateTranslations($detailData, $detail);
+            $offset++;
         }
+
+        Shopware()->Models()->clear();
+
+        $article = $this->getRepository()->find($articleId);
+
+        //check if the main detail variant was deleted
+        if ($article->getMainDetail() === null) {
+            $newMainDetail = $this->getArticleDetailRepository()->findOneBy(array('articleId' => $articleId));
+            $article->setMainDetail($newMainDetail);
+        }
+
+        Shopware()->Models()->flush();
+
+        $article = $this->getArticle($articleId);
+        $this->View()->assign(array(
+            'success' => true,
+            'data' => $article
+        ));
     }
 
 
     /**
      * Internal helper function to remove all article variants for the deselected options.
      * @param \Shopware\Models\Article\Article $article
-     * @param array                            $selectedOptions
+     * @param array $selectedOptions
      *
      */
     protected function deleteVariantsForAllDeactivatedOptions($article, $selectedOptions)
@@ -2479,16 +2397,16 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $configuratorSet = $article->getConfiguratorSet();
         $oldOptions = $configuratorSet->getOptions();
         $ids = array();
-        /**@var $oldOption \Shopware\Models\Article\Configurator\Option*/
+        /**@var $oldOption \Shopware\Models\Article\Configurator\Option */
         foreach ($oldOptions as $oldOption) {
             if (!array_key_exists($oldOption->getId(), $selectedOptions)) {
                 $details = $this->getRepository()
-                                ->getArticleDetailByConfiguratorOptionIdQuery($article->getId(), $oldOption->getId())
-                                ->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT)
-                                ->getResult();
+                    ->getArticleDetailByConfiguratorOptionIdQuery($article->getId(), $oldOption->getId())
+                    ->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT)
+                    ->getResult();
 
                 if (!empty($details)) {
-                    /**@var $detail \Shopware\Models\Article\Detail*/
+                    /**@var $detail \Shopware\Models\Article\Detail */
                     foreach ($details as $detail) {
                         if ($detail->getKind() === 1) {
                             $article->setMainDetail(null);
@@ -2504,10 +2422,10 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         if (!empty($ids)) {
             $builder = Shopware()->Models()->createQueryBuilder();
             $builder->delete('Shopware\Models\Attribute\Article', 'attribute')
-                    ->where('attribute.articleDetailId IN (:articleDetailIds)')
-                    ->setParameters(array('articleDetailIds' => $ids))
-                    ->getQuery()
-                    ->execute();
+                ->where('attribute.articleDetailId IN (:articleDetailIds)')
+                ->setParameters(array('articleDetailIds' => $ids))
+                ->getQuery()
+                ->execute();
         }
     }
 
@@ -2536,7 +2454,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     protected function prepareVariantData($variant, $detailData, &$counter, $dependencies, $priceVariations, $allOptions, $originals, $article, $mergeType)
     {
         $name = '';
-        $optionsModels= array();
+        $optionsModels = array();
         $tax = $article->getTax();
         $optionIds = array();
 
@@ -2667,14 +2585,14 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     protected function getDetailDataForVariantGeneration($article)
     {
         $detailData = $this->getRepository()
-                           ->getConfiguratorTemplateByArticleIdQuery($article->getId())
-                           ->getArrayResult();
+            ->getConfiguratorTemplateByArticleIdQuery($article->getId())
+            ->getArrayResult();
 
         if (empty($detailData)) {
             $this->createConfiguratorTemplate($article);
             $detailData = $this->getRepository()
-                    ->getConfiguratorTemplateByArticleIdQuery($article->getId())
-                    ->getArrayResult();
+                ->getConfiguratorTemplateByArticleIdQuery($article->getId())
+                ->getArrayResult();
         }
 
         return $detailData[0];
@@ -2687,13 +2605,13 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     {
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(array('detail', 'prices', 'customerGroup', 'attribute', 'priceAttribute'))
-                ->from('Shopware\Models\Article\Detail', 'detail')
-                ->leftJoin('detail.prices', 'prices')
-                ->leftJoin('prices.customerGroup', 'customerGroup')
-                ->leftJoin('detail.attribute', 'attribute')
-                ->leftJoin('prices.attribute', 'priceAttribute')
-                ->where('detail.id = :id')
-                ->setParameters(array('id' => $article->getMainDetail()->getId()));
+            ->from('Shopware\Models\Article\Detail', 'detail')
+            ->leftJoin('detail.prices', 'prices')
+            ->leftJoin('prices.customerGroup', 'customerGroup')
+            ->leftJoin('detail.attribute', 'attribute')
+            ->leftJoin('prices.attribute', 'priceAttribute')
+            ->where('detail.id = :id')
+            ->setParameters(array('id' => $article->getMainDetail()->getId()));
 
         $data = $builder->getQuery()->getArrayResult();
         $data = $data[0];
@@ -2896,11 +2814,11 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             if ($article->getConfiguratorSet() && $article->getConfiguratorSet()->getId()) {
                 $builder = Shopware()->Models()->createQueryBuilder();
                 $articles = $builder->select(array('articles'))
-                        ->from('Shopware\Models\Article\Article', 'articles')
-                        ->where('articles.configuratorSetId = ?1')
-                        ->setParameter(1, $article->getConfiguratorSet()->getId())
-                        ->getQuery()
-                        ->getArrayResult();
+                    ->from('Shopware\Models\Article\Article', 'articles')
+                    ->where('articles.configuratorSetId = ?1')
+                    ->setParameter(1, $article->getConfiguratorSet()->getId())
+                    ->getQuery()
+                    ->getArrayResult();
 
                 if (count($articles) <= 1) {
                     $set = Shopware()->Models()->find('Shopware\Models\Article\Configurator\Set', $article->getConfiguratorSet()->getId());
@@ -3063,7 +2981,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             if (empty($relatedData['id'])) {
                 continue;
             }
-            /**@var $relatedArticle \Shopware\Models\Article\Article*/
+            /**@var $relatedArticle \Shopware\Models\Article\Article */
             $relatedArticle = $this->getRepository()->find($relatedData['id']);
 
             //if the user select the cross
@@ -3115,7 +3033,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             if (empty($similarData['id'])) {
                 continue;
             }
-            /**@var $similarArticle \Shopware\Models\Article\Article*/
+            /**@var $similarArticle \Shopware\Models\Article\Article */
             $similarArticle = $this->getRepository()->find($similarData['id']);
 
             //if the user select the cross
@@ -3305,9 +3223,9 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         }
 
         return array(
-            'number'     => $prefix . $number,
+            'number' => $prefix . $number,
             'autoNumber' => $number,
-            'attribute'  => $prepared
+            'attribute' => $prepared
         );
     }
 
@@ -3317,33 +3235,26 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     public function deleteAction()
     {
-        try {
-            if (!$this->Request()->has('id')) {
-                return;
-            }
-            $id = (int) $this->Request()->getParam('id');
-            $article = $this->getRepository()->find($id);
-            if (!$article instanceof \Shopware\Models\Article\Article) {
-                return;
-            }
-            $this->removePrices($article->getId());
-            $this->removeArticleEsd($article->getId());
-            $this->removeAttributes($article->getId());
-            $this->removeArticleDetails($article);
-            $this->removeArticleTranslations($article);
-
-            Shopware()->Models()->remove($article);
-            Shopware()->Models()->flush();
-            $this->View()->assign(array(
-                'data' => $this->Request()->getParams(),
-                'success' => true
-            ));
-        } catch (Exception $e) {
-            $this->View()->assign(array(
-                'success' => false,
-                'message' => $e->getMessage()
-            ));
+        if (!$this->Request()->has('id')) {
+            return;
         }
+        $id = (int)$this->Request()->getParam('id');
+        $article = $this->getRepository()->find($id);
+        if (!$article instanceof \Shopware\Models\Article\Article) {
+            return;
+        }
+        $this->removePrices($article->getId());
+        $this->removeArticleEsd($article->getId());
+        $this->removeAttributes($article->getId());
+        $this->removeArticleDetails($article);
+        $this->removeArticleTranslations($article);
+
+        Shopware()->Models()->remove($article);
+        Shopware()->Models()->flush();
+        $this->View()->assign(array(
+            'data' => $this->Request()->getParams(),
+            'success' => true
+        ));
     }
 
     /**
@@ -3381,14 +3292,14 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     protected function removeArticleDetails($article)
     {
-        $sql= "SELECT id FROM s_articles_details WHERE articleID = ? AND kind != 1";
+        $sql = "SELECT id FROM s_articles_details WHERE articleID = ? AND kind != 1";
         $details = Shopware()->Db()->fetchAll($sql, array($article->getId()));
 
         foreach ($details as $detail) {
             $query = $this->getRepository()->getRemoveImageQuery($detail['id']);
             $query->execute();
 
-            $sql= "DELETE FROM s_article_configurator_option_relations WHERE article_id = ?";
+            $sql = "DELETE FROM s_article_configurator_option_relations WHERE article_id = ?";
             Shopware()->Db()->query($sql, array($detail['id']));
 
             $query = $this->getRepository()->getRemoveVariantTranslationsQuery($detail['id']);
@@ -3407,7 +3318,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $query = $this->getRepository()->getRemoveArticleTranslationsQuery($article->getId());
         $query->execute();
 
-        $sql= "DELETE FROM s_articles_translations WHERE articleID = ?";
+        $sql = "DELETE FROM s_articles_translations WHERE articleID = ?";
         $this->container->get('dbal_connection')->executeQuery($sql, array($article->getId()));
     }
 
@@ -3418,55 +3329,48 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     public function deleteConfiguratorGroupAction()
     {
-        try {
-            if (!$this->Request()->has('id')) {
-                $this->View()->assign(array(
-                    'success' => false,
-                    'message' => 'No valid id passed'
-                ));
-            }
-            $model = Shopware()->Models()->find('Shopware\Models\Article\Configurator\Group', (int) $this->Request()->getParam('id'));
-            if (!$model instanceof \Shopware\Models\Article\Configurator\Group) {
-                $this->View()->assign(array(
-                    'success' => false,
-                    'message' => 'No valid id passed'
-                ));
-            }
-            $builder = Shopware()->Models()->createQueryBuilder();
-            $boundedArticles = $builder->select(array('articles'))
-                                       ->from('Shopware\Models\Article\Detail', 'articles')
-                                       ->innerJoin('articles.configuratorOptions', 'options')
-                                       ->where('options.groupId = ?1')
-                                       ->setParameter(1, (int) $this->Request()->getParam('id'))
-                                       ->getQuery()
-                                       ->getArrayResult();
-
-            if (count($boundedArticles) > 0) {
-                $articles = array();
-                foreach ($boundedArticles as $article) {
-                    $articles[] = $article['number'] . ' - ' . $article['additionalText'];
-                }
-
-                $this->View()->assign(array(
-                    'success' => false,
-                    'articles' => $articles,
-                    'message' => 'Articles bounded on this group!'
-                ));
-
-                return;
-            }
-
-            Shopware()->Models()->remove($model);
-            Shopware()->Models()->flush();
-            $this->View()->assign(array(
-                'success' => true
-            ));
-        } catch (Exception $e) {
+        if (!$this->Request()->has('id')) {
             $this->View()->assign(array(
                 'success' => false,
-                'message' => $e->getMessage()
+                'message' => 'No valid id passed'
             ));
         }
+        $model = Shopware()->Models()->find('Shopware\Models\Article\Configurator\Group', (int)$this->Request()->getParam('id'));
+        if (!$model instanceof \Shopware\Models\Article\Configurator\Group) {
+            $this->View()->assign(array(
+                'success' => false,
+                'message' => 'No valid id passed'
+            ));
+        }
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $boundedArticles = $builder->select(array('articles'))
+            ->from('Shopware\Models\Article\Detail', 'articles')
+            ->innerJoin('articles.configuratorOptions', 'options')
+            ->where('options.groupId = ?1')
+            ->setParameter(1, (int)$this->Request()->getParam('id'))
+            ->getQuery()
+            ->getArrayResult();
+
+        if (count($boundedArticles) > 0) {
+            $articles = array();
+            foreach ($boundedArticles as $article) {
+                $articles[] = $article['number'] . ' - ' . $article['additionalText'];
+            }
+
+            $this->View()->assign(array(
+                'success' => false,
+                'articles' => $articles,
+                'message' => 'Articles bounded on this group!'
+            ));
+
+            return;
+        }
+
+        Shopware()->Models()->remove($model);
+        Shopware()->Models()->flush();
+        $this->View()->assign(array(
+            'success' => true
+        ));
     }
 
     /**
@@ -3475,37 +3379,30 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     public function deleteDetailAction()
     {
-        $details = $this->Request()->getParam('details', array(array('id' => (int) $this->Request()->getParam('id'))));
+        $details = $this->Request()->getParam('details', array(array('id' => (int)$this->Request()->getParam('id'))));
 
-        try {
-            $article = null;
-            foreach ($details as $detail) {
-                if (empty($detail['id'])) {
-                    continue;
-                }
-                /**@var $model \Shopware\Models\Article\Detail*/
-                $model = Shopware()->Models()->find('Shopware\Models\Article\Detail', $detail['id']);
-                if (!$model instanceof \Shopware\Models\Article\Detail) {
-                    continue;
-                }
-                if ($article === null) {
-                    $article = $model->getArticle();
-                }
-                if ($model->getId() !== $article->getMainDetail()->getId()) {
-                    Shopware()->Models()->remove($model);
-                }
+        $article = null;
+        foreach ($details as $detail) {
+            if (empty($detail['id'])) {
+                continue;
             }
-            Shopware()->Models()->flush();
-
-            $this->View()->assign(array(
-                'success' => true
-            ));
-        } catch (Exception $e) {
-            $this->View()->assign(array(
-                'success' => false,
-                'error' => $e->getMessage()
-            ));
+            /**@var $model \Shopware\Models\Article\Detail */
+            $model = Shopware()->Models()->find('Shopware\Models\Article\Detail', $detail['id']);
+            if (!$model instanceof \Shopware\Models\Article\Detail) {
+                continue;
+            }
+            if ($article === null) {
+                $article = $model->getArticle();
+            }
+            if ($model->getId() !== $article->getMainDetail()->getId()) {
+                Shopware()->Models()->remove($model);
+            }
         }
+        Shopware()->Models()->flush();
+
+        $this->View()->assign(array(
+            'success' => true
+        ));
     }
 
     /**
@@ -3515,57 +3412,50 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     public function deleteConfiguratorOptionAction()
     {
-        try {
-            $id = (int) $this->Request()->getParam('id');
+        $id = (int)$this->Request()->getParam('id');
 
-            if (empty($id) || $id < 0) {
-                $this->View()->assign(array(
-                    'success' => false,
-                    'message' => 'No valid id passed'
-                ));
-            }
-            $model = Shopware()->Models()->find('Shopware\Models\Article\Configurator\Option', $id);
-            if (!$model instanceof \Shopware\Models\Article\Configurator\Option) {
-                $this->View()->assign(array(
-                    'success' => false,
-                    'message' => 'No valid id passed'
-                ));
-            }
-            $builder = Shopware()->Models()->createQueryBuilder();
-            $boundedArticles = $builder->select(array('articles'))
-                                       ->from('Shopware\Models\Article\Detail', 'articles')
-                                       ->innerJoin('articles.configuratorOptions', 'options')
-                                       ->where('options.id = ?1')
-                                       ->setParameter(1, $id)
-                                       ->getQuery()
-                                       ->getArrayResult();
-
-            if (count($boundedArticles) > 0) {
-                $articles = array();
-                foreach ($boundedArticles as $article) {
-                    $articles[] = $article['number'] . ' - ' . $article['additionalText'];
-                }
-
-                $this->View()->assign(array(
-                    'success' => false,
-                    'articles' => $articles,
-                    'message' => 'Articles bounded on this option!'
-                ));
-
-                return;
-            }
-
-            Shopware()->Models()->remove($model);
-            Shopware()->Models()->flush();
-            $this->View()->assign(array(
-                'success' => true
-            ));
-        } catch (Exception $e) {
+        if (empty($id) || $id < 0) {
             $this->View()->assign(array(
                 'success' => false,
-                'message' => $e->getMessage()
+                'message' => 'No valid id passed'
             ));
         }
+        $model = Shopware()->Models()->find('Shopware\Models\Article\Configurator\Option', $id);
+        if (!$model instanceof \Shopware\Models\Article\Configurator\Option) {
+            $this->View()->assign(array(
+                'success' => false,
+                'message' => 'No valid id passed'
+            ));
+        }
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $boundedArticles = $builder->select(array('articles'))
+            ->from('Shopware\Models\Article\Detail', 'articles')
+            ->innerJoin('articles.configuratorOptions', 'options')
+            ->where('options.id = ?1')
+            ->setParameter(1, $id)
+            ->getQuery()
+            ->getArrayResult();
+
+        if (count($boundedArticles) > 0) {
+            $articles = array();
+            foreach ($boundedArticles as $article) {
+                $articles[] = $article['number'] . ' - ' . $article['additionalText'];
+            }
+
+            $this->View()->assign(array(
+                'success' => false,
+                'articles' => $articles,
+                'message' => 'Articles bounded on this option!'
+            ));
+
+            return;
+        }
+
+        Shopware()->Models()->remove($model);
+        Shopware()->Models()->flush();
+        $this->View()->assign(array(
+            'success' => true
+        ));
     }
 
     /**
@@ -3582,7 +3472,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             $number = substr($number, strlen(Shopware()->Config()->backendAutoOrderNumberPrefix));
         }
         if ($number == $autoNumber) {
-            $sql= "UPDATE s_order_number SET number = ? WHERE name = 'articleordernumber'";
+            $sql = "UPDATE s_order_number SET number = ? WHERE name = 'articleordernumber'";
             Shopware()->Db()->query($sql, array($autoNumber));
         }
     }
@@ -3599,19 +3489,20 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
             $builder = $this->getManager()->createQueryBuilder();
 
-            $builder->select(array(
-                        'articleDetail.id as id',
-                        'article.name as name',
-                        'articleDetail.id as articleDetailId',
-                        'articleDetail.additionalText as additionalText',
-                        'article.id as articleId',
-                    ))
-                    ->from('Shopware\Models\Article\Detail', 'articleDetail')
-                    ->leftJoin('articleDetail.esd', 'esd')
-                    ->leftJoin('articleDetail.article', 'article')
-                    ->where('articleDetail.articleId = :articleId')
-                    ->andWhere('esd.id IS NULL')
-                    ->setParameter('articleId', $articleId);
+            $builder->select([
+                'articleDetail.id as id',
+                'article.name as name',
+                'articleDetail.id as articleDetailId',
+                'articleDetail.additionalText as additionalText',
+                'article.id as articleId',
+                'articleDetail.number'
+            ]);
+            $builder->from('Shopware\Models\Article\Detail', 'articleDetail')
+                ->leftJoin('articleDetail.esd', 'esd')
+                ->leftJoin('articleDetail.article', 'article')
+                ->where('articleDetail.articleId = :articleId')
+                ->andWhere('esd.id IS NULL')
+                ->setParameter('articleId', $articleId);
 
             $query = $builder->getQuery();
             $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
@@ -3623,14 +3514,12 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             //returns the customer data
             $result = $paginator->getIterator()->getArrayCopy();
 
-            foreach ($result as &$item) {
-                if (!empty($item['additionalText'])) {
-                    $item['name'] .= ' - ' . $item['additionalText'];
-                }
-            }
+            $products = $this->buildListProducts($result);
+            $products = $this->getAdditionalTexts($products);
+            $result = $this->assignAdditionalText($result, $products);
 
             $this->View()->assign(array(
-                'data' =>  $result,
+                'data' => $result,
                 'total' => $totalResult,
                 'success' => true
             ));
@@ -3641,7 +3530,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $articleId = $this->Request()->getParam('articleId');
 
         $filter = $this->Request()->getParam('filter');
-        $sort   = $this->Request()->getParam('sort');
+        $sort = $this->Request()->getParam('sort');
         $start = $this->Request()->getParam('start', 0);
         $limit = $this->Request()->getParam('limit', 20);
 
@@ -3678,9 +3567,9 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
         $query = $this->getManager()->createQueryBuilder();
         $query->select('attribute')
-                ->from('Shopware\Models\Attribute\ArticleEsd', 'attribute', 'attribute.articleEsdId')
-                ->where('attribute.articleEsdId IN (:ids)')
-                ->setParameter('ids', $ids, \Doctrine\DBAL\Connection::PARAM_INT_ARRAY);
+            ->from('Shopware\Models\Attribute\ArticleEsd', 'attribute', 'attribute.articleEsdId')
+            ->where('attribute.articleEsdId IN (:ids)')
+            ->setParameter('ids', $ids, \Doctrine\DBAL\Connection::PARAM_INT_ARRAY);
 
         $esdAttributes = $query->getQuery()->getArrayResult();
 
@@ -3691,7 +3580,9 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             }
         }
 
-        return $esdAttributesList;
+        $products = $this->buildListProducts($esdAttributesList);
+        $products = $this->getAdditionalTexts($products);
+        return $this->assignAdditionalText($esdAttributesList, $products);
     }
 
     /**
@@ -3703,7 +3594,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $esdId = $this->Request()->getParam('esdId');
 
         $filter = $this->Request()->getParam('filter');
-        $sort   = $this->Request()->getParam('sort');
+        $sort = $this->Request()->getParam('sort');
         $start = $this->Request()->getParam('start', 0);
         $limit = $this->Request()->getParam('limit', 20);
 
@@ -3719,7 +3610,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $result = $paginator->getIterator()->getArrayCopy();
 
         $this->View()->assign(array(
-            'data' =>  $result,
+            'data' => $result,
             'total' => $totalResult,
             'success' => true
         ));
@@ -3727,35 +3618,28 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
     public function createEsdAction()
     {
-        try {
-            $articleDetailId = $this->Request()->getPost('articleDetailId');
+        $articleDetailId = $this->Request()->getPost('articleDetailId');
 
-            /** @var $articleDetail \Shopware\Models\Article\Detail */
-            $articleDetail = Shopware()->Models()->getRepository('Shopware\Models\Article\Detail')->find($articleDetailId);
-            if (!$articleDetail) {
-                $this->View()->assign(array(
-                    'success' => false,
-                    'message' => sprintf('ArticleDetail by id %s not found', $articleDetailId)
-                ));
-
-                return;
-            }
-
-            $esd = new \Shopware\Models\Article\Esd();
-            $esd->setArticleDetail($articleDetail);
-
-            $this->getManager()->persist($esd);
-            $this->getManager()->flush();
-
-            $this->View()->assign(array(
-                'success' => true
-            ));
-        } catch (Exception $e) {
+        /** @var $articleDetail \Shopware\Models\Article\Detail */
+        $articleDetail = Shopware()->Models()->getRepository('Shopware\Models\Article\Detail')->find($articleDetailId);
+        if (!$articleDetail) {
             $this->View()->assign(array(
                 'success' => false,
-                'message' => $e->getMessage()
+                'message' => sprintf('ArticleDetail by id %s not found', $articleDetailId)
             ));
+
+            return;
         }
+
+        $esd = new \Shopware\Models\Article\Esd();
+        $esd->setArticleDetail($articleDetail);
+
+        $this->getManager()->persist($esd);
+        $this->getManager()->flush();
+
+        $this->View()->assign(array(
+            'success' => true
+        ));
     }
 
     /**
@@ -3764,37 +3648,30 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     public function saveEsdAction()
     {
-        try {
-            $esdId = $this->Request()->getPost('id');
+        $esdId = $this->Request()->getPost('id');
 
-            /** @var $esd \Shopware\Models\Article\Esd */
-            $esd = Shopware()->Models()->getRepository('Shopware\Models\Article\Esd')->find($esdId);
-            if (!$esd) {
-                $this->View()->assign(array(
-                    'success' => false,
-                    'message' => sprintf('ESD by id %s not found', $esdId)
-                ));
-
-                return;
-            }
-
-            $freeSerialsCount = $this->getFreeSerialCount($esdId);
-            $articleDetail = $esd->getArticleDetail();
-            $articleDetail->setInStock($freeSerialsCount);
-
-            $esd->fromArray($this->Request()->getPost());
-            $this->getManager()->flush();
-
-            $this->View()->assign(array(
-                'data' =>  $this->Request()->getPost(),
-                'success' => true
-            ));
-        } catch (Exception $e) {
+        /** @var $esd \Shopware\Models\Article\Esd */
+        $esd = Shopware()->Models()->getRepository('Shopware\Models\Article\Esd')->find($esdId);
+        if (!$esd) {
             $this->View()->assign(array(
                 'success' => false,
-                'message' => $e->getMessage()
+                'message' => sprintf('ESD by id %s not found', $esdId)
             ));
+
+            return;
         }
+
+        $freeSerialsCount = $this->getFreeSerialCount($esdId);
+        $articleDetail = $esd->getArticleDetail();
+        $articleDetail->setInStock($freeSerialsCount);
+
+        $esd->fromArray($this->Request()->getPost());
+        $this->getManager()->flush();
+
+        $this->View()->assign(array(
+            'data' => $this->Request()->getPost(),
+            'success' => true
+        ));
     }
 
     /**
@@ -3804,29 +3681,23 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     public function deleteEsdAction()
     {
         $details = $this->Request()->getParam('details', array(array('id' => $this->Request()->getParam('id'))));
-        try {
-            foreach ($details as $detail) {
-                if (empty($detail['id'])) {
-                    continue;
-                }
 
-                $model = Shopware()->Models()->find('Shopware\Models\Article\Esd', $detail['id']);
-                if (!$model) {
-                    continue;
-                }
-                Shopware()->Models()->remove($model);
+        foreach ($details as $detail) {
+            if (empty($detail['id'])) {
+                continue;
             }
 
-            Shopware()->Models()->flush();
-            $this->View()->assign(array(
-                'success' => true
-            ));
-        } catch (Exception $e) {
-            $this->View()->assign(array(
-                'success' => false,
-                'error' => $e->getMessage()
-            ));
+            $model = Shopware()->Models()->find('Shopware\Models\Article\Esd', $detail['id']);
+            if (!$model) {
+                continue;
+            }
+            Shopware()->Models()->remove($model);
         }
+
+        Shopware()->Models()->flush();
+        $this->View()->assign(array(
+            'success' => true
+        ));
     }
 
     /**
@@ -3839,37 +3710,30 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
         $details = $this->Request()->getParam('details', array(array('id' => $this->Request()->getParam('id'))));
 
-        try {
-            foreach ($details as $detail) {
-                if (empty($detail['id'])) {
-                    continue;
-                }
-
-                $model = Shopware()->Models()->find('Shopware\Models\Article\EsdSerial', $detail['id']);
-                if (!$model) {
-                    continue;
-                }
-                Shopware()->Models()->remove($model);
+        foreach ($details as $detail) {
+            if (empty($detail['id'])) {
+                continue;
             }
 
-            Shopware()->Models()->flush();
-            $this->View()->assign(array(
-                'success' => true
-            ));
-
-            // Update stock
-            /** @var $esd \Shopware\Models\Article\Esd */
-            $esd = Shopware()->Models()->getRepository('Shopware\Models\Article\Esd')->find($esdId);
-            $freeSerialsCount = $this->getFreeSerialCount($esdId);
-            $articleDetail = $esd->getArticleDetail();
-            $articleDetail->setInStock($freeSerialsCount);
-            Shopware()->Models()->flush();
-        } catch (Exception $e) {
-            $this->View()->assign(array(
-                'success' => false,
-                'error' => $e->getMessage()
-            ));
+            $model = Shopware()->Models()->find('Shopware\Models\Article\EsdSerial', $detail['id']);
+            if (!$model) {
+                continue;
+            }
+            Shopware()->Models()->remove($model);
         }
+
+        Shopware()->Models()->flush();
+        $this->View()->assign(array(
+            'success' => true
+        ));
+
+        // Update stock
+        /** @var $esd \Shopware\Models\Article\Esd */
+        $esd = Shopware()->Models()->getRepository('Shopware\Models\Article\Esd')->find($esdId);
+        $freeSerialsCount = $this->getFreeSerialCount($esdId);
+        $articleDetail = $esd->getArticleDetail();
+        $articleDetail->setInStock($freeSerialsCount);
+        Shopware()->Models()->flush();
     }
 
     /**
@@ -3891,7 +3755,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $this->getManager()->flush();
 
         $this->View()->assign(array(
-            'total'   => $totalCount,
+            'total' => $totalCount,
             'success' => true
         ));
 
@@ -3925,69 +3789,62 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     public function saveSerialsAction()
     {
-        try {
-            $esdId = $this->Request()->getParam('esdId');
+        $esdId = $this->Request()->getParam('esdId');
 
-            /** @var $esd \Shopware\Models\Article\Esd */
-            $esd = Shopware()->Models()->getRepository('Shopware\Models\Article\Esd')->find($esdId);
+        /** @var $esd \Shopware\Models\Article\Esd */
+        $esd = Shopware()->Models()->getRepository('Shopware\Models\Article\Esd')->find($esdId);
 
-            if (!$esd) {
-                $this->View()->assign(array(
-                    'success' => false,
-                    'message' => sprintf('ESD by id %s not found', $esdId)
-                ));
-
-                return;
-            }
-
-            $serials = $this->Request()->getParam('serials');
-
-            // split string at newlines (WIN, Linux, OSX)
-            $serials = preg_split('/$\R?^/m', $serials);
-
-            // trim every serialnumber
-            array_walk($serials, 'trim');
-
-            // remove empty serialnumbers
-            $serials = array_filter($serials);
-
-            // remove duplicates
-            $serials = array_unique($serials);
-
-            $newSerials = 0;
-
-            foreach ($serials as $serialnumber) {
-                $serialnumber = trim($serialnumber);
-                $serial = Shopware()->Models()->getRepository('Shopware\Models\Article\EsdSerial')->findOneBy(array('serialnumber' => $serialnumber));
-                if ($serial) {
-                    continue;
-                }
-
-                $serial = new \Shopware\Models\Article\EsdSerial();
-                $serial->setSerialnumber($serialnumber);
-                $serial->setEsd($esd);
-                $this->getManager()->persist($serial);
-                $newSerials++;
-            }
-            $this->getManager()->flush();
-
-            // Update stock
-            $freeSerialsCount = $this->getFreeSerialCount($esdId);
-            $articleDetail = $esd->getArticleDetail();
-            $articleDetail->setInStock($freeSerialsCount);
-
-            $this->getManager()->flush();
-
-            $this->View()->assign(array(
-                'success' => true,
-                'total' => $newSerials
-            ));
-        } catch (Exception $e) {
+        if (!$esd) {
             $this->View()->assign(array(
                 'success' => false,
-                'message' => $e->getMessage()
+                'message' => sprintf('ESD by id %s not found', $esdId)
             ));
+
+            return;
         }
+
+        $serials = $this->Request()->getParam('serials');
+
+        // split string at newlines (WIN, Linux, OSX)
+        $serials = preg_split('/$\R?^/m', $serials);
+
+        // trim every serialnumber
+        array_walk($serials, 'trim');
+
+        // remove empty serialnumbers
+        $serials = array_filter($serials);
+
+        // remove duplicates
+        $serials = array_unique($serials);
+
+        $newSerials = 0;
+
+        foreach ($serials as $serialnumber) {
+            $serialnumber = trim($serialnumber);
+            $serial = Shopware()->Models()->getRepository('Shopware\Models\Article\EsdSerial')->findOneBy(array('serialnumber' => $serialnumber));
+            if ($serial) {
+                continue;
+            }
+
+            $serial = new \Shopware\Models\Article\EsdSerial();
+            $serial->setSerialnumber($serialnumber);
+            $serial->setEsd($esd);
+            $this->getManager()->persist($serial);
+            $newSerials++;
+        }
+        $this->getManager()->flush();
+
+        // Update stock
+        $freeSerialsCount = $this->getFreeSerialCount($esdId);
+        $articleDetail = $esd->getArticleDetail();
+        $articleDetail->setInStock($freeSerialsCount);
+
+        $this->getManager()->flush();
+
+        $this->View()->assign(array(
+            'success' => true,
+            'total' => $newSerials
+        ));
     }
 
     /**
@@ -4000,7 +3857,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
         if (!file_exists($filePath)) {
             $this->View()->assign(array(
-                'message' =>  'noFolder',
+                'message' => 'noFolder',
                 'success' => false
             ));
             return;
@@ -4016,8 +3873,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         }
 
         $this->View()->assign(array(
-            'data' =>  $result,
-            'total' =>  count($result),
+            'data' => $result,
+            'total' => count($result),
             'success' => true
         ));
     }
@@ -4030,22 +3887,17 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     {
         $destinationDir = Shopware()->DocPath('files_' . Shopware()->Config()->get('sESDKEY'));
 
-        try {
-            $fileBag = new \Symfony\Component\HttpFoundation\FileBag($_FILES);
-            /** @var $file Symfony\Component\HttpFoundation\File\UploadedFile */
-            $file = $fileBag->get('fileId');
-            $file->move($destinationDir, $file->getClientOriginalName());
-        } catch (Exception $e) {
-            $this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
+        $fileBag = new \Symfony\Component\HttpFoundation\FileBag($_FILES);
+        /** @var $file Symfony\Component\HttpFoundation\File\UploadedFile */
+        $file = $fileBag->get('fileId');
 
-            return;
-        }
+
         if ($file === null) {
             $this->View()->assign(array('success' => false));
 
             return;
         }
-
+        $file->move($destinationDir, $file->getClientOriginalName());
         $this->View()->assign(array('success' => true));
     }
 
@@ -4108,8 +3960,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $result = $stmt->fetchAll();
 
         $this->View()->assign(array(
-            'data' =>  $result,
-            'total' =>  count($result),
+            'data' => $result,
+            'total' => count($result),
             'success' => true
         ));
     }
@@ -4121,62 +3973,55 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     public function regenerateVariantOrderNumbersAction()
     {
-        try {
-            $data = $this->Request()->getParams();
-            $articleId = $data['articleId'];
-            $syntax = $data['syntax'];
-            $offset = $this->Request()->getParam('offset', null);
-            $limit = $this->Request()->getParam('limit', null);
+        $data = $this->Request()->getParams();
+        $articleId = $data['articleId'];
+        $syntax = $data['syntax'];
+        $offset = $this->Request()->getParam('offset', null);
+        $limit = $this->Request()->getParam('limit', null);
 
-            if (!$articleId > 0 || strlen($syntax) === 0) {
-                return;
-            }
-
-            $builder = $this->getRepository()->createQueryBuilder('article');
-            $builder->where('article.id = :id')
-                    ->setParameter('id', $articleId);
-
-            $article = $builder->getQuery()->getOneOrNullResult(
-                \Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT
-            );
-
-            $abortId = $article->getMainDetail()->getId();
-            $commands = $this->prepareNumberSyntax($syntax);
-
-            $builder = $this->getVariantsWithOptionsBuilder($articleId, $offset, $limit);
-            $query = $builder->getQuery();
-            $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
-            $paginator = $this->getModelManager()->createPaginator($query);
-            $details = $paginator->getIterator()->getArrayCopy();
-
-            $counter = $offset;
-            if ($offset == 0) {
-                $counter = 1;
-            }
-
-            /** @var $detail \Shopware\Models\Article\Detail */
-            foreach ($details as $detail) {
-                if ($detail->getId() === $abortId) {
-                    continue;
-                }
-                $number = $this->interpretNumberSyntax($article, $detail, $commands, $counter);
-                $counter++;
-                if (strlen($number) === 0) {
-                    continue;
-                }
-                $detail->setNumber($number);
-                Shopware()->Models()->persist($detail);
-            }
-            Shopware()->Models()->flush();
-            $this->View()->assign(array(
-                'success' => true
-            ));
-        } catch (Exception $e) {
-            $this->View()->assign(array(
-                'success' => false,
-                'message' => $e->getMessage()
-            ));
+        if (!$articleId > 0 || strlen($syntax) === 0) {
+            return;
         }
+
+        $builder = $this->getRepository()->createQueryBuilder('article');
+        $builder->where('article.id = :id')
+            ->setParameter('id', $articleId);
+
+        $article = $builder->getQuery()->getOneOrNullResult(
+            \Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT
+        );
+
+        $abortId = $article->getMainDetail()->getId();
+        $commands = $this->prepareNumberSyntax($syntax);
+
+        $builder = $this->getVariantsWithOptionsBuilder($articleId, $offset, $limit);
+        $query = $builder->getQuery();
+        $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
+        $paginator = $this->getModelManager()->createPaginator($query);
+        $details = $paginator->getIterator()->getArrayCopy();
+
+        $counter = $offset;
+        if ($offset == 0) {
+            $counter = 1;
+        }
+
+        /** @var $detail \Shopware\Models\Article\Detail */
+        foreach ($details as $detail) {
+            if ($detail->getId() === $abortId) {
+                continue;
+            }
+            $number = $this->interpretNumberSyntax($article, $detail, $commands, $counter);
+            $counter++;
+            if (strlen($number) === 0) {
+                continue;
+            }
+            $detail->setNumber($number);
+            Shopware()->Models()->persist($detail);
+        }
+        Shopware()->Models()->flush();
+        $this->View()->assign(array(
+            'success' => true
+        ));
     }
 
     /**
@@ -4194,13 +4039,13 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(array('details', 'options'));
         $builder->from('Shopware\Models\Article\Detail', 'details')
-                ->leftJoin('details.configuratorOptions', 'options')
-                ->where('details.articleId = :articleId')
-                ->setParameter('articleId', $articleId);
+            ->leftJoin('details.configuratorOptions', 'options')
+            ->where('details.articleId = :articleId')
+            ->setParameter('articleId', $articleId);
 
         if ($offset !== null && $limit !== null) {
             $builder->setFirstResult($offset)
-                    ->setMaxResults($limit);
+                ->setMaxResults($limit);
         }
         return $builder;
     }
@@ -4274,12 +4119,12 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
             return implode('.', $results);
 
-        //if the result of the current command on the cursor is an object
+            //if the result of the current command on the cursor is an object
         } elseif (is_object($result)) {
             //we have to execute the next command on the result
             return $this->recursiveInterpreter($result, $index, $commands);
 
-        //otherwise we can return directly.
+            //otherwise we can return directly.
         } else {
             return $result;
         }
@@ -4365,7 +4210,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         }
 
         $startDate = $this->Request()->getParam('fromDate', date("Y-m-d", mktime(0, 0, 0, date("m"), 1, date("Y"))));
-        $endDate   = $this->Request()->getParam('toDate', date("Y-m-d"));
+        $endDate = $this->Request()->getParam('toDate', date("Y-m-d"));
 
         $sql = "
             SELECT
@@ -4385,7 +4230,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         ";
 
         $stmt = Shopware()->Db()->query($sql, array(
-            'endDate'   => $endDate,
+            'endDate' => $endDate,
             'startDate' => $startDate,
             'articleId' => $articleId,
         ));
@@ -4409,8 +4254,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         Shopware()->Plugins()->Controller()->ViewRenderer()->setNoRender();
 
         $exist = $this->getRepository()
-                      ->getValidateNumberQuery($this->Request()->value, $this->Request()->param)
-                      ->getArrayResult();
+            ->getValidateNumberQuery($this->Request()->value, $this->Request()->param)
+            ->getArrayResult();
 
         if (empty($exist) && strlen($this->Request()->value) > 0) {
             echo 'true';
@@ -4425,8 +4270,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     public function previewDetailAction()
     {
-        $shopId = (int) $this->Request()->getParam('shopId');
-        $articleId = (int) $this->Request()->getParam('articleId');
+        $shopId = (int)$this->Request()->getParam('shopId');
+        $articleId = (int)$this->Request()->getParam('articleId');
 
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
         $shop = $repository->getActiveById($shopId);
@@ -4442,7 +4287,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             )
         );
 
-        /**@var $shop \Shopware\Models\Shop\Shop*/
+        /**@var $shop Shop */
         $this->Response()->setCookie('shop', $shopId, 0, $shop->getBasePath());
         $this->redirect($url);
     }
@@ -4455,11 +4300,79 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     protected function getViolationFields($violations)
     {
         $fields = array();
-        /**@var $violation Symfony\Component\Validator\ConstraintViolation*/
+        /**@var $violation Symfony\Component\Validator\ConstraintViolation */
         foreach ($violations as $violation) {
             $fields[] = $violation->getPropertyPath();
         }
 
         return $fields;
+    }
+
+    /**
+     * @param ListProduct[] $products
+     * @return ListProduct[]
+     */
+    private function getAdditionalTexts($products)
+    {
+        /** @var Repository $shopRepo */
+        $shopRepo = $this->get('models')->getRepository('Shopware\Models\Shop\Shop');
+
+        /** @var Shop $shop */
+        $shop = $shopRepo->getActiveDefault();
+
+        /** @var ContextServiceInterface $contextService */
+        $contextService = $this->get('shopware_storefront.context_service');
+
+        $context = $contextService->createShopContext(
+            $shop->getId(),
+            $shop->getCurrency()->getId(),
+            ContextService::FALLBACK_CUSTOMER_GROUP
+        );
+
+        /** @var AdditionalTextServiceInterface $service */
+        $service = $this->get('shopware_storefront.additional_text_service');
+
+        return $service->buildAdditionalTextLists($products, $context);
+    }
+
+    /**
+     * @param array $result
+     * @return ListProduct[]
+     */
+    private function buildListProducts(array $result)
+    {
+        $products = [];
+        foreach ($result as $item) {
+            $number = $item['number'];
+
+            $product = new ListProduct(
+                $item['articleId'],
+                $item['articleDetailId'],
+                $item['number']
+            );
+            if ($item['additionalText']) {
+                $product->setAdditional($item['additionalText']);
+            }
+            $products[$number] = $product;
+        }
+        return $products;
+    }
+
+    /**
+     * @param array $data
+     * @param ListProduct[] $products
+     * @return array
+     */
+    private function assignAdditionalText(array $data, array $products)
+    {
+        foreach ($data as &$item) {
+            $number = $item['number'];
+            if (!isset($products[$number])) {
+                continue;
+            }
+            $product = $products[$number];
+            $item['additionalText'] = $product->getAdditional();
+        }
+        return $data;
     }
 }

@@ -252,8 +252,6 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
                 'defaultListingSorting'
             ]),
             'filters' => $this->genericConfigLoader([
-                'propertySorting',
-                'displayFiltersOnDetailPage',
                 'showSupplierInCategories',
                 'showImmediateDeliveryFacet',
                 'showShippingFreeFacet',

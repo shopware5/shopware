@@ -86,7 +86,7 @@ EOF
 
         if (!$plugin->getUpdateVersion()) {
             $output->writeln(sprintf('The plugin %s is up to date.', $pluginName));
-            return 1;
+            return 0;
         }
 
         $pluginManager->updatePlugin($plugin);

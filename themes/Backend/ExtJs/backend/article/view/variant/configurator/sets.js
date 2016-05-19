@@ -185,7 +185,7 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Sets', {
             name: 'name',
             allowBlank: false,
             fieldLabel: me.snippets.setName
-        })
+        });
 
         me.formPanel = Ext.create('Ext.form.Panel', {
             layout: 'anchor',

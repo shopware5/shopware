@@ -93,12 +93,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
             return;
         }
 
-        try {
-            $this->setWidgetPosition($id, $position, $column);
-        } catch (\Doctrine\ORM\ORMException $e) {
-            $this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
-            return;
-        }
+        $this->setWidgetPosition($id, $position, $column);
 
         $this->View()->assign(array('success' => true, 'newPosition' => $position, 'newColumn' => $column));
     }
@@ -118,12 +113,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         $widgets = $this->Request()->getParam('widgets');
 
         foreach ($widgets as $widget) {
-            try {
-                $this->setWidgetPosition($widget['id'], $widget['position'], $widget['column']);
-            } catch (\Doctrine\ORM\ORMException $e) {
-                $this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
-                return;
-            }
+            $this->setWidgetPosition($widget['id'], $widget['position'], $widget['column']);
         }
 
         $this->View()->assign(array('success' => true));
@@ -167,23 +157,18 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         $column = $request->getParam('column');
         $position = $request->getParam('position');
 
-        try {
-            $model = new \Shopware\Models\Widget\View();
-            $model->setWidget(
-                Shopware()->Container()->get('models')->find('Shopware\Models\Widget\Widget', $widgetId)
-            );
-            $model->setAuth(
-                Shopware()->Container()->get('models')->find('Shopware\Models\User\User', $userID)
-            );
-            $model->setColumn($column);
-            $model->setPosition($position);
+        $model = new \Shopware\Models\Widget\View();
+        $model->setWidget(
+            Shopware()->Container()->get('models')->find('Shopware\Models\Widget\Widget', $widgetId)
+        );
+        $model->setAuth(
+            Shopware()->Container()->get('models')->find('Shopware\Models\User\User', $userID)
+        );
+        $model->setColumn($column);
+        $model->setPosition($position);
 
-            Shopware()->Container()->get('models')->persist($model);
-            Shopware()->Container()->get('models')->flush();
-        } catch (\Doctrine\ORM\ORMException $e) {
-            $this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
-        }
-
+        Shopware()->Container()->get('models')->persist($model);
+        Shopware()->Container()->get('models')->flush();
         $viewId = $model->getId();
 
         $this->View()->assign(array('success' => !empty($viewId), 'viewId' => $viewId));
@@ -204,14 +189,9 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         $request = $this->Request();
         $id = $request->getParam('id');
 
-        try {
-            $model = Shopware()->Container()->get('models')->find('Shopware\Models\Widget\View', $id);
-            Shopware()->Container()->get('models')->remove($model);
-            Shopware()->Container()->get('models')->flush();
-        } catch (\Doctrine\ORM\ORMException $e) {
-            $this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
-            return;
-        }
+        $model = Shopware()->Container()->get('models')->find('Shopware\Models\Widget\View', $id);
+        Shopware()->Container()->get('models')->remove($model);
+        Shopware()->Container()->get('models')->flush();
 
         $this->View()->assign(array('success' => true));
     }
@@ -614,9 +594,9 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
      */
     public function requestMerchantFormAction()
     {
-        $customerGroup = (string) $this->Request()->getParam('customerGroup');
-        $userId = (int) $this->Request()->getParam('id');
-        $mode = (string) $this->Request()->getParam('mode');
+        $customerGroup = (string)$this->Request()->getParam('customerGroup');
+        $userId = (int)$this->Request()->getParam('id');
+        $mode = (string)$this->Request()->getParam('mode');
 
         if ($mode === 'allow') {
             $tplMail = 'sCUSTOMERGROUP%sACCEPTED';
@@ -637,7 +617,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
                 array(
                     'success' => false,
                     'message' => $this->container->get('snippets')->getNamespace('backend/widget/controller')
-                            ->get('merchantNoUserId', 'There is no user for the specific user id')
+                        ->get('merchantNoUserId', 'There is no user for the specific user id')
                 )
             );
             return false;
@@ -671,9 +651,9 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         $mailModel->setTranslation($translation);
 
         $mailData = array(
-            'content' => nl2br($mailModel->getContent()) ? : '',
-            'fromMail' => $mailModel->getFromMail() ? : '{config name=mail}',
-            'fromName' => $mailModel->getFromName() ? : '{config name=shopName}',
+            'content' => nl2br($mailModel->getContent()) ?: '',
+            'fromMail' => $mailModel->getFromMail() ?: '{config name=mail}',
+            'fromName' => $mailModel->getFromName() ?: '{config name=shopName}',
             'subject' => $mailModel->getSubject(),
             'toMail' => $customer['email'],
             'userId' => $userId,
@@ -761,14 +741,15 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         }
 
         $result = [];
+
         try {
             $xml = new \SimpleXMLElement(file_get_contents('https://' . $lang . '.shopware.com/news/?sRss=1', false, stream_context_create([
                 'http' => [
                     'timeout' => 20
                 ]
             ])));
-        } catch (Exception $e) {
-            return $result;
+        } catch (\Exception $e) {
+            return [];
         }
 
         /**

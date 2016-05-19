@@ -19,7 +19,7 @@
 	{* Checkout *}
 	{if !$sMinimumSurcharge && !$sDispatchNoOrder}
 		{block name="frontend_checkout_actions_confirm"}
-        <a href="{url action=confirm}" title="{"{s name='CheckoutActionsLinkProceed'}{/s}"|escape}" class="button-right large right checkout" >
+        <a href="{if {config name=always_select_payment}}{url controller='checkout' action='shippingPayment'}{else}{url controller='checkout' action='confirm'}{/if}" title="{"{s name='CheckoutActionsLinkProceed'}{/s}"|escape}" class="button-right large right checkout" >
 			{s name="CheckoutActionsLinkProceed"}{/s}
         </a>
         {/block}

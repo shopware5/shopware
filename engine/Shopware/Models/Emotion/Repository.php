@@ -81,7 +81,7 @@ class Repository extends ModelRepository
                 'emotions.is_landingpage as isLandingPage',
                 'emotions.parent_id as parentId',
                 'emotions.modified',
-                'GROUP_CONCAT(categories.description) AS categoriesNames',
+                'GROUP_CONCAT(categories.description ORDER BY categories.description ASC) AS categoriesNames',
                 "(
               CASE
                 WHEN (emotions.is_landingpage = 1 AND emotions.parent_id IS NOT NULL) THEN parent.name

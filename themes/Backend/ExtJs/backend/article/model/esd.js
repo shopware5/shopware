@@ -46,7 +46,7 @@ Ext.define('Shopware.apps.Article.model.Esd', {
 		//{block name="backend/article/model/esd/fields"}{/block}
         { name: 'id', type: 'int' },
         { name: 'name' },
-        { name: 'additionalText' },
+        { name: 'additionalText', type: 'string', useNull: true, defaultValue: null },
         { name: 'date', type: 'date' },
         { name: 'hasSerials', type: 'boolean'},
         { name: 'serialsUsed', type: 'int' },

@@ -299,8 +299,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
      */
     public function logoutAction()
     {
-        Shopware()->Session()->unsetAll();
-        $this->refreshBasket();
+        $this->admin->logout();
     }
 
     /**
@@ -383,9 +382,9 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
                 'text4'         => array('required' => 0),
                 'text5'         => array('required' => 0),
                 'text6'         => array('required' => 0),
-                'birthyear'     => array('required' => 0),
-                'birthmonth'    => array('required' => 0),
-                'birthday'      => array('required' => 0),
+                'birthyear'     => array('required' => 0, 'date' => ['d' => 'birthday', 'm' => 'birthmonth', 'y' => 'birthyear']),
+                'birthmonth'    => array('required' => 0, 'date' => ['d' => 'birthday', 'm' => 'birthmonth', 'y' => 'birthyear']),
+                'birthday'      => array('required' => 0, 'date' => ['d' => 'birthday', 'm' => 'birthmonth', 'y' => 'birthyear']),
                 'additional_address_line1' => array(
                     'required' => (Shopware()->Config()->requireAdditionAddressLine1 && Shopware()->Config()->showAdditionAddressLine1) ? 1 : 0
                 ),
@@ -1015,12 +1014,8 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         /** @var \Doctrine\DBAL\Connection $connection */
         $connection = $this->get('dbal_connection');
 
-        $date = new \DateTime('-2 hours');
-
         $connection->executeUpdate(
-            'DELETE FROM s_core_optin WHERE datum <= :minDate AND type = "password"',
-            ['minDate' => $date],
-            ['minDate' => "datetime"]
+            'DELETE FROM s_core_optin WHERE datum <= (NOW() - INTERVAL 2 HOUR) AND type = "password"'
         );
     }
 
@@ -1086,8 +1081,8 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
     public function ajaxLogoutAction()
     {
         Enlight()->Plugins()->Controller()->Json()->setPadding();
-        Shopware()->Session()->unsetAll();
-        $this->refreshBasket();
+
+        $this->admin->logout();
     }
 
     /**

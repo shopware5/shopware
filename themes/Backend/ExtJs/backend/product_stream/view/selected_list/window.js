@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 //{namespace name=backend/product_stream/main}
-
+//{block name="backend/product_stream/view/selected_list/window"}
 Ext.define('Shopware.apps.ProductStream.view.selected_list.Window', {
     extend: 'Enlight.app.Window',
     alias: 'widget.product-stream-selected-list-window',
@@ -100,3 +100,4 @@ Ext.define('Shopware.apps.ProductStream.view.selected_list.Window', {
         return this.settingsPanel;
     }
 });
+//{/block}

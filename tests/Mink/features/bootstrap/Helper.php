@@ -2,15 +2,20 @@
 
 namespace Shopware\Tests\Mink;
 
-
-use \Behat\Behat\Exception\PendingException;
+use \Behat\Behat\Tester\Exception\PendingException;
 use \SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use \SensioLabs\Behat\PageObjectExtension\PageObject\Element;
 use Shopware\Tests\Mink\Element\MultipleElement;
-use Shopware\Tests\Mink\Helper as MinkHelper;
 
 class Helper
 {
+    private static $language;
+
+    public static function setCurrentLanguage($language)
+    {
+        self::$language = $language;
+    }
+
     /**
      * Helper function to check each row of an array.
      * If each second sub-element of a row is equal or in its first, function returns true
@@ -115,12 +120,10 @@ class Helper
      */
     public static function countElements($parent, $elementLocator, $count = 0)
     {
-        $locator = array($elementLocator);
-        $elements = self::findAllOfElements($parent, $locator, false);
-
+        $elements = self::findAllOfElements($parent, [$elementLocator], false);
         $countElements = count($elements[$elementLocator]);
 
-        if ($countElements === intval($count)) {
+        if ($countElements === $count) {
             return true;
         }
 
@@ -137,12 +140,12 @@ class Helper
     {
         foreach ($array1 as $key => $value) {
             if (!array_key_exists($key, $array2)) {
-                return array(
+                return [
                     'error' => 'keyNotExists',
                     'key' => $key,
                     'value' => $value,
                     'value2' => null
-                );
+                ];
             }
 
             if (is_array($value)) {
@@ -155,16 +158,16 @@ class Helper
                 continue;
             }
 
-            $check = array($value, $array2[$key]);
-            $result = self::checkArray(array($check));
+            $check = [$value, $array2[$key]];
+            $result = self::checkArray([$check]);
 
             if ($result !== true) {
-                return array(
+                return [
                     'error' => 'comparisonFailed',
                     'key' => $key,
                     'value' => $value,
                     'value2' => $array2[$key]
-                );
+                ];
             }
         }
 
@@ -181,8 +184,8 @@ class Helper
      */
     public static function findElements(HelperSelectorInterface $parent, array $keys, $throwExceptions = true)
     {
-        $notFound = array();
-        $elements = array();
+        $notFound = [];
+        $elements = [];
 
         $selectors = self::getRequiredSelectors($parent, $keys);
 
@@ -197,7 +200,7 @@ class Helper
         }
 
         if ($throwExceptions) {
-            $messages = array('The following elements of ' . get_class($parent) . ' were not found:');
+            $messages = ['The following elements of ' . get_class($parent) . ' were not found:'];
 
             foreach ($notFound as $key => $locator) {
                 $messages[] = sprintf('%s ("%s")', $key, $locator);
@@ -209,7 +212,6 @@ class Helper
         }
 
         return $elements;
-
     }
 
     /**
@@ -222,8 +224,8 @@ class Helper
      */
     public static function findAllOfElements(HelperSelectorInterface $parent, array $keys, $throwExceptions = true)
     {
-        $notFound = array();
-        $elements = array();
+        $notFound = [];
+        $elements = [];
 
         $selectors = self::getRequiredSelectors($parent, $keys);
 
@@ -238,7 +240,7 @@ class Helper
         }
 
         if ($throwExceptions) {
-            $messages = array('The following elements of ' . get_class($parent) . ' were not found:');
+            $messages = ['The following elements of ' . get_class($parent) . ' were not found:'];
 
             foreach ($notFound as $key => $locator) {
                 $messages[] = sprintf('%s ("%s")', $key, $locator);
@@ -263,8 +265,8 @@ class Helper
      */
     public static function getRequiredSelectors(HelperSelectorInterface $parent, array $keys, $throwExceptions = true)
     {
-        $errors = array();
-        $locators = array();
+        $errors = [];
+        $locators = [];
         $selectors = $parent->getCssSelectors();
 
         foreach ($keys as $key) {
@@ -285,7 +287,7 @@ class Helper
             return $locators;
         }
 
-        $message = array('Following element selectors of ' . get_class($parent) . ' are wrong:');
+        $message = ['Following element selectors of ' . get_class($parent) . ' are wrong:'];
 
         if (isset($errors['noSelector'])) {
             $message[] = sprintf('%s (not defined)', implode(', ', $errors['noSelector']));
@@ -305,7 +307,7 @@ class Helper
      */
     public static function getRequiredSelector(HelperSelectorInterface $parent, $key)
     {
-        $selectors = self::getRequiredSelectors($parent, array($key), false);
+        $selectors = self::getRequiredSelectors($parent, [$key], false);
 
         return (isset($selectors[$key])) ? $selectors[$key] : false;
     }
@@ -314,41 +316,39 @@ class Helper
     const EXCEPTION_PENDING = 2;
 
     /**
-     * Throws a generic or pending exception
+     * Throws a generic or pending exception, shows the backtrace to the first context class call
      * @param array|string $messages
      * @param int $type
      * @throws \Exception|PendingException
      */
-    public static function throwException($messages = array(), $type = self::EXCEPTION_GENERIC)
+    public static function throwException($messages = [], $type = self::EXCEPTION_GENERIC)
     {
         if (!is_array($messages)) {
-            $messages = array($messages);
+            $messages = [$messages];
         }
 
-        $debug = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 3);
+        $debug = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
 
-        $additionalText = '';
+        $message = [<<<EOD
+Exception thrown in {$debug[1]['class']}{$debug[1]['type']}{$debug[1]['function']}():{$debug[0]['line']}
 
-        if (isset($debug[2]['class'])) {
-            $additionalText = sprintf(
-                ', called by %s%s%s() (line %d)',
-                $debug[2]['class'],
-                $debug[2]['type'],
-                $debug[2]['function'],
-                $debug[1]['line']
-            );
+Stacktrace:
+EOD
+        ];
+
+        foreach ($debug as $key => $call) {
+            $next = $debug[$key + 1];
+
+            if (!isset($next['class'])) {
+                break;
+            }
+
+            $message[] = "{$next['class']}{$next['type']}{$next['function']}():{$call['line']}";
         }
 
-        $message = sprintf(
-            'Exception thrown in %s%s%s() (line %d%s)',
-            $debug[1]['class'],
-            $debug[1]['type'],
-            $debug[1]['function'],
-            $debug[0]['line'],
-            $additionalText
-        );
+        $message[] = "\r\nException:";
 
-        $messages = array_merge(array($message), $messages);
+        $messages = array_merge($message, $messages);
         $message = implode("\r\n", $messages);
 
         switch ($type) {
@@ -364,87 +364,114 @@ class Helper
                 self::throwException('Invalid exception type!', self::EXCEPTION_PENDING);
                 break;
         }
-
     }
 
     /**
      * Checks if a page or element has the requested named link
      * @param Page|Element|HelperSelectorInterface $parent
      * @param string $key
-     * @param string $language
      * @return bool
-     * @throws \Exception
-     * @throws PendingException
      */
-    public static function hasNamedLink(HelperSelectorInterface $parent, $key, $language = '')
+    public static function hasNamedLink(HelperSelectorInterface $parent, $key)
     {
-        $locatorArray = $parent->getNamedSelectors();
+        return (self::hasNamedLinks($parent, [$key]) === true) ?: false;
+    }
 
-        if (empty($language)) {
-            if ($parent instanceof Page) {
-                $language = self::getCurrentLanguage($parent);
-            } else {
-                self::throwException('For elements the language has to be set!', self::EXCEPTION_PENDING);
-            }
-        }
+    /**
+     * Searches for named links given by $keys. Returns true if all exist, otherwise an array of the not found keys.
+     * @param Page|Element|HelperSelectorInterface $parent
+     * @param string[] $keys
+     * @return bool|string[]
+     */
+    public static function hasNamedLinks(HelperSelectorInterface $parent, array $keys)
+    {
+        $notFound = [];
+        $locatorArray = $parent->getNamedSelectors();
 
         if ($parent instanceof Page) {
             $parent = self::getContentBlock($parent);
         }
 
-        return $parent->hasLink($locatorArray[$key][$language]);
+        foreach($keys as $key) {
+            if($parent->hasLink($locatorArray[$key][self::$language])) {
+                continue;
+            }
+
+            $notFound[$key] = $locatorArray[$key][self::$language];
+        }
+
+        return ($notFound) ?: true;
     }
 
     /**
      * Clicks the requested named link
      * @param Page|Element|HelperSelectorInterface $parent
      * @param string $key
-     * @param string $language
      * @throws \Exception
      * @throws PendingException
      */
-    public static function clickNamedLink(HelperSelectorInterface $parent, $key, $language = '')
+    public static function clickNamedLink(HelperSelectorInterface $parent, $key)
     {
         $locatorArray = $parent->getNamedSelectors();
-
-        if (empty($language)) {
-            if ($parent instanceof Page) {
-                $language = self::getCurrentLanguage($parent);
-            } else {
-                self::throwException('For elements the language has to be set!', self::EXCEPTION_PENDING);
-            }
-        }
 
         if ($parent instanceof Page) {
             $parent = self::getContentBlock($parent);
         }
 
-        $parent->clickLink($locatorArray[$key][$language]);
+        $parent->clickLink($locatorArray[$key][self::$language]);
+    }
+
+    /**
+     * Checks if a page or element has the requested named link
+     * @param Page|Element|HelperSelectorInterface $parent
+     * @param string $key
+     * @return bool
+     */
+    public static function hasNamedButton(HelperSelectorInterface $parent, $key)
+    {
+        return (self::hasNamedButtons($parent, [$key]) === true) ?: false;
+    }
+
+    /**
+     * Searches for named buttons given by $keys. Returns true if all exist, otherwise an array of the not found keys.
+     * @param Page|Element|HelperSelectorInterface $parent
+     * @param string[] $keys
+     * @return bool|string[]
+     */
+    public static function hasNamedButtons(HelperSelectorInterface $parent, array $keys)
+    {
+        $notFound = [];
+        $locatorArray = $parent->getNamedSelectors();
+
+        if ($parent instanceof Page) {
+            $parent = self::getContentBlock($parent);
+        }
+
+        foreach($keys as $key) {
+            if($parent->hasButton($locatorArray[$key][self::$language])) {
+                continue;
+            }
+
+            $notFound[$key] = $locatorArray[$key][self::$language];
+        }
+
+        return ($notFound) ?: true;
     }
 
     /**
      * Presses the requested named button
      * @param Page|Element|HelperSelectorInterface $parent
      * @param string $key
-     * @param string $language
      */
-    public static function pressNamedButton(HelperSelectorInterface $parent, $key, $language = '')
+    public static function pressNamedButton(HelperSelectorInterface $parent, $key)
     {
         $locatorArray = $parent->getNamedSelectors();
-
-        if (empty($language)) {
-            if ($parent instanceof Page) {
-                $language = self::getCurrentLanguage($parent);
-            } else {
-                self::throwException('For elements the language has to be set!', self::EXCEPTION_PENDING);
-            }
-        }
 
         if ($parent instanceof Page) {
             $parent = self::getContentBlock($parent);
         }
 
-        $parent->pressButton($locatorArray[$key][$language]);
+        $parent->pressButton($locatorArray[$key][self::$language]);
     }
 
     /**
@@ -453,12 +480,12 @@ class Helper
      * @return \Behat\Mink\Element\NodeElement
      * @throws \Exception
      */
-    private static function getContentBlock(Page $parent)
+    public static function getContentBlock(Page $parent)
     {
-        $contentBlocks = array(
+        $contentBlocks = [
             'emotion' => 'div#content > div.inner',
             'responsive' => 'div.content-main--inner'
-        );
+        ];
 
         foreach ($contentBlocks as $locator) {
             $block = $parent->find('css', $locator);
@@ -474,15 +501,12 @@ class Helper
     /**
      * Fills a the inputs of a form
      * @param Page|Element|HelperSelectorInterface $parent
-     * @param $formKey
-     * @param $values
+     * @param string $formKey
+     * @param array $values
      */
     public static function fillForm(HelperSelectorInterface $parent, $formKey, $values)
     {
-        $locators = array($formKey);
-        $elements = self::findElements($parent, $locators);
-
-        /** @var \SensioLabs\Behat\PageObjectExtension\PageObject\Element $form */
+        $elements = self::findElements($parent, [$formKey]);
         $form = $elements[$formKey];
 
         foreach ($values as $value) {
@@ -534,20 +558,11 @@ class Helper
 
     /**
      * Helper function to get the current language ('de' or 'en')
-     * @param Page $page
      * @return string
      */
-    public static function getCurrentLanguage(Page $page)
+    public static function getCurrentLanguage()
     {
-        $shop = null;
-        $meta = $page->find('css', 'meta[name=application-name]');
-        $shop = $meta->getAttribute('content');
-
-        if ($shop === 'English') {
-            return 'en';
-        }
-
-        return 'de';
+        return self::$language;
     }
 
     /**
@@ -560,21 +575,21 @@ class Helper
      */
     public static function getPageInfo(\Behat\Mink\Session $session, array $selectionMode)
     {
-        $prefixes = array(
-            'emotion' => array(
+        $prefixes = [
+            'emotion' => [
                 'controller' => 'ctl_'
-            ),
-            'responsive' => array(
+            ],
+            'responsive' => [
                 'controller' => 'is--ctl-',
                 'action' => 'is--act-'
-            )
-        );
+            ]
+        ];
 
         $body = $session->getPage()->find('css', 'body');
         $class = $body->getAttribute('class');
 
         foreach ($prefixes as $template => $modes) {
-            $activeModes = array();
+            $activeModes = [];
 
             foreach ($modes as $mode => $prefix) {
                 if (in_array($mode, $selectionMode)) {
@@ -617,7 +632,6 @@ class Helper
     /**
      * @param HelperSelectorInterface $element
      * @param bool $throwExceptions
-     * @deprecated Only used in sitemap
      * @return array
      */
     public static function getElementData(HelperSelectorInterface $element, $throwExceptions = true)
@@ -646,7 +660,7 @@ class Helper
      */
     public static function convertTableHashToArray(array $hash, $keyKey = 'property', $valueKey = 'value')
     {
-        $result = array();
+        $result = [];
 
         foreach ($hash as $item) {
             $key = $item[$keyKey];
@@ -668,7 +682,7 @@ class Helper
         $unique = array_unique($array);
 
         if (count($unique) > 1) {
-            $messages = array('There are more than one unique values in the array!');
+            $messages = ['There are more than one unique values in the array!'];
             foreach ($unique as $key => $value) {
                 $messages[] = sprintf('"%s" (Key: "%s")', $value, $key);
             }
@@ -699,11 +713,11 @@ class Helper
      */
     public static function assertElementProperties(Element $element, array $properties)
     {
-        $check = array();
+        $check = [];
 
         foreach ($properties as $propertyName => $value) {
             $property = self::getElementProperty($element, $propertyName);
-            $check[$propertyName] = array($property, $value);
+            $check[$propertyName] = [$property, $value];
         }
 
         $result = self::checkArray($check);
@@ -712,11 +726,11 @@ class Helper
             return true;
         }
 
-        return array(
+        return [
             'key' => $result,
             'value' => $check[$result][0],
             'value2' => $check[$result][1]
-        );
+        ];
     }
 
     /** @var  MultipleElement */
@@ -750,7 +764,7 @@ class Helper
     public static function searchElements(array $needles, MultipleElement $haystack)
     {
         self::$filterElements = $haystack;
-        $result = array_filter($needles, array('self', 'filter'));
+        $result = array_filter($needles, ['self', 'filter']);
 
         if ($result) {
             return $result;
@@ -767,17 +781,17 @@ class Helper
      */
     public static function assertElements(array $needles, MultipleElement $haystack)
     {
-        $failures = array();
+        $failures = [];
 
         foreach ($needles as $key => $item) {
             $element = $haystack->setInstance($key + 1);
             $result = self::assertElementProperties($element, $item);
 
             if ($result !== true) {
-                $failures[] = array(
+                $failures[] = [
                     'properties' => $item,
                     'result' => $result
-                );
+                ];
             }
         }
 
@@ -802,7 +816,7 @@ class Helper
                 get_class($elements),
                 $count
             );
-            MinkHelper::throwException($message);
+            self::throwException($message);
         }
     }
 }

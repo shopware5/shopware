@@ -214,11 +214,11 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
     {
         $ip = $request->getClientIp(false);
         $deviceType = $request->getDeviceType();
-
         $shopId = Shopware()->Shop()->getId();
+        $isNewRecord = false;
 
         $sql = '
-            SELECT id
+            SELECT 1
             FROM s_statistics_visitors
             WHERE datum = CURDATE()
             AND shopID = :shopId
@@ -243,16 +243,19 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
                     'deviceType' => $deviceType
                 )
             );
-            return;
+            $isNewRecord = true;
         }
 
-        $sql = 'SELECT id FROM s_statistics_pool WHERE datum = CURDATE() AND remoteaddr = ?';
+        $sql = 'SELECT 1 FROM s_statistics_pool WHERE datum = CURDATE() AND remoteaddr = ?';
         $result = Shopware()->Db()->fetchOne($sql, array($ip));
         if (empty($result)) {
             $sql = 'INSERT INTO s_statistics_pool (`remoteaddr`, `datum`) VALUES (?, NOW())';
             Shopware()->Db()->query($sql, array($ip));
-            $sql = 'UPDATE s_statistics_visitors SET pageimpressions=pageimpressions+1, uniquevisits=uniquevisits+1 WHERE datum=CURDATE() AND shopID = ? AND deviceType = ?';
-            Shopware()->Db()->query($sql, array($shopId, $deviceType));
+
+            if ($isNewRecord === false) {
+                $sql = 'UPDATE s_statistics_visitors SET pageimpressions=pageimpressions+1, uniquevisits=uniquevisits+1 WHERE datum=CURDATE() AND shopID = ? AND deviceType = ?';
+                Shopware()->Db()->query($sql, array($shopId, $deviceType));
+            }
         } else {
             $sql = 'UPDATE s_statistics_visitors SET pageimpressions=pageimpressions+1 WHERE datum=CURDATE() AND shopID = ? AND deviceType = ?';
             Shopware()->Db()->query($sql, array($shopId, $deviceType));

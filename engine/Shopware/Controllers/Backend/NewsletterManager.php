@@ -86,11 +86,11 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
 
         $groups = $this->getCampaignsRepository()->getListGroupsQuery($filter, $sort, $limit, $offset)->getArrayResult();
 
-        $this->View()->assign(array(
+        $this->View()->assign([
             'success' => true,
             'data' => $groups,
             'total' => count($groups),
-        ));
+        ]);
     }
 
     /**
@@ -102,13 +102,19 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
         $groupId = $this->Request()->getParam('groupId', null);
 
         if ($email === null || $groupId === null) {
-            $this->View()->assign(array('success' => false, 'message' => 'email and groupId needed'));
+            $this->View()->assign([
+                'success' => false,
+                'message' => $this->translateMessage('error_msg/mail_and_group_missing', 'Email and groupId needed')
+            ]);
             return;
         }
 
         $model = new \Shopware\Models\Newsletter\Address();
         if ($model === null) {
-            $this->View()->assign(array('success' => false, 'message' => 'Could not create address'));
+            $this->View()->assign([
+                'success' => false,
+                'message' => $this->translateMessage('error_msg/cannot_create_address', 'Could not create address')
+            ]);
             return;
         }
 
@@ -118,7 +124,7 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
         Shopware()->Models()->persist($model);
         Shopware()->Models()->flush();
 
-        $this->View()->assign(array('success' => true, 'data' => Shopware()->Models()->toArray($model)));
+        $this->View()->assign(['success' => true, 'data' => Shopware()->Models()->toArray($model)]);
     }
 
     /**
@@ -141,7 +147,7 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
             $direction = $sort[1]['direction'];
 
             // whitelist for valid fields
-            if (!in_array($field, array('name', 'number', 'internalId')) || !in_array($direction, array('ASC', 'DESC'))) {
+            if (!in_array($field, ['name', 'number', 'internalId']) || !in_array($direction, array('ASC', 'DESC'))) {
                 $field = "name";
                 $direction = "DESC";
             }
@@ -174,11 +180,11 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
 
         $data = Shopware()->Db()->fetchAll($sql);
 
-        $this->View()->assign(array(
+        $this->View()->assign([
             'success' => true,
             'data' => $data,
             'total' => count($data)
-        ));
+        ]);
         return;
     }
 
@@ -192,13 +198,19 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
         $groupId = $this->Request()->getParam('groupId', null);
 
         if ($id === null || $email === null || $groupId === null) {
-            $this->View()->assign(array('success' => false, 'message' => 'Id, groupId and email needed'));
+            $this->View()->assign([
+                'success' => false,
+                'message' => $this->translateMessage('error_msg/id_group_and_email_need', 'Id, groupId and email needed')
+            ]);
             return;
         }
 
         $model = Shopware()->Models()->find('Shopware\Models\Newsletter\Address', $id);
         if ($model === null) {
-            $this->View()->assign(array('success' => false, 'message' => 'Recipient not found'));
+            $this->View()->assign([
+                'success' => false,
+                'message' => $this->translateMessage('error_msg/no_recipient', 'Recipient not found')
+            ]);
             return;
         }
 
@@ -208,7 +220,7 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
         Shopware()->Models()->persist($model);
         Shopware()->Models()->flush();
 
-        $this->View()->assign(array('success' => true, 'data' => Shopware()->Models()->toArray($model)));
+        $this->View()->assign(['success' => true, 'data' => Shopware()->Models()->toArray($model)]);
     }
 
     /**
@@ -218,28 +230,28 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
     {
         $id = $this->Request()->getParam('id', null);
         if ($id === null) {
-            $this->View()->assign(array(
+            $this->View()->assign([
                 'success' => false,
                 'message' => 'No ID passed'
-            ));
+            ]);
             return;
         }
 
         $model = Shopware()->Models()->find('Shopware\Models\Newsletter\Newsletter', $id);
         if (!$model instanceof \Shopware\Models\Newsletter\Newsletter) {
-            $this->View()->assign(array(
+            $this->View()->assign([
                 'success' => false,
-                'message' => 'Newsletter not found'
-            ));
+                'message' => $this->translateMessage('error_msg/no_newsletter', 'Newsletter not found')
+            ]);
             return;
         }
 
         Shopware()->Models()->remove($model);
         Shopware()->Models()->flush();
 
-        $this->View()->assign(array(
+        $this->View()->assign([
             'success' => true
-        ));
+        ]);
         return;
     }
 
@@ -248,13 +260,13 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
      */
     public function deleteRecipientGroupAction()
     {
-        $groups = $this->Request()->getParam('recipientGroup', array(array('internalId' => $this->Request()->getParam('internalId'))));
+        $groups = $this->Request()->getParam('recipientGroup', [['internalId' => $this->Request()->getParam('internalId')]]);
 
         if (empty($groups)) {
-            $this->View()->assign(array(
+            $this->View()->assign([
                 'success' => false,
-                'message' => 'No ID passed'
-            ));
+                'message' => $this->translateMessage('error_msg/no_id_passed', 'No ID passed')
+            ]);
             return;
         }
         //iterate over the given senders and delete them
@@ -276,7 +288,7 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
 
         Shopware()->Models()->flush();
 
-        $this->View()->assign(array('success' => true));
+        $this->View()->assign(['success' => true]);
     }
 
 
@@ -285,13 +297,13 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
      */
     public function deleteRecipientAction()
     {
-        $recipients = $this->Request()->getParam('recipient', array(array('id' => $this->Request()->getParam('id'))));
+        $recipients = $this->Request()->getParam('recipient', [['id' => $this->Request()->getParam('id')]]);
 
         if (empty($recipients)) {
-            $this->View()->assign(array(
+            $this->View()->assign([
                 'success' => false,
-                'message' => 'No ID passed'
-            ));
+                'message' => $this->translateMessage('error_msg/no_id_passed', 'No ID passed')
+            ]);
             return;
         }
 
@@ -313,7 +325,7 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
 
         Shopware()->Models()->flush();
 
-        $this->View()->assign(array('success' => true));
+        $this->View()->assign(['success' => true]);
     }
 
     /**
@@ -324,10 +336,10 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
         $senders = $this->Request()->getParam('sender', array(array('id' => $this->Request()->getParam('id'))));
 
         if (empty($senders)) {
-            $this->View()->assign(array(
+            $this->View()->assign([
                 'success' => false,
-                'message' => 'No ID passed'
-            ));
+                'message' => $this->translateMessage('error_msg/no_id_passed', 'No ID passed')
+            ]);
             return;
         }
 
@@ -349,7 +361,7 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
 
         Shopware()->Models()->flush();
 
-        $this->View()->assign(array('success' => true));
+        $this->View()->assign(['success' => true]);
     }
 
     /**
@@ -359,7 +371,10 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
     {
         $data = $this->Request()->getParams();
         if ($data === null) {
-            $this->View()->assign(array('success' => false, 'message' => 'no data passed'));
+            $this->View()->assign([
+                'success' => false,
+                'message' => $this->translateMessage('error_msg/no_data_passed', 'No data passed')
+            ]);
             return;
         }
 
@@ -371,7 +386,6 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
             $data['containers'][$key]['text'] = $data['containers'][$key]['text'][0];
         }
 
-
         $model = new \Shopware\Models\Newsletter\Newsletter();
         $model->fromArray($data);
 
@@ -382,7 +396,7 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
             'id' => $model->getId()
         );
 
-        $this->View()->assign(array('success' => true, 'data' => $data));
+        $this->View()->assign(['success' => true, 'data' => $data]);
     }
 
     /**
@@ -392,20 +406,33 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
     {
         $id = $this->Request()->getParam('id', null);
         if ($id === null) {
-            $this->View()->assign(array('success' => false, 'message' => 'no id passed'));
+            $this->View()->assign([
+                'success' => false,
+                'message' => $this->translateMessage('error_msg/no_id_passed', 'No ID passed')
+            ]);
             return;
         }
 
         $data = $this->Request()->getParams();
         if ($data === null) {
-            $this->View()->assign(array('success' => false, 'message' => 'no data passed'));
+            $this->View()->assign([
+                'success' => false,
+                'message' => $this->translateMessage('error_msg/no_data_passed', 'No data passed')
+            ]);
             return;
+        }
+
+        if (!isset($data['timedDelivery'])) {
+            $data['timedDelivery'] = null;
         }
 
         // first of all get rid of the old containers and text fields
         $model= Shopware()->Models()->find('Shopware\Models\Newsletter\Newsletter', $id);
         if (!$model instanceof \Shopware\Models\Newsletter\Newsletter) {
-            $this->View()->assign(array('success' => false, 'message' => 'newsletter not found'));
+            $this->View()->assign([
+                'success' => false,
+                'message' => $this->translateMessage('error_msg/no_newsletter', 'Newsletter not found')
+            ]);
             return;
         }
 
@@ -429,7 +456,10 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
         $model= Shopware()->Models()->find('Shopware\Models\Newsletter\Newsletter', $id);
 
         if (!$model instanceof \Shopware\Models\Newsletter\Newsletter) {
-            $this->View()->assign(array('success' => false, 'message' => 'newsletter not found'));
+            $this->View()->assign([
+                'success' => false,
+                'message' => $this->translateMessage('error_msg/no_newsletter', 'Newsletter not found')
+            ]);
             return;
         }
 
@@ -438,7 +468,7 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
         Shopware()->Models()->persist($model);
         Shopware()->Models()->flush();
 
-        $this->View()->assign(array('success' => true, 'data' => $model->toArray));
+        $this->View()->assign(['success' => true, 'data' => $model->toArray]);
     }
 
 
@@ -454,7 +484,7 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
         Shopware()->Models()->persist($groupModel);
         Shopware()->Models()->flush();
 
-        $this->View()->assign(array('success' => true));
+        $this->View()->assign(['success' => true]);
     }
 
     /**
@@ -469,7 +499,7 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
         Shopware()->Models()->persist($senderModel);
         Shopware()->Models()->flush();
 
-        $this->View()->assign(array('success' => true));
+        $this->View()->assign(['success' => true]);
     }
 
     /**
@@ -481,13 +511,19 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
         $data = $this->Request()->getParams();
 
         if ($id === null) {
-            $this->View()->assign(array('success' => false, 'message' => 'No ID passed'));
+            $this->View()->assign([
+                'success' => false,
+                'message' => $this->translateMessage('error_msg/no_id_passed', 'No ID passed')
+            ]);
             return;
         }
 
         $model = Shopware()->Models()->find('Shopware\Models\Newsletter\Sender', $id);
         if ($model === null) {
-            $this->View()->assign(array('success' => false, 'message' => 'Sender not found'));
+            $this->View()->assign([
+                'success' => false,
+                'message' => $this->translateMessage('error_msg/no_sender', 'Sender not found')
+            ]);
             return;
         }
 
@@ -495,7 +531,7 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
         Shopware()->Models()->persist($model);
         Shopware()->Models()->flush();
 
-        $this->View()->assign(array('success' => true));
+        $this->View()->assign(['success' => true]);
     }
 
     /**
@@ -517,11 +553,11 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
         //returns the customer data
         $result = $paginator->getIterator()->getArrayCopy();
 
-        $this->View()->assign(array(
+        $this->View()->assign([
             'success' => true,
             'data' => $result,
             'total' => $totalResult,
-        ));
+        ]);
     }
 
     /**
@@ -545,11 +581,11 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
 
         $sender = $query->getArrayResult();
 
-        $this->View()->assign(array(
+        $this->View()->assign([
             'success' => true,
             'data' => $result,
             'total' => $totalResult,
-        ));
+        ]);
     }
 
     /**
@@ -559,14 +595,15 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
     {
         $builder = Shopware()->Models()->createQueryBuilder();
 
-        $builder->select(array(
+        $builder->select([
             'mailing',
             'container',
-            'text'))
-                ->from('Shopware\Models\Newsletter\Newsletter', 'mailing')
-                ->leftJoin('mailing.containers', 'container')
-                ->leftJoin('container.text', 'text')
-                ->where('mailing.status = -1');
+            'text'
+        ]);
+        $builder->from('Shopware\Models\Newsletter\Newsletter', 'mailing')
+            ->leftJoin('mailing.containers', 'container')
+            ->leftJoin('container.text', 'text')
+            ->where('mailing.status = -1');
 
         return $builder->getQuery();
     }
@@ -577,7 +614,7 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
     public function listNewslettersAction()
     {
         $filter = $this->Request()->getParam('filter', null);
-        $sort = $this->Request()->getParam('sort', array(array('property' => 'mailing.date', 'direction' => 'DESC')));
+        $sort = $this->Request()->getParam('sort', [['property' => 'mailing.date', 'direction' => 'DESC']]);
         $limit = $this->Request()->getParam('limit', 10);
         $offset = $this->Request()->getParam('start', 0);
 
@@ -616,18 +653,19 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
         $result = $paginator->getIterator()->getArrayCopy();
 
         // Get address count via plain sql in order to improve the speed
-        $ids = array();
+        $ids = [];
         foreach ($result as $newsletter) {
             $ids[] = $newsletter['id'];
         }
         $ids = implode(', ', $ids);
 
-        $addresses = array();
+        $addresses = [];
         if ($ids !== '') {
             $sql = "SELECT lastmailing, COUNT(lastmailing) as addressCount
             FROM `s_campaigns_mailaddresses`
             WHERE lastmailing
-            IN ( $ids )";
+            IN ( $ids )
+            GROUP BY lastmailing";
             $addresses = Shopware()->Db()->fetchAssoc($sql);
         }
 
@@ -649,11 +687,45 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
             }
         }
 
-        $this->View()->assign(array(
+        $this->View()->assign([
             'success' => true,
             'data' => $result,
             'total' => $totalResult,
-        ));
+        ]);
+    }
+
+    /**
+     * Will be executed if the user activates / deactivates a newsletter in the grid via the action column
+     */
+    public function releaseNewsletterAction()
+    {
+        $active = $this->Request()->getParam('status');
+        $id = (int) $this->Request()->getParam('id', null);
+
+        if ($id === null) {
+            $this->View()->assign([
+                'success' => false,
+                'message' => $this->translateMessage('error_msg/no_id_passed', 'No ID passed')
+            ]);
+            return;
+        }
+
+        $modelManager = $this->get('models');
+        $model = $modelManager->find('Shopware\Models\Newsletter\Newsletter', $id);
+
+        if ($model instanceof Shopware\Models\Newsletter\Newsletter) {
+            $model->setStatus($active);
+        } else {
+            $this->View()->assign([
+                'success' => false,
+                'message' => $this->translateMessage('error_msg/no_newsletter_belongs_to_id', 'No Newsletter belongs to the passed ID')]);
+            return;
+        }
+
+        $modelManager->persist($model);
+        $modelManager->flush();
+
+        $this->View()->assign(['success' => true]);
     }
 
     /**
@@ -663,7 +735,7 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
      */
     private function serializeGroup($groups)
     {
-        $newGroup = array(array(), array());
+        $newGroup = [[], []];
 
         foreach ($groups as $key => $values) {
             if ($values['isCustomerGroup'] === true) {
@@ -685,7 +757,7 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
     {
         $groups = unserialize($group);
 
-        $flattenedGroup = array();
+        $flattenedGroup = [];
         foreach ($groups as $group => $item) {
             foreach ($item as $id => $number) {
                 $groupKey = ($group === 0) ? $id : false;
@@ -702,5 +774,20 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
         }
 
         return $flattenedGroup;
+    }
+
+    /**
+     * Helper function to get the correct translation
+     *
+     * @param string $name
+     * @param string $default
+     * @return string
+     */
+    private function translateMessage($name, $default = null)
+    {
+        $namespace = Shopware()->Snippets()->getNamespace('backend/newsletter_manager/main');
+        $translation = $namespace->get($name, $default);
+
+        return $translation;
     }
 }

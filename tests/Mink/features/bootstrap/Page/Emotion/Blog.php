@@ -2,7 +2,6 @@
 namespace  Shopware\Tests\Mink\Page\Emotion;
 
 use Shopware\Tests\Mink\Element\Emotion\BlogComment;
-
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use Shopware\Tests\Mink\Helper;
 use Shopware\Tests\Mink\HelperSelectorInterface;
@@ -15,33 +14,60 @@ class Blog extends Page implements HelperSelectorInterface
     protected $path = '/blog/index/sCategory/{categoryId}';
 
     /**
-     * Returns an array of all css selectors of the element/page
-     * @return array
+     * @inheritdoc
      */
     public function getCssSelectors()
     {
-        return array(
-            'commentForm' => 'form.comments'
-        );
+        return [
+            'commentForm' => 'form.comments',
+            'articleRating' => '.blogdetail_header .star',
+            'articleRatingCount' => '.blogdetail_header a',
+        ];
     }
 
     /**
-     * Returns an array of all named selectors of the element/page
-     * @return array
+     * @inheritdoc
      */
     public function getNamedSelectors()
     {
-        return array(
-            'commentFormSubmit' => array('de' => 'Speichern', 'en' => 'Save')
-        );
+        return [
+            'rssFeed' => ['de' => 'RSS-Feed', 'en' => 'RSS-Feed'],
+            'atomFeed' => ['de' => 'Atom-Feed', 'en' => 'Atom-Feed'],
+            'commentFormSubmit' => ['de' => 'Speichern', 'en' => 'Save'],
+            'writeCommentButton' => ['de' => 'Kommentar schreiben', 'en' => 'Write a comment']
+        ];
     }
 
     /**
+     * Verify if we're on an expected page. Throw an exception if not.
+     * @throws \Exception
+     */
+    public function verifyPage()
+    {
+        if (Helper::hasNamedLinks($this, ['rssFeed', 'atomFeed']) == true) {
+            return;
+        }
+
+        $message = ['You are not on blog page!', 'Current URL: ' . $this->getSession()->getCurrentUrl()];
+        Helper::throwException($message);
+    }
+
+    /**
+     * Fills out the comment form and submits it
      * @param array $data
      */
     public function writeComment(array $data)
     {
+        $writeCommentLink = $this->getSession()
+            ->getPage()
+            ->find("css", ".blog--comments-form a.btn--create-entry");
+
+        if ($writeCommentLink) {
+            $writeCommentLink->click();
+        }
+
         Helper::fillForm($this, 'commentForm', $data);
+
         Helper::pressNamedButton($this, 'commentFormSubmit');
     }
 
@@ -59,11 +85,11 @@ class Blog extends Page implements HelperSelectorInterface
         $comments = Helper::floatArray($comments, ['stars']);
         $result = Helper::assertElements($comments, $blogComments);
 
-        if($result === true) {
+        if ($result === true) {
             return;
         }
 
-        $messages = array('The following comments are wrong:');
+        $messages = ['The following comments are wrong:'];
         foreach ($result as $evaluation) {
             $messages[] = sprintf(
                 '%s - Bewertung: %s (%s is "%s", should be "%s")',
@@ -78,38 +104,26 @@ class Blog extends Page implements HelperSelectorInterface
     }
 
     /**
+     * Helper function to check the rating of a blog comment
      * @param BlogComment $blogComments
      * @param $average
      * @throws \Exception
      */
     protected function checkRating(BlogComment $blogComments, $average)
     {
-//        $locators = array('productRating', 'productRatingCount', 'productEvaluationAverage', 'productEvaluationCount');
-//
-//        $elements = Helper::findElements($this, $locators);
-//
-//        $check = array();
-//
-//        foreach($elements as $locator => $element)
-//        {
-//            switch($locator) {
-//                case 'productRating':
-//                case 'productEvaluationAverage':
-//                    $check[$locator] = array($element->getAttribute('class'), $average);
-//                    break;
-//
-//                case 'productRatingCount':
-//                case 'productEvaluationCount':
-//                    $check[$locator] = array($element->getText(), count($articleEvaluations));
-//                    break;
-//            }
-//        }
-//
-//        $result = Helper::checkArray($check);
-//
-//        if ($result !== true) {
-//            $message = sprintf('There was a different value of the evaluation! (%s: "%s" instead of %s)', $result, $check[$result][0], $check[$result][1]);
-//            Helper::throwException($message);
-//        }
+        $elements = Helper::findElements($this, ['articleRating', 'articleRatingCount']);
+
+        $check = [
+            'articleRating' => [$elements['articleRating']->getAttribute('class'), $average],
+            'articleRatingCount' => [$elements['articleRatingCount']->getText(), count($blogComments)]
+        ];
+
+        $check = Helper::floatArray($check);
+        $result = Helper::checkArray($check);
+
+        if ($result !== true) {
+            $message = sprintf('There was a different value of the rating! (%s: "%s" instead of "%s")', $result, $check[$result][0], $check[$result][1]);
+            Helper::throwException($message);
+        }
     }
 }

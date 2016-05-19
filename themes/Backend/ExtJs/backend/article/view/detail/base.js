@@ -318,7 +318,13 @@ Ext.define('Shopware.apps.Article.view.detail.Base', {
             name: 'priceGroupActive',
             fieldLabel: me.snippets.priceGroupActive,
             inputValue: true,
-            uncheckedValue:false
+            uncheckedValue:false,
+            listeners: {
+                change: function(checkbox, newValue) {
+                    me.priceGroupComboBox.allowBlank = !newValue;
+                    me.priceGroupComboBox.validateValue(me.priceGroupComboBox.getValue());
+                }
+            }
         }, me.priceGroupComboBox ]
     }
 });

@@ -621,7 +621,6 @@ class FieldHelper
             'propertyOption.optionID as __propertyOption_optionID',
             'propertyOption.value as __propertyOption_value',
             'propertyOption.position as __propertyOption_position',
-            'propertyOption.value_numeric as __propertyOption_value_numeric',
         ];
     }
 

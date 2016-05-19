@@ -221,19 +221,27 @@ class sOrder
      */
     public function sGetOrderNumber()
     {
-        $number = $this->db->fetchOne(
-            "/*NO LIMIT*/ SELECT number FROM s_order_number WHERE name='invoice' FOR UPDATE"
-        );
-        $this->db->executeUpdate(
-            "UPDATE s_order_number SET number = number + 1 WHERE name='invoice'"
-        );
-        $number += 1;
+        $this->db->beginTransaction();
+        try {
+            $number = $this->db->fetchOne(
+                "/*NO LIMIT*/ SELECT number FROM s_order_number WHERE name='invoice' FOR UPDATE"
+            );
+            $this->db->executeUpdate(
+                "UPDATE s_order_number SET number = number + 1 WHERE name='invoice'"
+            );
+            $number += 1;
+            $this->db->commit();
+        } catch (Exception $e) {
+            $this->db->rollBack();
+            throw $e;
+        }
 
         $number = $this->eventManager->filter(
             'Shopware_Modules_Order_GetOrdernumber_FilterOrdernumber',
             $number,
             array('subject'=>$this)
         );
+
         return $number;
     }
 

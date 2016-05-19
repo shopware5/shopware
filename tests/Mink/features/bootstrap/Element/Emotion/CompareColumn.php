@@ -20,8 +20,7 @@ class CompareColumn extends MultipleElement implements \Shopware\Tests\Mink\Help
     protected $selector = array('css' => 'div.compare_article');
 
     /**
-     * Returns an array of all css selectors of the element/page
-     * @return string[]
+     * @inheritdoc
      */
     public function getCssSelectors()
     {
@@ -37,8 +36,7 @@ class CompareColumn extends MultipleElement implements \Shopware\Tests\Mink\Help
     }
 
     /**
-     * Returns an array of all named selectors of the element/page
-     * @return array[]
+     * @inheritdoc
      */
     public function getNamedSelectors()
     {

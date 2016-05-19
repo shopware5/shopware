@@ -340,6 +340,11 @@ class ListProduct extends BaseProduct implements \JsonSerializable
     protected $isMainVariant;
 
     /**
+     * @var Category[]
+     */
+    protected $categories = [];
+
+    /**
      * Adds a new product state.
      *
      * @param $state
@@ -1126,5 +1131,21 @@ class ListProduct extends BaseProduct implements \JsonSerializable
     public function isMainVariant()
     {
         return $this->isMainVariant;
+    }
+
+    /**
+     * @return Category[]
+     */
+    public function getCategories()
+    {
+        return $this->categories;
+    }
+
+    /**
+     * @param Category[] $categories
+     */
+    public function setCategories(array $categories)
+    {
+        $this->categories = $categories;
     }
 }

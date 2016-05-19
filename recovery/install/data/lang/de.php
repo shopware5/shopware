@@ -23,10 +23,10 @@ return [
     'language-selection_info_message'    => 'Diese Sprachauswahl bezieht sich lediglich auf den Installationsassistenten. Im Anschluss an die Installation können Sie Ihren Shop natürlich wahlweise in vielen anderen Sprachen betreiben.',
     'language-selection_welcome_message' => <<<EOT
 <p>
-    Sie sind nur noch wenige Klicks davon entfernt, Teil der großen Shopware Community zu werden, welche aktuell aus über 30.000 Onlinehändlern weltweit besteht!
+    Sie sind nur noch wenige Klicks davon entfernt, Teil der großen Shopware Community zu werden, welche aktuell aus über 54.000 Onlinehändlern weltweit besteht!
 </p>
 <p>
-    Darüber hinaus steht Ihnen unser Support-Team selbstverständlich jederzeit für Fragen zur Verfügung. Kontaktieren Sie uns einfach unter Tel. <a href="tel:+492555928850">(+49) 2555 92 8850</a> oder eMail <a href="mailto:info@shopware.com">info@shopware.com</a> .
+    Darüber hinaus steht Ihnen unser Support-Team selbstverständlich jederzeit für Fragen zur Verfügung. Kontaktieren Sie uns einfach unter Tel. <a href="tel:+492555928850">(+49) 2555 92 8850</a> oder E-Mail <a href="mailto:info@shopware.com">info@shopware.com</a> .
 </p>
 EOT
     ,
@@ -77,8 +77,8 @@ EOT
     'configuration_sconfig_header'          => 'Frontend Einstellungen',
     'configuration_sconfig_name'            => 'Name des Shops:',
     'configuration_sconfig_name_info'       => 'Bitte geben Sie den Namen Ihres Shops ein',
-    'configuration_sconfig_mail'            => 'Ihre eMail-Adresse:',
-    'configuration_sconfig_mail_info'       => 'Bitte geben Sie Ihre eMail-Adresse für ausgehende eMails ein',
+    'configuration_sconfig_mail'            => 'Ihre E-Mail-Adresse:',
+    'configuration_sconfig_mail_info'       => 'Bitte geben Sie Ihre E-Mail-Adresse für ausgehende E-Mails ein',
     'configuration_sconfig_domain'          => 'Shop-Domain:',
     'configuration_sconfig_language'        => 'Shop-Default-Sprache:',
     'configuration_sconfig_currency'        => 'Shop-Default-Währung:',
@@ -88,7 +88,7 @@ EOT
     'configuration_admin_currency_gbp'      => 'Britisches Pfund (GB)',
     'configuration_admin_title'             => 'Admin Benutzer einrichten',
     'configuration_admin_username'          => 'Admin Login-Name:',
-    'configuration_admin_mail'              => 'Admin eMail:',
+    'configuration_admin_mail'              => 'Admin E-Mail:',
     'configuration_admin_name'              => 'Admin Name:',
     'configuration_admin_language'          => 'Admin Backend-Sprache:',
     'configuration_admin_language_de'       => 'Deutsch',

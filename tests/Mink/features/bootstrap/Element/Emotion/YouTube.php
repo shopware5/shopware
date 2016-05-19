@@ -20,8 +20,7 @@ class YouTube extends MultipleElement implements \Shopware\Tests\Mink\HelperSele
     protected $selector = ['css' => 'div.emotion-element > div.youtube-element'];
 
     /**
-     * Returns an array of all css selectors of the element/page
-     * @return array
+     * @inheritdoc
      */
     public function getCssSelectors()
     {

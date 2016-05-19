@@ -257,7 +257,7 @@ Ext.define('Shopware.apps.Article.view.variant.Progress', {
                 var progress = doneVariants / model.get('totalCount');
                 progress = Ext.Number.toFixed(progress, 2);
 
-                me.progressField.setValue(Ext.String.format(me.snippets.process, doneVariants, model.get('totalCount')))
+                me.progressField.setValue(Ext.String.format(me.snippets.process, doneVariants, model.get('totalCount')));
 
                 //if the last variant was created we can hide the window and reload the listing
                 if (offset + limit >= model.get('totalCount') || me.cancelProcess) {

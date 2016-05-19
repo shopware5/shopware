@@ -100,8 +100,45 @@ class KeywordFinder implements KeywordFinderInterface
      */
     private function searchMatchingKeywords($term)
     {
-        $results = [];
+        return array_merge(
+            $this->findDirectMatches($term),
+            $this->findFuzzyMatches($term)
+        );
+    }
 
+    /**
+     * @param string $term
+     * @return Keyword[]
+     */
+    private function findDirectMatches($term)
+    {
+        $sql = '
+            SELECT `id` , `keyword`
+            FROM `s_search_keywords`
+            WHERE keyword = ?
+        ';
+
+        $directMatches = $this->connection->fetchAll($sql, [$term]);
+
+        $results = [];
+        foreach ($directMatches as $keyword) {
+            $results[] = new Keyword(
+                $keyword['id'],
+                $this->config->get('fuzzySearchExactMatchFactor', 100),
+                $term,
+                $keyword
+            );
+        }
+
+        return $results;
+    }
+
+    /**
+     * @param string $term
+     * @return Keyword[]
+     */
+    private function findFuzzyMatches($term)
+    {
         $sql = '
             SELECT `id` , `keyword`
             FROM `s_search_keywords`
@@ -109,9 +146,10 @@ class KeywordFinder implements KeywordFinderInterface
             OR keyword LIKE CONCAT(LEFT(?,2),\'%\')
         ';
 
-        $result = $this->connection->fetchAll($sql, [$term, $term]);
+        $fuzzyMatches = $this->connection->fetchAll($sql, [$term, $term]);
 
-        foreach ($result as $keyword) {
+        $results = [];
+        foreach ($fuzzyMatches as $keyword) {
             $keywordID = $keyword['id'];
             $keyword = $keyword['keyword'];
 
@@ -125,12 +163,8 @@ class KeywordFinder implements KeywordFinderInterface
 
             $relevance = 0;
 
-            // Terms are similar
-            if ($term1 === $term2) {
-                $relevance = $this->config->get('fuzzySearchExactMatchFactor', 100);
-
             // Check for sub term matching
-            } elseif (strpos($term1, $term2) !== false) {
+            if (strpos($term1, $term2) !== false) {
                 if (strlen($term1) < 4) {
                     $relevance = $this->config->get('fuzzySearchMatchFactor', 5);
 

@@ -11,13 +11,15 @@ Feature: Note
     Scenario: I can add several products to the note from their detail pages
         When  I am on the detail page for article 197
         And   I follow "Auf den Merkzettel"
-        And   I go to the detail page for article 122
+        Then  I should be on the page "Note"
+
+        When  I go to the detail page for article 122
         And   I choose the following article configuration:
             | groupId | value     |
             | 5       | 1,0 Liter |
         And   I follow "Auf den Merkzettel"
-        And   I go to the page "Note"
-        Then  the note should contain the following products:
+        Then  I should be on the page "Note"
+        And   the note should contain the following products:
             | number      | name                           | supplier            | description                                                                                                                                                  | price   | image                           | link                                                          |
             | SW100025211 | Zahlungsarten & Riskmanagement | Example             | In Shopware haben Sie ein sehr umfangreiches Riskmanagement, in dem Sie gewünscht Zahlungsarten unter Berücksichtigung verschiedenster Faktoren...           | 119,99  | Kwon-Tasche-Coach-schwarz       | /beispiele/zahlungsarten/228/zahlungsarten-und-riskmanagement |
             | SW10002694  | Abschlag bei Zahlungsarten     | Example             | In Shopware können Sie bei gewünschten Zahlungsarten auch Abschläge definieren. So ist bei diesem Beispiel ein Abschlag von 10% des...                       | 47,90   | Kwon-Fitness--Boxhandschuh-blau | /beispiele/zahlungsarten/230/abschlag-bei-zahlungsarten       |
@@ -34,6 +36,7 @@ Feature: Note
     @noResponsive
     Scenario: I can put articles from my note into the basket
         When  I put the article on position 1 of my note in the basket
+        Then  I should be on the page "CheckoutCart"
         And   I follow "Merkzettel"
         And   I put the article on position 2 of my note in the basket
 
@@ -66,15 +69,17 @@ Feature: Note
         When  I follow "Abschlag bei Zahlungsarten"
         And   I follow "Zahlungsarten"
         Then  I should see "Zahlungsarten & Riskmanagement"
+        And   I should be on the page "Listing"
 
         When  I follow the link "remember" of the element "ArticleBox" on position 2
-        And   I go to the page "Note"
-        Then  I should see 2 element of type "NotePosition"
+        Then  I should be on the page "Note"
+        And   I should see 2 element of type "NotePosition"
 
         When  I follow "Zahlungsarten & Riskmanagement"
         And   I follow "Zahlungsarten"
         Then  I should see "Zahlungsarten & Riskmanagement"
+        And   I should be on the page "Listing"
 
         When  I follow the link "remember" of the element "ArticleBox" on position 1
-        And   I go to the page "Note"
-        Then  I should see 3 element of type "NotePosition"
+        Then  I should be on the page "Note"
+        And   I should see 3 element of type "NotePosition"

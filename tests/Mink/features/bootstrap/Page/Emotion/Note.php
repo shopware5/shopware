@@ -13,6 +13,22 @@ class Note extends Page
     protected $path = '/note';
 
     /**
+     * Verify if we're on an expected page. Throw an exception if not.
+     * @throws \Exception
+     */
+    public function verifyPage()
+    {
+        $info = Helper::getPageInfo($this->getSession(), ['controller']);
+
+        if ($info['controller'] === 'note') {
+            return;
+        }
+
+        $message = ['You are not on the note!', 'Current URL: ' . $this->getSession()->getCurrentUrl()];
+        Helper::throwException($message);
+    }
+
+    /**
      * @param array $items
      */
     public function fillNoteWithProducts(array $items)
@@ -33,19 +49,11 @@ class Note extends Page
      */
     public function checkNoteProducts(NotePosition $notePositions, array $items)
     {
-        if(count($notePositions) !== count($items)) {
-            $message = sprintf(
-                'There are %d products on the note! (should be %d)',
-                count($notePositions),
-                count($items)
-            );
-            Helper::throwException($message);
-        }
-
+        Helper::assertElementCount($notePositions, count($items));
         $result = Helper::searchElements($items, $notePositions);
 
-        if($result !== true) {
-            $messages = array('The following articles were not found:');
+        if ($result !== true) {
+            $messages = ['The following articles were not found:'];
             foreach ($result as $product) {
                 $messages[] = $product['number'] . ' - ' . $product['name'];
             }

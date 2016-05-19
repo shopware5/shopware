@@ -20,8 +20,7 @@ class AccountShipping extends Element implements \Shopware\Tests\Mink\HelperSele
     protected $selector = ['css' => 'div.shipping > div.inner_container'];
 
     /**
-     * Returns an array of all css selectors of the element/page
-     * @return string[]
+     * @inheritdoc
      */
     public function getCssSelectors()
     {
@@ -31,8 +30,7 @@ class AccountShipping extends Element implements \Shopware\Tests\Mink\HelperSele
     }
 
     /**
-     * Returns an array of all named selectors of the element/page
-     * @return array[]
+     * @inheritdoc
      */
     public function getNamedSelectors()
     {

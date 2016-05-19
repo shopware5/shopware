@@ -71,7 +71,7 @@ class TermHelperTest extends PHPUnit_Framework_TestCase
     {
         return [
             ['ABC DEF 123', ['abc', 'def', 123]],
-            ['Ä ÖÜ 456', ['ä', 'öü', 456]],
+            ['Ä ÖÜ 456', ['ae', 'oeue', 456]],
             ['ӔЁ Љ 789', ['ӕё', 'љ', 789]],
             ['THIS-is/a?tÉsT:123', ['this', 'is', 'a', 'tést', 123]]
         ];

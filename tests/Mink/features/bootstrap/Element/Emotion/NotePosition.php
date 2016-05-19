@@ -18,8 +18,7 @@ class NotePosition extends CartPosition implements HelperSelectorInterface
     protected $selector = array('css' => 'div.table_row');
 
     /**
-     * Returns an array of all css selectors of the element/page
-     * @return string[]
+     * @inheritdoc
      */
     public function getCssSelectors()
     {
@@ -36,8 +35,7 @@ class NotePosition extends CartPosition implements HelperSelectorInterface
     }
 
     /**
-     * Returns an array of all named selectors of the element/page
-     * @return array[]
+     * @inheritdoc
      */
     public function getNamedSelectors()
     {

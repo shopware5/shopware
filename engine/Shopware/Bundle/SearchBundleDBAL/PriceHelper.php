@@ -40,6 +40,8 @@ class PriceHelper implements PriceHelperInterface
 
     const STATE_INCLUDES_AVAILABLE_VARIANT = 'available_variant';
 
+    const contextError = 'Expected Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface instead of Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface. This will be changed in \Shopware\Bundle\SearchBundleDBAL\PriceHelperInterface in SW 5.2';
+
     /**
      * @var Connection
      */
@@ -65,6 +67,10 @@ class PriceHelper implements PriceHelperInterface
      */
     public function getSelection(Struct\ShopContextInterface $context)
     {
+        if (!$context instanceof Struct\ProductContextInterface) {
+            throw new \InvalidArgumentException(self::contextError);
+        }
+
         $fallback = $context->getFallbackCustomerGroup();
         $current  = $context->getCurrentCustomerGroup();
         $currency = $context->getCurrency();
@@ -77,6 +83,8 @@ class PriceHelper implements PriceHelperInterface
         $discount = $current->useDiscount() ? $current->getPercentageDiscount() : 0;
 
         $considerMinPurchase = $this->config->get('calculateCheapestPriceWithMinPurchase');
+
+        $taxCase = $this->buildTaxCase($context);
 
         //rounded to filter this value correctly
         // => 2,99999999 displayed as 3,- € but won't be displayed with a filter on price >= 3,- €
@@ -92,7 +100,7 @@ class PriceHelper implements PriceHelperInterface
             ' * ((100 - IFNULL(priceGroup.discount, 0)) / 100)' .
 
             //multiplied with the product tax if the current customer group should see gross prices
-            ($current->displayGrossPrices() ? " * ((tax.tax + 100) / 100)" : '') .
+            ($current->displayGrossPrices() ? " * (( ".$taxCase." + 100) / 100)" : '') .
 
             //multiplied with the percentage discount of the current customer group
             ($discount ? " * " . (100 - (float) $discount) / 100 : '') .
@@ -101,6 +109,20 @@ class PriceHelper implements PriceHelperInterface
             ($currency->getFactor() ? " * " . $currency->getFactor() : '') .
 
         ', 2)';
+    }
+
+    /**
+     * Builds the tax cases for the price selection query
+     * @param Struct\ProductContextInterface $context
+     * @return string
+     */
+    private function buildTaxCase(Struct\ProductContextInterface $context)
+    {
+        $cases = [];
+        foreach ($context->getTaxRules() as $rule) {
+            $cases[] = ' WHEN ' . $rule->getId() . ' THEN ' . $rule->getTax();
+        }
+        return '(CASE tax.id ' . implode(' ', $cases) . ' END)';
     }
 
     /**

@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 //{namespace name=backend/product_stream/main}
-
+//{block name="backend/product_stream/view/condition_list/field/search_term"}
 Ext.define('Shopware.apps.ProductStream.view.condition_list.field.SearchTerm', {
 
     extend: 'Ext.form.FieldContainer',
@@ -90,3 +90,4 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.field.SearchTerm', {
         return value;
     }
 });
+//{/block}

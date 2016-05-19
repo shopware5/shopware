@@ -359,7 +359,6 @@ class SitemapXMLRepository
             $campaign['urlParams'] = array(
                 'sViewport' => 'campaign',
                 'emotionId' => $campaign[0]['id'],
-                'sCategory' => $campaign['categoryId']
             );
         }
 

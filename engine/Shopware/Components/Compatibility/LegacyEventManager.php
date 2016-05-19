@@ -697,7 +697,7 @@ class LegacyEventManager
             )
         );
 
-        if (!empty($getArticle["filtergroupID"]) && $this->displayFiltersOnArticleDetailPage()) {
+        if (!empty($getArticle["filtergroupID"])) {
             $getArticle["sProperties"] = $this->eventManager->filter(
                 'sArticles::sGetArticleProperties::replace',
                 $getArticle["sProperties"],
@@ -730,13 +730,5 @@ class LegacyEventManager
         );
 
         return $getArticle;
-    }
-
-    /**
-     * @return null
-     */
-    private function displayFiltersOnArticleDetailPage()
-    {
-        return $this->config->get('displayFiltersOnDetailPage', true);
     }
 }

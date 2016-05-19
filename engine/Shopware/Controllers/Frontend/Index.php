@@ -44,10 +44,17 @@ class Shopware_Controllers_Frontend_Index extends Enlight_Controller_Action
 
         $emotions = $this->get('emotion_device_configuration')->get($categoryId);
 
+        // media fix
+        $categoryContent = Shopware()->Modules()->Categories()->sGetCategoryContent($categoryId);
+        if (isset($categoryContent['media']['path'])) {
+            $mediaService = $this->get('shopware_media.media_service');
+            $categoryContent['media']['path'] = $mediaService->getUrl($categoryContent['media']['path']);
+        }
+
         $this->View()->assign([
             'emotions' => $emotions,
             'hasEmotion' => !empty($emotions),
-            'sCategoryContent' => Shopware()->Modules()->Categories()->sGetCategoryContent($categoryId),
+            'sCategoryContent' => $categoryContent,
             'sBanner' => Shopware()->Modules()->Marketing()->sBanner($categoryId),
             'hasEscapedFragment' => $this->Request()->has('_escaped_fragment_')
         ]);

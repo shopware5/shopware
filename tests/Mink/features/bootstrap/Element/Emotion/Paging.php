@@ -20,8 +20,7 @@ class Paging extends Element implements \Shopware\Tests\Mink\HelperSelectorInter
     protected $selector = ['css' => 'div.paging'];
 
     /**
-     * Returns an array of all css selectors of the element/page
-     * @return string[]
+     * @inheritdoc
      */
     public function getCssSelectors()
     {
@@ -32,8 +31,7 @@ class Paging extends Element implements \Shopware\Tests\Mink\HelperSelectorInter
     }
 
     /**
-     * Returns an array of all named selectors of the element/page
-     * @return array[]
+     * @inheritdoc
      */
     public function getNamedSelectors()
     {

@@ -1,0 +1,109 @@
+<?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
+
+namespace Shopware\Bundle\SearchBundleES\ConditionHandler;
+
+use Doctrine\DBAL\Connection;
+use ONGR\ElasticsearchDSL\Filter\NotFilter;
+use ONGR\ElasticsearchDSL\Filter\TermFilter;
+use ONGR\ElasticsearchDSL\Query\BoolQuery;
+use ONGR\ElasticsearchDSL\Query\MultiMatchQuery;
+use ONGR\ElasticsearchDSL\Query\TermsQuery;
+use ONGR\ElasticsearchDSL\Search;
+use Shopware\Bundle\SearchBundle\Condition\SimilarProductCondition;
+use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
+use Shopware\Bundle\SearchBundleES\HandlerInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+
+class SimilarProductConditionHandler implements HandlerInterface
+{
+    /** @var Connection $connection */
+    protected $connection;
+
+    public function __construct($connection)
+    {
+        /** @var Connection $connection */
+        $this->connection = $connection;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function supports(CriteriaPartInterface $criteriaPart)
+    {
+        return ($criteriaPart instanceof SimilarProductCondition);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function handle(
+        CriteriaPartInterface $criteriaPart,
+        Criteria $criteria,
+        Search $search,
+        ShopContextInterface $context
+    ) {
+
+        /** @var SimilarProductCondition $criteriaPart */
+        $productId = $criteriaPart->getProductId();
+        $productName = $criteriaPart->getProductName();
+        $categories = $this->getProductCategories($productId);
+
+        $query = new BoolQuery();
+
+        $nameQuery = new MultiMatchQuery(['name', 'keywords'], $productName, ['boost' => 5]);
+        $categoriesQuery = new TermsQuery('categoryIds', $categories, ['boost' => 0.2]);
+
+        $query->add($nameQuery, BoolQuery::SHOULD);
+        $query->add($categoriesQuery, BoolQuery::MUST);
+
+        $not = new NotFilter(
+            new TermFilter(
+                'id',
+                $productId
+            )
+        );
+
+        $search->addFilter($not);
+
+        $search->addQuery($query);
+    }
+
+    /**
+     * @param int $productId
+     * @return int[]
+     */
+    private function getProductCategories($productId)
+    {
+        $query = $this->connection->createQueryBuilder();
+
+        return $query->select('categoryID')
+            ->from('s_articles_categories', 'category')
+            ->where('articleID = :productId')
+            ->setParameter(':productId', $productId)
+            ->execute()
+            ->fetchAll(\PDO::FETCH_COLUMN);
+    }
+}

@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
 
 /**
  * Shopware SwagMultiEdit Plugin - MultiEdit Backend Controller
@@ -362,6 +363,10 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         $resource = $this->container->get('multi_edit.' . $resource);
         $result = $resource->filter($ast, $offset, $limit, $sort);
 
+        if ($this->displayVariants($ast)) {
+            $result = $this->addAdditionalText($result);
+        }
+
         $this->View()->assign(
             array(
                 'success' => true,
@@ -548,5 +553,93 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
                 'success' => true
             ));
         }
+    }
+
+    /**
+     * @param array[] $result
+     * @return array[]
+     */
+    private function addAdditionalText($result)
+    {
+        $products = $this->buildListProducts($result['data']);
+
+        $products = $this->getAdditionalTexts($products);
+
+        foreach ($result['data'] as &$item) {
+            $number = $item['Detail_number'];
+            if (!isset($products[$number])) {
+                continue;
+            }
+            $product = $products[$number];
+            $item['Detail_additionalText'] = $product->getAdditional();
+        }
+        return $result;
+    }
+
+    /**
+     * @param array[] $result
+     * @return ListProduct[]
+     */
+    private function buildListProducts($result)
+    {
+        $products = [];
+        foreach ($result as $item) {
+            $number = $item['Detail_number'];
+
+            $product = new \Shopware\Bundle\StoreFrontBundle\Struct\ListProduct(
+                $item['Article_id'],
+                $item['Detail_id'],
+                $item['Detail_number']
+            );
+            if ($item['Detail_additionalText']) {
+                $product->setAdditional($item['Detail_additionalText']);
+            }
+            $products[$number] = $product;
+        }
+        return $products;
+    }
+
+    /**
+     * @param array[] $ast
+     * @return bool
+     */
+    private function displayVariants($ast)
+    {
+        foreach ($ast as $filter) {
+            if (!isset($filter['token'])) {
+                continue;
+            }
+            if ($filter['token'] === 'ISMAIN') {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * @param \Shopware\Bundle\StoreFrontBundle\Struct\ListProduct[] $products
+     * @return \Shopware\Bundle\StoreFrontBundle\Struct\ListProduct[]
+     */
+    private function getAdditionalTexts($products)
+    {
+        /** @var \Shopware\Bundle\StoreFrontBundle\Service\AdditionalTextServiceInterface $service */
+        $service = $this->get('shopware_storefront.additional_text_service');
+
+        /** @var \Shopware\Models\Shop\Repository $shopRepo */
+        $shopRepo = $this->get('models')->getRepository('Shopware\Models\Shop\Shop');
+
+        /** @var \Shopware\Models\Shop\Shop $shop */
+        $shop = $shopRepo->getActiveDefault();
+
+        /** @var \Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface $contextService */
+        $contextService = $this->get('shopware_storefront.context_service');
+
+        $context = $contextService->createShopContext(
+            $shop->getId(),
+            $shop->getCurrency()->getId(),
+            ContextService::FALLBACK_CUSTOMER_GROUP
+        );
+
+        return $service->buildAdditionalTextLists($products, $context);
     }
 }

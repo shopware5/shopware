@@ -151,16 +151,14 @@ Feature: Checkout articles
 
     @javascript @plugin @noResponsive
     Scenario: I can change the language and pay via PayPal
-        When  I select "English" from "__shop"
-        Then  I should see "Your shopping cart does not contain any products"
+#        When  I select "English" from "__shop"
+#        Then  I should see "Your shopping cart does not contain any products"
+#
+#        When  I select "Deutsch" from "__shop"
+#        Then  I should see "Sonnenbrille Speed Eyes"
 
-        When  I select "Deutsch" from "__shop"
-        Then  I should see "Sonnenbrille Speed Eyes"
-
-        When  I follow the link "checkout" of the page "CheckoutCart"
-        Then  I should see "AGB und Widerrufsbelehrung"
-
-        When  I proceed to checkout
+        When  I proceed to order confirmation
+        And   I proceed to checkout
         Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware Demo!"
 
         When  I follow "Mein Konto"

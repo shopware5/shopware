@@ -75,7 +75,11 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Editor', {
             },
             'newsletter-manager-newsletter-settings': {
                 'formChanged': me.onFormChanged,
-                'changePublish': me.onChangePublish
+                'changePublish': me.onChangePublish,
+                'changeActive': me.onChangeActive,
+                'changeDeliveryDate': me.onChangeDeliveryDate,
+                'changeDeliveryTime': me.onChangeDeliveryTime
+
             },
             'newsletter-manager-bottom-toolbar': {
                 'backToOverview': me.onBackToOverview,
@@ -118,8 +122,8 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Editor', {
      */
     onSaveMail: function() {
         var me = this,
-              form = me.getNewsletterSettings().form,
-              newsletter = me.createNewsletterModel(me.getNewsletterEditor().record);
+            form = me.getNewsletterSettings().form,
+            newsletter = me.createNewsletterModel(me.getNewsletterEditor().record);
 
         // Only save if the form is valid. As formBind: true only works for buttons on the form
         // and as we want to have buttons in the editor as well as in the settings (sw-3195)
@@ -240,7 +244,7 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Editor', {
         // Iterate the checkboxes and populate the RecipientGroupStore with checked newsletter groups
         Ext.each(newsletterGroups, function(checkbox) {
             var record = checkbox.record,
-                    count = checkbox.count,
+                count = checkbox.count,
                 value = checkbox.getValue();
 
             //todo@dn: set count to the number of users in the given group
@@ -292,6 +296,11 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Editor', {
             newsletter, container, ctText, config,
             textStore, containerStore,
             settings = me.getSettings();
+
+        //Preview & testmail mode does not have a delivery time
+        if (typeof record !== 'undefined') {
+            me.createTimedDeliveryDateTime(record);
+        }
 
         // Create model and store for the text-field (content)
         ctText = Ext.create('Shopware.apps.NewsletterManager.model.ContainerTypeText', {
@@ -403,14 +412,93 @@ Ext.define('Shopware.apps.NewsletterManager.controller.Editor', {
     },
 
     /**
-     * called when the user changes the value of the publish checkbox
+     * Called when the user changes the value of the publish checkbox
      *
      * @param record
      * @param newValue
      */
     onChangePublish: function(record, newValue) {
         record.set('publish', newValue);
-    }
+    },
 
+    /**
+     * Called when the user changes the value of the active checkbox
+     *
+     * @param record
+     * @param newValue
+     */
+    onChangeActive: function(record, newValue) {
+        if (newValue) {
+            newValue = 1;
+        } else {
+            newValue = 0;
+        }
+        record.set('status', newValue);
+    },
+
+    /**
+     * Sets the timed delivery date
+     *
+     * @param record
+     * @param newValue
+     */
+    onChangeDeliveryDate: function(record, newValue) {
+        record.set('timedDeliveryDate', newValue);
+    },
+
+    /**
+     * Sets the delivery time
+     *
+     * @param record
+     * @param newValue
+     */
+    onChangeDeliveryTime: function(record, newValue) {
+        record.set('timedDeliveryTime', newValue);
+    },
+
+    /**
+     * Creates the datetime from the delivery time and date
+     *
+     * @param record
+     */
+    createTimedDeliveryDateTime: function(record) {
+        var me = this,
+            timedDeliveryDate = record.get('timedDeliveryDate'),
+            timedDeliveryTime = record.get('timedDeliveryTime');
+
+        record.set('timedDelivery', timedDeliveryDate);
+
+        if (typeof timedDeliveryDate == 'undefined' || timedDeliveryDate == null) {
+            return;
+        }
+
+        if (typeof timedDeliveryTime == 'undefined' || timedDeliveryTime == null) {
+            return;
+        }
+
+        var hours = timedDeliveryTime.getHours();
+        var minutes = timedDeliveryTime.getMinutes();
+        var seconds = timedDeliveryTime.getSeconds();
+
+        var timedDelivery = me.setTimeOfDate(timedDeliveryDate, hours, minutes, seconds);
+
+        record.set('timedDelivery', timedDelivery);
+    },
+
+    /**
+     * Adds the time of the day to the given date
+     * @param date
+     * @param hour
+     * @param min
+     * @param sec
+     */
+    setTimeOfDate: function(date, hour, min, sec) {
+        date = Ext.Date.clearTime(date);
+        date = Ext.Date.add(date, Ext.Date.HOUR, hour);
+        date = Ext.Date.add(date, Ext.Date.MINUTE, min);
+        date = Ext.Date.add(date, Ext.Date.SECOND, sec);
+
+        return date;
+    }
 });
 //{/block}

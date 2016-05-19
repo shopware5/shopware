@@ -35,7 +35,7 @@ Feature: Detail page
         Then  I should see "Benachrichtigen Sie mich, wenn der Artikel lieferbar ist"
 
         When  I submit the notification form with "test@example.de"
-        Then  I should see "Bestätigen Sie den Link der eMail die Sie gerade erhalten haben. Sie erhalten dann eine eMail sobald der Artikel wieder verfügbar ist"
+        Then  I should see "Bestätigen Sie den Link der E-Mail die Sie gerade erhalten haben. Sie erhalten dann eine E-Mail sobald der Artikel wieder verfügbar ist"
 
         When  I click the link in my latest email
         Then  I should see "Vielen Dank! Wir haben Ihre Anfrage gespeichert! Sie werden benachrichtigt sobald der Artikel wieder verfügbar ist."
@@ -65,7 +65,7 @@ Feature: Detail page
             | sVoteComment | Hallo Welt      |
             | sCaptcha     | 123456          |
         Then  I should not see "Bitte füllen Sie alle rot markierten Felder aus"
-        But   I should see "Vielen Dank für die Abgabe Ihrer Bewertung! Sie erhalten in wenigen Minuten eine Bestätigungsmail. Bestätigen Sie den Link in dieser E-Mail um die Bewertung freizugeben."
+        But   I should see "Vielen Dank für die Abgabe Ihrer Bewertung! Sie erhalten in wenigen Minuten eine Bestätigungs-E-Mail. Bestätigen Sie den Link in dieser E-Mail um die Bewertung freizugeben."
         But   I should not see "Hallo Welt"
 
         When  I click the link in my latest email
@@ -87,13 +87,13 @@ Feature: Detail page
             | number  | name          | quantity   | itemPrice   | sum   |
             | SW10208 | Staffelpreise | <quantity> | <itemPrice> | <sum> |
 
-    Examples:
-        | grade  | itemPrice | quantity | sum   |
-        | bis 10 | 1,00      | 10       | 10,00 |
-        | ab 11  | 0,90      | 20       | 18,00 |
-        | ab 21  | 0,80      | 30       | 24,00 |
-        | ab 31  | 0,75      | 40       | 30,00 |
-        | ab 41  | 0,70      | 50       | 35,00 |
+        Examples:
+            | grade  | itemPrice | quantity | sum   |
+            | bis 10 | 1,00      | 10       | 10,00 |
+            | ab 11  | 0,90      | 20       | 18,00 |
+            | ab 21  | 0,80      | 30       | 24,00 |
+            | ab 31  | 0,75      | 40       | 30,00 |
+            | ab 41  | 0,70      | 50       | 35,00 |
 
     @minimumQuantity @maximumQuantity @graduation
     Scenario: An article can have a minimum/maximum quantity with graduation
@@ -132,3 +132,36 @@ Feature: Detail page
             | 113 | 599,00   | 698,99      | 14,31    |
             | 208 | 500,00   | 1.000,01    | 50       |
             | 239 | 2.499,00 | 2.799,00    | 10,72    |
+
+    @javascript
+    Scenario: The customer evaluation form has a captcha
+        Given I am on the detail page for article 167
+        Then  I should see "Sonnenbrille Speed Eyes"
+        And   I should see a captcha
+
+    @basePrice
+    Scenario Outline: A product can have a base price
+        Given I am on the detail page for article <id>
+        Then  I should see "Inhalt: <content> (<basePrice> * / <baseUnit>)"
+
+        Examples:
+            | id | content   | basePrice | baseUnit  |
+            | 3  | 0.7 Liter | 21,36 €   | 1 Liter   |
+            | 18 | 10 Gramm  | 22,00 €   | 100 Gramm |
+
+    @basePrice @variants
+    Scenario Outline: Each variant can have a different base price
+        Given I am on the detail page for variant "<number>" of article 2
+        Then  I should see "Inhalt: <content> (<basePrice> * / 1 Liter)"
+
+        Examples:
+            | number    | content   | basePrice |
+            |           | 0.5 Liter | 39,98 €   |
+            | SW10002.1 | 1.5 Liter | 39,99 €   |
+            | SW10002.2 | 5 Liter   | 39,80 €   |
+
+    @notAvailable
+    Scenario: The customer evaluation form has a captcha
+        Given I am on the detail page for article 199
+        Then  I should see "Dieser Artikel steht derzeit nicht zur Verfügung!"
+        But   I should not see "In den Warenkorb"

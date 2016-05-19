@@ -203,11 +203,14 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
         $menu = $this->getAdvancedMenu($parent, $categoryId, (int) $config->levels);
 
         $view->assign('sAdvancedMenu', $menu);
-
         $view->assign('columnAmount', $config->columnAmount);
 
-        $view->addTemplateDir($this->Path() . 'Views');
-        $view->extendsTemplate('frontend/plugins/advanced_menu/index.tpl');
+        $version = Shopware()->Shop()->getTemplate()->getVersion();
+        if ($version >= 3) {
+            $view->addTemplateDir($this->Path() . 'Views');
+        } else {
+            $view->extendsTemplate('frontend/plugins/advanced_menu/index.tpl');
+        }
     }
 
     /**
@@ -339,6 +342,7 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
                 'name' => $category->getName(),
                 'parentId' => $category->getParentId(),
                 'hidetop' => !$category->displayInNavigation(),
+                'external' => $category->getExternalLink(),
                 'active' => 1,
                 'cmsHeadline' => $category->getCmsHeadline(),
                 'cmsText' => $category->getCmsText(),
@@ -356,7 +360,6 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
                 $data['media'] = $converter->convertMediaStruct($category->getMedia());
                 $data['media']['path'] = $category->getMedia()->getFile();
             }
-
             return $data;
         }, $categories);
     }

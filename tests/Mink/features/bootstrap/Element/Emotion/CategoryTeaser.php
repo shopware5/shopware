@@ -22,8 +22,7 @@ class CategoryTeaser extends MultipleElement implements \Shopware\Tests\Mink\Hel
     protected $selector = ['css' => 'div.emotion-element > div.category-teaser-element'];
 
     /**
-     * Returns an array of all css selectors of the element/page
-     * @return string[]
+     * @inheritdoc
      */
     public function getCssSelectors()
     {

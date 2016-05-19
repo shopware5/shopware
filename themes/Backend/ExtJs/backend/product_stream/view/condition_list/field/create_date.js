@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 //{namespace name=backend/product_stream/main}
-
+//{block name="backend/product_stream/view/condition_list/field/create_date"}
 Ext.define('Shopware.apps.ProductStream.view.condition_list.field.CreateDate', {
 
     extend: 'Ext.form.FieldContainer',
@@ -92,3 +92,4 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.field.CreateDate', {
         return value;
     }
 });
+//{/block}

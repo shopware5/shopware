@@ -135,6 +135,15 @@ class Criteria implements \JsonSerializable
      * @param string $name
      * @return bool
      */
+    public function hasUserCondition($name)
+    {
+        return array_key_exists($name, $this->conditions);
+    }
+
+    /**
+     * @param string $name
+     * @return bool
+     */
     public function hasSorting($name)
     {
         return array_key_exists($name, $this->sortings);
@@ -208,6 +217,24 @@ class Criteria implements \JsonSerializable
         }
 
         return null;
+    }
+
+    /**
+     * @param string $name
+     * @return ConditionInterface
+     */
+    public function getBaseCondition($name)
+    {
+        return $this->baseConditions[$name];
+    }
+
+    /**
+     * @param string $name
+     * @return ConditionInterface
+     */
+    public function getUserCondition($name)
+    {
+        return $this->conditions[$name];
     }
 
     /**
@@ -379,5 +406,13 @@ class Criteria implements \JsonSerializable
         }
 
         return $data;
+    }
+
+    /**
+     * @return ConditionInterface[]
+     */
+    public function getBaseConditions()
+    {
+        return $this->baseConditions;
     }
 }

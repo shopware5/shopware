@@ -20,6 +20,9 @@ class CartPosition extends \Shopware\Tests\Mink\Element\Emotion\CartPosition
      */
     protected $selector = ['css' => 'div.row--product'];
 
+    /**
+     * @inheritdoc
+     */
     public function getCssSelectors()
     {
         return [

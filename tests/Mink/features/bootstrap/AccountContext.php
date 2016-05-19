@@ -54,10 +54,10 @@ class AccountContext extends SubContext
      */
     public function iChangeMyBillingAddress(TableNode $table)
     {
-        $pageInfo = Helper::getPageInfo($this->getSession(), array('controller'));
+        $pageInfo = Helper::getPageInfo($this->getSession(), ['controller']);
         $pageName = ucfirst($pageInfo['controller']);
 
-        if($pageName === 'Checkout') {
+        if ($pageName === 'Checkout') {
             $pageName = 'CheckoutConfirm';
         }
 
@@ -73,10 +73,10 @@ class AccountContext extends SubContext
      */
     public function iChangeMyShippingAddress(TableNode $table)
     {
-        $pageInfo = Helper::getPageInfo($this->getSession(), array('controller'));
+        $pageInfo = Helper::getPageInfo($this->getSession(), ['controller']);
         $pageName = ucfirst($pageInfo['controller']);
 
-        if($pageName === 'Checkout') {
+        if ($pageName === 'Checkout') {
             $pageName = 'CheckoutConfirm';
         }
 
@@ -109,23 +109,23 @@ class AccountContext extends SubContext
      */
     public function iChangeThePaymentMethodTo($payment, TableNode $table = null)
     {
-        $pageInfo = Helper::getPageInfo($this->getSession(), array('controller', 'action'));
+        $pageInfo = Helper::getPageInfo($this->getSession(), ['controller', 'action']);
         $pageName = ucfirst($pageInfo['controller']);
 
-        if($pageName === 'Checkout') {
-            $pageName = ($pageInfo['action'] === 'shippingPayment') ? 'CheckoutCart' : 'CheckoutConfirm';
+        if ($pageName === 'Checkout') {
+            $pageName = ($pageInfo['action'] === 'shippingpayment') ? 'CheckoutCart' : 'CheckoutConfirm';
         }
 
         /** @var \Shopware\Tests\Mink\Page\Emotion\Account|\Shopware\Tests\Mink\Page\Emotion\CheckoutConfirm $page */
         $page = $this->getPage($pageName);
-        $data = array(
-            array(
+        $data = [
+            [
                 'field' => 'register[payment]',
                 'value' => $payment
-            )
-        );
+            ]
+        ];
 
-        if($table) {
+        if ($table) {
             $data = array_merge($data, $table->getHash());
         }
 
@@ -137,7 +137,7 @@ class AccountContext extends SubContext
      */
     public function theCurrentPaymentMethodShouldBe($paymentMethod)
     {
-        $pageInfo = Helper::getPageInfo($this->getSession(), array('controller'));
+        $pageInfo = Helper::getPageInfo($this->getSession(), ['controller']);
         $pageName = (ucfirst($pageInfo['controller']) === 'Checkout') ? 'CheckoutConfirm' : 'Account';
 
         $this->getPage($pageName)->checkPaymentMethod($paymentMethod);
@@ -155,5 +155,4 @@ class AccountContext extends SubContext
 
         $page->chooseAddress($addresses, $name);
     }
-
 }

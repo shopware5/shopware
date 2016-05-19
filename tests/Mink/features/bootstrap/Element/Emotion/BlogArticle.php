@@ -24,8 +24,7 @@ class BlogArticle extends MultipleElement implements \Shopware\Tests\Mink\Helper
     protected $selector = ['css' => 'div.emotion-element > div.blog-element'];
 
     /**
-     * Returns an array of all css selectors of the element/page
-     * @return array
+     * @inheritdoc
      */
     public function getCssSelectors()
     {

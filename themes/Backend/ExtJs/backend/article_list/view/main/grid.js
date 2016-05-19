@@ -36,6 +36,11 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
      */
     stateId: 'multiedit-grid',
 
+    /**
+     * Variant active column
+     */
+    detailActiveColumn: null,
+
     snippets: {
         'Article_id': '{s name=columns/product/Article_id}Article_id{/s}',
         'Article_mainDetailId': '{s name=columns/product/Article_mainDetailId}Article_mainDetailId{/s}',
@@ -173,7 +178,21 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
         });
         me.plugins = me.rowEditing;
 
+        me.listeners = {
+            'afterrender': me.onAfterRender
+        };
+
         me.callParent(arguments);
+    },
+
+    onAfterRender: function() {
+        var me = this;
+        Ext.each(me.columns, function(col) {
+            if (col.dataIndex == 'Detail_active') {
+                me.detailActiveColumn = col;
+                window.setTimeout(function() { col.setVisible(false); }, 0);
+            }
+        });
     },
 
     setupStateManager: function () {
@@ -282,11 +301,10 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
             columnDefinition = {
                 dataIndex: column.alias,
                 header: me.getTranslationForColumnHead(column.alias),
-                hidden: !column.show,
                 /*{if {acl_is_allowed resource=article privilege=save}}*/
                 editor: me.getEditorForColumn(column),
                 /*{/if}*/
-//                sortable: false
+                hidden: !column.show
             };
 
             if (xtype = me.getXtypeForColumn(column)) {
@@ -302,6 +320,10 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
                 columnDefinition.width = width;
             } else {
                 columnDefinition.flex = 1;
+            }
+
+            if (column.alias == 'Detail_active') {
+                columnDefinition.hidden = true;
             }
 
             columns.push(columnDefinition);
@@ -340,8 +362,14 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
      * @param value
      * @returns string
      */
-    boldColumnRenderer: function (value) {
-        return '<b>' + this.defaultColumnRenderer(value) + '</b>';
+    boldColumnRenderer: function (value, metaData, record) {
+        var result = value;
+        var checkbox = this.up('window').down('checkbox[name=displayVariants]');
+
+        if (checkbox.getValue() && record.get('Detail_additionalText')) {
+            result = value + ' - ' + record.get('Detail_additionalText');
+        }
+        return '<b>' + this.defaultColumnRenderer(result) + '</b>';
     },
 
     /**
@@ -484,6 +512,7 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
             case 'Supplier_name':
                 return 110;
             case 'Article_active':
+            case 'Detail_active':
                 return 40;
             case 'Tax_name':
                 return 75;
@@ -577,7 +606,6 @@ Ext.define('Shopware.apps.ArticleList.view.main.Grid', {
                         });
                         break;
                     default:
-                        console.log("Unknown column: ", column.type);
                         break;
                 }
                 break;

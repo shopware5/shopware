@@ -1209,10 +1209,6 @@ class sArticles
             return [];
         }
 
-        if (!$product) {
-            return [];
-        }
-
         if ($product->hasConfigurator()) {
             $type = $this->getConfiguratorType($product->getId());
 
@@ -1438,27 +1434,25 @@ class sArticles
     protected function getRandomArticle($mode, $category = 0)
     {
         $category = (int)$category;
-        $context = $this->contextService->getShopContext();
+        $context = $this->contextService->getProductContext();
         if (empty($category)) {
             $category = $context->getShop()->getCategory()->getId();
         }
 
         $criteria = $this->storeFrontCriteriaFactory->createBaseCriteria([$category], $context);
 
-        $criteria->offset(0);
+        $criteria->offset(0)
+            ->limit(100);
 
         switch ($mode) {
             case 'top':
                 $criteria->addSorting(new PopularitySorting(SortingInterface::SORT_DESC));
-                $criteria->limit(10);
                 break;
             case 'new':
                 $criteria->addSorting(new ReleaseDateSorting(SortingInterface::SORT_DESC));
-                $criteria->limit(1);
                 break;
             default:
                 $criteria->addSorting(new ReleaseDateSorting(SortingInterface::SORT_DESC));
-                $criteria->limit(100);
         }
 
         $result = $this->productNumberSearch->search($criteria, $context);

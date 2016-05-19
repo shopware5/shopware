@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 //{namespace name=backend/product_stream/main}
-
+//{block name="backend/product_stream/view/condition_list/condition_panel"}
 Ext.define('Shopware.apps.ProductStream.view.condition_list.ConditionPanel', {
     extend: 'Ext.form.Panel',
     alias: 'widget.product-stream-condition-panel',
@@ -113,7 +113,9 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.ConditionPanel', {
             Ext.create('Shopware.apps.ProductStream.view.condition_list.condition.Attribute'),
             Ext.create('Shopware.apps.ProductStream.view.condition_list.condition.Category'),
             Ext.create('Shopware.apps.ProductStream.view.condition_list.condition.ImmediateDelivery'),
+            Ext.create('Shopware.apps.ProductStream.view.condition_list.condition.Closeout'),
             Ext.create('Shopware.apps.ProductStream.view.condition_list.condition.HasPseudoPrice'),
+            Ext.create('Shopware.apps.ProductStream.view.condition_list.condition.IsNew'),
             Ext.create('Shopware.apps.ProductStream.view.condition_list.condition.CreateDate'),
             Ext.create('Shopware.apps.ProductStream.view.condition_list.condition.ReleaseDate'),
             Ext.create('Shopware.apps.ProductStream.view.condition_list.condition.VoteAverage'),
@@ -223,3 +225,4 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.ConditionPanel', {
         return new Ext.menu.Menu({ items: items });
     }
 });
+//{/block}

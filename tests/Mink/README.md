@@ -11,17 +11,17 @@ cp behat.yml.dist behat.yml
 
 ### Run entire testsuite
 ```
-$ ./behat
+$ ./behat --profile=responsive --tags="~javascript"
 ```
 
 ### Run single feature
 ```
-$ ./behat features/search.feature
+$ ./behat --profile=responsive --tags="~javascript" features/search.feature
 ```
 
 To append unimplemented snippets to a context
 ```
-$ ./behat features/search.feature --append-snippets
+$ ./behat --profile=responsive --tags="~javascript" features/search.feature --append-snippets
 ```
 
 ### Run Javascript Tests

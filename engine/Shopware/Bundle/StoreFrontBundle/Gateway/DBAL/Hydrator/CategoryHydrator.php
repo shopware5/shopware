@@ -154,7 +154,7 @@ class CategoryHydrator extends Hydrator
 
         if (isset($data['__category_customer_groups'])) {
             $category->setBlockedCustomerGroupIds(
-                explode('|', $data['__category_customer_groups'])
+                explode(',', $data['__category_customer_groups'])
             );
         }
     }

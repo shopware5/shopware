@@ -184,6 +184,8 @@ class Repository extends ModelRepository
             'detailAttribute',
             'documentAttribute',
             'shippingAttribute',
+            'paymentAttribute',
+            'dispatchAttribute',
             'subShop',
             'locale',
             'debit'
@@ -204,6 +206,8 @@ class Repository extends ModelRepository
                 ->leftJoin('orders.shipping', 'shipping')
                 ->leftJoin('orders.shop', 'shop')
                 ->leftJoin('orders.dispatch', 'dispatch')
+                ->leftJoin('payment.attribute', 'paymentAttribute')
+                ->leftJoin('dispatch.attribute', 'dispatchAttribute')
                 ->leftJoin('billing.attribute', 'billingAttribute')
                 ->leftJoin('shipping.attribute', 'shippingAttribute')
                 ->leftJoin('details.attribute', 'detailAttribute')
@@ -258,7 +262,6 @@ class Repository extends ModelRepository
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array(
                 'orders',
-                'details',
                 'customer',
                 'payment',
                 'billing',
@@ -278,7 +281,6 @@ class Repository extends ModelRepository
                 ->leftJoin('orders.orderStatus', 'orderStatus')
                 ->leftJoin('orders.billing', 'billing')
                 ->leftJoin('orders.customer', 'customer')
-                ->leftJoin('orders.details', 'details')
                 ->leftJoin('billing.country', 'billingCountry')
                 ->leftJoin('billing.state', 'billingState')
                 ->leftJoin('orders.shop', 'shop')
@@ -461,28 +463,22 @@ class Repository extends ModelRepository
                                 $expr->like('orders.number', '?1'),
                                 $expr->like('orders.invoiceAmount', '?1'),
                                 $expr->like('orders.transactionId', '?1'),
-                                $expr->like('payment.description', '?1'),
-                                $expr->like('dispatch.name', '?1'),
-                                $expr->like('orderStatus.description', '?1'),
-                                $expr->like('paymentStatus.description', '?1'),
-                                $expr->like('orders.orderTime', '?2'),
                                 $expr->like('billing.company', '?3'),
                                 $expr->like('customer.email', '?3'),
                                 $expr->like('billing.lastName', '?3'),
                                 $expr->like('billing.firstName', '?3'),
-                                $expr->like('shop.name', '?3'),
                                 $expr->like('orders.comment', '?3'),
                                 $expr->like('orders.customerComment', '?3'),
                                 $expr->like('orders.internalComment', '?3')
                             )
                         );
                         $builder->setParameter(1,       $filter['value'] . '%');
-                        $builder->setParameter(2, '%' . $filter['value']);
                         $builder->setParameter(3, '%' . $filter['value'] . '%');
                         break;
                     case "from":
                         $tmp = new \DateTime($filter['value']);
-                        $builder->andWhere($expr->gte('orders.orderTime', $tmp->format('Ymd')));
+                        $builder->andWhere('orders.orderTime >= :orderTimeFrom');
+                        $builder->setParameter('orderTimeFrom', $tmp->format('Ymd'));
                         break;
                     case "to":
                         $tmp = new \Zend_Date($filter['value']);
@@ -493,14 +489,12 @@ class Repository extends ModelRepository
                         $builder->setParameter('orderTimeTo', $tmp->get('yyyy-MM-dd HH:mm:ss'));
                         break;
                     case 'details.articleNumber':
+                        $builder->leftJoin('orders.details', 'details');
                         $builder->andWhere('details.articleNumber LIKE :articleNumber');
-                        $builder->setParameter('articleNumber',  $filter['value'] . "%");
-                        break;
-                    case 'customer.groupKey':
-                        $builder->andWhere($expr->eq($filter['property'], "'" . $filter['value'] . "'"));
+                        $builder->setParameter('articleNumber',  $filter['value']);
                         break;
                     default:
-                        $builder->andWhere($expr->eq($filter['property'], $filter['value']));
+                        $builder->addFilter(array($filter));
                 }
             }
         }

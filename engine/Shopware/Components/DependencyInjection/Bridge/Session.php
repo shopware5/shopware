@@ -42,7 +42,7 @@ class Session
      */
     public function factory(Container $container)
     {
-        $sessionOptions = Shopware()->getOption('session', array());
+        $sessionOptions = $container->getParameter('shopware.session');
 
         if (!empty($sessionOptions['unitTestEnabled'])) {
             \Enlight_Components_Session::$_unitTestEnabled = true;

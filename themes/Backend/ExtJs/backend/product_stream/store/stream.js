@@ -26,7 +26,7 @@
  * @version    $Id$
  * @author shopware AG
  */
-
+//{block name="backend/product_stream/store/stream"}
 Ext.define('Shopware.apps.ProductStream.store.Stream', {
     extend:'Shopware.store.Listing',
     groupField: 'type',
@@ -38,3 +38,4 @@ Ext.define('Shopware.apps.ProductStream.store.Stream', {
     },
     model: 'Shopware.apps.ProductStream.model.Stream'
 });
+//{/block}

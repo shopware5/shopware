@@ -46,8 +46,8 @@ class Shopware_Controllers_Backend_Overview extends Shopware_Controllers_Backend
                 SUM(visitors.uniquevisits)/SUM(order_count.order_count) AS averageUsers,
                 SUM(visitors.pageimpressions) AS hits,
                 order_count.order_count AS countOrders,
-                SUM(customer_count.new_customer_count) AS countUsers,
-                SUM(customer_count.new_customer_order_count) AS countCustomers,
+                customer_count.new_customer_count AS countUsers,
+                customer_count.new_customer_order_count AS countCustomers,
                 order_amount.amount AS amount,
                 visitors.datum AS `date`
             FROM s_statistics_visitors AS visitors

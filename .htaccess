@@ -26,7 +26,7 @@ RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization},L]
     RedirectMatch 404 /\\.(svn|git|hg|bzr|cvs)(/|$)
 
     # Restrict access to root folder files
-    RedirectMatch 404 /(autoload\.php|composer\.(json|lock|phar)|CONTRIBUTING\.md|eula.*\.txt|license\.txt|README\.md|UPGRADE\.md)$
+    RedirectMatch 404 /(composer\.(json|lock)|README\.md|UPGRADE\.md)$
 </IfModule>
 
 # Staging environment
@@ -104,6 +104,7 @@ DirectoryIndex shopware.php
    php_flag session.auto_start off
    php_flag suhosin.session.cryptua off
    php_flag zend.ze1_compatibility_mode off
+   php_value always_populate_raw_post_data -1
 </IfModule>
 
 #   AddType x-mapp-php5 .php

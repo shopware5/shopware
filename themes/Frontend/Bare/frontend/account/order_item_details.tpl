@@ -89,10 +89,19 @@
 
 										{block name="frontend_account_order_item_pseudo_price"}
 											{if $article.currentHas_pseudoprice}
-												<span class="order--pseudo-price is--italic is--soft is--line-through">
-													{s name="reducedPrice" namespace="frontend/listing/box_article"}{/s}
-													{$article.currentPseudoprice|currency}
-													{s name="Star" namespace="frontend/listing/box_article"}{/s}
+												<span class="price--pseudo">
+													{block name="frontend_account_order_item_pseudo_price_before"}
+														{s name="priceDiscountLabel" namespace="frontend/detail/data"}{/s}
+													{/block}
+
+													<span class="order--pseudo-price is--italic is--soft is--line-through">
+														{$article.currentPseudoprice|currency}
+														{s name="Star" namespace="frontend/listing/box_article"}{/s}
+													</span>
+
+													{block name="frontend_account_order_item_pseudo_price_after"}
+														{s name="priceDiscountInfo" namespace="frontend/detail/data"}{/s}
+													{/block}
 												</span>
 											{/if}
 										{/block}

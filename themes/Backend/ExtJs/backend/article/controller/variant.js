@@ -1794,15 +1794,13 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
         }).show();
     },
 
-
-
     /**
      * Called after the user hits the 'start' button of the multiRequestDialog
      */
     onStartNumberProcess: function(window) {
-        var me = this;
+        var me = this,
+            totalCount = window.totalCount || 0;
 
-        totalCount = window.totalCount;
         window.combo.disable();
 
         me.generateNumbers(0, window, totalCount, window.combo.getValue(), window.progressBar);

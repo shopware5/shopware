@@ -162,7 +162,8 @@ class Container extends BaseContainer
                 $me->get('slim.response'),
                 $me->get('dummy.plugin.finder'),
                 $me->get('cleanup.files.finder'),
-                $me->get('app')
+                $me->get('app'),
+                SW_PATH
             );
         };
 

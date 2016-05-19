@@ -57,4 +57,11 @@ interface CategoryGatewayInterface
      * @return Struct\Category
      */
     public function get($id, Struct\ShopContextInterface $context);
+
+    /**
+     * @param Struct\BaseProduct[] $products
+     * @param Struct\ShopContextInterface $context
+     * @return array Indexed by product number, contains all categories of a product
+     */
+    public function getProductsCategories(array $products, Struct\ShopContextInterface $context);
 }

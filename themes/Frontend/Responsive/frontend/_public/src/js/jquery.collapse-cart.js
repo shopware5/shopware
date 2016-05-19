@@ -1,4 +1,4 @@
-;jQuery(function ($) {
+;(function($, window) {
     'use strict';
 
     $.plugin('swCollapseCart', {
@@ -93,6 +93,31 @@
             me._$triggerEl = $(opts.triggerElSelector);
 
             /**
+             * Button element to change disabled state
+             *
+             * @private
+             * @property _$linkEl
+             * @type {jQuery}
+             */
+            me._$linkEl = me._$triggerEl.find('.cart--link');
+
+            /**
+             * Holds the state if the mouse is over the cart
+             *
+             * @private
+             * @property _mousePosition
+             * @type {boolean}
+             */
+            me._isOverMe = false;
+
+            /**
+             * Holds the state if the cart is loading
+             * @type {boolean}
+             * @private
+             */
+            me._isCartLoading = false;
+
+            /**
              * Loading icon that will be used for loading when an AJAX request is send.
              *
              * @private
@@ -141,9 +166,15 @@
                 $.subscribe('plugin/swAddArticle/onAddArticle', $.proxy(me.onArticleAdded, me));
                 $.subscribe('plugin/swAddArticle/onBeforeAddArticle', $.proxy(me.onBeforeAddArticle, me));
             } else {
+                me._on('.container--ajax-cart,' + me.opts.triggerElSelector, 'mousemove', $.proxy(me.onMouseHover, me));
                 me._on(me._$triggerEl, 'mouseenter touchstart', $.proxy(me.onMouseEnter, me));
                 me._on(me._$triggerEl, 'mouseleave', $.proxy(me.onMouseLeave, me));
+                me._on(me._$triggerEl, 'click', $.proxy(me.onClick, me));
                 me._on(me.$el, 'mouseleave', $.proxy(me.onMouseLeave, me));
+                $('.container--ajax-cart,' + me.opts.triggerElSelector).hover(
+                    $.proxy(me.onMouseHoverStart, me),
+                    $.proxy(me.onMouseHoverEnd, me)
+                );
             }
 
             $.publish('plugin/swCollapseCart/onRegisterEvents', [ me ]);
@@ -196,23 +227,35 @@
         onMouseEnter: function (event) {
             var me = this;
 
-            me.showLoadingIndicator();
-            me.openMenu();
-
             if (me.isDisplayMode('offcanvas')) {
                 event.preventDefault();
 
+                me.showLoadingIndicator();
+                me.openMenu();
+
                 me.loadCart();
             } else {
-                me.buffer(function () {
-                    me.loadCart(function () {
-                        $('body').one('touchstart', $.proxy(me.onMouseLeave, me));
+                if (me.isCartLoading()) {
+                    me.showLoadingIndicator();
+                    me.openMenu();
+                } else {
+                    me.buffer(function () {
+                        if (me.isOverMe() === false || me._wasClicked === true) {
+                            return;
+                        }
 
-                        $.publish('plugin/swCollapseCart/onMouseEnterLoaded', [ me, event ]);
-                    });
+                        me.showLoadingIndicator();
+                        me.openMenu();
 
-                    $.publish('plugin/swCollapseCart/onMouseEnterBuffer', [ me, event ]);
-                }, 500);
+                        me.loadCart(function () {
+                            $('body').one('touchstart', $.proxy(me.onMouseLeave, me));
+
+                            $.publish('plugin/swCollapseCart/onMouseEnterLoaded', [me, event]);
+                        });
+
+                        $.publish('plugin/swCollapseCart/onMouseEnterBuffer', [me, event]);
+                    }, 500);
+                }
             }
 
             $.publish('plugin/swCollapseCart/onMouseEnter', [ me, event ]);
@@ -235,6 +278,7 @@
             }
 
             me.closeMenu();
+            me.clearBuffer();
         },
 
         /**
@@ -292,11 +336,19 @@
         buffer: function(func, bufferTime) {
             var me = this;
 
+            me.clearBuffer();
+            me.bufferTimeout = setTimeout(func, bufferTime);
+        },
+
+        /**
+         * Clears the open cart timeout
+         */
+        clearBuffer: function() {
+            var me = this;
+
             if (me.bufferTimeout) {
                 clearTimeout(me.bufferTimeout);
             }
-
-            me.bufferTimeout = setTimeout(func, bufferTime);
         },
 
         /**
@@ -374,7 +426,14 @@
                 opts = me.opts,
                 $el = me.$el;
 
+            if (me.isCartLoading()) {
+                return;
+            }
+
             $.publish('plugin/swCollapseCart/onLoadCart', [ me ]);
+
+            me._$linkEl.addClass('is--disabled');
+            me._isCartLoading = true;
 
             $.ajax({
                 'url': opts.ajaxCartURL,
@@ -388,6 +447,10 @@
                     }
 
                     $.publish('plugin/swCollapseCart/onLoadCartFinished', [ me, result ]);
+                },
+                'complete': function () {
+                    me._$linkEl.removeClass('is--disabled');
+                    me._isCartLoading = false;
                 }
             });
         },
@@ -415,6 +478,55 @@
         },
 
         /**
+         * Intercepts the click event to prevent redirect while
+         * the request is being made
+         *
+         * @param event
+         */
+        onClick: function(event) {
+            var me = this;
+
+            if (me.isCartLoading()) {
+                event.preventDefault();
+                return false;
+            }
+
+            me._wasClicked = true;
+        },
+
+        /**
+         * Indicates if the cart is currently loading
+         *
+         * @returns {boolean}
+         */
+        isCartLoading: function() {
+            return !!this._isCartLoading;
+        },
+
+        /**
+         * Indicates if the mouse is over the cart button or cart menu itself
+         *
+         * @returns {boolean}
+         */
+        isOverMe: function() {
+            return !!this._isOverMe;
+        },
+
+        /**
+         * Indicates that the mouse is over the element
+         */
+        onMouseHoverStart: function() {
+            this._isOverMe = true;
+        },
+
+        /**
+         * Indicates that the mouse is not over the element anymore
+         */
+        onMouseHoverEnd: function() {
+            this._isOverMe = false;
+        },
+
+        /**
          * Destroys the plugin and removes all attached events and delegations.
          *
          * @public
@@ -428,4 +540,4 @@
             me._destroy();
         }
     });
-});
+})(jQuery, window);

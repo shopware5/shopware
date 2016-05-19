@@ -11,5 +11,4 @@ namespace Shopware\Tests\Mink\Element\Emotion;
  */
 class BlogArticleBox extends ArticleBox
 {
-
 }

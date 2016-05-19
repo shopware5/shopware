@@ -383,6 +383,7 @@ class Enlight_Application
     /**
      * Getter method for the internal options array.
      *
+     * @deprecated since version 5.1.3, to be removed in 5.2
      * @return array
      */
     public function getOptions()
@@ -393,6 +394,7 @@ class Enlight_Application
     /**
      * Getter method for a single option addressed by the given key.
      *
+     * @deprecated since version 5.1.3, to be removed in 5.2
      * @param string $key
      * @param null $default
      * @return mixed

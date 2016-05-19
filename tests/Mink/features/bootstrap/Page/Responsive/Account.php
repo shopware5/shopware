@@ -7,14 +7,11 @@ use Shopware\Tests\Mink\Helper;
 class Account extends \Shopware\Tests\Mink\Page\Emotion\Account
 {
     /**
-     * Returns an array of all css selectors of the element/page
-     * @return array
+     * @inheritdoc
      */
     public function getCssSelectors()
     {
-        return array(
-            'identifierDashboard' => 'div.content--wrapper > div.account--content',
-            'identifierRegister' => 'div.content--wrapper > div.register--content',
+        return [
             'payment' => 'div.account--payment.account--box strong',
             'logout' => 'div.account--menu-container a.link--logout',
             'registrationForm' => 'form.register--form',
@@ -25,35 +22,59 @@ class Account extends \Shopware\Tests\Mink\Page\Emotion\Account
             'emailForm' => 'div.account--email > form',
             'esdDownloads' => '.downloads--table-header ~ .panel--tr',
             'esdDownloadName' => '.download--name'
-        );
+        ];
     }
 
     /**
-     * Returns an array of all named selectors of the element/page
-     * @return array
+     * @inheritdoc
      */
     public function getNamedSelectors()
     {
-        return array(
-            'registerButton'        => array('de' => 'Neuer Kunde',             'en' => 'New customer'),
-            'sendButton'            => array('de' => 'Weiter',                  'en' => 'Continue'),
-            'changePaymentButton'   => array('de' => 'Ändern',                  'en' => 'Change'),
-            'changeBillingButton'   => array('de' => 'Ändern',                  'en' => 'Change'),
-            'changeShippingButton'  => array('de' => 'Ändern',                  'en' => 'Change'),
-            'changePasswordButton'  => array('de' => 'Passwort ändern',         'en' => ''),
-            'changeEmailButton'     => array('de' => 'E-Mail ändern',           'en' => ''),
-            'myOrdersLink'          => array('de' => 'Meine Bestellungen',      'en' => 'My orders'),
-            'myEsdDownloads'        => array('de' => 'Meine Sofortdownloads',   'en' => 'My instant downloads'),
-            'logoutLink'            => array('de' => 'Abmelden',                'en' => 'Logout')
+        return [
+            'loginButton'           => ['de' => 'Anmelden',                 'en' => 'Login'],
+            'forgotPasswordLink'    => ['de' => 'Passwort vergessen?',      'en' => 'Forgot your password?'],
+            'sendButton'            => ['de' => 'Weiter',                   'en' => 'Continue'],
+
+            'myAccountLink'         => ['de' => 'Mein Konto',               'en' => 'My account'],
+            'myOrdersLink'          => ['de' => 'Meine Bestellungen',       'en' => 'My orders'],
+            'myEsdDownloadsLink'    => ['de' => 'Meine Sofortdownloads',    'en' => 'My instant downloads'],
+            'changeBillingLink'     => ['de' => 'Rechnungsadresse ändern',  'en' => 'Change billing address'],
+            'changeShippingLink'    => ['de' => 'Lieferadresse ändern',     'en' => 'Change shipping address'],
+            'changePaymentLink'     => ['de' => 'Zahlungsart ändern',       'en' => 'Change payment method'],
+            'noteLink'              => ['de' => 'Merkzettel',               'en' => 'Wish list'],
+            'logoutLink'            => ['de' => 'Abmelden',                 'en' => 'Logout'],
+
+            'changePaymentButton'   => ['de' => 'Ändern',                   'en' => 'Change'],
+            'changeBillingButton'   => ['de' => 'Ändern',                   'en' => 'Change'],
+            'changeShippingButton'  => ['de' => 'Ändern',                   'en' => 'Change'],
+            'changePasswordButton'  => ['de' => 'Passwort ändern',          'en' => 'Change password'],
+            'changeEmailButton'     => ['de' => 'E-Mail ändern',            'en' => 'Change email']
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function verifyPageLogin()
+    {
+        return (
+            parent::verifyPageLogin() &&
+            parent::verifyPageRegister()
         );
     }
 
-    protected $identifiers = array('identifierDashboard', 'identifierRegister');
+    /**
+     * @inheritdoc
+     */
+    protected function verifyPageRegister()
+    {
+        return $this->verifyPageLogin();
+    }
 
     /**
-     * @param $data
+     * @inheritdoc
      */
-    public function register($data)
+    public function register(array $data)
     {
         $this->verifyPage();
 
@@ -62,8 +83,7 @@ class Account extends \Shopware\Tests\Mink\Page\Emotion\Account
     }
 
     /**
-     * @param AddressBox $addresses
-     * @param string $name
+     * @inheritdoc
      */
     public function chooseAddress(AddressBox $addresses, $name)
     {

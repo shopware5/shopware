@@ -17,8 +17,7 @@ class AddressBox extends \Shopware\Tests\Mink\Element\Emotion\AddressBox
     protected $selector = ['css' => 'div.address--container .panel'];
 
     /**
-     * Returns an array of all css selectors of the element/page
-     * @return array
+     * @inheritdoc
      */
     public function getCssSelectors()
     {

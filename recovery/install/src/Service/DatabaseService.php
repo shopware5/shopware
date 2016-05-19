@@ -51,10 +51,18 @@ class DatabaseService
     {
         $this->connection->exec(
             sprintf(
-                "CREATE DATABASE %s CHARACTER SET utf8 COLLATE utf8_unicode_ci;",
+                "CREATE DATABASE IF NOT EXISTS `%s` CHARACTER SET utf8 COLLATE utf8_unicode_ci;",
                 $databaseName
             )
         );
+    }
+
+    /**
+     * @param string $databaseName
+     */
+    public function selectDatabase($databaseName)
+    {
+        $this->connection->exec("USE `$databaseName`");
     }
 
     /**

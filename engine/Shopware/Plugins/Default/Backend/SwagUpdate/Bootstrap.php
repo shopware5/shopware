@@ -75,7 +75,7 @@ class Shopware_Plugins_Backend_SwagUpdate_Bootstrap extends Shopware_Components_
             'class'  => 'sprite-arrow-continue-090',
             'action' => 'Index',
             'active' => 1,
-            'parent' => $this->Menu()->findOneBy('id', 40) // help menu
+            'parent' => $this->Menu()->findOneBy(['id' => 40]) // help menu
         ));
 
         return array('success' => true, 'invalidateCache' => array('backend'));

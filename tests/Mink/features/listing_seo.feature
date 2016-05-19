@@ -1,9 +1,9 @@
-@listing @seo @basicSettings
+@listing @seo @basicSettings @configChange
 Feature: Listing Seo BasicSettings
 
     @browsing
     Scenario: I see canonical, index and follow in emotion world page for category with no pagination SEO
-      Given basic settings element "seoIndexPaginationLinks" has value 0
+      Given the config value of "seoIndexPaginationLinks" is 0
       And I am on the listing page for category 5
 
       Then I should see canonical link "genusswelten"
@@ -12,7 +12,7 @@ Feature: Listing Seo BasicSettings
 
     @browsing
     Scenario: I see canonical, noindex and follow in listing page 1 for category with no pagination SEO
-      Given basic settings element "seoIndexPaginationLinks" has value 0
+      Given the config value of "seoIndexPaginationLinks" is 0
       And I am on the listing page for category 5 on page 1
 
       Then I should see canonical link "genusswelten"
@@ -22,7 +22,7 @@ Feature: Listing Seo BasicSettings
 
     @browsing
     Scenario: I see canonical, index and follow in emotion world page for category with pagination SEO
-      Given basic settings element "seoIndexPaginationLinks" has value 1
+      Given the config value of "seoIndexPaginationLinks" is 1
       And I am on the listing page for category 5
 
       Then I should see canonical link "genusswelten"
@@ -31,7 +31,7 @@ Feature: Listing Seo BasicSettings
 
     @browsing
     Scenario: I see no canonical, noindex, follow and no next in listing page 1 for category with pagination SEO
-      Given basic settings element "seoIndexPaginationLinks" has value 1
+      Given the config value of "seoIndexPaginationLinks" is 1
       And I am on the listing page for category 5 on page 1
 
       Then I should not see canonical link
@@ -41,7 +41,7 @@ Feature: Listing Seo BasicSettings
 
     @browsing
     Scenario: I see no canonical, index, follow, prev and next in listing page 2 for category with pagination SEO
-      Given basic settings element "seoIndexPaginationLinks" has value 1
+      Given the config value of "seoIndexPaginationLinks" is 1
       And I am on the listing page for category 5 on page 2
 
       Then I should not see canonical link
@@ -51,7 +51,7 @@ Feature: Listing Seo BasicSettings
 
     @browsing
     Scenario: I see no canonical, noindex, follow and prev in last category page with pagination SEO
-      Given basic settings element "seoIndexPaginationLinks" has value 1
+      Given the config value of "seoIndexPaginationLinks" is 1
       And I am on the listing page for category 5 on page 4
 
       Then I should not see canonical link
@@ -61,7 +61,7 @@ Feature: Listing Seo BasicSettings
 
     @browsing
     Scenario: I see no canonical, noindex, follow and prev in last category page with pagination SEO
-      Given basic settings element "seoIndexPaginationLinks" has value 1
+      Given the config value of "seoIndexPaginationLinks" is 1
       And I am on the listing page for category 11 on page 2
 
       Then I should not see canonical link

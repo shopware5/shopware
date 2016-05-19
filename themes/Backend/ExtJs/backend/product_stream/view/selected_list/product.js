@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 //{namespace name=backend/product_stream/main}
-
+//{block name="backend/product_stream/view/selected_list/product"}
 Ext.define('Shopware.apps.ProductStream.view.selected_list.Product', {
     extend: 'Shopware.apps.ProductStream.view.SearchGrid',
     alias: 'widget.product-stream-selected-list-grid',
@@ -91,3 +91,4 @@ Ext.define('Shopware.apps.ProductStream.view.selected_list.Product', {
         });
     }
 });
+//{/block}

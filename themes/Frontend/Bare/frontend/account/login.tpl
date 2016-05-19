@@ -18,7 +18,7 @@
 	{* New customer *}
 	{block name='frontend_account_login_new'}
 	<div class="grid_10">
-		<h2 class="headingbox_dark largesize">{s name="LoginHeaderNew"}{/s} {$sShopname}</h2>
+		<h2 class="headingbox_dark largesize">{s name="LoginHeaderNew"}{/s} {$sShopname|escapeHtml}</h2>
 		<div class="inner_container">
 			<p>{s name="LoginInfoNew"}{/s}</p>
 			<form method="post" name="new_customer" class="new_customer_form" action="{url controller='register'}">
@@ -35,10 +35,10 @@
 		</div>
 	</div>
 	{/block}
-	
+
 	{* Existing customer *}
 	{block name='frontend_account_login_customer'}
-	<div class="grid_10">	
+	<div class="grid_10">
     	<h2 class="headingbox_dark largesize">{s name="LoginHeaderExistingCustomer"}{/s}</h2>
     	<div class="inner_container">
 	        <form name="sLogin" method="post" action="{url action=login}">
@@ -54,14 +54,14 @@
 	                    <input name="password" type="password" tabindex="2" id="passwort" class="text {if $sErrorFlag.password}instyle_error{/if}" />
 	                </p>
 	            </fieldset>
-	            
+
 	            <p class="password">
 	    			<a href="{url action=password}" title="{"{s name='LoginLinkLostPassword'}{/s}"|escape}">
 	    				{s name="LoginLinkLostPassword"}{/s}
 	    			</a>
 	    		</p>
 	            <div class="action">
-	           		<input class="button-middle small" type="submit" value="{s name='LoginLinkLogon'}{/s}" name="Submit"/>	
+	           		<input class="button-middle small" type="submit" value="{s name='LoginLinkLogon'}{/s}" name="Submit"/>
 	            </div>
 	        </form>
     	</div>

@@ -79,40 +79,6 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Filter', {
             {
                 xtype: 'fieldset',
                 defaults: me.defaults,
-                title: '{s name=fieldset/configuration}Configuration{/s}',
-                items: [
-
-                    {
-                        fieldLabel: '{s name=fieldset/filter/text/displayFiltersOnDetailPage}Display product filters on detail page{/s}',
-                        name: 'filters[displayFiltersOnDetailPage]',
-                        xtype: 'checkbox',
-                        uncheckedValue: false,
-                        inputValue: true
-                    },
-                    {
-                        fieldLabel: '{s name=fieldset/filter/text/sortProperties}Filter sort order{/s}',
-                        name: 'filters[propertySorting]',
-                        supportText: '{s name=fieldset/filter/text/sortProperties/support}In case that more than one filter group is configured in a category listing, this sort condition will be used to sort the filter values.{/s}',
-                        xtype: 'combo',
-                        valueField: 'id',
-                        editable: false,
-                        displayField: 'name',
-                        store: Ext.create('Ext.data.Store', {
-                            fields: [
-                                { name: 'id', type: 'int' },
-                                { name: 'name', type: 'string' }
-                            ],
-                            data: [
-                                { id: 0, name: '{s name=fieldset/filter/sort/alphanumeric}Sort by alphanumeric value{/s}' },
-                                { id: 1, name: '{s name=fieldset/filter/sort/numeric}Sort by numeric value{/s}' },
-                                { id: 3, name: '{s name=fieldset/filter/sort/position}Sort by position{/s}' }
-                            ]
-                        })
-                    }
-                ]
-            }, {
-                xtype: 'fieldset',
-                defaults: me.defaults,
                 title: '{s name=fieldset/listings}Listings{/s}',
                 items: [{
                     name: 'filters[showSupplierInCategories]',

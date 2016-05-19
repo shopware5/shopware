@@ -41,7 +41,7 @@ class DatabaseFactory
      */
     public function createPDOConnection(DatabaseConnectionInformation $info)
     {
-        $conn = @new \PDO(
+        $conn = new \PDO(
             $this->buildDsn($info),
             $info->username,
             $info->password,

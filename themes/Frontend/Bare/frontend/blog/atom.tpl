@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <link href="{$sCategoryContent.atomFeed|rewrite:$sCategoryContent.description|escape}" rel="self" type="application/atom+xml" />
     <author>
-        <name>{$sShopname}</name>
+        <name>{$sShopname|escapeHtml}</name>
     </author>
     <title>{block name='frontend_listing_atom_title'}{s name="BlogAtomFeedHeader"}{$sCategoryContent.description|escape}{/s}{/block}</title>
     <id>{$sCategoryContent.rssFeed|rewrite:$sCategoryContent.description|escape}</id>

@@ -70,11 +70,11 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Settings', {
         me.callParent(arguments);
 
         me.form.getFields().each(
-                function (field) {
-                    field.on('change', function (f, n, o) {
-                        me.fireEvent('formChanged', me.form);
-                    });
-                }
+            function (field) {
+                field.on('change', function (f, n, o) {
+                    me.fireEvent('formChanged', me.form);
+                });
+            }
         );
 
     },
@@ -249,6 +249,15 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Settings', {
                 editable: false
             },
             {
+                xtype: 'container',
+                layout: {
+                    type: 'hbox',
+                    border: false
+                },
+                margin: '3 0 5 0',
+                items: me.getTimedDeliveryFieldSet()
+            },
+            {
                 xtype: 'combobox',
                 fieldLabel: '{s name=dispatch}Dispatch:{/s}',
                 allowBlank: false,
@@ -271,10 +280,118 @@ Ext.define('Shopware.apps.NewsletterManager.view.newsletter.Settings', {
                         me.fireEvent('changePublish', me.record, newValue);
                     }
                 }
+            },
+            {
+                xtype: 'checkbox',
+                fieldLabel: '{s name=ready_for_sending}Release for sending:{/s}',
+                name: 'released',
+                inputValue: 1,
+                uncheckedValue: 0,
+                helpTitle: '{s name=active/help_title}Release a newsletter{/s}',
+                helpText: '{s name=active/help_text}These option releases the newsletter for the cronjob. If you don\'t use a cronjob you can ignore this option.{/s}',
+                listeners: {
+                    change: function(field, newValue, oldValue) {
+                        me.fireEvent('changeActive', me.record, newValue);
+                    },
+                    render: function (field) {
+                        if (me.record.get('status') == 2) {
+                            field.setDisabled(true);
+                            field.helpTitle = '{s name=active/error/help_title}Error{/s}';
+                            field.helpText = '{s name=error/active_text}A delivered newsletter can\'t change the released option.{/s}';
+                            return;
+                        } else if (me.record.get('status') > 0) {
+                            field.setValue(1);
+                        } else {
+                            field.setValue(0);
+                        }
+                    }
+                }
             }
         ];
+    },
+
+    /**
+     * Returns the date and time configuration for the timed delivering of newsletter
+     */
+    getTimedDeliveryFieldSet: function() {
+        var me = this;
+
+        me.timedDeliveryTimeField = Ext.create('Ext.form.field.Time', {
+            allowBlank: true,
+            name: 'timedDeliveryTime',
+            value: Ext.Date.parse('6pm', 'ga'),
+            helpTitle: '{s name=send_at/support/title}Configure time of delivery{/s}',
+            helpText: '{s name=send_at/support/text}With this setting you can define when you want to send the newsletter. The execution of the newsletter can be for example via a cron job. This setting is optional.{/s}',
+            listeners: {
+                change: function(field, newValue, oldValue) {
+                    me.fireEvent('changeDeliveryTime', me.record, newValue, oldValue);
+                },
+                render: function(field) {
+                    field.setValue(me.record.get('timedDelivery'));
+                }
+            },
+            validator: function(value) {
+                var timedDelivery = Ext.getCmp('timedDeliveryDate');
+
+                if (!me.timedDeliveryDateField.getValue() && value) {
+                    me.timedDeliveryDateField.markInvalid('{s name=send_at/error/no_date}You must configure the date.{/s}');
+                }
+
+                if (value && !timedDelivery.getValue()) {
+                    return '{s name=send_at/error/no_date}You must configure the date.{/s}';
+                }
+
+                return true;
+            }
+        });
+
+        me.timedDeliveryDateField = Ext.create('Ext.form.field.Date', {
+            fieldLabel: '{s name=send_at}Send at:{/s}',
+            allowBlank: true,
+            name: 'timedDeliveryDate',
+            id: 'timedDeliveryDate',
+            width: '40%',
+            minValue: new Date(),
+            listeners: {
+                change: function(field, newValue, oldValue) {
+                    me.fireEvent('changeDeliveryDate', me.record, newValue, oldValue);
+                    me.setTimeFieldMinValue();
+                },
+                render: function(field) {
+                    field.setValue(me.record.get('timedDelivery'));
+                }
+            }
+        });
+
+        return [
+            me.timedDeliveryDateField,
+            me.timedDeliveryTimeField
+        ];
+    },
+
+    /**
+     * Sets the time field min value to get a time in the future if the user set the current date
+     */
+    setTimeFieldMinValue: function() {
+        var me                = this,
+            timedDeliveryDate = me.record.get('timedDeliveryDate'),
+            currentDate       = new Date();
+
+        //don't set a min value if the time is not defined at the moment
+        if (timedDeliveryDate == Ext.undefined) {
+            return;
+        }
+
+        timedDeliveryDate = Ext.Date.clearTime(timedDeliveryDate);
+        currentDate       = Ext.Date.clearTime(currentDate);
+
+        //set the min value if the date the user set is equal to the current date
+        if (Ext.Date.isEqual(currentDate, timedDeliveryDate)) {
+            me.timedDeliveryTimeField.setMinValue(new Date());
+        } else {
+            //Resets the min value
+            me.timedDeliveryTimeField.setMinValue(Ext.Date.clearTime(new Date()));
+        }
     }
-
-
 });
 //{/block}

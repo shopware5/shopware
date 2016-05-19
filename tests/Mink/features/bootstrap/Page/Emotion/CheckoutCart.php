@@ -1,6 +1,10 @@
 <?php
 namespace  Shopware\Tests\Mink\Page\Emotion;
 
+use Behat\Behat\Tester\Exception\PendingException;
+use Behat\Mink\Driver\Selenium2Driver;
+use Behat\Mink\Exception\ResponseTextException;
+use Behat\Mink\WebAssert;
 use Shopware\Tests\Mink\Element\Emotion\CartPosition;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use Shopware\Tests\Mink\Helper;
@@ -13,12 +17,11 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
     protected $path = '/checkout/cart';
 
     /**
-     * Returns an array of all css selectors of the element/page
-     * @return array
+     * @inheritdoc
      */
     public function getCssSelectors()
     {
-        return array(
+        return [
             'aggregationAmounts' => 'div#aggregation',
             'sum' => 'div#aggregation > p.textright',
             'shipping' => 'div#aggregation > div:nth-of-type(1)',
@@ -32,49 +35,44 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
             'addArticleSubmit' => 'div.add_article input.box_send',
             'removeVoucher' => 'div.table_row.voucher a.del',
             'aggregationLabels' => '#aggregation_left > *',
-            'aggregationValues' => '#aggregation > *'
-        );
+            'aggregationValues' => '#aggregation > *',
+            'articleDeleteButtons' => 'div.table_row a.del'
+        ];
     }
 
     /**
-     * Returns an array of all named selectors of the element/page
-     * @return array
+     * @inheritdoc
      */
     public function getNamedSelectors()
     {
-        return array(
-            'checkout' => array('de' => 'Zur Kasse gehen!', 'en' => 'Proceed to checkout'),
-            'sum' => array('de' => 'Summe', 'en' => 'Proceed to checkout'),
-            'shipping' => array('de' => 'Versandkosten', 'en' => 'Proceed to checkout'),
-            'total' => array('de' => 'Gesamtsumme', 'en' => 'Proceed to checkout'),
-            'sumWithoutVat' => array('de' => 'Gesamtsumme ohne MwSt.:', 'en' => 'Proceed to checkout'),
-            'tax' => array('de' => 'zzgl. %d.00'. html_entity_decode('&nbsp;') . '%% MwSt.:', 'en' => 'Proceed to checkout'),
-        );
+        return [
+            'checkout' => ['de' => 'Zur Kasse gehen!', 'en' => 'Proceed to checkout'],
+            'sum' => ['de' => 'Summe', 'en' => 'Proceed to checkout'],
+            'shipping' => ['de' => 'Versandkosten', 'en' => 'Proceed to checkout'],
+            'total' => ['de' => 'Gesamtsumme', 'en' => 'Proceed to checkout'],
+            'sumWithoutVat' => ['de' => 'Gesamtsumme ohne MwSt.:', 'en' => 'Proceed to checkout'],
+            'tax' => ['de' => 'zzgl. %d.00'. html_entity_decode('&nbsp;') . '%% MwSt.:', 'en' => 'Proceed to checkout'],
+        ];
     }
 
-//    protected $taxesPositionFirst = 4;
-//    public $cartPositionFirst = 3;
-
     /**
+     * Checks the aggregation
      * @param $aggregation
      * @throws \Exception
      */
     public function checkAggregation($aggregation)
     {
-        $locators = array('aggregationLabels', 'aggregationValues');
-        $elements = Helper::findAllOfElements($this, $locators);
-        $lang = Helper::getCurrentLanguage($this);
-        $check = array();
+        $elements = Helper::findAllOfElements($this, ['aggregationLabels', 'aggregationValues']);
+        $lang = Helper::getCurrentLanguage();
+        $check = [];
 
-        foreach($aggregation as $property) {
+        foreach ($aggregation as $property) {
             $key = $this->getAggregationPosition($elements['aggregationLabels'], $property['label'], $lang);
 
-            $check[$property['label']] = Helper::floatArray(
-                array(
-                    $property['value'],
-                    $elements['aggregationValues'][$key]->getText()
-                )
-            );
+            $check[$property['label']] = Helper::floatArray([
+                $property['value'],
+                $elements['aggregationValues'][$key]->getText()
+            ]);
 
             unset($elements['aggregationLabels'][$key]);
             unset($elements['aggregationValues'][$key]);
@@ -82,7 +80,7 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
 
         $result = Helper::checkArray($check);
 
-        if($result !== true) {
+        if ($result !== true) {
             $message = sprintf(
                 'The value of "%s" is "%s"! (should be "%s")',
                 $result,
@@ -98,18 +96,17 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
      * @param string $key
      * @param string $language
      * @return string
-     * @throws \Behat\Behat\Exception\PendingException
      */
     private function getLabel($key, $language)
     {
         $labels = $this->getNamedSelectors();
 
-        if(strpos($key, '%') !== false) {
+        if (strpos($key, '%') !== false) {
             $taxRate = intval($key);
             return sprintf($labels['tax'][$language], $taxRate);
         }
 
-        if(isset($labels[$key][$language])) {
+        if (isset($labels[$key][$language])) {
             return $labels[$key][$language];
         }
 
@@ -141,7 +138,7 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
             }
 
             $key++;
-        } while($key <= $lastKey);
+        } while ($key <= $lastKey);
 
         $message = sprintf('Label "%s" does not exist on the page! ("%s")', $labelKey, $givenLabel);
         Helper::throwException($message);
@@ -153,8 +150,7 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
      */
     public function addVoucher($voucher)
     {
-        $locators = array('addVoucherInput', 'addVoucherSubmit');
-        $elements = Helper::findElements($this, $locators);
+        $elements = Helper::findElements($this, ['addVoucherInput', 'addVoucherSubmit']);
 
         $elements['addVoucherInput']->setValue($voucher);
         $elements['addVoucherSubmit']->press();
@@ -166,8 +162,7 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
      */
     public function addArticle($article)
     {
-        $locators = array('addArticleInput', 'addArticleSubmit');
-        $elements = Helper::findElements($this, $locators);
+        $elements = Helper::findElements($this, ['addArticleInput', 'addArticleSubmit']);
 
         $elements['addArticleInput']->setValue($article);
         $elements['addArticleSubmit']->press();
@@ -176,15 +171,10 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
     /**
      * Remove a product from the cart
      * @param CartPosition $item
-     * @param string $language
      */
-    public function removeProduct(CartPosition $item, $language = '')
+    public function removeProduct(CartPosition $item)
     {
-        if(empty($language)) {
-            $language = Helper::getCurrentLanguage($this);
-        }
-
-        Helper::clickNamedLink($item, 'remove', $language);
+        Helper::clickNamedLink($item, 'remove');
     }
 
     /**
@@ -193,26 +183,24 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
      */
     public function removeVoucher()
     {
-        $locator = array('removeVoucher');
-        $elements = Helper::findElements($this, $locator);
-
+        $elements = Helper::findElements($this, ['removeVoucher']);
         $elements['removeVoucher']->click();
     }
 
     /**
+     * Removes all products from the cart
      * @param CartPosition $items
      */
     public function emptyCart(CartPosition $items)
     {
-        $language = Helper::getCurrentLanguage($this);
-
         /** @var CartPosition $item */
-        foreach($items as $item) {
-            $this->removeProduct($item, $language);
+        foreach ($items as $item) {
+            $this->removeProduct($item);
         }
     }
 
     /**
+     * Fills the cart with products
      * @param array $items
      */
     public function fillCartWithProducts(array $items)
@@ -235,20 +223,12 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
      */
     public function checkCartProducts(CartPosition $cartPositions, array $items)
     {
-        if(count($cartPositions) !== count($items)) {
-            $message = sprintf(
-                'There are %d products in the cart! (should be %d)',
-                count($cartPositions),
-                count($items)
-            );
-            Helper::throwException($message);
-        }
-
+        Helper::assertElementCount($cartPositions, count($items));
         $items = Helper::floatArray($items, ['quantity', 'itemPrice', 'sum']);
         $result = Helper::assertElements($items, $cartPositions);
 
-        if($result !== true) {
-            $messages = array('The following articles are wrong:');
+        if ($result !== true) {
+            $messages = ['The following articles are wrong:'];
             foreach ($result as $product) {
                 $messages[] = sprintf(
                     '%s - %s (%s is "%s", should be "%s")',
@@ -264,12 +244,21 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
     }
 
     /**
-     * @param string $language
+     * Verify if we're on an expected page. Throw an exception if not.
      * @return bool
+     * @throws \Exception
      */
-    public function verifyPage($language = '')
+    public function verifyPage()
     {
-        return Helper::hasNamedLink($this, 'checkout', $language);
+        try {
+            $assert = new WebAssert($this->getSession());
+            $assert->pageTextContains('1 Ihr Warenkorb 2 Ihre Adresse 3 Prüfen und Bestellen');
+        } catch (ResponseTextException $e) {
+            $message = ['You are not on the cart!', 'Current URL: ' . $this->getSession()->getCurrentUrl()];
+            Helper::throwException($message);
+        }
+
+        return Helper::hasNamedLink($this, 'checkout');
     }
 
     /**
@@ -277,13 +266,11 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
      */
     public function proceedToOrderConfirmation()
     {
-        $language = Helper::getCurrentLanguage($this);
-
-        if($this->verifyPage($language)) {
-            Helper::clickNamedLink($this, 'checkout', $language);
+        if ($this->verifyPage()) {
+            Helper::clickNamedLink($this, 'checkout');
         }
 
-        $this->getPage('CheckoutConfirm')->verifyPage($language);
+        $this->getPage('CheckoutConfirm')->verifyPage();
     }
 
     /**
@@ -293,14 +280,21 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
      */
     public function proceedToOrderConfirmationWithLogin($eMail, $password)
     {
-        $language = Helper::getCurrentLanguage($this);
+        if ($this->verifyPage()) {
+            $locatorArray = $this->getNamedSelectors();
+            $parent = Helper::getContentBlock($this);
+            $language = Helper::getCurrentLanguage();
+            $link = $parent->findLink($locatorArray['checkout'][$language]);
 
-        if($this->verifyPage($language)) {
-            Helper::clickNamedLink($this, 'checkout', $language);
+            if ($this->getDriver() instanceof Selenium2Driver) {
+                $this->getSession()->visit($link->getAttribute('href'));
+            } else {
+                $link->click();
+            }
         }
 
         $this->getPage('Account')->login($eMail, $password);
-        $this->getPage('CheckoutConfirm')->verifyPage($language);
+        $this->getPage('CheckoutConfirm')->verifyPage();
     }
 
     /**
@@ -309,12 +303,28 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
      */
     public function proceedToOrderConfirmationWithRegistration(array $data)
     {
-        $language = Helper::getCurrentLanguage($this);
-
-        if($this->verifyPage($language)) {
-            Helper::clickNamedLink($this, 'checkout', $language);
+        if ($this->verifyPage()) {
+            Helper::clickNamedLink($this, 'checkout');
         }
 
         $this->getPage('Account')->register($data);
+    }
+
+    public function resetCart()
+    {
+        $originalPath = $this->path;
+
+        try {
+            $elements = Helper::findElements($this, ['articleDeleteButtons']);
+
+            foreach ($elements as $element) {
+                $this->path = $element->getAttribute('href');
+                $this->open();
+            }
+        } catch (\Exception $ex) {
+        }
+
+        $this->path = $originalPath;
+        $this->open();
     }
 }

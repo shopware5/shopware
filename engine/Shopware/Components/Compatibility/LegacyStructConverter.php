@@ -253,6 +253,24 @@ class LegacyStructConverter
             $promotion['sVoteAverange'] = $promotion['sVoteAverage'];
         }
 
+        $promotion['prices'] = [];
+        foreach ($product->getPrices() as $price) {
+            $priceData = $this->convertPriceStruct($price);
+
+            $priceData = array_merge($priceData, array(
+                'has_pseudoprice' => $price->getCalculatedPseudoPrice() > $price->getCalculatedPrice(),
+                'price' => $this->sFormatPrice($price->getCalculatedPrice()),
+                'price_numeric' => $price->getCalculatedPrice(),
+                'pseudoprice' => $this->sFormatPrice($price->getCalculatedPseudoPrice()),
+                'pseudoprice_numeric' => $price->getCalculatedPseudoPrice(),
+                'pricegroup' => $price->getCustomerGroup()->getKey(),
+                'purchaseunit' => $price->getUnit()->getPurchaseUnit(),
+                'maxpurchase' => $price->getUnit()->getMaxPurchase()
+            ));
+
+            $promotion['prices'][] = $priceData;
+        }
+
         $promotion["linkBasket"] = $this->config->get('baseFile') .
             "?sViewport=basket&sAdd=" . $promotion["ordernumber"];
 
@@ -389,12 +407,21 @@ class LegacyStructConverter
         }
 
         foreach ($product->getDownloads() as $download) {
-            $data['sDownloads'][] = array(
+            $temp = array(
                 'id' => $download->getId(),
                 'description' => $download->getDescription(),
                 'filename' => $this->mediaService->getUrl($download->getFile()),
-                'size' => $download->getSize()
+                'size' => $download->getSize(),
             );
+
+            $attributes = [];
+
+            if ($download->hasAttribute('core')) {
+                $attributes = $download->getAttribute('core')->toArray();
+            }
+
+            $temp['attributes'] = $attributes;
+            $data['sDownloads'][] = $temp;
         }
 
         foreach ($product->getLinks() as $link) {
@@ -514,9 +541,9 @@ class LegacyStructConverter
     private function getSourceSet($thumbnail)
     {
         if ($thumbnail->getRetinaSource() !== null) {
-            return sprintf('%s, %s 2x', $this->mediaService->getUrl($thumbnail->getSource()), $this->mediaService->getUrl($thumbnail->getRetinaSource()));
+            return sprintf('%s, %s 2x', $thumbnail->getSource(), $thumbnail->getRetinaSource());
         } else {
-            return $this->mediaService->getUrl($thumbnail->getSource());
+            return $thumbnail->getSource();
         }
     }
 
@@ -533,13 +560,9 @@ class LegacyStructConverter
         $thumbnails = [];
 
         foreach ($media->getThumbnails() as $thumbnail) {
-            $retina = null;
-            if ($thumbnail->hasRetinaSource()) {
-                $retina = $this->mediaService->getUrl($thumbnail->getRetinaSource());
-            }
             $thumbnails[] = [
-                'source' => $this->mediaService->getUrl($thumbnail->getSource()),
-                'retinaSource' => $retina,
+                'source' => $thumbnail->getSource(),
+                'retinaSource' => $thumbnail->getRetinaSource(),
                 'sourceSet' => $this->getSourceSet($thumbnail),
                 'maxWidth' => $thumbnail->getMaxWidth(),
                 'maxHeight' => $thumbnail->getMaxHeight()
@@ -549,7 +572,7 @@ class LegacyStructConverter
         $data = array(
             'id' => $media->getId(),
             'position' => 1,
-            'source' => $media->getFile(),//$this->mediaService->getUrl($media->getFile()),
+            'source' => $media->getFile(),
             'description' => $media->getName(),
             'extension' => $media->getExtension(),
             'main' => $media->isPreview(),
@@ -999,25 +1022,27 @@ class LegacyStructConverter
         $data['attributes'] = $product->getAttributes();
 
         if ($product->getManufacturer()) {
-            $data = array_merge(
-                $data,
-                array(
-                    'supplierName' => $product->getManufacturer()->getName(),
-                    'supplierImg' => $this->mediaService->getUrl($product->getManufacturer()->getCoverFile()),
-                    'supplierID' => $product->getManufacturer()->getId(),
-                    'supplierDescription' => $product->getManufacturer()->getDescription(),
-                )
+            $manufacturer = array(
+                'supplierName' => $product->getManufacturer()->getName(),
+                'supplierImg' => $product->getManufacturer()->getCoverFile(),
+                'supplierID' => $product->getManufacturer()->getId(),
+                'supplierDescription' => $product->getManufacturer()->getDescription(),
             );
 
+            if (!empty($manufacturer['supplierImg'])) {
+                $manufacturer['supplierImg'] = $this->mediaService->getUrl($manufacturer['supplierImg']);
+            }
+
+            $data = array_merge($data, $manufacturer);
             $data['supplier_attributes'] = $product->getManufacturer()->getAttributes();
         }
 
         if ($product->hasAttribute('marketing')) {
             /**@var $marketing StoreFrontBundle\Struct\Product\MarketingAttribute */
             $marketing = $product->getAttribute('marketing');
-            $data['newArticle'] = $marketing->get('isNew');
-            $data['sUpcoming'] = $marketing->get('comingSoon');
-            $data['topseller'] = $marketing->get('isTopSeller');
+            $data['newArticle'] = $marketing->isNew();
+            $data['sUpcoming'] = $marketing->comingSoon();
+            $data['topseller'] = $marketing->isTopSeller();
         }
 
         $today = new \DateTime();

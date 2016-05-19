@@ -4,15 +4,11 @@ namespace  Shopware\Tests\Mink\Page\Emotion;
 
 use Behat\Mink\WebAssert;
 use Shopware\Tests\Mink\Element\Emotion\Article;
-
 use Shopware\Tests\Mink\Element\Emotion\Banner;
-
 use Shopware\Tests\Mink\Element\Emotion\BlogArticle;
 use Shopware\Tests\Mink\Element\Emotion\CategoryTeaser;
 use Shopware\Tests\Mink\Element\Emotion\CompareColumn;
-
 use Shopware\Tests\Mink\Element\Emotion\YouTube;
-
 use Shopware\Tests\Mink\Element\SliderElement;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use Shopware\Tests\Mink\Helper;
@@ -26,24 +22,38 @@ class Homepage extends Page implements HelperSelectorInterface
     protected $path = '/';
 
     /**
-     * Returns an array of all css selectors of the element/page
-     * @return array
+     * @inheritdoc
      */
     public function getCssSelectors()
     {
-        return array(
+        return [
             'newsletterForm' => 'div.footer_column.col4 > form',
             'newsletterFormSubmit' => 'div.footer_column.col4 > form input[type="submit"]'
-        );
+        ];
     }
 
     /**
-     * Returns an array of all named selectors of the element/page
-     * @return array
+     * @inheritdoc
      */
     public function getNamedSelectors()
     {
-        return array();
+        return [];
+    }
+
+    /**
+     * Verify if we're on an expected page. Throw an exception if not.
+     * @throws \Exception
+     */
+    public function verifyPage()
+    {
+        $info = Helper::getPageInfo($this->getSession(), ['controller']);
+
+        if ($info['controller'] === 'index') {
+            return;
+        }
+
+        $message = ['You are not on the homepage!', 'Current URL: ' . $this->getSession()->getCurrentUrl()];
+        Helper::throwException($message);
     }
 
     /**
@@ -52,17 +62,16 @@ class Homepage extends Page implements HelperSelectorInterface
      */
     public function searchFor($searchTerm)
     {
-        $data = array(
-            array(
+        $data = [
+            [
                 'field' => 'sSearch',
                 'value' => $searchTerm
-            )
-        );
+            ]
+        ];
 
         $searchForm = $this->getElement('SearchForm');
-        $language = Helper::getCurrentLanguage($this);
         Helper::fillForm($searchForm, 'searchForm', $data);
-        Helper::pressNamedButton($searchForm, 'searchButton', $language);
+        Helper::pressNamedButton($searchForm, 'searchButton');
         $this->verifyResponse();
     }
 
@@ -72,16 +81,17 @@ class Homepage extends Page implements HelperSelectorInterface
      */
     public function receiveSearchResultsFor($searchTerm)
     {
-        $data = array(
-            array(
+        $data = [
+            [
                 'field' => 'sSearch',
                 'value' => $searchTerm
-            )
-        );
+            ]
+        ];
 
         $searchForm = $this->getElement('SearchForm');
         Helper::fillForm($searchForm, 'searchForm', $data);
         $this->getSession()->wait(5000, "$('ul.searchresult').children().length > 0");
+        $this->getSession()->wait(500);
     }
 
     /**
@@ -113,8 +123,7 @@ class Homepage extends Page implements HelperSelectorInterface
     {
         Helper::fillForm($this, 'newsletterForm', $data);
 
-        $locators = array('newsletterFormSubmit');
-        $elements = Helper::findElements($this, $locators);
+        $elements = Helper::findElements($this, ['newsletterFormSubmit']);
         $elements['newsletterFormSubmit']->press();
     }
 
@@ -127,19 +136,11 @@ class Homepage extends Page implements HelperSelectorInterface
      */
     public function checkComparisonProducts(CompareColumn $compareColumns, array $items)
     {
-        if (count($compareColumns) !== count($items)) {
-            $message = sprintf(
-                'There are %d products in the comparison! (should be %d)',
-                count($compareColumns),
-                count($items)
-            );
-            Helper::throwException($message);
-        }
-
+        Helper::assertElementCount($compareColumns, count($items));
         $result = Helper::searchElements($items, $compareColumns);
 
         if ($result !== true) {
-            $messages = array('The following articles were not found:');
+            $messages = ['The following articles were not found:'];
             foreach ($result as $product) {
                 $messages[] = $product['name'];
             }
@@ -209,7 +210,6 @@ class Homepage extends Page implements HelperSelectorInterface
      * Checks an emotion blog element
      * @param BlogArticle $blogArticle
      * @param array $articles
-     * @throws \Behat\Behat\Exception\PendingException
      * @throws \Exception
      */
     public function checkBlogArticles(BlogArticle $blogArticle, $articles)
@@ -339,6 +339,10 @@ class Homepage extends Page implements HelperSelectorInterface
         Helper::throwException($message);
     }
 
+    /**
+     * Returns the shop url
+     * @return string
+     */
     public function getShopUrl()
     {
         return $this->getUrl();

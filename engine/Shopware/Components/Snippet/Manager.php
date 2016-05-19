@@ -24,6 +24,7 @@
 
 
 use Shopware\Components\Model\ModelManager;
+use Shopware\Components\Snippet\DbAdapter;
 
 /**
  * @category  Shopware
@@ -79,7 +80,7 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
             ));
         }
 
-        $this->adapter = new Enlight_Config_Adapter_DbTable(array(
+        $this->adapter = new DbAdapter(array(
             'table'           => 's_core_snippets',
             'namespaceColumn' => 'namespace',
             'sectionColumn'   => array('shopID', 'localeID'),

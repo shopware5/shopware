@@ -29,7 +29,6 @@
  */
 //{block name="backend/article/model/media_mapping"}
 Ext.define('Shopware.apps.Article.model.MediaMapping', {
-
     /**
     * Extends the standard Ext Model
     * @string
@@ -41,9 +40,9 @@ Ext.define('Shopware.apps.Article.model.MediaMapping', {
      * @array
      */
     fields: [
-		//{block name="backend/article/model/media_mapping/fields"}{/block}
+        //{block name="backend/article/model/media_mapping/fields"}{/block}
         { name: 'id', type: 'int', useNull: true },
-        { name: 'imageId', type: 'int', useNull: true },
+        { name: 'imageId', type: 'int', useNull: true }
 
     ],
     associations: [

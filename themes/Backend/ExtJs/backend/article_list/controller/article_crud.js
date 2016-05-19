@@ -35,7 +35,8 @@ Ext.define('Shopware.apps.ArticleList.controller.ArticleCrud', {
     extend: 'Ext.app.Controller',
 
     refs: [
-        { ref:'grid', selector:'multi-edit-main-grid' }
+        { ref:'grid', selector:'multi-edit-main-grid' },
+        { ref:'showVariantsCheckbox', selector:'multi-edit-category-tree checkbox[name=displayVariants]' }
     ],
 
     /**
@@ -145,7 +146,12 @@ Ext.define('Shopware.apps.ArticleList.controller.ArticleCrud', {
      */
     onSaveProduct: function(editor, context) {
         var me = this,
-            record = context.record;
+            record = context.record,
+            isActiveChange = false,
+            changes = record.getChanges();
+
+        isActiveChange = typeof changes.Article_active !== 'undefined'
+                         && record.raw.Article_active != changes.Article_active;
 
         record.save({
             params: {
@@ -160,12 +166,19 @@ Ext.define('Shopware.apps.ArticleList.controller.ArticleCrud', {
                             'growl',
                             true
                     );
-                    // Update the modified record by the data, the controller returned
-                    // This way we make sure, that the record shows the data which is stored
-                    // in the database
-                    Ext.each(Object.keys(record.getData()), function(key) {
-                        record.set(key, operation.records[0].data[key]);
-                    });
+
+                    if (isActiveChange && me.getShowVariantsCheckbox().getValue()) {
+                        // If the global product active flag has changed and the "show Variants" toggle is on,
+                        // the store should reload to reflect this change to all related products
+                        record.store.load();
+                    } else {
+                        // Update the modified record by the data, the controller returned
+                        // This way we make sure, that the record shows the data which is stored
+                        // in the database
+                        Ext.each(Object.keys(record.getData()), function (key) {
+                            record.set(key, operation.records[0].data[key]);
+                        });
+                    }
 
                 }
             },

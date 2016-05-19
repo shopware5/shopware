@@ -512,7 +512,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
 
             $position["amount_netto"] = round($position["netto"] * $position["quantity"], 2);
 
-            $position["amount"] = $position["price"] * $position["quantity"];
+            $position["amount"] = round($position["price"] * $position["quantity"], 2);
 
             $this->_amountNetto +=  $position["amount_netto"];
             $this->_amount += $position["amount"];

@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 //{namespace name=backend/product_stream/main}
-
+//{block name="backend/product_stream/view/condition_list/window"}
 Ext.define('Shopware.apps.ProductStream.view.condition_list.Window', {
     extend: 'Enlight.app.Window',
     alias: 'widget.product-stream-detail-window',
@@ -107,3 +107,4 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.Window', {
         return this.settingsPanel;
     }
 });
+//{/block}

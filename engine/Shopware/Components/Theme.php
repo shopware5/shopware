@@ -109,6 +109,15 @@ class Theme
     protected $css = array();
 
     /**
+     * Defines if theme assets should be injected before or after plugin assets.
+     * This includes template directories for template inheritance and
+     * less and javascript files for the theme compiler.
+     *
+     * @var bool
+     */
+    protected $injectBeforePlugins = false;
+
+    /**
      * Don't override this function. Used
      * from the backend template module
      * to get the template hierarchy
@@ -236,6 +245,14 @@ class Theme
      */
     public function createConfigSets(ArrayCollection $collection)
     {
+    }
+
+    /**
+     * @return boolean
+     */
+    public function injectBeforePlugins()
+    {
+        return $this->injectBeforePlugins;
     }
 
     /**

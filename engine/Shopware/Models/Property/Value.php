@@ -90,6 +90,7 @@ class Value extends ModelEntity
     private $articles;
 
     /**
+     * @deprecated since version 5.1.2, to be removed in 5.2
      * @var float $len
      * @ORM\Column(name="value_numeric", type="decimal", nullable=false, precision=2)
      */

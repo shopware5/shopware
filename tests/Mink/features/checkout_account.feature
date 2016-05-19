@@ -25,26 +25,26 @@ Feature: Checkout articles (scenario origin is account without articles in baske
         And   I proceed to checkout
         Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware Demo!"
 
-    Examples:
-        | user                       | email             | sum     | shipping | total   | sumWithoutVat | tax    |
-        | Max Mustermann             | test@example.com  | 38,47 € | 3,90 €   | 42,37 € | 35,61 €       | 6,76 € |
-        | Händler Kundengruppe-Netto | mustermann@b2b.de | 32,02 € | 3,28 €   | 42,00 € | 35,30 €       | 6,70 € |
+        Examples:
+            | user                       | email             | sum     | shipping | total   | sumWithoutVat | tax    |
+            | Max Mustermann             | test@example.com  | 38,47 € | 3,90 €   | 42,37 € | 35,61 €       | 6,76 € |
+            | Händler Kundengruppe-Netto | mustermann@b2b.de | 32,02 € | 3,28 €   | 42,00 € | 35,30 €       | 6,70 € |
 
     @registration
     Scenario Outline: I can register, add articles to basket and finish my order
         Given I register me:
-            | field                | register[personal] | register[billing] |
-            | customer_type        | <customer_type>    |                   |
-            | salutation           | mr                 |                   |
-            | firstname            | Max                |                   |
-            | lastname             | Mustermann         |                   |
-            | email                | <email>            |                   |
-            | password             | shopware           |                   |
-            | company              |                    | Muster GmbH       |
-            | street               |                    | Musterstr. 55     |
-            | zipcode              |                    | 55555             |
-            | city                 |                    | Musterhausen      |
-            | country              |                    | Deutschland       |
+            | field         | register[personal] | register[billing] |
+            | customer_type | <customer_type>    |                   |
+            | salutation    | mr                 |                   |
+            | firstname     | Max                |                   |
+            | lastname      | Mustermann         |                   |
+            | email         | <email>            |                   |
+            | password      | shopware           |                   |
+            | company       |                    | Muster GmbH       |
+            | street        |                    | Musterstr. 55     |
+            | zipcode       |                    | 55555             |
+            | city          |                    | Musterhausen      |
+            | country       |                    | Deutschland       |
         Then  I should see "Willkommen, Max Mustermann"
 
         When  I am on the detail page for article 167
@@ -64,7 +64,7 @@ Feature: Checkout articles (scenario origin is account without articles in baske
         And   I proceed to checkout
         Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware Demo!"
 
-    Examples:
-        | customer_type | email             |
-        | private       | test@example.info |
-        | business      | test@example.air  |
+        Examples:
+            | customer_type | email             |
+            | private       | test@example.info |
+            | business      | test@example.air  |

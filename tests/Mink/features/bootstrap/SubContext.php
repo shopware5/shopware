@@ -3,26 +3,79 @@
 namespace Shopware\Tests\Mink;
 
 use Behat\Mink\Driver\DriverInterface;
+use Behat\Mink\Mink;
+use Behat\Mink\Session;
+use Behat\MinkExtension\Context\MinkAwareContext;
 use SensioLabs\Behat\PageObjectExtension\Context\PageObjectContext;
-use Shopware\Behat\ShopwareExtension\Context\KernelAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
-use Shopware\Tests\Mink\Element\MultipleElement;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
+use Shopware\Behat\ShopwareExtension\Context\KernelAwareContext;
+use Shopware\Kernel;
+use Shopware\Tests\Mink\Element\MultipleElement;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class SubContext extends PageObjectContext implements KernelAwareInterface
+class SubContext extends PageObjectContext implements KernelAwareContext, MinkAwareContext
 {
     /**
-     * @var \Shopware\Kernel
+     * @var Mink
+     */
+    private $mink;
+
+    /**
+     * @var array
+     */
+    private $minkParameters;
+
+    /**
+     * @var Kernel
      */
     private $kernel;
 
     /**
-     * @return \Behat\Mink\Session
+     * Sets Mink instance.
+     *
+     * @param Mink $mink Mink session manager
+     */
+    public function setMink(Mink $mink)
+    {
+        $this->mink = $mink;
+    }
+
+    /**
+     * @return Mink
+     */
+    public function getMink()
+    {
+        return $this->mink;
+    }
+
+    /**
+     * Sets parameters provided for Mink.
+     *
+     * @param array $parameters
+     */
+    public function setMinkParameters(array $parameters)
+    {
+        $this->minkParameters = $parameters;
+    }
+
+    /**
+     * Returns specific mink parameter.
+     *
+     * @param string $name
+     *
+     * @return mixed
+     */
+    public function getMinkParameter($name)
+    {
+        return isset($this->minkParameters[$name]) ? $this->minkParameters[$name] : null;
+    }
+
+    /**
+     * @return Session
      */
     public function getSession()
     {
-        return $this->getMainContext()->getSession();
+        return $this->mink->getSession();
     }
 
     /**
@@ -34,19 +87,11 @@ class SubContext extends PageObjectContext implements KernelAwareInterface
     }
 
     /**
-     * @param HttpKernelInterface $kernel
+     * @param Kernel $kernel
      */
-    public function setKernel(HttpKernelInterface $kernel)
+    public function setKernel(Kernel $kernel)
     {
         $this->kernel = $kernel;
-    }
-
-    /**
-     * @return \Shopware\Kernel
-     */
-    public function getKernel()
-    {
-        return $this->kernel;
     }
 
     /**
@@ -60,20 +105,28 @@ class SubContext extends PageObjectContext implements KernelAwareInterface
     }
 
     /**
-     * Returns a multiple element
+     * @param string $id
      *
-     * @param Page $page            Parent page
-     * @param string $elementName   Name of the element
-     * @param int $instance         Instance of the element
-     * @return MultipleElement
+     * @return object
      */
+    protected function getService($id)
+    {
+        return $this->getContainer()->get($id);
+    }
+
+    /**
+    * @param Page $page            Parent page
+    * @param string $elementName   Name of the element
+    * @param int $instance         Instance of the element
+    * @return MultipleElement
+    */
     protected function getMultipleElement(Page $page, $elementName, $instance = 1)
     {
         /** @var MultipleElement $element */
         $element = $this->getElement($elementName);
         $element->setParent($page);
 
-        if($instance > 1) {
+        if ($instance > 1) {
             $element = $element->setInstance($instance);
         }
 

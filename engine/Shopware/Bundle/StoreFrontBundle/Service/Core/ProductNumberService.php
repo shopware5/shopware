@@ -151,7 +151,7 @@ class ProductNumberService implements ProductNumberServiceInterface
 
         /**@var $statement \PDOStatement*/
         $statement = $query->execute();
-        
+
         return $statement->fetch(\PDO::FETCH_COLUMN);
     }
 

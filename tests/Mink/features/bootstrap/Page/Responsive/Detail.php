@@ -2,47 +2,49 @@
 namespace Shopware\Tests\Mink\Page\Responsive;
 
 use Behat\Mink\Driver\Selenium2Driver;
-use Behat\Mink\Element\NodeElement;
-use Shopware\Tests\Mink\Element\MultipleElement;
+use Shopware\Tests\Mink\Element\Emotion\ArticleEvaluation;
 use Shopware\Tests\Mink\Helper;
 
 class Detail extends \Shopware\Tests\Mink\Page\Emotion\Detail
 {
     /**
-     * Returns an array of all css selectors of the element/page
-     * @return array
+     * @inheritdoc
      */
     public function getCssSelectors()
     {
-        return array(
+        return [
             'productRating' => 'div.product--rating-container .product--rating > meta',
             'productRatingCount' => 'div.product--rating-container .product--rating > span',
             'configuratorForm' => 'form.configurator--form',
             'notificationForm' => 'form.notification--form',
             'notificationSubmit' => '.notification--button',
             'voteForm' => 'form.review--form'
-        );
+        ];
     }
 
-    protected $configuratorTypes = array(
+    /**
+     * @inheritdoc
+     */
+    public function getNamedSelectors()
+    {
+        return [
+            'notificationFormSubmit' => ['de' => 'Eintragen', 'en' => 'Enter'],
+            'voteFormSubmit' => ['de' => 'Speichern', 'en' => 'Save'],
+            'inquiryLink' => ['de' => 'Fragen zum Artikel?', 'en' => 'Do you have any questions concerning this product?'],
+            'compareLink' => ['de' => 'Vergleichen', 'en' => 'Compare'],
+            'rememberLink' => ['de' => 'Merken', 'en' => 'Remember'],
+            'commentLink' => ['de' => 'Bewerten', 'en' => 'Comment'],
+        ];
+    }
+
+    /**
+     * @var string[]
+     */
+    protected $configuratorTypes = [
         'table' => 'configurator--form',
         'standard' => 'configurator--form upprice--form',
         'select' => 'configurator--form selection--form'
-    );
-
-    /**
-     * Helper function how to read the evaluation from the evaluation element
-     * @param  NodeElement $element
-     * @return string
-     */
-    protected function getEvaluation($element)
-    {
-        $evaluation = $element->getAttribute('content');
-        $evaluation = floatval($evaluation);
-        $evaluation*= 2;
-
-        return (string) $evaluation;
-    }
+    ];
 
     /**
      * Puts the current article <quantity> times to basket
@@ -53,33 +55,23 @@ class Detail extends \Shopware\Tests\Mink\Page\Emotion\Detail
         $this->fillField('sQuantity', $quantity);
         $this->pressButton('In den Warenkorb');
 
-        if ($this->getSession()->getDriver() instanceof Selenium2Driver) {
+        if ($this->getDriver() instanceof Selenium2Driver) {
             $this->clickLink('Warenkorb anzeigen');
         }
     }
 
-    protected function checkRating(MultipleElement $articleEvaluations, $average)
+    /**
+     * @param ArticleEvaluation $articleEvaluations
+     * @param $average
+     * @throws \Exception
+     */
+    protected function checkRating(ArticleEvaluation $articleEvaluations, $average)
     {
-        $locators = array('productRating', 'productRatingCount');
-
-        $elements = Helper::findElements($this, $locators);
-
-        $check = array();
-
-        foreach($elements as $locator => $element)
-        {
-            switch($locator) {
-                case 'productRating':
-                    $rating = $element->getAttribute('content');
-                    $rating = floatval($rating);
-                    $check[$locator] = array($rating, $average);
-                    break;
-
-                case 'productRatingCount':
-                    $check[$locator] = array($element->getText(), count($articleEvaluations));
-                    break;
-            }
-        }
+        $elements = Helper::findElements($this, ['productRating', 'productRatingCount']);
+        $check = [
+            'productRating' => [$elements['productRating']->getAttribute('content'), $average],
+            'productRatingCount' => [$elements['productRatingCount']->getText(), count($articleEvaluations)]
+        ];
 
         $check = Helper::floatArray($check);
         $result = Helper::checkArray($check);
@@ -96,17 +88,16 @@ class Detail extends \Shopware\Tests\Mink\Page\Emotion\Detail
      */
     public function submitNotification($email)
     {
-        $data = array(
-            array(
+        $data = [
+            [
                 'field' => 'sNotificationEmail',
                 'value' => $email
-            )
-        );
+            ]
+        ];
 
         Helper::fillForm($this, 'notificationForm', $data);
 
-        $locators = array('notificationSubmit');
-        $elements = Helper::findElements($this, $locators);
+        $elements = Helper::findElements($this, ['notificationSubmit']);
         $elements['notificationSubmit']->press();
     }
 }

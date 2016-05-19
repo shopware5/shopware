@@ -242,6 +242,9 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
 
         /** @var $media Media */
         foreach ($mediaList as &$media) {
+            $media['path'] = $mediaService->getUrl($media['path']);
+            $media['virtualPath'] = $mediaService->normalize($media['path']);
+
             if ($media['type'] !== Media::TYPE_IMAGE) {
                 continue;
             }
@@ -251,9 +254,6 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             foreach ($thumbnails as $index => $thumbnail) {
                 $thumbnails[$index] = $thumbnail;
             }
-
-            $media['path'] = $mediaService->getUrl($media['path']);
-            $media['virtualPath'] = $mediaService->normalize($media['path']);
 
             if (!empty($thumbnails) && $mediaService->has($thumbnails['140x140'])) {
                 $media['thumbnail'] = $mediaService->getUrl($thumbnails['140x140']);

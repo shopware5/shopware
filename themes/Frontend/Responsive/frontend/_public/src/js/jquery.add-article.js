@@ -1,4 +1,4 @@
-;jQuery(function ($) {
+;(function($, window) {
     'use strict';
 
     /**
@@ -188,4 +188,4 @@
             $.publish('plugin/swAddArticle/onCloseModal', [ me ]);
         }
     });
-});
+})(jQuery, window);

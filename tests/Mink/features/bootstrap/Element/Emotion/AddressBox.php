@@ -19,8 +19,7 @@ class AddressBox extends MultipleElement
     protected $selector = array('css' => 'div.select_billing');
 
     /**
-     * Returns an array of all css selectors of the element/page
-     * @return string[]
+     * @inheritdoc
      */
     public function getCssSelectors()
     {
@@ -30,8 +29,7 @@ class AddressBox extends MultipleElement
     }
 
     /**
-     * Returns an array of all named selectors of the element/page
-     * @return array
+     * @inheritdoc
      */
     public function getNamedSelectors()
     {

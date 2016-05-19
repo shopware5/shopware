@@ -46,8 +46,8 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
     {
         $manufacturerId = $this->Request()->getParam('sSupplier', null);
 
-        /**@var $context ShopContextInterface*/
-        $context = $this->get('shopware_storefront.context_service')->getShopContext();
+        /**@var $context ProductContextInterface*/
+        $context = $this->get('shopware_storefront.context_service')->getProductContext();
 
         if (!$this->Request()->getParam('sCategory')) {
             $this->Request()->setParam('sCategory', $context->getShop()->getCategory()->getId());
@@ -71,7 +71,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         /**@var $manufacturer Manufacturer*/
         $manufacturer = $this->get('shopware_storefront.manufacturer_service')->get(
             $manufacturerId,
-            $this->get('shopware_storefront.context_service')->getShopContext()
+            $this->get('shopware_storefront.context_service')->getProductContext()
         );
 
         if ($manufacturer->getCoverFile()) {
@@ -138,7 +138,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             /**@var $manufacturer Manufacturer*/
             $manufacturer = $this->get('shopware_storefront.manufacturer_service')->get(
                 $manufacturerId,
-                $this->get('shopware_storefront.context_service')->getShopContext()
+                $this->get('shopware_storefront.context_service')->getProductContext()
             );
 
             $manufacturerContent = $this->getSeoDataOfManufacturer($manufacturer);
@@ -160,7 +160,10 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         $viewAssignments = array(
             'sBanner' => Shopware()->Modules()->Marketing()->sBanner($categoryId),
             'sBreadcrumb' => $this->getBreadcrumb($categoryId),
+
+            /** @deprecated since 5.1 will be removed in 5.2 - Use sCategoryContent instead */
             'sCategoryInfo' => $categoryContent,
+
             'sCategoryContent' => $categoryContent,
             'campaigns' => $this->getCampaigns($categoryId),
             'activeFilterGroup' => $this->request->getQuery('sFilterGroup'),
@@ -175,7 +178,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             return;
         }
 
-        $context = $this->get('shopware_storefront.context_service')->getShopContext();
+        $context = $this->get('shopware_storefront.context_service')->getProductContext();
 
         if ($categoryContent['streamId']) {
             /** @var \Shopware\Components\ProductStream\CriteriaFactoryInterface $factory */
@@ -185,6 +188,10 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             /** @var \Shopware\Components\ProductStream\RepositoryInterface $streamRepository */
             $streamRepository = $this->get('shopware_product_stream.repository');
             $streamRepository->prepareCriteria($criteria, $categoryContent['streamId']);
+
+            /** @var \Shopware\Components\ProductStream\FacetFilter $facetFilter */
+            $facetFilter = $this->get('shopware_product_stream.facet_filter');
+            $facetFilter->add($criteria);
         } else {
             /**@var $criteria Criteria*/
             $criteria = $this->get('shopware_search.store_front_criteria_factory')
@@ -219,6 +226,11 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 
         $viewAssignments['sCategoryContent'] = $categoryContent;
 
+        /** @var \Shopware\Components\ProductStream\FacetFilter $facetFilter */
+        $facetFilter = $this->get('shopware_product_stream.facet_filter');
+        $facets = $facetFilter->filter($categoryArticles['facets'], $criteria);
+        $categoryArticles['facets'] = $facets;
+
         $this->View()->assign($viewAssignments);
         $this->View()->assign($categoryArticles);
     }
@@ -246,7 +258,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             $location = array('controller' => 'index');
         } elseif ($this->get('config')->get('categoryDetailLink') && $checkRedirect) {
             /**@var $context ShopContextInterface*/
-            $context = $this->get('shopware_storefront.context_service')->getShopContext();
+            $context = $this->get('shopware_storefront.context_service')->getProductContext();
 
             /**@var $factory StoreFrontCriteriaFactoryInterface*/
             $factory = $this->get('shopware_search.store_front_criteria_factory');
@@ -270,7 +282,6 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 
         return $location;
     }
-
 
     /**
      * Converts the provided manufacturer to the category seo data structure.

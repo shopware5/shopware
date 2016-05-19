@@ -17,8 +17,7 @@ class AccountOrder extends \Shopware\Tests\Mink\Element\Emotion\AccountOrder
     protected $selector = ['css' => '.order--item'];
 
     /**
-     * Returns an array of all css selectors of the element/page
-     * @return array
+     * @inheritdoc
      */
     public function getCssSelectors()
     {

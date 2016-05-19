@@ -5,6 +5,13 @@
 <link rel="canonical" href="{url sCategory=$sCategoryCurrent emotionId=$emotionId}" />
 {/block}
 
+{block name='frontend_index_header_title'}{strip}
+    {if $seo_title}
+        {$seo_title|escapeHtml} | {{config name=sShopname}|escapeHtml}
+    {else}
+        {$smarty.block.parent}
+    {/if}
+{/strip}{/block}
 
 {* Keywords *}
 {block name="frontend_index_header_meta_keywords"}{if $seo_keywords}{$seo_keywords}{/if}{/block}

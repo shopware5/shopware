@@ -308,7 +308,7 @@ class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Back
 
         $fileName = $productFeed->getHash() . '_' . $productFeed->getFileName();
         $filePath = $cacheDir . $fileName;
-        if (file_exists($filePath) && $productFeed->getInterval() != -1) {
+        if (file_exists($filePath)) {
             unlink($filePath);
         }
         $productFeed->setCacheRefreshed('2000-01-01');

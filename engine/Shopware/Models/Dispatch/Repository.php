@@ -24,6 +24,7 @@
 
 namespace   Shopware\Models\Dispatch;
 
+use Doctrine\ORM\Query\Expr\Join;
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Models\Customer;
 
@@ -400,7 +401,7 @@ class Repository extends ModelRepository
 
         // Build the query
         $builder->from('Shopware\Models\Dispatch\Holiday', 'holiday')
-                ->select(array('holiday'));
+                ->select(['holiday']);
 
         // Set the order logic
         $builder = $this->sortOrderQuery($builder, 'holiday', $order);
@@ -410,6 +411,24 @@ class Repository extends ModelRepository
         }
 
         return $builder;
+    }
+
+    /**
+     * Selects all shipping costs with a deleted shop
+     *
+     * @return \Doctrine\ORM\Query
+     */
+    public function getDispatchWithDeletedShopsQuery()
+    {
+        $builder = $this->getEntityManager()->createQueryBuilder();
+
+        $builder->select('dispatch')
+            ->from('Shopware\Models\Dispatch\Dispatch', 'dispatch')
+            ->leftJoin('Shopware\Models\Shop\Shop', 'shop', Join::WITH, 'dispatch.multiShopId = shop.id')
+            ->andWhere('dispatch.multiShopId IS NOT NULL')
+            ->andWhere('shop.id IS NULL');
+
+        return $builder->getQuery();
     }
 
     /**

@@ -4,25 +4,26 @@ Feature: Newsletter
     Scenario: Subscribe to and unsubscribe from newsletter
         Given I am on the homepage
         When  I subscribe to the newsletter with "test@example.de"
-        Then  I should see "Vielen Dank. Wir haben Ihre Adresse eingetragen."
+        Then  I should be on the page "Newsletter"
+        And   I should see "Vielen Dank. Wir haben Ihre Adresse eingetragen."
 
         When  I unsubscribe the newsletter
-        Then  I should see "Ihre eMail-Adresse wurde gelöscht"
+        Then  I should see "Ihre E-Mail-Adresse wurde gelöscht"
 
     Scenario: I can subscribe to the newsletter with additional data
         Given I am on the page "Newsletter"
         When  I subscribe to the newsletter with "test@example.de" :
-            | field      | value           |
-            | salutation | mr              |
-            | firstname  | Max             |
-            | lastname   | Mustermann      |
-            | street     | Musterstr. 55   |
-            | zipcode    | 55555           |
-            | city       | Musterhausen    |
+            | field      | value         |
+            | salutation | mr            |
+            | firstname  | Max           |
+            | lastname   | Mustermann    |
+            | street     | Musterstr. 55 |
+            | zipcode    | 55555         |
+            | city       | Musterhausen  |
         Then  I should see "Vielen Dank. Wir haben Ihre Adresse eingetragen."
 
         When  I unsubscribe the newsletter
-        Then  I should see "Ihre eMail-Adresse wurde gelöscht"
+        Then  I should see "Ihre E-Mail-Adresse wurde gelöscht"
 
     @javascript @account
     Scenario: I can subscribe and unsubscribe from newsletter in my account
@@ -33,6 +34,6 @@ Feature: Newsletter
         And   the checkbox "newsletter" should be checked
 
         When  I uncheck "newsletter"
-        Then  I should see "Ihre eMail-Adresse wurde gelöscht"
+        Then  I should see "Ihre E-Mail-Adresse wurde gelöscht"
         And   the checkbox "newsletter" should be unchecked
         And   I log me out

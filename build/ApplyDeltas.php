@@ -11,6 +11,7 @@ $longopts  = array(
     "password:",
     "host:",
     "dbname:",
+    "port:"
 );
 $dbConfig = getopt('', $longopts);
 

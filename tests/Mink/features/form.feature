@@ -5,40 +5,47 @@ Feature: forms
     Scenario: I can raise a request regarding an article
         Given I am on the detail page for article 95
         When  I follow "Fragen zum Artikel?"
-        Then  I should see "Anfrage-Formular"
+        Then  I should be on the page "Form"
+        And   I should see "Anfrage-Formular"
         And   the "inquiry" field should contain "Ich habe folgende Fragen zum Artikel Blütenarrangement mit Rattan"
 
-        When  I fill in "email" with "info@example.com"
-        And   I fill in "vorname" with "Max"
-        And   I fill in "nachname" with "Mustermann"
-        And   I press "Senden"
+        When  I submit the inquiry form with:
+            | field    | value            |
+            | email    | info@example.com |
+            | vorname  | Max              |
+            | nachname | Mustermann       |
         Then  I should see "Bitte füllen Sie alle rot markierten Felder aus."
 
-        When  I select "Herr" from "anrede"
-        And   I press "Senden"
+        When  I submit the inquiry form with:
+            | field  | value |
+            | anrede | Herr  |
         Then  I should see "Ihre Anfrage wurde versendet!"
 
     @captchaInactive
     Scenario: I can raise a request regarding a quotation
-        Given I am on the detail page for article 207
-        When  I press "In den Warenkorb"
+        Given the cart contains the following products:
+            | number  | name                                  | quantity |
+            | SW10206 | Staffelung, Mindest- / Maximalabnahme | 3        |
         And   I follow "Angebot anfordern"
-        Then  I should see "Anfrage-Formular"
+        Then  I should be on the page "Form"
+        And   I should see "Anfrage-Formular"
         And   the "inquiry" field should contain:
         """
         Bitte unterbreiten Sie mir ein Angebot über die nachfolgenden Positionen
         3 x Staffelung, Mindest- / Maximalabnahme (SW10206) - 200,00 EUR
         """
 
-        When  I select "Frau" from "anrede"
-        And   I fill in "email" with "info@example.com"
-        And   I fill in "vorname" with "Erika Musterfrau"
-        And   I press "Senden"
+        When  I submit the inquiry form with:
+            | field   | value            |
+            | anrede  | Frau             |
+            | email   | info@example.com |
+            | vorname | Erika Musterfrau |
         Then  I should see "Bitte füllen Sie alle rot markierten Felder aus."
 
-        And   I fill in "vorname" with "Erika"
-        And   I fill in "nachname" with "Musterfrau"
-        And   I press "Senden"
+        When  I submit the inquiry form with:
+            | field    | value      |
+            | vorname  | Erika      |
+            | nachname | Musterfrau |
         Then  I should see "Ihre Anfrage wurde versendet!"
 
     @javascript
@@ -47,17 +54,11 @@ Feature: forms
         Then  I should see "<formTitle>"
         And   I should see a captcha
 
-    Examples:
-        | formId | formTitle          |
-        | 5      | Kontaktformular    |
-        | 8      | Partnerformular    |
-        | 9      | Defektes Produkt   |
-        | 10     | Rückgabe           |
-        | 16     | Anfrage-Formular   |
-        | 22     | Support beantragen |
-
-    @javascript
-    Scenario: Also the customer evaluation form on a detail page has a captcha
-        Given I am on the detail page for article 167
-        Then  I should see "Sonnenbrille Speed Eyes"
-        And   I should see a captcha
+        Examples:
+            | formId | formTitle          |
+            | 5      | Kontaktformular    |
+            | 8      | Partnerformular    |
+            | 9      | Defektes Produkt   |
+            | 10     | Rückgabe           |
+            | 16     | Anfrage-Formular   |
+            | 22     | Support beantragen |

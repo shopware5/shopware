@@ -18,8 +18,7 @@ class SitemapGroup extends MultipleElement
     protected $selector = ['css' => '.sitemap > div:not(.clear) > ul > li'];
 
     /**
-     * Returns an array of all css selectors of the element/page
-     * @return string[]
+     * @inheritdoc
      */
     public function getCssSelectors()
     {

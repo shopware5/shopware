@@ -45,6 +45,8 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorInterface
 {
+    const AGGREGATION_SIZE = 5000;
+
     /**
      * @var ProductAttributeFacet[]
      */
@@ -76,6 +78,7 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
             case (ProductAttributeFacet::MODE_RADIO_LIST_RESULT):
                 $aggregation = new TermsAggregation($criteriaPart->getName());
                 $aggregation->setField($field);
+                $aggregation->addParameter('size', self::AGGREGATION_SIZE);
                 break;
 
             case (ProductAttributeFacet::MODE_BOOLEAN_RESULT):

@@ -4,6 +4,14 @@
     <link rel="canonical" href="{url controller=campaign emotionId=$landingPage.id}" />
 {/block}
 
+{block name='frontend_index_header_title'}{strip}
+    {if $seo_title}
+        {$seo_title|escapeHtml} | {{config name=sShopname}|escapeHtml}
+    {else}
+        {$smarty.block.parent}
+    {/if}
+{/strip}{/block}
+
 {* Google optimized crawling *}
 {block name='frontend_index_header_meta_tags' append}
     {if !$hasEscapedFragment}
@@ -12,10 +20,10 @@
 {/block}
 
 {* Keywords *}
-{block name="frontend_index_header_meta_keywords"}{if $seo_keywords}{$seo_keywords}{/if}{/block}
+{block name="frontend_index_header_meta_keywords"}{if $seo_keywords}{$seo_keywords|escapeHtml}{/if}{/block}
 
 {* Description *}
-{block name="frontend_index_header_meta_description"}{if $seo_description}{$seo_description}{/if}{/block}
+{block name="frontend_index_header_meta_description"}{if $seo_description}{$seo_description|escapeHtml}{/if}{/block}
 
 {* Promotion *}
 {block name='frontend_home_index_promotions'}

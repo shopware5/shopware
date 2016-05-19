@@ -173,7 +173,7 @@ class CountryHydrator extends Hydrator
             $translation += $fallbackTranslation;
         }
 
-        if (empty($translation)) {
+        if (empty($translation) || empty($translation[$id])) {
             return [];
         }
 

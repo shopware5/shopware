@@ -17,8 +17,7 @@ class ArticleEvaluation extends \Shopware\Tests\Mink\Element\Emotion\ArticleEval
     protected $selector = ['css' => 'div.review--entry:not(.is--answer)'];
 
     /**
-     * Returns an array of all css selectors of the element/page
-     * @return array
+     * @inheritdoc
      */
     public function getCssSelectors()
     {

@@ -23,7 +23,7 @@
 			<input name="sVoteName" type="text" value="{$sFormData.sVoteName|escape}" class="review--field{if $sErrorFlag.sVoteName} has--error{/if}" placeholder="{s name="DetailCommentLabelName"}{/s}*" required="required" aria-required="true" />
 		{/block}
 
-		{* Reviewer eMail address *}
+		{* Reviewer email address *}
 		{block name='frontend_detail_comment_input_mail'}
 			{if {config name=OptinVote} == true}
 				<input name="sVoteMail" type="email" value="{$sFormData.sVoteMail|escape}" class="review--field{if $sErrorFlag.sVoteMail} has--error{/if}" placeholder="{s name="DetailCommentLabelMail"}{/s}*" required="required" aria-required="true" />

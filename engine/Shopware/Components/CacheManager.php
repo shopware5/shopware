@@ -214,9 +214,6 @@ class CacheManager
         // Clear Shopware Proxies / Classmaps / Container
         $this->clearDirectory($this->container->getParameter('shopware.hook.proxyDir'));
 
-        // Clear Doctrine Proxies
-        $this->clearDirectory($this->container->getParameter('shopware.model.fileCacheDir'));
-
         // Clear Anotation file cache
         $this->clearDirectory($this->container->getParameter('shopware.model.proxyDir'));
     }
@@ -318,21 +315,6 @@ class CacheManager
         $dir = $this->container->getParameter('shopware.model.proxydir');
         $info = $this->getDirectoryInfo($dir);
         $info['name'] = 'Doctrine Proxies';
-
-        return $info;
-    }
-
-    /**
-     * Returns cache information
-     *
-     * @return array
-     */
-    public function getDoctrineFileCacheInfo()
-    {
-        $dir = $this->container->getParameter('shopware.model.fileCacheDir');
-
-        $info = $this->getDirectoryInfo($dir);
-        $info['name'] = 'Doctrine annotations';
 
         return $info;
     }

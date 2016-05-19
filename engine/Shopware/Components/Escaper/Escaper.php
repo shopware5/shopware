@@ -51,7 +51,7 @@ class Escaper implements EscaperInterface
      */
     public function escapeHtml($string)
     {
-        return $this->escaper->escapeHtml($string);
+        return $this->escaper->escapeHtml((string) $string);
     }
 
     /**
@@ -59,7 +59,7 @@ class Escaper implements EscaperInterface
      */
     public function escapeHtmlAttr($string)
     {
-        return $this->escaper->escapeHtmlAttr($string);
+        return $this->escaper->escapeHtmlAttr((string) $string);
     }
 
     /**
@@ -67,7 +67,7 @@ class Escaper implements EscaperInterface
      */
     public function escapeJs($string)
     {
-        return $this->escaper->escapeJs($string);
+        return $this->escaper->escapeJs((string) $string);
     }
 
     /**
@@ -75,7 +75,7 @@ class Escaper implements EscaperInterface
      */
     public function escapeCss($string)
     {
-        return $this->escaper->escapeCss($string);
+        return $this->escaper->escapeCss((string) $string);
     }
 
     /**
@@ -83,6 +83,6 @@ class Escaper implements EscaperInterface
      */
     public function escapeUrl($string)
     {
-        return $this->escaper->escapeUrl($string);
+        return $this->escaper->escapeUrl((string) $string);
     }
 }

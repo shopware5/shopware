@@ -15,8 +15,7 @@ class BlogBox extends CartPosition
     protected $selector = array('css' => 'div.blogbox');
 
     /**
-     * Returns an array of all css selectors of the element/page
-     * @return array
+     * @inheritdoc
      */
     public function getCssSelectors()
     {
@@ -24,8 +23,7 @@ class BlogBox extends CartPosition
     }
 
     /**
-     * Returns an array of all named selectors of the element/page
-     * @return array
+     * @inheritdoc
      */
     public function getNamedSelectors()
     {

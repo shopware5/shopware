@@ -7,10 +7,7 @@ use Shopware\Tests\Mink\Helper;
 
 /**
  * Element: FilterGroup
- * Location: Billing address box on account dashboard
- *
- * Available retrievable properties:
- * - address (Element[], please use Account::checkAddress())
+ * Location: Filters in the listing
  */
 class FilterGroup extends \Shopware\Tests\Mink\Element\Emotion\FilterGroup
 {
@@ -18,8 +15,7 @@ class FilterGroup extends \Shopware\Tests\Mink\Element\Emotion\FilterGroup
     protected $selector = ['css' => 'div.filter--container label.filter-panel--title'];
 
     /**
-     * Returns an array of all css selectors of the element/page
-     * @return array
+     * @inheritdoc
      */
     public function getCssSelectors()
     {
@@ -29,21 +25,36 @@ class FilterGroup extends \Shopware\Tests\Mink\Element\Emotion\FilterGroup
     }
 
     /**
+     * Sets a property, returns false, if the property doesn't exist, otherwise true on success
      * @param string $propertyName
      * @return bool
      */
     public function setProperty($propertyName)
     {
+        $this->expandProperties();
+
         $elements = Helper::findElements($this, ['properties']);
 
         /** @var NodeElement $propertyContainer */
         $propertyContainer = $elements['properties'];
 
-        if(!$propertyContainer->hasField($propertyName)) {
+        if (!$propertyContainer->hasField($propertyName)) {
             return false;
         }
 
         $propertyContainer->checkField($propertyName);
         return true;
+    }
+
+    /**
+     * Helper method to expand the properties of the group
+     */
+    protected function expandProperties()
+    {
+        $class = $this->getParent()->getParent()->getAttribute('class');
+
+        if (strpos($class, 'is--collapsed') === false) {
+            $this->click();
+        }
     }
 }

@@ -485,7 +485,7 @@
          */
         onClick: function (event) {
             var me = this,
-                plugin = me.getImageSlider();
+                imageSlider = me.$el.data('plugin_swImageSlider');
 
             $.modal.open(me.$template || (me.$template = me.createTemplate()), {
                 width: '100%',
@@ -507,7 +507,7 @@
                 pinchToZoom: true,
                 doubleTap: true,
                 maxZoom: me.opts.maxZoom,
-                startIndex: plugin ? plugin.getIndex() : 0,
+                startIndex: imageSlider ? imageSlider.getIndex() : 0,
                 preventScrolling: true
             });
 

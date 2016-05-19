@@ -17,7 +17,7 @@ class SliderElement extends MultipleElement
     {
         preg_match('/^get([A-Z]{1}[a-zA-Z]+)Property$/', $name, $property);
 
-        if(!$property) {
+        if (!$property) {
             parent::__call($name, $arguments);
         }
 
@@ -44,9 +44,6 @@ class SliderElement extends MultipleElement
     public function getSlides(array $properties)
     {
         $elements = Helper::findAllOfElements($this, ['slide']);
-
-        //var_dump(count($elements['slide']));
-
         $slides = [];
 
         /** @var NodeElement $slide */

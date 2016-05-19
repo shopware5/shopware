@@ -4,11 +4,11 @@
 <atom:link href="{$sCategoryContent.rssFeed|rewrite:$sCategoryContent.description|escape}" rel="self" type="application/rss+xml" />
 <title>{block name='frontend_atom_title'}{$sCategoryContent.description|escape:'hexentity'}{/block}</title>
 <link>{url controller='index'}</link>
-<description>{$sShopname|escape:'hexentity'} - {$sCategoryContent.description|escape:'hexentity'}</description>
+<description>{$sShopname|escapeHtml} - {$sCategoryContent.description|escape:'hexentity'}</description>
 <language>de-de</language>
 <lastBuildDate>{time()|date:rss}</lastBuildDate>
 {foreach from=$sArticles item=sArticle key=key name="counter"}
-<item> 
+<item>
 	<title>{block name='frontend_listing_rss_article_name'}{$sArticle.articleName|escape}{/block}</title>
 	<guid>{block name='frontend_listing_rss_guid'}{$sArticle.linkDetails|rewrite:$sArticle.articleName|escape}{/block}</guid>
 	<link>{block name='frontend_listing_rss_link'}{$sArticle.linkDetails|rewrite:$sArticle.articleName|escape}{/block}</link>

@@ -2,7 +2,7 @@
 
 {* Title *}
 {block name='frontend_index_header_title'}
-    {s name="RegisterTitle"}{/s} | {config name=shopName}
+    {s name="RegisterTitle"}{/s} | {{config name=shopName}|escapeHtml}
 {/block}
 
 {* Back to the shop button *}
@@ -85,7 +85,7 @@
                 {if $register.personal.form_data.sValidation}
                     {* Include information related to registration for other customergroups then guest, this block get overridden by b2b essentials plugin *}
                     <div class="panel register--supplier">
-                        <h2 class="panel--title is--underline">{$sShopname} {s name='RegisterHeadlineSupplier' namespace='frontend/register/index'}{/s}</h2>
+                        <h2 class="panel--title is--underline">{$sShopname|escapeHtml} {s name='RegisterHeadlineSupplier' namespace='frontend/register/index'}{/s}</h2>
 
                         <div class="panel--body is--wide">
                             <p class="is--bold">{s name='RegisterInfoSupplier3' namespace='frontend/register/index'}{/s}</p>

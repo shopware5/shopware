@@ -70,7 +70,7 @@ class Sha256 implements PasswordEncoderInterface
 
         $verifyHash = $this->generateInternal($password, $salt, $iterations);
 
-        return $verifyHash == $hash;
+        return hash_equals($hash, $verifyHash);
     }
 
     /**

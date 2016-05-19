@@ -34,6 +34,9 @@ use Shopware\Bundle\StoreFrontBundle\Gateway;
  */
 class CheapestPriceService implements Service\CheapestPriceServiceInterface
 {
+    const contextError = 'Expected Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface instead of Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface. This will be changed in \Shopware\Bundle\StoreFrontBundle\Service\CheapestPriceServiceInterface in SW 5.2';
+    const productError = 'Expected Shopware\Bundle\StoreFrontBundle\Struct\ListProduct instead of Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct. This will be changed in \Shopware\Bundle\StoreFrontBundle\Service\CheapestPriceServiceInterface in SW 5.2';
+
     /**
      * @var Gateway\CheapestPriceGatewayInterface
      */
@@ -52,6 +55,14 @@ class CheapestPriceService implements Service\CheapestPriceServiceInterface
      */
     public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context)
     {
+        if (!$context instanceof Struct\ProductContextInterface) {
+            throw new \InvalidArgumentException(self::contextError);
+        }
+
+        if (!$context instanceof Struct\ListProduct) {
+            throw new \InvalidArgumentException(self::productError);
+        }
+
         $cheapestPrices = $this->getList([$product], $context);
 
         return array_shift($cheapestPrices);
@@ -62,6 +73,10 @@ class CheapestPriceService implements Service\CheapestPriceServiceInterface
      */
     public function getList($products, Struct\ShopContextInterface $context)
     {
+        if (!$context instanceof Struct\ProductContextInterface) {
+            throw new \InvalidArgumentException(self::contextError);
+        }
+
         $group = $context->getCurrentCustomerGroup();
 
         $rules = $this->cheapestPriceGateway->getList($products, $context, $group);
@@ -77,7 +92,7 @@ class CheapestPriceService implements Service\CheapestPriceServiceInterface
         );
 
         if (empty($fallbackProducts)) {
-            return $prices;
+            return $this->calculatePriceGroupDiscounts($products, $prices, $context);
         }
 
         //if some product has no price, we have to load the fallback customer group prices for the fallbackProducts.
@@ -94,6 +109,41 @@ class CheapestPriceService implements Service\CheapestPriceServiceInterface
         );
 
         $prices = $prices + $fallbackPrices;
+
+        return $this->calculatePriceGroupDiscounts($products, $prices, $context);
+    }
+
+    /**
+     * @param Struct\ListProduct[] $products
+     * @param Struct\Product\PriceRule[] $prices
+     * @param Struct\ProductContextInterface $context
+     * @return Struct\Product\PriceRule[]
+     */
+    private function calculatePriceGroupDiscounts($products, $prices, $context)
+    {
+        /** @var Struct\ListProduct $product */
+        foreach ($products as $product) {
+            if (!$product->isPriceGroupActive()) {
+                continue;
+            }
+
+            $price = $prices[$product->getNumber()];
+
+            if (!$price) {
+                continue;
+            }
+
+            /** @var Struct\Product\PriceRule $price */
+            $discount = $this->getHighestQuantityDiscount($product, $context, $price->getFrom());
+
+            if (!$discount) {
+                continue;
+            }
+            $price->setPrice(
+                $price->getPrice() / 100 * (100 - $discount->getPercent())
+            );
+        }
+
         return $prices;
     }
 
@@ -126,5 +176,51 @@ class CheapestPriceService implements Service\CheapestPriceServiceInterface
         }
 
         return $prices;
+    }
+
+    /**
+     * Returns the highest price group discount for the provided product.
+     *
+     * The price groups are stored in the provided context object.
+     * If the product has no configured price group or the price group has no discount defined for the
+     * current customer group, the function returns null.
+     *
+     * @param Struct\ListProduct $product
+     * @param Struct\ProductContextInterface $context
+     * @param $quantity
+     * @return null|Struct\Product\PriceDiscount
+     */
+    private function getHighestQuantityDiscount(Struct\ListProduct $product, Struct\ProductContextInterface $context, $quantity)
+    {
+        $priceGroups = $context->getPriceGroups();
+        if (empty($priceGroups)) {
+            return null;
+        }
+
+        $id = $product->getPriceGroup()->getId();
+        if (!isset($priceGroups[$id])) {
+            return null;
+        }
+
+        $priceGroup = $priceGroups[$id];
+
+        /**@var $highest Struct\Product\PriceDiscount*/
+        $highest = null;
+        foreach ($priceGroup->getDiscounts() as $discount) {
+            if ($discount->getQuantity() > $quantity) {
+                continue;
+            }
+
+            if (!$highest) {
+                $highest = $discount;
+                continue;
+            }
+
+            if ($highest->getPercent() < $discount->getPercent()) {
+                $highest = $discount;
+            }
+        }
+
+        return $highest;
     }
 }

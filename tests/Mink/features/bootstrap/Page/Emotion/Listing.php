@@ -2,8 +2,7 @@
 namespace  Shopware\Tests\Mink\Page\Emotion;
 
 use Shopware\Tests\Mink\Element\Emotion\ArticleBox;
-use Shopware\Tests\Mink\Element\MultipleElement;
-use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
+use Shopware\Tests\Mink\Element\Emotion\FilterGroup;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use Shopware\Tests\Mink\Helper;
 use Shopware\Tests\Mink\HelperSelectorInterface;
@@ -21,37 +20,35 @@ class Listing extends Page implements HelperSelectorInterface
     protected $path = '';
 
     /**
-     * Returns an array of all css selectors of the element/page
-     * @return array
+     * @inheritdoc
      */
     public function getCssSelectors()
     {
-        return array(
+        return [
             'viewTable' => 'a.table-view.active',
             'viewList' => 'a.list-view.active',
             'active' => '.active',
             'filterCloseLinks' => 'div.filter_properties > div > div.slideContainer > ul > li.close > a',
             'listingBox' => 'div.listing'
-        );
+        ];
     }
 
     /**
-     * Returns an array of all named selectors of the element/page
-     * @return array
+     * @inheritdoc
      */
     public function getNamedSelectors()
     {
-        return array();
+        return [
+            'moreProducts' => ['de' => 'Weitere Artikel in dieser Kategorie', 'en' => 'More articles in this category']
+        ];
     }
-
-    protected $viewSwitchCount = 2;
 
     /**
      * Opens the listing page
      * @param array $params
      * @param bool $autoPage
      */
-    public function openListing($params, $autoPage = true)
+    public function openListing(array $params, $autoPage = true)
     {
         $parameters = array_merge(
             ['sCategory' => 3],
@@ -67,24 +64,53 @@ class Listing extends Page implements HelperSelectorInterface
     }
 
     /**
-     * Sets the article filter
-     * @param MultipleElement $filterGroups
-     * @param $properties
+     * Verify if we're on an expected page. Throw an exception if not.
      * @throws \Exception
      */
-    public function filter(MultipleElement $filterGroups, $properties)
+    public function verifyPage()
+    {
+        if (Helper::hasNamedLink($this, 'moreProducts')) {
+            return;
+        }
+
+        $errors = [];
+
+        if (!$this->hasSelect('n')) {
+            $errors[] = '- There is no "article per page" select!';
+        }
+
+        if (!$this->hasSelect('o')) {
+            $errors[] = '- There is no "order" select!';
+        }
+
+        if (!$errors) {
+            return;
+        }
+
+        $message = ['You are not on a listing:'];
+        $message = array_merge($message, $errors);
+        $message[] = 'Current URL: ' . $this->getSession()->getCurrentUrl();
+        Helper::throwException($message);
+    }
+
+    /**
+     * Sets the article filter
+     * @param FilterGroup $filterGroups
+     * @param array $properties
+     * @throws \Exception
+     */
+    public function filter(FilterGroup $filterGroups, array $properties)
     {
         $this->resetFilters();
         $this->setFilters($filterGroups, $properties);
     }
 
     /**
-     * @throws \Exception
+     * Resets all filters
      */
     protected function resetFilters()
     {
-        $locators = array('filterCloseLinks');
-        $elements = Helper::findAllOfElements($this, $locators, false);
+        $elements = Helper::findAllOfElements($this, ['filterCloseLinks'], false);
 
         if (empty($elements['filterCloseLinks'])) {
             return;
@@ -97,15 +123,17 @@ class Listing extends Page implements HelperSelectorInterface
     }
 
     /**
-     * @param MultipleElement $filterGroups
-     * @param $properties
+     * Sets the filters
+     * @param FilterGroup $filterGroups
+     * @param array $properties
      * @throws \Exception
      */
-    protected function setFilters(MultipleElement $filterGroups, $properties)
+    protected function setFilters(FilterGroup $filterGroups, array $properties)
     {
         foreach ($properties as $property) {
             $found = false;
 
+            /** @var FilterGroup $filterGroup */
             foreach ($filterGroups as $filterGroup) {
                 $filterGroupName = rtrim($filterGroup->getText(), ' +');
 
@@ -132,13 +160,11 @@ class Listing extends Page implements HelperSelectorInterface
 
     /**
      * Checks the view method of the listing. Only $view has to be active
-     * @param $view
+     * @param string $view
      */
     public function checkView($view)
     {
-        $views = array('viewTable', 'viewList');
-        $elements = Helper::findElements($this, $views, false);
-        $elements = array_filter($elements);
+        $elements = array_filter(Helper::findElements($this, ['viewTable', 'viewList'], false));
 
         if (key($elements) !== $view) {
             $message = sprintf('"%s" is active! (should be "%s")', key($elements), $view);
@@ -148,7 +174,6 @@ class Listing extends Page implements HelperSelectorInterface
 
     /**
      * Checks, whether an article is in the listing or not, is $negation is true, it checks whether an article is NOT in the listing
-     *
      * @param string $name
      * @param bool $negation
      */
@@ -167,26 +192,25 @@ class Listing extends Page implements HelperSelectorInterface
                 ($negation) ? '' : ' not',
                 ($negation) ? ' not' : ''
             );
-            Helper::throwException(array($message));
+            Helper::throwException([$message]);
         }
     }
 
     /**
+     * Checks, if a product is in the listing
      * @param string $name
      * @return bool
      */
     private function isArticleInListing($name)
     {
-        $locator = array('listingBox');
-        $elements = Helper::findElements($this, $locator);
-
-        /** @var Element $listingBox */
+        $elements = Helper::findElements($this, ['listingBox']);
         $listingBox = $elements['listingBox'];
 
         return $listingBox->hasLink($name);
     }
 
     /**
+     * Checks the properties of a product box
      * @param ArticleBox $articleBox
      * @param array $properties
      * @throws \Exception

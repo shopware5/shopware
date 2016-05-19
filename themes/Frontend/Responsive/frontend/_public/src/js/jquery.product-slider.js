@@ -243,7 +243,7 @@
              * @property ajaxCategoryID
              * @type {Number}
              */
-            ajaxCategoryID: 3,
+            ajaxCategoryID: null,
 
             /**
              * The maximum number of items to load via ajax.

@@ -60,7 +60,6 @@ class CriteriaFactory implements CriteriaFactoryInterface
 
         $criteria->removeBaseCondition('category');
         $criteria->resetFacets();
-        $criteria->resetConditions();
 
         $category = $context->getShop()->getCategory()->getId();
         $criteria->addBaseCondition(new CategoryCondition([$category]));

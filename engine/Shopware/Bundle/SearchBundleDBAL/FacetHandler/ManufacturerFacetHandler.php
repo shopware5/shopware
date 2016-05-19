@@ -105,6 +105,7 @@ class ManufacturerFacetHandler implements FacetHandlerInterface
         $query->resetQueryPart('groupBy');
         $query->resetQueryPart('orderBy');
 
+        $query->groupBy('product.id');
         $query->select('DISTINCT product.supplierID as id');
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
@@ -142,6 +143,10 @@ class ManufacturerFacetHandler implements FacetHandlerInterface
 
             $listItems[] = $listItem;
         }
+
+        usort($listItems, function (ValueListItem $a, ValueListItem $b) {
+            return strcasecmp($a->getLabel(), $b->getLabel());
+        });
 
         return new ValueListFacetResult(
             'manufacturer',

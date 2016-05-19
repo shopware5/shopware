@@ -19,8 +19,7 @@ class SearchForm extends Element implements \Shopware\Tests\Mink\HelperSelectorI
     protected $selector = ['css' => '#searchcontainer'];
 
     /**
-     * Returns an array of all css selectors of the element/page
-     * @return string[]
+     * @inheritdoc
      */
     public function getCssSelectors()
     {
@@ -30,8 +29,7 @@ class SearchForm extends Element implements \Shopware\Tests\Mink\HelperSelectorI
     }
 
     /**
-     * Returns an array of all named selectors of the element/page
-     * @return array[]
+     * @inheritdoc
      */
     public function getNamedSelectors()
     {
@@ -39,6 +37,4 @@ class SearchForm extends Element implements \Shopware\Tests\Mink\HelperSelectorI
             'searchButton' => ['de' => 'Suchen', 'en' => 'Search']
         ];
     }
-
-
 }

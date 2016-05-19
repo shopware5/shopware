@@ -169,4 +169,32 @@ class Shopware_Components_Auth extends Enlight_Components_Auth
 
         return self::$_instance;
     }
+
+    /**
+     * Validates the given credentials of a user
+     *
+     * @param string $username
+     * @param string $password
+     * @return bool
+     */
+    public function isPasswordValid($username, $password)
+    {
+        $storage = $this->getStorage();
+        $adapters = $this->getAdapter();
+        $this->setStorage(new Zend_Auth_Storage_NonPersistent());
+
+        foreach ($adapters as $adapter) {
+            $adapter->setIdentity($username);
+            $adapter->setCredential($password);
+
+            $result = $this->authenticate($adapter);
+            if ($result->isValid()) {
+                $this->setStorage($storage);
+                return true;
+            }
+        }
+
+        $this->setStorage($storage);
+        return false;
+    }
 }

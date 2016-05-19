@@ -2,6 +2,8 @@
 
 namespace Shopware\Tests\Mink;
 
+use Behat\Gherkin\Node\TableNode;
+
 class SitemapContext extends SubContext
 {
     /**
@@ -9,14 +11,14 @@ class SitemapContext extends SubContext
      */
     public function iAmOnTheSitemapXml()
     {
-        $this->getPage('Sitemap')->open(array('xml' => '.xml'));
+        $this->getPage('Sitemap')->open(['xml' => '.xml']);
     }
 
     /**
      * @Then /^I should see the group "([^"]*)"$/
      * @Then /^I should see the group "([^"]*)":$/
      */
-    public function iShouldSeeTheGroup($name, \Behat\Gherkin\Node\TableNode $entries = null)
+    public function iShouldSeeTheGroup($name, TableNode $entries = null)
     {
         $this->iShouldSeeTheGroupWithLink($name, null, $entries);
     }
@@ -25,11 +27,11 @@ class SitemapContext extends SubContext
      * @Then /^I should see the group "([^"]*)" with link "([^"]*)"$/
      * @Then /^I should see the group "([^"]*)" with link "([^"]*)":$/
      */
-    public function iShouldSeeTheGroupWithLink($name, $link, \Behat\Gherkin\Node\TableNode $entries = null)
+    public function iShouldSeeTheGroupWithLink($name, $link, TableNode $entries = null)
     {
-        $links = array();
+        $links = [];
 
-        if($entries) {
+        if ($entries) {
             $links = $entries->getHash();
         }
 
@@ -42,7 +44,7 @@ class SitemapContext extends SubContext
         $sitemapGroup = $name;
 
         /** @var \Shopware\Tests\Mink\Element\Emotion\SitemapGroup $group */
-        foreach($groups as $group) {
+        foreach ($groups as $group) {
             if ($group->getTitle() === $name) {
                 $sitemapGroup = $group;
                 break;
@@ -55,7 +57,7 @@ class SitemapContext extends SubContext
     /**
      * @Then /^there should be these links in the XML:$/
      */
-    public function thereShouldBeTheseLinksInTheXml(\Behat\Gherkin\Node\TableNode $links)
+    public function thereShouldBeTheseLinksInTheXml(TableNode $links)
     {
         $links = $links->getHash();
         $this->getPage('Sitemap')->checkXml($links);

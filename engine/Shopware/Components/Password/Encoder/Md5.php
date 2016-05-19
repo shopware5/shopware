@@ -47,11 +47,11 @@ class Md5 implements PasswordEncoderInterface
     public function isPasswordValid($password, $hash)
     {
         if (strpos($hash, ':') === false) {
-            return $hash == md5($password);
+            return hash_equals($hash, md5($password));
         }
         list($md5, $salt) = explode(':', $hash);
 
-        return $md5 == md5($password . $salt);
+        return hash_equals($md5, md5($password . $salt));
     }
 
     /**

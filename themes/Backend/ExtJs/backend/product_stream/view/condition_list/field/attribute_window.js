@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 //{namespace name=backend/product_stream/main}
-
+//{block name="backend/product_stream/view/condition_list/field/attribute_window"}
 Ext.define('Shopware.apps.ProductStream.view.condition_list.field.AttributeWindow', {
     extend: 'Ext.window.Window',
     modal: true,
@@ -90,3 +90,4 @@ Ext.define('Shopware.apps.ProductStream.view.condition_list.field.AttributeWindo
         });
     }
 });
+//{/block}

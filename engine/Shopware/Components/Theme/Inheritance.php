@@ -115,12 +115,12 @@ class Inheritance
         $util = $this->util;
         $bare = array_filter($hierarchy, function (Shop\Template $template) use ($util) {
             $theme = $util->getThemeByTemplate($template);
-            return ($template->getParent() == null || $theme instanceof ResponsiveTheme);
+            return $theme->injectBeforePlugins();
         });
     
         $custom = array_filter($hierarchy, function (Shop\Template $template) use ($util) {
             $theme = $util->getThemeByTemplate($template);
-            return ($template->getParent() !== null && !($theme instanceof ResponsiveTheme));
+            return !$theme->injectBeforePlugins();
         });
         
         return [
@@ -437,7 +437,7 @@ class Inheritance
                 $row['value'] = '"' . $row['value'] . '"';
             }
 
-            if ($row['type'] === 'theme-media-selection' && $row['value'] !== $row['defaultValue'] && strpos($row['value'], "media/image") !== false) {
+            if ($row['type'] === 'theme-media-selection' && $row['value'] !== $row['defaultValue'] && strpos($row['value'], "media/") !== false) {
                 $row['value'] = $this->mediaService->getUrl($row['value']);
             }
         }

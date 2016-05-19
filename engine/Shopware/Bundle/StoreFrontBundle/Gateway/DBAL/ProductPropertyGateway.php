@@ -93,21 +93,14 @@ class ProductPropertyGateway implements Gateway\ProductPropertyGatewayInterface
 
         $query = $this->connection->createQueryBuilder();
 
-        $query->addSelect('products.id as productId')
+        $query
+            ->addSelect('products.id as productId')
+            ->addSelect('relations.position as __relations_position')
             ->addSelect($this->fieldHelper->getPropertySetFields())
             ->addSelect($this->fieldHelper->getPropertyGroupFields())
             ->addSelect($this->fieldHelper->getPropertyOptionFields())
             ->addSelect($this->fieldHelper->getMediaFields())
         ;
-
-        $query->addSelect('
-        (
-            CASE
-                WHEN propertySet.sortmode = 1 THEN propertyOption.value_numeric
-                WHEN propertySet.sortmode = 3 THEN propertyOption.position
-                ELSE propertyOption.value
-            END
-        ) as sortRelevance');
 
         $query->from('s_filter_articles', 'filterArticles');
 
@@ -179,15 +172,10 @@ class ProductPropertyGateway implements Gateway\ProductPropertyGatewayInterface
         $query->where('products.id IN (:ids)')
             ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
-        $query->orderBy('filterArticles.articleID')
-            ->addOrderBy('relations.position')
-            ->addOrderBy('propertyGroup.name')
-            ->addOrderBy('sortRelevance')
-            ->addOrderBy('propertyOption.id');
+        $query->orderBy('filterArticles.articleID');
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
-
         $data = $statement->fetchAll(\PDO::FETCH_GROUP);
 
         $properties = [];

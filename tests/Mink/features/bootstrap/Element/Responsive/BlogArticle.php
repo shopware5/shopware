@@ -20,8 +20,7 @@ class BlogArticle extends \Shopware\Tests\Mink\Element\Emotion\BlogArticle
     protected $selector = ['css' => 'div.emotion--blog'];
 
     /**
-     * Returns an array of all css selectors of the element/page
-     * @return array
+     * @inheritdoc
      */
     public function getCssSelectors()
     {

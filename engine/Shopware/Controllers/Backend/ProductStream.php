@@ -215,4 +215,21 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
 
         $this->View()->assign(['success' => true, 'data' => $columns]);
     }
+
+    public function copySelectedProductsAction()
+    {
+        $sourceStreamId = $this->Request()->getParam('sourceStreamId', false);
+        $targetStreamId = $this->Request()->getParam('targetStreamId', false);
+
+        if ($sourceStreamId === $targetStreamId || !$sourceStreamId || !$targetStreamId) {
+            return;
+        }
+
+        Shopware()->Container()->get('dbal_connection')->executeUpdate(
+            "INSERT IGNORE INTO s_product_streams_selection (stream_id, article_id) SELECT :targetStreamId, article_id FROM s_product_streams_selection WHERE stream_id = :sourceStreamId",
+            [':targetStreamId' => $targetStreamId, ':sourceStreamId' => $sourceStreamId]
+        );
+
+        $this->View()->assign('success', true);
+    }
 }

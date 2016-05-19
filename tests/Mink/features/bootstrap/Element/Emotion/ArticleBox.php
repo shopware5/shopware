@@ -17,8 +17,7 @@ class ArticleBox extends CartPosition
     protected $selector = array('css' => 'div.artbox');
 
     /**
-     * Returns an array of all css selectors of the element/page
-     * @return string[]
+     * @inheritdoc
      */
     public function getCssSelectors()
     {
@@ -29,8 +28,7 @@ class ArticleBox extends CartPosition
     }
 
     /**
-     * Returns an array of all named selectors of the element/page
-     * @return array
+     * @inheritdoc
      */
     public function getNamedSelectors()
     {

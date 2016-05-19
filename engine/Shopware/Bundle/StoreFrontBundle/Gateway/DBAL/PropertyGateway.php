@@ -105,9 +105,10 @@ class PropertyGateway implements Gateway\PropertyGatewayInterface
     {
         $query = $this->connection->createQueryBuilder();
 
-        $sortMode = $this->getSortMode($valueIds);
 
-        $query->addSelect($this->fieldHelper->getPropertySetFields())
+        $query
+            ->addSelect('relations.position as __relations_position')
+            ->addSelect($this->fieldHelper->getPropertySetFields())
             ->addSelect($this->fieldHelper->getPropertyGroupFields())
             ->addSelect($this->fieldHelper->getPropertyOptionFields())
             ->addSelect($this->fieldHelper->getMediaFields())
@@ -172,74 +173,12 @@ class PropertyGateway implements Gateway\PropertyGatewayInterface
         $query->where('propertyOption.id IN (:ids)')
             ->setParameter(':ids', $valueIds, Connection::PARAM_INT_ARRAY);
 
-        $query->orderBy('propertySet.position')
-            ->addOrderBy('propertySet.id')
-            ->addOrderBy('relations.position')
-            ->addOrderBy('propertyGroup.name');
-
-        switch ($sortMode) {
-            case self::FILTERS_SORT_NUMERIC:
-                $query->addOrderBy('propertyOption.value_numeric');
-                break;
-
-            case self::FILTERS_SORT_POSITION:
-                $query->addOrderBy('propertyOption.position');
-                break;
-
-            default:
-                $query->addOrderBy('propertyOption.value');
-        }
-
-        $query->addOrderBy('propertyOption.id');
+        $query->orderBy('propertySet.position');
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
-
         $rows = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
         return $this->propertyHydrator->hydrateValues($rows);
-    }
-
-    /**
-     * Returns the sort mode for the passed value ids.
-     * If the value ids contains more than one property set, the
-     * global fallback sort mode is used.
-     *
-     * @param array $valueIds
-     * @return int
-     */
-    private function getSortMode(array $valueIds)
-    {
-        $query = $this->connection->createQueryBuilder();
-        $query->select('DISTINCT propertySet.sortmode')
-            ->from('s_filter', 'propertySet');
-
-        $query->innerJoin(
-            'propertySet',
-            's_filter_relations',
-            'relations',
-            'relations.groupID = propertySet.id'
-        );
-
-        $query->innerJoin(
-            'relations',
-            's_filter_values',
-            'propertyOption',
-            'relations.optionID = propertyOption.optionID'
-        );
-
-        $query->where('propertyOption.id IN (:ids)')
-            ->setParameter(':ids', $valueIds, Connection::PARAM_INT_ARRAY);
-
-        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
-        $statement = $query->execute();
-
-        $rows = $statement->fetchAll(\PDO::FETCH_COLUMN);
-
-        if (count($rows) == 1) {
-            return $rows[0];
-        } else {
-            return $this->config->get('defaultFilterSort', self::FILTERS_SORT_POSITION);
-        }
     }
 }

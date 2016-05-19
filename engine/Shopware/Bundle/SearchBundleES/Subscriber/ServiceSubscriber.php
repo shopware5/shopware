@@ -48,17 +48,8 @@ class ServiceSubscriber implements SubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            'Enlight_Bootstrap_AfterInitResource_shopware_search.product_number_search'        => ['registerProductNumberSearch', -5000],
-            'Enlight_Bootstrap_AfterInitResource_shopware_storefront.similar_products_service' => ['registerSimilarProductsService', -5000]
+            'Enlight_Bootstrap_AfterInitResource_shopware_search.product_number_search'        => ['registerProductNumberSearch', -5000]
         ];
-    }
-
-    public function registerSimilarProductsService()
-    {
-        $this->container->set(
-            'shopware_storefront.similar_products_service',
-            $this->container->get('shopware_search_es.similar_products_service')
-        );
     }
 
     public function registerProductNumberSearch()

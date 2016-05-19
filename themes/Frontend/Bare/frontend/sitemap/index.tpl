@@ -1,7 +1,7 @@
 {extends file="frontend/index/index.tpl"}
 
 {* Breadcrumb *}
-{block name="rontend_index_start" prepend}
+{block name="frontend_index_start" prepend}
     {$sBreadcrumb = [['name'=>"{s name='SitemapTitle'}{/s}", 'link'=>{url controller=sitemap}]]}
 {/block}
 
