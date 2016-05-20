@@ -304,6 +304,10 @@ class %className% extends ModelEntity
             $className = $this->getClassNameOfTableName($tableName);
         }
 
+        if ($className === '') {
+            return false;
+        }
+
         $file = $this->getPath() . $className . '.php';
 
         if (file_exists($file) && !is_writable($file)) {
