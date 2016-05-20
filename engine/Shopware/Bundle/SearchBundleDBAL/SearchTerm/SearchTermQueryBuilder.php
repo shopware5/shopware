@@ -128,7 +128,7 @@ class SearchTermQueryBuilder implements SearchTermQueryBuilderInterface
 
         $enableAndSearchLogic = $this->config->get('enableAndSearchLogic', false);
         if ($enableAndSearchLogic) {
-            $this->addAndSearchLogic($query, $term, $keywords);
+            $this->addAndSearchLogic($query, $term);
         }
 
         return $query;
@@ -154,7 +154,7 @@ class SearchTermQueryBuilder implements SearchTermQueryBuilderInterface
             $query = $this->connection->createQueryBuilder();
             $alias = 'st' . $table['tableID'];
 
-            $query->select(['MAX(sf.relevance * sm.relevance) as relevance', 'sm.keywordID']);
+            $query->select(['MAX(sf.relevance * sm.relevance) as relevance', 'sm.keywordID', 'term']);
             $query->from('(' . $keywordSelection . ')', 'sm');
             $query->innerJoin('sm', 's_search_index', 'si', 'sm.keywordID = si.keywordID');
             $query->innerJoin('si', 's_search_fields', 'sf', 'si.fieldID = sf.id AND sf.relevance != 0 AND sf.tableID = ' . $table['tableID']);
@@ -179,7 +179,7 @@ class SearchTermQueryBuilder implements SearchTermQueryBuilderInterface
         $tablesSql = "\n" . implode("\n     UNION ALL\n", $tablesSql);
 
         $subQuery = $this->connection->createQueryBuilder();
-        $subQuery->select(['srd.articleID', 'SUM(srd.relevance) as relevance']);
+        $subQuery->select(['srd.articleID', 'SUM(srd.relevance) as relevance', 'COUNT(DISTINCT term) as termCount']);
         $subQuery->from("(" . $tablesSql . ')', 'srd')
             ->groupBy('srd.articleID')
             ->setMaxResults(5000);
@@ -244,69 +244,10 @@ class SearchTermQueryBuilder implements SearchTermQueryBuilderInterface
      *
      * @param QueryBuilder $query
      * @param string $term
-     * @param Keyword[] $keywords
      */
-    private function addAndSearchLogic($query, $term, $keywords)
+    private function addAndSearchLogic($query, $term)
     {
         $searchTerms = $this->termHelper->splitTerm($term);
-
-        $searchTermMatchQueries = $this->createSearchTermMatchQueries($keywords, $searchTerms);
-
-        $totalSearchTermMatchesQuery = $this->connection->createQueryBuilder();
-
-        $totalSearchTermMatchesQuery->select('sum(matches)')
-            ->from('(' . $searchTermMatchQueries . ')', 'termMatches')
-            ->where('termMatches.elementID = product_id');
-
-        $query->addSelect('(' . $totalSearchTermMatchesQuery->getSQL() . ') AS searchTermMatches');
-        $query->having('searchTermMatches >= ' . count($searchTerms));
-    }
-
-    /**
-     * creates the search term match query. makes sure that, for each search term at least one keyword matches
-     *
-     * @param Keyword[] $keywords
-     * @param string[] $searchTerms
-     * @return string
-     */
-    private function createSearchTermMatchQueries($keywords, $searchTerms)
-    {
-        $searchTermMatchQueries = [];
-        foreach ($searchTerms as $searchTerm) {
-            $searchKeywordIds = [];
-            foreach ($keywords as $keyword) {
-                if ($keyword->getTerm() == $searchTerm) {
-                    $searchKeywordIds[] = $keyword->getId();
-                }
-            }
-
-            $searchTermMatchQueries[] = $this->createSearchTermMatchQuery($searchKeywordIds);
-        }
-
-        $searchTermMatchQueries = "\n" . implode("\n     UNION ALL\n", $searchTermMatchQueries);
-
-        return $searchTermMatchQueries;
-    }
-
-    /**
-     * checks if at least one keyword matches to a search term
-     *
-     * @param int[] $searchKeywordIds
-     * @return string
-     */
-    private function createSearchTermMatchQuery($searchKeywordIds)
-    {
-        //if there is no keyword for a search term we need this little hack to prevent an empty IN condition
-        if (empty($searchKeywordIds)) {
-            $searchKeywordIds[] = -1;
-        }
-
-        $searchTermMatchQuery = $this->connection->createQueryBuilder();
-        $searchTermMatchQuery->select('DISTINCT 1 AS matches, elementID')
-            ->from('s_search_index', 'search_index')
-            ->innerJoin('search_index', 's_search_keywords', 'search_keywords', 'search_keywords.id = search_index.keywordID')
-            ->where("search_keywords.id IN(" . implode(',', $searchKeywordIds) . ")");
-
-        return $searchTermMatchQuery->getSQL();
+        $query->andWhere('termCount >= ' . count($searchTerms));
     }
 }

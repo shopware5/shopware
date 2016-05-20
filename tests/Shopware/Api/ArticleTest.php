@@ -190,8 +190,8 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit_Framework_TestCase
             ),
 
             'images' => array(
-                array('link' => 'http://lorempixel.com/640/480/food/'),
-                array('link' => 'http://lorempixel.com/640/480/food/')
+                array('link' => 'http://assets.shopware.com/sw_logo_white.png'),
+                array('link' => 'http://assets.shopware.com/sw_logo_white.png')
             ),
 
             'variants' => array(
@@ -586,7 +586,7 @@ class Shopware_Tests_Api_ArticleTest extends PHPUnit_Framework_TestCase
                     'mediaId' => 44
                 ],
                 [
-                    'link' => 'http://lorempixel.com/640/480/food/'
+                    'link' => 'http://assets.shopware.com/sw_logo_white.png'
                 ],
                 [
                     'mediaId' => 46

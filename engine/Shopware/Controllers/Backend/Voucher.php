@@ -183,7 +183,7 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
                         v.modus,
                         v.percental,
                         IF( modus = '0',
-                (SELECT count(*) FROM s_order_details as d WHERE articleordernumber =v.ordercode AND d.ordernumber!=0),
+                (SELECT count(*) FROM s_order_details as d WHERE articleordernumber =v.ordercode AND d.ordernumber!='0'),
                 (SELECT count(*) FROM s_emarketing_voucher_codes WHERE voucherID =v.id AND cashed=1))  AS checkedIn
                 FROM s_emarketing_vouchers as v
                 WHERE (modus = 1 OR modus = 0)

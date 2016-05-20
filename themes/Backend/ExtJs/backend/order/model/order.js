@@ -50,6 +50,7 @@ Ext.define('Shopware.apps.Order.model.Order', {
         { name : 'id', type: 'int' },
         { name : 'number', type: 'string' },
         { name : 'customerId', type: 'int' },
+        { name : 'customerEmail', type: 'string'},
         { name : 'invoiceAmountNet', type: 'float' },
         { name : 'invoiceShippingNet', type: 'float' },
         { name : 'status', type: 'int' },

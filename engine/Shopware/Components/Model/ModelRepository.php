@@ -25,7 +25,6 @@
 namespace Shopware\Components\Model;
 
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Query\Expr;
 
 /**
@@ -46,10 +45,16 @@ use Doctrine\ORM\Query\Expr;
 class ModelRepository extends EntityRepository
 {
     /**
-     * {@inheritdoc}
+     * Creates a new QueryBuilder instance that is prepopulated for this entity name.
+     *
+     * @param string $alias
+     * @param string $indexBy The index for the from.
+     *
+     * @return QueryBuilder
      */
     public function createQueryBuilder($alias, $indexBy = null)
     {
+        /** @var QueryBuilder $builder */
         $builder = parent::createQueryBuilder($alias, $indexBy = null);
         $builder->setAlias($alias);
 

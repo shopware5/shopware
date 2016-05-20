@@ -202,6 +202,10 @@
             <tag name="condition_handler_dbal"/>
         </service>
 
+        <service id="shopware_searchdbal.similar_products_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\SimilarProductConditionHandler">
+            <tag name="condition_handler_dbal"/>
+        </service>
+
         <!-- Sorting handler -->
         <service id="shopware_searchdbal.product_name_sorting_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\SortingHandler\ProductNameSortingHandler">
             <tag name="sorting_handler_dbal"/>

@@ -24,6 +24,7 @@
 
 namespace Shopware\Commands;
 
+use Shopware\Components\Routing\Context;
 use Shopware\Models\ProductFeed\ProductFeed;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -55,6 +56,10 @@ class GenerateProductFeedCommand extends ShopwareCommand
             $request = new \Enlight_Controller_Request_RequestHttp();
             $front->setRequest($request);
         }
+
+        $shop = $this->container->get('models')->getRepository('Shopware\Models\Shop\Shop')->getActiveDefault();
+        $context = Context::createFromShop($shop, $this->container->get('config'));
+        $this->container->get('router')->setContext($context);
 
         $productFeedRepository = $this->container->get('models')->getRepository(
             'Shopware\Models\ProductFeed\ProductFeed'

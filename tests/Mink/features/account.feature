@@ -27,10 +27,10 @@ Feature: My account (without changing login data)
         Examples:
             | password  | new_email         | confirmation      | message                                        |
             |           |                   |                   | Das aktuelle Passwort stimmt nicht!            |
-            | shopware  |                   |                   | Bitte geben Sie eine gültige eMail-Adresse ein |
-            | shopware  | test2@example.com |                   | Die eMail-Adressen stimmen nicht überein.      |
-            | shopware  | abc               | abc               | Bitte geben Sie eine gültige eMail-Adresse ein |
-            | shopware  | test@example.com  | test2@example.com | Die eMail-Adressen stimmen nicht überein.      |
+            | shopware  |                   |                   | Bitte geben Sie eine gültige E-Mail-Adresse ein |
+            | shopware  | test2@example.com |                   | Die E-Mail-Adressen stimmen nicht überein.      |
+            | shopware  | abc               | abc               | Bitte geben Sie eine gültige E-Mail-Adresse ein |
+            | shopware  | test@example.com  | test2@example.com | Die E-Mail-Adressen stimmen nicht überein.      |
             | shopware4 | test2@example.com | test2@example.com | Das aktuelle Passwort stimmt nicht!            |
 
     @shipping

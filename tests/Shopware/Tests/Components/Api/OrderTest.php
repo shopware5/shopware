@@ -94,11 +94,58 @@ class Shopware_Tests_Components_Api_OrderTest extends Shopware_Tests_Components_
     {
         $result = $this->resource->getList();
 
-        $this->assertArrayHasKey('data', $result);
-        $this->assertArrayHasKey('total', $result);
+        $this->assertInternalType('array', $result);
 
+        $this->assertArrayHasKey('total', $result);
         $this->assertGreaterThanOrEqual(1, $result['total']);
-        $this->assertGreaterThanOrEqual(1, $result['data']);
+
+        $this->assertArrayHasKey('data', $result);
+        $this->assertInternalType('array', $result['data']);
+
+        $this->assertGreaterThanOrEqual(1, count($result['data']));
+
+        $firstOrder = $result['data'][0];
+
+        $expectedKeys = [
+            "id",
+            "number",
+            "customerId",
+            "paymentId",
+            "dispatchId",
+            "partnerId",
+            "shopId",
+            "invoiceAmount",
+            "invoiceAmountNet",
+            "invoiceShipping",
+            "invoiceShippingNet",
+            "orderTime",
+            "transactionId",
+            "comment",
+            "customerComment",
+            "internalComment",
+            "net",
+            "taxFree",
+            "temporaryId",
+            "referer",
+            "clearedDate",
+            "trackingCode",
+            "languageIso",
+            "currency",
+            "currencyFactor",
+            "remoteAddress",
+            "deviceType",
+            "customer",
+            "paymentStatusId",
+            "orderStatusId",
+        ];
+
+        foreach ($expectedKeys as $expectedKey) {
+            $this->assertArrayHasKey($expectedKey, $firstOrder);
+        }
+
+        $this->assertInternalType('array', $firstOrder['customer']);
+        $this->assertArrayHasKey('id', $firstOrder['customer']);
+        $this->assertArrayHasKey('email', $firstOrder['customer']);
     }
 
     public function testGetListShouldBeAbleToReturnObjects()
@@ -144,7 +191,7 @@ class Shopware_Tests_Components_Api_OrderTest extends Shopware_Tests_Components_
         foreach ($order['details'] as $detail) {
             $updateArray['details'][$detail['id']] = array('id' => $detail['id'], 'status' => rand(0, 3), 'shipped' => 1);
         }
-        $this->resource->update($this->order['id'],$updateArray);
+        $this->resource->update($this->order['id'], $updateArray);
 
         // Reload the order and check the result
         $this->resource->setResultMode(\Shopware\Components\Api\Resource\Resource::HYDRATE_ARRAY);

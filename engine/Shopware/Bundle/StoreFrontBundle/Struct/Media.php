@@ -73,7 +73,7 @@ class Media extends Extendable implements \JsonSerializable
      * Contains the different thumbnail sizes.
      * @var array
      */
-    protected $thumbnails;
+    protected $thumbnails = [];
 
     /**
      * @var int

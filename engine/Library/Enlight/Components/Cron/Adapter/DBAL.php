@@ -167,6 +167,14 @@ class Enlight_Components_Cron_Adapter_DBAL implements Enlight_Components_Cron_Ad
     /**
      * {@inheritdoc}
      */
+    public function getJobByAction($action)
+    {
+        return $this->getJobByColumn('action', $action);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function createJob(Enlight_Components_Cron_Job $job)
     {
         $this->updateJob($job);

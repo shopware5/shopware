@@ -108,7 +108,7 @@
         .addPlugin('*[data-modalbox="true"]', 'swModalbox')
 
         // Change the active tab to the customer reviews
-        .addPlugin('.is--ctl-detail, .is--ctl-blog', 'swJumpToTab')
+        .addPlugin('.is--ctl-detail', 'swJumpToTab')
         .addPlugin('*[data-ajax-shipping-payment="true"]', 'swShippingPayment')
 
         // Initialize the registration plugin

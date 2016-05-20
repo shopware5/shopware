@@ -20,9 +20,9 @@
 			{foreach from=$sPages.pages item=page}
                 {if $page<$sRequests.sPage+4 AND $page>$sRequests.sPage-4}
                     {if $sRequests.sPage==$page}
-                        <a title="{$sCategoryInfo.name}" class="navi on">{$page}</a>
+                        <a title="{$sCategoryContent.name}" class="navi on">{$page}</a>
 					{else}
-                        <a href="{$sLinks.sPage}&sPage={$page}" title="{$sCategoryInfo.name}" class="navi">
+                        <a href="{$sLinks.sPage}&sPage={$page}" title="{$sCategoryContent.name}" class="navi">
                             {$page}
                         </a>
                     {/if}

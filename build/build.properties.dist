@@ -21,6 +21,13 @@ app.dir   = ${basedir}/engine/Shopware
 
 karma.config = ${basedir}/themes/Frontend/Responsive/karma.conf.js
 
+script.php      = php
+script.phpcs    = phpcs
+script.phpmd    = phpmd
+script.phpcpd   = phpcpd
+script.phploc   = phploc
+script.pdepend  = pdepend
+script.phpcb    = phpcb
 script.mysql    = mysql
 script.phpunit  = ${basedir}/vendor/bin/phpunit
 script.behat    = ${basedir}/vendor/bin/behat

@@ -22,7 +22,16 @@ return array_replace_recursive([
             'local' => [
                 'type' => 'local',
                 'mediaUrl' => '',
-
+                'permissions' => [
+                    'file' => [
+                        'public' => 0666 & ~umask(),
+                        'private' => 0600 & ~umask(),
+                    ],
+                    'dir' => [
+                        'public' => 0777 & ~umask(),
+                        'private' => 0700 & ~umask(),
+                    ]
+                ],
                 'path' => realpath(__DIR__ . '/../../../')
             ],
             'ftp' => [
@@ -95,6 +104,7 @@ return array_replace_recursive([
     ],
     'httpcache' => [
         'enabled' => true,
+        'lookup_optimization' => true,
         'debug' => false,
         'default_ttl' => 0,
         'private_headers' => ['Authorization', 'Cookie'],

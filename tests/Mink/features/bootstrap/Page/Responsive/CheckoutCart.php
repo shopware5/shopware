@@ -25,7 +25,8 @@ class CheckoutCart extends \Shopware\Tests\Mink\Page\Emotion\CheckoutCart
             'removeVoucher' => 'div.row--voucher a.btn',
             'aggregationLabels' => 'ul.aggregation--list .entry--label',
             'aggregationValues' => 'ul.aggregation--list .entry--value',
-            'shippingPaymentForm' => 'form.payment'
+            'shippingPaymentForm' => 'form.payment',
+            'articleDeleteButtons' => '.column--actions-link[title="Löschen"]'
         ];
     }
 
