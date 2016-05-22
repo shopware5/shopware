@@ -150,6 +150,7 @@ class Application extends BaseApplication
         }
 
         $this->registerFilesystemCommands();
+        $this->registerTaggedServiceIds();
     }
 
     protected function registerFilesystemCommands()
@@ -190,6 +191,21 @@ class Application extends BaseApplication
         foreach ($collection as $command) {
             if ($command instanceof Command) {
                 $this->add($command);
+            }
+        }
+    }
+
+    /**
+     * Register tagged commands in Symfony style
+     *
+     * @author Daniel Espendiller <daniel@espendiller.net>
+     * @see Shopware\Components\DependencyInjection\Compiler\AddConsoleCommandPass
+     */
+    protected function registerTaggedServiceIds()
+    {
+        if ($this->kernel->getContainer()->hasParameter('console.command.ids')) {
+            foreach ($this->kernel->getContainer()->getParameter('console.command.ids') as $id) {
+                $this->add($this->kernel->getContainer()->get($id));
             }
         }
     }
