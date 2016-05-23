@@ -308,6 +308,8 @@ In this document you will find a changelog of the important changes related to t
 * Moved s_user_billingaddress.customernumber to s_user table
 * Removed \Shopware\Models\Customer\Billing::number property
 * Removed method `Shopware\Bundle\PluginInstallerBundle\Service\InstallerService::getPluginBootstrap()`
+* Updated Codemirror to version 5.13.4 and improved the modes support
+* Improved Modes Support in CodeMirror Element
 
 ## 5.1.6
 * The interface `Enlight_Components_Cron_Adapter` in `engine/Library/Enlight/Components/Cron/Adapter.php` got a new method `getJobByAction`. For default implementation see `engine/Library/Enlight/Components/Cron/Adapter/DBAL.php`.
@@ -532,17 +534,17 @@ In this document you will find a changelog of the important changes related to t
     * `Shopware.apps.Base.model.OrderStatus` and `Shopware.apps.Base.model.PaymentStatus` ExtJs translations are now done using the `name` instead of the `id`.
 * Deprecated `Shopware\Bundle\StoreFrontBundle\Struct\Thumbnail::getSourceSet` since it should be placed in a hydrator or view
 * Introducing the `MediaBundle` to support huge amounts of media items and add support for CDN's (Content Delivery Network)
-	* Added library [thephpleague/flysystem](https://github.com/thephpleague/flysystem) to switch the underlying filesystem.
-	* Media directory structure has been changed
-		* Paths in `s_media` are now virtual paths, meaning that the files will no longer be accessible with the given path.
-		* A MediaBackend decides how and where media files are getting stored (e.g. /media/image/blue_shoes_size37.jpg could be /media/image/e0/77/f8/blue_shoes_size37.jpg)
-		* A MediaService handles file operations and generation of urls
-		* A MediaPathNormalizer removes all unrelevant parts of a string to get a coherent syntax like `media/image/blue_shoes_size37.jpg`
-		* A live migration, which is disabled by default, migrates media files to the new filesystem and format as they get requested
-		* The store front, product feed and api endpoints have already been updated to make use of the underlying filesystem.
-	* Added `sw:media` cli commands to easily manage your new media system
-		* `sw:media:migrate` migrates from one filesystem to another
-		    * E.g. use `sw:media:migrate --from=local --to=aws` to migrate all media items to Amazon S3
+    * Added library [thephpleague/flysystem](https://github.com/thephpleague/flysystem) to switch the underlying filesystem.
+    * Media directory structure has been changed
+        * Paths in `s_media` are now virtual paths, meaning that the files will no longer be accessible with the given path.
+        * A MediaBackend decides how and where media files are getting stored (e.g. /media/image/blue_shoes_size37.jpg could be /media/image/e0/77/f8/blue_shoes_size37.jpg)
+        * A MediaService handles file operations and generation of urls
+        * A MediaPathNormalizer removes all unrelevant parts of a string to get a coherent syntax like `media/image/blue_shoes_size37.jpg`
+        * A live migration, which is disabled by default, migrates media files to the new filesystem and format as they get requested
+        * The store front, product feed and api endpoints have already been updated to make use of the underlying filesystem.
+    * Added `sw:media` cli commands to easily manage your new media system
+        * `sw:media:migrate` migrates from one filesystem to another
+            * E.g. use `sw:media:migrate --from=local --to=aws` to migrate all media items to Amazon S3
 * Added `sw:media:cleanup` cli command to find all unused media and place them in a new album called Trash
     * Optional: `sw:media:cleanup --delete` to find all unused media and remove them automatically
 * Added event `Shopware_Collect_MediaPositions` to collect more tables to scan for unused images. You should return a ArrayCollection of MediaPosition instances.
