@@ -25,6 +25,7 @@
 namespace Components\DependencyInjection;
 
 use Prophecy\Argument;
+use Shopware\Components\ContainerAwareEventManager;
 use Shopware\Components\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -138,6 +139,63 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $this->expectException(\Exception::class);
 
         $this->container->get('Foo');
+    }
+
+    public function testAfterInitEventDecorator()
+    {
+        $this->container = new ProjectServiceContainer();
+        $eventManager = new ContainerAwareEventManager($this->container);
+        $this->container->set('events', $eventManager);
+
+        $class = new \stdClass();
+        $class->name = 'decorated';
+
+        $this->container->get('events')->addListener(
+            'Enlight_Bootstrap_AfterInitResource_bar',
+            function (\Enlight_Event_EventArgs $e) use ($class) {
+                /** @var ProjectServiceContainer $container */
+                $container = $e->getSubject();
+                $container->set('bar', $class);
+            }
+        );
+
+        $this->assertSame($class, $this->container->get('bar'));
+    }
+
+    public function testAfterInitEventDecoratorService()
+    {
+        $this->container = new ProjectServiceContainer();
+        $eventManager = new ContainerAwareEventManager($this->container);
+        $this->container->set('events', $eventManager);
+
+        $class = new \stdClass();
+        $class->name = 'decorated';
+
+        $this->container->set('service.listener', new Service($class));
+
+        $this->container->get('events')->addListenerService(
+            'Enlight_Bootstrap_AfterInitResource_bar',
+            ['service.listener', 'onEvent']
+        );
+
+        $this->assertSame($class, $this->container->get('bar'));
+    }
+}
+
+class Service
+{
+    private $class;
+
+    public function __construct($class)
+    {
+        $this->class = $class;
+    }
+
+    public function onEvent(\Enlight_Event_EventArgs $e)
+    {
+        /** @var ProjectServiceContainer $container */
+        $container = $e->getSubject();
+        $container->set('bar', $this->class);
     }
 }
 

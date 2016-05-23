@@ -139,7 +139,7 @@ class Container extends BaseContainer
 
     /**
      * Loads the given resource.
-
+     *
      * @param string $name
      * @throws \Exception
      * @throws \Enlight_Exception
@@ -171,14 +171,11 @@ class Container extends BaseContainer
             array('subject' => $this)
         );
 
-        $service = null;
         try {
             if ($event) {
-                $service = $event->getReturn();
-                $this->services[$id] = $service;
+                $this->services[$id] = $event->getReturn();
             } else {
-                $service = parent::get($id, $invalidBehavior);
-                $this->services[$id] = $service;
+                $this->services[$id] = parent::get($id, $invalidBehavior);
             }
         } finally {
             $eventManager->notify(
@@ -186,7 +183,7 @@ class Container extends BaseContainer
             );
         }
 
-        return $service;
+        return $this->services[$id];
     }
 
     /**
