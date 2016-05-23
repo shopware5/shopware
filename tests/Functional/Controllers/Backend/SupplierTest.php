@@ -64,7 +64,7 @@ class Shopware_Tests_Controllers_Backend_SupplierTest extends Enlight_Components
     {
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
         /** @var Enlight_Controller_Response_ResponseTestCase */
-        $response = $this->dispatch('backend/supplier/getSuppliers');
+        $this->dispatch('backend/supplier/getSuppliers');
         $this->assertTrue($this->View()->success);
 
         $jsonBody = $this->View()->getAssign();
@@ -83,7 +83,7 @@ class Shopware_Tests_Controllers_Backend_SupplierTest extends Enlight_Components
     public function testAddSupplier()
     {
         $this->Request()->setMethod('POST')->setPost($this->supplierData);
-        $response = $this->dispatch('backend/supplier/createSupplier');
+        $this->dispatch('backend/supplier/createSupplier');
         $this->assertTrue($this->View()->success);
 
         $jsonBody = $this->View()->getAssign();
@@ -108,7 +108,7 @@ class Shopware_Tests_Controllers_Backend_SupplierTest extends Enlight_Components
         $supplier['name'] = '___testSupplier_UPDATE';
 
         $this->Request()->setMethod('POST')->setPost($supplier);
-        $response = $this->dispatch('backend/supplier/updateSupplier');
+        $this->dispatch('backend/supplier/updateSupplier');
         $this->assertTrue($this->View()->success);
 
         $jsonBody = $this->View()->getAssign();
@@ -129,7 +129,7 @@ class Shopware_Tests_Controllers_Backend_SupplierTest extends Enlight_Components
     public function testDeleteSupplier(array $lastSupplier)
     {
         $this->Request()->setMethod('POST')->setPost(array('id'=>$lastSupplier['id']));
-        $response = $this->dispatch('backend/supplier/deleteSupplier');
+        $this->dispatch('backend/supplier/deleteSupplier');
         $this->assertTrue($this->View()->success);
     }
 }

@@ -2,7 +2,9 @@
 
 namespace Shopware\Tests\Mink;
 
+use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Gherkin\Node\TableNode;
+use Behat\Mink\WebAssert;
 
 class AccountContext extends SubContext
 {
@@ -154,5 +156,24 @@ class AccountContext extends SubContext
         $addresses = $this->getMultipleElement($page, 'AddressBox');
 
         $page->chooseAddress($addresses, $name);
+    }
+
+    /**
+     * @Given /^I change my profile with "([^"]*)" "([^"]*)" "([^"]*)"$/
+     */
+    public function iChangeMyProfileWith($salutation, $firstname, $lastname)
+    {
+        $this->getPage('Account')->changeProfile($salutation, $firstname, $lastname);
+    }
+
+    /**
+     * @Given /^I should be welcome'd with with "([^"]*)"$/
+     */
+    public function iShouldBeWelcomeDWithWith($welcome)
+    {
+        $welcome = preg_replace("/\s\s+/", " ", $welcome);
+
+        $assert = new WebAssert($this->getSession());
+        $assert->pageTextContains($welcome);
     }
 }

@@ -127,7 +127,6 @@ class Shopware_Tests_Models_ShopRepositoryTest extends Enlight_Components_Test_C
      * @param $url
      * @param $shopName
      * @param bool $secure
-     * @internal param $mainShop
      */
     public function callGetActiveShopByRequest(Enlight_Controller_Request_Request $request, \Shopware\Models\Shop\Repository $repository, $url, $shopName, $secure = false)
     {

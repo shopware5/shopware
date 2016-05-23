@@ -512,7 +512,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
 
             $position["amount_netto"] = round($position["netto"] * $position["quantity"], 2);
 
-            $position["amount"] = $position["price"] * $position["quantity"];
+            $position["amount"] = round($position["price"] * $position["quantity"], 2);
 
             $this->_amountNetto +=  $position["amount_netto"];
             $this->_amount += $position["amount"];
@@ -554,8 +554,9 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
     public function getBilling()
     {
         $this->_billing =  new ArrayObject(Shopware()->Db()->fetchRow("
-        SELECT sob.*,sub.ustid,sub.customernumber FROM s_order_billingaddress AS sob
+        SELECT sob.*,sub.ustid,u.customernumber FROM s_order_billingaddress AS sob
         LEFT JOIN s_user_billingaddress AS sub ON sub.userID = ?
+        LEFT JOIN s_user u ON u.id = sub.userID
         WHERE sob.userID = ? AND
         sob.orderID = ?
         ", array($this->_userID, $this->_userID, $this->_id)), ArrayObject::ARRAY_AS_PROPS);

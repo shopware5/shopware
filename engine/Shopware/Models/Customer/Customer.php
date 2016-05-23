@@ -59,6 +59,12 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Customer extends LazyFetchModelEntity
 {
+    const ACCOUNT_MODE_CUSTOMER = 0;
+    const ACCOUNT_MODE_FAST_LOGIN = 1;
+
+    const CUSTOMER_TYPE_PRIVATE = 'private';
+    const CUSTOMER_TYPE_BUSINESS = 'business';
+
     /**
      * The id property is an identifier property which means
      * doctrine associations can be defined over this field
@@ -253,6 +259,52 @@ class Customer extends LazyFetchModelEntity
     private $lockedUntil = null;
 
     /**
+     * @var string $salutation
+     *
+     * @Assert\NotBlank
+     *
+     * @ORM\Column(name="salutation", type="text", nullable=false)
+     */
+    private $salutation;
+
+    /**
+     * @var string $title
+     * @ORM\Column(name="title", type="text", nullable=false)
+     */
+    private $title;
+
+    /**
+     * @var string $firstname
+     *
+     * @Assert\NotBlank
+     *
+     * @ORM\Column(name="firstname", type="text", nullable=false)
+     */
+    private $firstname;
+
+    /**
+     * Contains the unique customer number
+     * @var string $number
+     * @ORM\Column(name="customernumber", type="string", length=30, nullable=true)
+     */
+    protected $number = '';
+
+    /**
+     * @var string $lastname
+     *
+     * @Assert\NotBlank
+     *
+     * @ORM\Column(name="lastname", type="text", nullable=false)
+     */
+    private $lastname;
+
+    /**
+     * @var \DateTime $birthday
+     * @ORM\Column(name="birthday", type="date", nullable=true)
+     */
+    private $birthday;
+
+    /**
      * INVERSE SIDE
      * The billing property is the inverse side of the association between customer and billing.
      * The association is joined over the billing userID field and the id field of the customer
@@ -325,7 +377,6 @@ class Customer extends LazyFetchModelEntity
      */
     protected $priceGroup;
 
-
     /**
      * INVERSE SIDE
      *
@@ -365,6 +416,16 @@ class Customer extends LazyFetchModelEntity
      * @ORM\JoinColumn(name="default_shipping_address_id", referencedColumnName="id")
      */
     protected $defaultShippingAddress;
+
+    /**
+     * @var string
+     */
+    private $customerType;
+
+    /**
+     * @var array
+     */
+    protected $additional;
 
     /**
      * Class constructor. Initials the orders array and the date fields.
@@ -1112,5 +1173,153 @@ class Customer extends LazyFetchModelEntity
     public function setDefaultShippingAddress(Address $defaultShippingAddress)
     {
         $this->defaultShippingAddress = $defaultShippingAddress;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSalutation()
+    {
+        return $this->salutation;
+    }
+
+    /**
+     * @param string $salutation
+     */
+    public function setSalutation($salutation)
+    {
+        $this->salutation = $salutation;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param string $title
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFirstname()
+    {
+        return $this->firstname;
+    }
+
+    /**
+     * @param string $firstname
+     */
+    public function setFirstname($firstname)
+    {
+        $this->firstname = $firstname;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLastname()
+    {
+        return $this->lastname;
+    }
+
+    /**
+     * @param string $lastname
+     */
+    public function setLastname($lastname)
+    {
+        $this->lastname = $lastname;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getBirthday()
+    {
+        return $this->birthday;
+    }
+
+    /**
+     * @param \DateTime|string $birthday
+     */
+    public function setBirthday($birthday = null)
+    {
+        if ($birthday instanceof \DateTime) {
+            $birthday = $birthday->format('Y-m-d');
+        }
+
+        $this->birthday = $birthday;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEncoderName()
+    {
+        return $this->encoderName;
+    }
+
+    /**
+     * @param string $encoderName
+     */
+    public function setEncoderName($encoderName)
+    {
+        $this->encoderName = $encoderName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNumber()
+    {
+        return $this->number;
+    }
+
+    /**
+     * @param string $number
+     */
+    public function setNumber($number)
+    {
+        $this->number = $number;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCustomerType()
+    {
+        return $this->customerType;
+    }
+
+    /**
+     * @param string $customerType
+     */
+    public function setCustomerType($customerType)
+    {
+        $this->customerType = $customerType;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAdditional()
+    {
+        return $this->additional;
+    }
+
+    /**
+     * @param array $additional
+     */
+    public function setAdditional($additional)
+    {
+        $this->additional = $additional;
     }
 }

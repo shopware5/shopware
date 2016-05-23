@@ -32,13 +32,11 @@ interface AddressServiceInterface
     /**
      * @param Address $address
      * @param Customer $customer
-     * @return Address
      */
     public function create(Address $address, Customer $customer);
 
     /**
      * @param Address $address
-     * @return Address
      */
     public function update(Address $address);
 
@@ -48,20 +46,12 @@ interface AddressServiceInterface
     public function delete(Address $address);
 
     /**
-     * Searches all customer addresses for the given data
+     * Validates the given address with the current shop configuration
      *
-     * @param array $data
-     * @param int $customerId
+     * @param Address $address
      * @return bool
      */
-    public function isDuplicate(array $data, $customerId);
-
-    /**
-     * @param Address $address
-     * @param array $data
-     * @return \Shopware\Models\Attribute\CustomerAddress
-     */
-    public function saveAttribute(Address $address, array $data = []);
+    public function isValid(Address $address);
 
     /**
      * Sets the address to the default billing address in the customer model

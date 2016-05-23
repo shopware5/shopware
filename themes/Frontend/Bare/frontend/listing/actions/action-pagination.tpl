@@ -28,7 +28,7 @@
     {* Pagination - current page *}
     {block name='frontend_listing_actions_paging_numbers'}
         {if $pages > 1}
-            <a title="{$sCategoryInfo.name|escape}" class="paging--link is--active">{$sPage}</a>
+            <a title="{$sCategoryContent.name|escape}" class="paging--link is--active">{$sPage}</a>
         {/if}
     {/block}
 

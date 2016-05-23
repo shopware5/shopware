@@ -159,9 +159,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         $viewAssignments = array(
             'sBanner' => Shopware()->Modules()->Marketing()->sBanner($categoryId),
             'sBreadcrumb' => $this->getBreadcrumb($categoryId),
-            'sCategoryInfo' => $categoryContent,
             'sCategoryContent' => $categoryContent,
-            'campaigns' => $this->getCampaigns($categoryId),
             'activeFilterGroup' => $this->request->getQuery('sFilterGroup'),
             'hasEscapedFragment' => $this->Request()->has('_escaped_fragment_'),
             'ajaxCountUrlParams' => ['sCategory' => $categoryContent['id']]
@@ -316,26 +314,6 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         $content['title'] = $manufacturer->getName();
 
         return $content;
-    }
-
-    /**
-     * @param $categoryId
-     * @return array
-     */
-    private function getCampaigns($categoryId)
-    {
-        /**@var $repository \Shopware\Models\Emotion\Repository */
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Emotion\Emotion');
-
-        $campaignsResult = $repository->getCampaignByCategoryQuery($categoryId)
-            ->getArrayResult();
-
-        $campaigns = array();
-        foreach ($campaignsResult as $campaign) {
-            $campaign['categoryId'] = $categoryId;
-            $campaigns[$campaign['landingPageBlock']][] = $campaign;
-        }
-        return $campaigns;
     }
 
     /**

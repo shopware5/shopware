@@ -57,7 +57,8 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
      * Define the width of the window
      * @integer
      */
-    width:1020,
+    width:'80%',
+
     /**
      * Define the height of the window
      * @integer
@@ -102,7 +103,13 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
         orderTab:'{s name=window/order_tab}Orders{/s}',
         addressTab:'{s name=window/address_tab}Addresses{/s}',
         from:'{s name=window/from_date}From{/s}',
-        to:'{s name=window/to_date}To{/s}'
+        to:'{s name=window/to_date}To{/s}',
+        field_title: '{s name=base/field_title}Title{/s}',
+        salutation: {
+            label: '{s name=base/salutation}Salutation{/s}'
+        },
+        firstname: '{s name=base/firstname}Firstname{/s}',
+        lastname: '{s name=base/lastname}Lastname{/s}'
     },
 
     /**
@@ -231,11 +238,20 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
         me.baseFieldSet = Ext.create('Shopware.apps.Customer.view.detail.Base', { record: me.record });
         me.commentFieldSet = Ext.create('Shopware.apps.Customer.view.detail.Comment', { record: me.record });
         me.debitFieldSet = Ext.create('Shopware.apps.Customer.view.detail.Debit', { record: me.record });
+        me.personalFieldSet = me.createPersonalFieldSet();
 
         if (me.record.get('id')) {
             me.addressFieldSet = me.createAddressFieldSet();
         } else {
             me.addressFieldSet = me.createAddressForm();
+        }
+
+        me.attributeForm = Ext.create('Shopware.attribute.Form', {
+            table: 's_user_attributes'
+        });
+
+        if (me.record) {
+            me.attributeForm.loadAttribute(me.record.get('id'));
         }
 
         me.detailForm = Ext.create('Ext.form.Panel', {
@@ -246,9 +262,11 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
             autoScroll:true,
             items:[
                 me.baseFieldSet,
+                me.personalFieldSet,
                 me.addressFieldSet,
                 me.debitFieldSet,
-                me.commentFieldSet
+                me.commentFieldSet,
+                me.attributeForm
             ],
             dockedItems: [{
                 xtype: 'toolbar',
@@ -266,6 +284,67 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
             [
                 additional,
                 me.detailForm
+            ]
+        });
+    },
+
+    createPersonalFieldSet: function() {
+        var me = this;
+
+        me.customerSalutation = Ext.create('Ext.form.field.ComboBox', {
+            triggerAction: 'all',
+            fieldLabel: me.snippets.salutation.label,
+            labelWidth: 155,
+            name: 'salutation',
+            editable: false,
+            allowBlank: false,
+            valueField: 'key',
+            displayField: 'label',
+            store: Ext.create('Shopware.apps.Base.store.Salutation').load()
+        });
+
+        me.customerTitle = Ext.create('Ext.form.field.Text', {
+            fieldLabel: me.snippets.field_title,
+            labelWidth: 155,
+            name: 'title',
+            allowBlank: true
+        });
+
+        me.customerFirstname = Ext.create('Ext.form.field.Text', {
+            fieldLabel: me.snippets.firstname,
+            labelWidth: 155,
+            name: 'firstname',
+            allowBlank: false,
+            required: true
+        });
+
+        me.customerLastname = Ext.create('Ext.form.field.Text', {
+            fieldLabel: me.snippets.lastname,
+            labelWidth: 155,
+            name: 'lastname',
+            allowBlank: false,
+            required: true
+        });
+
+        return Ext.create('Ext.form.FieldSet', {
+            layout: 'column',
+            title: '{s name="personal_field_set"}{/s}',
+            defaults: {
+                xtype: 'container',
+                columnWidth:0.5,
+                border:false,
+                cls: Ext.baseCSSPrefix + 'field-set-container',
+                layout:'anchor',
+                defaults: {
+                    anchor:'95%',
+                    labelWidth:155,
+                    minWidth:250,
+                    xtype:'textfield'
+                }
+            },
+            items: [
+                { items: [me.customerSalutation,me.customerTitle] },
+                { items: [me.customerFirstname, me.customerLastname] }
             ]
         });
     },
@@ -473,6 +552,8 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
                             '<span>{department}</span>',
                         '</p>',
                         '<p>',
+                            '<span>{salutationSnippet}</span>&nbsp;',
+                            '<tpl if="title"><span>{title}</span><br /></tpl>',
                             '<span>{firstName}</span>&nbsp;',
                             '<span>{lastName}</span>',
                         '</p>',

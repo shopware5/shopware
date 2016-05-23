@@ -20,20 +20,14 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  *
- * @category   Shopware
- * @package    UserManager
- * @subpackage Controller
- * @version    $Id$
- * @author shopware AG
+ * @category    Shopware
+ * @package     Emotion
+ * @subpackage  View
+ * @version     $Id$
+ * @author      shopware AG
  */
 
 //{namespace name=backend/emotion/view/detail}
-
-/**
- * Shopware UI - Emotion Main Controller
- *
- * This file contains the business logic for the Emotion module.
- */
 //{block name="backend/emotion/controller/detail"}
 Ext.define('Shopware.apps.Emotion.controller.Detail', {
 
@@ -41,39 +35,50 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
      * Extend from the standard ExtJS 4 controller
      * @string
      */
-	extend: 'Ext.app.Controller',
+    extend: 'Ext.app.Controller',
 
     refs: [
         { ref: 'mainWindow', selector: 'emotion-main-window' },
         { ref: 'detailWindow', selector: 'emotion-detail-window' },
+        { ref: 'sidebar', selector: 'emotion-detail-window tabpanel[name=sidebar]' },
         { ref: 'settingsForm', selector: 'emotion-detail-window emotion-detail-settings' },
+        { ref: 'layoutForm', selector: 'emotion-detail-window emotion-detail-layout' },
+        { ref: 'designerGrid', selector: 'emotion-detail-window emotion-detail-grid' },
+        { ref: 'designerPreview', selector: 'emotion-detail-window emotion-detail-preview' },
         { ref: 'listing', selector: 'emotion-main-window emotion-list-grid' },
-        { ref: 'deleteButton', selector: 'emotion-main-window button[action=emotion-list-toolbar-delete]' }
+        { ref: 'deleteButton', selector: 'emotion-main-window button[action=emotion-list-toolbar-delete]' },
+        { ref: 'attributeForm', selector: 'emotion-detail-window shopware-attribute-form' }
     ],
 
     snippets: {
-        successTitle: '{s name=save/success/title}Successful{/s}',
-        errorTitle: '{s name=save/error/title}Error{/s}',
-        warningTitle: '{s name=save/warning/title}Warning{/s}',
-        saveWarningMessage: '{s name=save/warning/message}This emotion exists already.{/s}',
-        saveSuccessMessage: '{s name=save/success/message}The emotion [0] has been saved.{/s}',
-        saveErrorMessage: '{s name=save/error/message}An error has occurred while saving the emotion:{/s}',
-        onSaveChangesNotValid: '{s name=save/error/not_valid}All required fields have not been filled{/s}',
-        removeSuccessMessage: '{s name=remove/success/message}Emotion(s) has been removed{/s}',
-        removeErrorMessage: '{s name=remove/error/message}An error has occurred while removing the emotion(s):{/s}',
-		growlMessage: '{s name=growlMessage}Emotion{/s}',
-		confirmMessage: '{s name=confirmMessage}Are you sure you want to delete the selected emotion?{/s}'
+        successTitle: '{s name=save/success/title}{/s}',
+        errorTitle: '{s name=save/error/title}{/s}',
+        warningTitle: '{s name=save/warning/title}{/s}',
+        saveWarningMessage: '{s name=save/warning/message}{/s}',
+        saveSuccessMessage: '{s name=save/success/message}{/s}',
+        saveErrorMessage: '{s name=save/error/message}{/s}',
+        onSaveChangesNotValid: '{s name=save/error/not_valid}{/s}',
+        removeSuccessMessage: '{s name=remove/success/message}{/s}',
+        removeErrorMessage: '{s name=remove/error/message}{/s}',
+        growlMessage: '{s name=growlMessage}{/s}',
+        confirmMessage: '{s name=confirmMessage}{/s}',
+        saveComponentAlert: '{s name=error/not_all_required_fields_filled}{/s}',
+        duplicateErrorMsg: '{s name=duplicate/error_msg}{/s}',
+        duplicateSuccessMsg: '{s name=duplicate/success_msg}{/s}',
+        removeColTitle: '{s name="settings/grid/removeColTitel"}{/s}',
+        removeColMsg: '{s name="settings/grid/removeColMsg"}{/s}',
+        emotionNotFoundMsg: '{s name="save/error/emotion_not_found"}{/s}'
     },
 
-	/**
-	 * Creates the necessary event listener for this
-	 * specific controller and opens a new Ext.window.Window
-	 * to display the subapplication
+    /**
+     * Creates the necessary event listener for this
+     * specific controller and opens a new Ext.window.Window
+     * to display the subapplication
      *
      * @return void
-	 */
-	init: function() {
-		var me = this;
+     */
+    init: function() {
+        var me = this;
 
         me.control({
             'emotion-detail-window': {
@@ -83,19 +88,27 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
                 'saveComponent': me.onSaveComponent
             },
             'emotion-detail-designer': {
-                'preview': me.onPreview
+                'preview': me.onPreview,
+                'closePreview': me.closePreview
             },
             'emotion-detail-grid': {
                 'openSettingsWindow': me.onOpenSettingsWindow
+            },
+            'emotion-detail-window emotion-detail-layout': {
+                'changeMode': me.onModeChange,
+                'changeColumns': me.onColumnsChange,
+                'updateGridByField': me.onUpdateGridByField
             },
             'emotion-main-window button[action=emotion-list-toolbar-add]': {
                 'click': me.onOpenDetail
             },
             'emotion-main-window emotion-list-grid': {
                 'editemotion': me.onEditEmotion,
+                'updateemotion': me.onUpdateEmotion,
                 'deleteemotion': me.removeEmotions,
                 'selectionChange': me.onSelectionChange,
-                'duplicateemotion': me.onDuplicateEmotion
+                'duplicateemotion': me.onDuplicateEmotion,
+                'preview': me.onPreviewEmotion
             },
             'emotion-main-window emotion-list-toolbar': {
                 'searchEmotions': me.onSearch,
@@ -108,7 +121,7 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
                 'saveBannerMapping': me.onSaveBannerMapping
             }
         });
-	},
+    },
 
     /**
      * Event listener function which fired when the user change the listing selection over the checkbox selection
@@ -141,32 +154,32 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
             grid = me.getListing(),
             store = grid.getStore();
 
-		Ext.MessageBox.confirm(me.snippets.growlMessage, me.snippets.confirmMessage , function (response) {
-			if ( response !== 'yes' ) {
-				return;
-			}
+        Ext.MessageBox.confirm(me.snippets.growlMessage, me.snippets.confirmMessage , function (response) {
+            if ( response !== 'yes' ) {
+                return;
+            }
 
-			if (!(store instanceof Ext.data.Store)) {
-				return;
-			}
-			store.remove(emotions);
-			store.sync({
-				callback: function(batch) {
-					var rawData = batch.proxy.getReader().rawData;
-					if (rawData.success === true) {
-						Shopware.Notification.createGrowlMessage(me.snippets.successTitle, me.snippets.removeSuccessMessage, me.snippets.growlMessage);
-					} else {
-						Shopware.Notification.createGrowlMessage(me.snippets.errorTitle, me.snippets.removeErrorMessage + '<br>' + rawData.message, me.snippets.growlMessage);
-					}
-				}
-			});
-		});
+            if (!(store instanceof Ext.data.Store)) {
+                return;
+            }
+            store.remove(emotions);
+            store.sync({
+                callback: function(batch) {
+                    var rawData = batch.proxy.getReader().rawData;
+                    if (rawData.success === true) {
+                        Shopware.Notification.createGrowlMessage(me.snippets.successTitle, me.snippets.removeSuccessMessage, me.snippets.growlMessage);
+                    } else {
+                        Shopware.Notification.createGrowlMessage(me.snippets.errorTitle, me.snippets.removeErrorMessage + '<br>' + rawData.message, me.snippets.growlMessage);
+                    }
+                }
+            });
+        });
     },
 
     /**
      * Event listener function which fired when the user insert a value into the search field.
-     * @param string value
      * @return void
+     * @param value
      */
     onSearch: function(value) {
         var me = this,
@@ -192,138 +205,156 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
 
     onSaveComponent: function(win, record, compFields) {
         var me = this,
-            form = win.down('form'),
-            data= [], fieldValue,
-            fieldKeys = [],
-            fields = form.getForm().getFields(),
+            detailWindow = me.getDetailWindow(),
+            formPanel = win.down('form'),
+            form = formPanel.getForm(),
+            data= [],
             cssField;
 
-        if(!form.getForm().isValid()) {
-            Shopware.Notification.createGrowlMessage(win.title, '{s name=error/not_all_required_fields_filled}Please fill out all required fields to save the component settings.{/s}');
+        if(!formPanel.getForm().isValid()) {
+            Shopware.Notification.createGrowlMessage(
+                win.title,
+                me.snippets.saveComponentAlert
+            );
+
             return false;
         }
 
-        compFields.each(function(item){
-            fieldKeys.push(item.get('name'));
-        });
+        compFields.each(function(compField) {
+            var formField = form.findField(compField.get('name'));
 
-        fields.each(function(field) {
-            if (Ext.Array.indexOf(fieldKeys, field.getName()) > -1) {
-                data.push(me.getFieldData(field, record));
+            if (formField !== null) {
+                data.push(me.getFieldData(formField, compField, record));
             }
         });
 
-        cssField = fields.findBy(function(item) {
-            return (item.cls && item.cls === 'css-field');
-        });
+        cssField = form.findField('cssClass');
 
-        record.set('cssClass', cssField.getValue());
+        record.set('cssClass', cssField.getValue() || '');
         record.set('data', data);
+
+        detailWindow.designer.grid.refresh();
+
         win.destroy();
     },
 
-    getFieldData: function(field, record) {
-        if (field.getName() === 'bannerMapping') {
-            var recordData = record.get('data'),
-                mapping = record.get('mapping');
+    getFieldData: function(formField, compField, record) {
+        var itemData = record.get('data'),
+            fieldName = formField.getName(),
+            data = {
+                id: null,
+                fieldId: compField.get('id'),
+                type: compField.get('valueType'),
+                key: fieldName
+            };
 
-            if(!mapping) {
-                Ext.each(recordData, function(el) {
-                    if(el.key === 'bannerMapping') {
-                        mapping = el.value;
+        Ext.each(itemData, function(item) {
+            if (item.key === fieldName) {
+                data['id'] = item['id'];
+                return false;
+            }
+        });
+
+        if (fieldName === 'banner_slider' ||
+            fieldName === 'bannerMapping' ||
+            fieldName === 'selected_manufacturers' ||
+            fieldName === 'selected_articles') {
+
+            data['value'] = record.get('mapping');
+
+            if (fieldName === 'bannerMapping' && !data['value']) {
+                Ext.each(itemData, function(el) {
+                    if (el.key === 'bannerMapping') {
+                        data['value'] = el.value;
                         return false;
                     }
                 });
             }
 
-            return {
-                id: field.fieldId,
-                type: field.valueType,
-                key: field.getName(),
-                value: mapping
-            };
-        } else if(field.getName() === 'banner_slider') {
-            return {
-                id: field.fieldId,
-                type: field.valueType,
-                key: field.getName(),
-                value: record.get('mapping')
-            };
-        } else if(field.getName() === 'selected_manufacturers') {
-            return {
-                id: field.fieldId,
-                type: field.valueType,
-                key: field.getName(),
-                value: record.get('mapping')
-            };
-        } else if(field.getName() === 'selected_articles') {
-            return {
-                id: field.fieldId,
-                type: field.valueType,
-                key: field.getName(),
-                value: record.get('mapping')
-            };
         } else {
-            return {
-                id: field.fieldId,
-                type: field.valueType,
-                key: field.getName(),
-                value: field.getValue()
-            };
+            data['value'] = formField.getValue()
         }
+
+        return data;
     },
 
     /**
      * Event will be fired when the user want to save the current emotion of the detail window
      * @param record
-     * @param dataViewStore
      * @param preview
      */
-    onSaveEmotion: function(record, dataViewStore, preview) {
-        var me = this, form = me.getSettingsForm(), win = me.getDetailWindow();
+    onSaveEmotion: function(record, preview) {
+        var me = this,
+            settings = me.getSettingsForm(),
+            attributeForm = me.getAttributeForm(),
+            sidebar = me.getSidebar(),
+            layout = me.getLayoutForm(),
+            win = me.getDetailWindow(),
+            activeTab = win.sidebar.items.indexOf(win.sidebar.getActiveTab());
 
-        if(Ext.isObject(preview)) {
+        if (Ext.isObject(preview)) {
             preview = false;
         }
 
-        form.getForm().updateRecord(record);
+        settings.getForm().updateRecord(record);
+        layout.getForm().updateRecord(record);
 
-        if (!form.getForm().isValid()) {
+        if (!settings.getForm().isValid()) {
+            sidebar.setActiveTab(0);
             Shopware.Notification.createGrowlMessage(me.snippets.errorTitle, me.snippets.onSaveChangesNotValid);
-            return;
+            return false;
         }
 
-        var elements = dataViewStore.getAt(0).get('elements');
-        record.getElements().removeAll();
-        record.getElements().add(elements);
+        if (!layout.getForm().isValid()) {
+            sidebar.setActiveTab(1);
+            Shopware.Notification.createGrowlMessage(me.snippets.errorTitle, me.snippets.onSaveChangesNotValid);
+            return false;
+        }
+
+
         record.save({
             callback: function(item) {
                 var rawData = item.proxy.getReader().rawData;
+
                 if (rawData.success === true) {
                     var message = Ext.String.format(me.snippets.saveSuccessMessage, record.get('name')),
-                        gridStore = me.getListing().getStore();
+                        listing = me.getListing(),
+                        gridStore = listing.getStore();
 
                     if (rawData.alreadyExists) {
-                        Shopware.Notification.createGrowlMessage(me.snippets.warningTitle, me.snippets.saveWarningMessage, me.snippets.growlMessage);
+                        Shopware.Notification.createGrowlMessage(
+                            me.snippets.warningTitle,
+                            me.snippets.saveWarningMessage,
+                            me.snippets.growlMessage
+                        );
                     }
 
-                    if(preview) {
+                    if (preview) {
                         return;
                     }
+
                     Shopware.Notification.createGrowlMessage(me.snippets.successTitle, message, me.snippets.growlMessage);
 
-                    me.loadEmotionRecord(record.get('id'), function(newRecord) {
-                        win.loadRecord(newRecord);
+                    win.showPreview = false;
+
+                    attributeForm.saveAttribute(record.get('id'), function() {
+                        me.loadEmotionRecord(record.get('id'), function(newRecord) {
+                            win.loadEmotion(newRecord, activeTab);
+                        });
                     });
 
                     gridStore.load();
-
-                    win.enableTabs();
                 } else {
-                    Shopware.Notification.createGrowlMessage(me.snippets.errorTitle, me.snippets.saveErrorMessage + '<br>' + rawData.message, me.snippets.growlMessage);
+                    Shopware.Notification.createGrowlMessage(
+                        me.snippets.errorTitle,
+                        me.snippets.saveErrorMessage + '<br>' + rawData.message,
+                        me.snippets.growlMessage
+                    );
                 }
             }
         });
+
+        return true;
     },
 
     onEditEmotion: function(scope, view, rowIndex, colIndex) {
@@ -337,6 +368,39 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
         );
     },
 
+    onUpdateEmotion: function(editor, context) {
+        var me = this,
+            record = context.record;
+
+        Ext.Ajax.request({
+            url: '{url controller="Emotion" action="updateStatusAndPosition"}',
+            params: {
+                id: record.get('id'),
+                active: record.get('active'),
+                position: record.get('position')
+            },
+            callback: function(operation, success, response) {
+                var result = Ext.JSON.decode(response.responseText);
+                if (success && result.success) {
+                    var message = Ext.String.format(me.snippets.saveSuccessMessage, record.get('name'));
+                    Shopware.Notification.createGrowlMessage(me.snippets.successTitle, message, me.snippets.growlMessage);
+
+                    me.getListing().getStore().load();
+                } else {
+                    var message = '';
+                    if (Ext.isDefined(result.emotion) && result.emotion == false) {
+                        message = me.snippets.emotionNotFoundMsg
+                    }
+                    Shopware.Notification.createGrowlMessage(
+                        me.snippets.errorTitle,
+                        me.snippets.saveErrorMessage + '<br>' + message,
+                        me.snippets.growlMessage
+                    );
+                }
+            }
+        });
+    },
+
     loadEmotionRecord: function(emotionId, callback) {
         var me = this,
             detailStore = me.getStore('Detail');
@@ -346,7 +410,7 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
         detailStore.load({
             callback: function(records, operation) {
                 if (operation.success) {
-                    callback(records[0]);
+                    Ext.callback(callback, me, [ records[0] ]);
                 }
             }
         });
@@ -358,45 +422,47 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
 
         me.getMainWindow().setLoading(true);
 
-        record = Ext.create('Shopware.apps.Emotion.model.Emotion', {
-            cols: 4,
-            rows: 20,
-            categoryId: null,
-            cellHeight: 185,
-            articleHeight: 2,
-            template: 'Standard'
-        });
+        record = Ext.create('Shopware.apps.Emotion.model.Emotion');
+
         me.openDetailWindow(record);
     },
 
-    openDetailWindow: function(record) {
+    openDetailWindow: function(record, options) {
         var me = this,
             libraryStore = me.getStore('Library'),
-            categoryPathStore = Ext.create('Shopware.apps.Emotion.store.CategoryPath'),
-            categoryStoreLoaded = false, libraryStoreLoaded = false;
-
-        var createWindow = function() {
-            me.getMainWindow().setLoading(false);
-            me.getView('detail.Window').create({
-                emotion: record,
-                libraryStore: libraryStore,
-                categoryPathStore: categoryPathStore
+            categoryStore = Ext.create('Shopware.apps.Emotion.store.CategoryPath'),
+            shopStore = Ext.create('Shopware.apps.Base.store.Shop', {
+                autoLoad: false,
+                filters: []
             });
-        };
 
-        categoryPathStore.getProxy().extraParams.parents = true;
-        categoryPathStore.load(function() {
-            categoryStoreLoaded = true;
-            if (libraryStoreLoaded) {
-                createWindow();
-            }
-        });
+        options = options || {};
+        options['emotion'] = record;
 
-        libraryStore.load(function() {
-            libraryStoreLoaded = true;
-            if (categoryStoreLoaded) {
-                createWindow();
-            }
+        categoryStore.getProxy().extraParams.parents = true;
+
+        var loadCounter = 0,
+            stores = [
+                { name: 'libraryStore', store: libraryStore },
+                { name: 'categoryStore', store: categoryStore },
+                { name: 'shopStore', store: shopStore }
+            ];
+
+        Ext.each(stores, function(item) {
+
+            item.store.load({
+                scope: me,
+                callback: function() {
+                    loadCounter++;
+
+                    options[item.name] = item.store;
+
+                    if (loadCounter === stores.length) {
+                        me.getMainWindow().setLoading(false);
+                        me.getView('detail.Window').create(options);
+                    }
+                }
+            });
         });
     },
 
@@ -408,35 +474,145 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
      * @param record
      * @param component
      * @param fields
+     * @param emotion
      */
-    onOpenSettingsWindow: function(view, record, component, fields, emotion, settings) {
+    onOpenSettingsWindow: function(view, record, component, fields, emotion) {
         this.getView('components.SettingsWindow').create({
             settings: {
                 record: record,
                 component: component,
                 fields: fields,
                 grid: emotion,
-                gridSettings: settings
+                gridSettings: emotion.getData()
             }
         });
     },
 
-    onPreview: function(view, deviceId, emotion, dataviewStore) {
+    onPreviewEmotion: function(emotionId) {
+        var me = this;
+
+        me.getMainWindow().setLoading(true);
+
+        me.loadEmotionRecord(
+            emotionId,
+            Ext.bind(me.openDetailWindow, me, {
+                'showPreview': true
+            }, true)
+        );
+    },
+
+    onPreview: function(view, viewport, emotion) {
         var me = this,
-            store =  view.dataviewStore,
-            settings = store.getAt(0).data.settings,
-            emotionName = settings.name,
-            emotionId = settings.id;
+            layoutForm = me.getLayoutForm(),
+            gridPanel = me.getDesignerGrid(),
+            previewPanel = me.getDesignerPreview();
 
-        me.onSaveEmotion(emotion, dataviewStore, true);
+        if (!me.onSaveEmotion(emotion, true)) {
+            gridPanel.designer.activePreview = false;
+            gridPanel.refresh();
+            return false;
+        }
 
-        this.getView('detail.Preview').create({
-            emotion: emotion,
-            dataviewStore: dataviewStore,
-            emotionId: emotionId,
-            emotionName: emotionName,
-            deviceId: deviceId
-        }).show();
+        layoutForm.setDisabled(true);
+
+        previewPanel.showPreview(viewport);
+        gridPanel.hide();
+    },
+
+    closePreview: function() {
+        var me = this,
+            layoutForm = me.getLayoutForm(),
+            gridPanel = me.getDesignerGrid(),
+            previewPanel = me.getDesignerPreview();
+
+        layoutForm.setDisabled(false);
+
+        previewPanel.hidePreview();
+        gridPanel.show();
+    },
+
+    onModeChange: function(record, mode) {
+        var me = this,
+            grid = me.getDesignerGrid();
+
+        mode = mode || 'fluid';
+
+        record.set('mode', mode);
+        grid.refresh();
+    },
+
+    onColumnsChange: function(record, value, columnField) {
+        var me = this,
+            currentValue = record.get('cols'),
+            elements = record.getElements(),
+            affectedElements = [],
+            viewports;
+
+        if (value < currentValue) {
+
+            elements.each(function(element) {
+                viewports = element.getViewports();
+
+                viewports.each(function(viewport) {
+                    if (viewport.get('endCol') > value && viewport.get('visible')) {
+                        affectedElements.push(element);
+                        return false;
+                    }
+                });
+            });
+
+            if (affectedElements.length > 0) {
+                Ext.MessageBox.confirm(
+                    me.snippets.removeColTitle,
+                    me.snippets.removeColMsg,
+                    function(response) {
+                        if (response !== 'yes') {
+                            columnField.setValue(currentValue);
+                            return false;
+                        }
+
+                        Ext.each(affectedElements, function(element) {
+                            viewports = element.getViewports();
+
+                            viewports.each(function(viewport) {
+                                if (viewport.get('startCol') > value) {
+                                    viewport.set('visible', false);
+                                }
+
+                                if (viewport.get('endCol') > value && viewport.get('visible')) {
+                                    viewport.set('endCol', value);
+                                }
+                            });
+                        });
+
+                        me.setColumns(record, value);
+                    }
+                );
+
+                return;
+
+            } else {
+                me.setColumns(record, value);
+            }
+        }
+
+        me.setColumns(record, value);
+    },
+
+    setColumns: function(record, cols) {
+        var me = this,
+            grid = me.getDesignerGrid();
+
+        record.set('cols', cols);
+        grid.refresh();
+    },
+
+    onUpdateGridByField: function(record, value, field) {
+        var me = this,
+            grid = me.getDesignerGrid();
+
+        record.set(field.name, value);
+        grid.refresh();
     },
 
     onOpenBannerMappingWindow: function(view, media, preview, element) {
@@ -472,10 +648,17 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
                 var response = Ext.decode(response.responseText);
 
                 if(!response.success) {
-                    Shopware.Notification.createGrowlMessage(me.snippets.growlMessage, '{s name=duplicate/error_msg}An error occurs while duplicating the selected emotion.{/s}');
+                    Shopware.Notification.createGrowlMessage(
+                        me.snippets.growlMessage,
+                        me.snippets.duplicateErrorMsg
+                    );
+
                     return false;
                 } else {
-                    Shopware.Notification.createGrowlMessage(me.snippets.growlMessage, '{s name=duplicate/success_msg}The selected emotion was successful duplicated.{/s}');
+                    Shopware.Notification.createGrowlMessage(
+                        me.snippets.growlMessage,
+                        me.snippets.duplicateSuccessMsg
+                    );
                 }
 
                 me.getListing().getStore().load();

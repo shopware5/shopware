@@ -49,7 +49,7 @@ class Shopware_Tests_Controllers_Backend_RiskManagementTest extends Enlight_Comp
     public function testGetPayments()
     {
         /** @var Enlight_Controller_Response_ResponseTestCase */
-        $response = $this->dispatch('backend/risk_management/getPayments');
+        $this->dispatch('backend/risk_management/getPayments');
         $this->assertTrue($this->View()->success);
 
         $jsonBody = $this->View()->getAssign();
@@ -141,7 +141,7 @@ class Shopware_Tests_Controllers_Backend_RiskManagementTest extends Enlight_Comp
     {
         $this->Request()->setMethod('POST')->setPost(array('id'=>$lastId));
 
-        $response = $this->dispatch('backend/risk_management/deleteRule');
+        $this->dispatch('backend/risk_management/deleteRule');
 
         $jsonBody = $this->View()->getAssign();
 

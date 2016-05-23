@@ -56,6 +56,11 @@ class VoteGateway implements Gateway\VoteGatewayInterface
     private $fieldHelper;
 
     /**
+     * @var Connection
+     */
+    private $connection;
+
+    /**
      * @param Connection $connection
      * @param FieldHelper $fieldHelper
      * @param Hydrator\VoteHydrator $voteHydrator

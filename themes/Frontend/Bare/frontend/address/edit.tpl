@@ -1,4 +1,4 @@
-{extends file="parent:frontend/address/index.tpl"}
+{extends file="frontend/address/index.tpl"}
 {namespace name="frontend/address/index"}
 
 {* Breadcrumb *}
@@ -8,7 +8,7 @@
 
 {* Main content *}
 {block name="frontend_index_content"}
-    <div class="account--addresses account--addresses-form account--content" data-register="true">
+    <div class="account--address account--address-form account--content" data-register="true">
 
         {* Address headline *}
         {block name="frontend_address_form_headline"}
@@ -20,7 +20,16 @@
         {/block}
 
         {block name="frontend_address_form_content"}
-            {include file="frontend/address/form.tpl" formAction="{url controller=address action=edit id=$formData.id}"}
+            {if $sTarget}
+                {$url={url controller=address action=edit id=$formData.id sTarget=$sTarget sTargetAction=$sTargetAction}}
+            {else}
+                {$url={url controller=address action=edit id=$formData.id}}
+            {/if}
+            <div class="panel has--border is--rounded">
+                <form name="frmAddresses" method="post" action="{$url}">
+                    {include file="frontend/address/form.tpl" formAction="{$url}"}
+                </form>
+            </div>
         {/block}
 
     </div>

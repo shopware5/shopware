@@ -23,7 +23,7 @@ class ManufacturerFacetTest extends TestCase
         $number,
         ProductContext $context,
         Category $category = null,
-        Supplier $manufacturer = null
+        $manufacturer = null
     ) {
         $product = parent::getProduct($number, $context, $category);
 

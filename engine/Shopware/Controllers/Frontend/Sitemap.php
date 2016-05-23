@@ -209,20 +209,39 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
         /** @var Shopware\Models\Emotion\Repository $emotionRepository */
         $emotionRepository = $this->get('models')->getRepository('Shopware\Models\Emotion\Emotion');
 
-        $builder = $emotionRepository->getCampaignsByCategoryId(Shopware()->Shop()->getCategory()->getId());
+        $shopId = Shopware()->Shop()->getId();
+        $fallbackId = null;
+
+        $fallbackShop = Shopware()->Shop()->getFallback();
+
+        if (!empty($fallbackShop)) {
+            $fallbackId = $fallbackShop->getId();
+        }
+
+        $translator = new Shopware_Components_Translation();
+
+        $builder = $emotionRepository->getCampaignsByShopId($shopId);
         $campaigns = $builder->getQuery()->getArrayResult();
 
         foreach ($campaigns as &$campaign) {
+            $translation = $translator->readWithFallback($shopId, $fallbackId, 'emotion', $campaign['id']);
+
+            $translation['seo_title'] = $translation['seoTitle'];
+            $translation['seo_keywords'] = $translation['seoKeywords'];
+            $translation['seo_description'] = $translation['seoDescription'];
+
+            $campaign = array_merge($campaign, $translation);
+
             $campaign['hideOnSitemap'] = !$this->filterCampaign(
-                $campaign[0]['validFrom'],
-                $campaign[0]['validTo']
+                $campaign['validFrom'],
+                $campaign['validTo']
             );
 
             $campaign = array_merge(
                 $campaign,
                 $this->getSitemapArray(
-                    $campaign[0]['id'],
-                    $campaign[0]['name'],
+                    $campaign['id'],
+                    $campaign['name'],
                     'campaign',
                     'emotionId'
                 )

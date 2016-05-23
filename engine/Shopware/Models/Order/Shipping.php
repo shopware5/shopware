@@ -122,6 +122,12 @@ class Shipping extends ModelEntity
     private $firstName = '';
 
     /**
+     * @var string
+     * @ORM\Column(name="title", type="string", length=100, nullable=true)
+     */
+    protected $title;
+
+    /**
      * Contains the last name of the shipping address
      * @var string $lastName
      * @ORM\Column(name="lastname", type="string", length=60, nullable=false)
@@ -547,11 +553,30 @@ class Shipping extends ModelEntity
         $this->setAdditionalAddressLine1((string) $address->getAdditionalAddressLine1());
         $this->setAdditionalAddressLine2((string) $address->getAdditionalAddressLine2());
         $this->setCountry($address->getCountry());
-
+        $this->setTitle($address->getTitle());
         if ($address->getState()) {
             $this->setState($address->getState());
         } else {
             $this->setState(null);
         }
+
+        $attributeData = Shopware()->Models()->toArray($address->getAttribute());
+        $this->setAttribute($attributeData);
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param string $title
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
     }
 }

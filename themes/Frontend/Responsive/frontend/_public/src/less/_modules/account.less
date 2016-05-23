@@ -17,7 +17,9 @@ It allows the user to directly see and change the important information of their
 }
 
 .account--content,
-.payment_logo_debit {
+.payment_logo_debit,
+.account-address--container,
+.account-info--container {
     .clearfix();
 }
 
@@ -76,7 +78,7 @@ It allows the user to directly see and change the important information of their
     }
 }
 
-    // Account error message margin
+// Account error message margin
 .account--error,
 .account--success {
     .unitize-margin(0, 0, 10, 0);
@@ -91,25 +93,11 @@ It allows the user to directly see and change the important information of their
     .clearfix();
 }
 
-    // Change Address / Payment method
-.account--change-billing,
-.account--change-shipping,
+// Change Address / Payment method
 .account--change-payment {
     &.register--content {
         display: block;
         width: 100%
-    }
-}
-
-.account--billing-address,
-.account--shipping-address {
-    .panel--body {
-        .unitize(height, 200)
-    }
-
-    .billing--actions,
-    .shipping--actions {
-        .unitize-padding(20, 0);
     }
 }
 
@@ -120,22 +108,6 @@ It allows the user to directly see and change the important information of their
     input[type="checkbox"] {
         .unitize-margin(0, 10, 0, 0);
     }
-}
-
-    // Select Address
-.account--addresses-content,
-.account--addresses-container {
-    .clearfix();
-}
-
-.account--addresses {
-    .clearfix();
-    width: 100%;
-}
-
-.address--container {
-    width: 100%;
-    padding: 2% 0 0 0;
 }
 
 .account--paging {
@@ -428,127 +400,92 @@ It allows the user to directly see and change the important information of their
     }
 }
 
-.account--content.account--addresses {
+.account--profile {
     .unitize(margin, 0);
-    .unitize(padding-top, 45);
+    .unitize(padding-top, 20);
 
-    .addresses--item-body .panel--title {
-        .unitize-margin(0, 0, 20, 0);
-        padding-top: 0;
-    }
-
-    .account--welcome {
-        margin-bottom: 0;
-    }
-
-    &.account--addresses-form {
-        .alert {
-            .unitize-margin(20, 18, 20, 18);
-        }
-    }
-
-    .addresses--action {
+    .profile--email-password-container {
         .clearfix();
-        .unitize-margin(20, 20);
-
-        .addresses--submit {
-            width: 100%;
-            text-align: center;
-        }
     }
 
-    .addresses--item-default-container {
-        .unitize(margin-bottom, 15);
-
-        h3 {
-            margin: 0;
-        }
+    .profile-password--container {
+        float: right;
+        width: 100%;
     }
 
-    .addresses--actions-set-defaults {
-        .unitize(margin-bottom, 10);
-        line-height: normal;
-
-        .btn {
-            padding: 0;
-            color: @brand-secondary;
-
-            &:hover {
-                color: @brand-primary;
-            }
-        }
+    .profile-email--container {
+        float: left;
+        width: 100%;
     }
 
-    .addresses--required-info {
-        .unitize-margin(0, 26, 16);
+    .alert {
+        .unitize(margin-bottom, 20);
+    }
+
+    .js--loading {
+        .unitize-width(18);
+        .unitize-height(18);
+        .border-radius(100%);
+        .unitize-margin(0, 0, 0, 5);
+        .unitize(top, 4);
+        .animation(keyframe--spin 1s linear infinite);
+        border: 2px solid @border-color;
+        border-top: 2px solid darken(@border-color, 50%);
+        display: inline-block;
+        position: relative;
+    }
+
+    .panel {
+        .unitize(margin-bottom, 20);
+    }
+
+    .required-info {
         .unitize(font-size, 14);
     }
 
     .js--fancy-select {
-        .unitize(margin-bottom, 5);
-        width: 100%;
-    }
-
-    .addresses--field {
         .unitize(margin-bottom, 10);
         width: 100%;
     }
 
-    .addresses--customertype {
-        display: block;
+    .profile--field {
+        .unitize(margin-bottom, 10);
+        width: 100%;
     }
 
-    .addresses--zip-city {
-        .addresses--field-zipcode {
+    .profile--zip-city {
+        .profile--field-zipcode {
             width: 28%;
             float: left;
         }
 
-        .addresses--field-city {
+        .profile--field-city {
             .clearfix();
             width: 70%;
             float: left;
         }
-
-        .addresses--spacer {
-            margin-right: 2%;
-        }
-
     }
 
-    &.addresses--delete {
-        .panel {
-            .unitize(margin-bottom, 20);
-        }
+    .birthday--label {
+        .unitize-margin(0, 0, 5, 0);
+        display: block;
+        font-weight: bold;
     }
 
-    .addresses--delete-actions .btn.is--primary {
-        float: right;
-    }
-
-    .addresses--content {
+    .profile--birthdate {
         .clearfix();
 
-        margin: -2% 0 0 -2%;
-    }
-
-    .addresses--content-item {
-        width: 100%;
-        float: left;
-        padding: 2% 0 0 2%;
-
-        .panel--actions {
-            display: table-cell;
-            vertical-align: bottom;
+        .js--fancy-select {
+            .unitize(margin-bottom, 15);
+            width: 100%;
+            float: left;
         }
-    }
 
-    .addresses--item-create .btn {
-        text-align: center;
-    }
+        .profile--birthyear,
+        .profile--birthyear .js--fancy-select {
+            .unitize(margin-right, 0);
+        }
 
-    .addresses--item-actions form {
-        display: block;
     }
 }
 
@@ -652,12 +589,6 @@ It allows the user to directly see and change the important information of their
     }
 
     // Select Address
-    .address--container {
-        width: 50%;
-        float: left;
-        padding: 2% 0 0 2%;
-    }
-
     .account--orders-overview {
         .orders--table-header {
             display: block;
@@ -914,8 +845,32 @@ It allows the user to directly see and change the important information of their
         }
     }
 
-    .account--addresses-container {
-        margin: -2% 0 0 -2%;
+    .account--profile {
+        .unitize(margin, 0);
+        .unitize(padding-top, 30);
+
+        .js--fancy-select {
+            .unitize(margin-bottom, 15);
+
+            .profile--birthday {
+                margin-right: 2%;
+            }
+        }
+
+        .profile--field {
+            .unitize(margin-bottom, 15);
+        }
+
+        .js--fancy-select {
+            .unitize-width(290);
+        }
+
+        .profile--birthdate {
+            .js--fancy-select {
+                width: 32%;
+                margin-right: 2%;
+            }
+        }
     }
 }
 
@@ -934,12 +889,14 @@ It allows the user to directly see and change the important information of their
     }
 
     .account--email,
-    .account--password {
+    .account--password,
+    .account--userdata {
         display: none;
     }
 
     .account--email,
     .account--password,
+    .account--userdata,
     .account--newsletter {
         clear: both;
     }
@@ -955,53 +912,16 @@ It allows the user to directly see and change the important information of their
         }
     }
 
-    .account--billing,
-    .account--shipping {
-        .panel--body {
-            .unitize-height(220);
-        }
-    }
-
-    .account--addresses.account--content {
-
-        .addresses--field {
-            .unitize(margin-bottom, 15);
-            width: 70%;
+    .account--profile {
+        .profile-password--container {
+            float: right;
+            width: 49%;
         }
 
-        .js--fancy-select {
-            width: 70%;
-        }
-
-        .addresses--customertype .js--fancy-select,
-        .addresses--salutation .js--fancy-select {
-            width: 40%;
-        }
-
-        .addresses--form-actions {
-            .clearfix();
-        }
-
-        .addresses--content-item {
-            width: 50%;
-        }
-
-        .addresses--zip-city {
-            .addresses--field-zipcode {
-                width: 18%;
-                float: left;
-            }
-
-            .addresses--field-city {
-                .clearfix();
-                width: 50%;
-                float: left;
-            }
-
-            .addresses--spacer {
-                margin-right: 2%;
-            }
-
+        .profile-email--container {
+            float: left;
+            width: 49%;
+            margin-right: 2%;
         }
     }
 }

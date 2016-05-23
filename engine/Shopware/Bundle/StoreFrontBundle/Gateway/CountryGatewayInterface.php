@@ -105,4 +105,11 @@ interface CountryGatewayInterface
      * @return Struct\Country\State
      */
     public function getState($id, Struct\ShopContextInterface $context);
+
+    /**
+     * @param int[] $countryIds
+     * @param Struct\ShopContextInterface $context
+     * @return array indexed by country id contains an array of Struct\Country\State
+     */
+    public function getCountryStates($countryIds, Struct\ShopContextInterface $context);
 }

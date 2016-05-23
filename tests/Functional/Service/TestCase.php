@@ -247,7 +247,8 @@ class TestCase extends \Enlight_Components_Test_TestCase
     protected function getProduct(
         $number,
         ProductContext $context,
-        Category $category = null
+        Category $category = null,
+        $additionally = null
     ) {
         $product = $this->helper->getSimpleProduct(
             $number,

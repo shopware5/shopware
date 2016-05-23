@@ -24,9 +24,7 @@
 
 namespace Shopware\Commands;
 
-use Shopware\Components\Theme\Generator;
 use Shopware\Components\Theme\Installer;
-use Shopware\Models\Shop\Template;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;

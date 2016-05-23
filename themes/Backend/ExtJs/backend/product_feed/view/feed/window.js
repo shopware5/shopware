@@ -86,6 +86,53 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.Window', {
      */
     createFormPanel: function(){
         var me = this;
+
+        me.tabPanel = Ext.create('Ext.tab.Panel', {
+            minHeight: 320,
+            flex: 1,
+            items: [
+                {
+                    xtype:'product_feed-feed-tab-format'
+                },
+                {
+                    xtype:'product_feed-feed-tab-header'
+                },
+                {
+                    xtype:'product_feed-feed-tab-body'
+                },
+                {
+                    xtype:'product_feed-feed-tab-footer'
+                },
+                {
+                    xtype:'product_feed-feed-tab-category',
+                    availableCategoriesTree: me.availableCategoriesTree,
+                    record: me.record
+                },
+                {
+                    xtype:'product_feed-feed-tab-supplier',
+                    supplierStore: me.supplierStore,
+                    record: me.record
+                },
+                {
+                    xtype:'product_feed-feed-tab-article',
+                    articleStore: me.articleStore,
+                    record: me.record
+                },
+                {
+                    xtype:'product_feed-feed-tab-filter'
+                }
+            ]
+        });
+        me.attributeForm = Ext.create('Shopware.attribute.Form', {
+            table: 's_export_attributes',
+            title: '{s namespace="backend/attributes/main" name="attribute_form_title"}{/s}',
+            bodyPadding: 20,
+            autoScroll: true,
+            tabPanel: me.tabPanel
+        });
+
+        me.tabPanel.add(me.attributeForm);
+
         return Ext.create('Ext.form.Panel', {
             layout: {
                 type: 'vbox',
@@ -102,42 +149,7 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.Window', {
                     availableCategoriesTree: me.availableCategoriesTree,
                     style:'padding: 10px'
                 },
-                {
-                    xtype: 'tabpanel',
-                    minHeight: 320,
-                    items: [
-                        {
-                            xtype:'product_feed-feed-tab-format'
-                        },
-                        {
-                            xtype:'product_feed-feed-tab-header'
-                        },
-                        {
-                            xtype:'product_feed-feed-tab-body'
-                        },
-                        {
-                            xtype:'product_feed-feed-tab-footer'
-                        },
-                        {
-                            xtype:'product_feed-feed-tab-category',
-                            availableCategoriesTree: me.availableCategoriesTree,
-                            record: me.record
-                        },
-                        {
-                            xtype:'product_feed-feed-tab-supplier',
-                            supplierStore: me.supplierStore,
-                            record: me.record
-                        },
-                        {
-                            xtype:'product_feed-feed-tab-article',
-                            articleStore: me.articleStore,
-                            record: me.record
-                        },
-                        {
-                            xtype:'product_feed-feed-tab-filter'
-                        }
-                    ]
-                }
+                me.tabPanel
             ]
         });
     },

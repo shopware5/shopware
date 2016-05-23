@@ -26,5 +26,9 @@ return array_merge($this->loadConfig($this->AppPath() . 'Configs/Default.php'), 
         'display_errors' => 1,
         'date.timezone' => 'Europe/Berlin',
         'max_execution_time' => 0
+    ),
+    'csrfProtection' => array(
+        'frontend' => false,
+        'backend' => false
     )
 ));

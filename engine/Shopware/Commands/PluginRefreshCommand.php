@@ -24,9 +24,7 @@
 
 namespace Shopware\Commands;
 
-use Shopware\Components\DependencyInjection\Container;
-use Shopware\Components\DependencyInjection\ContainerAwareInterface;
-use Shopware\Components\Model\ModelManager;
+use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -56,7 +54,7 @@ class PluginRefreshCommand extends ShopwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        /** @var Manager $pluginManager */
+        /** @var  InstallerService $pluginManager */
         $pluginManager  = $this->container->get('shopware_plugininstaller.plugin_manager');
         $pluginManager->refreshPluginList();
 

@@ -75,6 +75,8 @@
         <service id="shopware_storefront.similar_products_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\SimilarProductsService">
             <argument type="service" id="shopware_storefront.similar_products_gateway"/>
             <argument type="service" id="shopware_storefront.list_product_service"/>
+            <argument type="service" id="shopware_search.product_search"/>
+            <argument type="service" id="shopware_search.store_front_criteria_factory"/>
             <argument type="service" id="config" />
         </service>
 
@@ -282,6 +284,7 @@
             <argument type="service" id="shopware_storefront.customer_group_hydrator_dbal"/>
             <argument type="service" id="shopware_storefront.unit_hydrator_dbal"/>
             <argument type="service" id="shopware_storefront.attribute_hydrator_dbal"/>
+            <argument type="service" id="shopware_storefront.product_hydrator_dbal" />
         </service>
 
         <service id="shopware_storefront.manufacturer_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\ManufacturerHydrator">
@@ -316,13 +319,17 @@
             <argument type="service" id="shopware_storefront.attribute_hydrator_dbal"/>
         </service>
 
-        <service id="shopware_storefront.attribute_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\AttributeHydrator"/>
+        <service id="shopware_storefront.attribute_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\AttributeHydrator">
+            <argument type="service" id="shopware_storefront.field_helper_dbal" />
+        </service>
 
         <service id="shopware_storefront.tax_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\TaxHydrator"/>
 
         <service id="shopware_storefront.unit_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\UnitHydrator"/>
 
-        <service id="shopware_storefront.product_stream_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\ProductStreamHydrator"/>
+        <service id="shopware_storefront.product_stream_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\ProductStreamHydrator">
+            <argument type="service" id="shopware_storefront.attribute_hydrator_dbal" />
+        </service>
 
         <service id="shopware_storefront.vote_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\VoteHydrator"/>
 
@@ -367,6 +374,9 @@
             <argument type="service" id="dbal_connection" />
         </service>
 
-
+        <service id="shopware_storefront.location_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\LocationService">
+            <argument type="service" id="shopware_storefront.country_gateway" />
+            <argument type="service" id="dbal_connection" />
+        </service>
     </services>
 </container>

@@ -208,26 +208,36 @@ class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Action
         $this->View()->Engine()->setCompileId($this->View()->Engine()->getCompileId() . '_' . $this->Request()->getControllerName());
 
         foreach ($fileNames as $fileName) {
+            // Remove unwanted characters
+            $fileName = preg_replace('/[^a-z0-9\/_-]/i', '', $fileName);
+
+            // Replace multiple forward slashes
+            $fileName = preg_replace('#/+#', '/', $fileName);
+
+            // Remove leading and trailing forward slash
+            $fileName = trim($fileName, '/');
+
             // if string starts with "m/" replace with "model/"
             $fileName = preg_replace('/^m\//', 'model/', $fileName);
             $fileName = preg_replace('/^c\//', 'controller/', $fileName);
             $fileName = preg_replace('/^v\//', 'view/', $fileName);
 
-            $fileName = ltrim(dirname($fileName) . '/' . basename($fileName, '.js'), '/.');
             if (empty($fileName)) {
                 continue;
             }
+
             $templateBase = $inflector->filter(array(
-                'module' => $moduleName,
+                'module'     => $moduleName,
                 'controller' => $controllerName,
-                'file' => $fileName)
-            );
+                'file'       => $fileName
+            ));
 
             $templateExtend = $inflector->filter(array(
-                'module' => $moduleName,
+                'module'     => $moduleName,
                 'controller' => $this->Request()->getControllerName(),
-                'file' => $fileName)
-            );
+                'file'       => $fileName
+            ));
+
             if ($this->View()->templateExists($templateBase)) {
                 $template .= '{include file="' . $templateBase. '"}' . "\n";
             }

@@ -37,6 +37,7 @@ class PropertyHydrator extends Hydrator
      * @var AttributeHydrator
      */
     private $attributeHydrator;
+
     /**
      * @var MediaHydrator
      */
@@ -90,7 +91,6 @@ class PropertyHydrator extends Hydrator
             $sets[$setId] = $set;
 
             $group->setOptions($options);
-
             $set->setGroups($groups);
         }
 
@@ -113,12 +113,7 @@ class PropertyHydrator extends Hydrator
     private function hydrateSet(array $data)
     {
         $set = new Struct\Property\Set();
-        $translation = $this->getTranslation(
-            $data,
-            '__propertySet_translation',
-            '__propertySet_translation_fallback',
-            ['groupName' => '__propertySet_name']
-        );
+        $translation = $this->getTranslation($data, '__propertySet', ['groupName' => 'name']);
         $data = array_merge($data, $translation);
 
         $set->setId((int) $data['__propertySet_id']);
@@ -127,8 +122,7 @@ class PropertyHydrator extends Hydrator
         $set->setSortMode((int) $data['__propertySet_sortmode']);
 
         if ($data['__propertySetAttribute_id']) {
-            $attribute = $this->extractFields('__propertySetAttribute_', $data);
-            $set->addAttribute('core', $this->attributeHydrator->hydrate($attribute));
+            $this->attributeHydrator->addAttribute($set, $data, 'propertySetAttribute');
         }
 
         return $set;
@@ -141,18 +135,16 @@ class PropertyHydrator extends Hydrator
     public function hydrateGroup(array $data)
     {
         $group = new Struct\Property\Group();
-        $translation = $this->getTranslation(
-            $data,
-            '__propertyGroup_translation',
-            '__propertyGroup_translation_fallback',
-            ['optionName' => '__propertyGroup_name']
-        );
+        $translation = $this->getTranslation($data, '__propertyGroup', ['optionName' => 'name']);
         $data = array_merge($data, $translation);
 
         $group->setId((int) $data['__propertyGroup_id']);
         $group->setName($data['__propertyGroup_name']);
         $group->setFilterable((bool) $data['__propertyGroup_filterable']);
 
+        if ($data['__propertyGroupAttribute_id']) {
+            $this->attributeHydrator->addAttribute($group, $data, 'propertyGroupAttribute');
+        }
         return $group;
     }
 
@@ -163,17 +155,16 @@ class PropertyHydrator extends Hydrator
     public function hydrateOption(array $data)
     {
         $option = new Struct\Property\Option();
-        $translation = $this->getTranslation(
-            $data,
-            '__propertyOption_translation',
-            '__propertyOption_translation_fallback',
-            ['optionValue' => '__propertyOption_value']
-        );
+        $translation = $this->getTranslation($data, '__propertyOption', ['optionValue' => 'value']);
         $data = array_merge($data, $translation);
 
         $option->setId((int) $data['__propertyOption_id']);
         $option->setName($data['__propertyOption_value']);
         $option->setPosition((int) $data['__propertyOption_position']);
+
+        if ($data['__propertyOptionAttribute_id']) {
+            $this->attributeHydrator->addAttribute($option, $data, 'propertyOptionAttribute');
+        }
 
         if (isset($data['__media_id']) && $data['__media_id']) {
             $option->setMedia(
@@ -183,38 +174,6 @@ class PropertyHydrator extends Hydrator
 
         return $option;
     }
-
-    /**
-     * @param array $data
-     * @param string $arrayKey
-     * @param string $fallbackArrayKey
-     * @param array $mapping
-     * @return array
-     */
-    private function getTranslation(array $data, $arrayKey, $fallbackArrayKey, array $mapping)
-    {
-        if (!isset($data[$arrayKey])
-            || empty($data[$arrayKey])
-        ) {
-            $translation = [];
-        } else {
-            $translation = unserialize($data[$arrayKey]);
-        }
-
-        if (isset($data[$fallbackArrayKey])
-            && !empty($data[$fallbackArrayKey])
-        ) {
-            $fallbackTranslation = unserialize($data[$fallbackArrayKey]);
-            $translation += $fallbackTranslation;
-        }
-
-        if (empty($translation)) {
-            return [];
-        }
-
-        return $this->convertArrayKeys($translation, $mapping);
-    }
-
 
     /**
      * Sort groups by position in set

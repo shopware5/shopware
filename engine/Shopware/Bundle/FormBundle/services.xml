@@ -12,6 +12,15 @@
             <argument type="service" id="form.extension" />
         </service>
 
+        <service id="shopware.form.extension.event" class="Shopware\Bundle\FormBundle\Extension\EventExtension">
+            <argument type="service" id="events" />
+            <tag name="form.type_extension" extended-type="Symfony\Component\Form\Extension\Core\Type\FormType" />
+        </service>
+
+        <service id="shopware.form.extension.enlight" class="Shopware\Bundle\FormBundle\Extension\EnlightRequestExtension">
+            <tag name="form.type_extension" extended-type="Symfony\Component\Form\Extension\Core\Type\FormType" />
+        </service>
+
         <service id="form.extension" class="Symfony\Component\Form\Extension\DependencyInjection\DependencyInjectionExtension" public="false">
             <argument type="service" id="service_container" />
             <!-- All services with tag "form.type" are inserted here by FormPass -->
@@ -31,6 +40,5 @@
             <argument type="service" id="dbal_connection" />
             <tag name="validator.constraint_validator" alias="shopware.form.constraint.unique" />
         </service>
-
     </services>
 </container>

@@ -47,17 +47,6 @@ class sOrderTest extends PHPUnit_Framework_TestCase
         return $resource;
     }
 
-    /**
-     * @return \Shopware\Components\Api\Resource\Variant
-     */
-    private function getVariantResource()
-    {
-        $resource = new \Shopware\Components\Api\Resource\Variant();
-        $resource->setManager(Shopware()->Models());
-        $resource->setResultMode(1);
-        return $resource;
-    }
-
     public function setUp()
     {
         $this->module = Shopware()->Modules()->Order();
@@ -73,20 +62,6 @@ class sOrderTest extends PHPUnit_Framework_TestCase
         $next = $this->module->sGetOrderNumber();
 
         $this->assertEquals($next, $current + 1);
-    }
-
-    public function testGetOrderAttributes()
-    {
-        $orderId = $this->createDummyOrder();
-        $this->createDummyPosition($orderId);
-        $this->createDummyPosition($orderId);
-        $this->createDummyPosition($orderId);
-
-        $attributes = $this->invokeMethod($this->module, 'getOrderAttributes', array($orderId));
-
-        $this->assertNotEmpty($attributes);
-        $this->assertArrayHasKey('attribute1', $attributes);
-        $this->assertArrayHasKey('orderID', $attributes);
     }
 
     /**
@@ -133,21 +108,6 @@ class sOrderTest extends PHPUnit_Framework_TestCase
         $context = $args->get('context');
         $this->assertInternalType('array', $context['sPaymentTable']);
         $this->assertCount(0, $context['sPaymentTable']);
-    }
-
-
-    public function testGetOrderDetailAttributes()
-    {
-        $orderId = $this->createDummyOrder();
-        $this->createDummyPosition($orderId);
-        $this->createDummyPosition($orderId);
-        $detailId = $this->createDummyPosition($orderId);
-
-        $attributes = $this->invokeMethod($this->module, 'getOrderDetailAttributes', array($detailId));
-
-        $this->assertNotEmpty($attributes);
-        $this->assertArrayHasKey('attribute1', $attributes);
-        $this->assertArrayHasKey('detailID', $attributes);
     }
 
     public function testTransactionExistTrue()
@@ -356,7 +316,6 @@ class sOrderTest extends PHPUnit_Framework_TestCase
         $billing = Shopware()->Models()->getRepository('Shopware\Models\Order\Billing')->findOneBy(array('order' => $orderNumber));
 
         $this->assertEquals($originalBillingAddress["userID"], $billing->getCustomer()->getId());
-        $this->assertEquals($originalBillingAddress["customernumber"], $billing->getNumber());
         $this->assertEquals($originalBillingAddress["company"], $billing->getCompany());
         $this->assertEquals($originalBillingAddress["firstname"], $billing->getFirstName());
         $this->assertEquals($originalBillingAddress["lastname"], $billing->getLastName());
@@ -364,14 +323,15 @@ class sOrderTest extends PHPUnit_Framework_TestCase
 
         $billingAttr = $billing->getAttribute();
 
-        $this->assertEquals($originalBillingAddress["text1"], $billingAttr->getText1());
-        $this->assertEquals($originalBillingAddress["text2"], $billingAttr->getText2());
-        $this->assertEquals($originalBillingAddress["text3"], $billingAttr->getText3());
-        $this->assertEquals($originalBillingAddress["text4"], $billingAttr->getText4());
-        $this->assertEquals($originalBillingAddress["text5"], $billingAttr->getText5());
-        $this->assertEquals($originalBillingAddress["text6"], $billingAttr->getText6());
-
-        Shopware()->Models()->remove($billingAttr);
+        if ($billingAttr !== null) {
+            $this->assertEquals($originalBillingAddress["text1"], $billingAttr->getText1());
+            $this->assertEquals($originalBillingAddress["text2"], $billingAttr->getText2());
+            $this->assertEquals($originalBillingAddress["text3"], $billingAttr->getText3());
+            $this->assertEquals($originalBillingAddress["text4"], $billingAttr->getText4());
+            $this->assertEquals($originalBillingAddress["text5"], $billingAttr->getText5());
+            $this->assertEquals($originalBillingAddress["text6"], $billingAttr->getText6());
+            Shopware()->Models()->remove($billingAttr);
+        }
         Shopware()->Models()->remove($billing);
         Shopware()->Models()->flush();
     }
@@ -395,14 +355,16 @@ class sOrderTest extends PHPUnit_Framework_TestCase
 
         $shippingAttr = $shipping->getAttribute();
 
-        $this->assertEquals($originalBillingAddress["text1"], $shippingAttr->getText1());
-        $this->assertEquals($originalBillingAddress["text2"], $shippingAttr->getText2());
-        $this->assertEquals($originalBillingAddress["text3"], $shippingAttr->getText3());
-        $this->assertEquals($originalBillingAddress["text4"], $shippingAttr->getText4());
-        $this->assertEquals($originalBillingAddress["text5"], $shippingAttr->getText5());
-        $this->assertEquals($originalBillingAddress["text6"], $shippingAttr->getText6());
+        if ($shippingAttr !== null) {
+            $this->assertEquals($originalBillingAddress["text1"], $shippingAttr->getText1());
+            $this->assertEquals($originalBillingAddress["text2"], $shippingAttr->getText2());
+            $this->assertEquals($originalBillingAddress["text3"], $shippingAttr->getText3());
+            $this->assertEquals($originalBillingAddress["text4"], $shippingAttr->getText4());
+            $this->assertEquals($originalBillingAddress["text5"], $shippingAttr->getText5());
+            $this->assertEquals($originalBillingAddress["text6"], $shippingAttr->getText6());
+            Shopware()->Models()->remove($shippingAttr);
+        }
 
-        Shopware()->Models()->remove($shippingAttr);
         Shopware()->Models()->remove($shipping);
         Shopware()->Models()->flush();
     }
@@ -778,7 +740,7 @@ class sOrderTest extends PHPUnit_Framework_TestCase
 
     private function getRandomUser()
     {
-        $user = Shopware()->Db()->fetchRow("SELECT * FROM s_user ORDER BY RAND() LIMIT 1");
+        $user = Shopware()->Db()->fetchRow("SELECT * FROM s_user WHERE id = 1 LIMIT 1");
 
         $billing = Shopware()->Db()->fetchRow(
             "SELECT * FROM s_user_billingaddress WHERE userID = :id",
@@ -826,6 +788,7 @@ class sOrderTest extends PHPUnit_Framework_TestCase
         Shopware()->Session()->sUserGroupData = $customerGroup;
 
         return array(
+            'user' => $user,
             'billingaddress' => $billing,
             'shippingaddress' => $shipping,
             'customerGroup' => $customerGroup,
@@ -842,7 +805,7 @@ class sOrderTest extends PHPUnit_Framework_TestCase
 
     protected function createDummyOrder()
     {
-        $number = 'SW-' . uniqid();
+        $number = 'SW-' . uniqid(rand());
         Shopware()->Db()->insert('s_order', array(
             'id' => null,
             'userID' => 1,
@@ -916,50 +879,6 @@ class sOrderTest extends PHPUnit_Framework_TestCase
 
         return $detailId;
     }
-
-    private function getSimpleArticleData()
-    {
-        return array(
-            'name' => 'Testartikel',
-            'description' => 'Test description',
-            'active' => true,
-            'lastStock' => true,
-            'mainDetail' => array(
-                'number' => 'swTEST' . uniqid(),
-                'inStock' => 15,
-                'active' => true,
-                'unitId' => 1,
-                'prices' => array(
-                    array(
-                        'customerGroupKey' => 'EK',
-                        'from' => 1,
-                        'to' => '-',
-                        'price' => 400,
-                    )
-                )
-            ),
-            'taxId' => 1,
-            'supplierId' => 2
-        );
-    }
-
-    private function getSimpleVariantData()
-    {
-        return array(
-            'number' => 'swTEST' . uniqid(),
-            'inStock' => 100,
-            'unitId' => 1,
-            'prices' => array(
-                array(
-                    'customerGroupKey' => 'EK',
-                    'from' => 1,
-                    'to' => '-',
-                    'price' => 400,
-                ),
-            )
-        );
-    }
-
 
     public function testEKOrder()
     {
@@ -1065,7 +984,6 @@ class sOrderTest extends PHPUnit_Framework_TestCase
                 'phone' => '',
                 'department' => '',
                 'salutation' => 'mr',
-                'customernumber' => '20001',
                 'firstname' => 'Max',
                 'lastname' => 'Mustermann',
                 'street' => 'Musterstr. 55',
@@ -1096,6 +1014,7 @@ class sOrderTest extends PHPUnit_Framework_TestCase
                 'user' => array(
                     'id' => '1',
                     'email' => 'test@example.com',
+                    'customernumber' => '20001',
                     'active' => '1',
                     'accountmode' => '0',
                     'confirmationkey' => '',

@@ -144,7 +144,7 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
                     rawData = record.getProxy().getReader().rawData;
 
                 if ( operation.success === true ) {
-                    var number = record['getBillingStore'].first().get('number');
+                    var number = record.get('number');
                     Shopware.Notification.createGrowlMessage(me.snippets.account.successTitle, Ext.String.format(me.snippets.account.successText, number), me.snippets.growlMessage);
 
                     infoView.tpl = tpl;
@@ -380,28 +380,29 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
 
         //save the model and check in the callback function if the operation was successfully
         model.save({
-            callback:function (data, operation) {
+            callback: function (data, operation) {
                 var records = operation.getRecords(),
                     record = records[0],
                     rawData = record.getProxy().getReader().rawData;
 
-                if ( operation.success === true ) {
-                    addressModel.set('user_id', record.get('id'));
-                    addressModel.save({
-                        callback: function() {
-                            var billing = model.getBilling().first();
-                            number = billing.get('number');
+                if (operation.success === true) {
+                    if (typeof addressModel !== 'undefined') {
+                        addressModel.set('user_id', record.get('id'));
+                        addressModel.save();
+                    }
 
-                            Shopware.Notification.createGrowlMessage(
-                                me.snippets.password.successTitle,
-                                Ext.String.format(me.snippets.password.successText, number),
-                                me.snippets.growlMessage
-                            );
+                    number = model.get('number');
 
-                            win.destroy();
-                            listStore.load();
-                        }
-                    });
+                    Shopware.Notification.createGrowlMessage(
+                        me.snippets.password.successTitle,
+                        Ext.String.format(me.snippets.password.successText, number),
+                        me.snippets.growlMessage
+                    );
+
+                    win.attributeForm.saveAttribute(record.get('id'));
+
+                    win.destroy();
+                    listStore.load();
                 } else {
                     Shopware.Notification.createGrowlMessage(me.snippets.password.errorTitle, me.snippets.password.errorText + '<br> ' + rawData.message, me.snippets.growlMessage)
                 }

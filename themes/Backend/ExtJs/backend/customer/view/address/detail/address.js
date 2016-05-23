@@ -50,11 +50,10 @@ Ext.define('Shopware.apps.Customer.view.address.detail.Address', {
         },
         fields: {
             salutation: {
-                label: '{s name=detail/label/salutation}Salutation{/s}',
-                mr: '{s name=detail/label/salutation_mr}Mr{/s}',
-                ms: '{s name=detail/label/salutation_ms}Mrs{/s}'
+                label: '{s name=detail/label/salutation}Salutation{/s}'
             },
             firstname: '{s name=detail/label/firstname}First name{/s}',
+            title: '{s name=detail/label/title}Title{/s}',
             lastname: '{s name=detail/label/lastname}Last name{/s}',
             street: '{s name=detail/label/street}Street{/s}',
             zipcode: '{s name=detail/label/zipcode}Zip code{/s}',
@@ -76,10 +75,6 @@ Ext.define('Shopware.apps.Customer.view.address.detail.Address', {
         var me = this;
 
         me.countryStateStore = Ext.create('Shopware.apps.Base.store.CountryState');
-        me.salutationData = [
-            ['mr', me.snippets.fields.salutation.mr],
-            ['ms', me.snippets.fields.salutation.ms]
-        ];
 
         return {
             controller: 'Address',
@@ -105,16 +100,13 @@ Ext.define('Shopware.apps.Customer.view.address.detail.Address', {
                             xtype: 'combobox',
                             triggerAction: 'all',
                             fieldLabel: me.snippets.fields.salutation.label,
-                            valueField: 'text',
-                            displayField: 'snippet',
-                            mode: 'local',
                             editable: false,
                             allowBlank: false,
-                            store: new Ext.data.SimpleStore({
-                                fields: ['text', 'snippet'],
-                                data: me.salutationData
-                            })
+                            valueField: 'key',
+                            displayField: 'label',
+                            store: Ext.create('Shopware.apps.Base.store.Salutation').load()
                         },
+                        title: me.snippets.fields.title,
                         firstname: {
                             allowBlank: false,
                             fieldLabel: me.snippets.fields.firstname

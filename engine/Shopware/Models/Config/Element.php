@@ -35,8 +35,8 @@ use Doctrine\Common\Collections\ArrayCollection;
  */
 class Element extends ModelEntity
 {
+    const SCOPE_LOCALE = 0;
     const SCOPE_SHOP = 1;
-    const SCOPE_LOCALE = 2;
 
     /**
      * @var integer $id
@@ -265,6 +265,7 @@ class Element extends ModelEntity
                 unset($options[$field]);
             }
         }
+
         $this->options = $options;
     }
 

@@ -5,58 +5,43 @@ Contains the basic styles for the Shopware 5 shopping worlds and its elements.
 
 Shopware 5 provides 11 integrated elements inside the shopping worlds that can be chosen and modified inside the backend shopping world editor such as sliders, video elements and blog-articles.
 */
-.createColumnSizes(@n, @i: 1) when (@i =< @n) {
+.createColumns(@n, @state: ~'', @i: 1) when (@i =< @n) {
 
-    &.emotion--mode-resize {
-        &.emotion--column-@{n} .column--@{i} {
-            width: (100% / @n * @i);
-        }
+    .col@{state}-@{i} {
+        width: (100% / @n * @i);
     }
 
-    &.emotion--mode-masonry {
-        &.emotion--column-@{n} .column--@{i} {
-            width: 100%;
-        }
+    .start-col@{state}-@{i} {
+        left: (100% / @n * (@i - 1));
     }
 
-    @media screen and(min-width: @phoneLandscapeViewportWidth) {
-        @columns: 2;
-        &.emotion--mode-masonry {
-            &.emotion--column-@{n} .column--@{i} when (@i <= @columns) {
-                width: (100% / @columns * @i);
-            }
-        }
-    }
-
-    @media screen and(min-width: @tabletViewportWidth) {
-        @columns: 3;
-        &.emotion--mode-masonry {
-            &.emotion--column-@{n} .column--@{i} when (@i <= @columns) {
-                width: (100% / @columns * @i);
-            }
-        }
-    }
-
-    @media screen and(min-width: @tabletLandscapeViewportWidth) {
-        @columns: 3;
-        &.emotion--mode-masonry {
-            &.emotion--column-@{n} .column--@{i} when (@i <= @columns) {
-                width: (100% / @columns * @i);
-            }
-        }
-    }
-
-    @media screen and(min-width: @desktopViewportWidth) {
-        &.emotion--mode-masonry {
-            &.emotion--column-@{n} .column--@{i} {
-                width: (100% / @n * @i);
-            }
-        }
-    }
-
-    .createColumnSizes(@n, (@i + 1));
+    .createColumns(@n, @state, (@i + 1));
 }
 
+.createGrid(@n) {
+
+    &.emotion--column-@{n} {
+
+        .createColumns(@n);
+        .createColumns(@n, ~'-xs');
+
+        @media screen and(min-width: @phoneLandscapeViewportWidth) {
+            .createColumns(@n, ~'-s');
+        }
+
+        @media screen and(min-width: @tabletViewportWidth) {
+            .createColumns(@n, ~'-m');
+        }
+
+        @media screen and(min-width: @tabletLandscapeViewportWidth) {
+            .createColumns(@n, ~'-l');
+        }
+
+        @media screen and(min-width: @desktopViewportWidth) {
+            .createColumns(@n, ~'-xl');
+        }
+    }
+}
 
     // Content fullscreen mode
 .content-main.is--fullscreen {
@@ -137,6 +122,16 @@ Shopware 5 provides 11 integrated elements inside the shopping worlds that can b
     }
 }
 
+    // Emotion preview content
+body.emotion--preview {
+    background: #ffffff;
+
+    .content-main {
+        .box-shadow(none);
+        margin: 0;
+    }
+}
+
     // Emotion show listing link
 .emotion--show-listing {
     .unitize-margin(20, 0);
@@ -146,7 +141,12 @@ Shopware 5 provides 11 integrated elements inside the shopping worlds that can b
 .emotion--wrapper {
     display: block;
     margin: 0 auto;
+    max-width: 1160px;
     overflow: hidden;
+
+    &.is--fullscreen {
+        max-width: none;
+    }
 }
 
     // Emotion container
@@ -161,19 +161,161 @@ Shopware 5 provides 11 integrated elements inside the shopping worlds that can b
         .transform-origin(0, 0, 0);
     }
 
-    // Create the width based on the number of columns the item uses.
-    .createColumnSizes(1); // Container with one column
-    .createColumnSizes(2); // Container with two columns
-    .createColumnSizes(3); // Container with three columns
-    .createColumnSizes(4); // Container with four columns
-    .createColumnSizes(5); // Container with five columns
-    .createColumnSizes(6); // Container with six columns
-    .createColumnSizes(7); // Container with seven columns
-    .createColumnSizes(8); // Container with eight columns
-    .createColumnSizes(9); // Container with nine columns
-    .createColumnSizes(10); // Container with ten columns
-    .createColumnSizes(11); // Container with eleven columns
-    .createColumnSizes(12); // Container with twelve columns
+    // Create the grid classes for different grid sizes
+    .createGrid(1); // Container with one column
+    .createGrid(2); // Container with two columns
+    .createGrid(3); // Container with three columns
+    .createGrid(4); // Container with four columns
+    .createGrid(5); // Container with five columns
+    .createGrid(6); // Container with six columns
+    .createGrid(7); // Container with seven columns
+    .createGrid(8); // Container with eight columns
+    .createGrid(9); // Container with nine columns
+    .createGrid(10); // Container with ten columns
+    .createGrid(11); // Container with eleven columns
+    .createGrid(12); // Container with twelve columns
+
+    // Hide elements which are not visible in the current viewport
+    .is--hidden-s,
+    .is--hidden-m,
+    .is--hidden-l,
+    .is--hidden-xl {
+        display: block;
+    }
+
+    .is--hidden-xs {
+        display: none;
+    }
+
+    // Hide all sizer which don't match the current viewport
+    .emotion--sizer-s,
+    .emotion--sizer-m,
+    .emotion--sizer-l,
+    .emotion--sizer-xl {
+        display: none;
+    }
+
+    // Only show the sizer of the current viewport
+    .emotion--sizer-xs {
+        display: block;
+
+        // Hide the default sizer when there is a sizer for the current viewport
+        & ~ .emotion--sizer {
+            display: none;
+        }
+    }
+
+    @media screen and(min-width: @phoneLandscapeViewportWidth) {
+        .is--hidden-xs,
+        .is--hidden-m,
+        .is--hidden-l,
+        .is--hidden-xl {
+            display: block;
+        }
+
+        .is--hidden-s {
+            display: none;
+        }
+
+        .emotion--sizer-xs,
+        .emotion--sizer-m,
+        .emotion--sizer-l,
+        .emotion--sizer-xl {
+            display: none;
+        }
+
+        .emotion--sizer-s {
+            display: block;
+
+            & ~ .emotion--sizer {
+                display: none;
+            }
+        }
+    }
+
+    @media screen and(min-width: @tabletViewportWidth) {
+        .is--hidden-xs,
+        .is--hidden-s,
+        .is--hidden-l,
+        .is--hidden-xl {
+            display: block;
+        }
+
+        .is--hidden-m {
+            display: none;
+        }
+
+        .emotion--sizer-s,
+        .emotion--sizer-xs,
+        .emotion--sizer-l,
+        .emotion--sizer-xl {
+            display: none;
+        }
+
+        .emotion--sizer-m {
+            display: block;
+
+            & ~ .emotion--sizer {
+                display: none;
+            }
+        }
+    }
+
+    @media screen and(min-width: @tabletLandscapeViewportWidth) {
+        .is--hidden-xs,
+        .is--hidden-s,
+        .is--hidden-m,
+        .is--hidden-xl {
+            display: block;
+        }
+
+        .is--hidden-l {
+            display: none;
+        }
+
+        .emotion--sizer-xs,
+        .emotion--sizer-s,
+        .emotion--sizer-m,
+        .emotion--sizer-xl {
+            display: none;
+        }
+
+        .emotion--sizer-l {
+            display: block;
+
+            & ~ .emotion--sizer {
+                display: none;
+            }
+        }
+    }
+
+    @media screen and(min-width: @desktopViewportWidth) {
+        .is--hidden-xs,
+        .is--hidden-s,
+        .is--hidden-m,
+        .is--hidden-l {
+            display: block;
+        }
+
+        .is--hidden-xl {
+            display: none;
+        }
+
+        .emotion--sizer-s,
+        .emotion--sizer-xs,
+        .emotion--sizer-m,
+        .emotion--sizer-l {
+            display: none;
+        }
+
+        .emotion--sizer-xl {
+            display: block;
+
+            & ~ .emotion--sizer {
+                display: none;
+            }
+        }
+    }
 }
 
     // Emotion element
@@ -409,6 +551,12 @@ Shopware 5 provides 11 integrated elements inside the shopping worlds that can b
 .emotion--product {
     width: 100%;
     height: 100%;
+
+    &.is--no-border {
+        .box--content {
+            border: 0 none;
+        }
+    }
 
     .product--box {
         width: 100%;
@@ -694,6 +842,12 @@ Shopware 5 provides 11 integrated elements inside the shopping worlds that can b
     height: 100%;
     position: relative;
     overflow: auto;
+
+    .html--content {
+        :last-child {
+            margin-bottom: 0;
+        }
+    }
 }
 
 @media screen and(min-width: @tabletViewportWidth) {

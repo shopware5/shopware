@@ -31,5 +31,19 @@ Ext.define('Shopware.apps.Base.view.element.Date', {
     alias: [
         'widget.base-element-date',
         'widget.base-element-datefield'
-    ]
+    ],
+
+    setValue: function(value) {
+        this.callParent([this.formatValue(value)]);
+    },
+
+    formatValue: function(value) {
+        if(!value) {
+            return null;
+        } else if (typeof(value) == 'string') {
+            return new Date(value);
+        } else {
+            return value;
+        }
+    }
 });

@@ -13,7 +13,7 @@ class ProductMediaTest extends TestCase
         $number,
         ProductContext $context,
         Category $category = null,
-        $imageCount
+        $imageCount = null
     ) {
         $data = parent::getProduct($number, $context, $category);
 

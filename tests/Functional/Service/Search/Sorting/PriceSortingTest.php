@@ -9,7 +9,7 @@ use Shopware\Tests\Service\TestCase;
 
 class PriceSortingTest extends TestCase
 {
-    protected function getContext($displayGross, $discount = null)
+    protected function getPriceContext($displayGross, $discount = null)
     {
         $context = parent::getContext();
 
@@ -57,7 +57,7 @@ class PriceSortingTest extends TestCase
     public function testCurrentCustomerGroupPriceSorting()
     {
         $sorting = new PriceSorting();
-        $context = $this->getContext(true, 0);
+        $context = $this->getPriceContext(true, 0);
 
         $customerGroup = $context->getCurrentCustomerGroup();
         $fallback = $context->getFallbackCustomerGroup();
@@ -81,7 +81,7 @@ class PriceSortingTest extends TestCase
     public function testFallbackCustomerGroupPriceSorting()
     {
         $sorting = new PriceSorting();
-        $context = $this->getContext(true, 0);
+        $context = $this->getPriceContext(true, 0);
 
         $fallback = $context->getFallbackCustomerGroup();
 
@@ -104,7 +104,7 @@ class PriceSortingTest extends TestCase
     public function testFallbackAndCurrentCustomerGroupPriceSorting()
     {
         $sorting = new PriceSorting();
-        $context = $this->getContext(true, 0);
+        $context = $this->getPriceContext(true, 0);
 
         $customerGroup = $context->getCurrentCustomerGroup();
         $fallback = $context->getFallbackCustomerGroup();
@@ -128,7 +128,7 @@ class PriceSortingTest extends TestCase
     public function testCustomerGroupDiscount()
     {
         $sorting = new PriceSorting();
-        $context = $this->getContext(true, 10);
+        $context = $this->getPriceContext(true, 10);
 
         $customerGroup = $context->getCurrentCustomerGroup();
         $fallback = $context->getFallbackCustomerGroup();

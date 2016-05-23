@@ -53,11 +53,24 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Recommendation', {
             title: '{s name=recommendation/content/title}Recommendations{/s}',
             recommendedPluginsMessage: '{s name=recommendation/content/recommended_plugins_message}Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.{/s}',
             integratedPluginsMessage: '{s name=recommendation/content/other_plugins_message}Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.{/s}'
+        },
+        labels: {
+            integratedPluginsLanguageLabel: '{s name=recommendation/languages/label}Recommendations for:{/s}',
+            integratedPluginsMessageLabel: '{s name=recommendation/content/other_plugins_message/label}Country specific recommendations:{/s}'
         }
     },
 
     initComponent: function() {
         var me = this;
+
+        me.countriesStore = Ext.create('Shopware.apps.FirstRunWizard.store.IntegratedPluginsCountries').load(
+            function() {
+                var combo = me.languageFilter;
+                combo.setValue(
+                    combo.getStore().getAt(0).get('text')
+                );
+            }
+        );
 
         me.items = [
             {
@@ -79,13 +92,60 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Recommendation', {
                 xtype: 'container',
                 border: false,
                 bodyPadding: 20,
-                style: 'margin-bottom: 10px; margin-top: 10px;',
+                style: 'font-weight: 700; line-height: 20px; margin-top: 10px;',
+                html: '<h1>' + me.snippets.labels.integratedPluginsMessageLabel + '</h1>'
+            },
+            {
+                xtype: 'container',
+                border: false,
+                bodyPadding: 20,
+                style: 'margin-bottom: 10px;',
                 html: '<p>' + me.snippets.content.integratedPluginsMessage + '</p>'
             },
             me.createIntegratedPluginsListing()
         ];
 
         me.callParent(arguments);
+    },
+
+    createLanguagePicker: function () {
+        var me = this;
+
+        me.languageFilter = Ext.create('Ext.form.field.ComboBox', {
+            store: me.countriesStore,
+            queryMode: 'local',
+            valueField: 'iso',
+            displayField: 'text',
+            emptyText: me.snippets.languagePicker,
+            fieldLabel: me.snippets.labels.integratedPluginsLanguageLabel,
+            editable: false,
+            listeners: {
+                change: {
+                    fn: function (view, newValue) {
+                        if (newValue === null) {
+                            me.integratedPluginsListing.resetListing();
+                            return;
+                        }
+                        me.fireEvent('changeLanguageFilter', newValue);
+                    }
+                },
+                beforeselect: function (combo, record) {
+                    return record.data.iso !== null;
+                }
+            }
+        });
+
+        return Ext.create('Ext.form.FieldSet', {
+            cls: Ext.baseCSSPrefix + 'base-field-set',
+            width: 632,
+            style: 'margin-top: 10px;',
+            defaults: {
+                anchor:'100%'
+            },
+            items: [
+                me.languageFilter
+            ]
+        });
     },
 
     createRecommendedPluginsListing: function() {
@@ -97,7 +157,7 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Recommendation', {
             width: 632
         });
 
-        me.recommendedPluginsStore.on('load', function(store, records) {
+        me.recommendedPluginsStore.on('load', function() {
             me.recommendedPluginsListing.setLoading(false);
         });
 
@@ -120,12 +180,13 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Recommendation', {
             width: 632
         });
 
-        me.integratedPluginsStore.on('load', function(store, records) {
+        me.integratedPluginsStore.on('load', function() {
             me.integratedPluginsListing.setLoading(false);
         });
 
         me.content = Ext.create('Ext.container.Container', {
             items: [
+                me.createLanguagePicker(),
                 me.integratedPluginsListing
             ]
         });
@@ -134,7 +195,8 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Recommendation', {
     },
 
     refreshData: function() {
-        var me = this;
+        var me = this,
+            languageFilterValue = me.languageFilter.getValue();
 
         me.recommendedPluginsListing.setLoading(true);
         me.integratedPluginsListing.setLoading(true);
@@ -143,6 +205,11 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.Recommendation', {
         me.integratedPluginsListing.resetListing();
 
         me.recommendedPluginsStore.load();
+
+        if (languageFilterValue === null || typeof languageFilterValue === 'undefined') {
+            me.integratedPluginsListing.setLoading(false);
+            return;
+        }
         me.integratedPluginsStore.load();
     }
 });

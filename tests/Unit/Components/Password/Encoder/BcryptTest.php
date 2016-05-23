@@ -1,4 +1,6 @@
 <?php
+use Shopware\Components\Password\Encoder\Bcrypt;
+
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -25,7 +27,7 @@
 class Shopware_Tests_Components_Hash_HasherBcryptTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Shopware\Components\Password\Encoder\Bcrypt
+     * @var Bcrypt
      */
     private $hasher;
 
@@ -37,7 +39,7 @@ class Shopware_Tests_Components_Hash_HasherBcryptTest extends PHPUnit_Framework_
     {
         parent::setUp();
 
-        $this->hasher = new \Shopware\Components\Password\Encoder\Bcrypt(array(
+        $this->hasher = new Bcrypt(array(
             // test should run fast, use minimum cost
             'cost' => 4,
         ));
@@ -54,7 +56,7 @@ class Shopware_Tests_Components_Hash_HasherBcryptTest extends PHPUnit_Framework_
      */
     public function testIsAvailable()
     {
-        $this->assertInstanceOf('\Shopware\Components\Password\Encoder\Bcrypt', $this->hasher);
+        $this->assertInstanceOf(Bcrypt::class, $this->hasher);
     }
 
     /**
@@ -117,7 +119,7 @@ class Shopware_Tests_Components_Hash_HasherBcryptTest extends PHPUnit_Framework_
     public function testRehash2()
     {
         $hash = $this->hasher->encodePassword('foobar');
-        $this->hasher = new \Shopware\Components\Password\Encoder\Bcrypt(array(
+        $this->hasher = new Bcrypt(array(
             'cost' => 5,
         ));
 

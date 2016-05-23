@@ -22,6 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Models\Category\Category;
+
 /**
  * @category  Shopware
  * @package   Shopware\Tests
@@ -45,7 +47,7 @@ class Shopware_Tests_Controllers_Backend_CategoryTest extends Enlight_Components
     /** @var Shopware\Components\Model\ModelManager */
     private $manager = null;
 
-    /**@var $model \Shopware\Models\Category\Category*/
+    /**@var $model Category*/
     protected $repository = null;
 
 
@@ -57,7 +59,7 @@ class Shopware_Tests_Controllers_Backend_CategoryTest extends Enlight_Components
         parent::setUp();
 
         $this->manager    = Shopware()->Models();
-        $this->repository = Shopware()->Models()->Category();
+        $this->repository = $repository = Shopware()->Models()->getRepository(Category::class);
 
         // disable auth and acl
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
@@ -67,11 +69,11 @@ class Shopware_Tests_Controllers_Backend_CategoryTest extends Enlight_Components
     /**
      * Creates the dummy data
      *
-     * @return \Shopware\Models\Category\Category
+     * @return Category
      */
     private function getDummyData()
     {
-        $dummyModel = new \Shopware\Models\Category\Category();
+        $dummyModel = new Category();
         $dummyData = $this->dummyData;
 
         $dummyModel->fromArray($dummyData);
@@ -85,7 +87,7 @@ class Shopware_Tests_Controllers_Backend_CategoryTest extends Enlight_Components
     /**
      * helper method to create the dummy object
      *
-     * @return \Shopware\Models\Category\Category
+     * @return Category
      */
     private function createDummy()
     {

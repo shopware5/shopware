@@ -9,10 +9,27 @@ use Shopware\Tests\Service\TestCase;
 
 class SimilarProductsTest extends TestCase
 {
+    /**
+     * setting up test config
+     */
+    public static function setUpBeforeClass()
+    {
+        Shopware()->Config()->offsetSet('similarlimit', 3);
+    }
+
+    /**
+     * Cleaning up test config
+     */
+    public static function tearDownAfterClass()
+    {
+        Shopware()->Config()->offsetSet('similarlimit', 0);
+    }
+
     protected function getProduct(
         $number,
         ProductContext $context,
-        Category $category = null
+        Category $category = null,
+        $additonally = null
     ) {
         $data = parent::getProduct($number, $context, $category);
 

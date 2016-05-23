@@ -1084,13 +1084,13 @@ class sArticles
                     $cheapestPrice = $queryCheapestPrice[0]["price"];
                 } else {
                     $cheapestPrice = 0;
-                    $basePrice = $queryCheapestPrice[0]["price"];
+                    $listPrice = $queryCheapestPrice[0]["price"];
                 }
             }
             $foundPrice = true;
         } else {
             $cheapestPrice = 0;
-            $basePrice = $queryCheapestPrice[0]["price"];
+            $listPrice = $queryCheapestPrice[0]["price"];
         }
 
         $sql = "
@@ -1117,7 +1117,7 @@ class sArticles
         // Updated / Fixed 28.10.2008 - STH
         if (!empty($usepricegroups)) {
             if (!empty($cheapestPrice)) {
-                $basePrice = $cheapestPrice;
+                $listPrice = $cheapestPrice;
             } else {
                 $foundPrice = true;
             }
@@ -1125,7 +1125,7 @@ class sArticles
             $returnPrice = $this->sGetPricegroupDiscount(
                 $this->sSYSTEM->sUSERGROUP,
                 $pricegroup,
-                $basePrice,
+                $listPrice,
                 99999,
                 false
             );

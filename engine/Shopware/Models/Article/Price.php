@@ -92,13 +92,6 @@ class Price extends LazyFetchModelEntity
     private $pseudoPrice = 0;
 
     /**
-     * @var float $basePrice
-     *
-     * @ORM\Column(name="baseprice", type="float", nullable=false)
-     */
-    private $basePrice = 0;
-
-    /**
      * @var float $percent
      *
      * @ORM\Column(name="percent", type="float", nullable=false)
@@ -124,7 +117,7 @@ class Price extends LazyFetchModelEntity
 
     /**
      * INVERSE SIDE
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticlePrice", mappedBy="articlePrice", cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticlePrice", orphanRemoval=true, mappedBy="articlePrice", cascade={"persist"})
      * @var \Shopware\Models\Attribute\ArticlePrice
      */
     protected $attribute;
@@ -305,29 +298,6 @@ class Price extends LazyFetchModelEntity
     public function getPseudoPrice()
     {
         return $this->pseudoPrice;
-    }
-
-    /**
-     * Set basePrice
-     *
-     * @param  float $basePrice
-     * @return Price
-     */
-    public function setBasePrice($basePrice)
-    {
-        $this->basePrice = $basePrice;
-
-        return $this;
-    }
-
-    /**
-     * Get basePrice
-     *
-     * @return float
-     */
-    public function getBasePrice()
-    {
-        return $this->basePrice;
     }
 
     /**

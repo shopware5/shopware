@@ -20,7 +20,7 @@ class SearchTermConditionTest extends TestCase
         $number,
         ProductContext $context,
         Category $category = null,
-        $name
+        $name = null
     ) {
         $product = parent::getProduct($number, $context, $category);
         $product['name'] = $name;

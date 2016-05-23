@@ -23,6 +23,7 @@
  */
 
 use Shopware\Bundle\StoreFrontBundle;
+use Shopware\Models\Banner\Banner;
 
 /**
  * Deprecated Shopware Class that handles marketing related functions
@@ -234,7 +235,7 @@ class sMarketing
     {
         $limit = (int) $limit;
         try {
-            $bannerRepository = Shopware()->Models()->Banner();
+            $bannerRepository = Shopware()->Models()->getRepository(Banner::class);
             $bannerQuery = $bannerRepository->getAllActiveBanners($sCategory, $limit);
             if ($bannerQuery) {
                 $getBanners = $bannerQuery->getArrayResult();

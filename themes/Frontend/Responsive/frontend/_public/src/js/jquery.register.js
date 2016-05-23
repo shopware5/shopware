@@ -36,7 +36,7 @@
              * @property submitBtnSelector
              * @type {String}
              */
-            submitBtnSelector: '.register--submit,.addresses--submit',
+            submitBtnSelector: '.register--submit,.address--form-submit',
 
             /**
              * Selector for the type selection field.
@@ -44,7 +44,7 @@
              * @property typeFieldSelector
              * @type {String}
              */
-            typeFieldSelector: '.register--customertype select,.addresses--customertype select',
+            typeFieldSelector: '.register--customertype select,.address--customertype select',
 
             /**
              * Type name for a company selection.
@@ -79,7 +79,7 @@
              * @property companyFieldSelector
              * @type {String}
              */
-            companyFieldSelector: '.register--company,.addresses--company',
+            companyFieldSelector: '.register--company,.address--company',
 
             /**
              * Selector for the account field set.
@@ -129,7 +129,7 @@
              * @property stateContainerSelector
              * @type {String}
              */
-            stateContainerSelector: '.register--state-selection, .addresses--state-selection',
+            stateContainerSelector: '.register--state-selection, .address--state-selection',
 
             /**
              * Selector for the payment method select fields.
@@ -586,7 +586,7 @@
         onValidateSuccess: function (action, $input, result) {
             var me = this,
                 errorFlags,
-                errorMessages;
+                errorMessages = [];
 
             $('#' + action + '--message').remove();
 
@@ -594,8 +594,13 @@
                 return;
             }
 
-            errorFlags = result.error_flags;
-            errorMessages = result.error_messages;
+            errorFlags = result;
+            for (var key in result) {
+                //fields with `false` are now valid
+                if (result[key]) {
+                    errorMessages.push(result[key]);
+                }
+            }
 
             if (errorFlags) {
                 me.updateFieldFlags(errorFlags);

@@ -53,7 +53,7 @@ class MediaTest extends TestCase
         $dest = __DIR__ . '/fixtures/test-bild-used.jpg';
 
         //copy image to execute test case multiple times.
-        unlink($dest);
+        @unlink($dest);
         copy($source, $dest);
 
         $data['file'] = $dest;
@@ -78,7 +78,7 @@ class MediaTest extends TestCase
         $dest = __DIR__ . '/fixtures/test-bild-with-more-than-50-characaters-more-more-more-more-used.jpg';
 
         //copy image to execute test case multiple times.
-        unlink($dest);
+        @unlink($dest);
         copy($source, $dest);
 
         $data['file'] = $dest;

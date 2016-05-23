@@ -47,7 +47,12 @@ Ext.define('Shopware.apps.Emotion.view.components.ManufacturerSlider', {
         manufacturer_slider_scrollspeed: '{s name=manufacturer_slider_scrollspeed}Scroll speed{/s}',
         manufacturer_slider_rotation: '{s name=manufacturer_slider_rotation}Rotate automatically{/s}',
         manufacturer_slider_rotatespeed: '{s name=manufacturer_slider_rotatespeed}Rotation speed{/s}',
-        manufacturer_category: '{s name=manufacturer_category}Select category{/s}'
+        manufacturer_category: '{s name=manufacturer_category}Select category{/s}',
+
+        no_border: {
+            fieldLabel: '{s name="noBorder/label" namespace="backend/emotion/view/components/article"}{/s}',
+            supportText: '{s name="noBorder/supportText" namespace="backend/emotion/view/components/article"}{/s}'
+        }
     },
 
     /**

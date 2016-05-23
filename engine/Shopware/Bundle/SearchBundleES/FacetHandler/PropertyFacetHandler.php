@@ -135,11 +135,11 @@ class PropertyFacetHandler implements HandlerInterface, ResultHydratorInterface
         if (!isset($elasticResult['aggregations'])) {
             return;
         }
-        if (!isset($elasticResult['aggregations']['agg_properties'])) {
+        if (!isset($elasticResult['aggregations']['properties'])) {
             return;
         }
 
-        $data = $elasticResult['aggregations']['agg_properties']['buckets'];
+        $data = $elasticResult['aggregations']['properties']['buckets'];
         $ids  = array_column($data, 'key');
 
         if (empty($ids)) {

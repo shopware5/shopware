@@ -18,27 +18,22 @@
             /**
              * CSS class selector for panel headers
              */
-            panelHeaderSelector: '.panel .panel--header',
+            panelHeaderSelector: '.panel--header',
 
             /**
              * CSS class selector for panel bodies
              */
-            panelBodySelector: '.panel .panel--body',
+            panelBodySelector: '.panel--body',
 
             /**
              * CSS class selector for panel actions
              */
-            panelFooterSelector: '.panel .panel--actions',
+            panelFooterSelector: '.panel--actions',
 
             /**
              * Maximal height, set to NULL (default) if it should not be limited
              */
-            maxHeight: null,
-
-            /**
-             * Calculate height for the number of columns per row
-             */
-            columns: 0
+            maxHeight: null
         },
 
         /**
@@ -47,23 +42,95 @@
         $elChildren: null,
 
         /**
+         * If set to true, the modal will center after resizing
+         */
+        isModal: false,
+
+        /**
          * Automatic resizing of header, body and footer
          */
         init: function() {
-            var me = this,
-                opts = me.opts;
+            var me = this;
 
             me.applyDataAttributes();
 
             me.$elChildren = me.$el.children();
+            me.isModal = me.$el.closest('.js--modal').length > 0;
+
+            $.subscribe(me.getEventName('plugin/swPanelAutoResizer/onAfterSetHeight'), $.proxy(me._onAfterSetHeight, me));
 
             $.publish('plugin/swPanelAutoResizer/onInit', [ me ]);
-
-            me.resize(opts.panelHeaderSelector);
-            me.resize(opts.panelBodySelector);
-            me.resize(opts.panelFooterSelector);
-
+            me.update();
             $.publish('plugin/swPanelAutoResizer/onAfterInit', [ me ]);
+        },
+
+        /**
+         * Trigger a recalculation if the panel is nested any parent panel has been resized.
+         *
+         * @param event
+         * @param context
+         * @private
+         */
+        _onAfterSetHeight: function(event, context) {
+            var me = this;
+
+            if (me === context) {
+                return;
+            }
+
+            if (me.$el.closest(context.$el).length > 0) {
+                me._calculateColumns();
+                me.resize();
+            }
+        },
+
+        /**
+         * Calculate how many columns need to be sized properly
+         * based on their and their container's width
+         *
+         * @private
+         */
+        _calculateColumns: function() {
+            var me = this,
+                maxWidth = me.$el.width(),
+                width = 0,
+                columns = 0,
+                childWidth = 0;
+
+            $.each(me.$elChildren, function(index, child) {
+                childWidth = $(child).width();
+
+                if ((width + childWidth) > maxWidth) {
+                    return;
+                }
+
+                width += childWidth;
+                columns++;
+            });
+
+            me._columns = columns;
+        },
+
+        /**
+         * Recalculate the columns and resize all elements
+         *
+         * @private
+         */
+        update: function() {
+            var me = this;
+
+            if (me._resizeTimeout) {
+                window.clearTimeout(me._resizeTimeout);
+            }
+
+            me._resizeTimeout = window.setTimeout(function() {
+                $.publish('plugin/swPanelAutoResizer/onUpdate', [ me ]);
+
+                me._calculateColumns();
+                me.resize();
+
+                $.publish('plugin/swPanelAutoResizer/afterUpdate', [ me ]);
+            }, 150);
         },
 
         /**
@@ -81,8 +148,13 @@
 
             $.publish('plugin/swPanelAutoResizer/onGetMaxHeight', [ me ]);
 
+            // set heights to auto to recalculate the actual content height
             $elements.each(function(index, childElement) {
-                itemHeight = $(childElement).first().height();
+                $(childElement).css('height', 'auto');
+            });
+
+            $elements.each(function(index, childElement) {
+                itemHeight = $(childElement).height();
                 if (itemHeight > height) {
                     height = itemHeight;
                 }
@@ -126,31 +198,58 @@
          */
         resize: function(selector) {
             var me = this,
-                opts = me.opts,
                 height = 0,
-                chunkItems = [];
+                chunkItems = [],
+                i = 0,
+                childrenCount = me.$elChildren.length;
+
+            // shortcut to resize all
+            if (typeof selector === 'undefined') {
+                me.resize(me.opts.panelHeaderSelector);
+                me.resize(me.opts.panelBodySelector);
+                me.resize(me.opts.panelFooterSelector);
+                return;
+            }
 
             $.publish('plugin/swPanelAutoResizer/onResize', [ me, selector ]);
 
-            if (opts.columns > 0) {
-                for (var i = 0; i < me.$elChildren.length; i += opts.columns) {
-                    chunkItems = me.$elChildren.slice(i, i + opts.columns).find(selector);
+            if (me._columns > 1) {
+                for (i; i < childrenCount; i += me._columns) {
+                    chunkItems = me.$elChildren
+                        .slice(i, i + me._columns)
+                        .map(function(index, child) {
+                            return $(child).find(selector).first();
+                        });
+
                     height = me.getMaxHeight(chunkItems);
                     me.setHeight(chunkItems, height);
                 }
             } else {
-                chunkItems = me.$elChildren.find(selector);
-                height = me.getMaxHeight(chunkItems);
-                me.setHeight(chunkItems, height);
+               me.resetHeight();
             }
+
+            me._centerModal();
 
             $.publish('plugin/swPanelAutoResizer/onAfterResize', [ me, selector ]);
         },
 
         /**
+         * Call center() on modal
+         * 
+         * @private
+         */
+        _centerModal: function() {
+            if (this.isModal === false) {
+                return;
+            }
+
+            $.modal.center();
+        },
+
+        /**
          * Sets the height back to 'auto' if the plugin gets disabled
          */
-        destroy: function() {
+        resetHeight: function() {
             var me = this,
                 opts = me.opts;
 
@@ -163,6 +262,17 @@
             me.$elChildren.find(allSelectorClass).each(function(index, childElement) {
                 $(childElement).css('height', 'auto');
             });
+        },
+
+        /**
+         * Destroy the plugin and reset it's modified attributes
+         */
+        destroy: function() {
+            var me = this;
+
+            me.resetHeight();
+            $.unsubscribe(me.getEventName('plugin/swPanelAutoResizer/onAfterSetHeight'));
+            me._destroy();
         }
 
     });

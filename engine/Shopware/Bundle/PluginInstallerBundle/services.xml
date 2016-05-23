@@ -9,15 +9,28 @@
             <argument type="service" id="http_client" />
             <argument>%shopware.store.apiEndpoint%</argument>
             <argument type="service" id="shopware_plugininstaller.plugin_installer_struct_hydrator" />
+            <argument type="service" id="shopware.openssl_verificator"/>
         </service>
 
-        <service id="shopware.plugin_manager" alias="shopware_plugininstaller.plugin_manager" />
-        <service id="shopware_plugininstaller.plugin_manager" class="Shopware\Bundle\PluginInstallerBundle\Service\InstallerService">
+        <service id="shopware_plugininstaller.plugin_installer" class="Shopware\Bundle\PluginInstallerBundle\Service\PluginInstaller">
+            <argument type="service" id="models"/>
+        </service>
+
+        <service id="shopware_plugininstaller.legacy_plugin_installer" class="Shopware\Bundle\PluginInstallerBundle\Service\LegacyPluginInstaller">
             <argument type="service" id="models"/>
             <argument type="service" id="plugins"/>
             <argument>%shopware.plugin_directories%</argument>
         </service>
 
+
+        <service id="shopware.plugin_manager" alias="shopware_plugininstaller.plugin_manager" />
+        <service id="shopware_plugininstaller.plugin_manager" class="Shopware\Bundle\PluginInstallerBundle\Service\InstallerService">
+            <argument type="service" id="models"/>
+            <argument type="service" id="shopware_plugininstaller.plugin_installer"/>
+            <argument type="service" id="shopware_plugininstaller.legacy_plugin_installer"/>
+            <argument type="service" id="shopware.plugin.config_writer"/>
+            <argument type="service" id="shopware.plugin.config_reader"/>
+        </service>
 
         <service id="shopware_plugininstaller.plugin_download_service" class="Shopware\Bundle\PluginInstallerBundle\Service\DownloadService">
             <argument>%kernel.root_dir%</argument>
@@ -62,6 +75,7 @@
             <argument type="service" id="dbal_connection" />
             <argument type="service" id="shopware_plugininstaller.plugin_manager" />
             <argument type="service" id="shopware_plugininstaller.store_client" />
+            <argument type="service" id="shopware_core.local_license_unpack_service" />
         </service>
 
         <service id="shopware_plugininstaller.plugin_installer_struct_hydrator" class="Shopware\Bundle\PluginInstallerBundle\Struct\StructHydrator" />
@@ -70,6 +84,7 @@
             <argument type="service" id="dbal_connection" />
             <argument type="service" id="shopware_plugininstaller.store_client" />
             <argument type="service" id="models"/>
+            <argument type="service" id="shopware_plugininstaller.plugin_licence_service" />
         </service>
     </services>
 </container>

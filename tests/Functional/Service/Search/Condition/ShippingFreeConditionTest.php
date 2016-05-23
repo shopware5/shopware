@@ -31,8 +31,6 @@ class ShippingFreeConditionTest extends TestCase
 
     public function testShippingFree()
     {
-        $context = $this->getContext();
-
         $condition = new ShippingFreeCondition();
         $this->search(
             array(

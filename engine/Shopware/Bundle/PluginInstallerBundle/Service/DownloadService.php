@@ -98,21 +98,31 @@ class DownloadService
     }
 
     /**
-     * @param $file
-     * @param $pluginName
+     * @param string $file
+     * @param string $pluginName
      * @throws \Exception
      */
     public function extractPluginZip($file, $pluginName)
     {
-        $source = $this->getPluginSource($pluginName);
-        if (!$source) {
-            $source = 'Community';
+        $archive = ZipUtils::openZip($file);
+        $pluginZipDetector = new PluginZipDetector();
+
+        if ($pluginZipDetector->isLegacyPlugin($archive)) {
+            $source = $this->getPluginSource($pluginName);
+            if (!$source) {
+                $source = 'Community';
+            }
+
+            $destination = $this->pluginDirectories[$source];
+            $extractor = new LegacyPluginExtractor();
+            $extractor->extract($archive, $destination);
+        } elseif ($pluginZipDetector->isPlugin($archive)) {
+            $pluginDir = Shopware()->Container()->getParameter('kernel.root_dir').'/plugins';
+            $extractor = new PluginExtractor($pluginDir);
+            $extractor->extract($archive);
+        } else {
+            throw new \RuntimeException("No Plugin found in archive.");
         }
-
-        $destination = $this->pluginDirectories[$source];
-
-        $extractor = new PluginExtractor();
-        $extractor->extract($file, $destination);
     }
 
     /**

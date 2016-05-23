@@ -102,7 +102,7 @@ class ManufacturerTest extends TestCase
     public function testUpdateShouldBeSuccessful($id)
     {
         $testData = array(
-            'name'   => uniqid() . 'foobar supplier'
+            'name'   => uniqid(rand()) . 'foobar supplier'
         );
 
         $manufacturer = $this->resource->update($id, $testData);

@@ -163,7 +163,7 @@ class Shopware_Tests_Components_Thumbnail_ManagerTest extends \PHPUnit_Framework
         $media->setFile($file);
         $media->setPath(str_replace(Shopware()->DocPath(), '', $imagePath));
 
-        unlink($file->getRealPath());
+        @unlink($file->getRealPath());
 
         $manager = Shopware()->Container()->get('thumbnail_manager');
         $manager->createMediaThumbnail($media);

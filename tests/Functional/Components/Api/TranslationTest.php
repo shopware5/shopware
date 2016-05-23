@@ -1088,17 +1088,6 @@ class TranslationTest extends TestCase
         ");
     }
 
-//    public function testTranslationWriterChange()
-//    {
-//        $this->resource->setTranslationComponent(
-//            Shopware()->Models()
-//        );
-//        $this->assertInstanceOf(
-//            'Shopware\Components\Model\ModelManager',
-//            $this->resource->getTranslationComponent()
-//        );
-//    }
-
     /**
      * @group disable
      */

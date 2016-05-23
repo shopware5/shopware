@@ -22,10 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
-use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
-use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Plugin\Plugin;
 
 /**
@@ -33,8 +31,8 @@ use Shopware\Models\Plugin\Plugin;
  */
 class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Backend_ExtJs
 {
-    const PHP_RECOMMENDED_VERSION = '5.6.0';
-    const PHP_MINIMUM_VERSION     = '5.5.9';
+    const PHP_RECOMMENDED_VERSION = '7.0.0';
+    const PHP_MINIMUM_VERSION     = '5.6.4';
 
     const PERFORMANCE_VALID       = 1;
     const PERFORMANCE_WARNING     = 2;
@@ -365,6 +363,20 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         }
         $data['noCacheControllers'] = implode("\n", $lines);
 
+        $data['HttpCache:proxy'] = implode(
+            ',',
+            array_map(
+                function ($url) {
+                    $url = trim($url);
+                    if (empty($url) || strpos($url, '://') !== false) {
+                        return $url;
+                    }
+                    return 'http://' . $url;
+                },
+                explode(',', $data['HttpCache:proxy'])
+            )
+        );
+
         unset($data['id']);
 
         return $data;
@@ -445,6 +457,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
             return $defaultValue;
         }
 
+        /** @var \Shopware\Models\Config\Element $element */
         $element = $elementRepository->findOneBy(array('name' => $config, 'form' => $form));
 
         if (!$element) {

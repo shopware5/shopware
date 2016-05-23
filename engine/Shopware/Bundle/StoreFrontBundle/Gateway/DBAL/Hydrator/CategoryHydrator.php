@@ -72,8 +72,7 @@ class CategoryHydrator extends Hydrator
         }
 
         if ($data['__categoryAttribute_id']) {
-            $attribute = $this->extractFields('__categoryAttribute_', $data);
-            $category->addAttribute('core', $this->attributeHydrator->hydrate($attribute));
+            $this->attributeHydrator->addAttribute($category, $data, 'categoryAttribute');
         }
 
         return $category;

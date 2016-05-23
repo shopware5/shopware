@@ -25,7 +25,6 @@
 namespace Shopware\Bundle\AccountBundle\Service;
 
 use Shopware\Models\Customer\Address;
-use Shopware\Models\Customer\Customer;
 
 interface AddressImportServiceInterface
 {

@@ -55,6 +55,11 @@ class CustomerGroupGateway implements Gateway\CustomerGroupGatewayInterface
     private $fieldHelper;
 
     /**
+     * @var Connection
+     */
+    private $connection;
+
+    /**
      * @param Connection $connection
      * @param FieldHelper $fieldHelper
      * @param Hydrator\CustomerGroupHydrator $customerGroupHydrator
@@ -88,14 +93,8 @@ class CustomerGroupGateway implements Gateway\CustomerGroupGatewayInterface
         $query->select($this->fieldHelper->getCustomerGroupFields());
 
         $query->from('s_core_customergroups', 'customerGroup')
-            ->leftJoin(
-                'customerGroup',
-                's_core_customergroups_attributes',
-                'customerGroupAttribute',
-                'customerGroupAttribute.customerGroupID = customerGroup.id'
-            );
-
-        $query->where('customerGroup.groupkey IN (:keys)')
+            ->leftJoin('customerGroup', 's_core_customergroups_attributes', 'customerGroupAttribute', 'customerGroupAttribute.customerGroupID = customerGroup.id')
+            ->where('customerGroup.groupkey IN (:keys)')
             ->setParameter(':keys', $keys, Connection::PARAM_STR_ARRAY);
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
@@ -106,7 +105,6 @@ class CustomerGroupGateway implements Gateway\CustomerGroupGatewayInterface
         $customerGroups = [];
         foreach ($data as $group) {
             $key = $group['__customerGroup_groupkey'];
-
             $customerGroups[$key] = $this->customerGroupHydrator->hydrate($group);
         }
 

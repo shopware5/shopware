@@ -24,7 +24,7 @@ return [
     'language-selection_welcome_message' => <<<EOT
 <p>
     You are only a few clicks away from being part of the big Shopware community,
-    which consists of over 30000 online merchants worldwide.
+    which consists of over 54000 online merchants worldwide.
 </p>
 <p>
     Our Support team is available to answer your questions at any time.

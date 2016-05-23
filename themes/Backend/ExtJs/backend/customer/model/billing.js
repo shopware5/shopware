@@ -47,7 +47,6 @@ Ext.define('Shopware.apps.Customer.model.Billing', {
      */
     fields:[
 		//{block name="backend/customer/model/billing/fields"}{/block}
-        { name:'birthday', type:'date', dateFormat:'d.m.Y' },
         { name:'stateId', type:'int', useNull:true }
     ],
 
@@ -60,6 +59,7 @@ Ext.define('Shopware.apps.Customer.model.Billing', {
         this.set('company', address.get('company'));
         this.set('department', address.get('department'));
         this.set('salutation', address.get('salutation'));
+        this.set('title', address.get('title'));
         this.set('firstName', address.get('firstname'));
         this.set('lastName', address.get('lastname'));
         this.set('street', address.get('street'));

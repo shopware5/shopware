@@ -146,7 +146,7 @@ class QueryAliasMapperTest extends \PHPUnit_Framework_TestCase
 
     public function testRequestQueriesGettingReplacd()
     {
-        $request = new \Enlight_Controller_Request_RequestHttp();
+        $request = new \Enlight_Controller_Request_RequestTestCase();
         $request->setQuery('q', 'someValue');
         $request->setQuery('p', 'someOtherValue');
         $request->setQuery('someParam',  'someValue');
@@ -167,5 +167,6 @@ class QueryAliasMapperTest extends \PHPUnit_Framework_TestCase
         ];
 
         $this->assertEquals($expected, $request->getParams());
+        $request->clearAll();
     }
 }

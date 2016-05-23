@@ -136,6 +136,13 @@ class Template extends ModelEntity
     private $ean = null;
 
     /**
+     * @var float $purchasePrice
+     *
+     * @ORM\Column(name="purchaseprice", type="decimal", nullable=false)
+     */
+    private $purchasePrice = 0;
+
+    /**
      * @var integer $position
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
@@ -543,6 +550,28 @@ class Template extends ModelEntity
     public function setEan($ean)
     {
         $this->ean = $ean;
+    }
+
+    /**
+     * Set purchase price
+     *
+     * @param float $purchasePrice
+     * @return Article
+     */
+    public function setPurchasePrice($purchasePrice)
+    {
+        $this->purchasePrice = $purchasePrice;
+        return $this;
+    }
+
+    /**
+     * Get purchase price
+     *
+     * @return float
+     */
+    public function getPurchasePrice()
+    {
+        return $this->purchasePrice;
     }
 
     /**

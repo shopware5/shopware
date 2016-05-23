@@ -73,8 +73,6 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
             return;
         }
 
-        /** @var $repository Shopware\Models\Shop\Repository */
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
         $shop = $this->getShopByRequest($request);
 
         if (!$shop->getHost()) {
@@ -92,14 +90,6 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
         }
         if (!$shop->getSecureHost()) {
             $shop->setSecureHost($shop->getHost());
-        }
-
-        $main = $shop->getMain() !== null ? $shop->getMain() : $shop;
-        if (!$main->getDefault()) {
-            $main = $repository->getActiveDefault();
-            $shop->setTemplate($main->getTemplate());
-            $shop->setHost($main->getHost());
-            $shop->setSecureHost($main->getSecureHost() ?: $main->getHost());
         }
 
         // Read original base path for resources

@@ -56,8 +56,8 @@ Ext.define('Shopware.apps.Customer.model.List', {
 		//{block name="backend/customer/model/list/fields"}{/block}
         { name:'id', type:'int' },
         { name:'number', type:'string' },
-        { name:'firstName', type:'string' },
-        { name:'lastName', type:'string' },
+        { name:'firstname', type:'string' },
+        { name:'lastname', type:'string' },
         { name:'firstLogin', type:'date' },
         { name:'customerGroup', type:'string' },
         { name:'company', type:'string' },

@@ -631,10 +631,10 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
     {
         $select = '
             cm.email, cm.email as newsletter, cg.name as `group`,
-            IFNULL(ub.salutation, nd.salutation) as salutation,
-            title,
-            IFNULL(ub.firstname, nd.firstname) as firstname,
-            IFNULL(ub.lastname, nd.lastname) as lastname,
+            IFNULL(u.salutation, nd.salutation) as salutation,
+            IFNULL(u.title, nd.title) as title,
+            IFNULL(u.firstname, nd.firstname) as firstname,
+            IFNULL(u.lastname, nd.lastname) as lastname,
             IFNULL(ub.street, nd.street) as street,
             IFNULL(ub.zipcode, nd.zipcode) as zipcode,
             IFNULL(ub.city, nd.city) as city,

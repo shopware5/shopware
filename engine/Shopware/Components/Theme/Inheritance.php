@@ -28,7 +28,6 @@ use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Theme;
 use Shopware\Models\Shop as Shop;
-use Shopware\Themes\Responsive\Theme as ResponsiveTheme;
 
 /**
  * The Theme\Inheritance class is used to
@@ -117,12 +116,12 @@ class Inheritance
             $theme = $util->getThemeByTemplate($template);
             return $theme->injectBeforePlugins();
         });
-    
+
         $custom = array_filter($hierarchy, function (Shop\Template $template) use ($util) {
             $theme = $util->getThemeByTemplate($template);
             return !$theme->injectBeforePlugins();
         });
-        
+
         return [
             'full'   => $hierarchy,
             'bare'   => array_values($bare),

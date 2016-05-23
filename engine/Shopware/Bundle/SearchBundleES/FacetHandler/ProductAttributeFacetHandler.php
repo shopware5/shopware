@@ -27,7 +27,7 @@ namespace Shopware\Bundle\SearchBundleES\FacetHandler;
 use ONGR\ElasticsearchDSL\Aggregation\FilterAggregation;
 use ONGR\ElasticsearchDSL\Aggregation\TermsAggregation;
 use ONGR\ElasticsearchDSL\Aggregation\ValueCountAggregation;
-use ONGR\ElasticsearchDSL\Filter\ExistsFilter;
+use ONGR\ElasticsearchDSL\Query\ExistsQuery;
 use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\SearchBundleES\HandlerInterface;
 use Shopware\Bundle\SearchBundle\Condition\ProductAttributeCondition;
@@ -86,7 +86,7 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
                 $count->setField($field);
 
                 $aggregation = new FilterAggregation($criteriaPart->getName());
-                $aggregation->setFilter(new ExistsFilter($field));
+                $aggregation->setFilter(new ExistsQuery($field));
                 $aggregation->addAggregation($count);
                 break;
 
@@ -116,7 +116,7 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
         $aggregations = $elasticResult['aggregations'];
 
         foreach ($this->criteriaParts as $criteriaPart) {
-            $key = 'agg_' . $criteriaPart->getName();
+            $key = $criteriaPart->getName();
 
             if (!isset($aggregations[$key])) {
                 continue;
@@ -211,7 +211,7 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
      */
     private function createBooleanResult(ProductAttributeFacet $criteriaPart, $data, Criteria $criteria)
     {
-        $count = $data['agg_' . $criteriaPart->getName() . '_count'];
+        $count = $data[$criteriaPart->getName() . '_count'];
         $count = $count['value'];
 
         if ($count <= 0) {

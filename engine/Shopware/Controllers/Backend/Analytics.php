@@ -534,10 +534,8 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
                 case "mr":
                     $customers[$week]['male']++;
                     break;
-                case "ms":
-                    $customers[$week]['female']++;
-                    break;
                 default:
+                    $customers[$week]['female']++;
                     break;
             }
 

@@ -28,6 +28,7 @@ use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
 use Shopware\Bundle\SearchBundle\Sorting\PriceSorting;
 use Shopware\Bundle\SearchBundle\Sorting\ReleaseDateSorting;
 use Shopware\Bundle\SearchBundle\SortingInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Components\Model\Query\SqlWalker;
 use Shopware\Models\Emotion\Repository;
 
@@ -48,15 +49,52 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Emotion\Emotion');
         $emotions = $this->getEmotion($repository);
 
+        /** @var ShopContext $shopContext */
+        $shopContext = $this->get('shopware_storefront.context_service')->getShopContext();
+        $shopId = $shopContext->getShop()->getId();
+        $translator = new Shopware_Components_Translation();
+        $fallbackId = $shopContext->getShop()->getFallbackId();
+
+        $preview = $this->Request()->getParam('preview', false);
+
+        $elementIds = [];
+        foreach ($emotions as $emotion) {
+            $elementIds += array_column($emotion['elements'], 'id');
+        }
+
+        $viewports = $repository->getElementsViewports($elementIds);
+
         //iterate all emotions to select the element data.
         foreach ($emotions as &$emotion) {
             // Support for emotions which are available on multiple devices.
             $emotion['device'] = explode(',', $emotion['device']);
             $categoryId = $this->Request()->getParam('categoryId') ?: $emotion['categories'][0]['id'];
 
+            // Mapping for the grid settings
+            $emotion['grid'] = [
+                'cols' => $emotion['cols'],
+                'rows' => $emotion['rows'],
+                'gutter' => $emotion['cellSpacing'],
+                'cellHeight' => $emotion['cellHeight'],
+                'articleHeight' => $emotion['articleHeight']
+            ];
+
+            // The preview only shows the normal size.
+            if ($preview) {
+                $emotion['fullscreen'] = false;
+            }
+
             //for each emotion we have to iterate the elements to get the element data.
             foreach ($emotion['elements'] as &$element) {
-                $element['data'] = $this->handleElement($element, $repository, $categoryId);
+                $data = $this->handleElement($element, $repository, $categoryId);
+                $translation = $translator->readWithFallback($shopId, $fallbackId, 'emotionElement', $element['id']);
+                $element['data'] = array_merge($data, $translation);
+
+                $element['viewports'] = [];
+
+                if (isset($viewports[$element['id']])) {
+                    $element['viewports'] = $viewports[$element['id']];
+                }
             }
         }
 
@@ -90,12 +128,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $emotions = $query->getArrayResult();
 
         foreach ($emotions as &$emotion) {
-            $emotion['cols'] = $emotion['grid']['cols'];
             $emotion['elements'] = $repository->getEmotionElementsQuery($emotion['id'])->getQuery()->getArrayResult();
-
-            $emotion['cellHeight'] = $emotion['grid']['cellHeight'];
-            $emotion['articleHeight'] = $emotion['grid']['articleHeight'];
-            $emotion['gutter'] = $emotion['grid']['gutter'];
         }
 
         return $emotions;
@@ -214,32 +247,29 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
      */
     private function getArticle($data, $categoryId, $element)
     {
-        if ($data["article_type"] == "newcomer") {
-            // new product
-            $data = array_merge(
-                $data,
-                Shopware()->Modules()->Articles()->sGetPromotionById('new', $categoryId, 0, false)
-            );
-        } elseif ($data["article_type"] == "topseller") {
-            // top product
-            $temp = Shopware()->Modules()->Articles()->sGetPromotionById('top', $categoryId, 0, false);
-            if (empty($temp["articleID"])) {
-                $data = array_merge(
-                    $data,
-                    Shopware()->Modules()->Articles()->sGetPromotionById('random', $categoryId, 0, false)
-                );
+        $categoryId = empty($data['article_category']) ? $categoryId : $data['article_category'];
+        $type = empty($data['article_type']) ? 'selected_article' : $data['article_type'];
+
+        if ($type == 'selected_article' && !empty($data['article'])) {
+            return array_merge($data, $this->articleByNumber($data['article']));
+        }
+
+        if ($type == 'newcomer') {
+            return array_merge($data, Shopware()->Modules()->Articles()->sGetPromotionById('new', $categoryId, 0, false));
+        }
+
+        if ($type == 'topseller') {
+            $article = Shopware()->Modules()->Articles()->sGetPromotionById('top', $categoryId, 0, false);
+
+            if (empty($article['articleID'])) {
+                return array_merge($data, Shopware()->Modules()->Articles()->sGetPromotionById('random', $categoryId, 0, false));
             } else {
-                $data = array_merge($data, $temp);
+                return array_merge($data, $article);
             }
-        } elseif ($data["article_type"] == "random_article") {
-            // random product
-            $data = array_merge(
-                $data,
-                Shopware()->Modules()->Articles()->sGetPromotionById('random', $categoryId, 0, false)
-            );
-        } else {
-            // Fix product
-            $data = array_merge($data, $this->articleByNumber($data["article"]));
+        }
+
+        if ($type == 'random_article') {
+            return array_merge($data, Shopware()->Modules()->Articles()->sGetPromotionById('random', $categoryId, 0, false));
         }
 
         return $data;
@@ -792,6 +822,9 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $emotionId = $this->Request()->getParam('emotionId');
 
         $emotion = $this->get('emotion_device_configuration')->getById($emotionId);
+
+        // The user can preview the emotion for every device.
+        $emotion['devices'] = '0,1,2,3,4';
 
         $viewAssignments['emotion'] = $emotion;
         $viewAssignments['hasEmotion'] = (!empty($emotion));

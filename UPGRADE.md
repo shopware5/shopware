@@ -1,16 +1,18 @@
 # Shopware Upgrade Information
 In this document you will find a changelog of the important changes related to the code base of Shopware.
 
-
 ## 5.2.0 DEV
-* Increased minimum required PHP version to PHP >= 5.5.9.
-* Added CSRF protection to the backend which is enabled by default.
-    * OptOut by implementing `CSRFWhitelistAware` interface
+* Increased minimum required PHP version to PHP >= 5.6.4.
+* Added CSRF protection to frontend and backend which is enabled by default.
+    * OptOut by implementing `Shopware\Components\CSRFWhitelistAware` interface
     * Added `X-CSRF-Token` to every ajax request
-    * Added `__csrf_token` param to every ExtJS form submit via override in `ExtJs/overrides/Ext.form.Base.js` 
+    * Added `__csrf_token` to every html form in frontend
+    * Added `__csrf_token` param to every ExtJS form submit via override in `ExtJs/overrides/Ext.form.Base.js`
+    * Added `csrfProtection` config options to disable CSRF protection
+    * Special thanks to: [ltepner](https://github.com/ltepner)
     * See: https://developers.shopware.com/developers-guide/csrf-protection/
-* Update Symfony Components to version 2.8 LTS
-* Replace polyfill provided by `indigophp/hash-compat` with `symfony/polyfill-php56`
+* Updated Symfony Components to version 2.8 LTS
+* Replaced polyfill provided by `indigophp/hash-compat` with `symfony/polyfill-php56`
 * Added polyfill for `random_bytes()` and `random_int()` via `paragonie/random_compat`
 * Removed `client_check` and `referer_check` from the config in favor of the CSRF protection.
 * Removed session variables `__SW_REFERER` and `__SW_CLIENT`
@@ -20,16 +22,9 @@ In this document you will find a changelog of the important changes related to t
     * Added new `css_class` column to the `s_emotion_elements` table.
 * Removed deprecated columns `s_filter_values.value_numeric` and `s_filter_options.default`
 * Updated `monolog/monolog` to version 1.17.2
-* Add CSRF protection to frontend and backend which is enabled by default.
-    * OptOut by implementing `CSRFWhitelistAware` interface
-    * Add `X-CSRF-Token` to every ajax request
-    * Add `__csrf_token` to every html form in frontend
-    * Add `csrfProtection` config options to disable CSRF protection
-    * See: https://developers.shopware.com/developers-guide/csrf-protection/
-    * Special thanks to: [ltepner](https://github.com/ltepner)
-* Add HTML code widget for the shopping worlds which lets the user enter actual Smarty & JavaScript code which will be included like it is
+* Added HTML code widget for the shopping worlds which lets the user enter actual Smarty & JavaScript code which will be included like it is
     * The Smarty code has access to all globally available Smarty variables
-* Add the following fields to status emails:
+* Added the following fields to status emails:
     * `billing_additional_address_line1`
     * `billing_additional_address_line2`
     * `shipping_additional_address_line1`
@@ -113,17 +108,233 @@ In this document you will find a changelog of the important changes related to t
     * `Shopware.apps.Customer.view.detail.Billing`
     * `Shopware.apps.Customer.view.detail.Shipping`
 * Removed fax field form billing addresses
+* Updated `ongr/elasticsearch-dsl` to v2.0.0, see https://github.com/ongr-io/ElasticsearchDSL/blob/master/CHANGELOG.md#v200-2016-03-03 for BC breaks.
+* Renamed block 'frontend_blog_bookmarks_deliciosus' to 'frontend_blog_bookmarks_delicious'
+* Deprecated `\Shopware\Models\Article\Element`
+* Removed the following templates including their snippets and blocks
+    * `frontend/account/billing.tpl`
+    * `frontend/account/billing_checkout.tpl`
+    * `frontend/account/content_right.tpl`
+    * `frontend/account/select_address.tpl`
+    * `frontend/account/select_billing.tpl`
+    * `frontend/account/select_billing_checkout.tpl`
+    * `frontend/account/select_shipping.tpl`
+    * `frontend/account/select_shipping_checkout.tpl`
+    * `frontend/account/shipping.tpl`
+    * `frontend/account/shipping_checkout.tpl`
+    * `frontend/checkout/cart_left.tpl`
+    * `frontend/checkout/confirm_left.tpl`
+* Removed `sAdmin::sGetPreviousAddresses()`
+* Removed `sAdmin::sUpdateBilling()`
+* Removed `sAdmin::sUpdateShipping()`
+* Removed `sAdmin::sValidateStep1()`
+* Removed `sAdmin::sValidateStep2()`
+* Removed `sAdmin::sValidateStep2ShippingAddress()`
+* Removed `billingAction()` in `Controllers/Frontend/Account.php`
+* Removed `shippingAction()` in `Controllers/Frontend/Account.php`
+* Removed `saveBillingAction()` in `Controllers/Frontend/Account.php`
+* Removed `saveShippingAction()` in `Controllers/Frontend/Account.php`
+* Removed `selectBillingAction()` in `Controllers/Frontend/Account.php`
+* Removed `selectShippingAction()` in `Controllers/Frontend/Account.php`
+* Moved block `frontend_checkout_confirm_left_billing_address` outside panel body
+* Moved block `frontend_checkout_confirm_left_shipping_address` outside panel body
+* Removed the following backend models including their smarty blocks
+    * `Shopware.apps.Supplier.model.Attribute`
+    * `Shopware.apps.Customer.model.BillingAttributes`
+    * `Shopware.apps.Customer.model.ShippingAttributes`
+    * `Shopware.apps.Customer.model.Attribute`
+    * `Shopware.apps.Blog.model.Attribute`
+    * `Shopware.apps.Form.model.Attribute`
+    * `Shopware.apps.MediaManager.model.Attribute`
+    * `Shopware.apps.Property.model.Attribute`
+    * `Shopware.apps.Config.model.form.Attribute`
+    * `Shopware.apps.Voucher.model.Attribute`
+    * `Shopware.apps.Emotion.model.Attribute`
+    * `Shopware.apps.Banner.model.Attribute`
+    * `Shopware.apps.Order.model.Attribute`
+    * `Shopware.apps.Order.model.BillingAttribute`
+    * `Shopware.apps.Order.model.PositionAttribute`
+    * `Shopware.apps.Order.model.ReceiptAttribute`
+    * `Shopware.apps.Order.model.ShippingAttribute`
+* The following repository methods no longer select attributes or have been removed entirely
+    * `\Shopware\Models\Article\Repository::getSupplierQueryBuilder()`
+    * `\Shopware\Models\Customer\Repository::getCustomerDetailQueryBuilder()`
+    * `\Shopware\Models\Customer\Repository::getShippingAttributesQuery()`
+    * `\Shopware\Models\Customer\Repository::getShippingAttributesQueryBuilder()`
+    * `\Shopware\Models\Customer\Repository::getBillingAttributesQuery()`
+    * `\Shopware\Models\Customer\Repository::getBillingAttributesQueryBuilder()`
+    * `\Shopware\Models\Customer\Repository::getAttributesQuery()`
+    * `\Shopware\Models\Customer\Repository::getAttributesQueryBuilder()`
+    * `\Shopware\Models\Blog\Repository::getBackedDetailQueryBuilder()`
+    * `\Shopware\Models\Emotion\Repository::getEmotionDetailQueryBuilder()`
+    * `\Shopware\Models\ProductFeed\Repository::getDetailQueryBuilder()`
+    * `\Shopware\Models\Banner\Repository::getBannerMainQuery()`
+    * `\Shopware\Models\Order\Repository::getBackendOrdersQueryBuilder()`
+    * `\Shopware\Models\Order\Repository::getBackendAdditionalOrderDataQuery()`
+* Removed attribute associations from the following backend models
+    * `Shopware.apps.Supplier.model.Supplier`
+    * `Shopware.apps.Customer.model.Customer`
+    * `Shopware.apps.Blog.model.Detail`
+    * `Shopware.apps.Form.model.Form`
+    * `Shopware.apps.Property.model.Set`
+    * `Shopware.apps.MediaManager.model.Media`
+    * `Shopware.apps.Emotion.model.Emotion`
+    * `Shopware.apps.Config.model.form.Country`
+    * `Shopware.apps.Banner.model.BannerDetail`
+    * `Shopware.apps.Voucher.model.Detail`
+    * `Shopware.apps.Order.model.Receipt`
+    * `Shopware.apps.Order.model.Position`
+    * `Shopware.apps.Order.model.Order`
+* Removed the following backend files:
+    * `themes/Backend/ExtJs/backend/blog/view/blog/detail/sidebar/attributes.js`
+    * `themes/Backend/ExtJs/backend/config/store/form/attribute.js`
+    * `themes/Backend/ExtJs/backend/config/view/form/attribute.js`
+    * `themes/Backend/ExtJs/backend/config/model/form/attribute.js`
+* Changed position of `Shopware.apps.Customer.view.detail.Billing` fields
+* Changed position of `Shopware.apps.Customer.view.detail.Shipping` fields
+* Fixed Shopware.form.plugin.Translation, the plugin can now be used in multiple forms at the same time.
+    * Removed `clear`, `onOpenTranslationWindow`, `getFieldValues` and `onGetTranslatableFields` function
+* `\Shopware\Bundle\StoreFrontBundle\Gateway\GraduatedPricesGatewayInterface` requires now a provided `ShopContextInterface`
+* Categories of `Shopware\Components\Api\Resource\Article::getArticleCategories($articleId)` are no longer indexed by category id
+* Moved `<form>` element in checkout confirm outside the agreement box to wrap around address and payment boxes
+* Removed smarty variable `sCategoryInfo` in listing and blog controllers. Use `sCategoryContent` instead.
+* Added creation of custom `__construct()` method to `Shopware\Components\Model\Generator`, which initializes any default values of properties when generating attribute models
+* Removed `sAdmin::sUpdateAccount()`
+* Removed `saveAccount()` in `Controllers/Frontend/Account.php`
+* Moved field `birthday` from billing address to customer
+* Added validation of order number to `Shopware\Components\Api\Resource\Variant::prepareData()` to respond with meaningful error message for duplicate order numbers
+* Added service `shopware.number_range_manager` for safely retrieving the next number of a number range (`s_order_number`)
+* Changed the following methods to use the `shopware.number_range_manager` service for retrieving the next number of a range:
+    * `sAdmin::assignCustomerNumber()`
+    * `sOrder::sGetOrderNumber()`
+    * `Shopware_Components_Document::saveDocument()`
+* HttpCache: Added possibility to add multiple, comma separated proxy URLs
+* Removed `landingPageTeaser` and `landingPageBlock` fields from emotion shopping worlds.
+* Removed unnecessary method `getCampaignByCategoryQuery()` from `Models/Emotion/Repository.php`.
+* Removed template blocks for campaign boxes corresponding to the removed emotion fields.
+    * `frontend_index_left_campaigns_top`
+    * `frontend_index_left_campaigns_middle`
+    * `frontend_index_left_campaigns_bottom`
+    * `frontend_blog_index_campaign_top`
+    * `frontend_blog_index_campaign_middle`
+    * `frontend_blog_index_campaign_bottom`
+* Removed unnecessary template file for campaign boxes `frontend/campaign/box.tpl`.
+* Removed third party jQuery plugin dependency `masonry`.
+* Deprecated `initMasonryGrid` method and `plugin/swEmotion/onInitMasonryGrid` event in `jquery.emotion.js`
+* Removed shopping world mode `masonry`. The fallback is the new mode `fluid`.
+* Replaced old LESS mixin `createColumnSizes` for new grid mixins `createGrid` and `createColumns` in `_components/emotion.less`.
+* Added new blocks to `widgets/emotion/index.tpl` for better overriding of the configuration.
+    * `widgets/emotion/index/config`
+    * `widgets/emotion/index/attributes`
+    * `widgets/emotion/index/element/config`
+* Changed markup and styling on checkout confirm and finish page
+* Support arbitrary namespaces for doctrine entities instead of the `Shopware\CustomModels` namespace.
+* Deprecated `Shopware()->Models()->__call()`
+* Removed unused database fields `s_core_config_elements.filters`, `s_core_config_elements.validators`, `s_core_config_forms.scope`
+* Removed deprecated `\Shopware\Models\Menu\Repository::save()` and `\Shopware\Models\Menu\Repository::addItem()`
+* Removed event `Shopware_Modules_Order_SaveOrderAttributes_FilterSQL`
+* Removed event `Shopware_Modules_Order_SaveOrderAttributes_FilterDetailsSQL`
+* Removed event `Shopware_Modules_Order_SaveBillingAttributes_FilterSQL`
+* Removed event `Shopware_Modules_Order_SaveBillingAttributes_FilterArray`
+* Removed event `Shopware_Modules_Admin_SaveRegisterShippingAttributes_FilterSql`
+* Removed event `Shopware_Modules_Admin_SaveRegisterShippingAttributes_Return`
+* Removed event `Shopware_Modules_Admin_SaveRegisterBillingAttributes_FilterSql`
+* Removed event `Shopware_Modules_Admin_SaveRegisterBillingAttributes_Return`
+* Removed event `Shopware_Modules_Admin_SaveRegisterMainDataAttributes_FilterSql`
+* Removed event `Shopware_Modules_Admin_SaveRegisterMainDataAttributes_Return`
+* The filter event `Shopware_Modules_Order_SaveBilling_FilterArray` now contains an associative array instead of one with numeric keys.
+* The filter event `Shopware_Modules_Order_SaveBilling_FilterSQL` now uses named parameters in the query instead of question marks.
+* The filter event `Shopware_Modules_Order_SaveShipping_FilterArray` now contains an associative array instead of one with numeric keys.
+* The filter event `Shopware_Modules_Order_SaveShipping_FilterSQL` now uses named parameters in the query instead of question marks.
+* Moved `s_articles_prices.baseprice` to `s_articles_details.purchaseprice`
+    * Added new database field `s_articles_details.purchaseprice`.
+    * Added property `purchasePrice` to `Shopware\Models\Article\Detail`.
+    * Removed property `basePrice` of `Shopware\Models\Article\Price`.
+    * Removed methods `Shopware\Models\Article\Price::getBasePrice()` and `Shopware\Models\Article\Price::setBasePrice()`.
+    * Deprecated database field `s_articles_prices.baseprice`. All data is left intact but this field is not used in shopware anymore and will be dropped in a future version.
+    * Removed property `basePrice` of `Shopware\Models\Article\Configurator\Template\Price`.
+    * Removed database field `s_article_configurator_template_prices.baseprice`.
+* Removed unused class `Shopware_Components_Menu_Item` and `Shopware_Components_Menu_SaveHandler_DbTable`
+* Removed database fields
+    * `s_core_menu.hyperlink`
+    * `s_core_menu.style`
+    * `s_core_menu.resourceID`
+* Removed method `Shopware\Models\Menu\Menu::setStyle()` and `Shopware\Models\Menu\Menu::getStyle()`
+* Removed class `Shopware_Models_Payment`
+* Removed class `Shopware_Models_PaymentManager`
+* Removed `Shopware_Plugins_Frontend_Payment_Bootstrap`, Service: `Shopware()->Payments()`
+* Removed following methods:
+    * \Shopware_Controllers_Frontend_Register::saveRegister
+    * \Shopware_Controllers_Frontend_Register::personalAction
+    * \Shopware_Controllers_Frontend_Register::savePersonalAction
+    * \Shopware_Controllers_Frontend_Register::billingAction
+    * \Shopware_Controllers_Frontend_Register::saveBillingAction
+    * \Shopware_Controllers_Frontend_Register::shippingAction
+    * \Shopware_Controllers_Frontend_Register::saveShippingAction
+    * \Shopware_Controllers_Frontend_Register::paymentAction
+    * \Shopware_Controllers_Frontend_Register::savePaymentAction
+    * \Shopware_Controllers_Frontend_Register::validatePersonal
+    * \Shopware_Controllers_Frontend_Register::setRegisterData
+    * \Shopware_Controllers_Frontend_Register::validateBilling
+    * \Shopware_Controllers_Frontend_Register::validateShipping
+    * \Shopware_Controllers_Frontend_Register::validatePayment
+    * \sAdmin::sSaveRegisterMainData
+    * \sAdmin::sSaveRegisterNewsletter
+    * \sAdmin::sSaveRegisterBilling
+    * \sAdmin::sSaveRegisterShipping
+    * \sAdmin::sSaveRegister
+    * \sAdmin::validateRegistrationFields
+    * \sAdmin::assignCustomerNumber
+    * \sAdmin::logRegistrationMailException
+* Removed the following events:
+    * Shopware_Modules_Admin_SaveRegisterMainData_FilterSql
+    * Shopware_Modules_Admin_SaveRegisterMainData_Return
+    * Shopware_Modules_Admin_SaveRegisterMainData_Return
+    * Shopware_Modules_Admin_SaveRegisterBilling_FilterSql
+    * Shopware_Modules_Admin_SaveRegisterBilling_Return
+    * Shopware_Modules_Admin_SaveRegisterShipping_FilterSql
+    * Shopware_Modules_Admin_SaveRegisterShipping_Return
+    * Shopware_Modules_Admin_SaveRegister_Start
+    * Shopware_Modules_Admin_SaveRegister_GetCustomerNumber
+    * Shopware_Modules_Admin_SaveRegister_FilterNeededFields
+    * Shopware_Modules_Admin_SaveRegister_FilterErrors
+* Shopware_Modules_Admin_SaveRegister_Successful contains no more subject
+* Changed following registration templates
+    * frontend/register/index.tpl
+    * frontend/register/shipping_fieldset.tpl
+    * frontend/register/personal_fieldset.tpl
+    * frontend/register/error_messages.tpl
+    * frontend/register/billing_fieldset.tpl
+* Moved s_user_billingaddress.customernumber to s_user table
+* Removed \Shopware\Models\Customer\Billing::number property
+* Removed method `Shopware\Bundle\PluginInstallerBundle\Service\InstallerService::getPluginBootstrap()`
 * Added `is--active`-class to wishlist-entry in the account-sidebar
+
+## 5.1.6
+* The interface `Enlight_Components_Cron_Adapter` in `engine/Library/Enlight/Components/Cron/Adapter.php` got a new method `getJobByAction`. For default implementation see `engine/Library/Enlight/Components/Cron/Adapter/DBAL.php`.
+
+## 5.1.5
+* The smarty variable `sCategoryInfo` in Listing and Blog controllers is now deprecated and will be removed soon. Use `sCategoryContent` instead, it's a drop in replacement.
 
 ## 5.1.4
 * Customer logout will now regenerate the session id and clear the customers basket.
 * Added `IsNew` condition for product streams
+* Added `SimilarProducts` condition
+* Deprecated Method `Shopware\Bundle\StoreFrontBundle\Gateway\SimilarProductsGatewayInterface::getListByCategory` will be removed in shopware version 5.3
+* Deprecated Method `Shopware\Bundle\StoreFrontBundle\Gateway\SimilarProductsGatewayInterface::getByCategory` will be removed in shopware version 5.3
 * Added method `\Shopware\Models\Article\Repository::getSupplierListQueryBuilder()` to make the query builder extensible
 * Added index on `s_article_img_mapping_rules`.`mapping_id` and `s_article_img_mapping_rules`.`option_id`
 * Fixed `AND` search logic for search terms which not exist in the s_articles table.
 * Added order and payment state constants in `\Shopware\Models\Order\Status`
 * change email validation to a simple regex: `/^.+\@\S+\.\S+$/`. You can implement your own email validation by implementing the `EmailValidatorInterface`.
 * Optimized header lookups for `x-shopware-cache-id` will improve HTTP-Cache invalidation performance. Old behaviour can be restored by setting `lookup_optimization` to false
+* Moved the `div` element in block `frontend_index_left_switches` below `ul` element for W3C compatability in `themes/Frontend/Bare/frontend/index/sidebar.tpl`.
+* Added css rule in order to remove bottom border from last child of `.emotion--html > .html--content` so there is no scrollbar when only whitespace would overlap parent div
+* Enabled product streams for parent categories
+* Disabled the automatic detection of similar products for install customers. Enabling this option may decrease the shop performance.
+* Fixed the `removeListener` method in `Enlight_Event_Subscriber_Config`, `Enlight_Event_Subscriber_Array` and `Enlight_Event_EventManager`
+* Removed `engine/Shopware/Bundle/SearchBundleES/SimilarProductsService.php`
+* Added the possibility to configure the file and directory permissions for the `Local` CDN adapter.
 
 ## 5.1.3
 * Switch Grunt to relativeUrls to unify the paths to less.php

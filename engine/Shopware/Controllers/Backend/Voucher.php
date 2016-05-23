@@ -22,7 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Models\Voucher\Voucher as Voucher;
+use Shopware\Models\Tax\Tax;
+use Shopware\Models\Voucher\Code;
+use Shopware\Models\Voucher\Voucher;
 use Doctrine\ORM\AbstractQuery;
 
 /**
@@ -48,7 +50,7 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
     private function getVoucherRepository()
     {
         if ($this->voucherRepository === null) {
-            $this->voucherRepository = Shopware()->Models()->getRepository('Shopware\Models\Voucher\Voucher');
+            $this->voucherRepository = Shopware()->Models()->getRepository(Voucher::class);
         }
         return $this->voucherRepository;
     }
@@ -275,8 +277,8 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
     public function updateVoucherCodesAction()
     {
         $codeId = intval($this->Request()->getParam('id'));
-        /** @var \Shopware\Models\Voucher\Code $code */
-        $code = $this->get('models')->getRepository('Shopware\Models\Voucher\Code')->find($codeId);
+        /** @var Code $code */
+        $code = $this->get('models')->getRepository(Code::class)->find($codeId);
 
         if (!$code) {
             $this->View()->assign(array('success' => false));
@@ -377,7 +379,7 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
      */
     public function getTaxConfigurationAction()
     {
-        $builder = $this->getManager()->Tax()->createQueryBuilder('t');
+        $builder = $this->getManager()->getRepository(Tax::class)->createQueryBuilder('t');
         $builder->orderBy("t.id", "ASC");
         $tax = $builder->getQuery()->getArrayResult();
 
@@ -425,7 +427,6 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
             $params['bindToSupplier'] = null;
         }
 
-        $params['attribute'] = $params['attribute'][0];
         $voucher->fromArray($params);
         $this->getManager()->persist($voucher);
         $this->getManager()->flush();

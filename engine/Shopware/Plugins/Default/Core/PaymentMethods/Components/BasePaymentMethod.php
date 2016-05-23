@@ -46,7 +46,7 @@ abstract class BasePaymentMethod
      * Creates/updates the payment information for the current
      * method.
      *
-     * @param $userId The user id
+     * @param int $userId The user id
      * @param \Enlight_Controller_Request_Request $request The Request object
      * @return null
      */
@@ -56,7 +56,7 @@ abstract class BasePaymentMethod
      * Fetches the customer's current payment data for this
      * payment method as array
      *
-     * @param $userId The user id
+     * @param int $userId The user id
      * @return array|null
      */
     abstract public function getCurrentPaymentDataAsArray($userId);
@@ -65,9 +65,9 @@ abstract class BasePaymentMethod
      * Creates the Payment Instance for the given order
      * based on the current Payment Method policy.
      *
-     * @param $orderId The Order Id associated with the current payment
-     * @param $userId The User/Customer Id associated with the current payment
-     * @param $paymentId The Payment Method Id associated with the current payment
+     * @param int $orderId The Order Id associated with the current payment
+     * @param int $userId The User/Customer Id associated with the current payment
+     * @param int $paymentId The Payment Method Id associated with the current payment
      * @return true|null
      */
     abstract public function createPaymentInstance($orderId, $userId, $paymentId);

@@ -24,8 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundleES\ConditionHandler;
 
-use ONGR\ElasticsearchDSL\Filter\NotFilter;
-use ONGR\ElasticsearchDSL\Filter\QueryFilter;
+use ONGR\ElasticsearchDSL\Query\BoolQuery;
 use ONGR\ElasticsearchDSL\Query\RangeQuery;
 use ONGR\ElasticsearchDSL\Query\TermQuery;
 use ONGR\ElasticsearchDSL\Query\TermsQuery;
@@ -64,7 +63,8 @@ class ProductAttributeConditionHandler implements HandlerInterface
                 break;
 
             case ProductAttributeCondition::OPERATOR_NEQ:
-                $filter = new NotFilter(new TermQuery($field, $criteriaPart->getValue()));
+                $filter = new BoolQuery();
+                $filter->add(new TermQuery($field, $criteriaPart->getValue()), BoolQuery::MUST_NOT);
                 break;
 
             case ProductAttributeCondition::OPERATOR_LT:
@@ -95,9 +95,8 @@ class ProductAttributeConditionHandler implements HandlerInterface
             case ProductAttributeCondition::OPERATOR_STARTS_WITH:
             case ProductAttributeCondition::OPERATOR_ENDS_WITH:
             case ProductAttributeCondition::OPERATOR_CONTAINS:
-                $filter = new QueryFilter(
-                    new TermQuery($field, $criteriaPart->getValue())
-                );
+                $filter = new BoolQuery();
+                $filter->add(new TermQuery($field, $criteriaPart->getValue()), BoolQuery::MUST);
                 break;
 
             default:

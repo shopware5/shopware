@@ -42,7 +42,7 @@
 
     {* Accumulated product price *}
     {block name='frontend_checkout_cart_item_rebate_total_sum'}
-        <div class="table--column column--total-price block is--align-right">
+        <div class="panel--td table--column column--total-price block is--align-right">
             {block name='frontend_checkout_cart_item_rebate_total_sum_label'}
                 <div class="column--label total-price--label">
                     {s name="CartColumnTotal" namespace="frontend/checkout/cart_header"}{/s}

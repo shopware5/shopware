@@ -28,23 +28,9 @@ use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- *
- * Associations:
- * <code>
- *
- * </code>
- *
- *
- * Indices:
- * <code>
- *
- * </code>
- *
  * @category   Shopware
- * @package    Models
- * @subpackage Emotion
- * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
- * @license    http://enlight.de/license     New BSD License
+ * @package    Shopware\Models
+ * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  * @ORM\Entity
  * @ORM\Table(name="s_library_component_field")
@@ -167,6 +153,12 @@ class Field extends ModelEntity
      * @ORM\Column(name="help_text", type="text",  nullable=false)
      */
     private $helpText;
+
+    /**
+     * @var integer $translatable
+     * @ORM\Column(name="translatable", type="integer", length=1, nullable=false)
+     */
+    private $translatable;
 
     /**
      * @var integer $position
@@ -462,5 +454,21 @@ class Field extends ModelEntity
     public function getPosition()
     {
         return $this->position;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTranslatable()
+    {
+        return $this->translatable;
+    }
+
+    /**
+     * @param int $translatable
+     */
+    public function setTranslatable($translatable)
+    {
+        $this->translatable = $translatable;
     }
 }

@@ -24,21 +24,30 @@
 
 namespace Shopware\Bundle\PluginInstallerBundle\Service;
 
-/**
- * @package Shopware\Bundle\PluginInstallerBundle\Service
- */
 class PluginExtractor
 {
     /**
+     * @var string
+     */
+    private $pluginDir;
+
+    /**
+     * @param $pluginDir
+     */
+    public function __construct($pluginDir)
+    {
+        $this->pluginDir = $pluginDir;
+    }
+
+    /**
      * Extracts the provided zip file to the provided destination
      *
-     * @param string $file
-     * @param string $destination
+     * @param \ZipArchive $archive
      * @throws \Exception
      */
-    public function extract($file, $destination)
+    public function extract($archive)
     {
-        $stream = $this->validatePluginZip($file);
+        $destination = $this->pluginDir;
 
         if (!is_writable($destination)) {
             throw new \Exception(
@@ -46,7 +55,9 @@ class PluginExtractor
             );
         }
 
-        $stream->extractTo($destination);
+        $this->validatePluginZip($archive);
+
+        $archive->extractTo($destination);
 
         $this->clearOpcodeCache();
     }
@@ -56,77 +67,40 @@ class PluginExtractor
      * path and validates the plugin namespace, directory traversal
      * and multiple plugin directories.
      *
-     * @param string $filePath
-     * @return \ZipArchive
+     * @param \ZipArchive $archive
+     * @throws \Exception
      */
-    private function validatePluginZip($filePath)
+    private function validatePluginZip(\ZipArchive $archive)
     {
-        $stream = $this->openZip($filePath);
-
-        $namespace = $this->getPluginNamespace($stream);
-
-        for ($i = 2; $i < $stream->numFiles; $i++) {
-            $stat = $stream->statIndex($i);
-
-            if (strpos($stat['name'], '../') !== false) {
-                throw new \RuntimeException(
-                    sprintf('Directory Traversal detected')
-                );
-            }
-
-            if (strpos($stat['name'], $namespace) !== 0) {
-                throw new \RuntimeException(
-                    sprintf(
-                        'Detected invalid file/directory %s in the plugin zip: %s',
-                        $stat['name'],
-                        $namespace
-                    )
-                );
-            }
-        }
-
-        return $stream;
+        $prefix = $this->getPluginPrefix($archive);
+        $this->assertValid($archive, $prefix);
     }
 
     /**
-     * @param \ZipArchive $stream
+     * @param \ZipArchive $archive
+     * @param string $prefix
+     */
+    private function assertValid(\ZipArchive $archive, $prefix)
+    {
+        for ($i = 2; $i < $archive->numFiles; $i++) {
+            $stat = $archive->statIndex($i);
+
+            $this->assertNoDirectoryTraversal($stat['name']);
+            $this->assertPrefix($stat['name'], $prefix);
+        }
+    }
+
+    /**
+     * @param \ZipArchive $archive
      * @return string
      */
-    private function getPluginNamespace(\ZipArchive $stream)
+    private function getPluginPrefix(\ZipArchive $archive)
     {
-        $segments = $stream->statIndex(0);
-        $segments = array_filter(explode('/', $segments['name']));
+        $entry = $archive->statIndex(0);
 
-        if (count($segments) <= 1) {
-            $segments = $stream->statIndex(1);
-            $segments = array_filter(explode('/', $segments['name']));
-        }
+        $pluginName = rtrim($entry['name'], '/');
 
-        if (!in_array($segments[0], ['Frontend', 'Backend', 'Core'])) {
-            throw new \RuntimeException(
-                sprintf('Uploaded zip archive contains no plugin namespace directory: %s', $segments[1])
-            );
-        }
-
-        return implode('/', $segments);
-    }
-
-    /**
-     * @param $file
-     * @return \ZipArchive
-     */
-    private function openZip($file)
-    {
-        $stream = new \ZipArchive();
-
-        if (true !== ($retVal = $stream->open($file, null))) {
-            throw new \RuntimeException(
-                $this->getErrorMessage($retVal, $file),
-                $retVal
-            );
-        }
-
-        return $stream;
+        return $pluginName;
     }
 
     /**
@@ -145,33 +119,31 @@ class PluginExtractor
     }
 
     /**
-     * @param $retval
-     * @param $file
-     * @return string
+     * @param string $filename
+     * @param string $prefix
      */
-    protected function getErrorMessage($retval, $file)
+    private function assertPrefix($filename, $prefix)
     {
-        switch ($retval) {
-            case \ZipArchive::ER_EXISTS:
-                return sprintf("File '%s' already exists.", $file);
-            case \ZipArchive::ER_INCONS:
-                return sprintf("Zip archive '%s' is inconsistent.", $file);
-            case \ZipArchive::ER_INVAL:
-                return sprintf("Invalid argument (%s)", $file);
-            case \ZipArchive::ER_MEMORY:
-                return sprintf("Malloc failure (%s)", $file);
-            case \ZipArchive::ER_NOENT:
-                return sprintf("No such zip file: '%s'", $file);
-            case \ZipArchive::ER_NOZIP:
-                return sprintf("'%s' is not a zip archive.", $file);
-            case \ZipArchive::ER_OPEN:
-                return sprintf("Can't open zip file: %s", $file);
-            case \ZipArchive::ER_READ:
-                return sprintf("Zip read error (%s)", $file);
-            case \ZipArchive::ER_SEEK:
-                return sprintf("Zip seek error (%s)", $file);
-            default:
-                return sprintf("'%s' is not a valid zip archive, got error code: %s", $file, $retval);
+        if (strpos($filename, $prefix) !== 0) {
+            throw new \RuntimeException(
+                sprintf(
+                    'Detected invalid file/directory %s in the plugin zip: %s',
+                    $filename,
+                    $prefix
+                )
+            );
+        }
+    }
+
+    /**
+     * @param $filename
+     */
+    private function assertNoDirectoryTraversal($filename)
+    {
+        if (strpos($filename, '../') !== false) {
+            throw new \RuntimeException(
+                sprintf('Directory Traversal detected')
+            );
         }
     }
 }

@@ -23,6 +23,7 @@
  */
 
 use Psr\Log\LoggerInterface;
+use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Components\Random;
 use ShopwarePlugins\SwagUpdate\Components\Checks\EmotionTemplateCheck;
 use ShopwarePlugins\SwagUpdate\Components\Checks\IonCubeLoaderCheck;
@@ -47,7 +48,7 @@ use Symfony\Component\Filesystem\Filesystem;
  * @package   Shopware\Controllers\Backend\SwagUpdate
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backend_ExtJs
+class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
     /**
      * Cache key for update response
@@ -575,5 +576,17 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
         $locale = strtolower($locale->getLocale());
 
         return substr($locale, 0, 2);
+    }
+
+    /**
+     * Returns a list with actions which should not be validated for CSRF protection
+     *
+     * @return string[]
+     */
+    public function getWhitelistedCSRFActions()
+    {
+        return [
+            'startUpdate'
+        ];
     }
 }

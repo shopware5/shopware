@@ -56,6 +56,11 @@ class GraduatedPricesGateway implements Gateway\GraduatedPricesGatewayInterface
     private $fieldHelper;
 
     /**
+     * @var Connection
+     */
+    private $connection;
+
+    /**
      * @param Connection $connection
      * @param FieldHelper $fieldHelper
      * @param Hydrator\PriceHydrator $priceHydrator
@@ -75,9 +80,10 @@ class GraduatedPricesGateway implements Gateway\GraduatedPricesGatewayInterface
      */
     public function get(
         Struct\ListProduct $product,
+        Struct\ShopContextInterface $context,
         Struct\Customer\Group $customerGroup
     ) {
-        $prices = $this->getList([$product], $customerGroup);
+        $prices = $this->getList([$product], $context, $customerGroup);
 
         return array_shift($prices);
     }
@@ -85,7 +91,7 @@ class GraduatedPricesGateway implements Gateway\GraduatedPricesGatewayInterface
     /**
      * @inheritdoc
      */
-    public function getList($products, Struct\Customer\Group $customerGroup)
+    public function getList($products, Struct\ShopContextInterface $context, Struct\Customer\Group $customerGroup)
     {
         $ids = [];
         foreach ($products as $product) {
@@ -100,15 +106,15 @@ class GraduatedPricesGateway implements Gateway\GraduatedPricesGatewayInterface
 
         $query->from('s_articles_prices', 'price')
             ->innerJoin('price', 's_articles_details', 'variants', 'variants.id = price.articledetailsID')
-            ->leftJoin('price', 's_articles_prices_attributes', 'priceAttribute', 'priceAttribute.priceID = price.id');
-
-        $query->where('price.articledetailsID IN (:products)')
+            ->leftJoin('price', 's_articles_prices_attributes', 'priceAttribute', 'priceAttribute.priceID = price.id')
+            ->where('price.articledetailsID IN (:products)')
             ->andWhere('price.pricegroup = :customerGroup')
+            ->orderBy('price.articledetailsID', 'ASC')
+            ->addOrderBy('price.from', 'ASC')
             ->setParameter(':products', $ids, Connection::PARAM_INT_ARRAY)
             ->setParameter(':customerGroup', $customerGroup->getKey());
 
-        $query->orderBy('price.articledetailsID', 'ASC')
-            ->addOrderBy('price.from', 'ASC');
+        $this->fieldHelper->addPriceTranslation($query, $context);
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
@@ -118,7 +124,6 @@ class GraduatedPricesGateway implements Gateway\GraduatedPricesGatewayInterface
         $prices = [];
         foreach ($data as $row) {
             $product = $row['number'];
-
             $prices[$product][] = $this->priceHydrator->hydratePriceRule($row);
         }
 

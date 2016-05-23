@@ -56,7 +56,7 @@ class Shopware_Tests_Controllers_Backend_MailTest extends Enlight_Components_Tes
 
     public function testCreateMail()
     {
-        $this->testData['name'] .= uniqid();
+        $this->testData['name'] .= uniqid(rand());
 
         $this->Request()->setMethod('POST')->setPost($this->testData);
         $response = $this->dispatch('/backend/mail/createMail');

@@ -338,7 +338,7 @@ class Article extends Resource implements BatchInterface
     {
         $builder = $this->getManager()->createQueryBuilder();
         $builder->select(['categories.id', 'categories.name'])
-            ->from('Shopware\Models\Category\Category', 'categories', 'categories.id')
+            ->from('Shopware\Models\Category\Category', 'categories')
             ->innerJoin('categories.articles', 'articles')
             ->where('articles.id = :articleId')
             ->setParameter('articleId', $articleId);

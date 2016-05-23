@@ -24,7 +24,7 @@
      * category parameters out of the serialized form data.
      *
      * Example:
-     * <form id="filter" method="get" action="" data-filter-form="true">
+     * <form id="filter" method="get" data-filter-form="true">
      *
      *
      * ** Action Forms **
@@ -35,7 +35,7 @@
      * like sorting, layout type, number of products per page etc.
      *
      * Example:
-     * <form method="get" data-action-form="true" action="">
+     * <form method="get" data-action-form="true">
      *  <select name="{$shortParameters.sSort}" data-auto-submit="true">
      *      {...}
      *  </select>

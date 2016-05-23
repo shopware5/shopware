@@ -23,7 +23,6 @@
  */
 
 use Shopware\Models\Order\Order;
-use Doctrine\ORM\AbstractQuery;
 
 /**
  * Shopware Backend Controller

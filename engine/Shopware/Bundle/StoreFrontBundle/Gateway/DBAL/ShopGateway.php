@@ -61,7 +61,6 @@ class ShopGateway implements ShopGatewayInterface
         $this->connection = $connection;
     }
 
-
     /**
      * @param int $id
      * @return Shop
@@ -72,6 +71,10 @@ class ShopGateway implements ShopGatewayInterface
         return array_shift($shops);
     }
 
+    /**
+     * @param int[] $ids
+     * @return Shop[] indexed by id
+     */
     public function getList($ids)
     {
         $shops = $this->getShops($ids);
@@ -131,9 +134,8 @@ class ShopGateway implements ShopGatewayInterface
             ->leftJoin('category', 's_categories_avoid_customergroups', 'customerGroups', 'customerGroups.categoryID = category.id')
             ->leftJoin('category', 's_media', 'media', 'media.id = category.mediaID')
             ->leftJoin('media', 's_media_album_settings', 'mediaSettings', 'mediaSettings.albumID = media.albumID')
-            ->leftJoin('media', 's_media_attributes', 'mediaAttribute', 'mediaAttribute.mediaID = media.id');
-
-        $query->where('shop.id IN (:ids)')
+            ->leftJoin('media', 's_media_attributes', 'mediaAttribute', 'mediaAttribute.mediaID = media.id')
+            ->where('shop.id IN (:ids)')
             ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
         $data = $query->execute()->fetchAll(\PDO::FETCH_ASSOC);

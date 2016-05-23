@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Shopware\Models\ProductFeed\ProductFeed;
 
 /**
  * @category  Shopware
@@ -69,7 +70,7 @@ class Shopware_Tests_Controllers_Backend_ProductFeedTest extends Enlight_Compone
     /** @var Shopware\Components\Model\ModelManager */
     private $manager = null;
 
-    /**@var $model \Shopware\Models\ProductFeed\ProductFeed*/
+    /**@var $model ProductFeed*/
     protected $repository = null;
 
     /**
@@ -80,7 +81,7 @@ class Shopware_Tests_Controllers_Backend_ProductFeedTest extends Enlight_Compone
         parent::setUp();
 
         $this->manager    = Shopware()->Models();
-        $this->repository = Shopware()->Models()->ProductFeed();
+        $this->repository = Shopware()->Models()->getRepository(ProductFeed::class);
 
         // disable auth and acl
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
@@ -90,11 +91,11 @@ class Shopware_Tests_Controllers_Backend_ProductFeedTest extends Enlight_Compone
     /**
      * Creates the dummy feed
      *
-     * @return \Shopware\Models\ProductFeed\ProductFeed
+     * @return ProductFeed
      */
     private function getDummyFeed()
     {
-        $feed = new \Shopware\Models\ProductFeed\ProductFeed();
+        $feed = new ProductFeed();
         $feedData = $this->feedData;
         $feed->fromArray($feedData);
         return $feed;
@@ -103,7 +104,7 @@ class Shopware_Tests_Controllers_Backend_ProductFeedTest extends Enlight_Compone
     /**
      * helper method to create the dummy object
      *
-     * @return \Shopware\Models\ProductFeed\ProductFeed
+     * @return ProductFeed
      */
     private function createDummy()
     {
@@ -157,7 +158,7 @@ class Shopware_Tests_Controllers_Backend_ProductFeedTest extends Enlight_Compone
 
         $this->dispatch('backend/ProductFeed/saveFeed');
         $this->assertTrue($this->View()->success);
-        $this->assertCount(36, $this->View()->data);
+        $this->assertNotEmpty($this->View()->data);
         $this->assertEquals($params["name"], $this->View()->data["name"]);
 
         return $this->View()->data["id"];
@@ -208,7 +209,7 @@ class Shopware_Tests_Controllers_Backend_ProductFeedTest extends Enlight_Compone
         $this->dispatch('backend/ProductFeed/saveFeed');
 
         $this->assertTrue($this->View()->success);
-        $this->assertCount(36, $this->View()->data);
+        $this->assertNotEmpty($this->View()->data);
         $this->assertEquals($params["name"], $this->View()->data["name"]);
 
         return $id;
@@ -234,7 +235,6 @@ class Shopware_Tests_Controllers_Backend_ProductFeedTest extends Enlight_Compone
      * test getSuppliers action
      *
      * @return void
-     * @internal param $id
      */
     public function testGetSuppliersAction()
     {
@@ -247,7 +247,6 @@ class Shopware_Tests_Controllers_Backend_ProductFeedTest extends Enlight_Compone
      * test getArticles action
      *
      * @return void
-     * @internal param $id
      */
     public function testGetArticlesAction()
     {

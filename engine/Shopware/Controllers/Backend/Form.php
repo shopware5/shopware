@@ -169,7 +169,6 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
         $params = $this->Request()->getParams();
 
         $formModel = new Form();
-        $params['attribute'] = $params['attribute'][0];
         $params['shopIds'] = $params['shopIds'] ? '|' . implode('|', $params['shopIds']) . '|' : null;
 
         $formModel->fromArray($params);
@@ -201,7 +200,6 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
         }
 
         $params = $this->Request()->getParams();
-        $params['attribute'] = $params['attribute'][0];
 
         // unset fields - fields should only be updated via the updateField-Action
         unset($params['fields']);
@@ -261,6 +259,9 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
 
         $this->getManager()->persist($clonedForm);
         $this->getManager()->flush();
+
+        $persister = Shopware()->Container()->get('shopware_attribute.data_persister');
+        $persister->cloneAttribute('s_cms_support_attributes', $id, $clonedForm->getId());
 
         $this->View()->assign(array('success' => true));
     }

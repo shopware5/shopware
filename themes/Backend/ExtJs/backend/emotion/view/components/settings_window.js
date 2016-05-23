@@ -20,30 +20,27 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  *
- * @category   Shopware
- * @package    UserManager
- * @subpackage View
- * @version    $Id$
- * @author shopware AG
+ * @category    Shopware
+ * @package     Emotion
+ * @subpackage  View
+ * @version     $Id$
+ * @author      shopware AG
  */
 
 //{namespace name=backend/emotion/view/detail}
-
-/**
- * Shopware UI - Media Manager Main Window
- *
- * This file contains the business logic for the User Manager module. The module
- * handles the whole administration of the backend users.
- */
 //{block name="backend/emotion/view/component/settings_window"}
 Ext.define('Shopware.apps.Emotion.view.components.SettingsWindow', {
-	extend: 'Enlight.app.Window',
+
+    extend: 'Enlight.app.Window',
+
     alias: 'widget.emotion-detail-settings-window',
+
     border: false,
     layout: 'fit',
     autoShow: true,
     height: '90%',
-    width: 800,
+    width: 845,
+
     stateful: true,
     stateId: 'emotion-detail-settings-window',
 
@@ -80,16 +77,18 @@ Ext.define('Shopware.apps.Emotion.view.components.SettingsWindow', {
      * Registers additional component events.
      */
     registerEvents: function() {
-    	this.addEvents(
-    		/**
-    		 * Fired when the user clicks the save button to save the component settings
-    		 *
-    		 * @event
-    		 * @param [object] The component form panel
-    		 * @param [object] The component record
-    		 */
-    		'saveComponent'
-    	);
+        var me = this;
+
+        me.addEvents(
+            /**
+             * Fired when the user clicks the save button to save the component settings
+             *
+             * @event saveComponent
+             * @param [object] The component form panel
+             * @param [object] The component record
+             */
+            'saveComponent'
+        );
     },
 
     createActionButtons: function() {

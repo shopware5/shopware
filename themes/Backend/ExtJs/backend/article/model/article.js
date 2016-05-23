@@ -49,6 +49,7 @@ Ext.define('Shopware.apps.Article.model.Article', {
     fields: [
 		//{block name="backend/article/model/article/fields"}{/block}
         { name: 'id', type: 'int', useNull: true },
+        { name: 'mainDetailId', type: 'int', useNull: true },
         { name: 'configuratorSetId', type: 'integer', useNull: true },
         { name: 'supplierId', type: 'int', useNull: true },
         { name: 'supplierName', type: 'string' },
@@ -111,7 +112,6 @@ Ext.define('Shopware.apps.Article.model.Article', {
         { type: 'hasMany', model: 'Shopware.apps.Article.model.Download', name: 'getDownload', associationKey: 'downloads' },
         { type: 'hasMany', model: 'Shopware.apps.Article.model.Price', name: 'getPrice', associationKey: 'mainPrices' },
         { type: 'hasMany', model: 'Shopware.apps.Article.model.ConfiguratorTemplate', name: 'getConfiguratorTemplate', associationKey: 'configuratorTemplate' },
-        { type: 'hasMany', model: 'Shopware.apps.Article.model.Attribute', name: 'getAttribute', associationKey: 'attribute' },
         { type: 'hasMany', model: 'Shopware.apps.Article.model.ConfiguratorSet', name:'getConfiguratorSet', associationKey:'configuratorSet' },
         { type: 'hasMany', model: 'Shopware.apps.Article.model.Dependency', name: 'getDependencies', associationKey: 'dependencies' },
         { type: 'hasMany', model: 'Shopware.apps.Article.model.PriceSurcharge', name: 'getPriceSurcharges', associationKey: 'priceSurcharges' },

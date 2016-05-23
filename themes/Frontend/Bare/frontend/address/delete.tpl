@@ -8,7 +8,7 @@
 
 {* Main content *}
 {block name="frontend_index_content"}
-    <div class="account--addresses account--content addresses--delete">
+    <div class="account--address account--content address--delete">
 
         {* Addresses headline *}
         {block name="frontend_address_headline"}
@@ -36,10 +36,9 @@
                                 <p>{$address.company}{if $address.department} - {$address.department}{/if}</p>
                             {/if}
 
-                            {if $address.salutation eq "mr"}
-                                {s name="RegisterLabelMr" namespace="frontend/register/personal_fieldset"}{/s}
-                            {else}
-                                {s name="RegisterLabelMs" namespace="frontend/register/personal_fieldset"}{/s}
+                            {$address.salutation|salutation}
+                            {if {config name="displayprofiletitle"}}
+                                {$address.title}<br/>
                             {/if}
                             {$address.firstname} {$address.lastname}<br />
                             {$address.street}<br />
@@ -55,7 +54,7 @@
             {/block}
 
             {block name="frontend_address_delete_actions"}
-                <div class="addresses--delete-actions">
+                <div class="address--delete-actions">
                     <form action="{url controller=address action=delete id=$address.id}" method="post">
 
                         {block name="frontend_address_delete_actions_cancel"}

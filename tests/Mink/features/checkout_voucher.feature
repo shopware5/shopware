@@ -42,7 +42,7 @@ Feature: Checkout articles with voucher
             | salutation    | mr                 |                   |
             | firstname     | Max                |                   |
             | lastname      | Mustermann         |                   |
-            | skipLogin     | 1                  |                   |
+            | accountmode   | 1                  |                   |
             | email         | test@example.com   |                   |
             | company       |                    | Muster GmbH       |
             | street        |                    | Musterstr. 55     |

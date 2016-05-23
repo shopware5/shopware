@@ -1,5 +1,35 @@
 
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ *
+ * @category   Shopware
+ * @package    PluginManager
+ * @subpackage Controller
+ * @version    $Id$
+ * @author shopware AG
+ */
+
 //{namespace name=backend/plugin_manager/translation}
+//{block name="backend/plugin_manager/controller/main"}
 Ext.define('Shopware.apps.PluginManager.controller.Main', {
     extend:'Ext.app.Controller',
     mainWindow: null,
@@ -71,11 +101,16 @@ Ext.define('Shopware.apps.PluginManager.controller.Main', {
         updatePage.listing.resetListing();
 
         updatePage.updateStore.load({
-            callback: function(records) {
+            callback: function(records, operation, success) {
+                if (operation.response && operation.response.responseText) {
+                    var result = Ext.JSON.decode(operation.response.responseText);
+                    if (result.loginRecommended) {
+                        Shopware.app.Application.fireEvent('open-login', function() {});
+                    }
+                }
+
                 if (records) {
                     navigation.setUpdateCount(records.length);
-
-                    Ext.create('Shopware.notification.ExpiredLicence').check();
                 }
 
                 if (Ext.isFunction(callback)) {
@@ -120,3 +155,4 @@ Ext.define('Shopware.apps.PluginManager.controller.Main', {
         }, 1000);
     }
 });
+//{/block}

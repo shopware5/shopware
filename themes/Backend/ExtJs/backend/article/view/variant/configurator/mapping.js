@@ -74,12 +74,6 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Mapping', {
      */
     width:400,
     /**
-     * Define window height
-     * @integer
-     */
-    height:300,
-
-    /**
      * A flag which causes the object to attempt to restore the state of internal properties from a saved state on startup.
      */
     stateful:true,
@@ -102,6 +96,7 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Mapping', {
         attribute: '{s name=variant/configurator/mapping/attribute}Apply attribute configuration{/s}',
         prices: '{s name=variant/configurator/mapping/prices}Apply price configuration{/s}',
         basePrice: '{s name=variant/configurator/mapping/basePrice}Apply base price configuration{/s}',
+        purchasePrice: '{s name=variant/configurator/mapping/purchasePrice}Apply pruchase price configuration{/s}',
         settings: '{s name=variant/configurator/mapping/settings}Apply settings configuration{/s}',
         translations: '{s name=variant/configurator/mapping/translations}Apply translations{/s}',
         save: '{s name=variant/configurator/mapping/save}Save{/s}',
@@ -128,6 +123,11 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Mapping', {
         if (me.record) {
             me.formPanel.loadRecord(me.record);
         }
+
+        // Set height when showing the window, since all other height changes are ignored
+        me.on('show', function() {
+            me.setHeight(330);
+        });
     },
 
     /**
@@ -174,6 +174,9 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Mapping', {
         } , {
             name: 'basePrice',
             fieldLabel: me.snippets.basePrice
+        } , {
+            name: 'purchasePrice',
+            fieldLabel: me.snippets.purchasePrice
         } , {
             name: 'settings',
             fieldLabel: me.snippets.settings

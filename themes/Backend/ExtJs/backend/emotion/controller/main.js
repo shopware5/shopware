@@ -27,13 +27,12 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/emotion/view/main}
-
 /**
  * Shopware UI - Emotion Main Controller
  *
  * This file contains the business logic for the Emotion module.
  */
+//{namespace name=backend/emotion/view/main}
 //{block name="backend/emotion/controller/main"}
 Ext.define('Shopware.apps.Emotion.controller.Main', {
 
@@ -41,26 +40,19 @@ Ext.define('Shopware.apps.Emotion.controller.Main', {
      * Extend from the standard ExtJS 4 controller
      * @string
      */
-	extend: 'Ext.app.Controller',
+    extend: 'Ext.app.Controller',
 
-	/**
-	 * Creates the necessary event listener for this
-	 * specific controller and opens a new Ext.window.Window
-	 * to display the subapplication
+    /**
+     * Creates the necessary event listener for this
+     * specific controller and opens a new Ext.window.Window
+     * to display the subapplication
      *
      * @return void
-	 */
-	init: function() {
-		var me = this;
+     */
+    init: function() {
+        var me = this;
 
-        //load the categoryPath store initial to show the right category combobox entries
-        me.subApplication.categoryPathStore =  me.subApplication.getStore('CategoryPath');
-        me.subApplication.categoryPathStore.getProxy().extraParams.parents = true;
-        me.subApplication.categoryPathStore.load();
-
-        me.mainWindow = me.getView('main.Window').create({
-            categoryPathStore: me.subApplication.categoryPathStore
-        });
-	}
+        me.mainWindow = me.getView('main.Window').create();
+    }
 });
 //{/block}

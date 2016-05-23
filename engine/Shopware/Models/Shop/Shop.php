@@ -703,7 +703,7 @@ class Shop extends ModelEntity
         $plugins = $container->get('Plugins');
 
         /** @var $pluginNamespace  \Shopware_Components_Plugin_Namespace */
-          foreach ($plugins as $pluginNamespace) {
+        foreach ($plugins as $pluginNamespace) {
             if ($pluginNamespace instanceof \Shopware_Components_Plugin_Namespace) {
                 $pluginNamespace->setShop($this);
             }

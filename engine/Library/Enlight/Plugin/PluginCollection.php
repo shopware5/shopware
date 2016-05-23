@@ -54,7 +54,7 @@ abstract class Enlight_Plugin_PluginCollection extends Enlight_Class implements 
     /**
      * Returns the application instance.
      *
-     * @return Enlight_Application
+     * @return Shopware
      */
     abstract public function Application();
 

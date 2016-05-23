@@ -289,9 +289,6 @@ class ModelEntityTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(null, $article->getSupplier());
     }
 
-     /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testCanReAssignWithAnotherIdThrowsExceptionManyToOne()
     {
         $article = new Article();
@@ -312,6 +309,7 @@ class ModelEntityTest extends \PHPUnit_Framework_TestCase
             ),
         );
 
+        $this->expectException(\InvalidArgumentException::class);
         $article->fromArray($data);
     }
 

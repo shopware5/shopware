@@ -34,7 +34,7 @@ class CheckoutShipping extends Element implements \Shopware\Tests\Mink\HelperSel
     public function getNamedSelectors()
     {
         return [
-            'changeButton'  => ['de' => 'Ändern', 'en' => 'Change'],
+            'changeButton'  => ['de' => 'Adresse ändern', 'en' => 'Change address'],
             'otherButton'  => ['de' => 'Andere', 'en' => 'Others']
         ];
     }

@@ -47,97 +47,6 @@ class ArticleTest extends TestCase
         return new Article();
     }
 
-    /**
-     * @group performance
-     */
-    public function testPerformanceGetOneArray()
-    {
-        $ids = Shopware()->Db()->fetchCol("SELECT DISTINCT id FROM s_articles");
-        $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
-        foreach ($ids as $id) {
-            $article = $this->resource->getOne($id);
-            $this->assertInternalType('array', $article);
-        }
-    }
-
-    /**
-     * @group performance
-     */
-    public function testPerformanceGetOneObject()
-    {
-        $ids = Shopware()->Db()->fetchCol("SELECT DISTINCT id FROM s_articles");
-        $this->resource->setResultMode(Resource::HYDRATE_OBJECT);
-        foreach ($ids as $id) {
-            $article = $this->resource->getOne($id);
-            $this->assertInstanceOf('\Shopware\Models\Article\Article', $article);
-        }
-    }
-
-    /**
-     * @group performance
-     *
-     * @return int
-     */
-    public function testPerformanceCreateBigOne()
-    {
-        $article = $this->createBigArticle();
-        return $article->getId();
-    }
-
-    /**
-     * @group performance
-     *
-     * @depends testPerformanceCreateBigOne
-     * @param $id
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     */
-    public function testPerformanceGetBigOneObject($id)
-    {
-        $this->resource->setResultMode(Resource::HYDRATE_OBJECT);
-
-        $data = $this->resource->getOne($id);
-        $this->assertInstanceOf('\Shopware\Models\Article\Article', $data);
-    }
-
-    /**
-     * @group performance
-     *
-     * @depends testPerformanceCreateBigOne
-     * @param $id
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     */
-    public function testPerformanceGetBigOneArray($id)
-    {
-        $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
-
-        $data = $this->resource->getOne($id);
-        $this->assertInternalType('array', $data);
-    }
-
-    /**
-     * @group performance
-     *
-     * @depends testPerformanceCreateBigOne
-     */
-    public function testPerformanceBigArticleUpdate($id)
-    {
-        for ($i = 0; $i < 20; $i++) {
-            $data = array(
-                'similar' => Shopware()->Db()->fetchAll("SELECT DISTINCT id FROM s_articles ORDER BY RAND() LIMIT 10"),
-                'categories' => Shopware()->Db()->fetchAll(
-                    "SELECT DISTINCT id FROM s_categories ORDER BY RAND() LIMIT 20"
-                ),
-                'related' => Shopware()->Db()->fetchAll("SELECT DISTINCT id FROM s_articles LIMIT 10"),
-            );
-
-            $article = $this->resource->update($id, $data);
-
-            $this->assertInstanceOf('\Shopware\Models\Article\Article', $article);
-        }
-    }
-
     public function testCreateShouldBeSuccessful()
     {
         $testData = array(
@@ -160,12 +69,12 @@ class ArticleTest extends TestCase
                 array(
                     'value' => 'testWert',
                     'option' => array(
-                        'name' => 'neueOption' . uniqid()
+                        'name' => 'neueOption' . uniqid(rand())
                     )
                 )
             ),
             'mainDetail' => array(
-                'number' => 'swTEST' . uniqid(),
+                'number' => 'swTEST' . uniqid(rand()),
                 'inStock' => 15,
                 'unitId' => 1,
                 'attribute' => array(
@@ -209,7 +118,7 @@ class ArticleTest extends TestCase
             ),
             'variants' => array(
                 array(
-                    'number' => 'swTEST.variant.' . uniqid(),
+                    'number' => 'swTEST.variant.' . uniqid(rand()),
                     'inStock' => 17,
                     // create a new unit
                     'unit' => array(
@@ -335,7 +244,7 @@ class ArticleTest extends TestCase
                 array(
                     'value' => 'testWert',
                     'option' => array(
-                        'name' => 'neueOption' . uniqid()
+                        'name' => 'neueOption' . uniqid(rand())
                     )
                 )
             ),
@@ -351,7 +260,7 @@ class ArticleTest extends TestCase
                 )
             ),
             'mainDetail' => array(
-                'number' => 'swTEST' . uniqid(),
+                'number' => 'swTEST' . uniqid(rand()),
                 'inStock' => 15,
                 'unitId' => 1,
                 'attribute' => array(
@@ -395,7 +304,7 @@ class ArticleTest extends TestCase
             ),
             'variants' => array(
                 array(
-                    'number' => 'swTEST.variant.' . uniqid(),
+                    'number' => 'swTEST.variant.' . uniqid(rand()),
                     'inStock' => 17,
                     // create a new unit
                     'unit' => array(
@@ -597,7 +506,7 @@ class ArticleTest extends TestCase
                 array(
                     'value' => 'testWert',
                     'option' => array(
-                        'name' => 'neueOption' . uniqid()
+                        'name' => 'neueOption' . uniqid(rand())
                     )
                 )
             ),
@@ -607,7 +516,7 @@ class ArticleTest extends TestCase
                 )
             ),
             'mainDetail' => array(
-                'number' => 'swTEST' . uniqid(),
+                'number' => 'swTEST' . uniqid(rand()),
                 'inStock' => 15,
                 'unitId' => 1,
                 'attribute' => array(
@@ -652,7 +561,7 @@ class ArticleTest extends TestCase
             ),
             'variants' => array(
                 array(
-                    'number' => 'swTEST.variant.' . uniqid(),
+                    'number' => 'swTEST.variant.' . uniqid(rand()),
                     'inStock' => 17,
                     // create a new unit
                     'unit' => array(
@@ -764,12 +673,12 @@ class ArticleTest extends TestCase
                 array(
                     'value' => 'testWert',
                     'option' => array(
-                        'name' => 'neueOption' . uniqid()
+                        'name' => 'neueOption' . uniqid(rand())
                     )
                 )
             ),
             'mainDetail' => array(
-                'number' => 'swConfigSetMainTest' . uniqid(),
+                'number' => 'swConfigSetMainTest' . uniqid(rand()),
                 'inStock' => 15,
                 'unitId' => 1,
                 'attribute' => array(
@@ -819,7 +728,7 @@ class ArticleTest extends TestCase
             ),
             'variants' => array(
                 array(
-                    'number' => 'swConfigSetMainTest.variant.' . uniqid(),
+                    'number' => 'swConfigSetMainTest.variant.' . uniqid(rand()),
                     'inStock' => 17,
                     // create a new unit
                     'unit' => array(
@@ -862,7 +771,7 @@ class ArticleTest extends TestCase
                     )
                 ),
                 array(
-                    'number' => 'swConfigSetMainTest.variant.' . uniqid(),
+                    'number' => 'swConfigSetMainTest.variant.' . uniqid(rand()),
                     'inStock' => 18,
                     // create another new unit
                     'unit' => array(
@@ -1650,7 +1559,7 @@ class ArticleTest extends TestCase
     {
         $configurator = $this->getSimpleConfiguratorSet(2, 5);
         $variantOptions = $this->getVariantOptionsOfSet($configurator);
-        $variantNumber = 'swVariant' . uniqid();
+        $variantNumber = 'swVariant' . uniqid(rand());
 
         $testData = array(
             'name' => 'Testartikel',
@@ -1660,7 +1569,7 @@ class ArticleTest extends TestCase
             'taxId' => 1,
             'supplierId' => 1,
             'mainDetail' => array(
-                'number' => 'swTEST' . uniqid(),
+                'number' => 'swTEST' . uniqid(rand()),
                 'inStock' => 15,
                 'unitId' => 1,
                 'prices' => array(
@@ -2059,7 +1968,7 @@ class ArticleTest extends TestCase
     {
         $data = $this->getSimpleTestData();
 
-        $optionName = 'newOption' . uniqid();
+        $optionName = 'newOption' . uniqid(rand());
         $properties = array(
             array(
                 'option' => array('name' => $optionName),
@@ -2174,7 +2083,7 @@ class ArticleTest extends TestCase
 
     public function testUpdateWithMultiplePropertiesAndNewGroup()
     {
-        $optionName = 'newOption' . uniqid();
+        $optionName = 'newOption' . uniqid(rand());
         $properties = array(
             array(
                 'option' => array('name' => $optionName),
@@ -2670,127 +2579,6 @@ class ArticleTest extends TestCase
         }
     }
 
-    /**
-     * @return \Shopware\Models\Article\Article
-     */
-    private function createBigArticle()
-    {
-        $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->select(array('groups', 'options'))->from(
-                'Shopware\Models\Article\Configurator\Group',
-                'groups'
-            )->innerJoin('groups.options', 'options');
-
-        $configurator = array(
-            'name' => 'Performance Test Set',
-            'groups' => $builder->getQuery()->getArrayResult()
-        );
-
-        $builder->select(
-            array(
-                'groups.name as groupName',
-                'options.name as option'
-            )
-        )->groupBy('groups.id');
-
-        $variantOptions = $builder->getQuery()->getArrayResult();
-        foreach ($variantOptions as &$option) {
-            $option['group'] = $option['groupName'];
-            unset($option['groupName']);
-        }
-
-        $variants = array();
-        for ($i = 0; $i < 100; $i++) {
-            $variants[] = array(
-                'number' => 'swTEST.variant.' . uniqid(),
-                'inStock' => 17,
-                'unit' => array('unit' => 'xyz', 'name' => 'newUnit'),
-                'attribute' => array('attr3' => 'Freitext3', 'attr4' => 'Freitext4'),
-                'configuratorOptions' => $variantOptions,
-                'minPurchase' => 5,
-                'purchaseSteps' => 2,
-                'prices' => array(
-                    array('customerGroupKey' => 'H', 'from' => 1, 'to' => 20, 'price' => 500),
-                    array('customerGroupKey' => 'H', 'from' => 21, 'to' => '-', 'price' => 400),
-                )
-            );
-        }
-
-        $testData = array(
-            'name' => 'Performance - Artikel',
-            'description' => 'Test description',
-            'descriptionLong' => 'Test descriptionLong',
-            'active' => true,
-            'pseudoSales' => 999,
-            'highlight' => true,
-            'keywords' => 'test, testarticle',
-            'filterGroupId' => 1,
-            'propertyValues' => array(
-                array(
-                    'value' => 'grün',
-                    'option' => array(
-                        'name' => 'Farbe'
-                    )
-                ),
-                array(
-                    'value' => 'testWert',
-                    'option' => array(
-                        'name' => 'neueOption' . uniqid()
-                    )
-                )
-            ),
-            'mainDetail' => array(
-                'number' => 'swTEST' . uniqid(),
-                'inStock' => 15,
-                'unitId' => 1,
-                'attribute' => array(
-                    'attr1' => 'Freitext1',
-                    'attr2' => 'Freitext2',
-                ),
-                'minPurchase' => 5,
-                'purchaseSteps' => 2,
-                'prices' => array(
-                    array(
-                        'customerGroupKey' => 'EK',
-                        'from' => 1,
-                        'to' => 20,
-                        'price' => 500,
-                    ),
-                    array(
-                        'customerGroupKey' => 'EK',
-                        'from' => 21,
-                        'to' => '-',
-                        'price' => 400,
-                    ),
-                )
-            ),
-            'configuratorSet' => $configurator,
-            'variants' => $variants,
-            'taxId' => 1,
-            'supplierId' => 2,
-            'similar' => Shopware()->Db()->fetchAll("SELECT DISTINCT id FROM s_articles LIMIT 30"),
-            'categories' => Shopware()->Db()->fetchAll("SELECT DISTINCT id FROM s_categories LIMIT 100"),
-            'related' => Shopware()->Db()->fetchAll("SELECT DISTINCT id FROM s_articles LIMIT 30"),
-            'links' => array(
-                array('name' => 'foobar', 'link' => 'http://example.org'),
-                array('name' => 'Video', 'link' => 'http://example.org'),
-                array('name' => 'Video2', 'link' => 'http://example.org'),
-                array('name' => 'Video3', 'link' => 'http://example.org'),
-                array('name' => 'Video4', 'link' => 'http://example.org'),
-                array('name' => 'Video5', 'link' => 'http://example.org'),
-                array('name' => 'Video6', 'link' => 'http://example.org'),
-                array('name' => 'Video7', 'link' => 'http://example.org'),
-                array('name' => 'Video8', 'link' => 'http://example.org'),
-                array('name' => 'Video9', 'link' => 'http://example.org'),
-                array('name' => 'Video10', 'link' => 'http://example.org'),
-            ),
-        );
-
-        $article = $this->resource->create($testData);
-        Shopware()->Models()->clear();
-        return $article;
-    }
-
     private function getSimpleTestData()
     {
         return array(
@@ -2798,7 +2586,7 @@ class ArticleTest extends TestCase
             'description' => 'Test description',
             'active' => true,
             'mainDetail' => array(
-                'number' => 'swTEST' . uniqid(),
+                'number' => 'swTEST' . uniqid(rand()),
                 'inStock' => 15,
                 'unitId' => 1,
                 'prices' => array(
@@ -2865,7 +2653,7 @@ class ArticleTest extends TestCase
     private function getSimpleVariantData()
     {
         return array(
-            'number' => 'swTEST' . uniqid(),
+            'number' => 'swTEST' . uniqid(rand()),
             'inStock' => 100,
             'unitId' => 1,
             'prices' => array(
@@ -2988,7 +2776,7 @@ class ArticleTest extends TestCase
 
     public function testCategoryAssignment()
     {
-        $number = 'CategoryAssignment' . uniqid();
+        $number = 'CategoryAssignment' . uniqid(rand());
 
         $data = $this->getSimpleTestData();
         $data['mainDetail']['number'] = $number;

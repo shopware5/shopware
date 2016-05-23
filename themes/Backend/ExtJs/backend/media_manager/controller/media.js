@@ -333,6 +333,8 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
         selModel = view.getSelectionModel();
         selected = selModel.getSelection();
 
+        mediaView.attributeButton.hide();
+
         store.remove(selected);
         store.getProxy().batchActions = false;
         store.sync({

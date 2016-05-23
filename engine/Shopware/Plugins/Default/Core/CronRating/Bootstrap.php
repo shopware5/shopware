@@ -159,7 +159,7 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
                 b.company AS billing_company,
                 b.department AS billing_department,
                 b.salutation AS billing_salutation,
-                ub.customernumber,
+                u.customernumber,
                 b.firstname AS billing_firstname,
                 b.lastname AS billing_lastname,
                 b.street AS billing_street,
@@ -200,7 +200,6 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
                 sa.text5 AS shipping_text5,
                 sa.text6 AS shipping_text6,
                 u.*,
-                   ub.birthday,
                    g.id AS preisgruppe,
                    g.tax AS billing_net
             FROM

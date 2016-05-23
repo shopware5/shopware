@@ -67,7 +67,7 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
 
     private function createCustomer()
     {
-        $this->customerNumber = uniqid();
+        $this->customerNumber = uniqid(rand());
 
         Shopware()->Db()->insert(
             's_user',
@@ -79,7 +79,12 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
                 'firstlogin'    => '2013-06-01',
                 'lastlogin'     => '2013-07-01',
                 'subshopID'     => '1',
-                'customergroup' => 'EK'
+                'customergroup' => 'EK',
+                'salutation'    => 'mr',
+                'firstname'     => '',
+                'lastname'      => '',
+                'birthday'      => '1990-01-01'
+
             )
         );
         $this->userId = Shopware()->Db()->lastInsertId();
@@ -88,10 +93,8 @@ class Shopware_Tests_Controllers_Backend_AnalyticsTest extends Enlight_Component
             'userID'         => $this->userId,
             'company'        => 'PHPUNIT',
             'salutation'     => 'mr',
-            'customernumber' => $this->customerNumber,
             'countryID'      => 2,
             'stateID'        => 3,
-            'birthday'       => '1990-01-01'
         ));
     }
 

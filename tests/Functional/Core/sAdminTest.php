@@ -63,6 +63,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
+        Shopware()->Container()->get('models')->clear();
         Shopware()->Front()->setRequest(new Enlight_Controller_Request_RequestHttp());
 
         $this->module = Shopware()->Modules()->Admin();
@@ -75,6 +76,12 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->systemModule->sCurrency = Shopware()->Db()->fetchRow('SELECT * FROM s_core_currencies WHERE currency LIKE "EUR"');
         $this->systemModule->sSESSION_ID = null;
         $this->session->offsetSet('sessionId', null);
+    }
+
+    protected function tearDown()
+    {
+        parent::tearDown();
+        Shopware()->Container()->get('models')->clear();
     }
 
     /**
@@ -219,70 +226,11 @@ class sAdminTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers sAdmin::sUpdateBilling
-     */
-    public function testsUpdateBilling()
-    {
-        $customer = $this->createDummyCustomer();
-        $this->session->offsetSet('sUserId', $customer->getId());
-
-        $this->front->Request()->setPost(array(
-            'company' => 'TestCompany',
-            'department' => 'TestDepartment',
-            'salutation' => 'TestSalutation',
-            'firstname' => 'TestFirstName',
-            'lastname' => 'TestLastName',
-            'street' => 'TestStreet',
-            'zipcode' => 'TestZip',
-            'city' => 'TestCity',
-            'phone' => 'TestPhone',
-            'country' => '2',
-            'stateID' => '1',
-            'ustid' => 'TestUstId',
-            'birthday' => '21',
-            'birthmonth' => '10',
-            'birthyear' => '1998',
-            'text1' => 'TestText1',
-            'text2' => 'TestText2',
-            'text3' => 'TestText3',
-            'text4' => 'TestText4',
-            'text5' => 'TestText5',
-            'text6' => 'TestText6'
-        ));
-
-        $this->assertTrue($this->module->sUpdateBilling());
-        $result = Shopware()->Db()->fetchRow('
-            SELECT *
-
-            FROM s_user_billingaddress
-            LEFT JOIN s_user_billingaddress_attributes
-            ON s_user_billingaddress.id = s_user_billingaddress_attributes.billingID
-
-            WHERE s_user_billingaddress.userID = ?
-        ', array($customer->getId()));
-
-        $this->front->Request()->setPost(array(
-            'countryID' => $this->front->Request()->getPost('country'),
-            'birthday' => '1998-10-21',
-            'country' => '',
-            'birthmonth' => '',
-            'birthyear' => ''
-        ));
-
-        $this->assertArrayHasKey('id', $result);
-        foreach ($this->front->Request()->getPost() as $key => $value) {
-            $this->assertEquals($value, $result[$key]);
-        }
-
-        $this->deleteDummyCustomer($customer);
-    }
-
-    /**
      * @covers sAdmin::sUpdateNewsletter
      */
     public function testsUpdateNewsletter()
     {
-        $email = uniqid() . 'test@foobar.com';
+        $email = uniqid(rand()) . 'test@foobar.com';
 
         // Test insertion
         $this->assertTrue($this->module->sUpdateNewsletter(true, $email));
@@ -323,132 +271,6 @@ class sAdminTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers sAdmin::sGetPreviousAddresses
-     */
-    public function testsGetPreviousAddresses()
-    {
-        $customer = $this->createDummyCustomer();
-        $this->session->offsetSet('sUserId', null);
-
-        // Test no user id
-        $this->assertFalse($this->module->sGetPreviousAddresses('shipping'));
-
-        $this->session->offsetSet('sUserId', $customer->getId());
-
-        // Test empty argument scenario
-        $this->assertFalse($this->module->sGetPreviousAddresses(''));
-
-        // Test fetching for new customer with no order (should return empty)
-        $this->assertCount(0, $this->module->sGetPreviousAddresses('shipping'));
-        $this->assertCount(0, $this->module->sGetPreviousAddresses('billing'));
-
-        $this->deleteDummyCustomer($customer);
-
-        // Test with existing demo customer data
-        $this->session->offsetSet('sUserId', 1);
-
-        $shippingData = $this->module->sGetPreviousAddresses('shipping');
-        $billingData = $this->module->sGetPreviousAddresses('billing');
-        $this->assertGreaterThan(0, count($shippingData));
-        $this->assertGreaterThan(0, count($billingData));
-
-        $shippingDetails = end($shippingData);
-        $billingDetails = end($billingData);
-
-        $this->assertArrayHasKey('hash', $shippingDetails);
-        $this->assertArrayHasKey('hash', $billingDetails);
-
-        $shippingDetailsWithHash = $this->module->sGetPreviousAddresses('shipping', $shippingDetails['hash']);
-        $billingDetailsWithHash = $this->module->sGetPreviousAddresses('billing', $billingDetails['hash']);
-
-        foreach (array($shippingDetails, $billingDetails, $billingDetailsWithHash, $shippingDetailsWithHash) as $details) {
-            $this->assertInternalType('array', $details);
-            $this->assertArrayHasKey('company', $details);
-            $this->assertArrayHasKey('department', $details);
-            $this->assertArrayHasKey('salutation', $details);
-            $this->assertArrayHasKey('firstname', $details);
-            $this->assertArrayHasKey('lastname', $details);
-            $this->assertArrayHasKey('street', $details);
-            $this->assertArrayHasKey('zipcode', $details);
-            $this->assertArrayHasKey('city', $details);
-            $this->assertArrayHasKey('country', $details);
-            $this->assertArrayHasKey('countryID', $details);
-            $this->assertArrayHasKey('countryname', $details);
-
-            $this->assertNotEmpty($details['hash']);
-            $this->assertEquals('shopware AG', $details['company']);
-            $this->assertEquals('', $details['department']);
-            $this->assertEquals('mr', $details['salutation']);
-            $this->assertEquals('Max', $details['firstname']);
-            $this->assertEquals('Mustermann', $details['lastname']);
-            $this->assertEquals('Mustermannstraße 92', $details['street']);
-            $this->assertEquals('48624', $details['zipcode']);
-            $this->assertEquals('Schöppingen', $details['city']);
-            $this->assertEquals('2', $details['country']);
-            $this->assertEquals('2', $details['countryID']);
-            $this->assertEquals('Deutschland', $details['countryname']);
-        }
-    }
-
-    /**
-     * @covers sAdmin::sUpdateShipping
-     */
-    public function testsUpdateShipping()
-    {
-        // Test no user id
-        $this->assertFalse($this->module->sUpdateShipping());
-
-        $customer = $this->createDummyCustomer();
-        $this->session->offsetSet('sUserId', $customer->getId());
-
-        // With user id but with no data, operation is successful
-        $this->assertTrue($this->module->sUpdateShipping());
-
-        // Setup dummy test data and test with it
-        $postData = array(
-            'company' => 'Testcompany',
-            'department' => 'Testdepartment',
-            'salutation' => 'Testsalutation',
-            'firstname' => 'Testfirstname',
-            'lastname' => 'Testlastname',
-            'street' => 'Teststreet',
-            'zipcode' => 'Testzipcode',
-            'city' => 'Testcity',
-            'country' => '2',
-            'stateID' => '4',
-            'text1' => 'TestText1',
-            'text2' => 'TestText2',
-            'text3' => 'TestText3',
-            'text4' => 'TestText4',
-            'text5' => 'TestText5',
-            'text6' => 'TestText6'
-        );
-        $this->front->Request()->setPost($postData);
-        $this->assertTrue($this->module->sUpdateShipping());
-
-        $result = Shopware()->Db()->fetchRow('
-            SELECT *
-
-            FROM s_user_shippingaddress
-            LEFT JOIN s_user_shippingaddress_attributes
-            ON s_user_shippingaddress.id = s_user_shippingaddress_attributes.shippingID
-
-            WHERE s_user_shippingaddress.userID = ?
-        ', array($customer->getId()));
-
-        // Prepare testData for comparison
-        $postData['countryID'] = $postData['country'];
-        unset($postData['country']);
-
-        $this->assertArrayHasKey('id', $result);
-        foreach ($postData as $key => $value) {
-            $this->assertEquals($value, $result[$key]);
-        }
-
-        $this->deleteDummyCustomer($customer);
-    }
-
-    /**
      * @covers sAdmin::sUpdatePayment
      */
     public function testsUpdatePayment()
@@ -480,302 +302,6 @@ class sAdminTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers sAdmin::sUpdateAccount
-     */
-    public function testsUpdateAccount()
-    {
-        // Test no user id
-        $this->assertTrue($this->module->sUpdateAccount());
-
-        $customer = $this->createDummyCustomer();
-        $this->session->offsetSet('sUserId', $customer->getId());
-        $this->front->Request()->setPost('email', uniqid() . 'test@foobar.com');
-
-        $this->assertTrue($this->module->sUpdateAccount());
-
-        // Test that email was updated
-        $this->assertNotEquals(
-            $customer->getEmail(),
-            Shopware()->Db()->fetchOne('SELECT email FROM s_user WHERE id = ?', array($customer->getId()))
-        );
-
-        $this->front->Request()->setPost('password', uniqid() . 'password');
-        $this->front->Request()->setPost('passwordConfirmation', $this->front->Request()->getPost('password'));
-
-        $this->assertTrue($this->module->sUpdateAccount());
-
-        // Test that password was updated
-        $this->assertNotEquals(
-            $customer->getPassword(),
-            Shopware()->Db()->fetchOne('SELECT password FROM s_user WHERE id = ?', array($customer->getId()))
-        );
-
-        $this->deleteDummyCustomer($customer);
-    }
-
-    /**
-     * @covers sAdmin::sValidateStep2
-     */
-    public function testsValidateStep2()
-    {
-        // Test with no rules, should always validate
-        $result = $this->module->sValidateStep2(array());
-        $this->assertInternalType('array', $result);
-        $this->assertArrayHasKey('sErrorFlag', $result);
-        $this->assertArrayHasKey('sErrorMessages', $result);
-        $this->assertCount(0, $result['sErrorFlag']);
-        $this->assertCount(0, $result['sErrorMessages']);
-
-        $testRuleSet = array(
-            'testField1' => array('required' => 1),
-            'testField2' => array('required' => 0),
-            'testField3' => array('required' => 1),
-        );
-
-        // Test failing validation, should have 2 failing fields
-        $result = $this->module->sValidateStep2($testRuleSet);
-        $this->assertInternalType('array', $result);
-        $this->assertArrayHasKey('sErrorFlag', $result);
-        $this->assertArrayHasKey('sErrorMessages', $result);
-        $this->assertCount(2, $result['sErrorFlag']);
-        $this->assertArrayHasKey('testField1', $result['sErrorFlag']);
-        $this->assertArrayHasKey('testField3', $result['sErrorFlag']);
-        $this->assertCount(1, $result['sErrorMessages']);
-
-
-        // Setup dummy test data and test with it, see it passes
-        $this->front->Request()->setPost(array(
-            'testField1' => 'testValue',
-            'testField2' => 'testValue',
-            'testField3' => 'testValue'
-        ));
-        $result = $this->module->sValidateStep2($testRuleSet);
-        $this->assertInternalType('array', $result);
-        $this->assertArrayHasKey('sErrorFlag', $result);
-        $this->assertArrayHasKey('sErrorMessages', $result);
-        $this->assertCount(0, $result['sErrorFlag']);
-        $this->assertCount(0, $result['sErrorMessages']);
-    }
-
-    /**
-     * @covers sAdmin::sValidateStep2ShippingAddress
-     */
-    public function testsValidateStep2ShippingAddress()
-    {
-        // Test with no rules, should always validate
-        $result = $this->module->sValidateStep2ShippingAddress(array());
-        $this->assertInternalType('array', $result);
-        $this->assertArrayHasKey('sErrorFlag', $result);
-        $this->assertArrayHasKey('sErrorMessages', $result);
-        $this->assertNull($result['sErrorFlag']);
-        $this->assertNull($result['sErrorMessages']);
-
-        $testRuleSet = array(
-            'testField1' => array('required' => 1),
-            'testField2' => array('required' => 0),
-            'testField3' => array('required' => 1),
-        );
-
-        // Test failing validation, should have 2 failing fields
-        $result = $this->module->sValidateStep2ShippingAddress($testRuleSet);
-        $this->assertInternalType('array', $result);
-        $this->assertArrayHasKey('sErrorFlag', $result);
-        $this->assertArrayHasKey('sErrorMessages', $result);
-        $this->assertCount(2, $result['sErrorFlag']);
-        $this->assertArrayHasKey('testField1', $result['sErrorFlag']);
-        $this->assertArrayHasKey('testField3', $result['sErrorFlag']);
-        $this->assertCount(1, $result['sErrorMessages']);
-
-
-        // Setup dummy test data and test with it, see it passes
-        $this->front->Request()->setPost(array(
-            'testField1' => 'testValue',
-            'testField2' => 'testValue',
-            'testField3' => 'testValue'
-        ));
-        $result = $this->module->sValidateStep2ShippingAddress($testRuleSet);
-        $this->assertInternalType('array', $result);
-        $this->assertArrayHasKey('sErrorFlag', $result);
-        $this->assertArrayHasKey('sErrorMessages', $result);
-        $this->assertNull($result['sErrorFlag']);
-        $this->assertNull($result['sErrorMessages']);
-    }
-
-    /**
-     * @covers sAdmin::sValidateStep1
-     */
-    public function testsValidateStep1WithoutEdit()
-    {
-        // Test with no data, should fail on password field
-        $result = $this->module->sValidateStep1();
-        $this->assertInternalType('array', $result);
-        $this->assertArrayHasKey('sErrorFlag', $result);
-        $this->assertArrayHasKey('sErrorMessages', $result);
-        $this->assertCount(1, $result['sErrorMessages']);
-        $this->assertContains(
-            'Bitte w&auml;hlen Sie ein Passwort, welches aus mindestens {config name="MinPassword"} Zeichen besteht.',
-            $result['sErrorMessages']
-        );
-        $this->assertCount(2, $result['sErrorFlag']);
-        $this->assertArrayHasKey('password', $result['sErrorFlag']);
-        $this->assertArrayHasKey('passwordConfirmation', $result['sErrorFlag']);
-
-        // Test with diverging password, should fail
-        $this->front->Request()->setPost(array(
-            'password' => 'password',
-            'passwordConfirmation' => 'passwordConfirmation',
-        ));
-        $result = $this->module->sValidateStep1();
-        $this->assertInternalType('array', $result);
-        $this->assertArrayHasKey('sErrorFlag', $result);
-        $this->assertArrayHasKey('sErrorMessages', $result);
-        $this->assertCount(1, $result['sErrorMessages']);
-        $this->assertContains(
-            'Die Passwörter stimmen nicht überein.',
-            $result['sErrorMessages']
-        );
-        $this->assertCount(2, $result['sErrorFlag']);
-        $this->assertArrayHasKey('password', $result['sErrorFlag']);
-        $this->assertArrayHasKey('passwordConfirmation', $result['sErrorFlag']);
-
-        // Test with matching passwords, should succeed
-        $this->front->Request()->setPost(array(
-            'password' => 'password',
-            'passwordConfirmation' => 'password',
-        ));
-        $result = $this->module->sValidateStep1();
-        $this->assertInternalType('array', $result);
-        $this->assertArrayHasKey('sErrorFlag', $result);
-        $this->assertArrayHasKey('sErrorMessages', $result);
-        $this->assertNull($result['sErrorMessages']);
-        $this->assertNull($result['sErrorFlag']);
-
-        // Test with invalid email, should fail
-        $this->front->Request()->setPost('email', 'failmail.com');
-        $result = $this->module->sValidateStep1();
-        $this->assertInternalType('array', $result);
-        $this->assertArrayHasKey('sErrorFlag', $result);
-        $this->assertArrayHasKey('sErrorMessages', $result);
-        $this->assertCount(1, $result['sErrorMessages']);
-        $this->assertContains(
-            $this->snippetManager->getNamespace('frontend/account/internalMessages')
-                ->get('MailFailure', 'Please enter a valid mail address'),
-            $result['sErrorMessages']
-        );
-        $this->assertCount(1, $result['sErrorFlag']);
-        $this->assertArrayHasKey('email', $result['sErrorFlag']);
-
-        // Test with valid email, should succeed
-        $this->front->Request()->setPost('email', 'foo@failmail.com');
-        $result = $this->module->sValidateStep1();
-        $this->assertInternalType('array', $result);
-        $this->assertArrayHasKey('sErrorFlag', $result);
-        $this->assertArrayHasKey('sErrorMessages', $result);
-        $this->assertNull($result['sErrorMessages']);
-        $this->assertNull($result['sErrorFlag']);
-
-        // Test with diverging emailConfirmation and email, should fail
-        $this->front->Request()->setPost('emailConfirmation', 'bar@failmail.com');
-        $result = $this->module->sValidateStep1();
-        $this->assertInternalType('array', $result);
-        $this->assertArrayHasKey('sErrorFlag', $result);
-        $this->assertArrayHasKey('sErrorMessages', $result);
-        $this->assertCount(1, $result['sErrorMessages']);
-        $this->assertContains(
-            $this->snippetManager->getNamespace('frontend/account/internalMessages')
-                ->get('MailFailureNotEqual', 'The mail addresses entered are not equal'),
-            $result['sErrorMessages']
-        );
-        $this->assertCount(1, $result['sErrorFlag']);
-        $this->assertArrayHasKey('emailConfirmation', $result['sErrorFlag']);
-
-        // Test with valid email, should succeed
-        $this->front->Request()->setPost('emailConfirmation', 'foo@failmail.com');
-        $result = $this->module->sValidateStep1();
-        $this->assertInternalType('array', $result);
-        $this->assertArrayHasKey('sErrorFlag', $result);
-        $this->assertArrayHasKey('sErrorMessages', $result);
-        $this->assertNull($result['sErrorMessages']);
-        $this->assertNull($result['sErrorFlag']);
-
-        // Test that session data is correctly set
-        $sessionRegister = $this->session->offsetGet('sRegister');
-        $this->assertEquals(0, $sessionRegister['auth']['accountmode']);
-        $this->assertNull($sessionRegister['auth']['receiveNewsletter']);
-        $this->assertEquals('foo@failmail.com', $sessionRegister['auth']['email']);
-        $this->assertEquals('bcrypt', $sessionRegister['auth']['encoderName']);
-        $this->assertArrayHasKey('password', $sessionRegister['auth']);
-
-        // Test with skipLogin
-        $this->front->Request()->setPost('skipLogin', true);
-        $this->module->sValidateStep1();
-        $sessionRegister = $this->session->offsetGet('sRegister');
-        $this->assertEquals(1, $sessionRegister['auth']['accountmode']);
-        $this->assertNull($sessionRegister['auth']['receiveNewsletter']);
-        $this->assertEquals('foo@failmail.com', $sessionRegister['auth']['email']);
-        $this->assertEquals('md5', $sessionRegister['auth']['encoderName']);
-        $this->assertArrayHasKey('password', $sessionRegister['auth']);
-    }
-
-    /**
-     * @covers sAdmin::sValidateStep1
-     */
-    public function testsValidateStep1WithEdit()
-    {
-        $customer = $this->createDummyCustomer();
-
-        // Test with no data
-        $result = $this->module->sValidateStep1(true);
-        $this->assertInternalType('array', $result);
-        $this->assertArrayHasKey('sErrorFlag', $result);
-        $this->assertArrayHasKey('sErrorMessages', $result);
-        $this->assertCount(1, $result['sErrorMessages']);
-        $this->assertContains(
-            'Das aktuelle Passwort stimmt nicht!',
-            $result['sErrorMessages']
-        );
-        $this->assertCount(2, $result['sErrorFlag']);
-        $this->assertArrayHasKey('email', $result['sErrorFlag']);
-        $this->assertArrayHasKey('currentPassword', $result['sErrorFlag']);
-
-        // Test with correct basic data, wrong password
-        // First, hack session data with correct data
-        $this->session->offsetSet('sUserMail', $customer->getEmail());
-        $this->session->offsetSet(
-            "sUserPassword",
-            Shopware()->PasswordEncoder()->encodePassword("fooobar", 'bcrypt')
-        );
-        // Then set post with wrong data
-        $this->front->Request()->setPost(array(
-            'email' => $customer->getEmail(),
-            'currentPassword' => 'password',
-        ));
-        $result = $this->module->sValidateStep1(true);
-        $this->assertInternalType('array', $result);
-        $this->assertArrayHasKey('sErrorFlag', $result);
-        $this->assertArrayHasKey('sErrorMessages', $result);
-        $this->assertCount(1, $result['sErrorMessages']);
-        $this->assertContains(
-            'Das aktuelle Passwort stimmt nicht!',
-            $result['sErrorMessages']
-        );
-        $this->assertCount(2, $result['sErrorFlag']);
-        $this->assertArrayHasKey('email', $result['sErrorFlag']);
-        $this->assertArrayHasKey('currentPassword', $result['sErrorFlag']);
-
-        // Now use correct data to test correct behavior
-        $this->front->Request()->setPost('currentPassword', 'fooobar');
-        $result = $this->module->sValidateStep1(true);
-        $this->assertInternalType('array', $result);
-        $this->assertArrayHasKey('sErrorFlag', $result);
-        $this->assertArrayHasKey('sErrorMessages', $result);
-        $this->assertNull($result['sErrorMessages']);
-        $this->assertNull($result['sErrorFlag']);
-
-        $this->deleteDummyCustomer($customer);
-    }
-
-    /**
      * @covers sAdmin::sLogin
      */
     public function testsLogin()
@@ -797,8 +323,8 @@ class sAdminTest extends PHPUnit_Framework_TestCase
 
         // Test with wrong data, get error
         $this->front->Request()->setPost(array(
-            'email' => uniqid() . 'test',
-            'password' => uniqid() . 'test',
+            'email' => uniqid(rand()) . 'test',
+            'password' => uniqid(rand()) . 'test',
         ));
         $result = $this->module->sLogin();
         $this->assertInternalType('array', $result);
@@ -838,7 +364,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
 
         $this->front->Request()->setPost(array(
             'email' => $customer->getEmail(),
-            'passwordMD5' => uniqid(),
+            'passwordMD5' => uniqid(rand()),
         ));
         $result = $this->module->sLogin(true);
         $this->assertInternalType('array', $result);
@@ -1454,310 +980,6 @@ class sAdminTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers sAdmin::sSaveRegisterMainData
-     * @expectedException Zend_Db_Statement_Exception
-     */
-    public function testsSaveRegisterMainDataWithEmptyData()
-    {
-        $this->module->sSaveRegisterMainData(array());
-    }
-
-    /**
-     * @covers sAdmin::sSaveRegisterMainData
-     */
-    public function testsSaveRegisterMainData()
-    {
-        $password = Shopware()->PasswordEncoder()->encodePassword(
-            'foo',
-            'bcrypt'
-        );
-        $testData = array(
-            'auth' => array(
-                'password' => $password,
-                'email' => uniqid() . 'test@foobar.com',
-                'accountmode' => 1,
-                'encoderName' => 'bcrypt'
-            ),
-            'payment' => array(
-                'object' => array(
-                    'id' => 2
-                )
-            )
-        );
-        $this->module->sSYSTEM->sSESSION_ID = uniqid();
-        $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
-
-
-        $result = $this->module->sSaveRegisterMainData($testData);
-
-        /** @var $customer Shopware\Models\Customer\Customer */
-
-        $customer = Shopware()->Db()->fetchRow(
-            'SELECT * FROM s_user WHERE id = ?',
-            array($result)
-        );
-
-        $this->assertEquals($testData['auth']['email'], $customer['email']);
-        $this->assertEquals($customer['password'], $password);
-        $this->assertEquals($testData['auth']['accountmode'], $customer['accountmode']);
-        $this->assertEquals(2, $customer['paymentID']);
-
-        return $result;
-    }
-
-    /**
-     * @covers sAdmin::sSaveRegisterBilling
-     * @depends testsSaveRegisterMainData
-     * @expectedException Zend_Db_Statement_Exception
-     */
-    public function testsSaveRegisterBillingWithEmptyData($userId)
-    {
-        $this->module->sSaveRegisterBilling($userId, array());
-    }
-
-    /**
-     * @covers sAdmin::sSaveRegisterBilling
-     * @depends testsSaveRegisterMainData
-     */
-    public function testsSaveRegisterBilling($userId)
-    {
-        $testData = array(
-            'company' => 'Testcompany',
-            'department' => 'Testdepartment',
-            'salutation' => 'Testsalutation',
-            'firstname' => 'Testfirstname',
-            'lastname' => 'Testlastname',
-            'street' => 'Teststreet',
-            'zipcode' => 'Testzipcode',
-            'city' => 'Testcity',
-            'phone' => 'Testphone',
-            'country' => '2',
-            'stateID' => '3',
-            'ustid' => 'Testustid',
-
-            'birthyear' => '1956',
-            'birthmonth' => '2',
-            'birthday' => '21',
-
-            'text1' => 'text1',
-            'text2' => 'text2',
-            'text3' => 'text3',
-            'text4' => 'text4',
-            'text5' => 'text5',
-            'text6' => 'text6'
-        );
-
-        $result = $this->module->sSaveRegisterBilling($userId, array('billing' => $testData, 'shipping' => $testData));
-        $this->assertGreaterThan(0, $result);
-
-        $savedData = Shopware()->Db()->fetchRow('
-            SELECT *
-
-            FROM s_user_billingaddress
-            LEFT JOIN s_user_billingaddress_attributes
-            ON s_user_billingaddress.id = s_user_billingaddress_attributes.billingID
-
-            WHERE s_user_billingaddress.id = ?
-        ', array($result));
-
-        // Prepare demo data for comparison
-        $testData['countryID'] = $testData['country'];
-        unset($testData['country']);
-        $testData['birthday'] = mktime(
-            0, 0, 0,
-            (int) $testData['birthmonth'],
-            (int) $testData['birthday'],
-            (int) $testData['birthyear']
-        );
-        $testData['birthday'] = '1956-02-21';
-        unset($testData['birthmonth']);
-        unset($testData['birthyear']);
-
-        foreach ($testData as $name => $value) {
-            $this->assertEquals($savedData[$name], $value);
-        }
-
-        Shopware()->Db()->delete('s_user_billingaddress_attributes', 'billingID = '.$result);
-        Shopware()->Db()->delete('s_user_billingaddress', 'userID = '.$userId);
-    }
-
-    /**
-     * @covers sAdmin::sSaveRegisterShipping
-     * @depends testsSaveRegisterMainData
-     * @expectedException Zend_Db_Statement_Exception
-     */
-    public function testsSaveRegisterShippingWithEmptyData($userId)
-    {
-        $this->module->sSaveRegisterShipping($userId, array());
-    }
-
-    /**
-     * @covers sAdmin::sSaveRegisterShipping
-     * @depends testsSaveRegisterMainData
-     */
-    public function testsSaveRegisterShipping($userId)
-    {
-        $testData = array(
-            'company' => 'Testcompany',
-            'department' => 'Testdepartment',
-            'salutation' => 'Testsalutation',
-            'firstname' => 'Testfirstname',
-            'lastname' => 'Testlastname',
-            'street' => 'Teststreet',
-            'zipcode' => 'Testzipcode',
-            'city' => 'Testcity',
-            'country' => '2',
-            'stateID' => '3',
-
-            'text1' => 'text1',
-            'text2' => 'text2',
-            'text3' => 'text3',
-            'text4' => 'text4',
-            'text5' => 'text5',
-            'text6' => 'text6'
-        );
-
-        $result = $this->module->sSaveRegisterShipping($userId, array('shipping' => $testData, 'billing' => $testData));
-        $this->assertGreaterThan(0, $result);
-
-        $savedData = Shopware()->Db()->fetchRow('
-            SELECT *
-
-            FROM s_user_shippingaddress
-            LEFT JOIN s_user_shippingaddress_attributes
-            ON s_user_shippingaddress.id = s_user_shippingaddress_attributes.shippingID
-
-            WHERE s_user_shippingaddress.id = ?
-        ', array($result));
-
-        // Prepare demo data for comparison
-        $testData['countryID'] = $testData['country'];
-        unset($testData['country']);
-
-        foreach ($testData as $name => $value) {
-            $this->assertEquals($savedData[$name], $value);
-        }
-
-        Shopware()->Db()->delete('s_user_shippingaddress_attributes', 'shippingID = '.$result);
-        Shopware()->Db()->delete('s_user_shippingaddress', 'userID = '.$userId);
-        Shopware()->Db()->delete('s_user_attributes', 'userID = '.$userId);
-        Shopware()->Db()->delete('s_user', 'id = '.$userId);
-    }
-
-    /**
-     * @covers sAdmin::sSaveRegisterNewsletter
-     */
-    public function testsSaveRegisterNewsletter()
-    {
-        // Test basic scenario
-        $email = uniqid() . 'test@foobar.com';
-        $result = Shopware()->Db()->fetchOne(
-            'SELECT id FROM s_campaigns_mailaddresses WHERE email = ?',
-            array($email)
-        );
-        $this->assertFalse($result);
-
-        $testData = array(
-            'auth' => array(
-                'email' =>  $email,
-            ),
-        );
-        $this->module->sSaveRegisterNewsletter($testData);
-        $result = Shopware()->Db()->fetchOne(
-            'SELECT id FROM s_campaigns_mailaddresses WHERE email = ?',
-            array($email)
-        );
-        $this->assertGreaterThan(0, $result);
-
-        // Test that duplicates are not changed
-        $this->module->sSaveRegisterNewsletter($testData);
-        $result = Shopware()->Db()->fetchOne(
-            'SELECT id FROM s_campaigns_mailaddresses WHERE email = ?',
-            array($email)
-        );
-        $this->assertGreaterThan(0, $result);
-    }
-
-    /**
-     * @covers sAdmin::sSaveRegister
-     */
-    public function testsSaveRegisterWithRegistrationFinished()
-    {
-        $customer = $this->createDummyCustomer();
-
-        $this->session->offsetSet('sRegisterFinished', true);
-        $this->session->offsetSet('sUserMail', $customer->getEmail());
-        $this->session->offsetSet('sUserPassword', $customer->getPassword());
-        $this->session->offsetSet('sOneTimeAccount', true);
-        $this->assertTrue($this->module->sSaveRegister());
-        $this->assertNotEmpty($this->session->offsetGet('sUserId'));
-
-        $this->deleteDummyCustomer($customer);
-    }
-
-    /**
-     * @covers sAdmin::sSaveRegister
-     * @expectedException Enlight_Exception
-     */
-    public function testsSaveRegisterWithNoData()
-    {
-        $this->assertTrue($this->module->sSaveRegister());
-        $this->assertNotEmpty($this->session->offsetGet('sUserId'));
-    }
-
-    /**
-     * @covers sAdmin::sSaveRegister
-     */
-    public function testsSaveRegister()
-    {
-        // Prepare all needed test structures for login
-        $testData = array(
-            'auth' => array(
-                'email' => uniqid() . 'test@foobar.com',
-                'password' => 'fooobar',
-                'accountmode' => 1,
-                'encoderName' => 'bcrypt'
-            ),
-            'billing' => array(
-                'salutation' => 'testsalutation',
-                'firstname' => 'testfirstname',
-                'lastname' => 'testlastname',
-                'street' => 'teststreet',
-                'zipcode' => 'testzipcode',
-                'city' => 'testcity',
-                'country' => '2'
-            ),
-            'payment' => array(
-                'object' => array(
-                    'id' => 2
-                )
-            )
-        );
-        $this->module->sSYSTEM->sSESSION_ID = uniqid();
-        $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
-
-        $this->session->offsetSet('sRegister', $testData);
-
-        // Test that login was successful
-        $this->assertEmpty($this->session->offsetGet('sUserId'));
-        $this->assertFalse($this->module->sCheckUser());
-        $this->assertTrue($this->module->sSaveRegister());
-        $userId = $this->session->offsetGet('sUserId');
-        $this->assertEquals(
-            $userId,
-            Shopware()->Db()->fetchOne('SELECT id FROM s_user WHERE id = ?', array($userId))
-        );
-        $this->assertNotEmpty($this->session->offsetGet('sUserId'));
-        $this->assertTrue($this->module->sCheckUser());
-
-        // Logout and delete data
-        Shopware()->Session()->unsetAll();
-
-        Shopware()->Db()->delete('s_user_attributes', 'userID = '.$userId);
-        Shopware()->Db()->delete('s_user', 'id = '.$userId);
-    }
-
-    /**
      * @covers sAdmin::sGetDownloads
      */
     public function testsGetDownloads()
@@ -1771,7 +993,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
 
         // Inject demo data
         $orderData = array(
-            'ordernumber' => uniqid(),
+            'ordernumber' => uniqid(rand()),
             'userID' => $customer->getId(),
             'invoice_amount' => '37.99',
             'invoice_amount_net' => '31.92',
@@ -1897,7 +1119,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $customer = $demoData['customer'];
         $oldOrderId = $demoData['orderId'];
         $orderEsdId = $demoData['orderEsdId'];
-        $orderNumber = uniqid();
+        $orderNumber = uniqid(rand());
 
         // Add another order to the customer
         $orderData = array(
@@ -2009,11 +1231,11 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($customer->getEmail(), $this->module->sGetUserMailById());
 
         // Test sGetUserByMail with null and expected cases
-        $this->assertNull($this->module->sGetUserByMail(uniqid()));
+        $this->assertNull($this->module->sGetUserByMail(uniqid(rand())));
         $this->assertEquals($customer->getId(), $this->module->sGetUserByMail($customer->getEmail()));
 
         // Test sGetUserNameById with null and expected cases
-        $this->assertEmpty($this->module->sGetUserNameById(uniqid()));
+        $this->assertEmpty($this->module->sGetUserNameById(uniqid(rand())));
         $this->assertEquals(
             array('firstname' => 'Max', 'lastname' => 'Mustermann'),
             $this->module->sGetUserNameById($customer->getId())
@@ -2093,24 +1315,17 @@ class sAdminTest extends PHPUnit_Framework_TestCase
     {
         $customer = $this->createDummyCustomer();
         $this->session->offsetSet('sUserId', $customer->getId());
+        $this->session->offsetUnset('sState');
 
         $result = $this->module->sGetUserData();
 
         $expectedData = array(
             'billingaddress' => array(
-                'customerBillingId' => $customer->getBilling()->getId(),
-                'text1' => 'Freitext1',
-                'text2' => 'Freitext2',
-                'text3' => null,
-                'text4' => null,
-                'text5' => null,
-                'text6' => null,
                 'id' => $customer->getBilling()->getId(),
                 'userID' => $customer->getId(),
                 'company' => '',
                 'department' => '',
                 'salutation' => '',
-                'customernumber' => $customer->getBilling()->getNumber(),
                 'firstname' => 'Max',
                 'lastname' => 'Mustermann',
                 'street' => 'Kraftweg, 22',
@@ -2120,9 +1335,17 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                 'countryID' => '2',
                 'stateID' => null,
                 'ustid' => '',
-                'birthday' => '1986-12-20',
+                'title' => null,
                 'additional_address_line1' => 'IT-Department',
-                'additional_address_line2' => 'Second Floor'
+                'additional_address_line2' => 'Second Floor',
+                'attributes' => [
+                    'text1' => 'Freitext1',
+                    'text2' => 'Freitext2',
+                    'text3' => null,
+                    'text4' => null,
+                    'text5' => null,
+                    'text6' => null
+                ]
             ),
             'additional' => array(
                 'country' => array(
@@ -2153,6 +1376,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                     'accountmode' => '0',
                     'confirmationkey' => '',
                     'paymentID' => '0',
+                    'customernumber' => $customer->getNumber(),
                     'firstlogin' => $customer->getFirstLogin()->format('Y-m-d'),
                     'lastlogin' => $customer->getLastLogin()->format('Y-m-d H:i:s'),
                     'sessionID' => '',
@@ -2169,7 +1393,12 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                     'failedlogins' => '0',
                     'lockeduntil' => null,
                     'default_billing_address_id' => $customer->getDefaultBillingAddress() ? $customer->getDefaultBillingAddress()->getId() : null,
-                    'default_shipping_address_id' => $customer->getDefaultShippingAddress() ? $customer->getDefaultShippingAddress()->getId() : null
+                    'default_shipping_address_id' => $customer->getDefaultShippingAddress() ? $customer->getDefaultShippingAddress()->getId() : null,
+                    'birthday' => '1986-12-20',
+                    'firstname' => 'Max',
+                    'lastname' => 'Mustermann',
+                    'salutation' => 'mr',
+                    'title' => null
                 ),
                 'countryShipping' => array(
                     'id' => '4',
@@ -2214,13 +1443,6 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                 ),
             ),
             'shippingaddress' => array(
-                'customerShippingId' => $customer->getShipping()->getId(),
-                'text1' => 'Freitext1',
-                'text2' => 'Freitext2',
-                'text3' => null,
-                'text4' => null,
-                'text5' => null,
-                'text6' => null,
                 'id' => $customer->getShipping()->getId(),
                 'userID' => $customer->getId(),
                 'company' => 'Widgets Inc.',
@@ -2233,8 +1455,17 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                 'city' => '',
                 'countryID' => '4',
                 'stateID' => null,
+                'title' => null,
                 'additional_address_line1' => 'Sales-Department',
-                'additional_address_line2' => 'Third Floor'
+                'additional_address_line2' => 'Third Floor',
+                'attributes' => [
+                    'text1' => 'Freitext1',
+                    'text2' => 'Freitext2',
+                    'text3' => null,
+                    'text4' => null,
+                    'text5' => null,
+                    'text6' => null
+                ]
             ),
         );
 
@@ -2294,7 +1525,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
 
         // Inject demo data
         $orderData = array(
-            'ordernumber' => uniqid(),
+            'ordernumber' => uniqid(rand()),
             'userID' => $customer->getId(),
             'invoice_amount' => '37.99',
             'invoice_amount_net' => '31.92',
@@ -2480,7 +1711,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($this->module->sManageRisks(2, $basket, $user));
         Shopware()->Db()->delete('s_core_rulesets', 'id >= '.$firstTestRuleId);
 
-        $this->module->sSYSTEM->sSESSION_ID = uniqid();
+        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
         $this->basketModule->sAddArticle('SW10118.8');
 
@@ -2668,7 +1899,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             array(
                 'paymentID' => 2,
                 'rule1' => 'CUSTOMERNR',
-                'value1' => $customer->getBilling()->getNumber()
+                'value1' => $customer->getNumber()
             )
         );
         $this->assertTrue($this->module->sManageRisks(2, $fullBasket, $user));
@@ -2834,10 +2065,10 @@ class sAdminTest extends PHPUnit_Framework_TestCase
      */
     public function testsNewsletterSubscription()
     {
-        $validAddress = uniqid().'@shopware.com';
+        $validAddress = uniqid(rand()).'@shopware.com';
 
         // Test unsubscribe with non existing email, fail
-        $result = $this->module->sNewsletterSubscription(uniqid().'@shopware.com', true);
+        $result = $this->module->sNewsletterSubscription(uniqid(rand()).'@shopware.com', true);
         $this->assertEquals(
             array(
                 'code' => 4,
@@ -3051,18 +2282,18 @@ class sAdminTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers sAdmin::sGetPaymentmean
+     * @covers sAdmin::sGetPaymentMean
      */
     public function testsGetPaymentmean()
     {
         // Empty argument, return false
-        $this->assertFalse($this->module->sGetPaymentmean(''));
+        $this->assertFalse($this->module->sGetPaymentMean(''));
 
         // No matching payment mean, return empty array
-        $this->assertEquals(array('country_surcharge' => array()), $this->module->sGetPaymentmean(-1));
+        $this->assertEquals(array('country_surcharge' => array()), $this->module->sGetPaymentMean(-1));
 
         // Valid country returns valid data
-        $result = $this->module->sGetPaymentmean(
+        $result = $this->module->sGetPaymentMean(
             Shopware()->Db()->fetchOne('SELECT id FROM s_core_paymentmeans WHERE name = "prepayment"')
         );
 
@@ -3097,21 +2328,20 @@ class sAdminTest extends PHPUnit_Framework_TestCase
 
         // Fetching for id or iso code gives the same result
         $this->assertEquals(
-            $this->module->sGetPaymentmean($result['name']),
+            $this->module->sGetPaymentMean($result['name']),
             $result
         );
     }
 
     /**
      * @covers sAdmin::sGetDispatchBasket
-     * @group wip
      */
     public function testsGetDispatchBasket()
     {
         // No basket, return false
         $this->assertFalse($this->module->sGetDispatchBasket());
 
-        $this->module->sSYSTEM->sSESSION_ID = uniqid();
+        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
         $this->basketModule->sAddArticle('SW10118.8');
 
@@ -3151,7 +2381,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         // No basket, return empty array,
         $this->assertEquals(array(), $this->module->sGetPremiumDispatches());
 
-        $this->module->sSYSTEM->sSESSION_ID = uniqid();
+        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
         $this->basketModule->sAddArticle('SW10118.8');
 
@@ -3175,7 +2405,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         // No basket, return false,
         $this->assertFalse($this->module->sGetPremiumDispatchSurcharge(null));
 
-        $this->module->sSYSTEM->sSESSION_ID = uniqid();
+        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
         $this->basketModule->sAddArticle('SW10010');
         $fullBasket = $this->module->sGetDispatchBasket();
@@ -3200,7 +2430,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             }
         }
 
-        $this->module->sSYSTEM->sSESSION_ID = uniqid();
+        $this->module->sSYSTEM->sSESSION_ID = uniqid(rand());
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
         $this->basketModule->sAddArticle('SW10010');
 
@@ -3236,14 +2466,18 @@ class sAdminTest extends PHPUnit_Framework_TestCase
 
         $testData = array(
             "password" => "fooobar",
-            "email"    => uniqid() . 'test@foobar.com',
-
+            "email"    => uniqid(rand()) . 'test@foobar.com',
+            "customernumber" => 'dummy customer number',
             "lastlogin"  => $lastLogin,
+
+            "salutation" => "mr",
+            "firstname" => "Max",
+            "lastname"  => "Mustermann",
+            "birthday"  => $birthday,
 
             "billing" => array(
                 "firstName" => "Max",
                 "lastName"  => "Mustermann",
-                "birthday"  => $birthday,
                 "attribute" => array(
                     'text1' => 'Freitext1',
                     'text2' => 'Freitext2',

@@ -474,8 +474,8 @@ createShopwareVersionMessage = function() {
                     '<strong>Shopware {Shopware::VERSION} {Shopware::VERSION_TEXT}</strong>' +
                     '<span>Build Rev {Shopware::REVISION}</span></p>' +
 
-                    '{if !$product}<p><strong>Community Edition under <a href="http://www.gnu.org/licenses/agpl.html" target="_blank">AGPL license</a></strong><span>No support included in this shopware package.</span></p>{else}' +
-                    '<p><strong>{if $product == "PE"}Professional Edition {elseif $product == "EB"}Enterprise Business Edition {elseif $product == "EC"}Enterprise Cluster Edition{/if} under commercial / proprietary license</strong><span>See eula.txt / eula_en.txt (bundled with shopware) for details</span></p>{/if}' +
+                    '{if $product == "CE"}<p><strong>Community Edition under <a href="http://www.gnu.org/licenses/agpl.html" target="_blank">AGPL license</a></strong><span>No support included in this shopware package.</span></p>{else}' +
+                    '<p><strong>{if $product == "PE"}Professional Edition{elseif $product == "PP"}Professional Plus Edition{elseif $product == "EE"}Enterprise Edition{elseif $product == "EB"}Enterprise Business Edition{elseif $product == "EC"}Enterprise Cluster Edition{/if} under commercial / proprietary license</strong><span>See eula.txt / eula_en.txt (bundled with shopware) for details</span></p>{/if}' +
 
                     '<p><strong>Shopware 5 uses the following components</strong></p>' +
                     '<p><strong>Enlight 2</strong><span>BSD License</span><span>&nbsp;Origin: shopware AG</span></p>' +

@@ -166,7 +166,9 @@
                 'ajax_add_article': '{url controller="checkout" action="addArticle"}',
                 'ajax_listing': '{url module="widgets" controller="Listing" action="ajaxListing"}',
                 'ajax_cart_refresh': '{url controller="checkout" action="ajaxAmount"}',
-                'csrf_token_generate': '{url controller="csrftoken"}'
+                'csrf_token_generate': '{url controller="csrftoken"}',
+                'ajax_address_selection': '{url controller="address" action="ajaxSelection" fullPath forceSecure}',
+                'ajax_address_editor': '{url controller="address" action="ajaxEditor" fullPath forceSecure}'
             {rdelim};
 
             var snippets = snippets || {ldelim}

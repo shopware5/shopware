@@ -114,7 +114,6 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
 
         foreach ($widgets as $widget) {
             $this->setWidgetPosition($widget['id'], $widget['position'], $widget['column']);
-
         }
 
         $this->View()->assign(array('success' => true));
@@ -564,7 +563,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         $sql = "SELECT DISTINCT s_user.active AS active, customergroup,
             validation, email, s_core_customergroups.description AS customergroup_name,
             validation AS customergroup_id, s_user.id AS id, lastlogin AS date,
-            company AS company_name, customernumber, CONCAT(firstname,' ',lastname) AS customer
+            company AS company_name, s_user.customernumber, CONCAT(s_user.firstname,' ',s_user.lastname) AS customer
         FROM s_user
         LEFT JOIN s_core_customergroups
             ON groupkey = validation,
@@ -684,13 +683,13 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         $status = $params["status"];
 
         if (!$toMail || !$fromName || !$fromMail || !$subject || !$content || !$userId) {
-            $this->View()->assign(array('success' => false, 'message' => 'All required fiels needs to be filled.'));
+            $this->View()->assign(array('success' => false, 'message' => 'All required fields needs to be filled.'));
             return false;
         }
 
         $content = preg_replace('`<br(?: /)?>([\\n\\r])`', '$1', $params['content']);
 
-        $compiler = new Shopware_Components_StringCompiler($this->View());
+        $compiler = new Shopware_Components_StringCompiler($this->View()->Engine());
         $defaultContext = array(
             'sConfig' => Shopware()->Config(),
         );
@@ -742,11 +741,16 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
         }
 
         $result = [];
-        $xml = new \SimpleXMLElement(file_get_contents('https://' . $lang . '.shopware.com/news/?sRss=1', false, stream_context_create([
-            'http' => [
-                'timeout' => 20
-            ]
-        ])));
+
+        try {
+            $xml = new \SimpleXMLElement(file_get_contents('https://' . $lang . '.shopware.com/news/?sRss=1', false, stream_context_create([
+                'http' => [
+                    'timeout' => 20
+                ]
+            ])));
+        } catch (\Exception $e) {
+            return [];
+        }
 
         /**
          * @var \SimpleXMLElement $news

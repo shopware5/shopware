@@ -23,6 +23,7 @@
  */
 
 use Enlight_Controller_Request_Request as Request;
+use Shopware\Models\Customer\Address;
 
 /**
  * @category  Shopware
@@ -232,6 +233,20 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         if (!empty($voucherErrors)) {
             $this->View()->assign('sVoucherError', $voucherErrors);
         }
+
+        if (empty($activeBillingAddressId = $this->session->offsetGet('checkoutBillingAddressId', null))) {
+            $activeBillingAddressId = $userData['additional']['user']['default_billing_address_id'];
+        }
+
+        if (empty($activeShippingAddressId = $this->session->offsetGet('checkoutShippingAddressId', null))) {
+            $activeShippingAddressId = $userData['additional']['user']['default_shipping_address_id'];
+        }
+
+        $this->View()->assign('activeBillingAddressId', $activeBillingAddressId);
+        $this->View()->assign('activeShippingAddressId', $activeShippingAddressId);
+
+        $this->View()->assign('invalidBillingAddress', !$this->isValidAddress($activeBillingAddressId));
+        $this->View()->assign('invalidShippingAddress', !$this->isValidAddress($activeShippingAddressId));
     }
 
     /**
@@ -267,15 +282,21 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             return $this->forward('confirm');
         }
 
-        $this->View()->assign($this->session['sOrderVariables']->getArrayCopy());
+        $orderVariables = $this->session['sOrderVariables']->getArrayCopy();
+
+        if (!empty($orderVariables['sOrderNumber'])) {
+            $orderVariables['sAddresses']['billing'] = $this->getOrderAddress($orderVariables['sOrderNumber'], 'billing');
+            $orderVariables['sAddresses']['shipping'] = $this->getOrderAddress($orderVariables['sOrderNumber'], 'shipping');
+            $orderVariables['sAddresses']['equal'] = $this->areAddressesEqual($orderVariables['sAddresses']['billing'], $orderVariables['sAddresses']['shipping']);
+        }
+
+        $this->View()->assign($orderVariables);
 
         if ($this->basket->sCountBasket() <= 0) {
-            $this->View()->assign($this->session['sOrderVariables']->getArrayCopy());
             return;
         }
 
         if (!empty($this->View()->sUserData['additional']['payment']['embediframe'])) {
-            $this->View()->assign($this->session['sOrderVariables']->getArrayCopy());
             return;
         }
 
@@ -312,13 +333,34 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             );
         }
 
+        if (empty($activeBillingAddressId = $this->session->offsetGet('checkoutBillingAddressId', null))) {
+            $activeBillingAddressId = $this->View()->sUserData['additional']['user']['default_billing_address_id'];
+        }
+
+        if (empty($activeShippingAddressId = $this->session->offsetGet('checkoutShippingAddressId', null))) {
+            $activeShippingAddressId = $this->View()->sUserData['additional']['user']['default_shipping_address_id'];
+        }
+
+        if (!$this->isValidAddress($activeBillingAddressId) || !$this->isValidAddress($activeShippingAddressId)) {
+            $this->forward('confirm');
+            return;
+        }
+
         if (!empty($this->session['sNewsletter'])) {
             $this->admin->sUpdateNewsletter(true, $this->admin->sGetUserMailById(), true);
         }
 
         $this->saveOrder();
+        $this->saveDefaultAddresses();
+        $this->resetTemporaryAddresses();
 
-        $this->View()->assign($this->session['sOrderVariables']->getArrayCopy());
+        $orderVariables = $this->session['sOrderVariables']->getArrayCopy();
+
+        $orderVariables['sAddresses']['billing'] = $this->getOrderAddress($orderVariables['sOrderNumber'], 'billing');
+        $orderVariables['sAddresses']['shipping'] = $this->getOrderAddress($orderVariables['sOrderNumber'], 'shipping');
+        $orderVariables['sAddresses']['equal'] = $this->areAddressesEqual($orderVariables['sAddresses']['billing'], $orderVariables['sAddresses']['shipping']);
+
+        $this->View()->assign($orderVariables);
     }
 
     /**
@@ -1336,6 +1378,20 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     }
 
     /**
+     * Ajax add article action
+     *
+     * This action will get redirected from the default addArticleAction
+     * when the request was an AJAX request.
+     *
+     * The json padding will be set so that the content type will get to
+     * 'text/javascript' so the template can be returned via jsonp
+     */
+    public function ajaxAddArticleAction()
+    {
+        Shopware()->Plugins()->Controller()->Json()->setPadding();
+    }
+
+    /**
      * Ajax add article cart action
      *
      * This action is a lightweight way to add an article by the passed
@@ -1584,5 +1640,129 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         }
 
         return $payment;
+    }
+
+    /**
+     * Sets a temporary session variable which holds an address for the current order
+     */
+    public function setAddressAction()
+    {
+        $this->View()->loadTemplate('');
+        $target = $this->Request()->getParam('target', 'shipping');
+        $sessionKey = $target == 'shipping' ? 'checkoutShippingAddressId' : 'checkoutBillingAddressId';
+
+        $this->session->offsetSet($sessionKey, $this->Request()->getParam('addressId', null));
+
+        if ($target === 'both') {
+            $this->session->offsetSet('checkoutShippingAddressId', $this->Request()->getParam('addressId', null));
+            $this->session->offsetSet('checkoutBillingAddressId', $this->Request()->getParam('addressId', null));
+        }
+    }
+
+    /**
+     * Resets the temporary session address ids back to default
+     */
+    private function resetTemporaryAddresses()
+    {
+        $this->session->offsetUnset('checkoutBillingAddressId');
+        $this->session->offsetUnset('checkoutShippingAddressId');
+    }
+
+    /**
+     * Sets the default addresses for the user if he decided to use the temporary addresses as new default
+     */
+    private function saveDefaultAddresses()
+    {
+        $billingId = $this->session->offsetGet('checkoutBillingAddressId', false);
+        $shippingId = $this->session->offsetGet('checkoutShippingAddressId', false);
+        $setBoth = $this->Request()->getPost('setAsDefaultAddress', false);
+
+        if (!$this->Request()->getPost('setAsDefaultBillingAddress') && !$setBoth) {
+            $billingId = false;
+        }
+
+        if (!$this->Request()->getPost('setAsDefaultShippingAddress') && !$setBoth) {
+            $shippingId = false;
+        }
+
+        if ($billingId && $billingId != $this->View()->sUserData['additional']['user']['default_billing_address_id']) {
+            $address = $this->get('models')
+                ->getRepository(Address::class)
+                ->getOneByUser(
+                    $billingId,
+                    $this->View()->sUserData['additional']['user']['id']
+                );
+
+            $this->get('shopware_account.address_service')->setDefaultBillingAddress($address);
+        }
+
+        if ($shippingId && $shippingId != $this->View()->sUserData['additional']['user']['default_shipping_address_id']) {
+            $address = $this->get('models')
+                ->getRepository(Address::class)
+                ->getOneByUser(
+                    $shippingId,
+                    $this->View()->sUserData['additional']['user']['id']
+                );
+
+            $this->get('shopware_account.address_service')->setDefaultShippingAddress($address);
+        }
+    }
+
+    /**
+     * Validates the given address id with current shop configuration
+     * 
+     * @param $addressId
+     * @return bool
+     */
+    private function isValidAddress($addressId)
+    {
+        $address = $this->get('models')->find(Address::class, $addressId);
+
+        return $this->get('shopware_account.address_service')->isValid($address);
+    }
+
+    /**
+     * @param int $orderNumber
+     * @param string $source
+     * @return array
+     */
+    private function getOrderAddress($orderNumber, $source)
+    {
+        /** @var \Doctrine\DBAL\Query\QueryBuilder $builder */
+        $builder = $this->get('dbal_connection')->createQueryBuilder();
+        $context = $this->get('shopware_storefront.context_service')->getShopContext();
+
+        $sourceTable = $source === 'billing' ? 's_order_billingaddress' : 's_order_shippingaddress';
+
+        $address = $builder->select(['address.*'])
+            ->from($sourceTable, 'address')
+            ->join('address', 's_order', '', 'address.orderID = s_order.id AND s_order.ordernumber = :orderNumber')
+            ->setParameter('orderNumber', $orderNumber)
+            ->execute()
+            ->fetch();
+
+
+        $countryStruct = $this->get('shopware_storefront.country_gateway')->getCountry($address['countryID'], $context);
+        $stateStruct = $this->get('shopware_storefront.country_gateway')->getState($address['stateID'], $context);
+
+        $address['country'] = json_decode(json_encode($countryStruct), true);
+        $address['state'] = json_decode(json_encode($stateStruct), true);
+
+        return $address;
+    }
+
+    /**
+     * @param array $addressA
+     * @param array $addressB
+     * @return bool
+     */
+    private function areAddressesEqual(array $addressA, array $addressB)
+    {
+        $unset = ['id', 'customernumber', 'phone', 'ustid'];
+        foreach ($unset as $key) {
+            unset($addressA[$key], $addressB[$key]);
+        }
+
+        return count(array_diff($addressA, $addressB)) == 0;
     }
 }

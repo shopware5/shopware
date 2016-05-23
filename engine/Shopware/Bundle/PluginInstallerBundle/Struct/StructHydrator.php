@@ -339,6 +339,8 @@ class StructHydrator
             }
 
             $licence->setLicenseKey($row['licenseKey']);
+            $licenseCheck = isset($row['isLicenseCheckEnabled']) ? $row['isLicenseCheckEnabled'] : !empty($row['licenseKey']);
+            $licence->setIsLicenseCheckEnabled($licenseCheck);
 
             $priceModel = $this->hydratePrices([$row['priceModel']]);
             $licence->setPriceModel(array_shift($priceModel));

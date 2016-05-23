@@ -20,6 +20,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+//{block name="backend/base/component/preloader"}
 Ext.define('Shopware.component.Preloader', {
 
     /**
@@ -173,3 +174,4 @@ Ext.define('Shopware.component.Preloader', {
         });
     }
 });
+//{/block}

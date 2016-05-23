@@ -63,15 +63,7 @@ Ext.define('Shopware.apps.MediaManager.model.Media', {
             root: 'data',
             totalProperty: 'total'
         }
-    },
-    associations: [
-        {
-            type: 'hasMany',
-            model: 'Shopware.apps.MediaManager.model.Attribute',
-            name: 'getAttributes',
-            associationKey: 'attribute'
-        }
-    ]
+    }
 });
 //{/block}
 
