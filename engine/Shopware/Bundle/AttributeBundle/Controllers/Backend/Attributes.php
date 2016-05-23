@@ -39,7 +39,6 @@ class Shopware_Controllers_Backend_Attributes extends Shopware_Controllers_Backe
 {
     protected function addAclPermission($action, $privilege, $errorMessage = '')
     {
-        $this->addAclPermission("navigate", "read", "Insufficient Permissions");
         $this->addAclPermission("create", "update", "Insufficient Permissions");
         $this->addAclPermission("update", "update", "Insufficient Permissions");
         $this->addAclPermission("delete", "update", "Insufficient Permissions");
