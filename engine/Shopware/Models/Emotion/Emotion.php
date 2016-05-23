@@ -22,13 +22,12 @@
  * our trademarks remain entirely with us.
  */
 
-namespace   Shopware\Models\Emotion;
+namespace Shopware\Models\Emotion;
 
 use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- *
  * The Shopware Emotion Model enables you to adapt the view of a category individually according to a grid system.
  * Every emotion is assigned to a certain grid which consists of several rows and columns.
  * The width and height of the cells resulting from the columns and rows can be configured individually.
@@ -36,22 +35,9 @@ use Doctrine\ORM\Mapping as ORM;
  * A grid element may extend over several cells. The grid elements can be filled with components
  * from the component library, such as banners, items or text elements.
  *
- * Associations:
- * <code>
- *
- * </code>
- *
- *
- * Indices:
- * <code>
- *
- * </code>
- *
  * @category   Shopware
- * @package    Models
- * @subpackage Emotion
- * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
- * @license    http://enlight.de/license     New BSD License
+ * @package    Shopware\Models
+ * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  * @ORM\Entity(repositoryClass="Repository")
  * @ORM\Table(name="s_emotion")
@@ -106,13 +92,6 @@ class Emotion extends ModelEntity
     private $userId;
 
     /**
-     * @var integer $categoryId
-     *
-     * @ORM\Column(name="container_width", type="integer", nullable=false)
-     */
-    private $containerWidth;
-
-    /**
      * @var integer $position
      *
      * @ORM\Column(name="position", type="integer", nullable=false)
@@ -149,20 +128,6 @@ class Emotion extends ModelEntity
      * @ORM\Column(name="is_landingpage", type="integer", nullable=false)
      */
     private $isLandingPage;
-
-    /**
-     * @var integer $landingPageBlock
-     *
-     * @ORM\Column(name="landingpage_block", type="string", length=255, nullable=false)
-     */
-    private $landingPageBlock;
-
-    /**
-     * @var string $landingPageTeaser
-     *
-     * @ORM\Column(name="landingpage_teaser", type="string",length=255, nullable=false)
-     */
-    private $landingPageTeaser;
 
     /**
      * @var string $seoTitle
@@ -220,6 +185,30 @@ class Emotion extends ModelEntity
     private $rows;
 
     /**
+     * @var int
+     * @ORM\Column(name="cols", type="integer", nullable=false)
+     */
+    private $cols;
+
+    /**
+     * @var int
+     * @ORM\Column(name="cell_spacing", type="integer", nullable=false)
+     */
+    private $cellSpacing;
+
+    /**
+     * @var int
+     * @ORM\Column(name="cell_height", type="integer", nullable=false)
+     */
+    private $cellHeight;
+
+    /**
+     * @var int
+     * @ORM\Column(name="article_height", type="integer", nullable=false)
+     */
+    private $articleHeight;
+
+    /**
      * Contains the assigned \Shopware\Models\Category\Category
      * which can be configured in the backend emotion module.
      * The assigned grid will be displayed in front of the categories.
@@ -236,6 +225,23 @@ class Emotion extends ModelEntity
      * )
      */
     protected $categories;
+
+    /**
+     * Contains the assigned Shopware\Models\Shop\Shop.
+     * Used for shop limitation of single emotion landingpages.
+     *
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @ORM\ManyToMany(targetEntity="Shopware\Models\Shop\Shop")
+     * @ORM\JoinTable(name="s_emotion_shops",
+     *      joinColumns={
+     *          @ORM\JoinColumn(name="emotion_id", referencedColumnName="id"
+     *      )},
+     *      inverseJoinColumns={
+     *          @ORM\JoinColumn(name="shop_id", referencedColumnName="id")
+     *      }
+     * )
+     */
+    private $shops;
 
     /**
      * OWNING SIDE
@@ -273,25 +279,12 @@ class Emotion extends ModelEntity
 
     /**
      * @var
-     * @ORM\Column(name="grid_id", type="integer", nullable=true)
-     */
-    protected $gridId = null;
-
-    /**
-     * @var
      * @ORM\Column(name="template_id", type="integer", nullable=true)
      */
     protected $templateId = null;
 
     /**
-     * @var Grid
-     * @ORM\ManyToOne(targetEntity="Shopware\Models\Emotion\Grid", inversedBy="emotions")
-     * @ORM\JoinColumn(name="grid_id", referencedColumnName="id")
-     */
-    protected $grid;
-
-    /**
-     * @var Grid
+     * @var Template
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Emotion\Template", inversedBy="emotions")
      * @ORM\JoinColumn(name="template_id", referencedColumnName="id")
      */
@@ -311,7 +304,15 @@ class Emotion extends ModelEntity
      */
     public function __construct()
     {
+        $this->shops = new \Doctrine\Common\Collections\ArrayCollection();
         $this->categories = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->elements = new \Doctrine\Common\Collections\ArrayCollection();
+
+        $this->setRows(20);
+        $this->setCols(4);
+        $this->setCellSpacing(10);
+        $this->setCellHeight(185);
+        $this->setArticleHeight(2);
     }
 
     /**
@@ -463,22 +464,6 @@ class Emotion extends ModelEntity
     }
 
     /**
-     * @return int
-     */
-    public function getContainerWidth()
-    {
-        return $this->containerWidth;
-    }
-
-    /**
-     * @param int $containerWidth
-     */
-    public function setContainerWidth($containerWidth)
-    {
-        $this->containerWidth = $containerWidth;
-    }
-
-    /**
      * @return \Shopware\Models\Attribute\Emotion
      */
     public function getAttribute()
@@ -535,22 +520,6 @@ class Emotion extends ModelEntity
     public function getIsLandingPage()
     {
         return $this->isLandingPage;
-    }
-
-    /**
-     * @param string $landingPageTeaser
-     */
-    public function setLandingPageTeaser($landingPageTeaser)
-    {
-        $this->landingPageTeaser = $landingPageTeaser;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLandingPageTeaser()
-    {
-        return $this->landingPageTeaser;
     }
 
     /**
@@ -634,19 +603,19 @@ class Emotion extends ModelEntity
     }
 
     /**
-     * @param int $landingPageBlock
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
-    public function setLandingPageBlock($landingPageBlock)
+    public function getShops()
     {
-        $this->landingPageBlock = $landingPageBlock;
+        return $this->shops;
     }
 
     /**
-     * @return int
+     * @param \Doctrine\Common\Collections\ArrayCollection $shops
      */
-    public function getLandingPageBlock()
+    public function setShops($shops)
     {
-        return $this->landingPageBlock;
+        $this->shops = $shops;
     }
 
     /**
@@ -666,23 +635,7 @@ class Emotion extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Emotion\Grid $grid
-     */
-    public function setGrid($grid)
-    {
-        $this->grid = $grid;
-    }
-
-    /**
-     * @return \Shopware\Models\Emotion\Grid
-     */
-    public function getGrid()
-    {
-        return $this->grid;
-    }
-
-    /**
-     * @return \Shopware\Models\Emotion\Grid
+     * @return Template
      */
     public function getTemplate()
     {
@@ -690,9 +643,9 @@ class Emotion extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Emotion\Grid $template
+     * @param Template $template
      */
-    public function setTemplate($template)
+    public function setTemplate(Template $template = null)
     {
         $this->template = $template;
     }
@@ -743,6 +696,70 @@ class Emotion extends ModelEntity
     public function getRows()
     {
         return $this->rows;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCols()
+    {
+        return $this->cols;
+    }
+
+    /**
+     * @param int $cols
+     */
+    public function setCols($cols)
+    {
+        $this->cols = $cols;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCellSpacing()
+    {
+        return $this->cellSpacing;
+    }
+
+    /**
+     * @param int $cellSpacing
+     */
+    public function setCellSpacing($cellSpacing)
+    {
+        $this->cellSpacing = $cellSpacing;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCellHeight()
+    {
+        return $this->cellHeight;
+    }
+
+    /**
+     * @param int $cellHeight
+     */
+    public function setCellHeight($cellHeight)
+    {
+        $this->cellHeight = $cellHeight;
+    }
+
+    /**
+     * @return int
+     */
+    public function getArticleHeight()
+    {
+        return $this->articleHeight;
+    }
+
+    /**
+     * @param int $articleHeight
+     */
+    public function setArticleHeight($articleHeight)
+    {
+        $this->articleHeight = $articleHeight;
     }
 
     public function __clone()

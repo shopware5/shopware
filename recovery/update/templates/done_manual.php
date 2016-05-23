@@ -6,6 +6,12 @@
     <?= $language["done_info"];?>
 </div>
 
+<?php if ($changedTheme): ?>
+    <div class="alert alert-warning">
+        <?= $language["done_template_changed"]; ?>
+    </div>
+<?php endif; ?>
+
 <div class="alert alert-error">
     <?= $language["done_delete"];?>
 </div>

@@ -114,10 +114,6 @@ Ext.define('Shopware.apps.Mail.model.Mail', {
                 callback.call(this, false, response);
             }
         });
-    },
-
-    associations: [
-        { type: 'hasMany', model: 'Shopware.apps.Mail.model.Attribute', name: 'getAttributes', associationKey: 'attribute'}
-    ]
+    }
 });
 //{/block}

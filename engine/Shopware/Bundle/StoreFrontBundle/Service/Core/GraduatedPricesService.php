@@ -66,6 +66,7 @@ class GraduatedPricesService implements Service\GraduatedPricesServiceInterface
         $group = $context->getCurrentCustomerGroup();
         $specify = $this->graduatedPricesGateway->getList(
             $products,
+            $context,
             $group
         );
 
@@ -88,6 +89,7 @@ class GraduatedPricesService implements Service\GraduatedPricesServiceInterface
             //if some product has no price, we have to load the fallback customer group prices for the fallbackProducts.
             $fallbackPrices = $this->graduatedPricesGateway->getList(
                 $fallbackProducts,
+                $context,
                 $context->getFallbackCustomerGroup()
             );
 

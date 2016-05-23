@@ -24,7 +24,6 @@
 
 namespace Shopware\Bundle\MediaBundle;
 
-use League\Flysystem\Filesystem;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**

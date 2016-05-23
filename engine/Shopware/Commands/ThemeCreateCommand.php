@@ -98,9 +98,6 @@ EOF
     {
         $arguments = $input->getArguments();
 
-        // Disable error reporting for shopware menu legacy hack
-        $this->registerErrorHandler($output);
-
         /** @var Installer $themeInstaller */
         $themeInstaller = $this->container->get('theme_installer');
         $themeInstaller->synchronize();
@@ -117,16 +114,6 @@ EOF
             $output->writeln(
                 sprintf(
                     'Shop template by template name "%s" not found',
-                    $arguments['parent']
-                )
-            );
-            return 1;
-        }
-
-        if ($parent->getVersion() < 3) {
-            $output->writeln(
-                sprintf(
-                    'Shop template by template name "%s" is not a Shopware 5 Theme!',
                     $arguments['parent']
                 )
             );

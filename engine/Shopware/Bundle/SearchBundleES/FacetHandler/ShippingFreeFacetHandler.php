@@ -25,7 +25,7 @@ namespace Shopware\Bundle\SearchBundleES\FacetHandler;
 
 use ONGR\ElasticsearchDSL\Aggregation\FilterAggregation;
 use ONGR\ElasticsearchDSL\Aggregation\ValueCountAggregation;
-use ONGR\ElasticsearchDSL\Filter\TermFilter;
+use ONGR\ElasticsearchDSL\Query\TermQuery;
 use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\SearchBundleES\HandlerInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
@@ -82,7 +82,7 @@ class ShippingFreeFacetHandler implements HandlerInterface, ResultHydratorInterf
         $aggregation->setField('shippingFree');
 
         $filterAgg = new FilterAggregation('shipping_free_filter');
-        $filterAgg->setFilter(new TermFilter('shippingFree', 1));
+        $filterAgg->setFilter(new TermQuery('shippingFree', 1));
         $filterAgg->addAggregation($aggregation);
 
         $search->addAggregation($filterAgg);
@@ -100,11 +100,11 @@ class ShippingFreeFacetHandler implements HandlerInterface, ResultHydratorInterf
         if (!isset($elasticResult['aggregations'])) {
             return;
         }
-        if (!isset($elasticResult['aggregations']['agg_shipping_free_filter'])) {
+        if (!isset($elasticResult['aggregations']['shipping_free_filter'])) {
             return;
         }
 
-        $data = $elasticResult['aggregations']['agg_shipping_free_filter']['agg_shipping_free_count'];
+        $data = $elasticResult['aggregations']['shipping_free_filter']['shipping_free_count'];
 
         if ($data['value'] <= 0) {
             return;

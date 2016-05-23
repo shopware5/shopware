@@ -507,6 +507,10 @@ Ext.define('Shopware.form.field.TinyMCE',
         });
         params = params.substring(0, params.length - 1);
 
+        if (params.length <= 0) {
+            return;
+        }
+
         Ext.Ajax.request({
             url: me.preloadImageUrl + '?' + params,
             success: function(response) {

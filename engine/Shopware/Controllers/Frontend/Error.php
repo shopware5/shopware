@@ -21,10 +21,11 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Shopware\Components\CSRFWhitelistAware;
 
 /**
  */
-class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action
+class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action implements CSRFWhitelistAware
 {
     /**
      * Disable front plugins
@@ -51,7 +52,7 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action
             if (strpos($this->Request()->getHeader('Content-Type'), 'application/json') === 0) {
                 $this->Front()->Plugins()->Json()->setRenderer();
                 $this->View()->assign('success', false);
-            } elseif ($this->Request()->isXmlHttpRequest() || !Shopware()->Bootstrap()->issetResource('Db')) {
+            } elseif ($this->Request()->isXmlHttpRequest() || !Shopware()->Container()->initialized('Db')) {
                 $this->View()->loadTemplate($templateModule . '/error/exception.tpl');
             } elseif (isset($_ENV['SHELL']) || php_sapi_name() == 'cli') {
                 $this->View()->loadTemplate($templateModule . '/error/cli.tpl');
@@ -146,8 +147,8 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action
          * to pass it to the template
         */
         if ($this->Front()->getParam('showException') || $this->Request()->getModuleName() == 'backend') {
-            $paths = array(Enlight()->Path(), Enlight()->AppPath(), Enlight()->OldPath());
-            $replace = array('', Enlight()->App() . '/', '');
+            $paths = array(Shopware()->DocPath());
+            $replace = array('');
 
             $exception = $error->exception;
             $error_file = $exception->getFile();
@@ -195,5 +196,21 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action
                 'include_dir' => '.'
             )
         );
+    }
+
+    /**
+     * Returns a list with actions which should not be validated for CSRF protection
+     *
+     * @return string[]
+     */
+    public function getWhitelistedCSRFActions()
+    {
+        return [
+            'error',
+            'cli',
+            'pageNotFoundError',
+            'genericError',
+            'service'
+        ];
     }
 }

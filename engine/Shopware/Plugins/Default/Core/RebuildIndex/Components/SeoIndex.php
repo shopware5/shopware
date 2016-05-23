@@ -121,7 +121,7 @@ class Shopware_Components_SeoIndex extends Enlight_Class
 
         $shop = $repository->getActiveById($shopId);
 
-        $shop->registerResources(Shopware()->Bootstrap());
+        $shop->registerResources();
 
         return $shop;
     }

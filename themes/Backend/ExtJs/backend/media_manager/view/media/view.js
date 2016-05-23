@@ -372,6 +372,12 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
     createInfoPanel: function() {
         var me = this;
 
+        me.attributeButton = Ext.create('Shopware.attribute.Button', {
+            table: 's_media_attributes',
+            width: 185,
+            margin: '0 0 0 10'
+        });
+
         me.infoView = Ext.create('Ext.view.View', {
             cls: 'outer-media-info-pnl',
             border: 0,
@@ -379,21 +385,20 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
             emptyText: me.snippets.noAdditionalInfo,
             tpl: me.createInfoPanelTemplate(),
             itemSelector: '.copy-image-path',
-            height: '100%',
             width: 190,
             renderData: []
         });
 
         me.infoPanel = Ext.create('Ext.panel.Panel', {
             title: me.snippets.moreInfoTitle,
-            layout: 'fit',
+            layout: 'auto',
             cls: Ext.baseCSSPrefix + 'more-info',
             style: 'background: #fff',
             collapsible: true,
             autoScroll:true,
             region: 'east',
             width: 210,
-            items: [ me.infoView ]
+            items: [ me.infoView, me.attributeButton ]
         });
 
         return me.infoPanel;
@@ -604,6 +609,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
         me.onUnlockDeleteButton();
         if(me.infoView) {
             me.infoView.update(record.data);
+            me.attributeButton.setRecord(record);
         }
     },
 

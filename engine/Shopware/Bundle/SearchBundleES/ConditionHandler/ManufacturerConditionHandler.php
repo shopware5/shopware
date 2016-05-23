@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundleES\ConditionHandler;
 
-use ONGR\ElasticsearchDSL\Filter\TermsFilter;
+use ONGR\ElasticsearchDSL\Query\TermsQuery;
 use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\SearchBundle\Condition\ManufacturerCondition;
 use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
@@ -52,7 +52,7 @@ class ManufacturerConditionHandler implements HandlerInterface
         ShopContextInterface $context
     ) {
         /** @var ManufacturerCondition $criteriaPart */
-        $filter = new TermsFilter('manufacturer.id', $criteriaPart->getManufacturerIds());
+        $filter = new TermsQuery('manufacturer.id', $criteriaPart->getManufacturerIds());
 
         if ($criteria->hasBaseCondition($criteriaPart->getName())) {
             $search->addFilter($filter);

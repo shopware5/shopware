@@ -71,7 +71,7 @@ class ConfigWriter
      * @param string $name
      * @param mixed $value
      * @param string|null $namespace
-     * @param null|int $shopId
+     * @param int $shopId
      */
     public function save($name, $value, $namespace = null, $shopId = 1)
     {
@@ -92,7 +92,7 @@ class ConfigWriter
     /**
      * @param string $name
      * @param string|null $namespace
-     * @param int|null $shopId
+     * @param int $shopId
      * @return QueryBuilder
      */
     private function getConfigValueByNameQuery($name, $namespace = null, $shopId = 1)

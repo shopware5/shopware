@@ -26,7 +26,6 @@ namespace Shopware\Models\Price;
 
 use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Shopware Price Model

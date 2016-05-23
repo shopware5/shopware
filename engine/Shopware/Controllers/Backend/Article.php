@@ -27,13 +27,14 @@ use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Models\Shop\Repository;
 use Shopware\Models\Shop\Shop;
+use Shopware\Components\CSRFWhitelistAware;
 
 /**
  * @category  Shopware
  * @package   Shopware\Controllers\Backend
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_ExtJs
+class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
     /**
      * Repository for the article model.
@@ -126,6 +127,17 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         if (!in_array($this->Request()->getActionName(), array('index', 'load', 'validateNumber'))) {
             $this->Front()->Plugins()->Json()->setRenderer();
         }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getWhitelistedCSRFActions()
+    {
+        return [
+            'previewDetail',
+            'getEsdDownload'
+        ];
     }
 
     /**
@@ -480,15 +492,13 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         if ($mapping['attributes']) {
             $builder = Shopware()->Models()->createQueryBuilder();
             $mainData['attribute'] = $builder->select(array('attributes'))
-                ->from('Shopware\Models\Attribute\Article', 'attributes')
-                ->where('attributes.articleId = ?1')
-                ->andHaving('attributes.articleDetailId = :detailId')
-                ->setParameter(1, $mainDetail->getArticle()->getId())
-                ->setParameter('detailId', $mainDetail->getId())
-                ->setFirstResult(0)
-                ->setMaxResults(1)
-                ->getQuery()
-                ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+                    ->from('Shopware\Models\Attribute\Article', 'attributes')
+                    ->where('attributes.articleDetailId = :detailId')
+                    ->setParameter('detailId', $mainDetail->getId())
+                    ->setFirstResult(0)
+                    ->setMaxResults(1)
+                    ->getQuery()
+                    ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
             unset($mainData['attribute']['id']);
             unset($mainData['attribute']['articleId']);
@@ -498,13 +508,14 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         }
         if ($mapping['prices']) {
             $builder = Shopware()->Models()->createQueryBuilder();
-            $prices = $builder->select(array('prices', 'customerGroup'))
-                ->from('Shopware\Models\Article\Price', 'prices')
-                ->innerJoin('prices.customerGroup', 'customerGroup')
-                ->where('prices.articleDetailsId = ?1')
-                ->setParameter(1, $mainDetail->getId())
-                ->getQuery()
-                ->getArrayResult();
+            $prices = $builder->select(array('prices', 'attribute', 'customerGroup'))
+                              ->from('Shopware\Models\Article\Price', 'prices')
+                              ->innerJoin('prices.customerGroup', 'customerGroup')
+                              ->leftJoin('prices.attribute', 'attribute')
+                              ->where('prices.articleDetailsId = ?1')
+                              ->setParameter(1, $mainDetail->getId())
+                              ->getQuery()
+                              ->getArrayResult();
 
             foreach ($prices as $key => $price) {
                 unset($price['id']);
@@ -519,6 +530,9 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             $mainData['purchaseUnit'] = $mainDetail->getPurchaseUnit();
             $mainData['referenceUnit'] = $mainDetail->getReferenceUnit();
             $mainData['packUnit'] = $mainDetail->getPackUnit();
+        }
+        if ($mapping['purchasePrice']) {
+            $mainData['purchasePrice'] = $mainDetail->getPurchasePrice();
         }
 
         return $mainData;
@@ -1186,7 +1200,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     {
         $article = $detail->getArticle();
         $data['prices'] = $this->preparePricesAssociatedData($data['prices'], $article, $article->getTax());
-        $data['attribute'] = $data['attribute'][0];
         $data['article'] = $article;
         unset($data['images']);
         if (!empty($data['unitId'])) {
@@ -1408,7 +1421,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $customerGroups = $this->getCustomerRepository()->getCustomerGroupsQuery()->getArrayResult();
         $properties = $this->getRepository()->getPropertiesQuery()->getArrayResult();
         $configuratorGroups = $this->getRepository()->getConfiguratorGroupsQuery()->getArrayResult();
-        $attributeFields = $this->getAttributeFields();
 
         if (!empty($id)) {
             $article = $this->getArticle($id);
@@ -1423,7 +1435,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                 'customerGroups' => $customerGroups,
                 'taxes' => $taxes,
                 'suppliers' => $suppliers,
-                'attributeFields' => $attributeFields,
                 'templates' => $templates,
                 'units' => $units,
                 'properties' => $properties,
@@ -1643,21 +1654,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     }
 
     /**
-     * Selects the dynamic attribute fields
-     * @return array
-     */
-    protected function getAttributeFields()
-    {
-        $builder = Shopware()->Models()->createQueryBuilder();
-
-        return $builder->select(array('elements'))
-            ->from('Shopware\Models\Article\Element', 'elements')
-            ->orderBy('elements.position')
-            ->getQuery()
-            ->getArrayResult();
-    }
-
-    /**
      * Used for the article backend module to load the article data into
      * the module. This function selects only some fragments for the whole article
      * data. The full article data stack is defined in the
@@ -1787,17 +1783,16 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     {
         $mediaService = Shopware()->Container()->get('shopware_media.media_service');
         $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->select(array('images', 'imageAttribute', 'imageMapping', 'mappingRule', 'ruleOption'))
-            ->from('Shopware\Models\Article\Image', 'images')
-            ->leftJoin('images.article', 'article')
-            ->leftJoin('images.attribute', 'imageAttribute')
-            ->leftJoin('images.mappings', 'imageMapping')
-            ->leftJoin('imageMapping.rules', 'mappingRule')
-            ->leftJoin('mappingRule.option', 'ruleOption')
-            ->where('article.id = :articleId')
-            ->andWhere('images.parentId IS NULL')
-            ->orderBy('images.position')
-            ->setParameters(array('articleId' => $articleId));
+        $builder->select(array( 'images', 'imageMapping', 'mappingRule', 'ruleOption'))
+                ->from('Shopware\Models\Article\Image', 'images')
+                ->leftJoin('images.article', 'article')
+                ->leftJoin('images.mappings', 'imageMapping')
+                ->leftJoin('imageMapping.rules', 'mappingRule')
+                ->leftJoin('mappingRule.option', 'ruleOption')
+                ->where('article.id = :articleId')
+                ->andWhere('images.parentId IS NULL')
+                ->orderBy('images.position')
+                ->setParameters(array('articleId' => $articleId));
 
         $result = $builder->getQuery()->getArrayResult();
 
@@ -1975,7 +1970,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     {
         $data = $this->getArticleData($id);
 
-        $data[0]['attribute'] = $data[0]['mainDetail']['attribute'];
         $tax = $data[0]['tax'];
 
         $data[0]['categories'] = $this->getArticleCategories($id);
@@ -2277,14 +2271,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             $detailData['unit'] = Shopware()->Models()->find('Shopware\Models\Article\Unit', $detailData['unitId']);
         }
 
-        if (!empty($detailData['attribute'])) {
-            unset($detailData['attribute']['id']);
-            unset($detailData['attribute']['articleId']);
-            unset($detailData['attribute']['articleDetailId']);
-            unset($detailData['attribute']['articleDetail']);
-            $detailData['attribute']['article'] = $article;
-        }
-
         return $detailData;
     }
 
@@ -2490,7 +2476,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         //create the new variant data
         $variantData = array(
             'active' => 1,
-            'configuratorOptions' => $optionsModels
+            'configuratorOptions' => $optionsModels,
+            'purchasePrice' => $detailData['purchasePrice']
         );
 
         if ($mergeType == 1 && $counter == 0) {
@@ -2684,9 +2671,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         //format the posted extJs article configurator association.
         $data = $this->prepareConfiguratorAssociatedData($data, $article);
 
-        //format the posted extJs article attribute data
-        $data = $this->prepareAttributeAssociatedData($data, $article);
-
         //format the posted extJs article categories associations
         $data = $this->prepareCategoryAssociatedData($data);
 
@@ -2731,7 +2715,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             return $data;
         }
         $data['configuratorTemplate'] = $data['configuratorTemplate'][0];
-        $data['configuratorTemplate']['attribute'] = $data['configuratorTemplate']['attribute'][0];
 
         if (empty($data['configuratorTemplate'])) {
             $data['configuratorTemplate'] = null;
@@ -3058,7 +3041,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $position = 1;
         foreach ($data['images'] as &$imageData) {
             $imageData['position'] = $position;
-            $imageData['attribute'] = $imageData['attribute'][0];
             if (!empty($imageData['mediaId'])) {
                 $media = Shopware()->Models()->find('Shopware\Models\Media\Media', $imageData['mediaId']);
                 if ($media instanceof \Shopware\Models\Media\Media) {
@@ -3074,21 +3056,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             unset($imageData['parent']);
             $position++;
         }
-
-        return $data;
-    }
-
-    /**
-     * This function prepares the attribute data for the article.
-     * @param $data
-     * @param $article
-     * @return array
-     */
-    protected function prepareAttributeAssociatedData($data, $article)
-    {
-        $data['attribute'][0]['article'] = $article;
-        $data['mainDetail']['attribute'] = $data['attribute'][0];
-        unset($data['attribute']);
 
         return $data;
     }
@@ -3137,7 +3104,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             }
 
             //resolve the oneToMany association of ExtJs to an oneToOne association for doctrine.
-            $priceData['attribute'] = $priceData['attribute'][0];
             $priceData['customerGroup'] = $customerGroup;
             $priceData['article'] = $article;
             $priceData['articleDetail'] = $article->getMainDetail();
@@ -3155,7 +3121,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     {
         foreach ($data['links'] as &$linkData) {
             $linkData['link'] = trim($linkData['link']);
-            $linkData['attribute'] = $linkData['attribute'][0];
             // map the boolean ExtJS link target to the string format which used in the database
             $linkData['target'] = ($linkData['target'] === true) ? "_blank" : "_parent";
         }
@@ -3172,7 +3137,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     {
         $mediaService = Shopware()->Container()->get('shopware_media.media_service');
         foreach ($data['downloads'] as &$downloadData) {
-            $downloadData['attribute'] = $downloadData['attribute'][0];
             $downloadData['file'] = $mediaService->normalize($downloadData['file']);
         }
 
@@ -3215,17 +3179,9 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             } while ($hit);
         }
 
-        $sql = "SELECT `name`, `default` FROM s_core_engine_elements";
-        $data = Shopware()->Db()->fetchAll($sql);
-        $prepared = array();
-        foreach ($data as $item) {
-            $prepared[$item['name']] = $item['default'];
-        }
-
         return array(
-            'number' => $prefix . $number,
-            'autoNumber' => $number,
-            'attribute' => $prepared
+            'number'     => $prefix . $number,
+            'autoNumber' => $number
         );
     }
 
@@ -3563,23 +3519,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     private function getEsdListingAttributes($esdAttributesList)
     {
-        $ids = array_column($esdAttributesList, 'id');
-
-        $query = $this->getManager()->createQueryBuilder();
-        $query->select('attribute')
-            ->from('Shopware\Models\Attribute\ArticleEsd', 'attribute', 'attribute.articleEsdId')
-            ->where('attribute.articleEsdId IN (:ids)')
-            ->setParameter('ids', $ids, \Doctrine\DBAL\Connection::PARAM_INT_ARRAY);
-
-        $esdAttributes = $query->getQuery()->getArrayResult();
-
-        foreach ($esdAttributesList as &$row) {
-            $row['attribute'] = [];
-            if (isset($esdAttributes[$row['id']])) {
-                $row['attribute'] = $esdAttributes[$row['id']];
-            }
-        }
-
         $products = $this->buildListProducts($esdAttributesList);
         $products = $this->getAdditionalTexts($products);
         return $this->assignAdditionalText($esdAttributesList, $products);
@@ -3910,7 +3849,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $filename = $this->Request()->getParam('filename');
         $file = 'files/' . Shopware()->Config()->get('sESDKEY') . '/' . $filename;
 
-        if (!file_exists(Shopware()->OldPath() . $file)) {
+        if (!file_exists(Shopware()->DocPath() . $file)) {
             $this->View()->assign(array(
                 'message' => 'File not found',
                 'success' => false
@@ -4275,7 +4214,12 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
         $shop = $repository->getActiveById($shopId);
-        $shop->registerResources(Shopware()->Bootstrap());
+
+        if (!$shop instanceof Shop) {
+            throw new Exception("Invalid shop provided.");
+        }
+
+        $shop->registerResources();
 
         Shopware()->Session()->Admin = true;
 

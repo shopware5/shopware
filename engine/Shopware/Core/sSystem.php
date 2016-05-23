@@ -43,7 +43,7 @@ class sSystem
      * Current session id
      *
      * @var string
-     * @deprecated Use Shopware()->SessionID()
+     * @deprecated Use Shopware()->Session()->get('sessionId')
      */
     public $sSESSION_ID;
 

@@ -102,31 +102,6 @@ class DebitPaymentMethod extends GenericPaymentMethod
 
             Shopware()->Db()->update("s_core_payment_data", $data, $where);
         }
-
-        /**
-         * This section is legacy code form the old core debit.php class
-         * It's still used to avoid BC break, but should be considered deprecated
-         * and it will be removed in future releases
-         *
-         * It updates the s_user_debit (deprecated) table with the submited data
-         */
-        $data = array(
-            $request->getParam("sDebitAccount"),
-            $request->getParam("sDebitBankcode"),
-            $request->getParam("sDebitBankName"),
-            $request->getParam("sDebitBankHolder"),
-            $userId
-        );
-
-        if ($this->getData($userId)) {
-            $sql = "UPDATE s_user_debit SET account=?, bankcode=?, bankname=?, bankholder=?
-                WHERE userID = ?";
-        } else {
-            $sql = "INSERT INTO s_user_debit (account, bankcode, bankname, bankholder, userID)
-                VALUES (?,?,?,?,?)";
-        }
-
-        Shopware()->Db()->query($sql, $data);
     }
 
     /**
@@ -147,48 +122,6 @@ class DebitPaymentMethod extends GenericPaymentMethod
 
             return $arrayData;
         }
-
-        /**
-         * This code is provided as a temporary "bridge" between old and new tables
-         * It can be safely removed after s_user_debit is removed
-         */
-        $rawData = $this->getData($userId);
-        if (!$rawData) {
-            return array();
-        }
-
-        $paymentMean = Shopware()->Models()->getRepository('\Shopware\Models\Payment\Payment')->
-            getPaymentsQuery(array('name' => 'debit'))->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
-
-        $date = new \DateTime();
-        $data = array(
-            'account_number' => $rawData["sDebitAccount"],
-            'bank_code' => $rawData["sDebitBankcode"],
-            'bankname' => $rawData["sDebitBankName"],
-            'account_holder' => $rawData["sDebitBankHolder"],
-            'payment_mean_id' => $paymentMean['id'],
-            'user_id' => $userId,
-            'created_at' => $date->format('Y-m-d')
-        );
-
-        Shopware()->Db()->insert("s_core_payment_data", $data);
-
-        return $rawData;
-    }
-
-    /**
-     * @Deprecated
-     */
-    public function getData($userId)
-    {
-        $getData = Shopware()->Db()->fetchRow(
-            "SELECT account AS sDebitAccount, bankcode AS sDebitBankcode, bankname AS sDebitBankName, bankholder AS sDebitBankHolder
-              FROM s_user_debit
-              WHERE userID = :user_id",
-            array('user_id' => $userId)
-        );
-
-        return $getData;
     }
 
     /**
@@ -206,6 +139,7 @@ class DebitPaymentMethod extends GenericPaymentMethod
 
         $addressData = Shopware()->Models()->getRepository('Shopware\Models\Customer\Billing')->
             getUserBillingQuery($userId)->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
+
         $debitData = $this->getCurrentPaymentDataAsArray($userId);
 
         $date = new \DateTime();
@@ -225,6 +159,7 @@ class DebitPaymentMethod extends GenericPaymentMethod
             'amount' => $orderAmount,
             'created_at' => $date->format('Y-m-d')
         );
+
 
         Shopware()->Db()->insert("s_core_payment_instance", $data);
 

@@ -56,6 +56,11 @@ class ProductConfigurationGateway implements Gateway\ProductConfigurationGateway
     private $fieldHelper;
 
     /**
+     * @var Connection
+     */
+    private $connection;
+
+    /**
      * @param Connection $connection
      * @param FieldHelper $fieldHelper
      * @param Hydrator\ConfiguratorHydrator $configuratorHydrator
@@ -95,19 +100,7 @@ class ProductConfigurationGateway implements Gateway\ProductConfigurationGateway
         }
         $ids = array_unique($ids);
 
-        $query = $this->getQuery()
-            ->select('variants.ordernumber as number')
-            ->addSelect($this->fieldHelper->getConfiguratorGroupFields())
-            ->addSelect($this->fieldHelper->getConfiguratorOptionFields())
-        ;
-
-        $this->fieldHelper->addConfiguratorTranslation($query, $context);
-
-        $query->where('relations.article_id IN (:ids)')
-            ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
-
-        $query->addOrderBy('configuratorGroup.position');
-        $query->addOrderBy('configuratorGroup.id');
+        $query = $this->getQuery($ids, $context);
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
@@ -123,35 +116,29 @@ class ProductConfigurationGateway implements Gateway\ProductConfigurationGateway
     }
 
     /**
+     * @param $ids
+     * @param Struct\ShopContextInterface $context
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
-    private function getQuery()
+    private function getQuery($ids, Struct\ShopContextInterface $context)
     {
         $query = $this->connection->createQueryBuilder();
 
-        $query->from('s_article_configurator_option_relations', 'relations');
+        $query->select('variants.ordernumber as number')
+            ->addSelect($this->fieldHelper->getConfiguratorGroupFields())
+            ->addSelect($this->fieldHelper->getConfiguratorOptionFields());
 
-        $query->innerJoin(
-            'relations',
-            's_articles_details',
-            'variants',
-            'variants.id = relations.article_id'
-        );
+        $query->from('s_article_configurator_option_relations', 'relations')
+            ->innerJoin('relations', 's_articles_details', 'variants', 'variants.id = relations.article_id')
+            ->innerJoin('relations', 's_article_configurator_options', 'configuratorOption', 'configuratorOption.id = relations.option_id')
+            ->innerJoin('configuratorOption', 's_article_configurator_groups', 'configuratorGroup', 'configuratorGroup.id = configuratorOption.group_id')
+            ->where('relations.article_id IN (:ids)')
+            ->addOrderBy('configuratorGroup.position')
+            ->addOrderBy('configuratorGroup.id')
+            ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
-        $query->innerJoin(
-            'relations',
-            's_article_configurator_options',
-            'configuratorOption',
-            'configuratorOption.id = relations.option_id'
-        );
-
-        $query->innerJoin(
-            'configuratorOption',
-            's_article_configurator_groups',
-            'configuratorGroup',
-            'configuratorGroup.id = configuratorOption.group_id'
-        );
-
+        $this->fieldHelper->addConfiguratorGroupTranslation($query, $context);
+        $this->fieldHelper->addConfiguratorOptionTranslation($query, $context);
         return $query;
     }
 }

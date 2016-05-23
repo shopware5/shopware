@@ -23,7 +23,6 @@
  */
 
 use Shopware\Models\Order\Order;
-use Doctrine\ORM\AbstractQuery;
 
 /**
  * Shopware Backend Controller
@@ -372,7 +371,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         } else {
             $shop = $orderModel->getLanguageSubShop();
         }
-        $shop->registerResources(Shopware()->Bootstrap());
+        $shop->registerResources();
 
         // Try to send the actual mail
         try {

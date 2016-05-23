@@ -80,37 +80,12 @@ class SimilarProductsGateway implements Gateway\SimilarProductsGatewayInterface
 
         $query = $this->connection->createQueryBuilder();
 
-        $query->select(
-            [
-                'product.id',
-                'similarVariant.ordernumber as number'
-            ]
-        );
-
-        $query->from('s_articles_similar', 'similar');
-
-        $query->innerJoin(
-            'similar',
-            's_articles',
-            'product',
-            'product.id = similar.articleID'
-        );
-
-        $query->innerJoin(
-            'similar',
-            's_articles',
-            'similarArticles',
-            'similarArticles.id = similar.relatedArticle'
-        );
-
-        $query->innerJoin(
-            'similarArticles',
-            's_articles_details',
-            'similarVariant',
-            'similarVariant.id = similarArticles.main_detail_id'
-        );
-
-        $query->where('product.id IN (:ids)')
+        $query->select(['product.id', 'similarVariant.ordernumber as number'])
+            ->from('s_articles_similar', 'similar')
+            ->innerJoin('similar', 's_articles', 'product', 'product.id = similar.articleID')
+            ->innerJoin('similar', 's_articles', 'similarArticles', 'similarArticles.id = similar.relatedArticle')
+            ->innerJoin('similarArticles', 's_articles_details', 'similarVariant', 'similarVariant.id = similarArticles.main_detail_id')
+            ->where('product.id IN (:ids)')
             ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
@@ -158,43 +133,20 @@ class SimilarProductsGateway implements Gateway\SimilarProductsGatewayInterface
 
         $query = $this->connection->createQueryBuilder();
 
-        $query->select(
-            [
+        $query->select([
             'main.articleID',
             "GROUP_CONCAT(subVariant.ordernumber SEPARATOR '|') as similar"
-            ]
-        );
+        ]);
 
-        $query->from('s_articles_categories', 'main');
-
-        $query->innerJoin(
-            'main',
-            's_articles_categories',
-            'sub',
-            'sub.categoryID = main.categoryID AND sub.articleID != main.articleID'
-        );
-
-        $query->innerJoin(
-            'sub',
-            's_articles_details',
-            'subVariant',
-            'subVariant.articleID = sub.articleID AND subVariant.kind = 1'
-        );
-
-        $query->innerJoin(
-            'main',
-            's_categories',
-            'category',
-            'category.id = sub.categoryID AND category.id = main.categoryID'
-        );
-
-        $query->where('main.articleID IN (:ids)')
-            ->andWhere('category.path LIKE :path');
-
-        $query->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY)
+        $query->from('s_articles_categories', 'main')
+            ->innerJoin('main', 's_articles_categories', 'sub', 'sub.categoryID = main.categoryID AND sub.articleID != main.articleID')
+            ->innerJoin('sub', 's_articles_details', 'subVariant', 'subVariant.articleID = sub.articleID AND subVariant.kind = 1')
+            ->innerJoin('main', 's_categories', 'category', 'category.id = sub.categoryID AND category.id = main.categoryID')
+            ->where('main.articleID IN (:ids)')
+            ->andWhere('category.path LIKE :path')
+            ->groupBy('main.articleID')
+            ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY)
             ->setParameter(':path', '%|'. (int) $categoryId.'|');
-
-        $query->groupBy('main.articleID');
 
         $statement = $query->execute();
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);

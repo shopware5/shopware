@@ -26,7 +26,6 @@ namespace Shopware\Models\Article;
 
 use Shopware\Components\Model\ModelRepository;
 use Doctrine\ORM\Query;
-use Doctrine\ORM\Query\ResultSetMapping;
 
 /**
  * Repository class for Supplier entity

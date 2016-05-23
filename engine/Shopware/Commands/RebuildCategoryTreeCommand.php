@@ -25,13 +25,11 @@
 namespace Shopware\Commands;
 
 use Shopware\Components\Model\CategoryDenormalization;
-use Shopware\Components\Model\ModelManager;
 use Symfony\Component\Console\Helper\ProgressHelper;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Shopware\Commands\ShopwareCommand;
 
 /**
  * RebuildCategoryTreeCommand builds up the ro category tree of shopware
@@ -65,7 +63,7 @@ EOF
         $limit = $input->getOption('limit') ?: 1000;
 
         /** @var CategoryDenormalization $component */
-        $component = Shopware()->CategoryDenormalization();
+        $component = Shopware()->Container()->get('CategoryDenormalization');
 
         // Cleanup before the first call
         if ($progress == 0) {

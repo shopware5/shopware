@@ -49,14 +49,12 @@ Ext.define('Shopware.apps.Article.model.Price', {
         { name: 'to', type: 'string' },
         { name: 'price', type: 'float' },
         { name: 'pseudoPrice', type: 'float' },
-        { name: 'basePrice', type: 'float' },
         { name: 'percent', type: 'float' },
         { name: 'cloned', type: 'boolean', defaultValue: false },
         { name: 'customerGroupKey', type: 'string' }
     ],
     associations: [
-        { type: 'hasMany', model: 'Shopware.apps.Base.model.CustomerGroup', name: 'getCustomerGroup', associationKey: 'customerGroup'},
-        { type: 'hasMany', model: 'Shopware.apps.Article.model.PriceAttribute', name: 'getAttributes', associationKey: 'attribute'}
+        { type: 'hasMany', model: 'Shopware.apps.Base.model.CustomerGroup', name: 'getCustomerGroup', associationKey: 'customerGroup'}
     ]
 
 });

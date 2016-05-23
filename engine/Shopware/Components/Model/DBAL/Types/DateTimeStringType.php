@@ -50,7 +50,7 @@ class DateTimeStringType extends Type
 
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
-        if (!$value instanceof \DateTime && !empty($value)) {
+        if (!$value instanceof \DateTimeInterface && !empty($value)) {
             $value = new \DateTime($value);
         } elseif (empty($value)) {
             $value = null;

@@ -23,7 +23,6 @@
  */
 namespace Shopware\Models\Shop\TemplateConfig;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Models\Shop\Shop;

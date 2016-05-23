@@ -25,7 +25,6 @@
 namespace ShopwarePlugin\PaymentMethods\Components;
 
 use Doctrine\ORM\AbstractQuery;
-use Shopware\Models\Payment\PaymentInstance;
 
 /**
  * Class GenericPaymentMethod

@@ -84,6 +84,11 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
             'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP
         ));
 
+        $form->setElement('number', 'hoverDelay', array(
+            'label' => 'Hover Verzögerung (ms)',
+            'value' => 250
+        ));
+
         $form->setElement('text', 'levels', array(
             'label' => 'Anzahl Ebenen',
             'value' => 3,
@@ -129,7 +134,8 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
                 'levels' => array('label' => 'Category levels'),
                 'caching' => array('label' => 'Enable caching'),
                 'cachetime' => array('label' => 'Caching time'),
-                'columnAmount' => array('label' => 'Teaser width')
+                'columnAmount' => array('label' => 'Teaser width'),
+                'hoverDelay' => array('label' => 'Hover delay (ms)')
             )
         );
 
@@ -205,12 +211,9 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
         $view->assign('sAdvancedMenu', $menu);
         $view->assign('columnAmount', $config->columnAmount);
 
-        $version = Shopware()->Shop()->getTemplate()->getVersion();
-        if ($version >= 3) {
-            $view->addTemplateDir($this->Path() . 'Views');
-        } else {
-            $view->extendsTemplate('frontend/plugins/advanced_menu/index.tpl');
-        }
+        $view->assign('hoverDelay', $config->hoverDelay);
+
+        $view->addTemplateDir($this->Path() . 'Views');
     }
 
     /**

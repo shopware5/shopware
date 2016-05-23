@@ -24,7 +24,6 @@
 
 namespace Shopware\Components\Model;
 
-use Doctrine\Common\Persistence\Proxy;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping as ORM;
 

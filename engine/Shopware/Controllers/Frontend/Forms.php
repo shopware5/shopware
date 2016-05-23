@@ -309,7 +309,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
         $mail->setBodyText($mailBody);
         $mail->setSubject($content["email_subject"]);
 
-        $mail = Enlight()->Events()->filter('Shopware_Controllers_Frontend_Forms_commitForm_Mail', $mail, array('subject' => $this));
+        $mail = Shopware()->Events()->filter('Shopware_Controllers_Frontend_Forms_commitForm_Mail', $mail, array('subject' => $this));
 
         if (!$mail->send()) {
             throw new Enlight_Exception("Could not send mail");
@@ -359,10 +359,6 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
         }
 
         $placeholder = "placeholder=\"{$element['label']}$requiredFieldSnippet\"";
-        if (Shopware()->Shop()->getTemplate()->getVersion() < 3) {
-            $placeholder = "";
-            $requiredFieldSnippet = "";
-        }
 
         switch ($element['typ']) {
             case "password":
@@ -414,7 +410,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
                 $element['class'] = explode(";", $element['class']);
                 $element['name'] = explode(";", $element['name']);
 
-                if (Shopware()->Shop()->getTemplate()->getVersion() >= 3 && strpos($element['label'], ';') !== false) {
+                if (strpos($element['label'], ';') !== false) {
                     $placeholders = explode(";", $element['label']);
                     $placeholder0 = "placeholder=\"{$placeholders[0]}$requiredFieldSnippet\"";
                     $placeholder1 = "placeholder=\"{$placeholders[1]}$requiredFieldSnippet\"";
@@ -439,11 +435,8 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
                 if (!empty($requiredField)) {
                     $requiredField = 'disabled="disabled"';
                 }
-                if (Shopware()->Shop()->getTemplate()->getVersion() >= 3) {
-                    $label = $element['label'] . $requiredFieldSnippet;
-                } else {
-                    $label = Shopware()->Snippets()->getNamespace('frontend/newsletter/index')->get('NewsletterLabelSelect') . $requiredFieldSnippet;
-                }
+
+                $label = $element['label'] . $requiredFieldSnippet;
 
                 if (empty($post)) {
                     $output .= "<option selected=\"selected\" $requiredField value=\"\">$label</option>";

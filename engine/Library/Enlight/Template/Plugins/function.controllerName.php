@@ -37,7 +37,7 @@
 function smarty_function_controllerName($params, Enlight_Template_Default $template)
 {
     /** @var $front Enlight_Controller_Front */
-    $front = Enlight_Application::Instance()->Front();
+    $front = Shopware()->Front();
     $request = $front->Request();
 
     if (empty($request) || !$request instanceof Zend_Controller_Request_Abstract) {

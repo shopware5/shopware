@@ -12,6 +12,25 @@ It is displayed after the Shopware checkout process is finished and contains the
 
 .finish--content {
     .unitize(padding-top, 10);
+
+    .information--panel-item {
+        .clearfix();
+        .unitize(margin-bottom, 20);
+
+        .panel--body {
+            .clearfix();
+        }
+    }
+
+    .information--panel-item.information--panel-address {
+        .shipping--panel {
+            text-align: center;
+        }
+    }
+
+    .product--table {
+        margin-top: 0;
+    }
 }
 
 .finish--teaser {
@@ -31,16 +50,6 @@ It is displayed after the Shopware checkout process is finished and contains the
         .unitize-margin(4, 0, 0, 0);
         float: left;
     }
-}
-
-.finish--info {
-    .clearfix();
-}
-
-.finish--details,
-.finish--billing,
-.finish--shipping {
-    .unitize-margin(0, 0, 20, 0);
 }
 
 .finish--table {
@@ -100,27 +109,67 @@ It is displayed after the Shopware checkout process is finished and contains the
 
     .finish--content {
         .unitize(padding-top, 20);
+
+        // Personal information panels like billing and shipping address
+        .information--panel-wrapper {
+            margin: -2% 0 0 -2%;
+            .unitize(margin-bottom, 20);
+
+            .information--panel-item {
+                &.information--panel-item-billing {
+                    width: 50%;
+
+                    .panel {
+                        border-right: 0;
+                        border-top-right-radius: 0;
+                        border-bottom-right-radius: 0;
+                    }
+                }
+
+                &.information--panel-item-shipping {
+                    padding-left: 0;
+                    width: 50%;
+
+                    .panel {
+                        border-left: 0;
+                        border-top-left-radius: 0;
+                        border-bottom-left-radius: 0;
+                    }
+                }
+            }
+
+            .information--panel {
+                margin: 0;
+            }
+
+            .information--panel-item {
+                padding: 2% 0 0 2%;
+                width: 100%;
+                float: left;
+                margin-bottom: 0;
+            }
+        }
+
+        .information--panel-address {
+            .panel--body {
+                .clearfix();
+
+                .billing--panel {
+                    float: left;
+                    width: 50%;
+                }
+
+                .shipping--panel {
+                    float: right;
+                    width: 50%;
+                }
+            }
+        }
     }
 
     .teaser--btn-back {
         .unitize-margin(0, 20, 0, 0);
         width: auto;
-    }
-
-    .finish--info {
-        .unitize-height(280);
-    }
-
-    .finish--details,
-    .finish--billing,
-    .finish--shipping {
-        width: 32%;
-        height: 100%;
-    }
-
-    .finish--billing,
-    .finish--shipping {
-        margin-right: 2%;
     }
 
     .finish--table {
@@ -166,6 +215,45 @@ It is displayed after the Shopware checkout process is finished and contains the
 
         .aggregation--list {
             .unitize-padding(20, 20);
+        }
+    }
+}
+
+@media screen and (min-width: @tabletLandscapeViewportWidth) {
+    .finish--content {
+        .information--panel-wrapper {
+            .unitize(margin-bottom, 20);
+
+            .information--panel-item {
+                width: 33.3%;
+
+                &.information--panel-item-billing,
+                &.information--panel-item-shipping {
+                    width: 33.3%;
+                }
+
+                &.information--panel-address {
+                    width: 66.6%;
+                }
+            }
+
+            .information--panel-item-billing {
+                .panel {
+                    border-right: 0;
+                    border-top-right-radius: 0;
+                    border-bottom-right-radius: 0;
+                }
+            }
+
+            .information--panel-item-shipping {
+                padding-left: 0;
+
+                .panel {
+                    border-left: 0;
+                    border-top-left-radius: 0;
+                    border-bottom-left-radius: 0;
+                }
+            }
         }
     }
 }
@@ -231,22 +319,6 @@ It is displayed after the Shopware checkout process is finished and contains the
 
     .content-main {
         margin-bottom: 0;
-    }
-
-    .finish--info {
-        .unitize-height(280);
-    }
-
-    .finish--details,
-    .finish--billing,
-    .finish--shipping {
-        width: 32%;
-        height: 100%;
-    }
-
-    .finish--billing,
-    .finish--shipping {
-        margin-right: 2%;
     }
 
     .finish--table {

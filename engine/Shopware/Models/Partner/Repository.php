@@ -163,7 +163,7 @@ class Repository extends ModelRepository
                 'billing.company as customerCompany',
                 'billing.firstName as customerFirstName',
                 'billing.lastName as customerLastName',
-                'billing.number as customerNumber',
+                'customer.number as customerNumber',
                 'orderState.description as orderStatus',
                 'orderState.id as orderStatusId'
             ))
@@ -264,8 +264,8 @@ class Repository extends ModelRepository
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array(
             'customer.id as id',
-            'billing.number as customerNumber',
-            "CONCAT(CONCAT(billing.firstName, ' '), billing.lastName) as fullName",
+            'customer.number as customerNumber',
+            "CONCAT(CONCAT(customer.firstname, ' '), customer.lastname) as fullName",
             'billing.company as company',
             'customer.email as email'
         ));
@@ -273,7 +273,7 @@ class Repository extends ModelRepository
                 ->leftJoin('customer.billing', 'billing')
                 ->where("customer.accountMode = 0")
                 ->andWhere("customer.email = ?0")
-                ->orWhere("billing.number = ?1")
+                ->orWhere("customer.number = ?1")
                 ->orWhere("customer.id = ?2");
         $builder->setParameter(0, $mappingValue);
         $builder->setParameter(1, $mappingValue);

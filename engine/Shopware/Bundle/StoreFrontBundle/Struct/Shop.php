@@ -128,6 +128,11 @@ class Shop extends Extendable implements \JsonSerializable
     protected $currency;
 
     /**
+     * @var boolean
+     */
+    protected $customerScope;
+
+    /**
      * @param ShopEntity $shop
      * @return Shop
      */
@@ -137,6 +142,7 @@ class Shop extends Extendable implements \JsonSerializable
         $struct->setId($shop->getId());
         $struct->setParentId($shop->getMain() ? $shop->getMain()->getId() : $shop->getId());
 
+        $struct->setCustomerScope($shop->getMain() ? $shop->getMain()->getCustomerScope() : $shop->getCustomerScope());
         $struct->setIsDefault($shop->getDefault());
         $struct->setName($shop->getName());
         $struct->setHost($shop->getHost());
@@ -462,5 +468,21 @@ class Shop extends Extendable implements \JsonSerializable
     public function setTemplate(Template $template)
     {
         $this->template = $template;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function hasCustomerScope()
+    {
+        return $this->customerScope;
+    }
+
+    /**
+     * @param boolean $customerScope
+     */
+    public function setCustomerScope($customerScope)
+    {
+        $this->customerScope = $customerScope;
     }
 }

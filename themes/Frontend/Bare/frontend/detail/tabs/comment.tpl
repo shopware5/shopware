@@ -20,7 +20,7 @@
 			{if $sErrorFlag}
 				{include file="frontend/_includes/messages.tpl" type="error" content="{s name='DetailCommentInfoFillOutFields'}{/s}"}
 			{else}
-				{if {config name="OptinVote"} && !{$smarty.get.sConfirmation}}
+				{if {config name="OptinVote"} && !{$smarty.get.sConfirmation} && !{$userLoggedIn}}
 					{include file="frontend/_includes/messages.tpl" type="success" content="{s name='DetailCommentInfoSuccessOptin'}{/s}"}
 				{else}
 					{include file="frontend/_includes/messages.tpl" type="success" content="{s name='DetailCommentInfoSuccess'}{/s}"}

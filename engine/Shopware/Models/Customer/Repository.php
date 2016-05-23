@@ -75,10 +75,10 @@ class Repository extends ModelRepository
         //add the displayed columns
         $builder->select(array(
                 'customer.id',
-                'billing.number as number',
-                'billing.firstName as firstName',
+                'customer.number as number',
+                'customer.firstname as firstname',
                 'customer.firstLogin as firstLogin',
-                'billing.lastName as lastName',
+                'customer.lastname as lastname',
                 'customergroups.name as customerGroup',
                 'billing.company as company',
                 'billing.zipCode as zipCode',
@@ -95,12 +95,12 @@ class Repository extends ModelRepository
 
         //filter the displayed columns with the passed filter string
         if (!empty($filter)) {
-            $fullNameExp = $builder->expr()->concat('billing.firstName', $builder->expr()->concat($builder->expr()->literal(' '), 'billing.lastName'));
-            $fullNameReversedExp = $builder->expr()->concat('billing.lastName', $builder->expr()->concat($builder->expr()->literal(' '), 'billing.firstName'));
+            $fullNameExp = $builder->expr()->concat('customer.firstname', $builder->expr()->concat($builder->expr()->literal(' '), 'customer.lastname'));
+            $fullNameReversedExp = $builder->expr()->concat('customer.lastname', $builder->expr()->concat($builder->expr()->literal(' '), 'customer.firstname'));
 
-            $builder->where('billing.number LIKE ?1')           //Search only the beginning of the customer number.
-                    ->orWhere('billing.firstName LIKE ?2')      //Full text search for the first name of the customer
-                    ->orWhere('billing.lastName LIKE ?2')       //Full text search for the last name of the customer
+            $builder->where('customer.number LIKE ?1')           //Search only the beginning of the customer number.
+                    ->orWhere('customer.firstname LIKE ?2')      //Full text search for the first name of the customer
+                    ->orWhere('customer.lastname LIKE ?2')       //Full text search for the last name of the customer
                     ->orWhere($fullNameExp . ' LIKE ?2')        //Full text search for the full name of the customer
                     ->orWhere($fullNameReversedExp . ' LIKE ?2')//Full text search for the full name in reversed order of the customer
                     ->orWhere('customer.email LIKE ?2')         //Full text search for the customer email
@@ -150,12 +150,12 @@ class Repository extends ModelRepository
 
         //filter the displayed columns with the passed filter string
         if (!empty($filter)) {
-            $fullNameExp = $builder->expr()->concat('billing.firstName', $builder->expr()->concat($builder->expr()->literal(' '), 'billing.lastName'));
-            $fullNameReversedExp = $builder->expr()->concat('billing.lastName', $builder->expr()->concat($builder->expr()->literal(' '), 'billing.firstName'));
+            $fullNameExp = $builder->expr()->concat('customer.firstname', $builder->expr()->concat($builder->expr()->literal(' '), 'customer.lastname'));
+            $fullNameReversedExp = $builder->expr()->concat('customer.lastname', $builder->expr()->concat($builder->expr()->literal(' '), 'customer.firstname'));
 
-            $builder->andWhere('billing.number LIKE ?1')        //Search only the beginning of the customer number.
-                    ->orWhere('billing.firstName LIKE ?2')      //Full text search for the first name of the customer
-                    ->orWhere('billing.lastName LIKE ?2')       //Full text search for the last name of the customer
+            $builder->andWhere('customer.number LIKE ?1')        //Search only the beginning of the customer number.
+                    ->orWhere('customer.firstname LIKE ?2')      //Full text search for the first name of the customer
+                    ->orWhere('customer.lastname LIKE ?2')       //Full text search for the last name of the customer
                     ->orWhere($fullNameExp . ' LIKE ?2')        //Full text search for the full name of the customer
                     ->orWhere($fullNameReversedExp . ' LIKE ?2')//Full text search for the full name in reversed order of the customer
                     ->orWhere('customer.email LIKE ?2')         //Full text search for the customer email
@@ -203,13 +203,14 @@ class Repository extends ModelRepository
             ->from('Shopware\Models\Customer\Customer', 'customer2')
             ->leftJoin('customer2.orders', 'canceledOrders', \Doctrine\ORM\Query\Expr\Join::WITH, 'canceledOrders.cleared = 16')
             ->where($subQueryBuilder->expr()->eq('customer2', $customerId));
-        
+
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array(
             'customer',
+            'IDENTITY(customer.defaultBillingAddress) as default_billing_address_id',
+            'IDENTITY(customer.defaultShippingAddress) as default_shipping_address_id',
             'billing',
             'shipping',
-            'debit',
             'paymentData',
             'attribute',
             'billingAttribute',
@@ -227,7 +228,6 @@ class Repository extends ModelRepository
                 ->leftJoin('customer.shop', 'shop')
                 ->leftJoin('customer.languageSubShop', 'subShop')
                 ->leftJoin('subShop.locale', 'locale')
-                ->leftJoin('customer.debit', 'debit')
                 ->leftJoin('customer.paymentData', 'paymentData', \Doctrine\ORM\Query\Expr\Join::WITH, 'paymentData.paymentMean = customer.paymentId')
                 ->leftJoin('customer.orders', 'doneOrders', \Doctrine\ORM\Query\Expr\Join::WITH, 'doneOrders.status <> -1 AND doneOrders.status <> 4')
                 ->leftJoin('billing.attribute', 'billingAttribute')
@@ -236,6 +236,7 @@ class Repository extends ModelRepository
                 ->where($builder->expr()->eq('customer.id', $customerId));
 
         $builder->groupBy('customer.id');
+
         return $builder;
     }
 
@@ -338,90 +339,6 @@ class Repository extends ModelRepository
         $builder->andWhere($builder->expr()->notIn('orders.status', array('-1', '4')));
 
         $this->addOrderBy($builder, $orderBy);
-        return $builder;
-    }
-
-    /**
-     * Returns an instance of the \Doctrine\ORM\Query object which search for the attributes of the passed
-     * shipping id.
-     * @param $shippingId
-     * @return \Doctrine\ORM\Query
-     */
-    public function getShippingAttributesQuery($shippingId)
-    {
-        $builder = $this->getShippingAttributesQueryBuilder($shippingId);
-        return $builder->getQuery();
-    }
-
-    /**
-     * Helper function to create the query builder for the "getShippingAttributesQuery" function.
-     * This function can be hooked to modify the query builder of the query object.
-     * @param $shippingId
-     * @return \Doctrine\ORM\QueryBuilder
-     */
-    public function getShippingAttributesQueryBuilder($shippingId)
-    {
-        $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(array('attribute'))
-                ->from('Shopware\Models\Attribute\CustomerShipping', 'attribute')
-                ->where('attribute.customerShippingId = ?1')
-                ->setParameter(1, $shippingId);
-        return $builder;
-    }
-
-    /**
-     * Returns an instance of the \Doctrine\ORM\Query object which search for the attributes of the passed
-     * billing id.
-     * @param $billingId
-     * @return \Doctrine\ORM\Query
-     */
-    public function getBillingAttributesQuery($billingId)
-    {
-        $builder = $this->getBillingAttributesQueryBuilder($billingId);
-        return $builder->getQuery();
-    }
-
-    /**
-     * Helper function to create the query builder for the "getBillingAttributesQuery" function.
-     * This function can be hooked to modify the query builder of the query object.
-     * @param $billingId
-     * @return \Doctrine\ORM\QueryBuilder
-     */
-    public function getBillingAttributesQueryBuilder($billingId)
-    {
-        $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(array('attribute'))
-                ->from('Shopware\Models\Attribute\CustomerBilling', 'attribute')
-                ->where('attribute.customerBillingId = ?1')
-                ->setParameter(1, $billingId);
-        return $builder;
-    }
-
-    /**
-     * Returns an instance of the \Doctrine\ORM\Query object which search for the attributes of the passed
-     * customer id.
-     * @param $customerId
-     * @return \Doctrine\ORM\Query
-     */
-    public function getAttributesQuery($customerId)
-    {
-        $builder = $this->getAttributesQueryBuilder($customerId);
-        return $builder->getQuery();
-    }
-
-    /**
-     * Helper function to create the query builder for the "getAttributesQuery" function.
-     * This function can be hooked to modify the query builder of the query object.
-     * @param $customerId
-     * @return \Doctrine\ORM\QueryBuilder
-     */
-    public function getAttributesQueryBuilder($customerId)
-    {
-        $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(array('attribute'))
-                ->from('Shopware\Models\Attribute\Customer', 'attribute')
-                ->where('attribute.customerId = ?1')
-                ->setParameter(1, $customerId);
         return $builder;
     }
 

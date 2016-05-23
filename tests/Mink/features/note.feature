@@ -33,22 +33,6 @@ Feature: Note
         When  I remove the article on position 1 of my note
         Then  I should see 0 elements of type "NotePosition"
 
-    @noResponsive
-    Scenario: I can put articles from my note into the basket
-        When  I put the article on position 1 of my note in the basket
-        Then  I should be on the page "CheckoutCart"
-        And   I follow "Merkzettel"
-        And   I put the article on position 2 of my note in the basket
-
-        Then  the cart should contain 2 articles with a value of "165,89 €"
-        And   the aggregations should look like this:
-            | label         | value    |
-            | sum           | 165,89 € |
-            | shipping      | 3,90 €   |
-            | total         | 169,79 € |
-            | sumWithoutVat | 142,68 € |
-            | 19 %          | 27,11 €  |
-
     @comparison
     Scenario: I can compare articles from my note
         When  I compare the article on position 1 of my note
@@ -64,7 +48,6 @@ Feature: Note
         And   I go to the page "Note"
         Then  I should not see "Artikel vergleichen"
 
-    @noEmotion
     Scenario: I can put articles from the listing to my note
         When  I follow "Abschlag bei Zahlungsarten"
         And   I follow "Zahlungsarten"

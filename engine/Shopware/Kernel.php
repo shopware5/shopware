@@ -24,20 +24,27 @@
 
 namespace Shopware;
 
+use Enlight\Event\SubscriberInterface;
+use Shopware\Bundle\AttributeBundle\DependencyInjection\Compiler\SearchRepositoryCompilerPass;
 use Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\SettingsCompilerPass;
 use Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\SynchronizerCompilerPass;
 use Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\DataIndexerCompilerPass;
 use Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\MappingCompilerPass;
+use Shopware\Bundle\FormBundle\DependencyInjection\CompilerPass\FormPass;
 use Shopware\Bundle\SearchBundle\DependencyInjection\Compiler\CriteriaRequestHandlerCompilerPass;
 use Shopware\Bundle\SearchBundleDBAL\DependencyInjection\Compiler\DBALCompilerPass;
 use Shopware\Bundle\SearchBundleES\DependencyInjection\CompilerPass\SearchHandlerCompilerPass;
+use Shopware\Bundle\FormBundle\DependencyInjection\CompilerPass\AddConstraintValidatorsPass;
 use Shopware\Components\DependencyInjection\Compiler\DoctrineEventSubscriberCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\EventListenerCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\EventSubscriberCompilerPass;
 use Shopware\Components\ConfigLoader;
 use Shopware\Components\DependencyInjection\Container;
+use Shopware\Components\Plugin;
+use Symfony\Component\ClassLoader\Psr4ClassLoader;
 use Symfony\Component\Config\ConfigCache;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\DependencyInjection\Dumper\PhpDumper;
@@ -101,6 +108,16 @@ class Kernel implements HttpKernelInterface
      */
     protected $name;
 
+    /**
+     * @var Plugin[]
+     */
+    private $plugins = [];
+
+    /**
+     * @var string
+     */
+    private $pluginHash;
+
     const VERSION      = \Shopware::VERSION;
     const VERSION_TEXT = \Shopware::VERSION_TEXT;
     const REVISION     = \Shopware::REVISION;
@@ -111,6 +128,8 @@ class Kernel implements HttpKernelInterface
      */
     public function __construct($environment, $debug)
     {
+        $debug = false;
+
         $this->environment = $environment;
         $this->debug = (boolean) $debug;
         $this->name = 'Shopware';
@@ -156,8 +175,8 @@ class Kernel implements HttpKernelInterface
             $response   = clone $front->Response();
 
             $response->clearHeaders()
-                     ->clearRawHeaders()
-                     ->clearBody();
+                ->clearRawHeaders()
+                ->clearBody();
 
             $response->setHttpResponseCode(200);
             $request->setDispatched(true);
@@ -247,10 +266,62 @@ class Kernel implements HttpKernelInterface
             return;
         }
 
+        // no-plugins-mode
+        $this->initializePlugins();
+
         $this->initializeContainer();
         $this->initializeShopware();
 
+        foreach ($this->getPlugins() as $plugin) {
+            $plugin->setContainer($this->container);
+            //$plugin->boot();
+            if ($plugin instanceof SubscriberInterface) {
+                $this->container->get('events')->addSubscriber($plugin);
+            }
+        }
+
         $this->booted = true;
+    }
+
+    /**
+     * @return Plugin[]
+     */
+    public function getPlugins()
+    {
+        return $this->plugins;
+    }
+
+    protected function initializePlugins()
+    {
+        $this->plugins = [];
+
+        $classLoader = new Psr4ClassLoader();
+        $classLoader->register(true);
+
+        $pluginRoot = $this->getRootDir().'/plugins';
+
+        foreach (new \DirectoryIterator($pluginRoot) as $pluginDir) {
+            if ($pluginDir->isDot()) {
+                continue;
+            }
+
+            $pluginName = $pluginDir->getBasename();
+
+            if (!is_file($pluginDir->getPathname() . '/'. $pluginName . '.php')) {
+                continue;
+            }
+
+            $namespace = 'ShopwarePlugins\\' . $pluginName;
+            $className = '\\' . $namespace . '\\' .  $pluginName;
+
+            $classLoader->addPrefix($namespace, $pluginDir->getPathname());
+
+            /** @var Plugin $plugin */
+            $plugin = new $className();
+            $this->plugins[$plugin->getName()] = $plugin;
+        }
+
+        $this->pluginHash = $this->createPluginHash($this->plugins);
     }
 
     /**
@@ -300,11 +371,8 @@ class Kernel implements HttpKernelInterface
      */
     protected function initializeShopware()
     {
-        $this->shopware = new \Shopware(
-            $this->environment,
-            $this->config,
-            $this->container
-        );
+        $this->shopware = new \Shopware($this->container);
+        $this->container->setApplication($this->shopware);
     }
 
     /**
@@ -325,6 +393,7 @@ class Kernel implements HttpKernelInterface
         if (!$cache->isFresh()) {
             $container = $this->buildContainer();
             $container->compile();
+
             $this->dumpContainer($cache, $container, $class, 'Shopware\Components\DependencyInjection\Container');
         }
 
@@ -410,6 +479,22 @@ class Kernel implements HttpKernelInterface
     }
 
     /**
+     * Returns a hash containing the plugin names
+     *
+     * @param Plugin[] $plugins
+     * @return string
+     */
+    private function createPluginHash(array $plugins)
+    {
+        $string = '';
+        foreach ($plugins as $plugin) {
+            $string .= $plugin->getPath().$plugin->getName();
+        }
+
+        return sha1($string);
+    }
+
+    /**
      * Dumps the service container to PHP code in the cache.
      *
      * @param ConfigCache $cache     The config cache
@@ -461,7 +546,18 @@ class Kernel implements HttpKernelInterface
 
         $container = $this->getContainerBuilder();
         $container->addObjectResource($this);
+        $this->prepareContainer($container);
 
+        return $container;
+    }
+
+    /**
+     * Prepares the ContainerBuilder before it is compiled.
+     *
+     * @param ContainerBuilder $container A ContainerBuilder instance
+     */
+    protected function prepareContainer(ContainerBuilder $container)
+    {
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/Components/DependencyInjection/'));
         $loader->load('services.xml');
         $loader->load('theme.xml');
@@ -474,6 +570,9 @@ class Kernel implements HttpKernelInterface
         $loader->load('PluginInstallerBundle/services.xml');
         $loader->load('ESIndexingBundle/services.xml');
         $loader->load('MediaBundle/services.xml');
+        $loader->load('FormBundle/services.xml');
+        $loader->load('AccountBundle/services.xml');
+        $loader->load('AttributeBundle/services.xml');
 
         if ($this->isElasticSearchEnabled()) {
             $loader->load('SearchBundleES/services.xml');
@@ -486,8 +585,8 @@ class Kernel implements HttpKernelInterface
         $this->addShopwareConfig($container, 'shopware', $this->config);
         $this->addResources($container);
 
-        $container->addCompilerPass(new EventListenerCompilerPass());
-        $container->addCompilerPass(new EventSubscriberCompilerPass());
+        $container->addCompilerPass(new EventListenerCompilerPass(), PassConfig::TYPE_BEFORE_REMOVING);
+        $container->addCompilerPass(new EventSubscriberCompilerPass(), PassConfig::TYPE_BEFORE_REMOVING);
         $container->addCompilerPass(new DoctrineEventSubscriberCompilerPass());
         $container->addCompilerPass(new DBALCompilerPass());
         $container->addCompilerPass(new CriteriaRequestHandlerCompilerPass());
@@ -495,12 +594,15 @@ class Kernel implements HttpKernelInterface
         $container->addCompilerPass(new SynchronizerCompilerPass());
         $container->addCompilerPass(new DataIndexerCompilerPass());
         $container->addCompilerPass(new SettingsCompilerPass());
+        $container->addCompilerPass(new FormPass());
+        $container->addCompilerPass(new AddConstraintValidatorsPass());
+        $container->addCompilerPass(new SearchRepositoryCompilerPass());
 
         if ($this->isElasticSearchEnabled()) {
             $container->addCompilerPass(new SearchHandlerCompilerPass());
         }
 
-        return $container;
+        $this->loadPlugins($container);
     }
 
     /**
@@ -574,10 +676,13 @@ class Kernel implements HttpKernelInterface
     }
 
     /**
+     * @deprecated since 5.2, to be removed in 5.3
      * @return \Shopware
      */
     public function getShopware()
     {
+        trigger_error('Shopware\Kernel::getShopware() is deprecated since version 5.2 and will be removed in 5.3.', E_USER_DEPRECATED);
+
         return $this->shopware;
     }
 
@@ -597,7 +702,7 @@ class Kernel implements HttpKernelInterface
      */
     protected function getContainerClass()
     {
-        return $this->name.ucfirst($this->environment).($this->debug ? 'Debug' : '').'ProjectContainer';
+        return $this->name.ucfirst($this->environment).$this->pluginHash.($this->debug ? 'Debug' : '').'ProjectContainer';
     }
 
     /**
@@ -622,5 +727,20 @@ class Kernel implements HttpKernelInterface
     public function getElasticSearchConfig()
     {
         return is_array($this->config['es']) ? $this->config['es'] : [];
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     */
+    private function loadPlugins(ContainerBuilder $container)
+    {
+        if (count($this->plugins) === 0) {
+            return;
+        }
+
+        foreach ($this->plugins as $plugin) {
+            $container->addObjectResource($plugin);
+            $plugin->build($container);
+        }
     }
 }

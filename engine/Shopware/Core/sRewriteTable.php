@@ -1088,38 +1088,42 @@ class sRewriteTable
         $repo = $this->modelManager->getRepository('Shopware\Models\Emotion\Emotion');
         $queryBuilder = $repo->getListQueryBuilder();
 
+        $languageId = Shopware()->Shop()->getId();
+        $fallbackId = null;
+
+        $fallbackShop = Shopware()->Shop()->getFallback();
+
+        if (!empty($fallbackShop)) {
+            $fallbackId = $fallbackShop->getId();
+        }
+
+        $translator = new Shopware_Components_Translation();
+
         $queryBuilder
-            ->andWhere('emotions.isLandingPage = 1 ')
+            ->andWhere('emotions.isLandingPage = 1')
             ->andWhere('emotions.parentId IS NULL')
             ->andWhere('emotions.active = 1');
 
         if ($limit !== null && $offset !== null) {
-            $queryBuilder->setFirstResult($offset)
-                ->setMaxResults($limit);
+            $queryBuilder->setFirstResult($offset)->setMaxResults($limit);
         }
 
         $campaigns = $queryBuilder->getQuery()->getArrayResult();
 
         $routerCampaignTemplate = $this->config->get('routerCampaignTemplate');
+
         foreach ($campaigns as $campaign) {
-            $campaign["categoryId"] = null;
+            $translation = $translator->readWithFallback($languageId, $fallbackId, 'emotion', $campaign['id']);
+
+            $campaign = array_merge($campaign, $translation);
+
             $this->data->assign('campaign', $campaign);
+
             $path = $this->template->fetch('string:' . $routerCampaignTemplate, $this->data);
             $path = $this->sCleanupPath($path, false);
 
             $org_path = 'sViewport=campaign&emotionId=' . $campaign['id'];
             $this->sInsertUrl($org_path, $path);
-
-            foreach ($campaign['categories'] as $category) {
-                $campaign["categoryId"] = $category['id'];
-
-                $this->data->assign('campaign', $campaign);
-                $path = $this->template->fetch('string:' . $routerCampaignTemplate, $this->data);
-                $path = $this->sCleanupPath($path, false);
-
-                $org_path = 'sViewport=campaign&sCategory=' . $campaign['categoryId'] . '&emotionId=' . $campaign['id'];
-                $this->sInsertUrl($org_path, $path);
-            }
         }
     }
 

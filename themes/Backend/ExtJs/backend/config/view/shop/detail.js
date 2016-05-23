@@ -34,13 +34,102 @@ Ext.define('Shopware.apps.Config.view.shop.Detail', {
 
     store: 'detail.Shop',
 
-    getMainField: function() {
+    createTypeStore: function() {
+        var me = this;
+        return me.shopTypeStore = Ext.create('Ext.data.Store', {
+            fields: [ 'type', 'label' ],
+            data: [
+                { 'type': 'lang', 'label': '{s name=shop/detail/language_shop_label}Language shop{/s}' },
+                { 'type': 'sub', 'label': '{s name=shop/detail/sub_shop_label}Sub shop{/s}' }
+            ]
+        });
+    },
+
+    getIdField: function(){
         var me = this;
         return {
             xtype: 'hidden',
+            name: 'id',
+            listeners: {
+                scope: me,
+                change: function (hidden, value) {
+                    var form = hidden.up('form'),
+                        typeSwitchField = form.down('[name=typeSwitch]'),
+                        mainIdField,
+                        type;
+
+                    if(Ext.isEmpty(value)) {
+                        form.getForm().reset();
+                        typeSwitchField.setDisabled(false);
+                        return;
+                    }
+
+                    mainIdField = form.down('[name=mainId]');
+                    type = mainIdField.getValue() ? 'lang' : 'sub';
+                    typeSwitchField.setValue(type);
+                    // The shop type must not be switched on existing shops, this would cause inconsistencies
+                    typeSwitchField.setDisabled(true);
+                }
+            }
+        }
+    },
+
+    getTypeSwitchField: function(){
+        var me = this;
+        return {
+            xtype: 'config-element-select',
+            name: 'typeSwitch',
+            fieldLabel: '{s name=shop/detail/shop_type_label}Shop type{/s}',
+            helpText: '{s name=shop/detail/shop_type_help}A sub shop is available via an extra url, a language shop holds the translation for a sub shop or the default shop{/s}',
+            store: me.createTypeStore(),
+            valueField : 'type',
+            displayField : 'label',
+            listeners:{
+                scope: me,
+                change: function(select, value) {
+                    var form = select.up('form'),
+                        mainFields = form.query('[isMainField]'),
+                        requiredMainFields = form.query('[isMainRequired]'),
+                        langFields = form.query('[isLangField]'),
+                        requiredLangFields = form.query('[isLangRequired]'),
+                        mainIdField = form.down('[name=mainId]'),
+                        mainAction = value == 'sub' ? 'show' : 'hide',
+                        langAction = value == 'lang' ? 'show' : 'hide';
+
+                    if(value === 'sub') {
+                        mainIdField.clearValue();
+                    } else {
+                        mainIdField.setValue(1);
+                    }
+
+                    Ext.each(mainFields, function(field) {
+                        field[mainAction]();
+                    });
+                    Ext.each(requiredMainFields, function(field) {
+                        field['allowBlank'] = value != 'sub';
+                    });
+
+                    Ext.each(langFields, function(field) {
+                        field[langAction]();
+                    });
+                    Ext.each(requiredLangFields, function(field) {
+                        field['allowBlank'] = value != 'lang';
+                    });
+                }
+            }
+        }
+    },
+
+    getMainField: function() {
+        var me = this;
+        return {
+            xtype: 'config-element-select',
             name: 'mainId',
+            isLangField: true,
+            isLangRequired: true,
             fieldLabel: '{s name=shop/detail/main_shop_label}Main shop{/s}',
-            helpText: '{s name=shop/detail/main_shop_help}{/s}'
+            helpText: '{s name=shop/detail/main_shop_help}{/s}',
+            store: 'base.Shop'
         };
     },
 
@@ -54,25 +143,10 @@ Ext.define('Shopware.apps.Config.view.shop.Detail', {
             readOnly: true,
             handler: function(button, value) {
                 var form = button.up('form'),
-                    mainField = form.down('[name=mainId]'),
-                    fields = form.query('[isMainField]'),
-                    requiredFields = form.query('[isMainRequired]'),
-                    //securePathField = form.down('[name=secureBasePath]'),
-                    secureField = form.down('[name=secure]'),
-                    scopeField = form.down('[name=customerScope]'),
-                    action = value ? 'show' : 'hide';
-                Ext.each(fields, function(field) {
-                    field[action]();
-                });
-                Ext.each(requiredFields, function(field) {
-                    field.allowBlank = !value;
-                });
-                mainField.setValue(value ? null : 1);
-                if(!value) {
-                    secureField.setValue(false);
-                }
-                //securePathField[value ? 'hide' : 'show']();
-                scopeField.hide();
+                    fallbackField = form.down('[name=fallbackId]');
+
+                fallbackField[value ? 'hide' : 'show']();
+                fallbackField.setValue(null);
             }
         };
     },
@@ -89,7 +163,11 @@ Ext.define('Shopware.apps.Config.view.shop.Detail', {
             labelWidth: 120
         });
 
-        return [{
+        return [
+        me.getIdField(),
+        me.getTypeSwitchField(),
+        me.getMainField(),
+        {
             name: 'name',
             fieldLabel: '{s name=shop/detail/name_label}Name{/s}',
             allowBlank: false
@@ -97,7 +175,7 @@ Ext.define('Shopware.apps.Config.view.shop.Detail', {
             name: 'title',
             fieldLabel: '{s name=shop/detail/title_label}Title{/s}',
             helpText: '{s name=shop/detail/title_help}For the output in the shop frontend.{/s}'
-        }, me.getMainField(),{
+        },{
             xtype: 'config-element-number',
             name: 'position',
             fieldLabel: '{s name=shop/detail/position_label}Position{/s}',
@@ -206,7 +284,9 @@ Ext.define('Shopware.apps.Config.view.shop.Detail', {
             xtype: 'config-element-boolean',
             name: 'active',
             fieldLabel: '{s name=shop/detail/active_label}Active{/s}'
-        }, me.getDefaultField(), {
+        },
+        me.getDefaultField(),
+        {
             xtype: 'config-shop-currency',
             isMainField: true,
             hidden: true

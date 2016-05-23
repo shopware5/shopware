@@ -85,6 +85,11 @@ class ProductService implements Service\ProductServiceInterface
     private $configuratorService;
 
     /**
+     * @var Service\ListProductServiceInterface
+     */
+    private $listProductService;
+
+    /**
      * @param Service\ListProductServiceInterface $listProductService
      * @param Service\VoteServiceInterface $voteService
      * @param Service\MediaServiceInterface $mediaService

@@ -66,7 +66,8 @@ class PluginLocalService
     {
         $query = $this->getQuery();
 
-        $query->andWhere("plugin.name != 'PluginManager'")
+        $query
+            ->andWhere("plugin.name != 'PluginManager'")
             ->andWhere('plugin.capability_enable = 1')
         ;
 
@@ -148,8 +149,6 @@ class PluginLocalService
     {
         foreach ($plugins as &$row) {
             $row['iconPath'] = $this->getIconOfPlugin(
-                $row['source'],
-                $row['namespace'],
                 $row['name']
             );
         }
@@ -173,16 +172,22 @@ class PluginLocalService
         return $statement->fetchAll(\PDO::FETCH_KEY_PAIR);
     }
 
-    private function getIconOfPlugin($source, $namespace, $name)
+    /**
+     * @param string $name
+     * @return bool|string
+     */
+    private function getIconOfPlugin($name)
     {
-        $root = Shopware()->Container()->getParameter('kernel.root_dir');
+        $rootDir = Shopware()->Container()->getParameter('kernel.root_dir');
 
-        $path = '/engine/Shopware/Plugins/' . $source . '/' . $namespace . '/' . $name . '/plugin.png';
+        $path = Shopware()->Container()->get('shopware_plugininstaller.plugin_manager')->getPluginPath($name);
+        $path .= '/plugin.png';
 
+        $relativePath = str_replace($rootDir, '', $path);
         $front = Shopware()->Container()->get('front');
 
-        if (file_exists($root . $path) && $front && $front->Request()) {
-            return $front->Request()->getBasePath() . $path;
+        if (file_exists($path) && $front && $front->Request()) {
+            return $front->Request()->getBasePath() . $relativePath;
         } else {
             return false;
         }

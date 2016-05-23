@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundleES\ConditionHandler;
 
-use ONGR\ElasticsearchDSL\Filter\RangeFilter;
+use ONGR\ElasticsearchDSL\Query\RangeQuery;
 use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\SearchBundle\Condition\VoteAverageCondition;
 use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
@@ -52,7 +52,7 @@ class VoteAverageConditionHandler implements HandlerInterface
         ShopContextInterface $context
     ) {
         /** @var VoteAverageCondition $criteriaPart */
-        $range = new RangeFilter('voteAverage.average', [
+        $range = new RangeQuery('voteAverage.average', [
             'gte' => $criteriaPart->getAverage()
         ]);
 

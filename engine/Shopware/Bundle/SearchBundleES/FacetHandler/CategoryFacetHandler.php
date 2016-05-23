@@ -115,14 +115,11 @@ class CategoryFacetHandler implements HandlerInterface, ResultHydratorInterface
         Criteria $criteria,
         ShopContextInterface $context
     ) {
-        if (!isset($elasticResult['aggregations'])) {
-            return;
-        }
-        if (!isset($elasticResult['aggregations']['agg_category'])) {
+        if (!isset($elasticResult['aggregations']) || !isset($elasticResult['aggregations']['category'])) {
             return;
         }
 
-        $data = $elasticResult['aggregations']['agg_category']['buckets'];
+        $data = $elasticResult['aggregations']['category']['buckets'];
 
         $ids = $this->getCategoryIds($criteria, $data);
 
@@ -138,7 +135,6 @@ class CategoryFacetHandler implements HandlerInterface, ResultHydratorInterface
         $criteriaPart = $this->createTreeFacet($categories, $active);
         $result->addFacet($criteriaPart);
     }
-
 
     /**
      * @param Category[] $categories

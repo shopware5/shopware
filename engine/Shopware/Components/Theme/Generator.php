@@ -122,6 +122,7 @@ EOD;
             ),
             '_includes',
             'account',
+            'address',
             'blog' => array(
                 'comment'
             ),

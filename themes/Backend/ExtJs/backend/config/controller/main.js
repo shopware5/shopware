@@ -110,7 +110,7 @@ Ext.define('Shopware.apps.Config.controller.Main', {
             }
         });
         me.formStore.on('load', me.onLoadForm, me);
-//
+
         if(me.action) {
             me.formStore.load({
                 filters : [{

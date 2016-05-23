@@ -9,14 +9,24 @@
 {* hide left sidebar *}
 {block name='frontend_index_content_left'}{/block}
 
+{block name="frontend_index_body_classes" append}{strip} emotion--preview{/strip}{/block}
+
 {block name="frontend_index_content"}
 
-    <div class="emotion--wrapper"
-         data-controllerUrl="{url module=widgets controller=emotion action=index emotionId=$emotion.id controllerName=$Controller}"
-         data-availableDevices="{$emotion.devices}"
-         data-showListing="{if $emotion.showListing == 1}true{else}false{/if}">
-    </div>
+    {block name="widgets_emotion_preview_content"}
+        <div class="content content--emotion-preview">
+            <div class="content--emotions">
 
+                {block name="widgets_emotion_preview_wrapper"}
+                    <div class="emotion--wrapper"
+                         data-controllerUrl="{url module=widgets controller=emotion action=index emotionId=$emotion.id controllerName=$Controller preview=true}"
+                         data-availableDevices="{$emotion.devices}"
+                         data-showListing="{if $emotion.showListing == 1}true{else}false{/if}">
+                    </div>
+                {/block}
+            </div>
+        </div>
+    {/block}
 {/block}
 
 {* hide right sidebar *}

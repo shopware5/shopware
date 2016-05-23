@@ -25,7 +25,6 @@
 namespace Shopware\Components\Thumbnail;
 
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Service\Core\MediaService;
 use Shopware\Components\Thumbnail\Generator\GeneratorInterface;
 use Shopware\Models\Media\Media;
 use Shopware\Models\Media\Settings;

@@ -200,7 +200,11 @@ Ext.define('Shopware.apps.Article.view.resources.Links', {
             plugins: [
                 Ext.create('Ext.grid.plugin.CellEditing', {
                     clicksToEdit: 1
-                })
+                }),
+                {
+                    ptype: 'grid-attributes',
+                    table: 's_articles_information_attributes'
+                }
             ],
             columns: [
                 {

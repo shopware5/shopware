@@ -24,6 +24,7 @@
 
 namespace Shopware\Components\CategoryHandling;
 
+use Shopware\Bundle\AttributeBundle\Service\DataPersister;
 use Shopware\Components\Model\CategoryDenormalization;
 
 class CategoryDuplicator
@@ -39,13 +40,23 @@ class CategoryDuplicator
     protected $categoryDenormalization;
 
     /**
+     * @var DataPersister
+     */
+    private $attributePersister;
+
+    /**
      * @param \PDO $connection
      * @param CategoryDenormalization $categoryDenormalization
+     * @param DataPersister $attributePersister
      */
-    public function __construct(\PDO $connection, CategoryDenormalization $categoryDenormalization)
-    {
+    public function __construct(
+        \PDO $connection,
+        CategoryDenormalization $categoryDenormalization,
+        DataPersister $attributePersister
+    ) {
         $this->connection = $connection;
         $this->categoryDenormalization = $categoryDenormalization;
+        $this->attributePersister = $attributePersister;
     }
 
     /**
@@ -128,16 +139,10 @@ class CategoryDuplicator
      */
     public function duplicateCategoryAttributes($originalCategoryId, $newCategoryId)
     {
-        $stmt = $this->connection->prepare(
-            'INSERT INTO s_categories_attributes (`categoryID`, `attribute1`, `attribute2`, `attribute3`, `attribute4`, `attribute5`, `attribute6`)
-            SELECT :newCategoryID, `attribute1`, `attribute2`, `attribute3`, `attribute4`, `attribute5`, `attribute6`
-            FROM s_categories_attributes WHERE categoryID = :categoryID'
-        );
-        $stmt->execute(
-            [
-                ':newCategoryID' => $newCategoryId,
-                ':categoryID' => $originalCategoryId
-            ]
+        $this->attributePersister->cloneAttribute(
+            's_categories_attributes',
+            $originalCategoryId,
+            $newCategoryId
         );
     }
 

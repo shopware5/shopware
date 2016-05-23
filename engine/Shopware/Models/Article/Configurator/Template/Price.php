@@ -27,7 +27,6 @@ namespace Shopware\Models\Article\Configurator\Template;
 use Shopware\Components\Model\LazyFetchModelEntity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity
@@ -83,13 +82,6 @@ class Price extends LazyFetchModelEntity
      * @ORM\Column(name="pseudoprice", type="float", nullable=false)
      */
     private $pseudoPrice = 0;
-
-    /**
-     * @var float $basePrice
-     *
-     * @ORM\Column(name="baseprice", type="float", nullable=false)
-     */
-    private $basePrice = 0;
 
     /**
      * @var float $percent
@@ -248,29 +240,6 @@ class Price extends LazyFetchModelEntity
     public function getPseudoPrice()
     {
         return $this->pseudoPrice;
-    }
-
-    /**
-     * Set basePrice
-     *
-     * @param $basePrice
-     *
-     * @return \Shopware\Models\Article\Configurator\Template\Price
-     */
-    public function setBasePrice($basePrice)
-    {
-        $this->basePrice = $basePrice;
-        return $this;
-    }
-
-    /**
-     * Get basePrice
-     *
-     * @return float
-     */
-    public function getBasePrice()
-    {
-        return $this->basePrice;
     }
 
     /**

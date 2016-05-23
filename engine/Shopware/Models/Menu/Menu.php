@@ -57,12 +57,6 @@ class Menu extends ModelEntity
     public $onclick;
 
     /**
-     * @var string $style
-     * @ORM\Column(name="style", type="string", length=255, nullable=true)
-     */
-    public $style;
-
-    /**
      * @var string $class
      * @ORM\Column(name="class", type="string", length=255, nullable=false)
      */
@@ -177,22 +171,6 @@ class Menu extends ModelEntity
     public function setOnclick($onclick)
     {
         $this->onclick = $onclick;
-    }
-
-    /**
-     * @return string
-     */
-    public function getStyle()
-    {
-        return $this->style;
-    }
-
-    /**
-     * @param string $style
-     */
-    public function setStyle($style)
-    {
-        $this->style = $style;
     }
 
     /**

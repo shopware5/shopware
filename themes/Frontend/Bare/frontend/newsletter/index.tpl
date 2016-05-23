@@ -75,13 +75,16 @@
 								{if {config name=NewsletterExtendedFields}}
 									<div class="newsletter--additional-form">
 
+										{getSalutations variable="salutations"}
+
 										{* Salutation *}
 										{block name="frontend_newsletter_form_input_salutation"}
 											<div class="newsletter--salutation">
 												<select name="salutation" class="field--select{if $sStatus.sErrorFlag.salutation} has--error{/if}">
                                                     <option value=""{if $_POST.salutation eq ""} selected="selected"{/if}>{s name='NewsletterRegisterPlaceholderSalutation'}{/s}</option>
-													<option value="mr"{if $_POST.salutation eq "mr"} selected="selected"{/if}>{s name="NewsletterRegisterLabelMr"}{/s}</option>
-													<option value="ms"{if $_POST.salutation eq "ms"} selected="selected"{/if}>{s name="NewsletterRegisterLabelMs"}{/s}</option>
+													{foreach $salutations as $key => $label}
+														<option value="{$key}"{if $_POST.salutation eq $key} selected="selected"{/if}>{$label}</option>
+													{/foreach}
 												</select>
 											</div>
 										{/block}

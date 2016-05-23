@@ -80,17 +80,19 @@ class FirstRunWizardPluginStoreService
     /**
      * Loads integrated plugins from SBP
      *
-     * @param LocaleStruct $locale Locale in which to translate the information
+     * @param string $isoCode Two letter iso code indicating for which country to get the plugin list
      * @param string $shopwareVersion Current Shopware version
      * @return array List of plugins
      */
-    public function getIntegratedPlugins($locale, $shopwareVersion)
+    public function getIntegratedPlugins($isoCode, $shopwareVersion)
     {
-        $localeName = $locale ? $locale->getName() : null;
+        if (preg_match('/^([a-zA-Z]){2}$/', $isoCode) !== 1) {
+            throw new \RuntimeException('Iso parameter format not allowed');
+        }
 
         $data = $this->storeClient->doGetRequest(
-            '/firstrunwizard/integrated',
-            [ 'locale' => $localeName, 'shopwareVersion' => $shopwareVersion ]
+            '/firstrunwizard/countries/'.strtolower($isoCode),
+            [ 'shopwareVersion' => $shopwareVersion ]
         );
 
         $plugins = $this->hydrator->hydrateStorePlugins($data);
@@ -133,6 +135,24 @@ class FirstRunWizardPluginStoreService
         $data = $this->storeClient->doGetRequest(
             '/firstrunwizard/languages',
             [ 'locale' => $localeName, 'shopwareVersion' => $shopwareVersion ]
+        );
+
+        return $data;
+    }
+
+    /**
+     * Loads countries for integrated plugins from SBP
+     * 
+     * @param LocaleStruct $locale Locale in which to translate the information
+     * @return array List of countries
+     */
+    public function getIntegratedPluginsCountries($locale)
+    {
+        $localeName = $locale ? $locale->getName() : null;
+
+        $data = $this->storeClient->doGetRequest(
+            '/firstrunwizard/countries',
+            [ 'locale' => $localeName ]
         );
 
         return $data;

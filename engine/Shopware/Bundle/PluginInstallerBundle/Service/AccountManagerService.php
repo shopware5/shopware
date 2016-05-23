@@ -114,9 +114,7 @@ class AccountManagerService
     public function pingServer()
     {
         try {
-            $response = $this->guzzleHttpClient->get($this->apiEndPoint.'/ping', ['timeout' => 7]);
-
-            return $response->json() ?: false;
+            return $this->storeClient->doPing();
         } catch (\Exception $e) {
             $snippet = $this->snippetManager
                 ->getNamespace('backend/plugin_manager/exceptions')

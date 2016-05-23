@@ -22,12 +22,12 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Models\Order\Order as Order;
 use Shopware\Models\Order\Billing as Billing;
 use Shopware\Models\Order\Shipping as Shipping;
 use Shopware\Models\Order\Detail as Detail;
 use Shopware\Models\Order\Document\Document as Document;
-use Doctrine\Common\Collections\ArrayCollection as ArrayCollection;
 
 /**
  * Backend Controller for the order backend module.
@@ -35,7 +35,7 @@ use Doctrine\Common\Collections\ArrayCollection as ArrayCollection;
  * Displays all orders in an Ext.grid.Panel and allows to delete,
  * add and edit orders.
  */
-class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_ExtJs
+class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
     /**
      * Order repository. Declared for an fast access to the order repository.
@@ -185,6 +185,17 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         if (!in_array($this->Request()->getActionName(), array('index', 'load', 'skeleton', 'extends', 'orderPdf', 'mergeDocuments'))) {
             $this->Front()->Plugins()->Json()->setRenderer();
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getWhitelistedCSRFActions()
+    {
+        return [
+            'openPdf',
+            'createDocument'
+        ];
     }
 
     /**
@@ -340,24 +351,22 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         //returns the customer data
         $orders = $paginator->getIterator()->getArrayCopy();
 
+        $namespace = Shopware()->Container()->get('snippets')->getNamespace('frontend/salutation');
+
         foreach ($orders as $key => $order) {
             $additionalOrderDataQuery = $this->getRepository()->getBackendAdditionalOrderDataQuery($order['number']);
             $additionalOrderData = $additionalOrderDataQuery->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
             $order = array_merge($order, $additionalOrderData);
-            //we need to set the billing and shipping attributes to the first array level to load the data into a form panel
-            //same for locale
-            $order['billingAttribute'] = $order['billing']['attribute'];
-            $order['shippingAttribute'] = $order['shipping']['attribute'];
-            $order['locale'] = $order['languageSubShop']['locale'];
+            $order['locale']= $order['languageSubShop']['locale'];
 
             //Deprecated: use payment instance
             $order['debit'] = $order['customer']['debit'];
 
             $order['customerEmail'] = $order['customer']['email'];
 
-            unset($order['billing']['attribute']);
-            unset($order['shipping']['attribute']);
+            $order['billing']['salutationSnippet'] = $namespace->get($order['billing']['salutation']);
+            $order['shipping']['salutationSnippet'] = $namespace->get($order['shipping']['salutation']);
 
             //find the instock of the article
             foreach ($order["details"] as &$orderDetail) {
@@ -690,7 +699,6 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             return;
         }
 
-        $data['attribute'] = $data['attribute'][0];
         $position->fromArray($data);
         $position->setOrder($order);
 
@@ -724,39 +732,6 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             'invoiceAmount' => $invoiceAmount
         ));
     }
-
-    /**
-     * Internal helper function to save the dynamic attributes of an article price.
-     * @param $position
-     * @param $attributeData
-     * @return mixed
-     */
-    private function savePositionAttributes($position, $attributeData)
-    {
-        if (empty($attributeData)) {
-            return;
-        }
-        if ($position->getId() > 0) {
-            $builder = Shopware()->Models()->createQueryBuilder();
-            $builder->select(array('attribute'))
-                ->from('Shopware\Models\Attribute\OrderDetail', 'attribute')
-                ->where('attribute.orderDetailId = ?1')
-                ->setParameter(1, $position->getId());
-
-            $result = $builder->getQuery()->getOneOrNullResult();
-            if (empty($result)) {
-                $attributes = new \Shopware\Models\Attribute\OrderDetail();
-            } else {
-                $attributes = $result;
-            }
-        } else {
-            $attributes = new \Shopware\Models\Attribute\OrderDetail();
-        }
-        $attributes->fromArray($attributeData);
-        $attributes->setOrderDetail($position);
-        $this->getManager()->persist($attributes);
-    }
-
 
     /**
      * CRUD function delete of the position and list store of the backend order module.
@@ -1056,7 +1031,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             return;
         }
 
-        $mail = clone Shopware()->Mail();
+        $mail = clone Shopware()->Container()->get('mail');
         $mail->clearRecipients();
         $mail->setSubject($this->Request()->getParam('subject', ''));
         $mail->setBodyText($this->Request()->getParam('content', ''));
@@ -1344,9 +1319,6 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
 
         $data['billing'] = $this->prepareAddressData($data['billing'][0]);
         $data['shipping'] = $this->prepareAddressData($data['shipping'][0]);
-        $data['attribute'] = $data['attribute'][0];
-        $data['billing']['attribute'] = $data['billingAttribute'][0];
-        $data['shipping']['attribute'] = $data['shippingAttribute'][0];
 
         //unset calculated values
         unset($data['invoiceAmountNet']);
