@@ -20,20 +20,26 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  *
- * @category   Shopware
- * @package    ProductStream
- * @version    $Id$
- * @author shopware AG
+ * @category    Shopware
+ * @package     Base
+ * @subpackage  Attribute
+ * @version     $Id$
+ * @author      shopware AG
  */
 
-//{namespace name="backend/attributes/main"}
-
-Ext.define('Shopware.apps.Attributes.store.DependingTable', {
-    extend: 'Ext.data.Store',
-    proxy: {
-        type: 'ajax',
-        url: '{url controller="Attributes" action="getColumn"}',
-        reader: { type: 'json', root: 'data' }
+Ext.define('Shopware.attribute.ComboBoxFieldHandler', {
+    extend: 'Shopware.attribute.FieldHandlerInterface',
+    supports: function(attribute) {
+        return (attribute.get('columnType') == 'combobox');
     },
-    model: 'Shopware.model.AttributeConfig'
+    create: function(field, attribute) {
+        field.xtype = 'combobox';
+        field.displayField = 'value';
+        field.valueField = 'key';
+        field.store = Ext.create('Ext.data.Store', {
+            fields: ['key', 'value'],
+            data: Ext.JSON.decode(attribute.get('arrayStore'))
+        });
+        return field;
+    }
 });

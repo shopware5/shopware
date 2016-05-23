@@ -291,3 +291,4 @@
 {include file='backend/base/attribute/field_handler/Shopware.attribute.PremiumFieldHandler.js'}
 {include file='backend/base/attribute/field_handler/Shopware.attribute.ProductStreamFieldHandler.js'}
 {include file='backend/base/attribute/field_handler/Shopware.attribute.ShopFieldHandler.js'}
+{include file='backend/base/attribute/field_handler/Shopware.attribute.ComboBoxFieldHandler.js'}

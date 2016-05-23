@@ -43,14 +43,15 @@ class TypeMapping
      * @var array
      */
     private $types = [
-        'string'   => ['sql' => 'VARCHAR(500)', 'extJs' => 'string', 'dbal' => 'string'],
-        'text'     => ['sql' => 'TEXT', 'extJs' => 'string', 'dbal' => 'text'],
-        'html'     => ['sql' => 'MEDIUMTEXT', 'extJs' => 'string', 'dbal' => 'text'],
-        'integer'  => ['sql' => 'INT(11)', 'extJs' => 'integer', 'dbal' => 'integer'],
-        'float'    => ['sql' => 'DOUBLE', 'extJs' => 'float', 'dbal' => 'float'],
-        'boolean'  => ['sql' => 'INT(1)', 'extJs' => 'boolean', 'dbal' => 'boolean'],
-        'date'     => ['sql' => 'DATE', 'extJs' => 'date', 'dbal' => 'date'],
-        'datetime' => ['sql' => 'DATETIME', 'extJs' => 'date', 'dbal' => 'datetime'],
+        'string'   => ['sql' => 'VARCHAR(500)', 'dbal' => 'string'],
+        'text'     => ['sql' => 'TEXT', 'dbal' => 'text'],
+        'html'     => ['sql' => 'MEDIUMTEXT','dbal' => 'text'],
+        'integer'  => ['sql' => 'INT(11)','dbal' => 'integer'],
+        'float'    => ['sql' => 'DOUBLE','dbal' => 'float'],
+        'boolean'  => ['sql' => 'INT(1)', 'dbal' => 'boolean'],
+        'date'     => ['sql' => 'DATE', 'dbal' => 'date'],
+        'datetime' => ['sql' => 'DATETIME', 'dbal' => 'datetime'],
+        'combobox' => ['sql' => 'MEDIUMTEXT', 'dbal' => 'text'],
         'single_selection' => ['sql' => 'VARCHAR(500)'],
         'multi_selection' => ['sql' => 'MEDIUMTEXT']
     ];
@@ -158,20 +159,6 @@ class TypeMapping
             return 'string';
         }
         return $this->dbalTypes[$name];
-    }
-
-    /**
-     * @param string $type
-     * @return string
-     */
-    public function unifiedToExtJS($type)
-    {
-        $type = strtolower($type);
-        if (!isset($this->types[$type])) {
-            return 'string';
-        }
-        $mapping = $this->types[$type];
-        return $mapping['extJs'];
     }
 
     /**

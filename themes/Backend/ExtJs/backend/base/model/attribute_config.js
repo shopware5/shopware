@@ -12,7 +12,6 @@ Ext.define('Shopware.model.AttributeConfig', {
         { name: 'entity', type: 'string', useNull: true },
         { name: 'dbalType', type: 'string' },
         { name: 'sqlType', type: 'string' },
-        { name: 'extJsType', type: 'string' },
         { name: 'label', type: 'string' },
         { name: 'helpText', type: 'string' },
         { name: 'supportText', type: 'string' },
@@ -24,6 +23,7 @@ Ext.define('Shopware.model.AttributeConfig', {
         { name: 'custom', type: 'boolean', defaultValue: false },
         { name: 'identifier', type: 'boolean' },
         { name: 'core', type: 'boolean' },
+        { name: 'arrayStore', type: 'string' },
 
         //pseudo columns for view generation / data operations
         { name: 'deleteButton', type: 'boolean' },
@@ -67,14 +67,14 @@ Ext.define('Shopware.model.AttributeConfig', {
             'label',
             'helpText',
             'supportText',
+            'arrayStore',
             'translatable',
             'displayInBackend',
             'pluginId',
             'position',
             'custom',
             'dbalType',
-            'sqlType',
-            'extJsType'
+            'sqlType'
         ];
 
         Ext.each(fields, function(field) {

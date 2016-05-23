@@ -115,6 +115,12 @@ class Configuration extends ModelEntity
     private $position = 0;
 
     /**
+     * @var string
+     * @ORM\Column(name="array_store", type="text", nullable=true)
+     */
+    private $arrayStore = null;
+
+    /**
      * @return int
      */
     public function getId()
@@ -312,5 +318,21 @@ class Configuration extends ModelEntity
     public function setEntity($entity)
     {
         $this->entity = $entity;
+    }
+
+    /**
+     * @return string
+     */
+    public function getArrayStore()
+    {
+        return $this->arrayStore;
+    }
+
+    /**
+     * @param string $arrayStore
+     */
+    public function setArrayStore($arrayStore)
+    {
+        $this->arrayStore = $arrayStore;
     }
 }

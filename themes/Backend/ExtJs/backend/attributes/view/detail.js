@@ -1,3 +1,30 @@
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ *
+ * @category   Shopware
+ * @package    ProductStream
+ * @version    $Id$
+ * @author shopware AG
+ */
 
 //{namespace name="backend/attributes/main"}
 
@@ -336,7 +363,8 @@ Ext.define('Shopware.apps.Attributes.view.Detail', {
                         helpText: '{s name="help_text"}{/s}',
                         position: '{s name="position"}{/s}',
                         displayInBackend: '{s name="display_in_backend"}{/s}',
-                        translatable: '{s name="translatable"}{/s}'
+                        translatable: '{s name="translatable"}{/s}',
+                        arrayStore: me.createArrayStore
                     }
                 }
             ]
@@ -422,6 +450,28 @@ Ext.define('Shopware.apps.Attributes.view.Detail', {
         return me.entitySelection;
     },
 
+    createArrayStore: function() {
+        var me = this;
+
+        me.arrayStore = Ext.create('Ext.data.Store', {
+            fields: ['key', 'value'],
+            pageSize: 50000
+        });
+
+        me.arrayStoreField = Ext.create('Shopware.apps.Attributes.view.ArrayStoreField', {
+            store: me.arrayStore,
+            searchStore: me.arrayStore,
+            fieldLabel: '{s name="array_store_field_label"}{/s}',
+            anchor: '100%',
+            labelWidth: 130,
+            height: 200,
+            name: 'arrayStore',
+            hidden: true
+        });
+
+        return me.arrayStoreField;
+    },
+
     createColumnType: function(container, field) {
         var me = this;
 
@@ -457,10 +507,18 @@ Ext.define('Shopware.apps.Attributes.view.Detail', {
     onTypeChange: function(combo, value) {
         var me = this;
 
-        if (value == 'multi_selection' || value == 'single_selection') {
-            me.entitySelection.show();
-        } else {
-            me.entitySelection.hide();
+        me.arrayStoreField.hide();
+        me.entitySelection.hide();
+
+        switch (value) {
+            case 'multi_selection':
+            case 'single_selection':
+                me.entitySelection.show();
+                break;
+
+            case 'combobox':
+                me.arrayStoreField.show();
+                break;
         }
     }
 });
