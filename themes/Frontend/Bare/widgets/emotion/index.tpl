@@ -15,6 +15,8 @@
                 {$emotionFullscreen = $emotion.fullscreen}
                 {$emotionCols = $emotion.cols}
 
+                {$breakpoints = [ 's' => '30em', 'm' => '48em', 'l' => '64em', 'xl' => '78.75em' ]}
+
                 {if $Controller == 'listing' && $theme.displaySidebar}
                     {$baseWidth = 900}
                 {/if}

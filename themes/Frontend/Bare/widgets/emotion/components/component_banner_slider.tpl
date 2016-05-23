@@ -34,25 +34,41 @@
                                             {block name="frontend_widgets_banner_slider_banner_picture"}
                                                 {if $banner.thumbnails}
                                                     {$baseSource = $banner.thumbnails[0].source}
-                                                    {$colSize = 100 / $emotion.grid.cols}
-                                                    {$itemSize = $itemCols * $colSize}
+                                                    {$srcSet = ''}
+                                                    {$itemSize = ''}
+
+                                                    {foreach $element.viewports as $viewport}
+                                                        {$cols = ($viewport.endCol - $viewport.startCol) + 1}
+                                                        {$elementSize = $cols * $cellWidth}
+                                                        {$size = "{$elementSize}vw"}
+
+                                                        {if $breakpoints[$viewport.alias]}
+
+                                                            {if $viewport.alias === 'xl' && !$emotionFullscreen}
+                                                                {$size = "calc({$elementSize / 100} * {$baseWidth}px)"}
+                                                            {/if}
+
+                                                            {$size = "(min-width: {$breakpoints[$viewport.alias]}) {$size}"}
+                                                        {/if}
+
+                                                        {$itemSize = "{$size}{if $itemSize}, {$itemSize}{/if}"}
+                                                    {/foreach}
 
                                                     {foreach $banner.thumbnails as $image}
-                                                        {$srcSet = "{if $image@index !== 0}{$srcSet}, {/if}{$image.source} {$image.maxWidth}w"}
+                                                        {$srcSet = "{if $srcSet}{$srcSet}, {/if}{$image.source} {$image.maxWidth}w"}
 
                                                         {if $image.retinaSource}
-                                                            {$srcSetRetina = "{if $image@index !== 0}{$srcSetRetina}, {/if}{$image.retinaSource} {$image.maxWidth}w"}
+                                                            {$srcSet = "{if $srcSet}{$srcSet}, {/if}{$image.retinaSource} {$image.maxWidth * 2}w"}
                                                         {/if}
                                                     {/foreach}
                                                 {else}
                                                     {$baseSource = $banner.source}
                                                 {/if}
 
-                                                <picture>
-                                                    {if $srcSetRetina}<source sizes="{$itemSize}vw" srcset="{$srcSetRetina}" media="(min-resolution: 192dpi)" />{/if}
-                                                    {if $srcSet}<source sizes="{$itemSize}vw" srcset="{$srcSet}" />{/if}
-                                                    <img src="{$baseSource}" sizes="{$itemSize}vw" class="banner-slider--image"{if $banner.altText} alt="{$banner.altText|escape}"{/if} />
-                                                </picture>
+                                                <img src="{$baseSource}"
+                                                     class="banner-slider--image"
+                                                     {if $srcSet}sizes="{$itemSize}" srcset="{$srcSet}"{/if}
+                                                     {if $banner.altText}alt="{$banner.altText|escape}" {/if}/>
                                             {/block}
                                         </div>
                                     {/block}
