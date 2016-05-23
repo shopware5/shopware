@@ -312,6 +312,7 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
                 [
                     'added'        => 'datetime',
                     'refresh_date' => 'datetime',
+                    'update_date'  => 'datetime',
                 ]
             );
         } else {
@@ -319,7 +320,10 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
                 's_core_plugins',
                 $data,
                 ['id' => $id],
-                ['refresh_date' => 'datetime']
+                [
+                    'refresh_date' => 'datetime',
+                    'update_date'  => 'datetime',
+                ]
             );
         }
 
@@ -676,7 +680,7 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
 
             $newInfo->set('updateVersion', null);
             $newInfo->set('updateSource', null);
-            $newInfo->set('updateDate', Zend_Date::now());
+            $newInfo->set('updateDate', new DateTimeImmutable());
             $plugin->Info()->merge($newInfo);
             $this->registerPlugin($plugin);
 
