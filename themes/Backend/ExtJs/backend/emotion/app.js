@@ -97,6 +97,7 @@ Ext.define('Shopware.apps.Emotion', {
     models: [
         'Emotion',
         'EmotionElement',
+        'EmotionShop',
         'Viewport',
         'Component',
         'Field',

@@ -27,6 +27,8 @@ use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Emotion\Emotion;
 use Shopware\Models\Emotion\Library\Field;
 use \Shopware\Models\Emotion\Element;
+use Shopware\Models\Shop\Shop;
+use Doctrine\DBAL\Connection;
 
 class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_ExtJs
 {
@@ -170,14 +172,6 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         $emotion = $query->getArrayResult();
         $emotion = $emotion[0];
 
-        if (!empty($emotion["isLandingPage"])) {
-            $emotion["link"] = "shopware.php?sViewport=campaign&emotionId=".$emotion["id"];
-        }
-
-        if (!empty($emotion['shops'])) {
-            $emotion['shops'] = array_column($emotion['shops'], 'id');
-        }
-
         if (!empty($emotion['categories'])) {
             $emotion['categories'] = array_column($emotion['categories'], 'id');
         }
@@ -251,6 +245,16 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
             }
         }
 
+        if (!empty($emotion['shops'])) {
+            foreach ($emotion['shops'] as &$shop) {
+                $seoUrl = $this->getSeoUrlFromRouter($emotion['id'], $shop['id']);
+                if (!$seoUrl) {
+                    continue;
+                }
+                $shop['seoUrl'] = $seoUrl;
+            }
+        }
+        
         $this->View()->assign(array(
             'success' => true,
             'data' => $emotion,
@@ -301,6 +305,8 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
             $alreadyExists = $this->hasEmotionForSameDeviceType($data['categoryId']);
 
             $data['id'] = $emotion->getId();
+
+            $this->generateEmotionSeoUrls($emotion);
 
             $this->View()->assign(array(
                 'data' => $data,
@@ -440,7 +446,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         $shops = new \Doctrine\Common\Collections\ArrayCollection();
         if (!empty($data['shops'])) {
             foreach ($data['shops'] as $shop) {
-                $subShop = Shopware()->Models()->find('Shopware\Models\Shop\Shop', $shop);
+                $subShop = Shopware()->Models()->find('Shopware\Models\Shop\Shop', $shop['id']);
 
                 if ($shop !== null) {
                     $shops->add($subShop);
@@ -1207,5 +1213,62 @@ EOD;
     private function getElementIdentifier(Element $el)
     {
         return $el->getStartCol().$el->getStartRow().$el->getEndCol().$el->getEndRow();
+    }
+
+    /**
+     * @param Emotion
+     */
+    private function generateEmotionSeoUrls(Emotion $emotion)
+    {
+        /** @var Shopware_Components_SeoIndex $seoIndexer */
+        $seoIndexer = Shopware()->Container()->get('SeoIndex');
+        $module = Shopware()->Modules()->RewriteTable();
+        $shops = $emotion->getShops();
+        $emotionData = [
+            'id' => $emotion->getId(),
+            'name' => $emotion->getName()
+        ];
+
+        $translator = new Shopware_Components_Translation();
+        $routerCampaignTemplate = Shopware()->Config()->get('routerCampaignTemplate');
+        
+        /** @var Shop $shop */
+        foreach ($shops as $shop) {
+            $seoIndexer->registerShop($shop->getId());
+            $fallbackShopId = null;
+            $fallbackShop = $shop->getFallback();
+            if (!empty($fallbackShop)) {
+                $fallbackShopId = $fallbackShop->getId();
+            }
+            // Make sure a template is available
+            $module->baseSetup();
+            $module->sCreateRewriteTableForSingleCampaign($translator, $shop->getId(), $fallbackShopId, $emotionData, $routerCampaignTemplate);
+        }
+    }
+
+    /**
+     * @param int $emotionId
+     * @param int $shopId
+     * @return bool|string
+     */
+    private function getSeoUrlFromRouter($emotionId, $shopId)
+    {
+        /** @var Shop $shop */
+        $shop = Shopware()->Container()->get('models')->find(Shop::class, $shopId);
+        if (empty($shop)) {
+            return false;
+        }
+        $parent = $shop;
+        if ($shop->getFallback()) {
+            $parent = $shop->getFallback();
+        }
+        $parent->registerResources();
+
+        return $this->Front()->Router()->assemble([
+            'controller' => 'campaign',
+            'module' => 'frontend',
+            'emotionId' => $emotionId,
+            'fullPath' => true
+        ]);
     }
 }
