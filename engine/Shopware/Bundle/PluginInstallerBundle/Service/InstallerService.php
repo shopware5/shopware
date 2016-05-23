@@ -225,7 +225,7 @@ class InstallerService
         if ($this->isNewPlugin($plugin)) {
             return $this->pluginInstaller->deactivatePlugin($plugin);
         } else {
-            return $this->legacyPluginInstaller->activatePlugin($plugin);
+            return $this->legacyPluginInstaller->deactivatePlugin($plugin);
         }
     }
 
