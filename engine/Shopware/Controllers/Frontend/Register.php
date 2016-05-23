@@ -49,10 +49,6 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
     public function preDispatch()
     {
         $this->View()->setScope(Enlight_Template_Manager::SCOPE_PARENT);
-
-        if (in_array($this->Request()->getActionName(), array('ajax_validate_password', 'ajax_validate_billing', 'ajax_validate_email'))) {
-            Shopware()->Plugins()->Controller()->ViewRenderer()->setNoRender();
-        }
     }
 
     /**
@@ -187,6 +183,8 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
 
     public function ajaxValidateEmailAction()
     {
+        Shopware()->Plugins()->Controller()->ViewRenderer()->setNoRender();
+
         $data = $this->getPostData();
         $customerForm = $this->createCustomerForm($data['register']['personal']);
 
@@ -202,6 +200,8 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
 
     public function ajaxValidatePasswordAction()
     {
+        Shopware()->Plugins()->Controller()->ViewRenderer()->setNoRender();
+
         $data = $this->getPostData();
         $customerForm = $this->createCustomerForm($data['register']['personal']);
 
