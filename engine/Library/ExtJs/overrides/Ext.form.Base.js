@@ -1,4 +1,21 @@
 Ext.override(Ext.form.Basic, {
+    submit: function (options) {
+        options = options || {};
+        var me = this,
+            action;
+
+        if (options.standardSubmit || me.standardSubmit) {
+            action = 'standardsubmit';
+        } else {
+            action = me.api ? 'directsubmit' : 'submit';
+        }
+
+        options.params = options.params || {};
+        options.params.__csrf_token = Ext.CSRFService.getToken();
+
+        return me.doAction(action, options);
+    },
+
     loadRecord: function(record) {
         var me = this;
 

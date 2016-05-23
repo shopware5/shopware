@@ -23,6 +23,7 @@
  */
 
 use Shopware\Bundle\StoreFrontBundle;
+use Shopware\Models\Banner\Banner;
 
 /**
  * Deprecated Shopware Class that handles marketing related functions
@@ -234,7 +235,7 @@ class sMarketing
     {
         $limit = (int) $limit;
         try {
-            $bannerRepository = Shopware()->Models()->Banner();
+            $bannerRepository = Shopware()->Models()->getRepository(Banner::class);
             $bannerQuery = $bannerRepository->getAllActiveBanners($sCategory, $limit);
             if ($bannerQuery) {
                 $getBanners = $bannerQuery->getArrayResult();
@@ -289,9 +290,6 @@ class sMarketing
                 );
                 $getAffectedBanners["link"] = Shopware()->Front()->Router()->assemble($query);
             }
-
-            // @deprecated since 5.1 will be removed in 5.2
-            $getAffectedBanners['img'] = $mediaService->getUrl($getAffectedBanners['img']);
         }
         if ($limit == 1) {
             $getBanners = $getBanners[0];
@@ -643,7 +641,7 @@ class sMarketing
             WHERE promotionID=$id
             ORDER BY position
             ";
-            $sql = Enlight()->Events()->filter('Shopware_Modules_Marketing_MailCampaignsGetDetail_FilterSQL', $sql,
+            $sql = Shopware()->Events()->filter('Shopware_Modules_Marketing_MailCampaignsGetDetail_FilterSQL', $sql,
                 array(
                     'subject' => $this,
                     'id' => $id

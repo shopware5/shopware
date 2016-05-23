@@ -56,6 +56,11 @@ class ProductPropertyGateway implements Gateway\ProductPropertyGatewayInterface
     private $fieldHelper;
 
     /**
+     * @var Connection
+     */
+    private $connection;
+
+    /**
      * @param Connection $connection
      * @param FieldHelper $fieldHelper
      * @param Hydrator\PropertyHydrator $propertyHydrator
@@ -102,77 +107,26 @@ class ProductPropertyGateway implements Gateway\ProductPropertyGatewayInterface
             ->addSelect($this->fieldHelper->getMediaFields())
         ;
 
-        $query->from('s_filter_articles', 'filterArticles');
+        $query->from('s_filter_articles', 'filterArticles')
+            ->innerJoin('filterArticles', 's_articles', 'products', 'products.id = filterArticles.articleID')
+            ->innerJoin('filterArticles', 's_filter_values', 'propertyOption', 'propertyOption.id = filterArticles.valueID')
+            ->innerJoin('products', 's_filter', 'propertySet', 'propertySet.id = products.filtergroupID')
+            ->innerJoin('propertySet', 's_filter_relations', 'relations', 'relations.groupID = propertySet.id')
+            ->innerJoin('propertyOption', 's_filter_options', 'propertyGroup', 'propertyGroup.id = propertyOption.optionID AND relations.optionID = propertyGroup.id')
+            ->leftJoin('propertyOption', 's_media', 'media', 'propertyOption.media_id = media.id')
+            ->leftJoin('propertySet', 's_filter_attributes', 'propertySetAttribute', 'propertySetAttribute.filterID = propertySet.id')
+            ->leftJoin('propertyGroup', 's_filter_options_attributes', 'propertyGroupAttribute', 'propertyGroupAttribute.optionID = propertyGroup.id')
+            ->leftJoin('propertyOption', 's_filter_values_attributes', 'propertyOptionAttribute', 'propertyOptionAttribute.valueID = propertyOption.id')
+            ->leftJoin('media', 's_media_attributes', 'mediaAttribute', 'mediaAttribute.mediaID = media.id')
+            ->leftJoin('media', 's_media_album_settings', 'mediaSettings', 'mediaSettings.albumID = media.albumID')
+            ->where('products.id IN (:ids)')
+            ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY)
+            ->orderBy('filterArticles.articleID');
 
-        $query->innerJoin(
-            'filterArticles',
-            's_articles',
-            'products',
-            'products.id = filterArticles.articleID'
-        );
-
-        $query->innerJoin(
-            'filterArticles',
-            's_filter_values',
-            'propertyOption',
-            'propertyOption.id = filterArticles.valueID'
-        );
-
-        $query->innerJoin(
-            'products',
-            's_filter',
-            'propertySet',
-            'propertySet.id = products.filtergroupID'
-        );
-
-        $query->leftJoin(
-            'propertySet',
-            's_filter_attributes',
-            'propertySetAttribute',
-            'propertySetAttribute.filterID = propertySet.id'
-        );
-
-        $query->innerJoin(
-            'propertySet',
-            's_filter_relations',
-            'relations',
-            'relations.groupID = propertySet.id'
-        );
-
-        $query->innerJoin(
-            'propertyOption',
-            's_filter_options',
-            'propertyGroup',
-            'propertyGroup.id = propertyOption.optionID AND relations.optionID = propertyGroup.id'
-        );
-
-        $query->leftJoin(
-            'propertyOption',
-            's_media',
-            'media',
-            'propertyOption.media_id = media.id'
-        );
-
-        $query->leftJoin(
-            'media',
-            's_media_attributes',
-            'mediaAttribute',
-            'mediaAttribute.mediaID = media.id'
-        );
-
-        $query->leftJoin(
-            'media',
-            's_media_album_settings',
-            'mediaSettings',
-            'mediaSettings.albumID = media.albumID'
-        );
-
-        $this->fieldHelper->addAllPropertyTranslations($query, $context);
-
-        $query->where('products.id IN (:ids)')
-            ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
-
-        $query->orderBy('filterArticles.articleID');
+        $this->fieldHelper->addPropertySetTranslation($query, $context);
+        $this->fieldHelper->addPropertyGroupTranslation($query, $context);
+        $this->fieldHelper->addPropertyOptionTranslation($query, $context);
+        $this->fieldHelper->addMediaTranslation($query, $context);
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();

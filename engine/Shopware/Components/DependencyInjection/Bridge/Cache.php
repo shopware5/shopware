@@ -66,6 +66,10 @@ class Cache
         if (strtolower($backend) === 'auto') {
             $backend = $this->createAutomaticBackend($backendOptions);
         } else {
+            if (strtolower($backend) === 'apc') {
+                $backend = 'apcu';
+            }
+
             $backend = \Zend_Cache::_makeBackend($backend, $backendOptions);
         }
 
@@ -78,8 +82,8 @@ class Cache
      */
     private function createAutomaticBackend($backendOptions = [])
     {
-        if ($this->isApcAvailable()) {
-            $backend = new \Zend_Cache_Backend_Apc($backendOptions);
+        if ($this->isApcuAvailable()) {
+            $backend = new \Zend_Cache_Backend_Apcu($backendOptions);
         } else {
             $backend = new \Zend_Cache_Backend_File($backendOptions);
         }
@@ -90,13 +94,13 @@ class Cache
     /**
      * @return bool
      */
-    private function isApcAvailable()
+    private function isApcuAvailable()
     {
         if (PHP_SAPI === 'cli') {
             return false;
         }
 
-        return extension_loaded('apc') && version_compare(phpversion('apc'), '3.1.13', '>=');
+        return extension_loaded('apcu');
     }
 
     /**

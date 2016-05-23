@@ -170,6 +170,9 @@ $app->map('/done', function () use ($app, $container) {
         $systemLocker();
     }
 
+    $changedTheme = (bool) !empty($_SESSION['changedTheme']) ? : false;
+    $app->view()->set('changedTheme', $changedTheme);
+
     if (UPDATE_IS_MANUAL) {
         $app->render('done_manual.php');
     } else {

@@ -61,8 +61,7 @@ class Customer extends Resource
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(array('customer.id'))
                 ->from('\Shopware\Models\Customer\Customer', 'customer')
-                ->leftJoin('customer.billing', 'billing')
-                ->where('billing.number = ?1')
+                ->where('customer.number = ?1')
                 ->setParameter(1, $number);
 
         $id = $builder->getQuery()->getOneOrNullResult();
@@ -103,14 +102,13 @@ class Customer extends Resource
 
         $builder = $this->getRepository()
                 ->createQueryBuilder('customer')
-                ->select('customer', 'attribute', 'billing', 'billingAttribute', 'shipping', 'shippingAttribute', 'debit', 'paymentData')
+                ->select('customer', 'attribute', 'billing', 'billingAttribute', 'shipping', 'shippingAttribute', 'paymentData')
                 ->leftJoin('customer.attribute', 'attribute')
                 ->leftJoin('customer.billing', 'billing')
                 ->leftJoin('customer.paymentData', 'paymentData', \Doctrine\ORM\Query\Expr\Join::WITH, 'paymentData.paymentMean = customer.paymentId')
                 ->leftJoin('billing.attribute', 'billingAttribute')
                 ->leftJoin('customer.shipping', 'shipping')
                 ->leftJoin('shipping.attribute', 'shippingAttribute')
-                ->leftJoin('customer.debit', 'debit')
                 ->where('customer.id = ?1')
                 ->setParameter(1, $id);
 
@@ -188,6 +186,21 @@ class Customer extends Resource
 
         $this->getManager()->persist($customer);
         $this->flush();
+
+        $addressImportService = $this->getContainer()->get('shopware_account.address_import_service');
+
+        try {
+            $addressImportService->importCustomerBilling($customer->getId());
+        } catch (\Exception $ex) {
+        }
+
+        try {
+            $addressImportService->importCustomerShipping($customer->getId());
+        } catch (\Exception $ex) {
+        }
+
+        $this->getManager()->clear(CustomerModel::class);
+        $customer = $this->getManager()->find(CustomerModel::class, $customer->getId());
 
         return $customer;
     }
@@ -312,6 +325,11 @@ class Customer extends Resource
                 $defaultGroupKey = $shop->getCustomerGroup()->getKey();
                 $params['groupKey'] = $defaultGroupKey;
             }
+        }
+
+        $number = $this->getCustomerNumber($params, $customer);
+        if ($number !== null) {
+            $params['number'] = $number;
         }
 
         if (isset($params['groupKey'])) {
@@ -488,5 +506,24 @@ class Customer extends Resource
         $customer = $query->getArrayResult();
 
         return empty($customer);
+    }
+
+    /**
+     * @param array $params
+     * @param CustomerModel|null $customer
+     * @return string
+     * @throws \Exception
+     */
+    private function getCustomerNumber($params, CustomerModel $customer = null)
+    {
+        if (array_key_exists('number', $params)) {
+            return $params['number'];
+        }
+        if ($customer && $customer->getNumber()) {
+            return $customer->getNumber();
+        }
+
+        $incrementer = Shopware()->Container()->get('shopware.number_range_incrementer');
+        return $incrementer->increment('user');
     }
 }

@@ -38,7 +38,7 @@ interface PriceHelperInterface
      * @param Struct\ProductContextInterface $context
      * @return string
      */
-    public function getSelection(Struct\ShopContextInterface $context);
+    public function getSelection(Struct\ProductContextInterface $context);
 
     /**
      * Joins the customer prices to the provided query

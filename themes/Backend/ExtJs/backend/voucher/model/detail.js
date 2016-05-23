@@ -95,11 +95,6 @@ Ext.define('Shopware.apps.Voucher.model.Detail', {
 	*/
     validations : [
         { field : 'description', type : 'length', min : 5 }
-    ],
-
-    associations: [
-        { type: 'hasMany', model: 'Shopware.apps.Voucher.model.Attribute', name: 'getAttributes', associationKey: 'attribute'}
     ]
-
 });
 //{/block}

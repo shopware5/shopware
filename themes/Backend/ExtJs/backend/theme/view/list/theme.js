@@ -95,15 +95,11 @@ Ext.define('Shopware.apps.Theme.view.list.Theme', {
                     var me = this,
                         templatesByVersion = {
                             'shopware5': [],
-                            'shopware4': []
-                        }, output = '';
+                        },
+                        output = '';
 
                     Ext.each(values, function(item) {
-                        if(item.version === 3) {
-                            templatesByVersion['shopware5'].push(item);
-                        } else if(item.version === 2) {
-                            templatesByVersion['shopware4'].push(item);
-                        }
+                        templatesByVersion['shopware5'].push(item);
                     });
 
                     Ext.iterate(templatesByVersion, function(name, values) {
@@ -116,8 +112,7 @@ Ext.define('Shopware.apps.Theme.view.list.Theme', {
                 getRow: function (name, values) {
                     var me = this,
                         snippets = {
-                            'shopware5': '{s name=designed_for_shopware5}Designed for Shopware 5{/s}',
-                            'shopware4': '{s name=designed_for_shopware4}Designed for Shopware 4{/s}'
+                            'shopware5': '{s name=designed_for_shopware5}Designed for Shopware 5{/s}'
                         };
 
                     if(values.length <= 0) {

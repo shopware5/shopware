@@ -73,7 +73,7 @@ abstract class Enlight_Plugin_Namespace extends Enlight_Plugin_PluginCollection
     /**
      * Returns the application instance of the Enlight_Plugin_PluginManager
      *
-     * @return Enlight_Application
+     * @return Shopware
      */
     public function Application()
     {

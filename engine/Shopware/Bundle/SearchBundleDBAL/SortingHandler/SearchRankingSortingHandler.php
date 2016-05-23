@@ -26,7 +26,6 @@ namespace Shopware\Bundle\SearchBundleDBAL\SortingHandler;
 
 use Shopware\Bundle\SearchBundleDBAL\ConditionHandler\SearchTermConditionHandler;
 use Shopware\Bundle\SearchBundleDBAL\SortingHandlerInterface;
-use Shopware\Bundle\SearchBundle\Sorting\ReleaseDateSorting;
 use Shopware\Bundle\SearchBundle\Sorting\SearchRankingSorting;
 use Shopware\Bundle\SearchBundle\SortingInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;

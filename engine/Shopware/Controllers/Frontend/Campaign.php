@@ -21,10 +21,9 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Components\Emotion\DeviceConfiguration;
 
-/**
- */
 class Shopware_Controllers_Frontend_Campaign extends Enlight_Controller_Action
 {
     public function indexAction()
@@ -34,15 +33,29 @@ class Shopware_Controllers_Frontend_Campaign extends Enlight_Controller_Action
         /**@var $service DeviceConfiguration*/
         $service = $this->get('emotion_device_configuration');
         $landingPage = $service->getLandingPage($emotionId);
+        $landingPageShops = $service->getLandingPageShops($emotionId);
 
-        if (!$landingPage) {
+        /** @var $context ShopContext */
+        $context = $this->get('shopware_storefront.context_service')->getShopContext();
+        $shopId = $context->getShop()->getId();
+        $fallbackId = $context->getShop()->getFallbackId();
+
+        if (!$landingPage || !in_array($shopId, $landingPageShops)) {
             throw new Enlight_Controller_Exception(
                 'Landing page missing, non-existent or invalid for the current shop',
                 404
             );
         }
 
-        $landingPage['categoryId'] = $this->Request()->getParam('sCategory');
+        $translator = new Shopware_Components_Translation();
+
+        $translation = $translator->readWithFallback($shopId, $fallbackId, 'emotion', $emotionId);
+
+        $translation['seo_title'] = $translation['seoTitle'];
+        $translation['seo_keywords'] = $translation['seoKeywords'];
+        $translation['seo_description'] = $translation['seoDescription'];
+
+        $landingPage = array_merge($landingPage, $translation);
 
         $this->View()->assign([
             'sBreadcrumb'          => [['name' => $landingPage['name']]],

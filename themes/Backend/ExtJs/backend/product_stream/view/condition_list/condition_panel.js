@@ -30,10 +30,11 @@
 //{block name="backend/product_stream/view/condition_list/condition_panel"}
 Ext.define('Shopware.apps.ProductStream.view.condition_list.ConditionPanel', {
     extend: 'Ext.form.Panel',
+    cls: 'shopware-form',
     alias: 'widget.product-stream-condition-panel',
     autoScroll: true,
     layout: { type: 'vbox', align: 'stretch'},
-    bodyPadding: 10,
+    bodyPadding: '10 20',
     conditions: [],
 
     title: '{s name=conditions}Conditions{/s}',

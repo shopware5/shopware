@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundleES\ConditionHandler;
 
-use ONGR\ElasticsearchDSL\Filter\TermsFilter;
+use ONGR\ElasticsearchDSL\Query\TermsQuery;
 use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
@@ -52,7 +52,7 @@ class CategoryConditionHandler implements HandlerInterface
         ShopContextInterface $context
     ) {
         /** @var CategoryCondition $criteriaPart */
-        $filter = new TermsFilter('categoryIds', $criteriaPart->getCategoryIds());
+        $filter = new TermsQuery('categoryIds', $criteriaPart->getCategoryIds());
 
         if ($criteria->hasBaseCondition($criteriaPart->getName())) {
             $search->addFilter($filter);

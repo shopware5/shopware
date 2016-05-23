@@ -70,6 +70,10 @@ class EsdHydrator extends Hydrator
             $esd->setHasSerials((bool) $data['__esd_serials']);
         }
 
+        if (isset($data['__esdAttribute_id'])) {
+            $this->attributeHydrator->addAttribute($esd, $data, 'esdAttribute');
+        }
+
         return $esd;
     }
 }

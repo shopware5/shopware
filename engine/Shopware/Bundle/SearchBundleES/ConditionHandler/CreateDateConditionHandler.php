@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundleES\ConditionHandler;
 
-use ONGR\ElasticsearchDSL\Filter\RangeFilter;
+use ONGR\ElasticsearchDSL\Query\RangeQuery;
 use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\SearchBundle\Condition\CreateDateCondition;
 use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
@@ -57,7 +57,7 @@ class CreateDateConditionHandler implements HandlerInterface
         $interval = new \DateInterval($intervalSpec);
         $date->sub($interval);
 
-        $filter = new RangeFilter('formattedCreatedAt', [
+        $filter = new RangeQuery('formattedCreatedAt', [
             'gte' => $date->format('Y-m-d')
         ]);
 

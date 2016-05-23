@@ -79,6 +79,9 @@ class MediaHydrator extends Hydrator
     {
         $media = new Struct\Media();
 
+        $translation = $this->getTranslation($data, '__media');
+        $data = array_merge($data, $translation);
+
         if (isset($data['__media_id'])) {
             $media->setId((int) $data['__media_id']);
         }
@@ -126,10 +129,7 @@ class MediaHydrator extends Hydrator
         }
 
         if (!empty($data['__mediaAttribute_id'])) {
-            $attribute = $this->attributeHydrator->hydrate(
-                $this->extractFields('__mediaAttribute_', $data)
-            );
-            $media->addAttribute('media', $attribute);
+            $this->attributeHydrator->addAttribute($media, $data, 'mediaAttribute', 'media');
         }
         return $media;
     }
@@ -164,18 +164,14 @@ class MediaHydrator extends Hydrator
     {
         $media = $this->hydrate($data);
 
-        $data = array_merge($data, $this->getImageTranslation($data));
+        $translation = $this->getTranslation($data, '__image');
+        $data = array_merge($data, $translation);
 
         $media->setName($data['__image_description']);
-
         $media->setPreview((bool) ($data['__image_main'] == 1));
 
         if (!empty($data['__imageAttribute_id'])) {
-            $attribute = $this->attributeHydrator->hydrate(
-                $this->extractFields('__imageAttribute_', $data)
-            );
-
-            $media->addAttribute('image', $attribute);
+            $this->attributeHydrator->addAttribute($media, $data, 'imageAttribute', 'image', 'image');
         }
 
         return $media;
@@ -215,36 +211,6 @@ class MediaHydrator extends Hydrator
         }
 
         return $thumbnails;
-    }
-
-    /**
-     * @param $data
-     * @return array
-     */
-    private function getImageTranslation($data)
-    {
-        if (!isset($data['__image_translation'])
-            || empty($data['__image_translation'])
-        ) {
-            $translation = [];
-        } else {
-            $translation = unserialize($data['__image_translation']);
-        }
-
-        if (isset($data['__image_translation_fallback'])
-            && !empty($data['__image_translation_fallback'])
-        ) {
-            $fallbackTranslation = unserialize($data['__image_translation_fallback']);
-            $translation += $fallbackTranslation;
-        }
-
-        if (empty($translation)) {
-            return [];
-        }
-
-        return [
-            '__image_description' => $translation['description']
-        ];
     }
 
     /**

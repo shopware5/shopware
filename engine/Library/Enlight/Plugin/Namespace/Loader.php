@@ -63,7 +63,7 @@ class Enlight_Plugin_Namespace_Loader extends Enlight_Plugin_Namespace
      * @throws  Enlight_Exception
      * @param   string $prefix
      * @param   string $path
-     * @return  Enlight_Plugin_PluginNamespace
+     * @return  Enlight_Plugin_Namespace
      */
     public function addPrefixPath($prefix, $path)
     {
@@ -85,7 +85,7 @@ class Enlight_Plugin_Namespace_Loader extends Enlight_Plugin_Namespace
     {
         $class = implode('_', array($prefix, $name, 'Bootstrap'));
         if (!class_exists($class, false)) {
-            Enlight_Application::Instance()->Loader()->loadClass($class, $file);
+            Shopware()->Loader()->loadClass($class, $file);
         }
 
         $plugin = new $class($name, $this);
@@ -107,7 +107,7 @@ class Enlight_Plugin_Namespace_Loader extends Enlight_Plugin_Namespace
             return $this;
         }
         foreach ($this->prefixPaths as $path => $prefix) {
-            $file = $path . $name . $this->Application()->DS() . 'Bootstrap.php';
+            $file = $path . $name . DIRECTORY_SEPARATOR . 'Bootstrap.php';
             if (!file_exists($file)) {
                 continue;
             }

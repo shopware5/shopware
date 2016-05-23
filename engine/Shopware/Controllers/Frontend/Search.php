@@ -123,10 +123,6 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
                 $product
             );
 
-            if ($article['sVoteAverange']['averange']) {
-                $article['sVoteAverange']['averange'] /= 2;
-            }
-
             $articles[] = $article;
         }
 

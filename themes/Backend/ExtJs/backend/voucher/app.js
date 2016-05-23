@@ -71,7 +71,7 @@ Ext.define('Shopware.apps.Voucher', {
      * Requires models for sub-application
      * @array
      */
-    models:['Code','Detail','Main','Tax', 'Attribute'],
+    models:['Code','Detail','Main','Tax'],
     /**
      * Requires controllers for sub-application
      * @array

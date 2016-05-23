@@ -86,6 +86,13 @@ class Option extends ModelEntity
     protected $values;
 
     /**
+     * INVERSE SIDE
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\PropertyOption", mappedBy="propertyOption", orphanRemoval=true, cascade={"persist"})
+     * @var \Shopware\Models\Attribute\PropertyOption
+     */
+    protected $attribute;
+
+    /**
      * Constructor of Mail
      */
     public function __construct()
@@ -173,5 +180,22 @@ class Option extends ModelEntity
     public function getRelations()
     {
         return $this->relations;
+    }
+
+    /**
+     * @return \Shopware\Models\Attribute\PropertyOption
+     */
+    public function getAttribute()
+    {
+        return $this->attribute;
+    }
+
+    /**
+     * @param \Shopware\Models\Attribute\PropertyOption|array|null $attribute
+     * @return \Shopware\Models\Attribute\PropertyOption
+     */
+    public function setAttribute($attribute)
+    {
+        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\PropertyOption', 'attribute', 'propertyOption');
     }
 }

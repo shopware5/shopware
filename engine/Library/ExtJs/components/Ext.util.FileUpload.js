@@ -840,6 +840,9 @@ Ext.define('Ext.util.FileUpload', {
 
         }, false);
 
+        // enable CSRF
+        xhr.setRequestHeader('X-CSRF-Token', Ext.CSRFService.getToken());
+
         //send xml http request
         var formData = new FormData();
         formData.append(this.fileField, file);

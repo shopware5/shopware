@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundleES\ConditionHandler;
 
-use ONGR\ElasticsearchDSL\Filter\RangeFilter;
+use ONGR\ElasticsearchDSL\Query\RangeQuery;
 use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\SearchBundle\Condition\HasPseudoPriceCondition;
 use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
@@ -53,7 +53,7 @@ class HasPseudoPriceConditionHandler implements HandlerInterface
     ) {
         /** @var HasPseudoPriceCondition $criteriaPart */
         $field = $this->getPseudoPriceField($context);
-        $filter = new RangeFilter($field, ['gt' => 0]);
+        $filter = new RangeQuery($field, ['gt' => 0]);
 
         if ($criteria->hasBaseCondition($criteriaPart->getName())) {
             $search->addFilter($filter);

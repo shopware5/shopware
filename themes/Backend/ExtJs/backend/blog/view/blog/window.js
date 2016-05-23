@@ -46,7 +46,7 @@ Ext.define('Shopware.apps.Blog.view.blog.Window', {
      * @integer
      */
     height:'90%',
-    width: 1024,
+    width: '80%',
     modal:false,
     layout: {
         type: 'fit'
@@ -89,6 +89,7 @@ Ext.define('Shopware.apps.Blog.view.blog.Window', {
         //have to load it here because in some cases the view is not totally created before the record starts loading
         if(me.record) {
             me.formPanel.loadRecord(me.record);
+            me.attributeForm.loadAttribute(me.record.get('id'));
         }
     },
 
@@ -119,8 +120,15 @@ Ext.define('Shopware.apps.Blog.view.blog.Window', {
     createFormPanel: function() {
         var me = this;
         me.mainView = Ext.create('Shopware.apps.Blog.view.blog.detail.Main',{
-            flex: 4,
+            flex: 5,
             record: me.record
+        });
+
+        me.attributeForm = Ext.create('Shopware.attribute.Form', {
+            title: '{s namespace="backend/attributes/main" name="attribute_form_title"}{/s}',
+            table: 's_blog_attributes',
+            bodyPadding: 10,
+            autoScroll: true
         });
 
         return Ext.create('Ext.form.Panel', {
@@ -139,7 +147,7 @@ Ext.define('Shopware.apps.Blog.view.blog.Window', {
                         type: 'accordion',
                         animate: Ext.isChrome
                     },
-                    flex: 2,
+                    flex: 3,
                     margin: '0 0 0 10',
                     items: [
                         {
@@ -157,10 +165,7 @@ Ext.define('Shopware.apps.Blog.view.blog.Window', {
                             detailRecord: me.record,
                             mainTitleField: me.mainView.mainTitle
                         },
-                        {
-                            xtype: 'blog-blog-detail-sidebar-attributes',
-                            detailRecord: me.record
-                        }
+                        me.attributeForm
                     ]
                 }
             ]

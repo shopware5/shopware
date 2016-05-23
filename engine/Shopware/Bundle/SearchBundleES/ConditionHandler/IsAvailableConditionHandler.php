@@ -52,6 +52,12 @@ class IsAvailableConditionHandler implements HandlerInterface
         ShopContextInterface $context
     ) {
         $query = new TermQuery('hasAvailableVariant', true);
-        $search->addQuery($query);
+
+        /** @var IsAvailableCondition $criteriaPart */
+        if ($criteria->hasBaseCondition($criteriaPart->getName())) {
+            $search->addFilter($query);
+        } else {
+            $search->addPostFilter($query);
+        }
     }
 }

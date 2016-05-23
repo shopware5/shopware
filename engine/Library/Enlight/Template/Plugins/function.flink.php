@@ -32,7 +32,7 @@ function smarty_function_flink($params, $template)
     $file = $params['file'];
 
     /** @var $front Enlight_Controller_Front */
-    $front = Enlight_Application::Instance()->Front();
+    $front = Shopware()->Front();
     $request = $front->Request();
 
     // check if we got an URI or a local link
@@ -56,8 +56,8 @@ function smarty_function_flink($params, $template)
             }
         }
 
-        if (method_exists(Enlight_Application::Instance(), 'DocPath')) {
-            $docPath = Enlight_Application::Instance()->DocPath();
+        if (method_exists(Shopware(), 'DocPath')) {
+            $docPath = Shopware()->DocPath();
         } else {
             $docPath = getcwd() . DIRECTORY_SEPARATOR;
         }

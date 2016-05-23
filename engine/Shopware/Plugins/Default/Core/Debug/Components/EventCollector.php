@@ -77,7 +77,7 @@ class EventCollector implements CollectorInterface
                 continue;
             }
             $listeners = array();
-            foreach (Enlight()->Events()->getListeners($event) as $listener) {
+            foreach (Shopware()->Events()->getListeners($event) as $listener) {
                 $listener = $listener->getListener();
                 if ($listener[0] === $this) {
                     continue;

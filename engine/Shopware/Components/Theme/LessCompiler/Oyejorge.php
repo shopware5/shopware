@@ -24,7 +24,6 @@
 namespace Shopware\Components\Theme\LessCompiler;
 
 use Shopware\Components\Theme\LessCompiler;
-use Shopware\Models\Theme\Settings;
 
 class Oyejorge implements LessCompiler
 {

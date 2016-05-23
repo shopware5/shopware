@@ -24,6 +24,7 @@
 
 namespace ShopwarePlugins\SwagUpdate\Components;
 
+use Shopware\Components\OpenSSLVerifier;
 use ShopwarePlugins\SwagUpdate\Components\Struct\Version;
 
 /**
@@ -49,22 +50,22 @@ class UpdateCheck
     private $verifySignature;
 
     /**
-     * @var string
+     * @var OpenSSLVerifier
      */
-    private $publicKey;
+    private $verificator;
 
     /**
      * @param string $apiEndpoint
      * @param string $channel
      * @param bool   $verifySignature
-     * @param string $publicKey
+     * @param OpenSSLVerifier $verificator
      */
-    public function __construct($apiEndpoint, $channel, $verifySignature, $publicKey)
+    public function __construct($apiEndpoint, $channel, $verifySignature, OpenSSLVerifier $verificator)
     {
         $this->apiEndpoint     = rtrim($apiEndpoint, '/');
         $this->channel         = $channel;
         $this->verifySignature = $verifySignature;
-        $this->publicKey       = $publicKey;
+        $this->verificator     = $verificator;
     }
 
     /**
@@ -83,14 +84,11 @@ class UpdateCheck
      */
     private function verifyBody($signature, $body)
     {
-        if (!function_exists('openssl_verify')) {
+        if (!$this->verificator->isSystemSupported()) {
             return;
         }
 
-        $verificator = new OpenSsl();
-        $verificator->setPublicKey($this->publicKey);
-
-        if (!$verificator->verify($body, $signature)) {
+        if (!$this->verificator->isValid($body, $signature)) {
             throw new \Exception('Signature is not valid');
         }
     }
@@ -124,7 +122,7 @@ class UpdateCheck
         $body = $response->getBody();
 
         $verified = false;
-        if (!empty($this->publicKey) && $this->verifySignature) {
+        if ($this->verifySignature) {
             $signature = $response->getHeader('X-Shopware-Signature');
             $this->verifyBody($signature, $body);
             $verified = true;

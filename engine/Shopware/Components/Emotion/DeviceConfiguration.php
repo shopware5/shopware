@@ -140,6 +140,26 @@ class DeviceConfiguration
     }
 
     /**
+     * Get shops of landingpage by emotion id.
+     *
+     * @param $emotionId
+     * @return array
+     */
+    public function getLandingPageShops($emotionId)
+    {
+        $query = $this->getLandingpageShopsQuery();
+
+        $query->setParameter(':id', $emotionId);
+
+        /**@var $statement \PDOStatement */
+        $statement = $query->execute();
+
+        $shops = $statement->fetchAll(\PDO::FETCH_COLUMN);
+
+        return $shops;
+    }
+
+    /**
      * @param $id
      * @return array|null
      */
@@ -192,11 +212,28 @@ class DeviceConfiguration
 
         $query->from('s_emotion', 'emotion')
             ->andWhere('emotion.active = 1')
-            ->andWhere('(valid_from IS NULL OR valid_from <= now())')
-            ->andWhere('(valid_to IS NULL OR valid_to >= now())')
+            ->andWhere('emotion.is_landingpage = 1')
+            ->andWhere('(emotion.valid_from IS NULL OR emotion.valid_from <= now())')
+            ->andWhere('(emotion.valid_to IS NULL OR emotion.valid_to >= now())')
             ->orderBy('emotion.position', 'ASC')
             ->addOrderBy('emotion.id', 'ASC')
         ;
+
+        return $query;
+    }
+
+    /**
+     * Get QueryBuilder for shops of an emotion.
+     *
+     * @return QueryBuilder
+     */
+    private function getLandingpageShopsQuery()
+    {
+        $query = $this->connection->createQueryBuilder();
+
+        $query->select([ 'shops.shop_id' ])
+            ->from('s_emotion_shops', 'shops')
+            ->where('shops.emotion_id = :id');
 
         return $query;
     }

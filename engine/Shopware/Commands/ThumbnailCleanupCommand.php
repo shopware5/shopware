@@ -92,7 +92,7 @@ EOF
             }
 
             foreach ($album['media'] as $media) {
-                $path = Shopware()->oldPath() . $media['path'];
+                $path = Shopware()->DocPath() . $media['path'];
                 if ($mediaService->has($path)) {
                     continue;
                 }

@@ -100,7 +100,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
      */
     public function TopSeller()
     {
-        return Shopware()->TopSeller();
+        return Shopware()->Container()->get('TopSeller');
     }
 
     /**
@@ -110,7 +110,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
      */
     public function AlsoBought()
     {
-        return Shopware()->AlsoBought();
+        return Shopware()->Container()->get('AlsoBought');
     }
 
     /**
@@ -120,7 +120,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
      */
     public function SimilarShown()
     {
-        return Shopware()->SimilarShown();
+        return Shopware()->Container()->get('SimilarShown');
     }
 
     /**
@@ -226,7 +226,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
         );
 
         $similarShown = Enlight_Class::Instance('Shopware_Components_SimilarShown');
-        $this->Application()->Bootstrap()->registerResource('SimilarShown', $similarShown);
+        Shopware()->Container()->set('SimilarShown', $similarShown);
         return $similarShown;
     }
 
@@ -284,7 +284,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
                 AND   articleID = :articleId";
 
         $alreadyViewed = Shopware()->Db()->fetchOne($sql, array(
-            'sessionId' => Shopware()->SessionID(),
+            'sessionId' => Shopware()->Session()->get('sessionId'),
             'articleId' => $articleId
         ));
 
@@ -301,7 +301,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
         ";
 
         $articles = Shopware()->Db()->fetchCol($sql, array(
-            'sessionId' => Shopware()->SessionID(),
+            'sessionId' => Shopware()->Session()->get('sessionId'),
             'articleId' => $articleId
         ));
 
@@ -363,7 +363,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
         );
 
         $alsoBought = Enlight_Class::Instance('Shopware_Components_AlsoBought');
-        $this->Application()->Bootstrap()->registerResource('AlsoBought', $alsoBought);
+        Shopware()->Container()->set('AlsoBought', $alsoBought);
         return $alsoBought;
     }
 
@@ -395,7 +395,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
             WHERE basket1.sessionID = :sessionId
         ";
         $combinations = Shopware()->Db()->fetchAll($sql, array(
-            'sessionId' => Shopware()->SessionID()
+            'sessionId' => Shopware()->Session()->get('sessionId')
         ));
 
         $this->AlsoBought()->refreshMultipleBoughtArticles($combinations);
@@ -428,7 +428,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
         );
 
         $topSeller = Enlight_Class::Instance('Shopware_Components_TopSeller');
-        $this->Application()->Bootstrap()->registerResource('TopSeller', $topSeller);
+        Shopware()->Container()->set('TopSeller', $topSeller);
 
         return $topSeller;
     }

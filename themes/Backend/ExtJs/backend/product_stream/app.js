@@ -43,6 +43,7 @@ Ext.define('Shopware.apps.ProductStream', {
         'list.List',
 
         'common.Settings',
+        'common.Attributes',
 
         'condition_list.Window',
         'condition_list.ConditionPanel',

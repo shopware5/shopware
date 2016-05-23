@@ -22,12 +22,14 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\CSRFWhitelistAware;
+
 /**
  * Shopware Backend Controller
  *
  * Display backend / administration
  */
-class Shopware_Controllers_Backend_Deprecated extends Enlight_Controller_Action
+class Shopware_Controllers_Backend_Deprecated extends Enlight_Controller_Action implements CSRFWhitelistAware
 {
     public function init()
     {
@@ -39,6 +41,16 @@ class Shopware_Controllers_Backend_Deprecated extends Enlight_Controller_Action
         if (!in_array($this->Request()->getActionName(), array('index', 'load'))) {
             $this->Front()->Plugins()->ViewRenderer()->setNoRender();
         }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getWhitelistedCSRFActions()
+    {
+        return [
+            'include'
+        ];
     }
 
     /**
@@ -60,7 +72,7 @@ class Shopware_Controllers_Backend_Deprecated extends Enlight_Controller_Action
      */
     public function includeAction()
     {
-        $oldPath = Shopware()->OldPath('engine');
+        $oldPath = Shopware()->DocPath('engine');
 
         $module = basename($this->Request()->getParam('includeDir'));
         $module = preg_replace('/[^a-z0-9_.:-]/i', '', $module);

@@ -68,7 +68,7 @@
     {if $sCategoryContent.metaTitle}
         {$sCategoryContent.metaTitle|escapeHtml} | {{config name=sShopname}|escapeHtml}
     {elseif $sCategoryContent.title}
-        {$sCategoryContent.title|escapeHtml}
+        {$sCategoryContent.title|escapeHtml} | {{config name=sShopname}|escapeHtml}
     {else}
         {$smarty.block.parent}
     {/if}

@@ -116,7 +116,8 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Template', {
             active: '{s name=detail/base/active}Active{/s}',
             activeBox: '{s name=detail/base/active_box}Article will be displayed in store front{/s}',
             numberValidation: '{s name=detail/base/number_validation}The inserted article number already exists!{/s}',
-            additionalText: '{s name=detail/base/additional_text}Additional text{/s}'
+            additionalText: '{s name=detail/base/additional_text}Additional text{/s}',
+            purchasePrice: '{s name=detail/base/purchase_price}Purchase price{/s}'
         },
         basePrice: {
             title:'{s name=detail/base_price/title}Base price calculation{/s}',
@@ -149,8 +150,6 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Template', {
         additional: {
             title:'{s name=detail/additional_fields/title}Additional fields{/s}',
             comment:'{s name=detail/additional_fields/comment}Comment{/s}',
-            attribute1:'{s name=detail/additional_fields/free_text_1}Free text 1{/s}',
-            attribute2:'{s name=detail/additional_fields/free_text_2}Free text 2{/s}'
         },
         data:'{s name=variant/list/toolbar/data}Apply standard data{/s}',
         save:'{s name=detail/save_button}Save article{/s}',
@@ -183,6 +182,10 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Template', {
 
         if (me.record) {
             me.formPanel.loadRecord(me.record);
+            me.attributeForm.loadAttribute(me.record.get('id'));
+            Ext.Function.defer(function() {
+                me.formPanel.translationPlugin.initTranslationFields(me.formPanel);
+            }, 300);
         }
     },
 
@@ -303,6 +306,13 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Template', {
             }]
         });
 
+        me.attributeForm = Ext.create('Shopware.attribute.Form', {
+            table: 's_article_configurator_templates_attributes',
+            allowTranslation: false,
+            translationForm: me.formPanel
+        });
+        me.formPanel.add(me.attributeForm);
+
         return [me.formPanel];
     },
 
@@ -318,7 +328,7 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Template', {
         var basePriceFieldSet = me.createBasePriceFieldSet();
         var settingFieldSet = me.createSettingsFieldSet();
 
-        return [ baseFieldSet, priceFieldSet, basePriceFieldSet, settingFieldSet, me.attributeFieldSet ];
+        return [ baseFieldSet, priceFieldSet, basePriceFieldSet, settingFieldSet ];
     },
 
     /**
@@ -349,6 +359,12 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Template', {
                 boxLabel: me.snippets.baseFieldSet.activeBox,
                 inputValue: true,
                 uncheckedValue:false
+            }, {
+                xtype: 'numberfield',
+                name: 'purchasePrice',
+                fieldLabel: me.snippets.baseFieldSet.purchasePrice,
+                minValue: 0,
+                step: 0.01
             }]
         });
     },
@@ -361,6 +377,7 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Template', {
 
         me.priceGrid =  Ext.create('Shopware.apps.Article.view.detail.Prices', {
             customerGroupStore: me.customerGroupStore,
+            attributeTable: 's_article_configurator_template_prices_attributes',
             article: me.record
         });
 
@@ -544,6 +561,5 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.Template', {
             }]
         });
     }
-
 });
 //{/block}

@@ -41,6 +41,11 @@ class VoteAverageGateway implements Gateway\VoteAverageGatewayInterface
     private $voteHydrator;
 
     /**
+     * @var Connection
+     */
+    private $connection;
+
+    /**
      * @param Connection $connection
      * @param Hydrator\VoteHydrator $voteHydrator
      */
@@ -73,13 +78,11 @@ class VoteAverageGateway implements Gateway\VoteAverageGatewayInterface
 
         $query = $this->connection->createQueryBuilder();
 
-        $query->select(
-            [
-                'articleID',
-                'COUNT(id) as total',
-                'points'
-            ]
-        );
+        $query->select([
+            'articleID',
+            'COUNT(id) as total',
+            'points'
+        ]);
 
         $query->from('s_articles_vote', 'vote')
             ->where('vote.articleID IN (:products)')

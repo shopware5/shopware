@@ -96,11 +96,6 @@ class Category extends Extendable implements \JsonSerializable
     /**
      * @var boolean
      */
-    protected $displayPropertySets;
-
-    /**
-     * @var boolean
-     */
     protected $displayFacets;
 
     /**
@@ -323,14 +318,6 @@ class Category extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @param boolean $displayPropertySets
-     */
-    public function setDisplayPropertySets($displayPropertySets)
-    {
-        $this->displayPropertySets = $displayPropertySets;
-    }
-
-    /**
      * @param boolean $blog
      */
     public function setBlog($blog)
@@ -384,14 +371,6 @@ class Category extends Extendable implements \JsonSerializable
     public function displayInNavigation()
     {
         return $this->displayInNavigation;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function displayPropertySets()
-    {
-        return $this->displayPropertySets;
     }
 
     /**

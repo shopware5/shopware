@@ -60,18 +60,36 @@ class LicenseInstaller
             // Insert new license
             $sql = <<<EOT
 INSERT INTO s_core_licenses (module,host,label,license,version,type,source,added,creation,expiration,active)
-VALUES (?,?,?,?,'1.0.0',1,0,now(),now(),NULL,1)
+VALUES (:module,:host,:label,:license,:version,:type,:source,now(),:creation,:expiration,1)
 EOT;
 
             $prepareStatement = $this->pdo->prepare($sql);
             $prepareStatement->execute([
-                $license->module,
-                $license->host,
-                $license->label,
-                $license->license
+                ':module' => $license->module,
+                ':host' => $license->host,
+                ':label' => $license->label,
+                ':license' => $license->license,
+                ':version' => $license->version,
+                ':type' => $license->type,
+                ':source' => $license->source,
+                ':creation' => $this->checkDate($license->creation),
+                ':expiration' => $this->checkDate($license->expiration),
             ]);
         } catch (\PDOException $e) {
             throw new \RuntimeException("Could not insert license into database", 0, $e);
         }
+    }
+
+    /**
+     * Checks if a date string is plausible.
+     * If not, returns null. Otherwise the string.
+     *
+     * @param string $date
+     * @return string|null
+     */
+    private function checkDate($date)
+    {
+        $dateCheck = strtotime($date);
+        return is_int($dateCheck) && $dateCheck > 0 ? $date : null;
     }
 }

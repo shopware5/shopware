@@ -21,13 +21,14 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Shopware\Components\CSRFWhitelistAware;
 
 /**
  * Shopware Systeminfo Controller
  *
  * This controller reads out all necessary configs.
  */
-class Shopware_Controllers_Backend_Systeminfo extends Shopware_Controllers_Backend_ExtJs
+class Shopware_Controllers_Backend_Systeminfo extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
     public function initAcl()
     {
@@ -84,9 +85,7 @@ class Shopware_Controllers_Backend_Systeminfo extends Shopware_Controllers_Backe
      */
     public function getFileListAction()
     {
-        $fileName = Shopware()->AppPath() . '/Components/Check/Data/Files.md5sums';
-
-
+        $fileName = __DIR__ . '/../../Components/Check/Data/Files.md5sums';
         if (!is_file($fileName)) {
             $this->View()->assign(array('success' => true, 'data' => array()));
             return;
@@ -158,5 +157,17 @@ class Shopware_Controllers_Backend_Systeminfo extends Shopware_Controllers_Backe
             apache_setenv('HTTP_COOKIE', null);
         }
         phpinfo();
+    }
+
+    /**
+     * Returns a list with actions which should not be validated for CSRF protection
+     *
+     * @return string[]
+     */
+    public function getWhitelistedCSRFActions()
+    {
+        return [
+            'info'
+        ];
     }
 }

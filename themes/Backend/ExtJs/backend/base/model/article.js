@@ -70,7 +70,9 @@ Ext.define('Shopware.apps.Base.model.Article', {
         { name:'active', type:'int' },
         { name:'detailId', type:'int' },
         { name:'changeTime', type:'date' },
-        { name:'inStock', type:'int' }
+        { name:'inStock', type:'int' },
+
+        { name:'label', type:'string' }
     ]
 });
 //{/block}

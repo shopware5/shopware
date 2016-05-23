@@ -163,7 +163,8 @@ class Container extends BaseContainer
                 $me->get('dummy.plugin.finder'),
                 $me->get('cleanup.files.finder'),
                 $me->get('app'),
-                SW_PATH
+                SW_PATH,
+                $me->get('db')
             );
         };
 

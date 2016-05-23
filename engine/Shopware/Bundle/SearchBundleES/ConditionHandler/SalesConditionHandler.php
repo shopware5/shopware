@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundleES\ConditionHandler;
 
-use ONGR\ElasticsearchDSL\Filter\RangeFilter;
+use ONGR\ElasticsearchDSL\Query\RangeQuery;
 use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\SearchBundle\Condition\SalesCondition;
 use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
@@ -52,7 +52,7 @@ class SalesConditionHandler implements HandlerInterface
         ShopContextInterface $context
     ) {
         /** @var SalesCondition $criteriaPart */
-        $filter = new RangeFilter('sales', ['gt' => $criteriaPart->getMinSales()]);
+        $filter = new RangeQuery('sales', ['gt' => $criteriaPart->getMinSales()]);
 
         if ($criteria->hasBaseCondition($criteriaPart->getName())) {
             $search->addFilter($filter);
