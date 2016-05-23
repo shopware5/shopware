@@ -12,25 +12,39 @@
 
                     {if $Data.thumbnails}
                         {$baseSource = $Data.thumbnails[0].source}
-                        {$colSize = 100 / $emotion.grid.cols}
-                        {$itemSize = $itemCols * $colSize}
+
+                        {foreach $element.viewports as $viewport}
+                            {$cols = ($viewport.endCol - $viewport.startCol) + 1}
+                            {$elementSize = $cols * $cellWidth}
+                            {$size = "{$elementSize}vw"}
+
+                            {if $breakpoints[$viewport.alias]}
+
+                                {if $viewport.alias === 'xl' && !$emotionFullscreen}
+                                    {$size = "calc({$elementSize / 100} * {$baseWidth}px)"}
+                                {/if}
+
+                                {$size = "(min-width: {$breakpoints[$viewport.alias]}) {$size}"}
+                            {/if}
+
+                            {$itemSize = "{$size}{if $itemSize}, {$itemSize}{/if}"}
+                        {/foreach}
 
                         {foreach $Data.thumbnails as $image}
-                            {$srcSet = "{if $image@index !== 0}{$srcSet}, {/if}{$image.source} {$image.maxWidth}w"}
+                            {$srcSet = "{if $srcSet}{$srcSet}, {/if}{$image.source} {$image.maxWidth}w"}
 
                             {if $image.retinaSource}
-                                {$srcSetRetina = "{if $image@index !== 0}{$srcSetRetina}, {/if}{$image.retinaSource} {$image.maxWidth}w"}
+                                {$srcSet = "{if $srcSet}{$srcSet}, {/if}{$image.retinaSource} {$image.maxWidth * 2}w"}
                             {/if}
                         {/foreach}
                     {else}
                         {$baseSource = $Data.source}
                     {/if}
 
-                    <picture>
-                        {if $srcSetRetina}<source sizes="{$itemSize}vw" srcset="{$srcSetRetina}" media="(min-resolution: 192dpi)" />{/if}
-                        {if $srcSet}<source sizes="{$itemSize}vw" srcset="{$srcSet}" />{/if}
-                        <img src="{$baseSource}" sizes="{$itemSize}vw" class="banner--image"{if $Data.title} alt="{$Data.title|escape}"{/if} />
-                    </picture>
+                    <img src="{$baseSource}"
+                         class="banner--image"
+                         {if $srcSet}sizes="{$itemSize}" srcset="{$srcSet}"{/if}
+                         {if $Data.title}alt="{$Data.title|escape}" {/if}/>
                 {/block}
 
                 {* Banner mapping, based on the same technic as an image map *}
