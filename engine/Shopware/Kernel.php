@@ -117,6 +117,11 @@ class Kernel implements HttpKernelInterface
      */
     private $pluginHash;
 
+    /**
+     * @var \PDO
+     */
+    private $connection;
+
     const VERSION      = \Shopware::VERSION;
     const VERSION_TEXT = \Shopware::VERSION_TEXT;
     const REVISION     = \Shopware::REVISION;
@@ -265,7 +270,9 @@ class Kernel implements HttpKernelInterface
             return;
         }
 
-        // no-plugins-mode
+        $dbConn = $this->config['db'];
+        $this->connection = Components\DependencyInjection\Bridge\Db::createPDO($dbConn);
+
         $this->initializePlugins();
         $this->initializeContainer();
         $this->initializeShopware();
@@ -396,6 +403,7 @@ class Kernel implements HttpKernelInterface
 
         $this->container = new $class();
         $this->container->set('kernel', $this);
+        $this->container->set('db_connection', $this->connection);
     }
 
     /**
