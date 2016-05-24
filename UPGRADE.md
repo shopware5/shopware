@@ -308,6 +308,7 @@ In this document you will find a changelog of the important changes related to t
 * Moved s_user_billingaddress.customernumber to s_user table
 * Removed \Shopware\Models\Customer\Billing::number property
 * Removed method `Shopware\Bundle\PluginInstallerBundle\Service\InstallerService::getPluginBootstrap()`
+* Changed Shopware\Components\Model\ModelManager::addAttribute() to allow using empty string and boolean as default value when adding attribute fields
 
 ## 5.1.6
 * The interface `Enlight_Components_Cron_Adapter` in `engine/Library/Enlight/Components/Cron/Adapter.php` got a new method `getJobByAction`. For default implementation see `engine/Library/Enlight/Components/Cron/Adapter/DBAL.php`.
