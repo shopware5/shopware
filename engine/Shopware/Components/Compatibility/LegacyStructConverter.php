@@ -185,7 +185,6 @@ class LegacyStructConverter
             'external' => $category->getExternalLink(),
             'hideFilter' => !$category->displayFacets(),
             'hideTop' => !$category->displayInNavigation(),
-            'noViewSelect' => $category->allowViewSelect(),
             'changed' => null,
             'added' => null,
             'attribute' => $attribute,

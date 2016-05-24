@@ -91,11 +91,6 @@ class Category extends Extendable implements \JsonSerializable
     /**
      * @var boolean
      */
-    protected $allowViewSelect;
-
-    /**
-     * @var boolean
-     */
     protected $displayFacets;
 
     /**
@@ -294,14 +289,6 @@ class Category extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @param boolean $allowViewSelect
-     */
-    public function setAllowViewSelect($allowViewSelect)
-    {
-        $this->allowViewSelect = $allowViewSelect;
-    }
-
-    /**
      * @param boolean $displayFacets
      */
     public function setDisplayFacets($displayFacets)
@@ -339,14 +326,6 @@ class Category extends Extendable implements \JsonSerializable
     public function getMedia()
     {
         return $this->media;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function allowViewSelect()
-    {
-        return $this->allowViewSelect;
     }
 
     /**

@@ -72,7 +72,6 @@ class CategoryTest extends TestCase
             "external" => false,
             "hidefilter" => false,
             "hideTop" => true,
-            "noViewSelect" => true,
 
             "changed" => $changed,
             "added" => $added,
