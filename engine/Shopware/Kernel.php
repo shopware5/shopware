@@ -279,6 +279,11 @@ class Kernel implements HttpKernelInterface
 
         foreach ($this->getPlugins() as $plugin) {
             $plugin->setContainer($this->container);
+
+            if (!$plugin->isActive()) {
+                continue;
+            }
+
             $this->container->get('events')->addSubscriber($plugin);
         }
 
@@ -300,8 +305,10 @@ class Kernel implements HttpKernelInterface
         $classLoader = new Psr4ClassLoader();
         $classLoader->register(true);
 
-        $pluginRoot = $this->getRootDir().'/custom/plugins';
+        $stmt = $this->connection->query('SELECT name FROM s_core_plugins WHERE namespace LIKE "ShopwarePlugins" AND active = 1 AND installation_date IS NOT NULL;');
+        $activePlugins = $stmt->fetchAll(\PDO::FETCH_COLUMN);
 
+        $pluginRoot = $this->getRootDir().'/custom/plugins';
         foreach (new \DirectoryIterator($pluginRoot) as $pluginDir) {
             if ($pluginDir->isDot()) {
                 continue;
@@ -313,13 +320,15 @@ class Kernel implements HttpKernelInterface
                 continue;
             }
 
-            $namespace = 'ShopwarePlugins\\' . $pluginName;
+            $namespace = $pluginName;
             $className = '\\' . $namespace . '\\' .  $pluginName;
 
             $classLoader->addPrefix($namespace, $pluginDir->getPathname());
 
+            $isActive = in_array($pluginName, $activePlugins);
+
             /** @var Plugin $plugin */
-            $plugin = new $className();
+            $plugin = new $className($isActive);
             $this->plugins[$plugin->getName()] = $plugin;
         }
 
@@ -742,6 +751,10 @@ class Kernel implements HttpKernelInterface
         }
 
         foreach ($this->plugins as $plugin) {
+            if (!$plugin->isActive()) {
+                continue;
+            }
+
             $container->addObjectResource($plugin);
             $plugin->build($container);
         }

@@ -50,11 +50,32 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
     private $path;
 
     /**
+     * @var bool
+     */
+    private $isActive;
+
+    /**
      * @inheritdoc
      */
     public static function getSubscribedEvents()
     {
         return [];
+    }
+
+    /**
+     * @param bool $isActive
+     */
+    final public function __construct($isActive)
+    {
+        $this->isActive = (bool)$isActive;
+    }
+
+    /**
+     * @return bool
+     */
+    final public function isActive()
+    {
+        return $this->isActive;
     }
 
     /**
