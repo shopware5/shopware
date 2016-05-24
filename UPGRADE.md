@@ -312,6 +312,8 @@ In this document you will find a changelog of the important changes related to t
 * Removed s_categories.noviewselect
 * Removed \Shopware\Models\Category\Category::$noViewSelect
 * Removed \Shopware\Bundle\StoreFrontBundle\Struct\Category::$allowViewSelect
+* Include the departments, salutations, cities and countries in the address comparison of the backend order details
+* Display the departments in the backend order details overview
 
 ## 5.1.6
 * The interface `Enlight_Components_Cron_Adapter` in `engine/Library/Enlight/Components/Cron/Adapter.php` got a new method `getJobByAction`. For default implementation see `engine/Library/Enlight/Components/Cron/Adapter/DBAL.php`.

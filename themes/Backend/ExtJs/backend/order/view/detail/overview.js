@@ -320,64 +320,11 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
             items: [
                 {
                     xtype: 'container',
-                    renderTpl: me.createBillingTemplate(),
+                    renderTpl: me.createAddressTemplate(),
                     renderData: billing.raw
                 }
             ]
         });
-    },
-
-    /**
-     * Creates the XTemplate for the billing information panel
-     *
-     * @return [Ext.XTemplate] generated Ext.XTemplate
-     */
-    createBillingTemplate:function () {
-        return new Ext.XTemplate(
-            '{literal}<tpl for=".">',
-                '<div class="customeer-info-pnl">',
-                    '<div class="base-info">',
-                        '<p>',
-                            '<span>{company}</span>',
-                        '</p>',
-                        '<p>',
-                            '<span>{salutationSnippet}</span>&nbsp;',
-                            '<tpl if="title"><span>{title}</span><br /></tpl>',
-                            '<span>{firstName}</span>&nbsp;',
-                            '<span>{lastName}</span>',
-                        '</p>',
-                        '<p>',
-                            '<span>{street}</span>',
-                        '</p>',
-                        '<tpl if="additionalAddressLine1">',
-                            '<p>',
-                                '<span>{additionalAddressLine1}</span>',
-                            '</p>',
-                        '</tpl>',
-                        '<tpl if="additionalAddressLine2">',
-                            '<p>',
-                                '<span>{additionalAddressLine2}</span>',
-                            '</p>',
-                        '</tpl>',
-                        '<p>',
-                            '<span>{zipCode}</span>&nbsp;',
-                            '<span>{city}</span>',
-                        '</p>',
-                        '<tpl for="state">',
-                            '<p>',
-                                '<span>{name}</span>',
-                            '</p>',
-                        '</tpl>',
-                        '<tpl for="country">',
-                            '<p>',
-                                '<span>{name}</span>',
-                            '</p>',
-                        '</tpl>',
-                    '</div>',
-                '</div>',
-
-            '</tpl>{/literal}'
-        );
     },
 
     /**
@@ -405,7 +352,7 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
             items: [
                 {
                     xtype: 'container',
-                    renderTpl: me.createShippingTemplate(),
+                    renderTpl: me.createAddressTemplate(),
                     renderData:shipping.raw
                 }
             ]
@@ -414,8 +361,8 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
 
 
     /**
-     * Checks if the shipping and billing address is different. If this is the case the panel title
-     * if colored red and an icon will be displayed on the right side.
+     * Checks if the shipping and billing address is different by comparing all their fields, except for the ids.
+     * If this is the case, the panel title is colored red and an icon will be displayed to its right.
      * @return string
      */
     getShippingPanelTitle: function() {
@@ -429,12 +376,19 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
 
         billing = billing.first();
 
-        //if the shipping and billing address is different, an exclamation icon will be displayed.
+        // Compare ALL fields of the two addresses and if they differ, display an exclamation icon in the title of the box
         if (shipping.get('company') != billing.get('company') ||
+            shipping.get('department') != billing.get('department') ||
+            shipping.get('salutationSnippet') != billing.get('salutationSnippet') ||
             shipping.get('firstName') != billing.get('firstName') ||
             shipping.get('lastName') != billing.get('lastName') ||
             shipping.get('street') != billing.get('street') ||
-            shipping.get('zipCode') != billing.get('zipCode')) {
+            shipping.get('additionalAddressLine1') != billing.get('additionalAddressLine1') ||
+            shipping.get('additionalAddressLine2') != billing.get('additionalAddressLine2') ||
+            shipping.get('zipCode') != billing.get('zipCode') ||
+            shipping.get('city') != billing.get('city') ||
+            shipping.get('stateId') != billing.get('stateId') ||
+            shipping.get('countryId') != billing.get('countryId')) {
 
             var helper = new Ext.dom.Helper;
             var iconSpec = {
@@ -455,17 +409,20 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
     },
 
     /**
-     * Creates the XTemplate for the billing information panel
+     * Creates the XTemplate for an address information panel, including department and salutation.
      *
      * @return [Ext.XTemplate] generated Ext.XTemplate
      */
-    createShippingTemplate:function () {
+    createAddressTemplate: function() {
         return new Ext.XTemplate(
             '{literal}<tpl for=".">',
                 '<div class="customer-info-pnl">',
                     '<div class="base-info">',
                         '<p>',
                             '<span>{company}</span>',
+                        '</p>',
+                        '<p>',
+                            '<span>{department}</span>',
                         '</p>',
                         '<p>',
                             '<span>{salutationSnippet}</span>&nbsp;',
