@@ -2,8 +2,8 @@
     {foreach $sEmotions as $emotion}
 
         {if $emotion.grid}
-            {block name="widgets/emotion/index/container"}
 
+            {block name="widgets/emotion/index/config"}
                 {$cellHeight = $emotion.grid.cellHeight}
                 {$cellWidth = 100 / $emotion.grid.cols}
                 {$cellSpacing = $emotion.grid.gutter}
@@ -14,6 +14,9 @@
                 {/if}
 
                 {$lastRow = 0}
+            {/block}
+
+            {block name="widgets/emotion/index/container"}
 
                 <section class="emotion--container emotion--column-{$emotion.grid.cols} emotion--mode-{$emotion.mode} emotion--{$emotion@index}"
                          data-emotion="true"
