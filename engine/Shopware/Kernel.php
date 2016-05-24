@@ -96,7 +96,6 @@ class Kernel implements HttpKernelInterface
      */
     protected $environment;
 
-
     /**
      * Flag if the kernel already booted
      * @var bool

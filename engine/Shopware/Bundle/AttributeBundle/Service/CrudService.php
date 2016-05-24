@@ -218,8 +218,8 @@ class CrudService
                 $item->setConfigured(true);
                 $item->setDbalType($column->getType()->getName());
                 $item->setSqlType($this->typeMapping->unifiedToSQL($item->getColumnType()));
-                $item->setExtJsType($this->typeMapping->unifiedToExtJS($item->getColumnType()));
                 $item->setEntity($config['entity']);
+                $item->setArrayStore($config['arrayStore']);
             }
             $items[] = $item;
         }

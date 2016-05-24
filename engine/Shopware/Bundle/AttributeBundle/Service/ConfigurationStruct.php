@@ -119,12 +119,12 @@ class ConfigurationStruct implements \JsonSerializable
     /**
      * @var string
      */
-    private $extJsType;
+    private $entity;
 
     /**
      * @var string
      */
-    private $entity;
+    private $arrayStore;
 
     /**
      * @return int
@@ -382,22 +382,6 @@ class ConfigurationStruct implements \JsonSerializable
         $this->sqlType = $sqlType;
     }
 
-    /**
-     * @return string
-     */
-    public function getExtJsType()
-    {
-        return $this->extJsType;
-    }
-
-    /**
-     * @param string $extJsType
-     */
-    public function setExtJsType($extJsType)
-    {
-        $this->extJsType = $extJsType;
-    }
-
     public function jsonSerialize()
     {
         return get_object_vars($this);
@@ -433,5 +417,21 @@ class ConfigurationStruct implements \JsonSerializable
     public function setEntity($entity)
     {
         $this->entity = $entity;
+    }
+
+    /**
+     * @return string
+     */
+    public function getArrayStore()
+    {
+        return $this->arrayStore;
+    }
+
+    /**
+     * @param string $arrayStore
+     */
+    public function setArrayStore($arrayStore)
+    {
+        $this->arrayStore = $arrayStore;
     }
 }
