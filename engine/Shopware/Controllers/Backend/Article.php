@@ -1609,8 +1609,10 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             foreach ((array)$property['value'] as $value) {
                 $propertyValueModel = null;
                 if (is_array($value) && !empty($value["raw"])) {
-                    $value = $value["raw"]["id"];
-                }
+                    $value = (int)$value["raw"]["id"];
+                }elseif(is_array($value) && !isset($value["raw"])){
+					$value = (int)$value["id"];
+				}
                 if (is_int($value)) {
                     // search for property id
                     $propertyValueModel = $propertyValueRepository->find($value);
