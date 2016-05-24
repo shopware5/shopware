@@ -284,7 +284,7 @@ Ext.define('Shopware.attribute.Form', {
             items: [{
                 xtype: 'container',
                 padding: me.fieldSetPadding,
-                defaults: { anchor: '100%' },
+                defaults: me.defaults,
                 layout: 'anchor',
                 items: items
             }]
