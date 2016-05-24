@@ -217,7 +217,7 @@ Ext.define('Shopware.apps.Order.view.list.List', {
             labelWidth: 155,
             cls: Ext.baseCSSPrefix + 'page-size',
             queryMode: 'local',
-            width: 180,
+            width: 250,
             listeners: {
                 scope: me,
                 select: me.onPageSizeChange
