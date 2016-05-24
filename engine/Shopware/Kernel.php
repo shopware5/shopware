@@ -24,7 +24,6 @@
 
 namespace Shopware;
 
-use Enlight\Event\SubscriberInterface;
 use Shopware\Bundle\AttributeBundle\DependencyInjection\Compiler\SearchRepositoryCompilerPass;
 use Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\SettingsCompilerPass;
 use Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\SynchronizerCompilerPass;
@@ -268,16 +267,12 @@ class Kernel implements HttpKernelInterface
 
         // no-plugins-mode
         $this->initializePlugins();
-
         $this->initializeContainer();
         $this->initializeShopware();
 
         foreach ($this->getPlugins() as $plugin) {
             $plugin->setContainer($this->container);
-            //$plugin->boot();
-            if ($plugin instanceof SubscriberInterface) {
-                $this->container->get('events')->addSubscriber($plugin);
-            }
+            $this->container->get('events')->addSubscriber($plugin);
         }
 
         $this->booted = true;

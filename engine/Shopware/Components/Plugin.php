@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2013 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -30,8 +30,9 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Enlight\Event\SubscriberInterface;
 
-abstract class Plugin implements ContainerAwareInterface
+abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
 {
     /**
      * @var ContainerInterface
@@ -47,6 +48,14 @@ abstract class Plugin implements ContainerAwareInterface
      * @var string
      */
     private $path;
+
+    /**
+     * @inheritdoc
+     */
+    public static function getSubscribedEvents()
+    {
+        return [];
+    }
 
     /**
      * Registers Commands.
