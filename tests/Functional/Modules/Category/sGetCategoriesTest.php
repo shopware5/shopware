@@ -219,7 +219,7 @@ class sGetCategoriesTest extends \Enlight_Components_Test_TestCase
         $category = $result[1];
 
         $keys = array('id', 'name', 'metaKeywords', 'metaDescription', 'cmsHeadline', 'cmsText',
-            'active','template', 'blog', 'path', 'external', 'hideFilter', 'hideTop', 'noViewSelect',
+            'active','template', 'blog', 'path', 'external', 'hideFilter', 'hideTop',
             'media', 'attribute', 'description', 'childrenCount', 'hidetop',
             'subcategories', 'link', 'flag'
         );

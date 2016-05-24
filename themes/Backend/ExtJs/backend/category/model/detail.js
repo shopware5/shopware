@@ -77,7 +77,6 @@ Ext.define('Shopware.apps.Category.model.Detail', {
             }
         },
         { name : 'productBoxLayout', type: 'string', useNull:true, defaultValue: null },
-        { name : 'noViewSelect', type: 'boolean' },
         { name : 'active', type: 'boolean' },
         { name : 'blog', type: 'boolean' },
         { name : 'external', type: 'string' , useNull:true, defaultValue: null},

@@ -127,10 +127,6 @@ class CategoryHydrator extends Hydrator
             $category->setTemplate($data['__category_template']);
         }
 
-        if (isset($data['__category_noviewselect'])) {
-            $category->setAllowViewSelect((bool) !$data['__category_noviewselect']);
-        }
-
         if (isset($data['__category_blog'])) {
             $category->setBlog((bool) $data['__category_blog']);
         }

@@ -429,7 +429,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
                 xtype:'checkboxgroup',
                 columns:2,
                 defaultType:'checkboxfield',
-                margin:'3 0 0 0',
+                margin:'15 0 0 0',
                 defaults:Ext.applyIf({
                     inputValue:true,
                     uncheckedValue:false
@@ -451,11 +451,6 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
                 boxLabel:me.snippets.defaultSettingsHideTopLabel,
                 name:'hideTop',
                 dataIndex:'hideTop'
-            },
-            {
-                boxLabel:me.snippets.defaultSettingsNoDesignSwitchLabel,
-                name:'noViewSelect',
-                dataIndex:'noViewSelect'
             },
             {
                 boxLabel:me.snippets.defaultSettingsNoFilterLabel,
