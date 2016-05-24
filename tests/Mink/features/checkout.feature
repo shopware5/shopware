@@ -25,6 +25,7 @@ Feature: Checkout articles
             | total         | 82,32 € |
             | sumWithoutVat | 69,18 € |
             | 19 %          | 13,14 € |
+        And the url path should be "checkout/cart"
 
         When  I remove the article on position 1
         Then  the cart should contain 1 articles with a value of "37,95 €"

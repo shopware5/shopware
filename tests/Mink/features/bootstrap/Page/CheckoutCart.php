@@ -213,6 +213,12 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
         $this->path = $originalPath;
     }
 
+    protected function verify(array $urlParameters)
+    {
+        $this->verifyResponse();
+        $this->verifyPage();
+    }
+
     /**
      * Checks the cart positions
      * Available properties are: number (required), name (required), quantity, itemPrice, sum
