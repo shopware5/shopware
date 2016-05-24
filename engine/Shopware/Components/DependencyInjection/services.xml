@@ -7,6 +7,7 @@
     <services>
         <service id="application"     synthetic="true" />
         <service id="PasswordEncoder" synthetic="true" />
+        <service id="db_connection"   synthetic="true" />
 
         <service id="bootstrap" class="Shopware_Bootstrap">
             <argument type="service" id="service_container"/>
@@ -126,10 +127,6 @@
             <argument type="string">Shopware_Components_Cron_CronJob</argument>
         </service>
 
-        <service id="db_connection" class="Pdo">
-            <factory service="shopware.db" method="getConnection" />
-        </service>
-
         <service id="shopware.db" alias="db"/>
         <service id="db" class="Enlight_Components_Db_Adapter_Pdo_Mysql">
             <factory class="Shopware\Components\DependencyInjection\Bridge\Db" method="createEnlightDbAdapter" />
@@ -199,6 +196,7 @@
             <argument>%shopware.db%</argument>
             <argument type="service" id="ModelConfig"/>
             <argument type="service" id="model_event_manager"/>
+            <argument type="service" id="db_connection"/>
         </service>
 
         <service id="model_annotations_factory" class="Shopware\Components\DependencyInjection\Bridge\ModelAnnotation" />

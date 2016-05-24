@@ -26,7 +26,7 @@ Thumbs.db
 # User installed plugins
 /engine/Shopware/Plugins/Community/
 /engine/Shopware/Plugins/Local/
-/plugins/
+/custom/plugins/
 
 # Userconfigurations
 /config.php

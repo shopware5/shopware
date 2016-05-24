@@ -24,7 +24,6 @@
 
 namespace Shopware;
 
-use Enlight\Event\SubscriberInterface;
 use Shopware\Bundle\AttributeBundle\DependencyInjection\Compiler\SearchRepositoryCompilerPass;
 use Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\SettingsCompilerPass;
 use Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\SynchronizerCompilerPass;
@@ -116,6 +115,11 @@ class Kernel implements HttpKernelInterface
      * @var string
      */
     private $pluginHash;
+
+    /**
+     * @var \PDO
+     */
+    private $connection;
 
     const VERSION      = \Shopware::VERSION;
     const VERSION_TEXT = \Shopware::VERSION_TEXT;
@@ -259,24 +263,29 @@ class Kernel implements HttpKernelInterface
     /**
      * Boots the shopware and symfony di container
      */
-    public function boot()
+    public function boot($skipDatabase = false)
     {
         if ($this->booted) {
             return;
         }
 
-        // no-plugins-mode
-        $this->initializePlugins();
+        if (!$skipDatabase) {
+            $dbConn = $this->config['db'];
+            $this->connection = Components\DependencyInjection\Bridge\Db::createPDO($dbConn);
+            $this->initializePlugins();
+        }
 
         $this->initializeContainer();
         $this->initializeShopware();
 
         foreach ($this->getPlugins() as $plugin) {
             $plugin->setContainer($this->container);
-            //$plugin->boot();
-            if ($plugin instanceof SubscriberInterface) {
-                $this->container->get('events')->addSubscriber($plugin);
+
+            if (!$plugin->isActive()) {
+                continue;
             }
+
+            $this->container->get('events')->addSubscriber($plugin);
         }
 
         $this->booted = true;
@@ -297,8 +306,10 @@ class Kernel implements HttpKernelInterface
         $classLoader = new Psr4ClassLoader();
         $classLoader->register(true);
 
-        $pluginRoot = $this->getRootDir().'/plugins';
+        $stmt = $this->connection->query('SELECT name FROM s_core_plugins WHERE namespace LIKE "ShopwarePlugins" AND active = 1 AND installation_date IS NOT NULL;');
+        $activePlugins = $stmt->fetchAll(\PDO::FETCH_COLUMN);
 
+        $pluginRoot = $this->getRootDir().'/custom/plugins';
         foreach (new \DirectoryIterator($pluginRoot) as $pluginDir) {
             if ($pluginDir->isDot()) {
                 continue;
@@ -310,13 +321,15 @@ class Kernel implements HttpKernelInterface
                 continue;
             }
 
-            $namespace = 'ShopwarePlugins\\' . $pluginName;
+            $namespace = $pluginName;
             $className = '\\' . $namespace . '\\' .  $pluginName;
 
             $classLoader->addPrefix($namespace, $pluginDir->getPathname());
 
+            $isActive = in_array($pluginName, $activePlugins);
+
             /** @var Plugin $plugin */
-            $plugin = new $className();
+            $plugin = new $className($isActive);
             $this->plugins[$plugin->getName()] = $plugin;
         }
 
@@ -400,6 +413,7 @@ class Kernel implements HttpKernelInterface
 
         $this->container = new $class();
         $this->container->set('kernel', $this);
+        $this->container->set('db_connection', $this->connection);
     }
 
     /**
@@ -738,6 +752,10 @@ class Kernel implements HttpKernelInterface
         }
 
         foreach ($this->plugins as $plugin) {
+            if (!$plugin->isActive()) {
+                continue;
+            }
+
             $container->addObjectResource($plugin);
             $plugin->build($container);
         }

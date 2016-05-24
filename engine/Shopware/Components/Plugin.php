@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2013 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -30,8 +30,9 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Enlight\Event\SubscriberInterface;
 
-abstract class Plugin implements ContainerAwareInterface
+abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
 {
     /**
      * @var ContainerInterface
@@ -47,6 +48,35 @@ abstract class Plugin implements ContainerAwareInterface
      * @var string
      */
     private $path;
+
+    /**
+     * @var bool
+     */
+    private $isActive;
+
+    /**
+     * @inheritdoc
+     */
+    public static function getSubscribedEvents()
+    {
+        return [];
+    }
+
+    /**
+     * @param bool $isActive
+     */
+    final public function __construct($isActive)
+    {
+        $this->isActive = (bool)$isActive;
+    }
+
+    /**
+     * @return bool
+     */
+    final public function isActive()
+    {
+        return $this->isActive;
+    }
 
     /**
      * Registers Commands.
@@ -93,9 +123,7 @@ abstract class Plugin implements ContainerAwareInterface
      */
     final protected function loadFiles(ContainerBuilder $container)
     {
-        $files = glob($this->getPath().'/Resources/config/*.xml');
-
-        if (empty($files)) {
+        if (!is_file($this->getPath().'/Resources/service.xml')) {
             return;
         }
 
@@ -104,9 +132,7 @@ abstract class Plugin implements ContainerAwareInterface
             new FileLocator()
         );
 
-        foreach ($files as $file) {
-            $loader->load($file);
-        }
+        $loader->load($this->getPath().'/Resources/service.xml');
     }
 
     /**
