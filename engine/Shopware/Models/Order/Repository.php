@@ -237,7 +237,6 @@ class Repository extends ModelRepository
      * @param null $orderBy
      * @param null $offset
      * @param null $limit
-     * @internal param $ids
      * @return \Doctrine\ORM\Query
      */
     public function getBackendOrdersQuery($filters = null, $orderBy = null, $offset = null, $limit = null)
