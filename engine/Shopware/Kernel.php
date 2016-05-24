@@ -264,16 +264,18 @@ class Kernel implements HttpKernelInterface
     /**
      * Boots the shopware and symfony di container
      */
-    public function boot()
+    public function boot($skipDatabase = false)
     {
         if ($this->booted) {
             return;
         }
 
-        $dbConn = $this->config['db'];
-        $this->connection = Components\DependencyInjection\Bridge\Db::createPDO($dbConn);
+        if (!$skipDatabase) {
+            $dbConn = $this->config['db'];
+            $this->connection = Components\DependencyInjection\Bridge\Db::createPDO($dbConn);
+            $this->initializePlugins();
+        }
 
-        $this->initializePlugins();
         $this->initializeContainer();
         $this->initializeShopware();
 
