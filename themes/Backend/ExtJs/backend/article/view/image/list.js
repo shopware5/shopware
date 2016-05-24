@@ -334,7 +334,7 @@ Ext.define('Shopware.apps.Article.view.image.List', {
         var me = this;
 
         me.addButton = Ext.create('Ext.button.Button', {
-            text: 'Hinzufügen',
+            text: '{s name="image_list_add_button"}{/s}',
             iconCls: 'sprite-plus-circle-frame',
             handler: function() {
                 me.openMediaManager();
