@@ -67,6 +67,9 @@ class FileSystem
 
         /** @var $fileInfo \DirectoryIterator */
         foreach (new \DirectoryIterator($directory) as $fileInfo) {
+            
+            if (preg_match("/stats/", $fileInfo->getPathname())) continue;
+            
             if ($fileInfo->isDot()) {
                 continue;
             }
