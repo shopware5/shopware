@@ -440,7 +440,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
         try {
             /** @var PluginViewService $pluginViewService */
             $pluginViewService = $this->get('shopware_plugininstaller.plugin_service_view');
-            $data = $pluginViewService->getPlugins($context);
+            $data = $pluginViewService->getPlugin($context);
         } catch (Exception $e) {
             $this->handleException($e);
             return;
