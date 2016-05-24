@@ -140,6 +140,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
         me.baseFieldSet.shopStoreCombo.bindStore(stores.getShopStore);
         me.debitFieldSet.paymentCombo.bindStore(stores.getPaymentStore);
         me.paymentStore = stores.getPaymentStore;
+        me.countryStore = stores.getCountryStore;
 
         if(me.hasOwnProperty('orderGrid')) {
             me.orderGrid.dispatchStore = stores.getDispatchStore;
@@ -151,9 +152,22 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
 
         if (!me.record.get('id') ) {
             me.detailForm.getForm().clearInvalid();
+        } else {
+            me.countryStateStore = Ext.create('Shopware.apps.Base.store.CountryState');
+            me.countryStateStore.load({
+                callback: function() {
+                    me.refreshTemplateContainer();
+                }
+            });
         }
     },
 
+    refreshTemplateContainer: function() {
+        var me = this;
+
+        me.billingContainer.update(me.record.getBilling().first().getData());
+        me.shippingContainer.update(me.record.getShipping().first().getData());
+    },
 
     /**
      * Helper method which creates the tabpanel.
@@ -427,7 +441,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
         me.orderGrid = Ext.create('Shopware.apps.Customer.view.order.List', {
             flex: 1,
             gridStore: gridStore.load()
-        })
+        });
 
         me.orderToolbar = me.createOrderToolbar();
 
@@ -525,10 +539,8 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
             title: '{s name="billingContainerTitle"}Default billing address{/s}',
             bodyPadding: 10,
             flex: 1,
-            style: {
-                background: '#fff'
-            },
             paddingRight: 10,
+            cls: 'shopware-form',
             items: [
                 me.billingContainer
             ]
@@ -541,6 +553,8 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
      * @return [Ext.XTemplate] generated Ext.XTemplate
      */
     createBillingTemplate:function () {
+        var me = this;
+
         return new Ext.XTemplate(
             '{literal}<tpl for=".">',
                 '<div class="customer-info-pnl">',
@@ -574,9 +588,23 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
                             '<span>{zipCode}</span>&nbsp;',
                             '<span>{city}</span>',
                         '</p>',
+                        '<p><span>{[this.getCountry(values.countryId)]}</span></p>',
+                        '<p><span>{[this.getCountryState(values.stateId)]}</span></p>',
                     '</div>',
                 '</div>',
-            '</tpl>{/literal}'
+            '</tpl>{/literal}',
+            {
+                getCountry: function(countryId) {
+                    return me.countryStore.getById(countryId).get('name');
+                }
+            },
+            {
+                getCountryState: function(stateId) {
+                    if (stateId && me.countryStateStore.count() > 0) {
+                        return me.countryStateStore.getById(stateId).get('name');
+                    }
+                }
+            }
         );
     },
 
@@ -607,7 +635,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
             bodyPadding: 10,
             flex: 1,
             marginLeft: 10,
-            style: 'padding: 0 8 0 0 !important;background: #fff;',
+            cls: 'shopware-form',
             items: [
                 me.shippingContainer
             ]

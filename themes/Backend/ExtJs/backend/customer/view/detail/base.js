@@ -164,7 +164,8 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
             cls: Ext.baseCSSPrefix + 'field-set-container',
             defaults:{
                 labelWidth:155,
-                xtype:'textfield'
+                xtype:'textfield',
+                anchor: '95%'
             },
             items: me.createBaseFormRight()
         });
@@ -227,6 +228,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
         me.customerMail = Ext.create('Ext.form.field.Text', {
             fieldLabel:me.snippets.email.label,
             labelWidth:155,
+            anchor: '95%',
             name:'email',
             allowBlank:false,
             required:true,
@@ -255,6 +257,8 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
                 xtype: 'displayfield',
                 /*{/if}*/
                 name: 'number',
+                anchor: '95%',
+                labelWidth: 155,
                 fieldLabel: me.snippets.number.label,
                 helpText: me.snippets.number.helpText,
                 helpWidth: 360,
@@ -284,6 +288,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
             name:'confirm',
             inputType:'password',
             anchor: '95%',
+            labelWidth: 155,
             allowBlank:!pwRequired,
             required:pwRequired,
             fieldLabel:me.snippets.confirm.label,
@@ -304,6 +309,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
 
         return [{
             name:'active',
+            anchor: '95%',
             boxLabel:me.snippets.active.box,
             fieldLabel:me.snippets.active.field,
             xtype:'checkbox',
@@ -332,10 +338,9 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
             cls: Ext.baseCSSPrefix + 'password-button',
             iconCls:'sprite-license-key',
             action:'create-password',
+            labelWidth: 155,
             tooltip:me.snippets.password.button,
-            style: {
-                display: 'inline-block'
-            },
+            width: 25,
             /**
              * Add button handler to fire the generatePassword event which is handled
              * in the detail controller. The detail controller generates a password and set it into the password field
@@ -349,18 +354,16 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
         //button handler to pass the field to the generate password event
         me.passwordField = Ext.create('Ext.form.field.Text', {
             name:'newPassword',
-            anchor: '92%',
+            flex: 1,
             inputType:'password',
+            labelWidth: 155,
             allowBlank:!pwRequired,
             required:pwRequired,
             fieldLabel:me.snippets.password.label,
             supportText:me.snippets.password.support,
             cls: Ext.baseCSSPrefix + 'password-field',
-            //can't be set in sass.. extJs don't resize the password field.
-            style:{
-                display: 'inline-block',
-                margin: '0 8px 0 0 !important'
-            },
+            validateOnBlur: true,
+            validateOnChange: false,
             validator:function (value) {
                 if ( Ext.String.trim(value) == Ext.String.trim(me.confirmField.getValue()) ) {
                     me.confirmField.clearInvalid();
@@ -373,13 +376,9 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
 
         //create a container for the password field to append the generate password button
         return Ext.create('Ext.container.Container', {
-            layout:'anchor',
+            layout:'hbox',
+            anchor: '95%',
             cls: Ext.baseCSSPrefix + 'password-container',
-            defaults:{
-                labelWidth:155,
-                validateOnBlur:true,
-                validateOnChange:false
-            },
             height:70,
             items:[ me.passwordField, me.passwordButton ]
         });

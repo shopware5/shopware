@@ -359,11 +359,10 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
             return;
         }
 
-        form.getForm().updateRecord(model);
-
         if (!model.get('id')) {
             var addressData = {};
             Ext.each(me.getDetailWindow().addressForm.query('field'), function(field) {
+                field.submitValue = false;
                 addressData[field.getName()] = field.getValue();
             });
 
@@ -377,6 +376,8 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
             model.getBilling().add(billingModel);
             model.getShipping().add(shippingModel);
         }
+
+        form.getForm().updateRecord(model);
 
         //save the model and check in the callback function if the operation was successfully
         model.save({

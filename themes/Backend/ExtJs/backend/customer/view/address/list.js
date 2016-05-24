@@ -159,6 +159,7 @@ Ext.define('Shopware.apps.Customer.view.address.List', {
 
         return {
             columns: columns,
+            searchField: false,
             detailWindow: 'Shopware.apps.Customer.view.address.detail.Window'
         }
     },

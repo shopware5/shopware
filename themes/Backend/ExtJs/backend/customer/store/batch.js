@@ -79,7 +79,7 @@ Ext.define('Shopware.apps.Customer.store.Batch', {
             totalProperty:'total'
         }
 
-    },
+    }
 
 });
 //{/block}
