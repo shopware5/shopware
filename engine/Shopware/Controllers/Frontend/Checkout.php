@@ -1718,7 +1718,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     {
         $address = $this->get('models')->find(Address::class, $addressId);
 
-        return $this->get('shopware_account.address_service')->isValid($address);
+        return $this->get('shopware_account.address_validator')->isValid($address);
     }
 
     /**

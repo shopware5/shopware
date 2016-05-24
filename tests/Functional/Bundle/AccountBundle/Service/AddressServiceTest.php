@@ -88,7 +88,7 @@ class AddressServiceTest extends \Enlight_Components_Test_TestCase
     }
 
     /**
-     * @expectedException \Symfony\Component\Validator\Exception\ValidatorException
+     * @expectedException \Shopware\Components\Api\Exception\ValidationException
      */
     public function testCreateWithEmptyData()
     {
@@ -118,7 +118,7 @@ class AddressServiceTest extends \Enlight_Components_Test_TestCase
     }
 
     /**
-     * @expectedException \Symfony\Component\Validator\Exception\ValidatorException
+     * @expectedException \Shopware\Components\Api\Exception\ValidationException
      */
     public function testCreateWithEmptyAddress()
     {
@@ -259,42 +259,6 @@ class AddressServiceTest extends \Enlight_Components_Test_TestCase
         $this->assertEquals($address->getState() ? $address->getState()->getId() : null, $shipping->getStateId());
         $this->assertEquals($address->getAdditionalAddressLine1(), $shipping->getAdditionalAddressLine1());
         $this->assertEquals($address->getAdditionalAddressLine2(), $shipping->getAdditionalAddressLine2());
-    }
-
-    /**
-     * @param $addressId
-     * @depends testUpdateBilling
-     */
-    public function testIsDuplicateShouldBeTrue($addressId)
-    {
-        $address = self::$modelManager->find(Address::class, $addressId);
-        $addressArray = self::$modelManager->toArray($address);
-
-        $addressArray['country'] = $addressArray['country']['id'];
-        $addressArray['state'] = !empty($addressArray['state']) ? $addressArray['state']['id'] : null;
-
-        $this->assertTrue(
-            self::$addressService->isDuplicate($addressArray, $address->getCustomer()->getId())
-        );
-    }
-
-    /**
-     * @param $addressId
-     * @depends testUpdateBilling
-     */
-    public function testIsDuplicateShouldBeFalse($addressId)
-    {
-        $address = self::$modelManager->find(Address::class, $addressId);
-        $address->setFirstname('Gru');
-        $address->setLastname('Madman');
-        $addressArray = self::$modelManager->toArray($address);
-
-        $addressArray['country'] = $addressArray['country']['id'];
-        $addressArray['state'] = !empty($addressArray['state']) ? $addressArray['state']['id'] : null;
-
-        $this->assertFalse(
-            self::$addressService->isDuplicate($addressArray, $address->getCustomer()->getId())
-        );
     }
 
     /**

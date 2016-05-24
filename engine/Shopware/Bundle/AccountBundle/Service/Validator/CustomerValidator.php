@@ -31,6 +31,7 @@ use Shopware\Models\Customer\Customer;
 use Symfony\Component\Validator\Constraints\Choice;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\ConstraintValidatorInterface;
+use Symfony\Component\Validator\Validator\ContextualValidatorInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
@@ -55,6 +56,11 @@ class CustomerValidator implements CustomerValidatorInterface
     private $config;
 
     /**
+     * @var ContextualValidatorInterface
+     */
+    private $validationContext;
+
+    /**
      * CustomerValidator constructor.
      * @param ValidatorInterface $validator
      * @param ContextServiceInterface $context
@@ -76,29 +82,46 @@ class CustomerValidator implements CustomerValidatorInterface
      */
     public function validate(Customer $customer)
     {
-        $this->validateField($customer->getFirstname(), [new NotBlank()]);
-        $this->validateField($customer->getLastname(), [new NotBlank()]);
-        $this->validateField($customer->getSalutation(), $this->getSalutationConstraints());
-        $this->validateField($customer->getEmail(), [
+        $this->validationContext = $this->validator->startContext();
+
+        $this->validateField('firstname', $customer->getFirstname(), [new NotBlank()]);
+        $this->validateField('lastname', $customer->getLastname(), [new NotBlank()]);
+        $this->validateField('salutation', $customer->getSalutation(), $this->getSalutationConstraints());
+        $this->validateField('email', $customer->getEmail(), [
             new CustomerEmail([
                 'shop' => $this->context->getShopContext()->getShop(),
                 'customerId' => $customer->getId(),
                 'accountMode' => $customer->getAccountMode()
             ])
         ]);
+
+        if ($this->validationContext->getViolations()->count()) {
+            throw new ValidationException($this->validationContext->getViolations());
+        }
     }
 
     /**
+     * @inheritdoc
+     */
+    public function isValid(Customer $customer)
+    {
+        try {
+            $this->validate($customer);
+        } catch (ValidationException $ex) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @param string $property
      * @param string $value
      * @param ConstraintValidatorInterface[] $constraints
-     * @throws ValidationException
      */
-    private function validateField($value, $constraints)
+    private function validateField($property, $value, $constraints)
     {
-        $violations = $this->validator->validate($value, $constraints);
-        if ($violations->count()) {
-            throw new ValidationException($violations);
-        }
+        $this->validationContext->atPath($property)->validate($value, $constraints);
     }
 
     /**

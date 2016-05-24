@@ -1527,11 +1527,9 @@ class sAdmin
         $addressId = $this->session->offsetGet('checkoutBillingAddressId');
 
         try {
-            $legacyAddress = Shopware()->Container()
-                ->get('shopware_account.address_service')
-                ->convertToLegacyArray(
-                    $addressRepository->getOneByUser($addressId, $this->session->offsetGet('sUserId'))
-                );
+            $legacyAddress = $this->convertToLegacyAddressArray(
+                $addressRepository->getOneByUser($addressId, $this->session->offsetGet('sUserId'))
+            );
 
             $userData['billingaddress'] = array_merge($userData['billingaddress'], $legacyAddress);
             $userData = $this->completeUserCountryData($userData);
@@ -1559,11 +1557,9 @@ class sAdmin
         $addressId = $this->session->offsetGet('checkoutShippingAddressId');
 
         try {
-            $legacyAddress = Shopware()->Container()
-                ->get('shopware_account.address_service')
-                ->convertToLegacyArray(
-                    $addressRepository->getOneByUser($addressId, $this->session->offsetGet('sUserId'))
-                );
+            $legacyAddress = $this->convertToLegacyAddressArray(
+                $addressRepository->getOneByUser($addressId, $this->session->offsetGet('sUserId'))
+            );
 
             $userData['shippingaddress'] = array_merge($userData['shippingaddress'], $legacyAddress);
             $userData = $this->completeUserCountryData($userData, true);
@@ -1573,6 +1569,46 @@ class sAdmin
         }
 
         return $userData;
+    }
+
+    /**
+     * Converts an address to the array key structure of a legacy billing or shipping address
+     *
+     * @param Address $address
+     * @return array
+     */
+    private function convertToLegacyAddressArray(Address $address)
+    {
+        $output = Shopware()->Models()->toArray($address);
+
+        $output = array_merge($output, [
+            'id' => $address->getId(),
+            'userID' => $address->getCustomer()->getId(),
+            'company' => $address->getCompany(),
+            'department' => $address->getDepartment(),
+            'salutation' => $address->getSalutation(),
+            'title' => $address->getTitle(),
+            'firstname' => $address->getFirstname(),
+            'lastname' => $address->getLastname(),
+            'street' => $address->getStreet(),
+            'zipcode' => $address->getZipcode(),
+            'city' => $address->getCity(),
+            'phone' => $address->getPhone(),
+            'countryID' => $address->getCountry()->getId(),
+            'stateID' => $address->getState() ? $address->getState()->getId() : null,
+            'ustid' => $address->getVatId(),
+            'additional_address_line1' => $address->getAdditionalAddressLine1(),
+            'additional_address_line2' => $address->getAdditionalAddressLine2(),
+            'attributes' => []
+        ]);
+
+        if ($address->getAttribute()) {
+            $data = Shopware()->Models()->toArray($address->getAttribute());
+
+            $output['attributes'] = $data;
+        }
+
+        return $output;
     }
 
     /**

@@ -392,8 +392,8 @@ EOD
             $parent = self::getContentBlock($parent);
         }
 
-        foreach($keys as $key) {
-            if($parent->hasLink($locatorArray[$key][self::$language])) {
+        foreach ($keys as $key) {
+            if ($parent->hasLink($locatorArray[$key][self::$language])) {
                 continue;
             }
 
@@ -447,8 +447,8 @@ EOD
             $parent = self::getContentBlock($parent);
         }
 
-        foreach($keys as $key) {
-            if($parent->hasButton($locatorArray[$key][self::$language])) {
+        foreach ($keys as $key) {
+            if ($parent->hasButton($locatorArray[$key][self::$language])) {
                 continue;
             }
 
@@ -518,6 +518,10 @@ EOD
                     $fieldName = sprintf('%s[%s]', $key, $tempFieldName);
                 }
 
+                if (strpos($fieldName, ".") !== false) {
+                    $fieldName = str_replace(".", "][", $fieldName);
+                }
+                
                 $field = $form->findField($fieldName);
 
                 if (empty($field)) {

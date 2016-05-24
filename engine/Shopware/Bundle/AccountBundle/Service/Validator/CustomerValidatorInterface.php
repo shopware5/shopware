@@ -38,4 +38,10 @@ interface CustomerValidatorInterface
      * @throws ValidationException
      */
     public function validate(Customer $customer);
+
+    /**
+     * @param Customer $customer
+     * @return bool
+     */
+    public function isValid(Customer $customer);
 }
