@@ -101,16 +101,4 @@ class Shopware_Controllers_Api_Caches extends Shopware_Controllers_Api_Rest
 
         $this->View()->assign(array('success' => true));
     }
-
-    /**
-     * Delete cache
-     *
-     * DELETE /api/caches/
-     */
-    public function batchDeleteAction()
-    {
-        $this->resource->delete('all');
-
-        $this->View()->assign(array('success' => true));
-    }
 }

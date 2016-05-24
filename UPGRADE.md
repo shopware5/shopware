@@ -209,6 +209,7 @@ In this document you will find a changelog of the important changes related to t
     * `sOrder::sGetOrderNumber()`
     * `Shopware_Components_Document::saveDocument()`
 * HttpCache: Added possibility to add multiple, comma separated proxy URLs
+* API cache endpoint: Changed batchDelete in a way, that multiple cache types can be invalidated
 * Removed `landingPageTeaser` and `landingPageBlock` fields from emotion shopping worlds.
 * Removed unnecessary method `getCampaignByCategoryQuery()` from `Models/Emotion/Repository.php`.
 * Removed template blocks for campaign boxes corresponding to the removed emotion fields.
