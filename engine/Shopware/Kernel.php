@@ -298,7 +298,7 @@ class Kernel implements HttpKernelInterface
         $classLoader = new Psr4ClassLoader();
         $classLoader->register(true);
 
-        $pluginRoot = $this->getRootDir().'/plugins';
+        $pluginRoot = $this->getRootDir().'/custom/plugins';
 
         foreach (new \DirectoryIterator($pluginRoot) as $pluginDir) {
             if ($pluginDir->isDot()) {
