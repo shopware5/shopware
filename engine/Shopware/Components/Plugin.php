@@ -93,9 +93,7 @@ abstract class Plugin implements ContainerAwareInterface
      */
     final protected function loadFiles(ContainerBuilder $container)
     {
-        $files = glob($this->getPath().'/Resources/config/*.xml');
-
-        if (empty($files)) {
+        if (!is_file($this->getPath().'/Resources/service.xml')) {
             return;
         }
 
@@ -104,9 +102,7 @@ abstract class Plugin implements ContainerAwareInterface
             new FileLocator()
         );
 
-        foreach ($files as $file) {
-            $loader->load($file);
-        }
+        $loader->load($this->getPath().'/Resources/service.xml');
     }
 
     /**

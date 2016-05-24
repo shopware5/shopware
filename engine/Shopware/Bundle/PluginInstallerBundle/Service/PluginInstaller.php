@@ -65,12 +65,12 @@ class PluginInstaller implements PluginInstallerInterface
 
         $this->em->transactional(function ($em) use ($pluginBootstrap, $plugin) {
 
-            if (is_file($pluginBootstrap->getPath().'/config.xml')) {
-                $this->installForm($plugin, $pluginBootstrap->getPath().'/config.xml');
+            if (is_file($pluginBootstrap->getPath().'/Resources/config.xml')) {
+                $this->installForm($plugin, $pluginBootstrap->getPath().'/Resources/config.xml');
             }
 
-            if (is_file($pluginBootstrap->getPath().'/menu.xml')) {
-                $this->installMenu($plugin, $pluginBootstrap->getPath().'/menu.xml');
+            if (is_file($pluginBootstrap->getPath().'/Resources/menu.xml')) {
+                $this->installMenu($plugin, $pluginBootstrap->getPath().'/Resources/menu.xml');
             }
 
             $pluginBootstrap->install();
@@ -141,16 +141,15 @@ class PluginInstaller implements PluginInstallerInterface
             $currentVersion = $plugin->getVersion();
             $updateVersion  = $plugin->getUpdateVersion();
 
-            if (is_file($pluginBootstrap->getPath().'/config.xml')) {
-                $this->installForm($plugin, $pluginBootstrap->getPath().'/config.xml');
+            if (is_file($pluginBootstrap->getPath().'/Resources/config.xml')) {
+                $this->installForm($plugin, $pluginBootstrap->getPath().'/Resources/config.xml');
             }
 
-            if (is_file($pluginBootstrap->getPath().'/menu.xml')) {
-                $this->installMenu($plugin, $pluginBootstrap->getPath().'/menu.xml');
+            if (is_file($pluginBootstrap->getPath().'/Resources/menu.xml')) {
+                $this->installMenu($plugin, $pluginBootstrap->getPath().'/Resources/menu.xml');
             }
 
             $pluginBootstrap->update($currentVersion, $updateVersion);
-
 
             $plugin->setVersion($updateVersion);
             $plugin->setUpdateVersion(null);
