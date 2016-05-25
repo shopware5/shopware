@@ -98,7 +98,8 @@ class StoreFrontCriteriaFactory implements StoreFrontCriteriaFactoryInterface
         );
 
         $this->eventManager->notify('Shopware_SearchBundle_Create_Base_Criteria', [
-            'criteria' => $criteria
+            'criteria' => $criteria,
+            'categoryIds' => $categoryIds
         ]);
         return $criteria;
     }
