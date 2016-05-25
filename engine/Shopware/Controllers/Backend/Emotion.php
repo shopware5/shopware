@@ -1253,8 +1253,9 @@ EOD;
      */
     private function getSeoUrlFromRouter($emotionId, $shopId)
     {
+        $repository = Shopware()->Container()->get('models')->getRepository(Shop::class);
         /** @var Shop $shop */
-        $shop = Shopware()->Container()->get('models')->find(Shop::class, $shopId);
+        $shop = $repository->getActiveById($shopId);
         if (empty($shop)) {
             return false;
         }
