@@ -60,7 +60,7 @@
             {/block}
         </div>
     {/block}
-    <div class="listing--actions block-group is--advanced">
+    <div class="period--selection--form panel has--border is--rounded">
         {block name='frontend_account_partner_statistic_listing_actions_top'}
             <div class="top">
                 {block name="frontend_account_partner_statistic_listing_date"}
