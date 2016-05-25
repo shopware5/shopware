@@ -39,7 +39,7 @@
          */
         onAddArticleCompare: function (event) {
             var me = this,
-                $target = $(event.target),
+                $target = $(event.currentTarget),
                 addArticleUrl = $target.attr('href');
 
             event.preventDefault();
