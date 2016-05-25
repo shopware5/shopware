@@ -123,7 +123,7 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
      */
     final protected function loadFiles(ContainerBuilder $container)
     {
-        if (!is_file($this->getPath().'/Resources/service.xml')) {
+        if (!is_file($this->getPath().'/Resources/services.xml')) {
             return;
         }
 
@@ -132,7 +132,7 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
             new FileLocator()
         );
 
-        $loader->load($this->getPath().'/Resources/service.xml');
+        $loader->load($this->getPath().'/Resources/services.xml');
     }
 
     /**
