@@ -7439,7 +7439,7 @@ INSERT INTO `s_order_basket_attributes` (`id`, `basketID`, `attribute1`, `attrib
 
 TRUNCATE TABLE `s_order_billingaddress`;
 INSERT INTO `s_order_billingaddress` (`id`, `userID`, `orderID`, `company`, `department`, `salutation`, `firstname`, `lastname`, `street`, `zipcode`, `city`, `phone`, `countryID`, `stateID`, `ustid`) VALUES
-(1, 2, 15, 'B2B', 'Einkauf', 'company', 'Händler', 'Kundengruppe-Netto', 'Musterweg 1', '00000', 'Musterstadt', '012345 / 6789', 2, 3, ''),
+(1, 2, 15, 'B2B', 'Einkauf', 'mr', 'Händler', 'Kundengruppe-Netto', 'Musterweg 1', '00000', 'Musterstadt', '012345 / 6789', 2, 3, ''),
 (2, 1, 57, 'shopware AG', '', 'mr', 'Max', 'Mustermann', 'Mustermannstraße 92', '48624', 'Schöppingen', '', 2, 3, '');
 
 TRUNCATE TABLE `s_order_billingaddress_attributes`;
@@ -7515,7 +7515,7 @@ INSERT INTO `s_order_number` (`id`, `number`, `name`, `desc`) VALUES
 
 TRUNCATE TABLE `s_order_shippingaddress`;
 INSERT INTO `s_order_shippingaddress` (`id`, `userID`, `orderID`, `company`, `department`, `salutation`, `firstname`, `lastname`, `street`, `zipcode`, `city`, `countryID`, `stateID`) VALUES
-(1, 2, 15, 'B2B', 'Einkauf', 'company', 'Händler', 'Kundengruppe-Netto', 'Musterweg 1', '00000', 'Musterstadt', 2, 3),
+(1, 2, 15, 'B2B', 'Einkauf', 'mr', 'Händler', 'Kundengruppe-Netto', 'Musterweg 1', '00000', 'Musterstadt', 2, 3),
 (2, 1, 57, 'shopware AG', '', 'mr', 'Max', 'Mustermann', 'Mustermannstraße 92', '48624', 'Schöppingen', 2, 0);
 
 TRUNCATE TABLE `s_order_shippingaddress_attributes`;
