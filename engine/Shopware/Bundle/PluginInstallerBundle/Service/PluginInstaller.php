@@ -192,12 +192,13 @@ class PluginInstaller implements PluginInstallerInterface
         $plugins = $kernel->getPlugins();
 
         foreach ($plugins as $plugin) {
-            if (!is_file($plugin->getPath().'/plugin.xml')) {
-                continue;
+            $pluginInfoPath = $plugin->getPath().'/plugin.xml';
+            if (is_file($pluginInfoPath)) {
+                $xmlConfigReader = new XmlPluginInfoReader();
+                $info = $xmlConfigReader->read($pluginInfoPath);
+            } else {
+                $info = [];
             }
-
-            $xmlConfigReader = new XmlPluginInfoReader();
-            $updatePluginInfo = $xmlConfigReader->read($plugin->getPath().'/plugin.xml');
 
             $currentPluginInfo = $this->em->getConnection()->fetchAssoc(
                 'SELECT * FROM s_core_plugins WHERE `name` LIKE ?',
@@ -205,20 +206,26 @@ class PluginInstaller implements PluginInstallerInterface
             );
 
             $description = '';
-            if (isset($updatePluginInfo['description'])) {
-                foreach ($updatePluginInfo['description'] as $locale => $string) {
+            if (isset($info['description'])) {
+                foreach ($info['description'] as $locale => $string) {
                     $description .= sprintf('<div lang="%s">%s</div>', $locale, $string);
                 }
             }
 
+            $info['description'] = $description;
+            $info['version'] = isset($info['version']) ? $info['version'] : '0.0.1';
+            $info['author'] = isset($info['author']) ? $info['author'] : null;
+            $info['link'] = isset($info['link']) ? $info['link'] : null;
+            $info['label'] = isset($info['label']) && isset($info['label']['en']) ? $info['label']['en'] : $plugin->getName();
+
             $data = [
                 'namespace'          => 'ShopwarePlugins',
-                'version'            => $updatePluginInfo['version'],
-                'author'             => $updatePluginInfo['author'],
+                'version'            => $info['version'],
+                'author'             => $info['author'],
                 'name'               => $plugin->getName(),
-                'link'               => $updatePluginInfo['link'],
-                'label'              => $updatePluginInfo['label']['en'],
-                'description'        => $description,
+                'link'               => $info['link'],
+                'label'              => $info['label'],
+                'description'        => $info['description'],
                 'capability_update'  => true,
                 'capability_install' => true,
                 'capability_enable'  => true,
@@ -226,9 +233,9 @@ class PluginInstaller implements PluginInstallerInterface
             ];
 
             if ($currentPluginInfo) {
-                if ($this->hasInfoNewerVersion($updatePluginInfo['version'], $currentPluginInfo['version'])) {
+                if ($this->hasInfoNewerVersion($info['version'], $currentPluginInfo['version'])) {
                     $data['version']        = $currentPluginInfo['version'];
-                    $data['update_version'] = $updatePluginInfo['version'];
+                    $data['update_version'] = $info['version'];
                 }
 
                 $this->em->getConnection()->update(
