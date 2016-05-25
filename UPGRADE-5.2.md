@@ -27,6 +27,7 @@ This changelog references changes done in Shopware 5.2 patch versions.
     * `themes/Frontend/Responsive/frontend/_public/src/js/jquery.collapse-cart.js`
     * `themes/Frontend/Responsive/frontend/_public/src/js/jquery.product-compare-add.js`
     * `themes/Frontend/Responsive/frontend/_public/src/js/jquery.product-compare-menu.js`
+* Added event `Shopware_SearchBundle_Create_Base_Criteria` in `Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactory::createBaseCriteria()`
 
 ## 5.2.3
 
