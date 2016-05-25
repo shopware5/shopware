@@ -23,7 +23,6 @@
  */
 
 use Shopware\Bundle\AccountBundle\Service\AddressServiceInterface;
-use Shopware\Bundle\AccountBundle\Service\AddressImportServiceInterface;
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Components\NumberRangeIncrementerInterface;
 use Shopware\Components\Validator\EmailValidatorInterface;
@@ -131,11 +130,6 @@ class sAdmin
     public $sSYSTEM;
 
     /**
-     * @var AddressImportServiceInterface
-     */
-    private $addressImportService;
-
-    /**
      * @var AddressServiceInterface
      */
     private $addressService;
@@ -167,7 +161,6 @@ class sAdmin
         sSystem                                          $systemModule          = null,
         StoreFrontBundle\Service\ContextServiceInterface $contextService        = null,
         EmailValidatorInterface                          $emailValidator        = null,
-        AddressImportServiceInterface                    $addressImportService  = null,
         AddressServiceInterface                          $addressService        = null,
         NumberRangeIncrementerInterface                  $numberRangeIncrementer    = null
     ) {
@@ -187,7 +180,6 @@ class sAdmin
         $this->contextService = $contextService ? : Shopware()->Container()->get('shopware_storefront.context_service');
         $this->emailValidator = $emailValidator ? : Shopware()->Container()->get('validator.email');
         $this->subshopId = $this->contextService->getShopContext()->getShop()->getParentId();
-        $this->addressImportService = $addressImportService ? : Shopware()->Container()->get('shopware_account.address_import_service');
         $this->addressService = $addressService ? : Shopware()->Container()->get('shopware_account.address_service');
         $this->attributeLoader = Shopware()->Container()->get('shopware_attribute.data_loader');
         $this->attributePersister = Shopware()->Container()->get('shopware_attribute.data_persister');
@@ -1424,12 +1416,7 @@ class sAdmin
      */
     public function sGetUserNameById($id)
     {
-        return $this->db->fetchRow(
-            'SELECT firstname, lastname
-            FROM s_user_billingaddress
-            WHERE userID = ?',
-            array($id)
-        ) ? : array();
+        return $this->db->fetchRow('SELECT firstname, lastname FROM s_user WHERE id = ?', [$id]) ? : [];
     }
 
     /**

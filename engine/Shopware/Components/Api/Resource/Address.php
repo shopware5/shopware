@@ -24,11 +24,13 @@
 
 namespace Shopware\Components\Api\Resource;
 
-use Shopware\Bundle\AccountBundle\Form\Account\AddressFormType;
 use Shopware\Bundle\AccountBundle\Service\AddressServiceInterface;
 use Shopware\Components\Api\Exception as ApiException;
-use Shopware\Components\Api\Exception\ValidationException;
+use Shopware\Models\Country\Country;
+use Shopware\Models\Country\State;
 use Shopware\Models\Customer\Customer;
+use Shopware\Models\Shop\Repository;
+use Shopware\Models\Shop\Shop as ShopModel;
 
 /**
  * Address API Resource
@@ -56,7 +58,6 @@ class Address extends Resource
     {
         return $this->getManager()->getRepository('Shopware\Models\Customer\Address');
     }
-
 
     /**
      * @param int $id
@@ -112,31 +113,31 @@ class Address extends Resource
     /**
      * @param array $params
      * @return \Shopware\Models\Customer\Address
+     * @throws ApiException\CustomValidationException
      * @throws ApiException\NotFoundException
-     * @throws ApiException\PrivilegeException
-     * @throws ApiException\ValidationException
      */
     public function create(array $params)
     {
         $this->checkPrivilege('create');
 
         $customerId = !empty($params['customer']) ? (int) $params['customer'] : 0;
+        unset($params['customer']);
+
         $customer = $this->getContainer()->get('models')->find(Customer::class, $customerId);
         if (!$customer) {
             throw new ApiException\NotFoundException("Customer by id $customerId not found");
         }
 
-        $address = new \Shopware\Models\Customer\Address();
+        $this->setupContext($customer->getShop()->getId());
 
-        $form = $this->getContainer()
-            ->get('shopware.form.factory')
-            ->create(AddressFormType::class, $address);
-
-        $form->submit($params, true);
-
-        if (!$form->isValid()) {
-            throw ValidationException::createFromFormError($form->getErrors(true));
+        if (!$params['country']) {
+            throw new ApiException\CustomValidationException("A country is required.");
         }
+
+        $params = $this->prepareAddressData($params);
+
+        $address = new \Shopware\Models\Customer\Address();
+        $address->fromArray($params);
 
         $this->addressService->create($address, $customer);
 
@@ -174,15 +175,10 @@ class Address extends Resource
             throw new ApiException\NotFoundException("Address by id $id not found");
         }
 
-        $form = $this->getContainer()
-            ->get('shopware.form.factory')
-            ->create(AddressFormType::class, $address);
+        $this->setupContext($address->getCustomer()->getShop()->getId());
 
-        $form->submit($params, false);
-
-        if (!$form->isValid()) {
-            throw ValidationException::createFromFormError($form->getErrors(true));
-        }
+        $params = $this->prepareAddressData($params, true);
+        $address->fromArray($params);
 
         $this->addressService->update($address);
 
@@ -221,5 +217,39 @@ class Address extends Resource
         $this->addressService->delete($address);
 
         return $address;
+    }
+
+    /**
+     * Sets the correct context for e.g. validation
+     *
+     * @param int $shopId
+     * @throws \RuntimeException
+     */
+    private function setupContext($shopId)
+    {
+        /** @var Repository $shopRepository */
+        $shopRepository = $this->getContainer()->get('models')->getRepository(ShopModel::class);
+
+        $shop = $shopRepository->getActiveById($shopId);
+        if (!$shop) {
+            throw new \RuntimeException("A valid shopId is required.");
+        }
+
+        $shop->registerResources();
+    }
+
+    /**
+     * Resolves id's to models
+     *
+     * @param array $data
+     * @param bool $filter
+     * @return array
+     */
+    private function prepareAddressData(array $data, $filter = false)
+    {
+        $data['country'] = !empty($data['country']) ? $this->getContainer()->get('models')->find(Country::class, (int) $data['country']) : null;
+        $data['state'] = !empty($data['state']) ? $this->getContainer()->get('models')->find(State::class, $data['state']) : null;
+
+        return $filter ? array_filter($data) : $data;
     }
 }
