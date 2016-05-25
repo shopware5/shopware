@@ -486,6 +486,9 @@ class StructHydrator
                 case 3:
                     $price = new PriceStruct('test');
                     break;
+                case 99:
+                    $price = new PriceStruct('unlicensed');
+                    break;
                 default:
                     $price = new PriceStruct('buy');
             }

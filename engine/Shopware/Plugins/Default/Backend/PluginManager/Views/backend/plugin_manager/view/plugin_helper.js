@@ -401,6 +401,10 @@ Ext.define('Shopware.apps.PluginManager.view.PluginHelper', {
             return '{s name="free_version"}Free version{/s}';
         }
 
+        if (type == 'unlicensed') {
+            return '{s name="unlicensed"}Unlicensed version{/s}'
+        }
+
         return null;
     }
 });
