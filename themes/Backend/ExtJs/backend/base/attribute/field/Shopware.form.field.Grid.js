@@ -71,7 +71,6 @@ Ext.define('Shopware.form.field.Grid', {
         var me = this;
 
         me.store = me.initializeStore();
-
         me.items = me.createItems();
         me.callParent(arguments);
     },
@@ -86,10 +85,18 @@ Ext.define('Shopware.form.field.Grid', {
     },
 
     createItems: function() {
-        var me = this;
+        var me = this, items = [];
+
         me.grid = me.createGrid();
         me.searchField = me.createSearchField();
-        return [me.searchField, me.grid];
+
+        items.push(me.searchField);
+        items.push(me.grid);
+
+        if (me.supportText) {
+            items.push(me.createSupportText(me.supportText));
+        }
+        return items;
     },
 
     createGrid: function() {
@@ -223,6 +230,8 @@ Ext.define('Shopware.form.field.Grid', {
         }
 
         return {
+            helpText: me.helpText,
+            helpTitle: me.helpTitle,
             store: me.searchStore,
             multiSelect: true,
             margin: margin,
@@ -319,5 +328,12 @@ Ext.define('Shopware.form.field.Grid', {
 
     renderSorthandleColumn: function (value, metadata) {
         return '<div style="cursor: n-resize;">&#009868;</div>';
+    },
+
+    createSupportText: function(supportText) {
+        return Ext.create('Ext.Component', {
+            html: '<div>'+supportText+'</div>',
+            cls: Ext.baseCSSPrefix +'form-support-text'
+        });
     }
 });

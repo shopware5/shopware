@@ -34,10 +34,24 @@ Ext.define('Shopware.form.field.GridView', {
     alias: 'widget.shopware-form-field-grid-view',
 
     createItems: function() {
-        var me = this;
+        var me = this, items = [];
         me.grid = me.createGrid();
         me.toolbar = me.createToolbar();
-        return [me.toolbar, me.grid];
+
+        items.push(me.toolbar);
+        items.push(me.grid);
+
+        if (me.supportText) {
+            items.push(me.createSupportText(me.supportText));
+        }
+        return items;
+    },
+
+    createSupportText: function(supportText) {
+        return Ext.create('Ext.Component', {
+            html: '<div>'+supportText+'</div>',
+            cls: Ext.baseCSSPrefix +'form-support-text'
+        });
     },
 
     createToolbar: function() {
