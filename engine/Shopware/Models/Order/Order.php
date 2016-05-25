@@ -1057,7 +1057,10 @@ class Order extends ModelEntity
             }
         }
 
-        if ($this->net) {
+        if ($this->taxFree) {
+            $this->invoiceAmountNet = $invoiceAmount + $this->invoiceShippingNet;
+            $this->invoiceAmount = $this->invoiceAmountNet;
+        } elseif ($this->net) {
             $this->invoiceAmountNet = $invoiceAmount + $this->invoiceShippingNet;
             $this->invoiceAmount = $invoiceAmountNet + $this->invoiceShipping;
         } else {
