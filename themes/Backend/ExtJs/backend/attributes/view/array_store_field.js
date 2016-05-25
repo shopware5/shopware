@@ -103,12 +103,24 @@ Ext.define('Shopware.apps.Attributes.view.ArrayStoreField', {
         columns.push({
             dataIndex: 'key',
             flex: 1,
-            editor: { xtype: 'textfield', allowBlank: false, emptyText: 'key' }
+            renderer: function(value) {
+                if (value.length > 0) {
+                    return value;
+                }
+                return '<span style="color: #c4c4c4">{s name="define_key"}{/s}</span>';
+            },
+            editor: { xtype: 'textfield', allowBlank: false, emptyText: '{s name="define_key"}{/s}' }
         });
         columns.push({
             dataIndex: 'value',
             flex: 2,
-            editor: { xtype: 'textfield', allowBlank: false, emptyText: 'value' }
+            renderer: function(value) {
+                if (value.length > 0) {
+                    return value;
+                }
+                return '<span style="color: #c4c4c4">{s name="define_value"}{/s}</span>';
+            },
+            editor: { xtype: 'textfield', allowBlank: false, emptyText: '{s name="define_value"}{/s}' }
         });
 
         columns.push(me.createActionColumn());
