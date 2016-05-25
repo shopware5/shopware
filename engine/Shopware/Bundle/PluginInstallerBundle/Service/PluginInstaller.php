@@ -128,6 +128,8 @@ class PluginInstaller implements PluginInstallerInterface
         $this->removeTemplates($pluginId);
         $this->removeFormsAndElements($pluginId);
         $this->removeEmotionComponents($pluginId);
+
+        return $this->getPluginByName($plugin->getName())->uninstall();
     }
 
     /**
