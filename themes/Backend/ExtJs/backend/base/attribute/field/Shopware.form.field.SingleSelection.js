@@ -65,7 +65,19 @@ Ext.define('Shopware.form.field.SingleSelection', {
     },
 
     createItems: function() {
-        return [this.createSearchField()];
+        var items = [this.createSearchField()];
+
+        if (this.supportText) {
+            items.push(this.createSupportText(this.supportText));
+        }
+        return items;
+    },
+
+    createSupportText: function(supportText) {
+        return Ext.create('Ext.Component', {
+            html: '<div>'+supportText+'</div>',
+            cls: Ext.baseCSSPrefix +'form-support-text'
+        });
     },
 
     createSearchField: function() {
@@ -125,6 +137,8 @@ Ext.define('Shopware.form.field.SingleSelection', {
         var me = this;
 
         return {
+            helpText: me.helpText,
+            helpTitle: me.helpTitle,
             valueField: 'id',
             queryMode: 'remote',
             store: me.store,

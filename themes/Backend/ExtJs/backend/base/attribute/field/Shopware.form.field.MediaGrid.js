@@ -35,6 +35,17 @@ Ext.define('Shopware.form.field.MediaGrid', {
     alias: 'widget.shopware-form-field-media-grid',
     baseBodyCls: Ext.baseCSSPrefix + 'form-item-body media-multi-selection-body',
 
+    createToolbarItems: function() {
+        var me = this;
+        var items = me.callParent(arguments);
+
+        if (me.helpText) {
+            items.push('->');
+            items.push(me.createHelp(me.helpText));
+        }
+        return items;
+    },
+
     createItemTemplate: function() {
         return '{literal}' +
             '<img src="{thumbnail}" title="{name}" />' +
@@ -85,5 +96,35 @@ Ext.define('Shopware.form.field.MediaGrid', {
         if (me.searchField.el) {
             icon.insertAfter(me.searchField.el);
         }
+    },
+
+    createHelp:function (text) {
+        var icon = Ext.create('Ext.Component', {
+            html: '<span style="margin-top: 4px !important;" class="'+Ext.baseCSSPrefix + 'form-help-icon'+'"></span>',
+            width: 24,
+            height: 24,
+            margin: '0 30 0 0'
+        });
+
+        icon.on('afterrender', function() {
+            Ext.tip.QuickTipManager.register({
+                target: icon.el,
+                cls: Ext.baseCSSPrefix + 'form-tooltip',
+                title: '',
+                text: text,
+                width: 225,
+                anchorToTarget: true,
+                anchor: 'right',
+                anchorSize: {
+                    width: 24,
+                    height: 24
+                },
+                defaultAlign: 'tr',
+                showDelay: 250,
+                dismissDelay: 10000
+            });
+        });
+
+        return icon;
     }
 });
