@@ -147,8 +147,8 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
     saveConfiguration: function(plugin, form) {
         var me = this;
 
-        form.onSaveForm(form, false, function() {
-
+        form.onSaveForm(form, false, function(form, records, operation) {
+            me.handleCrudResponse(records.proxy.getReader().jsonData, plugin);
         });
     },
 
@@ -434,7 +434,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
 
     authenticateForUpdate: function(plugin, callback) {
         var me = this;
-        
+
         if (plugin.flaggedAsDummyPlugin()) {
             callback();
         } else {
@@ -778,7 +778,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
             }
         }
 
-        if (response.hasOwnProperty('invalidateCache')) {
+        if (response.hasOwnProperty('invalidateCache') && response.invalidateCache != null) {
             this.clearCache(response.invalidateCache, plugin);
         }
     },

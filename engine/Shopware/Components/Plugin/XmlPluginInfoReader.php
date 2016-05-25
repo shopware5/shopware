@@ -36,14 +36,14 @@ class XmlPluginInfoReader
             throw new \InvalidArgumentException(sprintf('Unable to parse file "%s".', $file), $e->getCode(), $e);
         }
 
-        return $this->parseMenu($dom);
+        return $this->parsePlugin($dom);
     }
 
     /**
      * @param \DOMDocument $xml
      * @return array
      */
-    private function parseMenu(\DOMDocument $xml)
+    private function parsePlugin(\DOMDocument $xml)
     {
         $xpath = new \DOMXPath($xml);
 
@@ -52,22 +52,22 @@ class XmlPluginInfoReader
         }
 
         $entry = $entries[0];
-        $menuEntry = [];
+        $pluginEntry = [];
 
         foreach ($this->getChildren($entry, 'label') as $label) {
             $lang = ($label->getAttribute('lang')) ? $label->getAttribute('lang') : 'en';
-            $menuEntry['label'][$lang] = $label->nodeValue;
+            $pluginEntry['label'][$lang] = $label->nodeValue;
         }
 
         foreach ($this->getChildren($entry, 'description') as $description) {
             $lang = ($description->getAttribute('lang')) ? $description->getAttribute('lang') : 'en';
-            $menuEntry['description'][$lang] = trim($description->nodeValue);
+            $pluginEntry['description'][$lang] = trim($description->nodeValue);
         }
 
         $simpleKeys = ['version', 'license', 'author', 'copyright', 'link'];
         foreach ($simpleKeys as $simpleKey) {
             if ($names = $this->getChildren($entry, $simpleKey)) {
-                $menuEntry[$simpleKey] = $names[0]->nodeValue;
+                $pluginEntry[$simpleKey] = $names[0]->nodeValue;
             }
         }
 
@@ -76,11 +76,20 @@ class XmlPluginInfoReader
 
             foreach ($this->getChildren($changelog, 'changes') as $changes) {
                 $lang = ($changes->getAttribute('lang')) ? $changes->getAttribute('lang') : 'en';
-                $menuEntry['changelog'][$version][$lang][] = $changes->nodeValue;
+                $pluginEntry['changelog'][$version][$lang][] = $changes->nodeValue;
             }
         }
 
-        return $menuEntry;
+        foreach ($this->getChildren($entry, 'cache-invalidation') as $cacheInvalidation) {
+            foreach ($this->getChildren($cacheInvalidation, 'invalidate') as $invalidation) {
+                $pluginMethod = $invalidation->getAttribute('on');
+                foreach ($this->getChildren($invalidation, 'cache') as $cache) {
+                    $pluginEntry['cache-invalidation'][$pluginMethod][] = $cache->nodeValue;
+                }
+            }
+        }
+
+        return $pluginEntry;
     }
 
     /**
