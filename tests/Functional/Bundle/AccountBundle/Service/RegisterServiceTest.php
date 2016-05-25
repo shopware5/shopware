@@ -144,7 +144,7 @@ class RegisterServiceTest extends \Enlight_Components_Test_TestCase
     }
 
     /**
-     * @expectedException \Symfony\Component\Validator\Exception\ValidatorException
+     * @expectedException \Shopware\Components\Api\Exception\ValidationException
      */
     public function testRegisterWithEmptyAddress()
     {

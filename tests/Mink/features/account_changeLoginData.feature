@@ -43,16 +43,16 @@ Feature: Successful changes of login data
         Given I log in successful as "<user>" with email "test@example.com" and password "shopware"
         When  I follow "Rechnungsadresse ändern"
         And   I change my billing address:
-            | field         | address      |
-            | customer_type | <type>       |
-            | salutation    | <salutation> |
-            | company       | <company>    |
-            | firstname     | <firstname>  |
-            | lastname      | <lastname>   |
-            | street        | <street>     |
-            | zipcode       | <zipcode>    |
-            | city          | <city>       |
-            | country       | <country>    |
+            | field                    | address      |
+            | additional.customer_type | <type>       |
+            | salutation               | <salutation> |
+            | company                  | <company>    |
+            | firstname                | <firstname>  |
+            | lastname                 | <lastname>   |
+            | street                   | <street>     |
+            | zipcode                  | <zipcode>    |
+            | city                     | <city>       |
+            | country                  | <country>    |
 
         Then  I should see "Die Adresse wurde erfolgreich gespeichert."
         And   the "billing" address should be "<company>, <firstname> <lastname>, <street>, <zipcode> <city>, <country>"

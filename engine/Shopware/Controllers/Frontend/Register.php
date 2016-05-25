@@ -294,9 +294,13 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         $data['register']['shipping']['state'] = $data['register']['shipping'][$countryStateName];
         $data['register']['billing'] += $data['register']['personal'];
         $data['register']['shipping']['phone'] = $data['register']['personal']['phone'];
+
         if (!$data['register']['personal']['accountmode']) {
             $data['register']['personal']['accountmode'] = Customer::ACCOUNT_MODE_CUSTOMER;
         }
+
+        $data['register']['billing']['additional']['customer_type'] = $data['register']['personal']['customer_type'];
+
         return $data;
     }
 

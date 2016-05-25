@@ -8,13 +8,19 @@
 
         <service id="shopware_account.address_service" class="Shopware\Bundle\AccountBundle\Service\AddressService">
             <argument type="service" id="models" />
-            <argument type="service" id="shopware.form.factory" />
+            <argument type="service" id="shopware_account.address_validator" />
         </service>
 
         <service id="shopware_account.address_import_service" class="Shopware\Bundle\AccountBundle\Service\AddressImportService">
             <argument type="service" id="dbal_connection" />
             <argument type="service" id="models" />
             <argument type="service" id="shopware_account.address_service" />
+        </service>
+
+        <service id="shopware_account.address_validator" class="Shopware\Bundle\AccountBundle\Service\Validator\AddressValidator">
+            <argument type="service" id="validator" />
+            <argument type="service" id="shopware_storefront.context_service" />
+            <argument type="service" id="config" />
         </service>
 
         <service id="shopware_account.customer_service" class="Shopware\Bundle\AccountBundle\Service\CustomerService">

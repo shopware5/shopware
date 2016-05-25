@@ -48,7 +48,7 @@ Feature: My account (without changing login data)
             | zipcode       | <zipcode>       |
             | city          | <city>          |
             | country       | <country>       |
-            | customer_type | <customer_type> |
+            | additional.customer_type | <customer_type> |
 
         Then I should see "Die Adresse wurde erfolgreich gespeichert"
         And  the "shipping" address should be "<company>, <firstname> <lastname>, <street>, <zipcode> <city>, <country>"

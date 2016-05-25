@@ -96,13 +96,11 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
 
             $this->addressService->create($address, $customer);
 
-            $extraData = $form->getExtraData();
-
-            if (!empty($extraData['set_default_billing'])) {
+            if (!empty($address->getAdditional()['setDefaultBillingAddress'])) {
                 $this->addressService->setDefaultBillingAddress($address);
             }
 
-            if (!empty($extraData['set_default_shipping'])) {
+            if (!empty($address->getAdditional()['setDefaultShippingAddress'])) {
                 $this->addressService->setDefaultShippingAddress($address);
             }
 
@@ -138,13 +136,11 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
         if ($form->isValid()) {
             $this->addressService->update($address);
 
-            $extraData = $form->getExtraData();
-
-            if (!empty($extraData['set_default_billing'])) {
+            if (!empty($address->getAdditional()['setDefaultBillingAddress'])) {
                 $this->addressService->setDefaultBillingAddress($address);
             }
 
-            if (!empty($extraData['set_default_shipping'])) {
+            if (!empty($address->getAdditional()['setDefaultShippingAddress'])) {
                 $this->addressService->setDefaultShippingAddress($address);
             }
 
@@ -208,9 +204,13 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
 
         $errorMessages = array_unique($errorMessages);
 
+        /** @var Address $address */
+        $address = $form->getViewData();
+
         $formData = array_merge(
-            $this->get('models')->toArray($form->getViewData()),
-            ['attribute' => $this->get('models')->toArray($form->getViewData()->getAttribute())],
+            $this->get('models')->toArray($address),
+            ['attribute' => $this->get('models')->toArray($address->getAttribute())],
+            ['additional' => $address->getAdditional()],
             $form->getExtraData()
         );
 

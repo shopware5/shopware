@@ -18,19 +18,19 @@
                 <div class="address--customertype">
                     {if {config name=showCompanySelectField}}
                         {block name="frontend_address_form_fieldset_customer_type_select"}
-                            <select name="{$inputPrefix}[customer_type]"
+                            <select name="{$inputPrefix}[additional][customer_type]"
                                     required="required"
                                     aria-required="true"
                                     class="is--required{if $error_flags.customer_type} has--error{/if}">
-                                <option value="private"{if !$formData.customer_type OR $formData.customer_type eq "private"} selected="selected"{/if}>{s name='RegisterPersonalLabelPrivate' namespace='frontend/register/personal_fieldset'}{/s}</option>
-                                <option value="business"{if $formData.company || $formData.customer_type eq "business"} selected="selected"{/if}>{s name='RegisterPersonalLabelBusiness' namespace='frontend/register/personal_fieldset'}{/s}</option>
+                                <option value="private"{if !$formData.additional.customer_type OR $formData.additional.customer_type eq "private"} selected="selected"{/if}>{s name='RegisterPersonalLabelPrivate' namespace='frontend/register/personal_fieldset'}{/s}</option>
+                                <option value="business"{if $formData.company || $formData.additional.customer_type eq "business"} selected="selected"{/if}>{s name='RegisterPersonalLabelBusiness' namespace='frontend/register/personal_fieldset'}{/s}</option>
                                 {block name="frontend_address_form_fieldset_customer_type_options"}{/block}
                             </select>
                         {/block}
                     {else}
                         {block name="frontend_address_form_fieldset_customer_type_input"}
                             {* Always register as a private customer*}
-                            <input type="hidden" name="{$inputPrefix}[customer_type]" value="private" />
+                            <input type="hidden" name="{$inputPrefix}[additional][customer_type]" value="private" />
                         {/block}
                     {/if}
                 </div>
@@ -313,7 +313,7 @@
                         <div class="address--default-shipping">
                             <input type="checkbox"
                                    id="set_default_shipping"
-                                   name="{$inputPrefix}[set_default_shipping]"
+                                   name="{$inputPrefix}[additional][setDefaultShippingAddress]"
                                    value="1" />
                             <label for="set_default_shipping">{s name="AddressesSetAsDefaultShippingAction"}{/s}</label>
                         </div>
@@ -325,7 +325,7 @@
                         <div class="address--default-billing">
                             <input type="checkbox"
                                    id="set_default_billing"
-                                   name="{$inputPrefix}[set_default_billing]"
+                                   name="{$inputPrefix}[additional][setDefaultBillingAddress]"
                                    value="1" />
                             <label for="set_default_billing">{s name="AddressesSetAsDefaultBillingAction"}{/s}</label>
                         </div>

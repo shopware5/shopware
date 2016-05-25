@@ -22,40 +22,26 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\AccountBundle\Service;
+namespace Shopware\Bundle\AccountBundle\Service\Validator;
 
+use Shopware\Components\Api\Exception\ValidationException;
 use Shopware\Models\Customer\Address;
-use Shopware\Models\Customer\Customer;
 
-interface AddressServiceInterface
+/**
+ * Interface AddressValidatorInterface
+ * @package Shopware\Bundle\AccountBundle\Service\Validator
+ */
+interface AddressValidatorInterface
 {
     /**
      * @param Address $address
-     * @param Customer $customer
+     * @throws ValidationException
      */
-    public function create(Address $address, Customer $customer);
+    public function validate(Address $address);
 
     /**
      * @param Address $address
+     * @return bool
      */
-    public function update(Address $address);
-
-    /**
-     * @param Address $address
-     */
-    public function delete(Address $address);
-
-    /**
-     * Sets the address to the default billing address in the customer model
-     *
-     * @param Address $address
-     */
-    public function setDefaultBillingAddress(Address $address);
-
-    /**
-     * Sets the address to the default shipping address in the customer model
-     *
-     * @param Address $address
-     */
-    public function setDefaultShippingAddress(Address $address);
+    public function isValid(Address $address);
 }

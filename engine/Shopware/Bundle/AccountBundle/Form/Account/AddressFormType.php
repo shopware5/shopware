@@ -33,6 +33,7 @@ use Shopware\Models\Country\State;
 use Shopware\Models\Customer\Address;
 use Shopware\Models\Customer\Customer;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -151,6 +152,14 @@ class AddressFormType extends AbstractType
             'allow_extra_fields' => true
         ]);
 
+        // default additional fields
+        $builder
+            ->get('additional')
+            ->add('customer_type', TextType::class, ['required' => false, 'data' => 'private'])
+            ->add('setDefaultBillingAddress', CheckboxType::class, ['required' => false, 'data' => false])
+            ->add('setDefaultShippingAddress', CheckboxType::class, ['required' => false, 'data' => false])
+        ;
+
         $this->addCountryStateValidation($builder);
         $this->addCompanyValidation($builder);
 
@@ -209,12 +218,11 @@ class AddressFormType extends AbstractType
         $builder->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event) {
             $form = $event->getForm();
 
-            $extra = $form->getExtraData();
-
             /** @var Address $data */
             $data = $form->getData();
+            $customerType = $form->get('additional')->get('customer_type')->getData();
 
-            if ($extra['customer_type'] !== Customer::CUSTOMER_TYPE_BUSINESS || !empty($data->getCompany())) {
+            if ($customerType !== Customer::CUSTOMER_TYPE_BUSINESS || !empty($data->getCompany())) {
                 return;
             }
 
@@ -233,12 +241,11 @@ class AddressFormType extends AbstractType
         $builder->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event) {
             $form = $event->getForm();
 
-            $extra = $form->getExtraData();
-
             /** @var Address $data */
             $data = $form->getData();
+            $customerType = $form->get('additional')->get('customer_type')->getData();
 
-            if ($extra['customer_type'] !== Customer::CUSTOMER_TYPE_BUSINESS || !empty($data->getVatId())) {
+            if ($customerType !== Customer::CUSTOMER_TYPE_BUSINESS || !empty($data->getVatId())) {
                 return;
             }
 
