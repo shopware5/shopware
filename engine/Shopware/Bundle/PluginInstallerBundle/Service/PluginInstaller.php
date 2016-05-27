@@ -28,7 +28,6 @@ use Doctrine\DBAL\Connection;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Plugin as PluginBootstrap;
 use Shopware\Components\Plugin\PluginContext;
-use Shopware\Components\Plugin\UpdateContext;
 use Shopware\Components\Snippet\DatabaseHandler;
 use Shopware\Kernel;
 use Shopware\Models\Plugin\Plugin;
@@ -80,13 +79,7 @@ class PluginInstaller
 
         $this->em->transactional(function ($em) use ($pluginBootstrap, $plugin, $context) {
 
-            if (is_file($pluginBootstrap->getPath().'/Resources/config.xml')) {
-                $this->installForm($plugin, $pluginBootstrap->getPath().'/Resources/config.xml');
-            }
-
-            if (is_file($pluginBootstrap->getPath().'/Resources/menu.xml')) {
-                $this->installMenu($plugin, $pluginBootstrap->getPath().'/Resources/menu.xml');
-            }
+            $this->installResources($pluginBootstrap, $plugin);
 
             $this->em->flush($plugin);
 
@@ -160,14 +153,7 @@ class PluginInstaller
         );
 
         $this->em->transactional(function ($em) use ($pluginBootstrap, $plugin, $context) {
-
-            if (is_file($pluginBootstrap->getPath().'/Resources/config.xml')) {
-                $this->installForm($plugin, $pluginBootstrap->getPath().'/Resources/config.xml');
-            }
-
-            if (is_file($pluginBootstrap->getPath().'/Resources/menu.xml')) {
-                $this->installMenu($plugin, $pluginBootstrap->getPath().'/Resources/menu.xml');
-            }
+            $this->installResources($pluginBootstrap, $plugin);
 
             $pluginBootstrap->update($context);
 
@@ -180,6 +166,33 @@ class PluginInstaller
         });
 
         return $context;
+    }
+
+    /**
+     * @param PluginBootstrap $bootstrap
+     * @param Plugin $plugin
+     */
+    private function installResources(PluginBootstrap $bootstrap, Plugin $plugin)
+    {
+        if (is_file($bootstrap->getPath().'/Resources/config.xml')) {
+            $this->installForm($plugin, $bootstrap->getPath().'/Resources/config.xml');
+        }
+
+        if (is_file($bootstrap->getPath().'/Resources/menu.xml')) {
+            $this->installMenu($plugin, $bootstrap->getPath().'/Resources/menu.xml');
+        }
+
+        if (file_exists($bootstrap->getPath() . '/Resources/snippets')) {
+            $this->installSnippets($bootstrap);
+        }
+    }
+
+    /**
+     * @param PluginBootstrap $bootstrap
+     */
+    private function installSnippets(PluginBootstrap $bootstrap)
+    {
+        $this->snippetHandler->loadToDatabase($bootstrap->getPath() . '/Resources/snippets/');
     }
 
     /**
