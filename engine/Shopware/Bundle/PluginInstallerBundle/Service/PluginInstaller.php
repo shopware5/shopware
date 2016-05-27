@@ -26,6 +26,8 @@ namespace Shopware\Bundle\PluginInstallerBundle\Service;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Components\Plugin\PluginContext;
+use Shopware\Components\Plugin\UpdateContext;
 use Shopware\Kernel;
 use Shopware\Models\Plugin\Plugin;
 use Shopware\Components\Plugin\FormSynchronizer;
@@ -34,7 +36,7 @@ use Shopware\Components\Plugin\XmlMenuReader;
 use Shopware\Components\Plugin\XmlConfigDefinitionReader;
 use Shopware\Components\Plugin\XmlPluginInfoReader;
 
-class PluginInstaller implements PluginInstallerInterface
+class PluginInstaller
 {
     /**
      * @var ModelManager
@@ -56,14 +58,18 @@ class PluginInstaller implements PluginInstallerInterface
     }
 
     /**
-     * @inheritdoc
+     * @param Plugin $plugin
+     * @return PluginContext
+     * @throws \Exception
      */
     public function installPlugin(Plugin $plugin)
     {
         /** @var Kernel $kernel */
         $pluginBootstrap = $this->getPluginByName($plugin->getName());
 
-        $this->em->transactional(function ($em) use ($pluginBootstrap, $plugin) {
+        $context = new PluginContext($plugin, \Shopware::VERSION, $plugin->getVersion());
+
+        $this->em->transactional(function ($em) use ($pluginBootstrap, $plugin, $context) {
 
             if (is_file($pluginBootstrap->getPath().'/Resources/config.xml')) {
                 $this->installForm($plugin, $pluginBootstrap->getPath().'/Resources/config.xml');
@@ -73,7 +79,9 @@ class PluginInstaller implements PluginInstallerInterface
                 $this->installMenu($plugin, $pluginBootstrap->getPath().'/Resources/menu.xml');
             }
 
-            $pluginBootstrap->install();
+            $this->em->flush($plugin);
+
+            $pluginBootstrap->install($context);
 
             $plugin->setInstalled(new \DateTime());
             $plugin->setUpdated(new \DateTime());
@@ -81,40 +89,21 @@ class PluginInstaller implements PluginInstallerInterface
             $this->em->flush($plugin);
         });
 
-        return true;
+        return $context;
     }
+
 
     /**
      * @param Plugin $plugin
-     * @param string $file
-     */
-    private function installForm(Plugin $plugin, $file)
-    {
-        $xmlConfigReader = new XmlConfigDefinitionReader();
-        $config = $xmlConfigReader->read($file);
-
-        $formSynchronizer = new FormSynchronizer($this->em);
-        $formSynchronizer->synchronize($plugin, $config);
-    }
-
-    /**
-     * @param Plugin $plugin
-     * @param string $file
-     */
-    private function installMenu(Plugin $plugin, $file)
-    {
-        $menuReader = new XmlMenuReader();
-        $menu = $menuReader->read($file);
-
-        $menuSynchronizer = new MenuSynchronizer($this->em);
-        $menuSynchronizer->synchronize($plugin, $menu);
-    }
-
-    /**
-     * @inheritdoc
+     * @param bool $removeData
+     * @return PluginContext
      */
     public function uninstallPlugin(Plugin $plugin, $removeData = true)
     {
+        $context = new PluginContext($plugin, \Shopware::VERSION, $plugin->getVersion());
+        $bootstrap = $this->getPluginByName($plugin->getName());
+        $bootstrap->uninstall($context);
+
         $plugin->setInstalled(null);
         $plugin->setActive(false);
 
@@ -128,18 +117,27 @@ class PluginInstaller implements PluginInstallerInterface
         $this->removeTemplates($pluginId);
         $this->removeFormsAndElements($pluginId);
         $this->removeEmotionComponents($pluginId);
+
+        return $context;
     }
 
     /**
-     * @inheritdoc
+     * @param Plugin $plugin
+     * @return PluginContext
+     * @throws \Exception
      */
     public function updatePlugin(Plugin $plugin)
     {
         $pluginBootstrap = $this->getPluginByName($plugin->getName());
 
-        $this->em->transactional(function ($em) use ($pluginBootstrap, $plugin) {
-            $currentVersion = $plugin->getVersion();
-            $updateVersion  = $plugin->getUpdateVersion();
+        $context = new PluginContext(
+            $plugin,
+            \Shopware::VERSION,
+            $plugin->getVersion(),
+            $plugin->getUpdateVersion()
+        );
+
+        $this->em->transactional(function ($em) use ($pluginBootstrap, $plugin, $context) {
 
             if (is_file($pluginBootstrap->getPath().'/Resources/config.xml')) {
                 $this->installForm($plugin, $pluginBootstrap->getPath().'/Resources/config.xml');
@@ -149,41 +147,54 @@ class PluginInstaller implements PluginInstallerInterface
                 $this->installMenu($plugin, $pluginBootstrap->getPath().'/Resources/menu.xml');
             }
 
-            $pluginBootstrap->update($currentVersion, $updateVersion);
+            $pluginBootstrap->update($context);
 
-            $plugin->setVersion($updateVersion);
+            $plugin->setVersion($context->getUpdateVersion());
             $plugin->setUpdateVersion(null);
             $plugin->setUpdateSource(null);
             $plugin->setUpdated(new \DateTime());
 
             $this->em->flush($plugin);
         });
+
+        return $context;
     }
 
     /**
-     * @inheritdoc
+     * @param Plugin $plugin
+     * @return PluginContext
      */
     public function activatePlugin(Plugin $plugin)
     {
+        $context = new PluginContext($plugin, \Shopware::VERSION, $plugin->getVersion());
+
+        $bootstrap = $this->getPluginByName($plugin->getName());
+        $bootstrap->activate($context);
+
         $plugin->setActive(true);
         $this->em->flush($plugin);
 
-        return true;
+        return $context;
     }
 
     /**
-     * @inheritdoc
+     * @param Plugin $plugin
+     * @return PluginContext
      */
     public function deactivatePlugin(Plugin $plugin)
     {
+        $context = new PluginContext($plugin, \Shopware::VERSION, $plugin->getVersion());
+        $bootstrap = $this->getPluginByName($plugin->getName());
+        $bootstrap->deactivate($context);
+
         $plugin->setActive(false);
         $this->em->flush($plugin);
 
-        return true;
+        return $context;
     }
 
     /**
-     * @inheritdoc
+     * @param \DateTimeInterface $refreshDate
      */
     public function refreshPluginList(\DateTimeInterface $refreshDate)
     {
@@ -256,6 +267,33 @@ class PluginInstaller implements PluginInstallerInterface
                 );
             }
         }
+    }
+
+
+    /**
+     * @param Plugin $plugin
+     * @param string $file
+     */
+    private function installForm(Plugin $plugin, $file)
+    {
+        $xmlConfigReader = new XmlConfigDefinitionReader();
+        $config = $xmlConfigReader->read($file);
+
+        $formSynchronizer = new FormSynchronizer($this->em);
+        $formSynchronizer->synchronize($plugin, $config);
+    }
+
+    /**
+     * @param Plugin $plugin
+     * @param string $file
+     */
+    private function installMenu(Plugin $plugin, $file)
+    {
+        $menuReader = new XmlMenuReader();
+        $menu = $menuReader->read($file);
+
+        $menuSynchronizer = new MenuSynchronizer($this->em);
+        $menuSynchronizer->synchronize($plugin, $menu);
     }
 
     /**

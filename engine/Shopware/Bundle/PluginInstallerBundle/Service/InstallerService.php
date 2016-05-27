@@ -27,6 +27,7 @@ namespace Shopware\Bundle\PluginInstallerBundle\Service;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Plugin\ConfigReader;
 use Shopware\Components\Plugin\ConfigWriter;
+use Shopware\Components\Plugin\PluginContext;
 use Shopware\Models\Plugin\Plugin;
 use Shopware\Models\Shop\Shop;
 
@@ -101,9 +102,9 @@ class InstallerService
 
         if ($this->isNewPlugin($plugin)) {
             return $this->pluginInstaller->getPluginPath($plugin);
-        } else {
-            return $this->legacyPluginInstaller->getPluginPath($plugin);
         }
+
+        return $this->legacyPluginInstaller->getPluginPath($plugin);
     }
 
     /**
@@ -136,68 +137,70 @@ class InstallerService
 
     /**
      * @param Plugin $plugin
-     * @return bool
+     * @return PluginContext
      * @throws \Exception
      */
     public function installPlugin(Plugin $plugin)
     {
         if ($plugin->getInstalled()) {
-            return true;
+            return $this->createPluginContextFromLegacyResult($plugin, true);
         }
 
         if ($this->isNewPlugin($plugin)) {
             return $this->pluginInstaller->installPlugin($plugin);
-        } else {
-            return $this->legacyPluginInstaller->installPlugin($plugin);
         }
+
+        $result = $this->legacyPluginInstaller->installPlugin($plugin);
+        return $this->createPluginContextFromLegacyResult($plugin, $result);
     }
 
     /**
      * @param Plugin $plugin
      * @param bool $removeData
-     * @return bool
+     * @return PluginContext
      * @throws \Exception
      */
     public function uninstallPlugin(Plugin $plugin, $removeData = true)
     {
         if (!$plugin->getInstalled()) {
-            return true;
+            return $this->createPluginContextFromLegacyResult($plugin, true);
         }
 
         if ($this->isNewPlugin($plugin)) {
             return $this->pluginInstaller->uninstallPlugin($plugin, $removeData);
-        } else {
-            return $this->legacyPluginInstaller->uninstallPlugin($plugin, $removeData);
         }
+        $result = $this->legacyPluginInstaller->uninstallPlugin($plugin, $removeData);
+        return $this->createPluginContextFromLegacyResult($plugin, $result);
     }
 
     /**
      * @param Plugin $plugin
-     * @return bool
+     * @return PluginContext
      * @throws \Exception
      */
     public function updatePlugin(Plugin $plugin)
     {
         if (!$plugin->getUpdateVersion()) {
-            return true;
+            return $this->createPluginContextFromLegacyResult($plugin, true);
         }
 
         if ($this->isNewPlugin($plugin)) {
             return $this->pluginInstaller->updatePlugin($plugin);
-        } else {
-            return $this->legacyPluginInstaller->updatePlugin($plugin);
         }
+
+        $result = $this->legacyPluginInstaller->updatePlugin($plugin);
+        return $this->createPluginContextFromLegacyResult($plugin, $result);
     }
 
     /**
      * @param Plugin $plugin
-     * @return array|bool|void
+     * @return PluginContext
      * @throws \Exception
      */
     public function activatePlugin(Plugin $plugin)
     {
         if ($plugin->getActive()) {
-            return true;
+            return $this->createPluginContextFromLegacyResult($plugin, true);
         }
 
         if (!$plugin->getInstalled()) {
@@ -206,27 +209,29 @@ class InstallerService
 
         if ($this->isNewPlugin($plugin)) {
             return $this->pluginInstaller->activatePlugin($plugin);
-        } else {
-            return $this->legacyPluginInstaller->activatePlugin($plugin);
         }
+
+        $result = $this->legacyPluginInstaller->activatePlugin($plugin);
+        return $this->createPluginContextFromLegacyResult($plugin, $result);
     }
 
     /**
      * @param Plugin $plugin
-     * @return array|bool|void
+     * @return PluginContext
      * @throws \Exception
      */
     public function deactivatePlugin(Plugin $plugin)
     {
         if (!$plugin->getActive()) {
-            return true;
+            return $this->createPluginContextFromLegacyResult($plugin, true);
         }
 
         if ($this->isNewPlugin($plugin)) {
             return $this->pluginInstaller->deactivatePlugin($plugin);
-        } else {
-            return $this->legacyPluginInstaller->deactivatePlugin($plugin);
         }
+
+        $result = $this->legacyPluginInstaller->deactivatePlugin($plugin);
+        return $this->createPluginContextFromLegacyResult($plugin, $result);
     }
 
     /**
@@ -303,5 +308,29 @@ class InstallerService
     private function isNewPlugin(Plugin $plugin)
     {
         return $plugin->getNamespace() === "ShopwarePlugins";
+    }
+
+    /**
+     * @param Plugin $plugin
+     * @param boolean|array $result
+     * @return PluginContext
+     */
+    private function createPluginContextFromLegacyResult(Plugin $plugin, $result)
+    {
+        $context = new PluginContext($plugin, \Shopware::VERSION, $plugin->getVersion());
+
+        if (is_bool($result)) {
+            return $context;
+        }
+
+        if (array_key_exists('invalidateCache', $result)) {
+            $context->scheduleClearCache($result['invalidateCache']);
+        }
+
+        if (array_key_exists('message', $result)) {
+            $context->scheduleMessage($result['message']);
+        }
+
+        return $context;
     }
 }

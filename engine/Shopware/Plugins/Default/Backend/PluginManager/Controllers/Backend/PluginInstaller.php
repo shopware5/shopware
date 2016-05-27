@@ -70,11 +70,7 @@ class Shopware_Controllers_Backend_PluginInstaller extends Shopware_Controllers_
 
         try {
             $result = $this->pluginManager->installPlugin($plugin);
-
-            if ($result === true || $result === false) {
-                $result = ['success' => $result];
-            }
-            $this->View()->assign($result);
+            $this->View()->assign(['result' => $result]);
         } catch (Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
         }
@@ -113,10 +109,7 @@ class Shopware_Controllers_Backend_PluginInstaller extends Shopware_Controllers_
         $plugin->setActive($active);
         $this->get('models')->flush();
 
-        if ($result === true || $result === false) {
-            $result = ['success' => $result];
-        }
-        $this->View()->assign($result);
+        $this->View()->assign(['result' => $result]);
     }
 
     public function uninstallPluginAction()
@@ -125,11 +118,7 @@ class Shopware_Controllers_Backend_PluginInstaller extends Shopware_Controllers_
 
         try {
             $result = $this->pluginManager->uninstallPlugin($plugin);
-
-            if ($result === true || $result === false) {
-                $result = ['success' => $result];
-            }
-            $this->View()->assign($result);
+            $this->View()->assign(['result' => $result]);
         } catch (Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
         }
@@ -144,11 +133,7 @@ class Shopware_Controllers_Backend_PluginInstaller extends Shopware_Controllers_
                 $plugin,
                 !$plugin->hasCapabilitySecureUninstall()
             );
-
-            if ($result === true || $result === false) {
-                $result = ['success' => $result];
-            }
-            $this->View()->assign($result);
+            $this->View()->assign(['result' => $result]);
         } catch (Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
         }
@@ -182,7 +167,7 @@ class Shopware_Controllers_Backend_PluginInstaller extends Shopware_Controllers_
 
         try {
             $result = $this->pluginManager->activatePlugin($plugin);
-            $this->View()->assign($result);
+            $this->View()->assign(['result' => $result]);
         } catch (Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
         }
@@ -194,7 +179,7 @@ class Shopware_Controllers_Backend_PluginInstaller extends Shopware_Controllers_
 
         try {
             $result = $this->pluginManager->deactivatePlugin($plugin);
-            $this->View()->assign($result);
+            $this->View()->assign(['result' => $result]);
         } catch (Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
         }

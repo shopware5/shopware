@@ -27,7 +27,7 @@ namespace Shopware\Bundle\PluginInstallerBundle\Service;
 use Shopware\Models\Plugin\Plugin;
 use Shopware\Components\Model\ModelManager;
 
-class LegacyPluginInstaller implements PluginInstallerInterface
+class LegacyPluginInstaller
 {
     /**
      * @var ModelManager
@@ -73,8 +73,11 @@ class LegacyPluginInstaller implements PluginInstallerInterface
         return $plugin;
     }
 
+
     /**
-     * @inheritdoc
+     * @param Plugin $plugin
+     * @return array
+     * @throws \Exception
      */
     public function installPlugin(Plugin $plugin)
     {
@@ -89,8 +92,9 @@ class LegacyPluginInstaller implements PluginInstallerInterface
             throw new \Exception(sprintf("Unable to install, got exception:\n%s\n", $e->getMessage()), 0, $e);
         }
 
-        $success = (is_bool($result) && $result || isset($result['success']) && $result['success']);
-        if (!$success) {
+        $result = is_bool($result) ? ['success' => $result] : $result;
+
+        if (!$result['success']) {
             if (isset($result['message'])) {
                 throw new \Exception(sprintf("Unable to install, got message:\n%s\n", $result['message']));
             } else {
@@ -102,7 +106,10 @@ class LegacyPluginInstaller implements PluginInstallerInterface
     }
 
     /**
-     * @inheritdoc
+     * @param Plugin $plugin
+     * @param bool $removeData
+     * @return array
+     * @throws \Exception
      */
     public function uninstallPlugin(Plugin $plugin, $removeData = true)
     {
@@ -117,8 +124,9 @@ class LegacyPluginInstaller implements PluginInstallerInterface
             throw new \Exception(sprintf("Unable to uninstall, got exception:\n%s\n", $e->getMessage()), 0, $e);
         }
 
-        $success = (is_bool($result) && $result || isset($result['success']) && $result['success']);
-        if (!$success) {
+        $result = is_bool($result) ? ['success' => $result] : $result;
+
+        if (!$result['success']) {
             if (isset($result['message'])) {
                 throw new \Exception(sprintf("Unable to uninstall, got message:\n%s\n", $result['message']));
             } else {
@@ -129,8 +137,11 @@ class LegacyPluginInstaller implements PluginInstallerInterface
         return $result;
     }
 
+
     /**
-     * @inheritdoc
+     * @param Plugin $plugin
+     * @return array
+     * @throws \Exception
      */
     public function updatePlugin(Plugin $plugin)
     {
@@ -145,19 +156,23 @@ class LegacyPluginInstaller implements PluginInstallerInterface
             throw new \Exception(sprintf("Unable to update, got exception:\n%s\n", $e->getMessage()), 0, $e);
         }
 
-        $success = (is_bool($result) && $result || isset($result['success']) && $result['success']);
-        if (!$success) {
+        $result = is_bool($result) ? ['success' => $result] : $result;
+
+        if (!$result['success']) {
             if (isset($result['message'])) {
                 throw new \Exception(sprintf("Unable to update, got message:\n%s\n", $result['message']));
             } else {
                 throw new \Exception(sprintf('Unable to update %s, an unknown error occured.', $plugin->getName()));
             }
         }
+
         return $result;
     }
 
     /**
-     * @inheritdoc
+     * @param Plugin $plugin
+     * @return array
+     * @throws \Exception
      */
     public function activatePlugin(Plugin $plugin)
     {
@@ -190,6 +205,8 @@ class LegacyPluginInstaller implements PluginInstallerInterface
 
         $plugin->setActive(false);
         $this->em->flush($plugin);
+
+        return $result;
     }
 
     /**
