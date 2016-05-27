@@ -296,6 +296,11 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
             preview = false;
         }
 
+        if (activeTab === 3) {
+            sidebar.setActiveTab(0);
+            activeTab = 0;
+        }
+
         settings.getForm().updateRecord(record);
         layout.getForm().updateRecord(record);
 
@@ -310,7 +315,6 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
             Shopware.Notification.createGrowlMessage(me.snippets.errorTitle, me.snippets.onSaveChangesNotValid);
             return false;
         }
-
 
         record.save({
             callback: function(item) {
