@@ -96,6 +96,13 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
 
     /**
      * This method can be overridden
+     */
+    public function uninstall()
+    {
+    }
+
+    /**
+     * This method can be overridden
      * @param string $oldVersion
      * @param string $currentVersion
      */

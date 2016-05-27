@@ -81,7 +81,10 @@ class PluginInstaller implements PluginInstallerInterface
             $this->em->flush($plugin);
         });
 
-        return true;
+        return [
+            'success' => true,
+            'invalidateCache' => $this->getCacheActions($pluginBootstrap, 'install')
+        ];
     }
 
     /**
@@ -128,6 +131,14 @@ class PluginInstaller implements PluginInstallerInterface
         $this->removeTemplates($pluginId);
         $this->removeFormsAndElements($pluginId);
         $this->removeEmotionComponents($pluginId);
+
+        $pluginBootstrap = $this->getPluginByName($plugin->getName());
+        $pluginBootstrap->uninstall();
+
+        return [
+            'success' => true,
+            'invalidateCache' => $this->getCacheActions($pluginBootstrap, 'uninstall')
+        ];
     }
 
     /**
@@ -158,6 +169,11 @@ class PluginInstaller implements PluginInstallerInterface
 
             $this->em->flush($plugin);
         });
+
+        return [
+            'success' => true,
+            'invalidateCache' => $this->getCacheActions($pluginBootstrap, 'update')
+        ];
     }
 
     /**
@@ -168,7 +184,12 @@ class PluginInstaller implements PluginInstallerInterface
         $plugin->setActive(true);
         $this->em->flush($plugin);
 
-        return true;
+        $pluginBootstrap = $this->getPluginByName($plugin->getName());
+
+        return [
+            'success' => true,
+            'invalidateCache' => $this->getCacheActions($pluginBootstrap, 'activate')
+        ];
     }
 
     /**
@@ -179,7 +200,12 @@ class PluginInstaller implements PluginInstallerInterface
         $plugin->setActive(false);
         $this->em->flush($plugin);
 
-        return true;
+        $pluginBootstrap = $this->getPluginByName($plugin->getName());
+
+        return [
+            'success' => true,
+            'invalidateCache' => $this->getCacheActions($pluginBootstrap, 'deactivate')
+        ];
     }
 
     /**
@@ -274,17 +300,33 @@ class PluginInstaller implements PluginInstallerInterface
      */
     public function getPluginPath(Plugin $plugin)
     {
-        /** @var Kernel $kernel */
         $pluginBootstrap = $this->getPluginByName($plugin->getName());
 
         return $pluginBootstrap->getPath();
+    }
+
+    public function getCacheActions(\Shopware\Components\Plugin $plugin, $action = 'install')
+    {
+        $xmlPluginInfo = new XmlPluginInfoReader();
+
+        if (file_exists($plugin->getPath() . '/plugin.xml')) {
+            $info = $xmlPluginInfo->read($plugin->getPath() . '/plugin.xml');
+        } else {
+            return null;
+        }
+
+        if (isset($info['cache-invalidation']) && isset($info['cache-invalidation'][$action])) {
+            return $info['cache-invalidation'][$action];
+        } else {
+            return null;
+        }
     }
 
     /**
      * @param string $pluginName
      * @return \Shopware\Components\Plugin
      */
-    private function getPluginByName($pluginName)
+    public function getPluginByName($pluginName)
     {
         /** @var Kernel $kernel */
         $kernel = Shopware()->Container()->get('kernel');

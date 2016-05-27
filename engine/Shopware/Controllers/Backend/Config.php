@@ -277,7 +277,21 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
             ));
         }
 
-        $this->View()->assign(array('success' => true));
+        if ($this->Request()->has('id')) {
+            $technicalName = Shopware()->Container()->get('dbal_connection')->fetchColumn('SELECT `name` FROM s_core_plugins WHERE `id` = (SELECT `plugin_id` FROM s_core_config_forms WHERE `id` = ?) and `namespace` = "ShopwarePlugins"', [$this->Request()->getParam('id')]);
+
+            try {
+                $pluginBootstrap = Shopware()->Container()->get('shopware_plugininstaller.plugin_installer')->getPluginByName($technicalName);
+                $this->View()->assign([
+                    'success' => true,
+                    'invalidateCache' => Shopware()->Container()->get('shopware_plugininstaller.plugin_installer')->getCacheActions($pluginBootstrap, 'saveConfig')
+                ]);
+            } catch (Exception $e) {
+                $this->View()->assign(['success' => true]);
+            }
+        } else {
+            $this->View()->assign(['success' => true]);
+        }
     }
 
     /**
