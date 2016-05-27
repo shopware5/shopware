@@ -26,8 +26,10 @@ namespace Shopware\Bundle\PluginInstallerBundle\Service;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Components\Plugin as PluginBootstrap;
 use Shopware\Components\Plugin\PluginContext;
 use Shopware\Components\Plugin\UpdateContext;
+use Shopware\Components\Snippet\DatabaseHandler;
 use Shopware\Kernel;
 use Shopware\Models\Plugin\Plugin;
 use Shopware\Components\Plugin\FormSynchronizer;
@@ -49,12 +51,19 @@ class PluginInstaller
     private $connection;
 
     /**
-     * @param ModelManager $em
+     * @var DatabaseHandler
      */
-    public function __construct(ModelManager $em)
+    private $snippetHandler;
+
+    /**
+     * @param ModelManager $em
+     * @param DatabaseHandler $snippetHandler
+     */
+    public function __construct(ModelManager $em, DatabaseHandler $snippetHandler)
     {
         $this->em = $em;
         $this->connection = $this->em->getConnection();
+        $this->snippetHandler = $snippetHandler;
     }
 
     /**
@@ -92,7 +101,6 @@ class PluginInstaller
         return $context;
     }
 
-
     /**
      * @param Plugin $plugin
      * @param bool $removeData
@@ -102,7 +110,8 @@ class PluginInstaller
     {
         $context = new PluginContext($plugin, \Shopware::VERSION, $plugin->getVersion());
         $bootstrap = $this->getPluginByName($plugin->getName());
-        $bootstrap->uninstall($context);
+
+        $bootstrap->uninstall($context, !$removeData);
 
         $plugin->setInstalled(null);
         $plugin->setActive(false);
@@ -115,10 +124,23 @@ class PluginInstaller
         $this->removeCrontabEntries($pluginId);
         $this->removeMenuEntries($pluginId);
         $this->removeTemplates($pluginId);
-        $this->removeFormsAndElements($pluginId);
         $this->removeEmotionComponents($pluginId);
 
+        $this->removeSnippets($bootstrap, $removeData);
+        if ($removeData) {
+            $this->removeFormsAndElements($pluginId);
+        }
+
         return $context;
+    }
+
+    /**
+     * @param PluginBootstrap $bootstrap
+     * @param boolean $removeDirty
+     */
+    private function removeSnippets(PluginBootstrap $bootstrap, $removeDirty)
+    {
+        $this->snippetHandler->removeFromDatabase($bootstrap->getPath() . '/Resources/snippets/', $removeDirty);
     }
 
     /**
@@ -230,17 +252,18 @@ class PluginInstaller
             $info['label'] = isset($info['label']) && isset($info['label']['en']) ? $info['label']['en'] : $plugin->getName();
 
             $data = [
-                'namespace'          => 'ShopwarePlugins',
-                'version'            => $info['version'],
-                'author'             => $info['author'],
-                'name'               => $plugin->getName(),
-                'link'               => $info['link'],
-                'label'              => $info['label'],
-                'description'        => $info['description'],
-                'capability_update'  => true,
+                'namespace' => 'ShopwarePlugins',
+                'version' => $info['version'],
+                'author' => $info['author'],
+                'name' => $plugin->getName(),
+                'link' => $info['link'],
+                'label' => $info['label'],
+                'description' => $info['description'],
+                'capability_update' => true,
                 'capability_install' => true,
-                'capability_enable'  => true,
-                'refresh_date'       => $refreshDate
+                'capability_enable' => true,
+                'capability_secure_uninstall' => true,
+                'refresh_date' => $refreshDate
             ];
 
             if ($currentPluginInfo) {
@@ -268,7 +291,6 @@ class PluginInstaller
             }
         }
     }
-
 
     /**
      * @param Plugin $plugin
@@ -320,7 +342,7 @@ class PluginInstaller
 
     /**
      * @param string $pluginName
-     * @return \Shopware\Components\Plugin
+     * @return PluginBootstrap
      */
     private function getPluginByName($pluginName)
     {
