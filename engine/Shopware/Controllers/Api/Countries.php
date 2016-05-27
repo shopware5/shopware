@@ -48,7 +48,7 @@ class Shopware_Controllers_Api_Countries extends Shopware_Controllers_Api_Rest
 
         $result = $this->resource->getList($offset, $limit, $filter, $sort);
 
-        $this->View()->assign($result);
+        $this->View()->assign('data', $result);
         $this->View()->assign('success', true);
     }
 

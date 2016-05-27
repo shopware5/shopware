@@ -103,7 +103,7 @@ class CountryTest extends TestCase
             'iso' => 'TC',
             'iso3' => 'TCY',
             'isoName' => 'TEST COUNTRY',
-            'areaId' => $area->getId()
+            'area' => $area->getId()
         ];
 
         $country = $this->resource->create($data);
@@ -138,7 +138,7 @@ class CountryTest extends TestCase
             'iso' => 'T2',
             'iso3' => 'TC2',
             'isoName' => 'TEST COUNTRY 2',
-            'areaId' => $area->getId(),
+            'area' => $area->getId(),
             'states' => [
                 [
                     'id' => $state->getId(),
@@ -218,7 +218,7 @@ class CountryTest extends TestCase
             'iso' => 'NC',
             'iso3' => 'NCN',
             'isoName' => 'NEW COUNTRY',
-            'areaId' => $area->getId(),
+            'area' => $area->getId(),
             'states' => [
                 [
                     'id' => $oldState->getId()

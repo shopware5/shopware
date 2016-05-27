@@ -36,7 +36,7 @@ use Shopware\Components\Api\Exception as ApiException;
 class Country extends Resource
 {
     /**
-     * @return \Doctrine\ORM\EntityRepository
+     * @return \Shopware\Models\Country\Repository
      */
     public function getRepository()
     {
@@ -232,12 +232,17 @@ class Country extends Resource
             }
         }
 
-        if (isset($params['areaId'])) {
-            $area = $this->getManager()->find('\Shopware\Models\Country\Area', $params['areaId']);
-            if ($area) {
-                $params['area'] = $area;
+        if (isset($params['area'])) {
+            $areaId = (int) $params['area'];
+            if ($areaId > 0) {
+                $area = $this->getManager()->find('\Shopware\Models\Country\Area', $areaId);
+                if ($area) {
+                    $params['area'] = $area;
+                } else {
+                    throw new ApiException\NotFoundException("Area by id {$areaId} not found");
+                }
             } else {
-                throw new ApiException\NotFoundException("Area by id {$params['areaId']} not found");
+                $params['area'] = null;
             }
         }
 

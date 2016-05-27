@@ -99,12 +99,11 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
 
-        $builder->select(
-            'countries',
-            'states'
-        );
-        $builder->from('Shopware\Models\Country\Country', 'countries')
-        ->leftJoin('countries.states', 'states');
+        $builder
+            ->select(['countries', 'states', 'area'])
+            ->from('Shopware\Models\Country\Country', 'countries')
+            ->leftJoin('countries.states', 'states')
+            ->leftJoin('countries.area', 'area');
 
         if ($filter !== null) {
             $builder->addFilter($filter);
