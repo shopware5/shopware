@@ -32,7 +32,6 @@ use Shopware\Models\Article\Configurator\Group as ConfiguratorGroup;
 use Shopware\Models\Article\Configurator\Option as ConfiguratorOption;
 use Shopware\Models\Article\Detail;
 use Shopware\Models\Article\Supplier;
-use Shopware\Models\Country\Country;
 use Shopware\Models\Country\State;
 use Shopware\Models\Dispatch\Dispatch;
 use Shopware\Models\Payment\Payment;
