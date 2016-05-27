@@ -316,7 +316,7 @@ class sBasket
               GROUP BY sessionID';
         $params = array($this->session->get('sessionId'));
 
-        $sql = Enlight()->Events()->filter(
+        $sql = Shopware()->Events()->filter(
             'Shopware_Modules_Basket_InsertDiscount_FilterSql_BasketAmount',
             $sql,
             array('subject' => $this, 'params' => $params)
@@ -1230,12 +1230,6 @@ class sBasket
     {
         $structConverter = Shopware()->Container()->get('legacy_struct_converter');
         $promotion = $structConverter->convertListProductStruct($product);
-
-        if ($voteAverage = $product->getVoteAverage()) {
-            $average = $structConverter->convertVoteAverageStruct($voteAverage);
-            $average['averange'] = $average['averange'] / 2;
-            $promotion['sVoteAverange'] = $average;
-        }
 
         $promotion["id"] = $note["id"];
         $promotion["datum_add"] = $note["datum"];

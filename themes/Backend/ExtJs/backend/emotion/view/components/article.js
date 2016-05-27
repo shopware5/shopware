@@ -37,6 +37,10 @@ Ext.define('Shopware.apps.Emotion.view.components.Article', {
         productImageOnly: {
             fieldLabel: '{s name=productImageOnly/label}Do not add styling{/s}',
             supportText: '{s name=productImageOnly/support}If selected, no other layout styling is applied.{/s}'
+        },
+        no_border: {
+            fieldLabel: '{s name="noBorder/label"}{/s}',
+            supportText: '{s name="noBorder/supportText"}{/s}'
         }
     },
 
@@ -59,17 +63,64 @@ Ext.define('Shopware.apps.Emotion.view.components.Article', {
         me.articleSearch = me.down('emotion-components-fields-article');
         me.articleSearch.searchField.setValue(me.articleSearch.hiddenField.getValue());
 
-        var value = '';
-        Ext.each(me.getSettings('record').get('data'), function(item) {
-            if(item.key == 'article_type') {
+        me.articleCategory = me.down('emotion-components-fields-category-selection');
+
+        me.articleTypeField = me.down('emotion-components-fields-article-type');
+        me.articleTypeField.on('change', me.onTypeChange, me);
+
+        me.articleType = me.getElementDataByName('article_type');
+
+        me.setVisibleFields(me.articleType);
+    },
+
+    /**
+     * Event callback on article type change.
+     *
+     * @param typeField
+     * @param newValue
+     */
+    onTypeChange: function(typeField, newValue) {
+        var me = this;
+
+        me.setVisibleFields(newValue);
+    },
+
+    /**
+     * Shows the corresponding config fields by selected article type.
+     *
+     * @param articleType
+     */
+    setVisibleFields: function(articleType) {
+        var me = this,
+            type = articleType || me.articleType;
+
+        me.articleSearch.setVisible(type === 'selected_article');
+        me.articleSearch.searchField.allowBlank = (type !== 'selected_article');
+        me.articleSearch.hiddenField.allowBlank = (type !== 'selected_article');
+
+        me.articleCategory.setVisible(type !== 'selected_article');
+        me.articleCategory.allowBlank = (type === 'selected_article');
+    },
+
+    /**
+     * Get the value of element data by field name.
+     *
+     * @param fieldName
+     * @returns string|undefined
+     */
+    getElementDataByName: function(fieldName) {
+        var me = this,
+            data = me.getSettings('record').get('data'),
+            value = Ext.undefined;
+
+        Ext.each(data, function(item) {
+            if (item.key === fieldName) {
                 value = item.value;
                 return false;
             }
         });
 
-        if(!value || value !== 'selected_article') {
-            me.articleSearch.hide();
-        }
+        return value;
     }
 });
 //{/block}

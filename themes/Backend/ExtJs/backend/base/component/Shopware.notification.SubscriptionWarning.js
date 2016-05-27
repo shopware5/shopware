@@ -31,7 +31,13 @@ Ext.define('Shopware.notification.SubscriptionWarning', {
         expired_soon_subscription_warning: 'Subscription(s) for [0]x plugin(s) expire in a few days.<br /><br /><b>Soon expired plugins:</b><br />[1]',
         expired_soon_subscription_days_warning: ' days',
         invalid_licence: 'Licence(s) of [0]x plugin(s) are invalid.<br /><br /><b>Invalid licence(s):</b><br />[1]',
-        shop_license_upgrade : 'The license upgrade for the shop hasn\'t been executed yet.'
+        shop_license_upgrade : 'The license upgrade for the shop hasn\'t been executed yet.',
+        no_license: 'You may be a victim of counterfeiting. <br /><br /><b>No valid license found for plugins:</b><br />[1]',
+        expiring_license: 'Expiring license(s)',
+        expired_license: 'Expired license(s)',
+        expiring_license_warning: 'License(s) of [0]x plugin(s) are soon expiring.<br /><br /><b>Soon expired license(s):</b><br />[1]',
+        expired_license_warning: 'License(s) of [0]x plugin(s) are expired.<br /><br /><b>Expired license(s):</b><br/>[1]',
+        confirm_plugin_deactivation: 'Do you want to open the Plugin Manager now?'
     },
 
     /**
@@ -40,9 +46,10 @@ Ext.define('Shopware.notification.SubscriptionWarning', {
     check: function () {
         var me = this;
 
-        me.getPluginsSubscriptionState(function (data) {
-            data.expiredPluginSubscriptions.sort(me.sortPluginsByDaysLeftCallback);
-            me.displayNotices(data);
+        me.getPluginInformation(function (data) {
+            var pluginData = me.preparePluginData(data);
+            pluginData.expiredPluginSubscriptions.sort(me.sortPluginsByDaysLeftCallback);
+            me.displayNotices(pluginData);
         });
     },
 
@@ -54,11 +61,77 @@ Ext.define('Shopware.notification.SubscriptionWarning', {
         });
     },
 
-    getPluginsSubscriptionState: function (callback) {
+    preparePluginData: function(data) {
+        var preparedData = {
+                isShopUpgraded: data.isShopUpgraded,
+                notUpgradedPlugins: [],
+                wrongVersionPlugins: [],
+                expiredPluginSubscriptions: [],
+                unknownLicensePlugins: [],
+                expiredLicensePlugins: []
+            },
+            plugins = data.plugins,
+            today = Ext.Date.clearTime(new Date()),
+            i = 0,
+            count = plugins.length;
+
+        for (i; i < count; i++) {
+            var plugin = plugins[i];
+            if (plugin.subscriptionUpgradeRequired) {
+                preparedData.notUpgradedPlugins.push({
+                    label: plugin.label
+                });
+            }
+            if (plugin.wrongSubscription) {
+                preparedData.wrongVersionPlugins.push({
+                    label: plugin.label
+                });
+            }
+            if (!Ext.isEmpty(plugin.subscriptionExpiration)) {
+                var subscriptionExpirationDate = Ext.Date.parse(plugin.subscriptionExpiration, 'Y-m-d'),
+                    isSubscriptionExpired = subscriptionExpirationDate < today,
+                    daysDiffSubscription = Math.round(Math.abs((subscriptionExpirationDate.getTime() - today.getTime())/(1000 * 60 * 60 * 24)));
+
+                if (!isSubscriptionExpired && daysDiffSubscription > 14) {
+                    continue;
+                }
+
+                preparedData.expiredPluginSubscriptions.push({
+                    label: plugin.label,
+                    expired: isSubscriptionExpired,
+                    daysLeft: isSubscriptionExpired ? 0 : daysDiffSubscription
+                });
+            }
+            if (plugin.unknownLicense) {
+                preparedData.unknownLicensePlugins.push({
+                    label: plugin.label
+                });
+            }
+            if (!Ext.isEmpty(plugin.licenseExpiration)) {
+                var licenseExpiration = Ext.Date.parse(plugin.licenseExpiration, 'Y-m-d'),
+                    isLicenseExpired = licenseExpiration < today,
+                    daysDiffLicense = Math.round(Math.abs((licenseExpiration.getTime() - today.getTime())/(1000 * 60 * 60 * 24)));
+
+                if (!isLicenseExpired && daysDiffLicense > 14) {
+                    continue;
+                }
+
+                preparedData.expiredLicensePlugins.push({
+                    label: plugin.label,
+                    expired: isLicenseExpired,
+                    daysLeft: isLicenseExpired ? 0 : daysDiffLicense
+                });
+            }
+        }
+
+        return preparedData;
+    },
+
+    getPluginInformation: function (callback) {
         var me = this;
 
         Ext.Ajax.request({
-            url: '{url controller="PluginManager" action="getPluginsSubscriptionState"}',
+            url: '{url controller="PluginManager" action="getPluginInformation"}',
             success: function (response) {
                 var responseData = Ext.decode(response.responseText);
 
@@ -73,8 +146,12 @@ Ext.define('Shopware.notification.SubscriptionWarning', {
         });
     },
 
-    displayNotices: function (data) {
-        var me = this;
+    displayNotices: function(data) {
+        var me = this,
+            expiredLicensePlugins = me.filterExpiredPlugins(data.expiredLicensePlugins, true),
+            soonExpiredLicensePlugins = me.filterExpiredPlugins(data.expiredLicensePlugins, false),
+            expiredPlugins = me.filterExpiredPlugins(data.expiredPluginSubscriptions, true),
+            soonExpiredPlugins = me.filterExpiredPlugins(data.expiredPluginSubscriptions, false);
 
         if(data.isShopUpgraded == false) {
             me.displayShopNotUpgradedShopMessage();
@@ -88,18 +165,28 @@ Ext.define('Shopware.notification.SubscriptionWarning', {
             me.displayWrongVersionNotice(data.wrongVersionPlugins);
         }
 
-        var expiredPlugins = me.filterExpiredPlugins(data.expiredPluginSubscriptions, true);
         if (expiredPlugins && expiredPlugins.length > 0) {
             me.displaySubscriptionNotice(expiredPlugins);
         }
 
-        var soonExpiredPlugins = me.filterExpiredPlugins(data.expiredPluginSubscriptions, false);
         if (soonExpiredPlugins && soonExpiredPlugins.length > 0) {
             me.displayExpiredSoonSubscriptionNotice(soonExpiredPlugins);
         }
+
+        if (expiredLicensePlugins && expiredLicensePlugins.length > 0) {
+            me.displayExpiredLicensePluginsNotice(expiredLicensePlugins);
+        }
+
+        if (soonExpiredLicensePlugins && soonExpiredLicensePlugins.length > 0) {
+            me.displaySoonExpiredLicensePluginsNotice(soonExpiredLicensePlugins);
+        }
+
+        if (data.unknownLicensePlugins && data.unknownLicensePlugins.length > 0) {
+            me.displayUnknownLicensePluginsNotice(data.unknownLicensePlugins);
+        }
     },
 
-    displayWrongVersionNotice: function (plugins) {
+    displayWrongVersionNotice: function(plugins) {
         var me          = this,
             pluginNames = me.getPluginNamesMessage(plugins, '<br />');
 
@@ -109,7 +196,7 @@ Ext.define('Shopware.notification.SubscriptionWarning', {
         });
     },
 
-    displayNotUpgradedNotice: function (plugins) {
+    displayNotUpgradedNotice: function(plugins) {
         var me          = this,
             pluginNames = me.getPluginNamesMessage(plugins, '<br />');
 
@@ -120,7 +207,7 @@ Ext.define('Shopware.notification.SubscriptionWarning', {
 
     },
 
-    displaySubscriptionNotice: function (plugins) {
+    displaySubscriptionNotice: function(plugins) {
         var me          = this,
             pluginNames = me.getPluginNamesMessage(plugins, '<br />');
 
@@ -140,12 +227,67 @@ Ext.define('Shopware.notification.SubscriptionWarning', {
         });
     },
 
-    displayShopNotUpgradedShopMessage: function (data) {
+    displayShopNotUpgradedShopMessage: function(data) {
         var me = this;
         Shopware.Notification.createStickyGrowlMessage({
             text: '<b>' + me.snippets.shop_license_upgrade + '</b>',
             width: 440
         });
+    },
+
+    displayExpiredLicensePluginsNotice: function(plugins) {
+        var me          = this,
+            pluginNames = me.getPluginNamesMessage(plugins, '<br />');
+
+        Shopware.Notification.createStickyGrowlMessage({
+            title: me.snippets.expired_license,
+            text: Ext.String.format(me.snippets.expired_license_warning, plugins.length, pluginNames),
+            width: 440,
+            onCloseButton: function() {
+                Ext.Msg.confirm(
+                    me.snippets.expired_license,
+                    me.snippets.confirm_plugin_deactivation,
+                    function(btn) {
+                        if (btn == 'yes') {
+                            me.deactivateExpiredPlugins(plugins);
+                        }
+                    }
+                );
+            }
+        });
+    },
+
+    displaySoonExpiredLicensePluginsNotice: function(plugins) {
+        var me          = this,
+            pluginNames = me.getSoonExpiredPluginNamesMessage(plugins, '<br />');
+
+        Shopware.Notification.createStickyGrowlMessage({
+            title: me.snippets.expiring_license,
+            text: Ext.String.format(me.snippets.expiring_license_warning, plugins.length, pluginNames),
+            width: 440
+        });
+    },
+
+    displayUnknownLicensePluginsNotice: function(plugins) {
+        var me          = this,
+            pluginNames = me.getPluginNamesMessage(plugins, '<br />');
+
+        Shopware.Notification.createStickyGrowlMessage({
+            text: Ext.String.format(me.snippets.no_license, plugins.length, pluginNames),
+            width: 440,
+            onCloseButton: function() {
+                Ext.Msg.confirm(
+                    me.snippets.expired_license,
+                    me.snippets.confirm_plugin_deactivation,
+                    function(btn) {
+                        if (btn == 'yes') {
+                            me.deactivateExpiredPlugins(plugins);
+                        }
+                    }
+                );
+            }
+        });
+
     },
 
     /**
@@ -217,5 +359,20 @@ Ext.define('Shopware.notification.SubscriptionWarning', {
             return 1;
         }
         return 0;
+    },
+
+    deactivateExpiredPlugins: function() {
+        var me = this;
+
+        Shopware.app.Application.addSubApplication({
+                name: 'Shopware.apps.PluginManager'
+            },
+            undefined,
+            function() {
+                Ext.Function.defer(function () {
+                    Shopware.app.Application.fireEvent('display-installed-plugins');
+                }, 2000);
+            }
+        );
     }
 });

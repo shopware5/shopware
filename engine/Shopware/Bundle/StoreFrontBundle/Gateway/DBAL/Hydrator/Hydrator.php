@@ -67,6 +67,21 @@ class Hydrator
     }
 
     /**
+     * @param string $prefix
+     * @param array $data
+     * @return array
+     */
+    protected function addArrayPrefix($prefix, array $data)
+    {
+        $result = [];
+        foreach ($data as $key => $value) {
+            $key = $prefix . '_' . $key;
+            $result[$key] = $value;
+        }
+        return $result;
+    }
+
+    /**
      * @param array $data
      * @param array $keys
      * @return array
@@ -83,5 +98,67 @@ class Hydrator
         }
 
         return $data;
+    }
+
+    /**
+     * @param array $data
+     * @param string $prefix
+     * @param array $mapping
+     * @param null $id used for `merged` translations
+     * @param bool $addPrefix
+     * @return array
+     */
+    protected function getTranslation(array $data, $prefix, array $mapping = [], $id = null, $addPrefix = true)
+    {
+        if ($prefix === null) {
+            $key = 'translation';
+        } else {
+            $key = $prefix . '_translation';
+        }
+
+        $fallback = $key . '_fallback';
+
+        $fallback = $this->extractTranslation($data, $fallback, $id);
+        $translation = $this->extractTranslation($data, $key, $id);
+
+        $translation = $translation + $fallback;
+
+        if (!empty($mapping)) {
+            $translation = $this->convertArrayKeys($translation, $mapping);
+        }
+
+        if (!$addPrefix) {
+            return $translation;
+        }
+
+        return $this->addArrayPrefix($prefix, $translation);
+    }
+
+    /**
+     * @param array $data
+     * @param string $key
+     * @param null|int $id
+     * @return array
+     */
+    private function extractTranslation(array $data, $key, $id = null)
+    {
+        if (!isset($data[$key]) || empty($data[$key])) {
+            return [];
+        }
+
+        $translation = unserialize($data[$key]);
+        if (!$translation) {
+            return [];
+        }
+
+        if ($id === null) {
+            return $translation;
+        }
+
+        if (!isset($translation[$id])) {
+            return [];
+        }
+
+        return $translation[$id];
     }
 }

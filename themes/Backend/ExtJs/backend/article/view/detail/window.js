@@ -151,8 +151,6 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
         additional: {
             title:'{s name=detail/additional_fields/title}Additional fields{/s}',
             comment:'{s name=detail/additional_fields/comment}Comment{/s}',
-            attribute1:'{s name=detail/additional_fields/free_text_1}Free text 1{/s}',
-            attribute2:'{s name=detail/additional_fields/free_text_2}Free text 2{/s}'
         },
         basePrice: {
             title:'{s name=detail/base_price/title}Base price calculation{/s}',
@@ -253,7 +251,7 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
 
         me.imageTab = Ext.create('Ext.container.Container', {
             layout: {
-                type: 'hbox',
+                type: 'vbox',
                 align: 'stretch'
             },
             title: me.snippets.imageTab,
@@ -386,6 +384,14 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
                 me.createActionsToolbar()
             ]
         });
+
+        me.attributeForm = Ext.create('Shopware.attribute.Form', {
+            table: 's_articles_attributes',
+            allowTranslation: false,
+            fieldSetPadding: 0,
+            translationForm: me.detailForm
+        });
+        me.detailForm.add(me.attributeForm);
 
         return me.detailContainer = Ext.create('Ext.container.Container', {
             layout: 'fit',
@@ -617,38 +623,36 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
      * @return Array
      */
     createImageTab: function() {
-        var me = this, leftContainer;
+        var me = this, topContainer;
 
         me.imageList = Ext.create('Shopware.apps.Article.view.image.List', {
             article: me.article,
-            margin: '0 10 10',
-            flex: 1
+            flex: 5,
+            layout: {
+                anchor: '100%'
+            }
         });
-        me.imageUpload = Ext.create('Shopware.apps.Article.view.image.Upload', {
-            article: me.article,
-            margin: 10,
-            flex: 1,
-            autoScroll:true
-        });
+
         me.imageInfo = Ext.create('Shopware.apps.Article.view.image.Info', {
-            margin: 10,
-            width: 390,
+            flex: 4,
+            margin: '0 0 0 10',
             configuratorGroupStore: me.configuratorGroupStore
         });
 
-        leftContainer = Ext.create('Ext.container.Container', {
+        topContainer = Ext.create('Ext.container.Container', {
             flex: 1,
+            padding: 10,
             layout: {
-                type: 'vbox',
+                type: 'hbox',
                 align: 'stretch'
             },
             items: [
-                me.imageUpload,
-                me.imageList
+                me.imageList,
+                me.imageInfo
             ]
         });
 
-        return [ leftContainer, me.imageInfo ];
+        return [ topContainer ];
     },
 
     /**
@@ -880,7 +884,6 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
     onStoresLoaded: function(article, stores) {
         var me = this;
         me.article = article;
-        me.detailForm.add(me.attributeFieldSet);
 
         me.unitComboBox.bindStore(stores['unit']);
         me.supplierStore = stores['suppliers'];
@@ -911,6 +914,9 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
         me.resourcesTab.setDisabled(false);
 
         me.variantListing.customerGroupStore = stores['customerGroups'];
+
+        me.attributeForm.loadAttribute(article.get('mainDetailId'));
+        me.attributeForm.disableForm(false);
 
         if(me.subApp.splitViewActive) {
             me.variantTab.setDisabled(true);
@@ -1041,7 +1047,6 @@ Ext.define('Shopware.apps.Article.view.detail.Window', {
             customerGroupStore: me.customerGroupStore,
             shopStore: me.shopStore,
             taxStore: me.taxStore,
-            attributeFields: me.attributeFields,
             supplierStore: me.supplierStore,
             templateStore: me.templateStore,
             dependencyStore: me.dependencyStore,

@@ -15,45 +15,48 @@
         "issues": "https://issues.shopware.com"
     },
     "require": {
-        "php": ">=5.4.0",
+        "php": "^5.6.4||^7.0",
         "ext-curl": "*",
         "ext-mbstring": "*",
         "ext-gd": "*",
-        "symfony/http-kernel": "2.7.3",
-        "symfony/config": "2.7.3",
-        "symfony/dependency-injection": "2.7.3",
-        "symfony/validator": "2.7.3",
-        "symfony/filesystem": "2.7.3",
-        "symfony/finder": "2.7.3",
-        "symfony/console": "2.7.3",
-        "monolog/monolog": "1.13.1",
-        "ircmaxell/password-compat": "1.0.4",
-        "ramsey/array_column": "1.1.3",
-        "doctrine/common": "2.5.1",
-        "doctrine/dbal": "2.5.1",
-        "doctrine/orm": "2.5.1",
-        "doctrine/cache": "1.5.1",
-        "beberlei/assert": "2.4.0",
+        "symfony/http-kernel": "2.8.6",
+        "symfony/config": "2.8.6",
+        "symfony/class-loader": "2.8.6",
+        "symfony/dependency-injection": "2.8.6",
+        "symfony/validator": "2.8.6",
+        "symfony/filesystem": "2.8.6",
+        "symfony/finder": "2.8.6",
+        "symfony/console": "2.8.6",
+        "symfony/form": "2.8.6",
+        "monolog/monolog": "1.19.0",
+        "doctrine/common": "2.6.1",
+        "doctrine/dbal": "2.5.4",
+        "doctrine/orm": "2.5.4",
+        "doctrine/cache": "1.6.0",
+        "beberlei/assert": "2.5.0",
         "zendframework/zend-escaper": "2.5.1",
-        "oyejorge/less.php": "1.7.0.5",
-        "guzzlehttp/guzzle": "5.1.0",
-        "egulias/email-validator": "1.2.9",
-        "elasticsearch/elasticsearch": "2.0.0",
-        "ongr/elasticsearch-dsl": "v1.0.0",
-        "league/flysystem": "1.0.18",
-        "indigophp/hash-compat": "1.1.0"
+        "oyejorge/less.php": "1.7.0.10",
+        "guzzlehttp/guzzle": "5.3.0",
+        "egulias/email-validator": "1.2.12",
+        "elasticsearch/elasticsearch": "2.1.5",
+        "ongr/elasticsearch-dsl": "2.0.1",
+        "league/flysystem": "1.0.22",
+        "paragonie/random_compat": "1.4.1"
     },
     "require-dev": {
-        "phpunit/phpunit": "~4.5",
-        "phpunit/dbunit": "~1.3",
-        "behat/behat": "~3.1.0",
+        "phpunit/phpunit": "~5.3",
+        "phpunit/dbunit": "~1.4",
+        "behat/behat": "~3.1",
         "behat/mink": "~1.7",
         "behat/mink-extension": "~2.1",
         "behat/mink-goutte-driver": "~1.2",
         "behat/mink-selenium2-driver": "~1.3",
         "sensiolabs/behat-page-object-extension": "~2.0.0-rc1",
-        "symfony/dom-crawler": "~2.7"
+        "symfony/dom-crawler": "~2.8"
     },
+    "include-path": [
+        "engine/Library/"
+    ],
     "autoload": {
         "psr-0": {
             "Doctrine\\Common\\Proxy\\AbstractProxyFactory": "engine/Library/",
@@ -71,13 +74,18 @@
     "autoload-dev": {
         "psr-4": {
             "Shopware\\Behat\\ShopwareExtension\\": "tests/Mink/Extension/ShopwareExtension",
-            "Shopware\\Tests\\Mink\\": "tests/Mink/features/bootstrap"
+            "Shopware\\Tests\\Mink\\": "tests/Mink/features/bootstrap",
+            "Shopware\\Tests\\": "tests/Functional"
         }
     },
     "config": {
         "autoloader-suffix": "Shopware",
         "platform": {
-            "php": "5.4"
+            "php": "5.6.4"
         }
+    },
+    "scripts": {
+        "test": "phpunit -c tests/",
+        "test-unit": "phpunit -c tests/phpunit_unit.xml.dist"
     }
 }

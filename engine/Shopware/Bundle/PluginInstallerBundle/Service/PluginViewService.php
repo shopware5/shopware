@@ -31,6 +31,7 @@ use Shopware\Bundle\PluginInstallerBundle\Context\UpdateListingRequest;
 use Shopware\Bundle\PluginInstallerBundle\Struct\ListingResultStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\PluginStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\StructHydrator;
+use Shopware\Bundle\PluginInstallerBundle\Struct\UpdateResultStruct;
 
 /**
  * Class PluginViewService
@@ -172,20 +173,23 @@ class PluginViewService
 
     /**
      * @param UpdateListingRequest $context
-     * @return PluginStruct[]
+     * @return UpdateResultStruct
      */
     public function getUpdates(UpdateListingRequest $context)
     {
-        $store = $this->storePluginService->getUpdates($context);
+        /** @var UpdateResultStruct $result */
+        $result = $this->storePluginService->getUpdates($context);
+        $store = $result->getPlugins();
 
         $merged = $this->getAdditionallyLocalData($store);
 
-        $result = [];
+        $plugins = [];
         foreach ($merged as $plugin) {
             if ($plugin->isUpdateAvailable()) {
-                $result[] = $plugin;
+                $plugins[] = $plugin;
             }
         }
+        $result->setPlugins($plugins);
 
         return $result;
     }

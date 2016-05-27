@@ -34,7 +34,7 @@
  */
 function smarty_modifier_currency($value, $config = null, $position = null)
 {
-    if (!Enlight_Application::Instance()->Bootstrap()->hasResource('Currency')) {
+    if (!Shopware()->Container()->has('Currency')) {
         return $value;
     }
 
@@ -56,12 +56,10 @@ function smarty_modifier_currency($value, $config = null, $position = null)
         }
     }
 
-    $currency = Enlight_Application::Instance()->Currency();
+    $currency = Shopware()->Container()->get('Currency');
     $value = floatval(str_replace(',', '.', $value));
     $value = $currency->toCurrency($value, $config);
-    if (function_exists('mb_convert_encoding')) {
-        $value = mb_convert_encoding($value, 'HTML-ENTITIES', 'UTF-8');
-    }
+    $value = mb_convert_encoding($value, 'HTML-ENTITIES', 'UTF-8');
     $value = htmlentities($value, ENT_COMPAT, 'UTF-8', false);
     return $value;
 }

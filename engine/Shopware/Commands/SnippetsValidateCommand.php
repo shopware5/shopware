@@ -90,9 +90,9 @@ class SnippetsValidateCommand extends ShopwareCommand
     protected function validatePlugins(SnippetValidator $validator)
     {
         $invalidPaths = [];
-        $pluginPaths = ['Default', 'Local', 'Community'];
-        foreach ($pluginPaths as $path) {
-            $pluginBasePath = $this->container->get('application')->AppPath('Plugins_'.$path);
+
+        $pluginDirectories = $this->container->getParameter('shopware.plugin_directories');
+        foreach ($pluginDirectories as $pluginBasePath) {
             foreach (array('Backend', 'Core', 'Frontend') as $namespace) {
                 foreach (new \DirectoryIterator($pluginBasePath.$namespace) as $pluginDir) {
                     if ($pluginDir->isDot() || !$pluginDir->isDir()) {

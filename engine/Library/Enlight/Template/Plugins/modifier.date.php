@@ -51,7 +51,7 @@ function smarty_modifier_date($value, $format = null, $type = null)
     }
 
     /** @var Zend_Locale $locale */
-    $locale = Enlight_Application::Instance()->Bootstrap()->getResource('locale');
+    $locale = Shopware()->Container()->get('locale');
     if (is_string($value)) {
         $value = strtotime($value);
     } elseif ($value instanceof DateTime) {

@@ -77,6 +77,7 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
         $this->View()->assign('sAction', isset($this->View()->sAction) ? $this->View()->sAction : 'index', true);
         $this->View()->assign('sErrorFlag', isset($this->View()->sErrorFlag) ? $this->View()->sErrorFlag : array(), true);
         $this->View()->assign('sFormData', isset($this->View()->sFormData) ? $this->View()->sFormData : array(), true);
+        $this->View()->assign('userLoggedIn', Shopware()->Modules()->Admin()->sCheckUser());
 
         if (!empty(Shopware()->Session()->sUserId) && empty($this->Request()->sVoteName)
           && $this->Request()->getParam('__cache') !== null) {
@@ -143,14 +144,6 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
         } else {
             $breadcrumb = array();
             $categoryInfo = null;
-        }
-
-        // Don't add the article itself to the breadcrumb in the new template
-        if (Shopware()->Shop()->getTemplate()->getVersion() < 3) {
-            $breadcrumb[] = array(
-                'link' => $article['linkDetails'],
-                'name' => $article['articleName']
-            );
         }
 
         // SW-3493 sArticle->getArticleById and sBasket->sGetGetBasket differ in camelcase

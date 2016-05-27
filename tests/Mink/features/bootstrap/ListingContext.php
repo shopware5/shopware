@@ -2,9 +2,9 @@
 
 namespace Shopware\Tests\Mink;
 
-use Shopware\Tests\Mink\Page\Emotion\Listing;
-use Shopware\Tests\Mink\Element\Emotion\FilterGroup;
-use Shopware\Tests\Mink\Element\Emotion\ArticleBox;
+use Shopware\Tests\Mink\Page\Listing;
+use Shopware\Tests\Mink\Element\FilterGroup;
+use Shopware\Tests\Mink\Element\ArticleBox;
 use Behat\Gherkin\Node\TableNode;
 
 class ListingContext extends SubContext

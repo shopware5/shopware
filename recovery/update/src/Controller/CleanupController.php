@@ -69,12 +69,18 @@ class CleanupController
     private $shopwarePath;
 
     /**
+     * @var \PDO
+     */
+    private $conn;
+
+    /**
      * @param Request $request
      * @param Response $response
      * @param DummyPluginFinder $pluginFinder
      * @param CleanupFilesFinder $filesFinder
      * @param Slim $app
      * @param string $shopwarePath
+     * @param \PDO $conn
      */
     public function __construct(
         Request $request,
@@ -82,7 +88,8 @@ class CleanupController
         DummyPluginFinder $pluginFinder,
         CleanupFilesFinder $filesFinder,
         Slim $app,
-        $shopwarePath
+        $shopwarePath,
+        \PDO $conn
     ) {
         $this->request      = $request;
         $this->response     = $response;
@@ -90,6 +97,7 @@ class CleanupController
         $this->pluginFinder = $pluginFinder;
         $this->filesFinder  = $filesFinder;
         $this->shopwarePath = $shopwarePath;
+        $this->conn = $conn;
     }
 
     public function cleanupOldFiles()
@@ -109,6 +117,8 @@ class CleanupController
         }
 
         if ($this->request->isPost()) {
+            $this->cleanupTemplateRelations();
+
             $result = [];
             foreach ($cleanupList as $path) {
                 $result = array_merge($result, Utils::cleanPath($path));
@@ -169,5 +179,57 @@ class CleanupController
                 rename($a->getPathname(), $mediaPath . "/" . $a->getFilename());
             }
         }
+    }
+
+    private function cleanupTemplateRelations()
+    {
+        $affectedShopsSql = <<<SQL
+SELECT shops.id, template.id as tplId, doctemplate.id as docTplId, template.version as tplVersion, doctemplate.version as docTplVersion
+FROM `s_core_shops` as shops
+LEFT JOIN `s_core_templates` as template ON shops.template_id = template.id
+LEFT JOIN `s_core_templates` as doctemplate ON shops.document_template_id = doctemplate.id
+WHERE
+  shops.template_id IS NOT NULL
+  OR shops.document_template_id IS NOT NULL
+HAVING
+  tplId IS NULL
+  OR docTplId IS NULL
+  OR template.version < 3
+  OR doctemplate.version < 3
+SQL;
+        $affectedShops = $this->conn->query($affectedShopsSql)->fetchAll();
+
+        if (empty($affectedShops)) {
+            return;
+        }
+
+        $sql = "SELECT id FROM `s_core_templates` WHERE version = 3 AND parent_id IS NOT NULL ORDER BY id ASC LIMIT 1";
+        $templateId = $this->conn->query($sql)->fetchColumn();
+
+        foreach ($affectedShops as $shop) {
+            if ($shop['tplId'] === null || $shop['tplVersion'] < 3) {
+                $this->updateShopConfig('template_id', $templateId, $shop['id']);
+            }
+
+            if ($shop['docTplId'] === null || $shop['docTplVersion'] < 3) {
+                $this->updateShopConfig('document_template_id', $templateId, $shop['id']);
+            }
+        }
+
+        $_SESSION['changedTheme'] = true;
+    }
+
+    /**
+     * @param $field
+     * @param $value
+     * @param $shopId
+     */
+    private function updateShopConfig($field, $value, $shopId)
+    {
+        $this->conn->prepare("UPDATE `s_core_shops` SET ".$field." = :newValue WHERE id = :shopId")
+            ->execute([
+                ':newValue' => $value,
+                ':shopId' => $shopId
+            ]);
     }
 }

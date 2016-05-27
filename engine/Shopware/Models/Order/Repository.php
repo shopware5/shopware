@@ -188,7 +188,6 @@ class Repository extends ModelRepository
             'dispatchAttribute',
             'subShop',
             'locale',
-            'debit'
         ));
 
         $builder->from('Shopware\Models\Order\Order', 'orders');
@@ -200,7 +199,6 @@ class Repository extends ModelRepository
                 ->leftJoin('orders.orderStatus', 'orderStatus')
                 ->leftJoin('orders.customer', 'customer')
                 ->leftJoin('orders.paymentInstances', 'paymentInstances')
-                ->leftJoin('customer.debit', 'debit')
                 ->leftJoin('orders.billing', 'billing')
                 ->leftJoin('billing.country', 'billingCountry')
                 ->leftJoin('orders.shipping', 'shipping')
@@ -269,9 +267,7 @@ class Repository extends ModelRepository
                 'shop',
                 'dispatch',
                 'paymentStatus',
-                'orderStatus',
-                'billingAttribute',
-                'attribute'
+                'orderStatus'
             ));
 
         $builder->from('Shopware\Models\Order\Order', 'orders');
@@ -283,9 +279,7 @@ class Repository extends ModelRepository
                 ->leftJoin('billing.country', 'billingCountry')
                 ->leftJoin('billing.state', 'billingState')
                 ->leftJoin('orders.shop', 'shop')
-                ->leftJoin('orders.dispatch', 'dispatch')
-                ->leftJoin('billing.attribute', 'billingAttribute')
-                ->leftJoin('orders.attribute', 'attribute');
+                ->leftJoin('orders.dispatch', 'dispatch');
 
         if (!empty($filters)) {
             $builder = $this->filterListQuery($builder, $filters);
@@ -312,15 +306,11 @@ class Repository extends ModelRepository
         $builder->select(array(
                 'orders',
                 'details',
-                'detailAttribute',
                 'documents',
                 'documentType',
-                'documentAttribute',
                 'customer',
                 'paymentInstances',
-                'debit',
                 'shipping',
-                'shippingAttribute',
                 'shippingCountry',
                 'shippingState',
                 'subShop',
@@ -329,15 +319,11 @@ class Repository extends ModelRepository
         $builder->from('Shopware\Models\Order\Order', 'orders');
         $builder->leftJoin('orders.documents', 'documents')
                 ->leftJoin('documents.type', 'documentType')
-                ->leftJoin('documents.attribute', 'documentAttribute')
                 ->leftJoin('orders.details', 'details')
-                ->leftJoin('details.attribute', 'detailAttribute')
                 ->leftJoin('orders.customer', 'customer')
-                ->leftJoin('customer.debit', 'debit')
                 ->leftJoin('orders.paymentInstances', 'paymentInstances')
                 ->leftJoin('orders.shipping', 'shipping')
                 ->leftJoin('shipping.state', 'shippingState')
-                ->leftJoin('shipping.attribute', 'shippingAttribute')
                 ->leftJoin('shipping.country', 'shippingCountry')
                 ->leftJoin('orders.languageSubShop', 'subShop')
                 ->leftJoin('subShop.locale', 'locale');

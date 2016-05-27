@@ -139,10 +139,10 @@ class ConfigLoader
     {
         if ($path !== null) {
             $path = str_replace('_', DIRECTORY_SEPARATOR, $path);
-            return $this->documentRoot . '/engine/Shopware/'. $path . DIRECTORY_SEPARATOR;
+            return $this->documentRoot . 'engine/Shopware/'. $path . DIRECTORY_SEPARATOR;
         }
 
-        return $this->documentRoot . '/engine/Shopware/';
+        return $this->documentRoot . 'engine/Shopware/';
     }
 
     /**
@@ -155,10 +155,10 @@ class ConfigLoader
     {
         if ($path !== null) {
             $path = str_replace('_', DIRECTORY_SEPARATOR, $path);
-            return $this->documentRoot . '/tests/Shopware/'. $path . DIRECTORY_SEPARATOR;
+            return $this->documentRoot . 'tests/Shopware/'. $path . DIRECTORY_SEPARATOR;
         }
 
-        return $this->documentRoot . '/tests/Shopware/';
+        return $this->documentRoot . 'tests/Shopware/';
     }
 
     /**

@@ -42,7 +42,6 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
     defaults: {
         anchor: '100%'
     },
-
     initComponent: function() {
         var me = this;
 
@@ -58,10 +57,27 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
             items: me.createFormElements()
         });
 
+        // Holder fieldset which contains the global element settings
+        me.globalSettingsFieldset = Ext.create('Ext.form.FieldSet', {
+            title: '{s name=base/global_fieldset_title}Global element settings{/s}',
+            defaults: me.defaults,
+            items: me.createGlobalFormElements()
+        });
+
         if(me.getSettings('component', true).description.length) {
             me.items.push(me.createDescriptionContainer());
         }
         me.items.push(me.elementFieldset);
+        me.items.push(me.globalSettingsFieldset);
+
+        me.plugins = [{
+            ptype: 'translation',
+            pluginId: 'translation',
+            translationType: 'emotionElement',
+            translationMerge: false,
+            translationKey: me.settings.record.get('id')
+        }];
+
         me.callParent(arguments);
         me.loadElementData(me.getSettings('record').get('data'));
     },
@@ -129,7 +145,8 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
                 allowBlank: (item.get('allowBlank') ? true : false),
                 value: item.get('defaultValue') || '',
                 labelWidth: 100,
-                boxLabel: boxLabel
+                boxLabel: boxLabel,
+                translatable: item.get('translatable')
             });
         });
 
@@ -137,10 +154,52 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
     },
 
     /**
+     * Contains the global settings form elements.
+     *
+     * @private
+     * @return [object] Ext.form.field.Text
+     */
+    createGlobalFormElements: function() {
+        var me = this, record = me.getSettings('record');
+
+        me.cssClassField = Ext.create('Ext.form.field.Text', {
+            fieldLabel: '{s name=base/css_class}CSS class{/s}',
+            supportText: '{s name=base/support_text}Multiple classes can be added by separating them with a whitespace.{/s}',
+            name: 'cssClass',
+            cls: 'css-field',
+            anchor: '100%',
+            allowBlank: true,
+            labelWidth: 100,
+            value: record.get('cssClass') || '',
+            validator: function(value) {
+                if (!value) {
+                    return true;
+                }
+
+                if(!value.match(/^[A-Za-z0-9-_ ]+$/)) {
+                    return '{s name=base/validator_special_character_error}The input value can not contain any special characters.{/s}';
+                }
+
+                if(value.match(/\s([-_ 0-9])/)) {
+                    return '{s name=base/validator_first_character_error}Class names can not start with a number, whitespace, underscore or hyphen.{/s}';
+                }
+
+                if(value.match(/^[-_ 0-9]/)) {
+                    return '{s name=base/validator_first_character_error}Class names can not start with a number, whitespace, underscore or hyphen.{/s}';
+                }
+
+                return true;
+            }
+        });
+
+        return me.cssClassField;
+    },
+
+    /**
      * Creates a fieldset with the element description.
      *
      * @private
-     * @return [object] Ext.form.FielSet
+     * @return [object] Ext.form.FieldSet
      */
     createDescriptionContainer: function() {
         var me = this, component = me.getSettings('component', true);

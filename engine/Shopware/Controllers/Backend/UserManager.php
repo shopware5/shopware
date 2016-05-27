@@ -370,7 +370,7 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
 
         //get posted user
         $userID = $this->Request()->getParam('id');
-        $getCurrentIdentity = Shopware()->Auth()->getIdentity();
+        $getCurrentIdentity = Shopware()->Container()->get('Auth')->getIdentity();
 
         // Backend users shall not delete their current login
         if ($userID == $getCurrentIdentity->id) {

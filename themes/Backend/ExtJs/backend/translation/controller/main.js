@@ -113,10 +113,13 @@ Ext.define('Shopware.apps.Translation.controller.Main',
                 itemclick: me.onLoadTranslations
             },
             'translation-main-window button[action=translation-main-window-cancel]': {
-                click: me.onSaveTranslations
+                click: me.onCloseWindow
             },
             'translation-main-window button[action=translation-main-window-save]': {
-                click: me.onCloseWindow
+                click: me.onSaveTranslations
+            },
+            'translation-main-window button[action=translation-main-window-save-and-close]': {
+                click: me.onSaveAndCloseTranslation
             },
             'translation-main-toolbar button[action=translation-main-toolbar-google]': {
                 click: me.onGoogleTranslator
@@ -136,9 +139,16 @@ Ext.define('Shopware.apps.Translation.controller.Main',
         me.registerTranslationSerivces();
 
         me.callParent(arguments);
+    },
 
-
-
+    /**
+     * Saves the translation and closes the window
+     * @param btn
+     */
+    onSaveAndCloseTranslation: function(btn) {
+        var me = this;
+        me.onSaveTranslations();
+        me.onCloseWindow(btn);
     },
 
     /**

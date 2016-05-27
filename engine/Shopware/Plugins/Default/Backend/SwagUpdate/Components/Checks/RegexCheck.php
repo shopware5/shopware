@@ -36,6 +36,16 @@ class RegexCheck implements CheckInterface
     const CHECK_TYPE = 'regex';
 
     /**
+     * @var SnippetNamespace
+     */
+    private $namespace;
+
+    /**
+     * @var string
+     */
+    private $userLang;
+
+    /**
      * @param SnippetNamespace $namespace
      * @param string           $userLang
      */

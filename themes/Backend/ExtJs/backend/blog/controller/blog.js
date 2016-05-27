@@ -48,8 +48,8 @@ Ext.define('Shopware.apps.Blog.controller.Blog', {
         { ref:'grid', selector:'blog-blog-list' },
         { ref:'detailWindow', selector:'blog-blog-window' },
         { ref:'optionsPanel', selector:'blog-blog-detail-sidebar-options' },
-        { ref:'commentPanel', selector:'blog-blog-detail-comments' }
-
+        { ref:'commentPanel', selector:'blog-blog-detail-comments' },
+        { ref:'attributeForm', selector: 'blog-blog-window shopware-attribute-form' }
     ],
 
     /**
@@ -217,13 +217,14 @@ Ext.define('Shopware.apps.Blog.controller.Blog', {
      */
     onDuplicateBlogArticle:function (view, rowIndex) {
         var me = this,
-                store = me.subApplication.detailStore,
-                record = me.subApplication.listStore.getAt(rowIndex);
+            store = me.subApplication.detailStore,
+            record = me.subApplication.listStore.getAt(rowIndex),
+            id = record.get("id");
 
         store.load({
             filters : [{
                 property: 'id',
-                value: record.get("id")
+                value: id
             }],
             callback: function(records, operation) {
                 if (operation.success !== true || !records.length) {
@@ -232,8 +233,7 @@ Ext.define('Shopware.apps.Blog.controller.Blog', {
                 me.detailRecord = records[0];
 
                 //delete id to save a new blog with the data of the duplicated one
-                me.detailRecord.data.id = '';
-                me.detailRecord.internalId = '';
+                me.detailRecord.set('id', null);
                 store.filters.clear();
 
                 me.getView('blog.Window').create({
@@ -440,6 +440,13 @@ Ext.define('Shopware.apps.Blog.controller.Blog', {
         record.save({
             callback: function (self,operation) {
                 if (operation.success) {
+                    // save attributes
+                    var response = Ext.JSON.decode(operation.response.responseText);
+                    var data = response.data;
+
+                    me.getAttributeForm().saveAttribute(data.id);
+                    record.set('id', data.id);
+
                     //enable the tabpanel
                     me.getCommentPanel().enable();
                     listStore.load();

@@ -30,9 +30,6 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Shopware\Bundle\PluginInstallerBundle\Context\PluginsByTechnicalNameRequest;
-use Shopware\Bundle\PluginInstallerBundle\Struct\PluginStruct;
-use Shopware\Models\Plugin\Plugin;
 
 /**
  * @category  Shopware

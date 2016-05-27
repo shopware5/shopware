@@ -74,10 +74,6 @@ class ConfigLoader implements SubscriberInterface
         /**@var $shop Shop*/
         $shop = $this->container->get('shop');
 
-        if ($shop->getTemplate()->getVersion() < 3) {
-            return;
-        }
-
         $templateManager = $this->container->get('template');
         $themeSettings = $templateManager->getTemplateVars('theme');
         if (!empty($themeSettings)) {

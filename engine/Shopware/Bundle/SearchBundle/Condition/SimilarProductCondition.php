@@ -26,7 +26,6 @@ namespace Shopware\Bundle\SearchBundle\Condition;
 
 use Assert\Assertion;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 
 class SimilarProductCondition implements ConditionInterface
 {

@@ -57,21 +57,6 @@ Ext.define('Shopware.apps.Config.model.form.Country', {
         model: 'Shopware.apps.Base.model.CountryState',
         name: 'getStates',
         associationKey: 'states'
-    },{
-        type: 'hasMany',
-        model: 'Shopware.apps.Base.model.CountryAttribute',
-        name: 'getAttribute',
-        associationKey: 'attribute'
     }]
-});
-//{/block}
-
-//{block name="backend/config/model/form/country_attribute"}
-Ext.define('Shopware.apps.Config.model.CountryAttribute', {
-    extend: 'Ext.data.Model',
-
-    fields : [
-        { name: 'id', type: 'int' }
-    ]
 });
 //{/block}

@@ -22,8 +22,12 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Bundle\AccountBundle\Service\AddressServiceInterface;
+use Shopware\Bundle\AccountBundle\Service\AddressImportServiceInterface;
 use Shopware\Bundle\StoreFrontBundle;
+use Shopware\Components\NumberRangeIncrementerInterface;
 use Shopware\Components\Validator\EmailValidatorInterface;
+use Shopware\Models\Customer\Address;
 
 /**
  * Shopware Class that handles several
@@ -126,18 +130,46 @@ class sAdmin
      */
     public $sSYSTEM;
 
+    /**
+     * @var AddressImportServiceInterface
+     */
+    private $addressImportService;
+
+    /**
+     * @var AddressServiceInterface
+     */
+    private $addressService;
+
+    /**
+     * @var NumberRangeIncrementerInterface
+     */
+    private $numberRangeIncrementer;
+
+    /**
+     * @var Shopware\Bundle\AttributeBundle\Service\DataLoader
+     */
+    private $attributeLoader;
+
+    /**
+     * @var Shopware\Bundle\AttributeBundle\Service\DataPersister
+     */
+    private $attributePersister;
+
     public function __construct(
-        Enlight_Components_Db_Adapter_Pdo_Mysql          $db                 = null,
-        Enlight_Event_EventManager                       $eventManager       = null,
-        Shopware_Components_Config                       $config             = null,
-        Enlight_Components_Session_Namespace             $session            = null,
-        Enlight_Controller_Front                         $front              = null,
-        \Shopware\Components\Password\Manager            $passwordEncoder    = null,
-        Shopware_Components_Snippet_Manager              $snippetManager     = null,
-        Shopware_Components_Modules                      $moduleManager      = null,
-        sSystem                                          $systemModule       = null,
-        StoreFrontBundle\Service\ContextServiceInterface $contextService     = null,
-        EmailValidatorInterface                          $emailValidator     = null
+        Enlight_Components_Db_Adapter_Pdo_Mysql          $db                    = null,
+        Enlight_Event_EventManager                       $eventManager          = null,
+        Shopware_Components_Config                       $config                = null,
+        Enlight_Components_Session_Namespace             $session               = null,
+        Enlight_Controller_Front                         $front                 = null,
+        \Shopware\Components\Password\Manager            $passwordEncoder       = null,
+        Shopware_Components_Snippet_Manager              $snippetManager        = null,
+        Shopware_Components_Modules                      $moduleManager         = null,
+        sSystem                                          $systemModule          = null,
+        StoreFrontBundle\Service\ContextServiceInterface $contextService        = null,
+        EmailValidatorInterface                          $emailValidator        = null,
+        AddressImportServiceInterface                    $addressImportService  = null,
+        AddressServiceInterface                          $addressService        = null,
+        NumberRangeIncrementerInterface                  $numberRangeIncrementer    = null
     ) {
         $this->db = $db ? : Shopware()->Db();
         $this->eventManager = $eventManager ? : Shopware()->Events();
@@ -155,6 +187,11 @@ class sAdmin
         $this->contextService = $contextService ? : Shopware()->Container()->get('shopware_storefront.context_service');
         $this->emailValidator = $emailValidator ? : Shopware()->Container()->get('validator.email');
         $this->subshopId = $this->contextService->getShopContext()->getShop()->getParentId();
+        $this->addressImportService = $addressImportService ? : Shopware()->Container()->get('shopware_account.address_import_service');
+        $this->addressService = $addressService ? : Shopware()->Container()->get('shopware_account.address_service');
+        $this->attributeLoader = Shopware()->Container()->get('shopware_attribute.data_loader');
+        $this->attributePersister = Shopware()->Container()->get('shopware_attribute.data_persister');
+        $this->numberRangeIncrementer = $numberRangeIncrementer ? : Shopware()->Container()->get('shopware.number_range_incrementer');
     }
 
     /**
@@ -470,117 +507,6 @@ class sAdmin
     }
 
     /**
-     * Updates the billing address of the user
-     *
-     * @throws Enlight_Exception On database error
-     * @return boolean If operation was successful
-     */
-    public function sUpdateBilling()
-    {
-        $postData = $this->front->Request()->getPost();
-        $userId = $this->session->offsetGet('sUserId');
-
-        // Convert multiple birthday fields into a single value
-        if (!empty($postData['birthmonth']) && !empty($postData['birthday']) && !empty($postData['birthyear'])) {
-            $isValidDate = checkdate(
-                (int) $postData['birthmonth'],
-                (int) $postData['birthday'],
-                (int) $postData['birthyear']
-            );
-
-            if ($isValidDate) {
-                $timestamp = mktime(
-                    0, 0, 0,
-                    (int) $postData['birthmonth'],
-                    (int) $postData['birthday'],
-                    (int) $postData['birthyear']
-                );
-
-                $postData['birthday'] = date('Y-m-d', $timestamp);
-            } else {
-                $postData['birthday'] = '0000-00-00';
-            }
-        } else {
-            unset($postData['birthday']);
-        }
-
-        $fields = array(
-            'company',
-            'department',
-            'salutation',
-            'firstname',
-            'lastname',
-            'street',
-            'zipcode',
-            'city',
-            'phone',
-            'fax',
-            'countryID',
-            'stateID',
-            'ustid',
-            'birthday',
-            'additional_address_line1',
-            'additional_address_line2'
-        );
-
-        $data = array();
-        foreach ($fields as $field) {
-            if (isset($postData[$field])) {
-                $data[$field] = $postData[$field];
-            }
-        }
-
-        $data["countryID"] = $postData["country"];
-
-        $where = array(
-            'userID='.(int) $this->session->offsetGet('sUserId')
-        );
-
-        list($data, $where) = $this->eventManager->filter(
-            'Shopware_Modules_Admin_UpdateBilling_FilterSql',
-            array($data, $where),
-            array(
-                'subject' => $this,
-                "id" => $userId,
-                "user" => $postData
-            )
-        );
-
-        $this->db->update('s_user_billingaddress', $data, $where);
-
-        if ($this->db->getErrorMessage()) {
-            throw new Enlight_Exception(
-                "sUpdateBilling #01: Could not save data (billing address)"
-                .$this->db->getErrorMessage()
-            );
-        }
-
-        $billingId = $this->db->fetchOne(
-            'SELECT id FROM s_user_billingaddress WHERE userID = ?',
-            array((int) $this->session->offsetGet('sUserId'))
-        );
-        $where = array(" billingID = " . $billingId);
-
-        $data = $this->filterBillingAttributeData($billingId, $postData);
-        list($data, $where) = $this->eventManager->filter(
-            'Shopware_Modules_Admin_UpdateBillingAttributes_FilterSql',
-            array($data, $where),
-            array(
-                'subject' => $this,
-                "id" => $userId,
-                "user" => $postData
-            )
-        );
-
-        if (!empty($data)) {
-            $this->db->update('s_user_billingaddress_attributes', $data, $where);
-        }
-        $this->front->Request()->setPost($postData);
-
-        return true;
-    }
-
-    /**
      * Add or remove an email address from the mailing list
      *
      * @param boolean $status True if insert, false if remove
@@ -673,168 +599,6 @@ class sAdmin
     }
 
     /**
-     * Gets the current order addresses for a given type and current user
-     * If a valid address hash is provided, only that address is returned
-     * Used on frontend controllers to get and set addresses
-     *
-     * @param string $type shipping / billing
-     * @param string $request_hash secure hash
-     * @return array|bool Array with addresses if no match found, or array with address details
-     * if match found, or false on failure
-     */
-    public function sGetPreviousAddresses($type, $request_hash = null)
-    {
-        if (empty($type)) {
-            return false;
-        }
-        $userId = $this->session->offsetGet('sUserId');
-        if (empty($userId)) {
-            return false;
-        }
-
-        $type = $type == 'shipping' ? 'shipping' : 'billing';
-
-        $sql = '
-            SELECT
-                MD5(CONCAT(company, department, salutation, firstname, lastname, street, zipcode, city, a.countryID, a.stateId)) as hash,
-                company, department, salutation, firstname, lastname,
-                street, zipcode, city, a.countryID as country, a.countryID as countryID, a.stateId as stateId, countryname, cs.name as statename, additional_address_line1, additional_address_line2
-            FROM s_order_'.$type.'address AS a
-            LEFT JOIN s_core_countries co
-            ON a.countryID=co.id
-            LEFT JOIN s_core_countries_states cs
-            ON a.stateId=cs.id
-            WHERE a.userID=?
-            GROUP BY hash
-            ORDER BY MAX(a.id) DESC
-        ';
-
-        $addresses = $this->db->fetchAll($sql, array($userId));
-
-        foreach ($addresses as &$address) {
-            if (!empty($request_hash) && $address['hash'] == $request_hash) {
-                return $address;
-            }
-            $countryTranslation = $this->sGetCountryTranslation(array('id' => $address['countryID']));
-            $address = array_merge($address, $countryTranslation);
-            $stateTranslation = $this->sGetCountryStateTranslation(array('id' => $address['stateId']));
-            $address = array_merge($address, $stateTranslation);
-        }
-
-        if (!empty($request_hash)) {
-            return false;
-        }
-
-        return $addresses;
-    }
-
-    /**
-     * Updates the shipping address of the user
-     * Used in the Frontend Account controller
-     *
-     * @throws Enlight_Exception On database error
-     * @return boolean If operation was successful
-     */
-    public function sUpdateShipping()
-    {
-        $userId = (int) $this->session->offsetGet('sUserId');
-        if (empty($userId)) {
-            return false;
-        }
-
-        $postData = $this->front->Request()->getPost();
-
-        $shippingID = $this->db->fetchOne(
-            'SELECT id FROM s_user_shippingaddress WHERE userID = ?',
-            array($userId)
-        );
-
-        $fields = array(
-            'company',
-            'department',
-            'salutation',
-            'firstname',
-            'lastname',
-            'street',
-            'zipcode',
-            'city',
-            'countryID',
-            'stateID',
-            'additional_address_line1',
-            'additional_address_line2'
-        );
-
-        $updateData = array();
-        foreach ($fields as $field) {
-            if (isset($postData[$field])) {
-                $updateData[$field] = $postData[$field];
-            }
-        }
-        $updateData["countryID"] = isset($postData["country"]) ? $postData["country"] : 0;
-
-        list($updateData) = $this->eventManager->filter(
-            'Shopware_Modules_Admin_UpdateShipping_FilterSql',
-            array($updateData), array(
-                'subject' => $this,
-                "id" => $userId,
-                "user" => $postData
-            )
-        );
-
-        if (empty($shippingID)) {
-            $updateData["userID"] = $userId;
-            $this->db->insert('s_user_shippingaddress', $updateData);
-
-            $shippingID = $this->db->lastInsertId('s_user_shippingaddress');
-            $attributeData = array(
-                'shippingID' => $shippingID,
-                'text1' => $postData['text1'],
-                'text2' => $postData['text2'],
-                'text3' => $postData['text3'],
-                'text4' => $postData['text4'],
-                'text5' => $postData['text5'],
-                'text6' => $postData['text6']
-            );
-            list($attributeData) = $this->eventManager->filter(
-                'Shopware_Modules_Admin_UpdateShippingAttributes_FilterSql',
-                array($attributeData),
-                array(
-                    'subject' => $this,
-                    "id" => $userId,
-                    "user" => $postData
-                )
-            );
-            $this->db->insert('s_user_shippingaddress_attributes', $attributeData);
-        } else {
-            $where = array('id='.(int) $shippingID);
-            $this->db->update('s_user_shippingaddress', $updateData, $where);
-            $attributeData = $this->filterShippingAttributeData($shippingID, $postData);
-
-            $where = array('shippingID='.(int) $shippingID);
-            list($attributeData) = $this->eventManager->filter(
-                'Shopware_Modules_Admin_UpdateShippingAttributes_FilterSql',
-                array($attributeData),
-                array(
-                    'subject' => $this,
-                    "id" => $this->session->offsetGet('sUserId'),
-                    "user" => $postData
-                )
-            );
-            if (!empty($attributeData)) {
-                $this->db->update('s_user_shippingaddress_attributes', $attributeData, $where);
-            }
-        }
-
-        if ($this->db->getErrorMessage()) {
-            throw new Enlight_Exception(
-                "sUpdateShipping #01: Could not save data (billing address)"
-                .$this->db->getErrorMessage()
-            );
-        }
-        return true;
-    }
-
-    /**
      * Updates the payment mean of the user
      * Used in the Frontend Account controller
      *
@@ -874,321 +638,6 @@ class sAdmin
             );
         }
         return true;
-    }
-
-    /**
-     * Update user's email address and password
-     * Used in the Frontend Account controller
-     *
-     * @throws Enlight_Exception On database error
-     * @return boolean If operation was successful
-     */
-    public function sUpdateAccount()
-    {
-        $postData = $this->front->Request()->getPost();
-        $userId = $this->session->offsetGet('sUserId');
-
-        $email = strtolower($postData["email"]);
-        $password = $postData["password"];
-        $passwordConfirmation = $postData["passwordConfirmation"];
-
-
-        if ($password && $passwordConfirmation) {
-            // If password is set, update it
-            $encoderName = $this->passwordEncoder->getDefaultPasswordEncoderName();
-            $password = $this->passwordEncoder->encodePassword($password, $encoderName);
-
-            $this->session->offsetSet('sUserMail', $email);
-            $this->session->offsetSet('sUserPassword', $password);
-            $sqlAccount = 'UPDATE s_user SET email = ?, password = ?, encoder = ? WHERE id = ?';
-            $sqlAccount = $this->eventManager->filter(
-                'Shopware_Modules_Admin_UpdateAccount_FilterPasswordSql',
-                $sqlAccount,
-                array(
-                    'email' => $email,
-                    'password' => $password,
-                    'encoder' => $encoderName,
-                    'subject' => $this,
-                    'id' => $userId
-                )
-            );
-
-            $this->db->query(
-                $sqlAccount,
-                array($email, $password, $encoderName, $userId)
-            );
-        } else {
-            // Just update email
-            $this->session->offsetSet('sUserMail', $email);
-            $sqlAccount = 'UPDATE s_user SET email=? WHERE id=?';
-            $sqlAccount = $this->eventManager->filter(
-                'Shopware_Modules_Admin_UpdateAccount_FilterEmailSql',
-                $sqlAccount,
-                array(
-                    'email' => $email,
-                    'password' => $password,
-                    'subject' => $this,
-                    'id' => $userId
-                )
-            );
-
-            $this->db->query(
-                $sqlAccount,
-                array($email, $userId)
-            );
-        }
-
-        if ($this->db->getErrorMessage()) {
-            throw new Enlight_Exception(
-                "sUpdateAccount #01: Could not save data (account)"
-                .$this->db->getErrorMessage()
-            );
-        }
-        return true;
-    }
-
-    /**
-     * Validates the billing address against the provided rule set
-     * Used in the Frontend Account and Register controllers
-     *
-     * @param array $rules Set of rules that specify which fields are required
-     * @param boolean $edit If the current call is editing data from a new or existing customer
-     * @return array Array with errors that may have occurred
-     */
-    public function sValidateStep2($rules, $edit = false)
-    {
-        $sErrorMessages = array();
-        $sErrorFlag = array();
-
-        $postData = $this->front->Request()->getPost();
-
-        list($sErrorMessages, $sErrorFlag) = $this->eventManager->filter(
-            'Shopware_Modules_Admin_ValidateStep2_FilterStart',
-            array($sErrorMessages, $sErrorFlag),
-            array(
-                'edit' => $edit,
-                'rules' => $rules,
-                'subject' => $this,
-                'post' => $postData
-            )
-        );
-
-        if (isset($rules['ustid'])) {
-            $rules['ustid']['required']  = $this->config->get('vatcheckrequired');
-        }
-
-        foreach ($rules as $ruleKey => $ruleValue) {
-            $postData[$ruleKey] = trim($postData[$ruleKey]);
-
-            if (empty($postData[$ruleKey])
-                && !empty($rules[$ruleKey]["required"])
-                && empty($rules[$ruleKey]["addicted"])
-            ) {
-                $sErrorFlag[$ruleKey] = true;
-            }
-
-            if ($rules[$ruleKey]["in"] && !in_array($postData[$ruleKey], $rules[$ruleKey]["in"])) {
-                $sErrorFlag[$ruleKey] = true;
-            }
-
-            if (!empty($rules[$ruleKey]['date'])
-                && !empty($rules[$ruleKey]['required'])
-            ) {
-                $isValidDate = checkdate(
-                    (int) $postData[$rules[$ruleKey]['date']['m']],
-                    (int) $postData[$rules[$ruleKey]['date']['d']],
-                    (int) $postData[$rules[$ruleKey]['date']['y']]
-                );
-
-                if (!$isValidDate) {
-                    $sErrorFlag[$ruleKey] = true;
-                    $sErrorMessages[] = $this->snippetManager->getNamespace('frontend/account/internalMessages')
-                        ->get('DateFailure', 'Please enter a valid birthday');
-                }
-            }
-        }
-
-        if (count($sErrorFlag)) {
-            // Some error occurred
-            $sErrorMessages[] = $this->snippetManager->getNamespace('frontend/account/internalMessages')
-                ->get('ErrorFillIn', 'Please fill in all red fields');
-        }
-
-        // Remove redundant error messages
-        $sErrorMessages = array_unique($sErrorMessages);
-
-        if (!$edit) {
-            $register = $this->session->offsetGet('sRegister');
-            if (!count($sErrorMessages)) {
-                foreach ($rules as $ruleKey => $ruleValue) {
-                    $register['billing'][$ruleKey] = $postData[$ruleKey];
-                }
-            } else {
-                foreach ($rules as $ruleKey => $ruleValue) {
-                    unset($register["billing"][$ruleKey]);
-                }
-            }
-            $this->session->offsetSet('sRegister', $register);
-        }
-        list($sErrorMessages, $sErrorFlag) = $this->eventManager->filter(
-            'Shopware_Modules_Admin_ValidateStep2_FilterResult',
-            array($sErrorMessages, $sErrorFlag),
-            array(
-                'edit' => $edit,
-                'rules' => $rules,
-                'subject' => $this,
-                'post' => $postData
-            )
-        );
-
-        return array("sErrorFlag" => $sErrorFlag, "sErrorMessages" => $sErrorMessages);
-    }
-
-    /**
-     * Validates the shipping address against the provided rule set
-     * Used in the Frontend Account and Register controllers
-     *
-     * @param array $rules Set of rules that specify which fields are required
-     * @param bool If the current call is editing data from a new or existing customer
-     * @return array Array with errors that may have occurred
-     */
-    public function sValidateStep2ShippingAddress($rules, $edit = false)
-    {
-        $postData = $this->front->Request()->getPost();
-
-        foreach ($rules as $ruleKey => $ruleValue) {
-            if ($rules[$ruleKey]["addicted"]) {
-                $addictedField = array_keys($rules[$ruleKey]["addicted"]);
-                if ($postData[$addictedField[0]] == $rules[$ruleKey]["addicted"][$addictedField[0]]
-                    && !$postData[$ruleKey]
-                ) {
-                    $sErrorFlag[$ruleKey] = true;
-                }
-            } else {
-                if (!$postData[$ruleKey] && $rules[$ruleKey]["required"]) {
-                    $sErrorFlag[$ruleKey] = true;
-                }
-
-                if ($rules[$ruleKey]["in"] && !in_array($postData[$ruleKey], $rules[$ruleKey]["in"])) {
-                    $sErrorFlag[$ruleKey] = true;
-                }
-
-                if (preg_match("/SHIPPING/", $ruleKey)) {
-                    $clearedRuleKey = str_replace("SHIPPING", "", $ruleKey);
-                    $postData[$clearedRuleKey] = $postData[$ruleKey];
-                    $rules[$clearedRuleKey] = $rules[$ruleKey];
-                    unset($rules[$ruleKey]);
-                }
-            }
-        }
-
-        if (count($sErrorFlag)) {
-            // Some error occurred
-            $sErrorMessages[] = $this->snippetManager->getNamespace('frontend/account/internalMessages')
-                ->get('ErrorFillIn', 'Please fill in all red fields');
-        }
-
-        $register = $this->session->offsetGet('sRegister');
-        if (!$edit) {
-            if (!count($sErrorMessages)) {
-                foreach ($rules as $ruleKey => $ruleValue) {
-                    $register["shipping"][$ruleKey] = $postData[$ruleKey];
-                }
-            } else {
-                foreach ($rules as $ruleKey => $ruleValue) {
-                    unset($register["shipping"][$ruleKey]);
-                }
-            }
-        }
-        $this->session->offsetSet('sRegister', $register);
-
-        list($sErrorMessages, $sErrorFlag) = $this->eventManager->filter(
-            'Shopware_Modules_Admin_ValidateStep2Shipping_FilterResult',
-            array($sErrorMessages, $sErrorFlag),
-            array(
-                'edit' => $edit,
-                'rules' => $rules,
-                'subject' => $this,
-                'post' => $postData
-            )
-        );
-
-        return array("sErrorFlag" => $sErrorFlag, "sErrorMessages" => $sErrorMessages);
-    }
-
-    /**
-     * Validate account information
-     * Used in the Frontend Account and Register controllers
-     *
-     * @param boolean $edit If the current call is editing data from a new or existing customer
-     * @return array Array with errors that may have occurred
-     */
-    public function sValidateStep1($edit = false)
-    {
-        $postData = $this->front->Request()->getPost();
-        $encoderName = $this->passwordEncoder->getDefaultPasswordEncoderName();
-        $sErrorMessages = null;
-        $sErrorFlag = null;
-
-        $this->validateStep1Email($edit, $postData, $sErrorMessages, $sErrorFlag);
-
-        $register = $this->session->offsetGet('sRegister');
-        if (empty($register)) {
-            $this->session->offsetSet('sRegister', array());
-        }
-
-        $this->validateStep1Password($edit, $postData, $register, $encoderName, $sErrorMessages, $sErrorFlag);
-
-        // Check if email is already registered
-        if (isset($postData["email"]) && ($postData["email"] != $this->session->offsetGet('sUserMail'))) {
-            $addScopeSql = '';
-            if ($this->scopedRegistration == true) {
-                $addScopeSql = $this->db->quoteInto(' AND subshopID = ?', $this->subshopId);
-            }
-            $checkIfMailExists = $this->db->fetchRow(
-                'SELECT id FROM s_user WHERE email = ? AND accountmode != 1 ' . $addScopeSql,
-                array($postData["email"])
-            );
-            if ($checkIfMailExists && !$postData["skipLogin"]) {
-                $sErrorFlag["email"] = true;
-                $sErrorMessages[] = $this->snippetManager
-                    ->getNamespace('frontend/account/internalMessages')
-                    ->get('MailFailureAlreadyRegistered', 'This mail address is already registered');
-            }
-        }
-
-        // Save data in session
-        if (!$edit) {
-            if (!count($sErrorFlag) && !count($sErrorMessages)) {
-                $register['auth']["email"] = $postData["email"];
-                // Receive Newsletter yes / no
-                $register['auth']["receiveNewsletter"] = $postData["receiveNewsletter"];
-                if ($postData["password"]) {
-                    $register['auth']["encoderName"] = $encoderName;
-                    $register['auth']["password"] = $this->passwordEncoder->encodePassword(
-                        $postData["password"],
-                        $encoderName
-                    );
-                } else {
-                    unset($register['auth']["password"]);
-                    unset($register['auth']["encoderName"]);
-                }
-            } else {
-                unset($register['auth']["email"]);
-                unset($register['auth']["password"]);
-                unset($register['auth']["encoderName"]);
-            }
-
-            $this->session->offsetSet('sRegister', $register);
-        }
-
-        list($sErrorMessages, $sErrorFlag) = $this->eventManager->filter(
-            'Shopware_Modules_Admin_ValidateStep1_FilterResult',
-            array($sErrorMessages, $sErrorFlag),
-            array('edit' => $edit, 'subject' => $this, "post" => $postData)
-        );
-
-        return array("sErrorFlag" => $sErrorFlag, "sErrorMessages" => $sErrorMessages);
     }
 
     public function logout()
@@ -1342,8 +791,8 @@ class sAdmin
 
         $this->sSYSTEM->sSESSION_ID = $newSessionId;
         $this->session->offsetSet('sessionId', $newSessionId);
-        Shopware()->Bootstrap()->resetResource('SessionId');
-        Shopware()->Bootstrap()->registerResource('SessionId', $newSessionId);
+        Shopware()->Container()->reset('SessionId');
+        Shopware()->Container()->set('SessionId', $newSessionId);
 
         $this->eventManager->notify(
             'Shopware_Modules_Admin_Regenerate_Session_Id',
@@ -1667,295 +1116,6 @@ class sAdmin
         return $countryList;
     }
 
-
-    /**
-     * Stores user data in database.
-     * Used internally in sAdmin during the registration process
-     *
-     * @param array $userObject  Array with all information from the registration process
-     * @return int Created user id
-     */
-    public function sSaveRegisterMainData($userObject)
-    {
-        // Support for merchants
-        $sMerchant = $userObject["billing"]["sValidation"] ? : "";
-
-        $defaultCustomerGroup = $this->config->get('sDefaultCustomerGroup');
-        if (empty($defaultCustomerGroup)) {
-            $this->config->offsetSet('sDefaultCustomerGroup', 'EK');
-        }
-        $referer = $this->session->offsetGet('sReferer');
-
-        $partnerId = $this->session->offsetGet('sPartner');
-        if (!empty($partnerId)) {
-            $partner = (int) $this->db->fetchOne(
-                'SELECT id FROM s_emarketing_partner WHERE idcode = ?',
-                array($partnerId)
-            );
-        }
-
-        $data = array(
-            $userObject["auth"]["password"],
-            $userObject["auth"]["email"],
-            $userObject["payment"]["object"]["id"],
-            $userObject["auth"]["accountmode"],
-            empty($sMerchant) ? "" : $sMerchant,
-            $this->session->offsetGet('sessionId'),
-            empty($partner) ? "" : $partner,
-            $this->config->get('sDefaultCustomerGroup'),
-            $this->contextService->getShopContext()->getShop()->getId(),
-            $this->subshopId,
-            empty($referer) ? "" : $referer,
-            $userObject["auth"]["encoderName"],
-        );
-        $sql = '
-            INSERT INTO s_user
-            (
-                password, email, paymentID, active, accountmode,
-                validation, firstlogin, sessionID, affiliate, customergroup,
-                language, subshopID, referer, encoder
-            )
-            VALUES (?,?,?,1,?,?,NOW(),?,?,?,?,?,?,?)
-        ';
-
-        list($sql, $data) = $this->eventManager->filter(
-            'Shopware_Modules_Admin_SaveRegisterMainData_FilterSql',
-            array($sql, $data),
-            array('subject' => $this)
-        );
-
-        $saveUserData = $this->db->query($sql, $data);
-        $this->eventManager->notify(
-            'Shopware_Modules_Admin_SaveRegisterMainData_Return',
-            array('subject' => $this, 'insertObject' => $saveUserData)
-        );
-
-        $userId = $this->db->lastInsertId();
-
-        $sql = "
-            INSERT INTO s_user_attributes (userID) VALUES (?)
-        ";
-        $data = array($userId);
-
-        list($sql, $data) = $this->eventManager->filter(
-            'Shopware_Modules_Admin_SaveRegisterMainDataAttributes_FilterSql',
-            array($sql, $data),
-            array('subject' => $this)
-        );
-        $saveAttributeData = $this->db->query($sql, $data);
-
-        $this->eventManager->notify(
-            'Shopware_Modules_Admin_SaveRegisterMainDataAttributes_Return',
-            array('subject' => $this, 'insertObject' => $saveAttributeData)
-        );
-
-        return $userId;
-    }
-
-    /**
-     * Adds user's email to the mailing list
-     * Used during registration
-     *
-     * @param array $userObject Array with all information from the registration process
-     */
-    public function sSaveRegisterNewsletter($userObject)
-    {
-        // Check for duplicates
-        $checkDuplicate = $this->db->fetchRow(
-            'SELECT id FROM s_campaigns_mailaddresses WHERE email = ?',
-            array($userObject["auth"]["email"])
-        );
-
-        if (empty($checkDuplicate["id"])) {
-            $this->db->insert(
-                's_campaigns_mailaddresses',
-                array(
-                    'customer' => 1,
-                    'groupID' => 0,
-                    'email' => $userObject["auth"]["email"],
-                    'added' => $this->getCurrentDateFormatted()
-                )
-            );
-        }
-    }
-
-    /**
-     * Save user billing address.
-     * Used internally in sAdmin during the registration process
-     *
-     * @param int $userID User id (s_user.id) from sSaveRegisterMain
-     * @param array $userObject Array with all information from the registration process
-     * @return int Created billing address id
-     */
-    public function sSaveRegisterBilling($userID, $userObject)
-    {
-        if (!is_numeric($userObject["billing"]["birthmonth"])) {
-            unset($userObject["billing"]["birthmonth"]);
-        }
-        if (!is_numeric($userObject["billing"]["birthday"])) {
-            unset($userObject["billing"]["birthday"]);
-        }
-        if (!is_numeric($userObject["billing"]["birthyear"])) {
-            unset($userObject["billing"]["birthyear"]);
-        }
-
-        if (!empty($userObject["billing"]["birthmonth"]) &&
-            !empty($userObject["billing"]["birthday"]) &&
-            !empty($userObject["billing"]["birthyear"])
-        ) {
-            $date = $userObject["billing"]["birthyear"] . "-" . $userObject["billing"]["birthmonth"]
-                . "-" . $userObject["billing"]["birthday"];
-
-            $date = date("Y-m-d", strtotime($date));
-        } else {
-            $date = "0000-00-00";
-        }
-        $userObject = $userObject["billing"];
-        $data = array(
-            $userID,
-            empty($userObject["company"]) ? "" : $userObject["company"],
-            empty($userObject["department"]) ? "" : $userObject["department"],
-            empty($userObject["salutation"]) ? "" : $userObject["salutation"],
-            $userObject["firstname"],
-            $userObject["lastname"],
-            $userObject["street"],
-            $userObject["zipcode"],
-            $userObject["city"],
-            empty($userObject["phone"]) ? "" : $userObject["phone"],
-            empty($userObject["fax"]) ? "" : $userObject["fax"],
-            $userObject["country"],
-            empty($userObject["stateID"]) ? 0 : $userObject["stateID"] ,
-            empty($userObject["ustid"]) ? "" : $userObject["ustid"],
-            $date,
-            empty($userObject["additional_address_line1"]) ? null : $userObject["additional_address_line1"],
-            empty($userObject["additional_address_line2"]) ? null : $userObject["additional_address_line2"]
-        );
-
-        $sqlBilling = "INSERT INTO s_user_billingaddress
-            (userID, company, department, salutation, firstname, lastname,
-            street, zipcode, city,phone,
-            fax, countryID, stateID, ustid, birthday, additional_address_line1, additional_address_line2)
-            VALUES
-            (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-
-        // Trying to insert
-        list($sqlBilling, $data) = $this->eventManager->filter(
-            'Shopware_Modules_Admin_SaveRegisterBilling_FilterSql',
-            array($sqlBilling, $data),
-            array('subject' => $this)
-        );
-
-        $saveUserData = $this->db->query($sqlBilling, $data);
-        $this->eventManager->notify(
-            'Shopware_Modules_Admin_SaveRegisterBilling_Return',
-            array('subject' => $this, 'insertObject' => $saveUserData)
-        );
-
-        // New attributes table
-        $billingID = $this->db->lastInsertId();
-        $attributeData = array(
-            $billingID,
-            empty($userObject["text1"]) ? "" : $userObject["text1"],
-            empty($userObject["text2"]) ? "" : $userObject["text2"],
-            empty($userObject["text3"]) ? "" : $userObject["text3"],
-            empty($userObject["text4"]) ? "" : $userObject["text4"],
-            empty($userObject["text5"]) ? "" : $userObject["text5"],
-            empty($userObject["text6"]) ? "" : $userObject["text6"],
-        );
-        $sqlAttribute = "INSERT INTO s_user_billingaddress_attributes
-                 (billingID, text1, text2, text3, text4, text5, text6)
-                 VALUES
-                 (?,?,?,?,?,?,?)";
-
-        list($sqlAttribute, $attributeData) = $this->eventManager->filter(
-            'Shopware_Modules_Admin_SaveRegisterBillingAttributes_FilterSql',
-            array($sqlAttribute, $attributeData),
-            array('subject' => $this)
-        );
-        $saveAttributeData = $this->db->query($sqlAttribute, $attributeData);
-        $this->eventManager->notify(
-            'Shopware_Modules_Admin_SaveRegisterBillingAttributes_Return',
-            array('subject' => $this, 'insertObject' => $saveAttributeData)
-        );
-
-        return $billingID;
-    }
-
-    /**
-     * Save user shipping address.
-     * Used internally in sAdmin during the registration process
-     *
-     * @param int $userID user id (s_user.id) from sSaveRegisterMain
-     * @param array $userObject Array with all information from the registration process
-     * @return int Created shipping address id
-     */
-    public function sSaveRegisterShipping($userID, $userObject)
-    {
-        $sqlShipping = "INSERT INTO s_user_shippingaddress
-            (userID, company, department, salutation, firstname, lastname,
-            street, zipcode, city, countryID, stateID, additional_address_line1, additional_address_line2)
-            VALUES
-            (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )";
-
-        $sqlShipping = $this->eventManager->filter(
-            'Shopware_Modules_Admin_SaveRegisterShipping_FilterSql',
-            $sqlShipping,
-            array('subject' => $this, 'user' => $userObject, 'id' => $userID)
-        );
-
-        $shippingParams = array(
-            $userID,
-            $userObject["shipping"]["company"],
-            $userObject["shipping"]["department"],
-            $userObject["shipping"]["salutation"],
-            $userObject["shipping"]["firstname"],
-            $userObject["shipping"]["lastname"],
-            $userObject["shipping"]["street"],
-            $userObject["shipping"]["zipcode"],
-            $userObject["shipping"]["city"],
-            $userObject["shipping"]["country"],
-            $userObject["shipping"]["stateID"],
-            $userObject["shipping"]["additional_address_line1"],
-            $userObject["shipping"]["additional_address_line2"]
-
-        );
-        // Trying to insert
-        $saveUserData = $this->db->query($sqlShipping, $shippingParams);
-        $this->eventManager->notify(
-            'Shopware_Modules_Admin_SaveRegisterShipping_Return',
-            array('subject' => $this, 'insertObject' => $saveUserData)
-        );
-
-        // New attributes table
-        $shippingId = $this->db->lastInsertId();
-        $sqlAttributes = "INSERT INTO s_user_shippingaddress_attributes
-                 (shippingID, text1, text2, text3, text4, text5, text6)
-                 VALUES
-                 (?, ?, ?, ?, ?, ?, ?)";
-
-        $sqlAttributes = $this->eventManager->filter(
-            'Shopware_Modules_Admin_SaveRegisterShippingAttributes_FilterSql',
-            $sqlAttributes,
-            array('subject' => $this, 'user' => $userObject, 'id' => $userID)
-        );
-        $attributeParams = array(
-            $shippingId,
-            $userObject["shipping"]["text1"],
-            $userObject["shipping"]["text2"],
-            $userObject["shipping"]["text3"],
-            $userObject["shipping"]["text4"],
-            $userObject["shipping"]["text5"],
-            $userObject["shipping"]["text6"]
-        );
-        $saveAttributeData = $this->db->query($sqlAttributes, $attributeParams);
-        $this->eventManager->notify(
-            'Shopware_Modules_Admin_SaveRegisterShippingAttributes_Return',
-            array('subject' => $this, 'insertObject' => $saveAttributeData)
-        );
-
-        return $shippingId;
-    }
-
     /**
      * Send email with registration confirmation
      * Used internally in sAdmin during the registration process
@@ -1979,11 +1139,11 @@ class sAdmin
             'sConfig'   => $this->config,
         );
 
-        $namespace = $this->snippetManager->getNamespace('frontend/account/index');
+        $namespace = $this->snippetManager->getNamespace('frontend/salutation');
         $register = $this->session->offsetGet('sRegister');
         foreach ($register["billing"] as $key => $value) {
             if ($key == "salutation") {
-                $value = ($value == "ms") ? $namespace->get('AccountSalutationMs', 'Ms') : $namespace->get('AccountSalutationMr', 'Mr');
+                $value = $namespace->get($value);
             }
 
             $context[$key] = $value;
@@ -2003,139 +1163,6 @@ class sAdmin
         );
 
         $mail->send();
-    }
-
-    /**
-     * Main registration function used by the Register controller
-     * Calls all previously defined helper functions to save user data
-     *
-     * @throws Enlight_Exception On database errors
-     * @return boolean If the operation was successful
-     */
-    public function sSaveRegister()
-    {
-        if ($this->eventManager->notifyUntil(
-            'Shopware_Modules_Admin_SaveRegister_Start',
-            array('subject' => $this))
-        ) {
-            return false;
-        }
-        if (!$this->session->offsetGet('sRegisterFinished')) {
-            $register = $this->session->offsetGet('sRegister');
-            if (empty($register["payment"]["object"]["id"])) {
-                // predefined payment out of the pre calculation of the shipping costs in the cart
-                if ($this->session->offsetExists("sPaymentID")) {
-                    $register["payment"]["object"]["id"] = $this->session->offsetGet("sPaymentID");
-                } else {
-                    // if no predefined payment exists use the default payment
-                    $register["payment"]["object"]["id"] = $this->config->get('sDEFAULTPAYMENT');
-                }
-                $this->session->offsetSet('sRegister', $register);
-            }
-
-            $this->validateRegistrationFields($register);
-
-            if (!$register["payment"]["object"]["id"]) {
-                $register["payment"]["object"]["id"] = $this->config->get('sPAYMENTDEFAULT');
-            }
-
-            // Save main user data
-            $userID = $this->sSaveRegisterMainData($register);
-
-            if ($this->db->getErrorMessage() || !$userID) {
-                throw new Enlight_Exception(
-                    "sSaveRegister #01: Could not save data"
-                    .$this->db->getErrorMessage()
-                    .print_r($register)
-                );
-            }
-
-            if ($register["auth"]["receiveNewsletter"]) {
-                $this->sSaveRegisterNewsletter($register);
-            }
-
-            // Save user billing address
-            $userBillingID = $this->sSaveRegisterBilling($userID, $register);
-
-            if ($this->db->getErrorMessage() || !$userBillingID) {
-                throw new Enlight_Exception(
-                    "sSaveRegister #02: Could not save data (billing-adress)"
-                    .$this->db->getErrorMessage()
-                    .print_r($register, true)
-                );
-            }
-
-            if ($this->config->get('sSHOPWAREMANAGEDCUSTOMERNUMBERS')) {
-                if (!$this->eventManager->notifyUntil(
-                    'Shopware_Modules_Admin_SaveRegister_GetCustomerNumber',
-                    array('subject' => $this, 'id' => $userID))
-                ) {
-                    $this->assignCustomerNumber($userID);
-                }
-            }
-
-            // Save user shipping address
-            if (count($register["shipping"])) {
-                $userShippingID = $this->sSaveRegisterShipping($userID, $register);
-                if ($this->db->getErrorMessage() || !$userShippingID) {
-                    throw new Enlight_Exception("sSaveRegister #02: Could not save data (shipping-address)".$this->db->getErrorMessage().print_r($register, true));
-                }
-            }
-
-            $uMail = $register["auth"]["email"];
-            $uPass = $register["auth"]["password"];
-
-            if ($register["auth"]["accountmode"] < 1) {
-                try {
-                    $this->sSaveRegisterSendConfirmation($uMail);
-                } catch (Exception $e) {
-                    $this->logRegistrationMailException($e, $uMail);
-                }
-                $this->session->offsetSet('sOneTimeAccount', false);
-            } else {
-                $this->session->offsetSet('sOneTimeAccount', true);
-            }
-
-            // Save referer where user comes from
-            $referer = $this->session->offsetGet('sReferer');
-            if (!empty($referer)) {
-                $this->db->insert(
-                    's_emarketing_referer',
-                    array(
-                        'userID' => $userID,
-                        'referer' => $referer,
-                        'date' => new Zend_Date()
-                    )
-                );
-            }
-
-            $this->front->Request()->setPost('email', $uMail);
-            $this->front->Request()->setPost('passwordMD5', $uPass);
-
-            // Login user
-            $this->sLogin(true);
-
-            // The user is now registered
-            $this->session->offsetSet('sRegisterFinished', true);
-
-            $this->eventManager->notify(
-                'Shopware_Modules_Admin_SaveRegister_Successful',
-                array(
-                    'subject' => $this,
-                    'id' => $userID,
-                    'billingID' => $userBillingID,
-                    'shippingID' => $userShippingID
-                )
-            );
-
-            // Garbage
-            $this->session->offsetUnset('sRegister');
-        } else {
-            $this->front->Request()->setPost('email', $this->session->offsetGet('sUserMail'));
-            $this->front->Request()->setPost('passwordMD5', $this->session->offsetGet('sUserPassword'));
-            $this->sLogin($this->session->offsetGet('sOneTimeAccount'));
-        }
-        return true;
     }
 
     /**
@@ -2447,6 +1474,13 @@ class sAdmin
             $userData["additional"]["user"]["newsletter"] = $newsletter["id"] ? 1 : 0;
 
             $userData = $this->getUserShippingData($userId, $userData, $countryQuery);
+            $userData = $this->overwriteBillingAddress($userData);
+            $userData = $this->overwriteShippingAddress($userData);
+
+            $userData["additional"]["payment"] = $this->sGetPaymentMeanById(
+                $userData["additional"]["user"]["paymentID"],
+                $userData
+            );
         } else {
             // No user logged in
             $register = $this->session->offsetGet('sRegister');
@@ -2476,57 +1510,109 @@ class sAdmin
         return $userData;
     }
 
-    /**
-     * Returns the given user's shipping address attributes
-     *
-     * @param $userId User id
-     * @return array The given user's shipping address attributes
-     */
-    private function getUserShippingAddressAttributes($userId)
-    {
-        $builder = Shopware()->Models()->createQueryBuilder();
-        $attributes = $builder->select(array('attributes'))
-            ->from('Shopware\Models\Attribute\CustomerShipping', 'attributes')
-            ->innerJoin('attributes.customerShipping', 'shipping')
-            ->where('shipping.customerId = :userId')
-            ->setParameter('userId', $userId)
-            ->setFirstResult(0)
-            ->setMaxResults(1)
-            ->getQuery()
-            ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
-        if (!is_array($attributes)) {
-            return array();
-        } else {
-            unset($attributes['id']);
-            return $attributes;
+    /**
+     * Overwrite sUserData['billingaddress'] with chosen address
+     * @param array $userData
+     * @return array
+     */
+    private function overwriteBillingAddress(array $userData)
+    {
+        // temporarily overwrite billing address
+        if (!$this->session->offsetGet('checkoutBillingAddressId') || Shopware()->Front()->Request()->getControllerName() !== 'checkout') {
+            return $userData;
         }
+
+        $addressRepository = Shopware()->Models()->getRepository(Address::class);
+        $addressId = $this->session->offsetGet('checkoutBillingAddressId');
+
+        try {
+            $legacyAddress = Shopware()->Container()
+                ->get('shopware_account.address_service')
+                ->convertToLegacyArray(
+                    $addressRepository->getOneByUser($addressId, $this->session->offsetGet('sUserId'))
+                );
+
+            $userData['billingaddress'] = array_merge($userData['billingaddress'], $legacyAddress);
+            $userData = $this->completeUserCountryData($userData);
+        } catch (\Exception $ex) {
+            // no need to overwrite default billing address
+            $this->session->offsetUnset('checkoutBillingAddressId');
+        }
+
+        return $userData;
     }
 
     /**
-     * Returns the given user's attributes
-     *
-     * @param $userId User id
-     * @return array The given user's attributes
+     * Overwrite sUserData['shippingaddress'] with chosen address
+     * @param array $userData
+     * @return array
      */
-    private function getUserAttributes($userId)
+    private function overwriteShippingAddress(array $userData)
     {
-        $builder = Shopware()->Models()->createQueryBuilder();
-        $attributes = $builder->select(array('attributes'))
-            ->from('Shopware\Models\Attribute\Customer', 'attributes')
-            ->where('attributes.customerId = :userId')
-            ->setParameter('userId', $userId)
-            ->setFirstResult(0)
-            ->setMaxResults(1)
-            ->getQuery()
-            ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-
-        if (!is_array($attributes)) {
-            return array();
-        } else {
-            unset($attributes['id']);
-            return $attributes;
+        // temporarily overwrite shipping address
+        if (!$this->session->offsetGet('checkoutShippingAddressId') || Shopware()->Front()->Request()->getControllerName() !== 'checkout') {
+            return $userData;
         }
+
+        $addressRepository = Shopware()->Models()->getRepository(Address::class);
+        $addressId = $this->session->offsetGet('checkoutShippingAddressId');
+
+        try {
+            $legacyAddress = Shopware()->Container()
+                ->get('shopware_account.address_service')
+                ->convertToLegacyArray(
+                    $addressRepository->getOneByUser($addressId, $this->session->offsetGet('sUserId'))
+                );
+
+            $userData['shippingaddress'] = array_merge($userData['shippingaddress'], $legacyAddress);
+            $userData = $this->completeUserCountryData($userData, true);
+        } catch (\Exception $ex) {
+            // no need to overwrite default shipping address
+            $this->session->offsetUnset('checkoutShippingAddressId');
+        }
+
+        return $userData;
+    }
+
+    /**
+     * @param array $userData
+     * @param bool $isShippingAddress changes keys in sUserData
+     * @return array
+     */
+    private function completeUserCountryData(array $userData, $isShippingAddress = false)
+    {
+        $sql = <<<SQL
+SELECT c.*, a.name AS countryarea
+FROM s_core_countries c
+LEFT JOIN s_core_countries_areas a ON a.id = c.areaID AND a.active = 1
+WHERE c.id = ?
+SQL;
+
+        $addressKey = $isShippingAddress ? 'shippingaddress' : 'billingaddress';
+        $countryKey = $isShippingAddress ? 'countryShipping' : 'country';
+        $stateKey = $isShippingAddress ? 'stateShipping' : 'state';
+
+        $userData["additional"][$countryKey] = Shopware()->Container()->get('dbal_connection')
+            ->executeQuery($sql, [$userData[$addressKey]['countryID']])
+            ->fetch(\PDO::FETCH_ASSOC);
+
+        $userData["additional"][$stateKey] = Shopware()->Container()->get('dbal_connection')
+            ->executeQuery("SELECT *, name as statename FROM s_core_countries_states WHERE id = ?", [$userData[$addressKey]['stateID']])
+            ->fetch(\PDO::FETCH_ASSOC);
+
+        // get translations
+        $userData["additional"][$countryKey] = $this->sGetCountryTranslation($userData['additional'][$countryKey]);
+        $userData["additional"][$stateKey] = $this->sGetCountryStateTranslation($userData['additional'][$stateKey]);
+
+        // session
+        if ($isShippingAddress) {
+            $this->session->offsetSet('sCountry', $userData['additional'][$countryKey]['id']);
+            $this->session->offsetSet('sState', $userData['additional'][$stateKey]['id']);
+            $this->session->offsetSet('sArea', $userData['additional'][$countryKey]['areaID']);
+        }
+
+        return $userData;
     }
 
     /**
@@ -3132,7 +2218,7 @@ class sAdmin
      */
     public function sRiskCUSTOMERNR($user, $order, $value)
     {
-        return ($user["billingaddress"]["customernumber"] == $value && !empty($value));
+        return ($user["additional"]["user"]["customernumber"] == $value && !empty($value));
     }
 
     /**
@@ -4012,111 +3098,6 @@ class sAdmin
     }
 
     /**
-     * Private helper method for sValidateStep1
-     * Validates email data
-     *
-     * @param $edit
-     * @param $postData
-     * @param $sErrorMessages
-     * @param $sErrorFlag
-     * @return array Error data
-     */
-    private function validateStep1Email($edit, &$postData, &$sErrorMessages, &$sErrorFlag)
-    {
-        // Email is present in post data
-        if (isset($postData["emailConfirmation"]) || isset($postData["email"])) {
-            $postData["email"] = strtolower(trim($postData["email"]));
-
-            if (empty($postData["email"]) || !$this->emailValidator->isValid($postData["email"])) {
-                $sErrorFlag["email"] = true;
-                $sErrorMessages[] = $this->snippetManager->getNamespace('frontend/account/internalMessages')
-                    ->get('MailFailure', 'Please enter a valid mail address');
-            }
-
-            // Check email confirmation if needed
-            if (isset($postData["emailConfirmation"])) {
-                $postData["emailConfirmation"] = strtolower(trim($postData["emailConfirmation"]));
-                if ($postData["email"] != $postData["emailConfirmation"]) {
-                    $sErrorFlag["emailConfirmation"] = true;
-                    $sErrorMessages[] = $this->snippetManager->getNamespace('frontend/account/internalMessages')
-                        ->get('MailFailureNotEqual', 'The mail addresses entered are not equal');
-                }
-            }
-        } elseif ($edit && empty($postData["email"])) {
-            $userEmail = $this->session->offsetGet('sUserMail');
-            if ($userEmail) {
-                $this->front->Request()->setPost('email', $userEmail);
-            }
-            $postData["email"] = $userEmail;
-        }
-    }
-
-    /**
-     * Private helper method for sValidateStep1
-     * Validates password data and account mode
-     *
-     * @param $edit
-     * @param $postData
-     * @param $register
-     * @param $encoderName
-     * @param $sErrorMessages
-     * @param $sErrorFlag
-     * @return array Error data
-     */
-    private function validateStep1Password($edit, &$postData, &$register, &$encoderName, &$sErrorMessages, &$sErrorFlag)
-    {
-        // Check account mode and password
-        if (!$postData["skipLogin"] || $edit) {
-            if (!$edit || (isset($postData["password"]) || isset($postData["passwordConfirmation"]))) {
-                // Validate password
-                if (strlen(trim($postData["password"])) == 0
-                    || !$postData["password"]
-                    || (strlen($postData["password"]) < $this->config->get('sMINPASSWORD'))
-                ) {
-                    $sErrorMessages[] = $this->snippetManager
-                        ->getNamespace("frontend")->get('RegisterPasswordLength', '', true);
-                    $sErrorFlag["password"] = true;
-                    $sErrorFlag["passwordConfirmation"] = true;
-                } elseif ((isset($postData["passwordConfirmation"])) && ($postData["password"] != $postData["passwordConfirmation"])) {
-                    $sErrorMessages[] = $this->snippetManager->getNamespace("frontend")
-                        ->get('AccountPasswordNotEqual', 'The passwords are not equal', true);
-                    $sErrorFlag["password"] = true;
-                    $sErrorFlag["passwordConfirmation"] = true;
-                }
-            }
-            $register["auth"]["accountmode"] = "0"; // Setting account mode to ACCOUNT
-        } else {
-            // Enforce the creation of an md5 hashed password for anonymous accounts
-            $postData["password"] = md5(uniqid(rand()));
-            $encoderName = 'md5';
-
-            $register["auth"]["accountmode"] = "1"; // Setting account mode to NO_ACCOUNT
-        }
-        $this->session->offsetSet('sRegister', $register);
-
-        // Check current password
-        $accountPasswordCheck = $this->config->offsetGet('accountPasswordCheck');
-        if ($edit && !empty($accountPasswordCheck)) {
-            $password = $postData["currentPassword"];
-            $current = $this->session->offsetGet('sUserPassword');
-            $snippet = $this->snippetManager->getNamespace("frontend");
-            if (empty($password) || !$this->passwordEncoder->isPasswordValid($password, $current, $encoderName)) {
-                $sErrorFlag['currentPassword'] = true;
-                if (isset($postData["password"])) {
-                    $sErrorFlag['password'] = true;
-                } else {
-                    $sErrorFlag['email'] = true;
-                }
-                $sErrorMessages[] = $snippet->get(
-                    'AccountCurrentPassword',
-                    'Das aktuelle Passwort stimmt nicht!',
-                    true
-                );
-            }
-        }
-    }
-
-    /**
      * Helper function for sLogin
      * Called when provided user data is correct
      * Logs in the user
@@ -4248,69 +3229,6 @@ class sAdmin
         $this->session->offsetUnset('sUserId');
 
         return $sErrorMessages;
-    }
-
-    /**
-     * Helper for sAdmin::sSaveRegister()
-     * Validates fields. Throws exception if any field is missing
-     *
-     * @param $register Registration data
-     * @throws Enlight_Exception If validation fails
-     */
-    private function validateRegistrationFields($register)
-    {
-        $neededFields = array(
-            "auth" => array(
-                "email",
-                "password"
-            ),
-            "billing" => array(
-                "salutation", "firstname",
-                "lastname", "street",
-                "zipcode",
-                "city", "country"
-            ),
-            "payment" => array(
-                "object" => array("id")
-            )
-        );
-
-        $neededFields = $this->eventManager->filter(
-            'Shopware_Modules_Admin_SaveRegister_FilterNeededFields',
-            $neededFields,
-            array('subject' => $this)
-        );
-
-        // Check for needed fields
-        foreach ($neededFields as $sectionKey => $sectionFields) {
-            foreach ($neededFields[$sectionKey] as $fieldKey => $fieldValue) {
-                if (is_array($fieldValue)) {
-                    $objKey = $fieldValue[0];
-
-                    if (empty($register[$sectionKey][$fieldKey][$objKey])) {
-                        $errorFields[] = $sectionKey . "#1($sectionKey)($fieldKey)($objKey)->" . $fieldValue;
-                    }
-                } else {
-                    if (empty($register[$sectionKey][$fieldValue])) {
-                        $errorFields[] = $sectionKey . "#2->" . $fieldValue;
-                    }
-                }
-            }
-        }
-
-        $errorFields = $this->eventManager->filter(
-            'Shopware_Modules_Admin_SaveRegister_FilterErrors',
-            $errorFields,
-            array('subject' => $this)
-        );
-
-        // Check for errors
-        if (count($errorFields)) {
-            if (!$_COOKIE["SHOPWARESID"]) {
-                $noCookies = "NO SESSION-COOKIE";
-            }
-            throw new Enlight_Exception("sSaveRegister #00: Fields are missing $noCookies - " . $this->session->offsetGet('sessionId') . " - " . print_r($errorFields, true));
-        }
     }
 
     /**
@@ -4448,7 +3366,7 @@ class sAdmin
         $userData["additional"]["country"] = $userData["additional"]["country"] ? : array();
         // State selection
         $userData["additional"]["state"] = $this->db->fetchRow(
-            "SELECT * FROM s_core_countries_states WHERE id = ?",
+            "SELECT *, name as statename FROM s_core_countries_states WHERE id = ?",
             array($userData["billingaddress"]["stateID"])
         );
         $userData["additional"]["state"] = $userData["additional"]["state"] ? : array();
@@ -4461,7 +3379,7 @@ class sAdmin
             array($userId)
         );
         $additional = $additional ? : array();
-        $attributes = $this->getUserAttributes($userId);
+        $attributes = $this->attributeLoader->load('s_user_attributes', $userId) ? : [];
         $userData["additional"]["user"] = array_merge($attributes, $additional);
         return $userData;
     }
@@ -4477,13 +3395,11 @@ class sAdmin
      */
     private function getUserShippingData($userId, $userData, $countryQuery)
     {
-        $shipping = $this->db->fetchRow(
-            "SELECT * FROM s_user_shippingaddress WHERE userID = ?",
-            array($userId)
-        );
-        $shipping = $shipping ? : array();
-        $attributes = $this->getUserShippingAddressAttributes($userId);
-        $userData["shippingaddress"] = array_merge($attributes, $shipping);
+        $shipping = $this->db->fetchRow("SELECT * FROM s_user_shippingaddress WHERE userID = ?", [$userId]);
+        $shipping['attributes'] = $this->attributeLoader->load('s_user_shippingaddress_attributes', $shipping['id']) ?: [];
+        unset($shipping['attributes']['shippingID'], $shipping['attributes']['id']);
+
+        $userData["shippingaddress"] = $shipping;
 
         // If shipping address is not available, billing address is coeval the shipping address
         $countryShipping = $this->config->get('sCOUNTRYSHIPPING');
@@ -4521,7 +3437,7 @@ class sAdmin
 
         // State selection
         $userData["additional"]["stateShipping"] = $this->db->fetchRow(
-            "SELECT * FROM s_core_countries_states WHERE id = ?",
+            "SELECT *, name as statename FROM s_core_countries_states WHERE id = ?",
             array($userData["shippingaddress"]["stateID"])
         );
         $userData["additional"]["stateShipping"] = $userData["additional"]["stateShipping"] ? : array();
@@ -4530,10 +3446,6 @@ class sAdmin
         $this->session->offsetSet('sState', $userData["additional"]["stateShipping"]["id"]);
         // Add areaId to session
         $this->session->offsetSet('sArea', $userData["additional"]["countryShipping"]["areaID"]);
-        $userData["additional"]["payment"] = $this->sGetPaymentMeanById(
-            $userData["additional"]["user"]["paymentID"],
-            $userData
-        );
 
         return $userData;
     }
@@ -4548,35 +3460,12 @@ class sAdmin
      */
     private function getUserBillingData($userId, $userData)
     {
-        $billing = $this->db->fetchRow(
-            'SELECT * FROM s_user_billingaddress WHERE userID = ?',
-            array($userId)
-        );
-        $billing = $billing ? : array();
+        $billing = $this->db->fetchRow('SELECT * FROM s_user_billingaddress WHERE userID = ?', [$userId]);
+        $billing['attributes'] = $this->attributeLoader->load('s_user_billingaddress_attributes', $billing['id']) ?: [];
+        unset($billing['attributes']['billingID'], $billing['attributes']['id']);
 
-        $builder = Shopware()->Models()->createQueryBuilder();
-        $attributes = $builder->select(array('attributes'))
-            ->from('Shopware\Models\Attribute\CustomerBilling', 'attributes')
-            ->innerJoin('attributes.customerBilling', 'billing')
-            ->where('billing.customerId = :userId')
-            ->setParameter('userId', $userId)
-            ->setFirstResult(0)
-            ->setMaxResults(1)
-            ->getQuery()
-            ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-        if (!is_array($attributes)) {
-            $attributes = array();
-        } else {
-            unset($attributes['id']);
-        }
+        $userData["billingaddress"] = $billing;
 
-        $userData["billingaddress"] = array_merge($attributes, $billing);
-
-        if (empty($userData["billingaddress"]['customernumber'])
-            && $this->config->get('sSHOPWAREMANAGEDCUSTOMERNUMBERS')
-        ) {
-            $this->assignCustomerNumber($userId);
-        }
         return $userData;
     }
 
@@ -4929,21 +3818,6 @@ class sAdmin
     }
 
     /**
-     * @param \Exception $e
-     * @param string     $email
-     */
-    private function logRegistrationMailException(\Exception $e, $email)
-    {
-        $message = sprintf(
-            "Could not send user registration email to address %s",
-            $email
-        );
-
-        $context = array('exception' => $e);
-        Shopware()->Container()->get('corelogger')->error($message, $context);
-    }
-
-    /**
      * Helper function to return the current date formatted
      *
      * @param string $format
@@ -4953,72 +3827,5 @@ class sAdmin
     {
         $date = new DateTime();
         return $date->format($format);
-    }
-
-    /**
-     * Assigns the next CustomerNumber from s_order_number
-     * to given $userId and updates s_order_number
-     * in an atomic operation.
-     *
-     * @param int $userId
-     */
-    private function assignCustomerNumber($userId)
-    {
-        $sql = <<<SQL
-UPDATE
-    s_order_number,
-    s_user_billingaddress
-SET
-    s_order_number.number = s_order_number.number+1,
-    s_user_billingaddress.customernumber = s_order_number.number
-WHERE
-    s_order_number.name = 'user'
-AND
-    s_user_billingaddress.userID = ?
-SQL;
-
-        $this->db->query($sql, array($userId));
-    }
-
-    /**
-     * @param int $billingId
-     * @param array $postData
-     * @return array
-     */
-    private function filterBillingAttributeData($billingId, $postData)
-    {
-        $data = $this->db->fetchRow("SELECT * FROM s_user_billingaddress_attributes WHERE billingID = ?", [$billingId]);
-        unset($data['id']);
-        unset($data['billingID']);
-        $allowedKeys = array_keys($data);
-
-        foreach ($postData as $key => $value) {
-            if (!in_array($key, $allowedKeys)) {
-                continue;
-            }
-            $data[$key] = $value;
-        }
-        return $data;
-    }
-
-    /**
-     * @param int $shippingId
-     * @param array $postData
-     * @return array
-     */
-    private function filterShippingAttributeData($shippingId, $postData)
-    {
-        $data = $this->db->fetchRow("SELECT * FROM s_user_shippingaddress_attributes WHERE shippingID = ?", [$shippingId]);
-        unset($data['id']);
-        unset($data['shippingID']);
-        $allowedKeys = array_keys($data);
-
-        foreach ($postData as $key => $value) {
-            if (!in_array($key, $allowedKeys)) {
-                continue;
-            }
-            $data[$key] = $value;
-        }
-        return $data;
     }
 }

@@ -47,9 +47,33 @@ Ext.define('Shopware.apps.Customer.model.Billing', {
      */
     fields:[
 		//{block name="backend/customer/model/billing/fields"}{/block}
-        { name:'birthday', type:'date', dateFormat:'d.m.Y' },
         { name:'stateId', type:'int', useNull:true }
-    ]
+    ],
+
+    /**
+     * Copy properties from the new address structure to legacy billing structure
+     * @param Shopware.apps.Customer.model.Address
+     * @returns Shopware.apps.Customer.model.Billing
+     */
+    fromAddress: function (address) {
+        this.set('company', address.get('company'));
+        this.set('department', address.get('department'));
+        this.set('salutation', address.get('salutation'));
+        this.set('title', address.get('title'));
+        this.set('firstName', address.get('firstname'));
+        this.set('lastName', address.get('lastname'));
+        this.set('street', address.get('street'));
+        this.set('city', address.get('city'));
+        this.set('zipCode', address.get('zipcode'));
+        this.set('additionalAddressLine1', address.get('additionalAddressLine1'));
+        this.set('additionalAddressLine2', address.get('additionalAddressLine2'));
+        this.set('phone', address.get('phone'));
+        this.set('vatId', address.get('vatId'));
+        this.set('countryId', address.get('country_id'));
+        this.set('stateId', address.get('state_id'));
+
+        return this;
+    }
 });
 //{/block}
 

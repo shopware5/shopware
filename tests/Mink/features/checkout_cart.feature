@@ -6,18 +6,18 @@ Feature: Checkout articles (scenario origin is cart with one product in it)
             | number  | name            | quantity |
             | SW10181 | Reisekoffer Set | 1        |
 
-    @fastOrder @payment @delivery @noEmotion
+    @fastOrder @payment @delivery
     Scenario Outline: I can finish my order with different payment and delivery methods
         Given I proceed to checkout as:
-            | field      | register[personal] | register[billing] |
-            | salutation | mr                 |                   |
-            | firstname  | Max                |                   |
-            | lastname   | Mustermann         |                   |
-            | skipLogin  | 1                  |                   |
-            | email      | test@example.de    |                   |
-            | street     |                    | Musterstr. 55     |
-            | zipcode    |                    | 55555             |
-            | city       |                    | Musterhausen      |
+            | field       | register[personal] | register[billing] |
+            | salutation  | mr                 |                   |
+            | firstname   | Max                |                   |
+            | lastname    | Mustermann         |                   |
+            | accountmode | 1                  |                   |
+            | email       | test@example.de    |                   |
+            | street      |                    | Musterstr. 55     |
+            | zipcode     |                    | 55555             |
+            | city        |                    | Musterhausen      |
         And   I change the payment method to <paymentMethod>:
             | field     | value            |
             | sDispatch | <shippingMethod> |
@@ -38,18 +38,18 @@ Feature: Checkout articles (scenario origin is cart with one product in it)
             | 3             | 14             | 9,90 €        | 147,89 € |
             | 4             | 14             | 9,90 €        | 152,89 € |
 
-    @fastOrder @payment @shipping @noEmotion
+    @fastOrder @payment @shipping
     Scenario: I can finish my order with different payment and delivery methods
         Given I proceed to checkout as:
-            | field      | register[personal] | register[billing] |
-            | salutation | mr                 |                   |
-            | firstname  | Max                |                   |
-            | lastname   | Mustermann         |                   |
-            | skipLogin  | 1                  |                   |
-            | email      | test@example.de    |                   |
-            | street     |                    | Musterstr. 55     |
-            | zipcode    |                    | 55555             |
-            | city       |                    | Musterhausen      |
+            | field       | register[personal] | register[billing] |
+            | salutation  | mr                 |                   |
+            | firstname   | Max                |                   |
+            | lastname    | Mustermann         |                   |
+            | accountmode | 1                  |                   |
+            | email       | test@example.de    |                   |
+            | street      |                    | Musterstr. 55     |
+            | zipcode     |                    | 55555             |
+            | city        |                    | Musterhausen      |
         And   I change the payment method to 2:
             | field            | value          |
             | sDebitAccount    | 123456789      |

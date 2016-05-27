@@ -28,6 +28,7 @@ use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * @deprecated Since 5.2 removed in 5.3 use \Shopware\Models\Customer\Address
  * Shopware customer shipping model represents a single shipping address of a customer.
  *
  * The Shopware customer shipping model represents a row of the s_user_shippingaddress table.
@@ -87,6 +88,12 @@ class Shipping extends ModelEntity
      * @ORM\Column(name="salutation", type="string", length=30, nullable=false)
      */
     private $salutation = '';
+
+    /**
+     * @var string
+     * @ORM\Column(name="title", type="string", length=100, nullable=true)
+     */
+    protected $title;
 
     /**
      * Contains the first name of the shipping address
@@ -476,5 +483,51 @@ class Shipping extends ModelEntity
     public function getAdditionalAddressLine1()
     {
         return $this->additionalAddressLine1;
+    }
+
+    /**
+     * Transfer values from the new address object
+     *
+     * @param Address $address
+     */
+    public function fromAddress(Address $address)
+    {
+        $this->setCompany((string) $address->getCompany());
+        $this->setDepartment((string) $address->getDepartment());
+        $this->setSalutation((string) $address->getSalutation());
+        $this->setFirstName((string) $address->getFirstname());
+        $this->setLastName((string) $address->getLastname());
+        $this->setStreet((string) $address->getStreet());
+        $this->setCity((string) $address->getCity());
+        $this->setZipCode((string) $address->getZipcode());
+        $this->setAdditionalAddressLine1((string) $address->getAdditionalAddressLine1());
+        $this->setAdditionalAddressLine2((string) $address->getAdditionalAddressLine2());
+        $this->setCountryId($address->getCountry()->getId());
+        $this->setTitle($address->getTitle());
+
+        if ($address->getState()) {
+            $this->setStateId($address->getState()->getId());
+        } else {
+            $this->setStateId(null);
+        }
+
+        $attributeData = Shopware()->Models()->toArray($address->getAttribute());
+        $this->setAttribute($attributeData);
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param string $title
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
     }
 }

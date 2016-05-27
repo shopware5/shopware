@@ -1,6 +1,9 @@
 default:
     extensions:
-        SensioLabs\Behat\PageObjectExtension: ~
+        SensioLabs\Behat\PageObjectExtension:
+            namespaces:
+                page: Shopware\Tests\Mink\Page
+                element: Shopware\Tests\Mink\Element
         Shopware\Behat\ShopwareExtension: ~
         Behat\MinkExtension:
             ## defined in buildscript
@@ -19,6 +22,7 @@ default:
     suites:
         default:
             paths:    [ %paths.base%/features ]
+            template: Responsive
             contexts:
                 - Behat\MinkExtension\Context\MinkContext
                 - Shopware\Tests\Mink\FeatureContext
@@ -35,27 +39,3 @@ default:
                 - Shopware\Tests\Mink\SitemapContext
                 - Shopware\Tests\Mink\SpecialContext
                 - Shopware\Tests\Mink\TransformContext
-
-responsive:
-    extensions:
-        SensioLabs\Behat\PageObjectExtension:
-            namespaces:
-                page: Shopware\Tests\Mink\Page\Responsive
-                element: Shopware\Tests\Mink\Element\Responsive
-    suites:
-        default:
-            filters:
-                tags: ~@noResponsive
-            template: Responsive
-
-emotion:
-    extensions:
-        SensioLabs\Behat\PageObjectExtension:
-            namespaces:
-                page: Shopware\Tests\Mink\Page\Emotion
-                element: Shopware\Tests\Mink\Element\Emotion
-    suites:
-        default:
-            filters:
-                tags: ~@noEmotion
-            template: emotion_orange

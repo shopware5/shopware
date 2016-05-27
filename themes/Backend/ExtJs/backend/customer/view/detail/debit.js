@@ -151,7 +151,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Debit', {
             allowBlank:false,
             required:true,
             anchor:'100%',
-            labelWidth:150,
+            labelWidth:155,
             minWidth:250,
             editable:false,
             tpl: Ext.create('Ext.XTemplate',
@@ -214,7 +214,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Debit', {
             cls: Ext.baseCSSPrefix + 'field-set-container',
             defaults:{
                 anchor:'100%',
-                labelWidth:150,
+                labelWidth:155,
                 minWidth:250,
                 xtype:'textfield'
             },
@@ -228,7 +228,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Debit', {
             cls: Ext.baseCSSPrefix + 'field-set-container',
             defaults:{
                 anchor:'100%',
-                labelWidth:100,
+                labelWidth:155,
                 xtype:'textfield'
             },
             items: me.createDebitFormRight()

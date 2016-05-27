@@ -32,27 +32,6 @@ describe('Plugin base class', function() {
         expect(window.PluginsCollection.yay).toBeDefined();
     });
 
-    it('should support plugin name aliases', function() {
-        var $testElement, data;
-        $.plugin('yay', {
-            alias: 'swagYay',
-            init: function() {}
-        });
-
-        $testElement = $('<div>', {
-            'class': 'test--element'
-        }).appendTo($('body')).yay();
-        data = $testElement.data('plugin_yay');
-        expect(data._name).toMatch('yay');
-
-        expect(window.PluginsCollection.swagYay).toBeDefined();
-
-        //data = $testElement.data('plugin_swagYay');
-        //expect(data._name).toMatch('swagYay');
-        $testElement.remove();
-        data._destroy();
-    });
-
     it('should support a custom config inside the plugin', function() {
         var $testElement, data;
         $.plugin('yay', {

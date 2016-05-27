@@ -71,10 +71,8 @@ abstract class Enlight_Components_Test_Controller_TestCase extends Enlight_Compo
     {
         parent::setUp();
 
-        $app = Enlight_Application::Instance();
-        $app->Bootstrap()
-                ->resetResource('Session')
-                ->resetResource('Auth');
+        Shopware()->Container()->reset('Session');
+        Shopware()->Container()->reset('Auth');
 
         $this->reset();
     }
@@ -124,7 +122,7 @@ abstract class Enlight_Components_Test_Controller_TestCase extends Enlight_Compo
      */
     public function reset()
     {
-        $app = Enlight_Application::Instance();
+        $app = Shopware();
 
         $this->resetRequest();
         $this->resetResponse();
@@ -143,22 +141,27 @@ abstract class Enlight_Components_Test_Controller_TestCase extends Enlight_Compo
         $app->Events()->reset();
         //$app->Db()->getProfiler()->clear();
 
-        $app->Bootstrap()
-                ->resetResource('Plugins')
-                ->resetResource('Front')
-                ->resetResource('Router')
-//            ->resetResource('Template')
-//            ->resetResource('Snippets')
-                ->resetResource('System')
-                ->resetResource('Modules')
-                ->resetResource('Models');
-//            ->resetResource('Config')
-//            ->resetResource('Shop');
-//            ->resetResource('Session')
-//            ->resetResource('Auth');
+        $container = Shopware()->Container();
 
-        $app->Bootstrap()->loadResource('Front');
-        $app->Bootstrap()->loadResource('Plugins');
+        $container->get('models')->clear();
+
+        $container
+                ->reset('Plugins')
+                ->reset('Front')
+                ->reset('Router')
+//            ->reset('Template')
+//            ->reset('Snippets')
+                ->reset('System')
+                ->reset('Modules')
+//                ->reset('Models')
+//            ->reset('Config')
+//            ->reset('Shop');
+//            ->reset('Session')
+//            ->reset('Auth');
+        ;
+
+        $container->load('Front');
+        $container->load('Plugins');
     }
 
     /**
@@ -196,7 +199,7 @@ abstract class Enlight_Components_Test_Controller_TestCase extends Enlight_Compo
     public function Front()
     {
         if (null === $this->_front) {
-            $this->_front = Enlight_Application::Instance()->Bootstrap()->getResource('Front');
+            $this->_front = Shopware()->Container()->get('Front');
         }
         return $this->_front;
     }
@@ -209,7 +212,7 @@ abstract class Enlight_Components_Test_Controller_TestCase extends Enlight_Compo
     public function Template()
     {
         if (null === $this->_template) {
-            $this->_template = Enlight_Application::Instance()->Bootstrap()->getResource('Template');
+            $this->_template = Shopware()->Container()->get('Template');
         }
         return $this->_template;
     }

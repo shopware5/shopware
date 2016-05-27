@@ -171,13 +171,6 @@ class Shopware_Components_Acl extends Zend_Acl
                 $this->createPrivilege($resource->getId(), $privilege);
             }
         }
-
-        if (!empty($menuItemName)) {
-            $this->em->getConnection()->executeUpdate(
-                "UPDATE s_core_menu SET resourceID = ? WHERE name = ?",
-                [$resource->getId(), $menuItemName]
-            );
-        }
     }
 
     /**
@@ -208,12 +201,6 @@ class Shopware_Components_Acl extends Zend_Acl
         if (empty($resource)) {
             return false;
         }
-
-        // remove the resource flag in the s_core_menu manually.
-        $this->em->getConnection()->executeUpdate(
-            "UPDATE s_core_menu SET resourceID = NULL WHERE resourceID = ?",
-            [$resource->getId()]
-        );
 
         //The mapping table s_core_acl_roles must be cleared manually.
         $this->em->getConnection()->executeUpdate(

@@ -47,11 +47,11 @@ Ext.define('Shopware.apps.Config.controller.Form', {
         'form.Unit',
         'form.Country',
         'form.CountryArea',
+        'form.CoreLicense',
         'form.CustomerGroup',
         'form.PriceGroup',
         'form.Tax',
         'form.PageGroup',
-        'form.Attribute',
         'form.Search',
         'form.CronJob',
 
@@ -80,7 +80,6 @@ Ext.define('Shopware.apps.Config.controller.Form', {
         'form.PriceGroup',
         'form.Tax',
         'form.PageGroup',
-        'form.Attribute',
         'form.SearchField',
         'form.CronJob',
 
@@ -107,7 +106,6 @@ Ext.define('Shopware.apps.Config.controller.Form', {
         'form.PriceGroup',
         'form.Tax',
         'form.PageGroup',
-        'form.Attribute',
         'form.SearchField',
         'form.SearchTable',
         'form.CronJob'

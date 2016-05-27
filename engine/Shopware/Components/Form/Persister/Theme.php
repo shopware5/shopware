@@ -24,7 +24,6 @@
 
 namespace Shopware\Components\Form\Persister;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\PersistentCollection;
 use Shopware\Components\Form as Form;
 use Shopware\Components\Form\Container;

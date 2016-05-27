@@ -38,7 +38,7 @@ class Plugins
      * @param \Enlight_Loader $loader
      * @param \Enlight_Event_EventManager $eventManager
      * @param \Shopware $application
-     * @param array $config
+     * @param array $pluginDirectories
      * @return \Enlight_Plugin_PluginManager
      */
     public function factory(
@@ -46,23 +46,29 @@ class Plugins
         \Enlight_Loader $loader,
         \Enlight_Event_EventManager $eventManager,
         \Shopware $application,
-        array $config
+        array $pluginDirectories
     ) {
         $pluginManager = new \Enlight_Plugin_PluginManager($application);
-        $container->load('Table');
 
-        if (!isset($config['namespaces'])) {
-            $config['namespaces'] = array('Core', 'Frontend', 'Backend');
-        }
+        $configReader = $container->get('shopware.plugin.cached_config_reader');
 
-        foreach ($config['namespaces'] as $namespace) {
-            $namespace = new \Shopware_Components_Plugin_Namespace($namespace);
+        foreach (['Core', 'Frontend', 'Backend'] as $namespace) {
+            $namespace = new \Shopware_Components_Plugin_Namespace(
+                $namespace,
+                null,
+                $pluginDirectories,
+                $configReader
+            );
+
             $pluginManager->registerNamespace($namespace);
             $eventManager->registerSubscriber($namespace->Subscriber());
         }
 
-        foreach (array('Local', 'Community', 'Default', 'Commercial') as $dir) {
-            $loader->registerNamespace('Shopware_Plugins', Shopware()->AppPath('Plugins_' . $dir));
+        foreach ($pluginDirectories as $source => $path) {
+            $loader->registerNamespace(
+                'Shopware_Plugins',
+                $path
+            );
         }
 
         return $pluginManager;

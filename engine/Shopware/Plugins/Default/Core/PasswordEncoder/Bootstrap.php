@@ -160,7 +160,7 @@ class Shopware_Plugins_Core_PasswordEncoder_Bootstrap extends Shopware_Component
     public function onInitResourcePasswordEncoder(Enlight_Event_EventArgs $args)
     {
         // Get a list of all available hashes
-        $availableHasher = Enlight()->Events()->filter(
+        $availableHasher = Shopware()->Events()->filter(
             'Shopware_Components_Password_Manager_AddEncoder',
             array(),
             array('subject' => $this)

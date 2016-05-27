@@ -44,7 +44,7 @@ Ext.define('Shopware.apps.Systeminfo.view.systeminfo.Encoder', {
     extend: 'Ext.container.Container',
 
     ui: 'shopware-ui',
-    height: 40,
+    height: 60,
 
     /**
      * ID to access the component out of other components
@@ -65,7 +65,7 @@ Ext.define('Shopware.apps.Systeminfo.view.systeminfo.Encoder', {
     */
     region: 'north',
 
-	style: 'margin-left: 15px; margin-right: 32px; margin-top: 10px;',
+	style: 'margin-left: 15px; margin-right: 15px; margin-top: 10px;',
 
     initComponent: function(){
         var me = this;

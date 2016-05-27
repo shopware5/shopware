@@ -3,9 +3,9 @@
 namespace Shopware\Tests\Mink;
 
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
-use Shopware\Tests\Mink\Page\Emotion\Homepage;
+use Shopware\Tests\Mink\Page\Homepage;
 use Behat\Gherkin\Node\TableNode;
-use Shopware\Tests\Mink\Element\Emotion\CompareColumn;
+use Shopware\Tests\Mink\Element\CompareColumn;
 
 class ShopwareContext extends SubContext
 {
@@ -95,7 +95,7 @@ class ShopwareContext extends SubContext
             $data = array_merge($data, $additionalData->getHash());
         }
 
-        /** @var Homepage|\Shopware\Tests\Mink\Page\Emotion\Newsletter $page */
+        /** @var Homepage|\Shopware\Tests\Mink\Page\Newsletter $page */
         $page = $this->getPage($pageName);
         $page->subscribeNewsletter($data);
     }
@@ -226,7 +226,7 @@ class ShopwareContext extends SubContext
         /** @var Homepage $page */
         $page = $this->getPage('Homepage');
 
-        /** @var \Shopware\Tests\Mink\Element\Emotion\Banner $banner */
+        /** @var \Shopware\Tests\Mink\Element\Banner $banner */
         $banner = $this->getMultipleElement($page, 'Banner', $position);
         $page->checkLinkedBanner($banner, $image, $link);
     }
@@ -247,7 +247,7 @@ class ShopwareContext extends SubContext
         /** @var Homepage $page */
         $page = $this->getPage('Homepage');
 
-        /** @var \Shopware\Tests\Mink\Element\Emotion\Banner $banner */
+        /** @var \Shopware\Tests\Mink\Element\Banner $banner */
         $banner = $this->getMultipleElement($page, 'Banner', $position);
         $mapping = $mapping->getHash();
 
@@ -263,7 +263,7 @@ class ShopwareContext extends SubContext
         /** @var Homepage $page */
         $page = $this->getPage('Homepage');
 
-        /** @var \Shopware\Tests\Mink\Element\Emotion\Article $article */
+        /** @var \Shopware\Tests\Mink\Element\Article $article */
         $article = $this->getMultipleElement($page, 'Article', $position);
 
         $page->checkArticle($article, $data->getHash());
@@ -277,7 +277,7 @@ class ShopwareContext extends SubContext
         /** @var Homepage $page */
         $page = $this->getPage('Homepage');
 
-        /** @var \Shopware\Tests\Mink\Element\Emotion\CategoryTeaser $teaser */
+        /** @var \Shopware\Tests\Mink\Element\CategoryTeaser $teaser */
         $teaser = $this->getMultipleElement($page, 'CategoryTeaser', $position);
 
         $page->checkCategoryTeaser($teaser, $name, $image, $link);
@@ -291,7 +291,7 @@ class ShopwareContext extends SubContext
         /** @var Homepage $page */
         $page = $this->getPage('Homepage');
 
-        /** @var \Shopware\Tests\Mink\Element\Emotion\BannerSlider $slider */
+        /** @var \Shopware\Tests\Mink\Element\BannerSlider $slider */
         $blogArticle = $this->getMultipleElement($page, 'BlogArticle', 1);
 
         $articles = $articles->getHash();
@@ -307,7 +307,7 @@ class ShopwareContext extends SubContext
         /** @var Homepage $page */
         $page = $this->getPage('Homepage');
 
-        /** @var \Shopware\Tests\Mink\Element\Emotion\BannerSlider $slider */
+        /** @var \Shopware\Tests\Mink\Element\BannerSlider $slider */
         $slider = $this->getMultipleElement($page, 'BannerSlider', 1);
 
         $page->checkSlider($slider, $slides->getHash());
@@ -321,7 +321,7 @@ class ShopwareContext extends SubContext
         /** @var Homepage $page */
         $page = $this->getPage('Homepage');
 
-        /** @var \Shopware\Tests\Mink\Element\Emotion\Youtube $slider */
+        /** @var \Shopware\Tests\Mink\Element\Youtube $slider */
         $youtube = $this->getMultipleElement($page, 'YouTube', 1);
 
         $page->checkYoutubeVideo($youtube, $code);
@@ -335,7 +335,7 @@ class ShopwareContext extends SubContext
         /** @var Homepage $page */
         $page = $this->getPage('Homepage');
 
-        /** @var \Shopware\Tests\Mink\Element\Emotion\ManufacturerSlider $slider */
+        /** @var \Shopware\Tests\Mink\Element\ManufacturerSlider $slider */
         $slider = $this->getMultipleElement($page, 'ManufacturerSlider', 1);
 
         $page->checkSlider($slider, $manufacturers->getHash());
@@ -349,7 +349,7 @@ class ShopwareContext extends SubContext
         /** @var Homepage $page */
         $page = $this->getPage('Homepage');
 
-        /** @var \Shopware\Tests\Mink\Element\Emotion\ManufacturerSlider $slider */
+        /** @var \Shopware\Tests\Mink\Element\ManufacturerSlider $slider */
         $slider = $this->getMultipleElement($page, 'ArticleSlider', 1);
 
         $products = Helper::floatArray($articles->getHash(), ['price']);

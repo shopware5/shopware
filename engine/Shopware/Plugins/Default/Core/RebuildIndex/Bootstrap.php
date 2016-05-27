@@ -108,7 +108,7 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
      */
     public function SeoIndex()
     {
-        return Shopware()->SeoIndex();
+        return Shopware()->Container()->get('SeoIndex');
     }
 
     /**
@@ -182,7 +182,7 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
             if ($shop === null) {
                 throw new Exception('No valid shop id passed');
             }
-            $shop->registerResources(Shopware()->Bootstrap());
+            $shop->registerResources();
             Shopware()->Modules()->Categories()->baseId = $shop->getCategory()->getId();
 
             list($cachedTime, $elementId, $shopId) = $this->SeoIndex()->getCachedTime();
@@ -250,7 +250,7 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
             return;
         }
 
-        if (!Shopware()->Bootstrap()->issetResource('Shop')) {
+        if (!Shopware()->Container()->initialized('Shop')) {
             return;
         }
 

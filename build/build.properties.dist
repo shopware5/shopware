@@ -11,7 +11,7 @@ db.password =
 db.port = 3306
 
 test.dir  = ${basedir}/tests
-test.dir.shopware = ${test.dir}/Shopware
+test.dir.shopware = ${test.dir}
 
 build.dir = ${basedir}/build
 log.dir   = ${build.dir}/logs

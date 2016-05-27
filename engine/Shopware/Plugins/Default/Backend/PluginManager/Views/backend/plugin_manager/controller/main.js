@@ -101,11 +101,16 @@ Ext.define('Shopware.apps.PluginManager.controller.Main', {
         updatePage.listing.resetListing();
 
         updatePage.updateStore.load({
-            callback: function(records) {
+            callback: function(records, operation, success) {
+                if (operation.response && operation.response.responseText) {
+                    var result = Ext.JSON.decode(operation.response.responseText);
+                    if (result.loginRecommended) {
+                        Shopware.app.Application.fireEvent('open-login', function() {});
+                    }
+                }
+
                 if (records) {
                     navigation.setUpdateCount(records.length);
-
-                    Ext.create('Shopware.notification.ExpiredLicence').check();
                 }
 
                 if (Ext.isFunction(callback)) {

@@ -436,7 +436,7 @@ class sArticles
      */
     public function sGetArticlesByCategory($categoryId = null, SearchBundle\Criteria $criteria = null)
     {
-        if (Enlight()->Events()->notifyUntil('Shopware_Modules_Articles_sGetArticlesByCategory_Start', array(
+        if (Shopware()->Events()->notifyUntil('Shopware_Modules_Articles_sGetArticlesByCategory_Start', array(
                 'subject' => $this,
                 'id'      => $categoryId
             ))) {
@@ -705,22 +705,9 @@ class sArticles
         $criteria->addSorting(new PopularitySorting(SortingInterface::SORT_DESC));
 
         $result = $this->searchService->search($criteria, $context);
+        $articles = $this->legacyStructConverter->convertListProductStructList($result->getProducts());
 
-        $articles = [];
-        foreach ($result->getProducts() as $product) {
-            $article = $this->legacyStructConverter->convertListProductStruct($product);
-            $article = $this->legacyEventManager->firePromotionByIdEvents(
-                $article,
-                $category,
-                $this
-            );
-
-            if ($article) {
-                $articles[] = $article;
-            }
-        }
-
-        Enlight()->Events()->notify(
+        Shopware()->Events()->notify(
             'Shopware_Modules_Articles_GetArticleCharts',
             array('subject' => $this, 'category' => $category, 'articles' => $articles)
         );
@@ -1097,13 +1084,13 @@ class sArticles
                     $cheapestPrice = $queryCheapestPrice[0]["price"];
                 } else {
                     $cheapestPrice = 0;
-                    $basePrice = $queryCheapestPrice[0]["price"];
+                    $listPrice = $queryCheapestPrice[0]["price"];
                 }
             }
             $foundPrice = true;
         } else {
             $cheapestPrice = 0;
-            $basePrice = $queryCheapestPrice[0]["price"];
+            $listPrice = $queryCheapestPrice[0]["price"];
         }
 
         $sql = "
@@ -1130,7 +1117,7 @@ class sArticles
         // Updated / Fixed 28.10.2008 - STH
         if (!empty($usepricegroups)) {
             if (!empty($cheapestPrice)) {
-                $basePrice = $cheapestPrice;
+                $listPrice = $cheapestPrice;
             } else {
                 $foundPrice = true;
             }
@@ -1138,7 +1125,7 @@ class sArticles
             $returnPrice = $this->sGetPricegroupDiscount(
                 $this->sSYSTEM->sUSERGROUP,
                 $pricegroup,
-                $basePrice,
+                $listPrice,
                 99999,
                 false
             );
@@ -1341,13 +1328,13 @@ class sArticles
      */
     public function sGetProductByOrdernumber($ordernumber)
     {
-        if (Enlight()->Events()->notifyUntil('Shopware_Modules_Articles_sGetProductByOrdernumber_Start', array('subject' => $this, 'value' => $ordernumber))) {
+        if (Shopware()->Events()->notifyUntil('Shopware_Modules_Articles_sGetProductByOrdernumber_Start', array('subject' => $this, 'value' => $ordernumber))) {
             return false;
         }
 
         $getPromotionResult = $this->getPromotion(null, $ordernumber);
 
-        $getPromotionResult = Enlight()->Events()->filter(
+        $getPromotionResult = Shopware()->Events()->filter(
             'Shopware_Modules_Articles_sGetProductByOrdernumber_FilterResult',
             $getPromotionResult,
             array('subject' => $this, 'value' => $ordernumber)
@@ -1391,12 +1378,6 @@ class sArticles
         if (!$result) {
             return false;
         }
-
-        $result = $this->legacyEventManager->firePromotionByIdEvents(
-            $result,
-            $category,
-            $this
-        );
 
         return $result;
     }
@@ -1672,7 +1653,7 @@ class sArticles
         //first we convert the passed article id into an integer to prevent sql injections
         $articleId = (int) $sArticleID;
 
-        Enlight()->Events()->notify(
+        Shopware()->Events()->notify(
             'Shopware_Modules_Articles_GetArticlePictures_Start',
             array('subject' => $this, 'id' => $articleId)
         );
@@ -1685,7 +1666,7 @@ class sArticles
         }
 
         if ($onlyCover) {
-            $cover = Enlight()->Events()->filter(
+            $cover = Shopware()->Events()->filter(
                 'Shopware_Modules_Articles_GetArticlePictures_FilterResult',
                 $cover,
                 array('subject' => $this, 'id' => $articleId)
@@ -1740,7 +1721,7 @@ class sArticles
             }
         }
 
-        $images = Enlight()->Events()->filter(
+        $images = Shopware()->Events()->filter(
             'Shopware_Modules_Articles_GetArticlePictures_FilterResult',
             $images,
             array('subject' => $this, 'id' => $articleId)
@@ -2261,11 +2242,6 @@ class sArticles
                 $article["linkDetails"] .= "&sCategory=$categoryId";
             }
 
-            if (isset($article['sVoteAverange']) && !empty($article['sVoteAverange'])) {
-                // the listing pages use a 0 - 5 based average
-                $article['sVoteAverange']['averange'] = $article['sVoteAverange']['averange'] / 2;
-            }
-
             if ($this->config->get('useShortDescriptionInListing') && strlen($article['description']) > 5) {
                 $article["description_long"] = $article['description'];
             }
@@ -2302,25 +2278,6 @@ class sArticles
     private function getLegacyProduct(Product $product, $categoryId, array $selection)
     {
         $data = $this->legacyStructConverter->convertProductStruct($product);
-
-        $relatedArticles = array();
-        foreach ($data['sRelatedArticles'] as $related) {
-            $related = $this->legacyEventManager->firePromotionByIdEvents($related, null, $this);
-            if ($related) {
-                $relatedArticles[] = $related;
-            }
-        }
-        $data['sRelatedArticles'] = $relatedArticles;
-
-        $similarArticles = array();
-        foreach ($data['sSimilarArticles'] as $similar) {
-            $similar = $this->legacyEventManager->firePromotionByIdEvents($similar, null, $this);
-            if ($similar) {
-                $similarArticles[] = $similar;
-            }
-        }
-        $data['sSimilarArticles'] = $similarArticles;
-
         $data['categoryID'] = $categoryId;
 
         if ($product->hasConfigurator()) {

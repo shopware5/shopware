@@ -50,6 +50,14 @@ class ProductStream extends ModelEntity
      */
     private $conditions = true;
 
+
+    /**
+     * INVERSE SIDE
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ProductStream", mappedBy="productStream", orphanRemoval=true, cascade={"persist"})
+     * @var \Shopware\Models\Attribute\ProductStream
+     */
+    protected $attribute;
+
     /**
      * @return int
      */
@@ -136,5 +144,22 @@ class ProductStream extends ModelEntity
     public function setSorting($sorting)
     {
         $this->sorting = $sorting;
+    }
+
+    /**
+     * @return \Shopware\Models\Attribute\ProductStream
+     */
+    public function getAttribute()
+    {
+        return $this->attribute;
+    }
+
+    /**
+     * @param \Shopware\Models\Attribute\ProductStream|array|null $attribute
+     * @return \Shopware\Models\Attribute\ProductStream
+     */
+    public function setAttribute($attribute)
+    {
+        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\ProductStream', 'attribute', 'productStream');
     }
 }

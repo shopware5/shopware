@@ -1,6 +1,6 @@
 {* Slider panel *}
 {block name="widget_emotion_component_product_slider"}
-    <div class="emotion--product-slider panel has--border">
+    <div class="emotion--product-slider panel{if !$Data.no_border} has--border{/if}">
 
         {* Title *}
         {block name="widget_emotion_component_product_slider_title"}

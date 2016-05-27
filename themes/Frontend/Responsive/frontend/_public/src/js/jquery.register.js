@@ -36,7 +36,7 @@
              * @property submitBtnSelector
              * @type {String}
              */
-            submitBtnSelector: '.register--submit',
+            submitBtnSelector: '.register--submit,.address--form-submit',
 
             /**
              * Selector for the type selection field.
@@ -44,7 +44,7 @@
              * @property typeFieldSelector
              * @type {String}
              */
-            typeFieldSelector: '.register--customertype select',
+            typeFieldSelector: '.register--customertype select,.address--customertype select',
 
             /**
              * Type name for a company selection.
@@ -79,7 +79,7 @@
              * @property companyFieldSelector
              * @type {String}
              */
-            companyFieldSelector: '.register--company',
+            companyFieldSelector: '.register--company,.address--company',
 
             /**
              * Selector for the account field set.
@@ -129,7 +129,7 @@
              * @property stateContainerSelector
              * @type {String}
              */
-            stateContainerSelector: '.register--state-selection',
+            stateContainerSelector: '.register--state-selection, .address--state-selection',
 
             /**
              * Selector for the payment method select fields.
@@ -183,6 +183,7 @@
             me.$paymentMethods = $el.find(opts.paymentMethodSelector);
 
             me.$inputs = $el.find(opts.inputSelector);
+            me.$stateContainers = $el.find(opts.stateContainerSelector);
 
             me.checkType();
             me.checkSkipAccount();
@@ -226,11 +227,13 @@
                 hideCompanyFields = (me.$typeSelection.length && me.$typeSelection.val() !== opts.companyType),
                 requiredFields = $fieldSet.find(opts.inputSelector),
                 requiredMethod = (!hideCompanyFields) ? me.setHtmlRequired : me.removeHtmlRequired,
-                classMethod = (!hideCompanyFields) ? 'removeClass' : 'addClass';
+                classMethod = (!hideCompanyFields) ? 'removeClass' : 'addClass',
+                disabledMethod = (!hideCompanyFields) ? 'removeAttr' : 'attr';
 
             requiredMethod(requiredFields);
 
             $fieldSet[classMethod](opts.hiddenClass);
+            $fieldSet.find('input, select, textarea')[disabledMethod]('disabled', 'disabled');
 
             $.publish('plugin/swRegister/onCheckType', [ me, hideCompanyFields ]);
         },
@@ -293,38 +296,73 @@
          */
         onCountryChanged: function (event) {
             var me = this,
-                opts = me.opts,
-                hiddenClass = opts.hiddenClass,
                 $select = $(event.currentTarget),
-                selectId = $select.attr('id'),
-                val = $select.val(),
-                $parent = $select.parents('.panel--body'),
-                areaSelection = $parent.find('#' + selectId + '_' + val + '_states'),
-                select,
+                countryId = $select.val(),
+                addressType = $select.attr('data-address-type'),
+                $stateContainers,
                 plugin;
 
-            $.publish('plugin/swRegister/onCountryChangedBefore', [ me, event ]);
+            $.publish('plugin/swRegister/onCountryChangedBefore', [ me, event, countryId, addressType ]);
 
-            $parent.find(opts.stateContainerSelector).addClass(hiddenClass);
-            select = areaSelection.find('select');
-            areaSelection.addClass(hiddenClass);
+            me.resetStateSelections(addressType);
 
-            if (!(plugin = select.data('plugin_swSelectboxReplacement'))) {
-                return;
+            $stateContainers = me.$stateContainers.filter('[data-address-type="' + addressType + '"]');
+
+            // if there is no address type defined or no targets are found, fall back to all state containers
+            if ($stateContainers.length === 0) {
+                $stateContainers = me.$stateContainers;
             }
 
-            if (!areaSelection.length) {
-                plugin.$el.addClass(hiddenClass);
-                plugin.$wrapEl.addClass(hiddenClass);
-                plugin.setDisabled();
-            } else {
-                plugin.$el.removeClass(hiddenClass);
-                plugin.$wrapEl.removeClass(hiddenClass);
-                areaSelection.removeClass(hiddenClass);
-                plugin.setEnabled();
+            $stateContainers = $stateContainers.filter('[data-country-id="' + countryId + '"]');
+
+            if ($stateContainers.length) {
+                $stateContainers.removeClass(me.opts.hiddenClass);
+                $select = $stateContainers.find('select');
+                $select.removeAttr('disabled');
+
+                if ((plugin = $select.data('plugin_swSelectboxReplacement'))) {
+                    plugin.$el.removeClass(me.opts.hiddenClass);
+                    plugin.$wrapEl.removeClass(me.opts.hiddenClass);
+                    plugin.setEnabled();
+                }
             }
 
-            $.publish('plugin/swRegister/onCountryChanged', [ me, event ]);
+            $.publish('plugin/swRegister/onCountryChanged', [ me, event, countryId, addressType ]);
+        },
+
+        /**
+         * Called every time the country selection changes. This method disables and hides all state selections
+         * to prevent sending invalid data. The caller method needs to make sure, that the correct
+         * state selection gets activated and shown again.
+         *
+         * @public
+         * @method resetStateSelections
+         * @param {String} addressType
+         */
+        resetStateSelections: function (addressType) {
+            var me = this,
+                plugin,
+                $select,
+                $stateContainers,
+                $stateContainer;
+
+            $stateContainers = me.$stateContainers.filter('[data-address-type="' + addressType + '"]');
+            if ($stateContainers.length === 0) {
+                $stateContainers = me.$stateContainers;
+            }
+
+            $.each($stateContainers, function(index, stateContainer) {
+                $stateContainer = $(stateContainer);
+                $select = $stateContainer.find('select');
+
+                if (plugin = $select.data('plugin_swSelectboxReplacement')) {
+                    plugin.setDisabled();
+                } else {
+                    $select.attr('disabled', 'disabled');
+                }
+
+                $stateContainer.addClass(me.opts.hiddenClass);
+            });
         },
 
         /**
@@ -548,7 +586,7 @@
         onValidateSuccess: function (action, $input, result) {
             var me = this,
                 errorFlags,
-                errorMessages;
+                errorMessages = [];
 
             $('#' + action + '--message').remove();
 
@@ -556,8 +594,13 @@
                 return;
             }
 
-            errorFlags = result.error_flags;
-            errorMessages = result.error_messages;
+            errorFlags = result;
+            for (var key in result) {
+                //fields with `false` are now valid
+                if (result[key]) {
+                    errorMessages.push(result[key]);
+                }
+            }
 
             if (errorFlags) {
                 me.updateFieldFlags(errorFlags);

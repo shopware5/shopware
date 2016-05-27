@@ -164,7 +164,7 @@ class Shopware_Plugins_Frontend_LastArticles_Bootstrap extends Shopware_Componen
         $article = $this->getArticleData((int) $articleId);
 
         Shopware()->Session()->sLastArticle = $articleId;
-        $sessionId = Shopware()->SessionID();
+        $sessionId = Shopware()->Session()->get('sessionId');
 
         if (empty($sessionId) || empty($article['articleName']) || empty($articleId)) {
             return;

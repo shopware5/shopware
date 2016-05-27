@@ -5,8 +5,13 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service id="bootstrap"       synthetic="true" />
         <service id="application"     synthetic="true" />
+        <service id="PasswordEncoder" synthetic="true" />
+
+        <service id="bootstrap" class="Shopware_Bootstrap">
+            <argument type="service" id="service_container"/>
+            <deprecated>The "%service_id%" service is deprecated since 5.2 and will be removed in 5.3.</deprecated>
+        </service>
 
         <service id="locale_factory" class="Shopware\Components\DependencyInjection\Bridge\Locale" />
         <service id="shopware.locale" alias="locale" />
@@ -75,7 +80,7 @@
             <argument type="service" id="Loader"/>
             <argument type="service" id="events"/>
             <argument type="service" id="application"/>
-            <argument>%shopware.plugins%</argument>
+            <argument>%shopware.plugin_directories%</argument>
         </service>
 
         <service id="router_factory" class="Shopware\Components\DependencyInjection\Bridge\Router" />
@@ -91,7 +96,6 @@
         <service id="front" class="Enlight_Controller_Front">
             <factory service="front_factory" method="factory" />
             <argument type="service" id="service_container"/>
-            <argument type="service" id="bootstrap"/>
             <argument type="service" id="events"/>
             <argument>%shopware.front%</argument>
         </service>
@@ -104,6 +108,7 @@
         <service id="Loader"     class="Enlight_Loader" />
         <service id="snippets"   class="Shopware_Components_Snippet_Manager">
             <argument type="service" id="shopware.model_manager"/>
+            <argument>%shopware.plugin_directories%</argument>
             <argument>%shopware.snippet%</argument>
         </service>
 
@@ -126,10 +131,9 @@
         </service>
 
         <service id="shopware.db" alias="db"/>
-        <service id="db_factory" class="Shopware\Components\DependencyInjection\Bridge\Db" />
         <service id="db" class="Enlight_Components_Db_Adapter_Pdo_Mysql">
-            <factory service="db_factory" method="factory" />
-            <argument>%shopware.db.adapter%</argument>
+            <factory class="Shopware\Components\DependencyInjection\Bridge\Db" method="createEnlightDbAdapter" />
+            <argument type="service" id="dbal_connection"/>
             <argument>%shopware.db%</argument>
         </service>
 
@@ -156,7 +160,9 @@
          </service>
 
         <service id="shopware.event_manager" alias="events" />
-        <service id="events" class="Enlight_Event_EventManager" />
+        <service id="events" class="Shopware\Components\ContainerAwareEventManager">
+            <argument type="service" id="service_container"/>
+        </service>
 
         <service id="shopware.hook_manager" alias="Hooks" />
         <service id="Hooks" class="Enlight_Hook_HookManager">
@@ -169,7 +175,7 @@
         <service id="ModelConfig" class="Shopware\Components\Model\Configuration">
             <argument>%shopware.Model%</argument>
             <argument type="service" id="cache" />
-            <argument type="service" id="shopware.hook_manager" />
+            <argument type="service" id="model_repository_factory" />
         </service>
 
         <service id="model_factory" class="Shopware\Components\DependencyInjection\Bridge\Models" />
@@ -180,8 +186,7 @@
             <argument type="service" id="model_event_manager" />
             <argument type="service" id="shopware.model_config" />
             <argument type="service" id="shopware.loader" />
-            <argument type="service" id="db_connection" />
-            <argument>%kernel.root_dir%</argument>
+            <argument type="service" id="dbal_connection" />
             <argument type="service" id="shopware.model_annotations" />
          </service>
 
@@ -190,7 +195,10 @@
         </service>
 
         <service id="dbal_connection" class="Doctrine\DBAL\Connection">
-            <factory service="models" method="getConnection" />
+            <factory class="Shopware\Components\DependencyInjection\Bridge\Db" method="createDbalConnection" />
+            <argument>%shopware.db%</argument>
+            <argument type="service" id="ModelConfig"/>
+            <argument type="service" id="model_event_manager"/>
         </service>
 
         <service id="model_annotations_factory" class="Shopware\Components\DependencyInjection\Bridge\ModelAnnotation" />
@@ -203,6 +211,10 @@
 
         <service id="model_event_manager" class="Doctrine\Common\EventManager" public="false" />
 
+        <service id="model_repository_factory" class="Shopware\Components\Model\ProxyAwareRepositoryFactory" public="false">
+            <argument type="service" id="Hooks" />
+        </service>
+
         <service id="EventSubscriber" class="Shopware\Components\Model\EventSubscriber" public="false">
             <argument type="service" id="shopware.event_manager" />
             <tag name="doctrine.event_subscriber" />
@@ -213,13 +225,14 @@
         </service>
 
         <service id="CategorySubscriber" class="Shopware\Components\Model\CategorySubscriber">
-            <argument type="service" id="CategoryDenormalization" />
+            <argument type="service" id="service_container" />
             <tag name="doctrine.event_subscriber" />
         </service>
 
         <service id="CategoryDuplicator" class="Shopware\Components\CategoryHandling\CategoryDuplicator">
             <argument type="service" id="db_connection" />
             <argument type="service" id="CategoryDenormalization" />
+            <argument type="service" id="shopware_attribute.data_persister" />
         </service>
 
         <service id="CategoryDenormalization" class="Shopware\Components\Model\CategoryDenormalization">
@@ -339,16 +352,6 @@
 
         <service id="file_system" class="Symfony\Component\Filesystem\Filesystem" />
 
-        <service id="legacy_listing_converter" class="Shopware\Components\Compatibility\LegacyListingSubscriber">
-            <argument type="service" id="service_container" />
-            <tag name="shopware.event_subscriber" />
-        </service>
-
-        <service id="legacy_search_converter" class="Shopware\Components\Compatibility\LegacySearchSubscriber">
-            <argument type="service" id="service_container" />
-            <tag name="shopware.event_subscriber" />
-        </service>
-
         <service id="first_run_wizard_plugin_store" class="Shopware\Bundle\PluginInstallerBundle\Service\FirstRunWizardPluginStoreService">
             <argument type="service" id="shopware_plugininstaller.plugin_installer_struct_hydrator" />
             <argument type="service" id="shopware_plugininstaller.plugin_service_local" />
@@ -369,6 +372,17 @@
             <argument type="service" id="dbal_connection" />
         </service>
 
+        <service id="validator.validator_factory" class="Shopware\Bundle\FormBundle\DependencyInjection\Factory\ConstraintValidatorFactory" public="false">
+            <argument type="service" id="service_container" />
+            <argument type="collection" />
+        </service>
+
+        <service id="validator" class="Symfony\Component\Validator\Validator\ValidatorInterface" >
+            <factory class="Shopware\Components\DependencyInjection\Bridge\Validator" method="create" />
+            <argument type="service" id="ModelConfig" />
+            <argument type="service" id="validator.validator_factory" />
+        </service>
+
         <service id="validator.email" class="Shopware\Components\Validator\EmailValidator" />
 
         <service id="sitemapxml.repository" class="Shopware\Components\SitemapXMLRepository">
@@ -376,12 +390,24 @@
             <argument type="service" id="shopware_storefront.context_service" />
         </service>
 
-        <service id="AttributeSubscriber" class="Shopware\Components\AttributeSubscriber" public="false">
+        <service id="AttributeSubscriber" class="Shopware\Components\AttributeSubscriber">
             <argument type="service" id="service_container" />
             <tag name="shopware.event_subscriber" />
         </service>
 
         <service id="config_writer" class="Shopware\Components\ConfigWriter">
+            <argument type="service" id="dbal_connection" />
+        </service>
+
+        <service id="shopware.plugin.config_writer" class="Shopware\Components\Plugin\ConfigWriter">
+            <argument type="service" id="models" />
+        </service>
+
+        <service id="shopware.plugin.cached_config_reader" class="Shopware\Components\Plugin\CachedConfigReader">
+            <argument type="service" id="shopware.plugin.config_reader" />
+        </service>
+
+        <service id="shopware.plugin.config_reader" class="Shopware\Components\Plugin\DBALConfigReader">
             <argument type="service" id="dbal_connection" />
         </service>
 
@@ -397,5 +423,26 @@
             <argument type="service" id="config" />
         </service>
 
+        <service id="shopware.csrftoken_validator" class="Shopware\Components\CSRFTokenValidator">
+            <argument type="service" id="service_container" />
+            <argument>%shopware.csrfProtection.frontend%</argument>
+            <argument>%shopware.csrfProtection.backend%</argument>
+            <tag name="shopware.event_subscriber" />
+        </service>
+
+        <service id="shopware_core.license_service_subscriber" class="Shopware\Components\License\Service\LicenseServiceSubscriber">
+            <argument type="service" id="service_container" />
+            <tag name="shopware.event_subscriber" />
+        </service>
+
+        <service id="shopware_core.local_license_unpack_service" class="Shopware\Components\License\Service\LocalLicenseUnpackService" />
+
+        <service id="shopware.openssl_verificator" class="Shopware\Components\OpenSSLVerifier">
+            <argument>%kernel.root_dir%/engine/Shopware/Components/HttpClient/public.key</argument>
+        </service>
+
+        <service id="shopware.number_range_incrementer" class="Shopware\Components\NumberRangeIncrementer">
+            <argument type="service" id="dbal_connection"/>
+        </service>
     </services>
 </container>

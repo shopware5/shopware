@@ -46,9 +46,9 @@ class DownloadService
     private $storeClient;
 
     /**
-     * @var string
+     * @var array
      */
-    private $rootDir;
+    private $pluginDirectories;
 
     /**
      * @var Connection
@@ -56,18 +56,26 @@ class DownloadService
     private $connection;
 
     /**
-     * @param $rootDir
+     * @var string
+     */
+    private $rootDir;
+
+    /**
+     * @param string $rootDir
+     * @param array $pluginDirectories
      * @param StoreClient $storeClient
      * @param Connection $connection
      */
     public function __construct(
         $rootDir,
+        array $pluginDirectories,
         StoreClient $storeClient,
         Connection $connection
     ) {
-        $this->rootDir = $rootDir;
+        $this->pluginDirectories = $pluginDirectories;
         $this->storeClient = $storeClient;
         $this->connection = $connection;
+        $this->rootDir = $rootDir;
     }
 
     /**
@@ -76,6 +84,9 @@ class DownloadService
      */
     public function downloadRange(RangeDownloadRequest $request)
     {
+        // Load SwagUpdate so the DownloadStep can be autoloaded
+        Shopware()->Plugins()->Backend()->SwagUpdate();
+
         $version = new Version([
             'uri'  => $request->getUri(),
             'size' => $request->getSize(),
@@ -87,20 +98,31 @@ class DownloadService
     }
 
     /**
-     * @param $file
-     * @param $pluginName
+     * @param string $file
+     * @param string $pluginName
      * @throws \Exception
      */
     public function extractPluginZip($file, $pluginName)
     {
-        $source = $this->getPluginSource($pluginName);
-        if (!$source) {
-            $source = 'Community';
-        }
-        $destination = $this->rootDir . '/engine/Shopware/Plugins/' . $source;
+        $archive = ZipUtils::openZip($file);
+        $pluginZipDetector = new PluginZipDetector();
 
-        $extractor = new PluginExtractor();
-        $extractor->extract($file, $destination);
+        if ($pluginZipDetector->isLegacyPlugin($archive)) {
+            $source = $this->getPluginSource($pluginName);
+            if (!$source) {
+                $source = 'Community';
+            }
+
+            $destination = $this->pluginDirectories[$source];
+            $extractor = new LegacyPluginExtractor();
+            $extractor->extract($archive, $destination);
+        } elseif ($pluginZipDetector->isPlugin($archive)) {
+            $pluginDir = Shopware()->Container()->getParameter('kernel.root_dir').'/plugins';
+            $extractor = new PluginExtractor($pluginDir);
+            $extractor->extract($archive);
+        } else {
+            throw new \RuntimeException("No Plugin found in archive.");
+        }
     }
 
     /**

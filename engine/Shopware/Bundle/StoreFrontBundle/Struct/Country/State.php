@@ -49,6 +49,11 @@ class State extends Extendable implements \JsonSerializable
     protected $code;
 
     /**
+     * @var int
+     */
+    protected $position;
+
+    /**
      * @param int $id
      */
     public function setId($id)
@@ -102,5 +107,21 @@ class State extends Extendable implements \JsonSerializable
     public function jsonSerialize()
     {
         return get_object_vars($this);
+    }
+
+    /**
+     * @return int
+     */
+    public function getPosition()
+    {
+        return $this->position;
+    }
+
+    /**
+     * @param int $position
+     */
+    public function setPosition($position)
+    {
+        $this->position = $position;
     }
 }

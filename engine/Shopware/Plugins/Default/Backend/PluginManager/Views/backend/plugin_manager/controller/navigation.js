@@ -84,6 +84,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Navigation', {
         });
 
         Shopware.app.Application.on({
+            'display-installed-plugins': me.displayLocalPluginPage,
             'display-plugin': me.displayDetailPage,
             'display-plugin-by-name': me.displayDetailPageByName,
             'plugin-manager-display-updates': me.displayPluginUpdatesPage,

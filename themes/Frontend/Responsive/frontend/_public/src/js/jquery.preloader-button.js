@@ -28,8 +28,7 @@
 
             me.applyDataAttributes();
 
-            me.opts.checkFormIsValid = me.checkForValiditySupport();
-
+            me.opts.checkFormIsValid = me.opts.checkFormIsValid && me.checkForValiditySupport();
             me._on(me.$el, 'click', $.proxy(me.onShowPreloader, me));
 
             $.publish('plugin/swPreloaderButton/onRegisterEvents', [ me ]);
@@ -59,7 +58,11 @@
             var me = this;
 
             if(me.opts.checkFormIsValid) {
-                var $form = $('#' + me.$el.attr('form')) || me.$el.parents('form');
+                var $form = $('#' + me.$el.attr('form'));
+
+                if (!$form.length) {
+                    $form = me.$el.parents('form');
+                }
 
                 if (!$form.length || !$form[0].checkValidity()) {
                     return;
@@ -72,6 +75,15 @@
 
                 $.publish('plugin/swPreloaderButton/onShowPreloader', [ me ]);
             }, 25);
+        },
+
+        /**
+         * Removes the loading indicator and re-enables the button
+         */
+        reset: function() {
+            var me = this;
+
+            me.$el.find('.' + me.opts.loaderCls).removeAttr('disabled').remove();
         }
     });
 })(jQuery, window);

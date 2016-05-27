@@ -24,11 +24,10 @@
 
 namespace Shopware\Bundle\SearchBundleES\ConditionHandler;
 
-use ONGR\ElasticsearchDSL\Filter\NotFilter;
-use ONGR\ElasticsearchDSL\Filter\QueryFilter;
-use ONGR\ElasticsearchDSL\Filter\RangeFilter;
-use ONGR\ElasticsearchDSL\Filter\TermFilter;
-use ONGR\ElasticsearchDSL\Filter\TermsFilter;
+use ONGR\ElasticsearchDSL\Query\BoolQuery;
+use ONGR\ElasticsearchDSL\Query\RangeQuery;
+use ONGR\ElasticsearchDSL\Query\TermQuery;
+use ONGR\ElasticsearchDSL\Query\TermsQuery;
 use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\SearchBundle\Condition\ProductAttributeCondition;
 use Shopware\Bundle\SearchBundle\CriteriaPartInterface;
@@ -60,44 +59,44 @@ class ProductAttributeConditionHandler implements HandlerInterface
 
         switch ($criteriaPart->getOperator()) {
             case ProductAttributeCondition::OPERATOR_EQ:
-                $filter = new TermFilter($field, $criteriaPart->getValue());
+                $filter = new TermQuery($field, $criteriaPart->getValue());
                 break;
 
             case ProductAttributeCondition::OPERATOR_NEQ:
-                $filter = new NotFilter(new TermFilter($field, $criteriaPart->getValue()));
+                $filter = new BoolQuery();
+                $filter->add(new TermQuery($field, $criteriaPart->getValue()), BoolQuery::MUST_NOT);
                 break;
 
             case ProductAttributeCondition::OPERATOR_LT:
-                $filter = new RangeFilter($field, ['lt' => $criteriaPart->getValue()]);
+                $filter = new RangeQuery($field, ['lt' => $criteriaPart->getValue()]);
                 break;
 
             case ProductAttributeCondition::OPERATOR_LTE:
-                $filter = new RangeFilter($field, ['lte' => $criteriaPart->getValue()]);
+                $filter = new RangeQuery($field, ['lte' => $criteriaPart->getValue()]);
                 break;
 
             case ProductAttributeCondition::OPERATOR_BETWEEN:
                 $value = $criteriaPart->getValue();
-                $filter = new RangeFilter($field, ['gte' => $value['min'], 'lte' => $value['max']]);
+                $filter = new RangeQuery($field, ['gte' => $value['min'], 'lte' => $value['max']]);
                 break;
 
             case ProductAttributeCondition::OPERATOR_GT:
-                $filter = new RangeFilter($field, ['gt' => $criteriaPart->getValue()]);
+                $filter = new RangeQuery($field, ['gt' => $criteriaPart->getValue()]);
                 break;
 
             case ProductAttributeCondition::OPERATOR_GTE:
-                $filter = new RangeFilter($field, ['gte' => $criteriaPart->getValue()]);
+                $filter = new RangeQuery($field, ['gte' => $criteriaPart->getValue()]);
                 break;
 
             case ProductAttributeCondition::OPERATOR_IN:
-                $filter = new TermsFilter($field, $criteriaPart->getValue());
+                $filter = new TermsQuery($field, $criteriaPart->getValue());
                 break;
 
             case ProductAttributeCondition::OPERATOR_STARTS_WITH:
             case ProductAttributeCondition::OPERATOR_ENDS_WITH:
             case ProductAttributeCondition::OPERATOR_CONTAINS:
-                $filter = new QueryFilter(
-                    new TermFilter($field, $criteriaPart->getValue())
-                );
+                $filter = new BoolQuery();
+                $filter->add(new TermQuery($field, $criteriaPart->getValue()), BoolQuery::MUST);
                 break;
 
             default:

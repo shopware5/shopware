@@ -87,8 +87,7 @@ Ext.define('Shopware.apps.Form.model.Form', {
     ],
 
     associations: [
-        { type: 'hasMany', model: 'Shopware.apps.Form.model.Field', name: 'getFields', associationKey: 'fields'},
-        { type: 'hasMany', model: 'Shopware.apps.Form.model.Attribute', name: 'getAttributes', associationKey: 'attribute'}
+        { type: 'hasMany', model: 'Shopware.apps.Form.model.Field', name: 'getFields', associationKey: 'fields'}
     ],
 
     /**

@@ -59,7 +59,8 @@ Ext.define('Shopware.apps.Property.view.main.OptionGrid', {
         me.store      = me.optionStore;
         me.editor     = me.getRowEditorPlugin();
         me.viewConfig = me.getViewConfig();
-        me.plugins    = [ me.getGridTranslationPlugin(), me.editor ];
+        me.plugins    = [me.editor];
+
         me.tbar       = me.getToolbar();
         me.columns    = me.getColumns();
 
@@ -94,32 +95,19 @@ Ext.define('Shopware.apps.Property.view.main.OptionGrid', {
     getColumns: function() {
         var me = this;
 
-        var columns = [{
+        return [{
             header: me.snippets.columnOption,
             dataIndex: 'value',
             flex: 1,
             renderer: 'htmlEncode',
-            translationEditor: {
-                xtype: 'textfield',
-                name: 'optionValue',
-                fieldLabel: 'value',
-                allowBlank: false
-            },
             editor: {
                 allowBlank: false
             }
         }, {
             xtype: 'actioncolumn',
-            width: 45,
+            width: 60,
             hideable: false,
             items: [{
-                action: 'edit',
-                iconCls: 'sprite-pencil',
-                handler: function (view, rowIndex, colIndex, item, opts, record) {
-                    me.fireEvent('editOption', record, view);
-                }
-            },
-                {
                 iconCls: 'sprite-minus-circle-frame',
                 action: 'delete',
                 cls: 'delete',
@@ -128,10 +116,14 @@ Ext.define('Shopware.apps.Property.view.main.OptionGrid', {
                     var record  = grid.getStore().getAt(rowIndex);
                     me.fireEvent('deleteOption', record, grid);
                 }
+            }, {
+                action: 'edit',
+                iconCls: 'sprite-pencil',
+                handler: function (view, rowIndex, colIndex, item, opts, record) {
+                    me.fireEvent('editOption', record, view);
+                }
             }]
         }];
-
-        return columns;
     },
 
     /**
@@ -149,18 +141,6 @@ Ext.define('Shopware.apps.Property.view.main.OptionGrid', {
         };
 
         return viewConfig;
-    },
-
-
-    /**
-     * Creates new Grid-Translation Plugin
-     *
-     * @return [Shopware.grid.plugin.Translation]
-     */
-    getGridTranslationPlugin: function() {
-        return Ext.create('Shopware.grid.plugin.Translation', {
-            translationType: 'propertyvalue'
-        });
     },
 
     /**

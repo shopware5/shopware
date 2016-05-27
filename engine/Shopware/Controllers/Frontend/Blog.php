@@ -216,11 +216,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
             $media = $medias[$mediaId];
             $media = $this->get('legacy_struct_converter')->convertMediaStruct($media);
 
-            if (Shopware()->Shop()->getTemplate()->getVersion() < 3) {
-                $blogArticles[$key]["preview"]["thumbNails"] = array_column($media['thumbnails'], 'source');
-            } else {
-                $blogArticles[$key]['media'] = $media;
-            }
+            $blogArticles[$key]['media'] = $media;
         }
 
         //RSS and ATOM Feed part
@@ -228,16 +224,6 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
             $this->Response()->setHeader('Content-Type', 'text/xml');
             $type = $this->Request()->getParam('sRss') ? 'rss' : 'atom';
             $this->View()->loadTemplate('frontend/blog/' . $type . '.tpl');
-        }
-
-        /**@var $repository \Shopware\Models\Emotion\Repository*/
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Emotion\Emotion');
-        $query = $repository->getCampaignByCategoryQuery($categoryId);
-        $campaignsResult = $query->getArrayResult();
-        $campaigns = array();
-        foreach ($campaignsResult as $campaign) {
-            $campaign['categoryId'] = $categoryId;
-            $campaigns[$campaign['landingPageBlock']][] = $campaign;
         }
 
         $categoryContent = Shopware()->Modules()->Categories()->sGetCategoryContent($categoryId);
@@ -251,12 +237,8 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
             'sFilterDate' => $this->getDateFilterData($blogCategoryIds, $filter),
             'sFilterAuthor' => $this->getAuthorFilterData($blogCategoryIds, $filter),
             'sFilterTags' => $this->getTagsFilterData($blogCategoryIds, $filter),
-
-            /** @deprecated since 5.1 will be removed in 5.2 - Use sCategoryContent instead */
             'sCategoryInfo' => $categoryContent,
-
-            'sBlogArticles' => $blogArticles,
-            'campaigns' => $campaigns
+            'sBlogArticles' => $blogArticles
         );
 
         $this->View()->assign(array_merge($assigningData, $this->getPagerData($totalResult, $sLimitEnd, $sPage, $categoryId)));
@@ -329,9 +311,6 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
                 $blogArticleData["preview"] = $mediaData;
             }
             $media = array_merge($media, $mediaData);
-
-            // @deprecated since 5.1 will be removed in 5.2
-            $media['media']['path'] = $mediaService->getUrl($media['media']['path']);
         }
 
         //add sRelatedArticles

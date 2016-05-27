@@ -249,13 +249,14 @@ Ext.define('Shopware.apps.PluginManager.view.PluginHelper', {
         );
     },
 
-    sendAjaxRequest: function(url, params, callback, errorCallback) {
+    sendAjaxRequest: function(url, params, callback, errorCallback, timeout) {
         var me = this;
 
         Ext.Ajax.request({
             url: url,
             method: 'POST',
             params: params,
+            timeout: Ext.isNumber(timeout) ? timeout : 30000,
             success: function(operation, opts) {
                 var response = Ext.decode(operation.responseText);
 

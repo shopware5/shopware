@@ -121,22 +121,23 @@ Ext.define('Shopware.apps.Property.controller.Main', {
 
         me.control({
             'property-main-groupGrid': {
-                deleteGroup:    me.onDeleteGroup,
-                edit:            me.onEditGroup,
-                selectionchange: me.onGroupChange
+                deleteGroup: me.onDeleteGroup,
+                edit: me.onEditGroup,
+                selectionchange: me.onGroupChange,
+                'editGroup': me.openGroupWindow
             },
 
-            'property-main-groupGrid textfield[action=searchGroups]':{
-                change:me.onSearchGroups
+            'property-main-groupGrid textfield[action=searchGroups]': {
+                change: me.onSearchGroups
             },
-
             'property-main-setGrid': {
                 selectionchange: me.onSetChange,
                 deleteSet: me.onDeleteSet,
-                edit: me.onEditSet
+                edit: me.onEditSet,
+                'editSet': me.openSetWindow
             },
-            'property-main-setGrid textfield[action=searchSets]':{
-                change:me.onSearchSets
+            'property-main-setGrid textfield[action=searchSets]': {
+                change: me.onSearchSets
             },
 
             'property-main-setAssignGrid': {
@@ -151,8 +152,8 @@ Ext.define('Shopware.apps.Property.controller.Main', {
 
             'property-main-optionGrid': {
                 deleteOption: me.onDeleteOption,
-                edit:        me.onEditOption,
-                editOption:  me.editOption
+                edit: me.onEditOption,
+                editOption: me.editOption
             },
 
             'property-main-optionGrid dataview': {
@@ -645,17 +646,6 @@ Ext.define('Shopware.apps.Property.controller.Main', {
         });
     },
 
-    editOption: function(record) {
-        var me = this;
-
-        me.getView('detail.OptionWindow').create({
-            record: record
-        }).show();
-
-        Shopware.app.Application.on('option-save-successfully', function(controller, result, detailWindow) {
-            detailWindow.destroy();
-        });
-    },
 
     /**
      * Fired after a row is edited and passes validation. This event is fired
@@ -727,8 +717,45 @@ Ext.define('Shopware.apps.Property.controller.Main', {
         store.filters.clear();
         store.currentPage = 1;
         store.filter('filter',searchString);
+    },
+
+    openGroupWindow: function (record) {
+        var me = this;
+        var listing = me.getGroupGrid();
+
+        me.groupWindow = me.getView('detail.GroupWindow').create({
+            record: record
+        });
+        me.groupWindow.show();
+        me.groupWindow.on('record-saved', function () {
+            listing.getStore().load();
+        });
+    },
+
+    openSetWindow: function (record) {
+        var me = this;
+        var listing = me.getSetGrid();
+
+        me.setWindow = me.getView('detail.SetWindow').create({
+            record: record
+        });
+        me.setWindow.show();
+        me.setWindow.on('record-saved', function () {
+            listing.getStore().load();
+        });
+    },
+
+    editOption: function(record) {
+        var me = this;
+        var listing = me.getOptionGrid();
+
+        me.optionWindow = me.getView('detail.OptionWindow').create({
+            record: record
+        });
+        me.optionWindow.show();
+        me.optionWindow.on('record-saved', function () {
+            listing.getStore().load();
+        });
     }
-
-
 });
 //{/block}

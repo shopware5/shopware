@@ -33,7 +33,7 @@
 function smarty_modifier_number($value, $format = array())
 {
     if (empty($format['locale'])) {
-        $format['locale'] = Enlight_Application::Instance()->Locale();
+        $format['locale'] = Shopware()->Locale();
     }
 
     return Zend_Locale_Format::toNumber($value, $format);

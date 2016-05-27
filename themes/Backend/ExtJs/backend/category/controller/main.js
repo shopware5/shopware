@@ -100,6 +100,7 @@ Ext.define('Shopware.apps.Category.controller.Main', {
             node:me.defaultRootNodeId
         };
         me.subApplication.treeStore.load();
+        me.subApplication.templateStore.load();
 
         me.mainWindow = me.getView('main.Window').create({
             templateStore:me.subApplication.templateStore,
@@ -134,6 +135,8 @@ Ext.define('Shopware.apps.Category.controller.Main', {
             categoryModel.save({
                 callback:function (self, operation) {
                     if (operation.success) {
+                        me.getSettingsForm().attributeForm.saveAttribute(categoryModel.get('id'));
+
                         Shopware.Notification.createGrowlMessage('', me.snippets.onSaveChangesSuccess, me.snippets.growlMessage);
                         me.subApplication.treeStore.load({ node: parentNode });
                     } else {

@@ -1,9 +1,7 @@
 {if $sSuccessAction}
 	{$successText=''}
-	{if $sSuccessAction == 'billing'}
-		{$successText="{s name='AccountBillingSuccess'}{/s}"}
-	{elseif $sSuccessAction == 'shipping'}
-		{$successText="{s name='AccountShippingSuccess'}{/s}"}
+	{if $sSuccessAction == 'address'}
+		{$successText="{s name='AccountAddressSuccess'}{/s}"}
 	{elseif $sSuccessAction == 'payment'}
 		{$successText="{s name='AccountPaymentSuccess'}{/s}"}
 	{elseif $sSuccessAction == 'account'}

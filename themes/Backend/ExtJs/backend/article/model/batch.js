@@ -91,9 +91,6 @@ Ext.define('Shopware.apps.Article.model.Batch', {
 
         //association for all defined price groups in the shop
         { type:'hasMany', model:'Shopware.apps.Article.model.PriceGroup', name:'getPriceGroups', associationKey:'priceGroups' },
-
-        //association for the dynamic attribute field set.
-        { type:'hasMany', model:'Shopware.apps.Article.model.Field', name:'getAttributeFields', associationKey:'attributeFields' }
     ]
 });
 //{/block}

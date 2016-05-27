@@ -56,6 +56,11 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
     private $fieldHelper;
 
     /**
+     * @var Connection
+     */
+    private $connection;
+
+    /**
      * @param Connection $connection
      * @param FieldHelper $fieldHelper
      * @param Hydrator\CategoryHydrator $categoryHydrator
@@ -126,22 +131,20 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
             ->addSelect("GROUP_CONCAT(customerGroups.customergroupID) as __category_customer_groups")
         ;
 
-        $query->from('s_categories', 'category');
-
-        $query->leftJoin('category', 's_categories_attributes', 'categoryAttribute', 'categoryAttribute.categoryID = category.id')
+        $query->from('s_categories', 'category')
+            ->leftJoin('category', 's_categories_attributes', 'categoryAttribute', 'categoryAttribute.categoryID = category.id')
             ->leftJoin('category', 's_categories_avoid_customergroups', 'customerGroups', 'customerGroups.categoryID = category.id')
             ->leftJoin('category', 's_media', 'media', 'media.id = category.mediaID')
             ->leftJoin('media', 's_media_album_settings', 'mediaSettings', 'mediaSettings.albumID = media.albumID')
-            ->leftJoin('media', 's_media_attributes', 'mediaAttribute', 'mediaAttribute.mediaID = media.id');
-
-        $query->addOrderBy('category.position')
+            ->leftJoin('media', 's_media_attributes', 'mediaAttribute', 'mediaAttribute.mediaID = media.id')
+            ->where('category.id IN (:categories)')
+            ->andWhere('category.active = 1')
+            ->addGroupBy('category.id')
+            ->addOrderBy('category.position')
             ->addOrderBy('category.id')
-            ->addGroupBy('category.id');
+            ->setParameter(':categories', $ids, Connection::PARAM_INT_ARRAY);
 
-        $query->where('category.id IN (:categories)')
-            ->andWhere('category.active = 1');
-
-        $query->setParameter(':categories', $ids, Connection::PARAM_INT_ARRAY);
+        $this->fieldHelper->addMediaTranslation($query, $context);
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();

@@ -73,7 +73,6 @@ Ext.define('Shopware.apps.Index.view.Menu', {
         me.insert(0, Ext.decode(response.responseText));
         me.fireEvent('menu-created', me.items);
 
-        Ext.create('Shopware.notification.ExpiredLicence').check();
         /*{if {acl_is_allowed privilege=read resource=pluginmanager}}*/
         Ext.create('Shopware.notification.SubscriptionWarning').check();
         /*{/if}*/

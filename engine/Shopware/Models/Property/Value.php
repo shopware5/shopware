@@ -90,13 +90,6 @@ class Value extends ModelEntity
     private $articles;
 
     /**
-     * @deprecated since version 5.1.2, to be removed in 5.2
-     * @var float $len
-     * @ORM\Column(name="value_numeric", type="decimal", nullable=false, precision=2)
-     */
-    private $valueNumeric = 0;
-
-    /**
      * @var int $mediaId
      * @ORM\Column(name="media_id", type="integer", nullable=true)
      */
@@ -108,6 +101,13 @@ class Value extends ModelEntity
      * @ORM\JoinColumn(name="media_id", referencedColumnName="id")
      */
     private $media;
+
+    /**
+     * INVERSE SIDE
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\PropertyValue", mappedBy="propertyValue", orphanRemoval=true, cascade={"persist"})
+     * @var \Shopware\Models\Attribute\PropertyValue
+     */
+    protected $attribute;
 
     /**
      * Class constructor.
@@ -141,7 +141,6 @@ class Value extends ModelEntity
     public function setValue($value)
     {
         $this->value = $value;
-        $this->valueNumeric = floatval(str_replace(',', '.', $value));
         return $this;
     }
 
@@ -207,5 +206,22 @@ class Value extends ModelEntity
     public function setMedia($media)
     {
         $this->media = $media;
+    }
+
+    /**
+     * @return \Shopware\Models\Attribute\PropertyValue
+     */
+    public function getAttribute()
+    {
+        return $this->attribute;
+    }
+
+    /**
+     * @param \Shopware\Models\Attribute\PropertyValue|array|null $attribute
+     * @return \Shopware\Models\Attribute\PropertyValue
+     */
+    public function setAttribute($attribute)
+    {
+        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\PropertyValue', 'attribute', 'propertyValue');
     }
 }

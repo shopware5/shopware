@@ -129,7 +129,7 @@
             <tag name="doctrine.event_subscriber" />
         </service>
 
-        <service id="shopware_elastic_search.domain_backlog_subscriber" class="Shopware\Bundle\ESIndexingBundle\Subscriber\DomainBacklogSubscriber" public="false">
+        <service id="shopware_elastic_search.domain_backlog_subscriber" class="Shopware\Bundle\ESIndexingBundle\Subscriber\DomainBacklogSubscriber">
             <argument type="service" id="service_container" />
             <tag name="shopware.event_subscriber" />
         </service>

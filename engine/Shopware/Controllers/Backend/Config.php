@@ -57,8 +57,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         $filter = $this->Request()->getParam('filter');
         $repository = $this->getRepository('form');
 
-
-        $user = Shopware()->Auth()->getIdentity();
+        $user = Shopware()->Container()->get('Auth')->getIdentity();
         /** @var $locale \Shopware\Models\Shop\Locale */
         $locale = $user->locale;
 
@@ -110,7 +109,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
     {
         $repository = $this->getRepository('form');
 
-        $user = Shopware()->Auth()->getIdentity();
+        $user = Shopware()->Container()->get('Auth')->getIdentity();
         /** @var $locale \Shopware\Models\Shop\Locale */
         $locale = $user->locale;
         $language = $locale->toString();
@@ -251,12 +250,16 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                     continue;
                 }
 
+                $valueData['value'] = $this->prepareValue($elementData, $valueData['value']);
+
                 $value = new Shopware\Models\Config\Value();
                 $value->setElement($element);
                 $value->setShop($shop);
                 $value->setValue($valueData['value']);
                 $values[$shop->getId()] = $value;
             }
+
+            $this->beforeSaveElement($elementData);
 
             $values = Shopware()->Events()->filter('Shopware_Controllers_Backend_Config_Before_Save_Config_Element', $values, array(
                 'subject' => $this,
@@ -318,8 +321,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                 break;
             case 'country':
                 $builder->leftJoin('country.area', 'area')
-                    ->leftJoin('country.attribute', 'attribute')
-                    ->addSelect('area', 'attribute');
+                    ->addSelect('area');
                 break;
             case 'widgetView':
                 $builder->leftJoin('widgetView.auth', 'auth')
@@ -331,9 +333,6 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                     ))
                     ->orderBy('widgetView.column')
                     ->addOrderBy('widgetView.position');
-                break;
-            case 'attribute':
-                $builder->orderBy('attribute.position');
                 break;
             default:
                 break;
@@ -509,8 +508,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
             case 'country':
                 $builder->leftJoin('country.area', 'area')
                     ->leftJoin('country.states', 'states')
-                    ->leftJoin('country.attribute', 'attribute')
-                    ->addSelect('area', 'states', 'attribute');
+                    ->addSelect('area', 'states');
                 break;
             case 'priceGroup':
                 $builder->leftJoin('priceGroup.discounts', 'discounts')
@@ -647,9 +645,9 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                     $data['widget'] = $mappingRepository->find($data['widgetId']);
                     unset($data['widgetId']);
                 }
-                if (Shopware()->Auth()->hasIdentity()) {
+                if (Shopware()->Container()->get('Auth')->hasIdentity()) {
                     $mappingRepository = $this->getRepository('auth');
-                    $authId = Shopware()->Auth()->getIdentity()->id;
+                    $authId = Shopware()->Container()->get('Auth')->getIdentity()->id;
                     $data['auth'] = $mappingRepository->find($authId);
                 }
                 break;
@@ -686,8 +684,21 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
 
         $model->fromArray($data);
 
-        $manager->persist($model);
-        $manager->flush();
+        try {
+            $manager->persist($model);
+            $manager->flush();
+        } catch (\Exception $ex) {
+            switch ($name) {
+                case 'country':
+                    if ($ex instanceof \Doctrine\DBAL\DBALException && stripos($ex->getMessage(), "violation: 1451") !== false) {
+                        $this->View()->assign(array('success' => false, 'message' => 'A state marked to be deleted is still in use.'));
+                        return;
+                    }
+                    break;
+                default:
+                    throw $ex;
+            }
+        }
 
         $this->View()->assign(array('success' => true));
     }
@@ -774,8 +785,19 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
             return;
         }
 
-        $manager->remove($model);
-        $manager->flush();
+        try {
+            $manager->remove($model);
+            $manager->flush();
+        } catch (\Exception $ex) {
+            switch ($name) {
+                case 'country':
+                    $this->View()->assign(array('success' => false, 'message' => 'The country is still being used.'));
+                    return;
+                default:
+                    throw $ex;
+            }
+        }
+
 
         $this->View()->assign(array('success' => true));
     }
@@ -864,9 +886,6 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                     break;
                 case 'pageGroup':
                     $repository = 'Shopware\Models\Site\Group';
-                    break;
-                case 'attribute':
-                    $repository = 'Shopware\Models\Article\Element';
                     break;
                 case 'document':
                     $repository = 'Shopware\Models\Document\Document';
@@ -1101,5 +1120,80 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         }
 
         $this->View()->assign(array('success' => true));
+    }
+
+    /**
+     * @param array $elementData
+     * @return bool
+     */
+    private function beforeSaveElement($elementData)
+    {
+        switch ($elementData['name']) {
+            case 'shopsalutations':
+                $this->createSalutationSnippets($elementData);
+                break;
+        }
+
+        return true;
+    }
+
+    /**
+     * @return int[] indexed by shop id
+     */
+    private function getShopLocaleMapping()
+    {
+        $connection = Shopware()->Container()->get('dbal_connection');
+        $query = $connection->createQueryBuilder();
+        $query->select(['id, IFNULL(main_id, id)']);
+        $query->from('s_core_shops');
+        return $query->execute()->fetchAll(PDO::FETCH_KEY_PAIR);
+    }
+
+    /**
+     * @param array $elementData
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    private function createSalutationSnippets($elementData)
+    {
+        $connection = Shopware()->Container()->get('dbal_connection');
+
+        $shops = $this->getShopLocaleMapping();
+
+        $query = $connection->prepare('INSERT IGNORE INTO s_core_snippets (namespace, shopID, localeID, name, created) VALUES (:namespace, :shopId, :localeId, :name, :created)');
+
+        $salutations = [];
+        foreach ($elementData['values'] as $value) {
+            $salutations = array_merge($salutations, explode(',', $value['value']));
+        }
+        $salutations = array_unique($salutations);
+
+        $date = new DateTime();
+        foreach ($shops as $localeId => $shopId) {
+            foreach ($salutations as $salutation) {
+                $query->execute([
+                    ':created' => $date->format('Y-m-d H:i:s'),
+                    ':namespace' => 'frontend/salutation',
+                    ':name' => trim($salutation),
+                    ':shopId' => $shopId,
+                    ':localeId' => $localeId
+                ]);
+            }
+        }
+    }
+
+    /**
+     * @param array $elementData
+     * @param mixed $value
+     * @return mixed
+     */
+    private function prepareValue($elementData, $value)
+    {
+        switch ($elementData['name']) {
+            case 'shopsalutations':
+                $values = explode(',', $value);
+                $value = implode(',', array_map('trim', $values));
+                break;
+        }
+        return $value;
     }
 }

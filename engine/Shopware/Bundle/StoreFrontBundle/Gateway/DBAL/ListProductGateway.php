@@ -167,6 +167,7 @@ class ListProductGateway implements Gateway\ListProductGatewayInterface
         $this->fieldHelper->addVariantTranslation($query, $context);
         $this->fieldHelper->addManufacturerTranslation($query, $context);
         $this->fieldHelper->addUnitTranslation($query, $context);
+        $this->fieldHelper->addEsdTranslation($query, $context);
 
         return $query;
     }

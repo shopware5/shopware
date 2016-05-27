@@ -54,39 +54,7 @@ abstract class Random
             return false;
         }
 
-        if (function_exists('openssl_random_pseudo_bytes')
-            && (version_compare(PHP_VERSION, '5.3.4') >= 0
-            || strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN')
-        ) {
-            $bytes = openssl_random_pseudo_bytes($length, $usable);
-            if (true === $usable) {
-                return $bytes;
-            }
-        }
-
-        if (function_exists('mcrypt_create_iv')
-            && (version_compare(PHP_VERSION, '5.3.7') >= 0
-            || strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN')
-        ) {
-            $bytes = mcrypt_create_iv($length, MCRYPT_DEV_URANDOM);
-            if ($bytes !== false && strlen($bytes) === $length) {
-                return $bytes;
-            }
-        }
-
-        if ($strong) {
-            throw new \Exception(
-                'This PHP environment doesn\'t support secure random number generation. ' .
-                'Please consider installing the OpenSSL and/or Mcrypt extensions'
-            );
-        }
-
-        $rand = '';
-        for ($i = 0; $i < $length; $i++) {
-            $rand .= chr(mt_rand(0, 255));
-        }
-
-        return $rand;
+        return random_bytes($length);
     }
 
     /**
@@ -103,7 +71,7 @@ abstract class Random
     }
 
     /**
-     * Generate a random integer between $min and $max
+     * Generate a random integer between $min and $max inclusive
      *
      * @param  integer $min
      * @param  integer $max
@@ -118,24 +86,8 @@ abstract class Random
                 'The min parameter must be lower than max parameter'
             );
         }
-        $range = $max - $min;
-        if ($range == 0) {
-            return $max;
-        } elseif ($range > PHP_INT_MAX || is_float($range)) {
-            throw new \DomainException(
-                'The supplied range is too great to generate'
-            );
-        }
-        $log    = log($range, 2);
-        $bytes  = (int) ($log / 8) + 1;
-        $bits   = (int) $log + 1;
-        $filter = (int) (1 << $bits) - 1;
-        do {
-            $rnd = hexdec(bin2hex(self::getBytes($bytes, $strong)));
-            $rnd = $rnd & $filter;
-        } while ($rnd > $range);
 
-        return ($min + $rnd);
+        return random_int($min, $max);
     }
 
     /**

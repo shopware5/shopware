@@ -47,6 +47,7 @@ Ext.define('Shopware.apps.Article.model.Mapping', {
         { name: 'settings', type: 'boolean', defaultValue: true },
         { name: 'prices', type: 'boolean', defaultValue: true },
         { name: 'basePrice', type: 'boolean', defaultValue: true },
+        { name: 'purchasePrice', type: 'boolean', defaultValue: true },
         { name: 'attributes', type: 'boolean', defaultValue: true },
         { name: 'translations', type: 'boolean', defaultValue: true }
 

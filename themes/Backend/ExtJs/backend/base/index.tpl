@@ -5,7 +5,7 @@
     {include file="backend/base/header.tpl"}
 {/block}
 
-  <body>
+  <body {if $product}class="shopware-{$product|lower}"{/if}>
     {block name="backend/base/container"}
     <div class="container">
 

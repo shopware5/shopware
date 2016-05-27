@@ -9,21 +9,6 @@ use Shopware\Bundle\PluginInstallerBundle\Service\PluginStoreService;
 class Shopware_Controllers_Backend_FirstRunWizardPluginManager extends Shopware_Controllers_Backend_ExtJs
 {
     /**
-     * Checks if shop has licenses configured.
-     */
-    public function checkShopLicenceAction()
-    {
-        $licenseCount = $this->container->get('dbal_connection')
-            ->executeQuery('SELECT COUNT(DISTINCT id) FROM s_core_licenses')
-            ->fetchColumn();
-
-        $this->View()->assign(array(
-            'success' => false,
-            'data' => (bool) $licenseCount,
-        ));
-    }
-
-    /**
      * Loads integrated plugins from SBP
      */
     public function getIntegratedPluginsAction()
@@ -31,16 +16,22 @@ class Shopware_Controllers_Backend_FirstRunWizardPluginManager extends Shopware_
         /** @var PluginStoreService $firstRunWizardPluginStore */
         $firstRunWizardPluginStore = $this->container->get('first_run_wizard_plugin_store');
 
+        $isoFromRequest = $this->Request()->get('iso');
+
+        $isoCode = $isoFromRequest ? $isoFromRequest : $this->getCurrentLocale()->getName();
+
+        $isoCode = substr($isoCode, -2);
+
         try {
             /** @var PluginStruct[] $plugins */
             $plugins = $firstRunWizardPluginStore->getIntegratedPlugins(
-                $this->getCurrentLocale(),
+                $isoCode,
                 $this->getVersion()
             );
         } catch (Exception $e) {
             $this->View()->assign(array(
-                'success' => false,
-                'message' => $e->getMessage()
+                'success' => true,
+                'data' => []
             ));
             return;
         }
@@ -67,8 +58,8 @@ class Shopware_Controllers_Backend_FirstRunWizardPluginManager extends Shopware_
             );
         } catch (Exception $e) {
             $this->View()->assign(array(
-                'success' => false,
-                'message' => $e->getMessage()
+                'success' => true,
+                'data' => []
             ));
             return;
         }
@@ -96,8 +87,8 @@ class Shopware_Controllers_Backend_FirstRunWizardPluginManager extends Shopware_
             );
         } catch (Exception $e) {
             $this->View()->assign(array(
-                'success' => false,
-                'message' => $e->getMessage()
+                'success' => true,
+                'data' => []
             ));
             return;
         }
@@ -127,8 +118,8 @@ class Shopware_Controllers_Backend_FirstRunWizardPluginManager extends Shopware_
             );
         } catch (Exception $e) {
             $this->View()->assign(array(
-                'success' => false,
-                'message' => $e->getMessage()
+                'success' => true,
+                'data' => []
             ));
             return;
         }
@@ -155,8 +146,8 @@ class Shopware_Controllers_Backend_FirstRunWizardPluginManager extends Shopware_
             );
         } catch (Exception $e) {
             $this->View()->assign(array(
-                'success' => false,
-                'message' => $e->getMessage()
+                'success' => true,
+                'data' => []
             ));
             return;
         }
@@ -164,6 +155,32 @@ class Shopware_Controllers_Backend_FirstRunWizardPluginManager extends Shopware_
         $this->View()->assign(array(
             'success' => true,
             'data' => $localizations
+        ));
+    }
+
+    /**
+     * Loads localizations list from SBP
+     */
+    public function getIntegratedPluginsCountriesAction()
+    {
+        /** @var PluginStoreService $firstRunWizardPluginStore */
+        $firstRunWizardPluginStore = $this->container->get('first_run_wizard_plugin_store');
+
+        $locale = $this->getCurrentLocale();
+
+        try {
+            $countries = $firstRunWizardPluginStore->getIntegratedPluginsCountries($locale);
+        } catch (Exception $e) {
+            $this->View()->assign(array(
+                'success' => true,
+                'data' => []
+            ));
+            return;
+        }
+
+        $this->View()->assign(array(
+            'success' => true,
+            'data' => $countries
         ));
     }
 
@@ -198,7 +215,7 @@ class Shopware_Controllers_Backend_FirstRunWizardPluginManager extends Shopware_
             }
         }
 
-        $user = Shopware()->Auth()->getIdentity();
+        $user = Shopware()->Container()->get('Auth')->getIdentity();
         /** @var $locale \Shopware\Models\Shop\Locale */
         $locale = $user->locale;
         $localeCode = $locale->getLocale();

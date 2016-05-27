@@ -37,10 +37,10 @@ interface CheapestPriceServiceInterface
      * @see \Shopware\Bundle\StoreFrontBundle\Service\Core\CheapestPriceServiceInterface::get()
      *
      * @param Struct\ListProduct[] $products
-     * @param Struct\ShopContextInterface $context Will be changed to ProductContextInterface in SW 5.2
+     * @param Struct\ProductContextInterface $context
      * @return Struct\Product\PriceRule[] Indexed by product number
      */
-    public function getList($products, Struct\ShopContextInterface $context);
+    public function getList($products, Struct\ProductContextInterface $context);
 
     /**
      * Returns the cheapest product price for the provided context and product.
@@ -53,9 +53,9 @@ interface CheapestPriceServiceInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\CheapestPriceGatewayInterface::get()
      *
-     * @param Struct\BaseProduct $product Will be changed to ListProduct in SW 5.2
-     * @param Struct\ShopContextInterface $context Will be changed to ProductContextInterface in SW 5.2
+     * @param Struct\ListProduct $product
+     * @param Struct\ProductContextInterface $context
      * @return Struct\Product\PriceRule
      */
-    public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context);
+    public function get(Struct\ListProduct $product, Struct\ProductContextInterface $context);
 }

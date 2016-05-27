@@ -255,7 +255,7 @@ class CacheManager
         $cacheConfig = $this->container->getParameter('shopware.cache');
 
         if ($this->cache->getBackend() instanceof \Zend_Cache_Backend_Apc) {
-            $apcInfo = apc_cache_info('user');
+            $apcInfo = apcu_cache_info('user');
             $info['files'] = $apcInfo['num_entries'];
             $info['size'] = $this->encodeSize($apcInfo['mem_size']);
         } else {
