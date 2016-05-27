@@ -53,9 +53,13 @@ Ext.define('Shopware.apps.Emotion.view.detail.Window', {
 
     showPreview: false,
 
-    layout: 'border',
     height: '92%',
     width: '92%',
+
+    layout: {
+        type: 'hbox',
+        align: 'stretch'
+    },
 
     snippets: {
         windowTitle: '{s name="global/title"}{/s}',
@@ -179,9 +183,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Window', {
             items: [me.sidebar],
             border: false,
             layout: { type: 'hbox', align: 'stretch' },
-            region: 'west',
-            width: '25%',
-            minWidth: 450,
+            width: 450,
             plugins: [{
                 ptype: 'translation',
                 pluginId: 'translation',
@@ -235,7 +237,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Window', {
         var me = this;
 
         return me.designer = Ext.create('Shopware.apps.Emotion.view.detail.Designer', {
-            region: 'center',
+            flex: 1,
             emotion: me.emotion,
             mainWindow: me,
             activePreview: me.showPreview
@@ -249,6 +251,16 @@ Ext.define('Shopware.apps.Emotion.view.detail.Window', {
             table: 's_emotion_attributes',
             bodyPadding: 20,
             fieldSetPadding: 5,
+            listeners: {
+                activate: function() {
+                    me.designer.hide();
+                    me.mainForm.setWidth(me.getWidth());
+                },
+                deactivate: function() {
+                    me.mainForm.setWidth(450);
+                    me.designer.show();
+                }
+            },
             style: 'background: rgb(240, 242, 244)',
             title: '{s namespace="backend/attributes/main" name="attribute_form_title"}{/s}',
             translationForm: me.mainForm
