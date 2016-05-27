@@ -32,6 +32,8 @@ use Shopware\Components\License\Service\LocalLicenseUnpackService;
 
 class PluginLicenceService
 {
+    const TYPE_UNLICENSED = 99;
+
     /**
      * @var Connection
      */
@@ -148,17 +150,26 @@ class PluginLicenceService
      */
     public function updateLocalLicenseInformation(array $pluginInformation, $domain)
     {
+        $this->cleanupUnknownLicenseInformation();
         foreach ($pluginInformation as $plugin) {
-            if ($plugin->getLicenseExpiration() == null || $plugin->getType() == null) {
+            if ($plugin->getLicenseExpiration() == null && !$plugin->isUnknownLicense()) {
                 continue;
             }
             $license = $this->getLocalLicenseByPluginName($plugin->getTechnicalName());
             if (empty($license)) {
-                $this->createLocalLicenseExpirationInformation($plugin, $domain);
+                $this->createLocalLicenseInformation($plugin, $domain);
             } elseif (empty($license['license'])) {
                 $this->updateLocalLicenseExpirationInformation($license, $plugin);
             }
         }
+    }
+
+    /**
+     * @throws \Doctrine\DBAL\Exception\InvalidArgumentException
+     */
+    private function cleanupUnknownLicenseInformation()
+    {
+        $this->connection->delete('s_core_licenses', ['type' => self::TYPE_UNLICENSED]);
     }
 
     /**
@@ -181,26 +192,31 @@ class PluginLicenceService
      * @param PluginInformationStruct $plugin
      * @param string $domain
      */
-    private function createLocalLicenseExpirationInformation(PluginInformationStruct $plugin, $domain)
+    private function createLocalLicenseInformation(PluginInformationStruct $plugin, $domain)
     {
-        $addedDate = new \DateTime();
-        $creationDate = new \DateTime($plugin->getLicenseCreation());
-        $expirationDate = new \DateTime($plugin->getLicenseExpiration());
-
+        $today = new \DateTime();
         $data = [
             'module' => $plugin->getTechnicalName(),
             'host' => $domain,
             'label' => $plugin->getLabel(),
             'license' => '',
             'version' => $plugin->getVersion(),
-            'type' => $plugin->getType(),
             'active' => 1,
             'source' => $plugin->getSource(),
-            'added' => $addedDate->format('Y-m-d'),
-            'creation' => $creationDate->format('Y-m-d'),
-            'expiration' => $expirationDate->format('Y-m-d')
+            'added' => $today->format('Y-m-d')
         ];
-        
+
+        if ($plugin->isUnknownLicense()) {
+            $type = self::TYPE_UNLICENSED;
+        } else {
+            $creationDate = new \DateTime($plugin->getLicenseCreation());
+            $expirationDate = new \DateTime($plugin->getLicenseExpiration());
+            $type = $plugin->getType();
+            $data['creation'] = $creationDate->format('Y-m-d');
+            $data['expiration'] = $expirationDate->format('Y-m-d');
+        }
+        $data['type'] = $type;
+
         $this->connection->insert('s_core_licenses', $data);
     }
 

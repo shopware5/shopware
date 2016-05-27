@@ -249,16 +249,21 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
     },
 
     licenceRenderer: function(value, metaData, record) {
+        var me = this;
+
         if (!record || !record['getLicenceStore']) {
             return;
         }
-
+        var result = '';
         try {
-            var licence = record['getLicenceStore'].first();
-            var price = licence['getPriceStore'].first();
-            var type = this.getTextForPriceType(price.get('type'));
-            var expiration = licence.get('expirationDate');
-            var result = type;
+            var licence = record['getLicenceStore'].first(),
+                price = licence['getPriceStore'].first(),
+                type = me.getTextForPriceType(price.get('type')),
+                expiration = licence.get('expirationDate');
+            result += type;
+            if (price.get('type') == 'unlicensed') {
+                result = Ext.String.format('<div style="color: [0]">[1]</div>', '#ff0000', result);
+            }
         } catch (e) {
             return result;
         }
@@ -268,7 +273,13 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
         }
 
         if (expiration) {
+            var expirationDate = new Date(expiration.date),
+                today = new Date();
             result += '<br><span class="label">{s name="till"}until{/s}: </span><span class="date">' + Ext.util.Format.date(expiration.date) + '</span>';
+
+            if (expirationDate < today) {
+                result = Ext.String.format('<div style="color: [0]">[1]</div>', '#ff0000', result);
+            }
         }
 
         return result;

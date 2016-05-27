@@ -30,9 +30,10 @@ namespace Shopware\Bundle\PluginInstallerBundle\Struct;
  */
 class PriceStruct implements \JsonSerializable
 {
-    const TYPE_RENT = 'rent';
-    const TYPE_BUY  = 'buy';
-    const TYPE_TEST = 'test';
+    const TYPE_RENT         = 'rent';
+    const TYPE_BUY          = 'buy';
+    const TYPE_TEST         = 'test';
+    const TYPE_UNLICENSED   = 'unlicensed';
 
     /**
      * @var int
