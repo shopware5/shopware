@@ -44,7 +44,7 @@ class PluginContextTest extends \PHPUnit_Framework_TestCase
         $context = new PluginContext($entity, \Shopware::VERSION);
         $plugin = new MyPlugin(true);
 
-        $plugin->uninstall($context);
+        $plugin->uninstall($context, true);
         $this->assertArrayHasKey('cache', $context->getScheduled());
         $this->assertEquals(PluginContext::CACHE_LIST_DEFAULT, $context->getScheduled()['cache']);
     }
