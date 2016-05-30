@@ -194,7 +194,8 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     {
         return [
             'openPdf',
-            'createDocument'
+            'createDocument',
+            'mergeDocuments'
         ];
     }
 
