@@ -571,16 +571,8 @@ Ext.define('Shopware.apps.Emotion.view.detail.elements.Base', {
             rows = Math.round((height + cellSpacing) / (cellSize.height + cellSpacing)),
             startRow, startCol, endRow, endCol;
 
-        cols = Math.max(cols, me.minCols);
-        rows = Math.max(rows, me.minRows);
-
-        if (me.maxCols !== null && me.maxCols > me.minCols) {
-            cols = Math.min(cols, me.maxCols);
-        }
-
-        if (me.maxRows !== null && me.maxRows > me.minRows) {
-            rows = Math.max(rows, me.maxRows);
-        }
+        cols = me.clampCols(cols);
+        rows = me.clampRows(rows);
 
         // Get the start row and column
         startRow = gridSettings.startRow;
@@ -614,16 +606,8 @@ Ext.define('Shopware.apps.Emotion.view.detail.elements.Base', {
         element.removeCls('is--resizing');
         element.removeCls('is--invalid');
 
-        cols = Math.max(cols, me.minCols);
-        rows = Math.max(rows, me.minRows);
-
-        if (me.maxCols !== null && me.maxCols > me.minCols) {
-            cols = Math.min(cols, me.maxCols);
-        }
-
-        if (me.maxRows !== null && me.maxRows > me.minRows) {
-            rows = Math.max(rows, me.maxRows);
-        }
+        cols = me.clampCols(cols);
+        rows = me.clampRows(rows);
 
         // Get the start row and column
         startRow = gridSettings.startRow;
@@ -696,13 +680,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.elements.Base', {
             gridSettings = me.getGridSettings(),
             rows = gridSettings.endRow - gridSettings.startRow + 1;
 
-        rows = Math.max(rows, me.minRows);
-
-        if (me.maxRows !== null && me.maxRows > me.minRows) {
-            rows = Math.min(rows, me.maxRows);
-        }
-
-        return rows;
+        return me.clampRows(rows);
     },
 
     getCols: function() {
@@ -710,10 +688,36 @@ Ext.define('Shopware.apps.Emotion.view.detail.elements.Base', {
             gridSettings = me.getGridSettings(),
             cols = gridSettings.endCol - gridSettings.startCol + 1;
 
+        return me.clampCols(cols);
+    },
+
+    clampRows: function(rows) {
+        var me = this;
+
+        rows = Math.max(rows, me.minRows);
+
+        if (me.maxRows !== null && me.maxRows > me.minRows) {
+            rows = Math.min(rows, me.maxRows);
+        }
+
+        if (me.gridView.settings.maxElementRows !== null) {
+            rows = Math.min(rows, me.gridView.settings.maxElementRows);
+        }
+
+        return rows;
+    },
+
+    clampCols: function(cols) {
+        var me = this;
+
         cols = Math.max(cols, me.minCols);
 
         if (me.maxCols !== null && me.maxCols > me.minCols) {
             cols = Math.min(cols, me.maxCols);
+        }
+
+        if (me.gridView.settings.maxElementCols !== null) {
+            cols = Math.min(cols, me.gridView.settings.maxElementCols);
         }
 
         return cols;
