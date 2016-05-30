@@ -57,6 +57,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Layout', {
         fields: {
             fluidModeLabel: '{s name="grids/settings/fluid_effect"}{/s}',
             resizeModeLabel: '{s name="grids/settings/resize_effect"}{/s}',
+            rowsModeLabel: '{s name="grids/settings/rows_effect"}{/s}',
             templateLabel: '{s name="settings/fieldset/select_template"}{/s}',
             templateEmptyText: '{s name="settings/fieldset/select_template_empty"}{/s}',
             modeLabel: '{s name="grids/settings/mode"}{/s}',
@@ -72,7 +73,8 @@ Ext.define('Shopware.apps.Emotion.view.detail.Layout', {
         },
         support: {
             fluidMode: '{s name="grid/settings/support/fluid_effect"}{/s}',
-            resizeMode: '{s name="grid/settings/support/resize_effect"}{/s}'
+            resizeMode: '{s name="grid/settings/support/resize_effect"}{/s}',
+            rowsMode: '{s name="grid/settings/support/rows_effect"}{/s}'
         },
         alert: {
             deviceWarningTitle: '{s name="settings/device/warning_title"}{/s}',
@@ -100,6 +102,22 @@ Ext.define('Shopware.apps.Emotion.view.detail.Layout', {
         );
 
         me.callParent(arguments);
+    },
+
+    onModeChange: function (modeField, mode) {
+        var me = this;
+
+        me.fireEvent('changeMode', me.emotion, mode);
+
+        if (mode === 'rows') {
+            me.cellHeightField.setValue(240);
+            me.disableCellHeightField(true);
+        }
+
+        if (mode === 'fluid' || mode === 'resize') {
+            me.cellHeightField.setValue(185);
+            me.disableCellHeightField(false);
+        }
     },
 
     createLayoutFieldset: function() {
@@ -137,9 +155,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Layout', {
             listeners: {
                 'change': {
                     scope: me,
-                    fn: function(field, newValue) {
-                        me.fireEvent('changeMode', me.emotion, newValue);
-                    }
+                    fn: me.onModeChange
                 }
             }
         });
@@ -151,18 +167,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Layout', {
             uncheckedValue: 0,
             hideEmptyLabel: false,
             margin: '10 0 5 0',
-            labelWidth: me.defaults.labelWidth,
-            listeners: {
-                scope: me,
-                change: function(field, value) {
-                    // ToDo@PSC: Make it possible to show listing after fullscreen shopping world
-                    //me.listingCheckbox.setVisible(!value);
-                    //
-                    //if (value) {
-                    //    me.listingCheckbox.setValue(false);
-                    //}
-                }
-            }
+            labelWidth: me.defaults.labelWidth
         });
 
         return Ext.create('Ext.form.FieldSet', {
@@ -312,8 +317,24 @@ Ext.define('Shopware.apps.Emotion.view.detail.Layout', {
                 'value': 'resize',
                 'display': me.snippets.fields.resizeModeLabel,
                 'supportText': me.snippets.support.resizeMode
+            }, {
+                'value': 'rows',
+                'display': me.snippets.fields.rowsModeLabel,
+                'supportText': me.snippets.support.rowsMode
             }]
         });
+    },
+
+    disableCellHeightField: function(disable) {
+        var me = this;
+
+        if (!Ext.isDefined(disable)) {
+            disable = true;
+        }
+
+        me.cellHeightField.setReadOnly(disable);
+        me.cellHeightField[disable ? 'addCls' : 'removeCls']('x-form-readonly');
+        me.cellHeightField[disable ? 'addCls' : 'removeCls']('x-item-disabled');
     },
 
     setDevices: function() {

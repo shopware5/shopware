@@ -48,6 +48,7 @@ Ext.define('Shopware.apps.Emotion.view.list.Grid', {
     typeMapping: {
         'fluid': '{s name="list/mode/label/fluid"}{/s}',
         'resize': '{s name="list/mode/label/resize"}{/s}',
+        'rows': '{s name="list/mode/label/rows"}{/s}',
         'masonry': '{s name="list/mode/label/masonry"}{/s}'
     },
 

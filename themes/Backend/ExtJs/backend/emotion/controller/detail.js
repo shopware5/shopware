@@ -537,9 +537,24 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
 
     onModeChange: function(record, mode) {
         var me = this,
-            grid = me.getDesignerGrid();
+            elements = record.getElements(),
+            grid = me.getDesignerGrid(),
+            viewports;
 
         mode = mode || 'fluid';
+
+        if (mode === 'rows') {
+            // Check if some elements are higher than one row.
+            elements.each(function(element) {
+                viewports = element.getViewports();
+
+                viewports.each(function(viewport) {
+                    if (viewport.get('endRow') > viewport.get('startRow')) {
+                        viewport.set('visible', false);
+                    }
+                });
+            });
+        }
 
         record.set('mode', mode);
         grid.refresh();

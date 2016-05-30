@@ -443,10 +443,13 @@
 
             me.remSpacing = ~~me.opts.cellSpacing / 16;
 
+            me.currentState = window.StateManager.getCurrentState();
+
             if (me.opts.fullscreen) {
                 me.initFullscreen();
             }
 
+            me.initState(me.currentState);
             me.initMode(me.opts.gridMode);
 
             me.initElements();
@@ -478,14 +481,37 @@
         },
 
         /**
+         * Initializes the shopping world for the current viewport state.
+         */
+        initState: function(state) {
+            var me = this;
+
+            state = state || window.StateManager.getCurrentState();
+
+            me.$sizer = me.$el.find('.emotion--sizer-' + state);
+
+            me.clsPrefix = '-' + state;
+
+            if (me.$sizer.length <= 0) {
+                me.$sizer = me.$el.find('.emotion--sizer');
+                me.clsPrefix = '';
+            }
+
+            me.rows = ~~me.$sizer.attr('data-rows');
+        },
+
+        /**
          * Initializes special elements and their needed plugins.
          */
         initElements: function() {
             var me = this;
 
-            $.each(me.$bannerElements, function(index, item) {
-                $(item).swEmotionBanner();
-            });
+            if (me.opts.gridMode !== 'rows') {
+
+                $.each(me.$bannerElements, function(index, item) {
+                    $(item).swEmotionBanner();
+                });
+            }
 
             $.each(me.$videoElements, function(index, item) {
                 $(item).swEmotionVideo();
@@ -545,6 +571,7 @@
         initFluidGrid: function() {
             var me = this;
 
+            me.setElementHeights();
             me.setElementPositions();
 
             $.publish('plugin/swEmotion/onInitFluidGrid', [ me ]);
@@ -564,11 +591,66 @@
                 me.$wrapper.css('max-width', me.baseWidth);
             }
 
+            me.setElementHeights();
             me.setElementPositions();
 
             me.scale();
 
             $.publish('plugin/swEmotion/onInitScaleGrid', [ me ]);
+        },
+
+        /**
+         * Initializes the grid for the rows mode.
+         */
+        initRowsGrid: function() {
+            var me = this,
+                r, c, rowCls, colCls, element, elementCols, lastCol = 0,
+                colExp = new RegExp(' col'+ me.clsPrefix +'-(\\d)', 'i'),
+                hiddenElements = $('<div>', { 'class': 'hidden-elements' }),
+                rows = [];
+
+            // Save hidden elements in new element for later use
+            me.$elements.filter('.is--hidden' + me.clsPrefix).appendTo(hiddenElements);
+
+            // Iterate through all rows and create wrapper elements for each row
+            for(r = 1; r <= me.rows; r++) {
+
+                rows[r] = $('<div>', { 'class': 'emotion--row row--' + r });
+                lastCol = 0;
+
+                // Iterate through each column of the row and add the corresponding elements to the row
+                for(c = 1; c <= me.opts.columns; c++) {
+                    rowCls = '.start-row' + me.clsPrefix + '-' + r;
+                    colCls = '.start-col' + me.clsPrefix + '-' + c;
+
+                    // Get all elements matching the row and col class, excluding the hidden elements.
+                    element = me.$elements.filter(rowCls + colCls).not('.is--hidden' + me.clsPrefix);
+
+                    if (element.length > 0) {
+                        elementCols = ~~(element.attr('class').match(colExp)[1] || 1);
+
+                        element.appendTo(rows[r]);
+
+                        if (c - lastCol > 1) {
+                            element.css('margin-left', 100 / me.opts.columns * (c - lastCol - 1) + '%');
+                        } else {
+                            element.css('margin-left', 'inherit');
+                        }
+
+                        lastCol = c + elementCols - 1;
+                    }
+                }
+            }
+
+            me.$el.find(':not([data-rows])').remove();
+
+            hiddenElements.appendTo(me.$el);
+
+            $.each(rows, function (rowIndex, $row) {
+                me.$el.append($row);
+            });
+
+            $.publish('plugin/swEmotion/onInitRowsGrid', [ me, rows, hiddenElements ]);
         },
 
         /**
@@ -591,20 +673,30 @@
          * Called by event listener on window resize.
          */
         onResize: function() {
-            var me = this;
+            var me = this,
+                state = window.StateManager.getCurrentState();
+
+            me.initState(state);
 
             if (me.opts.gridMode === 'resize') {
                 me.scale();
             }
 
             if (me.opts.gridMode === 'resize' || me.opts.gridMode === 'fluid') {
+                me.setElementHeights();
                 me.setElementPositions();
+            }
+
+            if (me.opts.gridMode === 'rows' && me.currentState !== state) {
+                me.initRowsGrid();
             }
 
             me.$bannerElements.trigger('emotionResize');
             me.$videoElements.trigger('emotionResize');
 
-            $.publish('plugin/swEmotion/onResize', [ me ]);
+            me.currentState = state;
+
+            $.publish('plugin/swEmotion/onResize', [ me, me.currentState ]);
         },
 
         onShow: function(event, emotion) {
@@ -644,28 +736,28 @@
          * Sets the correct position styling for all elements based on the viewport.
          */
         setElementPositions: function() {
-            var me = this,
-                state = window.StateManager.getCurrentState(),
-                $sizer = me.$el.find('.emotion--sizer-' + state),
-                clsPrefix = '-' + state,
-                i = 1;
+            var me = this, i = 1;
 
-            if ($sizer.length <= 0) {
-                $sizer = me.$el.find('.emotion--sizer');
-                clsPrefix = '';
-            }
-
-            var rows = ~~$sizer.attr('data-rows');
-
-            for (i; i <= rows; i++) {
-                var height = 100 / rows * i,
-                    top = 100 / rows * (i - 1);
-
-                me.$elements.filter('.row' + clsPrefix + '-' + i).css('height', height + '%');
-                me.$elements.filter('.start-row' + clsPrefix + '-' + i).css('top', top + '%');
+            for (i; i <= me.rows; i++) {
+                var top = 100 / me.rows * (i - 1);
+                me.$elements.filter('.start-row' + me.clsPrefix + '-' + i).css('top', top + '%');
             }
 
             $.publish('plugin/swEmotion/onSetElementPositions', [ me ]);
+        },
+
+        /**
+         * Sets the correct height for all elements based on the viewport.
+         */
+        setElementHeights: function() {
+            var me = this, i = 1;
+
+            for (i; i <= me.rows; i++) {
+                var height = 100 / me.rows * i;
+                me.$elements.filter('.row' + me.clsPrefix + '-' + i).css('height', height + '%');
+            }
+
+            $.publish('plugin/swEmotion/onSetElementHeights', [ me ]);
         },
 
         /**

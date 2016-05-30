@@ -161,6 +161,21 @@ body.emotion--preview {
         .transform-origin(0, 0, 0);
     }
 
+    &.emotion--mode-rows {
+        .emotion--sizer,
+        .emotion--sizer-xs,
+        .emotion--sizer-s,
+        .emotion--sizer-m,
+        .emotion--sizer-l,
+        .emotion--sizer-xl {
+            display: none;
+        }
+
+        .emotion--row {
+            .clearfix();
+        }
+    }
+
     // Create the grid classes for different grid sizes
     .createGrid(1); // Container with one column
     .createGrid(2); // Container with two columns
@@ -323,6 +338,13 @@ body.emotion--preview {
     display: block;
     position: absolute;
     top: 0; left: 0;
+
+    .emotion--container.emotion--mode-rows & {
+        position: relative;
+        top: 0; left: 0;
+        float: left;
+        vertical-align: top;
+    }
 }
 
     // Banner element
@@ -372,6 +394,24 @@ body.emotion--preview {
         }
     }
 
+    .emotion--mode-rows & {
+        height: auto;
+
+        .banner--content,
+        .banner--content.left.top,
+        .banner--content.left.center,
+        .banner--content.left.bottom,
+        .banner--content.center.top,
+        .banner--content.center.bottom,
+        .banner--content.right.top,
+        .banner--content.right.center,
+        .banner--content.right.bottom {
+            .transform(translate(0, 0));
+            position: relative;
+            left: 0; top: 0;
+        }
+    }
+
     .banner--image {
         width: 100%;
     }
@@ -405,6 +445,26 @@ body.emotion--preview {
 .emotion--banner-slider {
     width: 100%;
     height: 100%;
+
+    .emotion--mode-rows & {
+        height: auto;
+
+        .banner-slider--container,
+        .banner-slider--slide {
+            height: auto;
+        }
+
+        .banner-slider--item {
+            vertical-align: middle;
+        }
+
+        .banner-slider--banner {
+            .transform(none);
+            position: relative;
+            top: 0; left: 0;
+            width: 100%;
+        }
+    }
 
     .banner-slider--title {
         .unitize-padding(10, 20);
@@ -473,6 +533,10 @@ body.emotion--preview {
     width: 100%;
     height: 100%;
     position: relative;
+
+    .emotion--mode-rows & {
+        .unitize-height(360);
+    }
 
     .product-slider--title {
         .unitize-height(55);
@@ -552,6 +616,10 @@ body.emotion--preview {
     width: 100%;
     height: 100%;
 
+    .emotion--mode-rows & {
+        .unitize-height(360);
+    }
+
     &.is--no-border {
         .box--content {
             border: 0 none;
@@ -601,6 +669,10 @@ body.emotion--preview {
     width: 100%;
     height: 100%;
 
+    .emotion--mode-rows & {
+        .unitize-height(360);
+    }
+
     .category-teaser--link {
         display: block;
         width: 100%;
@@ -632,6 +704,10 @@ body.emotion--preview {
     width: 100%;
     height: 100%;
     position: relative;
+
+    .emotion--mode-rows & {
+        .unitize-height(260);
+    }
 
     .manufacturer--title {
         .unitize-height(55);
@@ -701,6 +777,10 @@ body.emotion--preview {
 .emotion--youtube {
     width: 100%;
     height: 100%;
+
+    .emotion--mode-rows & {
+        .unitize-height(360);
+    }
 }
 
     // Video element
@@ -709,6 +789,15 @@ body.emotion--preview {
     height: 100%;
     overflow: hidden;
     position: relative;
+
+    .emotion--mode-rows & {
+        height: auto;
+
+        .video--element {
+            height: auto;
+            position: relative;
+        }
+    }
 
     video::-moz-media-controls,
     video::-webkit-media-controls {
@@ -729,6 +818,7 @@ body.emotion--preview {
         width: 100%;
         height: 100%;
         position: absolute;
+        top: 0; left: 0;
         z-index: @zindex-emotion-video-cover;
         background-position: center center;
         background-size: cover;
@@ -788,6 +878,10 @@ body.emotion--preview {
 .emotion--iframe {
     width: 100%;
     height: 100%;
+
+    .emotion--mode-rows & {
+        .unitize-height(360);
+    }
 }
 
     // Blog element
@@ -795,6 +889,14 @@ body.emotion--preview {
     width: 100%;
     height: 100%;
     overflow: auto;
+
+    .emotion--mode-rows & {
+        height: auto;
+
+        .blog--image {
+            .unitize-height(160);
+        }
+    }
 
     .blog--container {
         height: 100%;
@@ -831,8 +933,8 @@ body.emotion--preview {
         .unitize(font-size, 14);
         .unitize(line-height, 20);
         color: @text-color;
-		height: auto;
-		max-height: 60%;
+        height: auto;
+        max-height: 60%;
     }
 }
 
@@ -843,6 +945,10 @@ body.emotion--preview {
     position: relative;
     overflow: auto;
 
+    .emotion--mode-rows & {
+        height: auto;
+    }
+
     .html--content {
         :last-child {
             margin-bottom: 0;
@@ -851,9 +957,9 @@ body.emotion--preview {
 }
 
 @media screen and(min-width: @tabletViewportWidth) {
-	.emotion--blog {
-		overflow: hidden;
-	}
+    .emotion--blog {
+        overflow: hidden;
+    }
 }
 
 @media screen and(min-width: @desktopViewportWidth) {

@@ -47,43 +47,16 @@ Ext.define('Shopware.apps.Emotion.view.detail.Grid', {
             rowButtons: true,
             maxElementRows: null,
             maxElementCols: null,
-            minCols: null,
-            maxCols: null,
-            minRows: null,
-            maxRows: null
-        }
-    },
-
-    defaultStateSettings: {
-        'xs': {
-            'resizeCol': true,
-            'resizeRow': true,
-            'drag': true,
-            'drop': true
+            resizeCol: true,
+            resizeRow: true,
+            drag: true,
+            drop: true
         },
-        's': {
-            'resizeCol': true,
-            'resizeRow': true,
-            'drag': true,
-            'drop': true
-        },
-        'm': {
-            'resizeCol': true,
-            'resizeRow': true,
-            'drag': true,
-            'drop': true
-        },
-        'l': {
-            'resizeCol': true,
-            'resizeRow': true,
-            'drag': true,
-            'drop': true
-        },
-        'xl': {
-            'resizeCol': true,
-            'resizeRow': true,
-            'drag': true,
-            'drop': true
+        'rows': {
+            maxElementRows: 1,
+            resizeRow: false,
+            drag: true,
+            drop: true
         }
     },
 
@@ -872,8 +845,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Grid', {
     getSettings: function(state, type) {
         var me = this,
             settings = me.emotion.getData() || {},
-            typeSettings = me.getTypeSettings(type),
-            stateSettings = me.getStateSettings(state);
+            typeSettings;
 
         /**
          * Delete unnecessary object trees.
@@ -882,46 +854,11 @@ Ext.define('Shopware.apps.Emotion.view.detail.Grid', {
         delete settings['shops'];
         delete settings['template'];
 
-        settings = Ext.merge(settings, stateSettings);
+        typeSettings = me.getTypeSettings(type);
+
         settings = Ext.merge(settings, typeSettings);
 
         return settings;
-    },
-
-    /**
-     * Get the designer settings for the current viewport state.
-     * Used internal by the getSettings() method to merge the state settings with the global settings.
-     *
-     * Can also be called separately to get just the current state settings.
-     *
-     * @param state
-     * @returns { * }
-     */
-    getStateSettings: function(state) {
-        var me = this, stateSettings;
-
-        /**
-         * The state can be passed directly to the method or set on creation of the grid.
-         *
-         * @type string
-         * @default 'xl'
-         */
-        state = state || me.state || 'xl';
-
-        /**
-         * Get the default settings for this state.
-         */
-        stateSettings = me.defaultStateSettings[state] || me.defaultStateSettings['xl'];
-
-        /**
-         * If there are custom state settings bound to the grid
-         * they get merged with the default state settings.
-         */
-        if (me['stateSettings']) {
-            return Ext.merge(stateSettings, me['stateSettings'][state] || {});
-        }
-
-        return stateSettings;
     },
 
     /**
@@ -934,7 +871,8 @@ Ext.define('Shopware.apps.Emotion.view.detail.Grid', {
      * @returns { * }
      */
     getTypeSettings: function(type) {
-        var me = this, typeSettings;
+        var me = this,
+            typeSettings = Ext.clone(me.defaultTypeSettings['standard']);
 
         /**
          * The type can be passed directly to the method.
@@ -948,9 +886,10 @@ Ext.define('Shopware.apps.Emotion.view.detail.Grid', {
 
         /**
          * Get the default settings for the type.
-         * If there are no default settings for this type get the standard settings.
          */
-        typeSettings = me.defaultTypeSettings[type] || me.defaultTypeSettings['standard'];
+        if (Ext.isDefined(me.defaultTypeSettings[type])) {
+            typeSettings = Ext.merge(typeSettings, me.defaultTypeSettings[type]);
+        }
 
         /**
          * If there are custom type settings bound to the grid
