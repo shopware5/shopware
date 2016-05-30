@@ -27,12 +27,8 @@
                                         <div class="panel has--border is--rounded block">
                                             {block name='frontend_address_selection_modal_container_item_body'}
                                                 <div class="panel--body is--wide">
-                                                    {$address.salutation|salutation}
-                                                    {if {config name="displayprofiletitle"}}
-									                    {$address.title}<br/>
-								                    {/if}
-                                                    <b>{$address.firstname} {$address.lastname}</b><br />
-                                                    {if $address.company}{$address.company}<br/>{/if}
+                                                    <span class="is--bold">{$address.firstname} {$address.lastname}</span><br />
+                                                    {if $address.company}<span class="is--bold">{$address.company}</span><br/>{/if}
                                                     {$address.street}<br />
                                                     {if $address.additionalAddressLine1}{$address.additionalAddressLine1}<br />{/if}
                                                     {if $address.additionalAddressLine2}{$address.additionalAddressLine2}<br />{/if}
