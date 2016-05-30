@@ -129,6 +129,7 @@
         open: function(addressId) {
             var me = this,
                 sizing = me.opts.sizing,
+                maxHeight = 0,
                 requestData = {
                     id: addressId || null,
                     extraData: {
@@ -140,6 +141,8 @@
 
             if (window.StateManager._getCurrentDevice() === 'mobile') {
                 sizing = 'auto';
+            } else {
+                maxHeight = me.opts.height;
             }
 
             // reset modal
@@ -160,6 +163,7 @@
                         $.modal.open(data, {
                             width: me.opts.width,
                             height: me.opts.height,
+                            maxHeight: maxHeight,
                             sizing: sizing,
                             additionalClass: 'address-manager--modal address-manager--editor',
                             addressId: addressId

@@ -99,7 +99,8 @@
         open: function (options) {
             var me = this,
                 sizing,
-                extraData;
+                extraData,
+                maxHeight = 0;
 
             me.opts = $.extend({}, me.defaults, options);
 
@@ -115,6 +116,8 @@
 
             if (window.StateManager._getCurrentDevice() === 'mobile') {
                 sizing = 'auto';
+            } else {
+                maxHeight = me.opts.height;
             }
 
             // reset modal
@@ -137,7 +140,7 @@
 
                         $.modal.open(data, {
                             width: me.opts.width,
-                            height: me.opts.height,
+                            maxHeight: maxHeight,
                             additionalClass: 'address-manager--modal address-manager--selection',
                             sizing: sizing
                         });

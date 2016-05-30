@@ -149,6 +149,13 @@
             height: 600,
 
             /**
+             * The max height if sizing is set to `content`
+             * 
+             * @type {Number}
+             */
+            maxHeight: 0,
+
+            /**
              * Whether or not the overlay should be shown.
              *
              * @type {Boolean}
@@ -286,6 +293,7 @@
             me.setTitle(opts.title);
             me.setWidth(opts.width);
             me.setHeight(opts.height);
+            me.setMaxHeight(opts.maxHeight);
 
             // set display to block instead of .show() for browser compatibility
             $modalBox.css('display', 'block');
@@ -475,6 +483,27 @@
 
             me._$modalBox.css('height', height);
             $.publish('plugin/swModal/onSetHeight', [ me ]);
+        },
+
+        /**
+         * Sets the max height of the modal box if the provided value is not empty or greater than 0.
+         * If a string was passed containing a only number, it will be parsed as a pixel value.
+         *
+         * @public
+         * @method setMaxHeight
+         * @param {Number|String} height
+         */
+        setMaxHeight: function (height) {
+            var me = this;
+
+            if (!height) {
+                return;
+            }
+
+            height = (typeof height === 'string' && !(/^\d+$/.test(height))) ? height : window.parseInt(height, 10);
+
+            me._$modalBox.css('max-height', height);
+            $.publish('plugin/swModal/onSetMaxHeight', [ me ]);
         },
 
         /**
