@@ -26,8 +26,8 @@ namespace Shopware\Components\Api\Resource;
 
 use Doctrine\ORM\Query\Expr\Join;
 use Shopware\Components\Api\Exception as ApiException;
-use Shopware\Models\Country\Country;
-use Shopware\Models\Country\State;
+use Shopware\Models\Country\Country as CountryModel;
+use Shopware\Models\Country\State as StateModel;
 use Shopware\Models\Customer\Customer as CustomerModel;
 use Shopware\Models\Customer\Address as AddressModel;
 use Shopware\Models\Shop\Shop as ShopModel;
@@ -458,8 +458,8 @@ class Customer extends Resource
      */
     private function prepareAddressData(array $data, $filter = false)
     {
-        $data['country'] = !empty($data['country']) ? $this->getContainer()->get('models')->find(Country::class, (int) $data['country']) : null;
-        $data['state'] = !empty($data['state']) ? $this->getContainer()->get('models')->find(State::class, $data['state']) : null;
+        $data['country'] = !empty($data['country']) ? $this->getContainer()->get('models')->find(CountryModel::class, (int) $data['country']) : null;
+        $data['state'] = !empty($data['state']) ? $this->getContainer()->get('models')->find(StateModel::class, $data['state']) : null;
 
         return $filter ? array_filter($data) : $data;
     }
