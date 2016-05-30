@@ -85,13 +85,9 @@ class PasswordValidator extends ConstraintValidator
             return;
         }
 
-        if (empty($password)) {
-            $this->addError($this->getSnippet(self::SNIPPET_PASSWORD_LENGTH));
-        }
-
         $minLength = (int) $this->config->get('minPassword');
 
-        if ($minLength && strlen($password) < $minLength) {
+        if (empty($password) || ($minLength && strlen($password) < $minLength)) {
             $this->addError($this->getSnippet(self::SNIPPET_PASSWORD_LENGTH));
         }
 

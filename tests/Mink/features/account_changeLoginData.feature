@@ -128,8 +128,8 @@ Feature: Successful changes of login data
 
         Then  I should see "Wenn Sie das Passwort für Ihr Konto vergessen haben, können Sie hier ein neues definieren. Wenn Sie das neue Passwort speichern, wird Ihr altes Passwort ungültig."
 
-        When  I fill in "password" with "shopware5"
-        And   I fill in "passwordConfirmation" with "shopware5"
+        When  I fill in "password[password]" with "shopware5"
+        And   I fill in "password[passwordConfirmation]" with "shopware5"
         And   I press "Passwort ändern"
         Then  I should see "Ihr Passwort wurde erfolgreich geändert."
         And   I should be on the page "Account"

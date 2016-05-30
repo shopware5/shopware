@@ -24,6 +24,7 @@
 use Shopware\Bundle\AccountBundle\Form\Account\EmailUpdateFormType;
 use Shopware\Bundle\AccountBundle\Form\Account\PasswordUpdateFormType;
 use Shopware\Bundle\AccountBundle\Form\Account\ProfileUpdateFormType;
+use Shopware\Bundle\AccountBundle\Form\Account\ResetPasswordFormType;
 use Shopware\Models\Customer\Customer;
 
 /**
@@ -481,149 +482,48 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
      */
     public function resetPasswordAction()
     {
-        $hash = $this->Request()->getParam('hash', null);
-        $newPassword = $this->Request()->getParam('password', null);
-        $passwordConfirmation = $this->Request()->getParam('passwordConfirmation', null);
+        $hash = $this->Request()->getParam('hash');
+        $this->View()->assign('hash', $hash);
 
-        $this->View()->hash = $hash;
+        try {
+            $customer = $this->getCustomerByResetHash($hash);
+        } catch (\Exception $ex) {
+            $this->View()->assign('invalidToken', true);
+            $this->View()->assign('sErrorMessages', [$ex->getMessage()]);
+        }
 
         if (!$this->Request()->isPost()) {
             return;
         }
 
-        list($errors, $errorMessages) = $this->validatePasswordResetForm($hash, $newPassword, $passwordConfirmation);
+        $form = $this->createForm(ResetPasswordFormType::class, $customer);
+        $form->handleRequest($this->Request());
 
-        if (empty($errors)) {
-            try {
-                $customerModel = $this->resetPassword($hash, $newPassword);
-            } catch (\Exception $e) {
-                $errorMessages[] = $e->getMessage();
+        if (!$form->isValid()) {
+            $errors = ['sErrorFlag' => [], 'sErrorMessages' => []];
+
+            foreach ($form->getErrors(true) as $error) {
+                $errors['sErrorFlag'][$error->getOrigin()->getName()] = true;
+                $errors['sErrorMessages'][]= $this->View()->fetch('string:' . $error->getMessage());
             }
-        }
 
-        if (!empty($errorMessages)) {
-            $this->View()->sErrorFlag = $errors;
-            $this->View()->sErrorMessages = $errorMessages;
+            $this->View()->assign($errors);
             return;
         }
 
+        $customer->setEncoderName($this->get('PasswordEncoder')->getDefaultPasswordEncoderName());
+
+        $this->customerService->update($customer);
+
         // Perform a login for the user and redirect him to his account
-        $this->admin->sSYSTEM->_POST['email'] = $customerModel->getEmail();
+        $this->Request()->setPost(['email' => $customer->getEmail(), 'password' => $form->get('password')->getData()]);
         $this->admin->sLogin();
 
         if (!$target = $this->Request()->getParam('sTarget')) {
             $target = 'account';
         }
 
-        $this->redirect(array(
-            'controller' => $target,
-            'action' => 'index',
-            'success' => 'resetPassword'
-        ));
-    }
-
-    /**
-     * Validates the data of the password reset form
-     * @param string $hash
-     * @param string $newPassword
-     * @param string $passwordConfirmation
-     * @return array
-     */
-    public function validatePasswordResetForm($hash, $newPassword, $passwordConfirmation)
-    {
-        $errors = array();
-        $errorMessages = array();
-        $resetPasswordNamespace = $this->container->get('snippets')->getNamespace('frontend/account/reset_password');
-        $frontendNamespace = $this->container->get('snippets')->getNamespace('frontend');
-
-        if (empty($hash)) {
-            $errors['hash'] = true;
-            $errorMessages[] = $resetPasswordNamespace->get(
-                'PasswordResetNewLinkError',
-                'Confirmation link not found. Note that the confirmation link is only valid for 2 hours. After that you have to request a new confirmation link.'
-            );
-        }
-
-        if ($newPassword !== $passwordConfirmation) {
-            $errors['password'] = true;
-            $errors['passwordConfirmation'] = true;
-            $errorMessages[] = $frontendNamespace->get(
-                'RegisterPasswordNotEqual',
-                'The passwords do not match.'
-            );
-        }
-
-        if (!$newPassword
-            || strlen(trim($newPassword)) == 0
-            || !$passwordConfirmation
-            || (strlen($newPassword) < Shopware()->Config()->sMINPASSWORD)
-        ) {
-            $errorMessages[] = $this->View()->fetch('string:'.$frontendNamespace->get(
-                'RegisterPasswordLength',
-                'Your password should contain at least {config name=\"MinPassword\"} characters'
-            ));
-            $errors['password'] = true;
-            $errors['passwordConfirmation'] = true;
-        }
-
-        return array($errors, $errorMessages);
-    }
-
-    /**
-     * Performs a password reset based on a given s_core_optin hash
-     * @param string $hash
-     * @param string $password
-     * @return Customer
-     * @throws Exception
-     */
-    public function resetPassword($hash, $password)
-    {
-        $resetPasswordNamespace = $this->container->get('snippets')->getNamespace('frontend/account/reset_password');
-
-        $em = $this->get('models');
-
-        $this->deleteExpiredOptInItems();
-
-        /** @var $confirmModel \Shopware\Models\CommentConfirm\CommentConfirm */
-        $confirmModel = $em->getRepository('Shopware\Models\CommentConfirm\CommentConfirm')
-            ->findOneBy(array('hash' => $hash, 'type' => 'password'));
-
-        if (!$confirmModel) {
-            throw new Exception(
-                $resetPasswordNamespace->get(
-                    'PasswordResetNewLinkError',
-                    'Confirmation link not found. Please check the spelling. Note that the confirmation link is only valid for 2 hours. After that you have to require a new confirmation link.'
-                )
-            );
-        }
-
-        /** @var $customer Customer */
-        $customer = $em->find('Shopware\Models\Customer\Customer', $confirmModel->getData());
-        if (!$customer) {
-            throw new Exception($resetPasswordNamespace->get(
-                sprintf('PasswordResetNewMissingId', $confirmModel->getData()),
-                sprintf('Could not find the user with the ID "%s".', $confirmModel->getData())
-            ));
-        }
-
-        // Generate the new password
-        /** @var \Shopware\Components\Password\Manager $passwordEncoder */
-        $passwordEncoder = $this->get('PasswordEncoder');
-
-        $encoderName = $passwordEncoder->getDefaultPasswordEncoderName();
-        $password = $passwordEncoder->encodePassword($password, $encoderName);
-
-        $conn = $this->get('dbal_connection');
-        $conn->executeUpdate(
-            'UPDATE s_user SET password = ?, encoder = ? WHERE id = ?',
-            [$password, $encoderName, $customer->getId()]
-        );
-
-        // Delete the confirm model
-        $em->remove($confirmModel);
-        $em->flush();
-
-        return $customer;
+        $this->redirect(['controller' => $target, 'action' => 'index', 'success' => 'resetPassword']);
     }
 
     /**
@@ -763,5 +663,42 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         }
 
         $this->forward('profile', 'account', 'frontend', ['section' => 'password', 'errors' => $form->getErrors(true)]);
+    }
+
+    /**
+     * @param string $hash
+     * @return Customer
+     * @throws Exception
+     */
+    private function getCustomerByResetHash($hash)
+    {
+        $resetPasswordNamespace = $this->container->get('snippets')->getNamespace('frontend/account/reset_password');
+
+        $this->deleteExpiredOptInItems();
+
+        /** @var $confirmModel \Shopware\Models\CommentConfirm\CommentConfirm */
+        $confirmModel = $this->get('models')
+            ->getRepository('Shopware\Models\CommentConfirm\CommentConfirm')
+            ->findOneBy(['hash' => $hash, 'type' => 'password']);
+
+        if (!$confirmModel) {
+            throw new Exception(
+                $resetPasswordNamespace->get(
+                    'PasswordResetNewLinkError',
+                    'Confirmation link not found. Please check the spelling. Note that the confirmation link is only valid for 2 hours. After that you have to require a new confirmation link.'
+                )
+            );
+        }
+
+        /** @var $customer Customer */
+        $customer = $this->get('models')->find('Shopware\Models\Customer\Customer', $confirmModel->getData());
+        if (!$customer) {
+            throw new Exception($resetPasswordNamespace->get(
+                sprintf('PasswordResetNewMissingId', $confirmModel->getData()),
+                sprintf('Could not find the user with the ID "%s".', $confirmModel->getData())
+            ));
+        }
+
+        return $customer;
     }
 }

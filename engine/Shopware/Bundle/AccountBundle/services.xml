@@ -84,6 +84,10 @@
             <tag name="form.type" />
         </service>
 
+        <service id="shopware_account.form.resetpasswordform" class="Shopware\Bundle\AccountBundle\Form\Account\ResetPasswordFormType">
+            <tag name="form.type" />
+        </service>
+
         <service id="shopware_account.constraint.password_validator" class="Shopware\Bundle\AccountBundle\Constraint\PasswordValidator">
             <argument type="service" id="snippets" />
             <argument type="service" id="config" />
