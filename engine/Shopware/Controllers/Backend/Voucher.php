@@ -22,6 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Models\Tax\Tax;
 use Shopware\Models\Voucher\Code;
 use Shopware\Models\Voucher\Voucher;
@@ -30,7 +31,7 @@ use Doctrine\ORM\AbstractQuery;
 /**
  * Shopware Backend Controller for the Voucher Module
  */
-class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_ExtJs
+class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
     /**
      * Entity Manager
@@ -550,5 +551,17 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
             $vouchersToDelete = Shopware()->Db()->fetchOne($sql, array($voucherId));
             $allVouchersDeleted = empty($vouchersToDelete);
         }
+    }
+
+    /**
+     * Returns a list with actions which should not be validated for CSRF protection
+     *
+     * @return string[]
+     */
+    public function getWhitelistedCSRFActions()
+    {
+        return [
+            'exportVoucherCode'
+        ];
     }
 }
