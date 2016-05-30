@@ -442,5 +442,12 @@
         <service id="shopware.number_range_incrementer" class="Shopware\Components\NumberRangeIncrementer">
             <argument type="service" id="dbal_connection"/>
         </service>
+
+        <service id="shopware.plugin_xml_plugin_info_reader" class="Shopware\Components\Plugin\XmlPluginInfoReader"/>
+
+        <service id="shopware.plugin_requirement_validator" class="Shopware\Components\Plugin\RequirementValidator">
+            <argument type="service" id="models" />
+            <argument type="service" id="shopware.plugin_xml_plugin_info_reader" />
+        </service>
     </services>
 </container>

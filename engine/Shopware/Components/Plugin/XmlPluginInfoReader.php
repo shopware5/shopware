@@ -36,14 +36,14 @@ class XmlPluginInfoReader
             throw new \InvalidArgumentException(sprintf('Unable to parse file "%s".', $file), $e->getCode(), $e);
         }
 
-        return $this->parseMenu($dom);
+        return $this->parseInfo($dom);
     }
 
     /**
      * @param \DOMDocument $xml
      * @return array
      */
-    private function parseMenu(\DOMDocument $xml)
+    private function parseInfo(\DOMDocument $xml)
     {
         $xpath = new \DOMXPath($xml);
 
@@ -52,22 +52,22 @@ class XmlPluginInfoReader
         }
 
         $entry = $entries[0];
-        $menuEntry = [];
+        $info = [];
 
         foreach ($this->getChildren($entry, 'label') as $label) {
             $lang = ($label->getAttribute('lang')) ? $label->getAttribute('lang') : 'en';
-            $menuEntry['label'][$lang] = $label->nodeValue;
+            $info['label'][$lang] = $label->nodeValue;
         }
 
         foreach ($this->getChildren($entry, 'description') as $description) {
             $lang = ($description->getAttribute('lang')) ? $description->getAttribute('lang') : 'en';
-            $menuEntry['description'][$lang] = trim($description->nodeValue);
+            $info['description'][$lang] = trim($description->nodeValue);
         }
 
         $simpleKeys = ['version', 'license', 'author', 'copyright', 'link'];
         foreach ($simpleKeys as $simpleKey) {
             if ($names = $this->getChildren($entry, $simpleKey)) {
-                $menuEntry[$simpleKey] = $names[0]->nodeValue;
+                $info[$simpleKey] = $names[0]->nodeValue;
             }
         }
 
@@ -76,11 +76,25 @@ class XmlPluginInfoReader
 
             foreach ($this->getChildren($changelog, 'changes') as $changes) {
                 $lang = ($changes->getAttribute('lang')) ? $changes->getAttribute('lang') : 'en';
-                $menuEntry['changelog'][$version][$lang][] = $changes->nodeValue;
+                $info['changelog'][$version][$lang][] = $changes->nodeValue;
             }
         }
 
-        return $menuEntry;
+        $compatibility = $this->getFirstChild($entry, 'compatibility');
+        if ($compatibility) {
+            $info['compatibility'] = [
+                'minVersion' => $compatibility->getAttribute('minVersion'),
+                'maxVersion' => $compatibility->getAttribute('maxVersion'),
+                'blacklist' => $this->getChildrenValues($compatibility, 'blacklist')
+            ];
+        }
+
+        $requiredPlugins = $this->getFirstChild($entry, 'requiredPlugins');
+        if ($requiredPlugins) {
+            $info['requiredPlugins'] = $this->parseRequiredPlugins($requiredPlugins);
+        }
+
+        return $info;
     }
 
     /**
@@ -101,5 +115,58 @@ class XmlPluginInfoReader
         }
 
         return $children;
+    }
+
+    /**
+     * @param \DOMNode $node
+     * @param $name
+     * @return null|\DOMElement
+     */
+    private function getFirstChild(\DOMNode $node, $name)
+    {
+        if ($children = $this->getChildren($node, $name)) {
+            return $children[0];
+        }
+
+        return null;
+    }
+
+    /**
+     * Get child element values by name.
+     *
+     * @param \DOMNode $node
+     * @param mixed    $name
+     *
+     * @return \DOMElement[]
+     */
+    private function getChildrenValues(\DOMNode $node, $name)
+    {
+        $children = array();
+        foreach ($node->childNodes as $child) {
+            if ($child instanceof \DOMElement && $child->localName === $name) {
+                $children[] = $child->nodeValue;
+            }
+        }
+
+        return $children;
+    }
+
+    /**
+     * @param $requiredPlugins
+     * @return array
+     */
+    private function parseRequiredPlugins($requiredPlugins)
+    {
+        $requiredPlugins = $this->getChildren($requiredPlugins, 'requiredPlugin');
+        $plugins = [];
+        foreach ($requiredPlugins as $requiredPlugin) {
+            $plugins[] = [
+                'pluginName' => $requiredPlugin->getAttribute('pluginName'),
+                'minVersion' => $requiredPlugin->getAttribute('minVersion'),
+                'maxVersion' => $requiredPlugin->getAttribute('maxVersion'),
+                'blacklist' => $this->getChildrenValues($requiredPlugin, 'blacklist')
+            ];
+        }
+        return $plugins;
     }
 }
