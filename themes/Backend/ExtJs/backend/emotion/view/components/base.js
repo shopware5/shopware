@@ -83,19 +83,32 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
     },
 
     loadElementData: function(data) {
-        var me = this, fields = [];
+        var me = this,
+            fieldCollection = me.getForm().getFields(),
+            field,
+            value;
+
         Ext.each(data, function(item) {
-            var field = me.down('field[name='+ item.key +']');
-            if (field !== null) {
-                try {
-                    field.setValue(item.value);
-                } catch(e) { }
-            }
+            try {
+                field = fieldCollection.getAt(fieldCollection.findIndex('name', item.key));
+                value = item.value;
+                if (field.getXType() === 'datefield') {
+                    value = Ext.Date.parse(item.value, 'Y-m-d');
+                }
+                field.setValue(value);
+            } catch(e) { }
         });
     },
 
     createFormElements: function() {
-        var me = this, items = [], store, name, fieldLabel, snippet, supportText, sortedFields, boxLabel = '';
+        var me = this, items = [], store,
+            name, fieldLabel, snippet,
+            supportText, sortedFields,
+            boxLabel = '',
+            constructedItem,
+            radios = {},
+            xtype,
+            date;
 
         sortedFields = Ext.Array.sort(
             me.getSettings('fields', true),
@@ -103,6 +116,7 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
         );
 
         Ext.each(sortedFields, function(item) {
+            xtype = item.get('xType');
             name = item.get('name');
             fieldLabel = item.get('fieldLabel');
             supportText = item.get('supportText');
@@ -123,31 +137,72 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
                 store = Ext.create(item.get('store'));
             }
 
-            if (item.get('xType') === 'checkbox' || item.get('xType') === 'checkboxfield') {
+            if (xtype === 'checkbox' || xtype === 'checkboxfield' || xtype === 'radio' || xtype === 'radiofield') {
                 boxLabel = supportText;
                 supportText = '';
             }
 
-            items.push({
-                xtype: item.get('xType'),
-                helpText: item.get('helpText') || '',
-                fieldLabel: fieldLabel || '',
-                fieldId: item.get('id'),
-                valueType: item.get('valueType'),
-                queryMode: 'remote',
-                name: item.get('name') || '',
-                store: store,
-                displayField: item.get('displayField'),
-                valueField: item.get('valueField'),
-                checkedValue: true,
-                uncheckedValue: false,
-                supportText: supportText || '',
-                allowBlank: (item.get('allowBlank') ? true : false),
-                value: item.get('defaultValue') || '',
-                labelWidth: 100,
-                boxLabel: boxLabel,
-                translatable: item.get('translatable')
-            });
+            constructedItem = {
+                xtype           : xtype,
+                helpText        : item.get('helpText') || '',
+                fieldLabel      : fieldLabel || '',
+                fieldId         : item.get('id'),
+                valueType       : item.get('valueType'),
+                queryMode       : 'remote',
+                name            : item.get('name') || '',
+                store           : store,
+                displayField    : item.get('displayField'),
+                valueField      : item.get('valueField'),
+                checkedValue    : true,
+                uncheckedValue  : false,
+                supportText     : supportText || '',
+                allowBlank      : (item.get('allowBlank') ? true : false),
+                value           : item.get('defaultValue') || '',
+                labelWidth      : 100,
+                boxLabel        : boxLabel,
+                translatable    : item.get('translatable')
+            };
+
+            if (xtype === 'timefield' &&  Ext.isDefined(item.get('displayField')) ) {
+                // If displayField is not set, use ExtJS default.
+                constructedItem.displayField = 'disp';
+                constructedItem.format = 'H:i';
+            } else if (xtype == 'combobox') {
+                constructedItem.queryMode = 'local';
+                constructedItem.listeners = {
+                    boxready: function(combo) {
+                        this.relayEvents(combo.getStore(), ['load'], 'store');
+                        combo.getStore().load();
+                    },
+                    storeload: function(store) {
+                        var record = store.findRecord(this.valueField, this.getValue());
+                        this.setValue(record);
+                    }
+                };
+            } else if (xtype === 'datefield') {
+                try {
+                    date = Ext.Date.parse(constructedItem.value, 'Y-m-d');
+                    if (Ext.isDate(date)) {
+                        constructedItem.value = date;
+                    }
+                } catch (e) {}
+            } else if(xtype === 'radiofield') {
+                if (!radios[constructedItem.name]) {
+                    radios[constructedItem.name] = {
+                        xtype     : 'radiogroup',
+                        fieldLabel: constructedItem.fieldLabel,
+                        columns   : 2,
+                        items     : []
+                    };
+                    items.push(radios[constructedItem.name]);
+                }
+                delete constructedItem.fieldLabel;
+                constructedItem.checked = radios[constructedItem.name].items.length == 0;
+                constructedItem.inputValue = constructedItem.value;
+                radios[constructedItem.name].items.push(constructedItem);
+                return;
+            }
+            items.push(constructedItem);
         });
 
         return items;
