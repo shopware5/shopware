@@ -25,6 +25,7 @@
 namespace Shopware\Components;
 
 use Shopware\Components\Console\Application;
+use Shopware\Components\Plugin\PluginContext;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -89,18 +90,46 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
 
     /**
      * This method can be overridden
+     * @param PluginContext $context
      */
-    public function install()
+    public function install(PluginContext $context)
     {
     }
 
     /**
      * This method can be overridden
-     * @param string $oldVersion
-     * @param string $currentVersion
+     * @param PluginContext $context
      */
-    public function update($oldVersion, $currentVersion)
+    public function update(PluginContext $context)
     {
+        $context->scheduleClearCache(PluginContext::CACHE_LIST_DEFAULT);
+    }
+
+    /**
+     * This method can be overridden
+     * @param PluginContext $context
+     */
+    public function activate(PluginContext $context)
+    {
+        $context->scheduleClearCache(PluginContext::CACHE_LIST_DEFAULT);
+    }
+
+    /**
+     * This method can be overridden
+     * @param PluginContext $context
+     */
+    public function deactivate(PluginContext $context)
+    {
+        $context->scheduleClearCache(PluginContext::CACHE_LIST_DEFAULT);
+    }
+
+    /**
+     * This method can be overridden
+     * @param PluginContext $context
+     */
+    public function uninstall(PluginContext $context)
+    {
+        $context->scheduleClearCache(PluginContext::CACHE_LIST_DEFAULT);
     }
 
     /**

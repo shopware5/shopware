@@ -767,20 +767,45 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
     },
 
     handleCrudResponse: function(response, plugin) {
+        response = response.result;
 
+        if (!response) {
+            return;
+        }
+
+        var message = this.getResponseMessage(response);
+
+        if (Ext.isObject(message)) {
+            Shopware.Notification.createStickyGrowlMessage(message);
+        } else if (Ext.isString(message)) {
+            Shopware.Notification.createStickyGrowlMessage({ text: message });
+        }
+
+        var caches = this.getResponseCacheClearTask(response);
+        if (caches !== null) {
+            this.clearCache(caches, plugin);
+        }
+    },
+
+    getResponseMessage: function(response) {
         if (response.hasOwnProperty('message')) {
-            var message = response.message;
-
-            if (Ext.isObject(message)) {
-                Shopware.Notification.createStickyGrowlMessage(response.message);
-            } else if (Ext.isString(message)) {
-                Shopware.Notification.createStickyGrowlMessage({ text: response.message });
-            }
+            return response.message;
         }
 
+        if (response.hasOwnProperty('scheduled') && response.scheduled.hasOwnProperty('message')) {
+            return response.scheduled.message;
+        }
+        return null;
+    },
+
+    getResponseCacheClearTask: function(response) {
         if (response.hasOwnProperty('invalidateCache')) {
-            this.clearCache(response.invalidateCache, plugin);
+            return response.invalidateCache;
         }
+        if (response.hasOwnProperty('scheduled') && response.scheduled.hasOwnProperty('cache')) {
+            return response.scheduled.cache;
+        }
+        return null;
     },
 
     clearCache: function(caches, plugin) {
@@ -788,7 +813,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
 
         var message = Ext.String.format(
             '{s name=clear_cache}This plugin needs a new initialisation in the following caches: [0]Clear cache?{/s}',
-            caches.join(', ') + '<br><br>'
+            '<br><br>- ' + caches.join('<br>- ') + '<br><br>'
         );
 
         me.confirmMessage(

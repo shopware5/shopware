@@ -262,6 +262,7 @@ class Kernel implements HttpKernelInterface
 
     /**
      * Boots the shopware and symfony di container
+     * @param bool $skipDatabase
      */
     public function boot($skipDatabase = false)
     {
