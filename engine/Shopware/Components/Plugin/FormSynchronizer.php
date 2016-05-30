@@ -24,6 +24,7 @@
 
 namespace Shopware\Components\Plugin;
 
+use Doctrine\DBAL\Connection;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Models\Config\Form;
@@ -120,8 +121,52 @@ class FormSynchronizer
         $this->addFormTranslations($translations, $form);
 
         $this->em->flush();
+
+        $this->removeNotExistingElements($plugin, array_column($config['elements'], 'name'));
     }
 
+    /**
+     * Removes no more existing form elements and their translations
+     * @param Plugin $plugin
+     * @param string[] $names
+     */
+    private function removeNotExistingElements(Plugin $plugin, $names)
+    {
+        $query = $this->em->getConnection()->createQueryBuilder();
+        $query->select('elements.id');
+        $query->from('s_core_config_elements', 'elements');
+        $query->innerJoin('elements', 's_core_config_forms', 'form', 'elements.form_id = form.id AND form.plugin_id = :pluginId');
+        $query->where('elements.name NOT IN (:names)');
+        $query->setParameter(':names', $names, Connection::PARAM_STR_ARRAY);
+        $query->setParameter(':pluginId', $plugin->getId());
+
+        $ids = $query->execute()->fetchAll(\PDO::FETCH_COLUMN);
+
+        if (empty($ids)) {
+            return;
+        }
+
+        //elements
+        $query = $this->em->getConnection()->createQueryBuilder();
+        $query->delete('s_core_config_elements');
+        $query->where('id IN (:ids)');
+        $query->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
+        $query->execute();
+
+        //saved values
+        $query = $this->em->getConnection()->createQueryBuilder();
+        $query->delete('s_core_config_values');
+        $query->where('element_id IN (:ids)');
+        $query->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
+        $query->execute();
+
+        //translations
+        $query = $this->em->getConnection()->createQueryBuilder();
+        $query->delete('s_core_config_element_translations');
+        $query->where('element_id IN (:ids)');
+        $query->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
+        $query->execute();
+    }
 
     /**
      * Returns plugin form
