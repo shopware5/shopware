@@ -48,8 +48,7 @@ class CustomerTest extends TestCase
     }
 
     /**
-     * @expectedException \Shopware\Components\Api\Exception\CustomValidationException
-     * @expectedExceptionMessage Emailaddress test@example.com for shopId 1 is not unique
+     * @expectedException \Shopware\Components\Api\Exception\ValidationException
      */
     public function testCreateWithNonUniqueEmailShouldThrowException()
     {
@@ -86,11 +85,15 @@ class CustomerTest extends TestCase
             "birthday"  => $birthday,
 
             "billing" => array(
-                "firstName" => "Max",
-                "lastName"  => "Mustermann",
+                'salutation' => 'mr',
+                'zipcode' => '12345',
+                'city' => 'Musterhausen',
+                "firstname" => "Max",
+                "lastname"  => "Mustermann",
+                'street' => 'Musterstr. 123',
                 "additionalAddressLine1"  => "Address Billing Addition 1",
                 "additionalAddressLine2"  => "Address Billing Addition 2",
-                "countryId" => "2",
+                "country" => "2",
                 "attribute" => array(
                     'text1' => 'Freitext1',
                     'text2' => 'Freitext2',
@@ -100,11 +103,14 @@ class CustomerTest extends TestCase
             "shipping" => array(
                 "salutation" => "Mr",
                 "company"    => "Widgets Inc.",
-                "firstName"  => "Max",
-                "lastName"   => "Mustermann",
+                "firstname"  => "Max",
+                "lastname"   => "Mustermann",
                 "additionalAddressLine1"  => "Address Shipping Addition 1",
                 "additionalAddressLine2"  => "Address Shipping Addition 2",
-                "countryId" => "2",
+                "country" => "2",
+                'street' => 'Musterstr. 123',
+                'zipcode' => '12345',
+                'city' => 'Mustercity',
                 "attribute" => array(
                     'text1' => 'Freitext1',
                     'text2' => 'Freitext2',
@@ -131,14 +137,19 @@ class CustomerTest extends TestCase
         $this->assertEquals($customer->getGroup()->getKey(), "EK");
         $this->assertEquals($customer->getActive(), true);
 
-
         $this->assertEquals($customer->getEmail(), $testData['email']);
-        $this->assertEquals($customer->getBilling()->getFirstName(), $testData['billing']['firstName']);
+
+        $this->assertEquals($customer->getBilling()->getFirstName(), $testData['billing']['firstname']);
+        $this->assertEquals($customer->getDefaultBillingAddress()->getFirstname(), $testData['billing']['firstname']);
+
         $this->assertEquals($customer->getBilling()->getAttribute()->getText1(), $testData['billing']['attribute']['text1']);
-        $this->assertEquals($customer->getShipping()->getFirstName(), $testData['shipping']['firstName']);
+        $this->assertEquals($customer->getDefaultBillingAddress()->getAttribute()->getText1(), $testData['billing']['attribute']['text1']);
+
+        $this->assertEquals($customer->getShipping()->getFirstName(), $testData['shipping']['firstname']);
+        $this->assertEquals($customer->getDefaultShippingAddress()->getFirstname(), $testData['shipping']['firstname']);
+
         $this->assertEquals($customer->getShipping()->getAttribute()->getText1(), $testData['shipping']['attribute']['text1']);
-
-
+        $this->assertEquals($customer->getDefaultShippingAddress()->getAttribute()->getText1(), $testData['shipping']['attribute']['text1']);
 
         //test additional address lines
         $this->assertEquals($customer->getShipping()->getAdditionalAddressLine1(), $testData['shipping']['additionalAddressLine1']);
@@ -223,8 +234,9 @@ class CustomerTest extends TestCase
             'active'  => true,
             'email'   => 'invalid',
             'billing' => array(
-                'firstName' => 'Max',
-                'lastName'  => 'Mustermann',
+                'firstname' => 'Max',
+                'lastname'  => 'Mustermann',
+                'country' => 2
             ),
         );
 
@@ -240,8 +252,8 @@ class CustomerTest extends TestCase
             'active'  => true,
             'email'   => uniqid(rand()) . 'update@foobar.com',
             'billing' => array(
-                'firstName' => 'Max Update',
-                'lastName'  => 'Mustermann Update',
+                'firstname' => 'Max Update',
+                'lastname'  => 'Mustermann Update',
                 'additionalAddressLine1'  => 'additional billing address Line 1',
                 'additionalAddressLine2'  => 'additional billing address Line 2',
             ),
@@ -257,7 +269,7 @@ class CustomerTest extends TestCase
         $this->assertEquals($id, $customer->getId());
 
         $this->assertEquals($customer->getEmail(), $testData['email']);
-        $this->assertEquals($customer->getBilling()->getFirstName(), $testData['billing']['firstName']);
+        $this->assertEquals($customer->getBilling()->getFirstName(), $testData['billing']['firstname']);
 
         //test additional fields
         $this->assertEquals($customer->getBilling()->getAdditionalAddressLine1(), $testData['billing']['additionalAddressLine1']);
@@ -267,33 +279,6 @@ class CustomerTest extends TestCase
         $this->assertEquals($customer->getShipping()->getAdditionalAddressLine2(), $testData['shipping']['additionalAddressLine2']);
 
         return $id;
-    }
-
-    /**
-     * @depends testCreateShouldBeSuccessful
-     */
-    public function testStreetAndStreetNumberShouldBeJoined($id)
-    {
-        $testData = array(
-            'billing' => array(
-                'street' => 'Fakestreet',
-                'streetNumber' => '333'
-            ),
-            'shipping' => array(
-                'street' => 'Teststreet',
-                'streetNumber' => '111'
-            ),
-        );
-
-        $customer = $this->resource->update($id, $testData);
-        $this->assertEquals(
-            $customer->getBilling()->getStreet(),
-            'Fakestreet 333'
-        );
-        $this->assertEquals(
-            $customer->getShipping()->getStreet(),
-            'Teststreet 111'
-        );
     }
 
     /**
@@ -309,8 +294,8 @@ class CustomerTest extends TestCase
             'active'  => true,
             'email'   => uniqid(rand()) . 'update@foobar.com',
             'billing' => array(
-                'firstName' => 'Max Update',
-                'lastName'  => 'Mustermann Update',
+                'firstname' => 'Max Update',
+                'lastname'  => 'Mustermann Update',
             ),
         );
 
@@ -320,7 +305,7 @@ class CustomerTest extends TestCase
         $this->assertEquals($id, $customer->getId());
 
         $this->assertEquals($customer->getEmail(), $testData['email']);
-        $this->assertEquals($customer->getBilling()->getFirstName(), $testData['billing']['firstName']);
+        $this->assertEquals($customer->getBilling()->getFirstName(), $testData['billing']['firstname']);
 
         return $number;
     }
@@ -335,8 +320,8 @@ class CustomerTest extends TestCase
             'active'  => true,
             'email'   => 'invalid',
             'billing' => array(
-                'firstName' => 'Max',
-                'lastName'  => 'Mustermann',
+                'firstname' => 'Max',
+                'lastname'  => 'Mustermann',
             ),
         );
 
@@ -417,17 +402,24 @@ class CustomerTest extends TestCase
             "birthday"  => $birthday,
 
             "billing" => array(
-                "firstName" => "Max",
-                "lastName"  => "Mustermann",
-                "countryId" => "2"
+                'salutation' => 'mr',
+                "firstname"  => "Max",
+                "lastname"   => "Mustermann",
+                'street'     => 'Musterstraße 123',
+                'zipcode'    => 12345,
+                'city'       => 'Musterhausen',
+                "country"    => "2"
             ),
 
             "shipping" => array(
                 "salutation" => "Mr",
                 "company"    => "Widgets Inc.",
-                "firstName"  => "Max",
-                "lastName"   => "Mustermann",
-                "countryId"  => "2"
+                "firstname"  => "Max",
+                "lastname"   => "Mustermann",
+                'street'     => 'Musterstraße 123',
+                'zipcode'    => 12345,
+                'city'       => 'Musterhausen',
+                "country"    => "2"
             ),
 
             "debit" => array(
@@ -484,17 +476,24 @@ class CustomerTest extends TestCase
             "birthday"  => $birthday,
 
             "billing" => array(
-                "firstName" => "Max",
-                "lastName"  => "Mustermann",
-                "countryId" => "2"
+                'salutation' => 'mr',
+                "firstname"  => "Max",
+                "lastname"   => "Mustermann",
+                'street'     => 'Musterstraße 123',
+                'zipcode'    => 12345,
+                'city'       => 'Musterhausen',
+                "country"    => "2"
             ),
 
             "shipping" => array(
                 "salutation" => "Mr",
                 "company"    => "Widgets Inc.",
-                "firstName"  => "Max",
-                "lastName"   => "Mustermann",
-                "countryId"  => "2"
+                "firstname"  => "Max",
+                "lastname"   => "Mustermann",
+                'street'     => 'Musterstraße 123',
+                'zipcode'    => 12345,
+                'city'       => 'Musterhausen',
+                "country"    => "2"
             ),
 
             "paymentData" => array(

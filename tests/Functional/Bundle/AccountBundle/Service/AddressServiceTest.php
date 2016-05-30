@@ -25,6 +25,8 @@
 namespace Shopware\Tests\Bundle\AccountBundle\Service;
 
 use Doctrine\DBAL\Connection;
+use Shopware\Bundle\AccountBundle\Service\RegisterServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Country\Country;
 use Shopware\Models\Customer\Address;
@@ -54,6 +56,16 @@ class AddressServiceTest extends \Enlight_Components_Test_TestCase
     protected static $connection;
 
     /**
+     * @var ContextServiceInterface
+     */
+    protected static $contextService;
+
+    /**
+     * @var RegisterServiceInterface
+     */
+    protected static $registerService;
+
+    /**
      * @var array
      */
     protected static $_cleanup = [];
@@ -66,6 +78,8 @@ class AddressServiceTest extends \Enlight_Components_Test_TestCase
         self::$addressService = Shopware()->Container()->get('shopware_account.address_service');
         self::$modelManager = Shopware()->Container()->get('models');
         self::$connection = Shopware()->Container()->get('dbal_connection');
+        self::$contextService = Shopware()->Container()->get('shopware_storefront.context_service');
+        self::$registerService = Shopware()->Container()->get('shopware_account.register_service');
 
         self::$modelManager->clear();
     }
@@ -304,7 +318,7 @@ class AddressServiceTest extends \Enlight_Components_Test_TestCase
     {
         $country = new Country();
 
-        $country->setName('ShopwareLand');
+        $country->setName('ShopwareLand' . uniqid(rand(1, 999)));
         $country->setActive(true);
         $country->setDisplayStateInRegistration(0);
         $country->setForceStateInRegistration(0);
@@ -336,58 +350,50 @@ class AddressServiceTest extends \Enlight_Components_Test_TestCase
         $billing = $this->createBillingEntity();
         $shipping = $this->createShippingEntity();
 
-        $customer->setBilling($billing);
-        $customer->setShipping($shipping);
+        $shop = self::$contextService->getShopContext()->getShop();
 
-        self::$modelManager->persist($customer);
-        self::$modelManager->persist($billing);
-        self::$modelManager->persist($shipping);
-        self::$modelManager->flush([$customer, $billing, $shipping]);
-
-        // should be removed with refactoring the register controller / rest api
-        Shopware()->Container()->get('shopware_account.address_import_service')->importCustomerBilling($customer->getId());
-        Shopware()->Container()->get('shopware_account.address_import_service')->importCustomerShipping($customer->getId());
+        self::$registerService->register($shop, $customer, $billing, $shipping);
 
         self::$_cleanup[Customer::class][] = $customer->getId();
 
-        return self::$modelManager->merge($customer);
+        return $customer;
     }
 
     /**
-     * @return Billing
+     * @return Address
      */
     private function createBillingEntity()
     {
-        $billing = new Billing();
+        $billing = new Address();
 
         $country = $this->createCountry();
 
         $billing->setSalutation('mr');
-        $billing->setFirstName('Nathan');
-        $billing->setLastName('Davis');
-        $billing->setZipCode('92123');
+        $billing->setFirstname('Nathan');
+        $billing->setLastname('Davis');
+        $billing->setZipcode('92123');
         $billing->setCity('San Diego');
-        $billing->setCountryId($country->getId());
+        $billing->setCountry($country);
         $billing->setStreet('4193 Pike Street');
 
         return $billing;
     }
 
     /**
-     * @return Shipping
+     * @return Address
      */
     private function createShippingEntity()
     {
-        $shipping = new Shipping();
+        $shipping = new Address();
 
         $country = $this->createCountry();
 
         $shipping->setSalutation('mr');
-        $shipping->setFirstName('Michael');
-        $shipping->setLastName('Crosby');
-        $shipping->setZipCode('36542');
+        $shipping->setFirstname('Michael');
+        $shipping->setLastname('Crosby');
+        $shipping->setZipcode('36542');
         $shipping->setCity('Gulf Shores');
-        $shipping->setCountryId($country->getId());
+        $shipping->setCountry($country);
         $shipping->setStreet('4267 Lonely Oak Drive');
 
         return $shipping;

@@ -28,9 +28,9 @@ use Shopware\Bundle\AccountBundle\Constraint\CustomerEmail;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\Api\Exception\ValidationException;
 use Shopware\Models\Customer\Customer;
+use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\Choice;
 use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\ConstraintValidatorInterface;
 use Symfony\Component\Validator\Validator\ContextualValidatorInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -117,7 +117,7 @@ class CustomerValidator implements CustomerValidatorInterface
     /**
      * @param string $property
      * @param string $value
-     * @param ConstraintValidatorInterface[] $constraints
+     * @param Constraint[] $constraints
      */
     private function validateField($property, $value, $constraints)
     {
@@ -125,7 +125,7 @@ class CustomerValidator implements CustomerValidatorInterface
     }
 
     /**
-     * @return ConstraintValidatorInterface[]
+     * @return Constraint[]
      */
     private function getSalutationConstraints()
     {

@@ -28,8 +28,8 @@ use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\Api\Exception\ValidationException;
 use Shopware\Models\Customer\Address;
 use Shopware\Models\Customer\Customer;
+use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\ConstraintValidatorInterface;
 use Symfony\Component\Validator\Validator\ContextualValidatorInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -117,7 +117,7 @@ class AddressValidator implements AddressValidatorInterface
     /**
      * @param string $property
      * @param string $value
-     * @param ConstraintValidatorInterface[] $constraints
+     * @param Constraint[] $constraints
      */
     private function validateField($property, $value, $constraints)
     {
@@ -139,7 +139,7 @@ class AddressValidator implements AddressValidatorInterface
     }
 
     /**
-     * @return array
+     * @return Constraint[]
      */
     private function getPhoneConstraints()
     {
@@ -153,7 +153,7 @@ class AddressValidator implements AddressValidatorInterface
     }
 
     /**
-     * @return array
+     * @return Constraint[]
      */
     private function getAdditionalAddressline1Constraints()
     {
@@ -167,7 +167,7 @@ class AddressValidator implements AddressValidatorInterface
     }
 
     /**
-     * @return array
+     * @return Constraint[]
      */
     private function getAdditionalAddressline2Constraints()
     {

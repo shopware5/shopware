@@ -117,32 +117,8 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('esdactive', $debitData);
 
         $customer = $this->createDummyCustomer();
-        $userData = array(
-            "additional" => array(
-                "user" => array(
-                    "id" => $customer->getId(),
-                    "paymentpreset" => 0
-                )
-            )
-        );
 
-        $this->assertEquals(0, $customer->getPaymentId());
-
-        // Fetching active payment mean doesn't update user
-        $this->module->sGetPaymentMeanById(2, $userData);
-        $customerPaymentId = Shopware()->Db()->fetchOne(
-            "SELECT paymentID FROM s_user WHERE id = ?",
-            array($customer->getPaymentId())
-        );
-        $this->assertEquals(0, $customerPaymentId);
-
-        // Test that payment method can be reset
-        $this->module->sGetPaymentMeanById(6, $userData);
-        $customerPaymentId = Shopware()->Db()->fetchOne(
-            "SELECT paymentID FROM s_user WHERE id = ?",
-            array($customer->getId())
-        );
-        $this->assertEquals(5, $customerPaymentId);
+        $this->assertEquals($this->config->get('defaultPayment'), $customer->getPaymentId());
 
         $this->deleteDummyCustomer($customer);
     }
@@ -1325,12 +1301,12 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                 'userID' => $customer->getId(),
                 'company' => '',
                 'department' => '',
-                'salutation' => '',
+                'salutation' => 'mr',
                 'firstname' => 'Max',
                 'lastname' => 'Mustermann',
                 'street' => 'Kraftweg, 22',
                 'zipcode' => '12345',
-                'city' => '',
+                'city' => 'Musterhausen',
                 'phone' => '',
                 'countryID' => '2',
                 'stateID' => null,
@@ -1375,7 +1351,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                     'active' => '1',
                     'accountmode' => '0',
                     'confirmationkey' => '',
-                    'paymentID' => '0',
+                    'paymentID' => 5,
                     'customernumber' => $customer->getNumber(),
                     'firstlogin' => $customer->getFirstLogin()->format('Y-m-d'),
                     'lastlogin' => $customer->getLastLogin()->format('Y-m-d H:i:s'),
@@ -1452,7 +1428,7 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                 'lastname' => 'Mustermann',
                 'street' => 'Merkel Strasse, 10',
                 'zipcode' => '98765',
-                'city' => '',
+                'city' => 'Musterhausen',
                 'countryID' => '4',
                 'stateID' => null,
                 'title' => null,
@@ -2476,15 +2452,17 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             "birthday"  => $birthday,
 
             "billing" => array(
-                "firstName" => "Max",
-                "lastName"  => "Mustermann",
+                'salutation' => 'mr',
+                "firstname" => "Max",
+                "lastname"  => "Mustermann",
                 "attribute" => array(
                     'text1' => 'Freitext1',
                     'text2' => 'Freitext2',
                 ),
                 "zipcode"   => '12345',
+                "city"   => 'Musterhausen',
                 "street"    => 'Kraftweg, 22',
-                "countryId" => '2',
+                "country" => '2',
                 "additionalAddressLine1" => 'IT-Department',
                 "additionalAddressLine2" => 'Second Floor',
             ),
@@ -2492,11 +2470,12 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             "shipping" => array(
                 "salutation" => "Mr",
                 "company"    => "Widgets Inc.",
-                "firstName"  => "Max",
-                "lastName"   => "Mustermann",
-                "zipcode"     => "98765",
+                "firstname"  => "Max",
+                "lastname"   => "Mustermann",
+                "zipcode"    => "98765",
+                "city"       => "Musterhausen",
                 "street"     => "Merkel Strasse, 10",
-                "countryId"  => '4',
+                "country"  => '4',
                 "attribute"  => array(
                     'text1'  => 'Freitext1',
                     'text2'  => 'Freitext2',

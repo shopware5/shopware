@@ -56,7 +56,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
         parent::setUp();
 
         Shopware()->Front()->setRequest(new Enlight_Controller_Request_RequestHttp());
-        Shopware()->Container()->get('models')->clear();
+
         $this->snippetManager = Shopware()->Snippets();
         $this->db = Shopware()->Db();
         $this->module = Shopware()->Modules()->Basket();
@@ -68,12 +68,6 @@ class sBasketTest extends PHPUnit_Framework_TestCase
         $this->module->sSYSTEM->sCONFIG = &$this->config;
         $this->module->sSYSTEM->sCurrency = Shopware()->Db()->fetchRow('SELECT * FROM s_core_currencies WHERE currency LIKE "EUR"');
         $this->module->sSYSTEM->sSESSION_ID = null;
-    }
-
-    protected function tearDown()
-    {
-        parent::tearDown();
-        Shopware()->Container()->get('models')->clear();
     }
 
     /**
@@ -2221,23 +2215,28 @@ class sBasketTest extends PHPUnit_Framework_TestCase
             "birthday"  => $birthday,
 
             "billing" => array(
-                "firstName" => "Max",
-                "lastName"  => "Mustermann",
+                'salutation' => 'mr',
+                "firstname" => "Max",
+                "lastname"  => "Mustermann",
+                'street' => 'Musterstr. 123',
+                'city' => 'Musterhausen',
                 "attribute" => array(
                     'text1' => 'Freitext1',
                     'text2' => 'Freitext2',
                 ),
                 "zipcode"   => '12345',
-                "countryId" => '2'
+                "country" => '2'
             ),
 
             "shipping" => array(
-                "salutation" => "Mr",
+                "salutation" => "mr",
                 "company"    => "Widgets Inc.",
-                "firstName"  => "Max",
-                "lastName"   => "Mustermann",
+                "firstname"  => "Max",
+                "lastname"   => "Mustermann",
                 "street"     => "Merkel Strasse, 10",
-                "countryId"  => '3',
+                'city'       => 'Musterhausen',
+                'zipcode'    => '12345',
+                "country"  => '3',
                 "attribute"  => array(
                     'text1'  => 'Freitext1',
                     'text2'  => 'Freitext2',

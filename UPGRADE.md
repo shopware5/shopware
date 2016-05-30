@@ -319,6 +319,7 @@ In this document you will find a changelog of the important changes related to t
 * Renamed input fields in `themes/Frontend/Bare/frontend/account/reset_password.tpl` with surrounding `password[]`
 * Removed method `\Shopware_Controllers_Frontend_Account::validatePasswordResetForm()`
 * Removed method `\Shopware_Controllers_Frontend_Account::resetPassword()`
+* Changed structure of `billing` and `shipping` to `\Shopware\Models\Customer\Address` in `\Shopware\Components\Api\Resource\Customer`
 
 ## 5.1.6
 * The interface `Enlight_Components_Cron_Adapter` in `engine/Library/Enlight/Components/Cron/Adapter.php` got a new method `getJobByAction`. For default implementation see `engine/Library/Enlight/Components/Cron/Adapter/DBAL.php`.
