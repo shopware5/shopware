@@ -42,6 +42,7 @@ use Shopware\Bundle\PluginInstallerBundle\StoreClient;
 use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\BasketStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\PluginInformationResultStruct;
+use Shopware\Bundle\PluginInstallerBundle\Struct\PluginInformationStruct;
 use Shopware\Models\Plugin\Plugin;
 use ShopwarePlugins\PluginManager\Components\PluginCategoryService;
 use ShopwarePlugins\SwagUpdate\Components\Steps\FinishResult;
@@ -407,6 +408,29 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
             'data' => array_values($updates->getPlugins()),
             'loginRecommended' => empty($secret) && $updates->isGtcAcceptanceRequired()
         ]);
+    }
+
+    public function expiredListingAction()
+    {
+        $pluginLicenseService = $this->container->get('shopware_plugininstaller.plugin_licence_service');
+        /** @var PluginInformationStruct[] $pluginInformationStructs */
+        $pluginInformationStructs = $pluginLicenseService->getExpiredLicenses();
+        $expiredPlugins = [];
+        foreach ($pluginInformationStructs as $pluginInformationStruct) {
+            $expiredPlugins[] = $pluginInformationStruct->getTechnicalName();
+        }
+
+        $context = new PluginsByTechnicalNameRequest(
+            $this->getLocale(),
+            $this->getVersion(),
+            $expiredPlugins
+        );
+
+        /** @var PluginStoreService $pluginStoreService */
+        $pluginStoreService = $this->get('shopware_plugininstaller.plugin_service_store_production');
+        $plugins = $pluginStoreService->getPlugins($context);
+
+        $this->View()->assign(['success' => true, 'data' => array_values($plugins)]);
     }
 
     public function checkLicencePluginAction()

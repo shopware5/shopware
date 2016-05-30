@@ -566,7 +566,8 @@ Ext.onReady(function() {
             expired_license: 'Expired license(s)',
             expiring_license_warning: 'License(s) of [0]x plugin(s) are soon expiring.<br /><br /><b>Soon expired license(s):</b><br />[1]',
             expired_license_warning: 'License(s) of [0]x plugin(s) are expired.<br /><br /><b>Expired license(s):</b><br/>[1]',
-            confirm_plugin_deactivation: 'Do you want to open the Plugin Manager now?'
+            unknown_license: "Unlicensed plugins",
+            confirm_plugin_deactivation: 'You have installed unlicensed plugins. Please buy a valid license or install and remove the plugins with help of the Plugin Manager now.'
         }
     });
 });

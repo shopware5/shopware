@@ -79,6 +79,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Main', {
         Shopware.app.Application.on({
             'load-update-listing': me.loadUpdateListing,
             'enable-premium-plugins-mode': me.enablePremiumPluginsMode,
+            'enable-expired-plugins-mode': me.enableExpiredPluginsMode,
             scope: me
         });
 
@@ -90,6 +91,15 @@ Ext.define('Shopware.apps.PluginManager.controller.Main', {
 
         me.getListingWindow().setWidth(1028);
         me.getListingWindow().setTitle('{s name="premium_plugins/title"}Try features{/s}');
+        me.getNavigation().hide();
+    },
+
+    enableExpiredPluginsMode: function() {
+        var me = this,
+            listingWindow = me.getListingWindow();
+
+        listingWindow.setWidth(1028);
+        listingWindow.setTitle('{s name="expired_plugins/title"}Expired plugins{/s}');
         me.getNavigation().hide();
     },
 
@@ -142,6 +152,9 @@ Ext.define('Shopware.apps.PluginManager.controller.Main', {
         if (me.subApplication.action == 'PremiumPlugins') {
             Shopware.app.Application.fireEvent('display-premium-plugins');
             return;
+        }
+        if (me.subApplication.action == 'ExpiredPlugins') {
+            Shopware.app.Application.fireEvent('display-expired-plugins');
         }
 
         Ext.Function.defer(function () {

@@ -209,11 +209,25 @@
     }
 }
 
+
 .store-plugin-rating {
-    width: 87px;
-    height: 16px;
-    background: theme-image($theme, 'plugin_manager/stars-sprite.png') no-repeat;
-    padding-left: 95px;
+  width: 87px;
+  height: 16px;
+  background: theme-image($theme, 'plugin_manager/stars-sprite.png') no-repeat;
+  padding-left: 95px;
+}
+
+.expired-plugin {
+  @extend .store-plugin;
+  height: 230px;
+
+  .right-side {
+      .button.uninstall {
+          border-color: #C00B00;
+          color: #C00B00;
+          margin-top: 10px;
+      }
+  }
 }
 
 .plugin-manager-listing .store-plugin-rating {

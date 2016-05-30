@@ -47,6 +47,7 @@ Ext.define('Shopware.apps.PluginManager', {
         'components.ImageSlider',
         'components.Listing',
         'components.StorePlugin',
+        'components.ExpiredPlugin',
         'components.Tab',
         'components.Tree',
 
@@ -57,6 +58,7 @@ Ext.define('Shopware.apps.PluginManager', {
         'list.UpdatePage',
         'list.LicencePage',
         'list.PremiumPluginsPage',
+        'list.ExpiredPluginsPage',
         'list.Window',
 
 
@@ -83,7 +85,8 @@ Ext.define('Shopware.apps.PluginManager', {
         'LocalPlugin',
         'StorePlugin',
         'Category',
-        'UpdatePlugins'
+        'UpdatePlugins',
+        'ExpiredPlugins'
     ],
 
     models: [
