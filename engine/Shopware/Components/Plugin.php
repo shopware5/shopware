@@ -126,8 +126,9 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
     /**
      * This method can be overridden
      * @param PluginContext $context
+     * @param boolean $keepUserData
      */
-    public function uninstall(PluginContext $context)
+    public function uninstall(PluginContext $context, $keepUserData)
     {
         $context->scheduleClearCache(PluginContext::CACHE_LIST_DEFAULT);
     }
