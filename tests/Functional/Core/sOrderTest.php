@@ -709,6 +709,7 @@ class sOrderTest extends PHPUnit_Framework_TestCase
     {
         $details = Shopware()->Db()->fetchAll(
             "SELECT
+                a.id as id,
                 a.name      as articlename,
                 a.id        as articleID,
                 0           as modus,
@@ -905,6 +906,7 @@ class sOrderTest extends PHPUnit_Framework_TestCase
            'AmountWithTaxNumeric' => 0,
            'content' => array(
                array(
+                   'id' => 1,
                    'articlename' => 'Strandtuch "Ibiza"',
                    'articleID' => '178',
                    'modus' => '0',
@@ -919,6 +921,7 @@ class sOrderTest extends PHPUnit_Framework_TestCase
                    'priceNet' => 16.764705882353
                ),
                array(
+                   'id' => 2,
                    'articlename' => 'Strandtuch Sunny',
                    'articleID' => '175',
                    'ordernumber' => 'SW10175',
@@ -932,6 +935,7 @@ class sOrderTest extends PHPUnit_Framework_TestCase
                    'priceNet' => 50.411764705882
                ),
                array(
+                   'id' => 3,
                    'articlename' => 'Sommer-Sandale Pink 36',
                    'articleID' => '162',
                    'ordernumber' => 'SW10162.1',
@@ -945,6 +949,7 @@ class sOrderTest extends PHPUnit_Framework_TestCase
                    'priceNet' => 20.159663865546
                ),
                array(
+                   'id' => 4,
                    'articlename' => 'ESD Download Artikel',
                    'articleID' => '197',
                    'ordernumber' => 'SW10196',
@@ -958,6 +963,7 @@ class sOrderTest extends PHPUnit_Framework_TestCase
                    'priceNet' => 25,201680672
                ),
                array(
+                   'id' => 5,
                    'articlename' => 'Warenkorbrabatt',
                    'articleID' => '0',
                    'ordernumber' => 'SHIPPINGDISCOUNT',
