@@ -28,6 +28,7 @@ use Doctrine\DBAL\Connection;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Plugin as PluginBootstrap;
 use Shopware\Components\Plugin\PluginContext;
+use Shopware\Components\Plugin\RequirementValidator;
 use Shopware\Components\Snippet\DatabaseHandler;
 use Shopware\Kernel;
 use Shopware\Models\Plugin\Plugin;
@@ -55,14 +56,24 @@ class PluginInstaller
     private $snippetHandler;
 
     /**
+     * @var RequirementValidator
+     */
+    private $requirementValidator;
+
+    /**
      * @param ModelManager $em
      * @param DatabaseHandler $snippetHandler
+     * @param RequirementValidator $requirementValidator
      */
-    public function __construct(ModelManager $em, DatabaseHandler $snippetHandler)
-    {
+    public function __construct(
+        ModelManager $em,
+        DatabaseHandler $snippetHandler,
+        RequirementValidator $requirementValidator
+    ) {
         $this->em = $em;
         $this->connection = $this->em->getConnection();
         $this->snippetHandler = $snippetHandler;
+        $this->requirementValidator = $requirementValidator;
     }
 
     /**
@@ -76,6 +87,8 @@ class PluginInstaller
         $pluginBootstrap = $this->getPluginByName($plugin->getName());
 
         $context = new PluginContext($plugin, \Shopware::VERSION, $plugin->getVersion());
+
+        $this->requirementValidator->validate($pluginBootstrap->getPath().'/plugin.xml', \Shopware::VERSION);
 
         $this->em->transactional(function ($em) use ($pluginBootstrap, $plugin, $context) {
 
@@ -144,6 +157,7 @@ class PluginInstaller
     public function updatePlugin(Plugin $plugin)
     {
         $pluginBootstrap = $this->getPluginByName($plugin->getName());
+        $this->requirementValidator->validate($pluginBootstrap->getPath().'/plugin.xml', \Shopware::VERSION);
 
         $context = new PluginContext(
             $plugin,
