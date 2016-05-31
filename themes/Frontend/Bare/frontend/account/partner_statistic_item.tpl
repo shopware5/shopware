@@ -20,7 +20,8 @@
 {if $lastitem}
 <div class="panel--tr is--odd is--bold">
     {block name='frontend_account_partner_statistic_item_overview_row'}
-
+        <div class="panel--td column--date"></div>
+        <div class="panel--td column--id"></div>
         <div class="panel--td column--item-sum column--price">
             <div class="column--label">
                 {s name="PartnerStatisticItemSum"}{/s}
