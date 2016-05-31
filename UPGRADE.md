@@ -321,6 +321,7 @@ In this document you will find a changelog of the important changes related to t
 * Removed method `\Shopware_Controllers_Frontend_Account::resetPassword()`
 * Added new shopping world type `rows` which is based on single rows.
 * Changed structure of `billing` and `shipping` to `\Shopware\Models\Customer\Address` in `\Shopware\Components\Api\Resource\Customer`
+* Added filter events to all convert functions in `LegacyStructConverter`
 
 ## 5.1.6
 * The interface `Enlight_Components_Cron_Adapter` in `engine/Library/Enlight/Components/Cron/Adapter.php` got a new method `getJobByAction`. For default implementation see `engine/Library/Enlight/Components/Cron/Adapter/DBAL.php`.
