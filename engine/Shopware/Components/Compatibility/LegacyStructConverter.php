@@ -34,7 +34,7 @@ use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
  * @package   Shopware\Components\Compatibility
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class LegacyStructConverter
+class LegacyStructConverter implements LegacyStructConverterInterface
 {
     /**
      * @var \Shopware_Components_Config
@@ -75,8 +75,7 @@ class LegacyStructConverter
     }
 
     /**
-     * @param StoreFrontBundle\Struct\Country[] $countries
-     * @return array
+     * @inheritdoc
      */
     public function convertCountryStructList($countries)
     {
@@ -84,8 +83,7 @@ class LegacyStructConverter
     }
 
     /**
-     * @param StoreFrontBundle\Struct\Country $country
-     * @return array
+     * @inheritdoc
      */
     public function convertCountryStruct(StoreFrontBundle\Struct\Country $country)
     {
@@ -116,8 +114,7 @@ class LegacyStructConverter
     }
 
     /**
-     * @param StoreFrontBundle\Struct\Country\State[] $states
-     * @return array
+     * @inheritdoc
      */
     public function convertStateStructList($states)
     {
@@ -125,8 +122,7 @@ class LegacyStructConverter
     }
 
     /**
-     * @param StoreFrontBundle\Struct\Country\State $state
-     * @return array
+     * @inheritdoc
      */
     public function convertStateStruct(StoreFrontBundle\Struct\Country\State $state)
     {
@@ -139,10 +135,7 @@ class LegacyStructConverter
     }
 
     /**
-     * Converts a configurator group struct which used for default or selection configurators.
-     *
-     * @param StoreFrontBundle\Struct\Configurator\Group $group
-     * @return array
+     * @inheritdoc
      */
     public function convertConfiguratorGroupStruct(StoreFrontBundle\Struct\Configurator\Group $group)
     {
@@ -161,9 +154,7 @@ class LegacyStructConverter
     }
 
     /**
-     * @param StoreFrontBundle\Struct\Category $category
-     * @return array
-     * @throws \Exception
+     * @inheritdoc
      */
     public function convertCategoryStruct(StoreFrontBundle\Struct\Category $category)
     {
@@ -224,8 +215,7 @@ class LegacyStructConverter
     }
 
     /**
-     * @param StoreFrontBundle\Struct\ListProduct[] $products
-     * @return array
+     * @inheritdoc
      */
     public function convertListProductStructList(array $products)
     {
@@ -233,10 +223,7 @@ class LegacyStructConverter
     }
 
     /**
-     * Converts the passed ListProduct struct to a shopware 3-4 array structure.
-     *
-     * @param StoreFrontBundle\Struct\ListProduct $product
-     * @return array
+     * @inheritdoc
      */
     public function convertListProductStruct(StoreFrontBundle\Struct\ListProduct $product)
     {
@@ -350,10 +337,7 @@ class LegacyStructConverter
     }
 
     /**
-     * Converts the passed ProductStream struct to an array structure.
-     *
-     * @param StoreFrontBundle\Struct\ProductStream $productStream
-     * @return array
+     * @inheritdoc
      */
     public function convertRelatedProductStreamStruct(StoreFrontBundle\Struct\ProductStream $productStream)
     {
@@ -374,8 +358,7 @@ class LegacyStructConverter
     }
 
     /**
-     * @param StoreFrontBundle\Struct\Product $product
-     * @return array
+     * @inheritdoc
      */
     public function convertProductStruct(StoreFrontBundle\Struct\Product $product)
     {
@@ -535,8 +518,7 @@ class LegacyStructConverter
     }
 
     /**
-     * @param StoreFrontBundle\Struct\Product\VoteAverage $average
-     * @return array
+     * @inheritdoc
      */
     public function convertVoteAverageStruct(StoreFrontBundle\Struct\Product\VoteAverage $average)
     {
@@ -554,8 +536,7 @@ class LegacyStructConverter
     }
 
     /**
-     * @param StoreFrontBundle\Struct\Product\Vote $vote
-     * @return array
+     * @inheritdoc
      */
     public function convertVoteStruct(StoreFrontBundle\Struct\Product\Vote $vote)
     {
@@ -588,8 +569,7 @@ class LegacyStructConverter
     }
 
     /**
-     * @param StoreFrontBundle\Struct\Product\Price $price
-     * @return array
+     * @inheritdoc
      */
     public function convertPriceStruct(StoreFrontBundle\Struct\Product\Price $price)
     {
@@ -620,8 +600,7 @@ class LegacyStructConverter
     }
 
     /**
-     * @param StoreFrontBundle\Struct\Media $media
-     * @return array
+     * @inheritdoc
      */
     public function convertMediaStruct(StoreFrontBundle\Struct\Media $media)
     {
@@ -669,8 +648,7 @@ class LegacyStructConverter
     }
 
     /**
-     * @param StoreFrontBundle\Struct\Product\Unit $unit
-     * @return array
+     * @inheritdoc
      */
     public function convertUnitStruct(StoreFrontBundle\Struct\Product\Unit $unit)
     {
@@ -705,37 +683,7 @@ class LegacyStructConverter
     }
 
     /**
-     * Example:
-     *
-     * return [
-     *     9 => [
-     *         'id' => 9,
-     *         'optionID' => 9,
-     *         'name' => 'Farbe',
-     *         'groupID' => 1,
-     *         'groupName' => 'Edelbrände',
-     *         'value' => 'goldig',
-     *         'values' => [
-     *             53 => 'goldig',
-     *         ],
-     *     ],
-     *     2 => [
-     *         'id' => 2,
-     *         'optionID' => 2,
-     *         'name' => 'Flaschengröße',
-     *         'groupID' => 1,
-     *         'groupName' => 'Edelbrände',
-     *         'value' => '0,5 Liter, 0,7 Liter, 1,0 Liter',
-     *         'values' => [
-     *             23 => '0,5 Liter',
-     *             24 => '0,7 Liter',
-     *             25 => '1,0 Liter',
-     *         ],
-     *     ],
-     * ];
-     *
-     * @param StoreFrontBundle\Struct\Property\Set $set
-     * @return array
+     * @inheritdoc
      */
     public function convertPropertySetStruct(StoreFrontBundle\Struct\Property\Set $set)
     {
@@ -774,8 +722,7 @@ class LegacyStructConverter
     }
 
     /**
-     * @param StoreFrontBundle\Struct\Property\Group $group
-     * @return array
+     * @inheritdoc
      */
     public function convertPropertyGroupStruct(StoreFrontBundle\Struct\Property\Group $group)
     {
@@ -801,8 +748,7 @@ class LegacyStructConverter
     }
 
     /**
-     * @param StoreFrontBundle\Struct\Property\Option $option
-     * @return array
+     * @inheritdoc
      */
     public function convertPropertyOptionStruct(StoreFrontBundle\Struct\Property\Option $option)
     {
@@ -822,8 +768,7 @@ class LegacyStructConverter
     }
 
     /**
-     * @param StoreFrontBundle\Struct\Product\Manufacturer $manufacturer
-     * @return array
+     * @inheritdoc
      */
     public function convertManufacturerStruct(StoreFrontBundle\Struct\Product\Manufacturer $manufacturer)
     {
@@ -852,9 +797,7 @@ class LegacyStructConverter
     }
 
     /**
-     * @param StoreFrontBundle\Struct\ListProduct $product
-     * @param StoreFrontBundle\Struct\Configurator\Set $set
-     * @return array
+     * @inheritdoc
      */
     public function convertConfiguratorStruct(
         StoreFrontBundle\Struct\ListProduct $product,
@@ -897,9 +840,7 @@ class LegacyStructConverter
     }
 
     /**
-     * @param StoreFrontBundle\Struct\ListProduct $product
-     * @param StoreFrontBundle\Struct\Configurator\Set $set
-     * @return array
+     * @inheritdoc
      */
     public function convertConfiguratorPrice(
         StoreFrontBundle\Struct\ListProduct $product,
@@ -973,11 +914,7 @@ class LegacyStructConverter
     }
 
     /**
-     * Converts a configurator option struct which used for default or selection configurators.
-     *
-     * @param StoreFrontBundle\Struct\Configurator\Group $group
-     * @param StoreFrontBundle\Struct\Configurator\Option $option
-     * @return array
+     * @inheritdoc
      */
     public function convertConfiguratorOptionStruct(
         StoreFrontBundle\Struct\Configurator\Group $group,
