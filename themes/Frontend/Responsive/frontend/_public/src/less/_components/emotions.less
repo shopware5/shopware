@@ -57,10 +57,23 @@ Shopware 5 provides 11 integrated elements inside the shopping worlds that can b
     }
 
     .content--breadcrumb,
-    .listing--wrapper,
     .tagcloud--content,
     .last-seen-products {
         display: none;
+    }
+
+    .listing--wrapper {
+        .unitize(max-width, 1160);
+        .unitize-padding(20, 10);
+        margin: 0 auto;
+
+        @media screen and(min-width: @tabletViewportWidth) {
+            .unitize-padding(20, 30);
+        }
+
+        @media screen and(min-width: @desktopViewportWidth) {
+            .unitize-padding(20, 0);
+        }
     }
 }
 
