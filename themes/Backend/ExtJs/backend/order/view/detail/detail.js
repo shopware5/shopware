@@ -103,7 +103,7 @@ Ext.define('Shopware.apps.Order.view.detail.Detail', {
             me.shippingForm,
 			Ext.create('Shopware.apps.Order.view.detail.Debit', { record: me.record, paymentsStore: me.paymentsStore })
         ];
-        me.buttons = me.createButtons();
+        me.dockedItems = [ me.createToolbar() ];
 
         me.title = me.snippets.title;
         me.callParent(arguments);
@@ -113,10 +113,11 @@ Ext.define('Shopware.apps.Order.view.detail.Detail', {
     /**
      * Creates the form button save and cancel
      */
-    createButtons: function() {
+    getEditFormButtons: function() {
         var me = this,
             buttons = [];
 
+        buttons.push('->');
         var cancelButton = Ext.create('Ext.button.Button', {
             text:me.snippets.cancel,
             scope:me,
@@ -225,6 +226,17 @@ Ext.define('Shopware.apps.Order.view.detail.Detail', {
                     editable: false
                 }
             ]
+        });
+    },
+
+    /**
+     * @returns { Ext.toolbar.Toolbar }
+     */
+    createToolbar: function() {
+        var me = this;
+        return me.toolbar = Ext.create('Ext.toolbar.Toolbar', {
+            dock: 'bottom',
+            items: me.getEditFormButtons()
         });
     }
 });
