@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Shopware\Bundle\AttributeBundle\Service\CrudService;
 
 /**
  * Shopware Translation Component
@@ -468,7 +469,7 @@ class Shopware_Components_Translation
 
         foreach ($data as $key => $value) {
             $column = strtolower($key);
-            $column = str_replace(Shopware_Controllers_Backend_Attributes::EXT_JS_PREFIX, '', $column);
+            $column = str_replace(CrudService::EXT_JS_PREFIX, '', $column);
 
             unset($data[$key]);
             if (in_array($column, $columns)) {

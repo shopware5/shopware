@@ -772,13 +772,19 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
      */
     createAttributeForm: function() {
         var me = this;
+        
         me.attributeForm = Ext.create('Shopware.attribute.Form', {
             table: 's_order_attributes',
             name: 'order-attributes',
             title: '{s name="attribute_title"}{/s}',
             border: true,
             margin: '10 0',
-            bodyPadding: 10
+            bodyPadding: 10,
+            listeners: {
+                'hide-attribute-field-set': function() {
+                    me.attributeForm.hide();
+                }
+            }
         });
         return me.attributeForm;
     }

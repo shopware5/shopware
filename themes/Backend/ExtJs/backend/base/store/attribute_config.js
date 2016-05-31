@@ -6,7 +6,7 @@ Ext.define('Shopware.store.AttributeConfig', {
 
     configure: function() {
         return {
-            controller: 'Attributes'
+            controller: 'AttributeData'
         }
     }
 });

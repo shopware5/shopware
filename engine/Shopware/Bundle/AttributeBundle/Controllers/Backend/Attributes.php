@@ -46,60 +46,6 @@ class Shopware_Controllers_Backend_Attributes extends Shopware_Controllers_Backe
         $this->addAclPermission("resetData", "update", "Insufficient Permissions");
     }
 
-    const EXT_JS_PREFIX = '__attribute_';
-
-    public function loadDataAction()
-    {
-        /** @var DataLoader $dataLoader */
-        $dataLoader = $this->get('shopware_attribute.data_loader');
-
-        try {
-            $data = $dataLoader->load(
-                $this->Request()->getParam('_table'),
-                $this->Request()->getParam('_foreignKey')
-            );
-        } catch (Exception $e) {
-            $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
-            return;
-        }
-
-        if (empty($data)) {
-            $data = [];
-        }
-
-        $result = [];
-        foreach ($data as $key => $value) {
-            $key = self::EXT_JS_PREFIX . $key;
-            $result[$key] = $value;
-        }
-
-        $this->View()->assign(['success' => true, 'data' => $result]);
-    }
-
-    public function saveDataAction()
-    {
-        /** @var \Shopware\Bundle\AttributeBundle\Service\DataPersister $dataPersister */
-        $dataPersister = $this->get('shopware_attribute.data_persister');
-
-        $data = [];
-        foreach ($this->Request()->getParams() as $key => $value) {
-            $key = str_replace(self::EXT_JS_PREFIX, '', $key);
-            $data[$key] = $value;
-        }
-
-        try {
-            $dataPersister->persist(
-                $data,
-                $this->Request()->getParam('_table'),
-                $this->Request()->getParam('_foreignKey')
-            );
-        } catch (Exception $e) {
-            $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
-            return;
-        }
-        $this->View()->assign('success', true);
-    }
-
     public function getTablesAction()
     {
         /** @var TableMapping $mapping */
@@ -154,25 +100,6 @@ class Shopware_Controllers_Backend_Attributes extends Shopware_Controllers_Backe
             return;
         }
         $this->View()->assign('success', true);
-    }
-
-    public function listAction()
-    {
-        /** @var CrudService $crudService */
-        $crudService = $this->get('shopware_attribute.crud_service');
-        $columns = $crudService->getList(
-            $this->Request()->getParam('table')
-        );
-
-        $columns = array_filter($columns, function (ConfigurationStruct $column) {
-            return $column->isIdentifier() == false;
-        });
-
-        $this->View()->assign([
-            'success' => true,
-            'data' => array_values($columns),
-            'total' => 1
-        ]);
     }
 
     public function getColumnAction()

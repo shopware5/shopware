@@ -34,6 +34,8 @@ use Shopware\Models\Attribute\Configuration;
  */
 class CrudService
 {
+    const EXT_JS_PREFIX = '__attribute_';
+
     /**
      * @var ModelManager
      */
