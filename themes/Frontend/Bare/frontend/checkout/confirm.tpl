@@ -280,7 +280,7 @@
                                                         <div class="shipping--panel">
                                                             {block name='frontend_checkout_confirm_information_addresses_equal_panel_shipping_select_address'}
                                                                 <a href="{url controller=address}"
-                                                                   class="btn"
+                                                                   class="btn choose-different-address"
                                                                    data-address-selection="true"
                                                                    data-sessionKey="checkoutShippingAddressId"
                                                                    data-id="{$activeShippingAddressId}"
@@ -295,16 +295,18 @@
                                                 {block name='frontend_checkout_confirm_information_addresses_equal_panel_actions'}
                                                     <div class="panel--actions is--wide">
                                                         {block name="frontend_checkout_confirm_information_addresses_equal_panel_actions_change"}
-                                                            <div>
-                                                                <a href="{url controller=address action=edit id=$activeBillingAddressId sTarget=checkout sTargetAction=confirm}"
-                                                                   data-address-editor="true"
-                                                                   data-id="{$activeBillingAddressId}"
-                                                                   data-sessionKey="checkoutBillingAddressId,checkoutShippingAddressId"
-                                                                   data-title="{s name="ConfirmAddressSelectButton"}Change address{/s}"
-                                                                   title="{s name="ConfirmAddressSelectButton"}Change address{/s}"
-                                                                   class="btn">
-                                                                    {s name="ConfirmAddressSelectButton"}Change address{/s}
-                                                                </a>
+                                                            <div class="address--actions-change">
+                                                                {block name='frontend_checkout_confirm_information_addresses_equal_panel_shipping_change_address'}
+                                                                    <a href="{url controller=address action=edit id=$activeBillingAddressId sTarget=checkout sTargetAction=confirm}"
+                                                                       data-address-editor="true"
+                                                                       data-id="{$activeBillingAddressId}"
+                                                                       data-sessionKey="checkoutBillingAddressId,checkoutShippingAddressId"
+                                                                       data-title="{s name="ConfirmAddressSelectButton"}Change address{/s}"
+                                                                       title="{s name="ConfirmAddressSelectButton"}Change address{/s}"
+                                                                       class="btn">
+                                                                        {s name="ConfirmAddressSelectButton"}Change address{/s}
+                                                                    </a>
+                                                                {/block}
 
                                                                 {block name='frontend_checkout_confirm_information_addresses_equal_panel_shipping_select_address'}
                                                                     <a href="{url controller=address}"
@@ -390,16 +392,18 @@
                                             {block name="frontend_checkout_confirm_information_addresses_billing_panel_actions"}
                                                 <div class="panel--actions is--wide">
                                                     {block name="frontend_checkout_confirm_information_addresses_billing_panel_actions_change"}
-                                                        <div>
-                                                            <a href="{url controller=address action=edit id=$activeBillingAddressId sTarget=checkout sTargetAction=confirm}"
-                                                               data-address-editor="true"
-                                                               data-sessionKey="checkoutBillingAddressId"
-                                                               data-id="{$activeBillingAddressId}"
-                                                               data-title="{s name="ConfirmAddressSelectButton"}Change address{/s}"
-                                                               title="{s name="ConfirmAddressSelectButton"}Change address{/s}"
-                                                               class="btn">
-                                                                {s name="ConfirmAddressSelectButton"}Change address{/s}
-                                                            </a>
+                                                        <div class="address--actions-change">
+                                                            {block name="frontend_checkout_confirm_information_addresses_billing_panel_actions_change_address"}
+                                                                <a href="{url controller=address action=edit id=$activeBillingAddressId sTarget=checkout sTargetAction=confirm}"
+                                                                   data-address-editor="true"
+                                                                   data-sessionKey="checkoutBillingAddressId"
+                                                                   data-id="{$activeBillingAddressId}"
+                                                                   data-title="{s name="ConfirmAddressSelectButton"}Change address{/s}"
+                                                                   title="{s name="ConfirmAddressSelectButton"}Change address{/s}"
+                                                                   class="btn">
+                                                                    {s name="ConfirmAddressSelectButton"}Change address{/s}
+                                                                </a>
+                                                            {/block}
                                                         </div>
                                                     {/block}
                                                     {block name="frontend_checkout_confirm_information_addresses_billing_panel_actions_select_address"}
@@ -470,16 +474,18 @@
                                             {block name="frontend_checkout_confirm_information_addresses_shipping_panel_actions"}
                                                 <div class="panel--actions is--wide">
                                                     {block name="frontend_checkout_confirm_information_addresses_shipping_panel_actions_change"}
-                                                        <div>
-                                                            <a href="{url controller=address action=edit id=$activeShippingAddressId sTarget=checkout sTargetAction=confirm}"
-                                                               title="{s name="ConfirmAddressSelectButton"}Change address{/s}"
-                                                               data-title="{s name="ConfirmAddressSelectButton"}Change address{/s}"
-                                                               data-address-editor="true"
-                                                               data-id="{$activeShippingAddressId}"
-                                                               data-sessionKey="checkoutShippingAddressId"
-                                                               class="btn">
-                                                                {s name="ConfirmAddressSelectButton"}Change address{/s}
-                                                            </a>
+                                                        <div class="address--actions-change">
+                                                            {block name="frontend_checkout_confirm_information_addresses_shipping_panel_actions_change_address"}
+                                                                <a href="{url controller=address action=edit id=$activeShippingAddressId sTarget=checkout sTargetAction=confirm}"
+                                                                   title="{s name="ConfirmAddressSelectButton"}Change address{/s}"
+                                                                   data-title="{s name="ConfirmAddressSelectButton"}Change address{/s}"
+                                                                   data-address-editor="true"
+                                                                   data-id="{$activeShippingAddressId}"
+                                                                   data-sessionKey="checkoutShippingAddressId"
+                                                                   class="btn">
+                                                                    {s name="ConfirmAddressSelectButton"}Change address{/s}
+                                                                </a>
+                                                            {/block}
                                                         </div>
                                                     {/block}
                                                     {block name="frontend_checkout_confirm_information_addresses_shipping_panel_actions_select_address"}
