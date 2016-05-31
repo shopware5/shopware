@@ -155,7 +155,7 @@ Ext.define('Shopware.attribute.Form', {
         me.setLoading(true);
 
         me.load({
-            url: '{url controller=Attributes action=loadData}',
+            url: '{url controller=AttributeData action=loadData}',
             params: {
                 _foreignKey: foreignKey,
                 _table: me.table
@@ -219,7 +219,7 @@ Ext.define('Shopware.attribute.Form', {
         }
 
         me.submit({
-            url: '{url controller=Attributes action=saveData}',
+            url: '{url controller=AttributeData action=saveData}',
             params: {
                 _table: me.table,
                 _foreignKey: foreignKey
@@ -269,10 +269,18 @@ Ext.define('Shopware.attribute.Form', {
     },
 
     createFieldSet: function(fields) {
-        var me = this, items;
+        var me = this, items, hidden = false;
 
         items = fields;
         if (fields.length <= 0) {
+
+            /*{if !{acl_is_allowed resource=attributes privilege=read}}*/
+                hidden = true;
+
+                me.fireEvent('hide-attribute-field-set');
+
+            /*{/if}*/
+
             items = [me.createNotification()];
         }
 
@@ -281,6 +289,7 @@ Ext.define('Shopware.attribute.Form', {
             defaults: { anchor: '100%' },
             layout: 'anchor',
             background: 'transparent',
+            hidden: hidden,
             items: [{
                 xtype: 'container',
                 padding: me.fieldSetPadding,

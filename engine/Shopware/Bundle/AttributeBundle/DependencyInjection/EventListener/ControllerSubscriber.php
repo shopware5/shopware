@@ -37,7 +37,8 @@ class ControllerSubscriber implements SubscriberInterface
     {
         return [
             'Enlight_Controller_Dispatcher_ControllerPath_Backend_EntitySearch' => 'registerEntitySearchController',
-            'Enlight_Controller_Dispatcher_ControllerPath_Backend_Attributes' => 'registerAttributesController'
+            'Enlight_Controller_Dispatcher_ControllerPath_Backend_Attributes' => 'registerAttributesController',
+            'Enlight_Controller_Dispatcher_ControllerPath_Backend_AttributeData' => 'registerAttributeDataController'
         ];
     }
 
@@ -49,5 +50,10 @@ class ControllerSubscriber implements SubscriberInterface
     public function registerAttributesController()
     {
         return __DIR__ . '/../../Controllers/Backend/Attributes.php';
+    }
+
+    public function registerAttributeDataController()
+    {
+        return __DIR__ . '/../../Controllers/Backend/AttributeData.php';
     }
 }
