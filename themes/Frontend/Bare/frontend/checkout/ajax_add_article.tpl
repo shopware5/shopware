@@ -111,25 +111,13 @@
 
                             {* Cross selling product slider *}
                             {block name='checkout_ajax_add_cross_slider'}
-                                <div class="product-slider">
-                                    <div class="product-slider--container">
+                                {if $sCrossBoughtToo|count < 1 && $sCrossSimilarShown}
+                                    {$sCrossSellingArticles = $sCrossSimilarShown}
+                                {else}
+                                    {$sCrossSellingArticles = $sCrossBoughtToo}
+                                {/if}
 
-                                        {if $sCrossBoughtToo|count < 1 && $sCrossSimilarShown}
-                                            {$sCrossSellingArticles = $sCrossSimilarShown}
-                                        {else}
-                                            {$sCrossSellingArticles = $sCrossBoughtToo}
-                                        {/if}
-
-                                        {* Product item *}
-                                        {foreach $sCrossSellingArticles as $article}
-                                            {block name='checkout_ajax_add_cross_slider_item'}
-                                                <div class="product-slider--item">
-                                                    {include file="frontend/listing/box_article.tpl" sArticle=$article productBoxLayout="slider"}
-                                                </div>
-                                            {/block}
-                                        {/foreach}
-                                    </div>
-                                </div>
+                                {include file="frontend/_includes/product_slider.tpl" articles=$sCrossSellingArticles}
                             {/block}
                         </div>
                     {/block}

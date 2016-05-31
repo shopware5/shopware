@@ -323,6 +323,31 @@ In this document you will find a changelog of the important changes related to t
 * Changed structure of `billing` and `shipping` to `\Shopware\Models\Customer\Address` in `\Shopware\Components\Api\Resource\Customer`
 * Replaced `buttons` with a toolbar in `dockedItems` in `Shopware.apps.Order.view.detail.Detail`
 * Removed method `createButtons()` in `Shopware.apps.Order.view.detail.Detail`
+* Added unified product slider template
+    * Created template files
+        * `themes/Frontend/Bare/frontend/_includes/product_slider.tpl`
+        * `themes/Frontend/Bare/frontend/_includes/product_slider_item.tpl`
+        * `themes/Frontend/Bare/frontend/_includes/product_slider_items.tpl`
+    * Created template blocks
+        * `frontend_common_product_slider_config`
+        * `frontend_common_product_slider_component`
+        * `frontend_common_product_slider_container`
+        * `frontend_common_product_slider_items`
+        * `frontend_common_product_slider_item_config`
+        * `frontend_common_product_slider_item`
+    * Removed template blocks
+        * `checkout_ajax_add_cross_slider_item`
+        * `frontend_detail_index_streams_slider_container`
+        * `frontend_detail_index_similar_slider_item`
+        * `widget_emotion_component_product_slider`
+        * `widgets_listing_top_seller_slider_container`
+        * `widgets_listing_top_seller_slider_container_inner`
+        * `widgets_listing_top_seller_slider_container_include`
+        * `frontend_detail_index_also_bought_slider_inner`
+        * `frontend_detail_index_similar_viewed_slider_inner`
+        * `frontend_widgets_slide_articles_item`
+    * Removed template files
+        * `themes/Frontend/Bare/widgets/emotion/slide_articles.tpl`
 
 ## 5.1.6
 * The interface `Enlight_Components_Cron_Adapter` in `engine/Library/Enlight/Components/Cron/Adapter.php` got a new method `getJobByAction`. For default implementation see `engine/Library/Enlight/Components/Cron/Adapter/DBAL.php`.
