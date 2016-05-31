@@ -533,10 +533,7 @@ class sOrder
             $this->sBasketData["AmountWithTaxNumeric"] = $this->sBasketData["AmountNumeric"];
         }
 
-        if ($this->isTaxFree(
-                $this->sSYSTEM->sUSERGROUPDATA["tax"],
-                $this->sSYSTEM->sUSERGROUPDATA["id"])
-        ) {
+        if ($this->isTaxFree($this->sSYSTEM->sUSERGROUPDATA["tax"], $this->sSYSTEM->sUSERGROUPDATA["id"])) {
             $net = "1";
         } else {
             $net = "0";
@@ -717,14 +714,7 @@ class sOrder
             $this->sBasketData['content'][$key]['orderDetailId'] = $orderdetailsID;
 
             // save attributes
-            $attributeData = [
-                'attribute1' => $basketRow['ob_attr1'],
-                'attribute2' => $basketRow['ob_attr2'],
-                'attribute3' => $basketRow['ob_attr3'],
-                'attribute4' => $basketRow['ob_attr4'],
-                'attribute5' => $basketRow['ob_attr5'],
-                'attribute6' => $basketRow['ob_attr6'],
-            ];
+            $attributeData = $this->attributeLoader->load('s_order_basket_attributes', $basketRow['id']);
             $this->attributePersister->persist($attributeData, 's_order_details_attributes', $orderdetailsID);
             $detailAttributes = $this->attributeLoader->load('s_order_details_attributes', $orderdetailsID) ?: [];
             unset($detailAttributes['id']);
