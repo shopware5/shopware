@@ -15,6 +15,7 @@
         <service id="shopware_plugininstaller.plugin_installer" class="Shopware\Bundle\PluginInstallerBundle\Service\PluginInstaller">
             <argument type="service" id="models"/>
             <argument type="service" id="shopware.snippet_database_handler" />
+            <argument type="service" id="shopware.plugin_requirement_validator" />
         </service>
 
         <service id="shopware_plugininstaller.legacy_plugin_installer" class="Shopware\Bundle\PluginInstallerBundle\Service\LegacyPluginInstaller">
