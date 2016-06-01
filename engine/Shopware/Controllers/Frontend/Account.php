@@ -57,7 +57,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
     public function preDispatch()
     {
         $this->View()->setScope(Enlight_Template_Manager::SCOPE_PARENT);
-        if (!in_array($this->Request()->getActionName(), array('login', 'logout', 'password', 'ajax_login', 'ajax_logout', 'resetPassword'))
+        if (!in_array($this->Request()->getActionName(), array('login', 'logout', 'password', 'resetPassword'))
             && !$this->admin->sCheckUser()) {
             return $this->forward('index', 'register');
         }

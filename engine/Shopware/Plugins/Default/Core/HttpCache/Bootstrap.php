@@ -592,10 +592,8 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
             $this->setNoCacheTag('admin');
         }
 
-        if ($controllerName == 'frontend/account') {
-            if (in_array($this->request->getActionName(), array('ajax_logout', 'logout'))) {
-                $this->setNoCacheTag('');
-            }
+        if ($controllerName == 'frontend/account' && $this->request->getActionName() === 'logout') {
+            $this->setNoCacheTag('');
         }
     }
 
