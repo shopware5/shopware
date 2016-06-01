@@ -55,7 +55,7 @@ Ext.define('Shopware.model.AttributeConfig', {
     },
 
     allowConfigure: function() {
-        return !this.get('identifier');
+        return this.get('custom') || this.get('core');
     },
 
     merge: function(column) {

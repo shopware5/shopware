@@ -143,6 +143,19 @@ class TableMapping
 
     /**
      * @param string $table
+     * @return array
+     * @throws \Exception
+     */
+    public function getDependingTables($table)
+    {
+        if (!$this->isAttributeTable($table)) {
+            throw new \Exception(sprintf("Table %s is no supported attribute table"));
+        }
+        return $this->tables[$table]['dependingTables'];
+    }
+
+    /**
+     * @param string $table
      * @return \Doctrine\DBAL\Schema\Column[]
      */
     public function getTableColumns($table)

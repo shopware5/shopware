@@ -78,9 +78,10 @@ class CrudService
     /**
      * @param string $table
      * @param string $column
+     * @param bool $updateDependingTables
      * @throws \Exception
      */
-    public function delete($table, $column)
+    public function delete($table, $column, $updateDependingTables = false)
     {
         if (!$this->tableMapping->isTableColumn($table, $column)) {
             throw new \Exception(sprintf('Table %s has no column with name %s', $table, $column));
@@ -99,68 +100,47 @@ class CrudService
             $this->entityManager->remove($entity);
             $this->entityManager->flush($entity);
         }
-    }
 
-    /**
-     * @param string $table
-     * @param string $column
-     * @param string $unifiedType
-     * @param array $data
-     * @throws \Exception
-     */
-    public function create($table, $column, $unifiedType, array $data = [])
-    {
-        $this->schemaOperator->createColumn(
-            $table,
-            $column,
-            $this->typeMapping->unifiedToSQL($unifiedType)
-        );
-
-        $data = array_merge($data, [
-            'tableName' => $table,
-            'columnName' => $column,
-            'columnType' => $unifiedType
-        ]);
-
-        $this->updateConfig($data['id'], $data);
-    }
-
-    /**
-     * @param string $table
-     * @param string $originalColumnName
-     * @param string $newColumnName
-     * @param string $unifiedType
-     * @param array $data
-     * @throws \Exception
-     */
-    public function update($table, $originalColumnName, $newColumnName, $unifiedType, array $data = [])
-    {
-        $config = $this->get($table, $originalColumnName);
-
-        $data = array_merge($data, [
-            'tableName' => $table,
-            'columnName' => $newColumnName,
-            'columnType' => $unifiedType
-        ]);
-
-        $this->updateConfig($config->getId(), $data);
-
-        $schemaChanged = $this->schemaChanged(
-            $config,
-            $newColumnName,
-            $unifiedType
-        );
-
-        if (!$schemaChanged) {
+        if (!$updateDependingTables) {
             return;
         }
 
-        $this->schemaOperator->changeColumn(
-            $config->getTableName(),
-            $originalColumnName,
-            $newColumnName,
-            $this->typeMapping->unifiedToSQL($unifiedType)
-        );
+        $tables = $this->tableMapping->getDependingTables($table);
+        foreach ($tables as $table) {
+            $this->delete($table, $column);
+        }
+    }
+
+    /**
+     * @param string $table
+     * @param string $columnName
+     * @param string $unifiedType
+     * @param array $data
+     * @param null $newColumnName
+     * @param bool $updateDependingTables
+     * @throws \Exception
+     */
+    public function update($table, $columnName, $unifiedType, array $data = [], $newColumnName = null, $updateDependingTables = false)
+    {
+        $config = $this->get($table, $columnName);
+
+        if (!$config) {
+            $this->createAttribute($table, $columnName, $unifiedType, $data);
+            return;
+        }
+
+        $newColumnName = $newColumnName?: $columnName;
+
+        $this->changeAttribute($table, $columnName, $newColumnName, $unifiedType, $data);
+
+        if (!$updateDependingTables) {
+            return;
+        }
+
+        $tables = $this->tableMapping->getDependingTables($table);
+        foreach ($tables as $table) {
+            $this->update($table, $columnName, $unifiedType, $data, $newColumnName);
+        }
     }
 
     /**
@@ -287,5 +267,67 @@ class CrudService
             ->setParameter('tableName', $table);
 
         return $query->getQuery()->getArrayResult();
+    }
+
+    /**
+     * @param string $table
+     * @param string $column
+     * @param string $unifiedType
+     * @param array $data
+     * @throws \Exception
+     */
+    private function createAttribute($table, $column, $unifiedType, array $data = [])
+    {
+        $this->schemaOperator->createColumn(
+            $table,
+            $column,
+            $this->typeMapping->unifiedToSQL($unifiedType)
+        );
+
+        $data = array_merge($data, [
+            'tableName' => $table,
+            'columnName' => $column,
+            'columnType' => $unifiedType
+        ]);
+
+        $this->updateConfig($data['id'], $data);
+    }
+
+    /**
+     * @param string $table
+     * @param string $originalColumnName
+     * @param string $newColumnName
+     * @param string $unifiedType
+     * @param array $data
+     * @throws \Exception
+     */
+    private function changeAttribute($table, $originalColumnName, $newColumnName, $unifiedType, array $data = [])
+    {
+        $config = $this->get($table, $originalColumnName);
+
+        $data = array_merge($data, [
+            'tableName' => $table,
+            'columnName' => $newColumnName,
+            'columnType' => $unifiedType
+        ]);
+
+        $this->updateConfig($config->getId(), $data);
+
+        $schemaChanged = $this->schemaChanged(
+            $config,
+            $newColumnName,
+            $unifiedType
+        );
+
+        if (!$schemaChanged) {
+            return;
+        }
+
+        $this->schemaOperator->changeColumn(
+            $config->getTableName(),
+            $originalColumnName,
+            $newColumnName,
+            $this->typeMapping->unifiedToSQL($unifiedType)
+        );
     }
 }
