@@ -218,6 +218,12 @@
         </exec>
     </target>
 
+    <target name="unit-continuous">
+        <exec executable="${script.phpunit}" failonerror="true" dir="${test.dir.shopware}">
+            <arg value="--log-junit=${log.dir}/junit.xml"/>
+        </exec>
+    </target>
+
     <target name="karma-shopware-continuous">
         <exec executable="${script.karma}" failonerror="true" dir="${log.dir}">
             <arg value="start"/>
