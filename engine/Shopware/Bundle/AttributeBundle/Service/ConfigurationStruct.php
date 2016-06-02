@@ -109,6 +109,11 @@ class ConfigurationStruct implements \JsonSerializable
     /**
      * @var string
      */
+    private $elasticSearchType;
+
+    /**
+     * @var string
+     */
     private $dbalType;
 
     /**
@@ -433,5 +438,21 @@ class ConfigurationStruct implements \JsonSerializable
     public function setArrayStore($arrayStore)
     {
         $this->arrayStore = $arrayStore;
+    }
+
+    /**
+     * @return string
+     */
+    public function getElasticSearchType()
+    {
+        return $this->elasticSearchType;
+    }
+
+    /**
+     * @param string $elasticSearchType
+     */
+    public function setElasticSearchType($elasticSearchType)
+    {
+        $this->elasticSearchType = $elasticSearchType;
     }
 }

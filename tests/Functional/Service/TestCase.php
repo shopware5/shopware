@@ -7,8 +7,8 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\FacetInterface;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
-use Shopware\Bundle\SearchBundle\SearchProduct;
 use Shopware\Bundle\SearchBundle\SortingInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\ProductContext;
 use Shopware\Components\MultiEdit\Resource\Product;
 use Shopware\Models\Article\Article;
@@ -67,6 +67,8 @@ class TestCase extends \Enlight_Components_Test_TestCase
         }
 
         $this->createProducts($products, $context, $category);
+
+        $this->helper->refreshSearchIndexes($context->getShop());
 
         $criteria = new Criteria();
 
@@ -206,7 +208,7 @@ class TestCase extends \Enlight_Components_Test_TestCase
     ) {
         $productResult = array_values($result->getProducts());
 
-        /**@var $product SearchProduct*/
+        /** @var BaseProduct $product */
         foreach ($productResult as $index => $product) {
             $expectedProduct = $expectedNumbers[$index];
 
@@ -242,6 +244,7 @@ class TestCase extends \Enlight_Components_Test_TestCase
      * @param $number
      * @param ProductContext $context
      * @param Category $category
+     * @param null $additionally
      * @return array
      */
     protected function getProduct(
@@ -264,5 +267,15 @@ class TestCase extends \Enlight_Components_Test_TestCase
         }
 
         return $product;
+    }
+
+    /**
+     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group
+     */
+    public function getEkCustomerGroup()
+    {
+        return $this->converter->convertCustomerGroup(
+            Shopware()->Container()->get('models')->find('Shopware\Models\Customer\Group', 1)
+        );
     }
 }

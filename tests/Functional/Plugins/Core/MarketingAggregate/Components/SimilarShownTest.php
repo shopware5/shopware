@@ -128,6 +128,9 @@ class SimilarShownTest extends AbstractMarketing
         }
     }
 
+    /**
+     * @group skipElasticSearch
+     */
     public function testSimilarShownLiveRefresh()
     {
         $this->insertDemoData();

@@ -130,7 +130,9 @@ class TopSellerTest extends AbstractMarketing
         $this->assertArrayEquals($topSeller, $allTopSeller[0], array('article_id', 'sales'));
     }
 
-
+    /**
+     * @group skipElasticSearch
+     */
     public function testTopSellerLiveRefresh()
     {
         $this->resetTopSeller();
@@ -146,7 +148,6 @@ class TopSellerTest extends AbstractMarketing
         $topSeller = $this->getAllTopSeller(" WHERE last_cleared > '2010-01-01' ");
         $this->assertCount(50, $topSeller);
     }
-
 
     public function testTopSellerCronJobRefresh()
     {

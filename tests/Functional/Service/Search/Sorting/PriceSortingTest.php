@@ -101,6 +101,9 @@ class PriceSortingTest extends TestCase
         );
     }
 
+    /**
+     * @group skipElasticSearch
+     */
     public function testFallbackAndCurrentCustomerGroupPriceSorting()
     {
         $sorting = new PriceSorting();
@@ -125,6 +128,9 @@ class PriceSortingTest extends TestCase
         );
     }
 
+    /**
+     * @group skipElasticSearch
+     */
     public function testCustomerGroupDiscount()
     {
         $sorting = new PriceSorting();

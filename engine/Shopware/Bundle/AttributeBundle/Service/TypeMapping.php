@@ -43,17 +43,61 @@ class TypeMapping
      * @var array
      */
     private $types = [
-        'string'   => ['sql' => 'VARCHAR(500)', 'dbal' => 'string'],
-        'text'     => ['sql' => 'TEXT', 'dbal' => 'text'],
-        'html'     => ['sql' => 'MEDIUMTEXT','dbal' => 'text'],
-        'integer'  => ['sql' => 'INT(11)','dbal' => 'integer'],
-        'float'    => ['sql' => 'DOUBLE','dbal' => 'float'],
-        'boolean'  => ['sql' => 'INT(1)', 'dbal' => 'boolean'],
-        'date'     => ['sql' => 'DATE', 'dbal' => 'date'],
-        'datetime' => ['sql' => 'DATETIME', 'dbal' => 'datetime'],
-        'combobox' => ['sql' => 'MEDIUMTEXT', 'dbal' => 'text'],
-        'single_selection' => ['sql' => 'VARCHAR(500)'],
-        'multi_selection' => ['sql' => 'MEDIUMTEXT']
+        'string'   => [
+            'sql' => 'VARCHAR(500)',
+            'dbal' => 'string',
+            'elastic' => ['type' => 'string']
+        ],
+        'text'     => [
+            'sql' => 'TEXT',
+            'dbal' => 'text',
+            'elastic' => ['type' => 'string']
+        ],
+        'html'     => [
+            'sql' => 'MEDIUMTEXT',
+            'dbal' => 'text',
+            'elastic' => ['type' => 'string']
+        ],
+        'integer'  => [
+            'sql' => 'INT(11)',
+            'dbal' => 'integer',
+            'elastic' => ['type' => 'long']
+        ],
+        'float'    => [
+            'sql' => 'DOUBLE',
+            'dbal' => 'float',
+            'elastic' => ['type' => 'double']
+        ],
+        'boolean'  => [
+            'sql' => 'INT(1)',
+            'dbal' => 'boolean',
+            'elastic' => ['type' => 'boolean']
+        ],
+        'date'     => [
+            'sql' => 'DATE',
+            'dbal' => 'date',
+            'elastic' => ['type' => 'date', 'format' => 'yyyy-MM-dd']
+        ],
+        'datetime' => [
+            'sql' => 'DATETIME',
+            'dbal' => 'datetime',
+            'elastic' => ['type' => 'date', 'format' => 'yyyy-MM-dd']
+        ],
+        'combobox' => [
+            'sql' => 'MEDIUMTEXT',
+            'dbal' => 'text',
+            'elastic' => ['type' => 'string']
+        ],
+        'single_selection' => [
+            'sql' => 'VARCHAR(500)',
+            'dbal' => 'text',
+            'elastic' => ['type' => 'string']
+        ],
+        'multi_selection' => [
+            'sql' => 'MEDIUMTEXT',
+            'dbal' => 'text',
+            'elastic' => ['type' => 'string']
+        ]
     ];
 
     /**
@@ -173,5 +217,18 @@ class TypeMapping
         }
         $mapping = $this->types[$type];
         return $mapping['sql'];
+    }
+
+    /**
+     * @param string $unified
+     * @return array
+     */
+    public function unifiedToElasticSearch($unified)
+    {
+        $type = strtolower($unified);
+        if (isset($this->types[$type])) {
+            return $this->types[$type]['elastic'];
+        }
+        return ['type' => 'string'];
     }
 }
