@@ -357,6 +357,7 @@ In this document you will find a changelog of the important changes related to t
         * `\Shopware_Controllers_Backend_ImportExport::importCustomers()`
         * `\Shopware_Controllers_Backend_ImportExport::saveCustomer()`
         * `\Shopware_Controllers_Backend_ImportExport::prepareCustomerData()`
+* Removed unused controller endpoints `ajax_login` and `ajax_logout` in `themes/Frontend/Bare/frontend/index/index.tpl`
 
 ## 5.1.6
 * The interface `Enlight_Components_Cron_Adapter` in `engine/Library/Enlight/Components/Cron/Adapter.php` got a new method `getJobByAction`. For default implementation see `engine/Library/Enlight/Components/Cron/Adapter/DBAL.php`.
