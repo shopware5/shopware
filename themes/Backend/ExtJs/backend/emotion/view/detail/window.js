@@ -87,10 +87,6 @@ Ext.define('Shopware.apps.Emotion.view.detail.Window', {
         if (me.emotion) {
             me.loadEmotion(me.emotion);
         }
-
-        me.on('resize', function() {
-            me.designer.grid.refresh();
-        });
     },
 
     /**
@@ -180,10 +176,12 @@ Ext.define('Shopware.apps.Emotion.view.detail.Window', {
         });
 
         me.mainForm = Ext.create('Ext.form.Panel', {
-            items: [me.sidebar],
+            items: [ me.sidebar ],
             border: false,
             layout: { type: 'hbox', align: 'stretch' },
             width: 450,
+            collapsible: window.innerWidth < 1920,
+            collapseDirection: 'left',
             plugins: [{
                 ptype: 'translation',
                 pluginId: 'translation',

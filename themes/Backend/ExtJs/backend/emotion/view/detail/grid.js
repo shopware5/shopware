@@ -437,6 +437,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Grid', {
 
         if (me.hiddenElements.getEl().getHTML().length <= 0) {
             me.hiddenElements.hide();
+            me.designer.activeHiddenElements = false;
         }
     },
 
@@ -504,6 +505,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Grid', {
 
                 if (!Ext.isDefined(gridElement)) {
                     gridElement = me.createElementFromRecord(dragRecord);
+                    me.designer.counterChange = Ext.Array.difference([ 'xs', 's', 'm', 'l', 'xl' ], me.stateConnections);
                 }
 
                 gridElement.removeCls('is--dragging');
@@ -716,6 +718,8 @@ Ext.define('Shopware.apps.Emotion.view.detail.Grid', {
     refreshToolbar: function() {
         var me = this;
 
+        me.viewportStore.suspendEvents();
+
         // Reset the current counters.
         me.viewportStore.each(function(viewport) {
             viewport.set('hiddenCounter', 0);
@@ -730,7 +734,10 @@ Ext.define('Shopware.apps.Emotion.view.detail.Grid', {
             });
         });
 
+        me.viewportStore.resumeEvents();
+
         me.toolbar.refresh();
+        me.designer.counterChange = [];
     },
 
     /**

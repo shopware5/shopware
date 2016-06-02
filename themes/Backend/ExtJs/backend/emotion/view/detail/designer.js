@@ -42,7 +42,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
         border: '0 none'
     },
 
-    overflowX: 'hidden',
+    overflowX: 'auto',
     overflowY: 'auto',
 
     cls: Ext.baseCSSPrefix + 'emotion-designer-container',
@@ -75,6 +75,9 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
         var me = this;
 
         me.addEvents('openSettingsWindow');
+
+        me.activeHiddenElements = false;
+        me.counterChange = [];
 
         me.toolbar = me.createToolbar();
         me.hiddenElements = me.createHiddenElementsContainer();
@@ -116,7 +119,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
 
         me.toolbar.getEl().on({
             'click': {
-                delegate: '.x-viewport-hidden-elements-counter.is--active',
+                delegate: '.x-viewport-hidden-elements-counter.is--master',
                 fn: me.onHiddenCounterClick,
                 scope: me
             }
@@ -173,7 +176,9 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
         var me = this;
 
         if (!me.activePreview) {
-            me.hiddenElements.setVisible(!me.hiddenElements.isVisible());
+            me.activeHiddenElements = !me.hiddenElements.isVisible();
+            me.hiddenElements.setVisible(me.activeHiddenElements);
+            me.grid.refresh();
         }
     },
 
@@ -300,7 +305,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
             dock: 'top',
             overflowX: 'auto',
             overflowY: 'hidden',
-            hidden: true
+            hidden: !me.activeHiddenElements
         });
     },
 
@@ -314,6 +319,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
             tpl: me.getToolbarTpl(),
             cls: 'x-designer-toolbar',
             itemSelector: '.x-designer-viewport',
+            blockRefresh: true,
             dock: 'top'
         });
     },
@@ -340,7 +346,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
                             '<div class="x-designer-viewport">',
                                 '<div class="{[this.getViewportBtnCls(values.alias)]}">',
                                     '<div class="{[this.getLabelCls(values.alias)]}" data-viewport="{alias}">{label}</div>',
-                                    '<div class="{[this.getCounterCls(values.alias, values.hiddenCounter)]}" data-viewport="{alias}" data-qtip="{[this.getHiddenElTooltip()]}" data-qalign="b-t">',
+                                    '<div class="{[this.getCounterCls(values.alias, values.hiddenCounter, values)]}" data-viewport="{alias}" data-qtip="{[this.getHiddenElTooltip()]}" data-qalign="b-t">',
                                         '<span class="counter--value">{hiddenCounter}</span>',
                                     '</div>',
                                     '<div class="{[this.getConnectCls(values.alias)]}" data-viewport="{alias}" data-qtip="{[this.getConnectTooltip(values.alias)]}" data-qalign="b-t"></div>',
@@ -395,11 +401,19 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
                     return 'x-designer-viewport-label';
                 },
 
-                getCounterCls: function(alias, counter) {
+                getCounterCls: function(alias, counter, values) {
                     var cls = 'x-viewport-hidden-elements-counter counter-' + alias;
 
-                    if (alias === me.grid.state && counter > 0) {
-                        cls += ' is--active';
+                    if (alias === me.grid.state) {
+                        cls += ' is--master';
+
+                        if (me.activeHiddenElements) {
+                            cls += ' is--active';
+                        }
+                    }
+
+                    if (me.counterChange.indexOf(alias) !== -1) {
+                        cls += ' is--counter-change';
                     }
 
                     if (me.activePreview) {

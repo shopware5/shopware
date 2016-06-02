@@ -121,7 +121,8 @@ Ext.define('Shopware.apps.Emotion.view.detail.Layout', {
     },
 
     createLayoutFieldset: function() {
-        var me = this;
+        var me = this,
+            layoutLabelWidth = 80;
 
         me.tplComboBox = Ext.create('Ext.form.field.ComboBox', {
             fieldLabel: me.snippets.fields.templateLabel,
@@ -131,8 +132,18 @@ Ext.define('Shopware.apps.Emotion.view.detail.Layout', {
             queryMode: 'remote',
             store: Ext.create('Shopware.apps.Emotion.store.Templates').load(),
             emptyText: me.snippets.fields.templateEmptyText,
-            labelWidth: me.defaults.labelWidth
+            labelWidth: layoutLabelWidth
         });
+
+        me.modeSelectionTpl = new Ext.XTemplate(
+            '{literal}<tpl for=".">',
+                '<div class="x-layout-mode-selection-item x-boundlist-item">',
+                    '<div class="x-selection-item-icon icon--{value}"></div>',
+                    '<div class="x-selection-item-label">{display}</div>',
+                    '<div class="x-selection-item-description">{supportText}</div>',
+                '</div>',
+            '</tpl>{/literal}'
+        );
 
         me.responsiveModeField = Ext.create('Ext.form.field.ComboBox', {
             name: 'mode',
@@ -144,14 +155,8 @@ Ext.define('Shopware.apps.Emotion.view.detail.Layout', {
             allowBlank: false,
             editable: false,
             forceSelection: true,
-            labelWidth: me.defaults.labelWidth,
-            tpl: Ext.create('Ext.XTemplate',
-                '{literal}<tpl for=".">',
-                    '<div class="x-boundlist-item">',
-                        '<h1>{display}</h1>{supportText}',
-                    '</div>',
-                '</tpl>{/literal}'
-            ),
+            labelWidth: layoutLabelWidth,
+            tpl: me.modeSelectionTpl,
             listeners: {
                 'change': {
                     scope: me,
@@ -167,7 +172,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Layout', {
             uncheckedValue: 0,
             hideEmptyLabel: false,
             margin: '10 0 5 0',
-            labelWidth: me.defaults.labelWidth
+            labelWidth: layoutLabelWidth
         });
 
         return Ext.create('Ext.form.FieldSet', {
@@ -195,8 +200,10 @@ Ext.define('Shopware.apps.Emotion.view.detail.Layout', {
             listeners: {
                 scope: me,
                 buffer: me.defaults.eventBuffer,
-                change: function(field, value) {
-                    me.fireEvent('changeColumns', me.emotion, value, field);
+                change: function(field, value, oldValue) {
+                    if (Ext.isDefined(oldValue)) {
+                        me.fireEvent('changeColumns', me.emotion, value, field);
+                    }
                 }
             }
         });
@@ -211,8 +218,10 @@ Ext.define('Shopware.apps.Emotion.view.detail.Layout', {
             listeners: {
                 scope: me,
                 buffer: me.defaults.eventBuffer,
-                change: function(field, value) {
-                    me.fireEvent('updateGridByField', me.emotion, value, field);
+                change: function(field, value, oldValue) {
+                    if (Ext.isDefined(oldValue)) {
+                        me.fireEvent('updateGridByField', me.emotion, value, field);
+                    }
                 }
             }
         });
@@ -227,8 +236,10 @@ Ext.define('Shopware.apps.Emotion.view.detail.Layout', {
             listeners: {
                 scope: me,
                 buffer: me.defaults.eventBuffer,
-                change: function(field, value) {
-                    me.fireEvent('updateGridByField', me.emotion, value, field);
+                change: function(field, value, oldValue) {
+                    if (Ext.isDefined(oldValue)) {
+                        me.fireEvent('updateGridByField', me.emotion, value, field);
+                    }
                 }
             }
         });
