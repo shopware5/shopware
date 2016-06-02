@@ -82,7 +82,7 @@ class Order extends ModelEntity
     /**
      * Contains the alphanumeric order number. If the
      * @var string $number
-     * @ORM\Column(name="ordernumber", type="string", length=30, nullable=true)
+     * @ORM\Column(name="ordernumber", type="string", length=255, nullable=true)
      */
     private $number;
 

@@ -94,14 +94,14 @@ class Detail extends ModelEntity
     /**
      * @var string $number
      *
-     * @ORM\Column(name="ordernumber", type="string", length=40, nullable=false)
+     * @ORM\Column(name="ordernumber", type="string", length=255, nullable=false)
      */
     private $number;
 
     /**
      * @var string $articleNumber
      *
-     * @ORM\Column(name="articleordernumber", type="string", length=30, nullable=false)
+     * @ORM\Column(name="articleordernumber", type="string", length=255, nullable=false)
      */
     private $articleNumber;
 
