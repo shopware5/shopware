@@ -348,6 +348,15 @@ In this document you will find a changelog of the important changes related to t
         * `frontend_widgets_slide_articles_item`
     * Removed template files
         * `themes/Frontend/Bare/widgets/emotion/slide_articles.tpl`
+* Removed customer options in import export module which results in the removal of
+    * Properties
+        * `\Shopware_Controllers_Backend_ImportExport::$customerRepository`
+    * Methods
+        * `\Shopware_Controllers_Backend_ImportExport::getCustomerRepository()`
+        * `\Shopware_Controllers_Backend_ImportExport::exportCustomersAction()`
+        * `\Shopware_Controllers_Backend_ImportExport::importCustomers()`
+        * `\Shopware_Controllers_Backend_ImportExport::saveCustomer()`
+        * `\Shopware_Controllers_Backend_ImportExport::prepareCustomerData()`
 
 ## 5.1.6
 * The interface `Enlight_Components_Cron_Adapter` in `engine/Library/Enlight/Components/Cron/Adapter.php` got a new method `getJobByAction`. For default implementation see `engine/Library/Enlight/Components/Cron/Adapter/DBAL.php`.
