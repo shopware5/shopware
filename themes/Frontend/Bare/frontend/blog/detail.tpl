@@ -136,15 +136,7 @@
                     {* Listing *}
                     {block name='frontend_blog_detail_crossselling_listing'}
                         <div class="blog--crossselling panel--body is--wide block">
-                            <div class="crossselling--content panel--body product-slider is--rounded" data-product-slider="true">
-                                <div class="product-slider--container">
-                                    {foreach $sArticle.sRelatedArticles as $article}
-                                        <div class="product-slider--item">
-                                            {include file="frontend/listing/box_article.tpl" sArticle=$article productBoxLayout="slider"}
-                                        </div>
-                                    {/foreach}
-                                </div>
-                            </div>
+                            {include file="frontend/_includes/product_slider.tpl" articles=$sArticle.sRelatedArticles productSliderCls="crossselling--content panel--body is--rounded"}
                         </div>
                     {/block}
                 </div>

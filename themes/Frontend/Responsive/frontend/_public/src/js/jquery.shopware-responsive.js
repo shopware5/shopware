@@ -59,9 +59,6 @@
         // Default product slider
         .addPlugin('*[data-product-slider="true"]', 'swProductSlider')
 
-        // Product slider for premium items
-        .addPlugin('.premium-product--content', 'swProductSlider')
-
         // Detail page tab menus
         .addPlugin('.product--rating-link, .link--publish-comment', 'swScrollAnimate', {
             scrollTarget: '.tab-menu--product'
@@ -77,7 +74,6 @@
             'contentSiblingSelector': '.tab--content'
         }, ['xs', 's'])
         .addPlugin('body', 'swAjaxProductNavigation')
-        .addPlugin('*[data-topseller-slider="true"]', 'swProductSlider')
         .addPlugin('*[data-collapse-panel="true"]', 'swCollapsePanel')
         .addPlugin('*[data-range-slider="true"]', 'swRangeSlider')
         .addPlugin('*[data-auto-submit="true"]', 'swAutoSubmit')

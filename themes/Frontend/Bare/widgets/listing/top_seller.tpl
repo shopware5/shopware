@@ -11,21 +11,7 @@
                     {/block}
 
                     {block name="widgets_listing_top_seller_slider"}
-                        <div class="topseller--content panel--body product-slider" data-topseller-slider="true">
-                            {block name="widgets_listing_top_seller_slider_container"}
-                                <div class="product-slider--container">
-                                    {block name="widgets_listing_top_seller_slider_container_inner"}
-                                        {foreach $sCharts as $article}
-                                            {block name="widgets_listing_top_seller_slider_container_include"}
-                                                <div class="product-slider--item">
-                                                    {include file="frontend/listing/box_article.tpl" sArticle=$article productBoxLayout="slider"}
-                                                </div>
-                                            {/block}
-                                        {/foreach}
-                                    {/block}
-                                </div>
-                            {/block}
-                        </div>
+                        {include file="frontend/_includes/product_slider.tpl" articles=$sCharts productSliderCls="topseller--content panel--body"}
                     {/block}
                 {/block}
             </div>

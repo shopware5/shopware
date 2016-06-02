@@ -12,7 +12,7 @@
 
             {* Product slider *}
             {block name='frontend_checkout_premium_slider'}
-                <div class="premium-product--content product-slider" data-itemMinWidth="280">
+                <div class="premium-product--content product-slider" data-product-slider="true" data-itemMinWidth="280">
 
                     {* Product slider container *}
                     {block name='frontend_checkout_premium_slider_container'}
