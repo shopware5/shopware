@@ -37,7 +37,8 @@ Ext.define('Shopware.notification.SubscriptionWarning', {
         expired_license: 'Expired license(s)',
         expiring_license_warning: 'License(s) of [0]x plugin(s) are soon expiring.<br /><br /><b>Soon expired license(s):</b><br />[1]',
         expired_license_warning: 'License(s) of [0]x plugin(s) are expired.<br /><br /><b>Expired license(s):</b><br/>[1]',
-        confirm_plugin_deactivation: 'Do you want to open the Plugin Manager now?'
+        unknown_license: 'Unlicensed plugins',
+        confirm_open_pluginmanager: 'You have installed unlicensed plugins. Do you want to open the Plugin Manager now to check your plugins?'
     },
 
     /**
@@ -92,15 +93,13 @@ Ext.define('Shopware.notification.SubscriptionWarning', {
                     isSubscriptionExpired = subscriptionExpirationDate < today,
                     daysDiffSubscription = Math.round(Math.abs((subscriptionExpirationDate.getTime() - today.getTime())/(1000 * 60 * 60 * 24)));
 
-                if (!isSubscriptionExpired && daysDiffSubscription > 14) {
-                    continue;
+                if (isSubscriptionExpired || daysDiffSubscription < 14) {
+                    preparedData.expiredPluginSubscriptions.push({
+                        label: plugin.label,
+                        expired: isSubscriptionExpired,
+                        daysLeft: isSubscriptionExpired ? 0 : daysDiffSubscription
+                    });
                 }
-
-                preparedData.expiredPluginSubscriptions.push({
-                    label: plugin.label,
-                    expired: isSubscriptionExpired,
-                    daysLeft: isSubscriptionExpired ? 0 : daysDiffSubscription
-                });
             }
             if (plugin.unknownLicense) {
                 preparedData.unknownLicensePlugins.push({
@@ -242,18 +241,12 @@ Ext.define('Shopware.notification.SubscriptionWarning', {
         Shopware.Notification.createStickyGrowlMessage({
             title: me.snippets.expired_license,
             text: Ext.String.format(me.snippets.expired_license_warning, plugins.length, pluginNames),
-            width: 440,
-            onCloseButton: function() {
-                Ext.Msg.confirm(
-                    me.snippets.expired_license,
-                    me.snippets.confirm_plugin_deactivation,
-                    function(btn) {
-                        if (btn == 'yes') {
-                            me.deactivateExpiredPlugins(plugins);
-                        }
-                    }
-                );
-            }
+            width: 440
+        });
+
+        Shopware.app.Application.addSubApplication({
+            name: 'Shopware.apps.PluginManager',
+            action: 'ExpiredPlugins'
         });
     },
 
@@ -276,13 +269,11 @@ Ext.define('Shopware.notification.SubscriptionWarning', {
             text: Ext.String.format(me.snippets.no_license, plugins.length, pluginNames),
             width: 440,
             onCloseButton: function() {
-                Ext.Msg.confirm(
-                    me.snippets.expired_license,
-                    me.snippets.confirm_plugin_deactivation,
-                    function(btn) {
-                        if (btn == 'yes') {
-                            me.deactivateExpiredPlugins(plugins);
-                        }
+                Ext.Msg.alert(
+                    me.snippets.unknown_license,
+                    me.snippets.confirm_open_pluginmanager,
+                    function() {
+                        me.openPluginManager(plugins);
                     }
                 );
             }
@@ -361,7 +352,7 @@ Ext.define('Shopware.notification.SubscriptionWarning', {
         return 0;
     },
 
-    deactivateExpiredPlugins: function() {
+    openPluginManager: function() {
         var me = this;
 
         Shopware.app.Application.addSubApplication({

@@ -111,7 +111,7 @@ class PluginLicenceService
     }
 
     /**
-     * function to get expired plugins
+     * function to get expired and soon expiring plugins
      * @return PluginInformationStruct[]
      */
     public function getExpiringLicenses()
@@ -122,7 +122,45 @@ class PluginLicenceService
         if (empty($licenses)) {
             return $expiringPluginLicenses;
         }
+        $expirations = $this->getExpirations($licenses);
+        foreach ($expirations as $expiration => $license) {
+            $expirationDate = new \DateTime($expiration);
+            if ($this->isExpired($expirationDate) || $this->isSoonExpiring($expirationDate)) {
+                $expiringPluginLicenses[] = $this->createPluginInformationStruct($license);
+            }
+        }
+        return $expiringPluginLicenses;
+    }
 
+    /**
+     * function to get only expired plugins
+     * @return PluginInformationStruct[]
+     */
+    public function getExpiredLicenses()
+    {
+        $expiredPluginLicenses = [];
+        $licenses = $this->getLicences();
+
+        if (empty($licenses)) {
+            return $expiredPluginLicenses;
+        }
+        $expirations = $this->getExpirations($licenses);
+        foreach ($expirations as $expiration => $license) {
+            $expirationDate = new \DateTime($expiration);
+            if ($this->isExpired($expirationDate)) {
+                $expiredPluginLicenses[] = $this->createPluginInformationStruct($license);
+            }
+        }
+        return $expiredPluginLicenses;
+    }
+
+    /**
+     * @param array $licenses
+     * @return array $expirations
+     */
+    private function getExpirations(array $licenses)
+    {
+        $expirations = [];
         foreach ($licenses as $license) {
             if (!empty($license['license'])) {
                 $info = $this->unpackService->readLicenseInfo(($license['license']));
@@ -136,12 +174,10 @@ class PluginLicenceService
                 continue;
             }
 
-            $expirationDate = new \DateTime($license['expiration']);
-            if ($this->isSoonExpiring($expirationDate)) {
-                $expiringPluginLicenses[] = $this->createPluginInformationStruct($license);
-            }
+            $expirations[$license['expiration']] = $license;
         }
-        return $expiringPluginLicenses;
+
+        return $expirations;
     }
 
     /**
@@ -150,7 +186,7 @@ class PluginLicenceService
      */
     public function updateLocalLicenseInformation(array $pluginInformation, $domain)
     {
-        $this->cleanupUnknownLicenseInformation();
+        $this->cleanupLocalLicenseInformation();
         foreach ($pluginInformation as $plugin) {
             if ($plugin->getLicenseExpiration() == null && !$plugin->isUnknownLicense()) {
                 continue;
@@ -167,9 +203,9 @@ class PluginLicenceService
     /**
      * @throws \Doctrine\DBAL\Exception\InvalidArgumentException
      */
-    private function cleanupUnknownLicenseInformation()
+    private function cleanupLocalLicenseInformation()
     {
-        $this->connection->delete('s_core_licenses', ['type' => self::TYPE_UNLICENSED]);
+        $this->connection->delete('s_core_licenses', ['license' => '']);
     }
 
     /**
@@ -233,7 +269,7 @@ class PluginLicenceService
     }
 
     /**
-     * function to get all plugin licenses
+     * function to get all plugin licenses of active plugins
      * @return array
      */
     private function getLicences()
@@ -244,10 +280,22 @@ class PluginLicenceService
 
         $builder->select(['license.module, license.label, license.expiration, license.license'])
             ->from('s_core_licenses', 'license')
-            ->where('license.active = 1');
+            ->leftJoin('license', 's_core_plugins', 'plugin', 'plugin.name = license.module')
+            ->where('plugin.active = 1');
 
         $builderExecute = $builder->execute();
         return $builderExecute->fetchAll();
+    }
+
+    /**
+     * @param \DateTime $expirationDate
+     * @return boolean
+     */
+    private function isExpired(\DateTime $expirationDate)
+    {
+        $diff = $expirationDate->diff(new \DateTime('now'));
+
+        return $diff->invert == 0;
     }
 
     /**

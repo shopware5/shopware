@@ -592,7 +592,8 @@ Ext.onReady(function() {
             expired_license: 'Abgelaufene Lizenz(en)',
             expiring_license_warning: 'Es laufen [0]x Plugin Lizenz(en) aus.<br /><br /><b>Bald abgelaufene Lizenz(en):</b><br />[1]',
             expired_license_warning: 'Es sind [0] Plugin Lizenz(en) abgelaufen.<br /><br /><b>Abgelaufene Lizenz(en):</b><br/>[1]',
-            confirm_plugin_deactivation: 'Wollen Sie jetzt den Plugin Manager öffnen?'
+            unknown_license: 'Nicht lizensierte Plugins',
+            confirm_open_pluginmanager: 'Sie haben nicht lizensierte Plugins installiert. Bitte erwerben Sie eine gültige Lizenz oder deinstallieren und entfernen Sie die Plugins über den Plugin Manager.'
         }
     });
 });

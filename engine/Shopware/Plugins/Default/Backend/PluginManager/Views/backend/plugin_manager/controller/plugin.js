@@ -320,16 +320,18 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
 
                     store.load({
                         callback: function(records) {
-                            var basket = records[0];
+                            if (records) {
+                                var basket = records[0];
 
-                            me.hideLoadingMask();
+                                me.hideLoadingMask();
 
-                            me.checkoutWindow = me.getView('account.Checkout').create({
-                                basket: basket,
-                                callback: callback
-                            });
+                                me.checkoutWindow = me.getView('account.Checkout').create({
+                                    basket: basket,
+                                    callback: callback
+                                });
 
-                            me.checkoutWindow.show();
+                                me.checkoutWindow.show();
+                            }
                         }
                     });
 
