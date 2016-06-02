@@ -373,7 +373,7 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
     },
 
     onUpdateEmotion: function(editor, context) {
-        var me = this,
+        var me = this, message,
             record = context.record;
 
         Ext.Ajax.request({
@@ -386,12 +386,12 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
             callback: function(operation, success, response) {
                 var result = Ext.JSON.decode(response.responseText);
                 if (success && result.success) {
-                    var message = Ext.String.format(me.snippets.saveSuccessMessage, record.get('name'));
+                    message = Ext.String.format(me.snippets.saveSuccessMessage, record.get('name'));
                     Shopware.Notification.createGrowlMessage(me.snippets.successTitle, message, me.snippets.growlMessage);
 
                     me.getListing().getStore().load();
                 } else {
-                    var message = '';
+                    message = '';
                     if (Ext.isDefined(result.emotion) && result.emotion == false) {
                         message = me.snippets.emotionNotFoundMsg
                     }

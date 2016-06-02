@@ -150,7 +150,10 @@ Ext.define('Shopware.apps.Emotion.view.detail.elements.Base', {
      * @returns { string }
      */
     createPreview: function() {
-        return '';
+        var me = this,
+            label = Ext.String.format('<div class="x-emotion-preview-title">[0]</div>', me.getLabel());
+
+        return Ext.String.format('<div class="x-emotion-element-preview-content">[0]</div>', label);
     },
 
     /**
@@ -406,6 +409,8 @@ Ext.define('Shopware.apps.Emotion.view.detail.elements.Base', {
                         endCol: 1,
                         visible: false
                     }, me.gridView.stateConnections);
+
+                    me.gridView.designer.counterChange = me.gridView.stateConnections;
                     me.gridView.refresh();
                 }
             }
