@@ -432,6 +432,7 @@ UPDATE s_crontab SET `name` = 'Clear HTTP cache' WHERE id = 12;
 -- s_core_units --
 UPDATE s_core_units SET `description` = 'Liter' WHERE id = 1;
 UPDATE s_core_units SET `description` = 'Gram' WHERE id = 2;
+UPDATE s_core_units SET `description` = 'Linear Meter(s)', `unit` = 'lm' WHERE id = 5;
 UPDATE s_core_units SET `description` = 'Kilogram' WHERE id = 6;
 UPDATE s_core_units SET `description` = 'Package(s)', `unit` = 'Package(s)' WHERE id = 8;
 UPDATE s_core_units SET `description` = 'Unit', `unit` = 'unit' WHERE id = 9;
