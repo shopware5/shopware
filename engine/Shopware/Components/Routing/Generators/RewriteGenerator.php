@@ -24,13 +24,22 @@ class RewriteGenerator implements GeneratorListInterface
     private $queryAliasMapper;
 
     /**
+     * @var \Enlight_Event_EventManager $eventManager
+     */private $eventManager;
+
+    /**
      * @param Connection $connection
      * @param QueryAliasMapper $queryAliasMapper
+     * @param \Enlight_Event_EventManager $eventManager
      */
-    public function __construct(Connection $connection, QueryAliasMapper $queryAliasMapper)
-    {
+    public function __construct(
+        Connection $connection,
+        QueryAliasMapper $queryAliasMapper,
+        \Enlight_Event_EventManager $eventManager
+    ) {
         $this->connection = $connection;
         $this->queryAliasMapper = $queryAliasMapper;
+        $this->eventManager = $eventManager;
     }
 
     /**
@@ -241,7 +250,14 @@ class RewriteGenerator implements GeneratorListInterface
                 }
                 break;
         }
-        return $orgQuery;
+
+        return $this->eventManager->filter(
+            'Shopware_Components_RewriteGenerator_FilterQuery',
+            $orgQuery,
+            [
+                'query' => $query
+            ]
+        );
     }
 
     /**
