@@ -204,6 +204,7 @@ class CrudService
             $item->setIdentifier($this->tableMapping->isIdentifierColumn($table, $column->getName()));
             $item->setCore($this->tableMapping->isCoreColumn($table, $column->getName()));
             $item->setColumnType($this->typeMapping->dbalToUnified($column->getType()));
+            $item->setElasticSearchType($this->typeMapping->unifiedToElasticSearch($item->getColumnType()));
 
             if (isset($configuration[$name])) {
                 $config = $configuration[$name];

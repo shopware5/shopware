@@ -323,6 +323,12 @@ In this document you will find a changelog of the important changes related to t
 * Changed structure of `billing` and `shipping` to `\Shopware\Models\Customer\Address` in `\Shopware\Components\Api\Resource\Customer`
 * Replaced `buttons` with a toolbar in `dockedItems` in `Shopware.apps.Order.view.detail.Detail`
 * Removed method `createButtons()` in `Shopware.apps.Order.view.detail.Detail`
+* Fixed \Shopware\Bundle\SearchBundleES\ConditionHandler\VoteAverageConditionHandler vote average value
+* Fixed \Shopware\Bundle\SearchBundleES\SortingHandler\ReleaseDateSortingHandler field usage
+* Fixed \Shopware\Bundle\SearchBundleES\ConditionHandler\ProductAttributeConditionHandler null value handling, not null handling and string operations.
+* Added attributes.core mapping in \Shopware\Bundle\ESIndexingBundle\Product\ProductMapping
+* Fixed attribute assignment in \Shopware\Bundle\SearchBundleDBAL\ProductNumberSearch
+* Added all source values as attributes of each product in \Shopware\Bundle\SearchBundleES\ProductNumberSearch
 * Added unified product slider template
     * Created template files
         * `themes/Frontend/Bare/frontend/_includes/product_slider.tpl`
@@ -358,7 +364,7 @@ In this document you will find a changelog of the important changes related to t
         * `\Shopware_Controllers_Backend_ImportExport::saveCustomer()`
         * `\Shopware_Controllers_Backend_ImportExport::prepareCustomerData()`
 * Removed unused controller endpoints `ajax_login` and `ajax_logout` in `themes/Frontend/Bare/frontend/index/index.tpl`
-
+* \Shopware\Bundle\SearchBundleES\ConditionHandler\ProductAttributeConditionHandler requires now the \Shopware\Bundle\AttributeBundle\Service\CrudService as constructor dependency
 ## 5.1.6
 * The interface `Enlight_Components_Cron_Adapter` in `engine/Library/Enlight/Components/Cron/Adapter.php` got a new method `getJobByAction`. For default implementation see `engine/Library/Enlight/Components/Cron/Adapter/DBAL.php`.
 

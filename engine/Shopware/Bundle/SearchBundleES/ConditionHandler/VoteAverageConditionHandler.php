@@ -53,7 +53,7 @@ class VoteAverageConditionHandler implements HandlerInterface
     ) {
         /** @var VoteAverageCondition $criteriaPart */
         $range = new RangeQuery('voteAverage.average', [
-            'gte' => $criteriaPart->getAverage()
+            'gte' => $criteriaPart->getAverage() * 2
         ]);
 
         if ($criteria->hasBaseCondition($criteriaPart->getName())) {

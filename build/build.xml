@@ -218,8 +218,9 @@
         </exec>
     </target>
 
-    <target name="unit-continuous">
+    <target name="unit-continuous-es">
         <exec executable="${script.phpunit}" failonerror="true" dir="${test.dir.shopware}">
+            <arg value="--exclude-group=skipElasticSearch" />
             <arg value="--log-junit=${log.dir}/junit.xml"/>
         </exec>
     </target>

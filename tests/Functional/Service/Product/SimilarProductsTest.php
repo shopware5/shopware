@@ -5,6 +5,8 @@ namespace Shopware\Tests\Service\Product;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\ProductContext;
 use Shopware\Models\Category\Category;
+use Shopware\Tests\Service\Converter;
+use Shopware\Tests\Service\Helper;
 use Shopware\Tests\Service\TestCase;
 
 class SimilarProductsTest extends TestCase
@@ -138,6 +140,12 @@ class SimilarProductsTest extends TestCase
             $similarNumber = 'SimilarProduct-' . $i;
             $this->getProduct($similarNumber, $context, $category);
         }
+
+        $helper = new Helper();
+        $converter = new Converter();
+        $helper->refreshSearchIndexes(
+            $converter->convertShop($helper->getShop(1))
+        );
 
         $product = Shopware()->Container()->get('shopware_storefront.list_product_service')
             ->get($number, $context);

@@ -24,7 +24,7 @@ class PriceConditionTest extends TestCase
     ) {
         $product = parent::getProduct($number, $context, $category);
 
-        $product['mainDetail']['prices'] = array();
+        $product['mainDetail']['prices'] = [];
         foreach ($prices as $key => $price) {
             if ($key === $context->getCurrentCustomerGroup()->getKey()) {
                 $customerGroup = $context->getCurrentCustomerGroup()->getKey();
@@ -45,55 +45,67 @@ class PriceConditionTest extends TestCase
 
     public function testSimplePriceRange()
     {
+        $context = $this->getContext();
+        $context->setFallbackCustomerGroup($this->getEkCustomerGroup());
+
         $condition = new PriceCondition(10, 20);
 
         $this->search(
-            array(
-                'first'  => array('PHP' => 21),
-                'second' => array('PHP' => 10),
-                'third'  => array('PHP' => 15),
-                'fourth' => array('PHP' => 20),
-            ),
-            array('second', 'third', 'fourth'),
+            [
+                'first'  => ['EK' => 21],
+                'second' => ['EK' => 10],
+                'third'  => ['EK' => 15],
+                'fourth' => ['EK' => 20],
+            ],
+            ['second', 'third', 'fourth'],
             null,
-            array($condition)
+            [$condition],
+            [],
+            [],
+            $context
         );
     }
 
     public function testDecimalPriceRange()
     {
+        $context = $this->getContext();
+        $context->setFallbackCustomerGroup($this->getEkCustomerGroup());
         $condition = new PriceCondition(10, 20);
 
         $this->search(
             array(
-                'first'  => array('PHP' => 9.99),
-                'second' => array('PHP' => 10.01),
-                'third'  => array('PHP' => 19.98)
+                'first'  => array('EK' => 9.99),
+                'second' => array('EK' => 10.01),
+                'third'  => array('EK' => 19.98)
             ),
             array('second', 'third'),
             null,
-            array($condition)
+            array($condition),
+            [],
+            [],
+            $context
         );
     }
-
 
     public function testCustomerGroupPrices()
     {
         $context = $this->getContext();
 
-        $customerGroup = $this->helper->createCustomerGroup(array('key' => 'CUST'));
+        $customerGroup = $this->helper->createCustomerGroup(['key' => 'CUST']);
         $context->setCurrentCustomerGroup(
             $this->converter->convertCustomerGroup($customerGroup)
         );
+
+        $context->setFallbackCustomerGroup($this->getEkCustomerGroup());
 
         $condition = new PriceCondition(10, 20);
 
         $this->search(
             array(
-                'first'  => array('PHP' => 21),
-                'second' => array('PHP' => 15),
-                'third'  => array('PHP' => 15, 'CUST' => 5),
-                'fourth' => array('PHP' => 3,  'CUST' => 15),
+                'first'  => array('EK' => 21),
+                'second' => array('EK' => 15),
+                'third'  => array('EK' => 15, 'CUST' => 5),
+                'fourth' => array('EK' => 3,  'CUST' => 15),
             ),
             array('second', 'fourth'),
             null,
@@ -107,14 +119,17 @@ class PriceConditionTest extends TestCase
     public function testPriceConditionWithCurrencyFactor()
     {
         $context = $this->getContext();
-        $context->getCurrency()->setFactor(2.5);
-        $condition = new PriceCondition(25, 50);
+        $context->getCurrency()->setFactor(1.3625);
+        $context->getCurrency()->setId(2);
+
+        $condition = new PriceCondition(12, 29);
+        $context->setFallbackCustomerGroup($this->getEkCustomerGroup());
 
         $this->search(
             array(
-                'first'  => array('PHP' => 10),
-                'second' => array('PHP' => 20),
-                'third'  => array('PHP' => 30)
+                'first'  => array('EK' => 10),
+                'second' => array('EK' => 20),
+                'third'  => array('EK' => 30)
             ),
             array('first', 'second'),
             null,

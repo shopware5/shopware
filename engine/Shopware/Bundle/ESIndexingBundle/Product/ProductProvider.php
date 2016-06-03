@@ -36,6 +36,7 @@ use Shopware\Bundle\StoreFrontBundle\Service\PriceCalculationServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\VoteServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule;
 use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
@@ -332,7 +333,13 @@ class ProductProvider implements ProductProviderInterface
                 $customerGroup = $context->getCurrentCustomerGroup()->getKey();
                 $key = $customerGroup . '_' . $context->getCurrency()->getId();
 
-                $product->setCheapestPriceRule($rules[$customerGroup]);
+                $rule = $rules[$context->getFallbackCustomerGroup()->getKey()];
+                if (isset($rules[$customerGroup])) {
+                    $rule = $rules[$customerGroup];
+                }
+
+                /** @var PriceRule $rule */
+                $product->setCheapestPriceRule($rule);
                 $this->priceCalculationService->calculateProduct($product, $context);
 
                 if ($product->getCheapestPrice()) {

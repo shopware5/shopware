@@ -113,6 +113,7 @@ class ArticleTest extends AbstractMarketing
 
     /**
      * Test case for the frontend top seller selection
+     * @group skipElasticSearch
      */
     public function testTopSellerSelection()
     {

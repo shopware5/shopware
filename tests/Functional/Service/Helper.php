@@ -3,11 +3,14 @@
 namespace Shopware\Tests\Service;
 
 use Doctrine\DBAL\Connection;
+use Shopware\Bundle\ESIndexingBundle\Console\ProgressHelperInterface;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ConfiguratorGateway;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ProductConfigurationGateway;
 use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group;
+use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 use Shopware\Components\Api\Resource;
 use Shopware\Bundle\StoreFrontBundle;
+use Shopware\Kernel;
 use Shopware\Models;
 use Shopware\Models\Tax\Tax;
 
@@ -341,9 +344,11 @@ class Helper
 
         $article = $this->entityManager->find('Shopware\Models\Article\Article', $articleId);
 
-        $this->entityManager->remove($article);
-        $this->entityManager->flush();
-        $this->entityManager->clear();
+        if ($article) {
+            $this->entityManager->remove($article);
+            $this->entityManager->flush();
+            $this->entityManager->clear();
+        }
 
         $detailIds = $this->db->fetchCol(
             "SELECT id FROM s_articles_details WHERE articleID = ?",
@@ -1287,5 +1292,51 @@ class Helper
             'txtpackunit' => 'Dummy Translation',
             'metaTitle' => 'Dummy Translation'
         );
+    }
+
+    /**
+     * @return bool
+     */
+    public function isElasticSearchEnabled()
+    {
+        /** @var Kernel $kernel */
+        $kernel = Shopware()->Container()->get('kernel');
+
+        return ($kernel->isElasticSearchEnabled());
+    }
+
+    /**
+     * @param Shop $shop
+     */
+    public function refreshSearchIndexes(Shop $shop)
+    {
+        if (!$this->isElasticSearchEnabled()) {
+            return;
+        }
+
+        $factory = Shopware()->Container()->get('shopware_elastic_search.index_factory');
+        $index = $factory->createShopIndex($shop);
+
+        try {
+            $client = Shopware()->Container()->get('shopware_elastic_search.client');
+            $client->indices()->delete(['index' => $index->getName()]);
+        } catch (\Exception $e) {
+        }
+
+        $indexer = Shopware()->Container()->get('shopware_elastic_search.shop_indexer');
+        $indexer->index($shop, new ProgressHelper());
+    }
+}
+
+class ProgressHelper implements ProgressHelperInterface
+{
+    public function start($count, $label = '')
+    {
+    }
+    public function advance($step = 1)
+    {
+    }
+    public function finish()
+    {
     }
 }

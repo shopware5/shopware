@@ -4,7 +4,6 @@ namespace Shopware\Tests\Service\Search\Facet;
 
 use Shopware\Bundle\SearchBundle\Facet\PriceFacet;
 use Shopware\Bundle\SearchBundle\FacetResult\RangeFacetResult;
-use Shopware\Bundle\SearchBundle\FacetResult\RangeFacetResultInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ProductContext;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Service\TestCase;
@@ -85,10 +84,10 @@ class PriceFacetTest extends TestCase
         $this->assertEquals(120.00, $facet->getMax());
     }
 
-
     public function testFacetWithFallbackCustomerGroupPrices()
     {
         $context = $this->getTestContext(true, null);
+        $context->setFallbackCustomerGroup($this->getEkCustomerGroup());
         $fallback = $context->getFallbackCustomerGroup();
 
         $result = $this->search(
@@ -113,6 +112,9 @@ class PriceFacetTest extends TestCase
         $this->assertEquals(130.00, $facet->getMax());
     }
 
+    /**
+     * @group skipElasticSearch
+     */
     public function testFacetWithMixedCustomerGroupPrices()
     {
         $context = $this->getTestContext(true, null);
@@ -140,6 +142,9 @@ class PriceFacetTest extends TestCase
         $this->assertEquals(150.00, $facet->getMax());
     }
 
+    /**
+     * @group skipElasticSearch
+     */
     public function testFacetWithCurrencyFactor()
     {
         $context = $this->getTestContext(true, null);

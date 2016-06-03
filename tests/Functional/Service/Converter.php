@@ -100,6 +100,16 @@ class Converter
         $struct->setSecureHost($shop->getSecureHost());
         $struct->setSecurePath($struct->getSecurePath());
 
+        if ($shop->getMain()) {
+            $struct->setParentId($shop->getMain()->getId());
+        } else {
+            $struct->setParentId($struct->getId());
+        }
+
+        $struct->setLocale(
+            $this->convertLocale($shop->getLocale())
+        );
+
         if ($shop->getCategory()) {
             $struct->setCategory(
                 $this->convertCategory($shop->getCategory())
@@ -125,5 +135,23 @@ class Converter
         $customerGroup->setSurcharge($group->getMinimumOrderSurcharge());
 
         return $customerGroup;
+    }
+
+    /**
+     * @param Models\Shop\Locale $locale
+     * @return Struct\Locale
+     */
+    public function convertLocale($locale)
+    {
+        $struct = new Struct\Locale();
+        if (!$locale) {
+            return $locale;
+        }
+
+        $struct->setId($locale->getId());
+        $struct->setLocale($locale->getLocale());
+        $struct->setLanguage($locale->getLanguage());
+        $struct->setTerritory($locale->getTerritory());
+        return $struct;
     }
 }
