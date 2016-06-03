@@ -208,8 +208,10 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
             detailWindow = me.getDetailWindow(),
             formPanel = win.down('form'),
             form = formPanel.getForm(),
+            formFields = form.getFields(),
             data= [],
-            cssField;
+            cssField,
+            xtype, compField;
 
         if(!formPanel.getForm().isValid()) {
             Shopware.Notification.createGrowlMessage(
@@ -220,11 +222,14 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
             return false;
         }
 
-        compFields.each(function(compField) {
-            var formField = form.findField(compField.get('name'));
+        formFields.each(function(formField) {
+            xtype = formField.getXType();
+            compField = compFields.getById(formField.fieldId);
 
-            if (formField !== null) {
-                data.push(me.getFieldData(formField, compField, record));
+            if (compField) {
+                if (xtype !== 'radiofield' || (xtype === 'radiofield' && formField.checked)) {
+                    data.push(me.getFieldData(formField, compField, record));
+                }
             }
         });
 
@@ -239,7 +244,8 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
     },
 
     getFieldData: function(formField, compField, record) {
-        var itemData = record.get('data'),
+        var xtype = formField.getXType(),
+            itemData = record.get('data'),
             fieldName = formField.getName(),
             data = {
                 id: null,
@@ -271,6 +277,12 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
                 });
             }
 
+        } else if (xtype === 'radiofield') {
+            data['value'] = formField.inputValue;
+        } else if (xtype === 'timefield') {
+            data['value'] = formField.getSubmitValue();
+        } else if (xtype === 'datefield') {
+            data['value'] = Ext.Date.format(formField.getValue(), 'Y-m-d');
         } else {
             data['value'] = formField.getValue()
         }
