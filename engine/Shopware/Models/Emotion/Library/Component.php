@@ -434,7 +434,7 @@ class Component extends ModelEntity
      *     @type string $name               Required; Logical name of the component field
      *     @type string $fieldLabel         Optional; Ext JS form field label.
      *     @type string $allowBlank         Optional; Defines if the value can contains null
-     *     @type string $devaultValue       Optional; date string in format Y-m-d
+     *     @type string $defaultValue       Optional; date string in format Y-m-d
      * }
      *
      * @param array $options
