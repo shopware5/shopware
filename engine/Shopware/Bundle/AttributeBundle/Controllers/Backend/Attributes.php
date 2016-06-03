@@ -22,9 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Bundle\AttributeBundle\Service\ConfigurationStruct;
 use Shopware\Bundle\AttributeBundle\Service\CrudService;
-use Shopware\Bundle\AttributeBundle\Service\DataLoader;
 use Shopware\Bundle\AttributeBundle\Service\SchemaOperator;
 use Shopware\Bundle\AttributeBundle\Service\TableMapping;
 use Shopware\Bundle\AttributeBundle\Service\TypeMapping;
@@ -130,7 +128,7 @@ class Shopware_Controllers_Backend_Attributes extends Shopware_Controllers_Backe
         $service = $this->get('shopware_attribute.crud_service');
 
         try {
-            $service->create(
+            $service->update(
                 $this->Request()->getParam('tableName'),
                 $this->Request()->getParam('columnName'),
                 $this->Request()->getParam('columnType'),
@@ -173,9 +171,9 @@ class Shopware_Controllers_Backend_Attributes extends Shopware_Controllers_Backe
             $service->update(
                 $this->Request()->getParam('tableName'),
                 $this->Request()->getParam('originalName'),
-                $this->Request()->getParam('columnName'),
                 $this->Request()->getParam('columnType'),
-                $data
+                $data,
+                $this->Request()->getParam('columnName')
             );
         } catch (Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);

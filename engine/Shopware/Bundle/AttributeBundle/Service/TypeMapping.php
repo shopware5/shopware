@@ -124,6 +124,7 @@ class TypeMapping
         'float' => 'float',
         'guid' => 'text'
     ];
+
     /**
      * @var \Shopware_Components_Snippet_Manager
      */
