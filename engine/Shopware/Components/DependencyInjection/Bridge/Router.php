@@ -33,7 +33,7 @@ class Router
         ];
 
         $generators = [
-            new Generators\RewriteGenerator($container->get('dbal_connection'), $queryAliasMapper),
+            new Generators\RewriteGenerator($container->get('dbal_connection'), $queryAliasMapper, $eventManager),
             new Generators\DefaultGenerator($container->get('dispatcher'))
         ];
 
