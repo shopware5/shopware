@@ -117,7 +117,7 @@ class DownloadService
             $extractor = new LegacyPluginExtractor();
             $extractor->extract($archive, $destination);
         } elseif ($pluginZipDetector->isPlugin($archive)) {
-            $pluginDir = Shopware()->Container()->getParameter('kernel.root_dir').'/plugins';
+            $pluginDir = Shopware()->Container()->getParameter('kernel.root_dir').'/custom/plugins';
             $extractor = new PluginExtractor($pluginDir);
             $extractor->extract($archive);
         } else {
