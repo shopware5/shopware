@@ -11,7 +11,7 @@ EOD;
 $this->addSql($sql);
 $sql = <<<'EOD'
 INSERT INTO `s_core_menu` (`id`, `parent`, `name`, `onclick`, `class`, `position`, `active`, `pluginID`, `controller`, `shortcut`, `action`) VALUES 
-(NULL, @parent, 'Performance', NULL, 'sprite-bin-full settings--performance', '-5', '1', NULL, 'Performance', NULL, 'Index');
+(NULL, @parent, 'Performance', NULL, 'sprite-bin-full settings--performance', '2', '1', NULL, 'Performance', NULL, 'Index');
 EOD;
         $this->addSql($sql);
     }
