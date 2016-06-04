@@ -209,6 +209,20 @@ class Compiler
             throw new \RuntimeException("Could not write to " . $file->getPath());
         }
         $file->flock(LOCK_UN);   // release the lock
+
+        /**
+         * Fix SourceMap Path
+         */
+        if ($compilerConfig['sourceMapWriteTo']) {
+            $sourceMap = json_decode(file_get_contents($compilerConfig['sourceMapWriteTo']), true);
+            $rootDir = substr(Shopware()->Container()->getParameter('kernel.root_dir'), 1);
+
+            foreach ($sourceMap['sources'] as &$source) {
+                $source = str_replace($rootDir, '', $source);
+            }
+
+            file_put_contents($compilerConfig['sourceMapWriteTo'], json_encode($sourceMap));
+        }
     }
 
     /**
