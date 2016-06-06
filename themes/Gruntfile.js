@@ -59,7 +59,8 @@ module.exports = function (grunt) {
                     dumpLineNumbers: 'all',
                     relativeUrls: true,
                     sourceMap: true,
-                    sourceMapFileInline: true
+                    sourceMapFileInline: true,
+                    sourceMapRootpath: '../'
                 },
                 files: lessTargetFile
             }
