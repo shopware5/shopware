@@ -263,8 +263,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
 
             $values = Shopware()->Events()->filter('Shopware_Controllers_Backend_Config_Before_Save_Config_Element', $values, array(
                 'subject' => $this,
-                'element' => $element,
-                'shop'    => $shop
+                'element' => $element
             ));
 
             $element->setValues($values);
@@ -272,8 +271,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
 
             Shopware()->Events()->notify('Shopware_Controllers_Backend_Config_After_Save_Config_Element', array(
                 'subject' => $this,
-                'element' => $element,
-                'shop'    => $shop
+                'element' => $element
             ));
         }
 
@@ -606,11 +604,9 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                     }
                 }
 
-                if ($data['templateId'] === null && $data['mainId'] === null && $data['id'] === null) {
-                    $templateId = Shopware()->Db()->fetchOne(
-                        'SELECT template_id FROM s_core_shops WHERE `default` = 1 AND template_id IS NOT NULL'
-                    );
-                    $data['templateId'] = $templateId;
+                if (!empty($data['id']) && !empty($data['mainId'])) {
+                    $sql = 'UPDATE s_core_shops SET main_id = 1 WHERE main_id = ?';
+                    Shopware()->Db()->query($sql, [$data['id']]);
                 }
 
                 $fields = array(
@@ -627,8 +623,10 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                     if (isset($data[$field])) {
                         $mappingRepository = $this->getRepository($mapping);
                         $data[$mapping] = $mappingRepository->find($data[$field]);
-                        unset($data[$field]);
+                    } else {
+                        $data[$mapping] = null;
                     }
+                    unset($data[$field]);
                 }
                 break;
             case 'country':
