@@ -2134,9 +2134,9 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $result = $this->module->sNewsletterSubscription($validAddress);
         $this->assertEquals(
             array(
-                'code' => 2,
+                'code' => 3,
                 'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
-                        ->get('NewsletterFailureAlreadyRegistered', 'You already receive our newsletter')
+                        ->get('NewsletterSuccess', 'Thank you! We have entered your address.')
             ),
             $result
         );
@@ -2146,9 +2146,9 @@ class sAdminTest extends PHPUnit_Framework_TestCase
         $result = $this->module->sNewsletterSubscription($validAddress, false, $groupId);
         $this->assertEquals(
             array(
-                'code' => 2,
+                'code' => 3,
                 'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
-                        ->get('NewsletterFailureAlreadyRegistered', 'You already receive our newsletter')
+                        ->get('NewsletterSuccess', 'Thank you! We have entered your address.')
             ),
             $result
         );

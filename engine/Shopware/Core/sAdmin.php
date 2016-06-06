@@ -3511,14 +3511,7 @@ SQL;
                         ->get('UnknownError', 'Unknown error')
             );
             return $result;
-        } elseif (count($result)) {
-            $result = array(
-                "code" => 2,
-                "message" => $this->snippetManager->getNamespace('frontend/account/internalMessages')
-                        ->get('NewsletterFailureAlreadyRegistered', 'You already receive our newsletter')
-            );
-            return $result;
-        } else {
+        } elseif (count($result) === 0) {
             $customer = $this->db->fetchOne(
                 'SELECT id FROM s_user WHERE email = ? LIMIT 1',
                 array($email)
@@ -3541,15 +3534,15 @@ SQL;
                             ->get('UnknownError', 'Unknown error')
                 );
                 return $result;
-            } else {
-                $result = array(
-                    "code" => 3,
-                    "message" => $this->snippetManager->getNamespace('frontend/account/internalMessages')
-                            ->get('NewsletterSuccess', 'Thank you for receiving our newsletter')
-                );
-                return $result;
             }
         }
+
+        $result = array(
+            "code" => 3,
+            "message" => $this->snippetManager->getNamespace('frontend/account/internalMessages')
+                ->get('NewsletterSuccess', 'Thank you for receiving our newsletter')
+        );
+        return $result;
     }
 
     /**
