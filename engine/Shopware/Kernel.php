@@ -312,12 +312,11 @@ class Kernel implements HttpKernelInterface
 
         $pluginRoot = $this->getRootDir().'/custom/plugins';
         foreach (new \DirectoryIterator($pluginRoot) as $pluginDir) {
-            if ($pluginDir->isDot()) {
+            if ($pluginDir->getBasename()[0] === '.' || $pluginDir->isFile()) {
                 continue;
             }
 
             $pluginName = $pluginDir->getBasename();
-
             if (!is_file($pluginDir->getPathname() . '/'. $pluginName . '.php')) {
                 continue;
             }
