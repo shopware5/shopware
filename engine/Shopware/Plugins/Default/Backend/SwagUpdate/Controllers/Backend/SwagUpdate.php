@@ -260,8 +260,9 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
 
         if ($config['update-send-feedback']) {
             $apiEndpoint = $config['update-feedback-api-endpoint'];
+            $rootDir = Shopware()->Container()->getParameter('kernel.root_dir');
+            $publicKey   = trim(file_get_contents($rootDir . '/engine/Shopware/Components/HttpClient/public.key'));
 
-            $publicKey   = trim(file_get_contents(__DIR__ . '/../../Resources/public.key'));
             $collector = new FeedbackCollector($apiEndpoint, $publicKey, $this->getUnique());
 
             try {
