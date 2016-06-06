@@ -2043,16 +2043,23 @@ class sBasket
         $products = $listProduct->getList($numbers, $context->getProductContext());
         $propertySets = $propertyService->getList($products, $context->getShopContext());
 
+        $covers = $container->get('shopware_storefront.variant_cover_service')
+            ->getList($products, $context->getProductContext());
+
         $details = [];
-        foreach ($products as $product){
+        foreach ($products as $product) {
             $promotion = $legacyStructConverter->convertListProductStruct($product);
+
+            if (isset($covers[$product->getNumber()])) {
+                $promotion['image'] = $legacyStructConverter->convertMediaStruct($covers[$product->getNumber()]);
+            }
 
             if ($product->hasProperties() && isset($propertySets[$product->getNumber()])) {
                 $propertySet = $propertySets[$product->getNumber()];
 
                 $promotion['sProperties'] = $legacyStructConverter->convertPropertySetStruct($propertySet);
                 $promotion['filtergroupID'] = $propertySet->getId();
-                $promotion['properties'] = array_map(function($property) {
+                $promotion['properties'] = array_map(function ($property) {
                     return $property['name'] . ':&nbsp;' . $property['value'];
                 }, $promotion['sProperties']);
                 $promotion['properties'] = implode(',&nbsp;', $promotion['properties']);
@@ -2071,11 +2078,11 @@ class sBasket
         return array(
             'src' => array(array_merge(
                 array('original' => $image['source']),
-                array_map(function($thumb) {
+                array_map(function ($thumb) {
                     return $thumb['source'];
                 }, $image['thumbnails']))
             ),
-            'srchd' => array(array_map(function($thumb) use($image) {
+            'srchd' => array(array_map(function ($thumb) use ($image) {
                 return str_replace('.' . $image['extension'], '@2x.'. $image['extension'], $thumb['source']);
             }, $image['thumbnails'])),
             'res' => array('original' => array(
@@ -2105,7 +2112,7 @@ class sBasket
 
         $numbers = [];
         foreach ($getArticles as $article) {
-            if(empty($article['modus'])) {
+            if (empty($article['modus'])) {
                 $numbers[] = $article['ordernumber'];
             }
         }

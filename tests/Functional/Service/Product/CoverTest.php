@@ -142,7 +142,8 @@ class CoverTest extends TestCase
             Shopware()->Container()->get('shopware_storefront.media_gateway'),
             Shopware()->Container()->get('shopware_storefront.product_media_gateway'),
             Shopware()->Container()->get('shopware_storefront.variant_media_gateway'),
-            $config
+            $config,
+            Shopware()->Container()->get('shopware_storefront.variant_cover_service')
         );
 
         $variants = $this->helper->getListProducts(
