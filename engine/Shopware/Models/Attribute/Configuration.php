@@ -94,19 +94,13 @@ class Configuration extends ModelEntity
      * @var bool
      * @ORM\Column(name="display_in_backend", type="boolean")
      */
-    private $displayInBackend = true;
+    private $displayInBackend = false;
 
     /**
      * @var bool
      * @ORM\Column(name="custom", type="boolean")
      */
     private $custom = false;
-
-    /**
-     * @var null
-     * @ORM\Column(name="plugin_id", type="integer", nullable=true)
-     */
-    private $pluginId = null;
 
     /**
      * @var string $position
@@ -254,22 +248,6 @@ class Configuration extends ModelEntity
     public function setDisplayInBackend($displayInBackend)
     {
         $this->displayInBackend = $displayInBackend;
-    }
-
-    /**
-     * @return null
-     */
-    public function getPluginId()
-    {
-        return $this->pluginId;
-    }
-
-    /**
-     * @param null $pluginId
-     */
-    public function setPluginId($pluginId)
-    {
-        $this->pluginId = $pluginId;
     }
 
     /**

@@ -194,7 +194,6 @@ class CrudService
                 $item->setHelpText($config['helpText']);
                 $item->setDisplayInBackend((bool) $config['displayInBackend']);
                 $item->setLabel($config['label']);
-                $item->setPluginId((int) $config['pluginId']);
                 $item->setPosition((int) $config['position']);
                 $item->setCustom((bool) $config['custom']);
                 $item->setTranslatable((bool) $config['translatable']);
@@ -227,6 +226,10 @@ class CrudService
 
         if ($id) {
             $model = $this->entityManager->find('Shopware\Models\Attribute\Configuration', $id);
+        }
+
+        if (isset($data['arrayStore']) && is_array($data['arrayStore'])) {
+            $data['arrayStore'] = json_encode($data['arrayStore']);
         }
 
         if (!$model) {
