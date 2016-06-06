@@ -16,6 +16,9 @@ class Migrations_Migration710 extends Shopware\Components\Migrations\AbstractMig
 
         $this->createMigrationFields();
 
+        $attributeColumns = $this->getAttributeColumns();
+        $attributeSql = $this->attributeColumnsToSql($attributeColumns);
+
         $sql = <<<SQL
 CREATE TABLE `s_user_addresses_migration` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -35,12 +38,7 @@ CREATE TABLE `s_user_addresses_migration` (
   `additional_address_line1` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `additional_address_line2` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `checksum` varchar(32) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `text1` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `text2` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `text3` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `text4` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `text5` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `text6` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  $attributeSql
   PRIMARY KEY (`id`),
   UNIQUE `unik` (`checksum`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
@@ -66,5 +64,26 @@ SQL;
         $this->addSql("UPDATE `s_user_shippingaddress` SET salutation = 'mr' WHERE salutation = 'company';");
         $this->addSql("UPDATE `s_order_billingaddress` SET salutation = 'mr' WHERE salutation = 'company';");
         $this->addSql("UPDATE `s_order_shippingaddress` SET salutation = 'mr' WHERE salutation = 'company';");
+    }
+
+    private function getAttributeColumns()
+    {
+        $columns = $this->getConnection()->query('DESCRIBE s_user_addresses_attributes')->fetchAll(\PDO::FETCH_ASSOC);
+
+        $columns = array_filter($columns, function ($column) {
+            return !in_array($column['Field'], ['id', 'address_id']);
+        });
+
+        return $columns;
+    }
+
+    private function attributeColumnsToSql($attributeColumns)
+    {
+        $attributeSql = "";
+        foreach ($attributeColumns as $column) {
+            $attributeSql .= "  `".$column['Field']."` ".$column['Type']." COLLATE utf8_unicode_ci DEFAULT NULL,".PHP_EOL;
+        }
+
+        return $attributeSql;
     }
 }

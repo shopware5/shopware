@@ -10,57 +10,8 @@ class Migrations_Migration708 extends Shopware\Components\Migrations\AbstractMig
     {
         $this->changeConfusingVatLabel();
         $this->createDefaultShippingBillingRelations();
-        $this->createAddressTables();
-    }
-
-    private function createAddressTables()
-    {
-        $sql = <<<SQL
-CREATE TABLE `s_user_addresses` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
-  `company` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `department` varchar(35) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `salutation` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
-  `firstname` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `lastname` varchar(60) COLLATE utf8_unicode_ci NOT NULL,
-  `street` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `zipcode` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `city` varchar(70) COLLATE utf8_unicode_ci NOT NULL,
-  `country_id` int(11) NOT NULL,
-  `state_id` int(11) DEFAULT NULL,
-  `ustid` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `phone` varchar(40) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `additional_address_line1` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `additional_address_line2` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `user_id` (`user_id`),
-  KEY `country_id` (`country_id`),
-  KEY `state_id` (`state_id`),
-  CONSTRAINT `s_user_addresses_ibfk_1` FOREIGN KEY (`country_id`) REFERENCES `s_core_countries` (`id`) ON UPDATE CASCADE,
-  CONSTRAINT `s_user_addresses_ibfk_2` FOREIGN KEY (`state_id`) REFERENCES `s_core_countries_states` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `s_user_addresses_ibfk_3` FOREIGN KEY (`user_id`) REFERENCES `s_user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
-SQL;
-
-        $this->addSql($sql);
-
-        $sql = <<<SQL
-CREATE TABLE `s_user_addresses_attributes` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `address_id` int(11) NOT NULL,
-  `text1` VARCHAR(255) DEFAULT NULL,
-  `text2` VARCHAR(255) DEFAULT NULL,
-  `text3` VARCHAR(255) DEFAULT NULL,
-  `text4` VARCHAR(255) DEFAULT NULL,
-  `text5` VARCHAR(255) DEFAULT NULL,
-  `text6` VARCHAR(255) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `address_id` (`address_id`),
-  CONSTRAINT `s_user_addresses_attributes_ibfk_1` FOREIGN KEY (`address_id`) REFERENCES `s_user_addresses` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
-SQL;
-        $this->addSql($sql);
+        $this->createAddressTable();
+        $this->createAttributeTable();
     }
 
     private function changeConfusingVatLabel()
@@ -88,6 +39,88 @@ ADD `default_billing_address_id` int(11) DEFAULT NULL,
 ADD `default_shipping_address_id` int(11) DEFAULT NULL AFTER `default_billing_address_id`,
 ADD INDEX `default_billing_address_id` (`default_billing_address_id`),
 ADD INDEX `default_shipping_address_id` (`default_shipping_address_id`);
+SQL;
+
+        $this->addSql($sql);
+    }
+
+    private function createAttributeTable()
+    {
+        $attributeColumns = $this->getAttributeColumns();
+        $attributeSql = $this->attributeColumnsToSql($attributeColumns);
+
+        $sql = <<<SQL
+CREATE TABLE `s_user_addresses_attributes` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `address_id` int(11) NOT NULL,
+  $attributeSql
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `address_id` (`address_id`),
+  CONSTRAINT `s_user_addresses_attributes_ibfk_1` FOREIGN KEY (`address_id`) REFERENCES `s_user_addresses` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
+SQL;
+        $this->addSql($sql);
+    }
+
+    private function attributeColumnsToSql($attributeColumns)
+    {
+        $attributeSql = "";
+        foreach ($attributeColumns as $column) {
+            $attributeSql .= "  `".$column['Field']."` ".$column['Type']." COLLATE utf8_unicode_ci DEFAULT NULL,".PHP_EOL;
+        }
+
+        return $attributeSql;
+    }
+
+    private function getAttributeColumns()
+    {
+        $identifierColumns = ['id', 'billingID', 'shippingID'];
+        $filteredColumns = [];
+
+        $columns = array_merge(
+            $this->getConnection()->query('DESCRIBE s_user_billingaddress_attributes')->fetchAll(\PDO::FETCH_ASSOC),
+            $this->getConnection()->query('DESCRIBE s_user_shippingaddress_attributes')->fetchAll(\PDO::FETCH_ASSOC)
+        );
+
+        foreach ($columns as $column) {
+            if (array_key_exists($column['Field'], $filteredColumns) || in_array($column['Field'], $identifierColumns)) {
+                continue;
+            }
+
+            $filteredColumns[$column['Field']] = $column;
+        }
+
+        return $filteredColumns;
+    }
+
+    private function createAddressTable()
+    {
+        $sql = <<<SQL
+CREATE TABLE `s_user_addresses` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `company` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `department` varchar(35) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `salutation` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `firstname` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `lastname` varchar(60) COLLATE utf8_unicode_ci NOT NULL,
+  `street` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `zipcode` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `city` varchar(70) COLLATE utf8_unicode_ci NOT NULL,
+  `country_id` int(11) NOT NULL,
+  `state_id` int(11) DEFAULT NULL,
+  `ustid` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `phone` varchar(40) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `additional_address_line1` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `additional_address_line2` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  KEY `country_id` (`country_id`),
+  KEY `state_id` (`state_id`),
+  CONSTRAINT `s_user_addresses_ibfk_1` FOREIGN KEY (`country_id`) REFERENCES `s_core_countries` (`id`) ON UPDATE CASCADE,
+  CONSTRAINT `s_user_addresses_ibfk_2` FOREIGN KEY (`state_id`) REFERENCES `s_core_countries_states` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `s_user_addresses_ibfk_3` FOREIGN KEY (`user_id`) REFERENCES `s_user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
 SQL;
 
         $this->addSql($sql);
