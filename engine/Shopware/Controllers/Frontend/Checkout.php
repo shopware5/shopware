@@ -502,6 +502,8 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
 
         if ($this->Request()->getParam('sAddAccessories')) {
             $this->forward('addAccessories');
+        } elseif ($this->Request()->getParam('isXHR')) {
+            $this->forward($this->Request()->getParam('sTargetAction', 'cart'));
         } else {
             $this->redirect(['action' => $this->Request()->getParam('sTargetAction', 'cart')]);
         }
