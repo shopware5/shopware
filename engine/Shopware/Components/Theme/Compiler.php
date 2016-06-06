@@ -536,6 +536,8 @@ class Compiler
 
         if ($settings->getCreateSourceMap()) {
             $config += array(
+                'sourceMapRootpath' => '../../',
+                'sourceMapBasepath' => $this->rootDir,
                 'sourceMapWriteTo' => $this->pathResolver->getSourceMapPath(),
                 'sourceMapURL' => $this->pathResolver->getSourceMapUrl($shop)
             );
