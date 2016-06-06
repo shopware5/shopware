@@ -83,7 +83,19 @@ class PathResolver
      */
     public function getPluginPath(Plugin $plugin)
     {
+        if ($this->isNewPlugin($plugin)) {
+            return $this->rootDir . '/custom/plugins/' . $plugin->getName() . '/resources';
+        }
         return $this->pluginDirectories[$plugin->getSource()] . $plugin->getNamespace() . DIRECTORY_SEPARATOR . $plugin->getName();
+    }
+
+    /**
+     * @param Plugin $plugin
+     * @return bool
+     */
+    private function isNewPlugin(Plugin $plugin)
+    {
+        return $plugin->getNamespace() === "ShopwarePlugins";
     }
 
     /**
