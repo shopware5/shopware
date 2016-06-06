@@ -103,7 +103,31 @@ class RequirementValidatorTest extends \PHPUnit_Framework_TestCase
     public function testSecondRequiredPluginNotExists()
     {
         $validator = $this->getValidator([
-            ['name' => 'SwagBundle', 'version' => '2.5']
+            ['name' => 'SwagBundle', 'version' => '2.5', 'active' => true, 'installed' => '2016-01-01 11:00:00']
+        ]);
+        $validator->validate(__DIR__ . '/examples/shopware_required_plugin.xml', '5.2');
+    }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage Required plugin SwagBundle is not installed
+     */
+    public function testRequiredPluginInstalledShouldFail()
+    {
+        $validator = $this->getValidator([
+            ['name' => 'SwagBundle', 'version' => '1.0']
+        ]);
+        $validator->validate(__DIR__ . '/examples/shopware_required_plugin.xml', '5.2');
+    }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage Required plugin SwagBundle is not active
+     */
+    public function testRequiredPluginActiveShouldFail()
+    {
+        $validator = $this->getValidator([
+            ['name' => 'SwagBundle', 'version' => '1.0', 'installed' => '2016-01-01 11:00:00']
         ]);
         $validator->validate(__DIR__ . '/examples/shopware_required_plugin.xml', '5.2');
     }
@@ -115,7 +139,7 @@ class RequirementValidatorTest extends \PHPUnit_Framework_TestCase
     public function testRequiredPluginMinimumVersionShouldFail()
     {
         $validator = $this->getValidator([
-            ['name' => 'SwagBundle', 'version' => '1.0']
+            ['name' => 'SwagBundle', 'version' => '1.0', 'active' => true, 'installed' => '2016-01-01 11:00:00']
         ]);
         $validator->validate(__DIR__ . '/examples/shopware_required_plugin.xml', '5.2');
     }
@@ -127,7 +151,7 @@ class RequirementValidatorTest extends \PHPUnit_Framework_TestCase
     public function testRequiredPluginMaximumVersionShouldFail()
     {
         $validator = $this->getValidator([
-            ['name' => 'SwagBundle', 'version' => '10.0']
+            ['name' => 'SwagBundle', 'version' => '10.0', 'active' => true, 'installed' => '2016-01-01 11:00:00']
         ]);
         $validator->validate(__DIR__ . '/examples/shopware_required_plugin.xml', '5.2');
     }
@@ -139,7 +163,7 @@ class RequirementValidatorTest extends \PHPUnit_Framework_TestCase
     public function testRequiredPluginVersionIsBlackListed()
     {
         $validator = $this->getValidator([
-            ['name' => 'SwagBundle', 'version' => '2.1']
+            ['name' => 'SwagBundle', 'version' => '2.1', 'active' => true, 'installed' => '2016-01-01 11:00:00']
         ]);
         $validator->validate(__DIR__ . '/examples/shopware_required_plugin.xml', '5.2');
     }
@@ -147,8 +171,8 @@ class RequirementValidatorTest extends \PHPUnit_Framework_TestCase
     public function testRequiredPluginsShouldBeSuccessful()
     {
         $validator = $this->getValidator([
-            ['name' => 'SwagBundle', 'version' => '2.1.1'],
-            ['name' => 'SwagLiveShopping', 'version' => '2.1.1']
+            ['name' => 'SwagBundle', 'version' => '2.1.1', 'active' => true, 'installed' => '2016-01-01 11:00:00'],
+            ['name' => 'SwagLiveShopping', 'version' => '2.1.1', 'active' => true, 'installed' => '2016-01-01 11:00:00']
         ]);
 
         $e = null;
@@ -179,6 +203,12 @@ class RequirementValidatorTest extends \PHPUnit_Framework_TestCase
 
             $plugin->method('getName')
                 ->willReturn($pluginInfo['name']);
+
+            $plugin->method('getActive')
+                ->willReturn($pluginInfo['active']);
+
+            $plugin->method('getInstalled')
+                ->willReturn($pluginInfo['installed']);
 
             $this->plugins[$pluginInfo['name']] = $plugin;
         }
