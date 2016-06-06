@@ -1237,6 +1237,10 @@ class sRewriteTable
             $part = str_replace($params['separator'], '', $part);
         }
         $parts = implode($params['separator'], $parts);
+
+        $ampReplace = Shopware()->Snippets()->getNamespace('core/rewrite/seo')->get('ampersandReplace');
+        $parts = str_replace('&', $ampReplace, $parts);
+
         return $parts;
     }
 

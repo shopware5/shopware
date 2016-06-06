@@ -366,6 +366,7 @@ In this document you will find a changelog of the important changes related to t
 * Removed unused controller endpoints `ajax_login` and `ajax_logout` in `themes/Frontend/Bare/frontend/index/index.tpl`
 * \Shopware\Bundle\SearchBundleES\ConditionHandler\ProductAttributeConditionHandler requires now the \Shopware\Bundle\AttributeBundle\Service\CrudService as constructor dependency
 * Merged \Shopware\Bundle\AttributeBundle\Service\CrudService create and update function
+* translate replacement of "&" in SEO URLs
 
 ## 5.1.6
 * The interface `Enlight_Components_Cron_Adapter` in `engine/Library/Enlight/Components/Cron/Adapter.php` got a new method `getJobByAction`. For default implementation see `engine/Library/Enlight/Components/Cron/Adapter/DBAL.php`.
