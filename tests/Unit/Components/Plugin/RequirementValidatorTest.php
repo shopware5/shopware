@@ -21,7 +21,6 @@ class RequirementValidatorTest extends \PHPUnit_Framework_TestCase
         $this->plugins = [];
     }
 
-
     /**
      * @expectedException \Exception
      * @expectedExceptionMessage Plugin requires at least Shopware version 5.1.0
@@ -185,18 +184,15 @@ class RequirementValidatorTest extends \PHPUnit_Framework_TestCase
 
     private function getValidator($plugins)
     {
-        $em = $this->getMockBuilder(ModelManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $em = $this->createMock(ModelManager::class);
 
-        $repo = $this->getMockBuilder(ModelRepository::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $repo = $this->createMock(ModelRepository::class);
+        $defaults = ['active' => false, 'installed' => null];
 
         foreach ($plugins as $pluginInfo) {
-            $plugin = $this->getMockBuilder(\Shopware\Models\Plugin\Plugin::class)
-                ->disableOriginalConstructor()
-                ->getMock();
+            $pluginInfo = array_merge($defaults, $pluginInfo);
+
+            $plugin = $this->createMock(\Shopware\Models\Plugin\Plugin::class);
 
             $plugin->method('getVersion')
                 ->willReturn($pluginInfo['version']);

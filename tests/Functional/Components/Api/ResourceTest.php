@@ -82,9 +82,7 @@ class ResourceTest extends \Enlight_Components_Test_TestCase
      */
     public function testCheckPrivilegeShouldThrowException()
     {
-        $aclMock = $this->getMockBuilder('\Shopware_Components_Acl')
-                ->disableOriginalConstructor()
-                ->getMock();
+        $aclMock = $this->createMock(\Shopware_Components_Acl::class);
 
         $aclMock->expects($this->any())
                 ->method('has')
@@ -102,9 +100,7 @@ class ResourceTest extends \Enlight_Components_Test_TestCase
 
     public function testFooFlushShouldWork()
     {
-        $aclMock = $this->getMockBuilder('\Shopware_Components_Acl')
-                ->disableOriginalConstructor()
-                ->getMock();
+        $aclMock = $this->createMock(\Shopware_Components_Acl::class);
 
         $aclMock->expects($this->any())
                 ->method('isAllowed')

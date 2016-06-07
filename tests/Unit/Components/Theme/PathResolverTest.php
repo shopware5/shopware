@@ -63,11 +63,7 @@ class PathResolverTest extends \PHPUnit_Framework_TestCase
      */
     private function createTemplateManagerMock()
     {
-        $templateManager = $this->getMockBuilder('Enlight_Template_Manager')
-                                ->disableOriginalConstructor()
-                                ->getMock();
-
-        return $templateManager;
+        return $this->createMock(Enlight_Template_Manager::class);
     }
 
     /**
@@ -76,9 +72,7 @@ class PathResolverTest extends \PHPUnit_Framework_TestCase
      */
     private function createTemplateMock($templateId)
     {
-        $templateStub = $this->getMockBuilder('Shopware\Models\Shop\Template')
-                             ->disableOriginalConstructor()
-                             ->getMock();
+        $templateStub = $this->createMock(\Shopware\Models\Shop\Template::class);
 
         $templateStub->method('getId')
                      ->willReturn($templateId);
@@ -93,9 +87,7 @@ class PathResolverTest extends \PHPUnit_Framework_TestCase
      */
     private function createShopMock($shopId, $templateStub)
     {
-        $stub = $this->getMockBuilder('Shopware\Models\Shop\Shop')
-                     ->disableOriginalConstructor()
-                     ->getMock();
+        $stub = $this->createMock(Shopware\Models\Shop\Shop::class);
 
         $stub->method('getMain')
             ->willReturn(null);

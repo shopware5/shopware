@@ -39,7 +39,7 @@ class TermHelperTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $configStub = $this->getMockBuilder('Shopware_Components_Config')->disableOriginalConstructor()->getMock();
+        $configStub = $this->createMock(\Shopware_Components_Config::class);
 
         $this->termHelper = new TermHelper($configStub);
     }

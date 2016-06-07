@@ -3,6 +3,7 @@
 namespace Shopware\Tests\Service\Search;
 
 use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
+use Shopware\Bundle\SearchBundle\CriteriaRequestHandler\CoreCriteriaRequestHandler;
 use Shopware\Bundle\SearchBundleDBAL\ConditionHandler\CategoryConditionHandler;
 use Shopware\Bundle\SearchBundleDBAL\SearchBundleDBALSubscriber;
 use Shopware\Bundle\SearchBundleDBAL\SortingHandler\PopularitySortingHandler;
@@ -12,9 +13,7 @@ class SearchBundleDBALSubscriberTest extends \PHPUnit_Framework_TestCase
 {
     public function testValidCreate()
     {
-        $criteriaRequestHandler = $this->getMockBuilder('\Shopware\Bundle\SearchBundle\CriteriaRequestHandler\CoreCriteriaRequestHandler')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $criteriaRequestHandler = $this->createMock(CoreCriteriaRequestHandler::class);
 
         $subscriber = new SearchBundleDBALSubscriber([
             new CategoryConditionHandler(),

@@ -24,6 +24,8 @@
 
 namespace Shopware\Tests\Components\Theme;
 
+use Shopware\Models\Shop\Template;
+
 class ConfiguratorTest extends Base
 {
     /**
@@ -174,7 +176,7 @@ class ConfiguratorTest extends Base
 
     public function testSynchronizeSetsAdd()
     {
-        $template = new \Shopware\Models\Shop\Template();
+        $template = new Template();
 
         $theme = $this->getResponsiveTheme();
 
@@ -214,9 +216,7 @@ class ConfiguratorTest extends Base
             $existing->add($set);
         }
 
-        $template = $this->getMockBuilder('Shopware\Models\Shop\Template')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $template = $this->createMock(Template::class);
 
         $template->expects($this->any())
             ->method('getConfigSets')
