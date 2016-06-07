@@ -44,7 +44,8 @@ Ext.define('Shopware.apps.Index.controller.Main', {
 	init: function() {
         var me = this,
             firstRunWizardStep = Ext.util.Cookies.get('firstRunWizardStep'),
-            firstRunWizardEnabled = me.subApplication.firstRunWizardEnabled;
+            firstRunWizardEnabled = me.subApplication.firstRunWizardEnabled,
+            enableBetaFeedback = me.subApplication.enableBetaFeedback;
 
         if (!firstRunWizardEnabled) {
             firstRunWizardStep = 0;
@@ -72,6 +73,20 @@ Ext.define('Shopware.apps.Index.controller.Main', {
 
         } else {
             me.initBackendDesktop();
+
+            if (enableBetaFeedback && (typeof(Storage) !== "undefined")) {
+                var item = window.localStorage.getItem("hideBetaFeedback");
+                if (!item) {
+                    Ext.Function.defer(function() {
+                        Shopware.app.Application.addSubApplication({
+                            name: 'Shopware.apps.Feedback',
+                            params: {
+                                previewFeedback: true
+                            }
+                        });
+                    }, 2000);
+                }
+            }
         }
 	},
 

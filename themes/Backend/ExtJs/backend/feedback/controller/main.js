@@ -46,8 +46,35 @@ Ext.define('Shopware.apps.Feedback.controller.Main', {
 	 */
 	init: function() {
 		var me = this;
+
+        me.control({
+            'feedback-preview-window': {
+                'beforeclose': me.onBeforePreviewFeedbackClose,
+                'feedback-show-issue-tracker': me.onPreviewWindowShowIssueTracker
+            }
+        });
+
+		if (me.subApplication.params && me.subApplication.params.previewFeedback) {
+            me.mainWindow = me.getView('preview.Window').create();
+            return;
+        }
+
         me.mainWindow = me.getView('main.Window').create();
 
-	}
+	},
+
+    onBeforePreviewFeedbackClose: function(win) {
+        var checked = win.down('#disablePreviewFeedback').getValue();
+        if (checked) {
+            window.localStorage.setItem("hideBetaFeedback", true);
+        }
+    },
+
+    onPreviewWindowShowIssueTracker: function(win) {
+        Shopware.app.Application.addSubApplication({
+            name: 'Shopware.apps.Feedback'
+        });
+        win.close();
+    }
 });
 //{/block}
