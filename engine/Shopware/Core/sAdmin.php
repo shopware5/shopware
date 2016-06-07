@@ -1138,6 +1138,10 @@ class sAdmin
             $context[$key] = $value;
         }
 
+        if (array_key_exists('password', $context)) {
+            unset($context['password']);
+        }
+
         $mail = Shopware()->TemplateMail()->createMail('sREGISTERCONFIRMATION', $context);
         $mail->addTo($email);
 
