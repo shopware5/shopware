@@ -100,7 +100,7 @@ class InstallerService
     {
         $plugin = $this->getPluginByName($pluginName);
 
-        if ($this->isNewPlugin($plugin)) {
+        if (!$plugin->isLegacyPlugin()) {
             return $this->pluginInstaller->getPluginPath($plugin);
         }
 
@@ -146,7 +146,7 @@ class InstallerService
             return $this->createPluginContextFromLegacyResult($plugin, true);
         }
 
-        if ($this->isNewPlugin($plugin)) {
+        if (!$plugin->isLegacyPlugin()) {
             return $this->pluginInstaller->installPlugin($plugin);
         }
 
@@ -166,10 +166,11 @@ class InstallerService
             return $this->createPluginContextFromLegacyResult($plugin, true);
         }
 
-        if ($this->isNewPlugin($plugin)) {
+        if (!$plugin->isLegacyPlugin()) {
             return $this->pluginInstaller->uninstallPlugin($plugin, $removeData);
         }
         $result = $this->legacyPluginInstaller->uninstallPlugin($plugin, $removeData);
+
         return $this->createPluginContextFromLegacyResult($plugin, $result);
     }
 
@@ -184,11 +185,12 @@ class InstallerService
             return $this->createPluginContextFromLegacyResult($plugin, true);
         }
 
-        if ($this->isNewPlugin($plugin)) {
+        if (!$plugin->isLegacyPlugin()) {
             return $this->pluginInstaller->updatePlugin($plugin);
         }
 
         $result = $this->legacyPluginInstaller->updatePlugin($plugin);
+
         return $this->createPluginContextFromLegacyResult($plugin, $result);
     }
 
@@ -207,7 +209,7 @@ class InstallerService
             throw new \Exception('Plugin has to be installed first.');
         }
 
-        if ($this->isNewPlugin($plugin)) {
+        if (!$plugin->isLegacyPlugin()) {
             return $this->pluginInstaller->activatePlugin($plugin);
         }
 
@@ -226,7 +228,7 @@ class InstallerService
             return $this->createPluginContextFromLegacyResult($plugin, true);
         }
 
-        if ($this->isNewPlugin($plugin)) {
+        if (!$plugin->isLegacyPlugin()) {
             return $this->pluginInstaller->deactivatePlugin($plugin);
         }
 
@@ -299,15 +301,6 @@ class InstallerService
             $this->em->remove($plugin);
         }
         $this->em->flush();
-    }
-
-    /**
-     * @param Plugin $plugin
-     * @return bool
-     */
-    private function isNewPlugin(Plugin $plugin)
-    {
-        return $plugin->getNamespace() === "ShopwarePlugins";
     }
 
     /**
