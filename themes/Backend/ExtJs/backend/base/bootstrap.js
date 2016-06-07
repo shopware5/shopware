@@ -55,6 +55,7 @@
 {include file='backend/base/component/Shopware.data.reader.Application.js'}
 {include file='ExtJs/overrides/Ext.form.field.Display.js'}
 {include file='ExtJs/overrides/Ext.String.js'}
+{include file='ExtJs/overrides/Ext.view.Table.js'}
 
 {* Include default components *}
 {include file='ExtJs/components/Enlight.app.Window.js'}
