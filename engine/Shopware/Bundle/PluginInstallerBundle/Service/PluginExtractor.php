@@ -24,6 +24,8 @@
 
 namespace Shopware\Bundle\PluginInstallerBundle\Service;
 
+use Symfony\Component\Filesystem\Filesystem;
+
 class PluginExtractor
 {
     /**
@@ -32,11 +34,18 @@ class PluginExtractor
     private $pluginDir;
 
     /**
-     * @param $pluginDir
+     * @var Filesystem
      */
-    public function __construct($pluginDir)
+    private $filesystem;
+
+    /**
+     * @param string $pluginDir
+     * @param Filesystem $filesystem
+     */
+    public function __construct($pluginDir, Filesystem $filesystem)
     {
         $this->pluginDir = $pluginDir;
+        $this->filesystem = $filesystem;
     }
 
     /**
@@ -55,9 +64,30 @@ class PluginExtractor
             );
         }
 
-        $this->validatePluginZip($archive);
+        $prefix = $this->getPluginPrefix($archive);
+        $this->validatePluginZip($prefix, $archive);
 
-        $archive->extractTo($destination);
+        $pluginDir = $destination.'/'.$prefix;
+
+        $oldFile = false;
+        if ($this->filesystem->exists($pluginDir)) {
+            $oldFile = $pluginDir.'.'.uniqid();
+            $this->filesystem->rename($pluginDir, $oldFile);
+            rename($pluginDir, $oldFile);
+        }
+
+        try {
+            $archive->extractTo($destination);
+
+            if ($oldFile) {
+                $this->filesystem->remove($oldFile);
+            }
+        } catch (\Exception $e) {
+            if ($oldFile) {
+                $this->filesystem->rename($oldFile, $pluginDir);
+            }
+            throw $e;
+        }
 
         $this->clearOpcodeCache();
     }
@@ -67,20 +97,10 @@ class PluginExtractor
      * path and validates the plugin namespace, directory traversal
      * and multiple plugin directories.
      *
-     * @param \ZipArchive $archive
-     * @throws \Exception
-     */
-    private function validatePluginZip(\ZipArchive $archive)
-    {
-        $prefix = $this->getPluginPrefix($archive);
-        $this->assertValid($archive, $prefix);
-    }
-
-    /**
-     * @param \ZipArchive $archive
      * @param string $prefix
+     * @param \ZipArchive $archive
      */
-    private function assertValid(\ZipArchive $archive, $prefix)
+    private function validatePluginZip($prefix, \ZipArchive $archive)
     {
         for ($i = 2; $i < $archive->numFiles; $i++) {
             $stat = $archive->statIndex($i);

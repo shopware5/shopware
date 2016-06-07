@@ -34,6 +34,7 @@ use ShopwarePlugins\SwagUpdate\Components\Steps\DownloadStep;
 use ShopwarePlugins\SwagUpdate\Components\Steps\FinishResult;
 use ShopwarePlugins\SwagUpdate\Components\Steps\ValidResult;
 use ShopwarePlugins\SwagUpdate\Components\Struct\Version;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * @package Shopware\Bundle\PluginInstallerBundle\Service
@@ -112,16 +113,15 @@ class DownloadService
             if (!$source) {
                 $source = 'Community';
             }
-
             $destination = $this->pluginDirectories[$source];
             $extractor = new LegacyPluginExtractor();
             $extractor->extract($archive, $destination);
         } elseif ($pluginZipDetector->isPlugin($archive)) {
-            $pluginDir = Shopware()->Container()->getParameter('kernel.root_dir').'/custom/plugins';
-            $extractor = new PluginExtractor($pluginDir);
+            $pluginDir = $this->rootDir.'/custom/plugins';
+            $extractor = new PluginExtractor($pluginDir, new Filesystem());
             $extractor->extract($archive);
         } else {
-            throw new \RuntimeException("No Plugin found in archive.");
+            throw new \RuntimeException('No Plugin found in archive.');
         }
     }
 
