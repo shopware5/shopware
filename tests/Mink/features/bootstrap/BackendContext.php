@@ -74,32 +74,29 @@ class BackendContext extends SubContext
     }
 
     /**
-     * Wait for an command to be true and abort after $maxRetries iterations
-     * Sleeps for 1 second after each try
-     *
-     * @param callable $lambda
-     * @param int $maxRetries
+     * Based on Behat's own example
+     * @see http://docs.behat.org/en/v2.5/cookbook/using_spin_functions.html#adding-a-timeout
+     * @param $lambda
+     * @param int $wait
      * @return bool
      * @throws \Exception
      */
-    public function spin($lambda, $maxRetries = 10)
+    public function spin($lambda, $wait = 60)
     {
-        for ($i = 0; $i < $maxRetries; $i++) {
+        $time = time();
+        $stopTime = $time + $wait;
+        while (time() < $stopTime) {
             try {
                 if ($lambda($this)) {
                     return true;
                 }
             } catch (\Exception $e) {
+                // do nothing
             }
 
-            sleep(1);
+            usleep(250000);
         }
 
-        if (!empty($e) && $e instanceof \Exception) {
-            throw $e;
-        } else {
-            $backtrace = debug_backtrace();
-            throw new \Exception("Timeout thrown by " . $backtrace[1]['class'] . "::" . $backtrace[1]['function'] . "()");
-        }
+        throw new \Exception("Spin function timed out after {$wait} seconds");
     }
 }
