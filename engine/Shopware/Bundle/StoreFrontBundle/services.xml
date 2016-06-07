@@ -102,6 +102,12 @@
             <argument type="service" id="shopware_storefront.product_media_gateway"/>
             <argument type="service" id="shopware_storefront.variant_media_gateway"/>
             <argument type="service" id="config"/>
+            <argument type="service" id="shopware_storefront.variant_cover_service"/>
+        </service>
+
+        <service id="shopware_storefront.variant_cover_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\VariantCoverService">
+            <argument type="service" id="shopware_storefront.product_media_gateway"/>
+            <argument type="service" id="shopware_storefront.variant_media_gateway"/>
         </service>
 
         <service id="shopware_storefront.property_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\PropertyService">
