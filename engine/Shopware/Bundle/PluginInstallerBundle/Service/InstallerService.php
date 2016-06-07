@@ -27,7 +27,11 @@ namespace Shopware\Bundle\PluginInstallerBundle\Service;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Plugin\ConfigReader;
 use Shopware\Components\Plugin\ConfigWriter;
-use Shopware\Components\Plugin\PluginContext;
+use Shopware\Components\Plugin\Context\ActivateContext;
+use Shopware\Components\Plugin\Context\DeactivateContext;
+use Shopware\Components\Plugin\Context\InstallContext;
+use Shopware\Components\Plugin\Context\UninstallContext;
+use Shopware\Components\Plugin\Context\UpdateContext;
 use Shopware\Models\Plugin\Plugin;
 use Shopware\Models\Shop\Shop;
 
@@ -137,13 +141,14 @@ class InstallerService
 
     /**
      * @param Plugin $plugin
-     * @return PluginContext
+     * @return InstallContext
      * @throws \Exception
      */
     public function installPlugin(Plugin $plugin)
     {
+        $context = new InstallContext($plugin, \Shopware::VERSION, $plugin->getVersion());
         if ($plugin->getInstalled()) {
-            return $this->createPluginContextFromLegacyResult($plugin, true);
+            return $context;
         }
 
         if (!$plugin->isLegacyPlugin()) {
@@ -151,38 +156,42 @@ class InstallerService
         }
 
         $result = $this->legacyPluginInstaller->installPlugin($plugin);
-        return $this->createPluginContextFromLegacyResult($plugin, $result);
+        $this->applyLegacyResultToContext($result, $context);
+        return $context;
     }
 
     /**
      * @param Plugin $plugin
      * @param bool $removeData
-     * @return PluginContext
+     * @return UninstallContext
      * @throws \Exception
      */
     public function uninstallPlugin(Plugin $plugin, $removeData = true)
     {
+        $context = new UninstallContext($plugin, \Shopware::VERSION, $plugin->getVersion(), !$removeData);
         if (!$plugin->getInstalled()) {
-            return $this->createPluginContextFromLegacyResult($plugin, true);
+            return $context;
         }
 
         if (!$plugin->isLegacyPlugin()) {
             return $this->pluginInstaller->uninstallPlugin($plugin, $removeData);
         }
-        $result = $this->legacyPluginInstaller->uninstallPlugin($plugin, $removeData);
 
-        return $this->createPluginContextFromLegacyResult($plugin, $result);
+        $result = $this->legacyPluginInstaller->uninstallPlugin($plugin, $removeData);
+        $this->applyLegacyResultToContext($result, $context);
+        return $context;
     }
 
     /**
      * @param Plugin $plugin
-     * @return PluginContext
+     * @return UpdateContext
      * @throws \Exception
      */
     public function updatePlugin(Plugin $plugin)
     {
+        $context = new UpdateContext($plugin, \Shopware::VERSION, $plugin->getVersion(), $plugin->getUpdateVersion());
         if (!$plugin->getUpdateVersion()) {
-            return $this->createPluginContextFromLegacyResult($plugin, true);
+            return $context;
         }
 
         if (!$plugin->isLegacyPlugin()) {
@@ -190,19 +199,20 @@ class InstallerService
         }
 
         $result = $this->legacyPluginInstaller->updatePlugin($plugin);
-
-        return $this->createPluginContextFromLegacyResult($plugin, $result);
+        $this->applyLegacyResultToContext($result, $context);
+        return $context;
     }
 
     /**
      * @param Plugin $plugin
-     * @return PluginContext
+     * @return ActivateContext
      * @throws \Exception
      */
     public function activatePlugin(Plugin $plugin)
     {
+        $context = new ActivateContext($plugin, \Shopware::VERSION, $plugin->getVersion());
         if ($plugin->getActive()) {
-            return $this->createPluginContextFromLegacyResult($plugin, true);
+            return $context;
         }
 
         if (!$plugin->getInstalled()) {
@@ -214,18 +224,20 @@ class InstallerService
         }
 
         $result = $this->legacyPluginInstaller->activatePlugin($plugin);
-        return $this->createPluginContextFromLegacyResult($plugin, $result);
+        $this->applyLegacyResultToContext($result, $context);
+        return $context;
     }
 
     /**
      * @param Plugin $plugin
-     * @return PluginContext
+     * @return DeactivateContext
      * @throws \Exception
      */
     public function deactivatePlugin(Plugin $plugin)
     {
+        $context = new DeactivateContext($plugin, \Shopware::VERSION, $plugin->getVersion());
         if (!$plugin->getActive()) {
-            return $this->createPluginContextFromLegacyResult($plugin, true);
+            return $context;
         }
 
         if (!$plugin->isLegacyPlugin()) {
@@ -233,7 +245,8 @@ class InstallerService
         }
 
         $result = $this->legacyPluginInstaller->deactivatePlugin($plugin);
-        return $this->createPluginContextFromLegacyResult($plugin, $result);
+        $this->applyLegacyResultToContext($result, $context);
+        return $context;
     }
 
     /**
@@ -304,16 +317,13 @@ class InstallerService
     }
 
     /**
-     * @param Plugin $plugin
      * @param boolean|array $result
-     * @return PluginContext
+     * @param InstallContext|ActivateContext|DeactivateContext|UninstallContext|UpdateContext $context
      */
-    private function createPluginContextFromLegacyResult(Plugin $plugin, $result)
+    private function applyLegacyResultToContext($result, InstallContext $context)
     {
-        $context = new PluginContext($plugin, \Shopware::VERSION, $plugin->getVersion());
-
         if (is_bool($result)) {
-            return $context;
+            return;
         }
 
         if (array_key_exists('invalidateCache', $result)) {
@@ -323,7 +333,5 @@ class InstallerService
         if (array_key_exists('message', $result)) {
             $context->scheduleMessage($result['message']);
         }
-
-        return $context;
     }
 }
