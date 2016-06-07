@@ -116,8 +116,7 @@ class Shopware_Tests_Components_Model_CategoryDenormalizationTest extends PHPUni
      */
     public function testSetConnection()
     {
-        $pdo = $this->getMockBuilder('PDOMock')
-                    ->getMock();
+        $pdo = $this->createMock(PDOMock::class);
 
         $this->component->setConnection($pdo);
 

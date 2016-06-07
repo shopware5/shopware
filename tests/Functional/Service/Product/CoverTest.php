@@ -130,9 +130,7 @@ class CoverTest extends TestCase
         $this->helper->createArticle($data);
 
         /** @var \Shopware_Components_Config $config */
-        $config = $this->getMockBuilder('\Shopware_Components_Config')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $config = $this->createMock(\Shopware_Components_Config::class);
 
         $config->expects($this->once())
             ->method('get')

@@ -24,6 +24,9 @@
 
 namespace Shopware\Tests\Components\Theme;
 
+use Shopware\Components\Theme\Configurator;
+use Shopware\Models\Shop\Template;
+
 /**
  * Class Shopware_Tests_Components_Theme_Base
  */
@@ -34,9 +37,7 @@ class Base extends \Enlight_Components_Test_TestCase
      */
     protected function getEntityManager()
     {
-        return $this->getMockBuilder('Shopware\Components\Model\ModelManager')
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->createMock(\Shopware\Components\Model\ModelManager::class);
     }
 
     /**
@@ -44,9 +45,7 @@ class Base extends \Enlight_Components_Test_TestCase
      */
     protected function getEventManager()
     {
-        return $this->getMockBuilder('Enlight_Event_EventManager')
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->createMock(\Enlight_Event_EventManager::class);
     }
 
     /**
@@ -54,9 +53,7 @@ class Base extends \Enlight_Components_Test_TestCase
      */
     protected function getPathResolver()
     {
-        return $this->getMockBuilder('Shopware\Components\Theme\PathResolver')
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->createMock(\Shopware\Components\Theme\PathResolver::class);
     }
 
     /**
@@ -64,9 +61,7 @@ class Base extends \Enlight_Components_Test_TestCase
      */
     protected function getUtilClass()
     {
-        return $this->getMockBuilder('Shopware\Components\Theme\Util')
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->createMock(\Shopware\Components\Theme\Util::class);
     }
 
     /**
@@ -74,9 +69,7 @@ class Base extends \Enlight_Components_Test_TestCase
      */
     protected function getConfigurator()
     {
-        return $this->getMockBuilder('Shopware\Components\Theme\Configurator')
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->createMock(Configurator::class);
     }
 
     /**
@@ -84,9 +77,7 @@ class Base extends \Enlight_Components_Test_TestCase
      */
     protected function getFormPersister()
     {
-        return $this->getMockBuilder('Shopware\Components\Form\Persister\Theme')
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->createMock(\Shopware\Components\Form\Persister\Theme::class);
     }
 
     /**
@@ -108,13 +99,11 @@ class Base extends \Enlight_Components_Test_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return Template
      */
     protected function getTemplate()
     {
-        return $this->getMockBuilder('Shopware\Models\Shop\Template')
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->createMock(Template::class);
     }
 
     /**
@@ -122,16 +111,12 @@ class Base extends \Enlight_Components_Test_TestCase
      */
     protected function getShopRepository()
     {
-        return $this->getMockBuilder('Shopware\Models\Shop\Repository')
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->createMock(\Shopware\Models\Shop\Repository::class);
     }
 
     protected function getSnippetHandler()
     {
-        return $this->getMockBuilder('Shopware\Components\Snippet\DatabaseHandler')
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->createMock(\Shopware\Components\Snippet\DatabaseHandler::class);
     }
 
     /**

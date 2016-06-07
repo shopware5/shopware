@@ -23,6 +23,7 @@
  */
 
 use Shopware\Models\Mail\Mail;
+use Shopware\Models\Order\Status;
 
 /**
  * @category  Shopware
@@ -230,13 +231,11 @@ class Shopware_Tests_Models_MailTest extends Enlight_Components_Test_TestCase
      */
     public function testSetStateShouldSetMailtypeToState()
     {
-        $statusMock = $this->getMockBuilder('\Shopware\Models\Order\Status')
-                ->disableOriginalConstructor()
-                ->getMock();
+        $statusMock = $this->createMock(Status::class);
 
         $statusMock->expects($this->any())
                 ->method('getGroup')
-                ->will($this->returnValue(\Shopware\Models\Order\Status::GROUP_STATE));
+                ->will($this->returnValue(Status::GROUP_STATE));
 
         $mail = new Mail();
         $mail->setStatus($statusMock);
@@ -278,13 +277,11 @@ class Shopware_Tests_Models_MailTest extends Enlight_Components_Test_TestCase
      */
     public function testShouldReturnCorrectMailTypeIfTypeIsOrderState()
     {
-        $statusMock = $this->getMockBuilder('\Shopware\Models\Order\Status')
-                           ->disableOriginalConstructor()
-                           ->getMock();
+        $statusMock = $this->createMock(Status::class);
 
         $statusMock->expects($this->any())
                    ->method('getGroup')
-                   ->will($this->returnValue(\Shopware\Models\Order\Status::GROUP_STATE));
+                   ->will($this->returnValue(Status::GROUP_STATE));
 
         $mail = new Mail();
         $mail->setMailtype(Mail::MAILTYPE_STATE);
@@ -301,13 +298,11 @@ class Shopware_Tests_Models_MailTest extends Enlight_Components_Test_TestCase
      */
     public function testShouldReturnCorrectMailTypeIfTypeIsPaymentState()
     {
-        $statusMock = $this->getMockBuilder('\Shopware\Models\Order\Status')
-                ->disableOriginalConstructor()
-                ->getMock();
+        $statusMock = $this->createMock(Status::class);
 
         $statusMock->expects($this->any())
                 ->method('getGroup')
-                ->will($this->returnValue(\Shopware\Models\Order\Status::GROUP_PAYMENT));
+                ->will($this->returnValue(Status::GROUP_PAYMENT));
 
         $mail = new Mail();
         $mail->setMailtype(Mail::MAILTYPE_STATE);

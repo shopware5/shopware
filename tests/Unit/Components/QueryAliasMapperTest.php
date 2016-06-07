@@ -64,10 +64,7 @@ class QueryAliasMapperTest extends \PHPUnit_Framework_TestCase
             'omg' => 'baz',
         ];
 
-
-        $mock = $this->getMockBuilder('Shopware_Components_Config')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $mock = $this->createMock(\Shopware_Components_Config::class);
 
         $mock->expects($this->any())
              ->method('get')
