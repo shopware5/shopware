@@ -1,10 +1,32 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
-namespace Shopware\Components\Plugin;
+namespace Shopware\Components\Plugin\Context;
 
 use Shopware\Models\Plugin\Plugin;
 
-class PluginContext implements \JsonSerializable
+class InstallContext implements \JsonSerializable
 {
     const CACHE_TAG_TEMPLATE = 'template';
     const CACHE_TAG_CONFIG = 'config';
@@ -62,28 +84,17 @@ class PluginContext implements \JsonSerializable
     /**
      * @var string
      */
-    private $updateVersion;
-
-    /**
-     * @var string
-     */
     private $shopwareVersion;
 
     /**
      * @param Plugin $plugin
      * @param string $shopwareVersion
      * @param string $currentVersion
-     * @param string $updateVersion
      */
-    public function __construct(
-        Plugin $plugin,
-        $shopwareVersion,
-        $currentVersion = null,
-        $updateVersion = null
-    ) {
+    public function __construct(Plugin $plugin, $shopwareVersion, $currentVersion)
+    {
         $this->plugin = $plugin;
         $this->currentVersion = $currentVersion;
-        $this->updateVersion = $updateVersion;
         $this->shopwareVersion = $shopwareVersion;
     }
 
@@ -95,13 +106,6 @@ class PluginContext implements \JsonSerializable
         return $this->currentVersion;
     }
 
-    /**
-     * @return string
-     */
-    public function getUpdateVersion()
-    {
-        return $this->updateVersion;
-    }
 
     /**
      * @param string $requiredVersion

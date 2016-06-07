@@ -115,7 +115,7 @@ class RequirementValidatorTest extends \PHPUnit_Framework_TestCase
     public function testRequiredPluginInstalledShouldFail()
     {
         $validator = $this->getValidator([
-            ['name' => 'SwagBundle', 'version' => '1.0']
+            ['name' => 'SwagBundle', 'version' => '1.0', 'active' => false, 'installed' => null]
         ]);
         $validator->validate(__DIR__ . '/examples/shopware_required_plugin.xml', '5.2');
     }
@@ -127,7 +127,7 @@ class RequirementValidatorTest extends \PHPUnit_Framework_TestCase
     public function testRequiredPluginActiveShouldFail()
     {
         $validator = $this->getValidator([
-            ['name' => 'SwagBundle', 'version' => '1.0', 'installed' => '2016-01-01 11:00:00']
+            ['name' => 'SwagBundle', 'active' => false, 'version' => '1.0', 'installed' => '2016-01-01 11:00:00']
         ]);
         $validator->validate(__DIR__ . '/examples/shopware_required_plugin.xml', '5.2');
     }
