@@ -383,26 +383,41 @@ div[id^=emotion-detail-window] {
 
     &.viewport-xs {
         background-color: $viewport-pink-light;
+
+        .#{$prefix}designer-viewport-label:hover {
+            background-color: $viewport-pink;
+        }
     }
     &.viewport-s {
         background-color: $viewport-violet-light;
+
+        .#{$prefix}designer-viewport-label:hover {
+            background-color: $viewport-violet;
+        }
     }
     &.viewport-m {
         background-color: $viewport-blue-light;
+
+        .#{$prefix}designer-viewport-label:hover {
+            background-color: $viewport-blue;
+        }
     }
     &.viewport-l {
         background-color: $viewport-turquoise-light;
+
+        .#{$prefix}designer-viewport-label:hover {
+            background-color: $viewport-turquoise;
+        }
     }
     &.viewport-xl {
         background-color: $viewport-green-light;
+
+        .#{$prefix}designer-viewport-label:hover {
+            background-color: $viewport-green;
+        }
     }
 
     &.is--active {
-        .#{$prefix}designer-viewport-label,
-        .#{$prefix}designer-viewport-label:hover {
-            opacity: 1;
-        }
-
         &.viewport-xs {
             background-color: $viewport-pink;
         }
@@ -427,10 +442,16 @@ div[id^=emotion-detail-window] {
         font-weight: bold;
         cursor: pointer;
         color: #ffffff;
-        opacity: 0.4;
 
-        &:hover {
-            opacity: 0.8;
+        &.is--not-active:after {
+            display: inline-block;
+            content: '';
+            width: 15px;
+            height: 15px;
+            margin-left: 5px;
+            position: relative;
+            top: 3px;
+            background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAM1JREFUeNqcU4ENgyAQBNMBHIER3KCM0A10BDdqN5ANSCdoN9ANcAN6n7zmS5+m9pILyt0DHq81CnLODsMFbHlqBYO1djE1UBE45TquYKsVdmASxhmMTDlPz50sbNksEYUeC+1BNQ3rI+jM76Cdx624N8fRNxyA+6PYNXwEDTJVrxks3+msigAHljX9RBcPbS122lP+cuxlCyxUDE8yVbQgOysduOf01ml4GQrDzF3nlYW91qJe6bSPBfdAKz/IgOEs7p+++45wb9L3EmAAG98mYlt9zW0AAAAASUVORK5CYII=') top left no-repeat transparent;
         }
     }
 
@@ -449,10 +470,29 @@ div[id^=emotion-detail-window] {
 
         &.is--master {
             cursor: pointer;
-            opacity: 0.8;
 
-            &:hover .counter--value {
+            .counter--value {
                 opacity: 1;
+            }
+
+            &.counter-xs:hover {
+                background-color: $viewport-pink;
+            }
+
+            &.counter-s:hover {
+                background-color: $viewport-violet;
+            }
+
+            &.counter-m:hover {
+                background-color: $viewport-blue;
+            }
+
+            &.counter-l:hover {
+                background-color: $viewport-turquoise;
+            }
+
+            &.counter-xl:hover {
+                background-color: $viewport-green;
             }
         }
 
@@ -533,18 +573,38 @@ div[id^=emotion-detail-window] {
 
         &.trigger-xs {
             background-color: $viewport-pink-light;
+
+            &:not(.is--master):hover {
+                background-color: $viewport-pink;
+            }
         }
         &.trigger-s {
             background-color: $viewport-violet-light;
+
+            &:not(.is--master):hover {
+                background-color: $viewport-violet;
+            }
         }
         &.trigger-m {
             background-color: $viewport-blue-light;
+
+            &:not(.is--master):hover {
+                background-color: $viewport-blue;
+            }
         }
         &.trigger-l {
             background-color: $viewport-turquoise-light;
+
+            &:not(.is--master):hover {
+                background-color: $viewport-turquoise;
+            }
         }
         &.trigger-xl {
             background-color: $viewport-green-light;
+
+            &:not(.is--master):hover {
+                background-color: $viewport-green;
+            }
         }
 
         &.is--active {
@@ -685,8 +745,26 @@ div[id^=emotion-detail-window] {
         top: 0; left: 0;
         display: inline-block;
 
+        .#{$prefix}emotion-element-icon {
+            width: 40px;
+            height: 40px;
+        }
+
+        .#{$prefix}emotion-element-label {
+            line-height: 16px;
+            font-size: 12px;
+        }
+
         .#{$prefix}emotion-element-options {
-            display: none;
+            padding: 0;
+            line-height: 17px;
+
+            .#{$prefix}emotion-element-pencil {
+                display: none;
+            }
+            .#{$prefix}emotion-element-visibility {
+                display: none;
+            }
         }
     }
 }
@@ -879,7 +957,7 @@ div[id^=emotion-detail-window] {
         top: 0; left: 0;
         bottom: 0; right: 0;
         margin: auto;
-        background: rgba(255, 255, 255, 0.8);
+        background: rgba(255, 255, 255, 0.9);
         z-index: 90;
     }
 

@@ -63,7 +63,8 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
         masterViewportTooltip: '{s name="toolbar/masterViewportTooltip"}{/s}',
         disconnectLabel: '{s name="viewports/disconnect/label"}{/s}',
         connectAlertTitle: '{s name="viewports/connect_alert/title"}{/s}',
-        connectAlertMsg: '{s name="viewports/connect_alert/msg"}{/s}'
+        connectAlertMsg: '{s name="viewports/connect_alert/msg"}{/s}',
+        notActiveViewportTooltip: '{s name="viewports/inactive/tooltip"}{/s}'
     },
 
     /**
@@ -345,11 +346,11 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
                         '<tpl for=".">',
                             '<div class="x-designer-viewport">',
                                 '<div class="{[this.getViewportBtnCls(values.alias)]}">',
-                                    '<div class="{[this.getLabelCls(values.alias)]}" data-viewport="{alias}">{label}</div>',
-                                    '<div class="{[this.getCounterCls(values.alias, values.hiddenCounter, values)]}" data-viewport="{alias}" data-qtip="{[this.getHiddenElTooltip()]}" data-qalign="b-t">',
+                                    '<div class="{[this.getLabelCls(values.deviceId)]}" data-viewport="{alias}" data-qtip="{[this.getLabelTooltip(values.deviceId)]}">{label}</div>',
+                                    '<div class="{[this.getCounterCls(values.alias, values.hiddenCounter, values)]}" data-viewport="{alias}" data-qtip="{[this.getHiddenElTooltip()]}">',
                                         '<span class="counter--value">{hiddenCounter}</span>',
                                     '</div>',
-                                    '<div class="{[this.getConnectCls(values.alias)]}" data-viewport="{alias}" data-qtip="{[this.getConnectTooltip(values.alias)]}" data-qalign="b-t"></div>',
+                                    '<div class="{[this.getConnectCls(values.alias)]}" data-viewport="{alias}" data-qtip="{[this.getConnectTooltip(values.alias)]}"></div>',
                                 '</div>',
                             '</div>',
                         '</tpl>',
@@ -397,8 +398,26 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
                     return cls;
                 },
 
-                getLabelCls: function() {
-                    return 'x-designer-viewport-label';
+                getLabelCls: function(deviceId) {
+                    var cls = 'x-designer-viewport-label',
+                        device = me.emotion.get('device') || '0,1,2,3,4';
+
+                    if (device.indexOf(deviceId) === -1) {
+                        cls += ' is--not-active'
+                    }
+
+                    return cls;
+                },
+
+                getLabelTooltip: function (deviceId) {
+                    var tooltip = '',
+                        device = me.emotion.get('device') || '0,1,2,3,4';
+
+                    if (device.indexOf(deviceId) === -1) {
+                        tooltip = me.snippets.notActiveViewportTooltip
+                    }
+
+                    return tooltip;
                 },
 
                 getCounterCls: function(alias, counter, values) {
@@ -472,13 +491,13 @@ Ext.define('Shopware.apps.Emotion.view.detail.Designer', {
         var me = this;
 
         return me.viewportStore = Ext.create('Ext.data.Store', {
-            fields: ['alias', 'label', 'minWidth', 'maxWidth', 'hiddenCounter'],
+            fields: ['deviceId', 'alias', 'label', 'minWidth', 'maxWidth', 'hiddenCounter'],
             data: [
-                { alias: 'xs',  label: me.snippets.mobilePortrait,  minWidth: 320,  maxWidth: 459,  hiddenCounter: 0 },
-                { alias: 's',   label: me.snippets.mobileLandscape, minWidth: 460,  maxWidth: 707,  hiddenCounter: 0 },
-                { alias: 'm',   label: me.snippets.tabletPortrait,  minWidth: 708,  maxWidth: 963,  hiddenCounter: 0 },
-                { alias: 'l',   label: me.snippets.tabletLandscape, minWidth: 964,  maxWidth: 1159, hiddenCounter: 0 },
-                { alias: 'xl',  label: me.snippets.desktop,         minWidth: 1160, maxWidth: 1190, hiddenCounter: 0 }
+                { deviceId: '4', alias: 'xs',  label: me.snippets.mobilePortrait,  minWidth: 320,  maxWidth: 459,  hiddenCounter: 0 },
+                { deviceId: '3', alias: 's',   label: me.snippets.mobileLandscape, minWidth: 460,  maxWidth: 707,  hiddenCounter: 0 },
+                { deviceId: '2', alias: 'm',   label: me.snippets.tabletPortrait,  minWidth: 708,  maxWidth: 963,  hiddenCounter: 0 },
+                { deviceId: '1', alias: 'l',   label: me.snippets.tabletLandscape, minWidth: 964,  maxWidth: 1159, hiddenCounter: 0 },
+                { deviceId: '0', alias: 'xl',  label: me.snippets.desktop,         minWidth: 1160, maxWidth: 1190, hiddenCounter: 0 }
             ]
         });
     }
