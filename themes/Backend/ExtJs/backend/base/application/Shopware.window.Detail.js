@@ -172,7 +172,15 @@ Ext.define('Shopware.window.Detail', {
              *
              * @optional
              */
-            hasOwnController: false
+            hasOwnController: false,
+
+            /**
+             * Allows to enable form translation.
+             * Contains the type string for the translations.
+             * @string
+             * @optional
+             */
+            translationKey: null
         },
 
         /**
@@ -547,9 +555,19 @@ Ext.define('Shopware.window.Detail', {
             items = [ me.tabPanel ];
         }
 
+        var plugins = [];
+        if (me.getConfig('translationKey')) {
+            plugins.push({
+                pluginId: 'translation',
+                ptype: 'translation',
+                translationType: me.getConfig('translationKey')
+            });
+        }
+
         me.formPanel = Ext.create('Ext.form.Panel', {
             items: items,
             flex: 1,
+            plugins: plugins,
             defaults: {
                 cls: 'shopware-form'
             },
