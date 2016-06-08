@@ -442,6 +442,17 @@ div[id^=emotion-detail-window] {
         font-weight: bold;
         cursor: pointer;
         color: #ffffff;
+
+        &.is--not-active:after {
+            display: inline-block;
+            content: '';
+            width: 15px;
+            height: 15px;
+            margin-left: 5px;
+            position: relative;
+            top: 3px;
+            background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAM1JREFUeNqcU4ENgyAQBNMBHIER3KCM0A10BDdqN5ANSCdoN9ANcAN6n7zmS5+m9pILyt0DHq81CnLODsMFbHlqBYO1djE1UBE45TquYKsVdmASxhmMTDlPz50sbNksEYUeC+1BNQ3rI+jM76Cdx624N8fRNxyA+6PYNXwEDTJVrxks3+msigAHljX9RBcPbS122lP+cuxlCyxUDE8yVbQgOysduOf01ml4GQrDzF3nlYW91qJe6bSPBfdAKz/IgOEs7p+++45wb9L3EmAAG98mYlt9zW0AAAAASUVORK5CYII=') top left no-repeat transparent;
+        }
     }
 
     .#{$prefix}viewport-hidden-elements-counter {

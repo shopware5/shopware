@@ -110,6 +110,10 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             me.timingFieldSet
         ];
 
+        me.addEvents(
+            'deviceChange'
+        );
+
         me.callParent(arguments);
     },
 
@@ -389,6 +393,8 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
                         Ext.Msg.alert(me.snippets.alert.deviceWarningTitle, me.snippets.alert.deviceWarningText);
                         comp.setValue(oldVal);
                     }
+
+                    me.fireEvent('deviceChange', me.emotion, comp, newVal, oldVal);
                 }
             }
         });
