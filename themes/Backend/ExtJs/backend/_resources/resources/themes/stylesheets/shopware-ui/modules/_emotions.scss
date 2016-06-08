@@ -383,26 +383,41 @@ div[id^=emotion-detail-window] {
 
     &.viewport-xs {
         background-color: $viewport-pink-light;
+
+        .#{$prefix}designer-viewport-label:hover {
+            background-color: $viewport-pink;
+        }
     }
     &.viewport-s {
         background-color: $viewport-violet-light;
+
+        .#{$prefix}designer-viewport-label:hover {
+            background-color: $viewport-violet;
+        }
     }
     &.viewport-m {
         background-color: $viewport-blue-light;
+
+        .#{$prefix}designer-viewport-label:hover {
+            background-color: $viewport-blue;
+        }
     }
     &.viewport-l {
         background-color: $viewport-turquoise-light;
+
+        .#{$prefix}designer-viewport-label:hover {
+            background-color: $viewport-turquoise;
+        }
     }
     &.viewport-xl {
         background-color: $viewport-green-light;
+
+        .#{$prefix}designer-viewport-label:hover {
+            background-color: $viewport-green;
+        }
     }
 
     &.is--active {
-        .#{$prefix}designer-viewport-label,
-        .#{$prefix}designer-viewport-label:hover {
-            opacity: 1;
-        }
-
         &.viewport-xs {
             background-color: $viewport-pink;
         }
@@ -427,11 +442,6 @@ div[id^=emotion-detail-window] {
         font-weight: bold;
         cursor: pointer;
         color: #ffffff;
-        opacity: 0.4;
-
-        &:hover {
-            opacity: 0.8;
-        }
     }
 
     .#{$prefix}viewport-hidden-elements-counter {
@@ -449,10 +459,29 @@ div[id^=emotion-detail-window] {
 
         &.is--master {
             cursor: pointer;
-            opacity: 0.8;
 
-            &:hover .counter--value {
+            .counter--value {
                 opacity: 1;
+            }
+
+            &.counter-xs:hover {
+                background-color: $viewport-pink;
+            }
+
+            &.counter-s:hover {
+                background-color: $viewport-violet;
+            }
+
+            &.counter-m:hover {
+                background-color: $viewport-blue;
+            }
+
+            &.counter-l:hover {
+                background-color: $viewport-turquoise;
+            }
+
+            &.counter-xl:hover {
+                background-color: $viewport-green;
             }
         }
 
@@ -533,18 +562,38 @@ div[id^=emotion-detail-window] {
 
         &.trigger-xs {
             background-color: $viewport-pink-light;
+
+            &:not(.is--master):hover {
+                background-color: $viewport-pink;
+            }
         }
         &.trigger-s {
             background-color: $viewport-violet-light;
+
+            &:not(.is--master):hover {
+                background-color: $viewport-violet;
+            }
         }
         &.trigger-m {
             background-color: $viewport-blue-light;
+
+            &:not(.is--master):hover {
+                background-color: $viewport-blue;
+            }
         }
         &.trigger-l {
             background-color: $viewport-turquoise-light;
+
+            &:not(.is--master):hover {
+                background-color: $viewport-turquoise;
+            }
         }
         &.trigger-xl {
             background-color: $viewport-green-light;
+
+            &:not(.is--master):hover {
+                background-color: $viewport-green;
+            }
         }
 
         &.is--active {
