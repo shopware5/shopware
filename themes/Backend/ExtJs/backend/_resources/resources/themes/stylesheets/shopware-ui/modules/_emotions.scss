@@ -685,8 +685,26 @@ div[id^=emotion-detail-window] {
         top: 0; left: 0;
         display: inline-block;
 
+        .#{$prefix}emotion-element-icon {
+            width: 40px;
+            height: 40px;
+        }
+
+        .#{$prefix}emotion-element-label {
+            line-height: 16px;
+            font-size: 12px;
+        }
+
         .#{$prefix}emotion-element-options {
-            display: none;
+            padding: 0;
+            line-height: 17px;
+
+            .#{$prefix}emotion-element-pencil {
+                display: none;
+            }
+            .#{$prefix}emotion-element-visibility {
+                display: none;
+            }
         }
     }
 }
@@ -879,7 +897,7 @@ div[id^=emotion-detail-window] {
         top: 0; left: 0;
         bottom: 0; right: 0;
         margin: auto;
-        background: rgba(255, 255, 255, 0.8);
+        background: rgba(255, 255, 255, 0.9);
         z-index: 90;
     }
 
