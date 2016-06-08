@@ -196,7 +196,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Window', {
 
         me.attributeForm.loadAttribute(me.emotion.get('id'));
 
-        me.layoutForm.setDevices();
+        me.settingsForm.setDevices();
 
         return me.mainForm;
     },

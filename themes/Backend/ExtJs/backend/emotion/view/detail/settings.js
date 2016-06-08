@@ -52,6 +52,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             basicSettingsLabel: '{s name="settings/basicFieldset/title"}{/s}',
             displaySettingsLabel: '{s name="settings/displayFielset/title"}{/s}',
             landingPageSettingsLabel: '{s name="settings/landingpage_settings"}{/s}',
+            deviceLabel: '{s name="settings/deviceFieldset/title"}{/s}',
             timeSettingsLabel: '{s name="settings/timeFieldset/title"}{/s}'
         },
         fields: {
@@ -73,7 +74,17 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
             timeStartTimeLabel: '{s name=settings/time_control/start_time}{/s}',
             timeEndTimeLabel: '{s name=settings/time_control/end_time}{/s}',
             timeResetBtnLabel: '{s name=settings/time_control/reset}{/s}',
-            shopSelectionLabel: '{s name="settings/shop_selection"}{/s}'
+            shopSelectionLabel: '{s name="settings/shop_selection"}{/s}',
+            deviceDesktopLabel: '{s name="settings/device/desktop"}{/s}',
+            deviceTabletLandscapeLabel: '{s name="settings/device/tabletLandscape"}{/s}',
+            deviceTabletPortraitLabel: '{s name="settings/device/tabletPortrait"}{/s}',
+            deviceMobileLandscapeLabel: '{s name="settings/device/mobileLandscape"}{/s}',
+            deviceMobilePortraitLabel: '{s name="settings/device/mobilePortrait"}{/s}',
+            deviceHelpText: '{s name="settings/device/helpText"}{/s}'
+        },
+        alert: {
+            deviceWarningTitle: '{s name="settings/device/warning_title"}{/s}',
+            deviceWarningText: '{s name="settings/device/warning_text"}{/s}'
         }
     },
 
@@ -88,12 +99,14 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
         me.mainFieldset = me.createMainFieldset();
         me.generalFieldSet = me.createGeneralFieldSet();
         me.landingPageFieldSet = me.createLandingPageFieldset();
+        me.deviceFieldset = me.createDeviceFieldset();
         me.timingFieldSet = me.createTimingFieldSet();
 
         me.items = [
             me.mainFieldset,
             me.generalFieldSet,
             me.landingPageFieldSet,
+            me.deviceFieldset,
             me.timingFieldSet
         ];
 
@@ -360,6 +373,87 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
         });
     },
 
+    createDeviceFieldset: function() {
+        var me = this;
+
+        me.deviceComboGroup = Ext.create('Ext.form.CheckboxGroup', {
+            columns: 1,
+            vertical: false,
+            items: me.createDeviceData(),
+            listeners: {
+                scope: me,
+                change: function(comp, newVal, oldVal) {
+                    var values = comp.getValue();
+
+                    if (!values.hasOwnProperty('device')) {
+                        Ext.Msg.alert(me.snippets.alert.deviceWarningTitle, me.snippets.alert.deviceWarningText);
+                        comp.setValue(oldVal);
+                    }
+                }
+            }
+        });
+
+        me.deviceHelpText = Ext.create('Ext.Component', {
+            html: me.snippets.fields.deviceHelpText,
+            style: {
+                'font-size': '12px',
+                'line-height': '18px',
+                'color': '#475c6a',
+                'margin-bottom': '10px'
+            }
+        });
+
+        return Ext.create('Ext.form.FieldSet', {
+            title: me.snippets.fieldSets.deviceLabel,
+            defaults: me.defaults,
+            collapsible: true,
+            items: [
+                me.deviceHelpText,
+                me.deviceComboGroup
+            ]
+        });
+    },
+
+    createDeviceData: function() {
+        var me = this;
+
+        return [{
+            'inputValue': '0',
+            'boxLabel': me.snippets.fields.deviceDesktopLabel,
+            'checked': 1,
+            'name': 'device'
+        }, {
+            'inputValue': '1',
+            'boxLabel' : me.snippets.fields.deviceTabletLandscapeLabel,
+            'checked': 1,
+            'name': 'device'
+        }, {
+            'inputValue': '2',
+            'boxLabel': me.snippets.fields.deviceTabletPortraitLabel,
+            'checked': 1,
+            'name': 'device'
+        }, {
+            'inputValue': '3',
+            'boxLabel': me.snippets.fields.deviceMobileLandscapeLabel,
+            'checked': 1,
+            'name': 'device'
+        }, {
+            'inputValue': '4',
+            'boxLabel': me.snippets.fields.deviceMobilePortraitLabel,
+            'checked': 1,
+            'name': 'device'
+        }];
+    },
+
+    setDevices: function() {
+        var me = this,
+            device = me.emotion.get('device') || '0,1,2,3,4';
+
+        me.deviceComboGroup.setValue({
+            'device': device.split(',')
+        });
+    },
+
     createTimingFieldSet: function() {
         var me = this;
 
@@ -423,6 +517,8 @@ Ext.define('Shopware.apps.Emotion.view.detail.Settings', {
         return Ext.create('Ext.form.FieldSet', {
             title: me.snippets.fieldSets.timeSettingsLabel,
             defaults: me.defaults,
+            collapsible: true,
+            collapsed: true,
             items: [
                 me.timeFields.resetBtn,
                 me.timeFields.validFrom,
