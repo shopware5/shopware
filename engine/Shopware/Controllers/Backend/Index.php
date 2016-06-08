@@ -139,6 +139,7 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
         $config = $this->get('config');
 
         $this->View()->assign('updateWizardStarted', $config->get('updateWizardStarted'));
+        $this->View()->assign('feedbackRequired', $this->checkIsFeedbackRequired());
     }
 
     /**
@@ -262,5 +263,13 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
             }
         }
         return $menuTree;
+    }
+
+    /**
+     * @return bool
+     */
+    private function checkIsFeedbackRequired()
+    {
+        return (Shopware::VERSION_TEXT !== '___VERSION_TEXT___' && strlen(Shopware::VERSION_TEXT) !== 0);
     }
 }
