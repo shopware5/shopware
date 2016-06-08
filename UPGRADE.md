@@ -369,6 +369,7 @@ In this document you will find a changelog of the important changes related to t
 * Removed `$basket` from `sAdmin::sManageRisks($paymentID, $basket, $user)`
 * Added new `\Shopware\Bundle\StoreFrontBundle\Service\VariantCoverServiceInterface` which allows to load variant covers without considering `forceMainImageInListing` parameter
 * Removed wrong parameter usage of `Shopware\Models\Menu\Repository::findOneBy`, which allows to provide two strings as criteria instead of array.
+* Fixed row selection in ExtJs grid panel when updating a row using e.g. the row editing plugin
 
 ## 5.1.6
 * The interface `Enlight_Components_Cron_Adapter` in `engine/Library/Enlight/Components/Cron/Adapter.php` got a new method `getJobByAction`. For default implementation see `engine/Library/Enlight/Components/Cron/Adapter/DBAL.php`.
