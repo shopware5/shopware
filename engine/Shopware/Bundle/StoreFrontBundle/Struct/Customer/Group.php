@@ -62,6 +62,13 @@ class Group extends Extendable implements \JsonSerializable
     protected $displayGrossPrices;
 
     /**
+     * Defines if prices inserted as gross prices
+     *
+     * @var boolean
+     */
+    protected $insertedGrossPrices;
+
+    /**
      * Defines if the display price
      * already reduces with a global customer
      * group discount
@@ -208,6 +215,23 @@ class Group extends Extendable implements \JsonSerializable
     {
         return $this->displayGrossPrices;
     }
+
+    /**
+     * @return boolean
+     */
+    public function insertedGrossPrices()
+    {
+        return $this->insertedGrossPrices;
+    }
+
+    /**
+     * @param boolean $insertedGrossPrices
+     */
+    public function setInsertedGrossPrices($insertedGrossPrices)
+    {
+        $this->insertedGrossPrices = $insertedGrossPrices;
+    }
+
 
     /**
      * @return float

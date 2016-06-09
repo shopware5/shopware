@@ -131,6 +131,7 @@ class Converter
         $customerGroup->setId($group->getId());
         $customerGroup->setPercentageDiscount($group->getDiscount());
         $customerGroup->setDisplayGrossPrices($group->getTax());
+        $customerGroup->setInsertedGrossPrices($group->getTaxInput());
         $customerGroup->setMinimumOrderValue($group->getMinimumOrder());
         $customerGroup->setSurcharge($group->getMinimumOrderSurcharge());
 

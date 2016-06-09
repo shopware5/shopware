@@ -60,6 +60,8 @@ class CustomerGroupHydrator extends Hydrator
 
         $customerGroup->setDisplayGrossPrices((bool) ($data['__customerGroup_tax']));
 
+        $customerGroup->setInsertedGrossPrices((bool) ($data['__customerGroup_taxinput']));
+
         $customerGroup->setKey($data['__customerGroup_groupkey']);
 
         $customerGroup->setMinimumOrderValue((float) $data['__customerGroup_minimumorder']);
