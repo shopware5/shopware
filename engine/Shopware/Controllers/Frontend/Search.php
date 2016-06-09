@@ -148,12 +148,9 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
         //we have to strip the / otherwise broken urls would be created e.g. wrong pager urls
         $term = str_replace("/", " ", $term);
 
-        $term = \Shopware()->Container()->get('events')->filter(
+        $term = Shopware()->Container()->get('events')->filter(
             'Shopware_Controllers_Frontend_Search_getSearchTerm_Term',
-            $term,
-            [
-                'subject'      => $this
-            ]
+            $term
         );
 
         return $term;
