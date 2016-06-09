@@ -67,7 +67,8 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
             $this->cacheManager->getTemplateCacheInfo(),
             $this->cacheManager->getThemeCacheInfo(),
             $this->cacheManager->getShopwareProxyCacheInfo(),
-            $this->cacheManager->getDoctrineProxyCacheInfo()
+            $this->cacheManager->getDoctrineProxyCacheInfo(),
+            $this->cacheManager->getOpCacheCacheInfo()
         );
 
         $this->View()->assign(array(

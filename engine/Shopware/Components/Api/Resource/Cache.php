@@ -102,7 +102,8 @@ class Cache extends Resource implements ContainerAwareInterface, BatchInterface
             $this->getCacheInfo('http'),
             $this->getCacheInfo('template'),
             $this->getCacheInfo('proxy'),
-            $this->getCacheInfo('doctrine-proxy')
+            $this->getCacheInfo('doctrine-proxy'),
+            $this->getCacheInfo('opcache')
         );
 
         return array('data' => $data, 'total' => count($data));
@@ -187,6 +188,9 @@ class Cache extends Resource implements ContainerAwareInterface, BatchInterface
             case 'router':
                 $this->cacheManager->clearRewriteCache();
                 break;
+            case 'opcache':
+                $this->cacheManager->clearOpCache();
+                break;
             default:
                 throw new ApiException\NotFoundException("Cache {$cache} is not a valid cache id.");
         }
@@ -223,6 +227,9 @@ class Cache extends Resource implements ContainerAwareInterface, BatchInterface
                 break;
             case 'doctrine-proxy':
                 $cacheInfo = $this->cacheManager->getDoctrineProxyCacheInfo();
+                break;
+            case 'opcache':
+                $cacheInfo = $this->cacheManager->getOpCacheCacheInfo();
                 break;
             default:
                 throw new ApiException\NotFoundException("Cache {$cache} is not a valid cache id.");
