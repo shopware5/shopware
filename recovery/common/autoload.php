@@ -9,4 +9,6 @@ $autoloader->addPsr4(
     SW_PATH . '/engine/Shopware/Components/Migrations/'
 );
 
+require_once SW_PATH . '/engine/Shopware/Bundle/AttributeBundle/Service/MigrationHelper.php';
+
 return $autoloader;
