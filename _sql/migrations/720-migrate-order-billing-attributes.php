@@ -8,6 +8,8 @@ class Migrations_Migration720 extends Shopware\Components\Migrations\AbstractMig
      */
     public function up($modus)
     {
+        require_once __DIR__ . '/../../engine/Shopware/Bundle/AttributeBundle/Service/MigrationHelper.php';
+
         $helper = new \Shopware\Bundle\AttributeBundle\Service\MigrationHelper($this->connection);
         $helper->migrateAttributes('s_order_billingaddress_attributes', 'billingID');
     }
