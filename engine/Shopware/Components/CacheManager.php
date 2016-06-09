@@ -218,6 +218,13 @@ class CacheManager
         $this->clearDirectory($this->container->getParameter('shopware.model.proxyDir'));
     }
 
+    public function clearOpCache()
+    {
+        if (extension_loaded('Zend OPcache')) {
+            opcache_reset();
+        }
+    }
+
     /**
      * Returns cache information
      *
@@ -227,7 +234,7 @@ class CacheManager
     public function getHttpCacheInfo($request = null)
     {
         if ($this->container->getParameter('shopware.httpCache.enabled')) {
-            $this->getDirectoryInfo(
+            $info = $this->getDirectoryInfo(
                 $this->container->getParameter('shopware.httpCache.cache_dir')
             );
         } else {
@@ -254,10 +261,13 @@ class CacheManager
     {
         $cacheConfig = $this->container->getParameter('shopware.cache');
 
-        if ($this->cache->getBackend() instanceof \Zend_Cache_Backend_Apc) {
+        if ($this->cache->getBackend() instanceof \Zend_Cache_Backend_Apcu) {
+            $info = [];
             $apcInfo = apcu_cache_info('user');
             $info['files'] = $apcInfo['num_entries'];
             $info['size'] = $this->encodeSize($apcInfo['mem_size']);
+            $apcInfo = apcu_sma_info();
+            $info['freeSpace'] = $this->encodeSize($apcInfo['avail_mem']);
         } else {
             if (!empty($cacheConfig['backendOptions']['cache_dir'])) {
                 $dir = $cacheConfig['backendOptions']['cache_dir'];
@@ -330,6 +340,26 @@ class CacheManager
 
         $info = $this->getDirectoryInfo($dir);
         $info['name'] = 'Shopware Proxies';
+
+        return $info;
+    }
+
+
+    /**
+     * Returns cache information
+     *
+     * @return array
+     */
+    public function getOpCacheCacheInfo()
+    {
+        $info = [];
+        if (extension_loaded('Zend OPcache')) {
+            $status = opcache_get_status(false);
+            $info['files'] = $status['opcache_statistics']['num_cached_scripts'];
+            $info['size'] = $this->encodeSize($status['memory_usage']['used_memory']);
+            $info['freeSpace'] = $this->encodeSize($status['memory_usage']['free_memory']);
+        }
+        $info['name'] = 'Zend OPcache';
 
         return $info;
     }
