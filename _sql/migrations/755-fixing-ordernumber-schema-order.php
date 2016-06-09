@@ -1,4 +1,4 @@
-751-fixing-ordernumber-schema.php<?php
+<?php
 
 class Migrations_Migration755 extends Shopware\Components\Migrations\AbstractMigration
 {
