@@ -188,6 +188,14 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
                 $countryArray[] = Shopware()->Models()->find('Shopware\Models\Country\Country', $country['id']);
             }
             $params['countries'] = $countryArray;
+
+            $shops = $params['shops'];
+            $shopArray = array();
+            foreach ($shops as $shop) {
+                $shopArray[] = Shopware()->Models()->find('Shopware\Models\Shop\Shop', $shop['id']);
+            }
+            $params['shops'] = $shopArray;
+
             $paymentModel->fromArray($params);
 
             Shopware()->Models()->persist($paymentModel);
