@@ -38,7 +38,7 @@
         "oyejorge/less.php": "1.7.0.5",
         "guzzlehttp/guzzle": "5.1.0",
         "egulias/email-validator": "1.2.9",
-        "elasticsearch/elasticsearch": "2.1.5",
+        "elasticsearch/elasticsearch": "2.2.0",
         "ongr/elasticsearch-dsl": "v1.0.0",
         "league/flysystem": "1.0.18",
         "indigophp/hash-compat": "1.1.0"
