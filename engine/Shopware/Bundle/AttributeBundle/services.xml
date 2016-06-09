@@ -31,7 +31,6 @@
         </service>
 
         <service id="shopware_attribute.type_mapping" class="Shopware\Bundle\AttributeBundle\Service\TypeMapping">
-            <argument type="service" id="dbal_connection" />
             <argument type="service" id="snippets" />
         </service>
 

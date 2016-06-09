@@ -12,52 +12,19 @@ class Migrations_Migration715 extends Shopware\Components\Migrations\AbstractMig
             return;
         }
 
-        $attributeColumns = $this->getAttributeColumns();
-        $attributeFields = join(", ", array_column($attributeColumns, 'Field'));
-        $attributeSelectorSql = $this->getAttributeSelectors($attributeColumns);
-        
         $sql = <<<SQL
-INSERT IGNORE INTO s_user_addresses_migration (user_id, company, department, salutation, firstname, lastname, street, zipcode, city, additional_address_line1, additional_address_line2, country_id, state_id, checksum, $attributeFields)
+INSERT IGNORE INTO s_user_addresses_migration (original_type, original_id, user_id, company, department, salutation, firstname, lastname, street, zipcode, city, additional_address_line1, additional_address_line2, country_id, state_id, checksum)
 (
   SELECT
-    userID, company, department, salutation, firstname, lastname, street, zipcode, city, additional_address_line1, additional_address_line2, countryID, IF(stateID = 0, NULL, stateID),
-    MD5(CONCAT_WS('', userID, company, department, salutation, firstname, lastname, street, zipcode, city, additional_address_line1, additional_address_line2, countryID, stateID, null, null)),
-    $attributeSelectorSql
+    's_order_shippingaddress' as original_type,
+    s_order_shippingaddress.id as original_id,
+    userID, company, department, s_order_shippingaddress.salutation, s_order_shippingaddress.firstname, s_order_shippingaddress.lastname, street, zipcode, city, additional_address_line1, additional_address_line2, countryID, IF(stateID = 0, NULL, stateID),
+    MD5(CONCAT_WS('', userID, company, department, s_order_shippingaddress.salutation, s_order_shippingaddress.firstname, s_order_shippingaddress.lastname, street, zipcode, city, additional_address_line1, additional_address_line2, countryID, stateID, null, null))
   FROM s_order_shippingaddress
-  LEFT JOIN s_order_shippingaddress_attributes AS attr ON attr.shippingID = s_order_shippingaddress.id
   INNER JOIN s_user ON s_order_shippingaddress.userID = s_user.id
   INNER JOIN s_core_countries ON s_order_shippingaddress.countryID = s_core_countries.id
 )
 SQL;
-
         $this->addSql($sql);
-    }
-
-    private function getAttributeColumns()
-    {
-        $columns = $this->getConnection()->query('DESCRIBE s_user_addresses_attributes')->fetchAll(\PDO::FETCH_ASSOC);
-
-        $columns = array_filter($columns, function ($column) {
-            return !in_array($column['Field'], ['id', 'address_id']);
-        });
-
-        return $columns;
-    }
-
-    private function getAttributeSelectors(array $columns)
-    {
-        $selectors = [];
-        $existingColumns = array_column($this->getConnection()->query('DESCRIBE s_order_shippingaddress_attributes')->fetchAll(\PDO::FETCH_ASSOC),
-            'Field');
-
-        foreach ($columns as $column) {
-            if (in_array($column['Field'], $existingColumns)) {
-                $selectors[] = 'attr.' . $column['Field'];
-            } else {
-                $selectors[] = 'NULL';
-            }
-        }
-
-        return join(", ", $selectors);
     }
 }

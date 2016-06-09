@@ -11,7 +11,7 @@ class Migrations_Migration709 extends Shopware\Components\Migrations\AbstractMig
         $this->changeConfusingVatLabel();
         $this->createDefaultShippingBillingRelations();
         $this->createAddressTable();
-        $this->createAttributeTable();
+        $this->removeCompanySalutation();
     }
 
     private function changeConfusingVatLabel()
@@ -44,55 +44,6 @@ SQL;
         $this->addSql($sql);
     }
 
-    private function createAttributeTable()
-    {
-        $attributeColumns = $this->getAttributeColumns();
-        $attributeSql = $this->attributeColumnsToSql($attributeColumns);
-
-        $sql = <<<SQL
-CREATE TABLE `s_user_addresses_attributes` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `address_id` int(11) NOT NULL,
-  $attributeSql
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `address_id` (`address_id`),
-  CONSTRAINT `s_user_addresses_attributes_ibfk_1` FOREIGN KEY (`address_id`) REFERENCES `s_user_addresses` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
-SQL;
-        $this->addSql($sql);
-    }
-
-    private function attributeColumnsToSql($attributeColumns)
-    {
-        $attributeSql = "";
-        foreach ($attributeColumns as $column) {
-            $attributeSql .= "  `".$column['Field']."` ".$column['Type']." COLLATE utf8_unicode_ci DEFAULT NULL,".PHP_EOL;
-        }
-
-        return $attributeSql;
-    }
-
-    private function getAttributeColumns()
-    {
-        $identifierColumns = ['id', 'billingID', 'shippingID'];
-        $filteredColumns = [];
-
-        $columns = array_merge(
-            $this->getConnection()->query('DESCRIBE s_user_billingaddress_attributes')->fetchAll(\PDO::FETCH_ASSOC),
-            $this->getConnection()->query('DESCRIBE s_user_shippingaddress_attributes')->fetchAll(\PDO::FETCH_ASSOC)
-        );
-
-        foreach ($columns as $column) {
-            if (array_key_exists($column['Field'], $filteredColumns) || in_array($column['Field'], $identifierColumns)) {
-                continue;
-            }
-
-            $filteredColumns[$column['Field']] = $column;
-        }
-
-        return $filteredColumns;
-    }
-
     private function createAddressTable()
     {
         $sql = <<<SQL
@@ -114,6 +65,8 @@ CREATE TABLE `s_user_addresses` (
   `phone` varchar(40) COLLATE utf8_unicode_ci DEFAULT NULL,
   `additional_address_line1` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `additional_address_line2` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `original_type` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `original_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `country_id` (`country_id`),
@@ -125,5 +78,13 @@ CREATE TABLE `s_user_addresses` (
 SQL;
 
         $this->addSql($sql);
+    }
+
+    private function removeCompanySalutation()
+    {
+        $this->addSql("UPDATE `s_user_billingaddress` SET salutation = 'mr' WHERE salutation = 'company';");
+        $this->addSql("UPDATE `s_user_shippingaddress` SET salutation = 'mr' WHERE salutation = 'company';");
+        $this->addSql("UPDATE `s_order_billingaddress` SET salutation = 'mr' WHERE salutation = 'company';");
+        $this->addSql("UPDATE `s_order_shippingaddress` SET salutation = 'mr' WHERE salutation = 'company';");
     }
 }
