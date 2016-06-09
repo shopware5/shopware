@@ -42,9 +42,8 @@ SQL;
      */
     private function applyAttributeSchema($table)
     {
-        require_once __DIR__ . '/../../engine/Shopware/Bundle/AttributeBundle/Service/MigrationHelper.php';
-
-        $helper = new \Shopware\Bundle\AttributeBundle\Service\MigrationHelper($this->connection);
+        require_once __DIR__ . '/common/MigrationHelper.php';
+        $helper = new MigrationHelper($this->connection);
 
         $attributes = $helper->getList($table);
 

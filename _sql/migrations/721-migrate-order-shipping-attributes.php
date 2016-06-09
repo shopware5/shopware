@@ -8,9 +8,9 @@ class Migrations_Migration721 extends Shopware\Components\Migrations\AbstractMig
      */
     public function up($modus)
     {
-        require_once __DIR__ . '/../../engine/Shopware/Bundle/AttributeBundle/Service/MigrationHelper.php';
+        require_once __DIR__ . '/common/MigrationHelper.php';
+        $helper = new MigrationHelper($this->connection);
 
-        $helper = new \Shopware\Bundle\AttributeBundle\Service\MigrationHelper($this->connection);
         $helper->migrateAttributes('s_order_shippingaddress_attributes', 'shippingID');
     }
 }

@@ -22,8 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\AttributeBundle\Service;
-
 class MigrationHelper
 {
     /**
