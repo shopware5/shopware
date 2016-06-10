@@ -24,7 +24,6 @@
 
 namespace Shopware\Bundle\AttributeBundle\Service;
 
-use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Types\Type;
 
 /**
