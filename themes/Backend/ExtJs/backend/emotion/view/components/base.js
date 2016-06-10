@@ -90,7 +90,7 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
 
         Ext.each(data, function(item) {
             try {
-                field = fieldCollection.getAt(fieldCollection.findIndex('name', item.key));
+                field = me.findFieldByName(item.key, fieldCollection);
                 value = item.value;
                 if (field.getXType() === 'datefield') {
                     value = Ext.Date.parse(item.value, 'Y-m-d');
@@ -98,6 +98,18 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
                 field.setValue(value);
             } catch(e) { }
         });
+    },
+
+    findFieldByName: function(name, fields) {
+        var found = false;
+
+        Ext.each(fields.getRange(), function(field) {
+            if (field.name == name) {
+                found = field;
+                return false;
+            }
+        });
+        return found;
     },
 
     createFormElements: function() {
