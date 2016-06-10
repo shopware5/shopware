@@ -118,7 +118,7 @@ class DownloadService
             $extractor->extract($archive, $destination);
         } elseif ($pluginZipDetector->isPlugin($archive)) {
             $pluginDir = $this->rootDir.'/custom/plugins';
-            $extractor = new PluginExtractor($pluginDir, new Filesystem());
+            $extractor = new PluginExtractor($pluginDir, new Filesystem(), $this->pluginDirectories);
             $extractor->extract($archive);
         } else {
             throw new \RuntimeException('No Plugin found in archive.');

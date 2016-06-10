@@ -39,13 +39,20 @@ class PluginExtractor
     private $filesystem;
 
     /**
+     * @var string[]
+     */
+    private $pluginDirectories = [];
+
+    /**
      * @param string $pluginDir
      * @param Filesystem $filesystem
+     * @param string[] $pluginDirectories
      */
-    public function __construct($pluginDir, Filesystem $filesystem)
+    public function __construct($pluginDir, Filesystem $filesystem, array $pluginDirectories = [])
     {
         $this->pluginDir = $pluginDir;
         $this->filesystem = $filesystem;
+        $this->pluginDirectories = $pluginDirectories;
     }
 
     /**
@@ -67,24 +74,18 @@ class PluginExtractor
         $prefix = $this->getPluginPrefix($archive);
         $this->validatePluginZip($prefix, $archive);
 
-        $pluginDir = $destination.'/'.$prefix;
-
-        $oldFile = false;
-        if ($this->filesystem->exists($pluginDir)) {
-            $oldFile = $pluginDir.'.'.uniqid();
-            $this->filesystem->rename($pluginDir, $oldFile);
-            rename($pluginDir, $oldFile);
-        }
+        $oldFile = $this->findOldFile($prefix);
+        $backupFile = $this->createBackupFile($oldFile);
 
         try {
             $archive->extractTo($destination);
 
-            if ($oldFile) {
-                $this->filesystem->remove($oldFile);
+            if ($backupFile !== false) {
+                $this->filesystem->remove($backupFile);
             }
         } catch (\Exception $e) {
-            if ($oldFile) {
-                $this->filesystem->rename($oldFile, $pluginDir);
+            if ($backupFile !== false) {
+                $this->filesystem->rename($backupFile, $oldFile);
             }
             throw $e;
         }
@@ -165,5 +166,46 @@ class PluginExtractor
                 sprintf('Directory Traversal detected')
             );
         }
+    }
+
+    /**
+     * @param string $pluginName
+     * @return bool|string
+     */
+    private function findOldFile($pluginName)
+    {
+        $dir = $this->pluginDir . '/' . $pluginName;
+        if ($this->filesystem->exists($dir)) {
+            return $dir;
+        }
+
+        foreach ($this->pluginDirectories as $directory) {
+            $namespaces = ['Core', 'Frontend', 'Backend'];
+            foreach ($namespaces as $namespace) {
+                $dir = $directory . $namespace . '/' . $pluginName;
+
+                if ($this->filesystem->exists($dir)) {
+                    return $dir;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param string $oldFile
+     * @return bool|string
+     */
+    private function createBackupFile($oldFile)
+    {
+        if ($oldFile === false) {
+            return false;
+        }
+
+        $backupFile = $oldFile . '.' . uniqid();
+        $this->filesystem->rename($oldFile, $backupFile);
+        rename($oldFile, $backupFile);
+        return $backupFile;
     }
 }
