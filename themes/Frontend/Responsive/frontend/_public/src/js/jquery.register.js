@@ -507,7 +507,7 @@
                     break;
             }
 
-            if (!$el.val()) {
+            if (!$el.val() && $el.attr('required')) {
                 me.setFieldAsError($el);
             } else if ($el.attr('type') === 'checkbox' && !$el.is(':checked')) {
                 me.setFieldAsError($el);
