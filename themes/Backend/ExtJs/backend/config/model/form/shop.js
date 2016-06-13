@@ -89,7 +89,10 @@ Ext.define('Shopware.apps.Config.model.form.Shop', {
             return v || record.raw && record.raw.customerGroup && record.raw.customerGroup.id;
         }, useNull: true },
         { name: 'fallbackId', convert: function(v, record) {
-            return v || record.raw && record.raw.fallback && record.raw.fallback.id;
+            if (v || v === null) {
+                return v;
+            }
+            return record.raw && record.raw.fallback && record.raw.fallback.id;
         }, useNull: true },
         { name: 'deletable', type: 'boolean', convert: function(v, r) { return r.data.id > 1; } }
     ],
