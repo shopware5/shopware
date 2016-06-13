@@ -25,7 +25,6 @@
 namespace Shopware\Bundle\AttributeBundle\Repository\Searcher;
 
 use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
-use Shopware\Components\Model\QueryBuilder;
 use Shopware\Models\Property\Value;
 
 /**
@@ -46,10 +45,9 @@ class PropertyOptionSearcher extends GenericSearcher
 
     /**
      * @param SearchCriteria $criteria
-     * @param QueryBuilder $builder
      * @return array
      */
-    protected function getSearchFields(SearchCriteria $criteria, QueryBuilder $builder)
+    protected function getSearchFields(SearchCriteria $criteria)
     {
         return [
             'entity.value',
