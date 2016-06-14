@@ -40,7 +40,8 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
     bodyPadding: 26,
     alias: 'widget.emotion-components-base',
     defaults: {
-        anchor: '100%'
+        anchor: '100%',
+        labelWidth: 170
     },
     initComponent: function() {
         var me = this;
@@ -116,6 +117,7 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
         var me = this, items = [], store,
             name, fieldLabel, snippet,
             supportText, sortedFields,
+            helpText,
             boxLabel = '',
             constructedItem,
             radios = {},
@@ -132,6 +134,7 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
             name = item.get('name');
             fieldLabel = item.get('fieldLabel');
             supportText = item.get('supportText');
+            helpText = item.get('helpText');
 
             if (me.snippets && me.snippets[name]) {
                 snippet = me.snippets[name];
@@ -139,6 +142,7 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
                 if (Ext.isObject(snippet)) {
                     if (snippet.hasOwnProperty('supportText')) supportText = snippet.supportText;
                     if (snippet.hasOwnProperty('fieldLabel')) fieldLabel = snippet.fieldLabel;
+                    if (snippet.hasOwnProperty('helpText')) helpText = snippet.helpText;
                 } else {
                     fieldLabel = snippet;
                 }
@@ -156,7 +160,7 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
 
             constructedItem = {
                 xtype           : xtype,
-                helpText        : item.get('helpText') || '',
+                helpText        : helpText || '',
                 fieldLabel      : fieldLabel || '',
                 fieldId         : item.get('id'),
                 valueType       : item.get('valueType'),
@@ -170,7 +174,6 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
                 supportText     : supportText || '',
                 allowBlank      : (item.get('allowBlank') ? true : false),
                 value           : item.get('defaultValue') || '',
-                labelWidth      : 100,
                 boxLabel        : boxLabel,
                 translatable    : item.get('translatable')
             };
@@ -236,7 +239,7 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
             cls: 'css-field',
             anchor: '100%',
             allowBlank: true,
-            labelWidth: 100,
+            labelWidth: 170,
             value: record.get('cssClass') || '',
             validator: function(value) {
                 if (!value) {
