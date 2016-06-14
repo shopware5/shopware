@@ -130,10 +130,10 @@
                 $container = $(el);
                 $tab = $(me.$tabs.get(i));
 
-                if ($container.find(opts.contentSelector).html().length) {
+                if ($.trim($container.find(opts.contentSelector).html()).length !== 0) {
                     $container.addClass(opts.hasContentClass);
                     $tab.addClass(opts.hasContentClass);
-                    
+
                     // When no start index is specified, we take the first tab with content.
                     if (opts.startIndex === -1) {
                         $tab.addClass(opts.activeTabClass);
