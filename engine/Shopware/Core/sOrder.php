@@ -243,6 +243,17 @@ class sOrder
     }
 
     /**
+     * @return int
+     */
+    private function getPaymentId()
+    {
+        if (!empty($this->sUserData['additional']['payment']['id'])) {
+            return $this->sUserData['additional']['payment']['id'];
+        }
+        return $this->sUserData['additional']['user']['paymentID'];
+    }
+
+    /**
      * Get a unique order number
      * @access public
      * @return string The reserved order number
@@ -430,7 +441,7 @@ class sOrder
             'invoice_shipping_net' => $this->sShippingcostsNumericNet,
             'ordertime' => new Zend_Db_Expr('NOW()'),
             'status' => -1,
-            'paymentID' => $this->sUserData["additional"]["user"]["paymentID"],
+            'paymentID' => $this->getPaymentId(),
             'customercomment' => $this->sComment,
             'net' => $net,
             'taxfree' => $taxfree,
@@ -580,7 +591,7 @@ class sOrder
             'ordertime'            => new Zend_Db_Expr('NOW()'),
             'status'               => 0,
             'cleared'              => 17,
-            'paymentID'            => $this->sUserData["additional"]["user"]["paymentID"],
+            'paymentID'            => $this->getPaymentId(),
             'transactionID'        => (string) $this->bookingId,
             'customercomment'      => $this->sComment,
             'net'                  => $net,
@@ -614,10 +625,10 @@ class sOrder
         }
 
         try {
-            $paymentData = Shopware()->Modules()->Admin()->sGetPaymentMeanById($this->sUserData["additional"]["user"]["paymentID"], Shopware()->Modules()->Admin()->sGetUserData());
+            $paymentData = Shopware()->Modules()->Admin()->sGetPaymentMeanById($this->getPaymentId(), Shopware()->Modules()->Admin()->sGetUserData());
             $paymentClass = Shopware()->Modules()->Admin()->sInitiatePaymentClass($paymentData);
             if ($paymentClass instanceof \ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod) {
-                $paymentClass->createPaymentInstance($orderID, $this->sUserData["additional"]["user"]["id"], $this->sUserData["additional"]["user"]["paymentID"]);
+                $paymentClass->createPaymentInstance($orderID, $this->sUserData["additional"]["user"]["id"], $this->getPaymentId());
             }
         } catch (\Exception $e) {
             //Payment method code failure
