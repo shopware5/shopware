@@ -3,17 +3,17 @@
 namespace Shopware\Tests\Service\Product;
 
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
-use Shopware\Bundle\StoreFrontBundle\Struct\ProductContext;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Tests\Service\TestCase;
 
 class ListProductTest extends TestCase
 {
     /**
      * @param $number
-     * @param ProductContext $context
+     * @param ShopContext $context
      * @return ListProduct
      */
-    private function getListProduct($number, ProductContext $context)
+    private function getListProduct($number, ShopContext $context)
     {
         return Shopware()->Container()->get('shopware_storefront.list_product_service')
             ->get($number, $context);

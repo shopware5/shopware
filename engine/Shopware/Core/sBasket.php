@@ -1234,7 +1234,7 @@ class sBasket
 
         $numbers = array_column($notes, 'ordernumber');
 
-        $context = Shopware()->Container()->get('shopware_storefront.context_service')->getProductContext();
+        $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
 
         $products = Shopware()->Container()->get('shopware_storefront.list_product_service')
             ->getList($numbers, $context);
@@ -2040,11 +2040,11 @@ class sBasket
         /** @var \Shopware\Components\Compatibility\LegacyStructConverter $legacyStructConverter */
         $legacyStructConverter = $container->get('legacy_struct_converter');
 
-        $products = $listProduct->getList($numbers, $context->getProductContext());
+        $products = $listProduct->getList($numbers, $context->getShopContext());
         $propertySets = $propertyService->getList($products, $context->getShopContext());
 
         $covers = $container->get('shopware_storefront.variant_cover_service')
-            ->getList($products, $context->getProductContext());
+            ->getList($products, $context->getShopContext());
 
         $details = [];
         foreach ($products as $product) {
@@ -2716,7 +2716,7 @@ class sBasket
         );
 
         if ($article['configurator_set_id'] > 0) {
-            $context = $this->contextService->getProductContext();
+            $context = $this->contextService->getShopContext();
             $product = Shopware()->Container()->get('shopware_storefront.list_product_service')->get($article['ordernumber'], $context);
             $product = $this->additionalTextService->buildAdditionalText($product, $context);
             $article['additionaltext'] = $product->getAdditional();

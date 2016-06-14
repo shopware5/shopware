@@ -2,14 +2,10 @@
 
 namespace Shopware\Tests\Service;
 
-use Shopware\Bundle\StoreFrontBundle\Struct\ProductContext;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 
-class TestContext extends ProductContext
+class TestContext extends ShopContext
 {
-    public function __construct()
-    {
-    }
-
     /**
      * @param \Shopware\Bundle\StoreFrontBundle\Struct\Country\Area $area
      */

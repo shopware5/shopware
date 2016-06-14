@@ -5,7 +5,7 @@ namespace Shopware\Tests\Service\Search\Facet;
 use Shopware\Bundle\SearchBundle\Facet\PropertyFacet;
 use Shopware\Bundle\SearchBundle\FacetResult\FacetResultGroup;
 use Shopware\Bundle\SearchBundle\FacetResult\ValueListFacetResult;
-use Shopware\Bundle\StoreFrontBundle\Struct\ProductContext;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Service\TestCase;
 
@@ -13,7 +13,7 @@ class PropertyFacetTest extends TestCase
 {
     protected function getProduct(
         $number,
-        ProductContext $context,
+        ShopContext $context,
         Category $category = null,
         $properties = array()
     ) {

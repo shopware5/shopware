@@ -3,7 +3,7 @@
 namespace Shopware\Tests\Service\Search\Condition;
 
 use Shopware\Bundle\SearchBundle\Condition\CustomerGroupCondition;
-use Shopware\Bundle\StoreFrontBundle\Struct\ProductContext;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Models\Category\Category;
 use Shopware\Models\Customer\Group;
 use Shopware\Tests\Service\TestCase;
@@ -14,12 +14,12 @@ class CustomerGroupConditionTest extends TestCase
      * @param $number
      * @param Group[] $customerGroups
      * @param \Shopware\Models\Category\Category $category
-     * @param ProductContext $context
+     * @param ShopContext $context
      * @return array
      */
     protected function getProduct(
         $number,
-        ProductContext $context,
+        ShopContext $context,
         Category $category = null,
         $customerGroups = null
     ) {

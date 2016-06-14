@@ -33,7 +33,7 @@ $productNumberResult = Shopware()->Container()->get('shopware_search.product_num
 );
 
 //executes a search request to find a list of \Shopware\Bundle\StoreFrontBundle\Struct\ListProduct.
-$context = Shopware()->Container()->get('shopware_storefront.context_service')->getProductContext();
+$context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
 $productResult = Shopware()->Container()->get('shopware_search.product_search')->search(
     $criteria,
     $context
