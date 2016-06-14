@@ -33,6 +33,8 @@ use Shopware\Components\CSRFWhitelistAware;
  */
 class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action implements CSRFWhitelistAware
 {
+    const MIN_DAYS_INSTALLATION_SURVEY = 14;
+
     /**
      * @var Shopware_Plugins_Backend_Auth_Bootstrap
      */
@@ -134,6 +136,7 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
         }
         $this->View()->assign('sbpLogin', $sbpLogin, true);
         $this->View()->assign('firstRunWizardEnabled', $firstRunWizardEnabled, true);
+        $this->View()->assign('installationSurvey', $this->checkForInstallationSurveyNecessity($identity));
 
         /** @var Shopware_Components_Config $config */
         $config = $this->get('config');
@@ -271,5 +274,30 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
     private function checkIsFeedbackRequired()
     {
         return (Shopware::VERSION_TEXT !== '___VERSION_TEXT___' && strlen(Shopware::VERSION_TEXT) !== 0);
+    }
+
+    /**
+     * @return bool
+     */
+    private function checkForInstallationSurveyNecessity($identity)
+    {
+        if (!$identity->role->getAdmin() || Shopware::VERSION_TEXT === '___VERSION_TEXT___') {
+            return false;
+        }
+        $installationSurvey = $this->container->get('config')->get('installationSurvey', false);
+        if (!$installationSurvey) {
+            return false;
+        }
+        $installationDate = \DateTime::createFromFormat('Y-m-d H:i', $this->container->get('config')->get('installationDate'));
+        if (!$installationDate) {
+            return false;
+        }
+        $now = new \DateTime();
+        $interval = $installationDate->diff($now);
+        $minDays = self::MIN_DAYS_INSTALLATION_SURVEY;
+        if ($minDays <= $interval->days) {
+            return true;
+        }
+        return false;
     }
 }
