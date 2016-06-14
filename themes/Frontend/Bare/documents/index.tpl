@@ -200,7 +200,7 @@ td.head  {
 			{if $position.name == 'Versandkosten'}
 				{s name="DocumentIndexPositionNameShippingCosts"}{$position.name}{/s}
 			{else}
-				{s name="DocumentIndexPositionNameDefault"}{$position.name|nl2br}{/s}
+				{s name="DocumentIndexPositionNameDefault"}{$position.name|nl2br|wordwrap:65:"<br />\n"}{/s}
 			{/if}
 			</td>
 		{/block}
