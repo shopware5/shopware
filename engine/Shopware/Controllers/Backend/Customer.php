@@ -626,6 +626,10 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             $params['shipping'] = $params['shipping'][0];
         }
 
+        if (!isset($params['birthday'])) {
+            $params['birthday'] = null;
+        }
+
         return $params;
     }
 

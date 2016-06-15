@@ -109,7 +109,8 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
             label: '{s name=base/salutation}Salutation{/s}'
         },
         firstname: '{s name=base/firstname}Firstname{/s}',
-        lastname: '{s name=base/lastname}Lastname{/s}'
+        lastname: '{s name=base/lastname}Lastname{/s}',
+        birthday: '{s name=base/birthday}Date of birth{/s}'
     },
 
     /**
@@ -340,6 +341,13 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
             required: true
         });
 
+        me.customerBirthdate = Ext.create('Ext.form.field.Date', {
+            fieldLabel: me.snippets.birthday,
+            labelWidth: 155,
+            submitFormat: 'd.m.Y',
+            name: 'birthday'
+        });
+
         return Ext.create('Ext.form.FieldSet', {
             layout: 'column',
             title: '{s name="personal_field_set"}{/s}',
@@ -357,8 +365,8 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
                 }
             },
             items: [
-                { items: [me.customerSalutation,me.customerTitle] },
-                { items: [me.customerFirstname, me.customerLastname] }
+                { items: [me.customerSalutation, me.customerFirstname, me.customerBirthdate] },
+                { items: [me.customerTitle, me.customerLastname] }
             ]
         });
     },
