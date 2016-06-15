@@ -465,10 +465,6 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
             $emotion->setUser($user);
         }
 
-        if (!empty($data['attribute'][0])) {
-            $emotion->setAttribute($data['attribute'][0]);
-        }
-
         $emotion->setModified(new \DateTime());
         $emotion->setName($data['name']);
         $emotion->setValidFrom($validFrom);

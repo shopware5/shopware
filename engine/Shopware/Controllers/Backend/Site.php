@@ -201,13 +201,8 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
             'shopIds' => $site->getShopIds(),
             'changed' => $site->getChanged(),
             'parentId' => $site->getParentId(),
-            'leaf' => true,
-            'attribute' => []
+            'leaf' => true
         ];
-
-        if ($site->getAttribute()) {
-            $node['attribute'] = Shopware()->Models()->toArray($site->getAttribute());
-        }
 
         //if the site has children, append them
         if ($site->getChildren()->count() > 0) {
@@ -394,10 +389,6 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
         //this was a javascript array
         //change it back to the actual db format
         $params['grouping'] = str_replace(",", "|", $params['grouping']);
-
-        if (!empty($params['attribute'][0])) {
-            $params['attribute'] = $params['attribute'][0];
-        }
 
         $params['shopIds'] = array_filter($params['shopIds']) ? '|' . implode('|', $params['shopIds']) . '|' : null;
 

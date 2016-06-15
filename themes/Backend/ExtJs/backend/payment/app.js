@@ -72,7 +72,7 @@ Ext.define('Shopware.apps.Payment', {
     * Required models for controller
     * @array
     */
-    models: [ 'Country', 'Payment', 'Attribute' ],
+    models: [ 'Country', 'Payment' ],
 
 	/**
 	* Requires controllers for sub-application
