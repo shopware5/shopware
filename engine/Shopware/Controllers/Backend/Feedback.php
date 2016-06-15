@@ -26,4 +26,13 @@
  */
 class Shopware_Controllers_Backend_Feedback extends Shopware_Controllers_Backend_ExtJs
 {
+    public function disableInstallationSurveyAction()
+    {
+        try {
+            $sql = "UPDATE s_core_config_elements SET value = 'b:0;' WHERE name = 'installationSurvey'";
+            $this->container->get('dbal_connection')->query($sql);
+        } catch (\PDOException $e) {
+            throw new \RuntimeException("Could not update config element", 0, $e);
+        }
+    }
 }

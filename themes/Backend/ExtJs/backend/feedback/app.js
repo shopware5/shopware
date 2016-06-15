@@ -66,6 +66,7 @@ Ext.define('Shopware.apps.Feedback', {
      */
     views: [
         'main.Window',
+        'survey.Window',
         'preview.Window'
     ],
 

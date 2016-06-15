@@ -48,11 +48,19 @@ Ext.define('Shopware.apps.Feedback.controller.Main', {
 		var me = this;
 
         me.control({
+            'installation-survey-window': {
+                'beforeclose': me.onBeforeInstallationFeedbackClose
+            },
             'feedback-preview-window': {
                 'beforeclose': me.onBeforePreviewFeedbackClose,
                 'feedback-show-issue-tracker': me.onPreviewWindowShowIssueTracker
             }
         });
+
+        if (me.subApplication.params && me.subApplication.params.installationFeedback) {
+            me.mainWindow = me.getView('survey.Window').create();
+            return;
+        }
 
 		if (me.subApplication.params && me.subApplication.params.previewFeedback) {
             me.mainWindow = me.getView('preview.Window').create();
@@ -62,6 +70,15 @@ Ext.define('Shopware.apps.Feedback.controller.Main', {
         me.mainWindow = me.getView('main.Window').create();
 
 	},
+
+    onBeforeInstallationFeedbackClose: function(win) {
+        var checked = win.down('#disableInstallationSurvey').getValue();
+        if (checked) {
+            Ext.Ajax.request({
+                url: '{url controller=feedback action=disableInstallationSurvey}'
+            });
+        }
+    },
 
     onBeforePreviewFeedbackClose: function(win) {
         var checked = win.down('#disablePreviewFeedback').getValue();
