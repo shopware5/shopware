@@ -371,6 +371,7 @@ In this document you will find a changelog of the important changes related to t
 * Removed wrong parameter usage of `Shopware\Models\Menu\Repository::findOneBy`, which allows to provide two strings as criteria instead of array.
 * Updated composer dependency elasticsearch/elasticsearch to version 2.2.0
 * Changed default labelWidth for emotion component fields in `Shopware.apps.Emotion.view.components.Base` to 170 pixels
+* Added support for loading a new store instance by ID in the config combo box `Shopware.apps.Config.view.element.Select`
 
 ## 5.1.6
 * The interface `Enlight_Components_Cron_Adapter` in `engine/Library/Enlight/Components/Cron/Adapter.php` got a new method `getJobByAction`. For default implementation see `engine/Library/Enlight/Components/Cron/Adapter/DBAL.php`.
