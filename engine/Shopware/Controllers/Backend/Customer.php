@@ -546,12 +546,6 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
 
         $data = $query->getOneOrNullResult(Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
-        //we need to set the billing and shipping attributes to the first array level to load the data into a form panel
-        $data[0]['billingAttribute'] = $data[0]['billing']['attribute'];
-        $data[0]['shippingAttribute'] = $data[0]['shipping']['attribute'];
-        unset($data[0]['billing']['attribute']);
-        unset($data[0]['shipping']['attribute']);
-
         $orderInfo = array(
             'orderCount' => $data['orderCount'],
             'amount' => $data['amount'],
@@ -623,18 +617,14 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         }
 
         unset($params['paymentData']);
+        unset($params['attribute']);
 
-        $attribute = $customer->getAttribute();
-        if (empty($attribute) && empty($params['attribute'])) {
-            $attribute = new \Shopware\Models\Attribute\Customer();
-            $params['attribute'] = [$attribute];
+        if (isset($params['billing'])) {
+            $params['billing'] = $params['billing'][0];
         }
-
-        $params['billing'] = $params['billing'][0];
-        $params['shipping'] = $params['shipping'][0];
-        $params['attribute'] = $params['attribute'][0];
-        $params['billing']['attribute'] = $params['billingAttribute'][0];
-        $params['shipping']['attribute'] = $params['shippingAttribute'][0];
+        if (isset($params['shipping'])) {
+            $params['shipping'] = $params['shipping'][0];
+        }
 
         return $params;
     }

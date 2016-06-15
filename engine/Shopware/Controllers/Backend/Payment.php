@@ -181,7 +181,6 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
             }
 
             $paymentModel = new Payment();
-            $params['attribute'] = $params['attribute'][0];
             $countries = $params['countries'];
             $countryArray = array();
             foreach ($countries as $country) {
@@ -239,7 +238,6 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
                 $data['shops'] = $shops;
             }
 
-            $data['attribute'] = $data['attribute'][0];
             $payment->fromArray($data);
 
             //A default parameter "action" is sent

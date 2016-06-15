@@ -156,6 +156,12 @@ In this document you will find a changelog of the important changes related to t
     * `Shopware.apps.Order.model.PositionAttribute`
     * `Shopware.apps.Order.model.ReceiptAttribute`
     * `Shopware.apps.Order.model.ShippingAttribute`
+    * `Shopware.apps.Category.model.Attribute`
+    * `Shopware.apps.Mail.model.Attribute`
+    * `Shopware.apps.Payment.model.Attribute`
+    * `Shopware.apps.Shipping.model.Attribute`
+    * `Shopware.apps.Site.model.Attribute`
+    * `Shopware.apps.UserManager.model.Attribute`
 * The following repository methods no longer select attributes or have been removed entirely
     * `\Shopware\Models\Article\Repository::getSupplierQueryBuilder()`
     * `\Shopware\Models\Customer\Repository::getCustomerDetailQueryBuilder()`
@@ -185,6 +191,13 @@ In this document you will find a changelog of the important changes related to t
     * `Shopware.apps.Order.model.Receipt`
     * `Shopware.apps.Order.model.Position`
     * `Shopware.apps.Order.model.Order`
+    * `Shopware.apps.Category.model.Detail`
+    * `Shopware.apps.Customer.model.Customer`
+    * `Shopware.apps.Payment.model.Payment`
+    * `Shopware.apps.Shipping.model.Dispatch`
+    * `Shopware.apps.Site.model.Nodes`
+    * `Shopware.apps.UserManager.model.User`
+    * `Shopware.apps.UserManager.model.UserDetail`
 * Removed the following backend files:
     * `themes/Backend/ExtJs/backend/blog/view/blog/detail/sidebar/attributes.js`
     * `themes/Backend/ExtJs/backend/config/store/form/attribute.js`
