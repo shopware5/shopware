@@ -62,6 +62,8 @@ Ext.define('Shopware.apps.Config.view.element.Select', {
             eval('me.store = ' + me.store + ';');
             // Remove value field for reasons of compatibility
             me.valueField = me.displayField;
+        } else if (typeof(me.store) === 'string' && me.store.substring(0, 5) !== 'base.') {
+            me.store = me.getStoreById(me.store);
         }
 
         me.callParent(arguments);
@@ -85,5 +87,35 @@ Ext.define('Shopware.apps.Config.view.element.Select', {
         }
 
         me.callParent(arguments);
+    },
+
+    /**
+     * plugin example usage:
+     * public function install()
+     * {
+     *     $form = $this->Form();
+     *
+     *     $form->setElement("select", "test123", [
+     *         "valueField" => "id",
+     *         "displayField" => "name",
+     *         "queryMode" => "remote",
+     *         "store" => "Shopware.apps.Base.store.Country"
+     *     ]);
+     *
+     *     return true;
+     * }
+     *
+     * @param storeId string
+     * @return Ext.data.Store|null
+     */
+    getStoreById: function(storeId) {
+        try {
+            return Ext.create(storeId, {
+                pageSize: 1000,
+                autoLoad: true
+            });
+        } catch (e) {
+            return null;
+        }
     }
 });
