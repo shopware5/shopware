@@ -430,8 +430,8 @@ class Shopware_Components_Translation
         $existStmt = Shopware()->Container()->get('dbal_connection')->prepare(
             "SELECT EXISTS (SELECT 1
              FROM s_core_translations
-	     WHERE objectlanguage = :language
-	     LIMIT 1)"
+             WHERE objectlanguage = :language
+             LIMIT 1)"
         );
 
         $insertStmt = Shopware()->Container()->get('dbal_connection')->prepare("
