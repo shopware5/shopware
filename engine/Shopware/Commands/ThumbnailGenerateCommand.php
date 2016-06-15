@@ -27,6 +27,7 @@ namespace Shopware\Commands;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Media\Album;
 use Shopware\Models\Media\Media;
+use Shopware\Models\Media\Repository;
 use Symfony\Component\Console\Helper\ProgressHelper;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -106,11 +107,6 @@ EOF
         $albumId             = (int)$input->getOption('albumid');
 
         foreach ($this->getMediaAlbums($albumId) as $album) {
-            //no size configured or no media object? continue
-            if ($this->hasNoThumbnails($album)) {
-                continue;
-            }
-
             $this->createAlbumThumbnails($album);
         }
 
@@ -125,27 +121,60 @@ EOF
     {
         $this->output->writeln("Generating Thumbnails for Album {$album->getName()} (ID: {$album->getId()})");
 
-        /** @var ProgressHelper $progress */
+        /**
+         * @var ProgressHelper $progress
+         */
         $progress = $this->getHelperSet()->get('progress');
-        $progress->start($this->output, $album->getMedia()->count());
 
-        /**@var $media Media */
-        foreach ($album->getMedia() as $media) {
-            if (!$this->imageExists($media)) {
-                $this->errors[] = 'Base image file does not exist: ' . $media->getPath();
+        /**
+         * @var ModelManager $em
+         */
+        $em = $this->getContainer()->get('models');
+        /**
+         * @var Repository $repository
+         */
+        $repository = $em->getRepository(Media::class);
+
+        $offset = 0;
+        $limit = 50;
+        $count = 0;
+
+        do {
+            $query = $repository->getAlbumMediaQuery($album->getId(), null, null, $offset, $limit);
+
+            $paginator = $em->createPaginator($query);
+
+            if ($count === 0) {
+                $total = $paginator->count();
+
+                $progress->start($this->output, $total);
+            }
+
+            /**
+             * @var $media Media
+             */
+            foreach ($paginator->getIterator() as $media) {
+                $count++;
+
+                if (!$this->imageExists($media)) {
+                    $this->errors[] = 'Base image file does not exist: ' . $media->getPath();
+                    $progress->advance();
+
+                    continue;
+                }
+
+                try {
+                    $this->createMediaThumbnails($media);
+                } catch (\Exception $e) {
+                    $this->errors[] = $e->getMessage();
+                }
+
                 $progress->advance();
-
-                continue;
             }
 
-            try {
-                $this->createMediaThumbnails($media);
-            } catch (\Exception $e) {
-                $this->errors[] = $e->getMessage();
-            }
+            $offset += $limit;
+        } while ($count < $total);
 
-            $progress->advance();
-        }
         $progress->finish();
         $this->output->writeln("");
     }
@@ -198,10 +227,9 @@ EOF
 
         $builder = $em->createQueryBuilder();
         $builder
-            ->select(array('album', 'settings', 'media'))
+            ->select(array('album', 'settings'))
             ->from('Shopware\Models\Media\Album', 'album')
-            ->innerJoin('album.settings', 'settings', 'WITH', 'settings.createThumbnails = 1')
-            ->leftJoin('album.media', 'media');
+            ->innerJoin('album.settings', 'settings', 'WITH', 'settings.createThumbnails = 1');
 
         if (!empty($albumId)) {
             $builder
