@@ -136,7 +136,7 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
         }
         $this->View()->assign('sbpLogin', $sbpLogin, true);
         $this->View()->assign('firstRunWizardEnabled', $firstRunWizardEnabled, true);
-        $this->View()->assign('installationSurvey', $this->checkForInstallationSurveyNecessity($identity));
+        $this->View()->assign('installationSurvey', $this->checkForInstallationSurveyNecessity($identity), true);
 
         /** @var Shopware_Components_Config $config */
         $config = $this->get('config');
@@ -148,7 +148,7 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
     /**
      * Returns if the first run wizard should be loaded in the current backend instance
      *
-     * @param $identity
+     * @param stdClass $identity
      * @return bool
      * @throws Exception
      */
@@ -277,6 +277,7 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
     }
 
     /**
+     * @param stdClass $identity
      * @return bool
      */
     private function checkForInstallationSurveyNecessity($identity)
@@ -285,19 +286,12 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
             return false;
         }
         $installationSurvey = $this->container->get('config')->get('installationSurvey', false);
-        if (!$installationSurvey) {
-            return false;
-        }
         $installationDate = \DateTime::createFromFormat('Y-m-d H:i', $this->container->get('config')->get('installationDate'));
-        if (!$installationDate) {
+        if (!$installationSurvey || !$installationDate) {
             return false;
         }
         $now = new \DateTime();
         $interval = $installationDate->diff($now);
-        $minDays = self::MIN_DAYS_INSTALLATION_SURVEY;
-        if ($minDays <= $interval->days) {
-            return true;
-        }
-        return false;
+        return self::MIN_DAYS_INSTALLATION_SURVEY <= $interval->days;
     }
 }
