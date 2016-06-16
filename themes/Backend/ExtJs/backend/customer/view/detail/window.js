@@ -110,7 +110,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
         },
         firstname: '{s name=base/firstname}Firstname{/s}',
         lastname: '{s name=base/lastname}Lastname{/s}',
-        birthday: '{s name=base/birthday}Date of birth{/s}'
+        birthday: '{s name=base/birthday}Birthday{/s}'
     },
 
     /**
@@ -341,7 +341,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
             required: true
         });
 
-        me.customerBirthdate = Ext.create('Ext.form.field.Date', {
+        me.customerBirthday = Ext.create('Ext.form.field.Date', {
             fieldLabel: me.snippets.birthday,
             labelWidth: 155,
             submitFormat: 'd.m.Y',
@@ -365,7 +365,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
                 }
             },
             items: [
-                { items: [me.customerSalutation, me.customerFirstname, me.customerBirthdate] },
+                { items: [me.customerSalutation, me.customerFirstname, me.customerBirthday] },
                 { items: [me.customerTitle, me.customerLastname] }
             ]
         });
