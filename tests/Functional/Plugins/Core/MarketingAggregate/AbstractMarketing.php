@@ -24,6 +24,11 @@
 
 namespace Shopware\Tests\Plugins\Core\MarketingAggregate;
 
+use Shopware\Models\Config\Element;
+use Shopware\Models\Config\Value;
+use Shopware\Models\Config\Form;
+use Shopware\Models\Shop\Shop;
+
 /**
  * @category  Shopware
  * @package   Shopware\Tests
@@ -89,8 +94,6 @@ class AbstractMarketing extends \Enlight_Components_Test_Plugin_TestCase
         parent::setUp();
     }
 
-
-
     protected function assertArrayEquals(array $expected, array $result, array $properties)
     {
         foreach ($properties as $property) {
@@ -104,9 +107,10 @@ class AbstractMarketing extends \Enlight_Components_Test_Plugin_TestCase
      */
     protected function saveConfig($name, $value)
     {
-        $shopRepository    = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
-        $elementRepository = Shopware()->Models()->getRepository('Shopware\Models\Config\Element');
-        $formRepository    = Shopware()->Models()->getRepository('Shopware\Models\Config\Form');
+        $shopRepository = Shopware()->Models()->getRepository(Shop::class);
+        $elementRepository = Shopware()->Models()->getRepository(Element::class);
+        $formRepository = Shopware()->Models()->getRepository(Form::class);
+        $valueRepository = Shopware()->Models()->getRepository(Value::class);
 
         $shop = $shopRepository->find($shopRepository->getActiveDefault()->getId());
 
@@ -123,27 +127,32 @@ class AbstractMarketing extends \Enlight_Components_Test_Plugin_TestCase
         /** @var $element \Shopware\Models\Config\Element */
         $element = $elementRepository->findOneBy($findBy);
 
-        // If the element is empty, the given setting does not exists. This might be the case for some plugins
-        // Skip those values
-        if (empty($element)) {
-            return;
-        }
+        $defaultValue = $element->getValue();
 
-        foreach ($element->getValues() as $valueModel) {
-            Shopware()->Models()->remove($valueModel);
-        }
+        /** @var Value $valueModel */
+        $valueModel = $valueRepository->findOneBy(['shop' => $shop, 'element' => $element]);
 
-        $values = array();
-        // Do not save default value
-        if ($value !== $element->getValue()) {
-            $valueModel = new \Shopware\Models\Config\Value();
+        if (!$valueModel) {
+            if ($value == $defaultValue || $value === null) {
+                return;
+            }
+
+            $valueModel = new Value();
             $valueModel->setElement($element);
             $valueModel->setShop($shop);
             $valueModel->setValue($value);
-            $values[$shop->getId()] = $valueModel;
+
+            Shopware()->Models()->persist($valueModel);
+            Shopware()->Models()->flush($valueModel);
+
+            return;
         }
 
-        $element->setValues($values);
-        Shopware()->Models()->flush($element);
+        if ($value == $defaultValue || $value === null) {
+            Shopware()->Models()->remove($valueModel);
+        } else {
+            $valueModel->setValue($value);
+        }
+        Shopware()->Models()->flush($valueModel);
     }
 }

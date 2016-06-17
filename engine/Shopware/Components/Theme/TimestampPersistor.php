@@ -21,15 +21,19 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+namespace Shopware\Components\Theme;
 
-/**
- * Returns the current time measured in the number of seconds
- * since the Unix Epoch (January 1 1970 00:00:00 GMT).
- */
-function smarty_function_themeTimestamp($params, $template)
+interface TimestampPersistor
 {
-    $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
-    $shopId = $context->getShop()->getParentId();
+    /**
+     * @param int $shopId
+     * @return int
+     */
+    public function getCurrentTimestamp($shopId);
 
-    return Shopware()->Container()->get('theme_timestamp_persistor')->getCurrentTimestamp($shopId);
+    /**
+     * @param int $shopId
+     * @param int $timestamp
+     */
+    public function updateTimestamp($shopId, $timestamp);
 }
