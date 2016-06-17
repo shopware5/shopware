@@ -80,6 +80,12 @@
             <argument type="service" id="theme_service" />
             <argument type="service" id="js_compressor" />
             <argument type="service" id="events" />
+            <argument type="service" id="theme_timestamp_persistor" />
+
+        </service>
+
+        <service id="theme_timestamp_persistor" class="Shopware\Components\Theme\DBALTimestampPersistor">
+            <argument type="service" id="dbal_connection"/>
         </service>
 
         <service id="theme_backend_registration" class="Shopware\Components\Theme\EventListener\BackendTheme">
