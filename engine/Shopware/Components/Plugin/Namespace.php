@@ -548,40 +548,20 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
         /** @var Connection $connection */
         $connection = $this->Application()->Container()->get('dbal_connection');
 
-        // Remove widgets
-        $widgets = $connection->fetchAll(
-            'SELECT * FROM s_core_widgets WHERE plugin_id = ?',
-            [$pluginId]
-        );
+        $sql = "
+            DELETE widgets, views, priv
+            FROM s_core_widgets widgets
+                INNER JOIN s_core_widget_views views
+                    ON views.widget_id = widgets.id
+                LEFT JOIN s_core_acl_privileges priv
+                    ON priv.name = widgets.name
+                LEFT JOIN s_core_acl_resources resource
+                    ON resource.name = 'widgets'
+                    AND resource.id = priv.resourceID
+            WHERE widgets.plugin_id = :pluginId
+        ";
 
-        if (empty($widgets)) {
-            return;
-        }
-
-        $sql = 'DELETE FROM s_core_widget_views WHERE plugin_id IN (?)';
-        $connection->executeUpdate(
-            $sql,
-            [array_column($widgets, 'id')],
-            [Connection::PARAM_INT_ARRAY]
-        );
-
-        $sql = 'DELETE FROM s_core_widgets WHERE plugin_id = ?';
-        $connection->executeUpdate(
-            $sql,
-            [$pluginId]
-        );
-
-        $resourceId = $connection->fetchColumn("SELECT id FROM s_core_acl_resources WHERE name = 'widgets'");
-        if (!$resourceId) {
-            return;
-        }
-
-        foreach ($widgets as $widget) {
-            $connection->executeUpdate("DELETE FROM s_core_acl_privileges WHERE resourceID = ? AND name = ?", [
-                $resourceId,
-                $widget['name']
-            ]);
-        }
+        $connection->executeUpdate($sql, [':pluginId' => $pluginId]);
     }
 
     /**
