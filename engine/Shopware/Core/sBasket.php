@@ -2075,23 +2075,24 @@ class sBasket
      */
     private function getBasketImage($image)
     {
-        return array(
-            'src' => array(array_merge(
-                array('original' => $image['source']),
-                array_map(function ($thumb) {
-                    return $thumb['source'];
-                }, $image['thumbnails']))
-            ),
-            'srchd' => array(array_map(function ($thumb) use ($image) {
-                return str_replace('.' . $image['extension'], '@2x.'. $image['extension'], $thumb['source']);
-            }, $image['thumbnails'])),
-            'res' => array('original' => array(
-                'width' => $image['height'],
-                'height' => $image['width']
-            )),
-            'description' => $image['description'],
-            'extension' => $image['extension'],
-            'attribute' => $image['attribute']
+        return array_merge(
+            $image,
+            [
+                'src' => array_merge(
+                    ['original' => $image['source']],
+                    array_column($image['thumbnails'], 'source')
+                ),
+                'srchd' => array_merge(
+                    ['original' => $image['source']],
+                    array_column($image['thumbnails'], 'retinaSource')
+                ),
+                'res' => [
+                    'original' => [
+                        'width' => $image['height'],
+                        'height' => $image['width']
+                    ]
+                ]
+            ]
         );
     }
 
