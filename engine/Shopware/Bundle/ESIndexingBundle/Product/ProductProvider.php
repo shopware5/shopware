@@ -126,7 +126,7 @@ class ProductProvider implements ProductProviderInterface
      */
     public function get(Shop $shop, $numbers)
     {
-        $context = $this->contextService->createProductContext(
+        $context = $this->contextService->createShopContext(
             $shop->getId(),
             null,
             ContextService::FALLBACK_CUSTOMER_GROUP
@@ -295,7 +295,7 @@ class ProductProvider implements ProductProviderInterface
         $keys = $this->identifierSelector->getCustomerGroupKeys();
         $prices = [];
         foreach ($keys as $key) {
-            $context        = $this->contextService->createProductContext($shopId, null, $key);
+            $context        = $this->contextService->createShopContext($shopId, null, $key);
             $customerPrices = $this->cheapestPriceService->getList($products, $context);
             foreach ($customerPrices as $number => $price) {
                 $prices[$number][$key] = $price;
@@ -362,7 +362,7 @@ class ProductProvider implements ProductProviderInterface
         $contexts = [];
         foreach ($customerGroups as $customerGroup) {
             foreach ($currencies as $currency) {
-                $contexts[] = $this->contextService->createProductContext($shopId, $currency, $customerGroup);
+                $contexts[] = $this->contextService->createShopContext($shopId, $currency, $customerGroup);
             }
         }
         return $contexts;
