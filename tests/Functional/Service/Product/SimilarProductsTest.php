@@ -3,7 +3,7 @@
 namespace Shopware\Tests\Service\Product;
 
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
-use Shopware\Bundle\StoreFrontBundle\Struct\ProductContext;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Service\Converter;
 use Shopware\Tests\Service\Helper;
@@ -29,7 +29,7 @@ class SimilarProductsTest extends TestCase
 
     protected function getProduct(
         $number,
-        ProductContext $context,
+        ShopContext $context,
         Category $category = null,
         $additonally = null
     ) {
@@ -115,6 +115,7 @@ class SimilarProductsTest extends TestCase
 
         $this->assertCount(2, $similarProductList);
 
+        /** @var ListProduct $product */
         foreach ($products as $product) {
             $similarProducts = $similarProductList[$product->getNumber()];
 

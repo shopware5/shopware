@@ -3276,7 +3276,7 @@ SQL;
         }
 
         $active = 1;
-        $context = $this->contextService->getProductContext();
+        $context = $this->contextService->getShopContext();
         $orderArticleOrderNumbers = array_column($getOrderDetails, 'articleordernumber');
         $listProducts = Shopware()->Container()->get('shopware_storefront.list_product_service')->getList($orderArticleOrderNumbers, $context);
         $listProducts = Shopware()->Container()->get('legacy_struct_converter')->convertListProductStructList($listProducts);

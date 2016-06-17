@@ -3,7 +3,7 @@
 namespace Shopware\Tests\Service\Product;
 
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Download;
-use Shopware\Bundle\StoreFrontBundle\Struct\ProductContext;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Models\Article\Article;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Service\TestCase;
@@ -12,13 +12,13 @@ class DownloadTest extends TestCase
 {
     /**
      * @param $number
-     * @param ProductContext $context
+     * @param ShopContext $context
      * @param \Shopware\Models\Category\Category $category
      * @return Article
      */
     protected function getProduct(
         $number,
-        ProductContext $context,
+        ShopContext $context,
         Category $category = null,
         $additionally = null
     ) {

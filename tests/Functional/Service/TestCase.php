@@ -9,7 +9,7 @@ use Shopware\Bundle\SearchBundle\FacetInterface;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Bundle\SearchBundle\SortingInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
-use Shopware\Bundle\StoreFrontBundle\Struct\ProductContext;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Components\MultiEdit\Resource\Product;
 use Shopware\Models\Article\Article;
 use Shopware\Models\Category\Category;
@@ -94,13 +94,13 @@ class TestCase extends \Enlight_Components_Test_TestCase
      * @param Criteria $criteria
      * @param Category $category
      * @param $conditions
-     * @param ProductContext $context
+     * @param ShopContext $context
      */
     protected function addCategoryBaseCondition(
         Criteria $criteria,
         Category $category,
         $conditions,
-        ProductContext $context
+        ShopContext $context
     ) {
         if ($category) {
             $criteria->addBaseCondition(
@@ -144,11 +144,11 @@ class TestCase extends \Enlight_Components_Test_TestCase
 
     /**
      * @param $products
-     * @param ProductContext $context
+     * @param ShopContext $context
      * @param Category $category
      * @return Article[]
      */
-    public function createProducts($products, ProductContext $context, Category $category)
+    public function createProducts($products, ShopContext $context, Category $category)
     {
         $articles = array();
         foreach ($products as $number => $additionally) {
@@ -164,13 +164,13 @@ class TestCase extends \Enlight_Components_Test_TestCase
 
     /**
      * @param $number
-     * @param ProductContext $context
+     * @param ShopContext $context
      * @param Category $category
      * @return \Shopware\Models\Article\Article
      */
     protected function createProduct(
         $number,
-        ProductContext $context,
+        ShopContext $context,
         Category $category,
         $additionally
     ) {
@@ -242,14 +242,14 @@ class TestCase extends \Enlight_Components_Test_TestCase
 
     /**
      * @param $number
-     * @param ProductContext $context
+     * @param ShopContext $context
      * @param Category $category
      * @param null $additionally
      * @return array
      */
     protected function getProduct(
         $number,
-        ProductContext $context,
+        ShopContext $context,
         Category $category = null,
         $additionally = null
     ) {

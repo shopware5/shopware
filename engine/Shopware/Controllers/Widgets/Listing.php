@@ -124,7 +124,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
     {
         $this->Front()->Plugins()->ViewRenderer()->setNoRender();
 
-        $context = $this->get('shopware_storefront.context_service')->getProductContext();
+        $context = $this->get('shopware_storefront.context_service')->getShopContext();
 
         $categoryId = $this->Request()->getParam('sCategory');
         $productStreamId = $this->findStreamIdByCategoryId($categoryId);
@@ -166,7 +166,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         $categoryId = $this->Request()->getParam('sCategory');
         $pageIndex = $this->Request()->getParam('sPage');
 
-        $context = $this->get('shopware_storefront.context_service')->getProductContext();
+        $context = $this->get('shopware_storefront.context_service')->getShopContext();
         $productStreamId = $this->findStreamIdByCategoryId($categoryId);
 
         if ($productStreamId) {

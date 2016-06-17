@@ -2,7 +2,7 @@
 
 namespace Shopware\Tests\Service\Product;
 
-use Shopware\Bundle\StoreFrontBundle\Struct\ProductContext;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Models\Category\Category;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\MediaService;
 use Shopware\Bundle\StoreFrontBundle\Struct;
@@ -211,7 +211,7 @@ class CoverTest extends TestCase
 
     protected function getProduct(
         $number,
-        ProductContext $context,
+        ShopContext $context,
         Category $category = null,
         $imageCount = 1
     ) {
@@ -229,7 +229,7 @@ class CoverTest extends TestCase
         return $data;
     }
 
-    private function getVariantImageProduct($number, ProductContext $context)
+    private function getVariantImageProduct($number, ShopContext $context)
     {
         $data = $this->getProduct($number, $context, null, 2);
 

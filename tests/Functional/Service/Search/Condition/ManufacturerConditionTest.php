@@ -3,7 +3,7 @@
 namespace Shopware\Tests\Service\Search\Condition;
 
 use Shopware\Bundle\SearchBundle\Condition\ManufacturerCondition;
-use Shopware\Bundle\StoreFrontBundle\Struct\ProductContext;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Models\Article\Supplier;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Service\TestCase;
@@ -14,12 +14,12 @@ class ManufacturerConditionTest extends TestCase
      * @param $number
      * @param \Shopware\Models\Category\Category $category
      * @param Supplier $manufacturer
-     * @param ProductContext $context
+     * @param ShopContext $context
      * @return array
      */
     protected function getProduct(
         $number,
-        ProductContext $context,
+        ShopContext $context,
         Category $category = null,
         $manufacturer = null
     ) {

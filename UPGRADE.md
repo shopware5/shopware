@@ -386,6 +386,19 @@ In this document you will find a changelog of the important changes related to t
 * Changed default labelWidth for emotion component fields in `Shopware.apps.Emotion.view.components.Base` to 170 pixels
 * IonCube Loader version requirement bumped to 5.0 or higher
 * PHP setting `display_errors` defaults to `off` now in `engine/Shopware/Configs/Default.php`
+* Removed `\Shopware\Bundle\StoreFrontBundle\Struct\Context` class
+* Deprecated following classes and functions:
+    * `\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::getContext`
+    * `\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::getProductContext`
+    * `\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::getLocationContext`
+    * `\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::initializeContext`
+    * `\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::initializeLocationContext`
+    * `\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::initializeProductContext`
+    * `\Shopware\Bundle\StoreFrontBundle\Struct\LocationContext`
+    * `\Shopware\Bundle\StoreFrontBundle\Struct\ProductContext`
+    * `\Shopware\Bundle\StoreFrontBundle\Struct\LocationContextInterface`
+    * `\Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface`
+
 
 ## 5.1.6
 * The interface `Enlight_Components_Cron_Adapter` in `engine/Library/Enlight/Components/Cron/Adapter.php` got a new method `getJobByAction`. For default implementation see `engine/Library/Enlight/Components/Cron/Adapter/DBAL.php`.

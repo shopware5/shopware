@@ -24,14 +24,17 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
+use Shopware\Bundle\StoreFrontBundle\Struct\Country\Area;
+use Shopware\Bundle\StoreFrontBundle\Struct\Country\State;
 use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceGroup;
 
 /**
  * @category  Shopware
  * @package   Shopware\Bundle\StoreFrontBundle\Struct
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class ShopContext extends Extendable implements ShopContextInterface, \JsonSerializable
+class ShopContext extends Extendable implements ProductContextInterface, \JsonSerializable
 {
     /**
      * @var Group
@@ -54,29 +57,69 @@ class ShopContext extends Extendable implements ShopContextInterface, \JsonSeria
     protected $shop;
 
     /**
+     * @var Tax[]
+     */
+    protected $taxRules;
+
+    /**
+     * @var PriceGroup[]
+     */
+    protected $priceGroups;
+
+    /**
      * @var string
      */
     protected $baseUrl;
 
     /**
-     * @param string   $baseUrl
-     * @param Shop     $shop
-     * @param Currency $currency
-     * @param Group    $currentCustomerGroup
-     * @param Group    $fallbackCustomerGroup
+     * @var Area|null
+     */
+    protected $area;
+
+    /**
+     * @var Country|null
+     */
+    protected $country;
+
+    /**
+     * @var State|null
+     */
+    protected $state;
+
+    /**
+     * @param string       $baseUrl
+     * @param Shop         $shop
+     * @param Currency     $currency
+     * @param Group        $currentCustomerGroup
+     * @param Group        $fallbackCustomerGroup
+     * @param Tax[]        $taxRules
+     * @param PriceGroup[] $priceGroups
+     * @param Area|null    $area
+     * @param Country|null $country
+     * @param State|null   $state
      */
     public function __construct(
         $baseUrl,
         Shop $shop,
         Currency $currency,
         Group $currentCustomerGroup,
-        Group $fallbackCustomerGroup
+        Group $fallbackCustomerGroup,
+        array $taxRules,
+        array $priceGroups,
+        Area $area = null,
+        Country $country = null,
+        State $state = null
     ) {
         $this->baseUrl = $baseUrl;
         $this->shop = $shop;
         $this->currency = $currency;
         $this->currentCustomerGroup = $currentCustomerGroup;
         $this->fallbackCustomerGroup = $fallbackCustomerGroup;
+        $this->taxRules = $taxRules;
+        $this->priceGroups = $priceGroups;
+        $this->area = $area;
+        $this->country = $country;
+        $this->state = $state;
     }
 
     /**
@@ -117,6 +160,56 @@ class ShopContext extends Extendable implements ShopContextInterface, \JsonSeria
     public function getBaseUrl()
     {
         return $this->baseUrl;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTaxRules()
+    {
+        return $this->taxRules;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTaxRule($taxId)
+    {
+        $key = 'tax_' . $taxId;
+
+        return $this->taxRules[$key];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPriceGroups()
+    {
+        return $this->priceGroups;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getArea()
+    {
+        return $this->area;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCountry()
+    {
+        return $this->country;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getState()
+    {
+        return $this->state;
     }
 
     /**

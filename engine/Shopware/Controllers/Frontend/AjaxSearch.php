@@ -60,7 +60,7 @@ class Shopware_Controllers_Frontend_AjaxSearch extends Enlight_Controller_Action
         }
 
         /**@var $context ProductContextInterface*/
-        $context  = $this->get('shopware_storefront.context_service')->getProductContext();
+        $context  = $this->get('shopware_storefront.context_service')->getShopContext();
 
         $criteria = $this->get('shopware_search.store_front_criteria_factory')
             ->createAjaxSearchCriteria($this->Request(), $context);

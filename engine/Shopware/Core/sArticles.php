@@ -317,7 +317,7 @@ class sArticles
             return [];
         }
 
-        $productContext = $this->contextService->getProductContext();
+        $productContext = $this->contextService->getShopContext();
         $product = $this->listProductService->get($orderNumber, $productContext);
         if (!$product || !$product->hasProperties()) {
             return [];
@@ -443,7 +443,7 @@ class sArticles
             return false;
         }
 
-        $context = $this->contextService->getProductContext();
+        $context = $this->contextService->getShopContext();
 
         $request = Shopware()->Container()->get('front')->Request();
 
@@ -611,7 +611,7 @@ class sArticles
      */
     public function getTaxRateByConditions($taxId)
     {
-        $context = $this->contextService->getProductContext();
+        $context = $this->contextService->getShopContext();
         $taxRate = $context->getTaxRule($taxId);
         if ($taxRate) {
             return number_format($taxRate->getTax(), 2);
@@ -697,7 +697,7 @@ class sArticles
             $category = $this->categoryId;
         }
 
-        $context = $this->contextService->getProductContext();
+        $context = $this->contextService->getShopContext();
 
         $criteria = $this->storeFrontCriteriaFactory->createBaseCriteria([$category], $context);
         $criteria->limit($sLimitChart);
@@ -755,7 +755,7 @@ class sArticles
      */
     public function getProductNavigation($orderNumber, $categoryId, Enlight_Controller_Request_RequestHttp $request)
     {
-        $context = $this->contextService->getProductContext();
+        $context = $this->contextService->getShopContext();
 
         $criteria = $this->storeFrontCriteriaFactory->createProductNavigationCriteria(
             $request,
@@ -1171,7 +1171,7 @@ class sArticles
             $number = $this->productNumberService->getMainProductNumberById($id);
         }
 
-        $context = $this->contextService->getProductContext();
+        $context = $this->contextService->getShopContext();
 
         /**
          * Checks which product number should be loaded. If a configuration passed.
@@ -1415,7 +1415,7 @@ class sArticles
     protected function getRandomArticle($mode, $category = 0)
     {
         $category = (int)$category;
-        $context = $this->contextService->getProductContext();
+        $context = $this->contextService->getShopContext();
         if (empty($category)) {
             $category = $context->getShop()->getCategory()->getId();
         }
@@ -2174,7 +2174,7 @@ class sArticles
      */
     private function getPromotion($category, $number)
     {
-        $context = $this->contextService->getProductContext();
+        $context = $this->contextService->getShopContext();
 
         $product = $this->listProductService->get(
             $number,
@@ -2283,7 +2283,7 @@ class sArticles
         if ($product->hasConfigurator()) {
             $configurator = $this->configuratorService->getProductConfigurator(
                 $product,
-                $this->contextService->getProductContext(),
+                $this->contextService->getShopContext(),
                 $selection
             );
             $convertedConfigurator = $this->legacyStructConverter->convertConfiguratorStruct($product, $configurator);
