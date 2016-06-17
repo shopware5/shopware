@@ -15,10 +15,10 @@ SQL;
 
     private function createUniqueIndex()
     {
-        $sql = <<<SQL
-ALTER IGNORE TABLE `s_core_config_values`
-ADD UNIQUE `element_id_shop_id` (`element_id`, `shop_id`);
-SQL;
-        $this->addSql($sql);
+        $this->addSql('CREATE TABLE `s_core_config_values_unique` LIKE `s_core_config_values`');
+        $this->addSql('ALTER TABLE `s_core_config_values_unique` ADD UNIQUE `element_id_shop_id` (`element_id`, `shop_id`)');
+        $this->addSql('INSERT IGNORE INTO `s_core_config_values_unique` SELECT * FROM `s_core_config_values`');
+        $this->addSql('DROP TABLE `s_core_config_values`');
+        $this->addSql('RENAME TABLE `s_core_config_values_unique` TO `s_core_config_values`');
     }
 }
