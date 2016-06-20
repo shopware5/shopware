@@ -23,7 +23,7 @@
 											{block name='frontend_detail_configurator_variant_group_option_input'}
 												<input type="radio"
 													   class="option--input"
-													   id="group[{$option.groupID}]"
+													   id="group[{$option.groupID}][{$option.optionID}]"
 													   name="group[{$option.groupID}]"
 													   value="{$option.optionID}"
 													   title="{$option.optionname}"
@@ -33,7 +33,7 @@
 											{/block}
 
 											{block name='frontend_detail_configurator_variant_group_option_label'}
-												<label for="group[{$option.groupID}]" class="option--label{if !$option.selectable} is--disabled{/if}">
+												<label for="group[{$option.groupID}][{$option.optionID}]" class="option--label{if !$option.selectable} is--disabled{/if}">
 
 													{if $option.media}
 														{$media = $option.media}
