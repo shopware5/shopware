@@ -25,28 +25,6 @@
 use Shopware\Models\Order\Order;
 use Shopware\Models\Shop\Shop;
 
-/**
- * Shopware 5
- * Copyright (c) shopware AG
- *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
- *
- * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * "Shopware" is a registered trademark of shopware AG.
- * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
- */
 class Shopware_Tests_Models_ShopRepositoryTest extends Enlight_Components_Test_Controller_TestCase
 {
     /**
@@ -70,28 +48,25 @@ class Shopware_Tests_Models_ShopRepositoryTest extends Enlight_Components_Test_C
 
         Shopware()->Db()->update('s_core_shops', [
             'host' => 'fallbackhost',
-            'secure' => 1,
-            'secure_base_path' => '/secure',
         ], 'id = 1');
 
         $this->mainShop = Shopware()->Db()->fetchRow('SELECT * FROM s_core_shops WHERE id = 1');
 
         // Create test shops
         $sql = "
-            INSERT IGNORE INTO `s_core_shops` (`id`, `main_id`, `name`, `title`, `position`, `host`, `base_path`, `base_url`, `hosts`, `secure`, `secure_host`, `secure_base_path`, `template_id`, `document_template_id`, `category_id`, `locale_id`, `currency_id`, `customer_group_id`, `fallback_id`, `customer_scope`, `default`, `active`, `always_secure`) VALUES
-            (100, 1, 'testShop1', 'Testshop', 0, NULL, NULL, ?, '', 0, NULL, ?, 11, 11, 11, 2, 1, 1, 2, 0, 0, 1, 0),
-            (101, 1, 'testShop2', 'Testshop', 0, NULL, NULL, ?, '', 0, NULL, ?, 11, 11, 11, 2, 1, 1, 2, 0, 0, 1, 0),
-            (102, 1, 'testShop3', 'Testshop', 0, NULL, NULL, ?, '', 0, NULL, ?, 11, 11, 11, 2, 1, 1, 2, 0, 0, 1, 0),
-            (103, 1, 'testShop4', 'Testshop', 0, NULL, NULL, ?, '', 0, NULL, ?, 11, 11, 11, 2, 1, 1, 2, 0, 0, 1, 0),
-            (104, 1, 'testShop5', 'Testshop', 0, NULL, NULL, ?, '', 0, NULL, ?, 11, 11, 11, 2, 1, 1, 2, 0, 0, 1, 0);
-
+            INSERT IGNORE INTO `s_core_shops` (`id`, `main_id`, `name`, `title`, `position`, `host`, `base_path`, `base_url`, `hosts`, `secure`, `template_id`, `document_template_id`, `category_id`, `locale_id`, `currency_id`, `customer_group_id`, `fallback_id`, `customer_scope`, `default`, `active`) VALUES
+            (100, 1, 'testShop1', 'Testshop', 0, NULL, NULL, ?, '', 0, 11, 11, 11, 2, 1, 1, 2, 0, 0, 1),
+            (101, 1, 'testShop2', 'Testshop', 0, NULL, NULL, ?, '', 0, 11, 11, 11, 2, 1, 1, 2, 0, 0, 1),
+            (102, 1, 'testShop3', 'Testshop', 0, NULL, NULL, ?, '', 0, 11, 11, 11, 2, 1, 1, 2, 0, 0, 1),
+            (103, 1, 'testShop4', 'Testshop', 0, NULL, NULL, ?, '', 0, 11, 11, 11, 2, 1, 1, 2, 0, 0, 1),
+            (104, 1, 'testShop5', 'Testshop', 0, NULL, NULL, ?, '', 0, 11, 11, 11, 2, 1, 1, 2, 0, 0, 1);
         ";
         Shopware()->Db()->query($sql, [
-            $this->mainShop['base_path'] . '/english', $this->mainShop['secure_base_path'] . '/english',
-            $this->mainShop['base_path'] . '/en/uk', $this->mainShop['secure_base_path'] . '/en/uk',
-            $this->mainShop['base_path'] . '/en', $this->mainShop['secure_base_path'] . '/en',
-            $this->mainShop['base_path'] . '/en/us', $this->mainShop['secure_base_path'] . '/en/us',
-            $this->mainShop['base_path'] . '/aus/en', $this->mainShop['secure_base_path'] . '/aus/en',
+            $this->mainShop['base_path'] . '/english',
+            $this->mainShop['base_path'] . '/en/uk',
+            $this->mainShop['base_path'] . '/en',
+            $this->mainShop['base_path'] . '/en/us',
+            $this->mainShop['base_path'] . '/aus/en',
         ]);
     }
 
@@ -158,14 +133,14 @@ class Shopware_Tests_Models_ShopRepositoryTest extends Enlight_Components_Test_C
         $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/en/uk/things', 'testShop2');
 
         // Tests for secure
-        $this->callGetActiveShopByRequest($this->mainShop['secure_base_path'] . '/en/us', 'testShop4', true);
-        $this->callGetActiveShopByRequest($this->mainShop['secure_base_path'] . '/en/us', 'testShop4', false);
-        $this->callGetActiveShopByRequest($this->mainShop['secure_base_path'] . '/en/ukfoooo', 'testShop3', true);
-        $this->callGetActiveShopByRequest($this->mainShop['secure_base_path'] . '/en/ukfoooo', 'testShop3', false);
-        $this->callGetActiveShopByRequest($this->mainShop['secure_base_path'] . '/en/uk', 'testShop2', true);
-        $this->callGetActiveShopByRequest($this->mainShop['secure_base_path'] . '/en/uk', 'testShop2', false);
-        $this->callGetActiveShopByRequest($this->mainShop['secure_base_path'] . '/en/uk/things', 'testShop2', true);
-        $this->callGetActiveShopByRequest($this->mainShop['secure_base_path'] . '/en/uk/things', 'testShop2', false);
+        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/en/us', 'testShop4');
+        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/en/us', 'testShop4');
+        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/en/ukfoooo', 'testShop3');
+        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/en/ukfoooo', 'testShop3');
+        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/en/uk', 'testShop2');
+        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/en/uk', 'testShop2');
+        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/en/uk/things', 'testShop2');
+        $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/en/uk/things', 'testShop2');
     }
 
     /**
@@ -173,14 +148,12 @@ class Shopware_Tests_Models_ShopRepositoryTest extends Enlight_Components_Test_C
      *
      * @param string $url
      * @param string $shopName
-     * @param bool   $secure
      */
-    public function callGetActiveShopByRequest($url, $shopName, $secure = false)
+    public function callGetActiveShopByRequest($url, $shopName)
     {
         $request = new Enlight_Controller_Request_RequestTestCase();
         $request->setHttpHost($this->mainShop['host']);
         $request->setRequestUri($url);
-        $request->setSecure($secure);
 
         $shop = $this->shopRepository->getActiveByRequest($request);
 
@@ -211,19 +184,19 @@ class Shopware_Tests_Models_ShopRepositoryTest extends Enlight_Components_Test_C
             INSERT IGNORE INTO `s_core_shops` (
               `id`, `main_id`, `name`, `title`, `position`,
               `host`, `base_path`, `base_url`, `hosts`,
-              `secure`, `secure_host`, `secure_base_path`,
+              `secure`,
               `template_id`, `document_template_id`, `category_id`,
               `locale_id`, `currency_id`, `customer_group_id`,
               `fallback_id`, `customer_scope`, `default`, `active`
             ) VALUES (
               10, NULL, 'Testshop 2', 'Testshop 2', 0,
               '2test.in', NULL, NULL, '2fr.test.in\\n2nl.test.in\\n',
-              0, NULL, NULL,
+              0,
               11, 11, 11, 2, 1, 1, 2, 0, 0, 1
             ), (
               11, NULL, 'Testshop 1', 'Testshop 1', 0,
               'test.in', NULL, NULL, 'fr.test.in\\nnl.test.in\\n',
-              0, NULL, NULL,
+              0,
               11, 11, 11, 2, 1, 1, 2, 0, 0, 1
             );
         ";

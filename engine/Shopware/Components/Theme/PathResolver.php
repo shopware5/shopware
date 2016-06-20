@@ -279,11 +279,7 @@ class PathResolver
      */
     public function formatPathToUrl($path, Shop\Shop $shop, $isSecureRequest = false)
     {
-        if ($isSecureRequest && $shop->getSecureBasePath()) {
-            $targetPath = $shop->getSecureBasePath();
-        } else {
-            $targetPath = $shop->getBasePath();
-        }
+        $targetPath = $shop->getBasePath();
 
         return str_replace($this->rootDir, $targetPath, $path);
     }

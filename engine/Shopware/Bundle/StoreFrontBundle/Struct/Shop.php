@@ -88,16 +88,6 @@ class Shop extends Extendable implements \JsonSerializable
     protected $secure;
 
     /**
-     * @var string
-     */
-    protected $secureHost;
-
-    /**
-     * @var string
-     */
-    protected $securePath;
-
-    /**
      * @var Category
      */
     protected $category;
@@ -150,8 +140,6 @@ class Shop extends Extendable implements \JsonSerializable
         $struct->setPath($shop->getBasePath());
         $struct->setUrl($shop->getBaseUrl());
         $struct->setSecure($shop->getSecure());
-        $struct->setSecureHost($shop->getSecureHost());
-        $struct->setSecurePath($shop->getSecureBasePath());
         if ($shop->getCategory()) {
             $struct->setCategory(
                 Category::createFromCategoryEntity($shop->getCategory())
@@ -261,38 +249,6 @@ class Shop extends Extendable implements \JsonSerializable
     public function getSecure()
     {
         return $this->secure;
-    }
-
-    /**
-     * @param string $secureHost
-     */
-    public function setSecureHost($secureHost)
-    {
-        $this->secureHost = $secureHost;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSecureHost()
-    {
-        return $this->secureHost;
-    }
-
-    /**
-     * @param string $securePath
-     */
-    public function setSecurePath($securePath)
-    {
-        $this->securePath = $securePath;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSecurePath()
-    {
-        return $this->securePath;
     }
 
     /**

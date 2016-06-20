@@ -7,7 +7,7 @@
             pid = (par && par[0]) ? par[0].substring(9) : null,
             cur = document.location.protocol + '//' + document.location.host,
             ref = document.referrer.indexOf(cur) === -1 ? document.referrer : null,
-            url = "{url module=widgets controller=index action=refreshStatistic forceSecure}",
+            url = "{url module=widgets controller=index action=refreshStatistic}",
             pth = document.location.pathname.replace("{url controller=index fullPath=false}", "/");
 
         url = url.replace('https:', '');

@@ -91,7 +91,7 @@ class Database
 
         $this->connection->query(sprintf('use `%s`', $dbName));
 
-        $stmt = $this->connection->prepare('UPDATE `s_core_shops` SET `host` = :host, `base_path` = :path, `secure` = :isSecure, `always_secure` = :isSecure WHERE `main_id` IS NULL');
+        $stmt = $this->connection->prepare('UPDATE `s_core_shops` SET `host` = :host, `base_path` = :path, `secure` = :isSecure WHERE `main_id` IS NULL');
         $stmt->execute([
             'host' => $host,
             'path' => $path,

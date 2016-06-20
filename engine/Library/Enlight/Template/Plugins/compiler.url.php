@@ -46,7 +46,11 @@ class Smarty_Compiler_Url extends Smarty_Internal_CompileBase
      *
      * @var array
      */
-    public $option_flags = array('appendSession', 'forceSecure', 'fullPath');
+    public $option_flags = array(
+        'appendSession',
+        'forceSecure', // @deprecated since Shopware Next
+        'fullPath'
+    );
 
     /**
      * @param $args

@@ -121,7 +121,6 @@ class Router
             // Reuse https
             if (!$newContext->isSecure()) {
                 $newContext->setSecure($context->isSecure());
-                $newContext->setSecureBaseUrl($context->getSecureBaseUrl());
             }
         }
         // Reuse the global params like controller and action

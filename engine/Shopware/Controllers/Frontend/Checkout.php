@@ -451,7 +451,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             $this->redirect([
                 'controller' => $action[0],
                 'action' => empty($action[1]) ? 'index' : $action[1],
-                'forceSecure' => true,
             ]);
         }
     }
