@@ -216,9 +216,14 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                 'Shopware\Models\Config\Element',
                 $elementData['id']
             );
+
+            $removedValues = [];
             foreach ($element->getValues() as $value) {
                 Shopware()->Models()->remove($value);
+                $removedValues[] = $value;
             }
+            Shopware()->Models()->flush($removedValues);
+
             $values = array();
             foreach ($elementData['values'] as $valueData) {
                 /* @var $shop \Shopware\Models\Shop\Shop */
@@ -430,8 +435,8 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
 
                 if (isset($search)) {
                     $sql .= ' WHERE f.name LIKE :search OR ' .
-                            'f.field LIKE :search OR ' .
-                            't.table LIKE :search';
+                        'f.field LIKE :search OR ' .
+                        't.table LIKE :search';
                     $sqlParams = array('search' => $search);
                 }
 
