@@ -459,7 +459,7 @@ Ext.define('Shopware.apps.Order.view.detail.Position', {
      * @returns { string }
      */
     attributeColumnRenderer: function(value, meta, record) {
-        if (!record.get('id') || this.backendAttributes.length <= 0) {
+        if (!record.get('id') || !this.backendAttributes || this.backendAttributes.length <= 0) {
             return 'x-hidden';
         }
     },
