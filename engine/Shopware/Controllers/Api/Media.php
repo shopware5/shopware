@@ -74,7 +74,14 @@ class Shopware_Controllers_Api_Media extends Shopware_Controllers_Api_Rest
      */
     public function postAction()
     {
-        $media = $this->resource->create($this->Request()->getPost());
+        $params = $this->Request()->getPost();
+
+        // Use the ID of the authenticated user as a fallback 'userId'
+        if (!isset($params['userId']) || empty($params['userId'])) {
+            $params['userId'] = $this->get('auth')->getIdentity()->id;
+        }
+
+        $media = $this->resource->create($params);
 
         $location = $this->apiBaseUrl . 'media/' . $media->getId();
         $data = array(
