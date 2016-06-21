@@ -90,8 +90,6 @@ class Store extends BaseStore
             return false;
         }
 
-        $result = false;
-
         /** @var $file \SplFileInfo */
         foreach ($this->createRecursiveFileIterator($this->root) as $file) {
             if (!$file->isFile()) {
@@ -104,10 +102,9 @@ class Store extends BaseStore
             }
 
             unlink($file->getPathname());
-            $result = true;
         }
 
-        return $result;
+        return true;
     }
 
     /**

@@ -1017,7 +1017,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
 
                 if ($response->getStatus() < 200 || $response->getStatus() >= 300) {
                     $this->get('corelogger')->error(
-                        'Reverse proxy returned invalidate status code',
+                        'Reverse proxy returned invalid status code',
                         ['response' => $response->getRawBody(), 'code' => $response->getStatus()]
                     );
                 }
