@@ -268,7 +268,15 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             $order = Shopware()->Db()->fetchRow($sql, array($this->Request()->getParam('sUniqueID'), Shopware()->Session()->sUserId));
             if (!empty($order)) {
                 $this->View()->assign($order);
-                $this->View()->assign($this->session['sOrderVariables']->getArrayCopy());
+                $orderVariables = $this->session['sOrderVariables']->getArrayCopy();
+
+                if (!empty($orderVariables['sOrderNumber'])) {
+                    $orderVariables['sAddresses']['billing'] = $this->getOrderAddress($orderVariables['sOrderNumber'], 'billing');
+                    $orderVariables['sAddresses']['shipping'] = $this->getOrderAddress($orderVariables['sOrderNumber'], 'shipping');
+                    $orderVariables['sAddresses']['equal'] = $this->areAddressesEqual($orderVariables['sAddresses']['billing'], $orderVariables['sAddresses']['shipping']);
+                }
+
+                $this->View()->assign($orderVariables);
                 return;
             }
         }
