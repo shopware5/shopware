@@ -596,6 +596,15 @@ class sBasket
      */
     public function sAddVoucher($voucherCode, $basket = '')
     {
+        // Check if a voucher code was entered
+        if (!$voucherCode) {
+            $sErrorMessages[] = $this->snippetManager->getNamespace('frontend/basket/internalMessages')->get(
+                'VoucherFailureNotEntered',
+                'No voucher code entered'
+            );
+            return array("sErrorFlag" => true, "sErrorMessages" => $sErrorMessages);
+        }
+
         if ($this->eventManager->notifyUntil(
             'Shopware_Modules_Basket_AddVoucher_Start',
             array('subject' => $this, 'code' => $voucherCode, 'basket' => $basket)
@@ -605,6 +614,21 @@ class sBasket
 
         $voucherCode = stripslashes($voucherCode);
         $voucherCode = strtolower($voucherCode);
+
+        // Check if the basket already has a voucher, and break if it does
+        $chkBasket = $this->db->fetchRow(
+            'SELECT id
+            FROM s_order_basket
+            WHERE sessionID = ? AND modus = 2',
+            array($this->session->get('sessionId'))
+        );
+        if ($chkBasket) {
+            $sErrorMessages[] = $this->snippetManager->getNamespace('frontend/basket/internalMessages')->get(
+                'VoucherFailureOnlyOnes',
+                'Only one voucher can be processed in order'
+            );
+            return array("sErrorFlag" => true, "sErrorMessages" => $sErrorMessages);
+        }
 
         // Load the voucher details
         $voucherDetails = $this->db->fetchRow(
@@ -665,7 +689,6 @@ class sBasket
         // 2 - No voucher code
         // 3 - Voucher is reusable and has already been used to the limit
         if (!$voucherDetails
-            || !$voucherCode
             || ($voucherDetails["numberofunits"] <= $usedVoucherCount["vouchers"] && !$individualCode)
         ) {
             $sErrorMessages[] = $this->snippetManager->getNamespace('frontend/basket/internalMessages')->get(
@@ -680,21 +703,6 @@ class sBasket
         // If voucher is limited to a specific subshop, filter that and return on failure
         $sErrorMessages = $this->filterSubShopVoucher($voucherDetails);
         if (!empty($sErrorMessages)) {
-            return array("sErrorFlag" => true, "sErrorMessages" => $sErrorMessages);
-        }
-
-        // Check if the basket already has a voucher, and break if it does
-        $chkBasket = $this->db->fetchRow(
-            'SELECT id
-            FROM s_order_basket
-            WHERE sessionID = ? AND modus = 2',
-            array($this->session->get('sessionId'))
-        );
-        if ($chkBasket) {
-            $sErrorMessages[] = $this->snippetManager->getNamespace('frontend/basket/internalMessages')->get(
-                'VoucherFailureOnlyOnes',
-                'Only one voucher can be processed in order'
-            );
             return array("sErrorFlag" => true, "sErrorMessages" => $sErrorMessages);
         }
 
