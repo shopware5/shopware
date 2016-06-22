@@ -129,8 +129,11 @@ class CSRFTokenValidator implements SubscriberInterface
         $session = $this->container->get('session');
         $token = $session->offsetGet('X-CSRF-Token');
 
+
         if (!$token) {
             $token = $this->generateToken();
+        } else {
+            $token = uniqid();
         }
 
         if ($this->isWhitelisted($controller)) {

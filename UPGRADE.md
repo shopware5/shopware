@@ -1,7 +1,7 @@
 # Shopware Upgrade Information
 In this document you will find a changelog of the important changes related to the code base of Shopware.
 
-## 5.2.0 DEV
+## 5.2.0
 * Increased minimum required PHP version to PHP >= 5.6.4.
 * Added CSRF protection to frontend and backend which is enabled by default.
     * OptOut by implementing `Shopware\Components\CSRFWhitelistAware` interface
@@ -399,6 +399,11 @@ In this document you will find a changelog of the important changes related to t
     * `\Shopware\Bundle\StoreFrontBundle\Struct\LocationContextInterface`
     * `\Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface`
 * Added support for loading a new store instance by ID in the config combo box `Shopware.apps.Config.view.element.Select`
+* Added attributes to interface `Enlight_Controller_Request_Request`. New methods:
+    * `Enlight_Controller_Request_Request::getAttributes()`
+    * `Enlight_Controller_Request_Request::getAttribute()`
+    * `Enlight_Controller_Request_Request::setAttribute()`
+    * `Enlight_Controller_Request_Request::unsetAttribute()`
 
 ## 5.1.6
 * The interface `Enlight_Components_Cron_Adapter` in `engine/Library/Enlight/Components/Cron/Adapter.php` got a new method `getJobByAction`. For default implementation see `engine/Library/Enlight/Components/Cron/Adapter/DBAL.php`.
