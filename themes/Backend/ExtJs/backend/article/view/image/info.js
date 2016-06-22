@@ -197,7 +197,15 @@ Ext.define('Shopware.apps.Article.view.image.Info', {
             name: 'description',
             anchor: '100%',
             fieldLabel: me.snippets.imageTitle,
-            translatable: true
+            translatable: true,
+            listeners: {
+                change: {
+                    buffer: 250,
+                    fn: function() {
+                        me.settingsForm.getForm().updateRecord(me.record);
+                    }
+                }
+            }
         });
 
         me.settingsForm = Ext.create('Ext.form.Panel', {
