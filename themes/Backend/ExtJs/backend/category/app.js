@@ -85,7 +85,7 @@ Ext.define('Shopware.apps.Category', {
      * Required models for sub-application
      * @array
      */
-    models:[ 'Detail','Tree', 'Template', 'Attribute', 'Emotion', 'ProductAssignment' ],
+    models:[ 'Detail','Tree', 'Template', 'Emotion', 'ProductAssignment' ],
 
     /**
      * Required controllers for sub-application

@@ -5,7 +5,7 @@
 		<name>php</name><group>core</group><required>5.6.4</required>
 	</requirement>
 	<requirement>
-	 	<name>ionCube Loader</name><group>core</group><required>4.6</required>
+	 	<name>ionCube Loader</name><group>core</group><required>5.0</required>
 		<notice>The ionCube Loader is only required if you wish to use encrypted third-party plugins.</notice>
 	</requirement>
 	<requirement>

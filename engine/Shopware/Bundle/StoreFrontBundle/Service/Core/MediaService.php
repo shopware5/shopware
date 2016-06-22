@@ -55,21 +55,29 @@ class MediaService implements Service\MediaServiceInterface
     private $mediaGateway;
 
     /**
+     * @var Service\VariantCoverServiceInterface
+     */
+    private $variantCoverService;
+
+    /**
      * @param \Shopware\Bundle\StoreFrontBundle\Gateway\MediaGatewayInterface $mediaGateway
      * @param Gateway\ProductMediaGatewayInterface $productMedia
      * @param Gateway\VariantMediaGatewayInterface $variantMedia
      * @param \Shopware_Components_Config $shopwareConfig
+     * @param Service\VariantCoverServiceInterface $variantCoverService
      */
     public function __construct(
         Gateway\MediaGatewayInterface $mediaGateway,
         Gateway\ProductMediaGatewayInterface $productMedia,
         Gateway\VariantMediaGatewayInterface $variantMedia,
-        \Shopware_Components_Config $shopwareConfig
+        \Shopware_Components_Config $shopwareConfig,
+        Service\VariantCoverServiceInterface $variantCoverService
     ) {
         $this->productMediaGateway = $productMedia;
         $this->variantMediaGateway = $variantMedia;
         $this->shopwareConfig = $shopwareConfig;
         $this->mediaGateway = $mediaGateway;
+        $this->variantCoverService = $variantCoverService;
     }
 
     /**
@@ -114,21 +122,7 @@ class MediaService implements Service\MediaServiceInterface
             );
         }
 
-        $covers = $this->variantMediaGateway->getCovers(
-            $products,
-            $context
-        );
-
-        $fallback = [];
-        foreach ($products as $product) {
-            if (!array_key_exists($product->getNumber(), $covers)) {
-                $fallback[] = $product;
-            }
-        }
-
-        $fallback = $this->productMediaGateway->getCovers($fallback, $context);
-
-        return $covers + $fallback;
+        return $this->variantCoverService->getList($products, $context);
     }
 
     /**

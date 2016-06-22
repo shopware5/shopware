@@ -76,10 +76,6 @@ Ext.define('Shopware.apps.Category.model.Tree', {
             type : 'json',
             root: 'data'
         }
-    },
-    associations: [
-        { type: 'hasMany', model: 'Shopware.apps.Category.model.Attribute', name: 'getAttributes', associationKey: 'attribute' }
-    ]
-
+    }
 });
 //{/block}

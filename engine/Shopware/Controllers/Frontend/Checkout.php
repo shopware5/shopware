@@ -93,9 +93,9 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
     public function indexAction()
     {
         if ($this->basket->sCountBasket() < 1 || empty($this->View()->sUserLoggedIn)) {
-            $this->redirect(['action' => 'cart']);
+            $this->forward('cart');
         } else {
-            $this->redirect(['action' => 'confirm']);
+            $this->forward('confirm');
         }
     }
 
@@ -151,7 +151,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
                 array('sTarget' => 'checkout', 'sTargetAction' => 'confirm', 'showNoAccount' => true)
             );
         } elseif ($this->basket->sCountBasket() < 1) {
-            return $this->redirect(['action' => 'cart']);
+            return $this->forward('cart');
         }
 
         $this->View()->sCountry = $this->getSelectedCountry();
@@ -268,18 +268,26 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             $order = Shopware()->Db()->fetchRow($sql, array($this->Request()->getParam('sUniqueID'), Shopware()->Session()->sUserId));
             if (!empty($order)) {
                 $this->View()->assign($order);
-                $this->View()->assign($this->session['sOrderVariables']->getArrayCopy());
+                $orderVariables = $this->session['sOrderVariables']->getArrayCopy();
+
+                if (!empty($orderVariables['sOrderNumber'])) {
+                    $orderVariables['sAddresses']['billing'] = $this->getOrderAddress($orderVariables['sOrderNumber'], 'billing');
+                    $orderVariables['sAddresses']['shipping'] = $this->getOrderAddress($orderVariables['sOrderNumber'], 'shipping');
+                    $orderVariables['sAddresses']['equal'] = $this->areAddressesEqual($orderVariables['sAddresses']['billing'], $orderVariables['sAddresses']['shipping']);
+                }
+
+                $this->View()->assign($orderVariables);
                 return;
             }
         }
 
         if (empty($this->session['sOrderVariables'])||$this->getMinimumCharge()||$this->getEsdNote()||$this->getDispatchNoOrder()) {
-            return $this->redirect(['action' => 'confirm']);
+            return $this->forward('confirm');
         }
 
         $checkQuantities = $this->basket->sCheckBasketQuantities();
         if (!empty($checkQuantities['hideBasket'])) {
-            return $this->redirect(['action' => 'confirm']);
+            return $this->forward('confirm');
         }
 
         $orderVariables = $this->session['sOrderVariables']->getArrayCopy();
@@ -342,7 +350,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         }
 
         if (!$this->isValidAddress($activeBillingAddressId) || !$this->isValidAddress($activeShippingAddressId)) {
-            $this->redirect(['action' => 'confirm']);
+            $this->forward('confirm');
             return;
         }
 
@@ -503,7 +511,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         if ($this->Request()->getParam('sAddAccessories')) {
             $this->forward('addAccessories');
         } else {
-            $this->redirect(['action' => $this->Request()->getParam('sTargetAction', 'cart')]);
+            $this->forward($this->Request()->getParam('sTargetAction', 'cart'));
         }
     }
 
@@ -519,7 +527,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             $this->Request()->getParam('sAddAccessoriesQuantity')
         );
 
-        $this->redirect(['action' => $this->Request()->getParam('sTargetAction', 'cart')]);
+        $this->forward($this->Request()->getParam('sTargetAction', 'cart'));
     }
 
     /**
@@ -563,7 +571,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
                 $this->View()->sVoucherError = $voucher['sErrorMessages'];
             }
         }
-        $this->redirect(['action' => $this->Request()->getParam('sTargetAction', 'index')]);
+        $this->forward($this->Request()->getParam('sTargetAction', 'index'));
     }
 
     /**
@@ -585,7 +593,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
                 $this->basket->sInsertPremium();
             }
         }
-        $this->redirect(['action' => $this->Request()->getParam('sTargetAction', 'index')]);
+        $this->forward($this->Request()->getParam('sTargetAction', 'index'));
     }
 
     /**
@@ -617,7 +625,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         // We need an indicator in the view to expand the shipping costs pre-calculation on page load
         $this->View()->assign('calculateShippingCosts', true);
 
-        $this->redirect(['action' => $this->Request()->getParam('sTargetAction', 'index')]);
+        $this->forward($this->Request()->getParam('sTargetAction', 'index'));
     }
 
     /**

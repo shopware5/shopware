@@ -68,10 +68,6 @@ Ext.define('Shopware.apps.UserManager.model.UserDetail', {
 		{ field: 'username', type: 'length', min: 6 },
 		{ field: 'password', type: 'length', min: 6 },
 		{ field: 'name', type: 'length', min: 6 }
-	],
-
-    associations: [
-        { type: 'hasMany', model: 'Shopware.apps.UserManager.model.Attribute', name: 'getAttributes', associationKey: 'attribute'}
-    ]
+	]
 });
 //{/block}

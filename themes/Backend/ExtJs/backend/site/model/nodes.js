@@ -69,9 +69,6 @@ Ext.define('Shopware.apps.Site.model.Nodes', {
 			type: 'json',
 			root: 'nodes'
 		}
-	},
-    associations: [
-        { type: 'hasMany', model: 'Shopware.apps.Site.model.Attribute', name: 'getAttributes',  associationKey: 'attribute' }
-    ]
+	}
 });
 //{/block}

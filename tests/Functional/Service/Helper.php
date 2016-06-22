@@ -85,7 +85,7 @@ class Helper
 
     public function getProductConfigurator(
         StoreFrontBundle\Struct\ListProduct $listProduct,
-        StoreFrontBundle\Struct\ProductContext $context,
+        StoreFrontBundle\Struct\ShopContext $context,
         array $selection = array(),
         ProductConfigurationGateway $productConfigurationGateway = null,
         ConfiguratorGateway $configuratorGateway = null
@@ -107,13 +107,13 @@ class Helper
 
     /**
      * @param StoreFrontBundle\Struct\ListProduct $product
-     * @param StoreFrontBundle\Struct\ProductContext $context
+     * @param StoreFrontBundle\Struct\ShopContext $context
      * @param \Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ProductPropertyGateway $productPropertyGateway
      * @return StoreFrontBundle\Struct\Property\Set
      */
     public function getProductProperties(
         StoreFrontBundle\Struct\ListProduct $product,
-        StoreFrontBundle\Struct\ProductContext $context,
+        StoreFrontBundle\Struct\ShopContext $context,
         StoreFrontBundle\Gateway\DBAL\ProductPropertyGateway $productPropertyGateway = null
     ) {
         if ($productPropertyGateway === null) {
@@ -126,7 +126,7 @@ class Helper
 
     /**
      * @param $number
-     * @param StoreFrontBundle\Struct\ProductContext $context
+     * @param StoreFrontBundle\Struct\ShopContext $context
      * @param null $productGateway
      * @param null $graduatedPricesService
      * @param null $cheapestPriceService
@@ -139,7 +139,7 @@ class Helper
      */
     public function getListProduct(
         $number,
-        $context, // StoreFrontBundle\Struct\ProductContext
+        $context, // StoreFrontBundle\Struct\ShopContext
         $productGateway = null,
         $graduatedPricesService = null,
         $cheapestPriceService = null,
@@ -1030,11 +1030,6 @@ class Helper
         Models\Customer\Group $fallbackCustomerGroup = null,
         Models\Shop\Currency $currency = null
     ) {
-        $context = new TestContext();
-
-        $context->setTaxRules($this->buildTaxRules($taxes));
-        $context->setShop($this->converter->convertShop($shop));
-
         if ($currency == null && $shop->getCurrency()) {
             $currency = $this->converter->convertCurrency(
                 $shop->getCurrency()
@@ -1043,21 +1038,19 @@ class Helper
             $currency = $this->converter->convertCurrency($currency);
         }
 
-        $context->setCurrency($currency);
-
-        $context->setCurrentCustomerGroup(
-            $this->converter->convertCustomerGroup($currentCustomerGroup)
-        );
-
-        if (!$fallbackCustomerGroup) {
+        if ($fallbackCustomerGroup === null) {
             $fallbackCustomerGroup = $currentCustomerGroup;
         }
 
-        $context->setFallbackCustomerGroup(
-            $this->converter->convertCustomerGroup($fallbackCustomerGroup)
+        return new TestContext(
+            '',
+            $this->converter->convertShop($shop),
+            $currency,
+            $this->converter->convertCustomerGroup($currentCustomerGroup),
+            $this->converter->convertCustomerGroup($fallbackCustomerGroup),
+            $this->buildTaxRules($taxes),
+            []
         );
-
-        return $context;
     }
 
     public function getProperties($groupCount, $optionCount, $namePrefix = 'Test')

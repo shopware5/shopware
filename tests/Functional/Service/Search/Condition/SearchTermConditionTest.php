@@ -3,7 +3,7 @@
 namespace Shopware\Tests\Service\Search\Condition;
 
 use Shopware\Bundle\SearchBundle\Condition\SearchTermCondition;
-use Shopware\Bundle\StoreFrontBundle\Struct\ProductContext;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Service\TestCase;
 
@@ -11,14 +11,14 @@ class SearchTermConditionTest extends TestCase
 {
     /**
      * @param $number
-     * @param ProductContext $context
+     * @param ShopContext $context
      * @param Category $category
      * @param $name
      * @return array
      */
     protected function getProduct(
         $number,
-        ProductContext $context,
+        ShopContext $context,
         Category $category = null,
         $name = null
     ) {
@@ -61,7 +61,7 @@ class SearchTermConditionTest extends TestCase
         );
     }
 
-    public function createProducts($products, ProductContext $context, Category $category)
+    public function createProducts($products, ShopContext $context, Category $category)
     {
         $articles = parent::createProducts($products, $context, $category);
 

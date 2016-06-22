@@ -28,6 +28,7 @@ use Shopware\Models\Customer\Customer;
 use Shopware_Components_Config;
 use Shopware_Components_Snippet_Manager;
 use Symfony\Component\Form\Form;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
@@ -91,13 +92,10 @@ class PasswordValidator extends ConstraintValidator
             $this->addError($this->getSnippet(self::SNIPPET_PASSWORD_LENGTH));
         }
 
-        if (!$form->has('passwordConfirmation')) {
-            return;
-        }
-
-        $confirmed = $form->get('passwordConfirmation')->getData();
-        if ($confirmed !== $password) {
-            $this->addError($this->getSnippet(self::SNIPPET_PASSWORD_CONFIRMATION));
+        if ($form->has('passwordConfirmation') && $form->get('passwordConfirmation')->getData() !== $password) {
+            $error = new FormError($this->getSnippet(self::SNIPPET_PASSWORD_CONFIRMATION));
+            $error->setOrigin($form->get('passwordConfirmation'));
+            $form->addError($error);
         }
     }
 

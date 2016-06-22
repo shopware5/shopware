@@ -123,6 +123,14 @@ class RequirementValidator
                 throw new \Exception(sprintf('Required plugin %s was not found', $requiredPlugin['pluginName']));
             }
 
+            if ($plugin->getInstalled() === null) {
+                throw  new \Exception(sprintf('Required plugin %s is not installed', $requiredPlugin['pluginName']));
+            }
+
+            if (!$plugin->getActive()) {
+                throw  new \Exception(sprintf('Required plugin %s is not active', $requiredPlugin['pluginName']));
+            }
+
             if (in_array($plugin->getVersion(), $requiredPlugin['blacklist'])) {
                 throw new \Exception(sprintf("Required plugin %s with version %s is blacklisted", $plugin->getName(), $plugin->getVersion()));
             }

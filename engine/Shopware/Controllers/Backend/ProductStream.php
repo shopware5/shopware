@@ -149,7 +149,7 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
         }
 
         return Shopware()->Container()->get('shopware_storefront.context_service')
-            ->createProductContext($shopId, $currencyId, $customerGroupKey);
+            ->createShopContext($shopId, $currencyId, $customerGroupKey);
     }
 
     public function loadSelectedProductsAction()

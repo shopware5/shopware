@@ -215,8 +215,6 @@ class sAdmin
             $user = array();
         }
 
-        $basket = $this->moduleManager->Basket()->sGetBasket();
-
         // Check for risk management
         // If rules match, reset to default payment mean if this payment mean was not
         // set by shop owner
@@ -238,7 +236,7 @@ class sAdmin
         }
 
         // Check additional rules
-        if ($this->sManageRisks($data["id"], $basket, $user)
+        if ($this->sManageRisks($data["id"], null, $user)
             && $data["id"] != $user["additional"]["user"]["paymentpreset"]
         ) {
             $resetPayment = $this->config->get('sPAYMENTDEFAULT');
@@ -311,7 +309,6 @@ class sAdmin
      */
     public function sGetPaymentMeans()
     {
-        $basket = $this->moduleManager->Basket()->sGetBasket();
         $isMobile = ($this->front->Request()->getDeviceType() == 'mobile');
 
         $user = $this->sGetUserData();
@@ -394,7 +391,7 @@ class sAdmin
             }
 
             // Check additional rules
-            if ($this->sManageRisks($payValue["id"], $basket, $user)
+            if ($this->sManageRisks($payValue["id"], null, $user)
                 && $payValue["id"] != $user["additional"]["user"]["paymentpreset"]
             ) {
                 unset($getPaymentMeans[$payKey]);
@@ -1139,6 +1136,10 @@ class sAdmin
             }
 
             $context[$key] = $value;
+        }
+
+        if (array_key_exists('password', $context)) {
+            unset($context['password']);
         }
 
         $mail = Shopware()->TemplateMail()->createMail('sREGISTERCONFIRMATION', $context);
@@ -1954,7 +1955,7 @@ SQL;
     public function sRiskORDERPOSITIONSMORE($user, $order, $value)
     {
         return (
-            (is_array($order["content"]) && count($order["content"]) >= $value)
+            (is_array($order["content"]) ? count($order["content"]) : $order["content"] >= $value)
         );
     }
 
@@ -3275,7 +3276,7 @@ SQL;
         }
 
         $active = 1;
-        $context = $this->contextService->getProductContext();
+        $context = $this->contextService->getShopContext();
         $orderArticleOrderNumbers = array_column($getOrderDetails, 'articleordernumber');
         $listProducts = Shopware()->Container()->get('shopware_storefront.list_product_service')->getList($orderArticleOrderNumbers, $context);
         $listProducts = Shopware()->Container()->get('legacy_struct_converter')->convertListProductStructList($listProducts);
@@ -3514,14 +3515,7 @@ SQL;
                         ->get('UnknownError', 'Unknown error')
             );
             return $result;
-        } elseif (count($result)) {
-            $result = array(
-                "code" => 2,
-                "message" => $this->snippetManager->getNamespace('frontend/account/internalMessages')
-                        ->get('NewsletterFailureAlreadyRegistered', 'You already receive our newsletter')
-            );
-            return $result;
-        } else {
+        } elseif (count($result) === 0) {
             $customer = $this->db->fetchOne(
                 'SELECT id FROM s_user WHERE email = ? LIMIT 1',
                 array($email)
@@ -3544,15 +3538,15 @@ SQL;
                             ->get('UnknownError', 'Unknown error')
                 );
                 return $result;
-            } else {
-                $result = array(
-                    "code" => 3,
-                    "message" => $this->snippetManager->getNamespace('frontend/account/internalMessages')
-                            ->get('NewsletterSuccess', 'Thank you for receiving our newsletter')
-                );
-                return $result;
             }
         }
+
+        $result = array(
+            "code" => 3,
+            "message" => $this->snippetManager->getNamespace('frontend/account/internalMessages')
+                ->get('NewsletterSuccess', 'Thank you for receiving our newsletter')
+        );
+        return $result;
     }
 
     /**

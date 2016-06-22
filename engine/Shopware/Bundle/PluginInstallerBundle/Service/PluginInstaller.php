@@ -27,7 +27,11 @@ namespace Shopware\Bundle\PluginInstallerBundle\Service;
 use Doctrine\DBAL\Connection;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Plugin as PluginBootstrap;
-use Shopware\Components\Plugin\PluginContext;
+use Shopware\Components\Plugin\Context\ActivateContext;
+use Shopware\Components\Plugin\Context\DeactivateContext;
+use Shopware\Components\Plugin\Context\InstallContext;
+use Shopware\Components\Plugin\Context\UninstallContext;
+use Shopware\Components\Plugin\Context\UpdateContext;
 use Shopware\Components\Plugin\RequirementValidator;
 use Shopware\Components\Snippet\DatabaseHandler;
 use Shopware\Kernel;
@@ -78,7 +82,7 @@ class PluginInstaller
 
     /**
      * @param Plugin $plugin
-     * @return PluginContext
+     * @return InstallContext
      * @throws \Exception
      */
     public function installPlugin(Plugin $plugin)
@@ -86,7 +90,7 @@ class PluginInstaller
         /** @var Kernel $kernel */
         $pluginBootstrap = $this->getPluginByName($plugin->getName());
 
-        $context = new PluginContext($plugin, \Shopware::VERSION, $plugin->getVersion());
+        $context = new InstallContext($plugin, \Shopware::VERSION, $plugin->getVersion());
 
         $this->requirementValidator->validate($pluginBootstrap->getPath().'/plugin.xml', \Shopware::VERSION);
 
@@ -110,14 +114,14 @@ class PluginInstaller
     /**
      * @param Plugin $plugin
      * @param bool $removeData
-     * @return PluginContext
+     * @return UninstallContext
      */
     public function uninstallPlugin(Plugin $plugin, $removeData = true)
     {
-        $context = new PluginContext($plugin, \Shopware::VERSION, $plugin->getVersion());
+        $context = new UninstallContext($plugin, \Shopware::VERSION, $plugin->getVersion(), !$removeData);
         $bootstrap = $this->getPluginByName($plugin->getName());
 
-        $bootstrap->uninstall($context, !$removeData);
+        $bootstrap->uninstall($context);
 
         $plugin->setInstalled(null);
         $plugin->setActive(false);
@@ -151,7 +155,7 @@ class PluginInstaller
 
     /**
      * @param Plugin $plugin
-     * @return PluginContext
+     * @return UpdateContext
      * @throws \Exception
      */
     public function updatePlugin(Plugin $plugin)
@@ -159,7 +163,7 @@ class PluginInstaller
         $pluginBootstrap = $this->getPluginByName($plugin->getName());
         $this->requirementValidator->validate($pluginBootstrap->getPath().'/plugin.xml', \Shopware::VERSION);
 
-        $context = new PluginContext(
+        $context = new UpdateContext(
             $plugin,
             \Shopware::VERSION,
             $plugin->getVersion(),
@@ -211,11 +215,11 @@ class PluginInstaller
 
     /**
      * @param Plugin $plugin
-     * @return PluginContext
+     * @return ActivateContext
      */
     public function activatePlugin(Plugin $plugin)
     {
-        $context = new PluginContext($plugin, \Shopware::VERSION, $plugin->getVersion());
+        $context = new ActivateContext($plugin, \Shopware::VERSION, $plugin->getVersion());
 
         $bootstrap = $this->getPluginByName($plugin->getName());
         $bootstrap->activate($context);
@@ -228,11 +232,11 @@ class PluginInstaller
 
     /**
      * @param Plugin $plugin
-     * @return PluginContext
+     * @return DeactivateContext
      */
     public function deactivatePlugin(Plugin $plugin)
     {
-        $context = new PluginContext($plugin, \Shopware::VERSION, $plugin->getVersion());
+        $context = new DeactivateContext($plugin, \Shopware::VERSION, $plugin->getVersion());
         $bootstrap = $this->getPluginByName($plugin->getName());
         $bootstrap->deactivate($context);
 

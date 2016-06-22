@@ -156,6 +156,12 @@ In this document you will find a changelog of the important changes related to t
     * `Shopware.apps.Order.model.PositionAttribute`
     * `Shopware.apps.Order.model.ReceiptAttribute`
     * `Shopware.apps.Order.model.ShippingAttribute`
+    * `Shopware.apps.Category.model.Attribute`
+    * `Shopware.apps.Mail.model.Attribute`
+    * `Shopware.apps.Payment.model.Attribute`
+    * `Shopware.apps.Shipping.model.Attribute`
+    * `Shopware.apps.Site.model.Attribute`
+    * `Shopware.apps.UserManager.model.Attribute`
 * The following repository methods no longer select attributes or have been removed entirely
     * `\Shopware\Models\Article\Repository::getSupplierQueryBuilder()`
     * `\Shopware\Models\Customer\Repository::getCustomerDetailQueryBuilder()`
@@ -185,6 +191,13 @@ In this document you will find a changelog of the important changes related to t
     * `Shopware.apps.Order.model.Receipt`
     * `Shopware.apps.Order.model.Position`
     * `Shopware.apps.Order.model.Order`
+    * `Shopware.apps.Category.model.Detail`
+    * `Shopware.apps.Customer.model.Customer`
+    * `Shopware.apps.Payment.model.Payment`
+    * `Shopware.apps.Shipping.model.Dispatch`
+    * `Shopware.apps.Site.model.Nodes`
+    * `Shopware.apps.UserManager.model.User`
+    * `Shopware.apps.UserManager.model.UserDetail`
 * Removed the following backend files:
     * `themes/Backend/ExtJs/backend/blog/view/blog/detail/sidebar/attributes.js`
     * `themes/Backend/ExtJs/backend/config/store/form/attribute.js`
@@ -366,6 +379,26 @@ In this document you will find a changelog of the important changes related to t
 * Removed unused controller endpoints `ajax_login` and `ajax_logout` in `themes/Frontend/Bare/frontend/index/index.tpl`
 * \Shopware\Bundle\SearchBundleES\ConditionHandler\ProductAttributeConditionHandler requires now the \Shopware\Bundle\AttributeBundle\Service\CrudService as constructor dependency
 * Merged \Shopware\Bundle\AttributeBundle\Service\CrudService create and update function
+* Removed `$basket` from `sAdmin::sManageRisks($paymentID, $basket, $user)`
+* Added new `\Shopware\Bundle\StoreFrontBundle\Service\VariantCoverServiceInterface` which allows to load variant covers without considering `forceMainImageInListing` parameter
+* Removed wrong parameter usage of `Shopware\Models\Menu\Repository::findOneBy`, which allows to provide two strings as criteria instead of array.
+* Updated composer dependency elasticsearch/elasticsearch to version 2.2.0
+* Changed default labelWidth for emotion component fields in `Shopware.apps.Emotion.view.components.Base` to 170 pixels
+* IonCube Loader version requirement bumped to 5.0 or higher
+* PHP setting `display_errors` defaults to `off` now in `engine/Shopware/Configs/Default.php`
+* Removed `\Shopware\Bundle\StoreFrontBundle\Struct\Context` class
+* Deprecated following classes and functions:
+    * `\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::getContext`
+    * `\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::getProductContext`
+    * `\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::getLocationContext`
+    * `\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::initializeContext`
+    * `\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::initializeLocationContext`
+    * `\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::initializeProductContext`
+    * `\Shopware\Bundle\StoreFrontBundle\Struct\LocationContext`
+    * `\Shopware\Bundle\StoreFrontBundle\Struct\ProductContext`
+    * `\Shopware\Bundle\StoreFrontBundle\Struct\LocationContextInterface`
+    * `\Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface`
+* Added support for loading a new store instance by ID in the config combo box `Shopware.apps.Config.view.element.Select`
 
 ## 5.1.6
 * The interface `Enlight_Components_Cron_Adapter` in `engine/Library/Enlight/Components/Cron/Adapter.php` got a new method `getJobByAction`. For default implementation see `engine/Library/Enlight/Components/Cron/Adapter/DBAL.php`.

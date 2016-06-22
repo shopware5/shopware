@@ -66,7 +66,7 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
         }
 
         /**@var $context ProductContextInterface*/
-        $context  = $this->get('shopware_storefront.context_service')->getProductContext();
+        $context  = $this->get('shopware_storefront.context_service')->getShopContext();
 
         $criteria = Shopware()->Container()->get('shopware_search.store_front_criteria_factory')
             ->createSearchCriteria($this->Request(), $context);

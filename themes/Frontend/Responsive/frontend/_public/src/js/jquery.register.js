@@ -31,6 +31,14 @@
             errorClass: 'has--error',
 
             /**
+             * Selector for the form.
+             *
+             * @property formSelector
+             * @type {String}
+             */
+            formSelector: '.register--form',
+
+            /**
              * Selector for the forms submit button.
              *
              * @property submitBtnSelector
@@ -153,7 +161,39 @@
              * @property errorMessageClass
              * @type {String}
              */
-            errorMessageClass: 'register--error-msg'
+            errorMessageClass: 'register--error-msg',
+
+            /**
+             * Selector for the email field.
+             *
+             * @property personalEmailSelector
+             * @type {String}
+             */
+            personalEmailSelector: '#register_personal_email',
+
+            /**
+             * Selector for the password field.
+             *
+             * @property personalPasswordSelector
+             * @type {String}
+             */
+            personalPasswordSelector: '#register_personal_password',
+
+            /**
+             * Selector for the email confirmation field.
+             *
+             * @property personalEmailConfirmationSelector
+             * @type {String}
+             */
+            personalEmailConfirmationSelector: '#register_personal_emailConfirmation',
+
+            /**
+             * Selector for the password confirmation field.
+             *
+             * @property personalPasswordConfirmationSelector
+             * @type {String}
+             */
+            personalPasswordConfirmationSelector: '#register_personal_passwordConfirmation'
         },
 
         /**
@@ -167,6 +207,13 @@
             var me = this,
                 opts = me.opts,
                 $el = me.$el;
+
+            me.$personalEmail = $el.find(opts.personalEmailSelector);
+            me.$personalPassword = $el.find(opts.personalPasswordSelector);
+            me.$personalEmailConfirmation = $el.find(opts.personalEmailConfirmationSelector);
+            me.$personalPasswordConfirmation = $el.find(opts.personalPasswordConfirmationSelector);
+
+            me.$form = $el.find(opts.formSelector);
 
             me.$submitBtn = $el.find(opts.submitBtnSelector);
 
@@ -206,7 +253,7 @@
             me._on(me.$alternativeShipping, 'change', $.proxy(me.checkChangeShipping, me));
             me._on(me.$countySelectFields, 'change', $.proxy(me.onCountryChanged, me));
             me._on(me.$paymentMethods, 'change', $.proxy(me.onPaymentChanged, me));
-            me._on(me.$inputs, 'blur', $.proxy(me.onValidateInput, me));
+            me._on(me.$form, 'focusout', $.proxy(me.onValidateInput, me));
             me._on(me.$submitBtn, 'click', $.proxy(me.onSubmitBtn, me));
 
             $.publish('plugin/swRegister/onRegisterEvents', [ me ]);
@@ -436,9 +483,12 @@
          */
         onValidateInput: function (event) {
             var me = this,
-                $el = $(event.currentTarget),
+                $el = $(event.target),
                 id = $el.attr('id'),
-                action;
+                action,
+                relatedTarget = event.relatedTarget || document.activeElement;
+
+            me.$targetElement = $(relatedTarget);
 
             switch (id) {
                 case 'register_personal_skipLogin':
@@ -457,7 +507,7 @@
                     break;
             }
 
-            if (!$el.val()) {
+            if (!$el.val() && $el.attr('required')) {
                 me.setFieldAsError($el);
             } else if ($el.attr('type') === 'checkbox' && !$el.is(':checked')) {
                 me.setFieldAsError($el);
@@ -585,8 +635,10 @@
          */
         onValidateSuccess: function (action, $input, result) {
             var me = this,
-                errorFlags,
-                errorMessages = [];
+                isError,
+                errorMessages = [],
+                skipEmailConfirmationError = me.$targetElement.attr('name') == me.$personalEmailConfirmation.attr('name') && me.$personalEmailConfirmation.val().length === 0,
+                skipPasswordConfirmationError = me.$targetElement.attr('name') == me.$personalPasswordConfirmation.attr('name') && me.$personalPasswordConfirmation.val().length === 0;
 
             $('#' + action + '--message').remove();
 
@@ -594,16 +646,39 @@
                 return;
             }
 
-            errorFlags = result;
-            for (var key in result) {
-                //fields with `false` are now valid
-                if (result[key]) {
-                    errorMessages.push(result[key]);
-                }
+            if (skipEmailConfirmationError) {
+                result['emailConfirmation'] = false;
+            } else if (skipPasswordConfirmationError) {
+                result['passwordConfirmation'] = false;
             }
 
-            if (errorFlags) {
-                me.updateFieldFlags(errorFlags);
+            for (var key in result) {
+                //fields with `false` are now valid
+                isError = result[key] ? true : false;
+
+                if (!isError) {
+                    continue;
+                }
+
+                if (key == 'emailConfirmation' && skipEmailConfirmationError) {
+                    result[key] = false;
+                    continue;
+                } else if (key == 'passwordConfirmation' && skipPasswordConfirmationError) {
+                    result[key] = false;
+                    continue;
+                }
+
+                if ($input.attr('name') == me.$personalEmailConfirmation.attr('name')) {
+                    $input = me.$personalEmail;
+                } else if ($input.attr('name') == me.$personalPasswordConfirmation.attr('name')) {
+                    $input = me.$personalPassword;
+                }
+
+                errorMessages.push(result[key]);
+            }
+
+            if (result) {
+                me.updateFieldFlags(result);
             }
 
             if (errorMessages && errorMessages.length) {

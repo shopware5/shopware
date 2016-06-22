@@ -3,7 +3,7 @@
 namespace Shopware\Tests\Service\Search\Facet;
 
 use Shopware\Bundle\SearchBundle\Facet\ShippingFreeFacet;
-use Shopware\Bundle\StoreFrontBundle\Struct\ProductContext;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Service\TestCase;
 
@@ -12,13 +12,13 @@ class ShippingFreeFacetTest extends TestCase
     /**
      * @param $number
      * @param \Shopware\Models\Category\Category $category
-     * @param ProductContext $context
+     * @param ShopContext $context
      * @param bool $shippingFree
      * @return array
      */
     protected function getProduct(
         $number,
-        ProductContext $context,
+        ShopContext $context,
         Category $category = null,
         $shippingFree = true
     ) {

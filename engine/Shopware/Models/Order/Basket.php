@@ -80,7 +80,7 @@ class Basket extends ModelEntity
     /**
      * @var string $orderNumber
      *
-     * @ORM\Column(name="ordernumber", type="string", length=30, nullable=true)
+     * @ORM\Column(name="ordernumber", type="string", length=255, nullable=true)
      */
     protected $orderNumber = null;
 

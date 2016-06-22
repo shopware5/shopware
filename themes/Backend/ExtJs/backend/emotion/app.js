@@ -101,7 +101,6 @@ Ext.define('Shopware.apps.Emotion', {
         'Viewport',
         'Component',
         'Field',
-        'Attribute',
         'BannerSlider',
         'ManufacturerSlider',
         'ArticleSlider',

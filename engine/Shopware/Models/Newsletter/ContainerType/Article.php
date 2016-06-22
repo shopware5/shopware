@@ -69,7 +69,7 @@ class Article extends LazyFetchModelEntity
      * Ordernumber of the article
      *
      * @var string $number
-     * @ORM\Column(name="articleordernumber", type="string", length=16777215 , nullable=false)
+     * @ORM\Column(name="articleordernumber", type="string", length=255 , nullable=false)
      */
     private $number = '';
 

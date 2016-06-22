@@ -58,14 +58,14 @@ class Premium extends LazyFetchModelEntity
     /**
      * @var string $orderNumber
      *
-     * @ORM\Column(name="ordernumber", type="string", length=30, nullable=false)
+     * @ORM\Column(name="ordernumber", type="string", length=255, nullable=false)
      */
     private $orderNumber;
 
     /**
      * @var string $orderNumberExport
      *
-     * @ORM\Column(name="ordernumber_export", type="string", length=30, nullable=false)
+     * @ORM\Column(name="ordernumber_export", type="string", length=255, nullable=false)
      */
     private $orderNumberExport;
 

@@ -696,4 +696,12 @@ class Plugin extends ModelEntity
     {
         return $this->capabilityUpdate;
     }
+
+    /**
+     * @return bool
+     */
+    public function isLegacyPlugin()
+    {
+        return $this->namespace !== 'ShopwarePlugins';
+    }
 }

@@ -44,7 +44,8 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->container = new ProjectServiceContainer();
-        $service = $this->getMock(\Enlight_Event_EventManager::class);
+        $service = $this->createMock(\Enlight_Event_EventManager::class);
+
         $this->container->set('events', $service);
     }
 

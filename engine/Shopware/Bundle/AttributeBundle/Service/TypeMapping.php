@@ -24,7 +24,6 @@
 
 namespace Shopware\Bundle\AttributeBundle\Service;
 
-use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Types\Type;
 
 /**
@@ -34,11 +33,6 @@ use Doctrine\DBAL\Types\Type;
  */
 class TypeMapping
 {
-    /**
-     * @var Connection
-     */
-    private $connection;
-
     /**
      * @var array
      */
@@ -132,12 +126,10 @@ class TypeMapping
 
     /**
      * TypeMapping constructor.
-     * @param Connection $connection
      * @param \Shopware_Components_Snippet_Manager $snippets
      */
-    public function __construct(Connection $connection, \Shopware_Components_Snippet_Manager $snippets)
+    public function __construct(\Shopware_Components_Snippet_Manager $snippets)
     {
-        $this->connection = $connection;
         $this->snippets = $snippets;
     }
 

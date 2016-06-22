@@ -262,13 +262,38 @@ class sBasket
      */
     public function sUpdateVoucher()
     {
+        $voucher = $this->sGetVoucher();
+        if ($voucher) {
+            $this->sDeleteArticle($voucher['basketID']);
+            $this->sAddVoucher($voucher['code']);
+        }
+    }
+
+    /**
+     * Deletes the current basket voucher
+     */
+    private function sDeleteVoucher()
+    {
+        $voucher = $this->sGetVoucher();
+        if ($voucher) {
+            $this->sDeleteArticle($voucher['basketID']);
+        }
+    }
+
+    /**
+     * Returns the current basket voucher or false
+     *
+     * @return array|false
+     */
+    private function sGetVoucher()
+    {
         $voucher = $this->db->fetchRow(
             'SELECT id basketID, ordernumber, articleID as voucherID
                 FROM s_order_basket
                 WHERE modus = 2 AND sessionID = ?',
             array($this->session->get('sessionId'))
         );
-        if ($voucher) {
+        if (!empty($voucher)) {
             $voucher['code'] = $this->db->fetchOne(
                 'SELECT vouchercode FROM s_emarketing_vouchers WHERE ordercode = ?',
                 array($voucher['ordernumber'])
@@ -279,9 +304,8 @@ class sBasket
                     array($voucher['voucherID'])
                 );
             }
-            $this->sDeleteArticle($voucher['basketID']);
-            $this->sAddVoucher($voucher['code']);
         }
+        return $voucher;
     }
 
     /**
@@ -1003,8 +1027,7 @@ class sBasket
     }
 
     /**
-     * Get all basket positions
-     * Used in multiple location
+     * Update cart and returns it.
      *
      * @return array Basket content
      */
@@ -1046,6 +1069,19 @@ class sBasket
         // Calculate global basket discount
         $this->sInsertDiscount();
 
+        // Refresh voucher
+        $this->sUpdateVoucher();
+
+        return $this->sGetBasketData();
+    }
+
+    /**
+     * Returns all basket data without refresh
+     *
+     * @return array
+     */
+    public function sGetBasketData()
+    {
         $getArticles = $this->loadBasketArticles();
 
         if (empty($getArticles)) {
@@ -1198,7 +1234,7 @@ class sBasket
 
         $numbers = array_column($notes, 'ordernumber');
 
-        $context = Shopware()->Container()->get('shopware_storefront.context_service')->getProductContext();
+        $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
 
         $products = Shopware()->Container()->get('shopware_storefront.list_product_service')
             ->getList($numbers, $context);
@@ -1400,8 +1436,6 @@ class sBasket
             )
         );
 
-        $this->sUpdateVoucher();
-
         if (!$update || !$queryNewPrice) {
             throw new Enlight_Exception("Basket Update ##01 Could not update quantity".$sql);
         }
@@ -1458,13 +1492,9 @@ class sBasket
      */
     public function sDeleteArticle($id)
     {
-        $id = (int) $id;
-        $modus = $this->db->fetchOne(
-            'SELECT modus FROM s_order_basket WHERE id = ?',
-            array($id)
-        );
-
-        if ($id && $id != "voucher") {
+        if ($id == 'voucher') {
+            $this->sDeleteVoucher();
+        } else {
             $this->db->delete(
                 's_order_basket',
                 array(
@@ -1472,9 +1502,6 @@ class sBasket
                     'id = ?' => $id
                 )
             );
-            if (empty($modus)) {
-                $this->sUpdateVoucher();
-            }
         }
     }
 
@@ -1998,31 +2025,75 @@ class sBasket
     }
 
     /**
-     * Proxy to a cached version of self::getBasketArticlesUncached()
-     *
-     * Caches the result of self::getBasketArticlesUncached() in a
-     * static variable using a hash of the input paramter
-     * to invalidate the cache.
-     *
-     * @param array $getArticles
+     * @param $numbers string[]Product numbers
+     * @return array Basket item details
+     */
+    private function getBasketAdditionalDetails($numbers)
+    {
+        $container = Shopware()->Container();
+        /** @var \Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface $listProduct */
+        $listProduct = $container->get('shopware_storefront.list_product_service');
+        /** @var \Shopware\Bundle\StoreFrontBundle\Service\PropertyServiceInterface $propertyService */
+        $propertyService = $container->get('shopware_storefront.property_service');
+        /** @var \Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface $context */
+        $context = $container->get('shopware_storefront.context_service');
+        /** @var \Shopware\Components\Compatibility\LegacyStructConverter $legacyStructConverter */
+        $legacyStructConverter = $container->get('legacy_struct_converter');
+
+        $products = $listProduct->getList($numbers, $context->getShopContext());
+        $propertySets = $propertyService->getList($products, $context->getShopContext());
+
+        $covers = $container->get('shopware_storefront.variant_cover_service')
+            ->getList($products, $context->getShopContext());
+
+        $details = [];
+        foreach ($products as $product) {
+            $promotion = $legacyStructConverter->convertListProductStruct($product);
+
+            if (isset($covers[$product->getNumber()])) {
+                $promotion['image'] = $legacyStructConverter->convertMediaStruct($covers[$product->getNumber()]);
+            }
+
+            if ($product->hasProperties() && isset($propertySets[$product->getNumber()])) {
+                $propertySet = $propertySets[$product->getNumber()];
+
+                $promotion['sProperties'] = $legacyStructConverter->convertPropertySetStruct($propertySet);
+                $promotion['filtergroupID'] = $propertySet->getId();
+                $promotion['properties'] = array_map(function ($property) {
+                    return $property['name'] . ':&nbsp;' . $property['value'];
+                }, $promotion['sProperties']);
+                $promotion['properties'] = implode(',&nbsp;', $promotion['properties']);
+            }
+            $details[$product->getNumber()] = $promotion;
+        }
+        return $details;
+    }
+
+    /**
+     * @param array $image
      * @return array
      */
-    private function getBasketArticles(array $getArticles)
+    private function getBasketImage($image)
     {
-        static $cache;
-        static $cacheHash;
-
-        $hash = md5(serialize($getArticles));
-        if ($cache && $hash === $cacheHash) {
-            return $cache;
-        }
-
-        $result = $this->getBasketArticlesUncached($getArticles);
-
-        $cache = $result;
-        $cacheHash = $hash;
-
-        return $result;
+        return array_merge(
+            $image,
+            [
+                'src' => array_merge(
+                    ['original' => $image['source']],
+                    array_column($image['thumbnails'], 'source')
+                ),
+                'srchd' => array_merge(
+                    ['original' => $image['source']],
+                    array_column($image['thumbnails'], 'retinaSource')
+                ),
+                'res' => [
+                    'original' => [
+                        'width' => $image['height'],
+                        'height' => $image['width']
+                    ]
+                ]
+            ]
+        );
     }
 
     /**
@@ -2032,13 +2103,21 @@ class sBasket
      * @param $getArticles
      * @return array
      */
-    private function getBasketArticlesUncached($getArticles)
+    private function getBasketArticles($getArticles)
     {
         $totalAmount = 0;
         $discount = 0;
         $totalAmountWithTax = 0;
         $totalAmountNet = 0;
         $totalCount = 0;
+
+        $numbers = [];
+        foreach ($getArticles as $article) {
+            if (empty($article['modus'])) {
+                $numbers[] = $article['ordernumber'];
+            }
+        }
+        $additionalDetails = $this->getBasketAdditionalDetails($numbers);
 
         foreach (array_keys($getArticles) as $key) {
             $getArticles[$key] = $this->eventManager->filter(
@@ -2079,21 +2158,7 @@ class sBasket
 
             // Get additional basket meta data for each product
             if ($getArticles[$key]["modus"] == 0) {
-                $tempArticle = $this->moduleManager->Articles()->sGetProductByOrdernumber($getArticles[$key]['ordernumber']);
-
-                if (empty($tempArticle)) {
-                    $getArticles[$key]["additional_details"] = array("properties" => array());
-                } else {
-                    $getArticles[$key]['additional_details'] = $tempArticle;
-                    $properties = '';
-                    if (isset($getArticles[$key]['additional_details']['sProperties'])) {
-                        foreach ($getArticles[$key]['additional_details']['sProperties'] as $property) {
-                            $properties .= $property['name'] . ':&nbsp;' . $property['value'] . ',&nbsp;';
-                        }
-                    }
-
-                    $getArticles[$key]['additional_details']['properties'] = substr($properties, 0, -7);
-                }
+                $getArticles[$key]['additional_details'] = $additionalDetails[$getArticles[$key]['ordernumber']];
             }
 
             // If unitID is set, query it
@@ -2139,33 +2204,6 @@ class sBasket
             $quantity = $getArticles[$key]["quantity"];
             $price = $getArticles[$key]["price"];
             $netprice = $getArticles[$key]["netprice"];
-
-            if ($getArticles[$key]["modus"] == 2) {
-                $ticketResult = $this->db->fetchRow(
-                    'SELECT vouchercode,taxconfig
-                    FROM s_emarketing_vouchers
-                    WHERE ordercode = ?',
-                    array($getArticles[$key]["ordernumber"])
-                ) ? : array();
-
-                if (!$ticketResult["vouchercode"]) {
-                    // Query Voucher-Code
-                    $queryVoucher = $this->db->fetchRow(
-                        'SELECT code
-                        FROM s_emarketing_voucher_codes
-                        WHERE id = ? AND cashed != 1',
-                        array($getArticles[$key]["articleID"])
-                    ) ? : array();
-                    $ticketResult["vouchercode"] = $queryVoucher["code"];
-                }
-                $this->sDeleteArticle($getArticles[$key]["id"]);
-
-                //if voucher was deleted, do not restore
-                if ($this->front->Request()->getQuery('sDelete') != 'voucher') {
-                    $this->sAddVoucher($ticketResult["vouchercode"]);
-                }
-            }
-
             $tax = $getArticles[$key]["tax_rate"];
 
             // If shop is in net mode, we have to consider
@@ -2255,30 +2293,19 @@ class sBasket
                 $getArticles[$key]["itemInfo"] = $getArticles[$key]["purchaseunit"] . " {$getUnitData["description"]} / " . $this->moduleManager->Articles()->sFormatPrice(str_replace(",", ".", $getArticles[$key]["amount"]) / $quantity);
             }
 
-            if ($getArticles[$key]["articleID"]) {
-                // Article image
-                if (!empty($getArticles[$key]["ob_attr1"])) {
-                    $getArticles[$key]["image"] = $this->moduleManager->Articles()
-                        ->sGetConfiguratorImage(
-                            $this->moduleManager->Articles()->sGetArticlePictures(
-                                $getArticles[$key]["articleID"],
-                                false,
-                                $this->config->get('sTHUMBBASKET'),
-                                false,
-                                true
-                            ),
-                            $getArticles[$key]["ob_attr1"]
-                        );
-                } else {
-                    $getArticles[$key]["image"] = $this->moduleManager->Articles()
-                        ->sGetArticlePictures(
-                            $getArticles[$key]["articleID"],
-                            true,
-                            $this->config->get('sTHUMBBASKET'),
-                            $getArticles[$key]["ordernumber"]
-                        );
-                }
+            if (!empty($getArticles[$key]['additional_details']['image'])) {
+                $getArticles[$key]["image"] = $this->getBasketImage($getArticles[$key]['additional_details']['image']);
+            } elseif (!empty($getArticles[$key]["articleID"])) {
+                // Premium product image
+                $getArticles[$key]["image"] = $this->moduleManager->Articles()
+                    ->sGetArticlePictures(
+                        $getArticles[$key]["articleID"],
+                        true,
+                        $this->config->get('sTHUMBBASKET'),
+                        $getArticles[$key]["ordernumber"]
+                    );
             }
+
             // Links to details, basket
             $getArticles[$key]["linkDetails"] = $this->config->get('sBASEFILE') . "?sViewport=detail&sArticle=" . $getArticles[$key]["articleID"];
             if ($getArticles[$key]["modus"] == 2) {
@@ -2690,7 +2717,7 @@ class sBasket
         );
 
         if ($article['configurator_set_id'] > 0) {
-            $context = $this->contextService->getProductContext();
+            $context = $this->contextService->getShopContext();
             $product = Shopware()->Container()->get('shopware_storefront.list_product_service')->get($article['ordernumber'], $context);
             $product = $this->additionalTextService->buildAdditionalText($product, $context);
             $article['additionaltext'] = $product->getAdditional();

@@ -51,7 +51,6 @@ Ext.define('Shopware.apps.Emotion.view.detail.Layout', {
     snippets: {
         fieldSets: {
             layoutLabel: '{s name="settings/layoutFieldset/title"}{/s}',
-            deviceLabel: '{s name="settings/deviceFieldset/title"}{/s}',
             gridLabel: '{s name="settings/gridFieldset/title"}{/s}'
         },
         fields: {
@@ -62,11 +61,6 @@ Ext.define('Shopware.apps.Emotion.view.detail.Layout', {
             templateEmptyText: '{s name="settings/fieldset/select_template_empty"}{/s}',
             modeLabel: '{s name="grids/settings/mode"}{/s}',
             fullscreenLabel: '{s name="settings/label/fullscreen"}{/s}',
-            deviceDesktopLabel: '{s name="settings/device/desktop"}{/s}',
-            deviceTabletLandscapeLabel: '{s name="settings/device/tabletLandscape"}{/s}',
-            deviceTabletPortraitLabel: '{s name="settings/device/tabletPortrait"}{/s}',
-            deviceMobileLandscapeLabel: '{s name="settings/device/mobileLandscape"}{/s}',
-            deviceMobilePortraitLabel: '{s name="settings/device/mobilePortrait"}{/s}',
             gridColsLabel: '{s name="settings/grid/colsLabel"}{/s}',
             gridSpacingLabel: '{s name="settings/grid/spacingLabel"}{/s}',
             gridHeightLabel: '{s name="settings/grid/rowHeightLabel"}{/s}'
@@ -75,10 +69,6 @@ Ext.define('Shopware.apps.Emotion.view.detail.Layout', {
             fluidMode: '{s name="grid/settings/support/fluid_effect"}{/s}',
             resizeMode: '{s name="grid/settings/support/resize_effect"}{/s}',
             rowsMode: '{s name="grid/settings/support/rows_effect"}{/s}'
-        },
-        alert: {
-            deviceWarningTitle: '{s name="settings/device/warning_title"}{/s}',
-            deviceWarningText: '{s name="settings/device/warning_text"}{/s}'
         }
     },
 
@@ -87,12 +77,10 @@ Ext.define('Shopware.apps.Emotion.view.detail.Layout', {
 
         me.layoutFieldset = me.createLayoutFieldset();
         me.gridFieldset = me.createGridFieldset();
-        me.deviceFieldset = me.createDeviceFieldset();
 
         me.items = [
             me.layoutFieldset,
-            me.gridFieldset,
-            me.deviceFieldset
+            me.gridFieldset
         ];
 
         me.addEvents(
@@ -255,66 +243,6 @@ Ext.define('Shopware.apps.Emotion.view.detail.Layout', {
         });
     },
 
-    createDeviceFieldset: function() {
-        var me = this;
-
-        me.deviceComboGroup = Ext.create('Ext.form.CheckboxGroup', {
-            columns: 1,
-            vertical: false,
-            items: me.createDeviceData(),
-            listeners: {
-                scope: me,
-                change: function(comp, newVal, oldVal) {
-                    var values = comp.getValue();
-
-                    if (!values.hasOwnProperty('device')) {
-                        Ext.Msg.alert(me.snippets.alert.deviceWarningTitle, me.snippets.alert.deviceWarningText);
-                        comp.setValue(oldVal);
-                    }
-                }
-            }
-        });
-
-        return Ext.create('Ext.form.FieldSet', {
-            title: me.snippets.fieldSets.deviceLabel,
-            defaults: me.defaults,
-            items: [
-                me.deviceComboGroup
-            ]
-        });
-    },
-
-    createDeviceData: function() {
-        var me = this;
-
-        return [{
-            'inputValue': '0',
-            'boxLabel': me.snippets.fields.deviceDesktopLabel,
-            'checked': 1,
-            'name': 'device'
-        }, {
-            'inputValue': '1',
-            'boxLabel' : me.snippets.fields.deviceTabletLandscapeLabel,
-            'checked': 1,
-            'name': 'device'
-        }, {
-            'inputValue': '2',
-            'boxLabel': me.snippets.fields.deviceTabletPortraitLabel,
-            'checked': 1,
-            'name': 'device'
-        }, {
-            'inputValue': '3',
-            'boxLabel': me.snippets.fields.deviceMobileLandscapeLabel,
-            'checked': 1,
-            'name': 'device'
-        }, {
-            'inputValue': '4',
-            'boxLabel': me.snippets.fields.deviceMobilePortraitLabel,
-            'checked': 1,
-            'name': 'device'
-        }];
-    },
-
     createResponsiveModeStore: function() {
         var me = this;
 
@@ -346,15 +274,6 @@ Ext.define('Shopware.apps.Emotion.view.detail.Layout', {
         me.cellHeightField.setReadOnly(disable);
         me.cellHeightField[disable ? 'addCls' : 'removeCls']('x-form-readonly');
         me.cellHeightField[disable ? 'addCls' : 'removeCls']('x-item-disabled');
-    },
-
-    setDevices: function() {
-        var me = this,
-            device = me.emotion.get('device') || '0,1,2,3,4';
-
-        me.deviceComboGroup.setValue({
-            'device': device.split(',')
-        });
     }
 });
 //{/block}

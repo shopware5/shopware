@@ -354,20 +354,4 @@ class CheckoutContext extends SubContext
 
         $modelManager->flush();
     }
-
-    /**
-     * @Given /^the url path should be "([^"]*)"$/
-     */
-    public function theUrlPathShouldBe($path)
-    {
-        $url = $this->getSession()->getCurrentUrl();
-        $urlPath = parse_url($url, PHP_URL_PATH);
-
-        $urlPath = trim($urlPath, '/');
-        $path = trim($path, '/');
-
-        if ($urlPath !== $path) {
-            Helper::throwException('Path "' . $urlPath . '" does not match expected path "' . $path . '".');
-        }
-    }
 }

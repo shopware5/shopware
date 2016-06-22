@@ -2,7 +2,7 @@
 
 namespace Shopware\Tests\Service\Product;
 
-use Shopware\Bundle\StoreFrontBundle\Struct\ProductContext;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Models\Category\Category;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\MediaService;
 use Shopware\Bundle\StoreFrontBundle\Struct;
@@ -130,9 +130,7 @@ class CoverTest extends TestCase
         $this->helper->createArticle($data);
 
         /** @var \Shopware_Components_Config $config */
-        $config = $this->getMockBuilder('\Shopware_Components_Config')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $config = $this->createMock(\Shopware_Components_Config::class);
 
         $config->expects($this->once())
             ->method('get')
@@ -142,7 +140,8 @@ class CoverTest extends TestCase
             Shopware()->Container()->get('shopware_storefront.media_gateway'),
             Shopware()->Container()->get('shopware_storefront.product_media_gateway'),
             Shopware()->Container()->get('shopware_storefront.variant_media_gateway'),
-            $config
+            $config,
+            Shopware()->Container()->get('shopware_storefront.variant_cover_service')
         );
 
         $variants = $this->helper->getListProducts(
@@ -212,7 +211,7 @@ class CoverTest extends TestCase
 
     protected function getProduct(
         $number,
-        ProductContext $context,
+        ShopContext $context,
         Category $category = null,
         $imageCount = 1
     ) {
@@ -230,7 +229,7 @@ class CoverTest extends TestCase
         return $data;
     }
 
-    private function getVariantImageProduct($number, ProductContext $context)
+    private function getVariantImageProduct($number, ShopContext $context)
     {
         $data = $this->getProduct($number, $context, null, 2);
 

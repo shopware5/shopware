@@ -67,8 +67,7 @@ Ext.define('Shopware.apps.Config.view.shop.Detail', {
                     mainIdField = form.down('[name=mainId]');
                     type = mainIdField.getValue() ? 'lang' : 'sub';
                     typeSwitchField.setValue(type);
-                    // The shop type must not be switched on existing shops, this would cause inconsistencies
-                    typeSwitchField.setDisabled(true);
+                    typeSwitchField.setDisabled(value == 1);
                 }
             }
         }
@@ -115,6 +114,14 @@ Ext.define('Shopware.apps.Config.view.shop.Detail', {
                     Ext.each(requiredLangFields, function(field) {
                         field['allowBlank'] = value != 'lang';
                     });
+
+                    if (value == 'lang') {
+                        Ext.each(mainFields, function(field) {
+                            if (field.xtype != 'config-shop-currency') {
+                                field.setValue('');
+                            }
+                        });
+                    }
                 }
             }
         }
@@ -255,6 +262,14 @@ Ext.define('Shopware.apps.Config.view.shop.Detail', {
         me.categorySelect,
         {
             xtype: 'config-element-select',
+            name: 'templateId',
+            fieldLabel: '{s name=shop/detail/template_label}Template{/s}',
+            store: 'base.Template',
+            isMainRequired: true,
+            isMainField: true,
+            hidden: true
+        },{
+            xtype: 'config-element-select',
             name: 'documentTemplateId',
             fieldLabel: '{s name=shop/detail/document_template_label}Document template{/s}',
             store: 'base.Template',
@@ -299,6 +314,15 @@ Ext.define('Shopware.apps.Config.view.shop.Detail', {
         var me = this;
         me.categorySelect.setValue(null);
         me.categorySelect.setRawValue(null);
+
+        me.callParent(arguments);
+    },
+
+    updateRecord: function(record) {
+        var me = this;
+        record = record || me.getRecord();
+        record.raw.main = { };
+        record.raw.template = { };
 
         me.callParent(arguments);
     }

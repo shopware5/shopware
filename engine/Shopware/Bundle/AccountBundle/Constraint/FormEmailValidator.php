@@ -27,6 +27,7 @@ namespace Shopware\Bundle\AccountBundle\Constraint;
 use Shopware\Models\Customer\Customer;
 use Shopware_Components_Snippet_Manager;
 use Symfony\Component\Form\Form;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
@@ -89,18 +90,10 @@ class FormEmailValidator extends ConstraintValidator
         $this->customerEmailValidator->validate($email, $emailConstraint);
 
         if ($form->has('emailConfirmation') && $form->get('emailConfirmation')->getData() !== $email) {
-            $this->addError($this->getSnippet(self::SNIPPET_EMAIL_CONFIRMATION));
+            $error = new FormError($this->getSnippet(self::SNIPPET_EMAIL_CONFIRMATION));
+            $error->setOrigin($form->get('emailConfirmation'));
+            $form->addError($error);
         }
-    }
-
-    /**
-     * @param string $message
-     */
-    private function addError($message)
-    {
-        $this->context->buildViolation($message)
-            ->atPath($this->context->getPropertyPath())
-            ->addViolation();
     }
 
     /**

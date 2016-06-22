@@ -44,9 +44,7 @@ class Shopware_Tests_Components_TemplateMailTest extends Enlight_Components_Test
 
         $stringCompiler = new Shopware_Components_StringCompiler(Shopware()->Template());
 
-        $manager = $this->getMockBuilder('Shopware\Components\Model\ModelManager')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $manager = $this->createMock(\Shopware\Components\Model\ModelManager::class);
 
         $manager->expects($this->any())
                 ->method('getRepository')
@@ -63,9 +61,7 @@ class Shopware_Tests_Components_TemplateMailTest extends Enlight_Components_Test
      */
     protected function getAttachmentMockObject()
     {
-        $attachmentMock = $this->getMockBuilder('\Shopware\Models\Mail\Attachment')
-                               ->disableOriginalConstructor()
-                               ->getMock();
+        $attachmentMock = $this->createMock(\Shopware\Models\Mail\Attachment::class);
 
         $attachmentMock->expects($this->any())
                        ->method('getPath')
@@ -87,9 +83,7 @@ class Shopware_Tests_Components_TemplateMailTest extends Enlight_Components_Test
      */
     protected function getSimpleMailMockObject()
     {
-        $templateMock = $this->getMockBuilder('\Shopware\Models\Mail\Mail')
-                             ->disableOriginalConstructor()
-                             ->getMock();
+        $templateMock = $this->createMock(\Shopware\Models\Mail\Mail::class);
 
         $templateMock->expects($this->any())
                      ->method('getFromMail')
@@ -127,9 +121,7 @@ class Shopware_Tests_Components_TemplateMailTest extends Enlight_Components_Test
      */
     protected function getSmartyMailMockObject()
     {
-        $templateMock = $this->getMockBuilder('\Shopware\Models\Mail\Mail')
-                             ->disableOriginalConstructor()
-                             ->getMock();
+        $templateMock = $this->createMock(\Shopware\Models\Mail\Mail::class);
 
         $templateMock->expects($this->any())
                      ->method('getFromMail')

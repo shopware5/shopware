@@ -3,9 +3,8 @@
 namespace Shopware\Tests\Service\Search\Facet;
 
 use Shopware\Bundle\SearchBundle\Facet\ManufacturerFacet;
-use Shopware\Bundle\SearchBundle\FacetResult\ValueListFacetResultInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\Context;
-use Shopware\Bundle\StoreFrontBundle\Struct\ProductContext;
+use Shopware\Bundle\SearchBundle\FacetResult\ValueListFacetResult;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Models\Article\Supplier;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Service\TestCase;
@@ -14,14 +13,14 @@ class ManufacturerFacetTest extends TestCase
 {
     /**
      * @param $number
-     * @param Context|ProductContext $context
+     * @param ShopContext $context
      * @param \Shopware\Models\Category\Category $category
      * @param Supplier $manufacturer
      * @return array
      */
     protected function getProduct(
         $number,
-        ProductContext $context,
+        ShopContext $context,
         Category $category = null,
         $manufacturer = null
     ) {
@@ -70,7 +69,7 @@ class ManufacturerFacetTest extends TestCase
 
         $facet = $result->getFacets()[0];
 
-        /**@var $facet ValueListFacetResultInterface*/
+        /**@var $facet ValueListFacetResult*/
         $this->assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\ValueListFacetResult', $facet);
 
         $this->assertCount(1, $facet->getValues());
@@ -97,7 +96,7 @@ class ManufacturerFacetTest extends TestCase
             array(new ManufacturerFacet())
         );
 
-        /**@var $facet ValueListFacetResultInterface*/
+        /**@var $facet ValueListFacetResult*/
 
         $facet = $result->getFacets()[0];
         $this->assertCount(2, $facet->getValues());
