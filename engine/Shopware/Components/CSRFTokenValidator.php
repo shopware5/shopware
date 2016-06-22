@@ -123,7 +123,14 @@ class CSRFTokenValidator implements SubscriberInterface
         $controller = $args->getSubject();
 
         $request = $controller->Request();
-        $response = $controller->Response();
+
+        // do not check internal subrequests
+        if ($request->getAttribute('_isSubrequest')) {
+            return;
+        }
+
+        /** @var \Enlight_Controller_Action $controller */
+        $controller = $args->getSubject();
 
         /** @var \Enlight_Components_Session_Namespace $session */
         $session = $this->container->get('session');
