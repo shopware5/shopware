@@ -288,23 +288,26 @@ class sBasket
     private function sGetVoucher()
     {
         $voucher = $this->db->fetchRow(
-            'SELECT id basketID, ordernumber, articleID as voucherID
-                FROM s_order_basket
-                WHERE modus = 2 AND sessionID = ?',
+            'SELECT
+                sob.id AS basketID,
+                sob.ordernumber,
+                sob.articleID AS voucherID,
+                CASE sev.vouchercode
+                    WHEN "" THEN sevc.code
+                    WHEN NULL THEN sevc.code
+                    ELSE sev.vouchercode
+                END AS code
+            FROM
+                s_order_basket sob
+                    INNER JOIN
+                s_emarketing_vouchers sev ON sev.ordercode = sob.ordernumber
+                    LEFT JOIN
+                s_emarketing_voucher_codes sevc ON sevc.id = sob.articleID
+            WHERE
+                sob.modus = 2
+                    AND sob.sessionID = ?',
             array($this->session->get('sessionId'))
         );
-        if (!empty($voucher)) {
-            $voucher['code'] = $this->db->fetchOne(
-                'SELECT vouchercode FROM s_emarketing_vouchers WHERE ordercode = ?',
-                array($voucher['ordernumber'])
-            );
-            if (empty($voucher['code'])) {
-                $voucher['code'] = $this->db->fetchOne(
-                    'SELECT code FROM s_emarketing_voucher_codes WHERE id = ?',
-                    array($voucher['voucherID'])
-                );
-            }
-        }
         return $voucher;
     }
 
