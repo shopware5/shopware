@@ -691,7 +691,7 @@ class sBasket
                         AND sev.valid_from <= NOW())
                         OR sev.valid_to IS NULL)
                 WHERE
-                    LOWER(sevc.code = ?)
+                    LOWER(sevc.code) = ?
                         AND cashed != 1',
                 array($voucherCode)
             );
