@@ -599,6 +599,15 @@ class sBasket
      */
     public function sAddVoucher($voucherCode, $basket = '')
     {
+        // Check if a voucher code was entered
+        if (!$voucherCode) {
+            $sErrorMessages[] = $this->snippetManager->getNamespace('frontend/basket/internalMessages')->get(
+                'VoucherFailureNotEntered',
+                'No voucher code entered'
+            );
+            return array("sErrorFlag" => true, "sErrorMessages" => $sErrorMessages);
+        }
+
         if ($this->eventManager->notifyUntil(
             'Shopware_Modules_Basket_AddVoucher_Start',
             array('subject' => $this, 'code' => $voucherCode, 'basket' => $basket)
@@ -608,6 +617,21 @@ class sBasket
 
         $voucherCode = stripslashes($voucherCode);
         $voucherCode = strtolower($voucherCode);
+
+        // Check if the basket already has a voucher, and break if it does
+        $chkBasket = $this->db->fetchRow(
+            'SELECT id
+            FROM s_order_basket
+            WHERE sessionID = ? AND modus = 2',
+            array($this->session->get('sessionId'))
+        );
+        if ($chkBasket) {
+            $sErrorMessages[] = $this->snippetManager->getNamespace('frontend/basket/internalMessages')->get(
+                'VoucherFailureOnlyOnes',
+                'Only one voucher can be processed in order'
+            );
+            return array("sErrorFlag" => true, "sErrorMessages" => $sErrorMessages);
+        }
 
         // Load the voucher details
         $voucherDetails = $this->db->fetchRow(
@@ -643,21 +667,35 @@ class sBasket
         } else {
             // If we don't have voucher details yet, need to check if its a one-time code
             $voucherDetails = $this->db->fetchRow(
-                'SELECT s_emarketing_voucher_codes.id AS id, s_emarketing_voucher_codes.code AS vouchercode,
-                    description, numberofunits, customergroup, value, restrictarticles,
-                    minimumcharge, shippingfree, bindtosupplier, taxconfig, valid_from,
-                    valid_to, ordercode, modus, percental, strict, subshopID
-                FROM s_emarketing_vouchers, s_emarketing_voucher_codes
-                WHERE modus = 1
-                AND s_emarketing_vouchers.id = s_emarketing_voucher_codes.voucherID
-                AND LOWER(code) = ?
-                AND cashed != 1
-                AND (
-                      (s_emarketing_vouchers.valid_to >= now()
-                          AND s_emarketing_vouchers.valid_from <= now()
-                      )
-                      OR s_emarketing_vouchers.valid_to is NULL
-                )',
+                'SELECT
+                    sevc.id AS id,
+                    sevc.code AS vouchercode,
+                    sev.description,
+                    sev.numberofunits,
+                    sev.customergroup,
+                    sev.value,
+                    sev.restrictarticles,
+                    sev.minimumcharge,
+                    sev.shippingfree,
+                    sev.bindtosupplier,
+                    sev.taxconfig,
+                    sev.valid_from,
+                    sev.valid_to,
+                    sev.ordercode,
+                    sev.modus,
+                    sev.percental,
+                    sev.strict,
+                    sev.subshopID
+                FROM
+                    s_emarketing_voucher_codes sevc
+                        INNER JOIN
+                    s_emarketing_vouchers sev ON sev.id = sevc.voucherID
+                        AND ((sev.valid_to >= NOW()
+                        AND sev.valid_from <= NOW())
+                        OR sev.valid_to IS NULL)
+                WHERE
+                    LOWER(sevc.code) = ?
+                        AND cashed != 1',
                 array($voucherCode)
             );
             $individualCode = ($voucherDetails && $voucherDetails["description"]);
@@ -668,7 +706,6 @@ class sBasket
         // 2 - No voucher code
         // 3 - Voucher is reusable and has already been used to the limit
         if (!$voucherDetails
-            || !$voucherCode
             || ($voucherDetails["numberofunits"] <= $usedVoucherCount["vouchers"] && !$individualCode)
         ) {
             $sErrorMessages[] = $this->snippetManager->getNamespace('frontend/basket/internalMessages')->get(
@@ -683,21 +720,6 @@ class sBasket
         // If voucher is limited to a specific subshop, filter that and return on failure
         $sErrorMessages = $this->filterSubShopVoucher($voucherDetails);
         if (!empty($sErrorMessages)) {
-            return array("sErrorFlag" => true, "sErrorMessages" => $sErrorMessages);
-        }
-
-        // Check if the basket already has a voucher, and break if it does
-        $chkBasket = $this->db->fetchRow(
-            'SELECT id
-            FROM s_order_basket
-            WHERE sessionID = ? AND modus = 2',
-            array($this->session->get('sessionId'))
-        );
-        if ($chkBasket) {
-            $sErrorMessages[] = $this->snippetManager->getNamespace('frontend/basket/internalMessages')->get(
-                'VoucherFailureOnlyOnes',
-                'Only one voucher can be processed in order'
-            );
             return array("sErrorFlag" => true, "sErrorMessages" => $sErrorMessages);
         }
 
