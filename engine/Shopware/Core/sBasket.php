@@ -664,21 +664,35 @@ class sBasket
         } else {
             // If we don't have voucher details yet, need to check if its a one-time code
             $voucherDetails = $this->db->fetchRow(
-                'SELECT s_emarketing_voucher_codes.id AS id, s_emarketing_voucher_codes.code AS vouchercode,
-                    description, numberofunits, customergroup, value, restrictarticles,
-                    minimumcharge, shippingfree, bindtosupplier, taxconfig, valid_from,
-                    valid_to, ordercode, modus, percental, strict, subshopID
-                FROM s_emarketing_vouchers, s_emarketing_voucher_codes
-                WHERE modus = 1
-                AND s_emarketing_vouchers.id = s_emarketing_voucher_codes.voucherID
-                AND LOWER(code) = ?
-                AND cashed != 1
-                AND (
-                      (s_emarketing_vouchers.valid_to >= now()
-                          AND s_emarketing_vouchers.valid_from <= now()
-                      )
-                      OR s_emarketing_vouchers.valid_to is NULL
-                )',
+                'SELECT
+                    sevc.id AS id,
+                    sevc.code AS vouchercode,
+                    sev.description,
+                    sev.numberofunits,
+                    sev.customergroup,
+                    sev.value,
+                    sev.restrictarticles,
+                    sev.minimumcharge,
+                    sev.shippingfree,
+                    sev.bindtosupplier,
+                    sev.taxconfig,
+                    sev.valid_from,
+                    sev.valid_to,
+                    sev.ordercode,
+                    sev.modus,
+                    sev.percental,
+                    sev.strict,
+                    sev.subshopID
+                FROM
+                    s_emarketing_voucher_codes sevc
+                        INNER JOIN
+                    s_emarketing_vouchers sev ON sev.id = sevc.voucherID
+                        AND ((sev.valid_to >= NOW()
+                        AND sev.valid_from <= NOW())
+                        OR sev.valid_to IS NULL)
+                WHERE
+                    LOWER(sevc.code = ?)
+                        AND cashed != 1',
                 array($voucherCode)
             );
             $individualCode = ($voucherDetails && $voucherDetails["description"]);
