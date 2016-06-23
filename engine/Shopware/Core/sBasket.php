@@ -268,7 +268,9 @@ class sBasket
                 $this->session->get('sUserId'), $voucher
             );
 
-            if (!empty($sErrorMessages)) {
+            if (!empty($sErrorMessages)
+                || ($voucher['value'] != $voucher['basketValue'] * -1)
+            ) {
                 $this->sDeleteArticle($voucher['basketID']);
                 $this->sAddVoucher($voucher['vouchercode']);
             }
@@ -296,6 +298,7 @@ class sBasket
         $voucher = $this->db->fetchRow(
             'SELECT
                 sob.id as basketID,
+                sob.price as basketValue,
                 IFNULL(sevc.id, sev.id) AS id,
                 IFNULL(sevc.code, sev.vouchercode) AS vouchercode,
                 sev.description,
