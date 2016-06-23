@@ -264,8 +264,14 @@ class sBasket
     {
         $voucher = $this->sGetVoucher();
         if ($voucher) {
-            $this->sDeleteArticle($voucher['basketID']);
-            $this->sAddVoucher($voucher['code']);
+            list($voucher, $sErrorMessages) = $this->prepareVoucher(
+                $this->session->get('sUserId'), $voucher
+            );
+
+            if (!empty($sErrorMessages)) {
+                $this->sDeleteArticle($voucher['basketID']);
+                $this->sAddVoucher($voucher['vouchercode']);
+            }
         }
     }
 
@@ -289,24 +295,45 @@ class sBasket
     {
         $voucher = $this->db->fetchRow(
             'SELECT
-                sob.id AS basketID,
-                sob.ordernumber,
-                sob.articleID AS voucherID,
-                CASE sev.vouchercode
-                    WHEN "" THEN sevc.code
-                    WHEN NULL THEN sevc.code
-                    ELSE sev.vouchercode
-                END AS code
+                sob.id as basketID,
+                IFNULL(sevc.id, sev.id) AS id,
+                IFNULL(sevc.code, sev.vouchercode) AS vouchercode,
+                sev.description,
+                sev.numberofunits,
+                sev.customergroup,
+                sev.value,
+                sev.restrictarticles,
+                sev.minimumcharge,
+                sev.shippingfree,
+                sev.bindtosupplier,
+                sev.taxconfig,
+                sev.valid_from,
+                sev.valid_to,
+                sev.ordercode,
+                sev.modus,
+                sev.percental,
+                sev.numorder,
+                sev.strict,
+                sev.subshopID,
+                IFNULL(sevc.cashed, COUNT(so.id)) AS cashed,
+                COUNT(sod.id) AS times_used
             FROM
                 s_order_basket sob
                     INNER JOIN
                 s_emarketing_vouchers sev ON sev.ordercode = sob.ordernumber
                     LEFT JOIN
-                s_emarketing_voucher_codes sevc ON sevc.id = sob.articleID
+                s_emarketing_voucher_codes sevc ON sev.modus = 1
+                    AND sevc.id = sob.articleID
+                    LEFT JOIN
+                s_order_details sod ON sev.ordercode = sod.articleordernumber
+                    AND sod.ordernumber != \'0\'
+                    LEFT JOIN
+                s_order so ON sod.orderID = so.id AND so.userID = ?
             WHERE
                 sob.modus = 2
-                    AND sob.sessionID = ?',
-            array($this->session->get('sessionId'))
+                    AND sob.sessionID = ?
+            GROUP BY sob.id , sev.id , sevc.id',
+            array($this->session->get('sUserId'), $this->session->get('sessionId'))
         );
         return $voucher;
     }
@@ -633,145 +660,15 @@ class sBasket
             return array("sErrorFlag" => true, "sErrorMessages" => $sErrorMessages);
         }
 
-        // Load the voucher details
-        $voucherDetails = $this->db->fetchRow(
-            'SELECT *
-              FROM s_emarketing_vouchers
-              WHERE modus != 1
-              AND LOWER(vouchercode) = ?
-              AND (
-                (valid_to >= now() AND valid_from <= now())
-                OR valid_to IS NULL
-              )',
-            array($voucherCode)
-        ) ? : array();
-
         $userId = $this->session->get('sUserId');
 
-        // Check if voucher has already been cashed
-        $sErrorMessages = $this->filterUsedVoucher($userId, $voucherDetails);
+        // Load the voucher details
+        $voucherDetails = $this->getVoucherDetails($userId, $voucherCode);
+
+        list($voucherDetails, $sErrorMessages) = $this->prepareVoucher($userId, $voucherDetails);
+
         if (!empty($sErrorMessages)) {
-            return array("sErrorFlag" => true, "sErrorMessages" => $sErrorMessages);
-        }
-
-        if ($voucherDetails["id"]) {
-            // If we have voucher details, its a reusable code
-            // We need to check how many times it has already been used
-            $usedVoucherCount = $this->db->fetchRow('
-                SELECT COUNT(id) AS vouchers
-                FROM s_order_details
-                WHERE articleordernumber = ?
-                AND s_order_details.ordernumber != \'0\'',
-                array($voucherDetails["ordercode"])
-            ) ? : array();
-        } else {
-            // If we don't have voucher details yet, need to check if its a one-time code
-            $voucherDetails = $this->db->fetchRow(
-                'SELECT
-                    sevc.id AS id,
-                    sevc.code AS vouchercode,
-                    sev.description,
-                    sev.numberofunits,
-                    sev.customergroup,
-                    sev.value,
-                    sev.restrictarticles,
-                    sev.minimumcharge,
-                    sev.shippingfree,
-                    sev.bindtosupplier,
-                    sev.taxconfig,
-                    sev.valid_from,
-                    sev.valid_to,
-                    sev.ordercode,
-                    sev.modus,
-                    sev.percental,
-                    sev.strict,
-                    sev.subshopID
-                FROM
-                    s_emarketing_voucher_codes sevc
-                        INNER JOIN
-                    s_emarketing_vouchers sev ON sev.id = sevc.voucherID
-                        AND ((sev.valid_to >= NOW()
-                        AND sev.valid_from <= NOW())
-                        OR sev.valid_to IS NULL)
-                WHERE
-                    LOWER(sevc.code) = ?
-                        AND cashed != 1',
-                array($voucherCode)
-            );
-            $individualCode = ($voucherDetails && $voucherDetails["description"]);
-        }
-
-        // Interrupt the operation if one of the following occurs:
-        // 1 - No voucher details were found (individual or reusable)
-        // 2 - No voucher code
-        // 3 - Voucher is reusable and has already been used to the limit
-        if (!$voucherDetails
-            || ($voucherDetails["numberofunits"] <= $usedVoucherCount["vouchers"] && !$individualCode)
-        ) {
-            $sErrorMessages[] = $this->snippetManager->getNamespace('frontend/basket/internalMessages')->get(
-                'VoucherFailureNotFound',
-                'Voucher could not be found or is not valid anymore'
-            );
-            return array("sErrorFlag" => true, "sErrorMessages" => $sErrorMessages);
-        }
-
-        $restrictDiscount = !empty($voucherDetails["strict"]);
-
-        // If voucher is limited to a specific subshop, filter that and return on failure
-        $sErrorMessages = $this->filterSubShopVoucher($voucherDetails);
-        if (!empty($sErrorMessages)) {
-            return array("sErrorFlag" => true, "sErrorMessages" => $sErrorMessages);
-        }
-
-        // Check if the voucher is limited to a certain customer group, and validate that
-        $sErrorMessages = $this->filterCustomerGroupVoucher($userId, $voucherDetails);
-        if (!empty($sErrorMessages)) {
-            return array("sErrorFlag" => true, "sErrorMessages" => $sErrorMessages);
-        }
-
-        // Check if the voucher is limited to certain articles, and validate that
-        list($sErrorMessages, $restrictedArticles) = $this->filterArticleVoucher($voucherDetails);
-        if (!empty($sErrorMessages)) {
-            return array("sErrorFlag" => true, "sErrorMessages" => $sErrorMessages);
-        }
-
-        // Check if the voucher is limited to certain supplier, and validate that
-        $sErrorMessages = $this->filterSupplierVoucher($voucherDetails);
-        if (!empty($sErrorMessages)) {
-            return array("sErrorFlag" => true, "sErrorMessages" => $sErrorMessages);
-        }
-
-        // Calculate the amount in the basket
-        $allowedSupplierId = $voucherDetails["bindtosupplier"];
-        if (!empty($restrictDiscount) && (!empty($restrictedArticles) || !empty($allowedSupplierId))) {
-            $amount = $this->sGetAmountRestrictedArticles($restrictedArticles, $allowedSupplierId);
-        } else {
-            $amount = $this->sGetAmountArticles();
-        }
-
-        // Including currency factor
-        if ($this->sSYSTEM->sCurrency["factor"] && empty($voucherDetails["percental"])) {
-            $factor = $this->sSYSTEM->sCurrency["factor"];
-            $voucherDetails["value"] *= $factor;
-        } else {
-            $factor = 1;
-        }
-
-        $basketValue = 0;
-        if ($factor != 0) {
-            $basketValue = $amount["totalAmount"] / $factor;
-        }
-        // Check if the basket's value is above the voucher's
-        if ($basketValue < $voucherDetails["minimumcharge"]) {
-            $sErrorMessages[] = str_replace(
-                "{sMinimumCharge}",
-                $voucherDetails["minimumcharge"],
-                $this->snippetManager->getNamespace('frontend/basket/internalMessages')->get(
-                    'VoucherFailureMinimumCharge',
-                    'The minimum charge for this voucher is {sMinimumCharge}'
-                )
-            );
-            return array( "sErrorFlag" => true, "sErrorMessages" => $sErrorMessages);
+            return array('sErrorFlag' => true, 'sErrorMessages' => $sErrorMessages);
         }
 
         $timeInsert = date("Y-m-d H:i:s");
@@ -781,9 +678,8 @@ class sBasket
             ->get('voucher_name', 'Voucher');
 
         if ($voucherDetails["percental"]) {
-            $value = $voucherDetails["value"];
-            $voucherName .= " ".$value." %";
-            $voucherDetails["value"] = ($amount["totalAmount"] / 100) * floatval($value);
+            $value = $voucherDetails["percentalValue"];
+            $voucherName .= " " . $value . " %";
         }
 
         // Tax calculation for vouchers
@@ -926,16 +822,16 @@ class sBasket
                 $this->db->insert(
                     's_order_basket',
                     $params = array(
-                        'sessionID'      => $this->session->get('sessionId'),
-                        'articlename'    => $surchargeName,
-                        'articleID'      => 0,
-                        'ordernumber'    => $name,
-                        'quantity'       => 1,
-                        'price'          => $surcharge,
-                        'netprice'       => $discountNet,
-                        'tax_rate'       => $tax,
-                        'datum'          => new Zend_Date(),
-                        'modus'          => 4,
+                        'sessionID' => $this->session->get('sessionId'),
+                        'articlename' => $surchargeName,
+                        'articleID' => 0,
+                        'ordernumber' => $name,
+                        'quantity' => 1,
+                        'price' => $surcharge,
+                        'netprice' => $discountNet,
+                        'tax_rate' => $tax,
+                        'datum' => new Zend_Date(),
+                        'modus' => 4,
                         'currencyFactor' => $this->sSYSTEM->sCurrency["factor"]
                     )
                 );
@@ -1820,30 +1716,158 @@ class sBasket
     }
 
     /**
+     * Fetch the voucher-details to a voucher code.
+     * Returns an array with the voucher-details if found.
+     * Returns an empty array if no voucher was found by the voucher code.
+     *
+     * @param $userId
+     * @param $voucherCode
+     * @return array
+     */
+    private function getVoucherDetails($userId, $voucherCode)
+    {
+        // Fetch re-usable voucher
+        $voucherDetails = $this->db->fetchRow(
+            'SELECT
+                sev.*,
+                COUNT(so.id) AS cashed,
+                COUNT(sod.id) AS times_used
+            FROM
+                s_emarketing_vouchers sev
+                    LEFT JOIN
+                s_order_details sod ON sev.ordercode = sod.articleordernumber
+                    AND sod.ordernumber != \'0\'
+                    LEFT JOIN
+                s_order so ON sod.orderID = so.id AND so.userID = ?
+            WHERE
+                sev.modus != 1
+                    AND LOWER(vouchercode) = ?
+                    AND ((valid_to >= NOW()
+                    AND valid_from <= NOW())
+                    OR valid_to IS NULL)
+            GROUP BY sev.id',
+            array($userId, $voucherCode)
+        ) ?: array();
+
+        if (!$voucherDetails['id']) {
+            // Fetch individual vouchers if no re-usable vouchers were found.
+            $voucherDetails = $this->db->fetchRow(
+                'SELECT
+                    sevc.id AS id,
+                    sevc.code AS vouchercode,
+                    sev.description,
+                    sev.numberofunits,
+                    sev.customergroup,
+                    sev.value,
+                    sev.restrictarticles,
+                    sev.minimumcharge,
+                    sev.shippingfree,
+                    sev.bindtosupplier,
+                    sev.taxconfig,
+                    sev.valid_from,
+                    sev.valid_to,
+                    sev.ordercode,
+                    sev.modus,
+                    sev.percental,
+                    sev.strict,
+                    sev.subshopID
+                FROM
+                    s_emarketing_voucher_codes sevc
+                        INNER JOIN
+                    s_emarketing_vouchers sev ON sev.id = sevc.voucherID
+                        AND ((sev.valid_to >= NOW()
+                        AND sev.valid_from <= NOW())
+                        OR sev.valid_to IS NULL)
+                WHERE
+                    LOWER(sevc.code) = ?
+                        AND cashed != 1',
+                array($voucherCode)
+            ) ?: array();
+        }
+
+        return $voucherDetails;
+    }
+
+    /**
+     * Prepares the voucher so it has all information needed to calculate voucher value.
+     * This method does also validate if the voucher is applicable for the current user and basket.
+     * Returns an array - the first element are the modified voucher details, the second element
+     * is an array with all error messages created while validating the voucher. If the second element
+     * is an empty array, the voucher is valid for the current user and basket.
+     *
+     * @param $userId
+     * @param $voucherDetails
+     * @return array
+     */
+    private function prepareVoucher($userId, $voucherDetails)
+    {
+        $sErrorMessages = array();
+
+        $sErrorMessages += $this->filterUsedVoucher($voucherDetails);
+
+        $sErrorMessages += $this->filterVoucherLimit($voucherDetails);
+
+        $sErrorMessages += $this->filterSubShopVoucher($voucherDetails);
+
+        $sErrorMessages += $this->filterCustomerGroupVoucher($userId, $voucherDetails);
+
+        list($restrictedArticlesErrorMessages, $restrictedArticles) = $this->filterArticleVoucher($voucherDetails);
+        $sErrorMessages += $restrictedArticlesErrorMessages;
+
+        $sErrorMessages += $this->filterSupplierVoucher($voucherDetails);
+
+        $restrictDiscount = !empty($voucherDetails['strict']);
+        $allowedSupplierId = $voucherDetails['bindtosupplier'];
+
+        if (!empty($restrictDiscount) && (!empty($restrictedArticles) || !empty($allowedSupplierId))) {
+            $amount = $this->sGetAmountRestrictedArticles($restrictedArticles, $allowedSupplierId);
+        } else {
+            $amount = $this->sGetAmountArticles();
+        }
+
+        if ($this->sSYSTEM->sCurrency['factor'] && empty($voucherDetails['percental'])) {
+            $factor = $this->sSYSTEM->sCurrency['factor'];
+            $voucherDetails['value'] *= $factor;
+        } else {
+            $factor = 1;
+        }
+
+        $basketValue = 0;
+        if ($factor != 0) {
+            $basketValue = $amount['totalAmount'] / $factor;
+        }
+
+        if ($basketValue < $voucherDetails['minimumcharge']) {
+            $sErrorMessages[] = str_replace(
+                '{sMinimumCharge}',
+                $voucherDetails['minimumcharge'],
+                $this->snippetManager->getNamespace('frontend/basket/internalMessages')->get(
+                    'VoucherFailureMinimumCharge',
+                    'The minimum charge for this voucher is {sMinimumCharge}'
+                )
+            );
+        }
+
+        if ($voucherDetails["percental"]) {
+            $value = $voucherDetails["value"];
+            $voucherDetails['percentalValue'] = $value;
+            $voucherDetails["value"] = ($amount["totalAmount"] / 100) * floatval($value);
+        }
+
+        return array($voucherDetails, $sErrorMessages);
+    }
+
+    /**
      * Check if voucher has already been cashed
      *
-     * @param int $userId The current user id
      * @param array $voucherDetails The voucher details
      * @return array Messages for detected errors
      */
-    private function filterUsedVoucher($userId, $voucherDetails)
+    private function filterUsedVoucher($voucherDetails)
     {
         $sErrorMessages = array();
-        if ($userId && $voucherDetails["id"]) {
-            $queryVoucher = $this->db->fetchAll(
-                'SELECT s_order_details.id AS id
-                    FROM s_order, s_order_details
-                    WHERE s_order.userID = ?
-                    AND s_order_details.orderID = s_order.id
-                    AND s_order_details.articleordernumber = ?
-                    AND s_order_details.ordernumber != \'0\'',
-                array(
-                    $userId,
-                    $voucherDetails["ordercode"]
-                )
-            );
-
-            if (count($queryVoucher) >= $voucherDetails["numorder"] && !$voucherDetails["modus"]) {
+        if ($voucherDetails["id"]) {
+            if ($voucherDetails['cashed'] >= $voucherDetails["numorder"] && !$voucherDetails["modus"]) {
                 $sErrorMessages[] = $this->snippetManager
                     ->getNamespace('frontend/basket/internalMessages')->get(
                         'VoucherFailureAlreadyUsed',
@@ -1851,6 +1875,29 @@ class sBasket
                     );
                 return $sErrorMessages;
             }
+        }
+        return $sErrorMessages;
+    }
+
+    /**
+     * Check if voucher is used up
+     *
+     * @param $voucherDetails
+     * @return array
+     */
+    private function filterVoucherLimit($voucherDetails)
+    {
+        $sErrorMessages = array();
+        if (!$voucherDetails
+            || ($voucherDetails['numberofunits'] <= $voucherDetails['times_used'] && !$voucherDetails['modus'])
+            || ($voucherDetails['cashed'] && $voucherDetails['modus'])
+        ) {
+            $sErrorMessages[] = $this->snippetManager
+                ->getNamespace('frontend/basket/internalMessages')->get(
+                    'VoucherFailureNotFound',
+                    'Voucher could not be found or is not valid anymore'
+                );
+            return $sErrorMessages;
         }
         return $sErrorMessages;
     }
