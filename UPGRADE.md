@@ -404,6 +404,7 @@ In this document you will find a changelog of the important changes related to t
     * `Enlight_Controller_Request_Request::getAttribute()`
     * `Enlight_Controller_Request_Request::setAttribute()`
     * `Enlight_Controller_Request_Request::unsetAttribute()`
+* Fixed tax free for company configuration. If the delivery country contains the flag `taxfree_ustid`, the vat id of the shipping address is checked.
 
 ## 5.1.6
 * The interface `Enlight_Components_Cron_Adapter` in `engine/Library/Enlight/Components/Cron/Adapter.php` got a new method `getJobByAction`. For default implementation see `engine/Library/Enlight/Components/Cron/Adapter/DBAL.php`.

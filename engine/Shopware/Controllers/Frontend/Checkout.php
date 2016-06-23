@@ -773,23 +773,12 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         $system = Shopware()->System();
         $userData = $this->admin->sGetUserData();
         if (!empty($userData['additional']['countryShipping'])) {
-            $sTaxFree = false;
-            if (!empty($userData['additional']['countryShipping']['taxfree'])) {
-                $sTaxFree = true;
-            } elseif (
-                !empty($userData['additional']['countryShipping']['taxfree_ustid'])
-                && !empty($userData['billingaddress']['ustid'])
-                && $userData['additional']['country']['id'] == $userData['additional']['countryShipping']['id']
-            ) {
-                $sTaxFree = true;
-            }
-
             $system->sUSERGROUPDATA = Shopware()->Db()->fetchRow("
                 SELECT * FROM s_core_customergroups
                 WHERE groupkey = ?
             ", array($system->sUSERGROUP));
 
-            if (!empty($sTaxFree)) {
+            if ($this->isTaxFreeDelivery($userData)) {
                 $system->sUSERGROUPDATA['tax'] = 0;
                 $system->sCONFIG['sARTICLESOUTPUTNETTO'] = 1; //Old template
                 Shopware()->Session()->sUserGroupData = $system->sUSERGROUPDATA;
@@ -1772,5 +1761,23 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         }
 
         return count(array_diff($addressA, $addressB)) == 0;
+    }
+
+    /**
+     * Validates if the provided customer should get a tax free delivery
+     * @param array $userData
+     * @return bool
+     */
+    protected function isTaxFreeDelivery($userData)
+    {
+        if (!empty($userData['additional']['countryShipping']['taxfree'])) {
+            return true;
+        }
+
+        if (empty($userData['additional']['countryShipping']['taxfree_ustid'])) {
+            return false;
+        }
+
+        return !empty($userData['shippingaddress']['ustid']);
     }
 }

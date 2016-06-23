@@ -1297,8 +1297,6 @@ class sAdminTest extends PHPUnit_Framework_TestCase
 
         $expectedData = array(
             'billingaddress' => array(
-                'id' => $customer->getBilling()->getId(),
-                'userID' => $customer->getId(),
                 'company' => '',
                 'department' => '',
                 'salutation' => 'mr',
@@ -1325,7 +1323,6 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             ),
             'additional' => array(
                 'country' => array(
-                    'id' => '2',
                     'countryname' => 'Germany',
                     'countryiso' => 'DE',
                     'areaID' => '1',
@@ -1344,7 +1341,6 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                 ),
                 'state' => array(),
                 'user' => array(
-                    'id' => (int) $customer->getId(),
                     'password' => $customer->getPassword(),
                     'encoder' => 'bcrypt',
                     'email' => $customer->getEmail(),
@@ -1377,7 +1373,6 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                     'title' => null
                 ),
                 'countryShipping' => array(
-                    'id' => '4',
                     'countryname' => 'Australien',
                     'countryiso' => 'AU',
                     'areaID' => '2',
@@ -1396,7 +1391,6 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                 ),
                 'stateShipping' => array(),
                 'payment' => array(
-                    'id' => '5',
                     'name' => 'prepayment',
                     'description' => 'Vorkasse',
                     'template' => 'prepayment.tpl',
@@ -1419,8 +1413,6 @@ class sAdminTest extends PHPUnit_Framework_TestCase
                 ),
             ),
             'shippingaddress' => array(
-                'id' => $customer->getShipping()->getId(),
-                'userID' => $customer->getId(),
                 'company' => 'Widgets Inc.',
                 'department' => '',
                 'salutation' => 'Mr',
@@ -1445,9 +1437,27 @@ class sAdminTest extends PHPUnit_Framework_TestCase
             ),
         );
 
-        $this->assertEquals($expectedData, $result);
+        $this->assertArray($expectedData, $result);
 
         $this->deleteDummyCustomer($customer);
+    }
+
+    /**
+     * @param array $expected
+     * @param array $actual
+     */
+    private function assertArray($expected, $actual)
+    {
+        foreach ($expected as $key => $value) {
+            $this->assertArrayHasKey($key, $actual);
+            $currentActual = $actual[$key];
+
+            if (is_array($value)) {
+                $this->assertArray($value, $currentActual);
+            } else {
+                $this->assertEquals($value, $currentActual);
+            }
+        }
     }
 
     /**
