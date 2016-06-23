@@ -27,7 +27,7 @@ namespace Shopware\Bundle\SearchBundleDBAL\ConditionHandler;
 use Shopware\Bundle\SearchBundle\Condition\HasPseudoPriceCondition;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\SearchBundleDBAL\ConditionHandlerInterface;
-use Shopware\Bundle\SearchBundleDBAL\PriceHelper;
+use Shopware\Bundle\SearchBundleDBAL\PriceHelperInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
@@ -39,7 +39,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 class HasPseudoPriceConditionHandler implements ConditionHandlerInterface
 {
     /**
-     * @var PriceHelper
+     * @var PriceHelperInterface
      */
     private $priceHelper;
 
@@ -49,11 +49,11 @@ class HasPseudoPriceConditionHandler implements ConditionHandlerInterface
     private $config;
 
     /**
-     * @param PriceHelper $priceHelper
+     * @param PriceHelperInterface $priceHelper
      * @param \Shopware_Components_Config $config
      */
     public function __construct(
-        PriceHelper $priceHelper,
+        PriceHelperInterface $priceHelper,
         \Shopware_Components_Config $config
     ) {
         $this->priceHelper = $priceHelper;

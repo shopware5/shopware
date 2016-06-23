@@ -26,7 +26,7 @@ namespace Shopware\Bundle\SearchBundleDBAL\ConditionHandler;
 
 use Shopware\Bundle\SearchBundle\Condition\IsAvailableCondition;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
-use Shopware\Bundle\SearchBundleDBAL\PriceHelper;
+use Shopware\Bundle\SearchBundleDBAL\PriceHelperInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Bundle\SearchBundleDBAL\ConditionHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
@@ -39,14 +39,14 @@ use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 class IsAvailableConditionHandler implements ConditionHandlerInterface
 {
     /**
-     * @var PriceHelper
+     * @var PriceHelperInterface
      */
     private $priceHelper;
 
     /**
-     * @param PriceHelper $priceHelper
+     * @param PriceHelperInterface $priceHelper
      */
-    public function __construct(PriceHelper $priceHelper)
+    public function __construct(PriceHelperInterface $priceHelper)
     {
         $this->priceHelper = $priceHelper;
     }
