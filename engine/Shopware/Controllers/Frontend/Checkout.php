@@ -779,7 +779,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
             } elseif (
                 !empty($userData['additional']['countryShipping']['taxfree_ustid'])
                 && !empty($userData['billingaddress']['ustid'])
-                && $userData['additional']['country']['id'] == $userData['additional']['countryShipping']['id']
             ) {
                 $sTaxFree = true;
             }
