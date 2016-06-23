@@ -1806,9 +1806,9 @@ class sBasket
     {
         $sErrorMessages = array();
 
-        $sErrorMessages += $this->filterUsedVoucher($voucherDetails);
-
         $sErrorMessages += $this->filterVoucherLimit($voucherDetails);
+
+        $sErrorMessages += $this->filterUsedVoucher($voucherDetails);
 
         $sErrorMessages += $this->filterSubShopVoucher($voucherDetails);
 
