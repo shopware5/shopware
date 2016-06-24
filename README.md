@@ -64,6 +64,9 @@ Unzip the files to the checkout directory:
 
 You can now access your shop
 
+# Backend
+
+The backend is located at `/backend` example `http://your.shop.com/backend`.
 Backend Login: demo/demo
 
 The test_images.zip file includes thumbnails for the new responsive theme and the old deprecated template.
