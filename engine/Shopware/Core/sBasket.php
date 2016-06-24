@@ -1060,6 +1060,9 @@ class sBasket
                 )
             );
         }
+        // Refresh voucher
+        $this->sUpdateVoucher();
+
         // Check for surcharges
         $this->sInsertSurcharge();
 
@@ -1068,9 +1071,6 @@ class sBasket
 
         // Calculate global basket discount
         $this->sInsertDiscount();
-
-        // Refresh voucher
-        $this->sUpdateVoucher();
 
         return $this->sGetBasketData();
     }
