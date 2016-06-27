@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\SearchBundleDBAL\SortingHandler;
 
-use Shopware\Bundle\SearchBundleDBAL\PriceHelper;
+use Shopware\Bundle\SearchBundleDBAL\PriceHelperInterface;
 use Shopware\Bundle\SearchBundleDBAL\SortingHandlerInterface;
 use Shopware\Bundle\SearchBundle\Sorting\PriceSorting;
 use Shopware\Bundle\SearchBundle\SortingInterface;
@@ -39,14 +39,14 @@ use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 class PriceSortingHandler implements SortingHandlerInterface
 {
     /**
-     * @var PriceHelper
+     * @var PriceHelperInterface
      */
     private $priceHelper;
 
     /**
-     * @param PriceHelper $priceHelper
+     * @param PriceHelperInterface $priceHelper
      */
-    public function __construct(PriceHelper $priceHelper)
+    public function __construct(PriceHelperInterface $priceHelper)
     {
         $this->priceHelper = $priceHelper;
     }
