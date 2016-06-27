@@ -83,6 +83,8 @@ class CrudService
      */
     public function delete($table, $column, $updateDependingTables = false)
     {
+        $column = $this->formatColumnName($column);
+
         if (!$this->tableMapping->isTableColumn($table, $column)) {
             throw new \Exception(sprintf('Table %s has no column with name %s', $table, $column));
         }
@@ -122,6 +124,9 @@ class CrudService
      */
     public function update($table, $columnName, $unifiedType, array $data = [], $newColumnName = null, $updateDependingTables = false)
     {
+        $columnName = $this->formatColumnName($columnName);
+        $newColumnName = $this->formatColumnName($newColumnName);
+
         $config = $this->get($table, $columnName);
 
         if (!$config) {
@@ -150,6 +155,8 @@ class CrudService
      */
     public function get($table, $columnName)
     {
+        $columnName = $this->formatColumnName($columnName);
+
         $columns = $this->getList($table);
         foreach ($columns as $column) {
             if ($column->getColumnName() == $columnName) {
@@ -332,5 +339,16 @@ class CrudService
             $newColumnName,
             $this->typeMapping->unifiedToSQL($unifiedType)
         );
+    }
+
+    /**
+     * Process the column name to handle edge cases
+     *
+     * @param string $column
+     * @return string
+     */
+    private function formatColumnName($column)
+    {
+        return strtolower($column);
     }
 }
