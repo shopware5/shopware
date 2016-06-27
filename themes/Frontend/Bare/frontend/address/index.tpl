@@ -37,43 +37,44 @@
                     {block name="frontend_address_item_content"}
                         <div class="address--item-content address--box">
                             <div class="panel has--border is--rounded block">
-                                {block name="frontend_address_item_content_title"}
-                                    {if $sUserData.additional.user.default_shipping_address_id == $address.id || $sUserData.additional.user.default_billing_address_id == $address.id}
-                                        <div class="panel--title is--underline">
-                                            {if $sUserData.additional.user.default_shipping_address_id == $address.id}
-                                                <div>{s name="AddressesTitleDefaultShippingAddress"}Default shipping address{/s}</div>
-                                            {/if}
-                                            {if $sUserData.additional.user.default_billing_address_id == $address.id}
-                                                <div>{s name="AddressesTitleDefaultBillingAddress"}Default billing address{/s}</div>
-                                            {/if}
+                                <div class="panel--body is--wide">
+                                    {block name="frontend_address_item_content_body"}
+                                        <div class="address--item-body">
+                                            {block name="frontend_address_item_content_title"}
+                                                {if $sUserData.additional.user.default_shipping_address_id == $address.id || $sUserData.additional.user.default_billing_address_id == $address.id}
+                                                    <div class="panel--title is--underline">
+                                                        {if $sUserData.additional.user.default_shipping_address_id == $address.id}
+                                                            <div>{s name="AddressesTitleDefaultShippingAddress"}Default shipping address{/s}</div>
+                                                        {/if}
+                                                        {if $sUserData.additional.user.default_billing_address_id == $address.id}
+                                                            <div>{s name="AddressesTitleDefaultBillingAddress"}Default billing address{/s}</div>
+                                                        {/if}
+                                                    </div>
+                                                {/if}
+                                            {/block}
+                                            {block name="frontend_address_item_content_inner"}
+                                                {if $address.company}
+                                                    <p><span class="address--company">{$address.company}</span>{if $address.department} - <span class="address--department">{$address.department}</span>{/if}</p>
+                                                {/if}
+                                                <span class="address--salutation">{$address.salutation|salutation}</span>
+                                                {if {config name="displayprofiletitle"}}
+                                                    <span class="address--title">{$address.title}</span><br/>
+                                                {/if}
+                                                <span class="address--firstname">{$address.firstname}</span> <span class="address--lastname">{$address.lastname}</span><br />
+                                                <span class="address--street">{$address.street}</span><br />
+                                                {if $address.additionalAddressLine1}<span class="address--additional-one">{$address.additionalAddressLine1}</span><br />{/if}
+                                                {if $address.additionalAddressLine2}<span class="address--additional-two">{$address.additionalAddressLine2}</span><br />{/if}
+                                                {if {config name=showZipBeforeCity}}
+                                                    <span class="address--zipcode">{$address.zipcode}</span> <span class="address--city">{$address.city}</span>
+                                                {else}
+                                                    <span class="address--city">{$address.city}</span> <span class="address--zipcode">{$address.zipcode}</span>
+                                                {/if}<br />
+                                                {if $address.state.name}<span class="address--statename">{$address.state.name}</span><br />{/if}
+                                                <span class="address--countryname">{$address.country.name}</span>
+                                            {/block}
                                         </div>
-                                    {/if}
-                                {/block}
-                                {block name="frontend_address_item_content_body"}
-                                <div class="address--item-body panel--body is--wide">
-
-                                    {block name="frontend_address_item_content_inner"}
-                                        {if $address.company}
-                                            <p><span class="address--company">{$address.company}</span>{if $address.department} - <span class="address--department">{$address.department}</span>{/if}</p>
-                                        {/if}
-                                        <span class="address--salutation">{$address.salutation|salutation}</span>
-                                        {if {config name="displayprofiletitle"}}
-                                            <span class="address--title">{$address.title}</span><br/>
-                                        {/if}
-                                        <span class="address--firstname">{$address.firstname}</span> <span class="address--lastname">{$address.lastname}</span><br />
-                                        <span class="address--street">{$address.street}</span><br />
-                                        {if $address.additionalAddressLine1}<span class="address--additional-one">{$address.additionalAddressLine1}</span><br />{/if}
-                                        {if $address.additionalAddressLine2}<span class="address--additional-two">{$address.additionalAddressLine2}</span><br />{/if}
-                                        {if {config name=showZipBeforeCity}}
-                                            <span class="address--zipcode">{$address.zipcode}</span> <span class="address--city">{$address.city}</span>
-                                        {else}
-                                            <span class="address--city">{$address.city}</span> <span class="address--zipcode">{$address.zipcode}</span>
-                                        {/if}<br />
-                                        {if $address.state.name}<span class="address--statename">{$address.state.name}</span><br />{/if}
-                                        <span class="address--countryname">{$address.country.name}</span>
                                     {/block}
                                 </div>
-                                {/block}
 
                                 {block name="frontend_address_item_content_actions"}
                                     <div class="address--item-actions panel--actions is--wide">
