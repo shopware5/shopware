@@ -406,8 +406,12 @@ In this document you will find a changelog of the important changes related to t
     * `Enlight_Controller_Request_Request::unsetAttribute()`
 * Fixed tax free for company configuration. If the delivery country contains the flag `taxfree_ustid`, the vat id of the shipping address is checked.
 
+# 5.1.7
+* Update elasticsearch/elasticsearch library to 2.2.0
+
 ## 5.1.6
 * The interface `Enlight_Components_Cron_Adapter` in `engine/Library/Enlight/Components/Cron/Adapter.php` got a new method `getJobByAction`. For default implementation see `engine/Library/Enlight/Components/Cron/Adapter/DBAL.php`.
+* Fix a unserialize regression with PHP 5.6.21 and PHP 7.0.6.
 
 ## 5.1.5
 * The smarty variable `sCategoryInfo` in Listing and Blog controllers is now deprecated and will be removed soon. Use `sCategoryContent` instead, it's a drop in replacement.
