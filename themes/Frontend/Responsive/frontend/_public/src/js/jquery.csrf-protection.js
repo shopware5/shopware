@@ -27,6 +27,11 @@
     var CSRF = {
 
         /**
+         * Key including subshop and -path
+         */
+        storageKey: 'X-CSRF-Token--' + window.csrfConfig.shopId + '-' + window.csrfConfig.baseUrl,
+
+        /**
          * Temporary request callback store
          */
         pendingRequests: {},
@@ -36,7 +41,7 @@
          * @returns {string}
          */
         getToken: function() {
-            return StorageManager.getItem('local', 'X-CSRF-Token');
+            return StorageManager.getItem('local', this.storageKey);
         },
 
         /**
@@ -139,9 +144,9 @@
             var me = this;
 
             $.ajax({
-                url: window.controller['csrf_token_generate'],
+                url: window.csrfConfig.generateUrl,
                 success: function(response, status, xhr) {
-                    StorageManager.setItem('local', 'X-CSRF-Token', xhr.getResponseHeader('x-csrf-token'));
+                    StorageManager.setItem('local', me.storageKey, xhr.getResponseHeader('x-csrf-token'));
                     $.removeCookie('invalidate-xcsrf-token');
                     me.afterInit();
                 }
