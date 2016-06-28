@@ -2994,7 +2994,7 @@ SQL;
         ));
 
         $basket = $this->sGetDispatchBasket(empty($country['id']) ? null : $country['id']);
-        if (empty($basket)) {
+        if (empty($basket) || $basket['count_article'] == 0) {
             return false;
         }
         $country = $this->sGetCountry($basket['countryID']);
