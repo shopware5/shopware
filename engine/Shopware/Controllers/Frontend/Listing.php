@@ -137,7 +137,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             /**@var $manufacturer Manufacturer*/
             $manufacturer = $this->get('shopware_storefront.manufacturer_service')->get(
                 $manufacturerId,
-                $this->get('shopware_storefront.context_service')->getShopContext()
+                $context
             );
 
             $manufacturerContent = $this->getSeoDataOfManufacturer($manufacturer);
@@ -148,12 +148,6 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
                 'Listing category missing, non-existent or invalid for the current shop',
                 404
             );
-        }
-
-        // media fix
-        if (isset($categoryContent['media']['path'])) {
-            $mediaService = $this->get('shopware_media.media_service');
-            $categoryContent['media']['path'] = $mediaService->getUrl($categoryContent['media']['path']);
         }
 
         $viewAssignments = array(

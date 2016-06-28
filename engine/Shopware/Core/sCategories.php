@@ -515,75 +515,22 @@ class sCategories
     /**
      * Returns category content for the given category id
      *
-     * @param $id
+     * @param int $id
      * @return array
      */
     public function sGetCategoryContent($id)
     {
-        if ($id === null) {
+        if (!$id) {
             $id = $this->baseId;
         }
 
-        $category = $this->getActiveCategoryData($id, $this->customerGroupId);
+        $context = $this->contextService->getShopContext();
+        $category = Shopware()->Container()->get('shopware_storefront.category_service')->get($id, $context);
         if (empty($category)) {
             return null;
         }
 
-        $detailUrl = $category['blog'] ? $this->blogBaseUrl : $this->baseUrl;
-        $detailUrl .= $category['id'];
-
-        /** @deprecated sSelfCanonical, use $canonicalParams instead */
-        $canonical = $detailUrl;
-        if ($this->config->get('forceCanonicalHttp')) {
-            $canonical = str_replace('https://', 'http://', $canonical);
-        }
-
-        $canonicalParams = $this->getCategoryCanonicalParams($category);
-
-        $category = array_merge(
-            $category,
-            array(
-                'description'     => $category['name'],
-                'cmsheadline'     => $category['cmsHeadline'],
-                'cmstext'         => $category['cmsText'],
-                'metaKeywords'    => $category['metaKeywords'],
-                'metaDescription' => $category['metaDescription'],
-                'childrenCount'   => (int) $category['childrenCount'],
-                'sSelf'           => $detailUrl,
-                'sSelfCanonical'  => $canonical,
-                'canonicalParams' => $canonicalParams,
-                'rssFeed'         => $detailUrl . '&sRss=1',
-                'atomFeed'        => $detailUrl . '&sAtom=1'
-            )
-        );
-
-        $category['productBoxLayout'] = $this->getProductBoxLayout($category['id']);
-
-        return $category;
-    }
-
-    /**
-     * @param array $category
-     * @return string
-     */
-    private function getCategoryCanonicalParams($category)
-    {
-        $request = $this->frontController->Request();
-        $page = $request->getQuery('sPage');
-
-        $emotion = $this->manager->getRepository('Shopware\Models\Emotion\Emotion')
-            ->getCategoryBaseEmotionsQuery($category['id'])->getArrayResult();
-
-        $canonicalParams = array(
-            'sViewport' => $category['blog'] ? 'blog' : 'cat',
-            'sCategory' => $category['id'],
-        );
-
-        if ($this->config->get('seoIndexPaginationLinks') && (!$emotion || $page)) {
-            $canonicalParams['sPage'] = $page ? : 1;
-        }
-
-        return $canonicalParams;
+        return Shopware()->Container()->get('legacy_struct_converter')->convertCategoryStruct($category);
     }
 
     /**
@@ -631,59 +578,5 @@ class sCategories
         }
 
         return $path;
-    }
-
-    /**
-     * @param $id
-     * @param $customerGroupId
-     * @return mixed
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     */
-    private function getActiveCategoryData($id, $customerGroupId)
-    {
-        $query = Shopware()->Models()->createQueryBuilder();
-        $query->select(array('category', 'attribute', 'media'));
-        $query->from('Shopware\Models\Category\Category', 'category')
-            ->leftJoin('category.attribute', 'attribute')
-            ->leftJoin('category.media', 'media')
-            ->where('category.id = :id')
-            ->andWhere('category.active = 1')
-            ->setParameter('id', $id);
-
-        $query->leftJoin('category.customerGroups', 'customerGroups', 'with', 'customerGroups.id = :customerGroupId')
-            ->setParameter('customerGroupId', $customerGroupId)
-            ->andHaving('COUNT(customerGroups.id) = 0');
-
-        $data = $query->getQuery()->getOneOrNullResult(
-            \Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY
-        );
-
-        if (!$data) {
-            return null;
-        }
-
-        $data['childrenCount'] = $this->getCategoryChildrenCount($id);
-
-        return $data;
-    }
-
-    /**
-     * Returns the count of children categories of the provided category
-     * @param int $id
-     * @return int
-     * @throws Exception
-     */
-    private function getCategoryChildrenCount($id)
-    {
-        $query = Shopware()->Container()->get('dbal_connection')->createQueryBuilder();
-        $query->select('COUNT(category.id)')
-            ->from('s_categories', 'category')
-            ->where('category.parent = :id')
-            ->setParameter(':id', $id);
-
-        /**@var $statement PDOStatement */
-        $statement = $query->execute();
-
-        return $statement->fetch(PDO::FETCH_COLUMN);
     }
 }

@@ -335,6 +335,10 @@
             <argument type="service" id="shopware_storefront.context_service" />
             <argument type="service" id="events" />
             <argument type="service" id="shopware_media.media_service" />
+            <argument type="service" id="dbal_connection" />
+            <argument type="service" id="models" />
+            <argument type="service" id="shopware_storefront.category_service" />
+            <argument type="service" id="service_container" />
         </service>
 
         <service id="legacy_event_manager" class="Shopware\Components\Compatibility\LegacyEventManager">
