@@ -263,7 +263,6 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
             ]),
             'various' => $this->genericConfigLoader([
                 'disableShopwareStatistics',
-                'TagCloud:show',
                 'LastArticles:show',
                 'LastArticles:lastarticlestoshow',
                 'disableArticleNavigation'
