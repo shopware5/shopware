@@ -81,6 +81,7 @@ class Price extends Extendable implements \JsonSerializable
     public function __construct(PriceRule $rule)
     {
         $this->rule = $rule;
+        $this->attributes = $rule->getAttributes();
     }
 
     /**
