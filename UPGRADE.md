@@ -138,6 +138,7 @@ In this document you will find a changelog of the important changes related to t
 * Removed `selectShippingAction()` in `Controllers/Frontend/Account.php`
 * Moved block `frontend_checkout_confirm_left_billing_address` outside panel body
 * Moved block `frontend_checkout_confirm_left_shipping_address` outside panel body
+* Removed block `frontend_checkout_finish_info`, use `frontend_checkout_finish_information_wrapper` instead
 * Removed the following backend models including their smarty blocks
     * `Shopware.apps.Supplier.model.Attribute`
     * `Shopware.apps.Customer.model.BillingAttributes`
