@@ -103,7 +103,7 @@ Ext.define('Shopware.apps.Config.view.form.Document', {
 				xtype: 'config-element-select',
 				valueField: 'name',
                 displayField: 'description',
-				store: 'form.Number',
+				store: 'Shopware.apps.Config.store.form.Number',
 				fieldLabel: '{s name=document/detail/numbers_label}Numbers{/s}'
 			},{
 				name: 'template',
