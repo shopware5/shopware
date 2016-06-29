@@ -80,6 +80,20 @@ class Helper
     }
 
     /**
+     * Converts the value to an integer
+     * @param $value
+     * @return int
+     */
+    public static function intValue($value)
+    {
+        if (is_int(($value))) {
+            return $value;
+        }
+
+        return intval($value);
+    }
+
+    /**
      * Converts values with key in $keys to floats
      * @param array $values
      * @param array $keys

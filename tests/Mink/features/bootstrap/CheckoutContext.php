@@ -2,7 +2,6 @@
 
 namespace Shopware\Tests\Mink;
 
-use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Exception\ResponseTextException;
 use Shopware\Components\Model\ModelManager;
@@ -519,7 +518,7 @@ class CheckoutContext extends SubContext
         $page = $this->getPage('CheckoutConfirm');
 
         $testAddress = array_values(array_filter(explode(', ', $address)));
-        if(empty(trim($testAddress[0]))){
+        if (empty(trim($testAddress[0]))) {
             $testAddress = array_shift($testAddress);
         }
 
@@ -616,5 +615,23 @@ class CheckoutContext extends SubContext
 
         $message = sprintf('Expected to find address "%s" as "%s", but didn\'t.', $address, $title);
         Helper::throwException($message);
+    }
+
+    /**
+     * @When /^I click "([^"]*)" to add the article to the cart$/
+     */
+    public function iClickToAddTheArticleToTheCart($locator)
+    {
+        /** @var \Shopware\Tests\Mink\Page\Detail $page */
+        $page = $this->getPage('Detail');
+        Helper::pressNamedButton($page, $locator);
+    }
+
+    /**
+     * @Given /^I open the cart page$/
+     */
+    public function iOpenTheCartPage()
+    {
+        $this->getPage('CheckoutCart')->open();
     }
 }

@@ -43,6 +43,7 @@ class Detail extends Page implements HelperSelectorInterface
             'compareLink' => ['de' => 'Vergleichen', 'en' => 'Compare'],
             'rememberLink' => ['de' => 'Merken', 'en' => 'Remember'],
             'commentLink' => ['de' => 'Bewerten', 'en' => 'Comment'],
+            'addToCartButton' => ['de' => 'In den Warenkorb', 'en' => 'Add to shipping cart'],
         ];
     }
 
