@@ -656,9 +656,15 @@ class Compiler
      */
     private function clearDirectory($names = array())
     {
+        $dir = $this->pathResolver->getCacheDirectory();
+        
+        if (!file_exists($dir)) {
+            return;
+        }
+        
         $iterator = new \RecursiveIteratorIterator(
             new \RecursiveDirectoryIterator(
-                $this->pathResolver->getCacheDirectory(),
+                $dir,
                 \RecursiveDirectoryIterator::SKIP_DOTS
             ),
             \RecursiveIteratorIterator::CHILD_FIRST
