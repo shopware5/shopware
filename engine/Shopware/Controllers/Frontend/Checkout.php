@@ -936,6 +936,8 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
      */
     public function getBasket()
     {
+        $this->updateArticles();
+
         $shippingcosts = $this->getShippingCosts();
 
         $basket = $this->basket->sGetBasket();
@@ -1779,5 +1781,23 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         }
 
         return !empty($userData['shippingaddress']['ustid']);
+    }
+
+    /**
+     * Updates all articles in the basket
+     */
+    private function updateArticles()
+    {
+        $query = $this->container->get('dbal_connection')->createQueryBuilder();
+        $query->select(['id', 'quantity']);
+        $query->from('s_order_basket', 'basket');
+        $query->where('basket.modus = 0');
+        $query->andWhere('basket.sessionID = :sessionId');
+        $query->setParameter(':sessionId', Shopware()->Session()->get('sessionId'));
+
+        $articles = $query->execute()->fetchAll(PDO::FETCH_KEY_PAIR);
+        foreach ($articles as $id => $quantity) {
+            $this->basket->sUpdateArticle($id, $quantity);
+        }
     }
 }
