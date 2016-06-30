@@ -639,28 +639,31 @@ class Compiler
      */
     private function clearDirectory($names = array())
     {
-        $iterator = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator(
-                $this->pathResolver->getCacheDirectory(),
-                \RecursiveDirectoryIterator::SKIP_DOTS
-            ),
-            \RecursiveIteratorIterator::CHILD_FIRST
-        );
+        $dir = $this->pathResolver->getCacheDirectory();
+        if (file_exists($dir)) {
+            $iterator = new \RecursiveIteratorIterator(
+                new \RecursiveDirectoryIterator(
+                    $dir,
+                    \RecursiveDirectoryIterator::SKIP_DOTS
+                ),
+                \RecursiveIteratorIterator::CHILD_FIRST
+            );
 
-        /** @var \SplFileInfo $path */
-        foreach ($iterator as $path) {
-            if ($path->getFilename() == '.gitkeep') {
-                continue;
-            }
+            /** @var \SplFileInfo $path */
+            foreach ($iterator as $path) {
+                if ($path->getFilename() == '.gitkeep') {
+                    continue;
+                }
 
-            if (!$this->fileNameMatch($path->getFilename(), $names)) {
-                continue;
-            }
+                if (!$this->fileNameMatch($path->getFilename(), $names)) {
+                    continue;
+                }
 
-            if ($path->isDir()) {
-                rmdir($path->__toString());
-            } else {
-                unlink($path->__toString());
+                if ($path->isDir()) {
+                    rmdir($path->__toString());
+                } else {
+                    unlink($path->__toString());
+                }
             }
         }
     }
