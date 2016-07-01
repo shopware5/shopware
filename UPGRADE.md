@@ -406,6 +406,7 @@ In this document you will find a changelog of the important changes related to t
     * `Enlight_Controller_Request_Request::setAttribute()`
     * `Enlight_Controller_Request_Request::unsetAttribute()`
 * Fixed tax free for company configuration. If the delivery country contains the flag `taxfree_ustid`, the vat id of the shipping address is checked.
+* Fixed exception in `\Shopware\Bundle\AccountBundle\ServiceRegisterService`, caused by using the `\Shopware\Components\NumberRangeIncrementer` within a transaction
 
 # 5.1.7
 * Update elasticsearch/elasticsearch library to 2.2.0

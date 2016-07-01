@@ -114,10 +114,16 @@ class RegisterService implements RegisterServiceInterface
         Address $billing,
         Address $shipping = null
     ) {
+        // Check whether a customer number must be created. This must be done before a transaction
+        // is started, because the numberIncrementer uses a transaction itself.
+        if (!$customer->getNumber() && $this->config->get('shopwareManagedCustomerNumbers')) {
+            $customerNumber = $this->numberIncrementer->increment('user');
+        }
+
         $this->modelManager->beginTransaction();
 
         try {
-            $this->saveCustomer($shop, $customer);
+            $this->saveCustomer($shop, $customer, $customerNumber);
 
             $this->addressService->create($billing, $customer);
             $this->addressService->setDefaultBillingAddress($billing);
@@ -157,8 +163,9 @@ class RegisterService implements RegisterServiceInterface
     /**
      * @param Shop $shop
      * @param Customer $customer
+     * @param string $customerNumber
      */
-    private function saveCustomer(Shop $shop, Customer $customer)
+    private function saveCustomer(Shop $shop, Customer $customer, $customerNumber = null)
     {
         if ($customer->getValidation() !== ContextService::FALLBACK_CUSTOMER_GROUP) {
             $customer->setCustomerType(Customer::CUSTOMER_TYPE_BUSINESS);
@@ -207,8 +214,8 @@ class RegisterService implements RegisterServiceInterface
             $customer->setAffiliate(0);
         }
 
-        if (!$customer->getNumber() && $this->config->get('shopwareManagedCustomerNumbers')) {
-            $customer->setNumber($this->numberIncrementer->increment('user'));
+        if (!$customer->getNumber() && $customerNumber !== null) {
+            $customer->setNumber($customerNumber);
         }
 
         $this->validator->validate($customer);
