@@ -50,7 +50,7 @@ class HeaderCart extends Element implements \Shopware\Tests\Mink\HelperSelectorI
         $element = Helper::findElements($this, ['quantity', 'amount']);
 
         $check = array(
-            'quantity' => array(Helper::intValue($element['quantity']->getText()), $quantity),
+            'quantity' => array((int)$element['quantity']->getText(), $quantity),
             'amount' => Helper::floatArray(array($element['amount']->getText(), $amount))
         );
 
