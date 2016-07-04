@@ -4,6 +4,7 @@ namespace Shopware\Tests\Mink;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Exception\ResponseTextException;
+use Doctrine\DBAL\Connection;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Price\Group;
 use Shopware\Tests\Mink\Element\CartPosition;
@@ -633,5 +634,41 @@ class CheckoutContext extends SubContext
     public function iOpenTheCartPage()
     {
         $this->getPage('CheckoutCart')->open();
+    }
+
+    /**
+     * @Then /^I open the order confirmation page$/
+     */
+    public function iOpenTheOrderConfirmationPage()
+    {
+        $this->getPage('CheckoutConfirm')->open();
+    }
+
+    /**
+     * @BeforeScenario @taxation
+     */
+    public function addCustomTaxation()
+    {
+        /** @var Connection $dbal */
+        $dbal = $this->getService('dbal_connection');
+        $sql = <<<"EOD"
+            INSERT INTO s_core_tax_rules (areaID, countryID, stateID, groupID, customer_groupID, tax, name, active)
+            VALUES (3, 23, null, 1, 1, 33, 'Austria', 1)
+EOD;
+        $dbal->query($sql);
+    }
+
+    /**
+     * @AfterScenario @taxation
+     */
+    public function removeCustomTaxation()
+    {
+        /** @var Connection $dbal */
+        $dbal = $this->getService('dbal_connection');
+        $sql = <<<"EOD"
+            DELETE FROM s_core_tax_rules
+            WHERE name = 'Austria'
+EOD;
+        $dbal->query($sql);
     }
 }
