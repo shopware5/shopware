@@ -110,6 +110,12 @@ class PluginConfigSetCommand extends ShopwareCommand
         if ($value === "true") {
             $value = true;
         }
+        if (preg_match('/\[(.+,?)*\]/', $value, $matches) && count($matches) == 2) {
+            $value = explode(',', $matches[1]);
+            $value = array_map(function ($val) {
+                return (preg_match('/\d+/', $val)) ? intval($val) : $val;
+            }, $value);
+        }
 
         $pluginManager->saveConfigElement($plugin, $input->getArgument('key'), $value, $shop);
         $output->writeln(sprintf("Plugin configuration for Plugin %s saved.", $pluginName));
