@@ -53,7 +53,7 @@ class EventManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testAddAListenerService()
     {
-        $service = $this->getMock(Service::class);
+        $service = $this->createMock(Service::class);
 
         $eventArgs = new \Enlight_Event_EventArgs(['some' => 'args']);
 
@@ -71,7 +71,7 @@ class EventManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testAddAListenerServiceCallMulitpleTimes()
     {
-        $service = $this->getMock(Service::class);
+        $service = $this->createMock(Service::class);
 
         $eventArgs = new \Enlight_Event_EventArgs(['some' => 'args']);
 
@@ -92,7 +92,7 @@ class EventManagerTest extends \PHPUnit_Framework_TestCase
     {
         $eventArgs = new \Enlight_Event_EventArgs(['some' => 'args']);
 
-        $service = $this->getMock(SubscriberService::class);
+        $service = $this->createMock(SubscriberService::class);
         $service
             ->expects($this->once())
             ->method('onEvent')
@@ -119,7 +119,7 @@ class EventManagerTest extends \PHPUnit_Framework_TestCase
     public function testPreventDuplicateListenerService()
     {
         $eventArgs = new \Enlight_Event_EventArgs(['some' => 'args']);
-        $service = $this->getMock(Service::class);
+        $service = $this->createMock(Service::class);
         $service
             ->expects($this->once())
             ->method('onEvent')
@@ -136,8 +136,8 @@ class EventManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testHasListenersOnLazyLoad()
     {
-        $eventArgs = new \Enlight_Event_EventArgs(['some' => 'args']);
-        $service = $this->getMock(Service::class);
+        //        $eventArgs = new \Enlight_Event_EventArgs(['some' => 'args']);
+        $service = $this->createMock(Service::class);
 
         $this->container->set('service.listener', $service);
 
@@ -153,7 +153,7 @@ class EventManagerTest extends \PHPUnit_Framework_TestCase
     }
     public function testGetListenersOnLazyLoad()
     {
-        $service = $this->getMock(Service::class);
+        $service = $this->createMock(Service::class);
         $this->container->set('service.listener', $service);
 
         $this->eventManager->addListenerService('onEvent', array('service.listener', 'onEvent'));
@@ -167,7 +167,7 @@ class EventManagerTest extends \PHPUnit_Framework_TestCase
     {
         $eventArgs = new \Enlight_Event_EventArgs(['some' => 'args']);
 
-        $service = $this->getMock(Service::class);
+        $service = $this->createMock(Service::class);
         $this->container->set('service.listener', $service);
 
         $this->eventManager->addListenerService('onEvent', array('service.listener', 'onEvent'));
@@ -183,7 +183,7 @@ class EventManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testRemoveBeforeDispatch()
     {
-        $service = $this->getMock(Service::class);
+        $service = $this->createMock(Service::class);
         $this->container->set('service.listener', $service);
         $this->eventManager->addListenerService('onEvent', array('service.listener', 'onEvent'));
 

@@ -90,13 +90,6 @@ Ext.define('Shopware.apps.Performance.view.tabs.settings.fields.Various', {
                         inputValue: true
                     },
                     {
-                        fieldLabel: '{s name=fieldset/various/enableTagCloud}Enable tag cloud{/s}',
-                        name: 'various[TagCloud:show]',
-                        xtype: 'checkbox',
-                        uncheckedValue: false,
-                        inputValue: true
-                    },
-                    {
                         fieldLabel: '{s name=fieldset/various/lastArticles}Display previously viewed items{/s}',
                         name: 'various[LastArticles:show]',
                         xtype: 'checkbox',

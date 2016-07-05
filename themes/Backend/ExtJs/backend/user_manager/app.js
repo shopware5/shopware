@@ -74,7 +74,7 @@ Ext.define('Shopware.apps.UserManager', {
 
     views: [ 'main.Window', 'main.Navigation', 'user.List', 'user.Create', 'roles.List', 'rules.Tree', 'rules.Add' ],
 
-    models: [ 'User', 'UserDetail', 'Roles', 'Detail', 'Privilege', 'Resource', 'Attribute', 'Locale', 'Rules' ],
+    models: [ 'User', 'UserDetail', 'Roles', 'Detail', 'Privilege', 'Resource', 'Locale', 'Rules' ],
 
     /**
      * Returns the main application window for this is expected

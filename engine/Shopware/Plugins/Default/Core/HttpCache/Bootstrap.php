@@ -323,7 +323,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
         $proxyUrl = trim($this->Config()->get('proxy'));
         if (!empty($proxyUrl)) {
             return $proxyUrl;
-        };
+        }
 
         // if proxy url is not set fall back to host detection
         if ($request !== null && $request->getHttpHost()) {
@@ -976,10 +976,6 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
             return false;
         }
 
-        if (!$this->request || $this->request->getHeader('Surrogate-Capability') === false) {
-            return false;
-        }
-
         return $this->invalidate($cacheId);
     }
 
@@ -993,6 +989,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
     private function invalidate($cacheId=null)
     {
         $proxy = $this->getProxyUrl($this->request);
+
         // if no explicit proxy was configured + no host is configured
         if ($proxy === null) {
             return false;
@@ -1020,7 +1017,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
 
                 if ($response->getStatus() < 200 || $response->getStatus() >= 300) {
                     $this->get('corelogger')->error(
-                        'Reverse proxy returned invalidate status code',
+                        'Reverse proxy returned invalid status code',
                         ['response' => $response->getRawBody(), 'code' => $response->getStatus()]
                     );
                 }
@@ -1105,7 +1102,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
 
         if ($session->offsetGet('sCountry')) {
             /** @var ProductContextInterface $productContext */
-            $productContext = $this->get('shopware_storefront.context_service')->getProductContext();
+            $productContext = $this->get('shopware_storefront.context_service')->getShopContext();
             $userContext = sha1(
                 json_encode($productContext->getTaxRules()) .
                 json_encode($productContext->getCurrentCustomerGroup())

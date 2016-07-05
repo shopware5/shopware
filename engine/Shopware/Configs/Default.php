@@ -124,17 +124,16 @@ return array_replace_recursive([
         'cache_cookies' => ['shop', 'currency', 'x-cache-context-hash'],
     ],
     'session' => [
-        'name' => 'SHOPWARESID',
         'cookie_lifetime' => 0,
-        //'cookie_httponly' => 1,
-        'use_trans_sid' => false,
+        'cookie_httponly' => 1,
         'gc_probability' => 1,
         'gc_divisor' => 100,
-        'save_handler' => 'db'
+        'save_handler' => 'db',
+        'use_trans_sid' => 0,
     ],
     'phpsettings' => [
         'error_reporting' => E_ALL & ~E_USER_DEPRECATED,
-        'display_errors' => 1,
+        'display_errors' => 0,
         'date.timezone' => 'Europe/Berlin',
     ],
     'cache' => [
@@ -169,6 +168,6 @@ return array_replace_recursive([
         'name' => 'SHOPWAREBACKEND',
         'cookie_lifetime' => 0,
         'cookie_httponly' => 1,
-        'use_trans_sid' => false
+        'use_trans_sid' => 0,
     ],
 ], $customConfig);

@@ -72,6 +72,7 @@ class CriteriaTest extends TestCase
 
         $this->assertInstanceOf('Shopware\Bundle\SearchBundle\Condition\CategoryCondition', $condition);
 
+        /** @var CategoryCondition $condition */
         $this->assertEquals(array(3), $condition->getCategoryIds());
     }
 }

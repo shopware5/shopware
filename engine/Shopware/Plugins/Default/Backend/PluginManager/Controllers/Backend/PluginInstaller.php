@@ -82,8 +82,6 @@ class Shopware_Controllers_Backend_PluginInstaller extends Shopware_Controllers_
 
         $plugin = $this->getPluginModel($technicalName);
 
-        $plugin->setUpdateVersion(true);
-
         //disable plugin and save state
         $active = $plugin->getActive();
         $plugin->setActive(false);

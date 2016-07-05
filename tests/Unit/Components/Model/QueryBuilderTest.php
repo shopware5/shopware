@@ -33,9 +33,7 @@ class Shopware_Tests_Components_Model_QueryBuilderTest extends PHPUnit_Framework
     public function setUp()
     {
         // Create a stub for the SomeClass class.
-        $emMock = $this->getMockBuilder('Doctrine\ORM\EntityManager')
-                        ->disableOriginalConstructor()
-                        ->getMock();
+        $emMock = $this->createMock(Doctrine\ORM\EntityManager::class);
 
         $queryBuilder = new Shopware\Components\Model\QueryBuilder($emMock);
 

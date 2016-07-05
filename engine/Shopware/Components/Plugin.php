@@ -25,7 +25,11 @@
 namespace Shopware\Components;
 
 use Shopware\Components\Console\Application;
-use Shopware\Components\Plugin\PluginContext;
+use Shopware\Components\Plugin\Context\ActivateContext;
+use Shopware\Components\Plugin\Context\DeactivateContext;
+use Shopware\Components\Plugin\Context\InstallContext;
+use Shopware\Components\Plugin\Context\UninstallContext;
+use Shopware\Components\Plugin\Context\UpdateContext;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -90,47 +94,46 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
 
     /**
      * This method can be overridden
-     * @param PluginContext $context
+     * @param InstallContext $context
      */
-    public function install(PluginContext $context)
+    public function install(InstallContext $context)
     {
     }
 
     /**
      * This method can be overridden
-     * @param PluginContext $context
+     * @param UpdateContext $context
      */
-    public function update(PluginContext $context)
+    public function update(UpdateContext $context)
     {
-        $context->scheduleClearCache(PluginContext::CACHE_LIST_DEFAULT);
+        $context->scheduleClearCache(InstallContext::CACHE_LIST_DEFAULT);
     }
 
     /**
      * This method can be overridden
-     * @param PluginContext $context
+     * @param ActivateContext $context
      */
-    public function activate(PluginContext $context)
+    public function activate(ActivateContext $context)
     {
-        $context->scheduleClearCache(PluginContext::CACHE_LIST_DEFAULT);
+        $context->scheduleClearCache(InstallContext::CACHE_LIST_DEFAULT);
     }
 
     /**
      * This method can be overridden
-     * @param PluginContext $context
+     * @param DeactivateContext $context
      */
-    public function deactivate(PluginContext $context)
+    public function deactivate(DeactivateContext $context)
     {
-        $context->scheduleClearCache(PluginContext::CACHE_LIST_DEFAULT);
+        $context->scheduleClearCache(InstallContext::CACHE_LIST_DEFAULT);
     }
 
     /**
      * This method can be overridden
-     * @param PluginContext $context
-     * @param boolean $keepUserData
+     * @param UninstallContext $context
      */
-    public function uninstall(PluginContext $context, $keepUserData)
+    public function uninstall(UninstallContext $context)
     {
-        $context->scheduleClearCache(PluginContext::CACHE_LIST_DEFAULT);
+        $context->scheduleClearCache(InstallContext::CACHE_LIST_DEFAULT);
     }
 
     /**

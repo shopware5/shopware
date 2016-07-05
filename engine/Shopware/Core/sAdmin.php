@@ -27,6 +27,7 @@ use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Components\NumberRangeIncrementerInterface;
 use Shopware\Components\Validator\EmailValidatorInterface;
 use Shopware\Models\Customer\Address;
+use Shopware\Models\Customer\Customer;
 
 /**
  * Shopware Class that handles several
@@ -215,8 +216,6 @@ class sAdmin
             $user = array();
         }
 
-        $basket = $this->moduleManager->Basket()->sGetBasket();
-
         // Check for risk management
         // If rules match, reset to default payment mean if this payment mean was not
         // set by shop owner
@@ -238,7 +237,7 @@ class sAdmin
         }
 
         // Check additional rules
-        if ($this->sManageRisks($data["id"], $basket, $user)
+        if ($this->sManageRisks($data["id"], null, $user)
             && $data["id"] != $user["additional"]["user"]["paymentpreset"]
         ) {
             $resetPayment = $this->config->get('sPAYMENTDEFAULT');
@@ -311,7 +310,6 @@ class sAdmin
      */
     public function sGetPaymentMeans()
     {
-        $basket = $this->moduleManager->Basket()->sGetBasket();
         $isMobile = ($this->front->Request()->getDeviceType() == 'mobile');
 
         $user = $this->sGetUserData();
@@ -394,7 +392,7 @@ class sAdmin
             }
 
             // Check additional rules
-            if ($this->sManageRisks($payValue["id"], $basket, $user)
+            if ($this->sManageRisks($payValue["id"], null, $user)
                 && $payValue["id"] != $user["additional"]["user"]["paymentpreset"]
             ) {
                 unset($getPaymentMeans[$payKey]);
@@ -1139,6 +1137,10 @@ class sAdmin
             }
 
             $context[$key] = $value;
+        }
+
+        if (array_key_exists('password', $context)) {
+            unset($context['password']);
         }
 
         $mail = Shopware()->TemplateMail()->createMail('sREGISTERCONFIRMATION', $context);
@@ -1954,7 +1956,7 @@ SQL;
     public function sRiskORDERPOSITIONSMORE($user, $order, $value)
     {
         return (
-            (is_array($order["content"]) && count($order["content"]) >= $value)
+            (is_array($order["content"]) ? count($order["content"]) : $order["content"] >= $value)
         );
     }
 
@@ -2992,7 +2994,7 @@ SQL;
         ));
 
         $basket = $this->sGetDispatchBasket(empty($country['id']) ? null : $country['id']);
-        if (empty($basket)) {
+        if (empty($basket) || $basket['count_article'] == 0) {
             return false;
         }
         $country = $this->sGetCountry($basket['countryID']);
@@ -3275,7 +3277,7 @@ SQL;
         }
 
         $active = 1;
-        $context = $this->contextService->getProductContext();
+        $context = $this->contextService->getShopContext();
         $orderArticleOrderNumbers = array_column($getOrderDetails, 'articleordernumber');
         $listProducts = Shopware()->Container()->get('shopware_storefront.list_product_service')->getList($orderArticleOrderNumbers, $context);
         $listProducts = Shopware()->Container()->get('legacy_struct_converter')->convertListProductStructList($listProducts);
@@ -3418,10 +3420,10 @@ SQL;
      */
     private function getUserShippingData($userId, $userData, $countryQuery)
     {
-        $shipping = $this->db->fetchRow("SELECT * FROM s_user_shippingaddress WHERE userID = ?", [$userId]);
-        $shipping['attributes'] = $this->attributeLoader->load('s_user_shippingaddress_attributes', $shipping['id']) ?: [];
-        unset($shipping['attributes']['shippingID'], $shipping['attributes']['id']);
-
+        $entityManager = Shopware()->Container()->get('models');
+        $customer = $entityManager->find(Shopware\Models\Customer\Customer::class, $userId);
+        $shipping = $this->convertToLegacyAddressArray($customer->getDefaultShippingAddress());
+        $shipping['attributes'] = $this->attributeLoader->load('s_user_addresses_attributes', $shipping['id']) ?: [];
         $userData["shippingaddress"] = $shipping;
 
         // If shipping address is not available, billing address is coeval the shipping address
@@ -3477,18 +3479,17 @@ SQL;
      * Helper function for sAdmin::sGetUserData()
      * Gets user billing data
      *
-     * @param $userId
-     * @param $userData
-     * @return mixed
+     * @param int $userId
+     * @param array $userData
+     * @return array
      */
     private function getUserBillingData($userId, $userData)
     {
-        $billing = $this->db->fetchRow('SELECT * FROM s_user_billingaddress WHERE userID = ?', [$userId]);
-        $billing['attributes'] = $this->attributeLoader->load('s_user_billingaddress_attributes', $billing['id']) ?: [];
-        unset($billing['attributes']['billingID'], $billing['attributes']['id']);
-
+        $entityManager = Shopware()->Container()->get('models');
+        $customer = $entityManager->find(Customer::class, $userId);
+        $billing = $this->convertToLegacyAddressArray($customer->getDefaultBillingAddress());
+        $billing['attributes'] = $this->attributeLoader->load('s_user_addresses_attributes', $billing['id']) ?: [];
         $userData["billingaddress"] = $billing;
-
         return $userData;
     }
 
@@ -3514,14 +3515,7 @@ SQL;
                         ->get('UnknownError', 'Unknown error')
             );
             return $result;
-        } elseif (count($result)) {
-            $result = array(
-                "code" => 2,
-                "message" => $this->snippetManager->getNamespace('frontend/account/internalMessages')
-                        ->get('NewsletterFailureAlreadyRegistered', 'You already receive our newsletter')
-            );
-            return $result;
-        } else {
+        } elseif (count($result) === 0) {
             $customer = $this->db->fetchOne(
                 'SELECT id FROM s_user WHERE email = ? LIMIT 1',
                 array($email)
@@ -3544,15 +3538,15 @@ SQL;
                             ->get('UnknownError', 'Unknown error')
                 );
                 return $result;
-            } else {
-                $result = array(
-                    "code" => 3,
-                    "message" => $this->snippetManager->getNamespace('frontend/account/internalMessages')
-                            ->get('NewsletterSuccess', 'Thank you for receiving our newsletter')
-                );
-                return $result;
             }
         }
+
+        $result = array(
+            "code" => 3,
+            "message" => $this->snippetManager->getNamespace('frontend/account/internalMessages')
+                ->get('NewsletterSuccess', 'Thank you for receiving our newsletter')
+        );
+        return $result;
     }
 
     /**

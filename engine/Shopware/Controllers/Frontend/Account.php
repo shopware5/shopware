@@ -453,10 +453,10 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         if (empty($email)) {
             return array('sErrorMessages' => array($snippets->get('ErrorForgotMail')));
         }
-
-        $userID = Shopware()->System()->sMODULES['sAdmin']->sGetUserByMail($email);
+        
+        $userID = Shopware()->Modules()->Admin()->sGetUserByMail($email);
         if (empty($userID)) {
-            return array('sErrorMessages' => array($snippets->get('ErrorForgotMailUnknown')));
+            return;
         }
 
         $hash = \Shopware\Components\Random::getAlphanumericString(32);

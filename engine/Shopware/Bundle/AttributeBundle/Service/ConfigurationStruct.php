@@ -52,11 +52,6 @@ class ConfigurationStruct implements \JsonSerializable
     private $supportText;
 
     /**
-     * @var int|null
-     */
-    private $pluginId;
-
-    /**
      * @var int
      */
     private $position = 0;
@@ -195,21 +190,6 @@ class ConfigurationStruct implements \JsonSerializable
         $this->supportText = $supportText;
     }
 
-    /**
-     * @return int|null
-     */
-    public function getPluginId()
-    {
-        return $this->pluginId;
-    }
-
-    /**
-     * @param int|null $pluginId
-     */
-    public function setPluginId($pluginId)
-    {
-        $this->pluginId = $pluginId;
-    }
 
     /**
      * @return int

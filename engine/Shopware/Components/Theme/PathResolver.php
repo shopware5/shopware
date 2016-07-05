@@ -83,7 +83,11 @@ class PathResolver
      */
     public function getPluginPath(Plugin $plugin)
     {
-        return $this->pluginDirectories[$plugin->getSource()] . $plugin->getNamespace() . DIRECTORY_SEPARATOR . $plugin->getName();
+        if ($plugin->isLegacyPlugin()) {
+            return $this->pluginDirectories[$plugin->getSource()] . $plugin->getNamespace() . DIRECTORY_SEPARATOR . $plugin->getName();
+        }
+
+        return $this->rootDir . '/custom/plugins/' . $plugin->getName() . '/resources';
     }
 
     /**

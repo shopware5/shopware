@@ -43,6 +43,7 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
         { ref: 'sidebar', selector: 'emotion-detail-window tabpanel[name=sidebar]' },
         { ref: 'settingsForm', selector: 'emotion-detail-window emotion-detail-settings' },
         { ref: 'layoutForm', selector: 'emotion-detail-window emotion-detail-layout' },
+        { ref: 'designer', selector: 'emotion-detail-window emotion-detail-designer' },
         { ref: 'designerGrid', selector: 'emotion-detail-window emotion-detail-grid' },
         { ref: 'designerPreview', selector: 'emotion-detail-window emotion-detail-preview' },
         { ref: 'listing', selector: 'emotion-main-window emotion-list-grid' },
@@ -93,6 +94,9 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
             },
             'emotion-detail-grid': {
                 'openSettingsWindow': me.onOpenSettingsWindow
+            },
+            'emotion-detail-window emotion-detail-settings': {
+                'deviceChange': me.onDeviceChange
             },
             'emotion-detail-window emotion-detail-layout': {
                 'changeMode': me.onModeChange,
@@ -644,6 +648,19 @@ Ext.define('Shopware.apps.Emotion.controller.Detail', {
 
         record.set(field.name, value);
         grid.refresh();
+    },
+
+    onDeviceChange: function (record, deviceField, value) {
+        var me = this,
+            designer = me.getDesigner();
+
+        if (!value.device) {
+            return false;
+        }
+
+        record.set('device', value.device.join(','));
+
+        designer.toolbar.refresh();
     },
 
     onOpenBannerMappingWindow: function(view, media, preview, element) {

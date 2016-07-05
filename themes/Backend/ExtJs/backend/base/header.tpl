@@ -35,6 +35,7 @@
         {* Ext.editorLang is no longer used and is deprecated *}
         Ext.editorLang = '{s name=script/ext/lang}{/s}';
 	    Ext.shopwareRevision = '{Shopware::REVISION}';
+        Ext.userLanguage = '{s name=script/ext/lang}{/s}';
     </script>
 
     {if $user}

@@ -29,7 +29,7 @@ use Shopware\Bundle\SearchBundle\FacetResult\RangeFacetResult;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactory;
 use Shopware\Bundle\SearchBundle\FacetInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Bundle\SearchBundleDBAL\PriceHelper;
+use Shopware\Bundle\SearchBundleDBAL\PriceHelperInterface;
 use Shopware\Bundle\SearchBundleDBAL\FacetHandlerInterface;
 use Shopware\Bundle\SearchBundle\Facet;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
@@ -43,7 +43,7 @@ use Shopware\Components\QueryAliasMapper;
 class PriceFacetHandler implements FacetHandlerInterface
 {
     /**
-     * @var PriceHelper
+     * @var PriceHelperInterface
      */
     private $priceHelper;
 
@@ -68,13 +68,13 @@ class PriceFacetHandler implements FacetHandlerInterface
     private $maxFieldName;
 
     /**
-     * @param PriceHelper $priceHelper
+     * @param PriceHelperInterface $priceHelper
      * @param QueryBuilderFactory $queryBuilderFactory
      * @param \Shopware_Components_Snippet_Manager $snippetManager
      * @param QueryAliasMapper $queryAliasMapper
      */
     public function __construct(
-        PriceHelper $priceHelper,
+        PriceHelperInterface $priceHelper,
         QueryBuilderFactory $queryBuilderFactory,
         \Shopware_Components_Snippet_Manager $snippetManager,
         QueryAliasMapper $queryAliasMapper

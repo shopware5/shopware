@@ -115,9 +115,10 @@ Feature: Successful changes of login data
 
         When  I fill in "email" with "test@example.info"
         And   I press "E-Mail senden"
-        Then  I should see "Diese E-Mail-Adresse ist uns nicht bekannt"
+        Then  I should see "Wir haben Ihnen eine Bestätigungs-E-Mail gesendet."
 
-        When  I fill in "email" with "test@example.com"
+        When  I follow "Zurück"
+        And   I fill in "email" with "test@example.com"
         And   I press "E-Mail senden"
         Then  I should see "Wir haben Ihnen eine Bestätigungs-E-Mail gesendet."
 

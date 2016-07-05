@@ -2,12 +2,15 @@
 
 namespace Shopware\Tests\Mink;
 
-use Behat\Behat\Tester\Exception\PendingException;
+use Behat\Gherkin\Node\TableNode;
+use Behat\Mink\Exception\ResponseTextException;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Price\Group;
-use Shopware\Tests\Mink\Page\CheckoutCart;
 use Shopware\Tests\Mink\Element\CartPosition;
-use Behat\Gherkin\Node\TableNode;
+use Shopware\Tests\Mink\Element\CheckoutAddressBox;
+use Shopware\Tests\Mink\Element\CheckoutAddressBoxModal;
+use Shopware\Tests\Mink\Element\MultipleElement;
+use Shopware\Tests\Mink\Page\CheckoutCart;
 
 class CheckoutContext extends SubContext
 {
@@ -356,18 +359,279 @@ class CheckoutContext extends SubContext
     }
 
     /**
-     * @Given /^the url path should be "([^"]*)"$/
+     * @When /^I click the link "([^"]*)" in the address box with title "([^"]*)"$/
      */
-    public function theUrlPathShouldBe($path)
+    public function iClickTheLinkInTheAddressBoxWithTitle($linkName, $title)
     {
-        $url = $this->getSession()->getCurrentUrl();
-        $urlPath = parse_url($url, PHP_URL_PATH);
+        /** @var \Shopware\Tests\Mink\Page\CheckoutConfirm $page */
+        $page = $this->getPage('CheckoutConfirm');
 
-        $urlPath = trim($urlPath, '/');
-        $path = trim($path, '/');
+        /** @var MultipleElement $checkoutAddressBoxes */
+        $checkoutAddressBoxes = $this->getMultipleElement($page, 'CheckoutAddressBox');
 
-        if ($urlPath !== $path) {
-            Helper::throwException('Path "' . $urlPath . '" does not match expected path "' . $path . '".');
+        /** @var CheckoutAddressBox $box */
+        foreach ($checkoutAddressBoxes as $box) {
+            if ($box->hasTitle($title)) {
+                Helper::clickNamedLink($box, $linkName);
+                return;
+            }
         }
+    }
+
+    /**
+     * @When /^I click on the link "([^"]*)"$/
+     */
+    public function iClickOnTheLink($linkName)
+    {
+        /** @var \Shopware\Tests\Mink\Page\CheckoutConfirm $page */
+        $page = $this->getPage('CheckoutConfirm');
+
+        /** @var MultipleElement $checkoutModalAddressSelections */
+        $checkoutModalAddressSelections = $this->getMultipleElement($page, 'CheckoutModalAddressSelection');
+
+        Helper::assertElementCount($checkoutModalAddressSelections, 1);
+
+        Helper::clickNamedLink($checkoutModalAddressSelections->current(), $linkName);
+    }
+
+    /**
+     * @When /^I create the address:$/
+     */
+    public function iCreateTheAddress(TableNode $table)
+    {
+        /** @var \Shopware\Tests\Mink\Page\CheckoutConfirm $page */
+        $page = $this->getPage('CheckoutConfirm');
+        $data = $table->getHash();
+
+        $page->createArbitraryAddress($data);
+    }
+
+    /**
+     * @Then /^I should see appear "([^"]*)"$/
+     */
+    public function iShouldSeeAppear($text)
+    {
+        $this->spin(function ($context) use ($text) {
+            try {
+                $this->getMink()->assertSession($this->getSession())->pageTextContains(str_replace('\\"', '"', $text));
+                return true;
+            } catch (ResponseTextException $e) {
+                // NOOP
+            }
+            return false;
+        });
+    }
+
+    /**
+     * Based on Behat's own example
+     * @see http://docs.behat.org/en/v2.5/cookbook/using_spin_functions.html#adding-a-timeout
+     * @param $lambda
+     * @param int $wait
+     * @throws \Exception
+     */
+    public function spin($lambda, $wait = 60)
+    {
+        $time = time();
+        $stopTime = $time + $wait;
+        while (time() < $stopTime) {
+            try {
+                if ($lambda($this)) {
+                    return;
+                }
+            } catch (\Exception $e) {
+                // do nothing
+            }
+
+            usleep(250000);
+        }
+
+        throw new \Exception("Spin function timed out after {$wait} seconds");
+    }
+
+    /**
+     * @When /^I wait for "([^"]*)" seconds$/
+     */
+    public function iWaitForSeconds($seconds)
+    {
+        $wait = 0;
+        while ($wait < $seconds) {
+            sleep(1);
+            $wait++;
+        }
+    }
+
+    /**
+     * @Given /^there should be a modal addressbox "([^"]*)"$/
+     */
+    public function thereShouldBeAModalAddressbox($address)
+    {
+        /** @var \Shopware\Tests\Mink\Page\CheckoutConfirm $page */
+        $page = $this->getPage('CheckoutConfirm');
+
+        $testAddress = array_values(array_filter(explode(', ', $address)));
+
+        /** @var MultipleElement $checkoutAddressBoxes */
+        $checkoutAddressBoxes = $this->getMultipleElement($page, 'CheckoutAddressBoxModal');
+
+        /** @var CheckoutAddressBoxModal $box */
+        foreach ($checkoutAddressBoxes as $box) {
+            if ($box->containsAdress($testAddress)) {
+                return;
+            }
+        }
+
+        $message = sprintf('Given address not found! (%s)', $address);
+        Helper::throwException($message);
+    }
+
+    /**
+     * @When /^I click "([^"]*)" on modal addressbox "([^"]*)"$/
+     */
+    public function iClickOnModalAddressbox($buttonName, $address)
+    {
+        /** @var \Shopware\Tests\Mink\Page\CheckoutConfirm $page */
+        $page = $this->getPage('CheckoutConfirm');
+
+        $testAddress = array_values(array_filter(explode(', ', $address)));
+
+        /** @var MultipleElement $checkoutAddressBoxes */
+        $checkoutAddressBoxes = $this->getMultipleElement($page, 'CheckoutAddressBoxModal');
+
+        /** @var CheckoutAddressBoxModal $box */
+        foreach ($checkoutAddressBoxes as $box) {
+            if ($box->containsAdress($testAddress)) {
+                Helper::pressNamedButton($box, $buttonName);
+                return;
+            }
+        }
+
+        $message = sprintf('Expected address not found! (%s)', $address);
+        Helper::throwException($message);
+    }
+
+    /**
+     * @Then /^I should see appear "([^"]*)" in addressbox "([^"]*)" after "([^"]*)" disappeared$/
+     */
+    public function iShouldSeeAppearInAddressboxAfterDisappeared($address, $title, $titleToDisappear)
+    {
+        /** @var \Shopware\Tests\Mink\Page\CheckoutConfirm $page */
+        $page = $this->getPage('CheckoutConfirm');
+
+        $testAddress = array_values(array_filter(explode(', ', $address)));
+        if (empty(trim($testAddress[0]))) {
+            $testAddress = array_shift($testAddress);
+        }
+
+        $this->spin(function ($context) use ($titleToDisappear) {
+            try {
+                $this->getMink()->assertSession($this->getSession())->pageTextNotContains(str_replace('\\"', '"', $titleToDisappear));
+                return true;
+            } catch (ResponseTextException $e) {
+                // NOOP
+            }
+            return false;
+        });
+
+        /** @var MultipleElement $checkoutAddressBoxes */
+        $checkoutAddressBoxes = $this->getMultipleElement($page, 'CheckoutAddressBox');
+        
+        /** @var CheckoutAddressBox $box */
+        foreach ($checkoutAddressBoxes as $box) {
+            if ($box->hasTitle($title) && $box->containsAdress($testAddress)) {
+                return;
+            }
+        }
+
+        $message = sprintf('Expected to find address as %s! (%s)', $title, $address);
+        Helper::throwException($message);
+    }
+
+    /**
+     * @When /^I change the address:$/
+     */
+    public function iChangeTheAddress(TableNode $table)
+    {
+        /** @var \Shopware\Tests\Mink\Page\CheckoutConfirm $page */
+        $page = $this->getPage('CheckoutConfirm');
+        $data = $table->getHash();
+
+        $page->changeModalAddress($data);
+    }
+
+    /**
+     * @Given /^I set "([^"]*)" as default after "([^"]*)" disappeared$/
+     */
+    public function iSetAsDefaultAfterDisappeared($address, $titleToDisappear)
+    {
+        /** @var \Shopware\Tests\Mink\Page\CheckoutConfirm $page */
+        $page = $this->getPage('CheckoutConfirm');
+
+        $testAddress = array_values(array_filter(explode(', ', $address)));
+
+        $this->spin(function ($context) use ($titleToDisappear) {
+            try {
+                $this->getMink()->assertSession($this->getSession())->pageTextNotContains(str_replace('\\"', '"', $titleToDisappear));
+                return true;
+            } catch (ResponseTextException $e) {
+                // NOOP
+            }
+            return false;
+        });
+
+        /** @var MultipleElement $checkoutAddressBoxes */
+        $checkoutAddressBoxes = $this->getMultipleElement($page, 'CheckoutAddressBox');
+
+        /** @var CheckoutAddressBox $box */
+        foreach ($checkoutAddressBoxes as $box) {
+            if ($box->hasTitle('Zahlung und Versand') === false && $box->containsAdress($testAddress)) {
+                $box->checkField('set_as_default_billing');
+                return;
+            }
+        }
+
+        $message = sprintf('Expected address not found! (%s)', $address);
+        Helper::throwException($message);
+    }
+
+    /**
+     * @Then /^the "([^"]*)" addressbox must contain "([^"]*)"$/
+     */
+    public function theAddressboxMustContain($title, $address)
+    {
+        /** @var \Shopware\Tests\Mink\Page\CheckoutConfirm $page */
+        $page = $this->getPage('CheckoutConfirm');
+
+        $testAddress = array_values(array_filter(explode(', ', $address)));
+
+        /** @var MultipleElement $checkoutAddressBoxes */
+        $checkoutAddressBoxes = $this->getMultipleElement($page, 'CheckoutAddressBox');
+
+        /** @var CheckoutAddressBox $box */
+        foreach ($checkoutAddressBoxes as $box) {
+            if ($box->hasTitle($title) && $box->containsAdress($testAddress)) {
+                return true;
+            }
+        }
+
+        $message = sprintf('Expected to find address "%s" as "%s", but didn\'t.', $address, $title);
+        Helper::throwException($message);
+    }
+
+    /**
+     * @When /^I click "([^"]*)" to add the article to the cart$/
+     */
+    public function iClickToAddTheArticleToTheCart($locator)
+    {
+        /** @var \Shopware\Tests\Mink\Page\Detail $page */
+        $page = $this->getPage('Detail');
+        Helper::pressNamedButton($page, $locator);
+    }
+
+    /**
+     * @Given /^I open the cart page$/
+     */
+    public function iOpenTheCartPage()
+    {
+        $this->getPage('CheckoutCart')->open();
     }
 }

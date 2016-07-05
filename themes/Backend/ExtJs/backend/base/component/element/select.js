@@ -64,7 +64,7 @@ Ext.define('Shopware.apps.Base.view.element.Select', {
             eval('me.store = ' + me.store + ';');
             // Remove value field for reasons of compatibility
             me.valueField = me.displayField;
-        } else if (typeof(me.store) === 'string') {
+        } else if (typeof(me.store) === 'string' && me.store.substring(0, 5) !== 'base.') {
             me.store = me.getStoreById(me.store);
         }
 

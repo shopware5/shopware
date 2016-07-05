@@ -1615,22 +1615,19 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             if (empty($property['value'])) {
                 continue;
             }
-            /** @var $article Shopware\Models\Property\Option */
+            /** @var $option Shopware\Models\Property\Option */
             $option = $models->find('Shopware\Models\Property\Option', $property['id']);
             foreach ((array)$property['value'] as $value) {
                 $propertyValueModel = null;
-                if (is_array($value) && !empty($value["raw"])) {
-                    $value = $value["raw"]["id"];
-                }
-                if (is_int($value)) {
+                if (!empty($value['id'])) {
                     // search for property id
-                    $propertyValueModel = $propertyValueRepository->find($value);
+                    $propertyValueModel = $propertyValueRepository->find($value['id']);
                 }
                 if ($propertyValueModel === null) {
                     //search for property value
                     $propertyValueModel = $propertyValueRepository->findOneBy(
                         array(
-                            'value' => $value,
+                            'value' => $value['value'],
                             'optionId' => $option->getId()
                         )
                     );

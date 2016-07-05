@@ -3,7 +3,7 @@
 namespace Shopware\Tests\Service\Search\Condition;
 
 use Shopware\Bundle\SearchBundle\Condition\ImmediateDeliveryCondition;
-use Shopware\Bundle\StoreFrontBundle\Struct\ProductContext;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Service\TestCase;
 
@@ -12,13 +12,13 @@ class ImmediateDeliveryConditionTest extends TestCase
     /**
      * @param $number
      * @param \Shopware\Models\Category\Category $category
-     * @param ProductContext $context
+     * @param ShopContext $context
      * @param array $data
      * @return array
      */
     protected function getProduct(
         $number,
-        ProductContext $context,
+        ShopContext $context,
         Category $category = null,
         $data = array('inStock' => 0, 'minPurchase' => 1)
     ) {
@@ -84,7 +84,7 @@ class ImmediateDeliveryConditionTest extends TestCase
 
     protected function createProduct(
         $number,
-        ProductContext $context,
+        ShopContext $context,
         Category $category,
         $additionally
     ) {

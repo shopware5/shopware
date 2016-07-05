@@ -3,7 +3,7 @@
 namespace Shopware\Tests\Service\Search\Sorting;
 
 use Shopware\Bundle\SearchBundle\Sorting\PriceSorting;
-use Shopware\Bundle\StoreFrontBundle\Struct\ProductContext;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Service\TestCase;
 
@@ -28,14 +28,14 @@ class PriceSortingTest extends TestCase
 
     /**
      * @param $number
-     * @param ProductContext $context
+     * @param ShopContext $context
      * @param \Shopware\Models\Category\Category $category
      * @param array $prices
      * @return array
      */
     protected function getProduct(
         $number,
-        ProductContext $context,
+        ShopContext $context,
         Category $category = null,
         $prices = array()
     ) {

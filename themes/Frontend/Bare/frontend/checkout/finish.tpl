@@ -135,21 +135,25 @@
 												{block name='frontend_checkout_finish_information_addresses_equal_panel_billing'}
 													<div class="billing--panel">
 														{if $sAddresses.billing.company}
-															<strong>{$sAddresses.billing.company}{if $sAddresses.billing.department}<br />{$sAddresses.billing.department}{/if}</strong>
+															<span class="address--company is--bold">{$sAddresses.billing.company}</span>{if $sAddresses.billing.department}<br /><span class="address--department is--bold">{$sAddresses.billing.department}</span>{/if}
 															<br />
 														{/if}
 
-														{$sAddresses.billing.salutation|salutation}
+														<span class="address--salutation">{$sAddresses.billing.salutation|salutation}</span>
 														{if {config name="displayprofiletitle"}}
-															{$sAddresses.billing.title}<br/>
+															<span class="address--title">{$sAddresses.billing.title}</span><br/>
 														{/if}
-														{$sAddresses.billing.firstname} {$sAddresses.billing.lastname}<br />
-														{$sAddresses.billing.street}<br />
-														{if $sAddresses.billing.additional_address_line1}{$sAddresses.billing.additional_address_line1}<br />{/if}
-														{if $sAddresses.billing.additional_address_line2}{$sAddresses.billing.additional_address_line2}<br />{/if}
-														{if {config name=showZipBeforeCity}}{$sAddresses.billing.zipcode} {$sAddresses.billing.city}{else}{$sAddresses.billing.city} {$sAddresses.billing.zipcode}{/if}<br />
-														{if $sAddresses.billing.state.name}{$sAddresses.billing.state.name}<br />{/if}
-														{$sAddresses.billing.country.name}
+														<span class="address--firstname">{$sAddresses.billing.firstname}</span> <span class="address--lastname">{$sAddresses.billing.lastname}</span><br />
+														<span class="address--street">{$sAddresses.billing.street}</span><br />
+														{if $sAddresses.billing.additional_address_line1}<span class="address--additional-one">{$sAddresses.billing.additional_address_line1}</span><br />{/if}
+														{if $sAddresses.billing.additional_address_line2}<span class="address--additional-two">{$sAddresses.billing.additional_address_line2}</span><br />{/if}
+														{if {config name=showZipBeforeCity}}
+                                                            <span class="address--zipcode">{$sAddresses.billing.zipcode}</span> <span class="address--city">{$sAddresses.billing.city}</span>
+														{else}
+                                                            <span class="address--city">{$sAddresses.billing.city}</span> <span class="address--zipcode">{$sAddresses.billing.zipcode}</span>
+                                                        {/if}<br />
+														{if $sAddresses.billing.state.name}<span class="address--statename">{$sAddresses.billing.state.name}</span><br />{/if}
+                                                        <span class="address--countryname">{$sAddresses.billing.country.name}</span>
 													</div>
 												{/block}
 											</div>
@@ -179,21 +183,25 @@
 										{block name='frontend_checkout_finish_information_addresses_billing_panel_body'}
 											<div class="panel--body is--wide">
 												{if $sAddresses.billing.company}
-													<strong>{$sAddresses.billing.company}{if $sAddresses.billing.department}<br />{$sAddresses.billing.department}{/if}</strong>
+                                                    <span class="address--company is--bold">{$sAddresses.billing.company}</span>{if $sAddresses.billing.department}<br /><span class="address--department is--bold">{$sAddresses.billing.department}</span>{/if}
 													<br />
 												{/if}
 
-												{$sAddresses.billing.salutation|salutation}
+                                                <span class="address--salutation">{$sAddresses.billing.salutation|salutation}</span>
 												{if {config name="displayprofiletitle"}}
-													{$sAddresses.billing.title}<br/>
+                                                    <span class="address--title">{$sAddresses.billing.title}</span><br/>
 												{/if}
-												{$sAddresses.billing.firstname} {$sAddresses.billing.lastname}<br />
-												{$sAddresses.billing.street}<br />
-												{if $sAddresses.billing.additional_address_line1}{$sAddresses.billing.additional_address_line1}<br />{/if}
-												{if $sAddresses.billing.additional_address_line2}{$sAddresses.billing.additional_address_line2}<br />{/if}
-												{if {config name=showZipBeforeCity}}{$sAddresses.billing.zipcode} {$sAddresses.billing.city}{else}{$sAddresses.billing.city} {$sAddresses.billing.zipcode}{/if}<br />
-												{if $sAddresses.billing.state.name}{$sAddresses.billing.state.name}<br />{/if}
-												{$sAddresses.billing.country.name}
+                                                <span class="address--firstname">{$sAddresses.billing.firstname}</span> <span class="address--lastname">{$sAddresses.billing.lastname}</span><br />
+												<span class="address--street">{$sAddresses.billing.street}</span><br />
+												{if $sAddresses.billing.additional_address_line1}<span class="address--additional-one">{$sAddresses.billing.additional_address_line1}</span><br />{/if}
+												{if $sAddresses.billing.additional_address_line2}<span class="address--additional-two">{$sAddresses.billing.additional_address_line2}</span><br />{/if}
+												{if {config name=showZipBeforeCity}}
+                                                    <span class="address--zipcode">{$sAddresses.billing.zipcode}</span> <span class="address--city">{$sAddresses.billing.city}</span>
+                                                {else}
+                                                    <span class="address--city">{$sAddresses.billing.city}</span> <span class="address--zipcode">{$sAddresses.billing.zipcode}</span>
+                                                {/if}<br />
+												{if $sAddresses.billing.state.name}<span class="address--statename">{$sAddresses.billing.state.name}</span><br />{/if}
+                                                <span class="address--countryname">{$sAddresses.billing.country.name}</span>
 											</div>
 										{/block}
 									</div>
@@ -217,21 +225,25 @@
 										{block name='frontend_checkout_finish_information_addresses_shipping_panel_body'}
 											<div class="panel--body is--wide">
 												{if $sAddresses.shipping.company}
-													<strong>{$sAddresses.shipping.company}{if $sAddresses.shipping.department}<br />{$sAddresses.shipping.department}{/if}</strong>
+                                                    <span class="address--company is--bold">{$sAddresses.shipping.company}</span>{if $sAddresses.shipping.department}<br /><span class="address--department is--bold">{$sAddresses.shipping.department}</span>{/if}
 													<br />
 												{/if}
 
-												{$sAddresses.shipping.salutation|salutation}
+                                                <span class="address--salutation">{$sAddresses.shipping.salutation|salutation}</span>
 												{if {config name="displayprofiletitle"}}
-													{$sAddresses.shipping.title}<br/>
+                                                    <span class="address--title">{$sAddresses.shipping.title}</span><br/>
 												{/if}
-												{$sAddresses.shipping.firstname} {$sAddresses.shipping.lastname}<br />
-												{$sAddresses.shipping.street}<br />
-												{if $sAddresses.shipping.additional_address_line1}{$sAddresses.shipping.additional_address_line1}<br />{/if}
-												{if $sAddresses.shipping.additional_address_line2}{$sAddresses.shipping.additional_address_line2}<br />{/if}
-												{if {config name=showZipBeforeCity}}{$sAddresses.shipping.zipcode} {$sAddresses.shipping.city}{else}{$sAddresses.shipping.city} {$sAddresses.shipping.zipcode}{/if}<br />
-												{if $sAddresses.shipping.state.name}{$sAddresses.shipping.state.name}<br />{/if}
-												{$sAddresses.shipping.country.name}
+                                                <span class="address--firstname">{$sAddresses.shipping.firstname}</span> <span class="address--lastname">{$sAddresses.shipping.lastname}</span><br />
+												<span class="address--street">{$sAddresses.shipping.street}</span><br />
+												{if $sAddresses.shipping.additional_address_line1}<span class="address--additional-one">{$sAddresses.shipping.additional_address_line1}</span><br />{/if}
+												{if $sAddresses.shipping.additional_address_line2}<span class="address--additional-two">{$sAddresses.shipping.additional_address_line2}</span><br />{/if}
+												{if {config name=showZipBeforeCity}}
+                                                    <span class="address--zipcode">{$sAddresses.shipping.zipcode}</span> <span class="address--city">{$sAddresses.shipping.city}</span>
+                                                {else}
+                                                    <span class="address--city">{$sAddresses.shipping.city}</span> <span class="address--zipcode">{$sAddresses.shipping.zipcode}</span>
+                                                {/if}<br />
+												{if $sAddresses.shipping.state.name}<span class="address--statename">{$sAddresses.shipping.state.name}</span><br />{/if}
+                                                <span class="address--countryname">{$sAddresses.shipping.country.name}</span>
 											</div>
 										{/block}
 									</div>

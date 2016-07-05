@@ -48,10 +48,9 @@ class PremiumSearcher extends GenericSearcher
 
     /**
      * @param SearchCriteria $criteria
-     * @param QueryBuilder $builder
      * @return array
      */
-    protected function getSearchFields(SearchCriteria $criteria, QueryBuilder $builder)
+    protected function getSearchFields(SearchCriteria $criteria)
     {
         return [
             'entity.orderNumberExport',

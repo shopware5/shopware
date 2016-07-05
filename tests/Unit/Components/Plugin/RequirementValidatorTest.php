@@ -21,7 +21,6 @@ class RequirementValidatorTest extends \PHPUnit_Framework_TestCase
         $this->plugins = [];
     }
 
-
     /**
      * @expectedException \Exception
      * @expectedExceptionMessage Plugin requires at least Shopware version 5.1.0
@@ -103,7 +102,31 @@ class RequirementValidatorTest extends \PHPUnit_Framework_TestCase
     public function testSecondRequiredPluginNotExists()
     {
         $validator = $this->getValidator([
-            ['name' => 'SwagBundle', 'version' => '2.5']
+            ['name' => 'SwagBundle', 'version' => '2.5', 'active' => true, 'installed' => '2016-01-01 11:00:00']
+        ]);
+        $validator->validate(__DIR__ . '/examples/shopware_required_plugin.xml', '5.2');
+    }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage Required plugin SwagBundle is not installed
+     */
+    public function testRequiredPluginInstalledShouldFail()
+    {
+        $validator = $this->getValidator([
+            ['name' => 'SwagBundle', 'version' => '1.0', 'active' => false, 'installed' => null]
+        ]);
+        $validator->validate(__DIR__ . '/examples/shopware_required_plugin.xml', '5.2');
+    }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage Required plugin SwagBundle is not active
+     */
+    public function testRequiredPluginActiveShouldFail()
+    {
+        $validator = $this->getValidator([
+            ['name' => 'SwagBundle', 'active' => false, 'version' => '1.0', 'installed' => '2016-01-01 11:00:00']
         ]);
         $validator->validate(__DIR__ . '/examples/shopware_required_plugin.xml', '5.2');
     }
@@ -115,7 +138,7 @@ class RequirementValidatorTest extends \PHPUnit_Framework_TestCase
     public function testRequiredPluginMinimumVersionShouldFail()
     {
         $validator = $this->getValidator([
-            ['name' => 'SwagBundle', 'version' => '1.0']
+            ['name' => 'SwagBundle', 'version' => '1.0', 'active' => true, 'installed' => '2016-01-01 11:00:00']
         ]);
         $validator->validate(__DIR__ . '/examples/shopware_required_plugin.xml', '5.2');
     }
@@ -127,7 +150,7 @@ class RequirementValidatorTest extends \PHPUnit_Framework_TestCase
     public function testRequiredPluginMaximumVersionShouldFail()
     {
         $validator = $this->getValidator([
-            ['name' => 'SwagBundle', 'version' => '10.0']
+            ['name' => 'SwagBundle', 'version' => '10.0', 'active' => true, 'installed' => '2016-01-01 11:00:00']
         ]);
         $validator->validate(__DIR__ . '/examples/shopware_required_plugin.xml', '5.2');
     }
@@ -139,7 +162,7 @@ class RequirementValidatorTest extends \PHPUnit_Framework_TestCase
     public function testRequiredPluginVersionIsBlackListed()
     {
         $validator = $this->getValidator([
-            ['name' => 'SwagBundle', 'version' => '2.1']
+            ['name' => 'SwagBundle', 'version' => '2.1', 'active' => true, 'installed' => '2016-01-01 11:00:00']
         ]);
         $validator->validate(__DIR__ . '/examples/shopware_required_plugin.xml', '5.2');
     }
@@ -147,8 +170,8 @@ class RequirementValidatorTest extends \PHPUnit_Framework_TestCase
     public function testRequiredPluginsShouldBeSuccessful()
     {
         $validator = $this->getValidator([
-            ['name' => 'SwagBundle', 'version' => '2.1.1'],
-            ['name' => 'SwagLiveShopping', 'version' => '2.1.1']
+            ['name' => 'SwagBundle', 'version' => '2.1.1', 'active' => true, 'installed' => '2016-01-01 11:00:00'],
+            ['name' => 'SwagLiveShopping', 'version' => '2.1.1', 'active' => true, 'installed' => '2016-01-01 11:00:00']
         ]);
 
         $e = null;
@@ -161,24 +184,27 @@ class RequirementValidatorTest extends \PHPUnit_Framework_TestCase
 
     private function getValidator($plugins)
     {
-        $em = $this->getMockBuilder(ModelManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $em = $this->createMock(ModelManager::class);
 
-        $repo = $this->getMockBuilder(ModelRepository::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $repo = $this->createMock(ModelRepository::class);
+        $defaults = ['active' => false, 'installed' => null];
 
         foreach ($plugins as $pluginInfo) {
-            $plugin = $this->getMockBuilder(\Shopware\Models\Plugin\Plugin::class)
-                ->disableOriginalConstructor()
-                ->getMock();
+            $pluginInfo = array_merge($defaults, $pluginInfo);
+
+            $plugin = $this->createMock(\Shopware\Models\Plugin\Plugin::class);
 
             $plugin->method('getVersion')
                 ->willReturn($pluginInfo['version']);
 
             $plugin->method('getName')
                 ->willReturn($pluginInfo['name']);
+
+            $plugin->method('getActive')
+                ->willReturn($pluginInfo['active']);
+
+            $plugin->method('getInstalled')
+                ->willReturn($pluginInfo['installed']);
 
             $this->plugins[$pluginInfo['name']] = $plugin;
         }

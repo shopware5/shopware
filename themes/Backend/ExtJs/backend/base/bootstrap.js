@@ -218,10 +218,6 @@
 
 
 {include file='backend/base/attribute/Shopware.attribute.FieldHandlerInterface.js'}
-{include file='backend/base/attribute/Shopware.attribute.Form.js'}
-{include file='backend/base/attribute/Shopware.attribute.Window.js'}
-{include file='backend/base/attribute/Shopware.attribute.Button.js'}
-{include file='backend/base/attribute/Shopware.grid.plugin.Attribute.js'}
 
 {include file='backend/base/attribute/field_handler/Shopware.attribute.BooleanFieldHandler.js'}
 {include file='backend/base/attribute/field_handler/Shopware.attribute.DateFieldHandler.js'}
@@ -292,3 +288,8 @@
 {include file='backend/base/attribute/field_handler/Shopware.attribute.ProductStreamFieldHandler.js'}
 {include file='backend/base/attribute/field_handler/Shopware.attribute.ShopFieldHandler.js'}
 {include file='backend/base/attribute/field_handler/Shopware.attribute.ComboBoxFieldHandler.js'}
+
+{include file='backend/base/attribute/Shopware.attribute.Form.js'}
+{include file='backend/base/attribute/Shopware.attribute.Window.js'}
+{include file='backend/base/attribute/Shopware.attribute.Button.js'}
+{include file='backend/base/attribute/Shopware.grid.plugin.Attribute.js'}

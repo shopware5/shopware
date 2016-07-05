@@ -22,6 +22,10 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Models\Config\Element;
+use Shopware\Models\Config\Value;
+use Shopware\Models\Shop\Shop;
+
 /**
  * Shopware Config Controller
  */
@@ -203,7 +207,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         $shopRepository = $this->getRepository('shop');
         $elements = $this->Request()->getParam('elements');
 
-        /* @var $defaultShop \Shopware\Models\Shop\Shop */
+        /* @var $defaultShop Shop */
         $defaultShop = $shopRepository->getDefault();
         if ($defaultShop === null) {
             $this->View()->assign(array('success' => false, 'message' => 'No default shop found. Check your shop configuration'));
@@ -211,70 +215,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
         }
 
         foreach ($elements as $elementData) {
-            /** @var $element Shopware\Models\Config\Element */
-            $element = Shopware()->Models()->find(
-                'Shopware\Models\Config\Element',
-                $elementData['id']
-            );
-            foreach ($element->getValues() as $value) {
-                Shopware()->Models()->remove($value);
-            }
-            $values = array();
-            foreach ($elementData['values'] as $valueData) {
-                /* @var $shop \Shopware\Models\Shop\Shop */
-                $shop = $shopRepository->find(
-                    $valueData['shopId']
-                );
-                //  Scope not match
-                if (empty($elementData['scope']) && $shop->getId() != $defaultShop->getId()) {
-                    continue;
-                }
-
-                // Do not save empty checkbox / boolean select values the fallback should be used
-                if (($elementData['type'] == "checkbox" || $elementData['type'] == "boolean") && $valueData['value'] === '') {
-                    continue;
-                }
-
-                // Do not save missing translations
-                if ((!isset($valueData['value']) || $valueData['value'] === '') && !empty($elementData['required'])) {
-                    continue;
-                }
-
-                // Do not save default value
-                if ($valueData['value'] === $elementData['value'] && (empty($elementData['scope']) || $shop->getId() == $defaultShop->getId())) {
-                    continue;
-                }
-
-                // Simple data validation
-                if (!$this->validateData($elementData, $valueData['value'])) {
-                    continue;
-                }
-
-                $valueData['value'] = $this->prepareValue($elementData, $valueData['value']);
-
-                $value = new Shopware\Models\Config\Value();
-                $value->setElement($element);
-                $value->setShop($shop);
-                $value->setValue($valueData['value']);
-                $values[$shop->getId()] = $value;
-            }
-
-            $this->beforeSaveElement($elementData);
-
-            $values = Shopware()->Events()->filter('Shopware_Controllers_Backend_Config_Before_Save_Config_Element', $values, array(
-                'subject' => $this,
-                'element' => $element,
-                'shop'    => $shop
-            ));
-
-            $element->setValues($values);
-            Shopware()->Models()->flush($element);
-
-            Shopware()->Events()->notify('Shopware_Controllers_Backend_Config_After_Save_Config_Element', array(
-                'subject' => $this,
-                'element' => $element,
-                'shop'    => $shop
-            ));
+            $this->saveElement($elementData, $defaultShop);
         }
 
         $this->View()->assign(array('success' => true));
@@ -432,8 +373,8 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
 
                 if (isset($search)) {
                     $sql .= ' WHERE f.name LIKE :search OR ' .
-                            'f.field LIKE :search OR ' .
-                            't.table LIKE :search';
+                        'f.field LIKE :search OR ' .
+                        't.table LIKE :search';
                     $sqlParams = array('search' => $search);
                 }
 
@@ -606,11 +547,9 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                     }
                 }
 
-                if ($data['templateId'] === null && $data['mainId'] === null && $data['id'] === null) {
-                    $templateId = Shopware()->Db()->fetchOne(
-                        'SELECT template_id FROM s_core_shops WHERE `default` = 1 AND template_id IS NOT NULL'
-                    );
-                    $data['templateId'] = $templateId;
+                if (!empty($data['id']) && !empty($data['mainId'])) {
+                    $sql = 'UPDATE s_core_shops SET main_id = 1 WHERE main_id = ?';
+                    Shopware()->Db()->query($sql, [$data['id']]);
                 }
 
                 $fields = array(
@@ -627,8 +566,10 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                     if (isset($data[$field])) {
                         $mappingRepository = $this->getRepository($mapping);
                         $data[$mapping] = $mappingRepository->find($data[$field]);
-                        unset($data[$field]);
+                    } else {
+                        $data[$mapping] = null;
                     }
+                    unset($data[$field]);
                 }
                 break;
             case 'country':
@@ -1195,5 +1136,81 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                 break;
         }
         return $value;
+    }
+
+    /**
+     * @param array $elementData
+     * @param Shop $defaultShop
+     */
+    private function saveElement(array $elementData, Shop $defaultShop)
+    {
+        $shopRepository = $this->getRepository('shop');
+
+        /** @var $element Element */
+        $element = Shopware()->Models()->find(Element::class, $elementData['id']);
+
+        $removedValues = [];
+        foreach ($element->getValues() as $value) {
+            Shopware()->Models()->remove($value);
+            $removedValues[] = $value;
+        }
+        Shopware()->Models()->flush($removedValues);
+
+        $values = [];
+        foreach ($elementData['values'] as $valueData) {
+
+            /* @var $shop Shop */
+            $shop = $shopRepository->find($valueData['shopId']);
+
+            //  Scope not match
+            if (empty($elementData['scope']) && $shop->getId() != $defaultShop->getId()) {
+                continue;
+            }
+
+            // Do not save empty checkbox / boolean select values the fallback should be used
+            if (($elementData['type'] == "checkbox" || $elementData['type'] == "boolean") && $valueData['value'] === '') {
+                continue;
+            }
+
+            // Do not save missing translations
+            if ((!isset($valueData['value']) || $valueData['value'] === '') && !empty($elementData['required'])) {
+                continue;
+            }
+
+            // Do not save default value
+            if ($valueData['value'] === $elementData['value'] && (empty($elementData['scope']) || $shop->getId() == $defaultShop->getId())) {
+                continue;
+            }
+
+            // Simple data validation
+            if (!$this->validateData($elementData, $valueData['value'])) {
+                continue;
+            }
+
+            $valueData['value'] = $this->prepareValue($elementData, $valueData['value']);
+
+            $value = new Value();
+            $value->setElement($element);
+            $value->setShop($shop);
+            $value->setValue($valueData['value']);
+            $values[$shop->getId()] = $value;
+        }
+
+        $this->beforeSaveElement($elementData);
+
+        $values = Shopware()->Events()->filter('Shopware_Controllers_Backend_Config_Before_Save_Config_Element',
+            $values, array(
+                'subject' => $this,
+                'element' => $element
+            ));
+
+        $element->setValues($values);
+
+        Shopware()->Models()->flush($element);
+
+        Shopware()->Events()->notify('Shopware_Controllers_Backend_Config_After_Save_Config_Element', array(
+            'subject' => $this,
+            'element' => $element
+        ));
     }
 }

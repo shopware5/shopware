@@ -4,7 +4,7 @@ namespace Shopware\Tests\Service\Search\Facet;
 
 use Shopware\Bundle\SearchBundle\Facet\PriceFacet;
 use Shopware\Bundle\SearchBundle\FacetResult\RangeFacetResult;
-use Shopware\Bundle\StoreFrontBundle\Struct\ProductContext;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Service\TestCase;
 
@@ -29,14 +29,14 @@ class PriceFacetTest extends TestCase
 
     /**
      * @param $number
-     * @param ProductContext $context
+     * @param ShopContext $context
      * @param \Shopware\Models\Category\Category $category
      * @param array $prices
      * @return array
      */
     protected function getProduct(
         $number,
-        ProductContext $context,
+        ShopContext $context,
         Category $category = null,
         $prices = array()
     ) {

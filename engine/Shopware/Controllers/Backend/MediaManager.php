@@ -26,6 +26,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile as UploadedFile;
 use Shopware\Models\Media\Album as Album;
 use Shopware\Models\Media\Settings as Settings;
 use Shopware\Models\Media\Media as Media;
+use Shopware\Components\CSRFWhitelistAware;
 
 /**
  * Shopware MediaManager Controller
@@ -37,7 +38,7 @@ use Shopware\Models\Media\Media as Media;
  * @package   Shopware\Controllers\Backend
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Backend_ExtJs
+class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
     protected $blackList = array(
         'php',
@@ -76,6 +77,16 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         // create
         $this->addAclPermission('saveAlbum', 'create', 'Insufficient Permissions');
         $this->addAclPermission('saveMedia', 'create', 'Insufficient Permissions');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getWhitelistedCSRFActions()
+    {
+        return [
+            'download'
+        ];
     }
 
     /**

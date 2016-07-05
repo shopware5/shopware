@@ -3,8 +3,9 @@
 namespace Shopware\Tests\Service\Search\Facet;
 
 use Shopware\Bundle\SearchBundle\Facet\CategoryFacet;
-use Shopware\Bundle\SearchBundle\FacetResult\TreeFacetResultInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\ProductContext;
+use Shopware\Bundle\SearchBundle\FacetResult\TreeFacetResult;
+use Shopware\Bundle\SearchBundle\FacetResult\TreeItem;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Service\TestCase;
 
@@ -12,7 +13,7 @@ class CategoryFacetTest extends TestCase
 {
     protected function getProduct(
         $number,
-        ProductContext $context,
+        ShopContext $context,
         Category $category = null,
         $additionally = null
     ) {
@@ -48,11 +49,12 @@ class CategoryFacetTest extends TestCase
         $facet = $result->getFacets();
         $facet = $facet[0];
 
-        /**@var $facet TreeFacetResultInterface*/
+        /**@var $facet TreeFacetResult*/
         $this->assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\TreeFacetResult', $facet);
 
         $this->assertCount(1, $facet->getValues());
 
+        /** @var TreeItem $value */
         $value = $facet->getValues()[0];
         $this->assertEquals('Deutsch', $value->getLabel());
 
@@ -96,7 +98,7 @@ class CategoryFacetTest extends TestCase
         $facet = $result->getFacets();
         $facet = $facet[0];
 
-        /**@var $facet TreeFacetResultInterface*/
+        /**@var $facet TreeFacetResult*/
         $this->assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\TreeFacetResult', $facet);
 
         $this->assertCount(1, $facet->getValues());
@@ -150,11 +152,12 @@ class CategoryFacetTest extends TestCase
         $facet = $result->getFacets();
         $facet = $facet[0];
 
-        /**@var $facet TreeFacetResultInterface*/
+        /**@var $facet TreeFacetResult*/
         $this->assertInstanceOf('Shopware\Bundle\SearchBundle\FacetResult\TreeFacetResult', $facet);
 
         $this->assertCount(1, $facet->getValues());
 
+        /** @var TreeItem $value */
         $value = $facet->getValues()[0];
         $this->assertEquals('Deutsch', $value->getLabel());
 

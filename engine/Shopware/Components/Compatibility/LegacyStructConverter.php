@@ -103,7 +103,8 @@ class LegacyStructConverter
             'iso3' => $country->getIso3(),
             'display_state_in_registration' => $country->displayStateSelection(),
             'force_state_in_registration' => $country->requiresStateSelection(),
-            'states' => []
+            'states' => [],
+            'attributes' => $country->getAttributes()
         ]);
 
         if ($country->displayStateSelection()) {
@@ -129,7 +130,7 @@ class LegacyStructConverter
     public function convertStateStruct(StoreFrontBundle\Struct\Country\State $state)
     {
         $data = json_decode(json_encode($state), true);
-        $data += ['shortcode' => $state->getCode()];
+        $data += ['shortcode' => $state->getCode(), 'attributes' => $state->getAttributes()];
         return $data;
     }
 
@@ -141,14 +142,15 @@ class LegacyStructConverter
      */
     public function convertConfiguratorGroupStruct(StoreFrontBundle\Struct\Configurator\Group $group)
     {
-        return array(
+        return [
             'groupID' => $group->getId(),
             'groupname' => $group->getName(),
             'groupdescription' => $group->getDescription(),
             'selected_value' => null,
             'selected' => $group->isSelected(),
-            'user_selected' => $group->isSelected()
-        );
+            'user_selected' => $group->isSelected(),
+            'attributes' => $group->getAttributes()
+        ];
     }
 
     /**
@@ -262,6 +264,7 @@ class LegacyStructConverter
                 'pseudoprice' => $pseudoPrice,
                 'pseudoprice_numeric' => $cheapestPrice->getCalculatedPseudoPrice(),
                 'pricegroup' => $cheapestPrice->getCustomerGroup()->getKey(),
+                'price_attributes' => $cheapestPrice->getAttributes()
             )
         );
 
@@ -319,7 +322,8 @@ class LegacyStructConverter
                 'pseudoprice_numeric' => $price->getCalculatedPseudoPrice(),
                 'pricegroup' => $price->getCustomerGroup()->getKey(),
                 'purchaseunit' => $price->getUnit()->getPurchaseUnit(),
-                'maxpurchase' => $price->getUnit()->getMaxPurchase()
+                'maxpurchase' => $price->getUnit()->getMaxPurchase(),
+                'unit_attributes' => $price->getUnit()->getAttributes()
             ));
 
             $promotion['prices'][] = $priceData;
@@ -350,7 +354,8 @@ class LegacyStructConverter
             'id' => $productStream->getId(),
             'name' => $productStream->getName(),
             'description' => $productStream->getDescription(),
-            'type' => $productStream->getType()
+            'type' => $productStream->getType(),
+            'attributes' => $productStream->getAttributes()
         ];
     }
 
@@ -383,7 +388,8 @@ class LegacyStructConverter
                 $data,
                 array(
                     'pricegroupActive' => $product->isPriceGroupActive(),
-                    'pricegroupID' => $product->getPriceGroup()->getId()
+                    'pricegroupID' => $product->getPriceGroup()->getId(),
+                    'pricegroup_attributes' => $product->getPriceGroup()->getAttributes()
                 )
             );
         }
@@ -396,6 +402,7 @@ class LegacyStructConverter
         $data['pseudoprice'] = $this->sFormatPrice($variantPrice->getCalculatedPseudoPrice());
         $data['pseudoprice_numeric'] = $variantPrice->getCalculatedPseudoPrice();
         $data['has_pseudoprice'] = $variantPrice->getCalculatedPseudoPrice() > $variantPrice->getCalculatedPrice();
+        $data['price_attributes'] = $variantPrice->getAttributes();
 
         if ($variantPrice->getCalculatedPseudoPrice()) {
             $discPseudo = $variantPrice->getCalculatedPseudoPrice();
@@ -455,21 +462,13 @@ class LegacyStructConverter
         }
 
         foreach ($product->getDownloads() as $download) {
-            $temp = array(
+            $data['sDownloads'][] = [
                 'id' => $download->getId(),
                 'description' => $download->getDescription(),
                 'filename' => $this->mediaService->getUrl($download->getFile()),
                 'size' => $download->getSize(),
-            );
-
-            $attributes = [];
-
-            if ($download->hasAttribute('core')) {
-                $attributes = $download->getAttribute('core')->toArray();
-            }
-
-            $temp['attributes'] = $attributes;
-            $data['sDownloads'][] = $temp;
+                'attributes' => $download->getAttributes()
+            ];
         }
 
         foreach ($product->getLinks() as $link) {
@@ -479,6 +478,7 @@ class LegacyStructConverter
                 'link' => $link->getLink(),
                 'target' => $link->getTarget(),
                 'supplierSearch' => false,
+                'attributes' => $link->getAttributes()
             );
 
             if (!preg_match("/http/", $temp['link'])) {
@@ -519,15 +519,12 @@ class LegacyStructConverter
      */
     public function convertVoteAverageStruct(StoreFrontBundle\Struct\Product\VoteAverage $average)
     {
-        $data = array(
+        return [
             'average' => round($average->getAverage()),
             'count' => $average->getCount(),
-            'pointCount' => $average->getPointCount()
-        );
-
-        $data['attributes'] = $average->getAttributes();
-
-        return $data;
+            'pointCount' => $average->getPointCount(),
+            'attributes' => $average->getAttributes()
+        ];
     }
 
     /**
@@ -568,21 +565,22 @@ class LegacyStructConverter
      */
     public function convertPriceStruct(StoreFrontBundle\Struct\Product\Price $price)
     {
-        $data = array(
+        return [
             'valFrom' => $price->getFrom(),
             'valTo' => $price->getTo(),
             'from' => $price->getFrom(),
             'to' => $price->getTo(),
             'price' => $price->getCalculatedPrice(),
             'pseudoprice' => $price->getCalculatedPseudoPrice(),
-            'referenceprice' => $price->getCalculatedReferencePrice()
-        );
-
-        $data['attributes'] = $price->getAttributes();
-
-        return $data;
+            'referenceprice' => $price->getCalculatedReferencePrice(),
+            'attributes' => $price->getAttributes()
+        ];
     }
 
+    /**
+     * @param StoreFrontBundle\Struct\Thumbnail $thumbnail
+     * @return string
+     */
     private function getSourceSet($thumbnail)
     {
         if ($thumbnail->getRetinaSource() !== null) {
@@ -610,7 +608,8 @@ class LegacyStructConverter
                 'retinaSource' => $thumbnail->getRetinaSource(),
                 'sourceSet' => $this->getSourceSet($thumbnail),
                 'maxWidth' => $thumbnail->getMaxWidth(),
-                'maxHeight' => $thumbnail->getMaxHeight()
+                'maxHeight' => $thumbnail->getMaxHeight(),
+                'attributes' => $thumbnail->getAttributes()
             ];
         }
 
@@ -624,7 +623,8 @@ class LegacyStructConverter
             'parentId' => null,
             'width' => $media->getWidth(),
             'height' => $media->getHeight(),
-            'thumbnails' => $thumbnails
+            'thumbnails' => $thumbnails,
+            'attributes' => $media->getAttributes()
         );
 
         $attributes = $media->getAttributes();
@@ -647,7 +647,7 @@ class LegacyStructConverter
      */
     public function convertUnitStruct(StoreFrontBundle\Struct\Product\Unit $unit)
     {
-        $data = array(
+        return [
             'minpurchase' => $unit->getMinPurchase(),
             'maxpurchase' => $unit->getMaxPurchase(),
             'purchasesteps' => $unit->getPurchaseStep(),
@@ -655,15 +655,12 @@ class LegacyStructConverter
             'referenceunit' => $unit->getReferenceUnit(),
             'packunit' => $unit->getPackUnit(),
             'unitID' => $unit->getId(),
-            'sUnit' => array(
+            'sUnit' => [
                 'unit' => $unit->getUnit(),
                 'description' => $unit->getName()
-            )
-        );
-
-        $data['unit_attributes'] = $unit->getAttributes();
-
-        return $data;
+            ],
+            'unit_attributes' => $unit->getAttributes()
+        ];
     }
 
     /**
@@ -736,6 +733,7 @@ class LegacyStructConverter
                 'value'     => implode(', ', $values),
                 'values'    => $values,
                 'media'     => $mediaValues,
+                'attributes' => $group->getAttributes(),
             ];
         }
 
@@ -753,12 +751,8 @@ class LegacyStructConverter
             'name' => $group->getName(),
             'isFilterable' => $group->isFilterable(),
             'options' => array(),
-            'attributes' => array()
+            'attributes' => $group->getAttributes()
         );
-
-        foreach ($group->getAttributes() as $key => $attribute) {
-            $data['attributes'][$key] = $attribute->toArray();
-        }
 
         foreach ($group->getOptions() as $option) {
             $data['options'][] = $this->convertPropertyOptionStruct($option);
@@ -773,17 +767,11 @@ class LegacyStructConverter
      */
     public function convertPropertyOptionStruct(StoreFrontBundle\Struct\Property\Option $option)
     {
-        $data = array(
+        return [
             'id' => $option->getId(),
             'name' => $option->getName(),
-            'attributes' => array()
-        );
-
-        foreach ($option->getAttributes() as $key => $attribute) {
-            $data['attributes'][$key] = $attribute->toArray();
-        }
-
-        return $data;
+            'attributes' => $option->getAttributes()
+        ];
     }
 
     /**
@@ -792,7 +780,7 @@ class LegacyStructConverter
      */
     public function convertManufacturerStruct(StoreFrontBundle\Struct\Product\Manufacturer $manufacturer)
     {
-        $data = array(
+        return [
             'id' => $manufacturer->getId(),
             'name' => $manufacturer->getName(),
             'description' => $manufacturer->getDescription(),
@@ -801,17 +789,8 @@ class LegacyStructConverter
             'metaKeywords' => $manufacturer->getMetaKeywords(),
             'link' => $manufacturer->getLink(),
             'image' => $manufacturer->getCoverFile(),
-        );
-
-        $data['attribute'] = array();
-        foreach ($manufacturer->getAttributes() as $attribute) {
-            $data['attribute'] = array_merge(
-                $data['attribute'],
-                $attribute->toArray()
-            );
-        }
-
-        return $data;
+            'attributes' => $manufacturer->getAttributes()
+        ];
     }
 
     /**
@@ -847,13 +826,11 @@ class LegacyStructConverter
 
         $settings = $this->getConfiguratorSettings($set, $product);
 
-        $data = array(
+        return [
             'sConfigurator' => $groups,
             'sConfiguratorSettings' => $settings,
             'isSelectionSpecified' => $set->isSelectionSpecified()
-        );
-
-        return $data;
+        ];
     }
 
     /**
@@ -943,7 +920,8 @@ class LegacyStructConverter
             'optionname' => $option->getName(),
             'user_selected' => $option->isSelected(),
             'selected' => $option->isSelected(),
-            'selectable' => $option->getActive()
+            'selectable' => $option->getActive(),
+            'attributes' => $option->getAttributes()
         );
 
         if ($option->getMedia()) {
@@ -1055,6 +1033,7 @@ class LegacyStructConverter
             'keywords' => $product->getKeywords(),
             'sReleasedate' => $this->dateToString($product->getReleaseDate()),
             'template' => $product->getTemplate(),
+            'attributes' => $product->getAttributes()
         );
 
         if ($product->hasAttribute('core')) {
@@ -1064,14 +1043,12 @@ class LegacyStructConverter
             $data = array_merge($data, $attributes);
         }
 
-        $data['attributes'] = $product->getAttributes();
-
         if ($product->getManufacturer()) {
             $manufacturer = array(
                 'supplierName' => $product->getManufacturer()->getName(),
                 'supplierImg' => $product->getManufacturer()->getCoverFile(),
                 'supplierID' => $product->getManufacturer()->getId(),
-                'supplierDescription' => $product->getManufacturer()->getDescription(),
+                'supplierDescription' => $product->getManufacturer()->getDescription()
             );
 
             if (!empty($manufacturer['supplierImg'])) {

@@ -548,9 +548,6 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
             'text'      : categoryName
         });
 
-        var attributes = me.getModel('Attribute').create(attributeValues);
-        newCategory.getAttributes().add(attributes);
-
         if(parentNode.isLeaf) {
             //setting the node to an folder
             parentNode.data.leaf = false;

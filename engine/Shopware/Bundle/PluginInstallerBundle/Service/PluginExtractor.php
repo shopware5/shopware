@@ -24,6 +24,8 @@
 
 namespace Shopware\Bundle\PluginInstallerBundle\Service;
 
+use Symfony\Component\Filesystem\Filesystem;
+
 class PluginExtractor
 {
     /**
@@ -32,11 +34,25 @@ class PluginExtractor
     private $pluginDir;
 
     /**
-     * @param $pluginDir
+     * @var Filesystem
      */
-    public function __construct($pluginDir)
+    private $filesystem;
+
+    /**
+     * @var string[]
+     */
+    private $pluginDirectories = [];
+
+    /**
+     * @param string $pluginDir
+     * @param Filesystem $filesystem
+     * @param string[] $pluginDirectories
+     */
+    public function __construct($pluginDir, Filesystem $filesystem, array $pluginDirectories = [])
     {
         $this->pluginDir = $pluginDir;
+        $this->filesystem = $filesystem;
+        $this->pluginDirectories = $pluginDirectories;
     }
 
     /**
@@ -55,9 +71,24 @@ class PluginExtractor
             );
         }
 
-        $this->validatePluginZip($archive);
+        $prefix = $this->getPluginPrefix($archive);
+        $this->validatePluginZip($prefix, $archive);
 
-        $archive->extractTo($destination);
+        $oldFile = $this->findOldFile($prefix);
+        $backupFile = $this->createBackupFile($oldFile);
+
+        try {
+            $archive->extractTo($destination);
+
+            if ($backupFile !== false) {
+                $this->filesystem->remove($backupFile);
+            }
+        } catch (\Exception $e) {
+            if ($backupFile !== false) {
+                $this->filesystem->rename($backupFile, $oldFile);
+            }
+            throw $e;
+        }
 
         $this->clearOpcodeCache();
     }
@@ -67,20 +98,10 @@ class PluginExtractor
      * path and validates the plugin namespace, directory traversal
      * and multiple plugin directories.
      *
-     * @param \ZipArchive $archive
-     * @throws \Exception
-     */
-    private function validatePluginZip(\ZipArchive $archive)
-    {
-        $prefix = $this->getPluginPrefix($archive);
-        $this->assertValid($archive, $prefix);
-    }
-
-    /**
-     * @param \ZipArchive $archive
      * @param string $prefix
+     * @param \ZipArchive $archive
      */
-    private function assertValid(\ZipArchive $archive, $prefix)
+    private function validatePluginZip($prefix, \ZipArchive $archive)
     {
         for ($i = 2; $i < $archive->numFiles; $i++) {
             $stat = $archive->statIndex($i);
@@ -145,5 +166,46 @@ class PluginExtractor
                 sprintf('Directory Traversal detected')
             );
         }
+    }
+
+    /**
+     * @param string $pluginName
+     * @return bool|string
+     */
+    private function findOldFile($pluginName)
+    {
+        $dir = $this->pluginDir . '/' . $pluginName;
+        if ($this->filesystem->exists($dir)) {
+            return $dir;
+        }
+
+        foreach ($this->pluginDirectories as $directory) {
+            $namespaces = ['Core', 'Frontend', 'Backend'];
+            foreach ($namespaces as $namespace) {
+                $dir = $directory . $namespace . '/' . $pluginName;
+
+                if ($this->filesystem->exists($dir)) {
+                    return $dir;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param string $oldFile
+     * @return bool|string
+     */
+    private function createBackupFile($oldFile)
+    {
+        if ($oldFile === false) {
+            return false;
+        }
+
+        $backupFile = $oldFile . '.' . uniqid();
+        $this->filesystem->rename($oldFile, $backupFile);
+        rename($oldFile, $backupFile);
+        return $backupFile;
     }
 }

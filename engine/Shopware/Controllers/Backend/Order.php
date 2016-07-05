@@ -337,7 +337,14 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         if (empty($sort)) {
             $sort = array(array('property' => 'orders.orderTime', 'direction' => 'DESC'));
         } else {
-            $sort[0]['property'] = 'orders.' . $sort[0]['property'];
+            switch ($sort[0]['property']) {
+                case 'customerEmail':
+                    $sort[0]['property'] = 'customer.email';
+                    break;
+                default:
+                    $sort[0]['property'] = 'orders.' . $sort[0]['property'];
+                    break;
+            }
         }
 
         $query = $this->getRepository()->getBackendOrdersQuery($filter, $sort, $offset, $limit);

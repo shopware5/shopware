@@ -34,6 +34,7 @@ use ShopwarePlugins\SwagUpdate\Components\Steps\DownloadStep;
 use ShopwarePlugins\SwagUpdate\Components\Steps\FinishResult;
 use ShopwarePlugins\SwagUpdate\Components\Steps\ValidResult;
 use ShopwarePlugins\SwagUpdate\Components\Struct\Version;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * @package Shopware\Bundle\PluginInstallerBundle\Service
@@ -112,16 +113,15 @@ class DownloadService
             if (!$source) {
                 $source = 'Community';
             }
-
             $destination = $this->pluginDirectories[$source];
             $extractor = new LegacyPluginExtractor();
             $extractor->extract($archive, $destination);
         } elseif ($pluginZipDetector->isPlugin($archive)) {
-            $pluginDir = Shopware()->Container()->getParameter('kernel.root_dir').'/custom/plugins';
-            $extractor = new PluginExtractor($pluginDir);
+            $pluginDir = $this->rootDir.'/custom/plugins';
+            $extractor = new PluginExtractor($pluginDir, new Filesystem(), $this->pluginDirectories);
             $extractor->extract($archive);
         } else {
-            throw new \RuntimeException("No Plugin found in archive.");
+            throw new \RuntimeException('No Plugin found in archive.');
         }
     }
 
@@ -167,33 +167,24 @@ class DownloadService
      */
     public function download(DownloadRequest $request)
     {
-        $content = $this->downloadFullZip($request);
+        $request = new MetaRequest(
+            $request->getTechnicalName(),
+            $request->getShopwareVersion(),
+            $request->getDomain(),
+            $request->getToken()
+        );
 
-        $file = $this->createDownloadZip($content);
+        $result = $this->getMetaInformation($request);
+
+        /** @var \Shopware\Components\HttpClient\HttpClientInterface $client */
+        $client = Shopware()->Container()->get('http_client');
+
+        $response = $client->get($result->getUri());
+        $file = $this->createDownloadZip($response->getBody());
 
         $this->extractPluginZip($file, $request->getTechnicalName());
 
         return true;
-    }
-
-    /**
-     * @param DownloadRequest $request
-     * @return string
-     */
-    private function downloadFullZip(DownloadRequest $request)
-    {
-        if ($request->getToken()) {
-            return $this->storeClient->doAuthGetRequestRaw(
-                $request->getToken(),
-                '/pluginFiles/' . $request->getTechnicalName() . '/file',
-                [ 'shopwareVersion' => $request->getShopwareVersion(), 'domain' => $request->getDomain() ]
-            );
-        }
-
-        return $this->storeClient->doGetRequestRaw(
-            '/pluginFiles/'. $request->getTechnicalName() . '/file',
-            [ 'shopwareVersion' => $request->getShopwareVersion(), 'domain' => $request->getDomain() ]
-        );
     }
 
     /**

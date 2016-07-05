@@ -80,7 +80,6 @@ Ext.define('Shopware.apps.Payment.model.Payment', {
 
     associations: [
         { type:'hasMany', model:'Shopware.apps.Payment.model.Country', name:'getCountries', associationKey:'countries' },
-        { type:'hasMany', model:'Shopware.apps.Payment.model.Attribute', name:'getAttributes', associationKey:'attribute' },
         { type:'hasMany', model:'Shopware.apps.Base.model.Shop', name:'getShops', associationKey:'shops' }
     ],
 

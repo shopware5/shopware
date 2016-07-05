@@ -24,34 +24,12 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
-use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceGroup;
-
 /**
+ * @deprecated since version 5.2, to be removed in 6.0 - Use ShopContextInterface instead
  * @category  Shopware
  * @package   Shopware\Bundle\StoreFrontBundle\Struct
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 interface ProductContextInterface extends ShopContextInterface
 {
-    /**
-     * Returns all tax rules
-     *
-     * @return Tax[]
-     */
-    public function getTaxRules();
-
-    /**
-     * Returns the active tax rule for the provided tax id.
-     *
-     * @param $taxId
-     * @return Tax
-     */
-    public function getTaxRule($taxId);
-
-    /**
-     * Returns the active price groups
-     *
-     * @return PriceGroup[]
-     */
-    public function getPriceGroups();
 }

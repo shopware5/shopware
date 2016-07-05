@@ -4,7 +4,7 @@ namespace Shopware\Tests\Service\Search\Sorting;
 
 use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
 use Shopware\Bundle\SearchBundle\SortingInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\ProductContext;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Service\TestCase;
 
@@ -12,7 +12,7 @@ class PopularitySortingTest extends TestCase
 {
     protected function createProduct(
         $number,
-        ProductContext $context,
+        ShopContext $context,
         Category $category,
         $sales
     ) {
