@@ -6140,7 +6140,7 @@ INSERT INTO `s_core_units` (`id`, `unit`, `description`) VALUES
 (6, 'kg', 'Kilogramm'),
 (8, 'Paket(e)', 'Paket(e)'),
 (9, 'Stck.', 'Stück'),
-(10, 'Milliliter', 'ml');
+(10, 'ml', 'Milliliter');
 
 TRUNCATE TABLE `s_core_widgets`;
 INSERT INTO `s_core_widgets` (`id`, `name`, `label`) VALUES
