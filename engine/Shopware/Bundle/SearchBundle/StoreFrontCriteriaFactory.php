@@ -96,6 +96,11 @@ class StoreFrontCriteriaFactory implements StoreFrontCriteriaFactoryInterface
         $criteria->addBaseCondition(
             new CustomerGroupCondition([$context->getCurrentCustomerGroup()->getId()])
         );
+
+        $this->eventManager->notify('Shopware_SearchBundle_Create_Base_Criteria', [
+            'criteria' => $criteria,
+            'categoryIds' => $categoryIds
+        ]);
         return $criteria;
     }
 
