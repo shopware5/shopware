@@ -119,9 +119,7 @@ class PluginExtractor
     {
         $entry = $archive->statIndex(0);
 
-        $pluginName = rtrim($entry['name'], '/');
-
-        return $pluginName;
+        return explode('/', $entry['name'])[0];
     }
 
     /**
