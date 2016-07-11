@@ -41,8 +41,7 @@ Ext.define('Shopware.apps.Analytics.model.Navigation', {
         { name: 'expanded', defaultValue: true },
         { name: 'children' },
         { name: 'store' },
-        { name: 'comparable' },
-        { name: 'leaf', type: 'boolean' }
+        { name: 'comparable' }
     ]
 });
 //{/block}
