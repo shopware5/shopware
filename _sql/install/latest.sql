@@ -4262,7 +4262,7 @@ CREATE TABLE IF NOT EXISTS `s_core_units` (
 INSERT INTO `s_core_units` (`id`, `unit`, `description`) VALUES
 (1, 'l', 'Liter'),
 (2, 'g', 'Gramm'),
-(5, 'lfm', 'lfm'),
+(5, 'lfm', 'Laufende(r) Meter'),
 (6, 'kg', 'Kilogramm'),
 (8, 'Paket(e)', 'Paket(e)'),
 (9, 'Stck.', 'Stück');
