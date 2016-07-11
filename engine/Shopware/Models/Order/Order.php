@@ -1039,7 +1039,12 @@ class Order extends ModelEntity
         //iterate order details to recalculate the amount.
         /**@var $detail Detail*/
         foreach ($this->getDetails() as $detail) {
-            $invoiceAmount += $detail->getPrice() * $detail->getQuantity();
+            // For net invoices, the price of the order details is the net price
+            if ($this->net) {
+                $invoiceAmountNet += $detail->getPrice() * $detail->getQuantity();
+            } else {
+                $invoiceAmount += $detail->getPrice() * $detail->getQuantity();
+            }
 
             $tax = $detail->getTax();
 
@@ -1051,19 +1056,14 @@ class Order extends ModelEntity
             }
 
             if ($this->net) {
-                $invoiceAmountNet += round(($detail->getPrice() * $detail->getQuantity()) / 100 * (100 + $taxValue), 2);
+                $invoiceAmount += round(($detail->getPrice() * $detail->getQuantity()) / 100 * (100 + $taxValue), 2);
             } else {
                 $invoiceAmountNet += ($detail->getPrice() * $detail->getQuantity()) / (100 + $taxValue) * 100;
             }
         }
 
-        if ($this->net) {
-            $this->invoiceAmountNet = $invoiceAmount + $this->invoiceShippingNet;
-            $this->invoiceAmount = $invoiceAmountNet + $this->invoiceShipping;
-        } else {
-            $this->invoiceAmount = $invoiceAmount + $this->invoiceShipping;
-            $this->invoiceAmountNet = $invoiceAmountNet + $this->invoiceShippingNet;
-        }
+        $this->invoiceAmountNet = $invoiceAmountNet + $this->invoiceShippingNet;
+        $this->invoiceAmount = $this->taxFree ? $this->invoiceAmountNet : $invoiceAmount + $this->invoiceShipping;
     }
 
     /**
