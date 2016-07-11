@@ -1149,10 +1149,9 @@ class sBasket
      */
     public function sAddNote($articleID, $articleName, $articleOrderNumber)
     {
-        $cookieData = $this->front->Request()->getCookie();
         $uniqueId = $this->front->Request()->getCookie('sUniqueID');
 
-        if (!empty($cookieData) && empty($uniqueId)) {
+        if (empty($uniqueId)) {
             $uniqueId = md5(uniqid(rand()));
             $this->front->Response()->setCookie('sUniqueID', $uniqueId, Time()+(86400*360), '/');
         }
