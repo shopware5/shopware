@@ -1154,7 +1154,7 @@ class sBasket
 
         if (!empty($cookieData) && empty($uniqueId)) {
             $uniqueId = md5(uniqid(rand()));
-            $this->front->Response()->setCookie('sUniqueID', $uniqueId, Time()+(86400*360), '/');
+            $this->front->Response()->setCookie('sUniqueID', $uniqueId, time()+(86400*360), '/');
         }
 
         // Check if this article is already noted
