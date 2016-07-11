@@ -365,10 +365,6 @@ class ModelManager extends EntityManager
             throw new \InvalidArgumentException("Table doesn't exist");
         }
 
-        if ($this->columnExist($table, $name)) {
-            return;
-        }
-
         $null = ($nullable) ? " NULL " : " NOT NULL ";
 
         if (is_string($default) && strlen($default) > 0) {
@@ -379,7 +375,12 @@ class ModelManager extends EntityManager
             $defaultValue = $default;
         }
 
-        $sql = 'ALTER TABLE ' . $table . ' ADD ' . $name . ' ' . $type . ' ' . $null . ' DEFAULT ' . $defaultValue;
+        if ($this->columnExist($table, $name)) {
+            $sql = 'ALTER TABLE ' . $table . ' CHANGE ' . $name . ' ' . $name . ' ' . $type . ' ' . $null . ' DEFAULT ' . $defaultValue;
+        } else {
+            $sql = 'ALTER TABLE ' . $table . ' ADD ' . $name . ' ' . $type . ' ' . $null . ' DEFAULT ' . $defaultValue;
+        }
+
         Shopware()->Db()->query($sql, array($table, $prefix, $column, $type, $null, $defaultValue));
     }
 
