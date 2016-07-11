@@ -1495,16 +1495,12 @@ class sArticles
 
         $highDpiThumbnails = $articleAlbum->getSettings()->isThumbnailHighDpi();
 
-        //now we get the configured image and thumbnail dir.
-        $imageDir = $this->sSYSTEM->sPathArticleImg;
-        $thumbDir = $imageDir. 'thumbnail/';
-
         //if no extension is configured, shopware use jpg as default extension
         if (empty($image['extension'])) {
             $image['extension'] = 'jpg';
         }
 
-        $imageData['src']['original'] = $imageDir . $image["path"] . "." . $image["extension"];
+        $imageData['src']['original'] = $mediaService->getUrl('media/image/' . $image["path"] . "." . $image["extension"]);
         $imageData["res"]["original"]["width"] = $image["width"];
         $imageData["res"]["original"]["height"] = $image["height"];
         $imageData["res"]["description"] = $image["description"];
@@ -1540,9 +1536,9 @@ class sArticles
             if (strpos($size, 'x')===0) {
                 $size = $size.'x'.$size;
             }
-            $imageData["src"][$key] = $mediaService->getUrl($thumbDir . $image['path'] . '_'. $size .'.'. $image['extension']);
+            $imageData["src"][$key] = $mediaService->getUrl('media/image/thumbnail/' . $image['path'] . '_'. $size .'.'. $image['extension']);
             if ($highDpiThumbnails) {
-                $imageData["srchd"][$key] = $mediaService->getUrl($thumbDir . $image['path'] . '_'. $size .'@2x.'. $image['extension']);
+                $imageData["srchd"][$key] = $mediaService->getUrl('media/image/thumbnail/' . $image['path'] . '_'. $size .'@2x.'. $image['extension']);
             }
         }
 
