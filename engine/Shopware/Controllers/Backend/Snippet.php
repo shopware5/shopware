@@ -545,7 +545,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
             FROM s_core_snippets s, s_core_locales l, s_core_shops o
             WHERE l.id = s.localeID
             AND o.id = s.shopID
-            ORDER BY s.id, l.id";
+            ORDER BY shopId, localeId";
             $locales = Shopware()->Db()->query($sql)->fetchAll();
 
             $baseLocale = $locales[0];
