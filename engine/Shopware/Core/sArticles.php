@@ -1398,10 +1398,11 @@ class sArticles
             return false;
         }
 
-        $number = $this->getOrdernumberByArticleId($value);
-
-        if ($number) {
-            $value = $number;
+        if (is_numeric($value)) {
+            $number = $this->getOrdernumberByArticleId($value);
+            if ($number) {
+                $value = $number;
+            }
         }
 
         return $value;

@@ -682,26 +682,13 @@ class sMarketing
                         break;
                     case "ctArticles":
                         $sql = "
-                        SELECT articleordernumber, type FROM s_campaigns_articles
+                        SELECT articleordernumber FROM s_campaigns_articles
                         WHERE parentID={$campaignValue["id"]}
                         ORDER BY position
                         ";
 
-                        $getArticles = $this->db->fetchAll($sql);
-                        unset($articleData);
-                        $context = $this->contextService->getShopContext();
-                        foreach ($getArticles as $article) {
-                            if ($article["type"]) {
-                                $category = $this->sSYSTEM->_GET["sCategory"] ? : $context->getShop()->getCategory()->getId();
-                                $tmpContainer = $this->sSYSTEM->sMODULES['sArticles']->sGetPromotionById($article["type"], $category, $article['articleordernumber']);
-
-                                if (count($tmpContainer) && isset($tmpContainer["articleName"])) {
-                                    $articleData[] = $tmpContainer;
-                                }
-                            }
-                        }
-
-                        $getCampaignContainers[$campaignKey]["data"] = $articleData;
+                        $getArticles = $this->db->fetchCol($sql);
+                        $getCampaignContainers[$campaignKey]["data"] = $this->sGetMailCampaignsArticles($getArticles);
                         break;
                     case "ctText":
                     case "ctVoucher":
@@ -725,9 +712,25 @@ class sMarketing
         }
     }
 
-    public function sCampaignsGetSuggestions($id, $userid = 0)
+    /**
+     * Returns products by numbers
+     *
+     * @param $numbers
+     * @return array
+     */
+    private function sGetMailCampaignsArticles($numbers)
     {
-        return array();
+        /** @var \Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface $listProductService */
+        $listProductService = Shopware()->Container()->get('shopware_storefront.list_product_service');
+
+        /** @var \Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface $contextService */
+        $contextService = Shopware()->Container()->get('shopware_storefront.context_service');
+
+        /** @var \Shopware\Components\Compatibility\LegacyStructConverter $converter */
+        $converter = Shopware()->Container()->get('legacy_struct_converter');
+        $products = $listProductService->getList($numbers, $contextService->getShopContext());
+
+        return $converter->convertListProductStructList($products);
     }
 
     /**
