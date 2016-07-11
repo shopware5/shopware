@@ -29,6 +29,7 @@ use Shopware\Components\Thumbnail\Manager;
 use Shopware\Models\Media\Album;
 use Shopware\Models\Media\Media as MediaModel;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Media API Resource
@@ -290,7 +291,14 @@ class Media extends Resource
         $name = pathinfo($link, PATHINFO_FILENAME);
         $path = $this->load($link, $name);
         $name = pathinfo($path, PATHINFO_FILENAME);
-        $file = new File($path);
+        $ext = strtolower(pathinfo($link, PATHINFO_EXTENSION));
+        if($ext == 'mp3'){
+            $full = $path.'.'.$ext;
+            $file = new UploadedFile($path, $full);
+        }
+        else{
+            $file = new File($path);
+        }
 
         $media = new MediaModel();
 
