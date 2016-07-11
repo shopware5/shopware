@@ -337,6 +337,7 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
     {
         $converter = Shopware()->Container()->get('legacy_struct_converter');
         return array_map(function (Category $category) use ($converter) {
+            $externalLink = $category->getExternalLink();
             $data = [
                 'id' => $category->getId(),
                 'name' => $category->getName(),
@@ -347,7 +348,8 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
                 'cmsHeadline' => $category->getCmsHeadline(),
                 'cmsText' => $category->getCmsText(),
                 'position' => $category->getPosition(),
-                'link' => 'shopware.php?sViewport=cat&sCategory=' . $category->getId(),
+                'link' =>  !empty($externalLink) ? $category->getExternalLink() :  'shopware.php?sViewport=cat&sCategory=' . $category->getId(),
+                'externalLink' => $category->getExternalLink(),
                 'media' => null,
                 'flag' => false
             ];
