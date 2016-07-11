@@ -155,7 +155,7 @@ class Application extends BaseApplication
                 $this->registerEventCommands();
 
                 foreach ($this->kernel->getPlugins() as $plugin) {
-                    if ($plugin instanceof \Shopware\Components\Plugin) {
+                    if ($plugin->isActive()) {
                         $plugin->registerCommands($this);
                     }
                 }
