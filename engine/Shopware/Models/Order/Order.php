@@ -82,7 +82,7 @@ class Order extends ModelEntity
     /**
      * Contains the alphanumeric order number. If the
      * @var string $number
-     * @ORM\Column(name="ordernumber", type="string", length=30, nullable=true)
+     * @ORM\Column(name="ordernumber", type="string", length=255, nullable=true)
      */
     private $number;
 
@@ -251,7 +251,7 @@ class Order extends ModelEntity
      *
      * Used for the language subshop association
      * @var \Shopware\Models\Shop\Shop
-     * @ORM\ManyToOne(targetEntity="Shopware\Models\Shop\Shop", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Shop\Shop")
      * @ORM\JoinColumn(name="language", referencedColumnName="id")
      */
     private $languageSubShop;
@@ -1051,7 +1051,7 @@ class Order extends ModelEntity
             }
 
             if ($this->net) {
-                $invoiceAmountNet += ($detail->getPrice() * $detail->getQuantity()) / 100 * (100 + $taxValue);
+                $invoiceAmountNet += round(($detail->getPrice() * $detail->getQuantity()) / 100 * (100 + $taxValue), 2);
             } else {
                 $invoiceAmountNet += ($detail->getPrice() * $detail->getQuantity()) / (100 + $taxValue) * 100;
             }

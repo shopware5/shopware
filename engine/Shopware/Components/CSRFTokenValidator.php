@@ -26,7 +26,6 @@ namespace Shopware\Components;
 
 use Enlight\Event\SubscriberInterface;
 use Enlight_Components_Session_Namespace as Session;
-use Enlight_Controller_Request_Request as Request;
 use Enlight_Controller_ActionEventArgs as ActionEventArgs;
 use Shopware\Components\DependencyInjection\Container;
 
@@ -101,8 +100,12 @@ class CSRFTokenValidator implements SubscriberInterface
         $expected = $this->container->get('BackendSession')->offsetGet($this->tokenName);
         $token = $controller->Request()->getHeader($this->tokenName);
 
+        if (empty($token)) {
+            $token = $controller->Request()->getParam('__csrf_token');
+        }
+
         if (!hash_equals($expected, $token)) {
-            throw new CSRFTokenValidationException("The provided X-CSRF-Token header is invalid. If you're sure that the request should be valid, the called controller action needs to be whitelisted using the CSRFWhitelistAware interface.");
+            throw new CSRFTokenValidationException("The provided CSRF-Token is invalid. If you're sure that the request should be valid, the called controller action needs to be whitelisted using the CSRFWhitelistAware interface.");
         }
     }
 
@@ -120,14 +123,21 @@ class CSRFTokenValidator implements SubscriberInterface
         $controller = $args->getSubject();
 
         $request = $controller->Request();
-        $response = $controller->Response();
+
+        // do not check internal subrequests
+        if ($request->getAttribute('_isSubrequest')) {
+            return;
+        }
+
+        /** @var \Enlight_Controller_Action $controller */
+        $controller = $args->getSubject();
 
         /** @var \Enlight_Components_Session_Namespace $session */
         $session = $this->container->get('session');
         $token = $session->offsetGet('X-CSRF-Token');
 
         if (!$token) {
-            $token = $this->generateToken($response);
+            $token = $this->generateToken();
         }
 
         if ($this->isWhitelisted($controller)) {
@@ -137,17 +147,16 @@ class CSRFTokenValidator implements SubscriberInterface
         if ($request->isPost()) {
             $requestToken = $request->getParam('__csrf_token') ? : $request->getHeader('X-CSRF-Token');
             if (!hash_equals($token, $requestToken)) {
-                $this->generateToken($response);
+                $this->generateToken();
                 throw new CSRFTokenValidationException("The provided X-CSRF-Token is invalid. Please go back, reload the page and try again.");
             }
         }
     }
 
     /**
-     * @param \Enlight_Controller_Response_ResponseHttp $response
      * @return string
      */
-    private function generateToken(\Enlight_Controller_Response_ResponseHttp $response)
+    private function generateToken()
     {
         $token = Random::getAlphanumericString(30);
         Shopware()->Session()->offsetSet('X-CSRF-Token', $token);

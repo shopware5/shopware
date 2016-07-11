@@ -323,7 +323,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
         $proxyUrl = trim($this->Config()->get('proxy'));
         if (!empty($proxyUrl)) {
             return $proxyUrl;
-        };
+        }
 
         // if proxy url is not set fall back to host detection
         if ($request !== null && $request->getHttpHost()) {
@@ -418,7 +418,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
         /**
          * Emits Shopware_Plugins_HttpCache_ShouldNotCache Event
          */
-        if (Enlight()->Events()->notifyUntil(
+        if (Shopware()->Events()->notifyUntil(
             // deprecated since SW 4.3, will be removed in SW 5.0
             'Shopware_Plugins_HttpCache_ShouldNotCache',
             array(
@@ -592,10 +592,8 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
             $this->setNoCacheTag('admin');
         }
 
-        if ($controllerName == 'frontend/account') {
-            if (in_array($this->request->getActionName(), array('ajax_logout', 'logout'))) {
-                $this->setNoCacheTag('');
-            }
+        if ($controllerName == 'frontend/account' && $this->request->getActionName() === 'logout') {
+            $this->setNoCacheTag('');
         }
     }
 
@@ -960,27 +958,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
      */
     protected function clearCache()
     {
-        if ($this->request) {
-            $proxyUrl = $this->getProxyUrl($this->request);
-        } else {
-            $proxyUrl = $this->getProxyUrl();
-        }
-
-        if ($proxyUrl === null) {
-            return false;
-        }
-
-        try {
-            $client = new Zend_Http_Client($proxyUrl, array(
-                'useragent' => 'Shopware/' . Shopware()->Config()->get('version'),
-                'timeout'   => 3,
-            ));
-            $client->request('BAN');
-        } catch (\Exception $e) {
-            return false;
-        }
-
-        return true;
+        return $this->invalidate();
     }
 
     /**
@@ -998,28 +976,58 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
             return false;
         }
 
-        $proxyUrl = $this->getProxyUrl($this->request);
-        if ($proxyUrl === null) {
+        return $this->invalidate($cacheId);
+    }
+
+    /**
+     * Will send BAN requests to all configured reverse proxies. If cacheId is provided,
+     * the corresponding headers will be set.
+     *
+     * @param null $cacheId    If set, only pages including these cacheIds will be invalidated
+     * @return bool            True will be returned, if *all* operations succeeded
+     */
+    private function invalidate($cacheId=null)
+    {
+        $proxy = $this->getProxyUrl($this->request);
+
+        // if no explicit proxy was configured + no host is configured
+        if ($proxy === null) {
             return false;
         }
 
-        if (!$this->request || $this->request->getHeader('Surrogate-Capability') === false) {
-            return false;
+        // expand + trim proxies (comma separated)
+        $urls = array_map(
+            'trim',
+            explode(',', $proxy)
+        );
+
+        $success = true;
+        foreach ($urls as $url) {
+            try {
+                $client = new Zend_Http_Client($url, array(
+                    'useragent' => 'Shopware/' . Shopware()->Config()->get('version'),
+                    'timeout'   => 3,
+                ));
+
+                if ($cacheId) {
+                    $client->setHeaders('x-shopware-invalidates', $cacheId);
+                }
+
+                $response = $client->request('BAN');
+
+                if ($response->getStatus() < 200 || $response->getStatus() >= 300) {
+                    $this->get('corelogger')->error(
+                        'Reverse proxy returned invalid status code',
+                        ['response' => $response->getRawBody(), 'code' => $response->getStatus()]
+                    );
+                }
+            } catch (\Exception $e) {
+                $this->get('corelogger')->error($e->getMessage(), ['exception' => $e]);
+                $success = false;
+            }
         }
 
-        try {
-            $client = new Zend_Http_Client($proxyUrl, array(
-                'useragent' => 'Shopware/' . Shopware()->Config()->get('version'),
-                'timeout'   => 5,
-            ));
-
-            $client->setHeaders('x-shopware-invalidates', $cacheId)
-                   ->request('BAN');
-        } catch (\Exception $e) {
-            return false;
-        }
-
-        return true;
+        return $success;
     }
 
     /**
@@ -1094,7 +1102,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
 
         if ($session->offsetGet('sCountry')) {
             /** @var ProductContextInterface $productContext */
-            $productContext = $this->get('shopware_storefront.context_service')->getProductContext();
+            $productContext = $this->get('shopware_storefront.context_service')->getShopContext();
             $userContext = sha1(
                 json_encode($productContext->getTaxRules()) .
                 json_encode($productContext->getCurrentCustomerGroup())

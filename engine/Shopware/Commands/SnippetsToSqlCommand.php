@@ -25,6 +25,7 @@
 namespace Shopware\Commands;
 
 use Shopware\Components\Snippet\QueryHandler;
+use Shopware\Models\Plugin\Plugin;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -125,7 +126,9 @@ class SnippetsToSqlCommand extends ShopwareCommand
      */
     protected function exportDefaultPlugins(InputInterface $input, OutputInterface $output, QueryHandler $queryLoader)
     {
-        $pluginBasePath = $this->container->get('application')->AppPath('Plugins_Default');
+        $pluginDirectories = $this->container->getParameter('shopware.plugin_directories');
+        $pluginBasePath = $pluginDirectories['Default'];
+
         foreach (array('Backend', 'Core', 'Frontend') as $namespace) {
             /** @var $pluginDir \SplFileInfo */
             foreach (new \DirectoryIterator($pluginBasePath . $namespace) as $pluginDir) {
@@ -149,21 +152,16 @@ class SnippetsToSqlCommand extends ShopwareCommand
     protected function exportPlugins(InputInterface $input, OutputInterface $output, QueryHandler $queryLoader)
     {
         $pluginRepository = $this->container->get('shopware.model_manager')->getRepository(
-                'Shopware\Models\Plugin\Plugin'
+            'Shopware\Models\Plugin\Plugin'
         );
-        $plugins = $pluginRepository->findByActive(true);
-        $pluginBasePath = $this->container->get('application')->AppPath('Plugins');
+
+        /** @var Plugin[] $plugins */
+        $plugins = $pluginRepository->findBy(['active' => true]);
+
+        $pluginDirectories = $this->container->getParameter('shopware.plugin_directories');
 
         foreach ($plugins as $plugin) {
-            $pluginPath = implode(
-                '/',
-                array(
-                    rtrim($pluginBasePath, '/'),
-                    $plugin->getSource(),
-                    $plugin->getNamespace(),
-                    $plugin->getName()
-                )
-            );
+            $pluginPath = $pluginDirectories[$plugin->getSource()] . $plugin->getNamespace() . DIRECTORY_SEPARATOR . $plugin->getName();
 
             $output->writeln('<info>Importing snippets for '.$plugin->getName().' plugin</info>');
             $this->exportPluginSnippets($queryLoader, $pluginPath, $input->getArgument('file'));

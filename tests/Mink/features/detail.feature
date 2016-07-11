@@ -35,7 +35,7 @@ Feature: Detail page
         Then  I should see "Benachrichtigen Sie mich, wenn der Artikel lieferbar ist"
 
         When  I submit the notification form with "test@example.de"
-        Then  I should see "Bestätigen Sie den Link der eMail die Sie gerade erhalten haben. Sie erhalten dann eine eMail sobald der Artikel wieder verfügbar ist"
+        Then  I should see "Bestätigen Sie den Link der E-Mail die Sie gerade erhalten haben. Sie erhalten dann eine E-Mail sobald der Artikel wieder verfügbar ist"
 
         When  I click the link in my latest email
         Then  I should see "Vielen Dank! Wir haben Ihre Anfrage gespeichert! Sie werden benachrichtigt sobald der Artikel wieder verfügbar ist."
@@ -65,7 +65,7 @@ Feature: Detail page
             | sVoteComment | Hallo Welt      |
             | sCaptcha     | 123456          |
         Then  I should not see "Bitte füllen Sie alle rot markierten Felder aus"
-        But   I should see "Vielen Dank für die Abgabe Ihrer Bewertung! Sie erhalten in wenigen Minuten eine Bestätigungsmail. Bestätigen Sie den Link in dieser E-Mail um die Bewertung freizugeben."
+        But   I should see "Vielen Dank für die Abgabe Ihrer Bewertung! Sie erhalten in wenigen Minuten eine Bestätigungs-E-Mail. Bestätigen Sie den Link in dieser E-Mail um die Bewertung freizugeben."
         But   I should not see "Hallo Welt"
 
         When  I click the link in my latest email

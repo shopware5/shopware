@@ -50,7 +50,7 @@ class CheapestPriceService implements Service\CheapestPriceServiceInterface
     /**
      * @inheritdoc
      */
-    public function get(Struct\BaseProduct $product, Struct\ProductContextInterface $context)
+    public function get(Struct\ListProduct $product, Struct\ProductContextInterface $context)
     {
         $cheapestPrices = $this->getList([$product], $context);
 

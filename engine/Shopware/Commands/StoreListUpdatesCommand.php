@@ -25,6 +25,7 @@
 namespace Shopware\Commands;
 
 use Shopware\Bundle\PluginInstallerBundle\Context\UpdateListingRequest;
+use Shopware\Bundle\PluginInstallerBundle\Struct\UpdateResultStruct;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -65,10 +66,12 @@ class StoreListUpdatesCommand extends StoreCommand
         $domain  = $this->container->get('shopware_plugininstaller.account_manager_service')->getDomain();
         $service = $this->container->get('shopware_plugininstaller.plugin_service_view');
         $request = new UpdateListingRequest(null, $version, $domain, $plugins);
+        /** @var UpdateResultStruct $updates */
         $updates = $service->getUpdates($request);
+        $plugins = $updates->getPlugins();
 
         $result = array();
-        foreach ($updates as $plugin) {
+        foreach ($plugins as $plugin) {
             $result[] = [
                 $plugin->getId(),
                 $plugin->getTechnicalName(),

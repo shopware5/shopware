@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+
+    <xsd:element name="config" type="config"/>
+
+    <xsd:complexType name="config">
+        <xsd:sequence>
+            <xsd:element name="label" type="translatableString" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="description" type="translatableString" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="elements" type="elementsType"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="elementsType">
+        <xsd:sequence>
+            <xsd:element name="element" type="elementType" minOccurs="1" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="elementType">
+        <xsd:sequence>
+            <xsd:element name="name" type="xsd:string"/>
+            <xsd:element name="label" type="translatableString" maxOccurs="unbounded"/>
+            <xsd:element name="value" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="description" type="translatableString" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="store" type="store" minOccurs="0"/>
+            <xsd:element name="options" type="options" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute name="type" type="type" default="text"/>
+        <xsd:attribute name="required" type="xsd:boolean" default="true"/>
+        <xsd:attribute name="scope" type="scope" default="locale"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="options">
+        <xsd:sequence>
+            <xsd:any processContents="lax" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:simpleType name="type">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="text"/>
+            <xsd:enumeration value="password"/>
+            <xsd:enumeration value="textarea"/>
+            <xsd:enumeration value="boolean"/>
+            <xsd:enumeration value="color"/>
+            <xsd:enumeration value="date"/>
+            <xsd:enumeration value="datetime"/>
+            <xsd:enumeration value="time"/>
+            <xsd:enumeration value="interval"/>
+            <xsd:enumeration value="html"/>
+            <xsd:enumeration value="mediaselection"/>
+            <xsd:enumeration value="number"/>
+            <xsd:enumeration value="select"/>
+            <xsd:enumeration value="combo"/>
+            <xsd:enumeration value="select"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="storeType">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="php"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:complexType name="store">
+        <xsd:simpleContent>
+            <xsd:extension base="xsd:string">
+                <xsd:attribute name="type" type="storeType" default="php"/>
+            </xsd:extension>
+        </xsd:simpleContent>
+    </xsd:complexType>
+
+    <xsd:simpleType name="scope">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="locale"/>
+            <xsd:enumeration value="shop"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:complexType name="translatableString">
+        <xsd:simpleContent>
+            <xsd:extension base="xsd:string">
+                <xsd:attribute name="lang" type="xsd:language" default="en"/>
+            </xsd:extension>
+        </xsd:simpleContent>
+    </xsd:complexType>
+
+</xsd:schema>

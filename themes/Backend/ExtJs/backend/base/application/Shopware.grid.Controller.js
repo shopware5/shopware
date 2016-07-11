@@ -773,20 +773,20 @@ Ext.define('Shopware.grid.Controller', {
         var match = false;
         term = Ext.String.trim(term.toLowerCase());
 
+        store.clearFilter();
         if (term.length <= 0) {
-            store.clearFilter();
             return;
         }
 
-        store.filter(function(item) {
+        store.filterBy(function(item) {
             match = false;
 
             for (var key in item.data) {
                 var value = item.data[key];
 
-                if (Ext.isString(value)) {
+                if (Ext.isString(value) && match == false) {
                     var temp = value.toLowerCase();
-                    match = match || (temp.indexOf(term) > -1);
+                    match = temp.indexOf(term) > -1;
                 }
             }
 

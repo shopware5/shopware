@@ -32,11 +32,10 @@
     "jquery": "^2.1.4",
     "jquery.event.swipe": "^0.5.4",
     "jquery.transit": "^0.9.12",
-    "masonry-layout": "^3.3.2",
     "normalize.css.less": "^3.0.3",
     "open-sans-fontface": "^1.4.0",
     "picturefill": "^3.0.1",
-    "pocketgrid-less": "^1.0.0"
+    "pocketgrid-less": "^1.0.1"
   },
   "devDependencies": {
     "grunt": "^0.4.5",

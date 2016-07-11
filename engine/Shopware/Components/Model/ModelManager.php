@@ -35,7 +35,6 @@ use Doctrine\DBAL\Connection;
 use Doctrine\Common\Util\Inflector;
 use Doctrine\Common\EventManager;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
-use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
@@ -47,11 +46,6 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
  */
 class ModelManager extends EntityManager
 {
-    /**
-     * @var ValidatorInterface
-     */
-    protected $validator;
-
     /**
      * Debug mode flag for the query builders.
      * @var bool
@@ -91,52 +85,23 @@ class ModelManager extends EntityManager
     /**
      * Magic method to build this liquid interface ...
      *
+     * @deprecated since 5.2, to be removed in 5.3
      * @param   string $name
      * @param   array|null $args
      * @return  ModelRepository
      */
     public function __call($name, $args)
     {
-        /** @todo make path custom able */
+        $backTrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1)[0];
+        $string = sprintf("Shopware()->Models()->__call() is deprecated since version 5.2 and will be removed in 5.3. File %s:%s", $backTrace['file'], $backTrace['line']);
+        trigger_error($string, E_USER_DEPRECATED);
+
         if (strpos($name, '\\') === false) {
             $name = $name .'\\' . $name;
         }
         $name = 'Shopware\\Models\\' . $name;
+
         return $this->getRepository($name);
-    }
-
-    /**
-     * The EntityRepository instances.
-     *
-     * @var array
-     */
-    private $repositories = array();
-
-    /**
-     * Gets the repository for an entity class.
-     *
-     * @param string $entityName The name of the entity.
-     * @return ModelRepository The repository class.
-     */
-    public function getRepository($entityName)
-    {
-        $entityName = ltrim($entityName, '\\');
-
-        if (!isset($this->repositories[$entityName])) {
-            $metadata = $this->getClassMetadata($entityName);
-            $repositoryClassName = $metadata->customRepositoryClassName;
-
-            if ($repositoryClassName === null) {
-                $repositoryClassName = $this->getConfiguration()->getDefaultRepositoryClassName();
-            }
-
-            $repositoryClassName = $this->getConfiguration()
-                ->getHookManager()->getProxy($repositoryClassName);
-
-            $this->repositories[$entityName] = new $repositoryClassName($this, $metadata);
-        }
-
-        return $this->repositories[$entityName];
     }
 
     /**
@@ -151,6 +116,10 @@ class ModelManager extends EntityManager
      */
     protected function serializeEntity($entity)
     {
+        if ($entity === null) {
+            return [];
+        }
+
         if ($entity instanceof \Doctrine\ORM\Proxy\Proxy) {
             /** @var $entity \Doctrine\ORM\Proxy\Proxy */
             $entity->__load();
@@ -253,29 +222,9 @@ class ModelManager extends EntityManager
     /**
      * @return ValidatorInterface
      */
-    private function createValidator()
-    {
-        $validatorBuilder = Validation::createValidatorBuilder();
-
-        $reader = $this->getConfiguration()->getAnnotationsReader();
-
-        $validatorBuilder->enableAnnotationMapping($reader);
-
-        $validator = $validatorBuilder->getValidator();
-
-        return $validator;
-    }
-
-    /**
-     * @return ValidatorInterface
-     */
     public function getValidator()
     {
-        if (null === $this->validator) {
-            $this->validator = $this->createValidator();
-        }
-
-        return $this->validator;
+        return Shopware()->Container()->get('validator');
     }
 
     /**
@@ -380,8 +329,10 @@ class ModelManager extends EntityManager
 
         $null = ($nullable) ? " NULL " : " NOT NULL ";
 
-        if (is_string($default) && strlen($default) > 0) {
+        if (is_string($default)) {
             $defaultValue = "'". $default ."'";
+        } elseif (is_bool($default)) {
+            $defaultValue = ($default) ? 1 : 0;
         } elseif (is_null($default)) {
             $defaultValue = " NULL ";
         } else {

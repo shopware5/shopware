@@ -57,5 +57,5 @@ interface CheapestPriceServiceInterface
      * @param Struct\ProductContextInterface $context
      * @return Struct\Product\PriceRule
      */
-    public function get(Struct\BaseProduct $product, Struct\ProductContextInterface $context);
+    public function get(Struct\ListProduct $product, Struct\ProductContextInterface $context);
 }

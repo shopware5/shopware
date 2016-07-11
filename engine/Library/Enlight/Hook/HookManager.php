@@ -44,11 +44,6 @@
 class Enlight_Hook_HookManager extends Enlight_Class
 {
     /**
-     * @var Enlight_Application
-     */
-    protected $application;
-
-    /**
      * @var null|Enlight_Hook_ProxyFactory instance of the Enlight_Hook_ProxyFactory.
      */
     protected $proxyFactory = null;

@@ -79,6 +79,9 @@ class MediaHydrator extends Hydrator
     {
         $media = new Struct\Media();
 
+        $translation = $this->getTranslation($data, '__media');
+        $data = array_merge($data, $translation);
+
         if (isset($data['__media_id'])) {
             $media->setId((int) $data['__media_id']);
         }
@@ -106,23 +109,8 @@ class MediaHydrator extends Hydrator
         /**
          * Live Migration to add width/height to images
          */
-        if ($media->getType() == Struct\Media::TYPE_IMAGE && $this->mediaService->has($data['__media_path'])) {
-            if (array_key_exists('__media_width', $data) && array_key_exists('__media_height', $data)) {
-                if ($data['__media_width'] === null || $data['__media_height'] === null) {
-                    list($width, $height) = getimagesizefromstring($this->mediaService->read($data['__media_path']));
-                    $this->database->executeUpdate(
-                        'UPDATE s_media SET width = :width, height = :height WHERE id = :id',
-                        [
-                            ':width' => $width,
-                            ':height' => $height,
-                            ':id' => $data['__media_id']
-                        ]
-                    );
-
-                    $data['__media_width'] = $width;
-                    $data['__media_height'] = $height;
-                }
-            }
+        if ($this->isUpdateRequired($media, $data)) {
+            $data = $this->updateMedia($data);
         }
 
         if (isset($data['__media_width'])) {
@@ -141,12 +129,31 @@ class MediaHydrator extends Hydrator
         }
 
         if (!empty($data['__mediaAttribute_id'])) {
-            $attribute = $this->attributeHydrator->hydrate(
-                $this->extractFields('__mediaAttribute_', $data)
-            );
-            $media->addAttribute('media', $attribute);
+            $this->attributeHydrator->addAttribute($media, $data, 'mediaAttribute', 'media');
         }
         return $media;
+    }
+
+    /**
+     * @param Struct\Media $media
+     * @param array $data
+     * @return bool
+     */
+    private function isUpdateRequired(Struct\Media $media, array $data)
+    {
+        if ($media->getType() != Struct\Media::TYPE_IMAGE) {
+            return false;
+        }
+        if (!array_key_exists('__media_width', $data)) {
+            return false;
+        }
+        if (!array_key_exists('__media_height', $data)) {
+            return false;
+        }
+        if ($data['__media_width'] !== null && $data['__media_height'] !== null) {
+            return false;
+        }
+        return $this->mediaService->has($data['__media_path']);
     }
 
     /**
@@ -157,18 +164,14 @@ class MediaHydrator extends Hydrator
     {
         $media = $this->hydrate($data);
 
-        $data = array_merge($data, $this->getImageTranslation($data));
+        $translation = $this->getTranslation($data, '__image');
+        $data = array_merge($data, $translation);
 
         $media->setName($data['__image_description']);
-
         $media->setPreview((bool) ($data['__image_main'] == 1));
 
         if (!empty($data['__imageAttribute_id'])) {
-            $attribute = $this->attributeHydrator->hydrate(
-                $this->extractFields('__imageAttribute_', $data)
-            );
-
-            $media->addAttribute('image', $attribute);
+            $this->attributeHydrator->addAttribute($media, $data, 'imageAttribute', 'image', 'image');
         }
 
         return $media;
@@ -211,32 +214,23 @@ class MediaHydrator extends Hydrator
     }
 
     /**
-     * @param $data
+     * @param array $data
      * @return array
      */
-    private function getImageTranslation($data)
+    private function updateMedia(array $data)
     {
-        if (!isset($data['__image_translation'])
-            || empty($data['__image_translation'])
-        ) {
-            $translation = [];
-        } else {
-            $translation = unserialize($data['__image_translation']);
-        }
+        list($width, $height) = getimagesizefromstring($this->mediaService->read($data['__media_path']));
+        $this->database->executeUpdate(
+            'UPDATE s_media SET width = :width, height = :height WHERE id = :id',
+            [
+                ':width' => $width,
+                ':height' => $height,
+                ':id' => $data['__media_id']
+            ]
+        );
 
-        if (isset($data['__image_translation_fallback'])
-            && !empty($data['__image_translation_fallback'])
-        ) {
-            $fallbackTranslation = unserialize($data['__image_translation_fallback']);
-            $translation += $fallbackTranslation;
-        }
-
-        if (empty($translation)) {
-            return [];
-        }
-
-        return [
-            '__image_description' => $translation['description']
-        ];
+        $data['__media_width'] = $width;
+        $data['__media_height'] = $height;
+        return $data;
     }
 }

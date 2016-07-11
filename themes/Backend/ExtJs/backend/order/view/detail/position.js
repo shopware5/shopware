@@ -59,10 +59,6 @@ Ext.define('Shopware.apps.Order.view.detail.Position', {
      */
     layout: 'fit',
 
-    style: {
-        background: '#fff'
-    },
-
     /**
      * A shortcut for setting a padding style on the body element. The value can either be a number to be applied to all sides, or a normal css string describing padding.
      */
@@ -272,8 +268,13 @@ Ext.define('Shopware.apps.Order.view.detail.Position', {
         });
 
         me.orderPositionGrid = Ext.create('Shopware.order.position.grid', {
+            name: 'order-position-grid',
             store: me.record.getPositions(),
-            plugins: [ me.rowEditor ],
+            plugins: [me.rowEditor, {
+                ptype: 'grid-attributes',
+                table: 's_order_details_attributes',
+                createActionColumn: false
+            }],
             style: {
                 borderTop: '1px solid #A4B5C0'
             },
@@ -422,6 +423,14 @@ Ext.define('Shopware.apps.Order.view.detail.Position', {
                                  return 'x-hidden';
                              }
                         }
+                    }, {
+                        iconCls: 'sprite-attributes',
+                        name: 'grid-attribute-plugin',
+                        handler: function (view, rowIndex, colIndex, item, opts, record) {
+                            me.attributeActionColumnClick(record);
+                        },
+                        getClass: me.attributeColumnRenderer,
+                        scope: grid
                     }
                 ]
             }
@@ -429,6 +438,31 @@ Ext.define('Shopware.apps.Order.view.detail.Position', {
 
     },
 
+    /**
+     * @param record - Ext.data.Model
+     */
+    attributeActionColumnClick: function(record) {
+        var me = this;
+
+        me.attributeWindow = Ext.create('Shopware.attribute.Window', {
+            table: 's_order_details_attributes',
+            record: record
+        });
+        me.attributeWindow.show();
+    },
+
+    /**
+     *
+     * @param value - mixed
+     * @param meta - Object
+     * @param record - Ext.data.Model
+     * @returns { string }
+     */
+    attributeColumnRenderer: function(value, meta, record) {
+        if (!record.get('id') || !this.backendAttributes || this.backendAttributes.length <= 0) {
+            return 'x-hidden';
+        }
+    },
 
     /**
      *

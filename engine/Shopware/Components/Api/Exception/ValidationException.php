@@ -24,6 +24,11 @@
 
 namespace Shopware\Components\Api\Exception;
 
+use Symfony\Component\Form\FormErrorIterator;
+use Symfony\Component\Validator\ConstraintViolation;
+use Symfony\Component\Validator\ConstraintViolationList;
+use Symfony\Component\Validator\ConstraintViolationListInterface;
+
 /**
  * API Exception
  *
@@ -34,14 +39,14 @@ namespace Shopware\Components\Api\Exception;
 class ValidationException extends \Enlight_Exception
 {
     /**
-     * @var \Symfony\Component\Validator\ConstraintViolationList
+     * @var ConstraintViolationListInterface
      */
     protected $violations = null;
 
     /**
-     * @param \Symfony\Component\Validator\ConstraintViolationList $violations
+     * @param ConstraintViolationListInterface $violations
      */
-    public function __construct(\Symfony\Component\Validator\ConstraintViolationList $violations)
+    public function __construct(ConstraintViolationListInterface $violations)
     {
         $this->setViolations($violations);
 
@@ -49,7 +54,7 @@ class ValidationException extends \Enlight_Exception
     }
 
     /**
-     * @param \Symfony\Component\Validator\ConstraintViolationList $violations
+     * @param ConstraintViolationListInterface $violations
      */
     public function setViolations($violations)
     {
@@ -57,10 +62,52 @@ class ValidationException extends \Enlight_Exception
     }
 
     /**
-     * @return \Symfony\Component\Validator\ConstraintViolationList
+     * @return ConstraintViolationListInterface
      */
     public function getViolations()
     {
         return $this->violations;
+    }
+
+    /**
+     * @param FormErrorIterator $errors
+     * @return ValidationException
+     */
+    public static function createFromFormError(FormErrorIterator $errors)
+    {
+        $violations = [];
+
+        foreach ($errors as $error) {
+            $message = Shopware()->Template()->fetch('string:' . $error->getMessage());
+
+            $violations[] = new ConstraintViolation(
+                $message,
+                $error->getMessageTemplate(),
+                $error->getMessageParameters(),
+                $error->getOrigin()->getRoot(),
+                $error->getOrigin()->getPropertyPath(),
+                $error->getOrigin()->getData(),
+                $error->getMessagePluralization(),
+                null,
+                null,
+                $error->getCause()
+            );
+        }
+
+        return new self(new ConstraintViolationList($violations));
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        $output = "";
+
+        foreach ($this->violations as $violation) {
+            $output .= $violation->getMessage().PHP_EOL;
+        }
+
+        return $output;
     }
 }

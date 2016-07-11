@@ -122,7 +122,7 @@ abstract class Enlight_Components_Test_Controller_TestCase extends Enlight_Compo
      */
     public function reset()
     {
-        $app = Enlight_Application::Instance();
+        $app = Shopware();
 
         $this->resetRequest();
         $this->resetResponse();
@@ -143,6 +143,8 @@ abstract class Enlight_Components_Test_Controller_TestCase extends Enlight_Compo
 
         $container = Shopware()->Container();
 
+        $container->get('models')->clear();
+
         $container
                 ->reset('Plugins')
                 ->reset('Front')
@@ -151,11 +153,12 @@ abstract class Enlight_Components_Test_Controller_TestCase extends Enlight_Compo
 //            ->reset('Snippets')
                 ->reset('System')
                 ->reset('Modules')
-                ->reset('Models');
+//                ->reset('Models')
 //            ->reset('Config')
 //            ->reset('Shop');
 //            ->reset('Session')
 //            ->reset('Auth');
+        ;
 
         $container->load('Front');
         $container->load('Plugins');

@@ -1,5 +1,34 @@
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ *
+ * @category   Shopware
+ * @package    PluginManager
+ * @subpackage Controller
+ * @version    $Id$
+ * @author shopware AG
+ */
 
 //{namespace name=backend/plugin_manager/translation}
+//{block name="backend/plugin_manager/controller/plugin"}
 Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
 
     extend:'Ext.app.Controller',
@@ -291,16 +320,18 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
 
                     store.load({
                         callback: function(records) {
-                            var basket = records[0];
+                            if (records) {
+                                var basket = records[0];
 
-                            me.hideLoadingMask();
+                                me.hideLoadingMask();
 
-                            me.checkoutWindow = me.getView('account.Checkout').create({
-                                basket: basket,
-                                callback: callback
-                            });
+                                me.checkoutWindow = me.getView('account.Checkout').create({
+                                    basket: basket,
+                                    callback: callback
+                                });
 
-                            me.checkoutWindow.show();
+                                me.checkoutWindow.show();
+                            }
                         }
                     });
 
@@ -738,20 +769,45 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
     },
 
     handleCrudResponse: function(response, plugin) {
+        response = response.result;
 
+        if (!response) {
+            return;
+        }
+
+        var message = this.getResponseMessage(response);
+
+        if (Ext.isObject(message)) {
+            Shopware.Notification.createStickyGrowlMessage(message);
+        } else if (Ext.isString(message)) {
+            Shopware.Notification.createStickyGrowlMessage({ text: message });
+        }
+
+        var caches = this.getResponseCacheClearTask(response);
+        if (caches !== null) {
+            this.clearCache(caches, plugin);
+        }
+    },
+
+    getResponseMessage: function(response) {
         if (response.hasOwnProperty('message')) {
-            var message = response.message;
-
-            if (Ext.isObject(message)) {
-                Shopware.Notification.createStickyGrowlMessage(response.message);
-            } else if (Ext.isString(message)) {
-                Shopware.Notification.createStickyGrowlMessage({ text: response.message });
-            }
+            return response.message;
         }
 
+        if (response.hasOwnProperty('scheduled') && response.scheduled.hasOwnProperty('message')) {
+            return response.scheduled.message;
+        }
+        return null;
+    },
+
+    getResponseCacheClearTask: function(response) {
         if (response.hasOwnProperty('invalidateCache')) {
-            this.clearCache(response.invalidateCache, plugin);
+            return response.invalidateCache;
         }
+        if (response.hasOwnProperty('scheduled') && response.scheduled.hasOwnProperty('cache')) {
+            return response.scheduled.cache;
+        }
+        return null;
     },
 
     clearCache: function(caches, plugin) {
@@ -759,7 +815,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
 
         var message = Ext.String.format(
             '{s name=clear_cache}This plugin needs a new initialisation in the following caches: [0]Clear cache?{/s}',
-            caches.join(', ') + '<br><br>'
+            '<br><br>- ' + caches.join('<br>- ') + '<br><br>'
         );
 
         me.confirmMessage(
@@ -792,3 +848,4 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
         );
     }
 });
+//{/block}

@@ -54,8 +54,7 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
     extend:'Ext.app.Controller',
 
     refs: [
-        { ref: 'detailWindow', selector: 'customer-detail-window' },
-        { ref: 'countryStateCombo', selector: 'customer-shipping-field-set combobox[action=shippingStateId]' }
+        { ref: 'detailWindow', selector: 'customer-detail-window' }
     ],
 
     /**
@@ -104,15 +103,8 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
             'customer-detail-window button[action=save-customer]':{
                 click:me.onSaveCustomer
             },
-            'customer-billing-field-set': {
-                countryChanged: me.onCountryChanged
-            },
             'customer-base-field-set':{
                 generatePassword:me.onGeneratePassword
-            },
-            'customer-shipping-field-set':{
-                copyAddress:me.onCopyAddress,
-                countryChanged: me.onCountryChanged
             },
             'customer-debit-field-set':{
                 changePayment:me.onChangePayment
@@ -123,94 +115,11 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
             }
         });
 
+        Shopware.app.Application.on('address-save-successfully', function() {
+            me.getDetailWindow().reloadRecord();
+        });
+
         me.callParent(arguments);
-    },
-
-    /**
-     * Called when the user changes the country combobox in the shipping or billing form
-     * @param field
-     * @param newValue
-     */
-    onCountryChanged: function(countryCombo, newValue, countryStateCombo) {
-        var me = this,
-            store, oldState;
-
-        oldState = countryStateCombo.getValue();
-        store = countryStateCombo.store;
-        if (newValue === null) {
-            countryStateCombo.setValue(null);
-            countryStateCombo.hide();
-            return;
-        }
-        store.getProxy().extraParams = {
-            countryId: newValue
-        };
-        store.load({
-            callback: function() {
-                var record = store.getById(oldState);
-
-                if (store.getCount() === 0) {
-                    countryStateCombo.setValue(null);
-                    countryStateCombo.hide();
-                    return true;
-                }
-
-                if (record instanceof Ext.data.Model) {
-                    countryStateCombo.setValue(record.get('id'));
-                } else {
-                    countryStateCombo.setValue(null);
-                }
-                countryStateCombo.show();
-            }
-        });
-    },
-
-    /**
-     * Event listener method which is fired when the user
-     * clicks the "copy data" button in the shipping field set on the detail window.
-     * @param [Ext.form.Panel] - The form panel of the detail window
-     * @return void
-     */
-    onCopyAddress:function (form) {
-        var basic = form.getForm(),
-            values = basic.getValues(),
-            countryStateCombobox = this.getCountryStateCombo();
-
-        //i tried to realise this over the form record, but the last overrides from the basic form and the form panel prevent it.
-        values["shipping[city]"] = values["billing[city]"];
-        values['shipping[salutation]'] = values['billing[salutation]'];
-        values['shipping[firstName]'] = values['billing[firstName]'];
-        values['shipping[lastName]'] = values['billing[lastName]'];
-        values['shipping[street]'] = values['billing[street]'];
-        values['shipping[zipCode]'] = values['billing[zipCode]'];
-        values['shipping[city]'] = values['billing[city]'];
-        values['shipping[additionalAddressLine1]'] = values['billing[additionalAddressLine1]'];
-        values['shipping[additionalAddressLine2]'] = values['billing[additionalAddressLine2]'];
-        values['shipping[countryId]'] = values['billing[countryId]'];
-        values['shipping[stateId]'] = values['billing[stateId]'];
-        values['shipping[company]'] = values['billing[company]'];
-        values['shipping[department]'] = values['billing[department]'];
-        values['shipping[text1]'] = values['billing[text1]'];
-        values['shipping[text2]'] = values['billing[text2]'];
-        values['shipping[text3]'] = values['billing[text3]'];
-        values['shipping[text4]'] = values['billing[text4]'];
-        values['shipping[text5]'] = values['billing[text5]'];
-        values['shipping[text6]'] = values['billing[text6]'];
-
-        //setting the country state combobox
-        countryStateCombobox.show();
-        basic.setValues(values);
-        var countryStateStore = countryStateCombobox.getStore();
-        countryStateStore.getProxy().extraParams = {
-            countryId: values['shipping[countryId]']
-        };
-        countryStateStore.load({
-            callback: function () {
-                if (values['shipping[stateId]']) {
-                    countryStateCombobox.setValue(values['shipping[stateId]']);
-                }
-            }
-        });
     },
 
     /**
@@ -235,7 +144,7 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
                     rawData = record.getProxy().getReader().rawData;
 
                 if ( operation.success === true ) {
-                    var number = record['getBillingStore'].first().get('number');
+                    var number = record.get('number');
                     Shopware.Notification.createGrowlMessage(me.snippets.account.successTitle, Ext.String.format(me.snippets.account.successText, number), me.snippets.growlMessage);
 
                     infoView.tpl = tpl;
@@ -450,19 +359,49 @@ Ext.define('Shopware.apps.Customer.controller.Detail', {
             return;
         }
 
+        if (!model.get('id')) {
+            var addressData = {};
+            Ext.each(me.getDetailWindow().addressForm.query('field'), function(field) {
+                field.submitValue = false;
+                addressData[field.getName()] = field.getValue();
+            });
+
+            var addressModel = Ext.create('Shopware.apps.Customer.model.Address', addressData),
+                billingModel = Ext.create('Shopware.apps.Customer.model.Billing'),
+                shippingModel = Ext.create('Shopware.apps.Customer.model.Shipping');
+
+            billingModel.fromAddress(addressModel);
+            shippingModel.fromAddress(addressModel);
+
+            model.getBilling().add(billingModel);
+            model.getShipping().add(shippingModel);
+        }
+
         form.getForm().updateRecord(model);
 
         //save the model and check in the callback function if the operation was successfully
         model.save({
-            callback:function (data, operation) {
+            callback: function (data, operation) {
                 var records = operation.getRecords(),
                     record = records[0],
                     rawData = record.getProxy().getReader().rawData;
 
-                if ( operation.success === true ) {
-                    var billing = model.getBilling().first();
-                    number = billing.get('number');
-                    Shopware.Notification.createGrowlMessage(me.snippets.password.successTitle, Ext.String.format(me.snippets.password.successText, number), me.snippets.growlMessage);
+                if (operation.success === true) {
+                    if (typeof addressModel !== 'undefined') {
+                        addressModel.set('user_id', record.get('id'));
+                        addressModel.save();
+                    }
+
+                    number = model.get('number');
+
+                    Shopware.Notification.createGrowlMessage(
+                        me.snippets.password.successTitle,
+                        Ext.String.format(me.snippets.password.successText, number),
+                        me.snippets.growlMessage
+                    );
+
+                    win.attributeForm.saveAttribute(record.get('id'));
+
                     win.destroy();
                     listStore.load();
                 } else {

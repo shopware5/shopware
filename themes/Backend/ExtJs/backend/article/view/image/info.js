@@ -76,16 +76,16 @@ Ext.define('Shopware.apps.Article.view.image.Info', {
      */
     snippets:{
         title: '{s name=image/info/title}Image options{/s}',
-        download: '{s name=image/info/download}Download{/s}',
         imageTitle: '{s name=image/info/image_title}Title{/s}',
-        settings: '{s name=image/info/settings}Settings{/s}',
-        treeTitle: '{s name=image/info/tree}Assignments{/s}',
-        translateTitle: '{s name=image/info/translate_title}Translate title{/s}',
-
-        attribute1: '{s name=image/info/attribute1}attribute1{/s}',
-        attribute2: '{s name=image/info/attribute2}attribute2{/s}',
-        attribute3: '{s name=image/info/attribute3}attribute3{/s}'
     },
+
+    plugins: [{
+        ptype: 'translation',
+        pluginId: 'translation',
+        translationType: 'articleimage',
+        translationMerge: false,
+        translationKey: null
+    }],
 
     /**
      * Sets the body padding value
@@ -108,9 +108,18 @@ Ext.define('Shopware.apps.Article.view.image.Info', {
         me.title = me.snippets.title;
         me.thumbnail = me.createThumbnail();
         me.settings = me.createSettings();
+
+        me.attributeForm = Ext.create('Shopware.attribute.Form', {
+            table: 's_articles_img_attributes',
+            allowTranslation: false,
+            translationForm: me,
+            margin: '10 0 0'
+        });
+
         me.items = [
             me.thumbnail,
-            me.settings
+            me.settings,
+            me.attributeForm
         ];
         me.registerEvents();
         me.callParent(arguments);
@@ -121,23 +130,6 @@ Ext.define('Shopware.apps.Article.view.image.Info', {
      */
     registerEvents: function() {
     	this.addEvents(
-    		/**
-    		 * Event will be fired when the user want to download the original image
-    		 *
-    		 * @event
-    		 * @param [Ext.data.Model] The media record
-    		 */
-    		'download',
-
-            /**
-             * Event will be fired when the user wants to translate the settings.
-             *
-             * @event
-             * @param [object] form - Ext.form.Panel - The settings Panel
-             * @param [object] record - Shopware.apps.Article.model.Media
-             */
-            'translateSettings',
-
             /**
              * Event will be fired when the user wants to save the image settings.
              * @event
@@ -162,12 +154,10 @@ Ext.define('Shopware.apps.Article.view.image.Info', {
             margin: '0 0 10',
             itemSelector: '.copy-image-path',
             autoScroll:true,
-            flex: 1,
+            height: 300,
             renderData: []
         });
     },
-
-
 
     /**
      * Creates the XTemplate for the information panel
@@ -196,19 +186,12 @@ Ext.define('Shopware.apps.Article.view.image.Info', {
     },
 
     /**
-     * Creates the field set for the image settings.
-     * Contains the title text field and the download button.
+     * Creates the field set for the image settings including the title text field.
      *
      * @return Ext.form.FieldSet
      */
     createSettings: function() {
         var me = this;
-
-        var changeHandler = function() {
-            if (me.record) {
-                me.fireEvent('saveImageSettings', me.settingsForm, me.record);
-            }
-        };
 
         me.titleField = Ext.create('Ext.form.field.Text', {
             name: 'description',
@@ -216,96 +199,27 @@ Ext.define('Shopware.apps.Article.view.image.Info', {
             fieldLabel: me.snippets.imageTitle,
             translatable: true,
             listeners: {
-                blur: {
-                    fn: changeHandler
-                }
-            }
-        });
-
-        me.attr1Field = Ext.create('Ext.form.field.Text', {
-            name: 'attribute[attribute1]',
-            anchor: '100%',
-            fieldLabel: me.snippets.attribute1,
-            listeners: {
-                blur: {
-                    fn: changeHandler
-                }
-            }
-        });
-
-        me.attr2Field = Ext.create('Ext.form.field.Text', {
-            name: 'attribute[attribute2]',
-            anchor: '100%',
-            fieldLabel: me.snippets.attribute2,
-            listeners: {
-                blur: {
-                    fn: changeHandler
-                }
-            }
-        });
-
-        me.attr3Field = Ext.create('Ext.form.field.Text', {
-            name: 'attribute[attribute3]',
-            anchor: '100%',
-            fieldLabel: me.snippets.attribute3,
-            listeners: {
-                blur: {
-                    fn: changeHandler
-                }
-            }
-        });
-
-        me.settingToolbar = Ext.create('Ext.toolbar.Toolbar', {
-            dock: 'bottom',
-            margin: '8 0 0',
-            items: [
-                '->', {
-                    xtype: 'button',
-                    text: me.snippets.translateTitle,
-                    cls: 'small secondary',
-                    handler: function() {
-                        if (me.record) {
-                            me.fireEvent('translateSettings', me.settingsForm, me.record);
-                        }
-                    }
-                }, {
-                    xtype: 'button',
-                    text: me.snippets.download,
-                    anchor: '50%',
-                    cls: 'small secondary',
-                    handler: function() {
-                        me.fireEvent('download', me.record);
+                change: {
+                    buffer: 250,
+                    fn: function() {
+                        me.settingsForm.getForm().updateRecord(me.record);
                     }
                 }
-            ]
+            }
         });
 
         me.settingsForm = Ext.create('Ext.form.Panel', {
-            title: me.snippets.settings,
             layout: 'anchor',
-            flex:1,
+            border: false,
+            bodyStyle: {
+                background: 'transparent'
+            },
             autoScroll:true,
-            plugins: [{
-                ptype: 'translation',
-                pluginId: 'translation',
-                translationType: 'articleimage',
-                translationMerge: false,
-                translationKey: null,
-                translationName: 'attributes'
-            }],
             defaults: {
                 labelWidth: 90,
                 anchor: '100%'
             },
-            bodyPadding: 10,
-            cls: Ext.baseCSSPrefix + 'media-info-form-panel',
-            dockedItems: [ me.settingToolbar ],
-            items: [
-                me.titleField,
-                me.attr1Field,
-                me.attr2Field,
-                me.attr3Field
-            ]
+            items: [me.titleField]
         });
         return me.settingsForm;
     }

@@ -60,6 +60,7 @@ Ext.define('Shopware.apps.Site.controller.Form', {
         { ref:'navigationTree', selector:'site-tree' },
         { ref:'itemSelector', selector:'site-form itemselector' },
 		{ ref:'navigationTree', selector:'site-tree' },
+        { ref:'attributeForm', selector: 'site-mainWindow shopware-attribute-form' },
 		{ ref:'parentIdField', selector:'site-form hidden[name=parentId]' },
         { ref:'helperIdField', selector:'site-form hidden[name=helperId]' }
     ],
@@ -135,6 +136,7 @@ Ext.define('Shopware.apps.Site.controller.Form', {
             success: function(record,response) {
                 var responseObject = Ext.decode(response.response.responseText);
                 record.set('helperId', responseObject.data.id);
+                me.getAttributeForm().saveAttribute(record.get('helperId'));
 
                 form.loadRecord(record);
                 Shopware.Notification.createGrowlMessage('','{s name=onSaveSiteSuccess}The site has been saved successfully.{/s}', '{s name=mainWindowTitle}{/s}');

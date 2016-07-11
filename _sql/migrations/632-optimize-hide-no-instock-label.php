@@ -1,0 +1,12 @@
+<?php
+
+class Migrations_Migration632 extends Shopware\Components\Migrations\AbstractMigration
+{
+    public function up($modus)
+    {
+        $sql = <<<EOD
+            UPDATE `s_core_config_elements` SET `label` = 'Abverkaufsartikel ohne Lagerbestand ausblenden' WHERE `s_core_config_elements`.`name` = 'hideNoInstock';
+EOD;
+        $this->addSql($sql);
+    }
+}

@@ -19,7 +19,7 @@
     </target>
 
     <target name="build-continuous" depends="unit-shopware-continuous"/>
-    <target name="build-unit" depends="build-cache-dir, build-composer-install, build-config, build-database, build-generate-attributes, build-snippets-deploy, build-theme-initialize, build-install-lock-file, build-disable-firstrunwizard, install-git-hooks" />
+    <target name="build-unit" depends="build-composer-install, build-cache-dir, build-config, build-database, build-snippets-deploy, build-theme-initialize,build-create-admin-account, build-install-lock-file, build-disable-firstrunwizard, install-git-hooks" />
     <target name="test-unit" depends="unit-shopware"/>
 
     <target name="configure" description="Set up build-variables">
@@ -72,12 +72,12 @@
     <target name="install-composer-binary" depends="check-composer-binary"  unless="composer.binary.present">
         <exec executable="bash" failonerror="true">
             <arg value="-c" />
-            <arg value="curl -s https://getcomposer.org/installer | php" />
+            <arg value="curl -s https://getcomposer.org/installer | ${script.php}" />
         </exec>
     </target>
 
     <target name="update-composer-binary" depends="install-composer-binary">
-        <exec executable="php">
+        <exec executable="${script.php}">
             <arg value="composer.phar" />
             <arg value="self-update" />
             <arg value="--no-interaction" />
@@ -85,7 +85,7 @@
     </target>
 
     <target name="build-composer-install" depends="update-composer-binary">
-        <exec executable="php" failonerror="true">
+        <exec executable="${script.php}" failonerror="true">
             <arg value="composer.phar" />
             <arg value="install" />
             <arg value="--no-interaction" />
@@ -94,98 +94,70 @@
     </target>
 
     <target name="build-composer-update" depends="update-composer-binary">
-        <exec executable="php" failonerror="true">
+        <exec executable="${script.php}" failonerror="true">
             <arg value="composer.phar" />
             <arg value="update" />
             <arg value="--no-interaction" />
         </exec>
     </target>
 
-    <target name="build-database" depends="build-database-foundation, build-database-apply-deltas, build-database-deploy-demodata" />
+    <target name="build-database" depends="build-database-foundation, build-database-deploy-demodata" />
+
+    <target name="build-create-admin-account">
+        <exec executable="${script.php}" dir="${basedir}/bin" failonerror="true">
+            <arg line="console sw:admin:create"/>
+            <arg value="--name=Demo user"/>
+            <arg value="--email=demo@example.com"/>
+            <arg value="--username=demo"/>
+            <arg value="--password=demo"/>
+            <arg value="--locale=de_DE"/>
+        </exec>
+    </target>
 
     <target name="build-database-foundation">
-        <concat encoding="UTF-8" outputencoding="UTF-8" destfile="${build.dir}/scripts/deploy.sql">
-            <fileset file="${build.dir}/scripts/deploy.create.sql"/>
-            <fileset file="${sql.dir}/install/latest.sql"/>
-            <fileset file="${build.dir}/scripts/deploy.shopconfig.sql"/>
-
-            <filterchain>
-                <replacetokens>
-                    <token key="database" value="${db.name}"/>
-                    <token key="host" value="${app.host}"/>
-                    <token key="path" value="${app.path}"/>
-                </replacetokens>
-            </filterchain>
-        </concat>
-
-        <exec executable="${script.mysql}" failonerror="true" input="${build.dir}/scripts/deploy.sql">
-            <arg value="-u${db.user}"/>
-            <arg value="-P${db.port}"/>
-            <arg value="--password=${db.password}"/>
-            <arg value="--host=${db.host}"/>
+        <exec executable="${script.php}" dir="${basedir}/bin" failonerror="true">
+            <arg line="console sw:database:setup"/>
+            <arg value="--steps=drop,create,import,setupShop"/>
+            <arg value="--host=${app.host}"/>
+            <arg value="--path=${app.path}"/>
         </exec>
-
-        <delete file="${build.dir}/scripts/deploy.sql"/>
     </target>
 
     <target name="build-database-apply-deltas">
-        <exec executable="php" failonerror="true">
-            <arg value="${build.dir}/ApplyDeltas.php"/>
-            <arg value="--port=${db.port}"/>
-            <arg value="--password=${db.password}"/>
-            <arg value="--host=${db.host}"/>
-            <arg value="--username=${db.user}"/>
-            <arg value="--dbname=${db.name}"/>
+        <exec executable="${script.php}" dir="${basedir}/bin" failonerror="true">
+            <arg line="console sw:migrations:migrate --mode=install"/>
         </exec>
     </target>
 
     <target name="build-database-deploy-demodata">
-        <concat encoding="UTF-8" outputencoding="UTF-8" destfile="${build.dir}/scripts/demo.template.sql">
-            <fileset file="${demo.data}"/>
-            <fileset file="${build.dir}/scripts/deploy.shopconfig.sql"/>
-        </concat>
-
-        <copy encoding="UTF-8" outputencoding="UTF-8" file="${build.dir}/scripts/demo.template.sql" toFile="${build.dir}/scripts/demo.deploy.sql">
-            <filterset>
-                <filter token="database" value="${db.name}"/>
-                <filter token="host" value="${app.host}"/>
-                <filter token="path" value="${app.path}"/>
-            </filterset>
-        </copy>
-
-        <exec executable="${script.mysql}" failonerror="true" input="${build.dir}/scripts/demo.deploy.sql">
-            <arg value="-u${db.user}"/>
-            <arg value="-P${db.port}"/>
-            <arg value="--password=${db.password}"/>
-            <arg value="--host=${db.host}"/>
-            <arg value="--default-character-set=utf8"/>
-            <arg value="${db.name}"/>
+        <exec executable="${script.php}" dir="${basedir}/bin" failonerror="true">
+            <arg line="console sw:database:setup"/>
+            <arg value="--steps=importDemodata,setupShop"/>
+            <arg value="--host=${app.host}"/>
+            <arg value="--path=${app.path}"/>
         </exec>
-
-        <delete file="${build.dir}/scripts/demo.template.sql"/>
-        <delete file="${build.dir}/scripts/demo.deploy.sql"/>
     </target>
 
     <target name="build-generate-attributes">
-        <exec executable="php" dir="${basedir}/bin" failonerror="true">
+        <exec executable="${script.php}" dir="${basedir}/bin" failonerror="true">
             <arg line="console sw:generate:attributes"/>
         </exec>
     </target>
 
-    <target name="build-snippets-deploy" depends="build-generate-attributes">
-        <exec executable="php" dir="${basedir}/bin" failonerror="true">
+    <target name="build-snippets-deploy">
+        <exec executable="${script.php}" dir="${basedir}/bin" failonerror="true">
             <arg line="console sw:snippets:to:db --include-plugins"/>
         </exec>
     </target>
 
-    <target name="build-theme-initialize" depends="build-generate-attributes">
-        <exec executable="php" dir="${basedir}/bin" failonerror="true">
+    <target name="build-theme-initialize">
+        <exec executable="${script.php}" dir="${basedir}/bin" failonerror="true">
             <arg line="console sw:theme:initialize"/>
         </exec>
     </target>
 
     <target name="build-disable-firstrunwizard">
-        <exec executable="php" dir="${basedir}/bin" failonerror="true">
+        <exec executable="${script.php}" dir="${basedir}/bin" failonerror="true">
             <arg line="console sw:firstrunwizard:disable"/>
         </exec>
     </target>
@@ -204,24 +176,9 @@
     </target>
 
     <target name="build-cache-dir">
-        <mkdir dir="${cache.dir}/"/>
-        <exec executable="chmod" os="Linux">
-            <arg value="0777"/>
-            <arg value="${cache.dir}/"/>
+        <exec executable="${script.php}" dir="${basedir}/bin" failonerror="true">
+            <arg line="console sw:cache:clear"/>
         </exec>
-
-        <delete includeEmptyDirs="true">
-            <fileset dir="${cache.dir}">
-                <include name="**/*"/>
-                <exclude name=".htaccess"/>
-                <exclude name="clear_cache.sh"/>
-            </fileset>
-
-            <fileset dir="${test.dir.shopware}/TempFiles/">
-                <include name="**/*"/>
-                <exclude name=".gitkeep"/>
-            </fileset>
-        </delete>
     </target>
 
     <target name="build-config">
@@ -257,6 +214,13 @@
 
     <target name="unit-shopware-continuous" depends="build-unit">
         <exec executable="${script.phpunit}" failonerror="true" dir="${test.dir.shopware}">
+            <arg value="--log-junit=${log.dir}/junit.xml"/>
+        </exec>
+    </target>
+
+    <target name="unit-continuous-es">
+        <exec executable="${script.phpunit}" failonerror="true" dir="${test.dir.shopware}">
+            <arg value="--exclude-group=skipElasticSearch" />
             <arg value="--log-junit=${log.dir}/junit.xml"/>
         </exec>
     </target>
@@ -308,7 +272,7 @@
     </target>
 
     <target name="static-phpcs" description="PHP CodeSniffer">
-        <exec executable="phpcs" output="/dev/null" failonerror="false">
+        <exec executable="${script.phpcs}" output="/dev/null" failonerror="false">
             <arg value="--standard=${build.dir}"/>
             <arg value="--report=checkstyle"/>
             <arg value="--report-file=${log.dir}/checkstyle.xml"/>
@@ -319,7 +283,7 @@
     </target>
 
     <target name="static-phpmd" description="PHP Mess Detector">
-        <exec executable="phpmd" failonerror="false" error="${log.dir}/error.log" append="true">
+        <exec executable="${script.phpmd}" failonerror="false" error="${log.dir}/error.log" append="true">
             <arg value="${app.dir}/"/>
             <arg value="xml"/>
             <arg value="codesize,design,unusedcode"/>
@@ -329,7 +293,7 @@
     </target>
 
     <target name="static-phpcpd" description="PHP Copy/Paste Detector">
-        <exec executable="phpcpd" failonerror="false" output="/dev/null" error="${log.dir}/error.log" append="true">
+        <exec executable="${script.phpcpd}" failonerror="false" output="/dev/null" error="${log.dir}/error.log" append="true">
             <arg value="--log-pmd"/>
             <arg value="${log.dir}/cpd.xml"/>
             <arg value="${app.dir}/"/>
@@ -337,7 +301,7 @@
     </target>
 
     <target name="static-phploc" description="PHP Lines of Code">
-        <exec executable="phploc" failonerror="false" output="${log.dir}/loc.txt" error="${log.dir}/error.log" append="true">
+        <exec executable="${script.phploc}" failonerror="false" output="${log.dir}/loc.txt" error="${log.dir}/error.log" append="true">
             <arg value="--log-xml"/>
             <arg value="${log.dir}/loc.xml"/>
             <arg value="--log-csv"/>
@@ -349,7 +313,7 @@
 
     <target name="static-pdepend">
         <mkdir dir="${log.dir}/depend"/>
-        <exec executable="pdepend" failonerror="false" output="${log.dir}/depend/output.txt" error="${log.dir}/error.log" append="true" dir="${app.dir}">
+        <exec executable="${script.pdepend}" failonerror="false" output="${log.dir}/depend/output.txt" error="${log.dir}/error.log" append="true" dir="${app.dir}">
             <arg value="--summary-xml=${log.dir}/depend/summary.xml"/>
             <arg value="--jdepend-chart=${log.dir}/depend/jdepend.svg"/>
             <arg value="--overview-pyramid=${log.dir}/depend/pyramid.svg"/>
@@ -358,7 +322,7 @@
     </target>
 
     <target name="build-phpcb" description="Build CodeBrowser">
-        <exec executable="phpcb" failonerror="false" output="/dev/null" error="${log.dir}/error.log" append="true">
+        <exec executable="${script.phpcb}" failonerror="false" output="/dev/null" error="${log.dir}/error.log" append="true">
             <arg value="-l${log.dir}"/>
             <arg value="-o${log.dir}/code-browser"/>
             <arg value="-s${app.dir}"/>

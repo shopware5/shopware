@@ -73,21 +73,22 @@ Ext.define('Shopware.apps.Shipping.view.edit.Advanced', {
      *
      * @integer
      */
-    bodyPadding: 4,
+    bodyPadding: 10,
 
     /**
      * Default formatting for the form panels.
      * @object
      */
     formDefaults: {
-        labelStyle : 'font-weight: 700; text-align: left;',
-        labelWidth  : 120,
+        labelWidth  : 155,
         minWidth : 250,
         xtype : 'container',
         layout: 'hbox',
         columnWidth : 0.4,
         anchor : '100%'
     },
+
+    cls: 'shopware-form',
 
     /**
      * Initialize the controller and defines the necessary default configuration
@@ -224,7 +225,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.Advanced', {
                     submitFormat:'H:i',
                     fieldLabel:'{s name=bind_time_from_label}Time{/s}',
                     labelStyle:'font-weight: 700; text-align: left;',
-                    labelWidth:120,
+                    labelWidth:155,
                     minWidth:80,
                     flex:2,
                     style:'margin-right: 5px'
@@ -260,7 +261,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.Advanced', {
                 decimalPrecision: 3,
                 submitLocaleSeparator: false,
                 allowDecimal: true,
-                labelWidth  : 120,
+                labelWidth  : 155,
                 minWidth:80,
                 flex:2,
                 style:'margin-right: 5px'
@@ -296,7 +297,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.Advanced', {
                 name: 'bindPriceFrom',
                 fieldLabel: '{s name=bind_price_from_label}Price from{/s}',
                 labelStyle: 'font-weight: 700; text-align: left;',
-                labelWidth: 120,
+                labelWidth: 155,
                 minWidth: 80,
                 flex:2,
                 style: 'margin-right: 5px'
@@ -343,7 +344,7 @@ Ext.define('Shopware.apps.Shipping.view.edit.Advanced', {
                     name        : 'bindWeekdayFrom',
                     fieldLabel  : '{s name=bind_weekday_from_label}Weekdays to{/s}',
                     labelStyle : 'font-weight: 700; text-align: left;',
-                    labelWidth  : 120,
+                    labelWidth  : 155,
                     minWidth       : 80,
                     style: 'margin-right: 5px',
                     store: new Ext.data.ArrayStore({

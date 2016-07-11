@@ -24,6 +24,8 @@
 
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
+use Shopware\Components\NumberRangeIncrementerInterface;
+use Shopware\Models\Customer\Customer;
 
 /**
  * Deprecated Shopware Class that handle frontend orders
@@ -138,8 +140,16 @@ class sOrder
      * Custom attributes
      *
      * @var string
+     * @deprecated since 5.2, remove in 5.3. Use orderAttributes instead
      */
     public $o_attr_1, $o_attr_2,$o_attr_3,$o_attr_4,$o_attr_5,$o_attr_6;
+
+    /**
+     * Custom attributes
+     *
+     * @var array
+     */
+    public $orderAttributes = [];
 
     /**
      * Device type from which the order was placed
@@ -188,6 +198,21 @@ class sOrder
     private $contextService;
 
     /**
+     * @var NumberRangeIncrementerInterface
+     */
+    private $numberRangeIncrementer;
+
+    /**
+     * @var Shopware\Bundle\AttributeBundle\Service\DataLoader
+     */
+    private $attributeLoader;
+
+    /**
+     * @var Shopware\Bundle\AttributeBundle\Service\DataPersister
+     */
+    private $attributePersister;
+
+    /**
      * Class constructor.
      * Injects all dependencies which are required for this class.
      * @param ContextServiceInterface $contextService
@@ -199,8 +224,11 @@ class sOrder
         $this->db = Shopware()->Db();
         $this->eventManager = Shopware()->Events();
         $this->config = Shopware()->Config();
+        $this->numberRangeIncrementer = Shopware()->Container()->get('shopware.number_range_incrementer');
 
         $this->contextService = $contextService ? : Shopware()->Container()->get('shopware_storefront.context_service');
+        $this->attributeLoader = Shopware()->Container()->get('shopware_attribute.data_loader');
+        $this->attributePersister = Shopware()->Container()->get('shopware_attribute.data_persister');
     }
 
     /**
@@ -221,19 +249,13 @@ class sOrder
      */
     public function sGetOrderNumber()
     {
-        $number = $this->db->fetchOne(
-            "/*NO LIMIT*/ SELECT number FROM s_order_number WHERE name='invoice' FOR UPDATE"
-        );
-        $this->db->executeUpdate(
-            "UPDATE s_order_number SET number = number + 1 WHERE name='invoice'"
-        );
-        $number += 1;
-
+        $number = $this->numberRangeIncrementer->increment('invoice');
         $number = $this->eventManager->filter(
             'Shopware_Modules_Order_GetOrdernumber_FilterOrdernumber',
             $number,
             array('subject'=>$this)
         );
+
         return $number;
     }
 
@@ -246,22 +268,6 @@ class sOrder
      */
     public function handleESDOrder($basketRow, $orderID, $orderDetailsID)
     {
-        $this->sManageEsdOrder($basketRow, $orderID, $orderDetailsID);
-
-        return $basketRow;
-    }
-
-    /**
-     * @deprecated since SW 5.0.4, will be removed in SW 5.2, use handleESDOrder() instead
-     *
-     * @param $basketRow
-     * @param $orderID
-     * @param $orderdetailsID
-     * @throws Enlight_Exception
-     * @throws Zend_Db_Adapter_Exception
-     */
-    public function sManageEsdOrder(&$basketRow, $orderID, $orderdetailsID)
-    {
         $quantity = $basketRow["quantity"];
         $basketRow['assignedSerials'] = array();
 
@@ -269,7 +275,7 @@ class sOrder
         $esdArticle = $this->getVariantEsd($basketRow["ordernumber"]);
 
         if (!$esdArticle["id"]) {
-            return;
+            return $basketRow;
         }
 
         if (!$esdArticle["serials"]) {
@@ -279,10 +285,10 @@ class sOrder
                 'esdID' => $esdArticle["id"],
                 'userID' => $this->sUserData["additional"]["user"]["id"],
                 'orderID' => $orderID,
-                'orderdetailsID' => $orderdetailsID,
+                'orderdetailsID' => $orderDetailsID,
                 'datum' => new Zend_Db_Expr('NOW()'),
             ));
-            return;
+            return $basketRow;
         }
 
         $availableSerials = $this->getAvailableSerialsOfEsd($esdArticle["id"]);
@@ -307,7 +313,7 @@ class sOrder
 
         // Check if enough serials are available, if not, an email has been sent, and we can return
         if (count($availableSerials) < $quantity) {
-            return;
+            return $basketRow;
         }
 
         for ($i = 1; $i <= $quantity; $i++) {
@@ -322,10 +328,12 @@ class sOrder
                 'esdID' => $esdArticle["id"],
                 'userID' => $this->sUserData["additional"]["user"]["id"],
                 'orderID' => $orderID,
-                'orderdetailsID' => $orderdetailsID,
+                'orderdetailsID' => $orderDetailsID,
                 'datum' => new Zend_Db_Expr('NOW()'),
             ));
         }
+
+        return $basketRow;
     }
 
     /**
@@ -525,10 +533,7 @@ class sOrder
             $this->sBasketData["AmountWithTaxNumeric"] = $this->sBasketData["AmountNumeric"];
         }
 
-        if ($this->isTaxFree(
-                $this->sSYSTEM->sUSERGROUPDATA["tax"],
-                $this->sSYSTEM->sUSERGROUPDATA["id"])
-        ) {
+        if ($this->isTaxFree($this->sSYSTEM->sUSERGROUPDATA["tax"], $this->sSYSTEM->sUSERGROUPDATA["id"])) {
             $net = "1";
         } else {
             $net = "0";
@@ -618,20 +623,19 @@ class sOrder
             //Payment method code failure
         }
 
-        $attributeSql = "INSERT INTO s_order_attributes (orderID, attribute1, attribute2, attribute3, attribute4, attribute5, attribute6)
-                VALUES (
-                    " . $orderID  .",
-                    ".$this->db->quote((string) $this->o_attr_1).",
-                    ".$this->db->quote((string) $this->o_attr_2).",
-                    ".$this->db->quote((string) $this->o_attr_3).",
-                    ".$this->db->quote((string) $this->o_attr_4).",
-                    ".$this->db->quote((string) $this->o_attr_5).",
-                    ".$this->db->quote((string) $this->o_attr_6)."
-                )";
-        $attributeSql = $this->eventManager->filter('Shopware_Modules_Order_SaveOrderAttributes_FilterSQL', $attributeSql, array('subject'=>$this));
-        $this->db->executeUpdate($attributeSql);
+        $attributeData = [
+            'attribute1' => $this->o_attr_1,
+            'attribute2' => $this->o_attr_2,
+            'attribute3' => $this->o_attr_3,
+            'attribute4' => $this->o_attr_4,
+            'attribute5' => $this->o_attr_5,
+            'attribute6' => $this->o_attr_6,
+        ];
 
-        $attributes = $this->getOrderAttributes($orderID);
+        $attributeData = array_merge($attributeData, $this->orderAttributes);
+
+        $this->attributePersister->persist($attributeData, 's_order_attributes', $orderID);
+        $attributes = $this->attributeLoader->load('s_order_attributes', $orderID) ?: [];
         unset($attributes['id']);
         unset($attributes['orderID']);
 
@@ -709,21 +713,10 @@ class sOrder
 
             $this->sBasketData['content'][$key]['orderDetailId'] = $orderdetailsID;
 
-            //new attribute tables
-            $attributeSql = "INSERT INTO s_order_details_attributes (detailID, attribute1, attribute2, attribute3, attribute4, attribute5, attribute6)
-                             VALUES ("
-                             .$orderdetailsID. "," .
-                             $this->db->quote((string) $basketRow["ob_attr1"]).",".
-                             $this->db->quote((string) $basketRow["ob_attr2"]).",".
-                             $this->db->quote((string) $basketRow["ob_attr3"]).",".
-                             $this->db->quote((string) $basketRow["ob_attr4"]).",".
-                             $this->db->quote((string) $basketRow["ob_attr5"]).",".
-                             $this->db->quote((string) $basketRow["ob_attr6"]).
-            ")";
-            $attributeSql = $this->eventManager->filter('Shopware_Modules_Order_SaveOrderAttributes_FilterDetailsSQL', $attributeSql, array('subject'=>$this, 'row'=>$basketRow, 'user'=>$this->sUserData, 'order'=>array("id"=>$orderID, "number"=>$orderNumber)));
-            $this->db->executeUpdate($attributeSql);
-
-            $detailAttributes = $this->getOrderDetailAttributes($orderdetailsID);
+            // save attributes
+            $attributeData = $this->attributeLoader->load('s_order_basket_attributes', $basketRow['id']);
+            $this->attributePersister->persist($attributeData, 's_order_details_attributes', $orderdetailsID);
+            $detailAttributes = $this->attributeLoader->load('s_order_details_attributes', $orderdetailsID) ?: [];
             unset($detailAttributes['id']);
             unset($detailAttributes['detailID']);
             $this->sBasketData['content'][$key]['attributes'] = $detailAttributes;
@@ -752,6 +745,10 @@ class sOrder
             'subject' => $this,
             'details' => $this->sBasketData['content'],
         ));
+
+        // Save Billing and Shipping-Address to retrace in future
+        $this->sSaveBillingAddress($this->sUserData["billingaddress"], $orderID);
+        $this->sSaveShippingAddress($this->sUserData["shippingaddress"], $orderID);
 
         $this->sUserData = $this->getUserDataForMail($this->sUserData);
 
@@ -782,10 +779,6 @@ class sOrder
         if ($this->bookingId) {
             $variables['sBookingID'] = $this->bookingId;
         }
-
-        // Save Billing and Shipping-Address to retrace in future
-        $this->sSaveBillingAddress($this->sUserData["billingaddress"], $orderID);
-        $this->sSaveShippingAddress($this->sUserData["shippingaddress"], $orderID);
 
         // Completed - Garbage basket / temporary - order
         $this->sDeleteTemporaryOrder();
@@ -851,21 +844,6 @@ class sOrder
             AND s_articles_esd_serials.esdID= :esdId",
             array('esdId' => $esdId)
         );
-    }
-
-    /**
-     * Helper function which returns the attribute data of the passed order position.
-     *
-     * @param $detailId
-     * @return array|false
-     */
-    private function getOrderDetailAttributes($detailId)
-    {
-        $attributes = $this->db->fetchRow(
-            'SELECT * FROM s_order_details_attributes WHERE detailID = :detailID;',
-            array('detailID' => $detailId)
-        );
-        return $attributes;
     }
 
     /**
@@ -973,22 +951,6 @@ class sOrder
     }
 
     /**
-     * Helper function which returns the attributes
-     * of the passed order id.
-     *
-     * @param $orderId
-     * @return array|false
-     */
-    private function getOrderAttributes($orderId)
-    {
-        $attributes = $this->db->fetchRow(
-            'SELECT * FROM s_order_attributes WHERE orderID = :orderId;',
-            array('orderId' => $orderId)
-        );
-        return $attributes;
-    }
-
-    /**
      * Small helper function which iterates all basket rows
      * and formats the article name and order number.
      * This function is used for the order status mail.
@@ -1031,7 +993,7 @@ class sOrder
 
         // add attributes to orderDetails
         foreach ($orderDetails as &$orderDetail) {
-            $attributes = $this->getOrderDetailAttributes($orderDetail['orderdetailsID']);
+            $attributes = $this->attributeLoader->load('s_order_details_attributes', $orderDetail['orderdetailsID']) ?: [];
             unset($attributes['id']);
             unset($attributes['detailID']);
             $orderDetail['attributes'] = $attributes;
@@ -1050,7 +1012,7 @@ class sOrder
     private function getOrderForStatusMail($orderId)
     {
         $order = $this->getOrderById($orderId);
-        $attributes = $this->getOrderAttributes($orderId);
+        $attributes = $this->attributeLoader->load('s_order_attributes', $orderId) ?: [];
         unset($attributes['id']);
         unset($attributes['orderID']);
         $order['attributes'] = $attributes;
@@ -1248,9 +1210,16 @@ class sOrder
     /**
      * Save order billing address
      * @access public
+     * @param array $address
+     * @param int $id
+     * @return int
+     * @throws Exception
      */
     public function sSaveBillingAddress($address, $id)
     {
+        /** @var Customer $customer */
+        $customer = Shopware()->Container()->get('models')->find(Customer::class, $address['userID']);
+
         $sql = "
         INSERT INTO s_order_billingaddress
         (
@@ -1266,74 +1235,77 @@ class sOrder
             zipcode,
             city,
             phone,
-            fax,
             countryID,
             stateID,
             ustid,
             additional_address_line1,
-            additional_address_line2
+            additional_address_line2,
+            title
         )
         VALUES (
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?
+            :userID,
+            :orderID,
+            :customernumber,
+            :company,
+            :department,
+            :salutation,
+            :firstname,
+            :lastname,
+            :street,
+            :zipcode,
+            :city,
+            :phone,
+            :countryID,
+            :stateID,
+            :ustid,
+            :additional_address_line1,
+            :additional_address_line2,
+            :title
             )
         ";
         $sql = $this->eventManager->filter('Shopware_Modules_Order_SaveBilling_FilterSQL', $sql, array('subject'=>$this, 'address'=>$address, 'id'=>$id));
         $array = array(
-            $address["userID"],
-            $id,
-            $address["customernumber"],
-            $address["company"],
-            $address["department"],
-            $address["salutation"],
-            $address["firstname"],
-            $address["lastname"],
-            $address["street"],
-            $address["zipcode"],
-            $address["city"],
-            $address["phone"],
-            $address["fax"],
-            $address["countryID"],
-            $address["stateID"],
-            $address["ustid"],
-            $address["additional_address_line1"],
-            $address["additional_address_line2"]
+            ':userID' => $address["userID"],
+            ':orderID' => $id,
+            ':customernumber' => $customer->getNumber(),
+            ':company' => (string) $address["company"],
+            ':department' => (string) $address["department"],
+            ':salutation' => (string) $address["salutation"],
+            ':firstname' => (string) $address["firstname"],
+            ':lastname' => (string) $address["lastname"],
+            ':street' => (string) $address["street"],
+            ':zipcode' => (string) $address["zipcode"],
+            ':city' => (string) $address["city"],
+            ':phone' => (string) $address["phone"],
+            ':countryID' => $address["countryID"],
+            ':stateID' => $address["stateID"],
+            ':ustid' => $address["ustid"],
+            ':additional_address_line1' => $address["additional_address_line1"],
+            ':additional_address_line2' => $address["additional_address_line2"],
+            ':title' => $address["title"]
         );
         $array = $this->eventManager->filter('Shopware_Modules_Order_SaveBilling_FilterArray', $array, array('subject'=>$this, 'address'=>$address, 'id'=>$id));
         $result = $this->db->executeUpdate($sql, $array);
 
-
-        //new attribute tables
         $billingID = $this->db->lastInsertId();
-        $sql = "INSERT INTO s_order_billingaddress_attributes (billingID, text1, text2, text3, text4, text5, text6) VALUES (?,?,?,?,?,?,?)";
-        $sql = $this->eventManager->filter('Shopware_Modules_Order_SaveBillingAttributes_FilterSQL', $sql, array('subject'=>$this, 'address'=>$address, 'id'=>$id));
-        $array = array(
-            $billingID,
-            $address["text1"],
-            $address["text2"],
-            $address["text3"],
-            $address["text4"],
-            $address["text5"],
-            $address["text6"]
-        );
-        $array = $this->eventManager->filter('Shopware_Modules_Order_SaveBillingAttributes_FilterArray', $array, array('subject'=>$this, 'address'=>$address, 'id'=>$id));
-        $this->db->executeUpdate($sql, $array);
+
+        $billingAddressId = null;
+
+        if ($this->session !== null) {
+            $billingAddressId = $this->session->get('checkoutBillingAddressId');
+        }
+
+        if ($billingAddressId === null) {
+            $billingAddressId = $customer->getDefaultBillingAddress()->getId();
+        }
+
+        $attributes = $this->attributeLoader->load('s_user_addresses_attributes', $billingAddressId);
+
+        if (!is_array($attributes)) {
+            $attributes = [];
+        }
+
+        $this->attributePersister->persist($attributes, 's_order_billingaddress_attributes', $billingID);
 
         return $result;
     }
@@ -1341,6 +1313,10 @@ class sOrder
     /**
      * save order shipping address
      * @access public
+     * @param array $address
+     * @param int $id
+     * @return int
+     * @throws Exception
      */
     public function sSaveShippingAddress($address, $id)
     {
@@ -1360,60 +1336,65 @@ class sOrder
             countryID,
             stateID,
             additional_address_line1,
-            additional_address_line2
+            additional_address_line2,
+            title
         )
         VALUES (
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?,
-            ?
+            :userID,
+            :orderID,
+            :company,
+            :department,
+            :salutation,
+            :firstname,
+            :lastname,
+            :street,
+            :zipcode,
+            :city,
+            :countryID,
+            :stateID,
+            :additional_address_line1,
+            :additional_address_line2,
+            :title
             )
         ";
         $sql = $this->eventManager->filter('Shopware_Modules_Order_SaveShipping_FilterSQL', $sql, array('subject'=>$this, 'address'=>$address, 'id'=>$id));
         $array = array(
-            $address["userID"],
-            $id,
-            $address["company"],
-            $address["department"],
-            $address["salutation"],
-            $address["firstname"],
-            $address["lastname"],
-            $address["street"],
-            $address["zipcode"],
-            $address["city"],
-            $address["countryID"],
-            $address["stateID"],
-            $address["additional_address_line1"],
-            $address["additional_address_line2"]
+            ':userID' => $address["userID"],
+            ':orderID' => $id,
+            ':company' => (string) $address["company"],
+            ':department' => (string) $address["department"],
+            ':salutation' => (string) $address["salutation"],
+            ':firstname' => (string) $address["firstname"],
+            ':lastname' => (string) $address["lastname"],
+            ':street' => (string) $address["street"],
+            ':zipcode' => (string) $address["zipcode"],
+            ':city' => (string) $address["city"],
+            ':countryID' => $address["countryID"],
+            ':stateID' => $address["stateID"],
+            ':additional_address_line1' => (string) $address["additional_address_line1"],
+            ':additional_address_line2' => (string) $address["additional_address_line2"],
+            ':title' => (string) $address["title"]
         );
         $array = $this->eventManager->filter('Shopware_Modules_Order_SaveShipping_FilterArray', $array, array('subject'=>$this, 'address'=>$address, 'id'=>$id));
         $result = $this->db->executeUpdate($sql, $array);
 
-        //new attribute table
         $shippingId = $this->db->lastInsertId();
-        $sql = "INSERT INTO s_order_shippingaddress_attributes (shippingID, text1, text2, text3, text4, text5, text6) VALUES (?,?,?,?,?,?,?)";
-        $sql = $this->eventManager->filter('Shopware_Modules_Order_SaveShippingAttributes_FilterSQL', $sql, array('subject'=>$this, 'address'=>$address, 'id'=>$id));
-        $array = array(
-            $shippingId,
-            $address["text1"],
-            $address["text2"],
-            $address["text3"],
-            $address["text4"],
-            $address["text5"],
-            $address["text6"]
-        );
-        $array = $this->eventManager->filter('Shopware_Modules_Order_SaveShippingAttributes_FilterArray', $array, array('subject'=>$this, 'address'=>$address, 'id'=>$id));
-        $this->db->executeUpdate($sql, $array);
+
+        $shippingAddressId = null;
+
+        if ($this->session !== null) {
+            $shippingAddressId = $this->session->get('checkoutShippingAddressId');
+        }
+
+        if ($shippingAddressId === null) {
+            /** @var Customer $customer */
+            $customer = Shopware()->Models()->getRepository('Shopware\Models\Customer\Customer')->find($address['userID']);
+            $shippingAddressId = $customer->getDefaultShippingAddress()->getId();
+        }
+
+        $attributes = $this->attributeLoader->load('s_user_addresses_attributes', $shippingAddressId) ?: [];
+
+        $this->attributePersister->persist($attributes, 's_order_shippingaddress_attributes', $shippingId);
 
         return $result;
     }
@@ -1436,8 +1417,8 @@ class sOrder
             ", array($checkMail));
 
             $advertiser = $this->db->fetchRow("
-            SELECT email, firstname, lastname FROM s_user, s_user_billingaddress
-            WHERE s_user_billingaddress.userID = s_user.id AND s_user.id=?
+            SELECT email, firstname, lastname FROM s_user
+            WHERE s_user.id=?
             ", array($checkIfUserFound["sender"]));
 
             if (!$advertiser) {
@@ -1857,7 +1838,7 @@ SELECT
     `b`.`company` AS `billing_company`,
     `b`.`department` AS `billing_department`,
     `b`.`salutation` AS `billing_salutation`,
-    `ub`.`customernumber`,
+    `u`.`customernumber`,
     `b`.`firstname` AS `billing_firstname`,
     `b`.`lastname` AS `billing_lastname`,
     `b`.`street` AS `billing_street`,
@@ -1867,8 +1848,6 @@ SELECT
     `b`.`city` AS `billing_city`,
     `b`.`phone` AS `phone`,
     `b`.`phone` AS `billing_phone`,
-    `b`.`fax` AS `fax`,
-    `b`.`fax` AS `billing_fax`,
     `b`.`countryID` AS `billing_countryID`,
     `b`.`stateID` AS `billing_stateID`,
     `bc`.`countryname` AS `billing_country`,
@@ -1906,7 +1885,6 @@ SELECT
     `sa`.`text5` AS `shipping_text5`,
     `sa`.`text6` AS `shipping_text6`,
     `u`.*,
-       ub.birthday,
        `g`.`id` AS `preisgruppe`,
        `g`.`tax` AS `billing_net`
 FROM

@@ -35,7 +35,7 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
      */
     public function SeoIndex()
     {
-        return Shopware()->SeoIndex();
+        return Shopware()->Container()->get('SeoIndex');
     }
 
     /**
@@ -206,9 +206,13 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
         $sql = $this->RewriteTable()->getSeoArticleQuery();
         $sql = Shopware()->Db()->limit($sql, $limit, $offset);
 
+
+        $shopFallbackId = ($shop->getFallback() instanceof \Shopware\Models\Shop\Shop) ? $shop->getFallback()->getId():null;
+
         $articles = Shopware()->Db()->fetchAll($sql, array(
             $shop->get('parentID'),
             $shop->getId(),
+            $shopFallbackId,
             '1900-01-01'
         ));
 

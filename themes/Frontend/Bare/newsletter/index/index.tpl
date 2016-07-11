@@ -1,6 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
+	<meta charset="UTF-8" />
 	<title>Newsletter</title>
 	<style type="text/css">
 		td {
@@ -59,8 +60,8 @@
 						{include file="newsletter/index/footer.tpl"}
 
 						<!--FOOTER-->
-				</tr>
-				</td>
+                    </td>
+                </tr>
 			</table>
 
 			<img src="{url module='backend' controller='newsletter' action='log' mailing=$sMailing.id mailaddress=$sUser.mailaddressID fullPath}" style="width:1px;height:1px">

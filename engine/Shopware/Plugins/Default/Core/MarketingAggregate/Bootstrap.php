@@ -100,7 +100,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
      */
     public function TopSeller()
     {
-        return Shopware()->TopSeller();
+        return Shopware()->Container()->get('TopSeller');
     }
 
     /**
@@ -110,7 +110,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
      */
     public function AlsoBought()
     {
-        return Shopware()->AlsoBought();
+        return Shopware()->Container()->get('AlsoBought');
     }
 
     /**
@@ -120,7 +120,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
      */
     public function SimilarShown()
     {
-        return Shopware()->SimilarShown();
+        return Shopware()->Container()->get('SimilarShown');
     }
 
     /**
@@ -284,7 +284,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
                 AND   articleID = :articleId";
 
         $alreadyViewed = Shopware()->Db()->fetchOne($sql, array(
-            'sessionId' => Shopware()->SessionID(),
+            'sessionId' => Shopware()->Session()->get('sessionId'),
             'articleId' => $articleId
         ));
 
@@ -301,7 +301,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
         ";
 
         $articles = Shopware()->Db()->fetchCol($sql, array(
-            'sessionId' => Shopware()->SessionID(),
+            'sessionId' => Shopware()->Session()->get('sessionId'),
             'articleId' => $articleId
         ));
 
@@ -395,7 +395,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
             WHERE basket1.sessionID = :sessionId
         ";
         $combinations = Shopware()->Db()->fetchAll($sql, array(
-            'sessionId' => Shopware()->SessionID()
+            'sessionId' => Shopware()->Session()->get('sessionId')
         ));
 
         $this->AlsoBought()->refreshMultipleBoughtArticles($combinations);

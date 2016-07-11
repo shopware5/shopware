@@ -254,6 +254,9 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
                     restrictionView;
 
                 me.detailRecord = records[0];
+
+                settingForm.attributeForm.loadAttribute(me.detailRecord.get('id'));
+
                 //first reset the old data of this form
                 settingForm.getForm().reset();
                 // change fieldset header
@@ -544,9 +547,6 @@ Ext.define('Shopware.apps.Category.controller.Tree', {
             'name'      : categoryName,
             'text'      : categoryName
         });
-
-        var attributes = me.getModel('Attribute').create(attributeValues);
-        newCategory.getAttributes().add(attributes);
 
         if(parentNode.isLeaf) {
             //setting the node to an folder

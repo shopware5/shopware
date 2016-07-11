@@ -61,6 +61,11 @@ class Application extends BaseApplication
     private $commandsRegistered = false;
 
     /**
+     * @var bool
+     */
+    private $skipDatabase = false;
+
+    /**
      * @param Kernel $kernel
      */
     public function __construct(Kernel $kernel)
@@ -94,7 +99,14 @@ class Application extends BaseApplication
      */
     public function doRun(InputInterface $input, OutputInterface $output)
     {
-        $this->kernel->boot();
+        try {
+            $this->kernel->boot();
+        } catch (\Exception $e) {
+            $this->kernel->boot(true);
+            $formatter = $this->getHelperSet()->get('formatter');
+            $output->writeln($formatter->formatBlock('WARNING! ' . $e->getMessage() . " in ". $e->getFile(), 'error'));
+            $this->skipDatabase = true;
+        }
 
         if (!$this->commandsRegistered) {
             $this->registerCommands($output);
@@ -125,25 +137,33 @@ class Application extends BaseApplication
      */
     protected function registerCommands(OutputInterface $output)
     {
-        //Wrap database related logic in a try-catch
-        //so that non-db commands can still execute
-        try {
-            $em = $this->kernel->getContainer()->get('models');
-
-            // setup doctrine commands
-            $helperSet = $this->getHelperSet();
-            $helperSet->set(new EntityManagerHelper($em), 'em');
-            $helperSet->set(new ConnectionHelper($em->getConnection()), 'db');
-
-            DoctrineConsoleRunner::addCommands($this);
-
-            $this->registerEventCommands();
-        } catch (\Exception $e) {
-            $formatter = $this->getHelperSet()->get('formatter');
-            $output->writeln($formatter->formatBlock('WARNING! ' . $e->getMessage() . " in ". $e->getFile(), 'error'));
-        }
-
         $this->registerFilesystemCommands();
+
+        if (!$this->skipDatabase) {
+            //Wrap database related logic in a try-catch
+            //so that non-db commands can still execute
+            try {
+                $em = $this->kernel->getContainer()->get('models');
+
+                // setup doctrine commands
+                $helperSet = $this->getHelperSet();
+                $helperSet->set(new EntityManagerHelper($em), 'em');
+                $helperSet->set(new ConnectionHelper($em->getConnection()), 'db');
+
+                DoctrineConsoleRunner::addCommands($this);
+
+                $this->registerEventCommands();
+
+                foreach ($this->kernel->getPlugins() as $plugin) {
+                    if ($plugin instanceof \Shopware\Components\Plugin) {
+                        $plugin->registerCommands($this);
+                    }
+                }
+            } catch (\Exception $e) {
+                $formatter = $this->getHelperSet()->get('formatter');
+                $output->writeln($formatter->formatBlock('WARNING! ' . $e->getMessage() . " in ". $e->getFile(), 'error'));
+            }
+        }
     }
 
     protected function registerFilesystemCommands()

@@ -33,6 +33,7 @@ use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\CachedReader;
 use Doctrine\Common\Cache\CacheProvider;
 use Doctrine\Common\Cache\XcacheCache;
+use Doctrine\ORM\Repository\RepositoryFactory;
 
 /**
  * @category  Shopware
@@ -58,12 +59,10 @@ class Configuration extends BaseConfiguration
     /**
      * @param array $options
      * @param \Zend_Cache_Core $cache
-     * @param \Enlight_Hook_HookManager $hookManager
+     * @param RepositoryFactory $repositoryFactory
      */
-    public function __construct($options, \Zend_Cache_Core $cache, \Enlight_Hook_HookManager $hookManager)
+    public function __construct($options, \Zend_Cache_Core $cache, RepositoryFactory $repositoryFactory)
     {
-        $this->setHookManager($hookManager);
-
         // Specifies the FQCN of a subclass of the EntityRepository.
         // That will be available for all entities without a custom repository class.
         $this->setDefaultRepositoryClassName('Shopware\Components\Model\ModelRepository');
@@ -71,13 +70,10 @@ class Configuration extends BaseConfiguration
         $this->setProxyDir($options['proxyDir']);
         $this->setProxyNamespace($options['proxyNamespace']);
 
-
+        $this->setRepositoryFactory($repositoryFactory);
         $this->setAutoGenerateProxyClasses(AbstractProxyFactory::AUTOGENERATE_FILE_NOT_EXISTS);
 
         $this->setAttributeDir($options['attributeDir']);
-
-        $this->addEntityNamespace('Shopware', 'Shopware\Models');
-        $this->addEntityNamespace('Custom', 'Shopware\CustomModels');
 
         Type::overrideType('datetime', 'Shopware\Components\Model\DBAL\Types\DateTimeStringType');
         Type::overrideType('date', 'Shopware\Components\Model\DBAL\Types\DateStringType');
@@ -190,23 +186,6 @@ class Configuration extends BaseConfiguration
         );
 
         return $reader;
-    }
-
-    /**
-     * @param null $hookManager
-     */
-    public function setHookManager($hookManager = null)
-    {
-        $this->_attributes['hookManager'] = $hookManager;
-    }
-
-    /**
-     * @return null
-     */
-    public function getHookManager()
-    {
-        return isset($this->_attributes['hookManager']) ?
-            $this->_attributes['hookManager'] : null;
     }
 
     /**

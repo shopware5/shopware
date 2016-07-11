@@ -22,6 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Models\Banner\Banner;
+
 /**
  * Shopware Backend Banner Management
  *
@@ -141,7 +143,7 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
         if (!is_null(self::$testRepository)) {
             $this->repository = self::$testRepository;
         } else {
-            $this->repository = Shopware()->Models()->Banner();
+            $this->repository = Shopware()->Models()->getRepository(Banner::class);
         }
         $this->namespace = Shopware()->Snippets()->getNamespace('backend/banner/banner');
     }
@@ -315,7 +317,7 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
                     'errorMsg' => $this->namespace->get('no_banner_selected', 'No banner has been selected.')));
                 return;
             }
-            $bannerModel = new \Shopware\Models\Banner\Banner();
+            $bannerModel = new Banner();
         }
         // read data
         $bannerModel->fromArray($params);

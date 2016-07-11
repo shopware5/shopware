@@ -103,18 +103,23 @@ class PreCommitChecks
     private function checkCodeStyle(array $files)
     {
         $succeed = true;
+        $misses = [];
 
         foreach ($files as $file) {
             $output = [];
             $return = null;
             exec("php-cs-fixer fix -v --dry-run --level=psr2 " . escapeshellarg($file), $output, $return);
             if ($return != 0) {
-                echo "Code style error at " . $file . ":" . PHP_EOL;
-                echo implode(PHP_EOL, $output) . PHP_EOL;
-                echo "   To fix, run: php-cs-fixer fix -v --level=psr2 " . escapeshellarg($file) . PHP_EOL;
+                $misses[$file] = "php-cs-fixer fix -v --level=psr2 " . escapeshellarg($file);
                 $this->error = true;
                 $succeed = false;
             }
+        }
+
+        if ($succeed === false) {
+            echo "Code style error in folling files:" . PHP_EOL . implode(PHP_EOL, array_keys($misses)) . PHP_EOL . PHP_EOL;
+            echo "To fix, run: " . PHP_EOL . implode(PHP_EOL, $misses). PHP_EOL;
+            echo PHP_EOL;
         }
 
         return $succeed;

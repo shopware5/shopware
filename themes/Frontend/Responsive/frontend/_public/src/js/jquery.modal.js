@@ -149,6 +149,13 @@
             height: 600,
 
             /**
+             * The max height if sizing is set to `content`
+             * 
+             * @type {Number}
+             */
+            maxHeight: 0,
+
+            /**
              * Whether or not the overlay should be shown.
              *
              * @type {Boolean}
@@ -283,9 +290,10 @@
                 $modalBox.css('top', 0);
             }
 
+            me.setTitle(opts.title);
             me.setWidth(opts.width);
             me.setHeight(opts.height);
-            me.setTitle(opts.title);
+            me.setMaxHeight(opts.maxHeight);
 
             // set display to block instead of .show() for browser compatibility
             $modalBox.css('display', 'block');
@@ -460,11 +468,42 @@
          * @param {Number|String} height
          */
         setHeight: function (height) {
+            var me = this,
+                hasTitle = me._$title.text().length > 0,
+                headerHeight;
+
+            height = (typeof height === 'string' && !(/^\d+$/.test(height))) ? height : window.parseInt(height, 10);
+
+            if(hasTitle) {
+                headerHeight = window.parseInt(me._$header.css('height'), 10);
+                me._$content.css('height', (height - headerHeight));
+            } else {
+                me._$content.css('height', '100%');
+            }
+
+            me._$modalBox.css('height', height);
+            $.publish('plugin/swModal/onSetHeight', [ me ]);
+        },
+
+        /**
+         * Sets the max height of the modal box if the provided value is not empty or greater than 0.
+         * If a string was passed containing a only number, it will be parsed as a pixel value.
+         *
+         * @public
+         * @method setMaxHeight
+         * @param {Number|String} height
+         */
+        setMaxHeight: function (height) {
             var me = this;
 
-            me._$modalBox.css('height', (typeof height === 'string' && !(/^\d+$/.test(height))) ? height : parseInt(height, 10));
+            if (!height) {
+                return;
+            }
 
-            $.publish('plugin/swModal/onSetHeight', [ me ]);
+            height = (typeof height === 'string' && !(/^\d+$/.test(height))) ? height : window.parseInt(height, 10);
+
+            me._$modalBox.css('max-height', height);
+            $.publish('plugin/swModal/onSetMaxHeight', [ me ]);
         },
 
         /**

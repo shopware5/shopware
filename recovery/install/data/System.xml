@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 <requirements>
 	<requirement>
-	 	<name>php</name><group>core</group><required>5.5.9</required>
+	 	<name>php</name><group>core</group><required>5.6.4</required>
 	</requirement>
 	<requirement>
-	 	<name>ionCube Loader</name><group>core</group><required>4.6</required>
-        <notice>The ionCube Loader is only required if you wish to use commercial plugins with the Shopware Community Edition, or if you have purchased the Cluster, Enterprise or Professional Edition of Shopware.</notice>
+	 	<name>ionCube Loader</name><group>core</group><required>5.0</required>
+		<notice>The ionCube Loader is only required if you wish to use encrypted third-party plugins.</notice>
     </requirement>
     <requirement>
         <name>eAccelerator</name><group>core</group><required>0</required>
@@ -36,9 +36,6 @@
 	<requirement>
 	 	<name>curl</name><group>extension</group><required>7.0.0</required>
 	</requirement>
-    <requirement>
-        <name>soap</name><group>extension</group><required>1</required>
-    </requirement>
 	<requirement>
 	 	<name>openssl</name><group>extension</group><required>1</required>
 	</requirement>

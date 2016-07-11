@@ -71,6 +71,9 @@ class Enlight_Template_Manager extends Smarty
 
         $this->start_time = microtime(true);
 
+        $this->_file_perms = 0666 & ~umask();
+        $this->_dir_perms = 0777 & ~umask();
+
         // set default dirs
         $this->setTemplateDir('.' . DS . 'templates' . DS)
             ->setCompileDir('.' . DS . 'templates_c' . DS)
@@ -103,15 +106,19 @@ class Enlight_Template_Manager extends Smarty
      */
     public function setOptions($options = null)
     {
+        if ($options === null) {
+            return $this;
+        }
+
         if ($options instanceof Enlight_Config) {
             $options = $options->toArray();
         }
-        if ($options !== null) {
-            foreach ($options as $key => $option) {
-                $key = str_replace(' ', '', ucwords(str_replace('_', ' ', $key)));
-                $this->{'set' . $key}($option);
-            }
+
+        foreach ($options as $key => $option) {
+            $key = str_replace(' ', '', ucwords(str_replace('_', ' ', $key)));
+            $this->{'set' . $key}($option);
         }
+
         return $this;
     }
 

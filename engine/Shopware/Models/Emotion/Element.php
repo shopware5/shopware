@@ -22,29 +22,15 @@
  * our trademarks remain entirely with us.
  */
 
-namespace   Shopware\Models\Emotion;
+namespace Shopware\Models\Emotion;
 
 use Shopware\Components\Model\ModelEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- *
- * Associations:
- * <code>
- *
- * </code>
- *
- *
- * Indices:
- * <code>
- *
- * </code>
- *
  * @category   Shopware
- * @package    Models
- * @subpackage Emotion
- * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
- * @license    http://enlight.de/license     New BSD License
+ * @package    Shopware\Models
+ * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  * @ORM\Entity
  * @ORM\Table(name="s_emotion_element")
@@ -156,6 +142,22 @@ class Element extends ModelEntity
     protected $data;
 
     /**
+     * INVERSE SIDE
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Emotion\ElementViewport", mappedBy="element", orphanRemoval=true, cascade={"persist"})
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     */
+    protected $viewports;
+
+    /**
+     * Class constructor.
+     */
+    public function __construct()
+    {
+        $this->data = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->viewports = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
      * Unique identifier field of the element model.
      *
      * @return int
@@ -203,46 +205,6 @@ class Element extends ModelEntity
     public function setStartCol($startCol)
     {
         $this->startCol = $startCol;
-    }
-
-    /**
-     * Defines how many rows over the element draws.
-     *
-     * @return int
-     */
-    public function getHeight()
-    {
-        return $this->height;
-    }
-
-    /**
-     * Defines how many rows over the element draws.
-     *
-     * @param int $height
-     */
-    public function setHeight($height)
-    {
-        $this->height = $height;
-    }
-
-    /**
-     * Defines how many columns over the element draws.
-     *
-     * @return int
-     */
-    public function getWidth()
-    {
-        return $this->width;
-    }
-
-    /**
-     * Defines how many columns over the element draws.
-     *
-     * @param int $width
-     */
-    public function setWidth($width)
-    {
-        $this->width = $width;
     }
 
     /**
@@ -300,7 +262,7 @@ class Element extends ModelEntity
      * The emotion model is the owning side (primary key in this table) of the association between
      * emotion and grid.
      *
-     * @return \Shopware\Models\Emotion\Grid
+     * @return \Shopware\Models\Emotion\Emotion
      */
     public function getEmotion()
     {
@@ -330,12 +292,29 @@ class Element extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection|array|null $data
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @param array $data
+     * @return ModelEntity
      */
     public function setData($data)
     {
         return $this->setOneToMany($data, '\Shopware\Models\Emotion\Data', 'data', 'element');
+    }
+
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getViewports()
+    {
+        return $this->viewports;
+    }
+
+    /**
+     * @param array $viewports
+     * @return ModelEntity
+     */
+    public function setViewports($viewports)
+    {
+        return $this->setOneToMany($viewports, '\Shopware\Models\Emotion\ElementViewport', 'viewports', 'element');
     }
 
     /**
@@ -369,7 +348,7 @@ class Element extends ModelEntity
 
         $this->emotionId = null;
 
-        $dataArray = array();
+        $dataArray = [];
         foreach ($this->data as $data) {
             $newData = clone $data;
 
@@ -379,5 +358,16 @@ class Element extends ModelEntity
         }
 
         $this->data = $dataArray;
+
+        $viewportData = [];
+        foreach ($this->viewports as $viewport) {
+            $newViewport = clone $viewport;
+
+            $newViewport->setElement($this);
+
+            $viewportData[] = $newViewport;
+        }
+
+        $this->viewports = $viewportData;
     }
 }

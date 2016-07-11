@@ -85,12 +85,9 @@
 {include file='backend/base/application/Shopware.listing.InfoPanel.js'}
 {include file='backend/base/application/Shopware.listing.FilterPanel.js'}
 {include file='backend/base/application/Shopware.filter.Field.js'}
-
 {include file='backend/base/application/Shopware.store.Association.js'}
 {include file='backend/base/application/Shopware.form.field.Media.js'}
 {include file='backend/base/application/Shopware.store.Search.js'}
-
-
 
 {* Include global models *}
 {include file='backend/base/model/user.js'}
@@ -123,6 +120,7 @@
 {include file='backend/base/model/password_encoder.js'}
 {include file='backend/base/model/product_box_layout.js'}
 {include file='backend/base/model/page_not_found_destination_options.js'}
+{include file='backend/base/model/attribute_config.js'}
 
 {* Include global stores *}
 {include file='backend/base/store/user.js'}
@@ -151,6 +149,8 @@
 {include file='backend/base/store/password_encoder.js'}
 {include file='backend/base/store/product_box_layout.js'}
 {include file='backend/base/store/page_not_found_destination_options.js'}
+{include file='backend/base/store/attribute_config.js'}
+{include file='backend/base/store/salutation.js'}
 
 
 {* Include shopware related components *}
@@ -177,7 +177,6 @@
 {include file='backend/base/component/Shopware.component.Preloader.js'}
 {include file='backend/base/component/Shopware.component.IconPreloader.js'}
 {include file='backend/base/component/Shopware.global.ErrorReporter.js'}
-{include file='backend/base/component/Shopware.notification.ExpiredLicence.js'}
 {include file='backend/base/component/Shopware.notification.SubscriptionWarning.js'}
 {include file='backend/base/component/Shopware.component.ValidatePassword.js'}
 
@@ -207,3 +206,90 @@
 {include file='backend/base/component/element/media_text_selection.js'}
 
 {include file='backend/base/component/Shopware.ModuleManager.js'}
+
+
+
+// Shopware attribute components
+{include file='backend/base/attribute/mixins/Shopware.attribute.SelectionFactory.js'}
+
+{include file='backend/base/attribute/model/dynamic.js'}
+{include file='backend/base/attribute/model/dynamic_reader.js'}
+
+
+
+{include file='backend/base/attribute/Shopware.attribute.FieldHandlerInterface.js'}
+
+{include file='backend/base/attribute/field_handler/Shopware.attribute.BooleanFieldHandler.js'}
+{include file='backend/base/attribute/field_handler/Shopware.attribute.DateFieldHandler.js'}
+{include file='backend/base/attribute/field_handler/Shopware.attribute.DateTimeFieldHandler.js'}
+{include file='backend/base/attribute/field_handler/Shopware.attribute.FloatFieldHandler.js'}
+{include file='backend/base/attribute/field_handler/Shopware.attribute.HtmlFieldHandler.js'}
+{include file='backend/base/attribute/field_handler/Shopware.attribute.IntegerFieldHandler.js'}
+{include file='backend/base/attribute/field_handler/Shopware.attribute.SingleSelectionFieldHandler.js'}
+{include file='backend/base/attribute/field_handler/Shopware.attribute.MultiSelectionFieldHandler.js'}
+{include file='backend/base/attribute/field_handler/Shopware.attribute.StringFieldHandler.js'}
+{include file='backend/base/attribute/field_handler/Shopware.attribute.TextAreaFieldHandler.js'}
+
+{include file='backend/base/attribute/field/Shopware.form.field.Grid.js'}
+{include file='backend/base/attribute/field/Shopware.form.field.GridView.js'}
+{include file='backend/base/attribute/field/Shopware.form.field.SingleSelection.js'}
+{include file='backend/base/attribute/field/Shopware.form.field.MediaGrid.js'}
+{include file='backend/base/attribute/field/Shopware.form.field.ProductGrid.js'}
+{include file='backend/base/attribute/field/Shopware.form.field.PropertyOptionGrid.js'}
+{include file='backend/base/attribute/field/Shopware.form.field.BlogGrid.js'}
+{include file='backend/base/attribute/field/Shopware.form.field.CategoryGrid.js'}
+{include file='backend/base/attribute/field/Shopware.form.field.ProductSingleSelection.js'}
+{include file='backend/base/attribute/field/Shopware.form.field.BlogSingleSelection.js'}
+{include file='backend/base/attribute/field/Shopware.form.field.PropertyOptionSingleSelection.js'}
+{include file='backend/base/attribute/field/Shopware.form.field.CategorySingleSelection.js'}
+{include file='backend/base/attribute/field/Shopware.form.field.VoucherSingleSelection.js'}
+{include file='backend/base/attribute/field/Shopware.form.field.VoucherGrid.js'}
+{include file='backend/base/attribute/field/Shopware.form.field.ProductFeedGrid.js'}
+{include file='backend/base/attribute/field/Shopware.form.field.ProductFeedSingleSelection.js'}
+{include file='backend/base/attribute/field/Shopware.form.field.NewsletterGrid.js'}
+{include file='backend/base/attribute/field/Shopware.form.field.NewsletterSingleSelection.js'}
+{include file='backend/base/attribute/field/Shopware.form.field.PartnerGrid.js'}
+{include file='backend/base/attribute/field/Shopware.form.field.PartnerSingleSelection.js'}
+{include file='backend/base/attribute/field/Shopware.form.field.FormGrid.js'}
+{include file='backend/base/attribute/field/Shopware.form.field.FormSingleSelection.js'}
+{include file='backend/base/attribute/field/Shopware.form.field.CustomerGrid.js'}
+{include file='backend/base/attribute/field/Shopware.form.field.CustomerSingleSelection.js'}
+{include file='backend/base/attribute/field/Shopware.form.field.DispatchGrid.js'}
+{include file='backend/base/attribute/field/Shopware.form.field.PaymentGrid.js'}
+{include file='backend/base/attribute/field/Shopware.form.field.PaymentSingleSelection.js'}
+{include file='backend/base/attribute/field/Shopware.form.field.MailGrid.js'}
+{include file='backend/base/attribute/field/Shopware.form.field.MailSingleSelection.js'}
+{include file='backend/base/attribute/field/Shopware.form.field.EmotionGrid.js'}
+{include file='backend/base/attribute/field/Shopware.form.field.EmotionSingleSelection.js'}
+{include file='backend/base/attribute/field/Shopware.form.field.PremiumGrid.js'}
+{include file='backend/base/attribute/field/Shopware.form.field.PremiumSingleSelection.js'}
+{include file='backend/base/attribute/field/Shopware.form.field.ProductStreamGrid.js'}
+{include file='backend/base/attribute/field/Shopware.form.field.ProductStreamSingleSelection.js'}
+{include file='backend/base/attribute/field/Shopware.form.field.ShopGrid.js'}
+
+
+{include file='backend/base/attribute/field_handler/Shopware.attribute.AbstractEntityFieldHandler.js'}
+{include file='backend/base/attribute/field_handler/Shopware.attribute.CategoryFieldHandler.js'}
+{include file='backend/base/attribute/field_handler/Shopware.attribute.BlogFieldHandler.js'}
+{include file='backend/base/attribute/field_handler/Shopware.attribute.ProductFieldHandler.js'}
+{include file='backend/base/attribute/field_handler/Shopware.attribute.PropertyOptionFieldHandler.js'}
+{include file='backend/base/attribute/field_handler/Shopware.attribute.MediaFieldHandler.js'}
+{include file='backend/base/attribute/field_handler/Shopware.attribute.VoucherFieldHandler.js'}
+{include file='backend/base/attribute/field_handler/Shopware.attribute.ProductFeedFieldHandler.js'}
+{include file='backend/base/attribute/field_handler/Shopware.attribute.NewsletterFieldHandler.js'}
+{include file='backend/base/attribute/field_handler/Shopware.attribute.PartnerFieldHandler.js'}
+{include file='backend/base/attribute/field_handler/Shopware.attribute.FormFieldHandler.js'}
+{include file='backend/base/attribute/field_handler/Shopware.attribute.CustomerFieldHandler.js'}
+{include file='backend/base/attribute/field_handler/Shopware.attribute.DispatchFieldHandler.js'}
+{include file='backend/base/attribute/field_handler/Shopware.attribute.PaymentFieldHandler.js'}
+{include file='backend/base/attribute/field_handler/Shopware.attribute.MailFieldHandler.js'}
+{include file='backend/base/attribute/field_handler/Shopware.attribute.EmotionFieldHandler.js'}
+{include file='backend/base/attribute/field_handler/Shopware.attribute.PremiumFieldHandler.js'}
+{include file='backend/base/attribute/field_handler/Shopware.attribute.ProductStreamFieldHandler.js'}
+{include file='backend/base/attribute/field_handler/Shopware.attribute.ShopFieldHandler.js'}
+{include file='backend/base/attribute/field_handler/Shopware.attribute.ComboBoxFieldHandler.js'}
+
+{include file='backend/base/attribute/Shopware.attribute.Form.js'}
+{include file='backend/base/attribute/Shopware.attribute.Window.js'}
+{include file='backend/base/attribute/Shopware.attribute.Button.js'}
+{include file='backend/base/attribute/Shopware.grid.plugin.Attribute.js'}

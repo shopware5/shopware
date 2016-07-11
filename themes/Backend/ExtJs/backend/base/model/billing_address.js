@@ -58,7 +58,6 @@ Ext.define('Shopware.apps.Base.model.BillingAddress', {
          */
         { name:'number', type:'string' },
         { name:'phone', type:'string' },
-        { name:'fax', type:'string' },
         { name:'vatId', type:'string' }
     ]
 

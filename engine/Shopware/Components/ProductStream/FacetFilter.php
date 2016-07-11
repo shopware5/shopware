@@ -201,12 +201,11 @@ class FacetFilter implements FacetFilterInterface
             return;
         }
 
-
         $new = [];
         /** @var ValueListFacetResult $propertyFacet */
         foreach ($facet->getFacetResults() as $propertyFacet) {
             $ids = array_map(
-                function (ValueListItem $item) {
+                function ($item) {
                     return $item->getId();
                 }, $propertyFacet->getValues()
             );

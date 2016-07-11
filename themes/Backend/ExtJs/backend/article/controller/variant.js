@@ -216,8 +216,6 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
             article = me.subApplication.article,
             listing = me.getVariantListing();
 
-        var attributeFieldSet = me.getController('Main').createAdditionalFieldSet(me.getMainWindow().attributeFields);
-
         if (article.getConfiguratorTemplate() instanceof Ext.data.Store && article.getConfiguratorTemplate().first() instanceof Ext.data.Model) {
             template = article.getConfiguratorTemplate().first();
         } else if (article.getMainDetail() instanceof Ext.data.Store && article.getMainDetail().first() instanceof Ext.data.Model) {
@@ -241,7 +239,6 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
         me.getView('variant.configurator.Template').create({
             record: template,
             article: article,
-            attributeFieldSet: attributeFieldSet,
             customerGroupStore: listing.customerGroupStore,
             unitStore: listing.unitStore
         }).show();
@@ -258,12 +255,10 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
 
         var mainDetail = article.getMainDetail().first();
         var prices = Ext.create('Ext.data.Store', { model: 'Shopware.apps.Article.model.Price' });
-        var attributes = Ext.create('Ext.data.Store', { model: 'Shopware.apps.Article.model.Attribute' });
         template.set(mainDetail.data);
 
         var priceStore = article.getPrice();
         var lastFilter = priceStore.filters.items;
-        var attributeStore = article.getAttribute();
 
         priceStore.clearFilter();
 
@@ -275,16 +270,8 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
             });
         }
 
-        if (attributeStore instanceof Ext.data.Store && attributeStore.getCount() > 0) {
-            var attribute = attributeStore.first();
-            var newAttribute = Ext.create('Shopware.apps.Article.model.Attribute', attribute.data);
-            newAttribute.set('id', null);
-            attributes.add(newAttribute);
-        }
-
         priceStore.filter(lastFilter);
         template.getPriceStore = prices;
-        template.getAttributeStore = attributes;
         return template;
     },
 
@@ -1401,7 +1388,16 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
         if (form && template) {
             form.getForm().updateRecord(template);
             var articleController = me.getController('Detail');
-            articleController.onSaveArticle(win.mainWindow, win.article);
+            articleController.onSaveArticle(
+                win.mainWindow,
+                win.article,
+                {
+                    callback: function(newArticle, success) {
+                        if (success)  {
+                            win.attributeForm.saveAttribute(newArticle.getConfiguratorTemplate().first().get('id'));
+                        }
+                    }
+            });
             win.destroy();
         }
     },
@@ -1439,6 +1435,7 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
                 var message = Ext.String.format(me.snippets.success.variantSave, number);
                 Shopware.Notification.createGrowlMessage(me.snippets.success.title, message, me.snippets.growlMessage);
                 if (win) {
+                    win.attributeForm.saveAttribute(record.get('id'));
                     win.destroy();
                 }
                 if (options !== Ext.undefined && Ext.isFunction(options.callback)) {
@@ -1502,7 +1499,6 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
 
         var newPrice = Ext.create('Shopware.apps.Article.model.Price', {
             pseudoPrice: 0,
-            basePrice: 0,
             percent: 0,
             customerGroupKey: me.subApplication.firstCustomerGroup.get('key')
         });
@@ -1689,13 +1685,11 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
      */
     onEditVariant: function(record) {
         var me = this,
-            listing = me.getVariantListing(),
-            attributeFieldSet = me.getController('Main').createAdditionalFieldSet(me.getMainWindow().attributeFields);
+            listing = me.getVariantListing();
 
         me.getView('variant.Detail').create({
             record: record,
             article: me.subApplication.article,
-            attributeFieldSet: attributeFieldSet,
             customerGroupStore: listing.customerGroupStore,
             unitStore: listing.unitStore
         }).show();
@@ -1919,6 +1913,7 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
         window.destroy();
         if (record.get('prices') === false &&
             record.get('basePrice') === false &&
+            record.get('purchasePrice') === false &&
             record.get('attributes') === false &&
             record.get('settings') === false &&
             record.get('translations') === false) {

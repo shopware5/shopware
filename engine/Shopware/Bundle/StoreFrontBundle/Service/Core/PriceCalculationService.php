@@ -186,11 +186,7 @@ class PriceCalculationService implements Service\PriceCalculationServiceInterfac
          * by the percentage discount value of the current customer group.
          */
         if ($customerGroup->useDiscount() && $customerGroup->getPercentageDiscount()) {
-            if ($customerGroup->getPercentageDiscount() != 0) {
-                $price = $price - ($price / 100 * $customerGroup->getPercentageDiscount());
-            } else {
-                $price = 0;
-            }
+            $price = $price - ($price / 100 * $customerGroup->getPercentageDiscount());
         }
 
         /**

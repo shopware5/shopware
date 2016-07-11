@@ -105,8 +105,7 @@ class Repository extends ModelRepository
     public function getBannerMainQuery($filter=null)
     {
         $builder = $this->createQueryBuilder('banner');
-        $builder->select(array('banner', 'attribute'));
-        $builder->leftJoin('banner.attribute', 'attribute');
+        $builder->select(array('banner'));
         if (null !== $filter || !empty($filter)) {
             //filter the displayed columns with the passed filter
             $builder->andWhere("banner.categoryId = ?1")

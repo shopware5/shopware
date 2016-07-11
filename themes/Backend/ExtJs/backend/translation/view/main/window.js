@@ -99,11 +99,15 @@ Ext.define('Shopware.apps.Translation.view.main.Window',
         return [{
             text: '{s name=button/cancel}Cancel{/s}',
             cls: 'secondary',
-            action: 'translation-main-window-save'
+            action: 'translation-main-window-cancel'
+        }, {
+            text: '{s name=button/save_and_close}Save and close{/s}',
+            cls: 'primary',
+            action: 'translation-main-window-save-and-close'
         }, {
             text: '{s name=button/save}Save translations{/s}',
             cls: 'primary',
-            action: 'translation-main-window-cancel'
+            action: 'translation-main-window-save'
         }];
     }
 });

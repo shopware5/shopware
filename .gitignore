@@ -16,7 +16,8 @@ Thumbs.db
 
 # Composer
 /composer.phar
-/vendor/
+/vendor/*
+!/vendor/.htaccess
 
 # Internal Repositories
 /internal
@@ -25,6 +26,7 @@ Thumbs.db
 # User installed plugins
 /engine/Shopware/Plugins/Community/
 /engine/Shopware/Plugins/Local/
+/custom/plugins/
 
 # Userconfigurations
 /config.php

@@ -35,8 +35,7 @@ The configurator element allows the user to choose from different article variat
         width: 100%;
         height: 100%;
         position: absolute;
-        top: 0;
-        left: 0;
+        top: 0; left: 0;
         z-index: @zindex-configurator-option-input;
         cursor: pointer;
 
@@ -48,6 +47,11 @@ The configurator element allows the user to choose from different article variat
         &:hover ~ label {
             color: @brand-primary;
             border-color: @brand-primary;
+
+            &.is--disabled {
+                color: @text-color;
+                border-color: @border-color;
+            }
         }
 
         &:checked ~ label {
@@ -55,10 +59,13 @@ The configurator element allows the user to choose from different article variat
             border-color: @brand-primary;
         }
 
-        &.is--disabled ~ label {
+        &:disabled ~ label {
             .opacity(0.5);
         }
 
+        &:disabled {
+            cursor: not-allowed;
+        }
     }
 
     .option--label {

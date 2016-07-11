@@ -140,6 +140,8 @@ class ProductMapping implements MappingInterface
                 'esd' => $this->getEsdMapping(),
                 'tax' => $this->getTaxMapping(),
                 'unit' => $this->getUnitMapping(),
+
+                'attributes' => $this->getAttributeMapping()
             ]
         ];
     }
@@ -278,6 +280,40 @@ class ProductMapping implements MappingInterface
                 'calculatedPrice' => ['type' => 'double'],
                 'calculatedReferencePrice' => ['type' => 'double'],
                 'calculatedPseudoPrice' => ['type' => 'double']
+            ]
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    private function getAttributeMapping()
+    {
+        $attributes = Shopware()->Container()->get('shopware_attribute.crud_service');
+        $attributes = $attributes->getList('s_articles_attributes');
+
+        $properties = [];
+        foreach ($attributes as $attribute) {
+            $name = $attribute->getColumnName();
+            $type = $attribute->getElasticSearchType();
+
+            if ($attribute->isIdentifier()) {
+                continue;
+            }
+
+            if ($type['type'] == 'string') {
+                $type['fields'] = [
+                    'raw' => array_merge($type, ['index' => 'not_analyzed'])
+                ];
+            }
+            $properties[$name] = $type;
+        }
+
+        return [
+            'properties' => [
+                'core' => [
+                    'properties' => $properties
+                ]
             ]
         ];
     }

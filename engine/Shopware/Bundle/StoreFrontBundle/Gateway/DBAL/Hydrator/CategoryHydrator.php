@@ -72,8 +72,7 @@ class CategoryHydrator extends Hydrator
         }
 
         if ($data['__categoryAttribute_id']) {
-            $attribute = $this->extractFields('__categoryAttribute_', $data);
-            $category->addAttribute('core', $this->attributeHydrator->hydrate($attribute));
+            $this->attributeHydrator->addAttribute($category, $data, 'categoryAttribute');
         }
 
         return $category;
@@ -126,10 +125,6 @@ class CategoryHydrator extends Hydrator
 
         if (isset($data['__category_template'])) {
             $category->setTemplate($data['__category_template']);
-        }
-
-        if (isset($data['__category_noviewselect'])) {
-            $category->setAllowViewSelect((bool) !$data['__category_noviewselect']);
         }
 
         if (isset($data['__category_blog'])) {

@@ -40,7 +40,8 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
     bodyPadding: 26,
     alias: 'widget.emotion-components-base',
     defaults: {
-        anchor: '100%'
+        anchor: '100%',
+        labelWidth: 170
     },
     initComponent: function() {
         var me = this;
@@ -69,24 +70,59 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
         }
         me.items.push(me.elementFieldset);
         me.items.push(me.globalSettingsFieldset);
+
+        me.plugins = [{
+            ptype: 'translation',
+            pluginId: 'translation',
+            translationType: 'emotionElement',
+            translationMerge: false,
+            translationKey: me.settings.record.get('id')
+        }];
+
         me.callParent(arguments);
         me.loadElementData(me.getSettings('record').get('data'));
     },
 
     loadElementData: function(data) {
-        var me = this, fields = [];
+        var me = this,
+            fieldCollection = me.getForm().getFields(),
+            field,
+            value;
+
         Ext.each(data, function(item) {
-            var field = me.down('field[name='+ item.key +']');
-            if (field !== null) {
-                try {
-                    field.setValue(item.value);
-                } catch(e) { }
-            }
+            try {
+                field = me.findFieldByName(item.key, fieldCollection);
+                value = item.value;
+                if (field.getXType() === 'datefield') {
+                    value = Ext.Date.parse(item.value, 'Y-m-d');
+                }
+                field.setValue(value);
+            } catch(e) { }
         });
     },
 
+    findFieldByName: function(name, fields) {
+        var found = false;
+
+        Ext.each(fields.getRange(), function(field) {
+            if (field.name == name) {
+                found = field;
+                return false;
+            }
+        });
+        return found;
+    },
+
     createFormElements: function() {
-        var me = this, items = [], store, name, fieldLabel, snippet, supportText, sortedFields, boxLabel = '';
+        var me = this, items = [], store,
+            name, fieldLabel, snippet,
+            supportText, sortedFields,
+            helpText,
+            boxLabel = '',
+            constructedItem,
+            radios = {},
+            xtype,
+            date;
 
         sortedFields = Ext.Array.sort(
             me.getSettings('fields', true),
@@ -94,9 +130,11 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
         );
 
         Ext.each(sortedFields, function(item) {
+            xtype = item.get('xType');
             name = item.get('name');
             fieldLabel = item.get('fieldLabel');
             supportText = item.get('supportText');
+            helpText = item.get('helpText');
 
             if (me.snippets && me.snippets[name]) {
                 snippet = me.snippets[name];
@@ -104,6 +142,7 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
                 if (Ext.isObject(snippet)) {
                     if (snippet.hasOwnProperty('supportText')) supportText = snippet.supportText;
                     if (snippet.hasOwnProperty('fieldLabel')) fieldLabel = snippet.fieldLabel;
+                    if (snippet.hasOwnProperty('helpText')) helpText = snippet.helpText;
                 } else {
                     fieldLabel = snippet;
                 }
@@ -114,30 +153,71 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
                 store = Ext.create(item.get('store'));
             }
 
-            if (item.get('xType') === 'checkbox' || item.get('xType') === 'checkboxfield') {
+            if (xtype === 'checkbox' || xtype === 'checkboxfield' || xtype === 'radio' || xtype === 'radiofield') {
                 boxLabel = supportText;
                 supportText = '';
             }
 
-            items.push({
-                xtype: item.get('xType'),
-                helpText: item.get('helpText') || '',
-                fieldLabel: fieldLabel || '',
-                fieldId: item.get('id'),
-                valueType: item.get('valueType'),
-                queryMode: 'remote',
-                name: item.get('name') || '',
-                store: store,
-                displayField: item.get('displayField'),
-                valueField: item.get('valueField'),
-                checkedValue: true,
-                uncheckedValue: false,
-                supportText: supportText || '',
-                allowBlank: (item.get('allowBlank') ? true : false),
-                value: item.get('defaultValue') || '',
-                labelWidth: 100,
-                boxLabel: boxLabel
-            });
+            constructedItem = {
+                xtype           : xtype,
+                helpText        : helpText || '',
+                fieldLabel      : fieldLabel || '',
+                fieldId         : item.get('id'),
+                valueType       : item.get('valueType'),
+                queryMode       : 'remote',
+                name            : item.get('name') || '',
+                store           : store,
+                displayField    : item.get('displayField'),
+                valueField      : item.get('valueField'),
+                checkedValue    : true,
+                uncheckedValue  : false,
+                supportText     : supportText || '',
+                allowBlank      : (item.get('allowBlank') ? true : false),
+                value           : item.get('defaultValue') || '',
+                boxLabel        : boxLabel,
+                translatable    : item.get('translatable')
+            };
+
+            if (xtype === 'timefield' &&  Ext.isDefined(item.get('displayField')) ) {
+                // If displayField is not set, use ExtJS default.
+                constructedItem.displayField = 'disp';
+                constructedItem.format = 'H:i';
+            } else if (xtype == 'combobox') {
+                constructedItem.queryMode = 'local';
+                constructedItem.listeners = {
+                    boxready: function(combo) {
+                        this.relayEvents(combo.getStore(), ['load'], 'store');
+                        combo.getStore().load();
+                    },
+                    storeload: function(store) {
+                        var record = store.findRecord(this.valueField, this.getValue());
+                        this.setValue(record);
+                    }
+                };
+            } else if (xtype === 'datefield') {
+                try {
+                    date = Ext.Date.parse(constructedItem.value, 'Y-m-d');
+                    if (Ext.isDate(date)) {
+                        constructedItem.value = date;
+                    }
+                } catch (e) {}
+            } else if(xtype === 'radiofield') {
+                if (!radios[constructedItem.name]) {
+                    radios[constructedItem.name] = {
+                        xtype     : 'radiogroup',
+                        fieldLabel: constructedItem.fieldLabel,
+                        columns   : 2,
+                        items     : []
+                    };
+                    items.push(radios[constructedItem.name]);
+                }
+                delete constructedItem.fieldLabel;
+                constructedItem.checked = radios[constructedItem.name].items.length == 0;
+                constructedItem.inputValue = constructedItem.value;
+                radios[constructedItem.name].items.push(constructedItem);
+                return;
+            }
+            items.push(constructedItem);
         });
 
         return items;
@@ -155,12 +235,12 @@ Ext.define('Shopware.apps.Emotion.view.components.Base', {
         me.cssClassField = Ext.create('Ext.form.field.Text', {
             fieldLabel: '{s name=base/css_class}CSS class{/s}',
             supportText: '{s name=base/support_text}Multiple classes can be added by separating them with a whitespace.{/s}',
-            name: 'name',
+            name: 'cssClass',
             cls: 'css-field',
             anchor: '100%',
             allowBlank: true,
-            labelWidth: 100,
-            value: record.get('cssClass'),
+            labelWidth: 170,
+            value: record.get('cssClass') || '',
             validator: function(value) {
                 if (!value) {
                     return true;

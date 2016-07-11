@@ -22,7 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-include_once(Shopware()->OldPath() . "engine/Library/Mpdf/mpdf.php");
+use Shopware\Components\NumberRangeIncrementerInterface;
+
+include_once(Shopware()->DocPath() . "engine/Library/Mpdf/mpdf.php");
 
 /**
  * Shopware document generator
@@ -250,7 +252,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
                 $mpdf->Output();
                 exit;
             } else {
-                $path = Shopware()->OldPath()."files/documents"."/".$this->_documentHash.".pdf";
+                $path = Shopware()->DocPath()."files/documents"."/".$this->_documentHash.".pdf";
                 $mpdf = new mPDF("utf-8", "A4", "", "", $this->_document["left"], $this->_document["right"], $this->_document["top"], $this->_document["bottom"]);
                 $mpdf->WriteHTML($data);
                 $mpdf->Output($path, "F");
@@ -574,7 +576,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
             UPDATE `s_order_documents` SET `date` = now(),`amount` = ?
             WHERE `type` = ? AND userID = ? AND orderID = ? LIMIT 1
             ";
-            $amount = $this->_config["netto"] == true ? round($this->_order->amountNetto, 2) : round($this->_order->amount, 2);
+            $amount = ($this->_order->order->taxfree ? true : $this->_config["netto"]) ? round($this->_order->amountNetto, 2) : round($this->_order->amount, 2);
             if ($typID == 4) {
                 $amount *= -1;
             }
@@ -614,7 +616,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
 
             $hash = md5(uniqid(rand()));
 
-            $amount = $this->_config["netto"] == true ? round($this->_order->amountNetto, 2) : round($this->_order->amount, 2);
+            $amount = ($this->_order->order->taxfree ? true : $this->_config["netto"]) ? round($this->_order->amountNetto, 2) : round($this->_order->amount, 2);
             if ($typID == 4) {
                 $amount *= -1;
             }
@@ -658,18 +660,17 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
                     $numberrange = "doc_".$typID;
                 }
 
-                $getNumber = Shopware()->Db()->fetchRow("
-                    SELECT `number`+1 as next FROM `s_order_number` WHERE `name` = ?", array($numberrange));
+                /** @var NumberRangeIncrementerInterface $incrementer */
+                $incrementer = Shopware()->Container()->get('shopware.number_range_incrementer');
+
+                // Get the next number and save it in the document
+                $nextNumber = $incrementer->increment($numberrange);
 
                 Shopware()->Db()->query("
                     UPDATE `s_order_documents` SET `docID` = ? WHERE `ID` = ? LIMIT 1 ;
-                ", array($getNumber['next'], $rowID));
+                ", array($nextNumber, $rowID));
 
-                Shopware()->Db()->query("
-                    UPDATE `s_order_number` SET `number` = ? WHERE `name` = ? LIMIT 1 ;
-                ", array($getNumber['next'], $numberrange));
-
-                $bid = $getNumber["next"];
+                $bid = $nextNumber;
             }
         }
         $this->_documentID = $bid;

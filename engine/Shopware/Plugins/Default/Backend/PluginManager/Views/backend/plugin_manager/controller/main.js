@@ -1,5 +1,35 @@
 
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ *
+ * @category   Shopware
+ * @package    PluginManager
+ * @subpackage Controller
+ * @version    $Id$
+ * @author shopware AG
+ */
+
 //{namespace name=backend/plugin_manager/translation}
+//{block name="backend/plugin_manager/controller/main"}
 Ext.define('Shopware.apps.PluginManager.controller.Main', {
     extend:'Ext.app.Controller',
     mainWindow: null,
@@ -49,6 +79,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Main', {
         Shopware.app.Application.on({
             'load-update-listing': me.loadUpdateListing,
             'enable-premium-plugins-mode': me.enablePremiumPluginsMode,
+            'enable-expired-plugins-mode': me.enableExpiredPluginsMode,
             scope: me
         });
 
@@ -63,6 +94,15 @@ Ext.define('Shopware.apps.PluginManager.controller.Main', {
         me.getNavigation().hide();
     },
 
+    enableExpiredPluginsMode: function() {
+        var me = this,
+            listingWindow = me.getListingWindow();
+
+        listingWindow.setWidth(1028);
+        listingWindow.setTitle('{s name="expired_plugins/title"}Expired plugins{/s}');
+        me.getNavigation().hide();
+    },
+
     loadUpdateListing: function(callback) {
         var me = this,
             navigation = me.getNavigation(),
@@ -71,11 +111,16 @@ Ext.define('Shopware.apps.PluginManager.controller.Main', {
         updatePage.listing.resetListing();
 
         updatePage.updateStore.load({
-            callback: function(records) {
+            callback: function(records, operation, success) {
+                if (operation.response && operation.response.responseText) {
+                    var result = Ext.JSON.decode(operation.response.responseText);
+                    if (result.loginRecommended) {
+                        Shopware.app.Application.fireEvent('open-login', function() {});
+                    }
+                }
+
                 if (records) {
                     navigation.setUpdateCount(records.length);
-
-                    Ext.create('Shopware.notification.ExpiredLicence').check();
                 }
 
                 if (Ext.isFunction(callback)) {
@@ -108,6 +153,9 @@ Ext.define('Shopware.apps.PluginManager.controller.Main', {
             Shopware.app.Application.fireEvent('display-premium-plugins');
             return;
         }
+        if (me.subApplication.action == 'ExpiredPlugins') {
+            Shopware.app.Application.fireEvent('display-expired-plugins');
+        }
 
         Ext.Function.defer(function () {
             localListing.getStore().load({
@@ -120,3 +168,4 @@ Ext.define('Shopware.apps.PluginManager.controller.Main', {
         }, 1000);
     }
 });
+//{/block}

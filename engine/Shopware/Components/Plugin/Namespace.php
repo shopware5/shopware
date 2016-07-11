@@ -22,6 +22,10 @@
  * our trademarks remain entirely with us.
  */
 
+use Doctrine\DBAL\Connection;
+use Shopware\Components\Model\ModelManager;
+use Shopware\Components\Plugin\ConfigReader;
+use Shopware\Models\Plugin\Plugin;
 use Shopware\Models\Shop\Shop;
 
 /**
@@ -41,7 +45,28 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
     /**
      * @var array
      */
-    protected $configStorage = array();
+    private $pluginDirectories;
+
+    /**
+     * @var ConfigReader
+     */
+    private $configReader;
+
+    /**
+     * Shopware_Components_Plugin_Namespace constructor.
+     *
+     * @param string $name
+     * @param Enlight_Config|null $storage
+     * @param array $pluginDirectories
+     * @param ConfigReader $configReader
+     */
+    public function __construct($name, $storage, array $pluginDirectories, ConfigReader $configReader)
+    {
+        $this->pluginDirectories = $pluginDirectories;
+        $this->configReader = $configReader;
+
+        parent::__construct($name, $storage);
+    }
 
     /**
      * @return Enlight_Config
@@ -50,19 +75,29 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
     {
         $sql = "
             SELECT
-              name, id, name, label,
-              description, source, active,
+              name, 
+              id, 
+              name, 
+              label,
+              description, 
+              source, 
+              active,
               installation_date as installationDate,
-              update_date as updateDate, changes,
+              update_date as updateDate, 
               version
             FROM s_core_plugins
             WHERE namespace=?
         ";
-        $plugins = $this->Application()->Db()->fetchAssoc($sql, array($this->name));
 
-        foreach ($plugins as $pluginName => $plugin) {
+        $connection = $this->Application()->Container()->get('dbal_connection');
+        $rows = $connection->fetchAll($sql, [$this->name]);
+
+        $plugins = [];
+        foreach ($rows as $row) {
+            $pluginName = $row['name'];
+            $plugins[$pluginName] = $row;
             $plugins[$pluginName]['class'] = $this->buildClassName($this->name, $pluginName);
-            $plugins[$pluginName]['path'] = $this->buildPath($this->name, $pluginName, $plugin['source']);
+            $plugins[$pluginName]['path'] = $this->buildPath($this->name, $pluginName, $row['source']);
             $plugins[$pluginName]['config'] = array();
         }
 
@@ -94,9 +129,9 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
      */
     protected function buildPath($namespace, $pluginName, $pluginSource)
     {
-        return $this->Application()->AppPath(implode('_', array(
-            'Plugins', $pluginSource, $namespace, $pluginName
-        )));
+        $baseDir = $this->pluginDirectories[$pluginSource];
+
+        return $baseDir . $namespace . DIRECTORY_SEPARATOR . $pluginName . DIRECTORY_SEPARATOR;
     }
 
     /**
@@ -136,61 +171,17 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
      *
      * @param   string $name
      * @param   Shop   $shop
-     * @return  Enlight_Config|array
+     * @return  Enlight_Config
      */
     public function getConfig($name, Shop $shop = null)
     {
-        if ($shop) {
-            $cacheKey = $name . $shop->getId();
-        } else {
-            $cacheKey  = $name;
+        if (!$shop) {
             $shop = $this->shop;
         }
 
-        if (!isset($this->configStorage[$cacheKey])) {
-            $sql = "
-                SELECT
-                  ce.name,
-                  COALESCE(currentShop.value, parentShop.value, fallbackShop.value, ce.value) as value
+        $config = $this->configReader->getByPluginName($name, $shop);
 
-                FROM s_core_plugins p
-
-                INNER JOIN s_core_config_forms cf
-                  ON cf.plugin_id = p.id
-
-                INNER JOIN s_core_config_elements ce
-                  ON ce.form_id = cf.id
-
-                LEFT JOIN s_core_config_values currentShop
-                  ON currentShop.element_id = ce.id
-                  AND currentShop.shop_id = :currentShopId
-
-                LEFT JOIN s_core_config_values parentShop
-                  ON parentShop.element_id = ce.id
-                  AND parentShop.shop_id = :parentShopId
-
-                LEFT JOIN s_core_config_values fallbackShop
-                  ON fallbackShop.element_id = ce.id
-                  AND fallbackShop.shop_id = :fallbackShopId
-
-                WHERE p.name=:pluginName
-            ";
-
-            $config = $this->Application()->Db()->fetchPairs($sql, array(
-                'fallbackShopId' => 1, //Shop parent id
-                'parentShopId'   => $shop !== null && $shop->getMain() !== null ? $shop->getMain()->getId() : 1,
-                'currentShopId'  => $shop !== null ? $shop->getId() : null,
-                'pluginName'     => $name,
-            ));
-
-            foreach ($config as $key => $value) {
-                $config[$key] = unserialize($value);
-            }
-
-            $this->configStorage[$cacheKey] = new Enlight_Config($config, true);
-        }
-
-        return $this->configStorage[$cacheKey];
+        return new Enlight_Config($config, true);
     }
 
     /**
@@ -243,17 +234,16 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
      */
     public function setShop(Shop $shop)
     {
-        // reset config storage
-        $this->configStorage = array();
-
         $this->shop = $shop;
 
         return $this;
     }
 
     /**
-     * @param $name
-     * @param $config
+     * This is used to install a new plugin
+     *
+     * @param string $name
+     * @param Enlight_Config $config
      * @return \Shopware_Components_Plugin_Bootstrap
      */
     public function initPlugin($name, $config)
@@ -262,6 +252,7 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
 
         /** @var $plugin Shopware_Components_Plugin_Bootstrap */
         $plugin = new $class($name, $config);
+
         return $plugin;
     }
 
@@ -269,11 +260,16 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
      * Registers a plugin in the collection.
      *
      * @param \Enlight_Plugin_Bootstrap|\Shopware_Components_Plugin_Bootstrap $plugin
-     * @return \Enlight_Plugin_PluginManager|\Shopware_Components_Plugin_Namespace
+     * @param DateTimeInterface $refreshDate
+     * @return Enlight_Plugin_PluginManager|Shopware_Components_Plugin_Namespace
      */
-    public function registerPlugin(Enlight_Plugin_Bootstrap $plugin)
+    public function registerPlugin(Enlight_Plugin_Bootstrap $plugin, \DateTimeInterface $refreshDate = null)
     {
         parent::registerPlugin($plugin);
+
+        if ($refreshDate === null) {
+            $refreshDate = new \DateTimeImmutable();
+        }
 
         $info         = $plugin->Info();
         $capabilities = $plugin->getCapabilities();
@@ -304,15 +300,31 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
             'capability_install' => !empty($capabilities['install']),
             'capability_enable' => !empty($capabilities['enable']),
             'capability_secure_uninstall' => !empty($capabilities['secureUninstall']),
-            'refresh_date' => Zend_Date::now()
+            'refresh_date' => $refreshDate,
         );
 
+        $connection = $this->Application()->Container()->get('dbal_connection');
         if (empty($id)) {
-            $data['added'] = new Zend_Date();
-            $this->Application()->Db()->insert('s_core_plugins', $data);
+            $data['added'] = $refreshDate;
+            $connection->insert(
+                's_core_plugins',
+                $data,
+                [
+                    'added'        => 'datetime',
+                    'refresh_date' => 'datetime',
+                    'update_date'  => 'datetime',
+                ]
+            );
         } else {
-            $where = array('id=?' => $id);
-            $this->Application()->Db()->update('s_core_plugins', $data, $where);
+            $connection->update(
+                's_core_plugins',
+                $data,
+                ['id' => $id],
+                [
+                    'refresh_date' => 'datetime',
+                    'update_date'  => 'datetime',
+                ]
+            );
         }
 
         $info->merge(new Enlight_Config($data));
@@ -330,10 +342,10 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
     {
         $this->reloadStorage();
 
-        /** @var \Shopware\Components\Model\ModelManager $em */
+        /** @var ModelManager $em */
         $em = $this->Application()->Models();
         $id = $this->getPluginId($bootstrap->getName());
-        $plugin = $em->find('Shopware\Models\Plugin\Plugin', $id);
+        $plugin = $em->find(Plugin::class, $id);
 
         $newInfo = $bootstrap->getInfo();
         $newInfo = new Enlight_Config($newInfo, true);
@@ -370,15 +382,15 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
 
             $em->flush();
 
-            Shopware()->Container()->get('shopware.snippet_database_handler')->loadToDatabase($bootstrap->Path().'Snippets/');
-            Shopware()->Container()->get('shopware.snippet_database_handler')->loadToDatabase($bootstrap->Path().'snippets/');
-            Shopware()->Container()->get('shopware.snippet_database_handler')->loadToDatabase($bootstrap->Path().'Resources/snippet/');
+            $this->Application()->Container()->get('shopware.snippet_database_handler')->loadToDatabase($bootstrap->Path().'Snippets/');
+            $this->Application()->Container()->get('shopware.snippet_database_handler')->loadToDatabase($bootstrap->Path().'snippets/');
+            $this->Application()->Container()->get('shopware.snippet_database_handler')->loadToDatabase($bootstrap->Path().'Resources/snippet/');
 
             // Clear proxy cache
             $this->Application()->Hooks()->getProxyFactory()->clearCache();
         }
 
-        $db = Shopware()->Container()->get('db');
+        $db = $this->Application()->Container()->get('db');
 
         $resourceId = $db->fetchOne(
             "SELECT id FROM s_core_acl_resources WHERE name = 'widgets'"
@@ -412,14 +424,13 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
      */
     public function uninstallPlugin(Shopware_Components_Plugin_Bootstrap $bootstrap, $removeData = true)
     {
-        /** @var \Shopware\Components\Model\ModelManager $em */
+        /** @var ModelManager $em */
         $em = $this->Application()->Models();
 
-        /** @var \Enlight_Components_Db_Adapter_Pdo_Mysql $db */
-        $db = $this->Application()->Db();
+        $connection = $em->getConnection();
 
         $id = $this->getPluginId($bootstrap->getName());
-        $plugin = $em->find('Shopware\Models\Plugin\Plugin', $id);
+        $plugin = $em->find(\Shopware\Models\Plugin\Plugin::class, $id);
 
         $this->Application()->Events()->notify(
             'Shopware_Plugin_PreUninstall',
@@ -476,12 +487,12 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
         $em->flush($plugin);
 
         // Remove event subscribers
-        $sql = 'DELETE FROM `s_core_subscribes` WHERE `pluginID`=?';
-        $db->query($sql, array($id));
+        $sql = 'DELETE FROM s_core_subscribes WHERE pluginID = ?';
+        $connection->executeUpdate($sql, [$id]);
 
         // Remove crontab-entries
-        $sql = 'DELETE FROM `s_crontab` WHERE `pluginID`=?';
-        $db->query($sql, array($id));
+        $sql = 'DELETE FROM s_crontab WHERE pluginID = ?';
+        $connection->executeUpdate($sql, [$id]);
 
         // Remove form
         $this->removeForm($bootstrap, $removeData);
@@ -493,15 +504,13 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
             $bootstrap->removeSnippets(true);
         }
 
-        // Remove menu-entry
-        $query = 'DELETE FROM Shopware\Models\Menu\Menu m WHERE m.pluginId = ?0';
-        $query = $em->createQuery($query);
-        $query->execute(array($id));
+        // Remove menu-entries
+        $sql = 'DELETE FROM s_core_menu WHERE pluginID = ?';
+        $connection->executeUpdate($sql, [$id]);
 
         // Remove templates
-        $query = 'DELETE FROM Shopware\Models\Shop\Template t WHERE t.pluginId = ?0';
-        $query = $em->createQuery($query);
-        $query->execute(array($id));
+        $sql = 'DELETE FROM s_core_templates WHERE plugin_id = ?';
+        $connection->executeUpdate($sql, [$id]);
 
         // Remove emotion-components
         $sql = "DELETE s_emotion_element_value, s_emotion_element
@@ -512,7 +521,7 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
                     ON s_library_component.id = s_emotion_element.componentID
                     AND s_library_component.pluginID = :pluginId";
 
-        $db->query($sql, array(':pluginId' => $id));
+        $connection->executeUpdate($sql, [':pluginId' => $id]);
 
         $sql = "DELETE s_library_component_field, s_library_component
                 FROM s_library_component_field
@@ -520,7 +529,7 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
                     ON s_library_component.id = s_library_component_field.componentID
                     AND s_library_component.pluginID = :pluginId";
 
-        $db->query($sql, array(':pluginId' => $id));
+        $connection->executeUpdate($sql, [':pluginId' => $id]);
 
         $this->removePluginWidgets($id);
 
@@ -532,44 +541,27 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
      *
      * The function removes additionally the auto generated acl rules for the widgets.
      *
-     * @param $pluginId
+     * @param int $pluginId
      */
     private function removePluginWidgets($pluginId)
     {
-        $db = Shopware()->Container()->get('db');
+        /** @var Connection $connection */
+        $connection = $this->Application()->Container()->get('dbal_connection');
 
-        // Remove widgets
-        $widgets = $db->fetchAll(
-            'SELECT * FROM s_core_widgets WHERE plugin_id = ?',
-            array($pluginId)
-        );
+        $sql = "
+            DELETE widgets, views, priv
+            FROM s_core_widgets widgets
+                INNER JOIN s_core_widget_views views
+                    ON views.widget_id = widgets.id
+                LEFT JOIN s_core_acl_privileges priv
+                    ON priv.name = widgets.name
+                LEFT JOIN s_core_acl_resources resource
+                    ON resource.name = 'widgets'
+                    AND resource.id = priv.resourceID
+            WHERE widgets.plugin_id = :pluginId
+        ";
 
-        if (empty($widgets)) {
-            return;
-        }
-
-        $db->delete(
-            's_core_widget_views',
-            array('widget_id IN (?)' => array_column($widgets, 'id'))
-        );
-
-        $db->delete(
-            's_core_widgets',
-            array('plugin_id = ?' => $pluginId)
-        );
-
-        $resourceId = $db->fetchOne("SELECT id FROM s_core_acl_resources WHERE name = 'widgets'");
-
-        if (!$resourceId) {
-            return;
-        }
-
-        foreach ($widgets as $widget) {
-            $db->query("DELETE FROM s_core_acl_privileges WHERE resourceID = ? AND name = ?", array(
-                $resourceId,
-                $widget['name']
-            ));
-        }
+        $connection->executeUpdate($sql, [':pluginId' => $pluginId]);
     }
 
     /**
@@ -586,7 +578,7 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
         }
 
         if ($removeData) {
-            /** @var \Shopware\Components\Model\ModelManager $em */
+            /** @var ModelManager $em */
             $em = $this->Application()->Models();
             $form = $bootstrap->Form();
 
@@ -627,6 +619,7 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
 
             return;
         }
+
         throw new \Exception('Plugin does not support secure uninstall.');
     }
 
@@ -667,7 +660,7 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
 
             $newInfo->set('updateVersion', null);
             $newInfo->set('updateSource', null);
-            $newInfo->set('updateDate', Zend_Date::now());
+            $newInfo->set('updateDate', new DateTimeImmutable());
             $plugin->Info()->merge($newInfo);
             $this->registerPlugin($plugin);
 
@@ -680,9 +673,9 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
             }
             $this->Application()->Models()->flush();
 
-            Shopware()->Container()->get('shopware.snippet_database_handler')->loadToDatabase($plugin->Path().'Snippets/');
-            Shopware()->Container()->get('shopware.snippet_database_handler')->loadToDatabase($plugin->Path().'snippets/');
-            Shopware()->Container()->get('shopware.snippet_database_handler')->loadToDatabase($plugin->Path().'Resources/snippet/');
+            $this->Application()->Container()->get('shopware.snippet_database_handler')->loadToDatabase($plugin->Path().'Snippets/');
+            $this->Application()->Container()->get('shopware.snippet_database_handler')->loadToDatabase($plugin->Path().'snippets/');
+            $this->Application()->Container()->get('shopware.snippet_database_handler')->loadToDatabase($plugin->Path().'Resources/snippet/');
 
 
             // Clear proxy cache
@@ -709,6 +702,7 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
             }
             $subscribe['listener'] = $this->getInfo($subscribe['plugin'], 'class')
                 . '::' . $subscribe['listener'];
+
             $sql = '
                 INSERT INTO `s_core_subscribes` (
                     `subscribe`,

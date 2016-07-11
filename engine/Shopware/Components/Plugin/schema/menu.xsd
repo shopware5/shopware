@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+
+    <xsd:element name="menu" type="menuType"/>
+
+    <xsd:complexType name="menuType">
+        <xsd:sequence>
+            <xsd:element name="entries" type="entriesType" />
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="entriesType">
+        <xsd:sequence>
+            <xsd:element name="entry" type="entryType" minOccurs="1" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="entryType">
+        <xsd:sequence>
+            <xsd:element name="name" type="xsd:token" minOccurs="1"/>
+            <xsd:element name="label" type="labelType" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="controller" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="action" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="class" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="parent" type="parentType" minOccurs="0"/>
+            <xsd:element name="active" type="xsd:boolean" minOccurs="0"/>
+            <xsd:element name="position" type="xsd:int" minOccurs="0"/>
+            <xsd:element name="onclick" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="children" type="entriesType" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="parentType">
+        <xsd:simpleContent>
+            <xsd:extension base="xsd:string">
+                <xsd:attribute name="identifiedBy" type="xsd:string" default="controller"/>
+            </xsd:extension>
+        </xsd:simpleContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="labelType">
+        <xsd:simpleContent>
+            <xsd:extension base="xsd:string">
+                <xsd:attribute name="lang" type="xsd:language" default="en"/>
+            </xsd:extension>
+        </xsd:simpleContent>
+    </xsd:complexType>
+
+</xsd:schema>

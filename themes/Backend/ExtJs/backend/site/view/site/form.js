@@ -41,12 +41,10 @@ Ext.define('Shopware.apps.Site.view.site.Form', {
     alias: 'widget.site-form',
     layout: 'anchor',
     defaults: {
-        anchor: '98%',
-        padding: 5
+        anchor: '100%'
     },
     bodyPadding: 5,
-    overflowY: 'auto',
-    autoWidth: true,
+    autoScroll: true,
 
     initComponent: function() {
         var me = this;
@@ -87,24 +85,35 @@ Ext.define('Shopware.apps.Site.view.site.Form', {
 
     getItems: function() {
         var me = this;
+
+        me.attributeForm = Ext.create('Shopware.attribute.Form', {
+            table: 's_cms_static_attributes'
+        });
+
         return [
             {
                 xtype: 'fieldset',
                 title: '{s name=formDetailFormEditContentCaption}Content{/s}',
-                items: me.getContentField()
+                items: me.getContentField(),
+                padding: 20,
+                defaults: { labelWidth: 155 }
             },
             {
                 xtype: 'fieldset',
                 title: '{s name=formDetailFormLinksCaption}Link{/s}',
-                items: me.getLinkField()
+                items: me.getLinkField(),
+                padding: 20,
+                defaults: { labelWidth: 155 }
             },
             {
                 xtype: 'fieldset',
                 title: '{s name=formDetailFormOptionalSettingsCaption}Settings{/s}',
                 collapsible: true,
                 collapsed: true,
-                items: me.getOptionsField()
-            }
+                items: me.getOptionsField(),
+                padding: 20,
+                defaults: { labelWidth: 155 }
+            }, me.attributeForm
         ]
     },
 
@@ -249,7 +258,7 @@ Ext.define('Shopware.apps.Site.view.site.Form', {
 
         return {
             name: 'grouping',
-            margin: '0 0 0 105',
+            margin: '0 0 0 160',
             xtype:'ddselector',
             fromTitle: '{s name=site/ddselector/fromTitle}Groups{/s}',
             toTitle: '{s name=site/ddselector/toTitle}Assigned groups{/s}',

@@ -257,7 +257,7 @@ class Zend_Cache_Backend_Apcu extends Zend_Cache_Backend implements Zend_Cache_B
     public function getIds()
     {
         $res = array();
-        $array = apcu_cache_info('user', false);
+        $array = apcu_cache_info(false);
         $records = $array['cache_list'];
         foreach ($records as $record) {
             $res[] = $record['info'];

@@ -1,4 +1,33 @@
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ *
+ * @category   Shopware
+ * @package    PluginManager
+ * @subpackage App
+ * @version    $Id$
+ * @author shopware AG
+ */
 
+//{block name="backend/plugin_manager/applications"}
 Ext.define('Shopware.apps.PluginManager', {
     extend: 'Enlight.app.SubApplication',
     name: 'Shopware.apps.PluginManager',
@@ -18,6 +47,7 @@ Ext.define('Shopware.apps.PluginManager', {
         'components.ImageSlider',
         'components.Listing',
         'components.StorePlugin',
+        'components.ExpiredPlugin',
         'components.Tab',
         'components.Tree',
 
@@ -28,6 +58,7 @@ Ext.define('Shopware.apps.PluginManager', {
         'list.UpdatePage',
         'list.LicencePage',
         'list.PremiumPluginsPage',
+        'list.ExpiredPluginsPage',
         'list.Window',
 
 
@@ -54,7 +85,8 @@ Ext.define('Shopware.apps.PluginManager', {
         'LocalPlugin',
         'StorePlugin',
         'Category',
-        'UpdatePlugins'
+        'UpdatePlugins',
+        'ExpiredPlugins'
     ],
 
     models: [
@@ -203,3 +235,4 @@ Ext.define('Shopware.apps.PluginManager', {
         }
     }
 });
+//{/block}

@@ -37,6 +37,19 @@ Ext.define('Shopware.apps.Config.model.form.Shop', {
     fields: [
 		//{block name="backend/config/model/form/shop/fields"}{/block}
         { name: 'id', type:'int', useNull: true, defaultValue: null },
+        { name: 'typeSwitch',  persist: false, convert: function(v, record) {
+
+            // The default value determines if a newly created shop is either a subshop (sub) or a language shop (lang).
+            // record.phantom is set automatically on new, unsaved records by ExtJs.
+            //{block name="backend/config/model/form/shop/fields/typeSwitch/defaultValue"}
+            if(record.phantom){
+                return 'lang';
+            }
+            //{/block}
+
+            // The shop type is internally determined by the presence/absence of the mainId
+            return record.raw && record.raw.main && record.raw.main.id ? 'lang' : 'sub';
+        }},
         { name: 'name', type: 'string' },
         { name: 'title', type: 'string', useNull: true },
         { name: 'position', type: 'int' },
@@ -51,16 +64,12 @@ Ext.define('Shopware.apps.Config.model.form.Shop', {
         { name: 'secureHost', type: 'string', useNull: true },
         { name: 'secureBasePath', type: 'string', useNull: true },
         { name: 'hosts', type: 'string', useNull: true },
-
         { name: 'customerScope', type: 'boolean' },
-        //{ name: 'flag', type: 'string', useNull: true },
-        //{ name: 'switchLanguages', type: 'string' },
-        //{ name: 'separateNumbers', type: 'boolean' },
 
         // Use "convert" because "mappping" not working with "useNull"
         { name: 'mainId', convert: function(v, record) {
             return v || record.raw && record.raw.main && record.raw.main.id;
-        }, useNull: true, defaultValue: 1 },
+        }, useNull: true, defaultValue: null },
         { name: 'localeId', convert: function(v, record) {
             return v || record.raw && record.raw.locale && record.raw.locale.id;
         }, useNull: true },
@@ -80,9 +89,12 @@ Ext.define('Shopware.apps.Config.model.form.Shop', {
             return v || record.raw && record.raw.customerGroup && record.raw.customerGroup.id;
         }, useNull: true },
         { name: 'fallbackId', convert: function(v, record) {
-            return v || record.raw && record.raw.fallback && record.raw.fallback.id;
+            if (v || v === null) {
+                return v;
+            }
+            return record.raw && record.raw.fallback && record.raw.fallback.id;
         }, useNull: true },
-        { name: 'deletable', type: 'boolean', convert: function(v, r) { return r.data.id > 2; } }
+        { name: 'deletable', type: 'boolean', convert: function(v, r) { return r.data.id > 1; } }
     ],
 
     associations: [{

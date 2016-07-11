@@ -52,7 +52,7 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
     /**
      * An optional extra CSS class that will be added to this component's Element.
      */
-    cls: Ext.baseCSSPrefix + 'overview-panel',
+    cls: Ext.baseCSSPrefix + 'overview-panel shopware-form',
 
     /**
      * A shortcut for setting a padding style on the body element. The value can either be a number to be applied to all sides, or a normal css string describing padding.
@@ -109,15 +109,10 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
             amountEuro: '{s name=overview/details/amount_euro}Total amount (in Euro){/s}',
             dispatch: '{s name=overview/details/dispatch}Chosen shipping type{/s}',
             remoteAddress: '{s name=overview/details/remote_address}IP address{/s}',
+            customerEmail: '{s name=overview/details/customer_email}E-Mail{/s}',
             referer: '{s name=overview/details/referer}Referer{/s}',
             deviceType: '{s name=overview/details/device_type}Device type{/s}',
-            partnerId: '{s name=overview/details/partner_id}Partner ID{/s}',
-            text1: '{s name=overview/details/text_1}Free text 1{/s}',
-            text2: '{s name=overview/details/text_2}Free text 2{/s}',
-            text3: '{s name=overview/details/text_3}Free text 3{/s}',
-            text4: '{s name=overview/details/text_4}Free text 4{/s}',
-            text5: '{s name=overview/details/text_5}Free text 5{/s}',
-            text6: '{s name=overview/details/text_6}Free text 6{/s}'
+            partnerId: '{s name=overview/details/partner_id}Partner ID{/s}'
         },
         customerDeleted: '{s name=overview/details/customer_deleted_text}Caution: The assigned customer has been deleted.{/s}'
     },
@@ -141,11 +136,14 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
             me.createCustomerNotification(),
             me.createCustomerInformation(),
             me.createDetailsContainer(),
-            me.createEditContainer()
+            me.createEditContainer(),
+            me.createAttributeForm(),
         ];
+        me.dockedItems = [me.createToolbar()];
         me.callParent(arguments);
         me.detailsForm.loadRecord(me.record);
         me.editForm.loadRecord(me.record);
+        me.attributeForm.loadAttribute(me.record.get('id'));
     },
 
     /**
@@ -322,62 +320,11 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
             items: [
                 {
                     xtype: 'container',
-                    renderTpl: me.createBillingTemplate(),
+                    renderTpl: me.createAddressTemplate(),
                     renderData: billing.raw
                 }
             ]
         });
-    },
-
-    /**
-     * Creates the XTemplate for the billing information panel
-     *
-     * @return [Ext.XTemplate] generated Ext.XTemplate
-     */
-    createBillingTemplate:function () {
-        return new Ext.XTemplate(
-            '{literal}<tpl for=".">',
-                '<div class="customeer-info-pnl">',
-                    '<div class="base-info">',
-                        '<p>',
-                            '<span>{company}</span>',
-                        '</p>',
-                        '<p>',
-                            '<span>{firstName}</span>&nbsp;',
-                            '<span>{lastName}</span>',
-                        '</p>',
-                        '<p>',
-                            '<span>{street}</span>',
-                        '</p>',
-                        '<tpl if="additionalAddressLine1">',
-                            '<p>',
-                                '<span>{additionalAddressLine1}</span>',
-                            '</p>',
-                        '</tpl>',
-                        '<tpl if="additionalAddressLine2">',
-                            '<p>',
-                                '<span>{additionalAddressLine2}</span>',
-                            '</p>',
-                        '</tpl>',
-                        '<p>',
-                            '<span>{zipCode}</span>&nbsp;',
-                            '<span>{city}</span>',
-                        '</p>',
-                        '<tpl for="state">',
-                            '<p>',
-                                '<span>{name}</span>',
-                            '</p>',
-                        '</tpl>',
-                        '<tpl for="country">',
-                            '<p>',
-                                '<span>{name}</span>',
-                            '</p>',
-                        '</tpl>',
-                    '</div>',
-                '</div>',
-
-            '</tpl>{/literal}'
-        );
     },
 
     /**
@@ -405,7 +352,7 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
             items: [
                 {
                     xtype: 'container',
-                    renderTpl: me.createShippingTemplate(),
+                    renderTpl: me.createAddressTemplate(),
                     renderData:shipping.raw
                 }
             ]
@@ -414,8 +361,8 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
 
 
     /**
-     * Checks if the shipping and billing address is different. If this is the case the panel title
-     * if colored red and an icon will be displayed on the right side.
+     * Checks if the shipping and billing address is different by comparing all their fields, except for the ids.
+     * If this is the case, the panel title is colored red and an icon will be displayed to its right.
      * @return string
      */
     getShippingPanelTitle: function() {
@@ -429,12 +376,19 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
 
         billing = billing.first();
 
-        //if the shipping and billing address is different, an exclamation icon will be displayed.
+        // Compare ALL fields of the two addresses and if they differ, display an exclamation icon in the title of the box
         if (shipping.get('company') != billing.get('company') ||
+            shipping.get('department') != billing.get('department') ||
+            shipping.get('salutationSnippet') != billing.get('salutationSnippet') ||
             shipping.get('firstName') != billing.get('firstName') ||
             shipping.get('lastName') != billing.get('lastName') ||
             shipping.get('street') != billing.get('street') ||
-            shipping.get('zipCode') != billing.get('zipCode')) {
+            shipping.get('additionalAddressLine1') != billing.get('additionalAddressLine1') ||
+            shipping.get('additionalAddressLine2') != billing.get('additionalAddressLine2') ||
+            shipping.get('zipCode') != billing.get('zipCode') ||
+            shipping.get('city') != billing.get('city') ||
+            shipping.get('stateId') != billing.get('stateId') ||
+            shipping.get('countryId') != billing.get('countryId')) {
 
             var helper = new Ext.dom.Helper;
             var iconSpec = {
@@ -455,11 +409,11 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
     },
 
     /**
-     * Creates the XTemplate for the billing information panel
+     * Creates the XTemplate for an address information panel, including department and salutation.
      *
      * @return [Ext.XTemplate] generated Ext.XTemplate
      */
-    createShippingTemplate:function () {
+    createAddressTemplate: function() {
         return new Ext.XTemplate(
             '{literal}<tpl for=".">',
                 '<div class="customer-info-pnl">',
@@ -468,6 +422,11 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
                             '<span>{company}</span>',
                         '</p>',
                         '<p>',
+                            '<span>{department}</span>',
+                        '</p>',
+                        '<p>',
+                            '<span>{salutationSnippet}</span>&nbsp;',
+                            '<tpl if="title"><span>{title}</span><br /></tpl>',
                             '<span>{firstName}</span>&nbsp;',
                             '<span>{lastName}</span>',
                         '</p>',
@@ -623,12 +582,22 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
             { name:'invoiceAmount', fieldLabel:me.snippets.details.amount, renderer: me.renderInvoiceAmount },
             { name:'dispatch[name]', fieldLabel:me.snippets.details.dispatch },
             { name:'partnerId', fieldLabel:me.snippets.details.partnerId },
-            { name:'referer', fieldLabel:me.snippets.details.referer }
+            { name:'customerEmail', fieldLabel:me.snippets.details.customerEmail, renderer: me.renderCustomerEmail }
+
         ];
         if (me.record.get('currencyFactor') !== 1) {
             fields.push({ name:'invoiceAmountEuro', fieldLabel:me.snippets.details.amountEuro, renderer: me.renderInvoiceAmount });
         }
         return fields;
+    },
+
+    /**
+     * Render function of the customerEmail display field
+     * @param value
+     * @return string
+     */
+    renderCustomerEmail: function(value) {
+        return (Ext.isDefined(value)) ? Ext.String.format('<a href="mailto:[0]">[0]</a>', value) : value;
     },
 
     /**
@@ -652,14 +621,9 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
         var me = this;
 
         return [
+            {  name:'referer', fieldLabel:me.snippets.details.referer },
             {  name:'remoteAddressConverted', fieldLabel:me.snippets.details.remoteAddress },
             {  name:'deviceTypeHuman', fieldLabel:me.snippets.details.deviceType },
-            {  name:'attribute[attribute1]', fieldLabel:me.snippets.details.text1 },
-            {  name:'attribute[attribute2]', fieldLabel:me.snippets.details.text2 },
-            {  name:'attribute[attribute3]', fieldLabel:me.snippets.details.text3 },
-            {  name:'attribute[attribute4]', fieldLabel:me.snippets.details.text4 },
-            {  name:'attribute[attribute5]', fieldLabel:me.snippets.details.text5 },
-            {  name:'attribute[attribute6]', fieldLabel:me.snippets.details.text6 }
         ];
     },
 
@@ -675,13 +639,11 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
             title: me.snippets.edit.title,
             bodyPadding: 10,
             layout: 'anchor',
-            background: '#fff',
             defaults: {
                 anchor: '100%',
                 labelWidth: 155
             },
-            items: me.createEditElements(),
-            buttons: me.getEditFormButtons()
+            items: me.createEditElements()
         });
         return me.editForm;
     },
@@ -694,6 +656,7 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
         var me = this,
             buttons = [];
 
+        buttons.push('->');
         var cancelButton = Ext.create('Ext.button.Button', {
             text: me.snippets.edit.cancel,
             scope:me,
@@ -701,6 +664,7 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
             handler:function () {
                 me.record.reject();
                 me.loadRecord(me.record);
+                me.attributeForm.loadAttribute(me.record.get('id'));
             }
         });
         buttons.push(cancelButton);
@@ -713,6 +677,7 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
                 me.editForm.getForm().updateRecord(me.record);
                 me.fireEvent('saveOverview', me.record, {
                     callback: function(order) {
+                        me.attributeForm.saveAttribute(me.record.get('id'));
                         me.fireEvent('updateForms', order, me.up('window'));
                     }
                 });
@@ -787,7 +752,41 @@ Ext.define('Shopware.apps.Order.view.detail.Overview', {
                 valueField: 'id'
             }
         ];
-    }
+    },
 
+    /**
+     *
+     * @returns { Ext.toolbar.Toolbar }
+     */
+    createToolbar: function() {
+        var me = this;
+        me.toolbar = Ext.create('Ext.toolbar.Toolbar', {
+            dock: 'bottom',
+            items: me.getEditFormButtons()
+        });
+        return me.toolbar;
+    },
+
+    /**
+     * @returns { Shopware.attribute.Form }
+     */
+    createAttributeForm: function() {
+        var me = this;
+        
+        me.attributeForm = Ext.create('Shopware.attribute.Form', {
+            table: 's_order_attributes',
+            name: 'order-attributes',
+            title: '{s name="attribute_title"}{/s}',
+            border: true,
+            margin: '10 0',
+            bodyPadding: 10,
+            listeners: {
+                'hide-attribute-field-set': function() {
+                    me.attributeForm.hide();
+                }
+            }
+        });
+        return me.attributeForm;
+    }
 });
 //{/block}

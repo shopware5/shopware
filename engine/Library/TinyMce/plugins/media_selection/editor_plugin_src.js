@@ -118,9 +118,9 @@
             return {
                 longname : 'MediaManager - MediaSelection',
                 author : 'shopware AG - st.pohl',
-                authorurl : 'http://www.shopware.de',
-                infourl : 'http://wiki.shopware.de/',
-                version : '1.1.0'
+                authorurl : 'http://www.shopware.com',
+                infourl : 'http://developers.shopware.com',
+                version : '1.1.1'
             };
         },
 
@@ -246,7 +246,7 @@
                 'class': me.videoCls,
                 width: 320,
                 height: 240,
-                src:  ed.settings.document_base_url + record.get('path'),
+                src: record.get('path'),
                 controls: true
             };
 

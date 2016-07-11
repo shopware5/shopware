@@ -28,6 +28,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Country\Area;
 use Shopware\Bundle\StoreFrontBundle\Struct\Country\State;
 
 /**
+ * @deprecated since version 5.2, to be removed in 6.0 - Use ShopContextInterface instead
  * @category  Shopware
  * @package   Shopware\Bundle\StoreFrontBundle\Struct
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)

@@ -93,7 +93,7 @@ class Repository implements RepositoryInterface
     {
         $ordernumbers = $this->getOrdernumbers($productStream['id']);
 
-        $criteria->addCondition(new OrdernumberCondition($ordernumbers));
+        $criteria->addBaseCondition(new OrdernumberCondition($ordernumbers));
 
         $sortings = $criteria->getSortings();
         if (empty($sortings)) {

@@ -76,7 +76,6 @@ Ext.define('Shopware.apps.ImportExport.view.main.Mainwindow', {
         exportCustomergroupPrices: '{s name=export_customergroup_prices}Export Customergroup Prices{/s}',
 		categories: '{s name=categories}Categories{/s}',
 		articles: '{s name=articles}Articles{/s}',
-		customers: '{s name=customers}Customers{/s}',
 		in_stock: '{s name=in_stock}In stock{/s}',
 		not_in_stock: '{s name=not_in_stock}Articles not in stock{/s}',
 		prices: '{s name=prices}Article prices{/s}',
@@ -89,7 +88,7 @@ Ext.define('Shopware.apps.ImportExport.view.main.Mainwindow', {
 		empty: '{s name=empty}empty{/s}',
 		file: '{s name=file}File{/s}',
         noticeMessage: '{s name=notice_message}The import / export options do possibly not support all of your maintained fields. Please read our \<a href=\'http://wiki.shopware.de/Datenaustausch_detail_308.html\' target=\'_blank\' \>wiki\</a\> documentation before using the module.{/s}',
-        deprecationMessage: '{s name=deprecated_message}The import / export is now marked as deprecated and will be removed in Shopware 5.2. Please refer to our new import / export module.{/s}',
+        deprecationMessage: '{s name=deprecated_message}The import / export is now marked as deprecated and will be removed soon. Please refer to our new import / export module.{/s}',
         deprecationButton: '{s name=deprecated_button}get new import / export{/s}',
         deprecationTitle: '{s name=deprecated_title}Heads up!{/s}'
     },
@@ -511,9 +510,7 @@ Ext.define('Shopware.apps.ImportExport.view.main.Mainwindow', {
                         var values = form.getValues();
                         var url = '';
 
-                        if (values.type === 'customers') {
-                            url = '{url module=backend controller=ImportExport action=exportCustomers}';
-                        } else if (values.type === 'instock') {
+                        if (values.type === 'instock') {
                             url = '{url module=backend controller=ImportExport action=exportInStock}';
                         } else if (values.type === 'notinstock') {
                             url = '{url module=backend controller=ImportExport action=exportNotInStock}';
@@ -561,7 +558,7 @@ Ext.define('Shopware.apps.ImportExport.view.main.Mainwindow', {
                             this.setValue(this.store.getAt('0').get('id'));
                         },
                         'change': function(view, newValue) {
-                            if (newValue === 'customers' || newValue === 'newsletter' || newValue === 'images') {
+                            if (newValue === 'newsletter' || newValue === 'images') {
                                 exportVariantsCheckbox.hide();
                                 limitField.hide();
                                 offsetField.hide();
@@ -623,48 +620,6 @@ Ext.define('Shopware.apps.ImportExport.view.main.Mainwindow', {
                 }
             ]
         /* {/if} */
-        });
-
-        var deleteCategoriesComboBox = Ext.create('Ext.form.ComboBox', {
-            fieldLabel: 'Delete categories',
-            name: 'deleteCategories',
-            listeners: {
-                'afterrender': function () {
-                    this.setValue(this.store.getAt('0').get('id'));
-                }
-            },
-            store: me.getDeleteCategoriesComboStore(),
-            forceSelection: true,
-            allowBlank: false,
-            editable: false,
-            mode: 'local',
-            triggerAction: 'all',
-            displayField: 'label',
-            valueField: 'id',
-            enabled: false,
-            anchor: '100%',
-            labelWidth: 300
-        });
-
-        var deleteArticlesComboBox = Ext.create('Ext.form.ComboBox', {
-            fieldLabel: 'Delete Articles',
-            name: 'deleteArticles',
-            listeners: {
-                'afterrender': function () {
-                    this.setValue(this.store.getAt('0').get('id'));
-                }
-            },
-            store: me.getDeleteArticlesComboStore(),
-            forceSelection: true,
-            allowBlank: false,
-            editable: false,
-            mode: 'local',
-            triggerAction: 'all',
-            displayField: 'label',
-            valueField: 'id',
-            enabled: false,
-            anchor: '100%',
-            labelWidth: 300
         });
 
         return Ext.create('Ext.form.Panel', {
@@ -750,7 +705,6 @@ Ext.define('Shopware.apps.ImportExport.view.main.Mainwindow', {
         return new Ext.data.SimpleStore({
             fields: ['id', 'label'],
             data: [
-                ['customers', me.snippets.customers],
                 ['instock', me.snippets.in_stock],
                 ['notinstock', me.snippets.not_in_stock],
                 ['prices', me.snippets.prices],
@@ -770,7 +724,6 @@ Ext.define('Shopware.apps.ImportExport.view.main.Mainwindow', {
         return new Ext.data.SimpleStore({
             fields: ['id', 'label'],
             data: [
-                ['customers', me.snippets.customers],
                 ['instock', me.snippets.in_stock],
                 ['newsletter', me.snippets.newsletter],
                 ['prices', me.snippets.prices],

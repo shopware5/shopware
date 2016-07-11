@@ -29,12 +29,12 @@ use Enlight_Controller_Request_Request as Request;
 use Enlight_Controller_Response_ResponseHttp as Response;
 use Shopware\Bundle\PluginInstallerBundle\Exception\ShopSecretException;
 use Shopware\Bundle\PluginInstallerBundle\StoreClient;
-use Shopware\Bundle\PluginInstallerBundle\Struct\PluginStruct;
-use Shopware\Bundle\PluginInstallerBundle\Struct\SubscriptionStateStruct;
+use Shopware\Bundle\PluginInstallerBundle\Struct\PluginInformationResultStruct;
+use Shopware\Bundle\PluginInstallerBundle\Struct\PluginInformationStruct;
 use Shopware\Components\Model\ModelManager;
 
 /**
- * Class StoreOrderService
+ * Class SubscriptionService
  * @package Shopware\Bundle\PluginInstallerBundle\Service
  */
 class SubscriptionService
@@ -55,15 +55,22 @@ class SubscriptionService
     private $models;
 
     /**
+     * @var PluginLicenceService
+     */
+    private $pluginLicenceService;
+
+    /**
      * @param Connection $connection
      * @param StoreClient $storeClient
      * @param ModelManager $models
+     * @param PluginLicenceService $pluginLicenceService
      */
-    public function __construct(Connection $connection, StoreClient $storeClient, ModelManager $models)
+    public function __construct(Connection $connection, StoreClient $storeClient, ModelManager $models, PluginLicenceService $pluginLicenceService)
     {
         $this->connection = $connection;
         $this->storeClient = $storeClient;
         $this->models = $models;
+        $this->pluginLicenceService = $pluginLicenceService;
     }
 
     /**
@@ -114,14 +121,15 @@ class SubscriptionService
     }
 
     /**
-     * Returns not upgraded plugins, "hacked" plugins, plugins, after do some check secret and cookie
+     * Returns information about shop upgrade state and installed plugins.
+     *
      * @param Response $response
      * @param Request $request
-     * @return SubscriptionStateStruct|bool
+     * @return PluginInformationResultStruct|bool
      */
-    public function getPluginsSubscription(Response $response, Request $request)
+    public function getPluginInformation(Response $response, Request $request)
     {
-        if ($this->isPluginsSubscriptionCookieValid($request) == false) {
+        if (!$this->isPluginsSubscriptionCookieValid($request)) {
             return false;
         }
 
@@ -131,10 +139,10 @@ class SubscriptionService
                 return false;
             }
 
-            $pluginStates = $this->getPluginsSubscriptionState($secret);
+            $pluginInformation = $this->getPluginInformationFromApi($secret);
             $response->setCookie('lastCheckSubscriptionDate', date('dmY'), time() + 60 * 60 * 24);
 
-            return $pluginStates;
+            return $pluginInformation;
         } catch (ShopSecretException $e) {
             $this->resetShopSecret();
             return false;
@@ -144,14 +152,14 @@ class SubscriptionService
     }
 
     /**
-     * function that return not upgraded plugins, plugins with wrong version, plugins which loose subscription, information if license upgrade for shop was executed
-     * @param String $secret
-     * @return SubscriptionStateStruct
+     * @param $secret
+     * @return PluginInformationResultStruct
      */
-    public function getPluginsSubscriptionState($secret)
+    private function getPluginInformationFromApi($secret)
     {
+        $domain = $this->getDomain();
         $params = [
-            'domain'            => $this->getDomain(),
+            'domain'            => $domain,
             'shopwareVersion'   => \Shopware::VERSION,
             'plugins'           => $this->getPluginsNameAndVersion()
         ];
@@ -160,26 +168,25 @@ class SubscriptionService
             'X-Shopware-Shop-Secret' => $secret
         ];
 
-        $data = $this->storeClient->doGetRequest(
-            '/pluginStore/pluginSubscription',
+        $data = $this->storeClient->doPostRequest(
+            '/pluginStore/environmentInformation',
             $params,
             $header
         );
 
-        $technicalNames = array_column($data['subscription'], 'name');
-        $technicalNames = array_merge($technicalNames, array_column($data['notUpgraded'], 'name'));
-        $technicalNames = array_merge($technicalNames, array_column($data['wrongVersion'], 'name'));
-        $technicalNames = array_values(array_unique($technicalNames));
+        $isShopUpgraded = $data['general']['isUpgraded'];
+        $pluginInformationStructs = array_map(
+            function ($plugin) {
+                return new PluginInformationStruct($plugin);
+            },
+            $data['plugins']
+        );
+        
+        $this->pluginLicenceService->updateLocalLicenseInformation($pluginInformationStructs, $domain);
+        
+        $informationResult = new PluginInformationResultStruct($pluginInformationStructs, $isShopUpgraded);
 
-        $labels = $this->getPluginLabelsByNames($technicalNames);
-
-        $data['subscription'] = $this->assignLabels($data['subscription'], $labels);
-        $data['notUpgraded'] = $this->assignLabels($data['notUpgraded'], $labels);
-        $data['wrongVersion'] = $this->assignLabels($data['wrongVersion'], $labels);
-
-        $subscriptionStateStruct = new SubscriptionStateStruct($data['shopUpgraded'], $data['notUpgraded'], $data['wrongVersion'], $data['subscription']);
-
-        return $subscriptionStateStruct;
+        return $informationResult;
     }
 
     /**
@@ -233,44 +240,6 @@ class SubscriptionService
     }
 
     /**
-     * @param array[] $plugins
-     * @param PluginStruct[] $labels
-     * @return array[]
-     */
-    private function assignLabels($plugins, $labels)
-    {
-        foreach ($plugins as &$plugin) {
-            $name = $plugin['name'];
-            if (isset($labels[$name])) {
-                $plugin['label'] = $labels[$name];
-            } else {
-                $plugin['label'] = $plugin['name'];
-            }
-        }
-
-        return $plugins;
-    }
-
-    /**
-     * @param string[] $names
-     * @return string[]
-     */
-    private function getPluginLabelsByNames($names)
-    {
-        $query = $this->connection->createQueryBuilder();
-
-        $query->select(['plugins.name', 'plugins.label'])
-            ->from('s_core_plugins', 'plugins')
-            ->where('plugins.name IN (:names)')
-            ->setParameter('names', $names, Connection::PARAM_STR_ARRAY);
-
-        /**@var $statement \PDOStatement*/
-        $statement = $query->execute();
-
-        return $statement->fetchAll(\PDO::FETCH_KEY_PAIR);
-    }
-
-    /**
      * Get all plugins with name and version
      * @return array
      */
@@ -286,99 +255,5 @@ class SubscriptionService
         $plugins = $builderExecute->fetchAll();
 
         return $plugins;
-    }
-
-    /**
-     * function to get expired plugins
-     * @return array
-     */
-    public function getExpiredPluginLicenses()
-    {
-        if ($this->checkLicensePluginIsInstalled() == false) {
-            return [];
-        }
-
-        //get all licenses
-        $expiredPlugins = [];
-        $expireDays = 14; //Days to warn before plugin gets expired
-        $licenses = $this->getLicences();
-
-        if (empty($licenses)) {
-            return [];
-        }
-
-        //decode all license and get info, check for expiring
-        foreach ($licenses as $license) {
-            $info = \Shopware_Components_License::readLicenseInfo($license['license']);
-
-            $expirationDate = $this->getLicenceExpirationDate($info);
-
-            if ($expirationDate === null) {
-                continue;
-            }
-
-            $diff = $expirationDate->diff(new \DateTime('now'));
-
-            if ($diff->invert == 1 && $diff->days <= $expireDays) {
-                $expiredPlugins[] = [
-                    'expireDate' => $expirationDate,
-                    'plugin' => $info['label']
-                ];
-            }
-        }
-
-        return $expiredPlugins;
-    }
-
-    /**
-     * check if license plugin is installed
-     * @return boolean
-     */
-    private function checkLicensePluginIsInstalled()
-    {
-        $connection = $this->connection;
-        $builder = $connection->createQueryBuilder();
-
-        $builder->select(['plugin.id'])
-            ->from('s_core_plugins', 'plugin')
-            ->where("plugin.name = 'License'")
-            ->andWhere('plugin.active = 1')
-            ->andWhere('plugin.installation_date IS NOT NULL');
-
-        $builderExecute = $builder->execute();
-        $exist = $builderExecute->fetchColumn();
-
-        return (empty($exist)) ? false : true;
-    }
-
-    /**
-     * function to get all plugin licenses
-     * @return array
-     */
-    private function getLicences()
-    {
-        /**@var $connection Connection */
-        $connection = $this->connection;
-        $builder = $connection->createQueryBuilder();
-
-        $builder->select(['license.label', 'license.license'])
-            ->from('s_core_licenses', 'license');
-
-        $builderExecute = $builder->execute();
-        return $builderExecute->fetchAll();
-    }
-
-    /**
-     * get expiration date of license-info-array
-     * @param $info
-     * @return null|\DateTime
-     */
-    private function getLicenceExpirationDate($info)
-    {
-        if (empty($info['expiration'])) {
-            return null;
-        }
-
-        return new \DateTime($info['expiration']);
     }
 }

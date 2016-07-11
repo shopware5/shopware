@@ -113,7 +113,9 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
         errorMessageWrongFileTypeTitle : '{s name=view/error_message_wrong_file_type_title}Wrong file type{/s}',
         errorMessageWrongFileType : '{s name=view/error_message_wrong_file_type}Wrong file type selected.{/s}',
 
-        defaultSettingsTemplateLabel : '{s name=view/settings_default_settings_template_label}Listing layout{/s}',
+        defaultSettingsTemplateLabel : '{s name=view/settings_default_settings_template_label}Individual layout{/s}',
+        defaultSettingsTemplateLabelStandard: '{s name=view/settings_default_settings_template_standard}Standard{/s}',
+        defaultSettingsTemplateNotAvailable: '{s name=view/settings_default_settings_template_not_available}Not available{/s}',
         defaultSettingsHideTopLabel : '{s name=view/settings_default_settings_no_top_navigation_label}Do NOT show in top navigation.{/s}',
         defaultSettingsNoDesignSwitchLabel : '{s name=view/settings_default_settings_no_design_switch_label}Do NOT switch design.{/s}',
         defaultSettingsNoFilterLabel : '{s name=view/settings_default_settings_no_filter_label}Hide filters.{/s}',
@@ -121,6 +123,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
         defaultSettingsProductLayoutLabel: '{s name=view/settings_default_settings_box_layout_label}Product layout{/s}',
         defaultSettingsProductLayoutHelp: '{s name=view/settings_default_settings_box_layout_help}Product layout allows you to control how your products are presented on the category page. Choose between three different layouts to fine-tune your product display. You can select a layout for each category or automatically adopt the settings from the parent category.{/s}',
         defaultSettingsProductStream: '{s name=view/settings_default_settings_box_stream_label}Product stream{/s}',
+        defaultSettingsProductStreamHelp: '{s name=view/settings_default_settings_box_stream_help}If a product stream is selected, the items from the stream will be used instead of the assigned ones. Subcategories do not inherit items from product streams.{/s}',
 
         cmsTitle : '{s name=view/settings_cms_title}CMS functions{/s}',
         cmsHeaderLabel : '{s name=view/settings_cms_header_label}Header{/s}',
@@ -132,12 +135,6 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
         metaKeywords : '{s name=view/settings_meta_keywords_label}Meta keywords{/s}',
 
         attribute_title : '{s name=view/settings_attribute_title}Free text fields{/s}',
-        attribute1 : '{s name=view/settings_attribute1_label}Free text 1{/s}',
-        attribute2 : '{s name=view/settings_attribute2_label}Free text 2{/s}',
-        attribute3 : '{s name=view/settings_attribute3_label}Free text 3{/s}',
-        attribute4 : '{s name=view/settings_attribute4_label}Free text 4{/s}',
-        attribute5 : '{s name=view/settings_attribute5_label}Free text 5{/s}',
-        attribute6 : '{s name=view/settings_attribute6_label}Free text 6{/s}',
 
         categorySave : '{s name=view/settings_save}Save category{/s}',
 
@@ -177,7 +174,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
      */
     defaults: {
         anchor : '100%',
-        labelWidth:180
+        labelWidth:155
     },
 
     /**
@@ -343,23 +340,27 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
         me.templateComboBox = Ext.create('Ext.form.field.ComboBox', {
             fieldLabel:me.snippets.defaultSettingsTemplateLabel,
             store:me.templateStore,
-            labelWidth:180,
+            labelWidth:155,
             valueField:'template',
             displayField:'name',
             editable:true,
             allowBlank:true,
             name:'template',
-            listeners: {
-                change: function (element, newValue) {
-                    if (newValue === null && me.form._record) {
-                        me.form._record.set('template', null);
-                    }
-                }
-            }
+            queryMode: 'local'
         });
+
+        // add record for default value
+        me.templateStore.on('load', function(store, records) {
+            var record = store.model.create({
+                template: '',
+                name: me.snippets.defaultSettingsTemplateLabelStandard
+            });
+            store.insert(0, record);
+        }, me);
 
         me.productLayoutField = Ext.create('Shopware.apps.Base.view.element.ProductBoxLayoutSelect', {
             name: 'productBoxLayout',
+            labelWidth: 155,
             storeConfig: {
                 displayExtendLayout: true,
                 displayBasicLayout: true,
@@ -370,7 +371,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
 
         me.streamSelection = Ext.create('Shopware.form.field.ProductStreamSelection', {
             name: 'streamId',
-            labelWidth: 180
+            labelWidth: 155
         });
 
         return [
@@ -428,7 +429,7 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
                 xtype:'checkboxgroup',
                 columns:2,
                 defaultType:'checkboxfield',
-                margin:'3 0 0 0',
+                margin:'15 0 0 0',
                 defaults:Ext.applyIf({
                     inputValue:true,
                     uncheckedValue:false
@@ -450,11 +451,6 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
                 boxLabel:me.snippets.defaultSettingsHideTopLabel,
                 name:'hideTop',
                 dataIndex:'hideTop'
-            },
-            {
-                boxLabel:me.snippets.defaultSettingsNoDesignSwitchLabel,
-                name:'noViewSelect',
-                dataIndex:'noViewSelect'
             },
             {
                 boxLabel:me.snippets.defaultSettingsNoFilterLabel,
@@ -534,40 +530,15 @@ Ext.define('Shopware.apps.Category.view.category.tabs.Settings', {
      *
      * @return Ext.form.FieldSet
      */
-    getAttributes : function()
-    {
+    getAttributes : function() {
         var me = this;
-        return Ext.create('Ext.form.FieldSet',{
-            title: me.snippets.attribute_title,
-            collapsed: true,
-            collapsible: true,
-            anchor: '100%',
-            defaults : Ext.applyIf({
-                xtype : 'textfield'
-            }, me.defaults),
-            disabled : true,
-            items : [
-                {
-                    fieldLabel : me.snippets.attribute1,
-                     name : 'attribute[attribute1]'
-                }, {
-                    fieldLabel : me.snippets.attribute2,
-                     name : 'attribute[attribute2]'
-                }, {
-                    fieldLabel : me.snippets.attribute3,
-                     name : 'attribute[attribute3]'
-                }, {
-                    fieldLabel : me.snippets.attribute4,
-                     name : 'attribute[attribute4]'
-                }, {
-                    fieldLabel : me.snippets.attribute5,
-                     name : 'attribute[attribute5]'
-                }, {
-                    fieldLabel : me.snippets.attribute6,
-                     name : 'attribute[attribute6]'
-                }
-            ]
+
+        me.attributeForm = Ext.create('Shopware.attribute.Form', {
+            table: 's_categories_attributes',
+            allowTranslation: false,
+            fieldSetPadding: 0
         });
+        return me.attributeForm;
     },
 
     /**

@@ -76,6 +76,16 @@ Ext.define('Shopware.apps.Article.view.esd.List', {
     },
 
     /**
+     * Add attributes plugin
+     */
+    plugins: [
+        {
+            ptype: 'grid-attributes',
+            table: 's_articles_esd_attributes'
+        }
+    ],
+
+    /**
      * Initialize the Shopware.apps.Article.view.esd.List and defines the necessary default configuration
      * @return void
      */
@@ -284,7 +294,8 @@ Ext.define('Shopware.apps.Article.view.esd.List', {
             displayTpl: Ext.create('Ext.XTemplate',
                 '<tpl for=".">',
                 '{literal}' +
-                    '{name} - {additionalText}' +
+                    '{name}' +
+                    '<tpl if="additionalText"> - {additionalText}</tpl>' +
                 '{/literal}',
                 '</tpl>'
             ),
@@ -292,7 +303,9 @@ Ext.define('Shopware.apps.Article.view.esd.List', {
                 '<tpl for=".">',
                     '{literal}' +
                         '<div class="x-boundlist-item">{name}' +
-                        '<span style="font-size:10px; font-weight: 800;"> - {additionalText}</span>' +
+                        '<tpl if="additionalText">' +
+                            '<span style="font-size:10px; font-weight: 800;"> - {additionalText}</span>' +
+                        '</tpl>' +
                         '</div>' +
                     '{/literal}',
                 '</tpl>'

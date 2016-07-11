@@ -23,12 +23,8 @@
  */
 
 use Shopware\Components\CSRFWhitelistAware;
+use Shopware\Components\NumberRangeIncrementerInterface;
 use Shopware\Models\Customer\Customer as Customer;
-use Shopware\Models\Customer\Billing as Billing;
-use Shopware\Models\Customer\Shipping as Shipping;
-use Shopware\Models\Customer\Debit as Debit;
-use Shopware\Models\Attribute\CustomerBilling as BillingAttributes;
-use Shopware\Models\Attribute\CustomerShipping as ShippingAttributes;
 use Shopware\Models\Customer\PaymentData;
 
 /**
@@ -199,6 +195,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         }
         return $this->countryRepository;
     }
+
     /**
      * Helper function to get access to the order repository.
      * @return \Shopware\Models\Order\Repository
@@ -261,7 +258,6 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
     }
 
 
-
     /**
      * Event listener method which fires when the customer list store is loaded. Returns an array of customer data
      * which displayed in an Ext.grid.Panel. Grants by the limit and start parameter a paging
@@ -272,26 +268,26 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
      */
     public function getListAction()
     {
-            //read store parameter to filter and paginate the data.
-            $limit = $this->Request()->getParam('limit', 20);
-            $offset = $this->Request()->getParam('start', 0);
-            $sort = $this->Request()->getParam('sort', array(array('property' => 'customer.id', 'direction' => 'DESC')));
-            $filter = $this->Request()->getParam('filter', null);
-            $filter = $filter[0]['value'];
+        //read store parameter to filter and paginate the data.
+        $limit = $this->Request()->getParam('limit', 20);
+        $offset = $this->Request()->getParam('start', 0);
+        $sort = $this->Request()->getParam('sort', array(array('property' => 'customer.id', 'direction' => 'DESC')));
+        $filter = $this->Request()->getParam('filter', null);
+        $filter = $filter[0]['value'];
 
-            $customerGroup = $this->Request()->getParam('customerGroup', null);
+        $customerGroup = $this->Request()->getParam('customerGroup', null);
 
-            //get access on the customer repository
-            $query = $this->getRepository()->getListQuery($filter, $customerGroup, $sort, $limit, $offset);
+        //get access on the customer repository
+        $query = $this->getRepository()->getListQuery($filter, $customerGroup, $sort, $limit, $offset);
 
-            //returns the customer data
-            $customers = $query->getArrayResult();
+        //returns the customer data
+        $customers = $query->getArrayResult();
 
-            //returns the total count of the query because getQueryCount and the paginator are to slow with huge data
-            $countQuery = $this->getRepository()->getBackendListCountedBuilder($filter, $customerGroup)->getQuery();
-            $countResult = $countQuery->getOneOrNullResult(Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        //returns the total count of the query because getQueryCount and the paginator are to slow with huge data
+        $countQuery = $this->getRepository()->getBackendListCountedBuilder($filter, $customerGroup)->getQuery();
+        $countResult = $countQuery->getOneOrNullResult(Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
-            $this->View()->assign(array('success' => true, 'data' => $customers, 'total' => $countResult["customerCount"]));
+        $this->View()->assign(array('success' => true, 'data' => $customers, 'total' => $countResult["customerCount"]));
     }
 
     /**
@@ -304,15 +300,15 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
      */
     public function getDetailAction()
     {
-            $customerId = $this->Request()->getParam('customerID');
-            if ($customerId === null || $customerId === 0) {
-                $this->View()->assign(array('success' => false, 'message' => 'No customer id passed'));
-                return;
-            }
+        $customerId = $this->Request()->getParam('customerID');
+        if ($customerId === null || $customerId === 0) {
+            $this->View()->assign(array('success' => false, 'message' => 'No customer id passed'));
+            return;
+        }
 
-            $data = $this->getCustomer($customerId);
+        $data = $this->getCustomer($customerId);
 
-            $this->View()->assign(array('success' => true, 'data' => $data, 'total' => 1));
+        $this->View()->assign(array('success' => true, 'data' => $data, 'total' => 1));
     }
 
     /**
@@ -326,42 +322,42 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
      */
     public function getOrdersAction()
     {
-            if (!$this->_isAllowed('read', 'order')) {
-                /** @var $namespace Enlight_Components_Snippet_Namespace */
-                $namespace = Shopware()->Snippets()->getNamespace('backend/customer');
+        if (!$this->_isAllowed('read', 'order')) {
+            /** @var $namespace Enlight_Components_Snippet_Namespace */
+            $namespace = Shopware()->Snippets()->getNamespace('backend/customer');
 
-                $this->View()->assign(array(
-                    'success' => false,
-                    'data' => $this->Request()->getParams(),
-                    'message' => $namespace->get('no_order_rights', 'You do not have sufficient rights to view customer orders.'))
-                );
-                return;
-            }
+            $this->View()->assign(array(
+                'success' => false,
+                'data' => $this->Request()->getParams(),
+                'message' => $namespace->get('no_order_rights', 'You do not have sufficient rights to view customer orders.'))
+            );
+            return;
+        }
 
-            $customerId = $this->Request()->getParam('customerID');
-            if ($customerId === null || $customerId === 0) {
-                $this->View()->assign(array('success' => false, 'message' => 'No customer id passed'));
-                return;
-            }
+        $customerId = $this->Request()->getParam('customerID');
+        if ($customerId === null || $customerId === 0) {
+            $this->View()->assign(array('success' => false, 'message' => 'No customer id passed'));
+            return;
+        }
 
-            $defaultSort = array('0' => array('property' => 'orderTime', 'direction' => 'DESC'));
+        $defaultSort = array('0' => array('property' => 'orderTime', 'direction' => 'DESC'));
 
-            $limit = $this->Request()->getParam('limit', 20);
-            $offset = $this->Request()->getParam('start', 0);
-            $sort = $this->Request()->getParam('sort', $defaultSort);
-            $filter = $this->Request()->getParam('filter', null);
-            $filter = $filter[0]['value'];
+        $limit = $this->Request()->getParam('limit', 20);
+        $offset = $this->Request()->getParam('start', 0);
+        $sort = $this->Request()->getParam('sort', $defaultSort);
+        $filter = $this->Request()->getParam('filter', null);
+        $filter = $filter[0]['value'];
 
-            //get access on the customer getRepository()
-            $query = $this->getRepository()->getOrdersQuery($customerId, $filter, $sort, $limit, $offset);
+        //get access on the customer getRepository()
+        $query = $this->getRepository()->getOrdersQuery($customerId, $filter, $sort, $limit, $offset);
 
-            //returns the total count of the query
-            $totalResult = $this->getManager()->getQueryCount($query);
+        //returns the total count of the query
+        $totalResult = $this->getManager()->getQueryCount($query);
 
-            //returns the customer data
-            $orders = $query->getArrayResult();
+        //returns the customer data
+        $orders = $query->getArrayResult();
 
-            $this->View()->assign(array('success' => true, 'data' => $orders, 'total' => $totalResult));
+        $this->View()->assign(array('success' => true, 'data' => $orders, 'total' => $totalResult));
     }
 
     /**
@@ -371,27 +367,27 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
      */
     public function getOrderChartAction()
     {
-            if (!$this->_isAllowed('read', 'order')) {
-                /** @var $namespace Enlight_Components_Snippet_Namespace */
-                $namespace = Shopware()->Snippets()->getNamespace('backend/customer');
+        if (!$this->_isAllowed('read', 'order')) {
+            /** @var $namespace Enlight_Components_Snippet_Namespace */
+            $namespace = Shopware()->Snippets()->getNamespace('backend/customer');
 
-                $this->View()->assign(array(
-                    'success' => false,
-                    'data' => $this->Request()->getParams(),
-                    'message' => $namespace->get('no_order_rights', 'You do not have sufficient rights to view customer orders.'))
-                );
-                return;
-            }
+            $this->View()->assign(array(
+                'success' => false,
+                'data' => $this->Request()->getParams(),
+                'message' => $namespace->get('no_order_rights', 'You do not have sufficient rights to view customer orders.'))
+            );
+            return;
+        }
 
-            //customer id passed?
-            $customerId = $this->Request()->getParam('customerID');
-            if ($customerId === null || $customerId === 0) {
-                $this->View()->assign(array('success' => false, 'message' => 'No customer id passed'));
-                return;
-            }
-            $orders = $this->getChartData($customerId);
+        //customer id passed?
+        $customerId = $this->Request()->getParam('customerID');
+        if ($customerId === null || $customerId === 0) {
+            $this->View()->assign(array('success' => false, 'message' => 'No customer id passed'));
+            return;
+        }
+        $orders = $this->getChartData($customerId);
 
-            $this->View()->assign(array('success' => true, 'data' => $orders));
+        $this->View()->assign(array('success' => true, 'data' => $orders));
     }
 
     /**
@@ -422,7 +418,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         }
         $toDateFilter = $toDate->format('Y-m-d');
 
-        $sql= "
+        $sql = "
             SELECT
                 SUM(invoice_amount) as amount,
                 DATE_FORMAT(ordertime, '%Y-%m-01') as `date`
@@ -439,7 +435,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
 
         if (!empty($orders)) {
             $first = new \DateTime($orders[0]['date']);
-            $last = new \DateTime($orders[count($orders)-1]['date']);
+            $last = new \DateTime($orders[count($orders) - 1]['date']);
 
             //to display the whole time range the user inserted, check if the date of the first order equals the fromDate parameter
             if ($fromDate->format('Y-m') !== $first->format('Y-m')) {
@@ -502,35 +498,41 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             $customer = new Customer();
         }
 
-            $params = $this->Request()->getParams();
+        $params = $this->Request()->getParams();
 
-            if (!$paymentData instanceof PaymentData && !empty($params['paymentData']) && array_filter($params['paymentData'][0])) {
-                $paymentData = new PaymentData();
-                $customer->addPaymentData($paymentData);
-                $paymentData->setPaymentMean(
-                    $this->getManager()->getRepository('Shopware\Models\Payment\Payment')->find($paymentId)
-                );
-            }
+        if (!$paymentData instanceof PaymentData && !empty($params['paymentData']) && array_filter($params['paymentData'][0])) {
+            $paymentData = new PaymentData();
+            $customer->addPaymentData($paymentData);
+            $paymentData->setPaymentMean(
+                $this->getManager()->getRepository('Shopware\Models\Payment\Payment')->find($paymentId)
+            );
+        }
 
-            $params = $this->prepareCustomerData($params, $customer, $paymentData);
+        $params = $this->prepareCustomerData($params, $customer, $paymentData);
 
-            //set parameter to the customer model.
-            $customer->fromArray($params);
+        //set parameter to the customer model.
+        $customer->fromArray($params);
 
-            $password = $this->Request()->getParam('newPassword', null);
+        $password = $this->Request()->getParam('newPassword', null);
 
-            //encode the password with md5
-            if (!empty($password)) {
-                $customer->setPassword($password);
-            }
+        //encode the password with md5
+        if (!empty($password)) {
+            $customer->setPassword($password);
+        }
 
-            $this->getManager()->persist($customer);
-            $this->getManager()->flush();
+        if (!$customer->getNumber() && Shopware()->Config()->get('shopwareManagedCustomerNumbers')) {
+            /** @var NumberRangeIncrementerInterface $incrementer */
+            $incrementer = Shopware()->Container()->get('shopware.number_range_incrementer');
+            $customer->setNumber($incrementer->increment('user'));
+        }
 
-            $this->View()->assign(array(
-                'success' => true,
-                'data' => $this->getCustomer($customer->getId())
-            ));
+        $this->getManager()->persist($customer);
+        $this->getManager()->flush();
+
+        $this->View()->assign(array(
+            'success' => true,
+            'data' => $this->getCustomer($customer->getId())
+        ));
     }
 
     /**
@@ -544,27 +546,27 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
 
         $data = $query->getOneOrNullResult(Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
-        //we need to set the billing and shipping attributes to the first array level to load the data into a form panel
-        $data[0]['billingAttribute'] = $data[0]['billing']['attribute'];
-        $data[0]['shippingAttribute'] = $data[0]['shipping']['attribute'];
-        unset($data[0]['billing']['attribute']);
-        unset($data[0]['shipping']['attribute']);
-
         $orderInfo = array(
             'orderCount' => $data['orderCount'],
             'amount' => $data['amount'],
             'shopName' => $data['shopName'],
             'language' => $data['language'],
-            'canceledOrderAmount' => $data['canceledOrderAmount']
+            'canceledOrderAmount' => $data['canceledOrderAmount'],
+            'default_billing_address_id' => $data['default_billing_address_id'],
+            'default_shipping_address_id' => $data['default_shipping_address_id']
         );
 
         $data = array_merge($orderInfo, $data[0]);
-        $birthday = $data['billing']['birthday'];
+        $birthday = $data['birthday'];
 
         /** @var $birthday \DateTime */
         if ($birthday instanceof \DateTime) {
-            $data['billing']['birthday'] = $birthday->format('d.m.Y');
+            $data['birthday'] = $birthday->format('d.m.Y');
         }
+
+        $namespace = Shopware()->Container()->get('snippets')->getNamespace('frontend/salutation');
+        $data['billing']['salutationSnippet'] = $namespace->get($data['billing']['salutation']);
+        $data['shipping']['salutationSnippet'] = $namespace->get($data['shipping']['salutation']);
 
         return $data;
     }
@@ -613,33 +615,20 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         if (!empty($params['paymentData']) && $paymentData) {
             $paymentData->fromArray(array_shift($params['paymentData']));
         }
+
         unset($params['paymentData']);
+        unset($params['attribute']);
 
-        /**
-         * Temporary support for deprecated s_user_debit table
-         * Can be removed after the table is removed
-         */
-        if ($paymentData && $paymentData->getPaymentMean()->getName() == 'debit') {
-            $debitData = array(
-                'account' => $paymentData->getAccountNumber(),
-                'accountHolder' => $paymentData->getAccountHolder(),
-                'bankName' => $paymentData->getBankName(),
-                'bankCode' => $paymentData->getBankCode()
-            );
-            $params['debit'] = $debitData;
+        if (isset($params['billing'])) {
+            $params['billing'] = $params['billing'][0];
+        }
+        if (isset($params['shipping'])) {
+            $params['shipping'] = $params['shipping'][0];
         }
 
-        $attribute = $customer->getAttribute();
-        if (empty($attribute) && empty($params['attribute'])) {
-            $attribute = new \Shopware\Models\Attribute\Customer();
-            $params['attribute'] = [$attribute];
+        if (!isset($params['birthday'])) {
+            $params['birthday'] = null;
         }
-
-        $params['billing'] = $params['billing'][0];
-        $params['shipping'] = $params['shipping'][0];
-        $params['attribute'] = $params['attribute'][0];
-        $params['billing']['attribute'] = $params['billingAttribute'][0];
-        $params['shipping']['attribute'] = $params['shippingAttribute'][0];
 
         return $params;
     }
@@ -651,21 +640,21 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
      */
     public function deleteAction()
     {
-            //get posted customers
-            $customers = $this->Request()->getParam('customers', array(array('id' => $this->Request()->getParam('id'))));
+        //get posted customers
+        $customers = $this->Request()->getParam('customers', array(array('id' => $this->Request()->getParam('id'))));
 
-            //iterate the customers and add the remove action
-            foreach ($customers as $customer) {
-                $entity = $this->getRepository()->find($customer['id']);
-                $this->getManager()->remove($entity);
-            }
-            //Performs all of the collected actions.
-            $this->getManager()->flush();
+        //iterate the customers and add the remove action
+        foreach ($customers as $customer) {
+            $entity = $this->getRepository()->find($customer['id']);
+            $this->getManager()->remove($entity);
+        }
+        //Performs all of the collected actions.
+        $this->getManager()->flush();
 
-            $this->View()->assign(array(
+        $this->View()->assign(array(
                 'success' => true,
                 'data' => $this->Request()->getParams())
-            );
+        );
     }
 
     /**
@@ -726,12 +715,12 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         Shopware()->Modules()->Admin()->sLogin(true);
 
         $url = $this->Front()->Router()->assemble(array(
-            'action'    => 'performOrderRedirect',
-            'shopId'    => $shop->getId(),
-            'hash'      => $this->createPerformOrderRedirectHash($user['password']),
-            'sessionId' => Shopware()->SessionID(),
-            'userId'    => $user['id'],
-            'fullPath'  => true
+            'action' => 'performOrderRedirect',
+            'shopId' => $shop->getId(),
+            'hash' => $this->createPerformOrderRedirectHash($user['password']),
+            'sessionId' => Shopware()->Session()->get('sessionId'),
+            'userId' => $user['id'],
+            'fullPath' => true
         ));
 
         if ($shop->getHost()) {
@@ -750,10 +739,10 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
      */
     public function performOrderRedirectAction()
     {
-        $shopId    = (int)$this->Request()->getQuery('shopId');
-        $userId    = (int)$this->Request()->getQuery('userId');
+        $shopId = (int)$this->Request()->getQuery('shopId');
+        $userId = (int)$this->Request()->getQuery('userId');
         $sessionId = $this->Request()->getQuery('sessionId');
-        $hash      = $this->Request()->getQuery('hash');
+        $hash = $this->Request()->getQuery('hash');
 
         $userPasswordHash = $this->get('dbal_connection')->fetchColumn(
             'SELECT password FROM s_user WHERE id = :userId',

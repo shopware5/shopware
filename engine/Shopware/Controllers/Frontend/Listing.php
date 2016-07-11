@@ -27,6 +27,7 @@ use Shopware\Bundle\SearchBundle\FacetResultInterface;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactoryInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer;
+use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
@@ -47,7 +48,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         $manufacturerId = $this->Request()->getParam('sSupplier', null);
 
         /**@var $context ProductContextInterface*/
-        $context = $this->get('shopware_storefront.context_service')->getProductContext();
+        $context = $this->get('shopware_storefront.context_service')->getShopContext();
 
         if (!$this->Request()->getParam('sCategory')) {
             $this->Request()->setParam('sCategory', $context->getShop()->getCategory()->getId());
@@ -71,7 +72,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         /**@var $manufacturer Manufacturer*/
         $manufacturer = $this->get('shopware_storefront.manufacturer_service')->get(
             $manufacturerId,
-            $this->get('shopware_storefront.context_service')->getProductContext()
+            $this->get('shopware_storefront.context_service')->getShopContext()
         );
 
         if ($manufacturer->getCoverFile()) {
@@ -136,7 +137,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             /**@var $manufacturer Manufacturer*/
             $manufacturer = $this->get('shopware_storefront.manufacturer_service')->get(
                 $manufacturerId,
-                $this->get('shopware_storefront.context_service')->getProductContext()
+                $this->get('shopware_storefront.context_service')->getShopContext()
             );
 
             $manufacturerContent = $this->getSeoDataOfManufacturer($manufacturer);
@@ -158,9 +159,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         $viewAssignments = array(
             'sBanner' => Shopware()->Modules()->Marketing()->sBanner($categoryId),
             'sBreadcrumb' => $this->getBreadcrumb($categoryId),
-            'sCategoryInfo' => $categoryContent,
             'sCategoryContent' => $categoryContent,
-            'campaigns' => $this->getCampaigns($categoryId),
             'activeFilterGroup' => $this->request->getQuery('sFilterGroup'),
             'hasEscapedFragment' => $this->Request()->has('_escaped_fragment_'),
             'ajaxCountUrlParams' => ['sCategory' => $categoryContent['id']]
@@ -168,7 +167,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 
         $viewAssignments = array_merge($viewAssignments, $emotionConfiguration);
 
-        $context = $this->get('shopware_storefront.context_service')->getProductContext();
+        $context = $this->get('shopware_storefront.context_service')->getShopContext();
 
         if ($categoryContent['streamId']) {
             /** @var \Shopware\Components\ProductStream\CriteriaFactoryInterface $factory */
@@ -256,7 +255,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             $location = array('controller' => 'index');
         } elseif ($this->get('config')->get('categoryDetailLink') && $checkRedirect) {
             /**@var $context ShopContextInterface*/
-            $context = $this->get('shopware_storefront.context_service')->getProductContext();
+            $context = $this->get('shopware_storefront.context_service')->getShopContext();
 
             /**@var $factory StoreFrontCriteriaFactoryInterface*/
             $factory = $this->get('shopware_search.store_front_criteria_factory');
@@ -315,26 +314,6 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         $content['title'] = $manufacturer->getName();
 
         return $content;
-    }
-
-    /**
-     * @param $categoryId
-     * @return array
-     */
-    private function getCampaigns($categoryId)
-    {
-        /**@var $repository \Shopware\Models\Emotion\Repository */
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Emotion\Emotion');
-
-        $campaignsResult = $repository->getCampaignByCategoryQuery($categoryId)
-            ->getArrayResult();
-
-        $campaigns = array();
-        foreach ($campaignsResult as $campaign) {
-            $campaign['categoryId'] = $categoryId;
-            $campaigns[$campaign['landingPageBlock']][] = $campaign;
-        }
-        return $campaigns;
     }
 
     /**

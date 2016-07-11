@@ -44,7 +44,9 @@ Ext.define('Shopware.apps.Index.controller.Main', {
 	init: function() {
         var me = this,
             firstRunWizardStep = Ext.util.Cookies.get('firstRunWizardStep'),
-            firstRunWizardEnabled = me.subApplication.firstRunWizardEnabled;
+            firstRunWizardEnabled = me.subApplication.firstRunWizardEnabled,
+            enableInstallationFeedback = me.subApplication.enableInstallationFeedback,
+            enableBetaFeedback = me.subApplication.enableBetaFeedback;
 
         if (!firstRunWizardEnabled) {
             firstRunWizardStep = 0;
@@ -72,6 +74,31 @@ Ext.define('Shopware.apps.Index.controller.Main', {
 
         } else {
             me.initBackendDesktop();
+            
+            if (enableInstallationFeedback) {
+                Ext.Function.defer(function() {
+                    Shopware.app.Application.addSubApplication({
+                        name: 'Shopware.apps.Feedback',
+                        params: {
+                            installationFeedback: true
+                        }
+                    });
+                }, 2000);
+            }
+
+            if (enableBetaFeedback && (typeof(Storage) !== "undefined")) {
+                var item = window.localStorage.getItem("hideBetaFeedback");
+                if (!item) {
+                    Ext.Function.defer(function() {
+                        Shopware.app.Application.addSubApplication({
+                            name: 'Shopware.apps.Feedback',
+                            params: {
+                                previewFeedback: true
+                            }
+                        });
+                    }, 2000);
+                }
+            }
         }
 	},
 
@@ -474,28 +501,31 @@ createShopwareVersionMessage = function() {
                     '<strong>Shopware {Shopware::VERSION} {Shopware::VERSION_TEXT}</strong>' +
                     '<span>Build Rev {Shopware::REVISION}</span></p>' +
 
-                    '{if !$product}<p><strong>Community Edition under <a href="http://www.gnu.org/licenses/agpl.html" target="_blank">AGPL license</a></strong><span>No support included in this shopware package.</span></p>{else}' +
-                    '<p><strong>{if $product == "PE"}Professional Edition {elseif $product == "EB"}Enterprise Business Edition {elseif $product == "EC"}Enterprise Cluster Edition{/if} under commercial / proprietary license</strong><span>See eula.txt / eula_en.txt (bundled with shopware) for details</span></p>{/if}' +
+                    '{if $product == "CE"}<p><strong>Community Edition under <a href="http://www.gnu.org/licenses/agpl.html" target="_blank">AGPL license</a></strong><span>No support included in this shopware package.</span></p>{else}' +
+                    '<p><strong>{if $product == "PE"}Professional Edition{elseif $product == "PP"}Professional Plus Edition{elseif $product == "EE"}Enterprise Edition{elseif $product == "EB"}Enterprise Business Edition{elseif $product == "EC"}Enterprise Cluster Edition{/if} under commercial / proprietary license</strong><span>See eula.txt / eula_en.txt (bundled with shopware) for details</span></p>{/if}' +
 
                     '<p><strong>Shopware 5 uses the following components</strong></p>' +
                     '<p><strong>Enlight 2</strong><span>BSD License</span><span>&nbsp;Origin: shopware AG</span></p>' +
-                    '<p><strong>Zend Framework 1</strong><span>New BSD License</span><span>&nbsp;Origin: Zend Technologies</span></p>' +
+                    '<p><strong>Zend Framework</strong><span>New BSD License</span><span>&nbsp;Origin: Zend Technologies</span></p>' +
                     '<p><strong>ExtJS 4</strong><span>GPL v3 License</span><span>&nbsp;Origin: Sencha Corp.</span></p>' +
-                    'If you want to develop proprietary extensions that makes use of ExtJS (ie extensions that are not licensed under the GNU Affero General Public License, version 3, or a compatible license), you´ll need to license shopware SDK to get the necessary rights for the distribution of your extensions / plugins.' +
+                    '<p>If you want to develop proprietary extensions that makes use of ExtJS (ie extensions that are not licensed under the GNU Affero General Public License, version 3, or a compatible license), you´ll need to license shopware SDK to get the necessary rights for the distribution of your extensions / plugins.</p>' +
                     '<p><strong>Doctrine 2</strong><span>MIT License</span><span>&nbsp;Origin: http://www.doctrine-project.org/</span></p>' +
-                    '<p><strong>password_compat</strong><span>MIT License</span><span>&nbsp;Origin: https://github.com/ircmaxell/password_compat/</span></p>' +
                     '<p><strong>TinyMCE 3</strong><span>LGPL 2.1 License</span><span>&nbsp;Origin: Moxiecode Systems AB.</span></p>' +
                     '<p><strong>Symfony 2</strong><span>MIT License</span><span>&nbsp;Origin: SensioLabs</span></p>' +
                     '<p><strong>Smarty 3</strong><span>LGPL 2.1 License</span><span>&nbsp;Origin: New Digital Group, Inc.</span></p>' +
-                    '<p><strong>Mpdf 5.0</strong><span>GPL License</span><span>&nbsp;Origin: http://www.mpdf1.com/mpdf/</span></p>' +
                     '<p><strong>CodeMirror</strong><span>BSD License</span><span>&nbsp;Origin: http://codemirror.net/</span></p>' +
-                    '<p><strong>FPDF</strong><span>License</span><span>&nbsp;Origin: http://www.fpdf.org/</span></p>' + "</p>" +
-                    '<p><strong>Guzzle</strong><span>MIT License</span><span>&nbsp;Origin: http://guzzlephp.org/</span></p>' + "</p>" +
-                    '<p><strong>Less.php</strong><span>Apache-2.0</span><span>&nbsp;Origin: http://lessphp.gpeasy.com/</span></p>' + "</p>" +
-                    '<p><strong>reactphp/promise</strong><span>MIT License</span><span>&nbsp;Origin: https://github.com/reactphp/promise</span></p>' + "</p>" +
-                    '<p><strong>array_column</strong><span>MIT License</span><span>&nbsp;Origin: https://github.com/ramsey/array_column</span></p>' + "</p>" +
-                    '<p><strong>Mobile_Detect</strong><span>MIT License</span><span>&nbsp;Origin: https://github.com/serbanghita/Mobile-Detect/</span></p>' + "</p>" +
-                    '<p><strong>Monolog</strong><span>MIT License</span><span>&nbsp;Origin: https://github.com/Seldaek/monolog/</span></p>' + "</p>"
+                    '<p><strong>MPDF</strong><span>GPL License</span><span>&nbsp;Origin: https://mpdf.github.io</span></p>' +
+                    '<p><strong>FPDF</strong><span>License</span><span>&nbsp;Origin: http://www.fpdf.org/</span></p>' +
+                    '<p><strong>Guzzle</strong><span>MIT License</span><span>&nbsp;Origin: http://guzzlephp.org</span></p>' +
+                    '<p><strong>Less.php</strong><span>Apache-2.0</span><span>&nbsp;Origin: http://lessphp.gpeasy.com</span></p>' +
+                    '<p><strong>Monolog</strong><span>MIT License</span><span>&nbsp;Origin: https://github.com/Seldaek/monolog</span></p>' +
+                    '<p><strong>ElasticSearch</strong><span>LGPL License</span><span>&nbsp;Origin: https://github.com/elastic/elasticsearch-php</span></p>' +
+                    '<p><strong>ongr/elasticsearch-dsl</strong><span>License</span><span>&nbsp;Origin: https://github.com/ongr-io/ElasticsearchDSL</span></p>' +
+                    '<p><strong>egulias/email-validator</strong><span>MIT License</span><span>&nbsp;Origin: https://github.com/egulias/EmailValidator</span></p>' +
+                    '<p><strong>Flysystem</strong><span>MIT License</span><span>&nbsp;Origin: http://flysystem.thephpleague.com</span></p>' +
+                    '<p><strong>paragonie/random_compat</strong><span>MIT License</span><span>&nbsp;Origin: https://github.com/paragonie/random_compat</span></p>' +
+                    '<p><strong>beberlei/assert</strong><span>License</span><span>&nbsp;Origin: https://github.com/beberlei/assert</span></p>' +
+                "</p>"
         }]
     });
 

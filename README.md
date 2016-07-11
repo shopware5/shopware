@@ -18,7 +18,7 @@ Visit the forum at <http://forum.shopware.com/>
 
 ### Shopware Server Requirements
 
-- PHP 5.5.9 or above
+- PHP 5.6.4 or above
 - PHP extensions `curl`, `mbstring` and `gd`
 - An Apache web server
 - Apache's `mod_rewrite` module
@@ -64,6 +64,9 @@ Unzip the files to the checkout directory:
 
 You can now access your shop
 
+# Backend
+
+The backend is located at `/backend` example `http://your.shop.com/backend`.
 Backend Login: demo/demo
 
 The test_images.zip file includes thumbnails for the new responsive theme and the old deprecated template.

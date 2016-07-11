@@ -104,7 +104,35 @@ class ProductNumberService implements ProductNumberServiceInterface
             return $selected;
         }
 
-        return $number;
+        if ($this->isNumberAvailable($number)) {
+            return $number;
+        }
+
+        $selected = $this->findFallbackById($productId);
+        if (!$selected) {
+            throw new \RuntimeException("No active product variant found");
+        }
+
+        return $selected;
+    }
+
+    /**
+     * @param int $productId
+     * @return string|false
+     */
+    private function findFallbackById($productId)
+    {
+        $selected = $this->getMainVariantNumberById($productId);
+        if ($selected) {
+            return $selected;
+        }
+
+        $selected = $this->getAvailableFallbackVariant($productId);
+        if ($selected) {
+            return $selected;
+        }
+
+        return $this->getFallbackVariant($productId);
     }
 
     /**
@@ -123,7 +151,7 @@ class ProductNumberService implements ProductNumberServiceInterface
 
         /**@var $statement \PDOStatement*/
         $statement = $query->execute();
-        
+
         return $statement->fetch(\PDO::FETCH_COLUMN);
     }
 
@@ -170,10 +198,98 @@ class ProductNumberService implements ProductNumberServiceInterface
     }
 
     /**
+     * @param string $number
+     * @return boolean
+     */
+    private function isNumberAvailable($number)
+    {
+        $query = $this->getProductNumberQuery();
+        $query->where('variant.ordernumber = :number')
+            ->andWhere('(product.laststock * variant.instock) >= (product.laststock * variant.minpurchase)')
+            ->setParameter(':number', $number);
+
+        $statement = $query->execute();
+        $selected = $statement->fetch(\PDO::FETCH_COLUMN);
+
+        return (bool) $selected;
+    }
+
+    /**
+     * @param int $productId
+     * @return string|false
+     */
+    private function getMainVariantNumberById($productId)
+    {
+        $query = $this->getProductNumberQuery();
+        $query->where('variant.id = product.main_detail_id')
+            ->andWhere('product.id = :productId')
+            ->andWhere('(product.laststock * variant.instock) >= (product.laststock * variant.minpurchase)')
+            ->setParameter(':productId', $productId);
+
+        $statement = $query->execute();
+        $selected = $statement->fetch(\PDO::FETCH_COLUMN);
+
+        return $selected;
+    }
+
+    /**
+     * Returns the first active variant number
+     *
+     * @param int $productId
+     * @return string|false
+     */
+    private function getFallbackVariant($productId)
+    {
+        $query = $this->getProductNumberQuery();
+
+        $query->andWhere('product.id = :productId');
+        $query->setMaxResults(1);
+        $query->setParameter(':productId', $productId);
+
+        $statement = $query->execute();
+        $selected = $statement->fetch(\PDO::FETCH_COLUMN);
+
+        return $selected;
+    }
+
+    /**
+     * Returns the first active variant number that is available for purchase
+     *
+     * @param int $productId
+     * @return string|false
+     */
+    private function getAvailableFallbackVariant($productId)
+    {
+        $query = $this->getProductNumberQuery();
+
+        $query->andWhere('product.id = :productId');
+        $query->andWhere('(product.laststock * variant.instock) >= (product.laststock * variant.minpurchase)');
+        $query->setMaxResults(1);
+        $query->setParameter(':productId', $productId);
+
+        $statement = $query->execute();
+        $selected = $statement->fetch(\PDO::FETCH_COLUMN);
+
+        return $selected;
+    }
+
+    /**
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    private function getProductNumberQuery()
+    {
+        $query = $this->connection->createQueryBuilder();
+        $query->select(['variant.ordernumber']);
+        $query->from('s_articles_details', 'variant');
+        $query->innerJoin('variant', 's_articles', 'product', 'product.id = variant.articleID AND variant.active = 1');
+        $query->setMaxResults(1);
+        return $query;
+    }
+
+    /**
      * Validates if the product is available in the current shop
      * @param int $productId
      * @param Shop $shop
-     * @return int
      */
     private function isProductAvailableInShop($productId, $shop)
     {

@@ -292,12 +292,12 @@ Ext.define('Shopware.model.Helper', {
      * The function returns a span tag with a css class for a checkbox
      * sprite.
      *
-     * @param { boolean } value
+     * @param { boolean|int } value
      * @return { String }
      */
     booleanColumnRenderer: function (value) {
         var checked = 'sprite-ui-check-box-uncheck';
-        if (value === true) {
+        if (value === true || value === 1) {
             checked = 'sprite-ui-check-box';
         }
         return '<span style="display:block; margin: 0 auto; height:16px; width:16px;" class="' + checked + '"></span>';

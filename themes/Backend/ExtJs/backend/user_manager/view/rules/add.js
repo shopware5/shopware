@@ -110,7 +110,7 @@ Ext.define('Shopware.apps.UserManager.view.rules.Add', {
         me.nameField = Ext.create('Ext.form.field.Text', {
             fieldLabel: label,
             emptyText: empty,
-            labelWidth: 200,
+            labelWidth: 155,
             name: 'name',
             allowBlank: false
         });

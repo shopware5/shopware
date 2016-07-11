@@ -26,6 +26,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile as UploadedFile;
 use Shopware\Models\Media\Album as Album;
 use Shopware\Models\Media\Settings as Settings;
 use Shopware\Models\Media\Media as Media;
+use Shopware\Components\CSRFWhitelistAware;
 
 /**
  * Shopware MediaManager Controller
@@ -37,7 +38,7 @@ use Shopware\Models\Media\Media as Media;
  * @package   Shopware\Controllers\Backend
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Backend_ExtJs
+class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
     protected $blackList = array(
         'php',
@@ -76,6 +77,16 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         // create
         $this->addAclPermission('saveAlbum', 'create', 'Insufficient Permissions');
         $this->addAclPermission('saveMedia', 'create', 'Insufficient Permissions');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getWhitelistedCSRFActions()
+    {
+        return [
+            'download'
+        ];
     }
 
     /**
@@ -229,7 +240,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         }
 
         /** @var $repository \Shopware\Models\Media\Repository */
-        $repository = Shopware()->Models()->Media();
+        $repository = Shopware()->Models()->getRepository(Media::class);
         $query = $repository->getAlbumMediaQuery($albumID, $filter, $order, $offset, $limit, $validTypes);
 
         $paginator = $this->getModelManager()->createPaginator($query);
@@ -294,7 +305,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             $thumbnailDir = Shopware()->DocPath('media_' . strtolower($media['type'])) . 'thumbnail' . DIRECTORY_SEPARATOR;
             $path = $thumbnailDir . $this->removeSpecialCharacters($media['name']) . '_' . $size . '.' . $media['extension'];
 
-            $path = str_replace(Shopware()->OldPath(), '', $path);
+            $path = str_replace(Shopware()->DocPath(), '', $path);
             if (DIRECTORY_SEPARATOR !== '/') {
                 $path = str_replace(DIRECTORY_SEPARATOR, '/', $path);
             }
@@ -377,9 +388,8 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         }
 
         $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->select(array('media', 'attribute'))
+        $builder->select(array('media'))
                ->from('Shopware\Models\Media\Media', 'media')
-               ->leftJoin('media.attribute', 'attribute')
                ->setMaxResults(1);
 
         if (!empty($id)) {
@@ -409,9 +419,8 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
     private function getMedia($id)
     {
         $builder = Shopware()->Models()->createQueryBuilder();
-        return $builder->select(array('media', 'attribute'))
+        return $builder->select(array('media'))
                 ->from('Shopware\Models\Media\Media', 'media')
-                ->leftJoin('media.attribute', 'attribute')
                 ->where('media.id = ?1')
                 ->setParameter(1, $id);
     }
@@ -559,7 +568,6 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
 
         //create a new model and set the properties
         $media = new Media();
-        $params['attribute'] = $params['attribute'][0];
 
         $albumId = !empty($params['albumID']) ? $params['albumID'] : -10;
         $album = Shopware()->Models()->find('Shopware\Models\Media\Album', $albumId);
@@ -573,7 +581,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         $media->setDescription('');
         $media->setCreated(new DateTime());
 
-        $identity = Shopware()->Auth()->getIdentity();
+        $identity = Shopware()->Container()->get('Auth')->getIdentity();
         if ($identity !== null) {
             $media->setUserId($identity->id);
         } else {
@@ -801,7 +809,6 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             $media->setName($oldName);
         }
 
-        $media->setAttribute($params['attribute'][0]);
         //check if the album id passed and is valid
         if (isset($params['newAlbumID']) && !empty($params['newAlbumID'])) {
             $media->setAlbumId($params['newAlbumID']);
@@ -860,7 +867,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
     private function getAlbumNodeProperties(\Shopware\Models\Media\Album $album)
     {
         /** @var $repository \Shopware\Models\Media\Repository */
-        $repository = Shopware()->Models()->Media();
+        $repository = Shopware()->Models()->getRepository(Media::class);
         $query = $repository->getAlbumMediaQuery($album->getId());
 
         $paginator = $this->getModelManager()->createPaginator($query);

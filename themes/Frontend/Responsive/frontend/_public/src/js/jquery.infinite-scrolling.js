@@ -81,7 +81,10 @@
             'pagingBottomSelector': '.listing--bottom-paging',
 
             /** @string listingActionsWrapper - this class will be cloned and used as a actions wrapper for the load more and previous button */
-            'listingActionsWrapper': 'infinite--actions'
+            'listingActionsWrapper': 'infinite--actions',
+
+            /** @string ajaxUrl - this string will be used as url for the ajax-call to load the articles */
+            ajaxUrl: window.controller.ajax_listing || null
         },
 
         /**
@@ -99,7 +102,7 @@
             me.applyDataAttributes();
 
             // Check if plugin is enabled
-            if(!me.opts.enabled || !me.$el.is(':visible') || !me.opts.categoryId) {
+            if(!me.opts.enabled || !me.$el.is(':visible') || !me.opts.categoryId || me.opts.ajaxUrl === null) {
                 return;
             }
 
@@ -145,7 +148,7 @@
 
             // Ajax configuration
             me.ajax = {
-                'url': window.controller.ajax_listing,
+                'url': me.opts.ajaxUrl,
                 'params': parseQueryString(window.location.href)
             };
 
@@ -319,6 +322,9 @@
 
             me.openLoadingIndicator();
 
+            // add parameter to see whether the next page or a previous page has been loaded
+            me.params.mode = 'next';
+
             // increase page index for further page loading
             me.params.p ++;
 
@@ -327,6 +333,8 @@
 
             // use categoryid by settings if not defined by filters
             if(!me.params.c) me.params.c = me.opts.categoryId;
+
+            $.publish('plugin/swInfiniteScrolling/onBeforeFetchNewPage', [ me ]);
 
             // generate ajax fefch url by all params
             var url = me.ajax.url + '?' + $.param(me.params);
@@ -424,7 +432,7 @@
         },
 
         /**
-         * onLoadPrevius method
+         * onLoadPrevious method
          *
          * @param event
          *
@@ -448,6 +456,11 @@
             if(!tmpParams.c) tmpParams.c = me.opts.categoryId;
 
             tmpParams.p = tmpParams.p - 1;
+
+            // add parameter to see whether the next page or a previous page has been loaded
+            tmpParams.mode = 'previous';
+
+            $.publish('plugin/swInfiniteScrolling/onBeforeFetchPreviousPage', [ me ]);
 
             // generate ajax fefch url by all params
             var url = me.ajax.url + '?' + $.param(tmpParams);

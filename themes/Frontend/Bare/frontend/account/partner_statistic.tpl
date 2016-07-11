@@ -60,44 +60,45 @@
             {/block}
         </div>
     {/block}
-    <div class="listing--actions block-group is--advanced">
-        {block name='frontend_account_partner_statistic_listing_actions_top'}
-            <div class="top">
-                {block name="frontend_account_partner_statistic_listing_date"}
-                    <form method="post" action="{url controller='account' action='partnerStatistic'}">
-                        <div class="date-filter">
-                            <label class="date-filter--label" for="datePickerFrom">{s name='PartnerStatisticLabelFromDate'}{/s}</label>
-                            <div class="date-filter--input">
-                                <input id="datePickerFrom" class="datepicker text" data-datepicker="true" name="fromDate" type="text" value="{$partnerStatisticFromDate}"/>
+    <div class="partner-statistic-body panel has--border is--rounded">
+        <div class="period--selection--form">
+            {block name='frontend_account_partner_statistic_listing_actions_top'}
+                <div class="top">
+                    {block name="frontend_account_partner_statistic_listing_date"}
+                        <form method="post" action="{url controller='account' action='partnerStatistic'}">
+                            <div class="date-filter">
+                                <label class="date-filter--label" for="datePickerFrom">{s name='PartnerStatisticLabelFromDate'}{/s}</label>
+                                <div class="date-filter--input">
+                                    <input id="datePickerFrom" class="datepicker text" data-datepicker="true" name="fromDate" type="text" value="{$partnerStatisticFromDate}"/>
+                                </div>
                             </div>
-                        </div>
-                        <div class="date-filter">
-                            <label class="date-filter--label" for="datePickerTo">{s name='PartnerStatisticLabelToDate'}{/s}</label>
-                            <div class="date-filter--input">
-                                <input id="datePickerTo" class="datepicker text" data-datepicker="true" name="toDate" type="text" value="{$partnerStatisticToDate}"/>
+                            <div class="date-filter">
+                                <label class="date-filter--label" for="datePickerTo">{s name='PartnerStatisticLabelToDate'}{/s}</label>
+                                <div class="date-filter--input">
+                                    <input id="datePickerTo" class="datepicker text" data-datepicker="true" name="toDate" type="text" value="{$partnerStatisticToDate}"/>
+                                </div>
                             </div>
-                        </div>
-                        <input type="submit" class="btn is--primary btn--filter is--small"  value="{s name="PartnerStatisticSubmitFilter"}{/s}" />
-                    </form>
-                {/block}
-            </div>
-        {/block}
-    </div>
-    {if $sPartnerOrders}
+                            <input type="submit" class="btn is--primary btn--filter is--small" value="{s name="PartnerStatisticSubmitFilter"}{/s}"/>
+                        </form>
+                    {/block}
+                </div>
+            {/block}
+        </div>
+        {if $sPartnerOrders}
         <table id="data" class="is--hidden">
             <tbody>
-                <tr>
-                    {foreach $sPartnerOrderChartData as $chartItem}
-                        <td>{$chartItem.netTurnOver|number_format:2:".":""}</td>
-                    {/foreach}
-                </tr>
+            <tr>
+                {foreach $sPartnerOrderChartData as $chartItem}
+                    <td>{$chartItem.netTurnOver|number_format:2:".":""}</td>
+                {/foreach}
+            </tr>
             </tbody>
             <tfoot>
-                <tr>
-                    {foreach $sPartnerOrderChartData as $chartItem}
-                        <th>{$chartItem.timeScale}</th>
-                    {/foreach}
-                </tr>
+            <tr>
+                {foreach $sPartnerOrderChartData as $chartItem}
+                    <th>{$chartItem.timeScale}</th>
+                {/foreach}
+            </tr>
             </tfoot>
         </table>
         <div id="holder" class="chart--holder"></div>
@@ -109,11 +110,11 @@
                     {block name="frontend_account_partner_statistic_table_head"}
                         <div class="orders--table-header panel--tr">
 
-                            <div class="panel--th">
+                            <div class="panel--th column--date">
                                 {s name="PartnerStatisticColumnDate"}{/s}
                             </div>
 
-                            <div class="panel--th">
+                            <div class="panel--th column--id">
                                 {s name="PartnerStatisticColumnId"}{/s}
                             </div>
 
@@ -139,6 +140,7 @@
                 </div>
             {/block}
         </div>
+    </div>
     {else}
         {block name="frontend_account_partner_statistic_info_empty"}
             <div class="account--no-orders-info">

@@ -47,7 +47,7 @@ Ext.define('Shopware.apps.Customer.model.Batch', {
      */
     fields:[
 		//{block name="backend/customer/model/customer/fields"}{/block}
-        { name:'id', type:'int' },
+        { name:'id', type:'int' }
     ],
 
     /**
@@ -62,7 +62,7 @@ Ext.define('Shopware.apps.Customer.model.Batch', {
         { type:'hasMany', model:'Shopware.apps.Base.model.Dispatch', name:'getDispatch', associationKey:'dispatch'},
         { type:'hasMany', model:'Shopware.apps.Base.model.Shop', name:'getShop', associationKey:'shop'},
         { type:'hasMany', model:'Shopware.apps.Base.model.Country', name:'getCountry', associationKey:'country'},
-        { type:'hasMany', model:'Shopware.apps.Base.model.CustomerGroup', name:'getCustomerGroup', associationKey:'customerGroup'},
+        { type:'hasMany', model:'Shopware.apps.Base.model.CustomerGroup', name:'getCustomerGroup', associationKey:'customerGroup'}
     ]
 
 });

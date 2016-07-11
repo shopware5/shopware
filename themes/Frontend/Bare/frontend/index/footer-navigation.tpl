@@ -3,7 +3,9 @@
 {* Service hotline *}
 {block name="frontend_index_footer_column_service_hotline"}
     <div class="footer--column column--hotline is--first block">
-        <div class="column--headline">{s name="sFooterServiceHotlineHead"}{/s}</div>
+		{block name="frontend_index_footer_column_service_hotline_headline"}
+            <div class="column--headline">{s name="sFooterServiceHotlineHead"}{/s}</div>
+		{/block}
 
 		{block name="frontend_index_footer_column_service_hotline_content"}
 			<div class="column--content">
@@ -15,7 +17,9 @@
 
 {block name="frontend_index_footer_column_service_menu"}
 	<div class="footer--column column--menu block">
-		<div class="column--headline">{s name="sFooterShopNavi1"}{/s}</div>
+		{block name="frontend_index_footer_column_service_menu_headline"}
+			<div class="column--headline">{s name="sFooterShopNavi1"}{/s}</div>
+		{/block}
 
 		{block name="frontend_index_footer_column_service_menu_content"}
 			<nav class="column--navigation column--content">
@@ -54,7 +58,9 @@
 
 {block name="frontend_index_footer_column_information_menu"}
 	<div class="footer--column column--menu block">
-		<div class="column--headline">{s name="sFooterShopNavi2"}{/s}</div>
+		{block name="frontend_index_footer_column_information_menu_headline"}
+			<div class="column--headline">{s name="sFooterShopNavi2"}{/s}</div>
+		{/block}
 
 		{block name="frontend_index_footer_column_information_menu_content"}
 			<nav class="column--navigation column--content">
@@ -92,7 +98,9 @@
 
 {block name="frontend_index_footer_column_newsletter"}
 	<div class="footer--column column--newsletter is--last block">
-		<div class="column--headline">{s name="sFooterNewsletterHead"}{/s}</div>
+		{block name="frontend_index_footer_column_newsletter_headline"}
+			<div class="column--headline">{s name="sFooterNewsletterHead"}{/s}</div>
+		{/block}
 
 		{block name="frontend_index_footer_column_newsletter_content"}
 			<div class="column--content">

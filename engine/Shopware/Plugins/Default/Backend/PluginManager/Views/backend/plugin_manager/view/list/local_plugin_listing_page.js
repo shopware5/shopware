@@ -1,5 +1,34 @@
-
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ *
+ * @category   Shopware
+ * @package    PluginManager
+ * @subpackage List
+ * @version    $Id$
+ * @author shopware AG
+ */
 //{namespace name=backend/plugin_manager/translation}
+
+//{block name="backend/plugin_manager/view/list/local_plugin_listing_page"}
 Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
     extend: 'Shopware.grid.Panel',
     alias: 'widget.plugin-manager-local-plugin-listing',
@@ -28,7 +57,7 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
                     editor: null
                 },
                 version: {
-                    width: 30,
+                    width: 60,
                     header: '{s name="version"}Version{/s}',
                     groupable: false,
                     editor: null
@@ -220,16 +249,21 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
     },
 
     licenceRenderer: function(value, metaData, record) {
+        var me = this;
+
         if (!record || !record['getLicenceStore']) {
             return;
         }
-
+        var result = '';
         try {
-            var licence = record['getLicenceStore'].first();
-            var price = licence['getPriceStore'].first();
-            var type = this.getTextForPriceType(price.get('type'));
-            var expiration = licence.get('expirationDate');
-            var result = type;
+            var licence = record['getLicenceStore'].first(),
+                price = licence['getPriceStore'].first(),
+                type = me.getTextForPriceType(price.get('type')),
+                expiration = licence.get('expirationDate');
+            result += type;
+            if (price.get('type') == 'unlicensed') {
+                result = Ext.String.format('<div style="color: [0]">[1]</div>', '#ff0000', result);
+            }
         } catch (e) {
             return result;
         }
@@ -239,7 +273,13 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
         }
 
         if (expiration) {
+            var expirationDate = new Date(expiration.date),
+                today = new Date();
             result += '<br><span class="label">{s name="till"}until{/s}: </span><span class="date">' + Ext.util.Format.date(expiration.date) + '</span>';
+
+            if (expirationDate < today) {
+                result = Ext.String.format('<div style="color: [0]">[1]</div>', '#ff0000', result);
+            }
         }
 
         return result;
@@ -373,3 +413,4 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
         return items;
     }
 });
+//{/block}

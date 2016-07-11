@@ -99,12 +99,10 @@ class ProductMediaGateway implements Gateway\ProductMediaGatewayInterface
         $query = $this->getQuery($context);
 
         $query->andWhere('childImage.id IS NULL')
-            ->andWhere('image.articleID IN (:products)');
-
-        $query->setParameter(':products', $ids, Connection::PARAM_INT_ARRAY);
-
-        $query->orderBy('image.main')
-            ->addOrderBy('image.position');
+            ->andWhere('image.articleID IN (:products)')
+            ->orderBy('image.main')
+            ->addOrderBy('image.position')
+            ->setParameter(':products', $ids, Connection::PARAM_INT_ARRAY);
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
@@ -141,7 +139,6 @@ class ProductMediaGateway implements Gateway\ProductMediaGatewayInterface
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
-
         $data = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
         $covers = [];
@@ -150,7 +147,6 @@ class ProductMediaGateway implements Gateway\ProductMediaGatewayInterface
 
             $covers[$id] = $this->hydrator->hydrateProductImage($row);
         }
-
         return $this->assignProductMedia($covers, $products);
     }
 
@@ -192,16 +188,16 @@ class ProductMediaGateway implements Gateway\ProductMediaGatewayInterface
         $query->select($this->fieldHelper->getMediaFields())
             ->addSelect($this->fieldHelper->getImageFields());
 
-        $this->fieldHelper->addImageTranslation($query, $context);
-
         $query->from('s_articles_img', 'image')
             ->innerJoin('image', 's_media', 'media', 'image.media_id = media.id')
             ->innerJoin('media', 's_media_album_settings', 'mediaSettings', 'mediaSettings.albumID = media.albumID')
             ->leftJoin('image', 's_media_attributes', 'mediaAttribute', 'mediaAttribute.mediaID = image.media_id')
             ->leftJoin('image', 's_articles_img_attributes', 'imageAttribute', 'imageAttribute.imageID = image.id')
-            ->leftJoin('image', 's_articles_img', 'childImage', 'childImage.parent_id = image.id');
+            ->leftJoin('image', 's_articles_img', 'childImage', 'childImage.parent_id = image.id')
+            ->andWhere('image.parent_id IS NULL');
 
-        $query->andWhere('image.parent_id IS NULL');
+        $this->fieldHelper->addImageTranslation($query, $context);
+        $this->fieldHelper->addMediaTranslation($query, $context);
 
         return $query;
     }

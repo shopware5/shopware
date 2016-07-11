@@ -52,7 +52,14 @@ Ext.define('Shopware.apps.Customer.model.Customer', {
         { name:'orderCount', type:'int' },
         { name:'canceledOrderAmount', type:'float' },
         { name:'shopName', type:'string' },
-        { name:'language', type:'string' }
+        { name:'language', type:'string' },
+        { name:'birthday', type:'date', dateFormat:'d.m.Y' },
+        { name:'title', type:'string' },
+        { name:'salutation', type:'string' },
+        { name:'firstname', type:'string' },
+        { name:'lastname', type:'string' },
+        { name:'title', type:'string' },
+        { name:'number', type: 'string' }
     ],
 
     /**
@@ -97,11 +104,8 @@ Ext.define('Shopware.apps.Customer.model.Customer', {
     associations:[
         { type:'hasMany', model:'Shopware.apps.Customer.model.Billing', name:'getBilling', associationKey:'billing' },
         { type:'hasMany', model:'Shopware.apps.Customer.model.Shipping', name:'getShipping', associationKey:'shipping' },
-        { type:'hasMany', model:'Shopware.apps.Customer.model.Attribute', name:'getCustomerAttributes', associationKey:'attribute' },
         { type:'hasMany', model:'Shopware.apps.Customer.model.Debit', name:'getDebit', associationKey:'debit'},
-        { type:'hasMany', model:'Shopware.apps.Customer.model.PaymentData', name:'getPaymentData', associationKey:'paymentData'},
-        { type:'hasMany', model:'Shopware.apps.Customer.model.BillingAttributes', name:'getBillingAttributes', associationKey:'billingAttribute'},
-        { type:'hasMany', model:'Shopware.apps.Customer.model.ShippingAttributes', name:'getShippingAttributes', associationKey:'shippingAttribute'}
+        { type:'hasMany', model:'Shopware.apps.Customer.model.PaymentData', name:'getPaymentData', associationKey:'paymentData'}
     ]
 
 });

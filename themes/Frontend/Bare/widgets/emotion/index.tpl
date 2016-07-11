@@ -1,53 +1,101 @@
 {if $sEmotions|@count > 0}
     {foreach $sEmotions as $emotion}
 
-        {if $emotion.grid}
-            {block name="widgets/emotion/index/container"}
+        {block name="widgets/emotion/index/container"}
 
-                {$cellHeight = $emotion.grid.cellHeight}
-                {$cellWidth = 100 / $emotion.grid.cols}
-                {$cellSpacing = $emotion.grid.gutter}
+            {* Config block for overriding configuration variables of the shopping world *}
+            {block name="widgets/emotion/index/config"}
+                {$cellHeight = $emotion.cellHeight}
+                {$cellWidth = 100 / $emotion.cols}
+                {$cellSpacing = $emotion.cellSpacing}
                 {$baseWidth = 1160}
+
+                {$emotionMode = $emotion.mode}
+                {$emotionGridMode = $emotion.mode}
+                {$emotionFullscreen = $emotion.fullscreen}
+                {$emotionCols = $emotion.cols}
+
+                {$breakpoints = [ 's' => '30em', 'm' => '48em', 'l' => '64em', 'xl' => '78.75em' ]}
 
                 {if $Controller == 'listing' && $theme.displaySidebar}
                     {$baseWidth = 900}
                 {/if}
 
-                {$lastRow = 0}
+                {$emotionRows = []}
+                {$emotionRows['base'] = 0}
+            {/block}
 
-                <section class="emotion--container emotion--column-{$emotion.grid.cols} emotion--mode-{$emotion.mode} emotion--{$emotion@index}"
+            {block name="widgets/emotion/index/emotion"}
+                <section class="emotion--container emotion--column-{$emotionCols} emotion--mode-{$emotionMode} emotion--{$emotion@index}"
                          data-emotion="true"
-                         data-gridMode="{$emotion.mode}"
+                         data-gridMode="{$emotionGridMode}"
+                         data-fullscreen="{if $emotionFullscreen}true{else}false{/if}"
+                         data-columns="{$emotionCols}"
                          data-cellSpacing="{$cellSpacing}"
-                         data-fullscreen="{if $emotion.fullscreen}true{else}false{/if}"
-                         data-columns="{$emotion.grid.cols}"
                          data-cellHeight="{$cellHeight}"
-                         data-baseWidth="{$baseWidth}">
+                         data-baseWidth="{$baseWidth}"
+                         {block name="widgets/emotion/index/attributes"}{/block}>
 
                     {if $emotion.elements.0}
                         {foreach $emotion.elements as $element}
                             {block name="widgets/emotion/index/element"}
 
-                                {$template = $element.component.template}
-                                {$Data = $element.data}
+                                {* Config block for overriding configuration variables of the emotion element *}
+                                {block name="widgets/emotion/index/element/config"}
+                                    {$template = $element.component.template}
+                                    {$Data = $element.data}
 
-                                {$itemCols = ($element.endCol - $element.startCol) + 1}
-                                {$itemRows = ($element.endRow - $element.startRow) + 1}
-                                {$itemHeight = $itemRows * ($cellHeight + $cellSpacing)}
-                                {$itemTop = ($element.startRow - 1) * ($cellHeight + $cellSpacing)}
-                                {$itemLeft = $cellWidth * ($element.startCol - 1)}
+                                    {$itemCls = "emotion--element"}
 
-                                {if $lastRow < $element.endRow}
-                                    {$lastRow = $element.endRow}
-                                {/if}
+                                    {$itemCols = ($element.endCol - $element.startCol) + 1}
+                                    {$itemRows = ($element.endRow - $element.startRow) + 1}
+                                    {$itemHeight = $itemRows * ($cellHeight + $cellSpacing)}
+                                    {$itemTop = ($element.startRow - 1) * ($cellHeight + $cellSpacing)}
+                                    {$itemLeft = $cellWidth * ($element.startCol - 1)}
+                                    {$itemStyle = "padding-left: {$cellSpacing / 16}rem; padding-bottom: {$cellSpacing / 16}rem;"}
+
+                                    {$itemCls = "{$itemCls} col-{$itemCols}"}
+                                    {$itemCls = "{$itemCls} row-{$itemRows}"}
+                                    {$itemCls = "{$itemCls} start-col-{$element.startCol}"}
+                                    {$itemCls = "{$itemCls} start-row-{$element.startRow}"}
+
+                                    {foreach $element.viewports as $viewport}
+                                        {$viewportCols = ($viewport.endCol - $viewport.startCol) + 1}
+                                        {$viewportRows = ($viewport.endRow - $viewport.startRow) + 1}
+
+                                        {$viewportColCls = "col-{$viewport.alias}-{$viewportCols}"}
+                                        {$viewportColCls = "{$viewportColCls} start-col-{$viewport.alias}-{$viewport.startCol}"}
+
+                                        {$viewportRowCls = "row-{$viewport.alias}-{$viewportRows}"}
+                                        {$viewportRowCls = "{$viewportRowCls} start-row-{$viewport.alias}-{$viewport.startRow}"}
+
+                                        {$itemCls = "{$itemCls} {$viewportColCls}"}
+                                        {$itemCls = "{$itemCls} {$viewportRowCls}"}
+
+                                        {if !$viewport.visible}
+                                            {$itemCls = "{$itemCls} is--hidden-{$viewport.alias}"}
+                                        {/if}
+
+                                        {if !$emotionRows[$viewport.alias]}
+                                            {$emotionRows[$viewport.alias] = 0}
+                                        {/if}
+
+                                        {if $emotionRows[$viewport.alias] < $viewport.endRow}
+                                            {$emotionRows[$viewport.alias] = $viewport.endRow}
+                                        {/if}
+                                    {/foreach}
+
+                                    {if $element.cssClass}
+                                        {$itemCls = "{$itemCls} {$element.cssClass}"}
+                                    {/if}
+
+                                    {if $emotionRows['base'] < $element.endRow}
+                                        {$emotionRows['base'] = $element.endRow}
+                                    {/if}
+                                {/block}
 
                                 {strip}
-                                <div class="emotion--element column--{$itemCols} row--{$itemRows}{if $element.cssClass} {$element.cssClass}{/if}"
-                                     style="padding-left: {$cellSpacing / 16}rem;
-                                            padding-bottom: {$cellSpacing / 16}rem;
-                                            height: {$itemHeight / 16}rem;
-                                            top: {$itemTop / 16}rem;
-                                            left: {$itemLeft}%;">
+                                <div class="{$itemCls}" style="{$itemStyle}">
 
                                     {block name="widgets/emotion/index/inner-element"}
 
@@ -82,7 +130,7 @@
                                             {include file="widgets/emotion/components/component_youtube.tpl"}
 
                                         {elseif "widgets/emotion/components/{$template}.tpl"|template_exists}
-                                            {include file="widgets/emotion/components/{$element.component.template}.tpl"}
+                                            {include file="widgets/emotion/components/{$template}.tpl"}
                                         {/if}
                                     {/block}
                                 </div>
@@ -91,13 +139,21 @@
                         {/foreach}
 
                         {block name="widgets/emotion/index/sizer"}
-                            {$containerHeight = $lastRow * ($cellHeight + $cellSpacing)}
+                            {foreach $emotionRows as $alias => $rows}
+                                {if $alias === 'base'}
+                                    {continue}
+                                {/if}
 
-                            <div class="emotion--sizer column--1"{if $emotion.mode == 'resize'} style="height: {$containerHeight / 16}rem;"{/if}></div>
+                                {$containerHeight = $rows * ($cellHeight + $cellSpacing)}
+                                <div class="emotion--sizer-{$alias} col--1" data-rows="{$rows}" style="height: {$containerHeight}px;"></div>
+                            {/foreach}
+
+                            {$containerHeight = $emotionRows['base'] * ($cellHeight + $cellSpacing)}
+                            <div class="emotion--sizer col-1" data-rows="{$emotionRows['base']}" style="height: {$containerHeight}px;"></div>
                         {/block}
                     {/if}
                 </section>
             {/block}
-        {/if}
+        {/block}
     {/foreach}
 {/if}

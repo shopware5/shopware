@@ -555,24 +555,19 @@ Ext.onReady(function() {
         override: 'Shopware.notification.SubscriptionWarning',
 
         snippets: {
-            licence_upgrade_warning: '[0] plugin(s) require a licence upgrade. <a target="_blank" href="https://account.shopware.com">Open account</a><br /><br /><b>Required upgrades:</b><br />[1]',
+            licence_upgrade_warning: '[0] plugin(s) require a license upgrade. <a target="_blank" href="https://account.shopware.com">Open account</a><br /><br /><b>Required upgrades:</b><br />[1]',
             subscription_warning: 'Subscription(s) for [0] plugin(s) have expired. <a target="_blank" href="https://account.shopware.com">Open account</a><br /><br /><b>Expired plugins:</b><br />[1]',
             expired_soon_subscription_warning: 'Subscription(s) for [0] plugin(s) will expire soon. <a target="_blank" href="https://account.shopware.com">Open account</a><br /><br /><b>Soon expiring plugins:</b><br />[1]',
             expired_soon_subscription_days_warning: ' days',
-            invalid_licence: 'Licence(s) of [0] plugin(s) are invalid. <a target="_blank" href="https://account.shopware.com">Open account</a><br /><b>Invalid licences:</b><br />[1]',
-            shop_license_upgrade : 'The license upgrade for the shop hasn\'t been executed yet. <a target="_blank" href="https://account.shopware.com">Open account</a>'
-        }
-    });
-
-    Ext.define('Shopware.notification.en_GB.ExpiredLicence', {
-        override: 'Shopware.notification.ExpiredLicence',
-
-        snippets: {
-            licenses_expired : 'Licenses will expire soon',
-            license_expired : 'License will expire soon',
-            licenses_expired_long : 'The following licenses will expire soon:',
-            license_expired_long : 'The following license will expire soon:',
-            license_expired_line_text : '[0] will expire on [1]'
+            invalid_licence: 'License(s) of [0] plugin(s) are invalid. <a target="_blank" href="https://account.shopware.com">Open account</a><br /><b>Invalid licences:</b><br />[1]',
+            shop_license_upgrade : 'The license upgrade for the shop hasn\'t been executed yet. <a target="_blank" href="https://account.shopware.com">Open account</a>',
+            no_license: 'You may be a victim of counterfeiting. <a target="_blank" href="https://account.shopware.com">Open account</a><br /><br /><b>No valid license found for plugins:</b><br />[1]',
+            expiring_license: 'Expiring license(s)',
+            expired_license: 'Expired license(s)',
+            expiring_license_warning: 'License(s) of [0]x plugin(s) are soon expiring.<br /><br /><b>Soon expired license(s):</b><br />[1]',
+            expired_license_warning: 'License(s) of [0]x plugin(s) are expired.<br /><br /><b>Expired license(s):</b><br/>[1]',
+            unknown_license: "Unlicensed plugins",
+            confirm_plugin_deactivation: 'You have installed unlicensed plugins. Please buy a valid license or install and remove the plugins with help of the Plugin Manager now.'
         }
     });
 });

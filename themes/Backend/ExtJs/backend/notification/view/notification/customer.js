@@ -96,7 +96,7 @@ Ext.define('Shopware.apps.Notification.view.notification.Customer', {
                 flex: 1
             },
             {
-                header: '{s name=list/customer/column/mail}eMail{/s}',
+                header: '{s name=list/customer/column/mail}Email{/s}',
                 dataIndex: 'mail',
                 flex: 1
             },

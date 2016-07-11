@@ -25,8 +25,8 @@
 namespace Shopware\Commands;
 
 use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
-use Shopware\Components\Console\Application;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -44,6 +44,11 @@ class PluginReinstallCommand extends ShopwareCommand
                 'plugin',
                 InputArgument::REQUIRED,
                 'Name of the plugin to be installed.'
+            )->addOption(
+                'removedata',
+                'r',
+                InputOption::VALUE_NONE,
+                'if supplied plugin data will be removed'
             );
     }
 
@@ -62,7 +67,9 @@ class PluginReinstallCommand extends ShopwareCommand
             $output->writeln(sprintf('Plugin by name "%s" was not found.', $pluginName));
             return 1;
         }
-        $pluginManager->uninstallPlugin($plugin, false);
+
+        $removeData = $input->getOption('removedata');
+        $pluginManager->uninstallPlugin($plugin, $removeData);
         $pluginManager->installPlugin($plugin);
         $pluginManager->activatePlugin($plugin);
     }

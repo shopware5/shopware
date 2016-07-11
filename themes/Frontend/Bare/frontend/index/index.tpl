@@ -11,7 +11,13 @@
 	{include file='frontend/index/header.tpl'}
 {/block}
 
-<body class="{block name="frontend_index_body_classes"}is--ctl-{controllerName} is--act-{controllerAction}{if $sUserLoggedIn} is--user{/if}{if $sTarget} is--target-{$sTarget}{/if}{if $theme.checkoutHeader && ( ({controllerName} == "checkout" && {controllerAction} != "cart") || ({controllerName} == "register" && $sTarget != "account") ) } is--minimal-header{/if}{if !$theme.displaySidebar} is--no-sidebar{/if}{/block}">
+<body class="{block name="frontend_index_body_classes"}{strip}
+    is--ctl-{controllerName|lower} is--act-{controllerAction|lower}
+    {if $sUserLoggedIn} is--user{/if}
+    {if $sTarget} is--target-{$sTarget|escapeHtml}{/if}
+    {if $theme.checkoutHeader && (({controllerName|lower} == "checkout" && {controllerAction|lower} != "cart") || ({controllerName|lower} == "register" && $sTarget != "account"))} is--minimal-header{/if}
+    {if !$theme.displaySidebar} is--no-sidebar{/if}
+    {/strip}{/block}">
 
     {block name='frontend_index_after_body'}{/block}
 
@@ -152,15 +158,14 @@
                 'vat_check_required': '{config name='vatcheckrequired'}',
                 'ajax_cart': '{url controller='checkout' action='ajaxCart'}',
                 'ajax_search': '{url controller="ajax_search"}',
-                'ajax_login': '{url controller="account" action="ajax_login"}',
                 'register': '{url controller="register"}',
                 'checkout': '{url controller="checkout"}',
-                'ajax_logout': '{url controller="account" action="ajax_logout"}',
                 'ajax_validate': '{url controller="register"}',
                 'ajax_add_article': '{url controller="checkout" action="addArticle"}',
                 'ajax_listing': '{url module="widgets" controller="Listing" action="ajaxListing"}',
                 'ajax_cart_refresh': '{url controller="checkout" action="ajaxAmount"}',
-                'csrf_token_generate': '{url controller="csrftoken"}'
+                'ajax_address_selection': '{url controller="address" action="ajaxSelection" fullPath forceSecure}',
+                'ajax_address_editor': '{url controller="address" action="ajaxEditor" fullPath forceSecure}'
             {rdelim};
 
             var snippets = snippets || {ldelim}
@@ -194,6 +199,12 @@
 						{/foreach}
 					{rdelim}
                 {/if}{rdelim}
+            {rdelim};
+
+            var csrfConfig = csrfConfig || {ldelim}
+                'generateUrl': '{url controller="csrftoken" fullPath=false}',
+                'baseUrl': '{$Shop->getBaseUrl()}',
+                'shopId': '{$Shop->getId()}'
             {rdelim};
         {/block}
         //]]>

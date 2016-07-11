@@ -26,6 +26,7 @@ namespace Shopware\Bundle\SearchBundleDBAL;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Bundle\SearchBundle;
+use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
 use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\AttributeHydrator;
@@ -127,7 +128,7 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
                 $row['__variant_ordernumber']
             );
 
-            $product->addAttribute('search', $this->attributeHydrator->hydrate($row));
+            $product->addAttribute('search', new Attribute($row));
             $products[$product->getNumber()] = $product;
         }
 

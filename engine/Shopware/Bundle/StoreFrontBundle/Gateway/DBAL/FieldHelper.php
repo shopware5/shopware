@@ -272,7 +272,6 @@ class FieldHelper
             'category.product_box_layout as __category_product_box_layout',
             'category.cmstext as __category_cmstext',
             'category.template as __category_template',
-            'category.noviewselect as __category_noviewselect',
             'category.blog as __category_blog',
             'category.external as __category_external',
             'category.hidefilter as __category_hidefilter',
@@ -301,7 +300,6 @@ class FieldHelper
             'price.articledetailsID as __price_articledetailsID',
             'price.price as __price_price',
             'price.pseudoprice as __price_pseudoprice',
-            'price.baseprice as __price_baseprice',
             'price.percent as __price_percent',
         ];
 
@@ -602,11 +600,16 @@ class FieldHelper
      */
     public function getPropertyGroupFields()
     {
-        return [
+        $fields = [
             'propertyGroup.id as __propertyGroup_id',
             'propertyGroup.name as __propertyGroup_name',
             'propertyGroup.filterable as __propertyGroup_filterable',
         ];
+        $fields = array_merge(
+            $fields,
+            $this->getTableFields('s_filter_options_attributes', 'propertyGroupAttribute')
+        );
+        return $fields;
     }
 
     /**
@@ -614,12 +617,17 @@ class FieldHelper
      */
     public function getPropertyOptionFields()
     {
-        return [
+        $fields = [
             'propertyOption.id as __propertyOption_id',
             'propertyOption.optionID as __propertyOption_optionID',
             'propertyOption.value as __propertyOption_value',
             'propertyOption.position as __propertyOption_position',
         ];
+        $fields = array_merge(
+            $fields,
+            $this->getTableFields('s_filter_values_attributes', 'propertyOptionAttribute')
+        );
+        return $fields;
     }
 
     /**
@@ -733,343 +741,106 @@ class FieldHelper
      */
     public function getRelatedProductStreamFields()
     {
-        return [
+        $fields = [
             'stream.id as __stream_id',
             'stream.name as __stream_name',
             'stream.description as __stream_description',
             'stream.type as __stream_type',
         ];
+
+        $fields = array_merge(
+            $fields,
+            $this->getTableFields('s_product_streams_attributes', 'productStreamAttribute')
+        );
+        return $fields;
     }
 
     /**
+     * Joins the translation table and selects the objectdata for the provided join conditions
+     *
+     * @param string $fromPart Table which uses as from part
+     * @param string $joinCondition Join condition for the objectkey column
+     * @param string $translationType Type of the translation
+     * @param string $selectName Name of the additional selection
      * @param QueryBuilder $query
      * @param ShopContextInterface $context
      */
-    public function addAllPropertyTranslations(QueryBuilder $query, ShopContextInterface $context)
-    {
+    public function addTranslation(
+        $fromPart,
+        $translationType,
+        QueryBuilder $query,
+        ShopContextInterface $context,
+        $joinCondition = null,
+        $selectName = null
+    ) {
         if ($context->getShop()->isDefault()) {
             return;
         }
 
-        $this->addPropertySetTranslationWithSuffix($query);
-        $this->addPropertyGroupTranslationWithSuffix($query);
-        $this->addPropertyOptionTranslationWithSuffix($query);
+        if ($joinCondition === null) {
+            $joinCondition = $fromPart . '.id';
+        }
+        if ($selectName === null) {
+            $selectName = '__' . $fromPart . '_translation';
+        }
 
-        $query->setParameter(':language', $context->getShop()->getId());
+        $this->addTranslationWithSuffix(
+            $fromPart,
+            $joinCondition,
+            $translationType,
+            $selectName,
+            $query,
+            $context->getShop()->getId()
+        );
 
         if ($context->getShop()->getFallbackId() !== $context->getShop()->getId()) {
-            $this->addPropertySetTranslationWithSuffix($query, 'Fallback');
-            $this->addPropertyGroupTranslationWithSuffix($query, 'Fallback');
-            $this->addPropertyOptionTranslationWithSuffix($query, 'Fallback');
-            $query->setParameter(':languageFallback', $context->getShop()->getFallbackId());
+            $this->addTranslationWithSuffix(
+                $fromPart,
+                $joinCondition,
+                $translationType,
+                $selectName,
+                $query,
+                $context->getShop()->getFallbackId(),
+                'fallback'
+            );
         }
     }
 
     /**
+     * @param string $fromPart Table which uses as from part
+     * @param string $joinCondition Join condition for the objectkey column
+     * @param string $translationType Type of the translation
+     * @param string $selectName Name of the additional selection
      * @param QueryBuilder $query
-     * @param ShopContextInterface $context
-     */
-    public function addPropertySetTranslation(QueryBuilder $query, ShopContextInterface $context)
-    {
-        if ($context->getShop()->isDefault()) {
-            return;
-        }
-
-        $this->addPropertySetTranslationWithSuffix($query);
-        $query->setParameter(':language', $context->getShop()->getId());
-
-        if ($context->getShop()->getFallbackId() !== $context->getShop()->getId()) {
-            $this->addPropertySetTranslationWithSuffix($query, 'Fallback');
-            $query->setParameter(':languageFallback', $context->getShop()->getFallbackId());
-        }
-    }
-
-    /**
-     * @param QueryBuilder $query
-     * @param ShopContextInterface $context
-     */
-    public function addPropertyGroupTranslation(QueryBuilder $query, ShopContextInterface $context)
-    {
-        if ($context->getShop()->isDefault()) {
-            return;
-        }
-
-        $this->addPropertyGroupTranslationWithSuffix($query);
-        $query->setParameter(':language', $context->getShop()->getId());
-
-        if ($context->getShop()->getFallbackId() !== $context->getShop()->getId()) {
-            $this->addPropertyGroupTranslationWithSuffix($query, 'Fallback');
-            $query->setParameter(':languageFallback', $context->getShop()->getFallbackId());
-        }
-    }
-
-    /**
-     * @param QueryBuilder $query
-     * @param ShopContextInterface $context
-     */
-    public function addPropertyOptionTranslation(QueryBuilder $query, ShopContextInterface $context)
-    {
-        if ($context->getShop()->isDefault()) {
-            return;
-        }
-
-        $this->addPropertyOptionTranslationWithSuffix($query);
-        $query->setParameter(':language', $context->getShop()->getId());
-
-        if ($context->getShop()->getFallbackId() !== $context->getShop()->getId()) {
-            $this->addPropertyOptionTranslationWithSuffix($query, 'Fallback');
-            $query->setParameter(':languageFallback', $context->getShop()->getFallbackId());
-        }
-    }
-
-    /**
-     * @param QueryBuilder $query
+     * @param int $shopId
      * @param string $suffix
      */
-    private function addPropertyOptionTranslationWithSuffix(QueryBuilder $query, $suffix = '')
-    {
+    private function addTranslationWithSuffix(
+        $fromPart,
+        $joinCondition,
+        $translationType,
+        $selectName,
+        QueryBuilder $query,
+        $shopId,
+        $suffix = ''
+    ) {
         $selectSuffix = !empty($suffix) ? '_' . strtolower($suffix) : '';
 
-        $query->leftJoin(
-            'propertyOption',
-            's_core_translations',
-            'propertyOptionTranslation' . $suffix,
-            'propertyOptionTranslation' . $suffix . '.objecttype = :optionTranslation AND
-             propertyOptionTranslation' . $suffix . '.objectkey = propertyOption.id AND
-             propertyOptionTranslation' . $suffix . '.objectlanguage = :language' . $suffix
-        );
+        $translationTable = uniqid('translation') . $suffix . $translationType;
 
-        $query->setParameter(':optionTranslation', 'propertyvalue');
-
-        $query->addSelect([
-            'propertyOptionTranslation' . $suffix . '.objectdata as __propertyOption_translation' . $selectSuffix
-        ]);
-    }
-
-    /**
-     * @param QueryBuilder $query
-     * @param string $suffix
-     */
-    private function addPropertyGroupTranslationWithSuffix(QueryBuilder $query, $suffix = '')
-    {
-        $selectSuffix = !empty($suffix) ? '_' . strtolower($suffix) : '';
-        $query->leftJoin(
-            'propertyGroup',
-            's_core_translations',
-            'propertyGroupTranslation' . $suffix,
-            'propertyGroupTranslation' . $suffix . '.objecttype = :groupTranslation AND
-             propertyGroupTranslation' . $suffix . '.objectkey = propertyGroup.id AND
-             propertyGroupTranslation' . $suffix . '.objectlanguage = :language' . $suffix
-        );
-
-        $query->setParameter(':groupTranslation', 'propertyoption');
-        $query->addSelect([
-            'propertyGroupTranslation' . $suffix . '.objectdata as __propertyGroup_translation' . $selectSuffix,
-        ]);
-    }
-
-    /**
-     * @param QueryBuilder $query
-     * @param string $suffix
-     */
-    private function addPropertySetTranslationWithSuffix(QueryBuilder $query, $suffix = '')
-    {
-        $selectSuffix = !empty($suffix) ? '_' . strtolower($suffix) : '';
+        $selectName .= $selectSuffix;
 
         $query->leftJoin(
-            'propertySet',
+            $fromPart,
             's_core_translations',
-            'propertySetTranslation' . $suffix,
-            'propertySetTranslation' . $suffix . '.objecttype = :setTranslation AND
-             propertySetTranslation' . $suffix . '.objectkey = propertySet.id AND
-             propertySetTranslation' . $suffix . '.objectlanguage = :language' . $suffix
+            $translationTable,
+            $translationTable . '.objecttype = :'.$translationTable.' AND ' .
+            $translationTable . '.objectkey = ' . $joinCondition . ' AND ' .
+            $translationTable . '.objectlanguage = :language' . $suffix
         );
-
-        $query->setParameter(':setTranslation', 'propertygroup');
-
-        $query->addSelect([
-            'propertySetTranslation' . $suffix . '.objectdata as __propertySet_translation' . $selectSuffix
-        ]);
-    }
-
-    /**
-     * @param QueryBuilder $query
-     * @param ShopContextInterface $context
-     */
-    public function addImageTranslation(QueryBuilder $query, ShopContextInterface $context)
-    {
-        if ($context->getShop()->isDefault()) {
-            return;
-        }
-
-        $this->addImageTranslationWithSuffix($query);
-        $query->setParameter(':language', $context->getShop()->getId());
-
-        if ($context->getShop()->getFallbackId() !== $context->getShop()->getId()) {
-            $this->addImageTranslationWithSuffix($query, 'Fallback');
-            $query->setParameter(':languageFallback', $context->getShop()->getFallbackId());
-        }
-    }
-
-    /**
-     * @param QueryBuilder $query
-     * @param string $suffix
-     */
-    private function addImageTranslationWithSuffix(QueryBuilder $query, $suffix = '')
-    {
-        $selectSuffix = !empty($suffix) ? '_' . strtolower($suffix) : '';
-
-        $query->leftJoin(
-            'image',
-            's_core_translations',
-            'imageTranslation' . $suffix,
-            'imageTranslation' . $suffix . '.objecttype = :imageType AND
-             imageTranslation' . $suffix . '.objectkey = image.id AND
-             imageTranslation' . $suffix . '.objectlanguage = :language' . $suffix
-        );
-        $query->addSelect(
-            [
-            'imageTranslation' . $suffix . '.objectdata as __image_translation' . $selectSuffix,
-            ]
-        );
-
-        $query->setParameter(':imageType', 'articleimage');
-    }
-
-    /**
-     * @param QueryBuilder $query
-     * @param ShopContextInterface $context
-     */
-    public function addConfiguratorTranslation(QueryBuilder $query, ShopContextInterface $context)
-    {
-        if ($context->getShop()->isDefault()) {
-            return;
-        }
-
-        $this->addConfiguratorTranslationWithSuffix($query);
-        $query->setParameter(':language', $context->getShop()->getId());
-
-        if ($context->getShop()->getFallbackId() !== $context->getShop()->getId()) {
-            $this->addConfiguratorTranslationWithSuffix($query, 'Fallback');
-            $query->setParameter(':languageFallback', $context->getShop()->getFallbackId());
-        }
-    }
-
-    /**
-     * @param QueryBuilder $query
-     * @param string $suffix
-     */
-    private function addConfiguratorTranslationWithSuffix(QueryBuilder $query, $suffix = '')
-    {
-        $selectSuffix = !empty($suffix) ? '_' . strtolower($suffix) : '';
-
-        $query->leftJoin(
-            'configuratorGroup',
-            's_core_translations',
-            'configuratorGroupTranslation' . $suffix,
-            'configuratorGroupTranslation' . $suffix . '.objecttype = :configuratorGroupType AND
-             configuratorGroupTranslation' . $suffix . '.objectkey = configuratorGroup.id AND
-             configuratorGroupTranslation' . $suffix . '.objectlanguage = :language' . $suffix
-        );
-
-        $query->leftJoin(
-            'configuratorOption',
-            's_core_translations',
-            'configuratorOptionTranslation' . $suffix,
-            'configuratorOptionTranslation' . $suffix . '.objecttype = :configuratorOptionType AND
-             configuratorOptionTranslation' . $suffix . '.objectkey = configuratorOption .id AND
-             configuratorOptionTranslation' . $suffix . '.objectlanguage = :language' . $suffix
-        );
-
-        $query->setParameter(':configuratorGroupType', 'configuratorgroup')
-           ->setParameter(':configuratorOptionType', 'configuratoroption');
-
-        $query->addSelect(
-            [
-            'configuratorGroupTranslation' . $suffix . '.objectdata as __configuratorGroup_translation' . $selectSuffix,
-            'configuratorOptionTranslation' . $suffix . '.objectdata as __configuratorOption_translation' . $selectSuffix
-            ]
-        );
-    }
-
-    /**
-     * @param QueryBuilder $query
-     * @param ShopContextInterface $context
-     */
-    public function addUnitTranslation(QueryBuilder $query, ShopContextInterface $context)
-    {
-        if ($context->getShop()->isDefault()) {
-            return;
-        }
-
-        $this->addUnitTranslationWithSuffix($query);
-        $query->setParameter(':language', $context->getShop()->getId());
-
-        if ($context->getShop()->getFallbackId() !== $context->getShop()->getId()) {
-            $this->addUnitTranslationWithSuffix($query, 'Fallback');
-            $query->setParameter(':languageFallback', $context->getShop()->getFallbackId());
-        }
-    }
-
-    /**
-     * @param QueryBuilder $query
-     * @param string $suffix
-     */
-    private function addUnitTranslationWithSuffix(QueryBuilder $query, $suffix = '')
-    {
-        $selectSuffix = !empty($suffix) ? '_' . strtolower($suffix) : '';
-
-        $query->leftJoin(
-            'variant',
-            's_core_translations',
-            'unitTranslation' . $suffix,
-            'unitTranslation' . $suffix . '.objecttype = :unitType AND
-             unitTranslation' . $suffix . '.objectkey = 1 AND
-             unitTranslation' . $suffix . '.objectlanguage = :language' . $suffix
-        );
-
-        $query->addSelect(['unitTranslation' . $suffix . '.objectdata as __unit_translation' . $selectSuffix])
-            ->setParameter(':unitType', 'config_units');
-    }
-
-    /**
-     * @param QueryBuilder $query
-     * @param ShopContextInterface $context
-     */
-    public function addVariantTranslation(QueryBuilder $query, ShopContextInterface $context)
-    {
-        if ($context->getShop()->isDefault()) {
-            return;
-        }
-
-        $this->addVariantTranslationWithSuffix($query);
-        $query->setParameter(':language', $context->getShop()->getId());
-
-        if ($context->getShop()->getFallbackId() !== $context->getShop()->getId()) {
-            $this->addVariantTranslationWithSuffix($query, 'Fallback');
-            $query->setParameter(':languageFallback', $context->getShop()->getFallbackId());
-        }
-    }
-
-    /**
-     * @param QueryBuilder $query
-     * @param string $suffix
-     */
-    private function addVariantTranslationWithSuffix(QueryBuilder $query, $suffix = '')
-    {
-        $selectSuffix = !empty($suffix) ? '_' . strtolower($suffix) : '';
-
-        $query->leftJoin(
-            'variant',
-            's_core_translations',
-            'variantTranslation' . $suffix,
-            'variantTranslation' . $suffix . '.objecttype = :variantType AND
-             variantTranslation' . $suffix . '.objectkey = variant.id AND
-             variantTranslation' . $suffix . '.objectlanguage = :language' . $suffix
-        );
-
-        $query->addSelect('variantTranslation' . $suffix . '.objectdata as __variant_translation' . $selectSuffix)
-            ->setParameter(':variantType', 'variant');
+        $query->setParameter(':language' . $suffix, $shopId);
+        $query->setParameter(':' . $translationTable, $translationType);
+        $query->addSelect($translationTable . '.objectdata as ' . $selectName);
     }
 
     /**
@@ -1078,37 +849,8 @@ class FieldHelper
      */
     public function addCountryTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
-        if ($context->getShop()->isDefault()) {
-            return;
-        }
-
-        $this->addCountryTranslationWithSuffix($query);
-        $query->setParameter(':language', $context->getShop()->getId());
-
-        if ($context->getShop()->getFallbackId() !== $context->getShop()->getId()) {
-            $this->addCountryTranslationWithSuffix($query, 'Fallback');
-            $query->setParameter(':languageFallback', $context->getShop()->getFallbackId());
-        }
-    }
-
-    /**
-     * @param QueryBuilder $query
-     * @param string $suffix
-     */
-    private function addCountryTranslationWithSuffix(QueryBuilder $query, $suffix = '')
-    {
-        $selectSuffix = !empty($suffix) ? '_' . strtolower($suffix) : '';
-
-        $query->leftJoin(
-            'country',
-            's_core_translations',
-            'countryTranslation' . $suffix,
-            'countryTranslation' . $suffix . '.objecttype = :countryType AND
-             countryTranslation' . $suffix . '.objectkey = 1 AND
-             countryTranslation' . $suffix . '.objectlanguage = :language' . $suffix
-        );
-        $query->addSelect('countryTranslation' . $suffix . '.objectdata as __country_translation' . $selectSuffix)
-            ->setParameter(':countryType', 'config_countries');
+        $this->addTranslation('country', 'config_countries', $query, $context, 1);
+        $this->addTranslation('countryAttribute', 's_core_countries_attributes', $query, $context, 'country.id');
     }
 
     /**
@@ -1117,38 +859,71 @@ class FieldHelper
      */
     public function addCountryStateTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
-        if ($context->getShop()->isDefault()) {
-            return;
-        }
-
-        $this->addCountryStateTranslationWithSuffix($query);
-        $query->setParameter(':language', $context->getShop()->getId());
-
-        if ($context->getShop()->getFallbackId() !== $context->getShop()->getId()) {
-            $this->addCountryStateTranslationWithSuffix($query, 'Fallback');
-            $query->setParameter(':languageFallback', $context->getShop()->getFallbackId());
-        }
+        $this->addTranslation('countryState', 'config_country_states', $query, $context, 1);
+        $this->addTranslation('countryStateAttribute', 's_core_countries_states_attributes', $query, $context, 'countryStateAttribute.stateID');
     }
 
     /**
      * @param QueryBuilder $query
-     * @param string $suffix
+     * @param ShopContextInterface $context
      */
-    private function addCountryStateTranslationWithSuffix(QueryBuilder $query, $suffix = '')
+    public function addMediaTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
-        $selectSuffix = !empty($suffix) ? '_' . strtolower($suffix) : '';
+        $this->addTranslation('mediaAttribute', 's_media_attributes', $query, $context, 'mediaAttribute.mediaID');
+    }
 
-        $query->leftJoin(
-            'countryState',
-            's_core_translations',
-            'stateTranslation' . $suffix,
-            'stateTranslation' . $suffix . '.objecttype = :stateType AND
-             stateTranslation' . $suffix . '.objectkey = 1 AND
-             stateTranslation' . $suffix . '.objectlanguage = :language' . $suffix
-        );
-        $query->addSelect('stateTranslation' . $suffix . '.objectdata as __countryState_translation' . $selectSuffix)
-            ->setParameter(':stateType', 'config_country_states')
-        ;
+    /**
+     * @param QueryBuilder $query
+     * @param ShopContextInterface $context
+     */
+    public function addUnitTranslation(QueryBuilder $query, ShopContextInterface $context)
+    {
+        $this->addTranslation('unit', 'config_units', $query, $context, 1);
+    }
+
+    /**
+     * @param QueryBuilder $queryBuilder
+     * @param ShopContextInterface $context
+     */
+    public function addEsdTranslation(QueryBuilder $queryBuilder, ShopContextInterface $context)
+    {
+        $this->addTranslation('esdAttribute', 's_articles_esd_attributes', $queryBuilder, $context, 'esd.id');
+    }
+
+    /**
+     * @param QueryBuilder $query
+     * @param ShopContextInterface $context
+     */
+    public function addConfiguratorGroupTranslation(QueryBuilder $query, ShopContextInterface $context)
+    {
+        $this->addTranslation('configuratorGroup', 'configuratorgroup', $query, $context);
+    }
+
+    /**
+     * @param QueryBuilder $query
+     * @param ShopContextInterface $context
+     */
+    public function addConfiguratorOptionTranslation(QueryBuilder $query, ShopContextInterface $context)
+    {
+        $this->addTranslation('configuratorOption', 'configuratoroption', $query, $context);
+    }
+
+    /**
+     * @param QueryBuilder $query
+     * @param ShopContextInterface $context
+     */
+    public function addDownloadTranslation(QueryBuilder $query, ShopContextInterface $context)
+    {
+        $this->addTranslation('downloadAttribute', 's_articles_downloads_attributes', $query, $context, 'download.id');
+    }
+
+    /**
+     * @param QueryBuilder $query
+     * @param ShopContextInterface $context
+     */
+    public function addLinkTranslation(QueryBuilder $query, ShopContextInterface $context)
+    {
+        $this->addTranslation('linkAttribute', 's_articles_information_attributes', $query, $context, 'link.id');
     }
 
     /**
@@ -1157,38 +932,25 @@ class FieldHelper
      */
     public function addProductTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
-        if ($context->getShop()->isDefault()) {
-            return;
-        }
-
-        $this->addProductTranslationWithSuffix($query);
-        $query->setParameter(':language', $context->getShop()->getId());
-
-        if ($context->getShop()->getFallbackId() != $context->getShop()->getId()) {
-            $this->addProductTranslationWithSuffix($query, 'Fallback');
-            $query->setParameter(':languageFallback', $context->getShop()->getFallbackId());
-        }
+        $this->addTranslation('product', 'article', $query, $context);
     }
 
     /**
      * @param QueryBuilder $query
-     * @param string $suffix
+     * @param ShopContextInterface $context
      */
-    private function addProductTranslationWithSuffix(QueryBuilder $query, $suffix = '')
+    public function addVariantTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
-        $selectSuffix = !empty($suffix) ? '_' . strtolower($suffix) : '';
+        $this->addTranslation('variant', 'variant', $query, $context);
+    }
 
-        $query->leftJoin(
-            'variant',
-            's_core_translations',
-            'productTranslation' . $suffix,
-            'productTranslation' . $suffix . '.objecttype = :productType AND
-             productTranslation' . $suffix . '.objectkey = variant.articleID AND
-             productTranslation' . $suffix . '.objectlanguage = :language' . $suffix
-        );
-
-        $query->addSelect(['productTranslation' . $suffix . '.objectdata as __product_translation' . $selectSuffix])
-            ->setParameter(':productType', 'article');
+    /**
+     * @param QueryBuilder $query
+     * @param ShopContextInterface $context
+     */
+    public function addPriceTranslation(QueryBuilder $query, ShopContextInterface $context)
+    {
+        $this->addTranslation('priceAttribute', 's_articles_prices_attributes', $query, $context, 'price.id');
     }
 
     /**
@@ -1197,39 +959,43 @@ class FieldHelper
      */
     public function addManufacturerTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
-        if ($context->getShop()->isDefault()) {
-            return;
-        }
-
-        $this->addManufacturerTranslationWithSuffix($query);
-        $query->setParameter(':language', $context->getShop()->getId());
-
-        if ($context->getShop()->getFallbackId() !== $context->getShop()->getId()) {
-            $this->addManufacturerTranslationWithSuffix($query, 'Fallback');
-            $query->setParameter(':languageFallback', $context->getShop()->getFallbackId());
-        }
+        $this->addTranslation('manufacturer', 'supplier', $query, $context);
     }
 
     /**
      * @param QueryBuilder $query
-     * @param string $suffix
+     * @param ShopContextInterface $context
      */
-    private function addManufacturerTranslationWithSuffix(QueryBuilder $query, $suffix = '')
+    public function addImageTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
-        $selectSuffix = !empty($suffix) ? '_' . strtolower($suffix) : '';
+        $this->addTranslation('image', 'articleimage', $query, $context);
+    }
 
-        $query->leftJoin(
-            'manufacturer',
-            's_core_translations',
-            'manufacturerTranslation' . $suffix,
-            'manufacturerTranslation' . $suffix . '.objecttype = :manufacturerType AND
-             manufacturerTranslation' . $suffix . '.objectkey = manufacturer.id AND
-             manufacturerTranslation' . $suffix . '.objectlanguage = :language' . $suffix
-        );
-        $query->addSelect(
-            ['manufacturerTranslation' . $suffix . '.objectdata as __manufacturer_translation' . $selectSuffix]
-        )
-            ->setParameter(':manufacturerType', 'supplier');
+    /**
+     * @param QueryBuilder $query
+     * @param ShopContextInterface $context
+     */
+    public function addPropertySetTranslation(QueryBuilder $query, ShopContextInterface $context)
+    {
+        $this->addTranslation('propertySet', 'propertygroup', $query, $context);
+    }
+
+    /**
+     * @param QueryBuilder $query
+     * @param ShopContextInterface $context
+     */
+    public function addPropertyGroupTranslation(QueryBuilder $query, ShopContextInterface $context)
+    {
+        $this->addTranslation('propertyGroup', 'propertyoption', $query, $context);
+    }
+
+    /**
+     * @param QueryBuilder $query
+     * @param ShopContextInterface $context
+     */
+    public function addPropertyOptionTranslation(QueryBuilder $query, ShopContextInterface $context)
+    {
+        $this->addTranslation('propertyOption', 'propertyvalue', $query, $context);
     }
 
     /**
@@ -1238,38 +1004,6 @@ class FieldHelper
      */
     public function addProductStreamTranslation(QueryBuilder $query, ShopContextInterface $context)
     {
-        if ($context->getShop()->isDefault()) {
-            return;
-        }
-
-        $this->addProductStreamTranslationWithSuffix($query);
-        $query->setParameter(':language', $context->getShop()->getId());
-
-        if ($context->getShop()->getFallbackId() !== $context->getShop()->getId()) {
-            $this->addProductStreamTranslationWithSuffix($query, 'Fallback');
-            $query->setParameter(':languageFallback', $context->getShop()->getFallbackId());
-        }
-    }
-
-    /**
-     * @param QueryBuilder $query
-     * @param string $suffix
-     */
-    private function addProductStreamTranslationWithSuffix(QueryBuilder $query, $suffix = '')
-    {
-        $selectSuffix = !empty($suffix) ? '_' . strtolower($suffix) : '';
-
-        $query->leftJoin(
-            'stream',
-            's_core_translations',
-            'streamTranslation' . $suffix,
-            'streamTranslation' . $suffix . '.objecttype = :streamType AND
-             streamTranslation' . $suffix . '.objectkey = stream.id AND
-             streamTranslation' . $suffix . '.objectlanguage = :language' . $suffix
-        );
-        $query->addSelect(
-            ['streamTranslation' . $suffix . '.objectdata as __stream_translation' . $selectSuffix]
-        )
-            ->setParameter(':streamType', 'productStream');
+        $this->addTranslation('stream', 'productStream', $query, $context);
     }
 }

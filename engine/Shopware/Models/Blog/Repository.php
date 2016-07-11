@@ -267,13 +267,14 @@ class Repository extends ModelRepository
      */
     public function getFilterQueryBuilder($categoryIds, $filter)
     {
-        $builder = $this->createQueryBuilder("blog");
-        $builder->leftJoin("blog.tags as tags")
-                ->leftJoin("blog.author as author")
+        $builder = $this->createQueryBuilder('blog');
+        $builder->leftJoin('blog.tags', 'tags')
+                ->leftJoin('blog.author', 'author')
                 ->where('blog.active = 1')
                 ->andWhere('blog.displayDate < :now')
-                ->setParameter("now", new \DateTime())
+                ->setParameter('now', new \DateTime())
                 ->orderBy('blog.displayDate', 'DESC');
+
         if (!empty($categoryIds)) {
             $builder->andWhere($builder->expr()->in('blog.categoryId', $categoryIds));
         }
@@ -406,12 +407,11 @@ class Repository extends ModelRepository
     public function getBackedDetailQueryBuilder($filter)
     {
         $builder = $this->createQueryBuilder("blog");
-        $builder->select(array('blog', 'tags', 'media', 'mappingMedia', 'assignedArticles', 'assignedArticlesDetail', 'attribute' ))
+        $builder->select(array('blog', 'tags', 'media', 'mappingMedia', 'assignedArticles', 'assignedArticlesDetail' ))
                 ->leftJoin('blog.tags', 'tags')
                 ->leftJoin('blog.assignedArticles', 'assignedArticles')
                 ->leftJoin('assignedArticles.mainDetail', 'assignedArticlesDetail')
                 ->leftJoin('blog.media', 'mappingMedia')
-                ->leftJoin('blog.attribute', 'attribute')
                 ->leftJoin('mappingMedia.media', 'media')
                 ->addFilter($filter);
 

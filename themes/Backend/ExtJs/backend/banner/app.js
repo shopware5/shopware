@@ -78,7 +78,7 @@ Ext.define('Shopware.apps.Banner', {
     ],
 
     stores : [ 'Category', 'Banner' ],
-    models : [ 'BannerDetail', 'Attribute' ],
+    models : [ 'BannerDetail' ],
 
     /**
      * Returns the main application window for this is expected

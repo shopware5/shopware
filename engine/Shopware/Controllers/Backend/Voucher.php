@@ -22,13 +22,16 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Models\Voucher\Voucher as Voucher;
+use Shopware\Components\CSRFWhitelistAware;
+use Shopware\Models\Tax\Tax;
+use Shopware\Models\Voucher\Code;
+use Shopware\Models\Voucher\Voucher;
 use Doctrine\ORM\AbstractQuery;
 
 /**
  * Shopware Backend Controller for the Voucher Module
  */
-class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_ExtJs
+class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
     /**
      * Entity Manager
@@ -48,7 +51,7 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
     private function getVoucherRepository()
     {
         if ($this->voucherRepository === null) {
-            $this->voucherRepository = Shopware()->Models()->getRepository('Shopware\Models\Voucher\Voucher');
+            $this->voucherRepository = Shopware()->Models()->getRepository(Voucher::class);
         }
         return $this->voucherRepository;
     }
@@ -183,7 +186,7 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
                         v.modus,
                         v.percental,
                         IF( modus = '0',
-                (SELECT count(*) FROM s_order_details as d WHERE articleordernumber =v.ordercode AND d.ordernumber!=0),
+                (SELECT count(*) FROM s_order_details as d WHERE articleordernumber =v.ordercode AND d.ordernumber!='0'),
                 (SELECT count(*) FROM s_emarketing_voucher_codes WHERE voucherID =v.id AND cashed=1))  AS checkedIn
                 FROM s_emarketing_vouchers as v
                 WHERE (modus = 1 OR modus = 0)
@@ -275,8 +278,8 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
     public function updateVoucherCodesAction()
     {
         $codeId = intval($this->Request()->getParam('id'));
-        /** @var \Shopware\Models\Voucher\Code $code */
-        $code = $this->get('models')->getRepository('Shopware\Models\Voucher\Code')->find($codeId);
+        /** @var Code $code */
+        $code = $this->get('models')->getRepository(Code::class)->find($codeId);
 
         if (!$code) {
             $this->View()->assign(array('success' => false));
@@ -377,7 +380,7 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
      */
     public function getTaxConfigurationAction()
     {
-        $builder = $this->getManager()->Tax()->createQueryBuilder('t');
+        $builder = $this->getManager()->getRepository(Tax::class)->createQueryBuilder('t');
         $builder->orderBy("t.id", "ASC");
         $tax = $builder->getQuery()->getArrayResult();
 
@@ -425,7 +428,6 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
             $params['bindToSupplier'] = null;
         }
 
-        $params['attribute'] = $params['attribute'][0];
         $voucher->fromArray($params);
         $this->getManager()->persist($voucher);
         $this->getManager()->flush();
@@ -549,5 +551,17 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
             $vouchersToDelete = Shopware()->Db()->fetchOne($sql, array($voucherId));
             $allVouchersDeleted = empty($vouchersToDelete);
         }
+    }
+
+    /**
+     * Returns a list with actions which should not be validated for CSRF protection
+     *
+     * @return string[]
+     */
+    public function getWhitelistedCSRFActions()
+    {
+        return [
+            'exportVoucherCode'
+        ];
     }
 }

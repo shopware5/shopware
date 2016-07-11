@@ -123,6 +123,16 @@ class %className% extends ModelEntity
     ';
 
     /**
+     * Definitition of a constructor for initializing properties.
+     */
+    const CONSTRUCTOR = '
+    public function __construct()
+    {
+        %propertyInitializations%
+    }
+    ';
+
+    /**
      * Definition of the standard shopware getter and setter
      * functions of a single model column property.
      */
@@ -261,22 +271,23 @@ class %className% extends ModelEntity
             $this->tableMapping = $this->createTableMapping();
         }
 
-        $this->createTargetDirectory();
-        if (!file_exists($this->getPath())) {
-            return array('success' => false, 'error' => self::CREATE_TARGET_DIRECTORY_FAILED);
+        try {
+            $this->createTargetDirectory($this->getPath());
+        } catch (\Exception $e) {
+            return array('success' => false, 'error' => self::CREATE_TARGET_DIRECTORY_FAILED, 'message' => $e->getMessage());
         }
 
         $errors = array();
-        /**@var $table \Doctrine\DBAL\Schema\Table*/
-        foreach ($this->getSchemaManager()->listTables() as $table) {
-            if (!empty($tableNames) && !in_array($table->getName(), $tableNames)) {
+        foreach ($this->getSchemaManager()->listTableNames() as $tableName) {
+            if (!empty($tableNames) && !in_array($tableName, $tableNames)) {
                 continue;
             }
 
-            if (!$this->stringEndsWith($table->getName(), '_attributes')) {
+            if (!$this->stringEndsWith($tableName, '_attributes')) {
                 continue;
             }
 
+            $table = $this->getSchemaManager()->listTableDetails($tableName);
             $sourceCode = $this->generateModel($table);
             $result = $this->createModelFile($table, $sourceCode);
             if ($result === false) {
@@ -316,13 +327,17 @@ class %className% extends ModelEntity
 
     /**
      * Creates a new directory for the models which will be generated.
+     * @param string $dir
      */
-    protected function createTargetDirectory()
+    protected function createTargetDirectory($dir)
     {
-        if (file_exists($this->getPath())) {
-            return true;
+        if (!is_dir($dir)) {
+            if (false === @mkdir($dir, 0777, true) && !is_dir($dir)) {
+                throw new \RuntimeException(sprintf("Unable to create directory (%s)\n", $dir));
+            }
+        } elseif (!is_writable($dir)) {
+            throw new \RuntimeException(sprintf("Unable to write in directory (%s)\n", $dir));
         }
-        return mkdir($this->getPath(), 0777);
     }
 
     /**
@@ -353,6 +368,9 @@ class %className% extends ModelEntity
         //after the normal column properties created, we can add the association properties.
         $associationProperties = $this->getAssociationProperties($table);
 
+        // Add the constructor
+        $constructor = $this->getConstructor($table);
+
         //now all properties are declared, but the properties needs getter and setter function to get access from extern
         $columnFunctions = $this->getColumnsFunctions($table);
 
@@ -367,6 +385,7 @@ class %className% extends ModelEntity
             $classHeader,
             implode("\n", $columnProperties),
             implode("\n", $associationProperties),
+            $constructor,
             implode("\n", $columnFunctions),
             implode("\n", $associationFunctions),
             '}'
@@ -655,6 +674,64 @@ class %className% extends ModelEntity
         $source = str_replace('%localColumn%', $localColumn[0], $source);
         $source = str_replace('%foreignColumn%', $foreignColumn[0], $source);
         $source = str_replace('%property%', lcfirst($className), $source);
+        return $source;
+    }
+
+    /**
+     * Creates the source code for the custom constructor, which initializes all
+     * not-null properties with their respective default vaulue.
+     *
+     * @param $table \Doctrine\DBAL\Schema\Table
+     * @return string
+     */
+    protected function getConstructor($table)
+    {
+        // Create the property initializations
+        $initializations = array();
+        foreach ($table->getColumns() as $column) {
+            if ($column->getDefault() === null || $this->isPrimaryColumn($table, $column)) {
+                continue;
+            }
+
+            // Make sure not to set default values for foreign key properties
+            $isForeignKeyColumn = false;
+            foreach ($table->getForeignKeys() as $foreignKey) {
+                if (in_array($column->getName(), $foreignKey->getLocalColumns())) {
+                    $isForeignKeyColumn = true;
+                    break;
+                }
+            }
+            if ($isForeignKeyColumn) {
+                continue;
+            }
+
+            // Determine property name, type and default value
+            $property = $this->getPropertyNameOfColumnName($table, $column);
+            $type = $this->getPropertyTypeOfColumnType($column);
+            $default = $column->getDefault();
+            switch ($type) {
+                case 'string':
+                    $default = '"'.$default.'"';
+                    break;
+                case 'boolean':
+                    $default = ($default) ? 'true' : 'false';
+                    break;
+                case 'date':
+                case 'datetime':
+                    $default = 'new \DateTime("'.$default.'")';
+            }
+
+            $initializations[] = '$this->'.lcfirst($property).' = '.$default.';';
+        }
+        if (count($initializations) === 0) {
+            // No need for a constructor
+            return '';
+        }
+
+        // Compile the source snippet
+        $source = self::CONSTRUCTOR;
+        $source = str_replace('%propertyInitializations%', implode("\n        ", $initializations), $source);
+
         return $source;
     }
 

@@ -36,7 +36,7 @@ class Shopware_Controllers_Backend_SimilarShown extends Shopware_Controllers_Bac
      */
     public function SimilarShown()
     {
-        return Shopware()->SimilarShown();
+        return Shopware()->Container()->get('SimilarShown');
     }
 
 

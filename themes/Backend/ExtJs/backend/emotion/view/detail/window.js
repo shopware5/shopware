@@ -20,38 +20,52 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  *
- * @category   Shopware
- * @package    UserManager
- * @subpackage View
- * @version    $Id$
- * @author shopware AG
+ * @category    Shopware
+ * @package     Emotion
+ * @subpackage  View
+ * @version     $Id$
+ * @author      shopware AG
  */
 
 //{namespace name=backend/emotion/view/detail}
 
 /**
- * Shopware UI - Media Manager Main Window
+ * Emotion Detail Window
  *
- * This file contains the business logic for the User Manager module. The module
- * handles the whole administration of the backend users.
+ * This file contains the logic for the detail view of a shopping world.
+ * It includes the settings and the designer view.
  */
 //{block name="backend/emotion/view/detail/window"}
 Ext.define('Shopware.apps.Emotion.view.detail.Window', {
-	extend: 'Enlight.app.Window',
+
+    extend: 'Enlight.app.Window',
     alias: 'widget.emotion-detail-window',
-    border: false,
-    resizable: false,
-    maximizable: false,
-    autoShow: true,
-    layout: 'fit',
-    height: '90%',
-    width: 815,
+
     stateful: true,
     stateId: 'emotion-detail-window',
 
+    border: false,
+    resizable: false,
+    collapsible: false,
+    maximizable: true,
+    minimizable: true,
+    autoShow: true,
+
+    showPreview: false,
+
+    height: '92%',
+    width: '92%',
+
+    layout: {
+        type: 'hbox',
+        align: 'stretch'
+    },
+
     snippets: {
-        errorTitle: '{s name=save/error/title}Error{/s}',
-        errorMessage: '{s name=save/error/message_load}There is an error occured while opening the emotion. Please try again.{/s}'
+        windowTitle: '{s name="global/title"}{/s}',
+        saveBtnLabel: '{s name="window/button/save_emotion"}{/s}',
+        errorTitle: '{s name="save/error/title"}{/s}',
+        errorMessage: '{s name="save/error/message_load"}{/s}'
     },
 
     /**
@@ -62,275 +76,192 @@ Ext.define('Shopware.apps.Emotion.view.detail.Window', {
     initComponent: function() {
         var me = this;
 
-        me.plugins = [ me.createHubPlugin() ];
+        me.title = me.snippets.windowTitle;
 
-        me.dockedItems = [{
-            dock: 'bottom',
-            xtype: 'toolbar',
-            ui: 'shopware-ui',
-            items: me.createActionButtons()
-        }];
+        me.dockedItems = me.createDockedItems();
 
         me.registerEvents();
+
         me.callParent(arguments);
 
         if (me.emotion) {
-            me.loadRecord(me.emotion);
+            me.loadEmotion(me.emotion);
         }
-    },
-
-    loadRecord: function(emotion) {
-        var me = this;
-
-        try {
-            me.emotion = emotion;
-            var settings = me.createSettings(me.emotion);
-            var elements = me.getEmotionElements(me.emotion);
-            me.changeTitle(elements);
-            me.createDataViewStore(elements, settings);
-
-            var items = me.createItems();
-            me.removeAll();
-
-            me.add(items);
-        } catch (e) {
-            Shopware.Notification.createGrowlMessage(me.snippets.errorTitle, me.snippets.errorMessage);
-
-            me.destroy();
-        }
-    },
-
-    createHudStore: function() {
-        var me = this;
-
-        var shopwareComponents = me.getShopwareComponents();
-        var pluginComponents = me.getPluginComponents();
-
-        // Create the data store
-        return Ext.create('Ext.data.Store', {
-            fields: [
-                'headline', 'children'
-            ],
-            data: [{
-                headline: '{s name=window/default_elements}Default elements{/s}',
-                children: shopwareComponents
-            }, {
-                headline: '{s name=window/third_party_elements}Third party elements{/s}',
-                children: pluginComponents
-            }]
-        });
-    },
-
-    createSettings: function(emotionRecord) {
-        var me = this;
-        var settings = emotionRecord.data;
-
-        if (emotionRecord.getGrid() instanceof Ext.data.Store
-            && emotionRecord.getGrid().first() instanceof Ext.data.Model
-        ) {
-            var gridModel = emotionRecord.getGrid().first();
-            settings.cols = gridModel.get('cols');
-            settings.cellHeight = gridModel.get('cellHeight');
-            settings.articleHeight = gridModel.get('articleHeight');
-        }
-
-        return settings;
-    },
-
-    getEmotionElements: function(emotion) {
-        var elements = emotion.getElements();
-
-        if (elements instanceof Ext.data.Store && elements.data.length > 0) {
-            elements = elements.data.items;
-        } else {
-            elements = [];
-        }
-        return elements;
-    },
-
-    createHubPlugin: function() {
-        var me = this;
-
-        me.hubPlugin = Ext.create('Shopware.window.plugin.Hud', {
-            hudStore: me.createHudStore(),
-            originalStore: me.libraryStore,
-            hudOffset: 0,
-            hudHeight: 550,
-            itemSelector: '.x-library-element',
-            tpl: me.createElementLibraryTemplate()
-        });
-        return me.hubPlugin;
-    },
-
-    changeTitle: function(elements) {
-        var me = this;
-
-        // Set the title
-        if(elements.length) {
-            me.title = '{s name=window/title_edit}Edit emotion{/s}';
-        } else {
-            me.title = '{s name=window/title}New emotion{/s}';
-        }
-    },
-
-    createDataViewStore: function(elements, settings) {
-        var me = this;
-
-        me.dataviewStore = Ext.create('Ext.data.Store',{
-            fields: ['settings', 'elements'],
-            data: [{
-                settings: settings,
-                elements: elements
-            }]
-        });
-
-        return me.dataviewStore;
-    },
-
-    createItems: function() {
-        var me = this;
-        me.tabPanel = me.createTabPanel();
-        return [ me.tabPanel ];
     },
 
     /**
      * Registers additional component events.
      */
     registerEvents: function() {
-        this.addEvents(
+        var me = this;
+
+        me.addEvents(
             /**
-             * Event will be fired when the user clicks the save button to save the emotion.
+             * Event will be fired when the user clicks the save button to save the shopping world.
              *
-             * @event
+             * @event saveEmotion
              * @param [Ext.data.Model] The emotion record
-             * @param [Ext.data.Store] The store for the designer tab
-             * @param [Ext.form.Panel] The settings panel
              */
             'saveEmotion'
         );
     },
 
-    getShopwareComponents: function() {
-        var me = this, components = [];
-
-        me.libraryStore.clearFilter();
-        me.libraryStore.filter({
-            filterFn: function(item) {
-                return item.get("pluginId") === null;
-            }
-        });
-        return me.libraryStore.data.items;
-    },
-
-    getPluginComponents: function() {
-        var me = this, components = [];
-
-        me.libraryStore.clearFilter();
-        me.libraryStore.filter({
-            filterFn: function(item) {
-                return item.get("pluginId") > 0;
-            }
-        });
-        return me.libraryStore.data.items;
-    },
-
-    createTabPanel: function() {
-        var me = this,
-            activeTab = 1,
-            designerDisabled = true;
-
-        if (me.emotion.get('name')) {
-            activeTab = 0;
-            designerDisabled = false;
-        }
-        if (me.tabPanel && (me.tabPanel.getActiveTab() !== null)) {
-            activeTab = me.tabPanel.getActiveTab();
-            activeTab = activeTab.tabIndex;
-        }
-
-        return Ext.create('Ext.tab.Panel', {
-            plain: true,
-            activeTab: activeTab,
-            listeners: {
-                scope: me,
-
-                /**
-                 * Event handler method which shows/hides the library
-                 * panel.
-                 *
-                 * @event beforetabchange
-                 * @param [object] panel - Ext.panel.Panel
-                 * @param [object] newCard - Ext.tab.Tab
-                 * @return void
-                 */
-                beforetabchange: function(panel, newCard) {
-                    if(newCard.initialTitle === 'settings') {
-                        me.libraryPnl.hide();
-                    } else {
-                        me.libraryPnl.show();
-                    }
-                }
-
-            },
-            items: [{
-                xtype: 'emotion-detail-designer',
-                initialTitle: 'designer',
-                emotion: me.emotion,
-                dataviewStore: me.dataviewStore,
-                disabled: designerDisabled,
-                tabIndex: 0
-            }, {
-                xtype: 'emotion-detail-settings',
-                initialTitle: 'settings',
-                categoryPathStore: me.categoryPathStore,
-                emotion: me.emotion,
-                dataviewStore: me.dataviewStore,
-                tabIndex: 1
-            }]
-        });
-    },
-
-    createElementLibraryTemplate: function() {
-        return new Ext.XTemplate(
-            '{literal}<tpl for=".">',
-                '<div class="x-library-outer-panel">',
-                    '<h2 class="x-library-section-title">',
-                        '<div class="x-library-section-inner-title">{headline}:</div>',
-                        '<div class="toggle"></div>',
-                    '</h2>',
-                    '<div class="x-library-inner-panel">',
-                        '<ul>',
-                            '<tpl for="children">',
-                                '<li class="x-library-element" data-componentId="{data.id}">',
-                                    '{data.fieldLabel}',
-                                '</li>',
-                            '</tpl>',
-                        '</ul>',
-                    '</div>',
-                '</div>',
-            '</tpl>{/literal}'
-        );
-    },
-
-    createActionButtons: function() {
+    loadEmotion: function(emotion, activeTab) {
         var me = this;
 
-        return ['->', {
-            text: '{s name=window/button/save_emotion}Save emotion{/s}',
-            cls: 'primary',
-            action: 'emotion-detail-settings-save',
-            handler: function() {
-                me.fireEvent('saveEmotion', me.emotion, me.dataviewStore);
+        try {
+            me.emotion = emotion;
+
+            if (me.emotion.get('name')) {
+                me.title = me.title + ' - ' + me.emotion.get('name');
             }
-        }];
+
+            me.removeAll();
+            me.add(me.createItems());
+
+            if (Ext.isDefined(activeTab)) {
+                me.sidebar.setActiveTab(activeTab);
+            }
+
+        } catch (e) {
+            Shopware.Notification.createGrowlMessage(
+                me.snippets.errorTitle,
+                me.snippets.errorMessage
+            );
+
+            me.destroy();
+        }
     },
 
-    enableTabs: function () {
-        var me = this,
-            tabs = me.tabPanel.items;
+    createItems: function() {
+        var me = this;
 
-        tabs.each(function(item) {
-            item.setDisabled(false);
+        return [
+            me.createSidebar(),
+            me.createDesigner()
+        ];
+    },
+
+    createDockedItems: function() {
+        var me = this;
+
+        return me.toolBar = Ext.create('Ext.toolbar.Toolbar', {
+            ui: 'shopware-ui',
+            dock: 'bottom',
+            items: [
+                '->',
+                {
+                    text: me.snippets.saveBtnLabel,
+                    cls: 'primary',
+                    action: 'emotion-detail-settings-save',
+                    handler: function () {
+                        me.fireEvent('saveEmotion', me.emotion);
+                    }
+                }
+            ]
+        });
+    },
+
+    createSidebar: function () {
+        var me = this;
+
+        me.sidebar = Ext.create('Ext.tab.Panel', {
+            flex: 1,
+            name: 'sidebar',
+            items: [
+                me.createSettingsTab(),
+                me.createLayoutTab(),
+                me.createWidgetTab()
+            ]
+        });
+
+        me.mainForm = Ext.create('Ext.form.Panel', {
+            items: [ me.sidebar ],
+            border: false,
+            layout: { type: 'hbox', align: 'stretch' },
+            width: 450,
+            collapsible: window.innerWidth < 1920,
+            collapseDirection: 'left',
+            plugins: [{
+                ptype: 'translation',
+                pluginId: 'translation',
+                translationType: 'emotion',
+                translationMerge: false,
+                translationKey: me.emotion.get('id')
+            }]
+        });
+        me.attributeForm = me.createAttributeTab();
+        me.sidebar.add(me.attributeForm);
+        me.mainForm.loadRecord(me.emotion);
+
+        me.attributeForm.loadAttribute(me.emotion.get('id'));
+
+        me.settingsForm.setDevices();
+
+        return me.mainForm;
+    },
+
+    createSettingsTab: function() {
+        var me = this;
+
+        return me.settingsForm = Ext.create('Shopware.apps.Emotion.view.detail.Settings', {
+            emotion: me.emotion,
+            categoryStore: me.categoryStore,
+            shopStore: me.shopStore,
+            mainWindow: me
+        });
+    },
+
+    createLayoutTab: function() {
+        var me = this;
+
+        return me.layoutForm = Ext.create('Shopware.apps.Emotion.view.detail.Layout', {
+            emotion: me.emotion,
+            mainWindow: me
+        });
+    },
+
+    createWidgetTab: function() {
+        var me = this;
+
+        return me.widgetsTab = Ext.create('Shopware.apps.Emotion.view.detail.Widgets', {
+            emotion: me.emotion,
+            libraryStore: me.libraryStore,
+            mainWindow: me
+        });
+    },
+
+    createDesigner: function() {
+        var me = this;
+
+        return me.designer = Ext.create('Shopware.apps.Emotion.view.detail.Designer', {
+            flex: 1,
+            emotion: me.emotion,
+            mainWindow: me,
+            activePreview: me.showPreview
+        });
+    },
+
+    createAttributeTab: function() {
+        var me = this;
+
+        return Ext.create('Shopware.attribute.Form', {
+            table: 's_emotion_attributes',
+            bodyPadding: 20,
+            fieldSetPadding: 5,
+            listeners: {
+                activate: function() {
+                    me.designer.hide();
+                    me.mainForm.setWidth(me.getWidth());
+                },
+                deactivate: function() {
+                    me.mainForm.setWidth(450);
+                    me.designer.show();
+                }
+            },
+            style: 'background: rgb(240, 242, 244)',
+            title: '{s namespace="backend/attributes/main" name="attribute_form_title"}{/s}',
+            translationForm: me.mainForm
         });
     }
 });

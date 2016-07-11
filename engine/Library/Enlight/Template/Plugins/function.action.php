@@ -37,7 +37,7 @@
 function smarty_function_action($params, Enlight_Template_Default $template)
 {
     /** @var $front Enlight_Controller_Front */
-    $front = Enlight_Application::Instance()->Front();
+    $front = Shopware()->Front();
     $dispatcher = clone $front->Dispatcher();
 
     $modules = $dispatcher->getControllerDirectory();
@@ -88,7 +88,10 @@ function smarty_function_action($params, Enlight_Template_Default $template)
         $request->setControllerName($params['controller'])
                 ->setActionName('index');
     }
+
+    // setParam is used for bc reasons, the attribute should be read for new code
     $request->setParam('_isSubrequest', true);
+    $request->setAttribute('_isSubrequest', true);
 
     $request->setActionName(isset($params['action']) ? $params['action'] : 'index');
     $request->setParams($params)

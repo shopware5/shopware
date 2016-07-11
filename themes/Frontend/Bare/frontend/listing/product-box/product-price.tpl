@@ -14,9 +14,20 @@
     {* Discount price *}
     {block name='frontend_listing_box_article_price_discount'}
         {if $sArticle.has_pseudoprice}
-            <span class="price--discount is--nowrap">
-                {$sArticle.pseudoprice|currency}
-                {s name="Star"}{/s}
+            <span class="price--pseudo">
+
+                {block name='frontend_listing_box_article_price_discount_before'}
+                    {s name="priceDiscountLabel" namespace="frontend/detail/data"}{/s}
+                {/block}
+
+                <span class="price--discount is--nowrap">
+                    {$sArticle.pseudoprice|currency}
+                    {s name="Star"}{/s}
+                </span>
+
+                {block name='frontend_listing_box_article_price_discount_after'}
+                    {s name="priceDiscountInfo" namespace="frontend/detail/data"}{/s}
+                {/block}
             </span>
         {/if}
     {/block}

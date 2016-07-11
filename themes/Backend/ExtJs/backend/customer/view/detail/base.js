@@ -150,7 +150,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
             layout:'anchor',
             defaults:{
                 anchor:'95%',
-                labelWidth:150,
+                labelWidth:155,
                 minWidth:250,
                 xtype:'textfield'
             },
@@ -163,8 +163,9 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
             layout:'anchor',
             cls: Ext.baseCSSPrefix + 'field-set-container',
             defaults:{
-                labelWidth:150,
-                xtype:'textfield'
+                labelWidth:155,
+                xtype:'textfield',
+                anchor: '95%'
             },
             items: me.createBaseFormRight()
         });
@@ -192,7 +193,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
             editable:false,
             allowBlank:false,
             anchor:'95%',
-            labelWidth:150,
+            labelWidth:155,
             minWidth:250
         });
 
@@ -206,7 +207,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
             allowBlank:false,
             editable:false,
             anchor:'95%',
-            labelWidth:150,
+            labelWidth:155,
             minWidth:250,
             listeners: {
                 // When the selected job changes, validate the mail address again
@@ -226,7 +227,8 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
 
         me.customerMail = Ext.create('Ext.form.field.Text', {
             fieldLabel:me.snippets.email.label,
-            labelWidth:150,
+            labelWidth:155,
+            anchor: '95%',
             name:'email',
             allowBlank:false,
             required:true,
@@ -250,16 +252,19 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
             me.customerMail,
             me.customerGroupCombo,
             me.shopStoreCombo,
-        {
-            /*{if {config name=shopwareManagedCustomerNumbers}==1}*/
-            xtype: 'displayfield',
-            /*{/if}*/
-            name: 'billing[number]',
-            fieldLabel: me.snippets.number.label,
-            helpText: me.snippets.number.helpText,
-            helpWidth: 360,
-            helpTitle: me.snippets.number.helpTitle
-        }];
+            {
+                /*{if {config name=shopwareManagedCustomerNumbers}==1}*/
+                xtype: 'displayfield',
+                /*{/if}*/
+                name: 'number',
+                anchor: '95%',
+                labelWidth: 155,
+                fieldLabel: me.snippets.number.label,
+                helpText: me.snippets.number.helpText,
+                helpWidth: 360,
+                helpTitle: me.snippets.number.helpTitle
+            }
+        ];
     },
 
     /**
@@ -283,6 +288,7 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
             name:'confirm',
             inputType:'password',
             anchor: '95%',
+            labelWidth: 155,
             allowBlank:!pwRequired,
             required:pwRequired,
             fieldLabel:me.snippets.confirm.label,
@@ -303,11 +309,12 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
 
         return [{
             name:'active',
+            anchor: '95%',
             boxLabel:me.snippets.active.box,
             fieldLabel:me.snippets.active.field,
             xtype:'checkbox',
             value: true,
-            labelWidth:100,
+            labelWidth:155,
             uncheckedValue:false,
             inputValue:true
         },  me.passwordContainer, me.confirmField ];
@@ -331,10 +338,9 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
             cls: Ext.baseCSSPrefix + 'password-button',
             iconCls:'sprite-license-key',
             action:'create-password',
+            labelWidth: 155,
             tooltip:me.snippets.password.button,
-            style: {
-                display: 'inline-block'
-            },
+            width: 25,
             /**
              * Add button handler to fire the generatePassword event which is handled
              * in the detail controller. The detail controller generates a password and set it into the password field
@@ -348,18 +354,16 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
         //button handler to pass the field to the generate password event
         me.passwordField = Ext.create('Ext.form.field.Text', {
             name:'newPassword',
-            anchor: '92%',
+            flex: 1,
             inputType:'password',
+            labelWidth: 155,
             allowBlank:!pwRequired,
             required:pwRequired,
             fieldLabel:me.snippets.password.label,
             supportText:me.snippets.password.support,
             cls: Ext.baseCSSPrefix + 'password-field',
-            //can't be set in sass.. extJs don't resize the password field.
-            style:{
-                display: 'inline-block',
-                margin: '0 8px 0 0 !important'
-            },
+            validateOnBlur: true,
+            validateOnChange: false,
             validator:function (value) {
                 if ( Ext.String.trim(value) == Ext.String.trim(me.confirmField.getValue()) ) {
                     me.confirmField.clearInvalid();
@@ -372,13 +376,9 @@ Ext.define('Shopware.apps.Customer.view.detail.Base', {
 
         //create a container for the password field to append the generate password button
         return Ext.create('Ext.container.Container', {
-            layout:'anchor',
+            layout:'hbox',
+            anchor: '95%',
             cls: Ext.baseCSSPrefix + 'password-container',
-            defaults:{
-                labelWidth:150,
-                validateOnBlur:true,
-                validateOnChange:false
-            },
             height:70,
             items:[ me.passwordField, me.passwordButton ]
         });

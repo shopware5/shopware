@@ -64,7 +64,11 @@ Ext.define('Shopware.apps.Feedback', {
     /**
      * Required views for the module (subapplication)
      */
-    views: [ 'main.Window' ],
+    views: [
+        'main.Window',
+        'survey.Window',
+        'preview.Window'
+    ],
 
     /**
      * Returns the main application window for this is expected

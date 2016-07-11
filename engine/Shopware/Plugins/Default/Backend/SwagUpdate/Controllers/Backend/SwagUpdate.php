@@ -23,6 +23,7 @@
  */
 
 use Psr\Log\LoggerInterface;
+use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Components\Random;
 use ShopwarePlugins\SwagUpdate\Components\Checks\EmotionTemplateCheck;
 use ShopwarePlugins\SwagUpdate\Components\Checks\IonCubeLoaderCheck;
@@ -47,7 +48,7 @@ use Symfony\Component\Filesystem\Filesystem;
  * @package   Shopware\Controllers\Backend\SwagUpdate
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backend_ExtJs
+class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
     /**
      * Cache key for update response
@@ -80,7 +81,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
             return;
         }
 
-        $user = Shopware()->Auth()->getIdentity();
+        $user = Shopware()->Container()->get('Auth')->getIdentity();
         $userLang = $this->getUserLanguage($user);
         $languagePriorities = array(
             $userLang,
@@ -111,7 +112,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
             return;
         }
 
-        $user = Shopware()->Auth()->getIdentity();
+        $user = Shopware()->Container()->get('Auth')->getIdentity();
         $userLang = $this->getUserLanguage($user);
 
         $namespace = $this->get('snippets')->getNamespace('backend/swag_update/main');
@@ -259,8 +260,9 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
 
         if ($config['update-send-feedback']) {
             $apiEndpoint = $config['update-feedback-api-endpoint'];
+            $rootDir = Shopware()->Container()->getParameter('kernel.root_dir');
+            $publicKey   = trim(file_get_contents($rootDir . '/engine/Shopware/Components/HttpClient/public.key'));
 
-            $publicKey   = trim(file_get_contents(__DIR__ . '/../../Resources/public.key'));
             $collector = new FeedbackCollector($apiEndpoint, $publicKey, $this->getUnique());
 
             try {
@@ -287,7 +289,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
     {
         $clientIp = $this->Request()->getClientIp();
         $base     = $this->Request()->getBaseUrl();
-        $user     = Shopware()->Auth()->getIdentity();
+        $user     = Shopware()->Container()->get('Auth')->getIdentity();
 
         /** @var $locale \Shopware\Models\Shop\Locale */
         $locale = $user->locale;
@@ -575,5 +577,17 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
         $locale = strtolower($locale->getLocale());
 
         return substr($locale, 0, 2);
+    }
+
+    /**
+     * Returns a list with actions which should not be validated for CSRF protection
+     *
+     * @return string[]
+     */
+    public function getWhitelistedCSRFActions()
+    {
+        return [
+            'startUpdate'
+        ];
     }
 }

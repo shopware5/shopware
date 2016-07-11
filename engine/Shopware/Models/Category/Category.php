@@ -219,16 +219,6 @@ class Category extends ModelEntity
     private $hideTop = false;
 
     /**
-     * Can this category used even there is no view selected?
-     *
-     * @var integer $noViewSelect
-     *
-     * @ORM\Column(name="noviewselect", type="boolean", nullable=false)
-     */
-    private $noViewSelect;
-
-
-    /**
      * INVERSE SIDE
      *
      * @var ArrayCollection
@@ -663,29 +653,6 @@ class Category extends ModelEntity
     public function getTemplate()
     {
         return $this->template;
-    }
-
-    /**
-     * Set no view select
-     *
-     * @param bool $noViewSelect
-     * @return Category
-     */
-    public function setNoViewSelect($noViewSelect)
-    {
-        $this->noViewSelect = (bool) $noViewSelect;
-
-        return $this;
-    }
-
-    /**
-     * Get no view select
-     *
-     * @return integer
-     */
-    public function getNoViewSelect()
-    {
-        return $this->noViewSelect;
     }
 
     /**

@@ -22,6 +22,16 @@ return array_replace_recursive([
             'local' => [
                 'type' => 'local',
                 'mediaUrl' => '',
+                'permissions' => [
+                    'file' => [
+                        'public' => 0666 & ~umask(),
+                        'private' => 0600 & ~umask(),
+                    ],
+                    'dir' => [
+                        'public' => 0777 & ~umask(),
+                        'private' => 0700 & ~umask(),
+                    ]
+                ],
                 'path' => realpath(__DIR__ . '/../../../')
             ],
             'ftp' => [
@@ -81,7 +91,11 @@ return array_replace_recursive([
     'store' => [
         'apiEndpoint' => 'https://api.shopware.com',
     ],
-    'plugins' => [],
+    'plugin_directories' => [
+        'Default'   => $this->AppPath('Plugins_' . 'Default'),
+        'Local'     => $this->AppPath('Plugins_' . 'Local'),
+        'Community' => $this->AppPath('Plugins_' . 'Community'),
+    ],
     'template' => [
         'compileCheck' => true,
         'compileLocking' => true,
@@ -98,6 +112,7 @@ return array_replace_recursive([
     ],
     'httpcache' => [
         'enabled' => true,
+        'lookup_optimization' => true,
         'debug' => false,
         'default_ttl' => 0,
         'private_headers' => ['Authorization', 'Cookie'],
@@ -109,17 +124,16 @@ return array_replace_recursive([
         'cache_cookies' => ['shop', 'currency', 'x-cache-context-hash'],
     ],
     'session' => [
-        'name' => 'SHOPWARESID',
         'cookie_lifetime' => 0,
-        //'cookie_httponly' => 1,
-        'use_trans_sid' => false,
+        'cookie_httponly' => 1,
         'gc_probability' => 1,
         'gc_divisor' => 100,
-        'save_handler' => 'db'
+        'save_handler' => 'db',
+        'use_trans_sid' => 0,
     ],
     'phpsettings' => [
-        'error_reporting' => E_ALL,
-        'display_errors' => 1,
+        'error_reporting' => E_ALL & ~E_USER_DEPRECATED,
+        'display_errors' => 0,
         'date.timezone' => 'Europe/Berlin',
     ],
     'cache' => [
@@ -131,8 +145,8 @@ return array_replace_recursive([
         ],
         'backend' => 'auto', // e.G auto, apcu, xcache
         'backendOptions' => [
-            'hashed_directory_perm' => 0771,
-            'cache_file_perm' => 0644,
+            'hashed_directory_perm' => 0777 & ~umask(),
+            'cache_file_perm' => 0666 & ~umask(),
             'hashed_directory_level' => 3,
             'cache_dir' => $this->getCacheDir().'/general',
             'file_name_prefix' => 'shopware'
@@ -154,6 +168,6 @@ return array_replace_recursive([
         'name' => 'SHOPWAREBACKEND',
         'cookie_lifetime' => 0,
         'cookie_httponly' => 1,
-        'use_trans_sid' => false
+        'use_trans_sid' => 0,
     ],
 ], $customConfig);

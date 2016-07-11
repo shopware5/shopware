@@ -6,14 +6,14 @@ use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 
 class Backend extends Page
 {
-    const TIMEOUT_MILLISECONDS = 10000;
+    const TIMEOUT_MILLISECONDS = 500;
 
     /**
      * @var string $path
      */
     protected $path = '/backend/';
 
-    public function verifyPage()
+    public function verifyLogin()
     {
         $this->getSession()->wait(self::TIMEOUT_MILLISECONDS, 'document.querySelector(".login-window") !== null');
 
@@ -25,6 +25,8 @@ class Backend extends Page
         if (!$loginFormPresent) {
             throw new \Exception("Login form not there");
         }
+
+        return true;
     }
 
     public function login($username, $password)
@@ -33,10 +35,17 @@ class Backend extends Page
         $this->fillField('password', $password);
         $this->pressButton('Login');
 
+        return true;
+    }
+
+    public function verifyIsLoggedIn()
+    {
         $result = $this->getSession()->wait(self::TIMEOUT_MILLISECONDS, 'document.querySelector(".shopware-menu") !== null');
         if (!$result) {
             throw new \Exception("Could not login");
         }
+
+        return true;
     }
 
     /**

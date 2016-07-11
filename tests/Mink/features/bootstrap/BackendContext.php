@@ -36,7 +36,17 @@ class BackendContext extends SubContext
         $page = $this->getPage('Backend');
         $page->open();
 
-        $page->login('demo', 'demo');
+        $this->spin(function ($context) use ($page) {
+            return $page->verifyLogin();
+        });
+
+        $this->spin(function ($context) use ($page) {
+            return $page->login('demo', 'demo');
+        });
+
+        $this->spin(function ($context) use ($page) {
+            return $page->verifyIsLoggedIn();
+        });
     }
 
     /**
@@ -44,7 +54,10 @@ class BackendContext extends SubContext
      */
     public function iOpenTheModule($moduleName)
     {
-        $this->getPage('Backend')->openModule($moduleName);
+        $this->spin(function ($context) use ($moduleName) {
+            $context->getPage('Backend')->openModule($moduleName);
+            return true;
+        });
     }
 
     /**
@@ -52,6 +65,38 @@ class BackendContext extends SubContext
      */
     public function theModuleShouldOpenAWindow()
     {
-        $this->getPage('Backend')->verifyModule();
+        $page = $this->getPage('Backend');
+
+        $this->spin(function ($context) use ($page) {
+            $context->getPage('Backend')->verifyModule();
+            return true;
+        });
+    }
+
+    /**
+     * Based on Behat's own example
+     * @see http://docs.behat.org/en/v2.5/cookbook/using_spin_functions.html#adding-a-timeout
+     * @param $lambda
+     * @param int $wait
+     * @return bool
+     * @throws \Exception
+     */
+    public function spin($lambda, $wait = 60)
+    {
+        $time = time();
+        $stopTime = $time + $wait;
+        while (time() < $stopTime) {
+            try {
+                if ($lambda($this)) {
+                    return true;
+                }
+            } catch (\Exception $e) {
+                // do nothing
+            }
+
+            usleep(250000);
+        }
+
+        throw new \Exception("Spin function timed out after {$wait} seconds");
     }
 }

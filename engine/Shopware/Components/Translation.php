@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Shopware\Bundle\AttributeBundle\Service\CrudService;
 
 /**
  * Shopware Translation Component
@@ -418,68 +419,124 @@ class Shopware_Components_Translation
     /**
      * Fix article translation table data.
      *
-     * @param $languageId
-     * @param $articleId
-     * @param $data
+     * @param int $languageId
+     * @param int $articleId
+     * @param string $data
      */
     protected function fixArticleTranslation($languageId, $articleId, $data)
     {
-        $sql = "SELECT id FROM s_core_shops WHERE fallback_id = ?";
-        $ids = Shopware()->Db()->fetchCol($sql, array($languageId));
+        $connection = Shopware()->Container()->get('dbal_connection');
+        $fallbacks = $connection->fetchAll("SELECT id FROM s_core_shops WHERE fallback_id = :languageId", [':languageId' => $languageId]);
+        $fallbacks = array_column($fallbacks, 'id');
 
-        $existStmt = Shopware()->Container()->get('dbal_connection')->prepare(
-            "SELECT id
-             FROM s_core_translations
-             WHERE objectlanguage = :language"
-        );
+        $data = $this->prepareArticleData($data);
 
-        $insertStmt = Shopware()->Container()->get('dbal_connection')->prepare("
-          INSERT INTO `s_articles_translations` (articleID, languageID, name, keywords, description, description_long)
-          VALUE (:articleId, :languageId, :name, :keywords, :description, :descriptionLong)
-          ON DUPLICATE KEY UPDATE
-              name = VALUES(name),
-              keywords = VALUES(keywords),
-              description = VALUES(description),
-              description_long = VALUES(description_long);
-        ");
+        $this->addArticleTranslation($articleId, $languageId, $data);
 
-        // prepare data
-        $data = unserialize($data);
-        if (!empty($data['txtlangbeschreibung']) && strlen($data['txtlangbeschreibung']) > 1000) {
-            $data['txtlangbeschreibung'] = substr(strip_tags($data['txtlangbeschreibung']), 0, 1000);
-        }
-        $data['txtArtikel'] = isset($data['txtArtikel']) ? (string) $data['txtArtikel'] : '';
-        $data['txtkeywords'] = ($data['txtkeywords']) ? (string) $data['txtkeywords'] : '';
-        $data['txtshortdescription'] = isset($data['txtshortdescription']) ? (string) $data['txtshortdescription'] : '';
-        $data['txtlangbeschreibung'] = isset($data['txtlangbeschreibung']) ? (string) $data['txtlangbeschreibung'] : '';
-
-        // Insert s_articles_translations entry for current locale
-        $insertStmt->execute(array(
-            ':articleId' => $articleId,
-            ':languageId' => $languageId,
-            ':name' => $data['txtArtikel'],
-            ':keywords' => $data['txtkeywords'],
-            ':description' => $data['txtshortdescription'],
-            ':descriptionLong' => $data['txtlangbeschreibung']
-        ));
-
-        // Insert s_articles_translations entry for fallbacks
-        foreach ($ids as $id) {
-            $existStmt->execute(array(':language' => $id));
-            $exist = $existStmt->fetch(PDO::FETCH_COLUMN);
+        $existQuery = $connection->prepare("SELECT id FROM s_core_translations WHERE objectlanguage = :language");
+        foreach ($fallbacks as $id) {
+            $existQuery->execute([':language' => $id]);
+            $exist = $existQuery->fetch(PDO::FETCH_COLUMN);
 
             if ($exist) {
                 continue;
             }
-
-            $insertStmt->execute(array(
-                ':articleId' => $articleId,
-                ':languageId' => $id,
-                ':name' => $data['txtArtikel'],
-                ':keywords' => $data['txtkeywords'],
-                ':description' => $data['txtshortdescription'],
-                ':descriptionLong' => $data['txtlangbeschreibung']
-            ));
+            $this->addArticleTranslation($articleId, $id, $data);
         }
+    }
+
+    /**
+     * @param string $data
+     * @return array
+     */
+    private function prepareArticleData($data)
+    {
+        $data = unserialize($data);
+        if (!empty($data['txtlangbeschreibung']) && strlen($data['txtlangbeschreibung']) > 1000) {
+            $data['txtlangbeschreibung'] = substr(strip_tags($data['txtlangbeschreibung']), 0, 1000);
+        }
+
+        $data = array_merge($data, [
+            'name' => (string)$data['txtArtikel'],
+            'keywords' => (string)$data['txtkeywords'],
+            'description' => (string)$data['txtshortdescription'],
+            'description_long' => (string)$data['txtlangbeschreibung'],
+        ]);
+
+        $schemaManager = Shopware()->Container()->get('dbal_connection')->getSchemaManager();
+        $columns = $schemaManager->listTableColumns('s_articles_translations');
+        $columns = array_keys($columns);
+
+        foreach ($data as $key => $value) {
+            $column = strtolower($key);
+            $column = str_replace(CrudService::EXT_JS_PREFIX, '', $column);
+
+            unset($data[$key]);
+            if (in_array($column, $columns)) {
+                $data[$column] = $value;
+            }
+        }
+
+        return $data;
+    }
+
+    /**
+     * @param int $articleId
+     * @param int $languageId
+     * @param array $data
+     */
+    private function addArticleTranslation($articleId, $languageId, array $data)
+    {
+        $connection = Shopware()->Container()->get('dbal_connection');
+        $query = $connection->executeQuery(
+            "SELECT id FROM s_articles_translations WHERE articleID = :articleId AND languageID = :languageId LIMIT 1",
+            [':articleId' => $articleId, ':languageId' => $languageId]
+        );
+        $exist = $query->fetch(PDO::FETCH_COLUMN);
+
+        if ($exist) {
+            $this->updateArticleTranslation($exist, $data);
+        } else {
+            $this->insertArticleTranslation($articleId, $languageId, $data);
+        }
+    }
+
+    /**
+     * @param int $articleId
+     * @param int $languageId
+     * @param array $data
+     */
+    private function insertArticleTranslation($articleId, $languageId, array $data)
+    {
+        $data = array_merge($data, ['languageID' => $languageId, 'articleID' => $articleId]);
+
+        $connection = Shopware()->Container()->get('dbal_connection');
+        $query = $connection->createQueryBuilder();
+        $query->insert('s_articles_translations');
+        foreach ($data as $key => $value) {
+            $query->setValue($key, ':' . $key);
+            $query->setParameter(':' . $key, $value);
+        }
+        $query->execute();
+    }
+
+    /**
+     * @param int $id
+     * @param array $data
+     */
+    private function updateArticleTranslation($id, array $data)
+    {
+        $connection = Shopware()->Container()->get('dbal_connection');
+        $query = $connection->createQueryBuilder();
+
+        $query->update('s_articles_translations', 'translation');
+        foreach ($data as $key => $value) {
+            $query->set($key, ':' . $key);
+            $query->setParameter(':' . $key, $value);
+        }
+
+        $query->where('id = :id');
+        $query->setParameter(':id', $id);
+        $query->execute();
     }
 }

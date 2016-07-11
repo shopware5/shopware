@@ -27,11 +27,10 @@ namespace Shopware\Bundle\SearchBundleES\FacetHandler;
 use Doctrine\DBAL\Connection;
 use Elasticsearch\Client;
 use ONGR\ElasticsearchDSL\Aggregation\TermsAggregation;
-use ONGR\ElasticsearchDSL\Filter\IdsFilter;
-use ONGR\ElasticsearchDSL\Filter\TermFilter;
+use ONGR\ElasticsearchDSL\Query\IdsQuery;
+use ONGR\ElasticsearchDSL\Query\TermQuery;
 use ONGR\ElasticsearchDSL\Search;
 use ONGR\ElasticsearchDSL\Sort\FieldSort;
-use ONGR\ElasticsearchDSL\Sort\Sort;
 use Shopware\Bundle\ESIndexingBundle\IndexFactoryInterface;
 use Shopware\Bundle\ESIndexingBundle\Property\PropertyMapping;
 use Shopware\Bundle\SearchBundleES\ResultHydratorInterface;
@@ -53,6 +52,8 @@ use Shopware\Components\QueryAliasMapper;
 
 class PropertyFacetHandler implements HandlerInterface, ResultHydratorInterface
 {
+    const AGGREGATION_SIZE = 5000;
+    
     /**
      * @var QueryAliasMapper
      */
@@ -118,6 +119,7 @@ class PropertyFacetHandler implements HandlerInterface, ResultHydratorInterface
     ) {
         $aggregation = new TermsAggregation('properties');
         $aggregation->setField('properties.id');
+        $aggregation->addParameter('size', self::AGGREGATION_SIZE);
         $search->addAggregation($aggregation);
     }
 
@@ -133,11 +135,11 @@ class PropertyFacetHandler implements HandlerInterface, ResultHydratorInterface
         if (!isset($elasticResult['aggregations'])) {
             return;
         }
-        if (!isset($elasticResult['aggregations']['agg_properties'])) {
+        if (!isset($elasticResult['aggregations']['properties'])) {
             return;
         }
 
-        $data = $elasticResult['aggregations']['agg_properties']['buckets'];
+        $data = $elasticResult['aggregations']['properties']['buckets'];
         $ids  = array_column($data, 'key');
 
         if (empty($ids)) {
@@ -147,9 +149,11 @@ class PropertyFacetHandler implements HandlerInterface, ResultHydratorInterface
         $groupIds = $this->getGroupIds($ids);
 
         $search = new Search();
-        $search->addFilter(new IdsFilter($groupIds));
-        $search->addFilter(new TermFilter('filterable', 1));
+        $search->addFilter(new IdsQuery($groupIds));
+        $search->addFilter(new TermQuery('filterable', 1));
         $search->addSort(new FieldSort('name'));
+        $search->setFrom(0);
+        $search->setSize(self::AGGREGATION_SIZE);
 
         $index = $this->indexFactory->createShopIndex($context->getShop());
         $data = $this->client->search([

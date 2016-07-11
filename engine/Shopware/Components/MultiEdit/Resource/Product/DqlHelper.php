@@ -501,22 +501,6 @@ class DqlHelper
             'position' => array_key_exists($alias, $columnPositions) ? $columnPositions[$alias] : -1,
         );
 
-        $alias = 'Price_basePrice';
-        $result['PriceBasePrice'] = array(
-            'entity' => 'Price',
-            'field' => 'basePrice',
-            'editable' => true,
-            'type' => 'float',
-            'precision' => 3,
-            'nullable' => true,
-            'columnName' => 'baseprice',
-            'table' => 's_articles_prices',
-            'alias' => $alias,
-            'allowInGrid' => true,
-            'show' => in_array($alias, $shownColumns),
-            'position' => array_key_exists($alias, $columnPositions) ? $columnPositions[$alias] : -1,
-        );
-
         $alias = 'Price_netPrice';
         $result['PriceNetPrice'] = array(
             'entity' => 'Price',

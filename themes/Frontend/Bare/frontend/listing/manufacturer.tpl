@@ -8,7 +8,7 @@
         {* Vendor headline *}
         {block name="frontend_listing_list_filter_supplier_headline"}
             <h1 class="panel--title is--underline">
-                {s name='ListingInfoFilterSupplier'}{/s} {$manufacturer->getName()}
+                {s name='ListingInfoFilterSupplier'}{/s} {$manufacturer->getName()|escapeHtml}
             </h1>
         {/block}
 

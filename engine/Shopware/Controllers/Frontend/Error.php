@@ -147,8 +147,8 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action impl
          * to pass it to the template
         */
         if ($this->Front()->getParam('showException') || $this->Request()->getModuleName() == 'backend') {
-            $paths = array(Enlight()->Path(), Enlight()->AppPath(), Enlight()->OldPath());
-            $replace = array('', Enlight()->App() . '/', '');
+            $paths = array(Shopware()->DocPath());
+            $replace = array('');
 
             $exception = $error->exception;
             $error_file = $exception->getFile();

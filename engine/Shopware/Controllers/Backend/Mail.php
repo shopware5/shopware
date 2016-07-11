@@ -233,7 +233,6 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
         $params = $this->Request()->getParams();
 
         $mail = new Mail();
-        $params['attribute'] = $params['attribute'][0];
         $params['dirty'] = 1;
         $mail->fromArray($params);
 
@@ -271,7 +270,6 @@ class Shopware_Controllers_Backend_Mail extends Shopware_Controllers_Backend_Ext
         }
 
         $params = $this->Request()->getParams();
-        $params['attribute'] = $params['attribute'][0];
         $params['dirty'] = 1;
 
         $mail->fromArray($params);

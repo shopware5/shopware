@@ -81,10 +81,36 @@ Ext.define('Shopware.apps.Category.controller.Settings', {
      */
     onRecordLoaded : function(record, treeRecord) {
         var me = this,
-            form = me.getSettingsForm();
+            form = me.getSettingsForm(),
+            store = form.templateComboBox.getStore(),
+            records = store.getRange(),
+            customTpl = record.get('template'),
+            i = 0,
+            count = records.length;
+
+        // handle special cases for custom templates
+        for (i; i < count; i++) {
+            var rec = records[i];
+            if (rec.customTpl == true) {
+                store.remove(rec);
+            }
+        }
+
+        if (customTpl !== '') {
+            var tplRecord = store.findRecord('template', record.get('template'));
+            if (!tplRecord) {
+                tplRecord = store.model.create({
+                    template: record.get('template'),
+                    name: record.get('template') + ' (' +  form.snippets.defaultSettingsTemplateNotAvailable + ')'
+                });
+                tplRecord.customTpl = true;
+                store.insert(1, tplRecord);
+                form.templateComboBox.select(tplRecord);
+            }
+        }
 
         if(record.getId() != me.subApplication.defaultRootNodeId){
-            if(~~(1 * record.get('parentId')) === 1) {
+            if(~~(1 * record.get('parentId')) === 1 || store.count() === 1) {
                 form.templateComboBox.hide();
             } else {
                 form.templateComboBox.show();
@@ -95,7 +121,6 @@ Ext.define('Shopware.apps.Category.controller.Settings', {
             //to select the settings if the tree element is not a leaf
             if(!treeRecord.get('leaf')){
                 me.getMainWindow().tabPanel.setActiveTab(0);
-                form.streamSelection.disable();
             }
 
             //show or hide the emotionNotice if an emotion is mapped to this category

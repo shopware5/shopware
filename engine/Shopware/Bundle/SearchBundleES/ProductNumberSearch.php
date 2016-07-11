@@ -177,7 +177,10 @@ class ProductNumberSearch implements ProductNumberSearchInterface
 
             $product->addAttribute(
                 'elastic_search',
-                new Attribute(['score' => $data['_score']])
+                new Attribute(array_merge(
+                    $data['_source'],
+                    ['score' => $data['_score']]
+                ))
             );
 
             $products[$product->getNumber()] = $product;

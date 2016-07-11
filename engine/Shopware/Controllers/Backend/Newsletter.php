@@ -82,7 +82,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
     {
         if ($this->Request()->getParam('id')) {
             $mailingID = (int) $this->Request()->getParam('id');
-            if (!Shopware()->Auth()->hasIdentity()) {
+            if (!Shopware()->Container()->get('Auth')->hasIdentity()) {
                 $hash = $this->createHash($mailingID);
                 if ($hash!==$this->Request()->getParam('hash')) {
                     return;
@@ -144,7 +144,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
     {
         $mailingID = (int) $this->Request()->getParam('id');
 
-        if (!empty($mailingID) && !Shopware()->Auth()->hasIdentity()) {
+        if (!empty($mailingID) && !Shopware()->Container()->get('Auth')->hasIdentity()) {
             return;
         }
 
@@ -214,7 +214,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
         $fromName = $template->fetch('string:' . $mailing['sendername'], $template);
 
         /** @var \Enlight_Components_Mail $mail */
-        $mail = clone Shopware()->Mail();
+        $mail = clone Shopware()->Container()->get('mail');
         $mail->setFrom($from, $fromName);
 
         $counter = 0;
@@ -407,7 +407,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
         $sql = 'SELECT * FROM s_core_customergroups WHERE groupkey=?';
         Shopware()->Session()->sUserGroupData =  Shopware()->Db()->fetchRow($sql, array($mailing['customergroup']));
 
-        Shopware()->Router()->setGlobalParam('module', 'frontend');
+        Shopware()->Container()->get('router')->setGlobalParam('module', 'frontend');
         Shopware()->Config()->DontAttachSession = true;
 
         return $mailing;
@@ -631,10 +631,10 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
     {
         $select = '
             cm.email, cm.email as newsletter, cg.name as `group`,
-            IFNULL(ub.salutation, nd.salutation) as salutation,
-            title,
-            IFNULL(ub.firstname, nd.firstname) as firstname,
-            IFNULL(ub.lastname, nd.lastname) as lastname,
+            IFNULL(u.salutation, nd.salutation) as salutation,
+            IFNULL(u.title, nd.title) as title,
+            IFNULL(u.firstname, nd.firstname) as firstname,
+            IFNULL(u.lastname, nd.lastname) as lastname,
             IFNULL(ub.street, nd.street) as street,
             IFNULL(ub.zipcode, nd.zipcode) as zipcode,
             IFNULL(ub.city, nd.city) as city,

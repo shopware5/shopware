@@ -21,13 +21,21 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
-use Enlight_Components_Session_Namespace as Session;
+use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\DependencyInjection\Container;
-use Shopware\Bundle\StoreFrontBundle\Struct;
-use Shopware\Bundle\StoreFrontBundle\Service;
-use Shopware\Bundle\StoreFrontBundle\Gateway;
+use Shopware\Bundle\StoreFrontBundle\Gateway\CountryGatewayInterface;
+use Shopware\Bundle\StoreFrontBundle\Gateway\CurrencyGatewayInterface;
+use Shopware\Bundle\StoreFrontBundle\Gateway\CustomerGroupGatewayInterface;
+use Shopware\Bundle\StoreFrontBundle\Gateway\PriceGroupDiscountGatewayInterface;
+use Shopware\Bundle\StoreFrontBundle\Gateway\ShopGatewayInterface;
+use Shopware\Bundle\StoreFrontBundle\Gateway\TaxGatewayInterface;
+use Enlight_Components_Session_Namespace as Session;
 use Shopware\Models;
 
 /**
@@ -35,7 +43,7 @@ use Shopware\Models;
  * @package   Shopware\Bundle\StoreFrontBundle\Service\Core
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class ContextService implements Service\ContextServiceInterface
+class ContextService implements ContextServiceInterface
 {
     const FALLBACK_CUSTOMER_GROUP = "EK";
 
@@ -45,67 +53,57 @@ class ContextService implements Service\ContextServiceInterface
     private $container;
 
     /**
-     * @var Gateway\CustomerGroupGatewayInterface
-     */
-    private $customerGroupGateway;
-
-    /**
-     * @var Gateway\TaxGatewayInterface
-     */
-    private $taxGateway;
-
-    /**
-     * @var Struct\Context
+     * @var ProductContextInterface
      */
     private $context = null;
 
     /**
-     * @var Struct\LocationContext
+     * @var CustomerGroupGatewayInterface
      */
-    private $locationContext = null;
+    private $customerGroupGateway;
 
     /**
-     * @var Struct\ProductContext
+     * @var TaxGatewayInterface
      */
-    private $productContext = null;
+    private $taxGateway;
 
     /**
-     * @var Struct\ShopContext
-     */
-    private $shopContext = null;
-
-    /**
-     * @var Gateway\PriceGroupDiscountGatewayInterface
+     * @var PriceGroupDiscountGatewayInterface
      */
     private $priceGroupDiscountGateway;
 
     /**
-     * @var Gateway\ShopGatewayInterface
+     * @var ShopGatewayInterface
      */
     private $shopGateway;
 
     /**
-     * @var Gateway\CurrencyGatewayInterface
+     * @var CurrencyGatewayInterface
      */
     private $currencyGateway;
 
     /**
+     * @var CountryGatewayInterface
+     */
+    private $countryGateway;
+
+    /**
      * @param Container $container
-     * @param Gateway\CustomerGroupGatewayInterface $customerGroupGateway
-     * @param Gateway\TaxGatewayInterface $taxGateway
-     * @param Gateway\CountryGatewayInterface $countryGateway
-     * @param Gateway\PriceGroupDiscountGatewayInterface $priceGroupDiscountGateway
-     * @param Gateway\ShopGatewayInterface $shopGateway
-     * @param Gateway\CurrencyGatewayInterface $currencyGateway
+     * @param CustomerGroupGatewayInterface $customerGroupGateway
+     * @param TaxGatewayInterface $taxGateway
+     * @param CountryGatewayInterface $countryGateway
+     * @param PriceGroupDiscountGatewayInterface $priceGroupDiscountGateway
+     * @param ShopGatewayInterface $shopGateway
+     * @param CurrencyGatewayInterface $currencyGateway
      */
     public function __construct(
         Container $container,
-        Gateway\CustomerGroupGatewayInterface $customerGroupGateway,
-        Gateway\TaxGatewayInterface $taxGateway,
-        Gateway\CountryGatewayInterface $countryGateway,
-        Gateway\PriceGroupDiscountGatewayInterface $priceGroupDiscountGateway,
-        Gateway\ShopGatewayInterface $shopGateway,
-        Gateway\CurrencyGatewayInterface $currencyGateway
+        CustomerGroupGatewayInterface $customerGroupGateway,
+        TaxGatewayInterface $taxGateway,
+        CountryGatewayInterface $countryGateway,
+        PriceGroupDiscountGatewayInterface $priceGroupDiscountGateway,
+        ShopGatewayInterface $shopGateway,
+        CurrencyGatewayInterface $currencyGateway
     ) {
         $this->container = $container;
         $this->taxGateway = $taxGateway;
@@ -117,145 +115,110 @@ class ContextService implements Service\ContextServiceInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-    public function getContext()
+    public function getShopContext()
     {
-        if (!$this->context) {
-            $this->initializeContext();
+        if ($this->context === null) {
+            $this->initializeShopContext();
         }
-
         return $this->context;
     }
 
     /**
-     * @inheritdoc
-     */
-    public function getShopContext()
-    {
-        if (!$this->shopContext) {
-            $this->initializeShopContext();
-        }
-
-        return $this->shopContext;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getProductContext()
-    {
-        if (!$this->productContext) {
-            $this->initializeProductContext();
-        }
-        return $this->productContext;
-    }
-
-    /**
-     * @return Struct\LocationContext
-     */
-    public function getLocationContext()
-    {
-        if (!$this->locationContext) {
-            $this->initializeLocationContext();
-        }
-        return $this->locationContext;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function initializeContext()
-    {
-        $locationContext = $this->getLocationContext();
-
-        $productContext = $this->getProductContext();
-
-        $this->context = Struct\Context::createFromContexts(
-            $productContext,
-            $locationContext
-        );
-    }
-
-    /**
-     * Initials the shop context which contains
-     * all information about the current shop state.
+     * {@inheritdoc}
      */
     public function initializeShopContext()
     {
-        /** @var $session Session */
-        $session = $this->container->get('session');
-
-        /**@var $shop Models\Shop\Shop */
-        $shop = $this->container->get('shop');
-
-        if ($session->offsetExists('sUserGroup') && $session->offsetGet('sUserGroup')) {
-            $key = $session->offsetGet('sUserGroup');
-        } else {
-            $key = $shop->getCustomerGroup()->getKey();
-        }
-
-        $this->shopContext = $this->createShopContext(
-            $shop->getId(),
-            $shop->getCurrency()->getId(),
-            $key
+        $this->context = $this->create(
+            $this->getStoreFrontBaseUrl(),
+            $this->getStoreFrontShopId(),
+            $this->getStoreFrontCurrencyId(),
+            $this->getStoreFrontCurrentCustomerGroupKey(),
+            $this->getStoreFrontAreaId(),
+            $this->getStoreFrontCountryId(),
+            $this->getStoreFrontStateId()
         );
     }
 
     /**
-     * Initials the location context which contains
-     * the information about the current country state.
+     * {@inheritdoc}
+     */
+    public function getContext()
+    {
+        return $this->getShopContext();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getProductContext()
+    {
+        return $this->getShopContext();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getLocationContext()
+    {
+        return $this->getShopContext();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function initializeContext()
+    {
+        $this->initializeShopContext();
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function initializeLocationContext()
     {
-        $shopContext = $this->getShopContext();
+        $this->initializeShopContext();
+    }
 
-        /** @var $session Session */
-        $session = $this->container->get('session');
+    /**
+     * {@inheritdoc}
+     */
+    public function initializeProductContext()
+    {
+        $this->initializeShopContext();
+    }
 
-        $area    = $this->createAreaStruct($session, $shopContext);
-        $country = $this->createCountryStruct($session, $shopContext);
-        $state   = $this->createStateStruct($session, $shopContext);
-
-        $this->locationContext = new Struct\LocationContext(
-            $area,
-            $country,
-            $state
+    /**
+     * {@inheritdoc}
+     */
+    public function createProductContext($shopId, $currencyId = null, $customerGroupKey = null)
+    {
+        return $this->create(
+            $this->getStoreFrontBaseUrl(),
+            $shopId,
+            $currencyId,
+            $customerGroupKey
         );
     }
 
     /**
-     * Initials the product context which contains
-     * the information about the tax rules and price group discounts.
+     * {@inheritdoc}
      */
-    public function initializeProductContext()
+    public function createShopContext($shopId, $currencyId = null, $customerGroupKey = null)
     {
-        $shopContext = $this->getShopContext();
-
-        $locationContext = $this->getLocationContext();
-
-        $rules = $this->createTaxRulesStruct(
-            $shopContext,
-            $locationContext->getArea(),
-            $locationContext->getCountry(),
-            $locationContext->getState()
-        );
-
-        $priceGroups = $this->priceGroupDiscountGateway->getPriceGroups(
-            $shopContext->getCurrentCustomerGroup(),
-            $shopContext
-        );
-        $this->productContext = Struct\ProductContext::createFromContexts(
-            $shopContext,
-            $rules,
-            $priceGroups
+        return $this->create(
+            $this->getStoreFrontBaseUrl(),
+            $shopId,
+            $currencyId,
+            $customerGroupKey
         );
     }
 
     /**
      * @return string
      */
-    private function buildBaseUrl()
+    private function getStoreFrontBaseUrl()
     {
         /** @var $config \Shopware_Components_Config */
         $config = $this->container->get('config');
@@ -268,144 +231,117 @@ class ContextService implements Service\ContextServiceInterface
         }
 
         if ($request !== null) {
-            $baseUrl = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath();
-        } else {
-            $baseUrl = 'http://' . $config->get('basePath');
+            return $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath();
         }
 
-        return $baseUrl;
+        return 'http://' . $config->get('basePath');
     }
 
     /**
-     * @param Session $session
-     * @param Struct\ShopContextInterface $context
-     * @return null|Struct\Country\Area
+     * @return int
      */
-    protected function createAreaStruct(Session $session, Struct\ShopContextInterface $context)
+    private function getStoreFrontShopId()
     {
-        $area = null;
+        /**@var $shop Models\Shop\Shop */
+        $shop = $this->container->get('shop');
+        return $shop->getId();
+    }
+
+    /**
+     * @return int
+     */
+    private function getStoreFrontCurrencyId()
+    {
+        /**@var $shop Models\Shop\Shop */
+        $shop = $this->container->get('shop');
+        return $shop->getCurrency()->getId();
+    }
+
+    /**
+     * @return string
+     */
+    private function getStoreFrontCurrentCustomerGroupKey()
+    {
+        /** @var $session Session */
+        $session = $this->container->get('session');
+        if ($session->offsetExists('sUserGroup') && $session->offsetGet('sUserGroup')) {
+            return $session->offsetGet('sUserGroup');
+        }
+
+        /**@var $shop Models\Shop\Shop */
+        $shop = $this->container->get('shop');
+        return $shop->getCustomerGroup()->getKey();
+    }
+
+    /**
+     * @return int|null
+     */
+    private function getStoreFrontAreaId()
+    {
+        /** @var $session Session */
+        $session = $this->container->get('session');
         if ($session->offsetGet('sArea')) {
-            $area = $this->countryGateway->getArea(
-                $session->offsetGet('sArea'),
-                $context
-            );
-
-            return $area;
+            return $session->offsetGet('sArea');
         }
-
-        return $area;
+        return null;
     }
 
     /**
-     * @param Session $session
-     * @param Struct\ShopContextInterface $context
-     * @return null|Struct\Country
+     * @return int|null
      */
-    protected function createCountryStruct(Session $session, Struct\ShopContextInterface $context)
+    private function getStoreFrontCountryId()
     {
-        $country = null;
+        /** @var $session Session */
+        $session = $this->container->get('session');
         if ($session->offsetGet('sCountry')) {
-            $country = $this->countryGateway->getCountry(
-                $session->offsetGet('sCountry'),
-                $context
-            );
-
-            return $country;
+            return $session->offsetGet('sCountry');
         }
-
-        return $country;
+        return null;
     }
 
     /**
-     * @param Session $session
-     * @param Struct\ShopContextInterface $context
-     * @return null|Struct\Country\State
+     * @return int|null
      */
-    protected function createStateStruct(Session $session, Struct\ShopContextInterface $context)
+    private function getStoreFrontStateId()
     {
-        $state = null;
+        /** @var $session Session */
+        $session = $this->container->get('session');
         if ($session->offsetGet('sState')) {
-            $state = $this->countryGateway->getState(
-                $session->offsetGet('sState'),
-                $context
-            );
-
-            return $state;
+            return $session->offsetGet('sState');
         }
-
-        return $state;
+        return null;
     }
 
     /**
-     * @param Struct\ShopContextInterface $context
-     * @param Struct\Country\Area|null $area
-     * @param Struct\Country|null $country
-     * @param Struct\Country\State|null $state
-     * @return Struct\Tax[]
+     * @param string $baseUrl
+     * @param int $shopId
+     * @param null|int $currencyId
+     * @param null|string $currentCustomerGroupKey
+     * @param null|int $areaId
+     * @param null|int $countryId
+     * @param null|int $stateId
+     * @return ShopContext
      */
-    protected function createTaxRulesStruct(
-        Struct\ShopContextInterface $context,
-        Struct\Country\Area $area = null,
-        Struct\Country $country = null,
-        Struct\Country\State $state = null
+    private function create(
+        $baseUrl,
+        $shopId,
+        $currencyId = null,
+        $currentCustomerGroupKey = null,
+        $areaId = null,
+        $countryId = null,
+        $stateId = null
     ) {
-        $rules = $this->taxGateway->getRules(
-            $context->getCurrentCustomerGroup(),
-            $area,
-            $country,
-            $state
-        );
-
-        return $rules;
-    }
-
-    /**
-     * @param int $shopId
-     * @param null|int $currencyId
-     * @param null|int $customerGroupKey
-     * @return Struct\ProductContext
-     */
-    public function createProductContext($shopId, $currencyId = null, $customerGroupKey = null)
-    {
-        $shopContext = $this->createShopContext($shopId, $currencyId, $customerGroupKey);
-
-        $locationContext = new Struct\LocationContext(null, null, null, null);
-
-        $rules = $this->createTaxRulesStruct(
-            $shopContext,
-            $locationContext->getArea(),
-            $locationContext->getCountry(),
-            $locationContext->getState()
-        );
-
-        $priceGroups = $this->priceGroupDiscountGateway->getPriceGroups(
-            $shopContext->getCurrentCustomerGroup(),
-            $shopContext
-        );
-
-        return Struct\ProductContext::createFromContexts(
-            $shopContext,
-            $rules,
-            $priceGroups
-        );
-    }
-
-    /**
-     * @param int $shopId
-     * @param null|int $currencyId
-     * @param null|int $customerGroupKey
-     * @return Struct\ShopContext
-     */
-    public function createShopContext($shopId, $currencyId = null, $customerGroupKey = null)
-    {
         $shop = $this->shopGateway->get($shopId);
-        $fallback = self::FALLBACK_CUSTOMER_GROUP;
+        $fallbackCustomerGroupKey = ContextService::FALLBACK_CUSTOMER_GROUP;
 
-        if ($customerGroupKey == null) {
-            $customerGroupKey = $fallback;
+        if ($currentCustomerGroupKey == null) {
+            $currentCustomerGroupKey = $fallbackCustomerGroupKey;
         }
 
-        $groups = $this->customerGroupGateway->getList([$customerGroupKey, $fallback]);
+        $groups = $this->customerGroupGateway->getList([$currentCustomerGroupKey, $fallbackCustomerGroupKey]);
+
+        $currentCustomerGroup = $groups[$currentCustomerGroupKey];
+        $fallbackCustomerGroup = $groups[$fallbackCustomerGroupKey];
 
         $currency = null;
         if ($currencyId != null) {
@@ -416,12 +352,37 @@ class ContextService implements Service\ContextServiceInterface
             $currency = $shop->getCurrency();
         }
 
-        return new Struct\ShopContext(
-            $this->buildBaseUrl(),
+        $context = new ShopContext($baseUrl, $shop, $currency, $currentCustomerGroup, $fallbackCustomerGroup, [], []);
+
+        $area = null;
+        if ($areaId !== null) {
+            $area = $this->countryGateway->getArea($areaId, $context);
+        }
+
+        $country = null;
+        if ($countryId !== null) {
+            $country = $this->countryGateway->getCountry($countryId, $context);
+        }
+
+        $state = null;
+        if ($stateId !== null) {
+            $state = $this->countryGateway->getState($stateId, $context);
+        }
+
+        $taxRules = $this->taxGateway->getRules($currentCustomerGroup, $area, $country, $state);
+        $priceGroups = $this->priceGroupDiscountGateway->getPriceGroups($currentCustomerGroup, $context);
+
+        return new ShopContext(
+            $baseUrl,
             $shop,
             $currency,
-            $groups[$customerGroupKey],
-            $groups[$fallback]
+            $currentCustomerGroup,
+            $fallbackCustomerGroup,
+            $taxRules,
+            $priceGroups,
+            $area,
+            $country,
+            $state
         );
     }
 }

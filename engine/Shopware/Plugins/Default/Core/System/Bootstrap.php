@@ -73,23 +73,23 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
      * @param Enlight_Event_EventArgs $args
      * @return \sSystem
      */
-    public static function onInitResourceSystem(Enlight_Event_EventArgs $args)
+    public function onInitResourceSystem(Enlight_Event_EventArgs $args)
     {
         $config = Shopware()->Config();
 
         $request = Shopware()->Front()->Request();
         $system = new sSystem($request);
+
         Shopware()->Container()->set('System', $system);
 
         $system->sMODULES = Shopware()->Modules();
         $system->sSMARTY = Shopware()->Template();
         $system->sCONFIG = $config;
-        $system->sMailer = Shopware()->Mail();
-
+        $system->sMailer = Shopware()->Container()->get('mail');
 
         if (Shopware()->Container()->initialized('Session')) {
             $system->_SESSION = Shopware()->Session();
-            $system->sSESSION_ID = Shopware()->SessionID();
+            $system->sSESSION_ID = Shopware()->Session()->get('sessionId');
             if ($request !== null && Shopware()->Session()->Bot === null) {
                 /** @var $plugin Shopware_Plugins_Frontend_Statistics_Bootstrap */
                 $plugin = Shopware()->Plugins()->Frontend()->Statistics();

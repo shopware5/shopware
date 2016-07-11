@@ -66,7 +66,7 @@ class Shopware_Controllers_Backend_Login extends Shopware_Controllers_Backend_Ex
         }
 
         /** @var $auth Shopware_Components_Auth */
-        $auth = Shopware()->Auth();
+        $auth = Shopware()->Container()->get('Auth');
         $result = $auth->login($username, $password);
         $user = $auth->getIdentity();
         if (!empty($user->roleID)) {
@@ -112,7 +112,7 @@ class Shopware_Controllers_Backend_Login extends Shopware_Controllers_Backend_Ex
      */
     public function logoutAction()
     {
-        Shopware()->Auth()->clearIdentity();
+        Shopware()->Container()->get('Auth')->clearIdentity();
         $this->redirect('backend');
     }
 
@@ -161,7 +161,7 @@ class Shopware_Controllers_Backend_Login extends Shopware_Controllers_Backend_Ex
      */
     public function getLoginStatusAction()
     {
-        $auth = Shopware()->Auth();
+        $auth = Shopware()->Container()->get('Auth');
         if ($auth->hasIdentity()) {
             $refresh = $auth->refresh();
         }
@@ -182,7 +182,7 @@ class Shopware_Controllers_Backend_Login extends Shopware_Controllers_Backend_Ex
     public function validatePasswordAction()
     {
         /** @var $auth Shopware_Components_Auth */
-        $auth = Shopware()->Auth();
+        $auth = Shopware()->Container()->get('Auth');
         $username = $auth->getIdentity()->username;
         $password = $this->Request()->get('password');
 

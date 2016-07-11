@@ -47,7 +47,7 @@ interface RelatedProductStreamsServiceInterface
      *
      * @param Struct\BaseProduct $product
      * @param Struct\ShopContextInterface $context
-     * @return \int[] Array of product stream structs, indexed by the product order number.
+     * @return int[] Array of product stream structs, indexed by the product order number.
      */
     public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context);
 }

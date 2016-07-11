@@ -40,7 +40,7 @@ Ext.define('Shopware.apps.Emotion', {
      * sub-application behavior and the event bus
      * @string
      */
-	extend: 'Enlight.app.SubApplication',
+    extend: 'Enlight.app.SubApplication',
 
     /**
      * Sets the loading path for the sub-application.
@@ -61,38 +61,51 @@ Ext.define('Shopware.apps.Emotion', {
      * The name of the module. Used for internal purpose
      * @string
      */
-	name: 'Shopware.apps.Emotion',
+    name: 'Shopware.apps.Emotion',
 
     /**
      * Required controllers for module (subapplication)
      * @array
      */
-    controllers: [ 'Main', 'Detail', 'Grids', 'Templates' ],
+    controllers: [ 'Main', 'Detail', 'Templates' ],
 
     /**
      * Required views for module (subapplication)
      * @array
      */
     views: [ 'main.Window', 'list.Toolbar', 'list.Grid', 'detail.Window', 'detail.Preview', 'detail.Designer', 'detail.Grid',
-        'detail.Settings', 'components.SettingsWindow', 'components.Base', 'components.Banner', 'components.BannerMapping',
+        'detail.Settings', 'detail.Layout', 'detail.Widgets', 'detail.elements.Base', 'detail.elements.Banner', 'detail.elements.BannerSlider',
+        'detail.elements.Html', 'detail.elements.Article', 'detail.elements.ArticleSlider', 'detail.elements.HtmlCode', 'detail.elements.Blog',
+        'detail.elements.CategoryTeaser', 'detail.elements.HtmlVideo', 'detail.elements.Iframe', 'detail.elements.ManufacturerSlider', 'detail.elements.Youtube',
+        'components.SettingsWindow', 'components.Base', 'components.Banner', 'components.BannerMapping', 'components.Iframe',
         'components.Article', 'components.CategoryTeaser', 'components.fields.Article', 'components.fields.ArticleType',
         'components.fields.CategoryImageType', 'components.fields.CategorySelection', 'components.Blog', 'components.BannerSlider',
-        'components.fields.SliderSelect', 'components.fields.ManufacturerType', 'components.ManufacturerSlider',
-        'components.fields.ArticleSliderType', 'components.ArticleSlider', 'components.HtmlElement', 'components.HtmlVideo', 'components.Youtube',
-        'grids.List', 'grids.Toolbar', 'templates.List',
-        'grids.Settings', 'templates.Toolbar', 'templates.Settings', 'components.fields.VideoMode' ],
+        'components.fields.SliderSelect', 'components.fields.ManufacturerType', 'components.ManufacturerSlider', 'components.fields.LinkTarget',
+        'components.fields.ArticleSliderType', 'components.ArticleSlider', 'components.HtmlElement', 'components.HtmlVideo', 'components.HtmlCode', 'components.Youtube',
+        'templates.List', 'templates.Toolbar', 'templates.Settings', 'components.fields.VideoMode' ],
 
     /**
      * Required views for module (subapplication)
      * @array
      */
-    stores: [ 'CategoryPath', 'List', 'LandingPage', 'Detail', 'Library', 'Grids', 'Templates' ],
+    stores: [ 'CategoryPath', 'List', 'LandingPage', 'Detail', 'Library', 'Templates' ],
 
     /**
      * Required models for the module (subapplication)
      * @array
      */
-    models: [ 'Emotion', 'EmotionElement', 'Component', 'Field', 'Attribute', 'BannerSlider', 'ManufacturerSlider', 'ArticleSlider', 'Grid' , 'Template'  ],
+    models: [
+        'Emotion',
+        'EmotionElement',
+        'EmotionShop',
+        'Viewport',
+        'Component',
+        'Field',
+        'BannerSlider',
+        'ManufacturerSlider',
+        'ArticleSlider',
+        'Template'
+    ],
 
     /**
      * Returns the main application window for this is expected

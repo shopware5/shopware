@@ -35,7 +35,43 @@ Ext.define('Shopware.apps.Emotion.view.components.Youtube', {
 
     snippets: {
         video_id: '{s name=video_id}Youtube video id{/s}',
-        video_hd: '{s name=video_hd}Use HD videos{/s}'
+        video_hd: '{s name=video_hd}Use HD videos{/s}',
+        video_autoplay: '{s name=video_autoplay}Autostart video{/s}',
+        video_related: '{s name=video_related}Hide related{/s}',
+        video_controls: '{s name=video_controls}Hide controls{/s}',
+        video_start: '{s name=video_start}Start video at x-seconds{/s}',
+        video_end: '{s name=video_end}End video after x-seconds{/s}',
+        video_info: '{s name=video_info}Hide info{/s}',
+        video_branding: '{s name=video_branding}Hide video branding{/s}',
+        video_loop: {
+            fieldLabel: '{s name=video_loop}Loop video{/s}',
+            helpText: '{s name=video_loop_help}{/s}'
+        }
+    },
+
+    initComponent: function() {
+        var me = this,
+            idField;
+
+        me.callParent(arguments);
+
+        idField = me.elementFieldset.down('field[name=video_id]');
+        idField.getValue = function() {
+            var val = this.rawToValue(this.processRawValue(this.getRawValue()));
+
+            this.value = val.match('^https?://') ? me.extractVideoID(val) : val;
+            return this.value;
+        };
+    },
+
+    extractVideoID: function(url) {
+        var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/,
+            match = url.match(regExp);
+
+        if (match && match[7].length == 11) {
+            return match[7];
+        }
+        return url;
     }
 });
 //{/block}

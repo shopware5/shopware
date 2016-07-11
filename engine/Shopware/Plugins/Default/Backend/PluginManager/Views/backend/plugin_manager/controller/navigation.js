@@ -1,3 +1,33 @@
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ *
+ * @category   Shopware
+ * @package    PluginManager
+ * @subpackage Controller
+ * @version    $Id$
+ * @author shopware AG
+ */
+
+//{block name="backend/plugin_manager/controller/navigation"}
 Ext.define('Shopware.apps.PluginManager.controller.Navigation', {
     extend: 'Ext.app.Controller',
 
@@ -19,7 +49,8 @@ Ext.define('Shopware.apps.PluginManager.controller.Navigation', {
         listingPage: 3,
         accountPage: 4,
         licencePage: 5,
-        premiumPluginsPage: 6
+        premiumPluginsPage: 6,
+        expiredPluginsPage: 7
     },
 
     animationSpeed: 150,
@@ -54,10 +85,12 @@ Ext.define('Shopware.apps.PluginManager.controller.Navigation', {
         });
 
         Shopware.app.Application.on({
+            'display-installed-plugins': me.displayLocalPluginPage,
             'display-plugin': me.displayDetailPage,
             'display-plugin-by-name': me.displayDetailPageByName,
             'plugin-manager-display-updates': me.displayPluginUpdatesPage,
             'display-premium-plugins': me.displayPremiumPluginsPage,
+            'display-expired-plugins': me.displayExpiredPluginsPage,
             scope: me
         });
 
@@ -214,6 +247,14 @@ Ext.define('Shopware.apps.PluginManager.controller.Navigation', {
         me.switchView(me.cards.premiumPluginsPage);
     },
 
+    displayExpiredPluginsPage: function() {
+        var me = this;
+
+        Shopware.app.Application.fireEvent('enable-expired-plugins-mode');
+
+        me.switchView(me.cards.expiredPluginsPage);
+    },
+
     displayPluginUpdatesPage: function () {
         var me = this,
             updatePage = me.getUpdatePage(),
@@ -368,3 +409,4 @@ Ext.define('Shopware.apps.PluginManager.controller.Navigation', {
         navigation.accountLicenceLink.removeCls('active');
     }
 });
+//{/block}

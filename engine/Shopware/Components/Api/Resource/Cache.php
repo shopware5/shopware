@@ -24,6 +24,7 @@
 
 namespace Shopware\Components\Api\Resource;
 
+use Shopware\Components\Api\BatchInterface;
 use Shopware\Components\Api\Exception as ApiException;
 use Shopware\Components\CacheManager;
 use Shopware\Components\DependencyInjection\Container;
@@ -39,7 +40,7 @@ use Shopware\Components\DependencyInjection\ContainerAwareInterface;
  * @package   Shopware\Components\Api\Resource
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Cache extends Resource implements ContainerAwareInterface
+class Cache extends Resource implements ContainerAwareInterface, BatchInterface
 {
     /**
      * @var \Enlight_Controller_Request_Request
@@ -67,7 +68,7 @@ class Cache extends Resource implements ContainerAwareInterface
     public function setContainer(Container $container = null)
     {
         if ($container) {
-            $this->request      = $container->get('front')->Request();
+            $this->request = $container->get('front')->Request();
             $this->cacheManager = $container->get('shopware.cache_manager');
         }
     }
@@ -101,7 +102,8 @@ class Cache extends Resource implements ContainerAwareInterface
             $this->getCacheInfo('http'),
             $this->getCacheInfo('template'),
             $this->getCacheInfo('proxy'),
-            $this->getCacheInfo('doctrine-proxy')
+            $this->getCacheInfo('doctrine-proxy'),
+            $this->getCacheInfo('opcache')
         );
 
         return array('data' => $data, 'total' => count($data));
@@ -183,7 +185,11 @@ class Cache extends Resource implements ContainerAwareInterface
                 $this->cacheManager->clearSearchCache();
                 break;
             case 'rewrite':
+            case 'router':
                 $this->cacheManager->clearRewriteCache();
+                break;
+            case 'opcache':
+                $this->cacheManager->clearOpCache();
                 break;
             default:
                 throw new ApiException\NotFoundException("Cache {$cache} is not a valid cache id.");
@@ -222,6 +228,9 @@ class Cache extends Resource implements ContainerAwareInterface
             case 'doctrine-proxy':
                 $cacheInfo = $this->cacheManager->getDoctrineProxyCacheInfo();
                 break;
+            case 'opcache':
+                $cacheInfo = $this->cacheManager->getOpCacheCacheInfo();
+                break;
             default:
                 throw new ApiException\NotFoundException("Cache {$cache} is not a valid cache id.");
         }
@@ -229,5 +238,49 @@ class Cache extends Resource implements ContainerAwareInterface
         $cacheInfo['id'] = $cache;
 
         return $cacheInfo;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIdByData($data)
+    {
+        if (isset($data['id'])) {
+            return $data['id'];
+        }
+
+        return false;
+    }
+
+    /**
+     * Overwrites the base implementation as the cache endpoint does not involve any entity related logic
+     *
+     * @param $data
+     * @return array
+     */
+    public function batchDelete($data)
+    {
+        $results = array();
+        foreach ($data as $key => $datum) {
+            $id = $this->getIdByData($datum);
+
+            try {
+                $results[$key] = array(
+                    'success' => true,
+                    'operation' => 'delete',
+                    'data' => $this->delete($id)
+                );
+            } catch (\Exception $e) {
+                $message = $e->getMessage();
+
+                $results[$key] = array(
+                    'success' => false,
+                    'message' => $message,
+                    'trace' => $e->getTraceAsString()
+                );
+            }
+        }
+
+        return $results;
     }
 }

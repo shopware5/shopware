@@ -122,12 +122,6 @@ Ext.define('Shopware.apps.ProductFeed.model.Detail', {
             model:'Shopware.apps.Base.model.Article',
             name:'getArticles',
             associationKey:'articles'
-        },
-        {
-            type:'hasMany',
-            model:'Shopware.apps.ProductFeed.model.Attribute',
-            name:'getAttributes',
-            associationKey:'attributes'
         }
     ]
 });

@@ -31,12 +31,20 @@
             errorClass: 'has--error',
 
             /**
+             * Selector for the form.
+             *
+             * @property formSelector
+             * @type {String}
+             */
+            formSelector: '.register--form',
+
+            /**
              * Selector for the forms submit button.
              *
              * @property submitBtnSelector
              * @type {String}
              */
-            submitBtnSelector: '.register--submit',
+            submitBtnSelector: '.register--submit,.address--form-submit',
 
             /**
              * Selector for the type selection field.
@@ -44,7 +52,7 @@
              * @property typeFieldSelector
              * @type {String}
              */
-            typeFieldSelector: '.register--customertype select',
+            typeFieldSelector: '.register--customertype select,.address--customertype select',
 
             /**
              * Type name for a company selection.
@@ -79,7 +87,7 @@
              * @property companyFieldSelector
              * @type {String}
              */
-            companyFieldSelector: '.register--company',
+            companyFieldSelector: '.register--company,.address--company',
 
             /**
              * Selector for the account field set.
@@ -129,7 +137,7 @@
              * @property stateContainerSelector
              * @type {String}
              */
-            stateContainerSelector: '.register--state-selection',
+            stateContainerSelector: '.register--state-selection, .address--state-selection',
 
             /**
              * Selector for the payment method select fields.
@@ -153,7 +161,39 @@
              * @property errorMessageClass
              * @type {String}
              */
-            errorMessageClass: 'register--error-msg'
+            errorMessageClass: 'register--error-msg',
+
+            /**
+             * Selector for the email field.
+             *
+             * @property personalEmailSelector
+             * @type {String}
+             */
+            personalEmailSelector: '#register_personal_email',
+
+            /**
+             * Selector for the password field.
+             *
+             * @property personalPasswordSelector
+             * @type {String}
+             */
+            personalPasswordSelector: '#register_personal_password',
+
+            /**
+             * Selector for the email confirmation field.
+             *
+             * @property personalEmailConfirmationSelector
+             * @type {String}
+             */
+            personalEmailConfirmationSelector: '#register_personal_emailConfirmation',
+
+            /**
+             * Selector for the password confirmation field.
+             *
+             * @property personalPasswordConfirmationSelector
+             * @type {String}
+             */
+            personalPasswordConfirmationSelector: '#register_personal_passwordConfirmation'
         },
 
         /**
@@ -167,6 +207,13 @@
             var me = this,
                 opts = me.opts,
                 $el = me.$el;
+
+            me.$personalEmail = $el.find(opts.personalEmailSelector);
+            me.$personalPassword = $el.find(opts.personalPasswordSelector);
+            me.$personalEmailConfirmation = $el.find(opts.personalEmailConfirmationSelector);
+            me.$personalPasswordConfirmation = $el.find(opts.personalPasswordConfirmationSelector);
+
+            me.$form = $el.find(opts.formSelector);
 
             me.$submitBtn = $el.find(opts.submitBtnSelector);
 
@@ -183,6 +230,7 @@
             me.$paymentMethods = $el.find(opts.paymentMethodSelector);
 
             me.$inputs = $el.find(opts.inputSelector);
+            me.$stateContainers = $el.find(opts.stateContainerSelector);
 
             me.checkType();
             me.checkSkipAccount();
@@ -205,7 +253,7 @@
             me._on(me.$alternativeShipping, 'change', $.proxy(me.checkChangeShipping, me));
             me._on(me.$countySelectFields, 'change', $.proxy(me.onCountryChanged, me));
             me._on(me.$paymentMethods, 'change', $.proxy(me.onPaymentChanged, me));
-            me._on(me.$inputs, 'blur', $.proxy(me.onValidateInput, me));
+            me._on(me.$form, 'focusout', $.proxy(me.onValidateInput, me));
             me._on(me.$submitBtn, 'click', $.proxy(me.onSubmitBtn, me));
 
             $.publish('plugin/swRegister/onRegisterEvents', [ me ]);
@@ -226,11 +274,13 @@
                 hideCompanyFields = (me.$typeSelection.length && me.$typeSelection.val() !== opts.companyType),
                 requiredFields = $fieldSet.find(opts.inputSelector),
                 requiredMethod = (!hideCompanyFields) ? me.setHtmlRequired : me.removeHtmlRequired,
-                classMethod = (!hideCompanyFields) ? 'removeClass' : 'addClass';
+                classMethod = (!hideCompanyFields) ? 'removeClass' : 'addClass',
+                disabledMethod = (!hideCompanyFields) ? 'removeAttr' : 'attr';
 
             requiredMethod(requiredFields);
 
             $fieldSet[classMethod](opts.hiddenClass);
+            $fieldSet.find('input, select, textarea')[disabledMethod]('disabled', 'disabled');
 
             $.publish('plugin/swRegister/onCheckType', [ me, hideCompanyFields ]);
         },
@@ -293,38 +343,73 @@
          */
         onCountryChanged: function (event) {
             var me = this,
-                opts = me.opts,
-                hiddenClass = opts.hiddenClass,
                 $select = $(event.currentTarget),
-                selectId = $select.attr('id'),
-                val = $select.val(),
-                $parent = $select.parents('.panel--body'),
-                areaSelection = $parent.find('#' + selectId + '_' + val + '_states'),
-                select,
+                countryId = $select.val(),
+                addressType = $select.attr('data-address-type'),
+                $stateContainers,
                 plugin;
 
-            $.publish('plugin/swRegister/onCountryChangedBefore', [ me, event ]);
+            $.publish('plugin/swRegister/onCountryChangedBefore', [ me, event, countryId, addressType ]);
 
-            $parent.find(opts.stateContainerSelector).addClass(hiddenClass);
-            select = areaSelection.find('select');
-            areaSelection.addClass(hiddenClass);
+            me.resetStateSelections(addressType);
 
-            if (!(plugin = select.data('plugin_swSelectboxReplacement'))) {
-                return;
+            $stateContainers = me.$stateContainers.filter('[data-address-type="' + addressType + '"]');
+
+            // if there is no address type defined or no targets are found, fall back to all state containers
+            if ($stateContainers.length === 0) {
+                $stateContainers = me.$stateContainers;
             }
 
-            if (!areaSelection.length) {
-                plugin.$el.addClass(hiddenClass);
-                plugin.$wrapEl.addClass(hiddenClass);
-                plugin.setDisabled();
-            } else {
-                plugin.$el.removeClass(hiddenClass);
-                plugin.$wrapEl.removeClass(hiddenClass);
-                areaSelection.removeClass(hiddenClass);
-                plugin.setEnabled();
+            $stateContainers = $stateContainers.filter('[data-country-id="' + countryId + '"]');
+
+            if ($stateContainers.length) {
+                $stateContainers.removeClass(me.opts.hiddenClass);
+                $select = $stateContainers.find('select');
+                $select.removeAttr('disabled');
+
+                if ((plugin = $select.data('plugin_swSelectboxReplacement'))) {
+                    plugin.$el.removeClass(me.opts.hiddenClass);
+                    plugin.$wrapEl.removeClass(me.opts.hiddenClass);
+                    plugin.setEnabled();
+                }
             }
 
-            $.publish('plugin/swRegister/onCountryChanged', [ me, event ]);
+            $.publish('plugin/swRegister/onCountryChanged', [ me, event, countryId, addressType ]);
+        },
+
+        /**
+         * Called every time the country selection changes. This method disables and hides all state selections
+         * to prevent sending invalid data. The caller method needs to make sure, that the correct
+         * state selection gets activated and shown again.
+         *
+         * @public
+         * @method resetStateSelections
+         * @param {String} addressType
+         */
+        resetStateSelections: function (addressType) {
+            var me = this,
+                plugin,
+                $select,
+                $stateContainers,
+                $stateContainer;
+
+            $stateContainers = me.$stateContainers.filter('[data-address-type="' + addressType + '"]');
+            if ($stateContainers.length === 0) {
+                $stateContainers = me.$stateContainers;
+            }
+
+            $.each($stateContainers, function(index, stateContainer) {
+                $stateContainer = $(stateContainer);
+                $select = $stateContainer.find('select');
+
+                if (plugin = $select.data('plugin_swSelectboxReplacement')) {
+                    plugin.setDisabled();
+                } else {
+                    $select.attr('disabled', 'disabled');
+                }
+
+                $stateContainer.addClass(me.opts.hiddenClass);
+            });
         },
 
         /**
@@ -398,9 +483,12 @@
          */
         onValidateInput: function (event) {
             var me = this,
-                $el = $(event.currentTarget),
+                $el = $(event.target),
                 id = $el.attr('id'),
-                action;
+                action,
+                relatedTarget = event.relatedTarget || document.activeElement;
+
+            me.$targetElement = $(relatedTarget);
 
             switch (id) {
                 case 'register_personal_skipLogin':
@@ -419,7 +507,7 @@
                     break;
             }
 
-            if (!$el.val()) {
+            if (!$el.val() && $el.attr('required')) {
                 me.setFieldAsError($el);
             } else if ($el.attr('type') === 'checkbox' && !$el.is(':checked')) {
                 me.setFieldAsError($el);
@@ -547,8 +635,10 @@
          */
         onValidateSuccess: function (action, $input, result) {
             var me = this,
-                errorFlags,
-                errorMessages;
+                isError,
+                errorMessages = [],
+                skipEmailConfirmationError = me.$targetElement.attr('name') == me.$personalEmailConfirmation.attr('name') && me.$personalEmailConfirmation.val().length === 0,
+                skipPasswordConfirmationError = me.$targetElement.attr('name') == me.$personalPasswordConfirmation.attr('name') && me.$personalPasswordConfirmation.val().length === 0;
 
             $('#' + action + '--message').remove();
 
@@ -556,11 +646,39 @@
                 return;
             }
 
-            errorFlags = result.error_flags;
-            errorMessages = result.error_messages;
+            if (skipEmailConfirmationError) {
+                result['emailConfirmation'] = false;
+            } else if (skipPasswordConfirmationError) {
+                result['passwordConfirmation'] = false;
+            }
 
-            if (errorFlags) {
-                me.updateFieldFlags(errorFlags);
+            for (var key in result) {
+                //fields with `false` are now valid
+                isError = result[key] ? true : false;
+
+                if (!isError) {
+                    continue;
+                }
+
+                if (key == 'emailConfirmation' && skipEmailConfirmationError) {
+                    result[key] = false;
+                    continue;
+                } else if (key == 'passwordConfirmation' && skipPasswordConfirmationError) {
+                    result[key] = false;
+                    continue;
+                }
+
+                if ($input.attr('name') == me.$personalEmailConfirmation.attr('name')) {
+                    $input = me.$personalEmail;
+                } else if ($input.attr('name') == me.$personalPasswordConfirmation.attr('name')) {
+                    $input = me.$personalPassword;
+                }
+
+                errorMessages.push(result[key]);
+            }
+
+            if (result) {
+                me.updateFieldFlags(result);
             }
 
             if (errorMessages && errorMessages.length) {

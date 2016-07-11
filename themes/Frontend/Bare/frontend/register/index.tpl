@@ -75,14 +75,14 @@
 {* Register content *}
 {block name='frontend_index_content'}
     {block name='frontend_register_index_registration'}
-        <div class="register--content panel content block has--border is--rounded{if $register->personal->error_flags || $register->billing->error_flags || $register->shipping->error_flags} is--collapsed{/if}" id="registration" data-register="true">
+        <div class="register--content panel content block has--border is--rounded{if $errors.occurred} is--collapsed{/if}" id="registration" data-register="true">
 
             {block name='frontend_register_index_dealer_register'}
                 {* Included for compatibility reasons *}
             {/block}
 
             {block name='frontend_register_index_cgroup_header'}
-                {if $register.personal.form_data.sValidation}
+                {if $register.personal.sValidation}
                     {* Include information related to registration for other customergroups then guest, this block get overridden by b2b essentials plugin *}
                     <div class="panel register--supplier">
                         <h2 class="panel--title is--underline">{$sShopname|escapeHtml} {s name='RegisterHeadlineSupplier' namespace='frontend/register/index'}{/s}</h2>
@@ -104,18 +104,18 @@
                 <form method="post" action="{url action=saveRegister sTarget=$sTarget sTargetAction=$sTargetAction}" class="panel register--form">
 
                     {block name='frontend_register_index_form_personal_fieldset'}
-                        {include file="frontend/register/error_message.tpl" error_messages=$register->personal->error_messages}
-                        {include file="frontend/register/personal_fieldset.tpl" form_data=$register->personal->form_data error_flags=$register->personal->error_flags}
+                        {include file="frontend/register/error_message.tpl" error_messages=$errors.personal}
+                        {include file="frontend/register/personal_fieldset.tpl" form_data=$register.personal error_flags=$errors.personal}
                     {/block}
 
                     {block name='frontend_register_index_form_billing_fieldset'}
-                        {include file="frontend/register/error_message.tpl" error_messages=$register->billing->error_messages}
-                        {include file="frontend/register/billing_fieldset.tpl" form_data=$register->billing->form_data error_flags=$register->billing->error_flags country_list=$register->billing->country_list}
+                        {include file="frontend/register/error_message.tpl" error_messages=$errors.billing}
+                        {include file="frontend/register/billing_fieldset.tpl" form_data=$register.billing error_flags=$errors.billing country_list=$countryList}
                     {/block}
 
                     {block name='frontend_register_index_form_shipping_fieldset'}
-                        {include file="frontend/register/error_message.tpl" error_messages=$register->shipping->error_messages}
-                        {include file="frontend/register/shipping_fieldset.tpl" form_data=$register->shipping->form_data error_flags=$register->shipping->error_flags country_list=$register->shipping->country_list}
+                        {include file="frontend/register/error_message.tpl" error_messages=$errors.shipping}
+                        {include file="frontend/register/shipping_fieldset.tpl" form_data=$register.shipping error_flags=$errors.shipping country_list=$countryList}
                     {/block}
 
                     {* Privacy checkbox *}
@@ -124,7 +124,7 @@
                             {block name='frontend_register_index_input_privacy'}
                                 <div class="register--privacy">
                                     <input name="register[personal][dpacheckbox]" type="checkbox" id="dpacheckbox"{if $form_data.dpacheckbox} checked="checked"{/if} required="required" aria-required="true" value="1" class="chkbox is--required" />
-                                    <label for="dpacheckbox" class="chklabel{if $register->personal->error_flags.dpacheckbox} has--error{/if}">{s name='RegisterLabelDataCheckbox'}{/s}</label>
+                                    <label for="dpacheckbox" class="chklabel{if isset($errors.personal.dpacheckbox)} has--error{/if}">{s name='RegisterLabelDataCheckbox'}{/s}</label>
                                 </div>
                             {/block}
                         {/if}

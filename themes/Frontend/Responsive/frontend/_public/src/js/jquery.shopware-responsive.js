@@ -36,12 +36,6 @@
         // Search field
         .addPlugin('*[data-search="true"]', 'swSearch')
 
-        // Scroll plugin
-        .addPlugin('.btn--password, .btn--email', 'swScrollAnimate', ['xs', 's', 'm'])
-
-        // Collapse panel
-        .addPlugin('.btn--password, .btn--email', 'swCollapsePanel', ['l', 'xl'])
-
         // Slide panel
         .addPlugin('.footer--column .column--headline', 'swCollapsePanel', {
             contentSiblingSelector: '.column--content'
@@ -65,9 +59,6 @@
         // Default product slider
         .addPlugin('*[data-product-slider="true"]', 'swProductSlider')
 
-        // Product slider for premium items
-        .addPlugin('.premium-product--content', 'swProductSlider')
-
         // Detail page tab menus
         .addPlugin('.product--rating-link, .link--publish-comment', 'swScrollAnimate', {
             scrollTarget: '.tab-menu--product'
@@ -83,7 +74,6 @@
             'contentSiblingSelector': '.tab--content'
         }, ['xs', 's'])
         .addPlugin('body', 'swAjaxProductNavigation')
-        .addPlugin('*[data-topseller-slider="true"]', 'swProductSlider')
         .addPlugin('*[data-collapse-panel="true"]', 'swCollapsePanel')
         .addPlugin('*[data-range-slider="true"]', 'swRangeSlider')
         .addPlugin('*[data-auto-submit="true"]', 'swAutoSubmit')
@@ -108,7 +98,7 @@
         .addPlugin('*[data-modalbox="true"]', 'swModalbox')
 
         // Change the active tab to the customer reviews
-        .addPlugin('.is--ctl-detail, .is--ctl-blog', 'swJumpToTab')
+        .addPlugin('.is--ctl-detail', 'swJumpToTab')
         .addPlugin('*[data-ajax-shipping-payment="true"]', 'swShippingPayment')
 
         // Initialize the registration plugin
@@ -121,7 +111,11 @@
         .addPlugin('*[data-product-compare-menu="true"]', 'swProductCompareMenu')
         .addPlugin('*[data-infinite-scrolling="true"]', 'swInfiniteScrolling')
         .addPlugin('*[data-ajax-variants-container="true"]', 'swAjaxVariant')
-        .addPlugin('*[data-subcategory-nav="true"]', 'swSubCategoryNav', ['xs', 's']);
+        .addPlugin('*[data-subcategory-nav="true"]', 'swSubCategoryNav', ['xs', 's'])
+        .addPlugin('*[data-panel-auto-resizer="true"]', 'swPanelAutoResizer')
+        .addPlugin('*[data-address-selection="true"]', 'swAddressSelection')
+        .addPlugin('*[data-address-editor="true"]', 'swAddressEditor')
+    ;
 
     $(function($) {
 

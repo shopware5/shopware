@@ -303,7 +303,6 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
             unset($params["password"]);
         }
 
-        $params['attribute'] = $params['attribute'][0];
         $user->fromArray($params);
 
         // Do logout
@@ -330,34 +329,6 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
     }
 
     /**
-     * Internal helper function to save the dynamic attributes of an article price.
-     * @param $user
-     * @param $attributeData
-     * @return mixed
-     */
-    private function saveUserAttributes($user, $attributeData)
-    {
-        if (empty($attributeData)) {
-            return;
-        }
-        if ($user->getId() > 0) {
-            $result = $this->getUserRepository()
-                ->getAttributesQuery($user->getId())
-                ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
-            if (empty($result)) {
-                $attributes = new \Shopware\Models\Attribute\User();
-            } else {
-                $attributes = $result;
-            }
-        } else {
-            $attributes = new \Shopware\Models\Attribute\User();
-        }
-        $attributes->fromArray($attributeData);
-        $attributes->setUser($user);
-        $this->getManager()->persist($attributes);
-    }
-
-    /**
      * Deletes a backend user from the database
      *
      * @throws Exception
@@ -370,7 +341,7 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
 
         //get posted user
         $userID = $this->Request()->getParam('id');
-        $getCurrentIdentity = Shopware()->Auth()->getIdentity();
+        $getCurrentIdentity = Shopware()->Container()->get('Auth')->getIdentity();
 
         // Backend users shall not delete their current login
         if ($userID == $getCurrentIdentity->id) {

@@ -50,13 +50,20 @@ class PathResolver
     private $templateManager;
 
     /**
+     * @var array
+     */
+    private $pluginDirectories;
+
+    /**
      * @param string $rootDir
+     * @param array $pluginDirectories
      * @param \Enlight_Template_Manager $templateManager
      */
-    public function __construct($rootDir, \Enlight_Template_Manager $templateManager)
+    public function __construct($rootDir, array $pluginDirectories, \Enlight_Template_Manager $templateManager)
     {
         $this->rootDir = $rootDir;
         $this->templateManager = $templateManager;
+        $this->pluginDirectories = $pluginDirectories;
     }
 
     /**
@@ -70,22 +77,17 @@ class PathResolver
 
     /**
      * Helper function to build the path to the passed plugin.
+     *
      * @param Plugin $plugin
      * @return string
      */
     public function getPluginPath(Plugin $plugin)
     {
-        $namespace = strtolower($plugin->getNamespace());
-        $source = strtolower($plugin->getSource());
-        $name = $plugin->getName();
+        if ($plugin->isLegacyPlugin()) {
+            return $this->pluginDirectories[$plugin->getSource()] . $plugin->getNamespace() . DIRECTORY_SEPARATOR . $plugin->getName();
+        }
 
-        return $this->rootDir .
-        DIRECTORY_SEPARATOR . 'engine' .
-        DIRECTORY_SEPARATOR . 'Shopware' .
-        DIRECTORY_SEPARATOR . 'Plugins' .
-        DIRECTORY_SEPARATOR . ucfirst($source) .
-        DIRECTORY_SEPARATOR . ucfirst($namespace) .
-        DIRECTORY_SEPARATOR . ucfirst($name);
+        return $this->rootDir . '/custom/plugins/' . $plugin->getName() . '/resources';
     }
 
     /**

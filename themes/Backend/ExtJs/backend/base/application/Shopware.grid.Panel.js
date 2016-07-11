@@ -1178,7 +1178,6 @@ Ext.define('Shopware.grid.Panel', {
         column.xtype = 'gridcolumn';
         column.dataIndex = field.name;
         column.header = me.getHumanReadableWord(field.name);
-        column.flex = 1;
 
         var fieldAssociation = me.getFieldAssociation(field.name);
 
@@ -1217,6 +1216,10 @@ Ext.define('Shopware.grid.Panel', {
             column = Ext.apply(column, customConfig);
         } else if (Ext.isFunction(customConfig)) {
             column = customConfig.call(this, model, column, field, fieldAssociation);
+        }
+
+        if (!column.flex && !column.width) {
+            column.flex = 1;
         }
 
         me.fireEvent(me.eventAlias + '-column-created', me, column, model, field);

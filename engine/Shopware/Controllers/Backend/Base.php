@@ -96,22 +96,6 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
     }
 
     /**
-     * Get all expired plugins
-     * return data as json to the view
-     */
-    public function getExpiredLicencesAction()
-    {
-        $subscriptionService = $this->container->get('shopware_plugininstaller.subscription_service');
-        $licences = $subscriptionService->getExpiredPluginLicenses();
-
-        if (empty($licences)) {
-            $this->View()->assign('success', false);
-        } else {
-            $this->View()->assign(['success' => true, 'data' => $licences]);
-        }
-    }
-
-    /**
      * Returns all supported detail status as an array. The status are used on the detail
      * page in the position grid to edit or create an order position.
      */
@@ -247,7 +231,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
     public function getCategoriesAction()
     {
         /** @var $repository \Shopware\Models\Category\Repository */
-        $repository = Shopware()->Models()->Category();
+        $repository = Shopware()->Models()->getRepository(\Shopware\Models\Category\Category::class);
 
         $query = $repository->getListQuery(
             $this->Request()->getParam('filter', array()),
@@ -1074,5 +1058,44 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         } else {
             $this->Response()->setBody("");
         }
+    }
+
+    public function getSalutationsAction()
+    {
+        $value = $this->getAvailableSalutationKeys();
+
+        $namespace = Shopware()->Container()->get('snippets')->getNamespace('frontend/salutation');
+        $salutations = [];
+        foreach ($value as $key) {
+            $salutations[] = ['key' => $key, 'label' => $namespace->get($key, $key)];
+        }
+
+        $this->View()->assign('data', $salutations);
+    }
+
+    /**
+     * @return array
+     */
+    private function getAvailableSalutationKeys()
+    {
+        $builder = Shopware()->Container()->get('models')->createQueryBuilder();
+        $builder->select(['element', 'values'])
+            ->from('Shopware\Models\Config\Element', 'element')
+            ->leftJoin('element.values', 'values')
+            ->where('element.name = :name')
+            ->setParameter('name', 'shopsalutations');
+
+        $data = $builder->getQuery()->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+
+        $value = explode(',', $data['value']);
+        if (!empty($data['values'])) {
+            $value = [];
+        }
+
+        foreach ($data['values'] as $shopValue) {
+            $value = array_merge($value, explode(',', $shopValue['value']));
+        }
+        $value = array_unique(array_filter($value));
+        return $value;
     }
 }

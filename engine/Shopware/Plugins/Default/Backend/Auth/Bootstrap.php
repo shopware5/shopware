@@ -216,7 +216,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
     public function checkAuth()
     {
         /** @var $auth Shopware_Components_Auth */
-        $auth = Shopware()->Auth();
+        $auth = Shopware()->Container()->get('Auth');
         if ($auth->hasIdentity()) {
             $auth->refresh();
         }
@@ -434,7 +434,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
         Enlight_Components_Session::setOptions($options);
 
         if (Enlight_Components_Session::sessionExists()) {
-            $auth = Shopware()->Auth();
+            $auth = Shopware()->Container()->get('Auth');
             if ($auth->hasIdentity()) {
                 $user = $auth->getIdentity();
                 if (isset($user->locale)) {
@@ -457,7 +457,7 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
      */
     private function getSessionOptions()
     {
-        $options = $this->Application()->getOption('backendSession', array());
+        $options = Shopware()->Container()->getParameter('shopware.backendsession');
 
         if (!isset($options['cookie_path']) && $this->request !== null) {
             $options['cookie_path'] = rtrim($this->request->getBaseUrl(), '/').'/backend/';

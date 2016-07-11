@@ -37,6 +37,7 @@
 //{block name="backend/voucher/view/voucher/base_configuration"}
 Ext.define('Shopware.apps.Voucher.view.voucher.BaseConfiguration', {
     extend:'Ext.form.Panel',
+    cls: 'shopware-form',
     alias:'widget.voucher-voucher-base_configuration',
     title:'{s name=detail_general/win_title/configuration}Configuration{/s}',
     autoShow:true,
@@ -85,7 +86,11 @@ Ext.define('Shopware.apps.Voucher.view.voucher.BaseConfiguration', {
             items:me.createRestrictionForm()
         });
 
-        me.items = [ me.generalFieldset, me.restrictionFieldset ];
+        me.attributeForm = Ext.create('Shopware.attribute.Form', {
+            table: 's_emarketing_vouchers_attributes'
+        });
+
+        me.items = [ me.generalFieldset, me.restrictionFieldset, me.attributeForm ];
         me.dockedItems = [{
             dock: 'bottom',
             xtype: 'toolbar',
@@ -97,6 +102,7 @@ Ext.define('Shopware.apps.Voucher.view.voucher.BaseConfiguration', {
 
         if(me.record){
             me.loadRecord(me.record);
+            me.attributeForm.loadAttribute(me.record.get('id'));
         }
     },
 
@@ -111,7 +117,7 @@ Ext.define('Shopware.apps.Voucher.view.voucher.BaseConfiguration', {
         leftContainer = Ext.create('Ext.container.Container', {
             defaults:{
                 anchor:'95%',
-                labelWidth:180,
+                labelWidth:155,
                 minWidth:250,
                 labelStyle:'font-weight: 700;',
                 xtype:'textfield'
@@ -123,7 +129,7 @@ Ext.define('Shopware.apps.Voucher.view.voucher.BaseConfiguration', {
         rightContainer = Ext.create('Ext.container.Container', {
             defaults:{
                 anchor:'95%',
-                labelWidth:180,
+                labelWidth:155,
                 labelStyle:'font-weight: 700;',
                 xtype:'textfield'
             },
@@ -143,7 +149,7 @@ Ext.define('Shopware.apps.Voucher.view.voucher.BaseConfiguration', {
         leftContainer = Ext.create('Ext.container.Container', {
             defaults:{
                 anchor:'95%',
-                labelWidth:180,
+                labelWidth:155,
                 minWidth:250,
                 labelStyle:'font-weight: 700;',
                 xtype:'textfield'
@@ -155,7 +161,7 @@ Ext.define('Shopware.apps.Voucher.view.voucher.BaseConfiguration', {
         rightContainer = Ext.create('Ext.container.Container', {
             defaults:{
                 anchor:'95%',
-                labelWidth:180,
+                labelWidth:155,
                 minWidth:250,
                 labelStyle:'font-weight: 700;',
                 xtype:'textfield'

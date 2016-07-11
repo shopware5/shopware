@@ -44,165 +44,165 @@ class Shop extends ModelEntity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var integer $mainId
      * @ORM\Column(name="main_id", type="integer", nullable=true)
      */
-    private $mainId;
+    protected $mainId;
 
     /**
      * @var integer $categoryId
      * @ORM\Column(name="category_id", type="integer", nullable=true)
      */
-    private $categoryId;
+    protected $categoryId;
 
     /**
      * @var Shop $main
      * @ORM\ManyToOne(targetEntity="Shop", inversedBy="children")
      */
-    private $main;
+    protected $main;
 
     /**
      * @var string $name
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
-    private $name;
+    protected $name;
 
     /**
      * @var string $title
      * @ORM\Column(name="title", type="string", length=255, nullable=true)
      */
-    private $title;
+    protected $title;
 
     /**
      * @var integer $position
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
-    private $position = 0;
+    protected $position = 0;
 
     /**
      * @var string $name
      * @ORM\Column(name="host", type="string", length=255, nullable=true)
      */
-    private $host;
+    protected $host;
 
     /**
      * @var string $basePath
      * @ORM\Column(name="base_path", type="string", length=255, nullable=true)
      */
-    private $basePath;
+    protected $basePath;
 
     /**
      * @var string $baseUrl
      * @ORM\Column(name="base_url", type="string", length=255, nullable=true)
      */
-    private $baseUrl;
+    protected $baseUrl;
 
     /**
      * @var string $hosts
      * @ORM\Column(name="hosts", type="text", nullable=false)
      */
-    private $hosts = '';
+    protected $hosts = '';
 
     /**
      * @var boolean $secure
      * @ORM\Column(name="secure", type="boolean", nullable=false)
      */
-    private $secure = false;
+    protected $secure = false;
 
     /**
      * @var boolean $secure
      * @ORM\Column(name="always_secure", type="boolean", nullable=false)
      */
-    private $alwaysSecure = false;
+    protected $alwaysSecure = false;
 
     /**
      * @var string $name
      * @ORM\Column(name="secure_host", type="string", length=255, nullable=true)
      */
-    private $secureHost;
+    protected $secureHost;
 
     /**
      * @var string $secureBasePath
      * @ORM\Column(name="secure_base_path", type="string", length=255, nullable=true)
      */
-    private $secureBasePath;
+    protected $secureBasePath;
 
     /**
      * @var string $secureBaseUrl
      */
-    private $secureBaseUrl;
+    protected $secureBaseUrl;
 
     /**
      * @var $template int
      * @ORM\Column(name="template_id", type="integer", nullable=true)
      */
-    private $templateId;
+    protected $templateId;
 
     /**
      * @var Template $template
      * @ORM\ManyToOne(targetEntity="Template", inversedBy="shops")
      * @ORM\JoinColumn(name="template_id", referencedColumnName="id")
      */
-    private $template;
+    protected $template;
 
     /**
      * @var Template $documentTemplate
      * @ORM\ManyToOne(targetEntity="Template")
      * @ORM\JoinColumn(name="document_template_id", referencedColumnName="id")
      */
-    private $documentTemplate;
+    protected $documentTemplate;
 
     /**
      * @var \Shopware\Models\Category\Category $category
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Category\Category")
      */
-    private $category;
+    protected $category;
 
     /**
      * @var Locale $locale
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Shop\Locale")
      */
-    private $locale;
+    protected $locale;
 
     /**
      * @var Currency $currency
      * @ORM\ManyToOne(targetEntity="Currency")
      */
-    private $currency;
+    protected $currency;
 
     /**
      * @var \Shopware\Models\Customer\Group $customerGroup
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Customer\Group")
      * @ORM\JoinColumn(name="customer_group_id", referencedColumnName="id")
      */
-    private $customerGroup;
+    protected $customerGroup;
 
     /**
      * @var boolean $default
      * @ORM\Column(name="`default`", type="boolean", nullable=false)
      */
-    private $default = false;
+    protected $default = false;
 
     /**
      * @var boolean $active
      * @ORM\Column(name="active", type="boolean", nullable=false)
      */
-    private $active = true;
+    protected $active = true;
 
     /**
      * @var Shop $fallback
      * @ORM\ManyToOne(targetEntity="Shop")
      */
-    private $fallback;
+    protected $fallback;
 
     /**
      * @var boolean $default
      * @ORM\Column(name="customer_scope", type="boolean", nullable=false)
      */
-    private $customerScope = false;
+    protected $customerScope = false;
 
     /**
      * @var Currency[]|\Doctrine\Common\Collections\ArrayCollection
@@ -210,7 +210,7 @@ class Shop extends ModelEntity
      * @ORM\JoinTable(name="s_core_shop_currencies")
      * @ORM\OrderBy({"position" = "ASC", "id" = "ASC"})
      */
-    private $currencies;
+    protected $currencies;
 
     /**
      * @var \Shopware\Models\Site\Group[]|\Doctrine\Common\Collections\ArrayCollection
@@ -218,14 +218,14 @@ class Shop extends ModelEntity
      * @ORM\JoinTable(name="s_core_shop_pages")
      * @ORM\OrderBy({"id" = "ASC"})
      */
-    private $pages;
+    protected $pages;
 
     /**
      * @var Shop[]|\Doctrine\Common\Collections\ArrayCollection
      * @ORM\OneToMany(targetEntity="Shop", mappedBy="main", cascade={"all"}))
      * @ORM\OrderBy({"position" = "ASC", "id" = "ASC"})
      */
-    private $children;
+    protected $children;
 
     /**
      * Class constructor.
@@ -673,7 +673,7 @@ class Shop extends ModelEntity
 
     /**
      * @param null $bootstrap Deprecated since 5.2 will be removed in 5.3
-     * @return Shop
+     * @return DetachedShop
      */
     public function registerResources($bootstrap = null)
     {
@@ -699,12 +699,10 @@ class Shop extends ModelEntity
         $snippets = $container->get('Snippets');
         $snippets->setShop($this);
 
-        /** @var $snippets \Enlight_Plugin_PluginManager */
+        /** @var $plugins \Enlight_Plugin_PluginManager */
         $plugins = $container->get('Plugins');
 
         /** @var $pluginNamespace  \Shopware_Components_Plugin_Namespace */
-        $pluginNamespace = null;
-
         foreach ($plugins as $pluginNamespace) {
             if ($pluginNamespace instanceof \Shopware_Components_Plugin_Namespace) {
                 $pluginNamespace->setShop($this);
@@ -738,9 +736,9 @@ class Shop extends ModelEntity
 
             $templateManager->setCompileId(
                 'frontend' .
-                    '_' . $template->toString() .
-                    '_' . $localeName .
-                    '_' . $this->getId()
+                '_' . $template->toString() .
+                '_' . $localeName .
+                '_' . $this->getId()
             );
         }
 

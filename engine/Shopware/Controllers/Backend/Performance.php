@@ -22,19 +22,20 @@
  * our trademarks remain entirely with us.
  */
 
-use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
-use Shopware\Components\Model\ModelManager;
+use Shopware\Models\Config\Element;
+use Shopware\Models\Config\Form;
 use Shopware\Models\Plugin\Plugin;
+use Shopware\Models\Shop\Shop;
 
 /**
  * Shopware Performance Controller
  */
 class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Backend_ExtJs
 {
-    const PHP_RECOMMENDED_VERSION = '5.6.0';
-    const PHP_MINIMUM_VERSION     = '5.5.9';
+    const PHP_RECOMMENDED_VERSION = '7.0.0';
+    const PHP_MINIMUM_VERSION     = '5.6.4';
 
     const PERFORMANCE_VALID       = 1;
     const PERFORMANCE_WARNING     = 2;
@@ -152,7 +153,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
      */
     public function getConfigAction()
     {
-        Shopware()->Cache()->remove('Shopware_Config');
+        Shopware()->Container()->get('cache')->remove('Shopware_Config');
         $this->View()->assign(array(
             'success' => true,
             'data' => $this->prepareConfigData()
@@ -203,7 +204,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         $data = $this->prepareDataForSaving($data);
         $this->saveConfigData($data);
 
-        Shopware()->Cache()->remove('Shopware_Config');
+        Shopware()->Container()->get('cache')->remove('Shopware_Config');
 
         // Reload config, so that the actual config from the
         // db is returned
@@ -217,9 +218,9 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
 
     /**
      * Iterates the given data array and persists all config variables
-     * @param $data
+     * @param array $data
      */
-    public function saveConfigData($data)
+    public function saveConfigData(array $data)
     {
         foreach ($data as $values) {
             foreach ($values as $configKey => $value) {
@@ -262,7 +263,6 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
             ]),
             'various' => $this->genericConfigLoader([
                 'disableShopwareStatistics',
-                'TagCloud:show',
                 'LastArticles:show',
                 'LastArticles:lastarticlestoshow',
                 'disableArticleNavigation'
@@ -365,6 +365,20 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         }
         $data['noCacheControllers'] = implode("\n", $lines);
 
+        $data['HttpCache:proxy'] = implode(
+            ',',
+            array_map(
+                function ($url) {
+                    $url = trim($url);
+                    if (empty($url) || strpos($url, '://') !== false) {
+                        return $url;
+                    }
+                    return 'http://' . $url;
+                },
+                explode(',', $data['HttpCache:proxy'])
+            )
+        );
+
         unset($data['id']);
 
         return $data;
@@ -372,13 +386,16 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
 
     /**
      * Helper method to persist a given config value
+     *
+     * @param string $name
+     * @param mixed $value
      */
     public function saveConfig($name, $value)
     {
         $modelManager = $this->container->get('models');
-        $shopRepository    = $modelManager->getRepository('Shopware\Models\Shop\Shop');
-        $elementRepository = $modelManager->getRepository('Shopware\Models\Config\Element');
-        $formRepository    = $modelManager->getRepository('Shopware\Models\Config\Form');
+        $shopRepository    = $modelManager->getRepository(Shop::class);
+        $elementRepository = $modelManager->getRepository(Element::class);
+        $formRepository    = $modelManager->getRepository(Form::class);
 
         $shop = $shopRepository->find($shopRepository->getActiveDefault()->getId());
 
@@ -401,9 +418,12 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
             return;
         }
 
+        $removedValues = [];
         foreach ($element->getValues() as $valueModel) {
-            $this->container->get('models')->remove($valueModel);
+            $removedValues[] = $valueModel;
+            $modelManager->remove($valueModel);
         }
+        $modelManager->flush($removedValues);
 
         $values = array();
         // Do not save default value
@@ -445,6 +465,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
             return $defaultValue;
         }
 
+        /** @var \Shopware\Models\Config\Element $element */
         $element = $elementRepository->findOneBy(array('name' => $config, 'form' => $form));
 
         if (!$element) {
@@ -602,7 +623,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
         $offset = $this->Request()->getParam('offset', 0);
         $limit  = $this->Request()->getParam('limit', null);
 
-        $component = Shopware()->CategoryDenormalization();
+        $component = Shopware()->Container()->get('CategoryDenormalization');
 
         if ($offset == 0) {
             $component->rebuildCategoryPath();
@@ -619,7 +640,7 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
 
     public function prepareTreeAction()
     {
-        $component = Shopware()->CategoryDenormalization();
+        $component = Shopware()->Container()->get('CategoryDenormalization');
 
         $component->removeOrphanedAssignments();
 

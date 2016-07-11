@@ -26,7 +26,7 @@ namespace Shopware\Bundle\SearchBundleES\FacetHandler;
 
 use ONGR\ElasticsearchDSL\Aggregation\FilterAggregation;
 use ONGR\ElasticsearchDSL\Aggregation\ValueCountAggregation;
-use ONGR\ElasticsearchDSL\Filter\TermFilter;
+use ONGR\ElasticsearchDSL\Query\TermQuery;
 use ONGR\ElasticsearchDSL\Search;
 use Shopware\Bundle\SearchBundleES\HandlerInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
@@ -83,7 +83,7 @@ class ImmediateDeliveryFacetHandler implements HandlerInterface, ResultHydratorI
         $aggregation->setField('hasAvailableVariant');
 
         $filter = new FilterAggregation('has_available_variant_filter');
-        $filter->setFilter(new TermFilter('hasAvailableVariant', 1));
+        $filter->setFilter(new TermQuery('hasAvailableVariant', 1));
         $filter->addAggregation($aggregation);
 
         $search->addAggregation($filter);
@@ -101,11 +101,11 @@ class ImmediateDeliveryFacetHandler implements HandlerInterface, ResultHydratorI
         if (!isset($elasticResult['aggregations'])) {
             return;
         }
-        if (!isset($elasticResult['aggregations']['agg_has_available_variant_filter'])) {
+        if (!isset($elasticResult['aggregations']['has_available_variant_filter'])) {
             return;
         }
 
-        $data = $elasticResult['aggregations']['agg_has_available_variant_filter']['agg_has_available_variant_count'];
+        $data = $elasticResult['aggregations']['has_available_variant_filter']['has_available_variant_count'];
 
         if ($data['value'] <= 0) {
             return;

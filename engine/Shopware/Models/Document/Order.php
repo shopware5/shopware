@@ -301,19 +301,20 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
         }
 
         $taxShipping = (float) $taxShipping;
-        if ($this->_order["taxfree"]) {
-            $this->_amountNetto =  $this->_amountNetto + $this->_order["invoice_shipping"];
-        } else {
-            $this->_amountNetto =  $this->_amountNetto + ($this->_order["invoice_shipping"]/(100+$taxShipping)*100);
-            if (!empty($taxShipping) && !empty($this->_order["invoice_shipping"])) {
-                $this->_tax[number_format($taxShipping, 2)] += ($this->_order["invoice_shipping"]/(100+$taxShipping))*$taxShipping;
-            }
-        }
-
-        $this->_amount =  $this->_amount + $this->_order["invoice_shipping"];
         $this->_shippingCosts = $this->_order["invoice_shipping"];
 
         if ($this->_shippingCostsAsPosition == true && !empty($this->_shippingCosts)) {
+            if ($this->_order["taxfree"]) {
+                $this->_amountNetto =  $this->_amountNetto + $this->_order["invoice_shipping"];
+            } else {
+                $this->_amountNetto =  $this->_amountNetto + ($this->_order["invoice_shipping"]/(100+$taxShipping)*100);
+                if (!empty($taxShipping) && !empty($this->_order["invoice_shipping"])) {
+                    $this->_tax[number_format($taxShipping,2)] += ($this->_order["invoice_shipping"]/(100+$taxShipping))*$taxShipping;
+                }
+            }
+
+            $this->_amount =  $this->_amount + $this->_order["invoice_shipping"];
+
             $shipping = array();
             $shipping['quantity'] = 1;
 
@@ -512,7 +513,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
 
             $position["amount_netto"] = round($position["netto"] * $position["quantity"], 2);
 
-            $position["amount"] = $position["price"] * $position["quantity"];
+            $position["amount"] = round($position["price"] * $position["quantity"], 2);
 
             $this->_amountNetto +=  $position["amount_netto"];
             $this->_amount += $position["amount"];
@@ -554,8 +555,9 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
     public function getBilling()
     {
         $this->_billing =  new ArrayObject(Shopware()->Db()->fetchRow("
-        SELECT sob.*,sub.ustid,sub.customernumber FROM s_order_billingaddress AS sob
+        SELECT sob.*,sub.ustid,u.customernumber FROM s_order_billingaddress AS sob
         LEFT JOIN s_user_billingaddress AS sub ON sub.userID = ?
+        LEFT JOIN s_user u ON u.id = sub.userID
         WHERE sob.userID = ? AND
         sob.orderID = ?
         ", array($this->_userID, $this->_userID, $this->_id)), ArrayObject::ARRAY_AS_PROPS);

@@ -1,4 +1,34 @@
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ *
+ * @category   Shopware
+ * @package    PluginManager
+ * @subpackage Account
+ * @version    $Id$
+ * @author shopware AG
+ */
 //{namespace name=backend/plugin_manager/translation}
+
+//{block name="backend/plugin_manager/view/account/login_window"}
 Ext.define('Shopware.apps.PluginManager.view.account.LoginWindow', {
     extend: 'Ext.window.Window',
     modal: true,
@@ -9,7 +39,7 @@ Ext.define('Shopware.apps.PluginManager.view.account.LoginWindow', {
      */
     snippets: {
         title: '{s name=account/title}Shopware ID{/s}',
-        descriptionMessage: '{s name=account/description_message}Here you can create you personal Shopware ID. The Shopware ID will give you access to your Shopware account in our forum, wiki and other community resources. It will also grant you access to our plugin store, where you can find many more plugins that will help you easily customize your shop to your needs.{/s}'
+        descriptionMessage: '{s name=account/description_message}Please login with your existing Shopware ID or register your shop, to access the complete functional range of the PluginManager. <br>The Shopware ID is your username and will give you access to your Shopware account and our Community Store, the central marketplace for all shopware extensions.{/s}'
     },
 
     cls: 'plugin-manager-login-window',
@@ -105,3 +135,4 @@ Ext.define('Shopware.apps.PluginManager.view.account.LoginWindow', {
     }
 
 });
+//{/block}

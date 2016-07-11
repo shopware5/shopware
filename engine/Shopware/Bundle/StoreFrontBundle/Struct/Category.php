@@ -91,11 +91,6 @@ class Category extends Extendable implements \JsonSerializable
     /**
      * @var boolean
      */
-    protected $allowViewSelect;
-
-    /**
-     * @var boolean
-     */
     protected $displayFacets;
 
     /**
@@ -294,14 +289,6 @@ class Category extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @param boolean $allowViewSelect
-     */
-    public function setAllowViewSelect($allowViewSelect)
-    {
-        $this->allowViewSelect = $allowViewSelect;
-    }
-
-    /**
      * @param boolean $displayFacets
      */
     public function setDisplayFacets($displayFacets)
@@ -344,14 +331,6 @@ class Category extends Extendable implements \JsonSerializable
     /**
      * @return boolean
      */
-    public function allowViewSelect()
-    {
-        return $this->allowViewSelect;
-    }
-
-    /**
-     * @return boolean
-     */
     public function isBlog()
     {
         return $this->blog;
@@ -382,7 +361,7 @@ class Category extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @return \int[]
+     * @return int[]
      */
     public function getBlockedCustomerGroupIds()
     {
@@ -390,7 +369,7 @@ class Category extends Extendable implements \JsonSerializable
     }
 
     /**
-     * @param \int[] $blockedCustomerGroupIds
+     * @param int[] $blockedCustomerGroupIds
      */
     public function setBlockedCustomerGroupIds(array $blockedCustomerGroupIds)
     {

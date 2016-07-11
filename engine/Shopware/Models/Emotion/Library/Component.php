@@ -30,25 +30,11 @@ use Doctrine\ORM\Mapping as ORM;
 use Shopware\Models\Plugin\Plugin;
 
 /**
- *
- * Associations:
- * <code>
- *
- * </code>
- *
- *
- * Indices:
- * <code>
- *
- * </code>
- *
  * @category   Shopware
- * @package    Models
- * @subpackage Emotion
- * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
- * @license    http://enlight.de/license     New BSD License
+ * @package    Shopware\Models
+ * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
- * @ORM\Entity(repositoryClass="Repository")
+ * @ORM\Entity
  * @ORM\Table(name="s_library_component")
  */
 class Component extends ModelEntity
@@ -362,6 +348,7 @@ class Component extends ModelEntity
             'displayField' => '',
             'valueField' => '',
             'allowBlank' => false,
+            'translatable' => false,
             'position' => $this->getMaxPositionValue()
         );
 
@@ -447,6 +434,7 @@ class Component extends ModelEntity
      *     @type string $name               Required; Logical name of the component field
      *     @type string $fieldLabel         Optional; Ext JS form field label.
      *     @type string $allowBlank         Optional; Defines if the value can contains null
+     *     @type string $defaultValue       Optional; date string in format Y-m-d
      * }
      *
      * @param array $options
@@ -634,6 +622,7 @@ class Component extends ModelEntity
      *     @type string $name               Required; Logical name of the component field
      *     @type string $fieldLabel         Optional; Ext JS form field label.
      *     @type string $allowBlank         Optional; Defines if the value can contains null
+     *     @type string $defaultValue       Optional; default value as string in format H:i
      * }
      *
      * @return Field
@@ -715,7 +704,8 @@ class Component extends ModelEntity
                 function ($field) {return $field->getPosition();},
                 $this->getFields()->toArray()
             );
-            $this->maxFieldPositionValue = max($positions) ? : 0;
+            
+            $this->maxFieldPositionValue = !empty($positions) ? max($positions) : 0;
         }
 
         return $this->maxFieldPositionValue;

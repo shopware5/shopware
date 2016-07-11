@@ -21,9 +21,34 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Shopware\Components\CacheManager;
+
 /**
  * Empty controller due to the fact that we've no logic here. The Shopware_Controllers_Backend_ExtJs handles the rest.
  */
 class Shopware_Controllers_Backend_Feedback extends Shopware_Controllers_Backend_ExtJs
 {
+    public function disableInstallationSurveyAction()
+    {
+        $conn = $this->container->get('dbal_connection');
+        $elementId = $conn->fetchColumn('SELECT id FROM s_core_config_elements WHERE name LIKE "installationSurvey"');
+        $valueId = $conn->fetchColumn('SELECT id FROM s_core_config_values WHERE element_id = :elementId', ['elementId' => $elementId]);
+        $data = [
+            'element_id' => $elementId,
+            'shop_id'    => 1,
+            'value'      => serialize(false),
+        ];
+        if ($valueId) {
+            $conn->update(
+                's_core_config_values',
+                $data,
+                ['id' => $valueId]
+            );
+        } else {
+            $conn->insert('s_core_config_values', $data);
+        }
+        /** @var CacheManager */
+        $cacheManager = $this->get('shopware.cache_manager');
+        $cacheManager->clearConfigCache();
+    }
 }

@@ -35,6 +35,7 @@ use Shopware\Bundle\PluginInstallerBundle\Struct\LicenceStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\ListingResultStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\PluginStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\StructHydrator;
+use Shopware\Bundle\PluginInstallerBundle\Struct\UpdateResultStruct;
 
 /**
  * Class PluginStoreService
@@ -127,7 +128,7 @@ class PluginStoreService
 
     /**
      * @param UpdateListingRequest $context
-     * @return PluginStruct[]
+     * @return UpdateResultStruct
      * @throws \Exception
      */
     public function getUpdates(UpdateListingRequest $context)
@@ -143,8 +144,10 @@ class PluginStoreService
         );
         
         $plugins = $this->hydrator->hydrateStorePlugins($result['data']);
+        $gtcAcceptanceRequired = isset($result['gtcAcceptanceRequired']) ? $result['gtcAcceptanceRequired'] : false;
+        $result = new UpdateResultStruct($plugins, $gtcAcceptanceRequired);
 
-        return $plugins;
+        return $result;
     }
 
     /**

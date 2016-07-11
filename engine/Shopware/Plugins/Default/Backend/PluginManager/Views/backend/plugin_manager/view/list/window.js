@@ -1,5 +1,34 @@
-
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ *
+ * @category   Shopware
+ * @package    PluginManager
+ * @subpackage List
+ * @version    $Id$
+ * @author shopware AG
+ */
 //{namespace name=backend/plugin_manager/translation}
+
+//{block name="backend/plugin_manager/view/list/window"}
 Ext.define('Shopware.apps.PluginManager.view.list.Window', {
     extend: 'Enlight.app.Window',
 
@@ -37,7 +66,8 @@ Ext.define('Shopware.apps.PluginManager.view.list.Window', {
             me.createListingPage(),
             me.createAccountPage(),
             me.createLicencePage(),
-            me.createPremiumPluginsPage()
+            me.createPremiumPluginsPage(),
+            me.createExpiredPluginsPage()
         ];
 
         me.centerPanel = Ext.create('Ext.container.Container', {
@@ -139,5 +169,14 @@ Ext.define('Shopware.apps.PluginManager.view.list.Window', {
         });
 
         return this.createPremiumPluginPage;
+    },
+
+    createExpiredPluginsPage: function() {
+        this.createExpiredPluginsPage = Ext.create('Shopware.apps.PluginManager.view.list.ExpiredPluginsPage', {
+           cardIndex: 7
+        });
+
+        return this.createExpiredPluginsPage;
     }
 });
+//{/block}

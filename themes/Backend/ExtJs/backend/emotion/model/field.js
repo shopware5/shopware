@@ -58,6 +58,7 @@ Ext.define('Shopware.apps.Emotion.model.Field', {
         { name: 'valueField', type: 'string', useNull: true, defaultValue: null },
         { name: 'allowBlank', type: 'int' },
         { name: 'defaultValue', type: 'string' },
+        { name: 'translatable', type: 'int'},
         { name: 'position', type: 'int' }
     ]
 

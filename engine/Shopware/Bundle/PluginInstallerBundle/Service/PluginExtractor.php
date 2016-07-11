@@ -24,21 +24,46 @@
 
 namespace Shopware\Bundle\PluginInstallerBundle\Service;
 
-/**
- * @package Shopware\Bundle\PluginInstallerBundle\Service
- */
+use Symfony\Component\Filesystem\Filesystem;
+
 class PluginExtractor
 {
     /**
+     * @var string
+     */
+    private $pluginDir;
+
+    /**
+     * @var Filesystem
+     */
+    private $filesystem;
+
+    /**
+     * @var string[]
+     */
+    private $pluginDirectories = [];
+
+    /**
+     * @param string $pluginDir
+     * @param Filesystem $filesystem
+     * @param string[] $pluginDirectories
+     */
+    public function __construct($pluginDir, Filesystem $filesystem, array $pluginDirectories = [])
+    {
+        $this->pluginDir = $pluginDir;
+        $this->filesystem = $filesystem;
+        $this->pluginDirectories = $pluginDirectories;
+    }
+
+    /**
      * Extracts the provided zip file to the provided destination
      *
-     * @param $file
-     * @param $destination
+     * @param \ZipArchive $archive
      * @throws \Exception
      */
-    public function extract($file, $destination)
+    public function extract($archive)
     {
-        $stream = $this->validatePluginZip($file);
+        $destination = $this->pluginDir;
 
         if (!is_writable($destination)) {
             throw new \Exception(
@@ -46,7 +71,24 @@ class PluginExtractor
             );
         }
 
-        $stream->extractTo($destination);
+        $prefix = $this->getPluginPrefix($archive);
+        $this->validatePluginZip($prefix, $archive);
+
+        $oldFile = $this->findOldFile($prefix);
+        $backupFile = $this->createBackupFile($oldFile);
+
+        try {
+            $archive->extractTo($destination);
+
+            if ($backupFile !== false) {
+                $this->filesystem->remove($backupFile);
+            }
+        } catch (\Exception $e) {
+            if ($backupFile !== false) {
+                $this->filesystem->rename($backupFile, $oldFile);
+            }
+            throw $e;
+        }
 
         $this->clearOpcodeCache();
     }
@@ -56,77 +98,28 @@ class PluginExtractor
      * path and validates the plugin namespace, directory traversal
      * and multiple plugin directories.
      *
-     * @param $filePath
-     * @return \ZipArchive
+     * @param string $prefix
+     * @param \ZipArchive $archive
      */
-    private function validatePluginZip($filePath)
+    private function validatePluginZip($prefix, \ZipArchive $archive)
     {
-        $stream = $this->openZip($filePath);
+        for ($i = 2; $i < $archive->numFiles; $i++) {
+            $stat = $archive->statIndex($i);
 
-        $namespace = $this->getPluginNamespace($stream);
-
-        for ($i = 2; $i < $stream->numFiles; $i++) {
-            $stat = $stream->statIndex($i);
-
-            if (strpos($stat['name'], '../') !== false) {
-                throw new \RuntimeException(
-                    sprintf('Directory Traversal detected')
-                );
-            }
-
-            if (strpos($stat['name'], $namespace) !== 0) {
-                throw new \RuntimeException(
-                    sprintf(
-                        'Detected invalid file/directory %s in the plugin zip: %s',
-                        $stat['name'],
-                        $namespace
-                    )
-                );
-            }
+            $this->assertNoDirectoryTraversal($stat['name']);
+            $this->assertPrefix($stat['name'], $prefix);
         }
-
-        return $stream;
     }
 
     /**
-     * @param \ZipArchive $stream
+     * @param \ZipArchive $archive
      * @return string
      */
-    private function getPluginNamespace(\ZipArchive $stream)
+    private function getPluginPrefix(\ZipArchive $archive)
     {
-        $segments = $stream->statIndex(0);
-        $segments = array_filter(explode('/', $segments['name']));
+        $entry = $archive->statIndex(0);
 
-        if (count($segments) <= 1) {
-            $segments = $stream->statIndex(1);
-            $segments = array_filter(explode('/', $segments['name']));
-        }
-
-        if (!in_array($segments[0], ['Frontend', 'Backend', 'Core'])) {
-            throw new \RuntimeException(
-                sprintf('Uploaded zip archive contains no plugin namespace directory: %s', $segments[1])
-            );
-        }
-
-        return implode('/', $segments);
-    }
-
-    /**
-     * @param $file
-     * @return \ZipArchive
-     */
-    private function openZip($file)
-    {
-        $stream = new \ZipArchive();
-
-        if (true !== ($retVal = $stream->open($file, null))) {
-            throw new \RuntimeException(
-                $this->getErrorMessage($retVal, $file),
-                $retVal
-            );
-        }
-
-        return $stream;
+        return explode('/', $entry['name'])[0];
     }
 
     /**
@@ -145,33 +138,72 @@ class PluginExtractor
     }
 
     /**
-     * @param $retval
-     * @param $file
-     * @return string
+     * @param string $filename
+     * @param string $prefix
      */
-    protected function getErrorMessage($retval, $file)
+    private function assertPrefix($filename, $prefix)
     {
-        switch ($retval) {
-            case \ZipArchive::ER_EXISTS:
-                return sprintf("File '%s' already exists.", $file);
-            case \ZipArchive::ER_INCONS:
-                return sprintf("Zip archive '%s' is inconsistent.", $file);
-            case \ZipArchive::ER_INVAL:
-                return sprintf("Invalid argument (%s)", $file);
-            case \ZipArchive::ER_MEMORY:
-                return sprintf("Malloc failure (%s)", $file);
-            case \ZipArchive::ER_NOENT:
-                return sprintf("No such zip file: '%s'", $file);
-            case \ZipArchive::ER_NOZIP:
-                return sprintf("'%s' is not a zip archive.", $file);
-            case \ZipArchive::ER_OPEN:
-                return sprintf("Can't open zip file: %s", $file);
-            case \ZipArchive::ER_READ:
-                return sprintf("Zip read error (%s)", $file);
-            case \ZipArchive::ER_SEEK:
-                return sprintf("Zip seek error (%s)", $file);
-            default:
-                return sprintf("'%s' is not a valid zip archive, got error code: %s", $file, $retval);
+        if (strpos($filename, $prefix) !== 0) {
+            throw new \RuntimeException(
+                sprintf(
+                    'Detected invalid file/directory %s in the plugin zip: %s',
+                    $filename,
+                    $prefix
+                )
+            );
         }
+    }
+
+    /**
+     * @param $filename
+     */
+    private function assertNoDirectoryTraversal($filename)
+    {
+        if (strpos($filename, '../') !== false) {
+            throw new \RuntimeException(
+                sprintf('Directory Traversal detected')
+            );
+        }
+    }
+
+    /**
+     * @param string $pluginName
+     * @return bool|string
+     */
+    private function findOldFile($pluginName)
+    {
+        $dir = $this->pluginDir . '/' . $pluginName;
+        if ($this->filesystem->exists($dir)) {
+            return $dir;
+        }
+
+        foreach ($this->pluginDirectories as $directory) {
+            $namespaces = ['Core', 'Frontend', 'Backend'];
+            foreach ($namespaces as $namespace) {
+                $dir = $directory . $namespace . '/' . $pluginName;
+
+                if ($this->filesystem->exists($dir)) {
+                    return $dir;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param string $oldFile
+     * @return bool|string
+     */
+    private function createBackupFile($oldFile)
+    {
+        if ($oldFile === false) {
+            return false;
+        }
+
+        $backupFile = $oldFile . '.' . uniqid();
+        $this->filesystem->rename($oldFile, $backupFile);
+        rename($oldFile, $backupFile);
+        return $backupFile;
     }
 }

@@ -23,6 +23,8 @@
  */
 
 use Enlight_Controller_Request_Request as Request;
+use Shopware\Models\Shop\DetachedShop;
+use Shopware\Models\Shop\Repository;
 use Shopware\Models\Shop\Shop;
 
 /**
@@ -71,8 +73,6 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
             return;
         }
 
-        /** @var $repository Shopware\Models\Shop\Repository */
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
         $shop = $this->getShopByRequest($request);
 
         if (!$shop->getHost()) {
@@ -90,14 +90,6 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
         }
         if (!$shop->getSecureHost()) {
             $shop->setSecureHost($shop->getHost());
-        }
-
-        $main = $shop->getMain() !== null ? $shop->getMain() : $shop;
-        if (!$main->getDefault()) {
-            $main = $repository->getActiveDefault();
-            $shop->setTemplate($main->getTemplate());
-            $shop->setHost($main->getHost());
-            $shop->setSecureHost($main->getSecureHost() ?: $main->getHost());
         }
 
         // Read original base path for resources
@@ -144,6 +136,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
             $requestUri = substr($requestUri, 0, $pos);
         }
 
+        /** @var $repository Shopware\Models\Shop\Repository */
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
         $requestShop = $repository->getActiveByRequest($request);
 
@@ -221,7 +214,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
         $response = $args->getResponse();
 
         if (Shopware()->Container()->initialized('Shop')) {
-            /** @var Shop $shop */
+            /** @var DetachedShop $shop */
             $shop = $this->Application()->Shop();
 
             if ($request->isSecure() && $request->getHttpHost() !== $shop->getSecureHost()) {
@@ -269,7 +262,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
     {
         $container = $this->Application()->Container();
 
-        /** @var $shop Shop */
+        /** @var $shop DetachedShop */
         $shop = $this->Application()->Shop();
 
         $cookieKey = null;
@@ -404,10 +397,11 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
 
     /**
      * @param Request $request
-     * @return Shop
+     * @return DetachedShop
      */
     protected function getShopByRequest(Request $request)
     {
+        /** @var Repository $repository */
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
 
         $shop = null;
@@ -439,6 +433,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
         Request $request,
         Shop $newShop
     ) {
+        /** @var Repository $repository */
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
         $requestShop = $repository->getActiveByRequest($request);
 

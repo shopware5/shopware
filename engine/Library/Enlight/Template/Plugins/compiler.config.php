@@ -68,17 +68,17 @@ class Smarty_Compiler_Config extends Smarty_Internal_CompileBase
                 $return .= ', ' . $_attr['default'];
             }
             if (isset($_attr['namespace'])) {
-                return '<?php echo Enlight_Application::Instance()->Config()->getByNamespace(' . $_attr['namespace'] . ', ' . $return . '); ?>';
+                return '<?php echo Shopware()->Config()->getByNamespace(' . $_attr['namespace'] . ', ' . $return . '); ?>';
             }
-            return '<?php echo Enlight_Application::Instance()->Config()->get(' . $return . '); ?>';
+            return '<?php echo Shopware()->Config()->get(' . $return . '); ?>';
         }
 
         $name = substr($_attr['name'], 1, -1);
         if (isset($_attr['namespace'])) {
             $namespace = substr($_attr['namespace'], 1, -1);
-            $value = Enlight_Application::Instance()->Config()->getByNamespace($namespace, $name);
+            $value = Shopware()->Config()->getByNamespace($namespace, $name);
         } else {
-            $value = Enlight_Application::Instance()->Config()->get($name);
+            $value = Shopware()->Config()->get($name);
         }
 
         if ($value !== null) {

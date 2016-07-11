@@ -60,6 +60,8 @@ class CustomerGroupHydrator extends Hydrator
 
         $customerGroup->setDisplayGrossPrices((bool) ($data['__customerGroup_tax']));
 
+        $customerGroup->setInsertedGrossPrices((bool) ($data['__customerGroup_taxinput']));
+
         $customerGroup->setKey($data['__customerGroup_groupkey']);
 
         $customerGroup->setMinimumOrderValue((float) $data['__customerGroup_minimumorder']);
@@ -71,10 +73,7 @@ class CustomerGroupHydrator extends Hydrator
         $customerGroup->setUseDiscount((bool) ($data['__customerGroup_mode']));
 
         if (!empty($data['__customerGroupAttribute_id'])) {
-            $attribute = $this->attributeHydrator->hydrate(
-                $this->extractFields('__customerGroupAttribute_', $data)
-            );
-            $customerGroup->addAttribute('core', $attribute);
+            $this->attributeHydrator->addAttribute($customerGroup, $data, 'customerGroupAttribute');
         }
 
         return $customerGroup;
