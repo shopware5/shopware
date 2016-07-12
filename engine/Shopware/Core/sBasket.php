@@ -452,8 +452,15 @@ class sBasket
             $deletePremium = $this->db->fetchCol(
                 'SELECT basket.id
                 FROM s_order_basket basket
+                LEFT JOIN s_articles a
+                ON a.id = basket.articleID
+                LEFT JOIN s_articles_details d
+                ON d.id = a.main_detail_id
                 LEFT JOIN s_addon_premiums premium
-                ON premium.ordernumber_export = basket.ordernumber
+                ON IF(a.configurator_set_id IS NULL,
+                   premium.ordernumber_export = basket.ordernumber,
+                   premium.ordernumber = d.ordernumber
+                )
                 AND premium.startprice <= ?
                 WHERE basket.modus = 1
                 AND premium.id IS NULL
