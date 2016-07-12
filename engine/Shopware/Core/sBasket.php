@@ -1558,27 +1558,13 @@ class sBasket
             $sessionId
         );
 
-        // Shopware 3.5.0 / sth / laststock - instock check
-        if (!empty($chkBasketForArticle["id"])) {
-            if (
-                $article["laststock"] == true
-                && $article["instock"] < ($chkBasketForArticle["quantity"] + $quantity)
-            ) {
-                $quantity -= $chkBasketForArticle["quantity"];
-            }
-        } else {
-            if ($article["laststock"] == true && $article["instock"] <= $quantity) {
-                $quantity = $article["instock"];
-                if ($quantity <= 0) {
-                    return;
-                }
-            }
+        $quantity = $this->getBasketQuantity($quantity, $chkBasketForArticle, $article);
+
+        if ($quantity <= 0) {
+            return;
         }
 
         if ($chkBasketForArticle) {
-            // Article is already in basket, update quantity
-            $quantity += $chkBasketForArticle["quantity"];
-
             $this->sUpdateArticle($chkBasketForArticle["id"], $quantity);
             return $chkBasketForArticle["id"];
         }
@@ -2731,5 +2717,22 @@ class sBasket
         }
 
         return $article;
+    }
+
+    /**
+     * @param int $quantity
+     * @param array $basketProduct
+     * @param array $article
+     * @return int
+     */
+    private function getBasketQuantity($quantity, $basketProduct, $article)
+    {
+        $newQuantity = $quantity + $basketProduct["quantity"] ?: 0;
+
+        if ($article['laststock'] && $newQuantity > $article['instock']) {
+            return (int) $article['instock'];
+        }
+
+        return $newQuantity;
     }
 }
