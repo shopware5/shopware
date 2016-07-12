@@ -58,7 +58,7 @@ class sRewriteTest extends PHPUnit_Framework_TestCase
             array('Hello,World', 'Hello-World'),
             array('Hello;World', 'HelloWorld'),
             array('Hello&World', 'HelloWorld'),
-            array('Hello & World', 'Hello-und-World'),
+            array('Hello & World', 'Hello-World'),
             array('Nguyễn Đăng Khoa', 'Nguyen-Dang-Khoa'),
             array('Ä ä Ö ö Ü ü ß', 'AE-ae-OE-oe-UE-ue-ss'),
             array('Á À á à É È é è Ó Ò ó ò Ñ ñ Ú Ù ú ù', 'A-A-a-a-E-E-e-e-O-O-o-o-N-n-U-U-u-u'),

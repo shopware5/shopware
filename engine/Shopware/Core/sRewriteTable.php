@@ -541,7 +541,7 @@ class sRewriteTable
         'Ỷ' => 'Y',
         'Ỹ' => 'Y',
         // shopware rules
-        ' & ' => '-und-',
+        ' & ' => '-',
         ':' => '-',
         ',' => '-',
         "'" => '-',
