@@ -197,6 +197,11 @@ class CheapestPriceService implements Service\CheapestPriceServiceInterface
             return null;
         }
 
+        $checkPriceGroup = $product->getPriceGroup();
+        if (empty($checkPriceGroup)) {
+            return null;
+        }
+
         $id = $product->getPriceGroup()->getId();
         if (!isset($priceGroups[$id])) {
             return null;
