@@ -249,7 +249,10 @@ class Manager
                 ':version' => $migration->getVersion(),
                 ':msg'     => $e->getMessage(),
             ));
-            throw new \Exception("Could not apply migration: " . $e->getMessage());
+
+            throw new \Exception(sprintf(
+                'Could not apply migration (%s). Error: %s ', get_class($migration), $e->getMessage()
+            ));
         }
 
         $sql = 'UPDATE s_schema_version SET complete_date = :date WHERE version = :version';
