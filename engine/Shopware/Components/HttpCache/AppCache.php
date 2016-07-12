@@ -151,13 +151,13 @@ class AppCache extends HttpCache
             if ($result) {
                 $response->setStatusCode(200, 'Banned');
             } else {
-                $response->setStatusCode(404, 'Not Banned');
+                $response->setStatusCode(200, 'Not Banned');
             }
         } elseif ($request->getMethod() === 'PURGE') {
             if ($this->getStore()->purge($request->getUri())) {
                 $response->setStatusCode(200, 'Purged');
             } else {
-                $response->setStatusCode(404, 'Not purged');
+                $response->setStatusCode(200, 'Not purged');
             }
         }
 
