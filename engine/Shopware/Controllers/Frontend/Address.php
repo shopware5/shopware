@@ -198,11 +198,19 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
 
         foreach ($form->getErrors(true) as $error) {
             $errorFlags[$error->getOrigin()->getName()] = true;
-            $errorMessages[] = $this->get('snippets')->getNamespace('frontend/account/internalMessages')
-                ->get('ErrorFillIn', 'Please fill in all red fields');
+            if ($error->getMessage()) {
+                $errorMessages[] = $error->getMessage();
+            }
         }
 
         $errorMessages = array_unique($errorMessages);
+
+        if (!empty($errorFlags)) {
+            $errorMessage = $this->get('snippets')
+                ->getNamespace('frontend/account/internalMessages')
+                ->get('ErrorFillIn', 'Please fill in all red fields');
+            array_unshift($errorMessages, $errorMessage);
+        }
 
         /** @var Address $address */
         $address = $form->getViewData();
