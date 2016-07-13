@@ -647,22 +647,21 @@ class sBasket
         } else {
             // If we don't have voucher details yet, need to check if its a one-time code
             $voucherDetails = $this->db->fetchRow(
-                'SELECT s_emarketing_voucher_codes.id AS id, s_emarketing_voucher_codes.code AS vouchercode,
-                    description, numberofunits, customergroup, value, restrictarticles,
-                    minimumcharge, shippingfree, bindtosupplier, taxconfig, valid_from,
-                    valid_to, ordercode, modus, percental, strict, subshopID
-                FROM s_emarketing_vouchers, s_emarketing_voucher_codes
-                WHERE modus = 1
-                AND s_emarketing_vouchers.id = s_emarketing_voucher_codes.voucherID
-                AND LOWER(code) = ?
-                AND cashed != 1
+                'SELECT
+                    c.id AS id, c.code AS vouchercode, v.description, v.numberofunits,  v.customergroup, v.value, v.restrictarticles,
+                    v.minimumcharge, v.shippingfree, v.bindtosupplier, v.taxconfig, v.valid_from, v.valid_to, v.ordercode, v.modus, v.percental, v.strict, v.subshopID
+                FROM s_emarketing_voucher_codes c
+                LEFT JOIN s_emarketing_vouchers v on (c.voucherID = v.id)
+                WHERE c.id = (
+                    SELECT id from s_emarketing_voucher_codes where code = ?
+                )
+                AND  v.modus =1
+                AND  c.cashed !=1
                 AND (
-                      (s_emarketing_vouchers.valid_to >= now()
-                          AND s_emarketing_vouchers.valid_from <= now()
-                      )
-                      OR s_emarketing_vouchers.valid_to is NULL
+                    (v.valid_to >= now() AND v.valid_from <= now())
+                    OR v.valid_to IS NULL
                 )',
-                array($voucherCode)
+                array(strtoupper($voucherCode))
             );
             $individualCode = ($voucherDetails && $voucherDetails["description"]);
         }
