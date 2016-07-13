@@ -103,6 +103,9 @@ Ext.define('Shopware.apps.Voucher.view.voucher.BaseConfiguration', {
         if(me.record){
             me.loadRecord(me.record);
             me.attributeForm.loadAttribute(me.record.get('id'));
+
+            // revalidate minimumCharge after loading record
+            me.down('[name="minimumCharge"]').validateValue(me.down('[name="minimumCharge"]').getValue());
         }
     },
 
