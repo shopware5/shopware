@@ -421,9 +421,9 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
 
                 $joinStatements[] = "
                     LEFT JOIN `s_articles_prices` p{$cg['id']}
-                    ON p{$cg['id']}.articledetailsID=d.id
-                    AND p{$cg['id']}.pricegroup='{$cg['groupkey']}'
-                    AND p{$cg['id']}.`from`=1
+                    ON `p{$cg['id']}.articledetailsID`=d.id
+                    AND `p{$cg['id']}.pricegroup`='{$cg['groupkey']}'
+                    AND `p{$cg['id']}.from`=1
                 ";
 
                 if (empty($cg['taxinput'])) {
