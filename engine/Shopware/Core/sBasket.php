@@ -874,22 +874,28 @@ class sBasket
                     ->getNamespace('backend/static/discounts_surcharges')
                     ->get('surcharge_name');
 
-                $this->db->insert(
-                    's_order_basket',
-                    $params = array(
-                        'sessionID'      => $this->session->get('sessionId'),
-                        'articlename'    => $surchargeName,
-                        'articleID'      => 0,
-                        'ordernumber'    => $name,
-                        'quantity'       => 1,
-                        'price'          => $surcharge,
-                        'netprice'       => $discountNet,
-                        'tax_rate'       => $tax,
-                        'datum'          => new Zend_Date(),
-                        'modus'          => 4,
-                        'currencyFactor' => $this->sSYSTEM->sCurrency["factor"]
-                    )
+                $params = array(
+                    'sessionID'      => $this->session->get('sessionId'),
+                    'articlename'    => $surchargeName,
+                    'articleID'      => 0,
+                    'ordernumber'    => $name,
+                    'quantity'       => 1,
+                    'price'          => $surcharge,
+                    'netprice'       => $discountNet,
+                    'tax_rate'       => $tax,
+                    'datum'          => new Zend_Date(),
+                    'modus'          => 4,
+                    'currencyFactor' => $this->sSYSTEM->sCurrency["factor"]
                 );
+
+                if (! $this->eventManager->notifyUntil(
+                    'Shopware_Modules_Basket_BeforeAddMinmumOrderSurcharge', array(
+                        'subject'   => $this,
+                        'surcharge' => $params
+                    )
+                )) {
+                    $this->db->insert('s_order_basket', $params);
+                }
             }
         }
     }

@@ -3,6 +3,8 @@ In this document you will find a changelog of the important changes related to t
 
 # 5.1.7
 * Update elasticsearch/elasticsearch library to 2.2.0
+* Add notifyUntil-Event `Shopware_Modules_Basket_BeforeAddMinmumOrderSurcharge` to `\sBsket::sInsertSurcharge`,
+containing the surcharge. Use this to prevent sBasket from adding a surcharge to the basket.
 
 ## 5.1.6
 * The interface `Enlight_Components_Cron_Adapter` in `engine/Library/Enlight/Components/Cron/Adapter.php` got a new method `getJobByAction`. For default implementation see `engine/Library/Enlight/Components/Cron/Adapter/DBAL.php`.
