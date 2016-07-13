@@ -213,7 +213,7 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
      /**
      * Gets the Plugin config.
      *
-     * @return string The Plugin config
+     * @return array The Plugin config
      */
     final public function getConfig()
     {
