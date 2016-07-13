@@ -3301,6 +3301,7 @@ SQL;
 
                 // Set article in activate state
                 $getOrderDetails[$orderDetailsKey]['active'] = 1;
+                $getOrderDetails[$orderDetailsKey]['article'] = $tmpArticle;
                 if (!empty($tmpArticle['purchaseunit'])) {
                     $getOrderDetails[$orderDetailsKey]['purchaseunit'] = $tmpArticle['purchaseunit'];
                 }
