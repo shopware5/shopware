@@ -8,10 +8,20 @@
             <table width="100%" border="0" cellpadding="0" cellspacing="0" style="margin:0;padding:0;font-family:Arial,Helvetica,sans-serif;">
                 {foreach from=$sCampaignContainer.data item=sArticle name=artikelListe}
                     {if $sArticle@index%3==0}<tr>{/if}
+
                     <!-- beginning article -->
-                    <td height="350" width="180" align="center" valign="top" style="border: 1px solid #dfdfdf; padding:0;margin:0; width:180px;">
+
+                    {$boxWidth = 180}
+
+                    {if $sCampaignContainer.data|count == 1}
+                        {$boxWidth = 560}
+                    {elseif $sCampaignContainer.data|count == 2}
+                        {$boxWidth = 270}
+                    {/if}
+
+                    <td height="350" width="{$boxWidth}" align="center" valign="top" style="border: 1px solid #dfdfdf; padding:0;margin:0; width:{$boxWidth}px;">
                         <!-- article content -->
-                        <table width="180" align="center" border="0" cellpadding="0" cellspacing="0" style="width:180px; padding:0; margin:0; background-color:#ffffff; font-family:Arial,Helvetica,sans-serif;">
+                        <table width="{$boxWidth}" align="center" border="0" cellpadding="0" cellspacing="0" style="width:{$boxWidth}px; padding:0; margin:0; background-color:#ffffff; font-family:Arial,Helvetica,sans-serif;">
                             <tr>
                                 <td height="180" valign="center" style="height: 180px; text-align:center; background-color:#fff;">
                                     <div align="center" style="overflow:hidden;">
