@@ -22,6 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Monolog\Handler\HandlerInterface;
 use Shopware\Components\Logger;
 use Shopware\Plugin\Debug\Components\ControllerCollector;
@@ -141,43 +142,50 @@ class Shopware_Plugins_Core_Debug_Bootstrap extends Shopware_Components_Plugin_B
     {
         $this->get('loader')->registerNamespace('Shopware\Plugin\Debug', __DIR__ . '/');
 
+        $collectors = array();
         $eventManager = $this->get('events');
         $utils = new Utils();
         $errorHandler = $this->Collection()->get('ErrorHandler');
 
         if ($this->Config()->get('logTemplateVars')) {
-            $this->pushCollector(new TemplateVarCollector($eventManager));
+            $collectors[] = new TemplateVarCollector($eventManager);
         }
 
         if ($this->Config()->get('logErrors')) {
-            $this->pushCollector(new ErrorCollector($errorHandler, $utils));
+            $collectors[] = new ErrorCollector($errorHandler, $utils);
         }
 
         if ($this->Config()->get('logExceptions')) {
-            $this->pushCollector(new ExceptionCollector($eventManager, $utils));
+            $collectors[] = new ExceptionCollector($eventManager, $utils);
         }
 
         if ($this->Config()->get('logDb')) {
-            $this->pushCollector(new DatabaseCollector($this->get('db')));
+            $collectors[] = new DatabaseCollector($this->get('db'));
         }
 
         if ($this->Config()->get('logModel')) {
-            $this->pushCollector(new DbalCollector($this->get('modelconfig')));
+            $collectors[] = new DbalCollector($this->get('modelconfig'));
         }
 
         if ($this->Config()->get('logTemplate')) {
-            $this->pushCollector(new TemplateCollector($this->get('template'), $utils, $this->get('kernel')->getRootDir()));
+            $collectors[] = new TemplateCollector($this->get('template'), $utils, $this->get('kernel')->getRootDir());
         }
 
         if ($this->Config()->get('logController')) {
-            $this->pushCollector(new ControllerCollector($eventManager, $utils));
+            $collectors[] = new ControllerCollector($eventManager, $utils);
         }
 
         if ($this->Config()->get('logEvents')) {
-            $this->pushCollector(new EventCollector($eventManager, $utils));
+            $collectors[] = new EventCollector($eventManager, $utils);
         }
 
-        foreach ($this->collectors as $collector) {
+        $collectors = $this->get('events')->filter(
+            'Shopware_Plugins_Core_Debug_Bootstrap_FilterCollectors',
+            $collectors
+        );
+
+        foreach ($collectors as $collector) {
+            $this->pushCollector($collector);
             $collector->start();
         }
     }
@@ -217,9 +225,20 @@ class Shopware_Plugins_Core_Debug_Bootstrap extends Shopware_Components_Plugin_B
      */
     public function getHandlers(\Enlight_Controller_Request_Request $request)
     {
+        $handlerRegister = new ArrayCollection([
+            $this->get('monolog.handler.firephp')
+        ]);
+
+        $handlerRegister = $this->get('events')->collect(
+            'Shopware_Plugins_Core_Debug_Bootstrap_FilterHandlerRegister',
+            $handlerRegister
+        );
+
         $handlers = array();
-        if ($this->get('monolog.handler.firephp')->acceptsRequest($request)) {
-            $handlers[] = $this->get('monolog.handler.firephp');
+        foreach ($handlerRegister as $handler) {
+            if ($handler instanceof HandlerInterface) {
+                $handlers[] = $handler;
+            }
         }
 
         return $handlers;

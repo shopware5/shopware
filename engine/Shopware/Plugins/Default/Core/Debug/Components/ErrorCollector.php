@@ -40,7 +40,7 @@ class ErrorCollector implements CollectorInterface
     /**
      * @var Utils
      */
-    private $utils;
+    protected $utils;
 
     /**
      * @param \Shopware_Plugins_Core_ErrorHandler_Bootstrap $handler

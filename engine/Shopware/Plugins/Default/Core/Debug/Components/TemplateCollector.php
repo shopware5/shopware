@@ -46,7 +46,7 @@ class TemplateCollector implements CollectorInterface
     /**
      * @var Utils
      */
-    private $utils;
+    protected $utils;
 
     /**
      * @param \Enlight_Template_Manager $template

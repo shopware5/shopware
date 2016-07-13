@@ -46,7 +46,7 @@ class ExceptionCollector implements CollectorInterface
     /**
      * @var Utils
      */
-    private $utils;
+    protected $utils;
 
     /**
      * @param \Enlight_Event_EventManager $eventManager
