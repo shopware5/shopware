@@ -159,6 +159,10 @@ class ManufacturerFacetHandler implements HandlerInterface, ResultHydratorInterf
             );
         }
 
+        usort($items, function (ValueListItem $a, ValueListItem $b) {
+            return strcasecmp($a->getLabel(), $b->getLabel());
+        });
+
         return $items;
     }
 
