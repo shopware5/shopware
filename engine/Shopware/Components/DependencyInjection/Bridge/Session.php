@@ -53,11 +53,13 @@ class Session
             \Enlight_Components_Session::writeClose();
         }
 
-        /** @var $shop \Shopware\Models\Shop\Shop */
-        $shop = $container->get('Shop');
+        if (!isset($sessionOptions['name'])) {
+            /** @var $shop \Shopware\Models\Shop\Shop */
+            $shop = $container->get('Shop');
 
-        $name = 'session-' . $shop->getId();
-        $sessionOptions['name'] = $name;
+            $name = 'session-' . $shop->getId();
+            $sessionOptions['name'] = $name;
+        }
 
         if (!isset($sessionOptions['save_handler']) || $sessionOptions['save_handler'] == 'db') {
             $config_save_handler = array(
