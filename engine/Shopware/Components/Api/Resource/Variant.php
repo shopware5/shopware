@@ -738,7 +738,13 @@ class Variant extends Resource implements BatchInterface
 
         return $priceData;
     }
-
+    
+    /**
+     * Simulates utf8_general_ci similar conditions
+     */
+    private function simulateUtf8UnicodeCi($inputvar){
+        return strtolower(preg_replace('/ß/', 'ss', $inputvar));
+    }
 
     /**
      * Resolves the passed configuratorOptions parameter for a single variant.
@@ -787,6 +793,25 @@ class Variant extends Resource implements BatchInterface
                 $option->setName($optionData['option']);
                 $option->setGroup($availableGroup);
                 $this->getManager()->persist($option);
+            }elseif (
+	            isset($optionData['option']) &&
+		        $optionData['option'] !== null &&
+		        $optionData['option'] != '' &&
+		        $availableGroup->getId() !== null &&
+		        $availableGroup->getId() >= 1 &&
+		        $this->simulateUtf8UnicodeCi($option->getName()) == $this->simulateUtf8UnicodeCi($optionData['option']) &&
+		        $option->getName() != $optionData['option']
+            ) {
+                Shopware()->Db()->query("UPDATE `s_article_configurator_options`
+                SET `name` = ?
+                WHERE `name` = ?
+                AND `group_id` = ?",
+			        array(
+				        $optionData['option'],
+				        $optionData['option'],
+				        $availableGroup->getId()
+			        )
+		        );
             }
             $options->add($option);
         }
@@ -797,7 +822,6 @@ class Variant extends Resource implements BatchInterface
 
         return $data;
     }
-
 
     /**
      * Checks if the passed group data is already existing in the passed array collection.
@@ -811,8 +835,8 @@ class Variant extends Resource implements BatchInterface
     {
         /**@var $availableGroup Option */
         foreach ($availableGroups as $availableGroup) {
-            if (($availableGroup->getName() == $groupData['name'] && $groupData['name'] !== null)
-                || ($availableGroup->getId() == $groupData['id']) && $groupData['id'] !== null) {
+            if ( ($groupData['name'] !== null && $this->simulateUtf8UnicodeCi($availableGroup->getName()) == $this->simulateUtf8UnicodeCi($groupData['name']))
+                || ($groupData['id'] !== null && $availableGroup->getId() == $groupData['id'])) {
                 return $availableGroup;
             }
         }
@@ -832,8 +856,8 @@ class Variant extends Resource implements BatchInterface
     {
         /**@var $availableOption Option */
         foreach ($availableOptions as $availableOption) {
-            if (($availableOption->getName() == $optionData['name'] && $optionData['name'] !== null)
-                || ($availableOption->getId() == $optionData['id'] && $optionData['id'] !== null)) {
+            if ( ($optionData['name'] !== null && $this->simulateUtf8UnicodeCi($availableOption->getName()) == $this->simulateUtf8UnicodeCi($optionData['name']))
+                || ($optionData['id'] !== null && $availableOption->getId() == $optionData['id'] )) {
                 return $availableOption;
             }
         }
