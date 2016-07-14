@@ -428,9 +428,10 @@ class Shopware_Components_Translation
         $ids = Shopware()->Db()->fetchCol($sql, array($languageId));
 
         $existStmt = Shopware()->Container()->get('dbal_connection')->prepare(
-            "SELECT id
+            "SELECT EXISTS (SELECT 1
              FROM s_core_translations
-             WHERE objectlanguage = :language"
+             WHERE objectlanguage = :language
+             LIMIT 1)"
         );
 
         $insertStmt = Shopware()->Container()->get('dbal_connection')->prepare("
