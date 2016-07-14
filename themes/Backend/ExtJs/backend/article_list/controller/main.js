@@ -191,7 +191,8 @@ Ext.define('Shopware.apps.ArticleList.controller.Main', {
                 fields = [
             { name: 'imageSrc', type: 'string' },
             { name: 'hasConfigurator', type: 'boolean' },
-            { name: 'hasCategories', type: 'boolean' }
+            { name: 'hasCategories', type: 'boolean' },
+            { name: 'Detail_additionalText_dynamic', type: 'string' }
         ];
 
         for (var i = 0; i < data.length; i++) {
