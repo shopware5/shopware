@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,7 +23,8 @@
  */
 
 namespace   Shopware\Models\Banner;
-use         Shopware\Components\Model\ModelRepository;
+
+use Shopware\Components\Model\ModelRepository;
 
 /**
  * Repository for the banner model (Shopware\Models\Banner\Banner).
@@ -33,7 +34,7 @@ use         Shopware\Components\Model\ModelRepository;
 class Repository extends ModelRepository
 {
     /**
-     * Loads all banners without any live shopping banners. The $filter parameter can
+     * Loads all banners. The $filter parameter can
      * be used to narrow the selection down to a category id.
      *
      * @param null $filter
@@ -42,7 +43,6 @@ class Repository extends ModelRepository
     public function getBanners($filter=null)
     {
         $builder = $this->getBannerMainQuery($filter);
-        $builder->andWhere('banner.liveShoppingId = ?2')->setParameter(2, 0);
 
         return $builder->getQuery();
     }
@@ -64,7 +64,7 @@ class Repository extends ModelRepository
         $today = new \DateTime();
         $builder->andWhere(
             $builder->expr()->orX(
-                $builder->expr()->lte('banner.validFrom','?3'),
+                $builder->expr()->lte('banner.validFrom', '?3'),
                 $builder->expr()->orX(
                     $builder->expr()->eq('banner.validFrom', '?4'),
                     $builder->expr()->isNull('banner.validFrom')
@@ -73,7 +73,7 @@ class Repository extends ModelRepository
         )->setParameter(3, $today)->setParameter(4, null);
         $builder->andWhere(
             $builder->expr()->orX(
-                $builder->expr()->gte('banner.validTo','?5'),
+                $builder->expr()->gte('banner.validTo', '?5'),
                 $builder->expr()->orX(
                     $builder->expr()->eq('banner.validTo', '?6'),
                     $builder->expr()->isNull('banner.validTo')
@@ -105,8 +105,7 @@ class Repository extends ModelRepository
     public function getBannerMainQuery($filter=null)
     {
         $builder = $this->createQueryBuilder('banner');
-        $builder->select(array('banner', 'attribute'));
-        $builder->leftJoin('banner.attribute', 'attribute');
+        $builder->select(array('banner'));
         if (null !== $filter || !empty($filter)) {
             //filter the displayed columns with the passed filter
             $builder->andWhere("banner.categoryId = ?1")
@@ -127,7 +126,7 @@ class Repository extends ModelRepository
         $today = new \DateTime();
         $builder->andWhere(
             $builder->expr()->orX(
-                $builder->expr()->lte('banner.validFrom','?3'),
+                $builder->expr()->lte('banner.validFrom', '?3'),
                 $builder->expr()->orX(
                     $builder->expr()->eq('banner.validFrom', '?4'),
                     $builder->expr()->isNull('banner.validFrom')
@@ -136,7 +135,7 @@ class Repository extends ModelRepository
         )->setParameter(3, $today)->setParameter(4, null);
         $builder->andWhere(
             $builder->expr()->orX(
-                $builder->expr()->gte('banner.validTo','?5'),
+                $builder->expr()->gte('banner.validTo', '?5'),
                 $builder->expr()->orX(
                     $builder->expr()->eq('banner.validTo', '?6'),
                     $builder->expr()->isNull('banner.validTo')
@@ -156,7 +155,7 @@ class Repository extends ModelRepository
         shuffle($retval);
 
         if ($limit > 0) {
-            $retval =   array_slice($retval,0,$limit);
+            $retval =   array_slice($retval, 0, $limit);
         }
 
         return $retval;

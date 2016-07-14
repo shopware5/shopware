@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -43,7 +43,6 @@ class Shopware_Components_SeoIndex extends Enlight_Class
         $currentTime = Shopware()->Db()->fetchOne('SELECT ?', array(new Zend_Date()));
 
         if (strtotime($cachedTime) < strtotime($currentTime) - $cache) {
-
             $this->setCachedTime($currentTime, $elementId, $shopId);
 
             $resultTime = Shopware()->Modules()->RewriteTable()->sCreateRewriteTable($cachedTime);
@@ -122,7 +121,7 @@ class Shopware_Components_SeoIndex extends Enlight_Class
 
         $shop = $repository->getActiveById($shopId);
 
-        $shop->registerResources(Shopware()->Bootstrap());
+        $shop->registerResources();
 
         return $shop;
     }
@@ -176,7 +175,9 @@ class Shopware_Components_SeoIndex extends Enlight_Class
         }
 
         // Count total number of associated blog articles
-        $builder = Shopware()->Models()->getRepository('Shopware\Models\Blog\Blog')->getListQueryBuilder($blogCategoryIds);
+        $builder = Shopware()->Models()->getRepository('Shopware\Models\Blog\Blog')->getListQueryBuilder(
+            $blogCategoryIds, null
+        );
         $numResults = $builder->select('COUNT(blog)')
             ->getQuery()
             ->getSingleScalarResult();
@@ -197,7 +198,7 @@ class Shopware_Components_SeoIndex extends Enlight_Class
 
         // Calculate the number of articles which have been update since the last update time
         $sql = "
-            SELECT COUNT(a.id)
+            SELECT COUNT(DISTINCT a.id)
             FROM s_articles a
 
             INNER JOIN s_articles_categories_ro ac
@@ -237,13 +238,23 @@ class Shopware_Components_SeoIndex extends Enlight_Class
      */
     public function countEmotions()
     {
-        $builder = Shopware()->Models()->getRepository('Shopware\Models\Emotion\Emotion')->getCampaigns();
+        /**@var $repo \Shopware\Models\Emotion\Repository*/
+        $repo = Shopware()->Models()->getRepository('Shopware\Models\Emotion\Emotion');
+        $builder = $repo->getListingQuery();
 
-        $numResults = $builder->select('COUNT(emotions)')
-            ->getQuery()
-            ->getSingleScalarResult();
+        $builder
+            ->andWhere('emotions.is_landingpage = 1 ')
+            ->andWhere('emotions.parent_id IS NULL')
+            ->andWhere('emotions.active = 1');
 
-        return (int) $numResults;
+        $builder->select('COUNT(DISTINCT emotions.id)')
+            ->resetQueryPart('groupBy')
+            ->resetQueryPart('orderBy');
+
+        $statement = $builder->execute();
+        $count = $statement->fetch(PDO::FETCH_COLUMN);
+
+        return (int) $count;
     }
 
     /**
@@ -258,18 +269,18 @@ class Shopware_Components_SeoIndex extends Enlight_Class
     {
         $this->registerShop($shopId);
 
-        $counts = array(
-            Shopware()->Db()->fetchOne('SELECT COUNT(id) FROM `s_emarketing_promotion_main`'),
+        $counts = [
             Shopware()->Db()->fetchOne('SELECT COUNT(id) FROM `s_cms_support`'),
             Shopware()->Db()->fetchOne('SELECT COUNT(id) FROM `s_cms_static` WHERE link=\'\''),
-            Shopware()->Db()->fetchOne('SELECT COUNT(id) FROM `s_cms_groups`')
-        );
+        ];
 
         return max($counts);
     }
 
     /**
      * Count Static routes
+     * @param $shopId
+     * @return int
      */
     public function countStatic($shopId)
     {
@@ -277,14 +288,16 @@ class Shopware_Components_SeoIndex extends Enlight_Class
         $urls = Shopware()->Config()->seoStaticUrls;
 
         if (empty($urls)) {
-            return;
+            return 0;
         }
         $static = array();
 
         if (!empty($urls)) {
             foreach (explode("\n", $urls) as $url) {
                 list($key, $value) = explode(',', trim($url));
-                if (empty($key) || empty($value)) continue;
+                if (empty($key) || empty($value)) {
+                    continue;
+                }
                 $static[$key] = $value;
             }
         }

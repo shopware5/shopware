@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -21,10 +21,24 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Shopware\Components\CSRFWhitelistAware;
 
 /**
  */
-class Shopware_Controllers_Backend_Error extends Shopware_Controllers_Frontend_Error
+class Shopware_Controllers_Backend_Error extends Shopware_Controllers_Frontend_Error  implements CSRFWhitelistAware
 {
-
+    /**
+     * Returns a list with actions which should not be validated for CSRF protection
+     *
+     * @return string[]
+     */
+    public function getWhitelistedCSRFActions()
+    {
+        return [
+            'error',
+            'pageNotFoundError',
+            'genericError',
+            'service'
+        ];
+    }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -24,9 +24,11 @@
 
 namespace Shopware\Models\Shop;
 
-use Shopware\Components\Model\ModelEntity,
-    Doctrine\ORM\Mapping as ORM,
-    Doctrine\Common\Collections\ArrayCollection;
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
+use Shopware\Components\Theme\Inheritance;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\DependencyInjection\Container;
 
 /**
  *
@@ -42,158 +44,165 @@ class Shop extends ModelEntity
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    protected $id;
 
     /**
      * @var integer $mainId
      * @ORM\Column(name="main_id", type="integer", nullable=true)
      */
-    private $mainId;
+    protected $mainId;
 
     /**
      * @var integer $categoryId
      * @ORM\Column(name="category_id", type="integer", nullable=true)
      */
-    private $categoryId;
+    protected $categoryId;
 
     /**
      * @var Shop $main
      * @ORM\ManyToOne(targetEntity="Shop", inversedBy="children")
      */
-    private $main;
+    protected $main;
 
     /**
      * @var string $name
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
-    private $name;
+    protected $name;
 
     /**
      * @var string $title
      * @ORM\Column(name="title", type="string", length=255, nullable=true)
      */
-    private $title;
+    protected $title;
 
     /**
      * @var integer $position
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
-    private $position = 0;
+    protected $position = 0;
 
     /**
      * @var string $name
      * @ORM\Column(name="host", type="string", length=255, nullable=true)
      */
-    private $host;
+    protected $host;
 
     /**
      * @var string $basePath
      * @ORM\Column(name="base_path", type="string", length=255, nullable=true)
      */
-    private $basePath;
+    protected $basePath;
 
     /**
      * @var string $baseUrl
      * @ORM\Column(name="base_url", type="string", length=255, nullable=true)
      */
-    private $baseUrl;
+    protected $baseUrl;
 
     /**
      * @var string $hosts
      * @ORM\Column(name="hosts", type="text", nullable=false)
      */
-    private $hosts = '';
+    protected $hosts = '';
 
     /**
      * @var boolean $secure
      * @ORM\Column(name="secure", type="boolean", nullable=false)
      */
-    private $secure = false;
+    protected $secure = false;
 
     /**
      * @var boolean $secure
      * @ORM\Column(name="always_secure", type="boolean", nullable=false)
      */
-    private $alwaysSecure = false;
+    protected $alwaysSecure = false;
 
     /**
      * @var string $name
      * @ORM\Column(name="secure_host", type="string", length=255, nullable=true)
      */
-    private $secureHost;
+    protected $secureHost;
 
     /**
      * @var string $secureBasePath
      * @ORM\Column(name="secure_base_path", type="string", length=255, nullable=true)
      */
-    private $secureBasePath;
+    protected $secureBasePath;
 
     /**
      * @var string $secureBaseUrl
      */
-    private $secureBaseUrl;
+    protected $secureBaseUrl;
+
+    /**
+     * @var $template int
+     * @ORM\Column(name="template_id", type="integer", nullable=true)
+     */
+    protected $templateId;
 
     /**
      * @var Template $template
-     * @ORM\ManyToOne(targetEntity="Template")
+     * @ORM\ManyToOne(targetEntity="Template", inversedBy="shops")
+     * @ORM\JoinColumn(name="template_id", referencedColumnName="id")
      */
-    private $template;
+    protected $template;
 
     /**
      * @var Template $documentTemplate
      * @ORM\ManyToOne(targetEntity="Template")
      * @ORM\JoinColumn(name="document_template_id", referencedColumnName="id")
      */
-    private $documentTemplate;
+    protected $documentTemplate;
 
     /**
      * @var \Shopware\Models\Category\Category $category
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Category\Category")
      */
-    private $category;
+    protected $category;
 
     /**
      * @var Locale $locale
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Shop\Locale")
      */
-    private $locale;
+    protected $locale;
 
     /**
      * @var Currency $currency
      * @ORM\ManyToOne(targetEntity="Currency")
      */
-    private $currency;
+    protected $currency;
 
     /**
      * @var \Shopware\Models\Customer\Group $customerGroup
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Customer\Group")
      * @ORM\JoinColumn(name="customer_group_id", referencedColumnName="id")
      */
-    private $customerGroup;
+    protected $customerGroup;
 
     /**
      * @var boolean $default
      * @ORM\Column(name="`default`", type="boolean", nullable=false)
      */
-    private $default = false;
+    protected $default = false;
 
     /**
      * @var boolean $active
      * @ORM\Column(name="active", type="boolean", nullable=false)
      */
-    private $active = true;
+    protected $active = true;
 
     /**
      * @var Shop $fallback
      * @ORM\ManyToOne(targetEntity="Shop")
      */
-    private $fallback;
+    protected $fallback;
 
     /**
      * @var boolean $default
      * @ORM\Column(name="customer_scope", type="boolean", nullable=false)
      */
-    private $customerScope = false;
+    protected $customerScope = false;
 
     /**
      * @var Currency[]|\Doctrine\Common\Collections\ArrayCollection
@@ -201,7 +210,7 @@ class Shop extends ModelEntity
      * @ORM\JoinTable(name="s_core_shop_currencies")
      * @ORM\OrderBy({"position" = "ASC", "id" = "ASC"})
      */
-    private $currencies;
+    protected $currencies;
 
     /**
      * @var \Shopware\Models\Site\Group[]|\Doctrine\Common\Collections\ArrayCollection
@@ -209,14 +218,14 @@ class Shop extends ModelEntity
      * @ORM\JoinTable(name="s_core_shop_pages")
      * @ORM\OrderBy({"id" = "ASC"})
      */
-    private $pages;
+    protected $pages;
 
     /**
      * @var Shop[]|\Doctrine\Common\Collections\ArrayCollection
      * @ORM\OneToMany(targetEntity="Shop", mappedBy="main", cascade={"all"}))
      * @ORM\OrderBy({"position" = "ASC", "id" = "ASC"})
      */
-    private $children;
+    protected $children;
 
     /**
      * Class constructor.
@@ -663,76 +672,97 @@ class Shop extends ModelEntity
     }
 
     /**
-     * @param \Enlight_Bootstrap $bootstrap
-     * @deprecated
-     * @return Shop
+     * @param null $bootstrap Deprecated since 5.2 will be removed in 5.3
+     * @return DetachedShop
      */
-    public function registerResources(\Enlight_Bootstrap $bootstrap)
+    public function registerResources($bootstrap = null)
     {
-        $bootstrap->registerResource('Shop', $this);
+        /** @var Container $container */
+        $container = Shopware()->Container();
+
+        $container->set('Shop', $this);
 
         /** @var $locale \Zend_Locale */
-        $locale = $bootstrap->getResource('Locale');
+        $locale = $container->get('Locale');
         $locale->setLocale($this->getLocale()->toString());
 
         /** @var $currency \Zend_Currency */
-        $currency = $bootstrap->getResource('Currency');
+        $currency = $container->get('Currency');
         $currency->setLocale($locale);
         $currency->setFormat($this->getCurrency()->toArray());
 
         /** @var $config \Shopware_Components_Config */
-        $config = $bootstrap->getResource('Config');
+        $config = $container->get('Config');
         $config->setShop($this);
 
         /** @var $snippets \Shopware_Components_Config */
-        $snippets = $bootstrap->getResource('Snippets');
+        $snippets = $container->get('Snippets');
         $snippets->setShop($this);
 
-        /** @var $snippets \Enlight_Plugin_PluginManager */
-        $plugins = $bootstrap->getResource('Plugins');
+        /** @var $plugins \Enlight_Plugin_PluginManager */
+        $plugins = $container->get('Plugins');
 
         /** @var $pluginNamespace  \Shopware_Components_Plugin_Namespace */
-        $pluginNamespace = null;
-
         foreach ($plugins as $pluginNamespace) {
             if ($pluginNamespace instanceof \Shopware_Components_Plugin_Namespace) {
                 $pluginNamespace->setShop($this);
             }
         }
 
+        $container->get('shopware_storefront.context_service')->initializeShopContext();
+
         if ($this->getTemplate() !== null) {
-            /** @var $template \Enlight_Template_Manager */
-            $templateManager = $bootstrap->getResource('Template');
+            /** @var $templateManager \Enlight_Template_Manager */
+            $templateManager = $container->get('Template');
             $template = $this->getTemplate();
             $localeName = $this->getLocale()->toString();
 
-            if ($template->getVersion() == 2) {
+            if ($template->getVersion() == 3) {
+                $this->registerTheme($template);
+            } elseif ($template->getVersion() == 2) {
                 $templateManager->addTemplateDir(array(
                     'custom' => $template->toString(),
                     'local' => '_emotion_local',
                     'emotion' => '_emotion',
+                    'include_dir' => '.'
                 ));
             } else {
-                $templateManager->addTemplateDir(array(
-                    'custom' => $template->toString(),
-                    'local' => '_local',
-                    'emotion' => '_default',
+                throw new \Exception(sprintf(
+                    'Tried to load unsupported template version %s for template: %s',
+                    $template->getVersion(),
+                    $template->getName()
                 ));
             }
 
             $templateManager->setCompileId(
                 'frontend' .
-                    '_' . $template->toString() .
-                    '_' . $localeName .
-                    '_' . $this->getId()
+                '_' . $template->toString() .
+                '_' . $localeName .
+                '_' . $this->getId()
             );
         }
 
         /** @var $templateMail \Shopware_Components_TemplateMail */
-        $templateMail = $bootstrap->getResource('TemplateMail');
+        $templateMail = $container->get('TemplateMail');
         $templateMail->setShop($this);
 
         return $this;
+    }
+
+    /**
+     * @param Template $template
+     * @throws \Exception
+     */
+    private function registerTheme(Template $template)
+    {
+        /**@var $templateManager \Enlight_Template_Manager*/
+        $templateManager = Shopware()->Container()->get('template');
+
+        /**@var $inheritance Inheritance*/
+        $inheritance = Shopware()->Container()->get('theme_inheritance');
+
+        $path = $inheritance->getTemplateDirectories($template);
+        $templateManager->setTemplateDir($path);
     }
 
     /**

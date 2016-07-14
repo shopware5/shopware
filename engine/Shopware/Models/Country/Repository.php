@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,13 +23,13 @@
  */
 
 namespace Shopware\Models\Country;
-use       Shopware\Components\Model\ModelRepository;
+
+use Shopware\Components\Model\ModelRepository;
 
 /**
  */
 class Repository extends ModelRepository
 {
-
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which selects all defined countries.
      * @return \Doctrine\ORM\Query
@@ -69,6 +69,8 @@ class Repository extends ModelRepository
             'countries.iso',
             'countries.position',
             'countries.active as active',
+            'countries.forceStateInRegistration',
+            'countries.displayStateInRegistration',
             'area.id as areaId'
         ));
         $builder->from('Shopware\Models\Country\Country', 'countries')
@@ -78,6 +80,32 @@ class Repository extends ModelRepository
             $builder->where('area.id = :areaId');
             $builder->setParameter('areaId', $filter[0]['value']);
         } elseif ($filter !== null) {
+            $builder->addFilter($filter);
+        }
+
+        if ($order !== null) {
+            $builder->addOrderBy($order);
+        }
+
+        return $builder;
+    }
+
+    /**
+     * @param array|null $filter
+     * @param array|null $order
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getCountriesWithStatesQueryBuilder($filter = null, $order = null)
+    {
+        $builder = $this->getEntityManager()->createQueryBuilder();
+
+        $builder
+            ->select(['countries', 'states', 'area'])
+            ->from('Shopware\Models\Country\Country', 'countries')
+            ->leftJoin('countries.states', 'states')
+            ->leftJoin('countries.area', 'area');
+
+        if ($filter !== null) {
             $builder->addFilter($filter);
         }
 
@@ -244,5 +272,4 @@ class Repository extends ModelRepository
                          ->where('attribute.countryStateId = ?1')
                          ->setParameter(1, $stateId);
     }
-
 }

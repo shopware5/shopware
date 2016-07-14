@@ -105,10 +105,27 @@ class Enlight_Config_Adapter_File extends Enlight_Config_Adapter
     protected function getFilename($name)
     {
         $suffix = $this->_nameSuffix !== null ? $this->_nameSuffix : '.' . $this->_configType;
-        foreach ($this->_configDir as $dir) {
-            $result = $dir . $this->_namePrefix . $name . $suffix;
-            if (file_exists($result)) {
-                return $result;
+        $indexed = false;
+
+        foreach ($this->_configDir as $key => $dir) {
+            if (is_string($key) && strpos($name, $key) === 0) {
+                $indexed = true;
+                $name = substr_replace($name, '', 0, strlen($key));
+
+                $result = $dir . $this->_namePrefix . $name . $suffix;
+                if (file_exists($result)) {
+                    return $result;
+                }
+                break;
+            }
+        }
+
+        if (!$indexed) {
+            foreach ($this->_configDir as $dir) {
+                $result = $dir . $this->_namePrefix . $name . $suffix;
+                if (file_exists($result)) {
+                    return $result;
+                }
             }
         }
         $name = $this->_configDir[0] . $this->_namePrefix . $name . $suffix;
@@ -187,7 +204,7 @@ class Enlight_Config_Adapter_File extends Enlight_Config_Adapter
      * Saves the data changes to the data store.
      *
      * @param Enlight_Config $config
-     * @throws Enlight_Config_Exception
+     * @param bool $forceWrite
      * @return Enlight_Config_Adapter_File
      */
     public function write(Enlight_Config $config, $forceWrite = false)

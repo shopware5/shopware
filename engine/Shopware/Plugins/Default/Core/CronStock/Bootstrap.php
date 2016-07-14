@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -58,7 +58,7 @@ class Shopware_Plugins_Core_CronStock_Bootstrap extends Shopware_Components_Plug
             d.suppliernumber,
             d.kind,
             d.additionaltext,
-            d.impressions,
+            COALESCE(sai.impressions, 0) as impressions,
             d.sales,
             d.active,
             d.instock,
@@ -70,15 +70,27 @@ class Shopware_Plugins_Core_CronStock_Bootstrap extends Shopware_Components_Plug
             s.name as supplier,
             u.unit,
             t.tax
+
         FROM s_articles a
         INNER JOIN s_articles_details as d
         INNER JOIN s_articles_attributes as at
+
         LEFT JOIN s_articles_supplier as s
         ON a.supplierID = s.id
+
         LEFT JOIN s_core_units as u
         ON d.unitID = u.id
+
         LEFT JOIN s_core_tax as t
         ON a.taxID = t.id
+
+        LEFT JOIN
+            (
+              SELECT articleId AS id, SUM(s.impressions) AS impressions
+              FROM s_statistics_article_impression s
+              GROUP BY articleId
+            ) sai ON sai.id = a.id
+
         WHERE d.articleID = a.id
         AND d.id = at.articledetailsID
         AND stockmin > instock
@@ -105,10 +117,15 @@ class Shopware_Plugins_Core_CronStock_Bootstrap extends Shopware_Components_Plug
         $mail = Shopware()->TemplateMail()->createMail(
             $job->get('inform_template'), $context
         );
-        $mail->addTo($job->get('inform_mail'));
+
+        $informMail = $job->get('inform_mail');
+        if ($job->get('inform_mail') === trim('{$sConfig.sMAIL}')) {
+            $informMail = Shopware()->Config()->get('mail');
+        }
+
+        $mail->addTo($informMail);
         $mail->send();
 
         return $data;
     }
-
 }

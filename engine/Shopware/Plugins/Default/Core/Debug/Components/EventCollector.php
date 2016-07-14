@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -77,7 +77,7 @@ class EventCollector implements CollectorInterface
                 continue;
             }
             $listeners = array();
-            foreach (Enlight()->Events()->getListeners($event) as $listener) {
+            foreach (Shopware()->Events()->getListeners($event) as $listener) {
                 $listener = $listener->getListener();
                 if ($listener[0] === $this) {
                     continue;

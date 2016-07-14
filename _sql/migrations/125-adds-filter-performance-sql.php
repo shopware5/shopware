@@ -1,7 +1,7 @@
 <?php
 class Migrations_Migration125 Extends Shopware\Components\Migrations\AbstractMigration
 {
-    public function up()
+    public function up($modus)
     {
         $sql = <<<'EOD'
 ALTER TABLE  `s_filter_values` ADD  `value_numeric`  DECIMAL( 10, 2 ) DEFAULT 0 NOT NULL;

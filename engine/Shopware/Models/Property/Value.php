@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,9 +23,10 @@
  */
 
 namespace Shopware\Models\Property;
-use Shopware\Components\Model\ModelEntity,
-    Doctrine\ORM\Mapping AS ORM,
-    Doctrine\Common\Collections\ArrayCollection;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
+use Shopware\Models\Media\Media;
 
 /**
  * Shopware Article Property Model
@@ -35,8 +36,6 @@ use Shopware\Components\Model\ModelEntity,
  */
 class Value extends ModelEntity
 {
-
-
     /**
      * @var integer $id
      *
@@ -91,11 +90,24 @@ class Value extends ModelEntity
     private $articles;
 
     /**
-     * @var float $len
-     * @ORM\Column(name="value_numeric", type="decimal", nullable=false, precision=2)
+     * @var int $mediaId
+     * @ORM\Column(name="media_id", type="integer", nullable=true)
      */
-    private $valueNumeric = 0;
+    private $mediaId = null;
 
+    /**
+     * @var Media
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Media\Media", inversedBy="properties")
+     * @ORM\JoinColumn(name="media_id", referencedColumnName="id")
+     */
+    private $media;
+
+    /**
+     * INVERSE SIDE
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\PropertyValue", mappedBy="propertyValue", orphanRemoval=true, cascade={"persist"})
+     * @var \Shopware\Models\Attribute\PropertyValue
+     */
+    protected $attribute;
 
     /**
      * Class constructor.
@@ -129,7 +141,6 @@ class Value extends ModelEntity
     public function setValue($value)
     {
         $this->value = $value;
-        $this->valueNumeric = floatval(str_replace(',', '.', $value));
         return $this;
     }
 
@@ -166,7 +177,7 @@ class Value extends ModelEntity
     }
 
     /**
-     * @param string $option
+     * @param Option $option
      */
     public function setOption($option)
     {
@@ -174,10 +185,43 @@ class Value extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return Option
      */
     public function getOption()
     {
         return $this->option;
+    }
+
+    /**
+     * @return \Shopware\Models\Media\Media
+     */
+    public function getMedia()
+    {
+        return $this->media;
+    }
+
+    /**
+     * @param \Shopware\Models\Media\Media $media
+     */
+    public function setMedia($media)
+    {
+        $this->media = $media;
+    }
+
+    /**
+     * @return \Shopware\Models\Attribute\PropertyValue
+     */
+    public function getAttribute()
+    {
+        return $this->attribute;
+    }
+
+    /**
+     * @param \Shopware\Models\Attribute\PropertyValue|array|null $attribute
+     * @return \Shopware\Models\Attribute\PropertyValue
+     */
+    public function setAttribute($attribute)
+    {
+        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\PropertyValue', 'attribute', 'propertyValue');
     }
 }

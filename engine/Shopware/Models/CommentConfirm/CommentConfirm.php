@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,8 +23,9 @@
  */
 
 namespace Shopware\Models\CommentConfirm;
-use Shopware\Components\Model\ModelEntity,
-Doctrine\ORM\Mapping AS ORM;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * CommentConfirm Model Entity
@@ -44,11 +45,18 @@ class CommentConfirm extends ModelEntity
     private $id;
 
     /**
-     * @var string $creationDate
+     * @var \DateTime $creationDate
      *
      * @ORM\Column(name="datum", type="datetime", nullable=false)
      */
     private $creationDate;
+
+    /**
+     * @var string $type
+     *
+     * @ORM\Column(name="type", type="string", length=255, nullable=true)
+     */
+    private $type = null;
 
     /**
      * @var string $hash
@@ -118,7 +126,7 @@ class CommentConfirm extends ModelEntity
     /**
      * Set CreationDate
      *
-     * @param string $creationDate
+     * @param \DateTime|string $creationDate
      */
     public function setCreationDate($creationDate)
     {
@@ -136,5 +144,21 @@ class CommentConfirm extends ModelEntity
     public function getCreationDate()
     {
         return $this->creationDate;
+    }
+
+    /**
+     * @param string $type
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
     }
 }

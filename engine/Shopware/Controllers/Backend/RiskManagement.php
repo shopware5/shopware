@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -31,7 +31,7 @@
  */
 class Shopware_Controllers_Backend_RiskManagement extends Shopware_Controllers_Backend_ExtJs
 {
-//    /**
+    //    /**
 //     * @var Shopware\Models\RiskManagement\Repository
 //     */
 //    private $repository;
@@ -66,7 +66,7 @@ class Shopware_Controllers_Backend_RiskManagement extends Shopware_Controllers_B
         try {
             $builder = Shopware()->Models()->createQueryBuilder();
             $builder->select(array('payment', 'ruleSets'))
-                    ->from('Shopware\Models\Payment\Payment','payment');
+                    ->from('Shopware\Models\Payment\Payment', 'payment');
             $builder->leftJoin('payment.ruleSets', 'ruleSets');
             $builder->where('payment.active=1');
 

@@ -1,0 +1,204 @@
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ *
+ * @category   Shopware
+ * @package    Shopware_Styling
+ * @subpackage Grid
+ * @version    $Id$
+ * @author shopware AG
+ */
+.#{$prefix}panel .#{$prefix}grid-body {
+    border-top: 1px solid $border-color;
+	border-left: 1px solid $light-border-color;
+	border-right: 1px solid $light-border-color;
+	color: $font-color;
+
+	// Cell formatting
+	.#{$prefix}grid-row .#{$prefix}grid-cell {
+		border-color: #cdd6dc;
+		border-top: 1px solid transparent;
+        -webkit-transition: background linear 0.2s, color linear 0.2s, box-shadow linear 0.2s;
+        -moz-transition: background linear 0.2s, color linear 0.2s, box-shadow linear 0.2s;
+        -ms-transition: background linear 0.2s, color linear 0.2s, box-shadow linear 0.2s;
+        -o-transition: background linear 0.2s, color linear 0.2s, box-shadow linear 0.2s;
+        transition: background linear 0.2s, color linear 0.2s, box-shadow linear 0.2s;
+
+		// Basic cell content formatting
+		a {
+		    color: $link-color;
+			text-decoration: none;
+			-webkit-transition: border linear 0.2s;
+			-moz-transition: border linear 0.2s;
+			-ms-transition: border linear 0.2s;
+			-o-transition: border linear 0.2s;
+			transition: border linear 0.2s;
+			border-bottom: 1px dotted transparent;
+
+			&:hover {
+				border-bottom-color: $link-color;
+			}
+		}
+		strong { font-weight: bold }
+	}
+
+	// Zebra row styling
+	.#{$prefix}grid-row-alt .#{$prefix}grid-cell, .#{$prefix}grid-row-alt .#{$prefix}grid-rowwrap-div {
+		background-color: #f3f5f7;
+	}
+
+	// Checkbox column
+	.#{$prefix}grid-row .#{$prefix}grid-cell-special {
+		background-image: none;
+		background-color: #e8e9eb;
+		border-top: 1px solid transparent;
+		border-bottom: 1px solid #d4d4d4;
+		border-right: 1px solid #fff;
+
+		.#{$prefix}grid-row-checker	{
+			background-image: theme-image($theme, 'unchecked.png');
+		}
+	}
+
+	// Action column
+	.#{$prefix}action-col-cell {
+	    text-align: center;
+
+		.#{$prefix}action-col-icon {
+		   	display: inline-block;
+			margin: 0 4px;
+            width: 16px !important;
+            height: 16px !important;
+            cursor: pointer !important;
+
+            /** Neccessary for IE to hide gray border around grid action images */
+            border: none !important;
+            outline: none !important;
+            -ms-appearance: none;
+            appearance: none;
+		}
+	}
+
+    .#{$prefix}grid-cell-selected {
+        background: #009CFF !important;
+        color: #fff;
+    }
+
+	.#{$prefix}grid-row-over {
+		background: transparent;
+
+		.#{$prefix}grid-cell {
+			background: transparent !important;
+		}
+        .#{$prefix}grid-cell-selected {
+            background: #009CFF !important;
+        }
+	}
+
+
+
+	// Marked rows
+	.#{$prefix}grid-row-selected {
+
+		.#{$prefix}grid-cell {
+			background-color: #e6f2f8 !important;
+			border-bottom-color: #d1e0ec;
+			border-style: solid;
+			color: $font-color;
+		}
+		.#{$prefix}grid-cell-special {
+			background-color: #e6f2f8 !important;
+			border-right: 1px solid #d1e0ec;
+
+			.#{$prefix}grid-row-checker	{
+				background-image: theme-image($theme, 'checked.png');
+			}
+		}
+	}
+}
+
+// Grid header
+.#{$prefix}grid-header-ct {
+	border-left: 1px solid $light-border-color;
+    border-right: 1px solid $light-border-color;
+
+  	.#{$prefix}column-header {
+  		border-left: 1px solid #c8cdd2;
+  		border-right: 1px solid #fff;
+
+		// Remove the border from the first and last element in the header
+  		&:first-child {
+  			border-left: 0 none;
+  		}
+  		&:last-child {
+  			border-right: 0 none;
+  		}
+	}
+
+	// Checkbox column
+	.#{$prefix}column-header-checkbox {
+		.#{$prefix}column-header-text {
+			background-image: theme-image($theme, 'unchecked.png');
+		}
+	}
+	#{$prefix}grid-hd-checker-on {
+		.#{$prefix}column-header-text {
+			background-image: theme-image($theme, 'checked.png');
+		}
+	}
+
+    .#{$prefix}box-inner {
+
+        background: svg-linear-gradient(0%, 0%, 0%, 100%, (
+                      svg-color-stop(#f7f7f7, 0%, 1),
+                      svg-color-stop(#e5e5e5, 100%, 1)
+                    )) center center no-repeat transparent !important;
+
+    	border-top: 1px solid #fff;
+        border-bottom: 1px solid #fff;
+
+        .#{$prefix}column-header-text {
+        	color: $font-color;
+        	font-size: 11px;
+        }
+    }
+}
+
+.#{$prefix}grid-with-row-lines {
+	border: 1px solid #A4B5C0;
+
+	.#{$prefix}panel-header-default-top {
+		border: 0 none;
+		border-bottom: 1px solid #A4B5C0 !important;
+	}
+
+	.#{$prefix}grid-view {
+		background: #fff;
+		margin: 0 !important;
+		padding:0 !important;
+		overflow: hidden !important;
+		overflow-y: auto !important;
+	}
+}
+
+.#{$prefix}grid-row.vertical-alignment {
+	vertical-align: middle !important;
+}

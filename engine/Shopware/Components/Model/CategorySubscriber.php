@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -30,6 +30,7 @@ use Doctrine\ORM\Event\PostFlushEventArgs;
 use Doctrine\ORM\Events;
 use Shopware\Models\Article\Article;
 use Shopware\Models\Category\Category;
+use Symfony\Component\DependencyInjection\Container;
 
 /**
  * CategorySubscriber
@@ -71,11 +72,16 @@ class CategorySubscriber implements BaseEventSubscriber
     protected $disabledForNextFlush = false;
 
     /**
-     * @param CategoryDenormalization $categoryDenormalization
+     * @var Container
      */
-    public function __construct(CategoryDenormalization $categoryDenormalization)
+    private $container;
+
+    /**
+     * @param Container $container
+     */
+    public function __construct(Container $container)
     {
-        $this->categoryDenormalization = $categoryDenormalization;
+        $this->container = $container;
     }
 
     /**
@@ -83,6 +89,8 @@ class CategorySubscriber implements BaseEventSubscriber
      */
     public function getCategoryComponent()
     {
+        $this->categoryDenormalization = $this->container->get('CategoryDenormalization');
+
         $this->categoryDenormalization->disableTransactions();
 
         return $this->categoryDenormalization;

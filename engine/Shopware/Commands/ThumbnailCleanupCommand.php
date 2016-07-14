@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -37,7 +37,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  *
  * @category  Shopware
  * @package   Shopware\Components\Console\Command
- * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ThumbnailCleanupCommand extends ShopwareCommand
 {
@@ -47,17 +47,17 @@ class ThumbnailCleanupCommand extends ShopwareCommand
     protected function configure()
     {
         $this->setName('sw:thumbnail:cleanup')
-                ->setDescription('Deletes unused Album thumbnails.')
-                ->addOption(
-                    'albumid',
-                    null,
-                    InputOption::VALUE_OPTIONAL,
-                    'ID of the album which contains the images'
-                )->setHelp(
-                    <<<EOF
+            ->setDescription('Deletes thumbnails for images whose original file has been deleted.')
+            ->addOption(
+                'albumid',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'ID of the album which contains the images'
+            )->setHelp(
+                <<<EOF
                     The <info>%command.name%</info> deletes unused thumbnails.
 EOF
-                );
+            );
     }
 
     /**
@@ -71,18 +71,19 @@ EOF
 
         $builder = $em->createQueryBuilder();
         $builder->select(array('album', 'settings', 'media'))
-                ->from('Shopware\Models\Media\Album', 'album')
-                ->leftJoin('album.settings', 'settings')
-                ->leftJoin('album.media', 'media');
+            ->from('Shopware\Models\Media\Album', 'album')
+            ->leftJoin('album.settings', 'settings')
+            ->leftJoin('album.media', 'media');
 
         if (!empty($albumId)) {
             $builder->where('album.id = :albumId')->setParameter('albumId', $albumId);
         }
 
         $albumArray = $builder->getQuery()->getResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
 
         foreach ($albumArray as $album) {
-            $output->writeln("Deleting unused Thumbnails for Album {$album['name']} (ID: {$album['id']})");
+            $output->writeln("Deleting unused Thumbnails for album {$album['name']} (ID: {$album['id']})");
 
             $sizes = $album['settings']['thumbnailSize'];
 
@@ -91,16 +92,19 @@ EOF
             }
 
             foreach ($album['media'] as $media) {
-                $path = Shopware()->oldPath() . $media['path'];
-                if(file_exists($path) || file_exists($path)){
+                $path = Shopware()->DocPath() . $media['path'];
+                if ($mediaService->has($path)) {
                     continue;
                 }
 
                 $paths = $this->getMediaThumbnailPaths($media, explode(';', $sizes));
 
-                foreach($paths as $path){
-                    if(file_exists($path)){
-                        unlink($path);
+                foreach ($paths as $path) {
+                    if ($mediaService->has($path)) {
+                        $mediaService->delete($path);
+                        if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
+                            $output->writeln("Deleting {$path}");
+                        }
                     }
                 }
             }
@@ -137,7 +141,7 @@ EOF
 
             $thumbnails[] = $path . '.jpg';
 
-            if($media['extension'] !== 'jpg'){
+            if ($media['extension'] !== 'jpg') {
                 $thumbnails[] = $path . '.' . $media['extension'];
             }
         }

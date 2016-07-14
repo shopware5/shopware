@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -40,14 +40,24 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
     }
 
     /**
-     * Error action method
-     *
-     * Read similar products
+     * Error action method for not found/inactive articles
+     * Can throw an exception that is handled by the default error controller
+     * or show a custom page with related articles
      */
     public function errorAction()
     {
-        $this->Response()->setHttpResponseCode(404);
-        $this->View()->sRelatedArticles = Shopware()->Modules()->Marketing()->sGetSimilarArticles($this->Request()->sArticle, 4);
+        $config = $this->container->get('config');
+        if (!$config->get('RelatedArticlesOnArticleNotFound')) {
+            throw new Enlight_Controller_Exception('Article not found', 404);
+        }
+
+        $this->Response()->setHttpResponseCode(
+            $config->get('PageNotFoundCode', 404)
+        );
+        $this->View()->sRelatedArticles = Shopware()->Modules()->Marketing()->sGetSimilarArticles(
+            $this->Request()->sArticle,
+            4
+        );
     }
 
     /**
@@ -67,6 +77,7 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
         $this->View()->assign('sAction', isset($this->View()->sAction) ? $this->View()->sAction : 'index', true);
         $this->View()->assign('sErrorFlag', isset($this->View()->sErrorFlag) ? $this->View()->sErrorFlag : array(), true);
         $this->View()->assign('sFormData', isset($this->View()->sFormData) ? $this->View()->sFormData : array(), true);
+        $this->View()->assign('userLoggedIn', Shopware()->Modules()->Admin()->sCheckUser());
 
         if (!empty(Shopware()->Session()->sUserId) && empty($this->Request()->sVoteName)
           && $this->Request()->getParam('__cache') !== null) {
@@ -77,22 +88,46 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
             );
         }
 
-        $article = Shopware()->Modules()->Articles()->sGetArticleById($id);
+        $number = $this->Request()->getParam('number', null);
+        $selection = $this->Request()->getParam('group', array());
+
+        $categoryId = $this->Request()->get('sCategory');
+        if (!$this->isValidCategory($categoryId)) {
+            $categoryId = 0;
+        }
+
+        try {
+            $article = Shopware()->Modules()->Articles()->sGetArticleById(
+                $id,
+                $categoryId,
+                $number,
+                $selection
+            );
+        } catch (RuntimeException $e) {
+            $article = null;
+        }
+
+        $this->Request()->setQuery('sCategory', $article['categoryID']);
 
         if (empty($article) || empty($article["articleName"])) {
             return $this->forward('error');
         }
 
-        if (!empty($article['template'])) {
+        $template = trim($article['template']);
+        if (!empty($template)) {
             $this->View()->loadTemplate('frontend/detail/' . $article['template']);
         } elseif (!empty($article['mode'])) {
             $this->View()->loadTemplate('frontend/blog/detail.tpl');
-        } elseif ($tpl === 'ajax' || $this->Request()->isXmlHttpRequest()) {
+        } elseif ($tpl === 'ajax') {
             $this->View()->loadTemplate('frontend/detail/ajax.tpl');
         }
 
         $article = Shopware()->Modules()->Articles()->sGetConfiguratorImage($article);
-        $article['sBundles'] = Shopware()->Modules()->Articles()->sGetArticleBundlesByArticleID($id);
+
+        // Was:
+        // $article['sBundles'] = Shopware()->Modules()->Articles()->sGetArticleBundlesByArticleID($id);
+        // But sGetArticleBundlesByArticleID() always returned false.
+        $article['sBundles'] = false;
 
         if (!empty(Shopware()->Config()->InquiryValue)) {
             $this->View()->sInquiry = $this->Front()->Router()->assemble(array(
@@ -111,11 +146,6 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
             $categoryInfo = null;
         }
 
-        $breadcrumb[] = array(
-            'link' => $article['linkDetails'],
-            'name' => $article['articleName']
-        );
-
         // SW-3493 sArticle->getArticleById and sBasket->sGetGetBasket differ in camelcase
         $article['sReleaseDate'] = $article['sReleasedate'];
 
@@ -123,6 +153,50 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
         $this->View()->sCategoryInfo = $categoryInfo;
         $this->View()->sArticle = $article;
         $this->View()->rand = md5(uniqid(rand()));
+    }
+
+    /**
+     * Checks if the provided $categoryId is in the current shop's category tree
+     *
+     * @param int $categoryId
+     * @return bool
+     */
+    private function isValidCategory($categoryId)
+    {
+        $defaultShopCategoryId = Shopware()->Shop()->getCategory()->getId();
+
+        /**@var $repository \Shopware\Models\Category\Repository*/
+        $repository = Shopware()->Models()->getRepository('Shopware\Models\Category\Category');
+        $categoryPath = $repository->getPathById($categoryId);
+
+        if (!$categoryPath) {
+            return true;
+        }
+
+        if (!array_key_exists($defaultShopCategoryId, $categoryPath)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * product quick view method
+     *
+     * Fetches the correct product corresponding to the given order number.
+     * Assigns the product information to the sArticle view variable.
+     */
+    public function productQuickViewAction()
+    {
+        $orderNumber = (string) $this->Request()->get('ordernumber');
+
+        if (empty($orderNumber)) {
+            throw new \InvalidArgumentException('Argument ordernumber missing');
+        }
+
+        /** @var sArticles $articleModule */
+        $articleModule = Shopware()->Modules()->Articles();
+        $this->View()->sArticle = $articleModule->sGetProductByOrdernumber($orderNumber);
     }
 
     /**
@@ -169,8 +243,7 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
                 $sErrorFlag['sCaptcha'] = true;
             }
         }
-        $validator = new Zend_Validate_EmailAddress();
-
+        $validator = $this->container->get('validator.email');
         if (!empty(Shopware()->Config()->sOPTINVOTE)
             && (empty(Shopware()->System()->_POST['sVoteMail'])
                 || !$validator->isValid(Shopware()->System()->_POST['sVoteMail']))
@@ -182,14 +255,13 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
             if (!empty(Shopware()->Config()->sOPTINVOTE)
                 && !$voteConfirmed && empty(Shopware()->Session()->sUserId)
             ) {
-                $hash = md5(uniqid(rand()));
-
+                $hash = \Shopware\Components\Random::getAlphanumericString(32);
                 $sql = '
                     INSERT INTO s_core_optin (datum, hash, data)
                     VALUES (NOW(), ?, ?)
                 ';
                 Shopware()->Db()->query($sql, array(
-                    $hash, serialize(Shopware()->System()->_POST)
+                    $hash, serialize(Shopware()->System()->_POST->toArray())
                 ));
 
                 $link = $this->Front()->Router()->assemble(array(
@@ -206,14 +278,13 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
 
                 $mail = Shopware()->TemplateMail()->createMail('sOPTINVOTE', $context);
                 $mail->addTo($this->Request()->getParam('sVoteMail'));
-                $mail->Send();
-
+                $mail->send();
             } else {
                 unset(Shopware()->Config()->sOPTINVOTE);
                 Shopware()->Modules()->Articles()->sSaveComment($id);
             }
         } else {
-            $this->View()->sFormData = Shopware()->System()->_POST;
+            $this->View()->sFormData = Shopware()->System()->_POST->toArray();
             $this->View()->sErrorFlag = $sErrorFlag;
         }
 

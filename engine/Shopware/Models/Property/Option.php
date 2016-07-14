@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -24,9 +24,9 @@
 
 namespace Shopware\Models\Property;
 
-use Shopware\Components\Model\ModelEntity,
-    Doctrine\ORM\Mapping AS ORM,
-    Doctrine\Common\Collections\ArrayCollection;
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Shopware Article Model
@@ -84,6 +84,13 @@ class Option extends ModelEntity
      * @ORM\OneToMany(targetEntity="Value", mappedBy="option", cascade={"remove"}))
      */
     protected $values;
+
+    /**
+     * INVERSE SIDE
+     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\PropertyOption", mappedBy="propertyOption", orphanRemoval=true, cascade={"persist"})
+     * @var \Shopware\Models\Attribute\PropertyOption
+     */
+    protected $attribute;
 
     /**
      * Constructor of Mail
@@ -175,4 +182,20 @@ class Option extends ModelEntity
         return $this->relations;
     }
 
+    /**
+     * @return \Shopware\Models\Attribute\PropertyOption
+     */
+    public function getAttribute()
+    {
+        return $this->attribute;
+    }
+
+    /**
+     * @param \Shopware\Models\Attribute\PropertyOption|array|null $attribute
+     * @return \Shopware\Models\Attribute\PropertyOption
+     */
+    public function setAttribute($attribute)
+    {
+        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\PropertyOption', 'attribute', 'propertyOption');
+    }
 }

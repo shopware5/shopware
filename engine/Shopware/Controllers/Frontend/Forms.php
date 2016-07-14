@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -22,8 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Models\Form\Form,
-    Shopware\Models\Form\Field;
+use Shopware\Models\Form\Form;
+use Shopware\Models\Form\Field;
 
 /**
  * Shopware Frontend Controller for the form module
@@ -59,7 +59,6 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
      * Render form - onSubmit checkFields -
      *
      * @throws Enlight_Exception
-     * @return void
      */
     public function indexAction()
     {
@@ -68,16 +67,65 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
 
         $this->View()->forceMail = intval($this->Request()->getParam('forceMail'));
         $this->View()->id        = $id;
+        $this->View()->sSupport  = $this->getContent($id);
+        $this->View()->rand      = md5(uniqid(rand()));
 
+        $success = $this->Request()->getParam('success');
+        if ($success) {
+            $this->View()->sSupport = array_merge($this->View()->sSupport, array("sElements" => ""));
+        }
+
+        $this->View()->assign('success', $success);
+
+        if ($this->Request()->isPost()) {
+            $this->handleFormPost($id);
+        }
+    }
+
+    /**
+     * @param int $formId
+     * @throws Enlight_Exception
+     */
+    private function handleFormPost($formId)
+    {
+        if (count($this->_errors) || empty($this->Request()->Submit)) {
+            return;
+        }
+
+        $this->commitForm();
+
+        $this->redirect(
+            array(
+                'controller' => 'ticket',
+                'action' => 'index',
+                'sFid' => $formId,
+                'success' => 1
+            )
+        );
+    }
+
+    /**
+     * @param integer $formId
+     * @return array
+     * @throws Enlight_Exception
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    protected function getContent($formId)
+    {
+        $fields = array();
+        $labels = array();
+
+        $shopId = $this->container->get('shopware_storefront.context_service')->getShopContext()->getShop()->getId();
 
         /* @var $query \Doctrine\ORM\Query */
-        $query = Shopware()->Models()->getRepository('Shopware\Models\Form\Form')->getFormQuery($id);
+        $query = Shopware()->Models()->getRepository('Shopware\Models\Form\Form')->getFormQuery($formId, $shopId);
 
         /* @var $form Form */
         $form = $query->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
 
         if (!$form) {
-            throw new Enlight_Exception("Could not construct form class");
+            $this->Response()->setHttpResponseCode(404);
+            return $this->forward('index', 'index');
         }
 
         /* @var $field Field */
@@ -95,13 +143,12 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
             );
         }
 
-        if (!empty($this->Request()->Submit)) {
-            $this->checkFields($this->_elements);
+        if ($this->Request()->isPost()) {
+            $this->checkFields();
         }
 
         if (empty($this->Request()->Submit) || count($this->_errors)) {
             foreach ($this->_elements as $id => $element) {
-
                 if ($element["name"] == "inquiry" && !empty($this->Request()->sInquiry)) {
                     switch ($this->Request()->sInquiry) {
                         case "basket":
@@ -119,7 +166,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
                             }
                             break;
                         case "detail":
-                            if ($this->Request()->getParam('sOrdernumber', null) !== null ) {
+                            if ($this->Request()->getParam('sOrdernumber', null) !== null) {
                                 $getName = Shopware()->Modules()->Articles()->sGetArticleNameByOrderNumber($this->Request()->getParam('sOrdernumber'));
                                 $text = Shopware()->Snippets()->getNamespace('frontend/detail/comment')->get('InquiryTextArticle');
                                 $text .= " " . $getName;
@@ -137,30 +184,25 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
 
         // prepare formadata for view
         $formData = array(
-            'id'             => (string) $form->getId(),  // intended string cast to keep compatibility
-            'name'           => $form->getName(),
-            'text'           => $form->getText(),
-            'text2'          => $form->getText2(),
-            'email'          => $form->getEmail(),
-            'email_template' => $form->getEmailTemplate(),
-            'email_subject'  => $form->getEmailSubject(),
+            'id'                => (string) $form->getId(),  // intended string cast to keep compatibility
+            'name'              => $form->getName(),
+            'text'              => $form->getText(),
+            'text2'             => $form->getText2(),
+            'email'             => $form->getEmail(),
+            'email_template'    => $form->getEmailTemplate(),
+            'email_subject'     => $form->getEmailSubject(),
+            'metaTitle'         => $form->getMetaTitle(),
+            'metaDescription'   => $form->getMetaDescription(),
+            'metaKeywords'      => $form->getMetaKeywords(),
         );
 
-        $this->View()->sSupport = array_merge($formData, array(
+        return array_merge($formData, array(
             'sErrors'   => $this->_errors,
             'sElements' => $this->_elements,
             'sFields'   => $fields,
             'sLabels'   => $labels
         ));
-
-        $this->View()->rand = md5(uniqid(rand()));
-
-        if (!count($this->_errors) && !empty($this->Request()->Submit)) {
-            $this->commitForm();
-            $this->View()->sSupport = array_merge($this->View()->sSupport, array("sElements" => ""));
-        }
     }
-
 
     /**
      * Validate input - check form field rules defined by merchant
@@ -179,7 +221,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
             $captcha = str_replace(' ', '', strtolower($this->Request()->sCaptcha));
             $rand = $this->Request()->getPost('sRand');
             if (empty($rand) || $captcha != substr(md5($rand), 0, 5)) {
-                $this->_elements["sCaptcha"]['class'] = " instyle_error";
+                $this->_elements["sCaptcha"]['class'] = " instyle_error has--error";
                 $this->_errors["e"]["sCaptcha"] = true;
             }
         }
@@ -189,9 +231,12 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
                 if (isset($this->_errors['e'][$key])) {
                     if ($this->_elements[$key]['typ'] == "text2") {
                         $class = explode(";", $this->_elements[$key]['class']);
-                        $this->_elements[$key]['class'] = implode(" instyle_error;", $class) . " instyle_error";
+                        $this->_elements[$key]['class'] = implode(
+                                " instyle_error has--error;",
+                                $class
+                            ) . " instyle_error has--error";
                     } else {
-                        $this->_elements[$key]['class'] .= " instyle_error";
+                        $this->_elements[$key]['class'] .= " instyle_error has--error";
                     }
                 }
             }
@@ -218,18 +263,17 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
     }
 
     /**
-     * Commit Formular via email (default) or database (ticket-system)
+     * Commit form via email (default) or database (ticket  system)
      *
      * @throws Enlight_Exception
      * @return void
      */
     public function commitForm()
     {
-        $mail = Shopware()->System()->sMailer;
-        $template = Shopware()->Config()->Templates->sSUPPORT;
-        $mail->IsHTML($template['ishtml']);
+        /** @var Enlight_Components_Mail $mail */
+        $mail = $this->get('mail');
 
-         //eMail field available check
+        //Email field available check
         foreach ($this->_elements as $element) {
             if ($element['typ'] == "email") {
                 $postEmail = $this->_postData[$element['id']];
@@ -238,38 +282,36 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
         }
 
         if (!empty($postEmail)) {
-            $mail->From = $postEmail;
-        } else {
-            $mail->From = Shopware()->Config()->Mail;
+            $mail->setReplyTo($postEmail);
         }
 
         $content = $this->View()->sSupport;
 
-        $mail->FromName = $mail->From;
-        $mail->Subject  = $content["email_subject"];
-        $mail->Body     = $content["email_template"];
-
+        $mailBody = $content["email_template"];
         foreach ($this->_postData as $key => $value) {
             if ($this->_elements[$key]['typ'] == "text2") {
                 $names = explode(";", $this->_elements[$key]['name']);
-
-                $mail->Body = str_replace("{sVars." . $names[0] . "}", $value[0], $mail->Body);
-                $mail->Body = str_replace("{sVars." . $names[1] . "}", $value[1], $mail->Body);
+                $mailBody = str_replace("{sVars." . $names[0] . "}", $value[0], $mailBody);
+                $mailBody = str_replace("{sVars." . $names[1] . "}", $value[1], $mailBody);
             } else {
-                $mail->Body = str_replace("{sVars." . $this->_elements[$key]['name'] . "}", $value, $mail->Body);
+                $mailBody = str_replace("{sVars." . $this->_elements[$key]['name'] . "}", $value, $mailBody);
             }
         }
 
-        $mail->Body = str_replace("{sIP}", $_SERVER['REMOTE_ADDR'], $mail->Body);
-        $mail->Body = str_replace("{sDateTime}", date("d.m.Y h:i:s"), $mail->Body);
-        $mail->Body = str_replace('{$sShopname}', Shopware()->Config()->shopName, $mail->Body);
-        $mail->Body = strip_tags($mail->Body);
+        $mailBody = str_replace("{sIP}", $_SERVER['REMOTE_ADDR'], $mailBody);
+        $mailBody = str_replace("{sDateTime}", date("d.m.Y h:i:s"), $mailBody);
+        $mailBody = str_replace('{$sShopname}', Shopware()->Config()->shopName, $mailBody);
+        $mailBody = strip_tags($mailBody);
 
-        $mail->ClearAddresses();
+        $mail->setFrom(Shopware()->Config()->Mail);
+        $mail->clearRecipients();
+        $mail->addTo($content["email"]);
+        $mail->setBodyText($mailBody);
+        $mail->setSubject($content["email_subject"]);
 
-        $mail->AddAddress($content["email"], "");
+        $mail = Shopware()->Events()->filter('Shopware_Controllers_Frontend_Forms_commitForm_Mail', $mail, array('subject' => $this));
 
-        if (!$mail->Send()) {
+        if (!$mail->send()) {
             throw new Enlight_Exception("Could not send mail");
         }
     }
@@ -283,7 +325,12 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
      */
     protected function _createLabelElement($element)
     {
-        $output = "<label for=\"{$element['name']}\">{$element['label']}";
+        $output = "<label for=\"{$element['name']}\">";
+        if ($element['typ'] == 'text2') {
+            $output .= str_replace(';', '/', "{$element['label']}");
+        } else {
+            $output .= "{$element['label']}";
+        }
         if ($element['required'] == 1) {
             $output .= "*";
         }
@@ -302,10 +349,16 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
     protected function _createInputElement($element, $post = null)
     {
         if ($element['required'] == 1) {
-            $req = "required";
+            $requiredField = "is--required required";
+            $requiredFieldSnippet = "%*%";
+            $requiredFieldAria = 'required="required" aria-required="true"';
         } else {
-            $req = "";
+            $requiredField = "";
+            $requiredFieldSnippet = "";
+            $requiredFieldAria = "";
         }
+
+        $placeholder = "placeholder=\"{$element['label']}$requiredFieldSnippet\"";
 
         switch ($element['typ']) {
             case "password":
@@ -340,7 +393,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
             case "password":
             case "email":
             case "text":
-                $output .= "<input type=\"{$element['typ']}\" class=\"{$element['class']} $req\" value=\"{$post}\" id=\"{$element['name']}\" name=\"{$element['name']}\"/>\r\n";
+                $output .= "<input type=\"{$element['typ']}\" class=\"{$element['class']} $requiredField\" $requiredFieldAria value=\"{$post}\" id=\"{$element['name']}\" $placeholder name=\"{$element['name']}\"/>\r\n";
                 break;
             case "checkbox":
                 if ($post == $element['value']) {
@@ -348,26 +401,48 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
                 } else {
                     $checked = "";
                 }
-                $output .= "<input type=\"{$element['typ']}\" class=\"{$element['class']} $req\" value=\"{$element['value']}\" id=\"{$element['name']}\" name=\"{$element['name']}\"$checked/>\r\n";
+                $output .= "<input type=\"{$element['typ']}\" class=\"{$element['class']} $requiredField\" $requiredFieldAria value=\"{$element['value']}\" id=\"{$element['name']}\" name=\"{$element['name']}\"$checked/>\r\n";
                 break;
             case "file":
-                $output .= "<input type=\"{$element['typ']}\" class=\"{$element['class']} $req file\" id=\"{$element['name']}\" name=\"{$element['name']}\" maxlength=\"100000\" accept=\"{$element['value']}\"/>\r\n";
+                $output .= "<input type=\"{$element['typ']}\" class=\"{$element['class']} $requiredField file\" $requiredFieldAria id=\"{$element['name']}\" $placeholder name=\"{$element['name']}\" maxlength=\"100000\" accept=\"{$element['value']}\"/>\r\n";
                 break;
             case "text2":
                 $element['class'] = explode(";", $element['class']);
                 $element['name'] = explode(";", $element['name']);
-                $output .= "<input type=\"text\" class=\"{$element['class'][0]} $req\" value=\"{$post[0]}\" id=\"{$element['name'][0]};{$element['name'][1]}\" name=\"{$element['name'][0]}\"/>\r\n";
-                $output .= "<input type=\"text\" class=\"{$element['class'][1]} $req\" value=\"{$post[1]}\" id=\"{$element['name'][0]};{$element['name'][1]}\" name=\"{$element['name'][1]}\"/>\r\n";
+
+                if (strpos($element['label'], ';') !== false) {
+                    $placeholders = explode(";", $element['label']);
+                    $placeholder0 = "placeholder=\"{$placeholders[0]}$requiredFieldSnippet\"";
+                    $placeholder1 = "placeholder=\"{$placeholders[1]}$requiredFieldSnippet\"";
+                } else {
+                    $placeholder0 = $placeholder;
+                    $placeholder1 = $placeholder;
+                }
+
+                $output .= "<input type=\"text\" class=\"{$element['class'][0]} $requiredField\" $requiredFieldAria value=\"{$post[0]}\" $placeholder0 id=\"{$element['name'][0]};{$element['name'][1]}\" name=\"{$element['name'][0]}\"/>\r\n";
+                $output .= "<input type=\"text\" class=\"{$element['class'][1]} $requiredField\" $requiredFieldAria value=\"{$post[1]}\" $placeholder1 id=\"{$element['name'][0]};{$element['name'][1]}\" name=\"{$element['name'][1]}\"/>\r\n";
                 break;
             case "textarea":
                 if (empty($post) && $element["value"]) {
                     $post = $element["value"];
                 }
-                $output .= "<textarea class=\"{$element['class']} $req\" id=\"{$element['name']}\" name=\"{$element['name']}\">{$post}</textarea>\r\n";
+                $output .= "<textarea class=\"{$element['class']} $requiredField\" $requiredFieldAria id=\"{$element['name']}\" $placeholder name=\"{$element['name']}\">{$post}</textarea>\r\n";
                 break;
             case "select":
                 $values = explode(";", $element['value']);
-                $output .= "<select class=\"{$element['class']} $req\" id=\"{$element['name']}\" name=\"{$element['name']}\">\r\n\t<option selected=\"selected\" value=\"\">" . Shopware()->Snippets()->getNamespace('frontend/newsletter/index')->get('NewsletterLabelSelect') . "</option>";
+                $output .= "<select class=\"{$element['class']} $requiredField\" $requiredFieldAria id=\"{$element['name']}\" name=\"{$element['name']}\">\r\n\t";
+
+                if (!empty($requiredField)) {
+                    $requiredField = 'disabled="disabled"';
+                }
+
+                $label = $element['label'] . $requiredFieldSnippet;
+
+                if (empty($post)) {
+                    $output .= "<option selected=\"selected\" $requiredField value=\"\">$label</option>";
+                } else {
+                    $output .= "<option $requiredField value=\"\">$label</option>";
+                }
                 foreach ($values as $value) {
                     if ($value == $post) {
                         $output .= "<option selected>$value</option>";
@@ -385,7 +460,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
                     } else {
                         $checked = "";
                     }
-                    $output .= "<input type=\"radio\" class=\"{$element['class']} $req\" value=\"$value\" id=\"{$element['name']}\" name=\"{$element['name']}\"$checked> $value ";
+                    $output .= "<input type=\"radio\" class=\"{$element['class']} $requiredField\" value=\"$value\" id=\"{$element['name']}\" name=\"{$element['name']}\"$checked> $value ";
                 }
                 $output .= "\r\n";
                 break;
@@ -405,6 +480,9 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
     protected function _validateInput($inputs, $elements)
     {
         $errors = array();
+
+        /** @var \Shopware\Components\Validator\EmailValidatorInterface $emailValidator */
+        $emailValidator = $this->container->get('validator.email');
 
         foreach ($elements as $element) {
             $valide = true;
@@ -445,7 +523,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
                         break;
                     case "email":
                         $value = strtolower($value);
-                        if (!Zend_Validate::is($value, 'EmailAddress')) {
+                        if (!$emailValidator->isValid($value)) {
                             unset($value);
                             $valide = false;
                         }

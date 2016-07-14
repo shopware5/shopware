@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,10 +23,10 @@
  */
 
 namespace Shopware\Models\Article;
-use Shopware\Components\Model\ModelEntity,
-Doctrine\ORM\Mapping AS ORM,
-Symfony\Component\Validator\Constraints as Assert,
-Doctrine\Common\Collections\ArrayCollection;
+
+use Shopware\Components\Model\LazyFetchModelEntity;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Shopware Notification Model
@@ -38,7 +38,7 @@ Doctrine\Common\Collections\ArrayCollection;
  * @ORM\Table(name="s_articles_notification")
  * @ORM\HasLifecycleCallbacks
  */
-class Notification extends ModelEntity
+class Notification extends LazyFetchModelEntity
 {
     /**
      * @var integer $id
@@ -58,7 +58,7 @@ class Notification extends ModelEntity
     private $articleNumber;
 
     /**
-     * @var datetime $date
+     * @var \DateTime $date
      *
      * @ORM\Column(name="date", type="datetime", nullable=false)
      */
@@ -112,7 +112,6 @@ class Notification extends ModelEntity
      */
     protected $customer;
 
-
     /**
      * Get id
      *
@@ -126,8 +125,8 @@ class Notification extends ModelEntity
     /**
      * Set date
      *
-     * @param datetime $date
-     * @return SArticlesNotification
+     * @param \DateTime $date
+     * @return Notification
      */
     public function setDate($date)
     {
@@ -138,7 +137,7 @@ class Notification extends ModelEntity
     /**
      * Get date
      *
-     * @return datetime
+     * @return \DateTime
      */
     public function getDate()
     {
@@ -149,7 +148,7 @@ class Notification extends ModelEntity
      * Set send
      *
      * @param integer $send
-     * @return SArticlesNotification
+     * @return Notification
      */
     public function setSend($send)
     {
@@ -171,7 +170,7 @@ class Notification extends ModelEntity
      * Set language
      *
      * @param string $language
-     * @return SArticlesNotification
+     * @return Notification
      */
     public function setLanguage($language)
     {
@@ -193,7 +192,7 @@ class Notification extends ModelEntity
      * Set shopLink
      *
      * @param string $shopLink
-     * @return SArticlesNotification
+     * @return Notification
      */
     public function setShopLink($shopLink)
     {
@@ -209,5 +208,21 @@ class Notification extends ModelEntity
     public function getShopLink()
     {
         return $this->shopLink;
+    }
+
+    /**
+     * @return \Shopware\Models\Article\Detail
+     */
+    public function getArticleDetail()
+    {
+        return $this->fetchLazy($this->articleDetail, array('number' => $this->articleNumber));
+    }
+
+    /**
+     * @return \Shopware\Models\Customer\Customer
+     */
+    public function getCustomer()
+    {
+        return $this->fetchLazy($this->customer, array('email' => $this->mail));
     }
 }

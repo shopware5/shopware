@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -39,6 +39,8 @@ use Symfony\Component\HttpFoundation\File\File;
  */
 class Media extends Resource
 {
+    const FILENAME_LENGTH = 50;
+
     /**
      * @return \Shopware\Models\Category\Repository
      */
@@ -55,7 +57,6 @@ class Media extends Resource
      */
     public function getOne($id)
     {
-
         $this->checkPrivilege('read');
 
         if (empty($id)) {
@@ -68,10 +69,12 @@ class Media extends Resource
         /** @var $media \Shopware\Models\Media\Media*/
         $media = $query->getOneOrNullResult($this->getResultMode());
 
-
         if (!$media) {
             throw new ApiException\NotFoundException("Media by id $id not found");
         }
+
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $media['path'] = $mediaService->getUrl($media['path']);
 
         return $media;
     }
@@ -98,6 +101,11 @@ class Media extends Resource
         //returns the category data
         $media = $paginator->getIterator()->getArrayCopy();
 
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        array_walk($media, function (&$item) use ($mediaService) {
+            $item['path'] = $mediaService->getUrl($item['path']);
+        });
+
         return array('data' => $media, 'total' => $totalResult);
     }
 
@@ -116,6 +124,9 @@ class Media extends Resource
         $media = new \Shopware\Models\Media\Media();
         $media->fromArray($params);
 
+        $path = $this->prepareFilePath($media->getPath(), $media->getFileName());
+        $media->setPath($path);
+
         $violations = $this->getManager()->validate($media);
         if ($violations->count() > 0) {
             throw new ApiException\ValidationException($violations);
@@ -128,7 +139,7 @@ class Media extends Resource
             /**@var $manager Manager */
             $manager = $this->getContainer()->get('thumbnail_manager');
 
-            $manager->createMediaThumbnail($media);
+            $manager->createMediaThumbnail($media, array(), true);
         }
 
         return $media;
@@ -172,7 +183,7 @@ class Media extends Resource
             /**@var $manager Manager */
             $manager = $this->getContainer()->get('thumbnail_manager');
 
-            $manager->createMediaThumbnail($media);
+            $manager->createMediaThumbnail($media, array(), true);
         }
         return $media;
     }
@@ -221,7 +232,6 @@ class Media extends Resource
 
         if (!$media && (!isset($params['file']) || empty($params['file']))) {
             throw new ApiException\ParameterMissingException();
-
         }
 
         if (!$media && (!isset($params['description']) || empty($params['description']))) {
@@ -246,20 +256,21 @@ class Media extends Resource
         }
 
         if (isset($params['file'])) {
+            if (!isset($params['name'])) {
+                $params['name'] = pathinfo($params['file'], PATHINFO_FILENAME);
+            }
+            $params['name'] = $this->getUniqueFileName($params['file'], $params['name']);
+
             if (!file_exists($params['file'])) {
                 try {
-                    $name = pathinfo($params['file'], PATHINFO_FILENAME);
-                    $path = $this->load($params['file'], $name);
+                    $path = $this->load($params['file'], $params['name']);
                 } catch (\Exception $e) {
-                    throw new \Exception(sprintf("Could not load image %s", $params['file'] ));
+                    throw new \Exception(sprintf("Could not load image %s", $params['file']));
                 }
             } else {
                 $path = $params['file'];
             }
             $params['file'] = new \Symfony\Component\HttpFoundation\File\File($path);
-            if (!isset($params['name'])) {
-                $params['name'] = pathinfo($path, PATHINFO_FILENAME);
-            }
         }
 
         return $params;
@@ -310,15 +321,10 @@ class Media extends Resource
         }
 
         if ($media->getType() === MediaModel::TYPE_IMAGE) {
-            $settingSizes = $album->getSettings()->getThumbnailSize();
-            $settingSizes += $media->getDefaultThumbnails();
-
+            /**@var $manager Manager */
             $manager = Shopware()->Container()->get('thumbnail_manager');
-            $manager->createMediaThumbnail(
-                $media,
-                $settingSizes,
-                true
-            );
+
+            $manager->createMediaThumbnail($media, array(), true);
         }
 
         return $media;
@@ -435,6 +441,11 @@ class Media extends Resource
      */
     private function getUniqueFileName($destPath, $baseFileName = null)
     {
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        if (!$mediaService->has("$destPath/$baseFileName") && $baseFileName !== null) {
+            return substr($baseFileName, 0, self::FILENAME_LENGTH);
+        }
+
         $counter = 1;
         if ($baseFileName === null) {
             $filename = md5(uniqid(rand(), true));
@@ -442,18 +453,39 @@ class Media extends Resource
             $filename = $baseFileName;
         }
 
-        $filename = substr($filename, 0, 50);
+        $filename = substr($filename, 0, self::FILENAME_LENGTH);
 
-        while (file_exists("$destPath/$filename")) {
+        while ($mediaService->has("$destPath/$filename")) {
             if ($baseFileName) {
                 $filename = "$counter-$baseFileName";
                 $counter++;
             } else {
                 $filename = md5(uniqid(rand(), true));
             }
-            $filename = substr($filename, 0, 50);
+            $filename = substr($filename, 0, self::FILENAME_LENGTH);
         }
 
         return $filename;
+    }
+
+    /**
+     * Replaces the filename in the path with the short filename because
+     * the media object holds the old path with over FILENAME_LENGTH characters.
+     * This is necessary because the thumbnail manager uses the path from the media object.
+     *
+     * @param string $oldPath
+     * @param string $filename
+     * @return string|bool
+     */
+    private function prepareFilePath($oldPath, $filename)
+    {
+        $oldFilename = pathinfo($oldPath, PATHINFO_BASENAME);
+
+        if (strlen($oldFilename) >= self::FILENAME_LENGTH) {
+            $path = str_replace($oldFilename, $filename, $oldPath);
+
+            return $path;
+        }
+        return $oldPath;
     }
 }

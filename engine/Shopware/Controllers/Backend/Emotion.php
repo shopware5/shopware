@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -21,6 +21,14 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
+use Doctrine\Common\Collections\ArrayCollection;
+use Shopware\Components\Model\ModelManager;
+use Shopware\Models\Emotion\Emotion;
+use Shopware\Models\Emotion\Library\Field;
+use \Shopware\Models\Emotion\Element;
+use Shopware\Models\Shop\Shop;
+use Doctrine\DBAL\Connection;
 
 class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_ExtJs
 {
@@ -86,27 +94,65 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     {
         $limit = $this->Request()->getParam('limit', null);
         $offset = $this->Request()->getParam('start', 0);
-        $sort = $this->Request()->getParam('sort', null);
         $filter = $this->Request()->getParam('filter', null);
-        if (!empty($filter)) {
-            $filter = $filter[0]['value'];
-        }
+        $filterBy = $this->Request()->getParam('filterBy', null);
+        $categoryId = $this->Request()->getParam('categoryId', null);
 
-        $query = $this->getRepository()->getListQuery($filter, $sort, $offset, $limit);
-        $count = Shopware()->Models()->getQueryCount($query);
-        $emotions = $query->getArrayResult();
-        foreach ($emotions as &$emotion) {
-            $categories = array();
-            foreach ($emotion["categories"] as $category) {
-                $categories[] = $category["name"];
-            }
-            $emotion["categoriesNames"] = implode(",",$categories);
-        }
+        $query = $this->getRepository()->getListingQuery($filter, $filterBy, $categoryId);
+
+        $query->setFirstResult($offset)
+            ->setMaxResults($limit);
+
+        /**@var $statement PDOStatement*/
+        $statement = $query->execute();
+        $emotions = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        $query->select('COUNT(emotions.id) as count')
+            ->resetQueryPart('groupBy')
+            ->resetQueryPart('orderBy')
+            ->setFirstResult(0)
+            ->setMaxResults(1)
+        ;
+
+        $statement = $query->execute();
+        $count = $statement->fetch(PDO::FETCH_COLUMN);
+
         $this->View()->assign(array(
             'success' => true,
             'data' => $emotions,
-            'total' => $count
+            'total' => (int) $count
         ));
+    }
+
+    /**
+     * Returns all master landing pages.
+     */
+    public function getMasterLandingPagesAction()
+    {
+        $id = $this->Request()->getParam('id', null);
+        $ownId = $this->Request()->getParam('ownId', null);
+
+        $builder = $this->getRepository()->getListingQuery([], 'onlyLandingPageMasters');
+
+        if ($id) {
+            $builder->where('emotions.id = :id')
+                ->setParameters(['id' => $id])
+                ->setFirstResult(0)
+                ->setMaxResults(1);
+        }
+
+        if ($ownId) {
+            $builder->andWhere('emotions.id != :ownId')
+                ->setParameter('ownId', $ownId);
+        }
+
+        $builder->andWhere('emotions.is_landingpage = 1')
+            ->andWhere('emotions.parent_id IS NULL');
+
+        $statement = $builder->execute();
+        $data = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        $this->View()->assign(['success' => true, 'data' => $data]);
     }
 
     /**
@@ -118,16 +164,16 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     public function detailAction()
     {
         $id = $this->Request()->getParam('id', null);
-        $query = $this->getRepository()->getEmotionDetailQuery($id);
+        $repository = $this->getRepository();
+
+        $query = $repository->getEmotionDetailQuery($id);
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
 
         $emotion = $query->getArrayResult();
         $emotion = $emotion[0];
-        $emotion['grid'] = array($emotion['grid']);
 
-        if (!empty($emotion["isLandingPage"])) {
-            $emotion["link"] = "shopware.php?sViewport=campaign&emotionId=".$emotion["id"];
-        } else {
-            $emotion["categoryId"] = !empty($emotion["categories"][0]["id"]) ? $emotion["categories"][0]["id"] : 0;
+        if (!empty($emotion['categories'])) {
+            $emotion['categories'] = array_column($emotion['categories'], 'id');
         }
 
         $validFrom = $emotion['validFrom'];
@@ -145,30 +191,70 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
             $emotion['validToTime'] = $validTo->format('H:i');
         }
 
+        $elementIds = array_column($emotion['elements'], 'id');
+        $viewports = $repository->getElementsViewports($elementIds);
+
         foreach ($emotion['elements'] as &$element) {
-            $elementQuery = $this->getRepository()->getElementDataQuery($element['id'], $element['componentId']);
+            $elementQuery = $repository->getElementDataQuery($element['id'], $element['componentId']);
             $componentData = $elementQuery->getArrayResult();
             $data = array();
+
             foreach ($componentData as $entry) {
-                $value = '';
                 switch (strtolower($entry['valueType'])) {
                     case "json":
-                        $value = Zend_Json::decode($entry['value']);
+                        if ($entry['value'] != '') {
+                            $value = Zend_Json::decode($entry['value']);
+                        } else {
+                            $value = null;
+                        }
                         break;
                     case "string":
                     default:
                         $value = $entry['value'];
                         break;
                 }
+
+                if ($entry['name'] === 'file' ||
+                    $entry['name'] === 'image' ||
+                    $entry['name'] === 'fallback_picture') {
+                    $value = $mediaService->getUrl($value);
+                }
+
+                if (in_array($entry['name'], ['selected_manufacturers', 'banner_slider'])) {
+                    foreach ($value as $k => $v) {
+                        if (isset($v['path'])) {
+                            $value[$k]['path'] = $mediaService->getUrl($v['path']);
+                        }
+                    }
+                }
+
                 $data[] = array(
                     'id' => $entry['id'],
+                    'fieldId' => $entry['fieldId'],
                     'valueType' => $entry['valueType'],
                     'key' => $entry['name'],
                     'value' => $value
                 );
             }
             $element['data'] = $data;
+
+            $element['viewports'] = [];
+
+            if (isset($viewports[$element['id']])) {
+                $element['viewports'] = $viewports[$element['id']];
+            }
         }
+
+        if (!empty($emotion['shops'])) {
+            foreach ($emotion['shops'] as &$shop) {
+                $seoUrl = $this->getSeoUrlFromRouter($emotion['id'], $shop['id']);
+                if (!$seoUrl) {
+                    continue;
+                }
+                $shop['seoUrl'] = $seoUrl;
+            }
+        }
+        
         $this->View()->assign(array(
             'success' => true,
             'data' => $emotion,
@@ -184,8 +270,10 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     {
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(array('components', 'fields'))
-                ->from('Shopware\Models\Emotion\Library\Component', 'components')
-                ->leftJoin('components.fields', 'fields');
+            ->from('Shopware\Models\Emotion\Library\Component', 'components')
+            ->leftJoin('components.fields', 'fields')
+            ->orderBy('components.id', 'ASC')
+            ->addOrderBy('fields.position', 'ASC');
 
         $components = $builder->getQuery()->getArrayResult();
         $this->View()->assign(array(
@@ -197,91 +285,87 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     /**
      * Model event listener function which fired when the user configure an emotion over the backend
      * module and clicks the save button.
-     *
-     * @return mixed
      */
     public function saveAction()
     {
-
-        /** @var $namespace Enlight_Components_Snippet_Namespace */
-        $namespace = Shopware()->Snippets()->getNamespace('backend/emotion');
         try {
-            $id = $this->Request()->getParam('id', null);
             $data = $this->Request()->getParams();
 
-            if (!empty($id)) {
-                /**@var $model \Shopware\Models\Emotion\Emotion*/
-                $emotion = Shopware()->Models()->find('Shopware\Models\Emotion\Emotion', $id);
-                if (!$emotion) {
-                    $this->View()->assign(array(
-                        'success' => false,
-                        'data' => $this->Request()->getParams(),
-                        'message' => $namespace->get('no_valid_id', 'No valid emotion id passed.'))
-                    );
-                    return;
-                }
-                unset($data['createDate']);
-                $this->clearEmotionData($emotion);
-            } else {
-                $emotion = new \Shopware\Models\Emotion\Emotion();
-                $data["createDate"] = new \DateTime();
+            $emotion = $this->saveEmotion($data);
+
+            if ($emotion === null) {
+                $this->View()->assign(array(
+                    'data' => $this->Request()->getParams(),
+                    'success' => false
+                ));
+
+                return;
             }
 
-            if (!empty($data['gridId'])) {
-                $data['grid'] = Shopware()->Models()->find('Shopware\Models\Emotion\Grid', $data['gridId']);
-            }
-            if (!empty($data['templateId'])) {
-                $data['template'] = Shopware()->Models()->find('Shopware\Models\Emotion\Template', $data['templateId']);
-            } else {
-                $data['template'] = null;
-            }
+            $alreadyExists = $this->hasEmotionForSameDeviceType($data['categoryId']);
 
-            if (!empty($data['validFrom']) && !empty($data['validFromTime'])) {
-                $fromDate = new \DateTime($data['validFrom']);
-                $fromTime = new \DateTime($data['validFromTime']);
-                $data['validFrom'] = $fromDate->format('d.m.Y') . ' ' . $fromTime->format('H:i');
-            } else {
-                $data['validFrom'] = null;
-            }
+            $data['id'] = $emotion->getId();
 
-            if (!empty($data['validTo']) && !empty($data['validToTime'])) {
-                $toDate = new \DateTime($data['validTo']);
-                $toTime = new \DateTime($data['validToTime']);
-                $data['validTo'] = $toDate->format('d.m.Y') . ' ' . $toTime->format('H:i');
-            } else {
-                $data['validTo'] = null;
-            }
-
-            $data['attribute'] = $data['attribute'][0];
-            $data['modified'] = new \DateTime();
-            $data['elements'] = $this->fillElements($emotion, $data);
-
-            if ($data['isLandingPage']) {
-                if (empty($data['categories'])) {
-                    $data['categories'] = null;
-                } else {
-                    $categories = array();
-                    foreach ($data['categories'] as $category) {
-                        $categories[] = Shopware()->Models()->find('Shopware\Models\Category\Category', $category);
-                    }
-                    $data['categories'] = $categories;
-                }
-            } else {
-                $data['categories'] = array(Shopware()->Models()->find('Shopware\Models\Category\Category', $data['categoryId']));
-            }
-
-            unset($data['user']);
-            if (Shopware()->Auth()->getIdentity()->id) {
-                $data['user'] = Shopware()->Models()->find('Shopware\Models\User\User', Shopware()->Auth()->getIdentity()->id);
-            }
-            $emotion->fromArray($data);
-
-            Shopware()->Models()->persist($emotion);
-            Shopware()->Models()->flush();
+            $this->generateEmotionSeoUrls($emotion);
 
             $this->View()->assign(array(
                 'data' => $data,
-                'success' => true
+                'success' => true,
+                'alreadyExists' => $alreadyExists
+            ));
+        } catch (\Doctrine\ORM\ORMException $e) {
+            $this->View()->assign(array(
+                'data' => $this->Request()->getParams(),
+                'success' => false,
+                'message' => $e->getMessage()
+            ));
+        }
+    }
+
+    /***
+     * Function for only updating active status and position
+     * of an emotion.
+     *
+     * @return void
+     */
+    public function updateStatusAndPositionAction()
+    {
+        if (!$this->Request()->has('id')) {
+            $this->View()->assign(array(
+                'success' => false,
+                'data' => $this->Request()->getParams()
+            ));
+
+            return;
+        }
+
+        try {
+            $data = $this->Request()->getParams();
+            /** @var ModelManager $manager */
+            $manager = $this->getManager();
+            /** @var Emotion $emotion */
+            $emotion = $this->getRepository()->find($data['id']);
+
+            if (!$emotion) {
+                $this->View()->assign(array(
+                    'success' => false,
+                    'data' => $this->Request()->getParams(),
+                    'emotion' => false
+                ));
+
+                return;
+            }
+
+            $emotion->setActive($data['active'] === 'true');
+            $emotion->setPosition($data['position']);
+            $emotion->setModified(new \DateTime());
+
+            $manager->persist($emotion);
+            $manager->flush();
+
+            $this->View()->assign(array(
+                'success' => true,
+                'data' => $data
             ));
         } catch (\Doctrine\ORM\ORMException $e) {
             $this->View()->assign(array(
@@ -293,68 +377,263 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     }
 
     /**
-     * Internal helper function which deletes all data for the passed emotion.
-     * @param $emotion
+     * Method for saving a single emotion model.
+     * Processes the provided data and creates necessary associations.
+     *
+     * @param array $data
+     * @return Emotion|null
      */
-    private function clearEmotionData($emotion)
+    private function saveEmotion(array $data)
     {
-        $query = Shopware()->Models()->createQuery('DELETE Shopware\Models\Emotion\Data u WHERE u.emotionId = ?1');
-        $query->setParameter(1,$emotion->getId());
-        $query->execute();
+        /** @var $namespace Enlight_Components_Snippet_Namespace */
+        $namespace = Shopware()->Snippets()->getNamespace('backend/emotion');
 
-        $query = Shopware()->Models()->createQuery('DELETE Shopware\Models\Emotion\Element u WHERE u.emotionId = ?1');
-        $query->setParameter(1,$emotion->getId());
-        $query->execute();
+        if (!empty($data['id'])) {
+
+            /** @var $emotion Emotion */
+            $emotion = Shopware()->Models()->find('Shopware\Models\Emotion\Emotion', $data['id']);
+
+            if (!$emotion) {
+                $this->View()->assign(array(
+                    'success' => false,
+                    'data' => $this->Request()->getParams(),
+                    'message' => $namespace->get('no_valid_id', 'No valid emotion id passed.'))
+                );
+
+                return null;
+            }
+        } else {
+            /** @var $emotion Emotion */
+            $emotion = new Emotion();
+            $emotion->setCreateDate(new \DateTime());
+        }
+
+        $template = null;
+        if (!empty($data['templateId'])) {
+            /**@var $template \Shopware\Models\Emotion\Template */
+            $template = Shopware()->Models()->find('Shopware\Models\Emotion\Template', $data['templateId']);
+        }
+
+        $validFrom = null;
+        if (!empty($data['validFrom']) &&
+            !empty($data['validFromTime'])) {
+            $fromDate = new \DateTime($data['validFrom']);
+            $fromTime = new \DateTime($data['validFromTime']);
+
+            $validFrom = $fromDate->format('d.m.Y') . ' ' . $fromTime->format('H:i');
+        }
+
+        $validTo = null;
+        if (!empty($data['validTo']) &&
+            !empty($data['validToTime'])) {
+            $toDate = new \DateTime($data['validTo']);
+            $toTime = new \DateTime($data['validToTime']);
+
+            $validTo = $toDate->format('d.m.Y') . ' ' . $toTime->format('H:i');
+        }
+
+        $categories = new \Doctrine\Common\Collections\ArrayCollection();
+        if (!empty($data['categories'])) {
+            foreach ($data['categories'] as $category) {
+                $cat = Shopware()->Models()->find('Shopware\Models\Category\Category', $category);
+
+                if ($cat !== null) {
+                    $categories->add($cat);
+                }
+            }
+        }
+
+        $shops = new \Doctrine\Common\Collections\ArrayCollection();
+        if (!empty($data['shops'])) {
+            foreach ($data['shops'] as $shop) {
+                $subShop = Shopware()->Models()->find('Shopware\Models\Shop\Shop', $shop['id']);
+
+                if ($shop !== null) {
+                    $shops->add($subShop);
+                }
+            }
+        }
+
+        $elements = [];
+        if (!empty($data['elements'])) {
+            $elements = $this->createElements($emotion, $data['elements']);
+        }
+
+        if (Shopware()->Container()->get('Auth')->getIdentity()->id) {
+            /**@var $user \Shopware\Models\User\User */
+            $user = Shopware()->Models()->find('Shopware\Models\User\User', Shopware()->Container()->get('Auth')->getIdentity()->id);
+            $emotion->setUser($user);
+        }
+
+        $emotion->setModified(new \DateTime());
+        $emotion->setName($data['name']);
+        $emotion->setValidFrom($validFrom);
+        $emotion->setValidTo($validTo);
+        $emotion->setShops($shops);
+        $emotion->setCategories($categories);
+        $emotion->setElements($elements);
+        $emotion->setTemplate($template);
+        $emotion->setParentId(!empty($data['parentId']) ? $data['parentId'] : null);
+        $emotion->setActive(!empty($data['active']));
+        $emotion->setPosition(!empty($data['position']) ? $data['position'] : 1);
+        $emotion->setShowListing(!empty($data['showListing']));
+        $emotion->setFullscreen(!empty($data['fullscreen']));
+        $emotion->setDevice((!empty($data['device']) || $data['device'] === '0') ? $data['device'] : null);
+        $emotion->setMode($data['mode']);
+        $emotion->setRows($data['rows']);
+        $emotion->setCols($data['cols']);
+        $emotion->setCellSpacing($data['cellSpacing']);
+        $emotion->setCellHeight($data['cellHeight']);
+        $emotion->setArticleHeight($data['articleHeight']);
+        $emotion->setIsLandingPage(!empty($data['isLandingPage']));
+        $emotion->setSeoTitle($data['seoTitle']);
+        $emotion->setSeoKeywords($data['seoKeywords']);
+        $emotion->setSeoDescription($data['seoDescription']);
+
+        Shopware()->Models()->persist($emotion);
+        Shopware()->Models()->flush();
+
+        return $emotion;
     }
 
     /**
-     * Internal helper function which interpreted the passed emotion elements and save convert the data array
-     * to an model array.
+     * Helper method for creating associated emotion elements.
      *
-     * @param $emotion
-     * @param $data
+     * @param Emotion $emotion
+     * @param array $emotionElements
      * @return array
      */
-    private function fillElements($emotion, $data)
+    private function createElements(Emotion $emotion, array $emotionElements)
     {
-        $elements= array();
+        foreach ($emotionElements as &$item) {
+            if (!empty($item['componentId'])) {
 
-        foreach ($data['elements'] as $elementData) {
-            $element = new \Shopware\Models\Emotion\Element();
-            $component = Shopware()->Models()->find('Shopware\Models\Emotion\Library\Component', $elementData['componentId']);
+                /**@var $component \Shopware\Models\Emotion\Library\Component */
+                $component = Shopware()->Models()->find('Shopware\Models\Emotion\Library\Component', $item['componentId']);
 
-            foreach ($elementData['data'] as $item) {
-                $model = new \Shopware\Models\Emotion\Data();
-                $field = Shopware()->Models()->find('Shopware\Models\Emotion\Library\Field', $item['id']);
-                $model->setComponent($component);
-                $model->setComponentId($component->getId());
-                $model->setElement($element);
-                $model->setFieldId($item['id']);
-
-                /**@var $field \Shopware\Models\Emotion\Library\Field*/
-                $model->setField($field);
-                $value = '';
-                switch (strtolower($field->getValueType())) {
-                    case "json":
-                        $value = Zend_Json::encode($item['value']);
-                        break;
-                    case "string":
-                    default:
-                        $value = $item['value'];
-                        break;
+                if ($component !== null) {
+                    $item['component'] = $component;
                 }
-                $model->setValue($value);
-                $model->setEmotionId($emotion->getId());
-                Shopware()->Models()->persist($model);
             }
 
-            $elementData['emotion'] = $emotion;
-            $elementData['component'] = $component;
-            unset($elementData['data']);
-            $element->fromArray($elementData);
-            $elements[] = $element;
+            if (!empty($item['data'])) {
+                $item['data'] = $this->createElementData($emotion, $item, $item['data']);
+            }
+
+            if (!empty($item['viewports'])) {
+                $item['viewports'] = $this->createElementViewports($emotion, $item, $item['viewports']);
+            }
         }
-        return $elements;
+
+        return $emotionElements;
+    }
+
+    /**
+     * Helper method for creating associated element viewports.
+     *
+     * @param Emotion $emotion
+     * @param array $element
+     * @param array $elementViewports
+     * @return array
+     */
+    private function createElementViewports(Emotion $emotion, array $element, array $elementViewports)
+    {
+        foreach ($elementViewports as &$viewport) {
+            $viewport['emotion'] = $emotion;
+        }
+
+        return $elementViewports;
+    }
+
+    /**
+     * Helper method for creating associated element data.
+     *
+     * @param Emotion $emotion
+     * @param array $element
+     * @param array $elementData
+     * @return array
+     */
+    private function createElementData(Emotion $emotion, array $element, array $elementData)
+    {
+        foreach ($elementData as &$item) {
+
+            /** @var $field Field */
+            $field = Shopware()->Models()->find('Shopware\Models\Emotion\Library\Field', $item['fieldId']);
+            $item['field'] = $field;
+
+            $item['component'] = $element['component'];
+            $item['emotion'] = $emotion;
+
+            $item['value'] = $this->processDataFieldValue($field, $item['value']);
+        }
+
+        return $elementData;
+    }
+
+    /**
+     * Method for processing the different value types of the data fields.
+     *
+     * @param Field $field
+     * @param $value
+     * @return string
+     */
+    private function processDataFieldValue(Field $field, $value)
+    {
+        $valueType = strtolower($field->getValueType());
+        $xType = $field->getXType();
+
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+        $mediaFields = $this->getMediaXTypes();
+
+        if ($valueType === 'json') {
+            if (is_array($value)) {
+                foreach ($value as &$val) {
+                    $val['path'] = $mediaService->normalize($val['path']);
+                }
+            }
+
+            $value = Zend_Json::encode($value);
+        }
+
+        if (in_array($xType, $mediaFields)) {
+            $value = $mediaService->normalize($value);
+        }
+
+        return $value;
+    }
+
+    /**
+     * Fetch all emotions with same category Id and
+     * mark existing emotions with same devices and category
+     *
+     * @param int $categoryId
+     * @return bool
+     */
+    private function hasEmotionForSameDeviceType($categoryId)
+    {
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder
+            ->select(['emotions', 'categories'])
+            ->from('Shopware\Models\Emotion\Emotion', 'emotions')
+            ->leftJoin('emotions.categories', 'categories')
+            ->where('categories.id = :categoryId');
+
+        $builder->setParameters(['categoryId' => $categoryId]);
+        $result = $builder->getQuery()->getArrayResult();
+
+        $usedDevices = [];
+        foreach ($result as $emotion) {
+            $devices = explode(",", $emotion['device']);
+            foreach ($devices as $device) {
+                if (!in_array($device, $usedDevices)) {
+                    $usedDevices[] = $device;
+                } else {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -374,10 +653,21 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
                 if (empty($emotion['id'])) {
                     continue;
                 }
-                /**@var $entity \Shopware\Models\Emotion\Emotion*/
+                /**@var $entity Emotion*/
                 $entity = $this->getRepository()->find($emotion['id']);
+
+                $translator = new Shopware_Components_Translation();
+                /** @var \Shopware\Models\Emotion\Element $element */
+                foreach ($entity->getElements() as $element) {
+                    $translator->delete(null, 'emotionElement', $element->getId());
+                }
+
                 Shopware()->Models()->remove($entity);
             }
+
+            // delete corresponding translations
+            $this->deleteTranslations($emotions);
+
             Shopware()->Models()->flush();
 
             $this->View()->assign(array(
@@ -396,348 +686,117 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     public function duplicateAction()
     {
         $emotionId = (int) $this->Request()->getParam('emotionId');
+        $device = $this->Request()->getParam('forDevice');
+
+        if (!$emotionId) {
+            $this->View()->assign(array('success' => false));
+            return;
+        }
+
+        /** @var Emotion $emotion */
+        $emotion = Shopware()->Models()->find('Shopware\Models\Emotion\Emotion', $emotionId);
+
+        if (!$emotion) {
+            $this->View()->assign(array('success' => false));
+            return;
+        }
+
+        $new = clone $emotion;
+
+        switch (true) {
+            case ($emotion->getIsLandingPage() && $emotion->getParentId()):
+                $new->setParentId($emotion->getParentId());
+                break;
+            case ($emotion->getIsLandingPage()):
+                $new->setParentId($emotion->getId());
+                break;
+        }
+
+        $copyName = $emotion->getName() . ' - Copy';
+        $new->setName($copyName);
+
+        $new->setDevice($device);
+        $new->setCreateDate(new \DateTime());
+        $new->setModified(new \DateTime());
+
+        Shopware()->Models()->persist($new);
+        Shopware()->Models()->flush();
+
+        if (!empty($new->getId())) {
+            $this->copyEmotionTranslations($emotion->getId(), $new->getId());
+            $this->copyElementTranslations($emotion, $new);
+            $persister = Shopware()->Container()->get('shopware_attribute.data_persister');
+            $persister->cloneAttribute('s_emotion_attributes', $emotion->getId(), $new->getId());
+        }
+
 
         $this->View()->assign(array('success' => true, 'data' => array()));
     }
 
-
-    //Grid functions of the "own grids" listing
-
     /**
-     * Controller action  to create a new grid.
-     * Use the internal "saveGrid" function.
-     * The request parameters are used as grid/model data.
-     */
-    public function createGridAction()
-    {
-        $this->View()->assign(
-            $this->saveGrid(
-                $this->Request()->getParams()
-            )
-        );
-    }
-
-    /**
-     * Controller action to update an existing grid.
-     * Use the internal "saveGrid" function.
-     * The request parameters are used as grid/model data.
-     * The updateGridAction should have a "id" request parameter which
-     * contains the id of the existing grid.
-     */
-    public function updateGridAction()
-    {
-        $this->View()->assign(
-            $this->saveGrid(
-                $this->Request()->getParams()
-            )
-        );
-    }
-
-    /**
-     * Controller action to delete a single grid.
-     * Use the internal "deleteGrid" function.
-     * Expects the grid id as request parameter "id".
-     */
-    public function deleteGridAction()
-    {
-        $this->View()->assign(
-            $this->deleteGrid(
-                $this->Request()->getParam('id', null)
-            )
-        );
-    }
-
-    public function deleteManyGridsAction()
-    {
-        $this->View()->assign(
-            $this->deleteManyGrids(
-                $this->Request()->getParam('records', array())
-            )
-        );
-    }
-
-    /**
-     * The delete many grids function is used from the controller action deleteManyGridsAction
-     * and contains the real deleteMany process. As parameter the function expects
-     * and two dimensional array with model ids:
+     * Copies the translations of an emotion to a new one.
      *
-     * Example:
-     * array(
-     *    array('id' => 1),
-     *    array('id' => 2),
-     *    ...
-     * )
-     *
-     * The function iterates the passed records array and calls for each record
-     * the "deleteGrid" function. If the delete action for the item was successfully,
-     * the delete function returns the following array('success' => true).
-     * If the delete function fails, the delete action returns array('success' => false, 'error'),
-     * this errors will be collected.
-     * Notice: The iteration don't stops if an errors occurs. It will be continue with the next record.
-     *
-     * After all records deleted, the function returns array('success' => true) if no errors occurs.
-     * If one or more errors occurred the function return an array like this:
-     *  array(
-     *      'success' => false,
-     *      'error' => array('Error 1', 'Error 2', ...)
-     * )
-     *
-     * @param $records
-     * @return array
+     * @param int $oldId
+     * @param int $newId
      */
-    protected function deleteManyGrids($records)
+    private function copyEmotionTranslations($oldId, $newId)
     {
-        if (empty($records)) {
-            return array('success' => false, 'error' => 'No grids passed');
+        if (empty($oldId) || empty($newId)) {
+            return;
         }
-        $errors = array();
-        foreach ($records as $record) {
-            if (empty($record['id'])) {
+
+        $translation = new Shopware_Components_Translation();
+
+        /** @var \Doctrine\DBAL\Query\QueryBuilder $query */
+        $query = Shopware()->Container()->get('dbal_connection')->createQueryBuilder();
+
+        $languageIds = $query->select('id')
+            ->from('s_core_shops', 'shops')
+            ->execute()
+            ->fetchAll(PDO::FETCH_COLUMN);
+
+        foreach ($languageIds as $id) {
+            $data = $translation->read($id, 'emotion', $oldId);
+
+            if (empty($data)) {
                 continue;
             }
-            $result = $this->deleteGrid($record['id']);
-            if ($result['success'] === false) {
-                $errors[] = array($result['error']);
-            }
-        }
 
-        return array(
-            'success' => empty($errors),
-            'error' => $errors
-        );
+            $data['name'] = $data['name'] . ' - Copy';
+            $translation->write($id, 'emotion', $newId, $data);
+        }
     }
 
     /**
-     * Controller action to duplicate a single grid.
-     * Use the internal "duplicateGrid" function.
-     * Expects the grid id as request parameter "id".
+     * Deletes all corresponding translations for the given emotions.
+     *
+     * @param array $emotions
      */
-    public function duplicateGridAction()
+    private function deleteTranslations(array $emotions)
     {
-        $this->View()->assign(
-            $this->duplicateGrid(
-                $this->Request()->getParam('id', null)
-            )
-        );
-    }
-
-    /**
-     * Controller action to get a list of all defined grids.
-     * You can paginate the list over the request parameters
-     * "start" and "limit".
-     * Use the internal "getGrids" function.
-     */
-    public function getGridsAction()
-    {
-        $this->View()->assign(
-            $this->getGrids(
-                $this->Request()->getParam('start', null),
-                $this->Request()->getParam('limit', null)
-            )
-        );
-    }
-
-    /**
-     * Returns a list with all defined grids.
-     * The function return value is every time an array.
-     *
-     * Success case:
-     *  array('success' => true, 'total' => Total listing count, 'data' => All defined grids)
-     *
-     * Failure case:
-     *  array('success' => false, 'error' => Error message)
-     *
-     * @param null $offset
-     * @param null $limit
-     *
-     * @return array
-     */
-    protected function getGrids($offset = null, $limit = null)
-    {
-        try {
-            $query = $this->getGridsQuery($offset, $limit);
-            $paginator = $this->getQueryPaginator($query->getQuery());
-
-            $result = array(
-                'success' => true,
-                'total' => $paginator->count(),
-                'data' => $paginator->getIterator()->getArrayCopy()
-            );
-        } catch (Exception $e) {
-            return array('success' => false, 'error' => $e->getMessage());
+        if (empty($emotions)) {
+            return;
         }
 
-        return $result;
-    }
+        $translation = new Shopware_Components_Translation();
 
-    /**
-     * @param null $offset
-     * @param null $limit
-     *
-     * @return Doctrine\ORM\QueryBuilder|Shopware\Components\Model\QueryBuilder
-     */
-    protected function getGridsQuery($offset = null, $limit = null)
-    {
-        $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->select(array('grids'))
-                ->from('Shopware\Models\Emotion\Grid', 'grids');
+        /** @var \Doctrine\DBAL\Query\QueryBuilder $query */
+        $query = Shopware()->Container()->get('dbal_connection')->createQueryBuilder();
 
-        if ($offset !== null  && $limit !== null) {
-            $builder->setFirstResult($offset)
-                    ->setMaxResults($limit);
-        }
+        $languageIds = $query->select('id')
+            ->from('s_core_shops', 'shops')
+            ->execute()
+            ->fetchAll(PDO::FETCH_COLUMN);
 
-        return $builder;
-    }
-
-    /**
-     * Deletes a single grid which will be identified over
-     * the passed id parameter. The return value is
-     * every time an array.
-     *
-     * Success case:
-     *  array('success' => true)
-     *
-     * Failure case:
-     *  array('success' => false, 'error' => An error message)
-     *
-     *
-     * @param null $id
-     *
-     * @return array
-     */
-    protected function deleteGrid($id = null)
-    {
-        if (empty($id)) {
-            return array('success' => false, 'error' => "The request parameter id don't passed!");
-        }
-
-        try {
-            $grid = Shopware()->Models()->find('Shopware\Models\Emotion\Grid', $id);
-            if (!$grid instanceof \Shopware\Models\Emotion\Grid) {
-                return array('success' => false, 'error' => "The passed grid id exist no more!");
-            }
-            Shopware()->Models()->remove($grid);
-            Shopware()->Models()->flush();
-        } catch (Exception $e) {
-            return array('success' => false, 'error' => $e->getMessage());
-        }
-
-        return array('success' => true);
-    }
-
-    /**
-     * Duplicates a single grid which will be identified over
-     * the passed id parameter. The return value is
-     * every time an array. The duplicate function used
-     * the php __clone function of the model.
-     *
-     * Success case:
-     *  array('success' => true, 'data' => New Grid data)
-     *
-     * Failure case:
-     *  array('success' => false, 'error' => An error message)
-     *
-     *
-     * @param null $id
-     *
-     * @return array
-     */
-    protected function duplicateGrid($id = null)
-    {
-        if (empty($id)) {
-            return array('success' => false, 'error' => "The request parameter gridId don't passed!");
-        }
-        $data = array();
-
-        try {
-            $grid = Shopware()->Models()->find('Shopware\Models\Emotion\Grid', $id);
-            if (!$grid instanceof \Shopware\Models\Emotion\Grid) {
-                return array('success' => false, 'error' => "The passed grid id exist no more!");
+        foreach ($emotions as $emotion) {
+            if (empty($emotion['id'])) {
+                continue;
             }
 
-            $new = clone $grid;
-            Shopware()->Models()->persist($new);
-            Shopware()->Models()->flush();
-
-            $data = $this->getGrid($new->getId());
-        } catch (Exception $e) {
-            return array('success' => false, 'error' => $e->getMessage());
-        }
-
-        return array('success' => true, 'data' => $data);
-    }
-
-    /**
-     * Updates or creates a single grid. If the data parameter contains
-     * an "id" property, this property is used to identify an existing grid.
-     * The return value is every time an array.
-     *
-     * Success case:
-     *  array('success' => true, 'data' => New Grid data)
-     *
-     * Failure case:
-     *  array('success' => false, 'error' => An error message)
-     *
-     * @param $data
-     *
-     * @return array
-     */
-    protected function saveGrid($data)
-    {
-        $result = array();
-
-        try {
-            //we have to remove the emotions to prevent an assignment from this side!
-            unset($data['emotions']);
-            if (!empty($data['id'])) {
-                $grid = Shopware()->Models()->find('Shopware\Models\Emotion\Grid', $data['id']);
-            } else {
-                $grid = new \Shopware\Models\Emotion\Grid();
+            foreach ($languageIds as $id) {
+                $translation->delete($id, 'emotion', $emotion['id']);
             }
-
-            if (!$grid instanceof \Shopware\Models\Emotion\Grid) {
-                return array('success' => false, 'error' => "The passed grid id exist no more!");
-            }
-
-            $grid->fromArray($data);
-            Shopware()->Models()->persist($grid);
-            Shopware()->Models()->flush();
-
-            $result = $this->getGrid($grid->getId());
-
-        } catch (Exception $e) {
-            return array('success' => false, 'error' => $e->getMessage());
         }
-
-        return array('success' => true, 'data' => $result);
-    }
-
-    /**
-     * Helper function to get the array data of a single grid.
-     * The passed $id parameter is used to identify the grid.
-     *
-     * Success case:
-     *  array(Data of the grid)
-     *
-     * Failure case:
-     *  null
-     *
-     * @param null $id
-     *
-     * @return array
-     */
-    protected function getGrid($id)
-    {
-        $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->select(array('grid'))
-                ->from('Shopware\Models\Emotion\Grid', 'grid')
-                ->where('grid.id = :id')
-                ->setParameter('id', $id);
-
-        return $builder->getQuery()->getOneOrNullResult(
-            \Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY
-        );
     }
 
     /**
@@ -930,11 +989,11 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     {
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(array('templates'))
-                ->from('Shopware\Models\Emotion\Template', 'templates');
+            ->from('Shopware\Models\Emotion\Template', 'templates');
 
         if ($offset !== null  && $limit !== null) {
             $builder->setFirstResult($offset)
-                    ->setMaxResults($limit);
+                ->setMaxResults($limit);
         }
 
         return $builder;
@@ -1055,7 +1114,6 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
             Shopware()->Models()->flush();
 
             $result = $this->getTemplate($template->getId());
-
         } catch (Exception $e) {
             return array('success' => false, 'error' => $e->getMessage());
         }
@@ -1081,13 +1139,133 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     {
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(array('template'))
-                ->from('Shopware\Models\Emotion\Template', 'template')
-                ->where('template.id = :id')
-                ->setParameter('id', $id);
+            ->from('Shopware\Models\Emotion\Template', 'template')
+            ->where('template.id = :id')
+            ->setParameter('id', $id);
 
         return $builder->getQuery()->getOneOrNullResult(
             \Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY
         );
     }
 
+    /**
+     * Collects all media related x_types which needs to be normalized
+     *
+     * @return array
+     */
+    private function getMediaXTypes()
+    {
+        $mediaFields = new ArrayCollection([
+            'mediaselectionfield',
+            'mediatextfield'
+        ]);
+
+        $mediaFields = $this->get('events')->collect('Shopware_Plugin_Collect_MediaXTypes', $mediaFields);
+
+        return $mediaFields->toArray();
+    }
+
+    /**
+     * @param Emotion $emotion
+     * @param Emotion $clonedEmotion
+     */
+    private function copyElementTranslations(Emotion $emotion, Emotion $clonedEmotion)
+    {
+        $oldObjectKeys = [];
+        $sql = <<<EOD
+INSERT INTO `s_core_translations` (`objecttype`, `objectdata`, `objectkey`, `objectlanguage`, `dirty`)
+SELECT `objecttype`,
+`objectdata`,
+:objectKey as 'objectkey',
+`objectlanguage`,
+`dirty`
+FROM `s_core_translations`
+WHERE objectkey = :oldObjectKey
+EOD;
+
+        /** @var Element $el */
+        foreach ($emotion->getElements() as $el) {
+            $key = $this->getElementIdentifier($el);
+            $oldObjectKeys[$key] = $el->getId();
+        }
+
+        /** @var Element $el */
+        foreach ($clonedEmotion->getElements() as $el) {
+            $key = $this->getElementIdentifier($el);
+
+            Shopware()->Db()->executeQuery($sql, [
+                ':objectKey' => $el->getId(),
+                ':oldObjectKey' => $oldObjectKeys[$key],
+            ]);
+        }
+    }
+
+    /**
+     * creates a unique identifier string based on the grid position
+     *
+     * @param Element $el
+     * @return string
+     */
+    private function getElementIdentifier(Element $el)
+    {
+        return $el->getStartCol().$el->getStartRow().$el->getEndCol().$el->getEndRow();
+    }
+
+    /**
+     * @param Emotion
+     */
+    private function generateEmotionSeoUrls(Emotion $emotion)
+    {
+        /** @var Shopware_Components_SeoIndex $seoIndexer */
+        $seoIndexer = Shopware()->Container()->get('SeoIndex');
+        $module = Shopware()->Modules()->RewriteTable();
+        $shops = $emotion->getShops();
+        $emotionData = [
+            'id' => $emotion->getId(),
+            'name' => $emotion->getName()
+        ];
+
+        $translator = new Shopware_Components_Translation();
+        $routerCampaignTemplate = Shopware()->Config()->get('routerCampaignTemplate');
+        
+        /** @var Shop $shop */
+        foreach ($shops as $shop) {
+            $seoIndexer->registerShop($shop->getId());
+            $fallbackShopId = null;
+            $fallbackShop = $shop->getFallback();
+            if (!empty($fallbackShop)) {
+                $fallbackShopId = $fallbackShop->getId();
+            }
+            // Make sure a template is available
+            $module->baseSetup();
+            $module->sCreateRewriteTableForSingleCampaign($translator, $shop->getId(), $fallbackShopId, $emotionData, $routerCampaignTemplate);
+        }
+    }
+
+    /**
+     * @param int $emotionId
+     * @param int $shopId
+     * @return bool|string
+     */
+    private function getSeoUrlFromRouter($emotionId, $shopId)
+    {
+        $repository = Shopware()->Container()->get('models')->getRepository(Shop::class);
+        /** @var Shop $shop */
+        $shop = $repository->getActiveById($shopId);
+        if (empty($shop)) {
+            return false;
+        }
+        $parent = $shop;
+        if ($shop->getFallback()) {
+            $parent = $shop->getFallback();
+        }
+        $parent->registerResources();
+
+        return $this->Front()->Router()->assemble([
+            'controller' => 'campaign',
+            'module' => 'frontend',
+            'emotionId' => $emotionId,
+            'fullPath' => true
+        ]);
+    }
 }

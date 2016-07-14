@@ -1,7 +1,7 @@
 <?php
 class Migrations_Migration123 Extends Shopware\Components\Migrations\AbstractMigration
 {
-    public function up()
+    public function up($modus)
     {
         $sql = <<<'EOD'
 ALTER TABLE s_core_plugins ADD capability_dummy INT(1) NOT NULL DEFAULT 0 AFTER capability_enable;

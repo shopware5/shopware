@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -64,10 +64,10 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
             $shop = $repository->getActiveById($shopId);
             $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Currency');
             $shop->setCurrency($repository->find($order["currencyID"]));
-            $shop->registerResources(Shopware()->Bootstrap());
+            $shop->registerResources();
 
             foreach ($positions[$orderId] as &$position) {
-                $position["link"] = Shopware()->Router()->assemble(array(
+                $position["link"] = Shopware()->Container()->get('router')->assemble(array(
                     'module' => 'frontend', 'sViewport' => 'detail',
                     'sArticle' => $position["articleID"]
                 ));
@@ -159,17 +159,14 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
                 b.company AS billing_company,
                 b.department AS billing_department,
                 b.salutation AS billing_salutation,
-                ub.customernumber,
+                u.customernumber,
                 b.firstname AS billing_firstname,
                 b.lastname AS billing_lastname,
                 b.street AS billing_street,
-                b.streetnumber AS billing_streetnumber,
                 b.zipcode AS billing_zipcode,
                 b.city AS billing_city,
                 b.phone AS phone,
                 b.phone AS billing_phone,
-                b.fax AS fax,
-                b.fax AS billing_fax,
                 b.countryID AS billing_countryID,
                 bc.countryname AS billing_country,
                 bc.countryiso AS billing_countryiso,
@@ -189,7 +186,6 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
                 s.firstname AS shipping_firstname,
                 s.lastname AS shipping_lastname,
                 s.street AS shipping_street,
-                s.streetnumber AS shipping_streetnumber,
                 s.zipcode AS shipping_zipcode,
                 s.city AS shipping_city,
                 s.countryID AS shipping_countryID,
@@ -204,7 +200,6 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
                 sa.text5 AS shipping_text5,
                 sa.text6 AS shipping_text6,
                 u.*,
-                   ub.birthday,
                    g.id AS preisgruppe,
                    g.tax AS billing_net
             FROM

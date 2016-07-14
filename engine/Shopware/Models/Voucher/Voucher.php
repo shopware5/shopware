@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,8 +23,10 @@
  */
 
 namespace Shopware\Models\Voucher;
-use Shopware\Components\Model\ModelEntity,
-    Doctrine\ORM\Mapping AS ORM;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
+
 /**
  * Standard Voucher Model Entity
  *
@@ -92,14 +94,14 @@ class Voucher extends ModelEntity
     private $bindToSupplier;
 
     /**
-     * @var date $validFrom
+     * @var \DateTime $validFrom
      *
      * @ORM\Column(name="valid_from", type="date", nullable=true)
      */
     private $validFrom = null;
 
     /**
-     * @var date $validTo
+     * @var \DateTime $validTo
      *
      * @ORM\Column(name="valid_to", type="date", nullable=true)
      */
@@ -350,7 +352,7 @@ class Voucher extends ModelEntity
     /**
      * Setter Method to set the validFrom field from the Model
      *
-     * @param date $validFrom
+     * @param \DateTime|string $validFrom
      * @return Voucher
      */
     public function setValidFrom($validFrom)
@@ -365,7 +367,7 @@ class Voucher extends ModelEntity
     /**
      * Getter Method to get the ValidFrom field from the Model
      *
-     * @return date
+     * @return \DateTime
      */
     public function getValidFrom()
     {
@@ -375,7 +377,7 @@ class Voucher extends ModelEntity
     /**
      * Setter Method to set the validTo field from the Model
      *
-     * @param date $validTo
+     * @param \DateTime|string $validTo
      * @return Voucher
      */
     public function setValidTo($validTo)
@@ -390,7 +392,7 @@ class Voucher extends ModelEntity
     /**
      * Getter Method to get the ValidTo field from the Model
      *
-     * @return date
+     * @return \DateTime
      */
     public function getValidTo()
     {
@@ -510,7 +512,7 @@ class Voucher extends ModelEntity
     /**
      * Setter Method to set the restrictArticles field from the Model
      *
-     * @param text $restrictArticles
+     * @param string $restrictArticles
      * @return Voucher
      */
     public function setRestrictArticles($restrictArticles)
@@ -522,7 +524,7 @@ class Voucher extends ModelEntity
     /**
      * Getter Method to get the restrictArticles field from the Model
      *
-     * @return text
+     * @return string
      */
     public function getRestrictArticles()
     {
@@ -628,5 +630,4 @@ class Voucher extends ModelEntity
     {
         return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\Voucher', 'attribute', 'voucher');
     }
-
 }

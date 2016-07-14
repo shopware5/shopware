@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,7 +23,8 @@
  */
 
 namespace   Shopware\Models\User;
-use         Shopware\Components\Model\ModelRepository;
+
+use Shopware\Components\Model\ModelRepository;
 
 /**
  * Repository for the customer model (Shopware\Models\Customer\Customer).
@@ -34,7 +35,6 @@ use         Shopware\Components\Model\ModelRepository;
  */
 class Repository extends ModelRepository
 {
-
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select the user data for
      * the passed user id.
@@ -97,7 +97,6 @@ class Repository extends ModelRepository
                 'user.lastLogin as lastLogin',
                 'user.name as name',
                 'role.name as groupname',
-                'user.admin as admin',
                 'user.active as active',
                 'user.email as email'
             )
@@ -449,5 +448,4 @@ class Repository extends ModelRepository
                 ->andWhere($expr->isNull('rule.privilegeId'));
         return $builder;
     }
-
 }

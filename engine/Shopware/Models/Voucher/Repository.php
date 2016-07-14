@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,8 +23,10 @@
  */
 
 namespace Shopware\Models\Voucher;
-use Shopware\Components\Model\ModelRepository,
-    Doctrine\ORM\Query;
+
+use Shopware\Components\Model\ModelRepository;
+use Doctrine\ORM\Query;
+
 /**
  * Repository for the Voucher model (Shopware\Models\Voucher\Voucher).
  * <br>
@@ -34,7 +36,6 @@ use Shopware\Components\Model\ModelRepository,
  */
 class Repository extends ModelRepository
 {
-
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select a list of voucher
      * codes for the passed voucher id.
@@ -71,21 +72,20 @@ class Repository extends ModelRepository
             "codes.customerId as customerId",
             "codes.code as code",
             "codes.cashed as cashed",
-            "billing.firstName as firstName",
-            "billing.lastName as lastName",
-            "billing.number as number"
+            "customer.firstname as firstName",
+            "customer.lastname as lastName",
+            "customer.number as number"
         ));
         $builder->from('Shopware\Models\Voucher\Code', 'codes')
                 ->leftJoin("codes.customer", "customer")
-                ->leftJoin("customer.billing", "billing")
                 ->where("codes.voucherId = ?1")
-                ->setParameter(1,$voucherId);
+                ->setParameter(1, $voucherId);
         //search for values
         if (!empty($filter)) {
             $builder->andWhere('codes.code LIKE ?2')
-                ->orWhere('billing.firstName LIKE ?2')
-                ->orWhere('billing.lastName LIKE ?2')
-                ->orWhere('billing.number LIKE ?2')
+                ->orWhere('customer.firstname LIKE ?2')
+                ->orWhere('customer.lastname LIKE ?2')
+                ->orWhere('customer.number LIKE ?2')
                 ->setParameter(2, '%' . $filter . '%');
         }
         if (!empty($order)) {
@@ -204,10 +204,10 @@ class Repository extends ModelRepository
         $builder->select(array('voucher'))
                 ->from($this->getEntityName(), 'voucher')
                 ->where("voucher.voucherCode = ?1")
-                ->setParameter(1,$code);
+                ->setParameter(1, $code);
         if (!empty($voucherId)) {
             $builder->andWhere($builder->expr()->neq("voucher.id", "?2"))
-                    ->setParameter(2,$voucherId);
+                    ->setParameter(2, $voucherId);
         }
         return $builder;
     }
@@ -238,11 +238,10 @@ class Repository extends ModelRepository
         $builder->select(array('voucher'))
                 ->from($this->getEntityName(), 'voucher')
                 ->where("voucher.orderCode = ?1")
-                ->setParameter(1,$code);
+                ->setParameter(1, $code);
         if (!empty($voucherId)) {
             $builder->andWhere($builder->expr()->neq("voucher.id", $voucherId));
         }
         return $builder;
     }
-
 }

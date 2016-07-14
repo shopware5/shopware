@@ -1,7 +1,7 @@
 <?php
 class Migrations_Migration226 Extends Shopware\Components\Migrations\AbstractMigration
 {
-    public function up()
+    public function up($modus)
     {
         $sql = <<<'EOD'
         SET @parent = (SELECT id FROM s_core_config_forms WHERE name = 'Recommendation' AND plugin_id IS NULL LIMIT 1);
@@ -9,7 +9,7 @@ class Migrations_Migration226 Extends Shopware\Components\Migrations\AbstractMig
         INSERT IGNORE INTO `s_core_config_elements`
             (`form_id`, `name`, `value`, `label`, `description`, `type`, `required`, `position`, `scope`, `filters`, `validators`, `options`)
         VALUES
-            (@parent, 'showTellAFriend', 'b:1;', 'Artikel weiterempfehlen anzeigen', NULL, 'boolean', 0, 7, 1, NULL, NULL, NULL);
+            (@parent, 'showTellAFriend', 'b:0;', 'Artikel weiterempfehlen anzeigen', NULL, 'boolean', 0, 7, 1, NULL, NULL, NULL);
 
         SET @element = (SELECT id FROM s_core_config_elements WHERE name = 'showTellAFriend' LIMIT 1);
 

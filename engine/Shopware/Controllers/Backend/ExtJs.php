@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -93,7 +93,6 @@ class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Action
      */
     protected function initAcl()
     {
-
     }
 
     /**
@@ -103,17 +102,6 @@ class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Action
     public function getAclRules()
     {
         return $this->aclPermissions;
-    }
-
-    /**
-     * Set acl resource name - will be set in init-method to controller base - name for default
-     *
-     * @deprecated Not required any more
-     * @param $resource
-     */
-    protected function setAclResourceName($resource = null)
-    {
-
     }
 
     /**
@@ -142,7 +130,6 @@ class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Action
      * @param null|string $privilege Name of privilege
      * @param null|string|Zend_Acl_Role_Interface $resource
      * @param null|string|Zend_Acl_Resource_Interface $role
-     * @deprecated use is_allowed template plugin
      * @return boolean
      */
     protected function _isAllowed($privilege, $resource = null, $role = null)
@@ -159,7 +146,7 @@ class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Action
      */
     public function indexAction()
     {
-        $identity = Shopware()->Auth()->getIdentity();
+        $identity = Shopware()->Container()->get('Auth')->getIdentity();
         $this->View()->assign('user', $identity, true);
 
         if ($this->Request()->get('file') == 'bootstrap') {
@@ -175,7 +162,7 @@ class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Action
 
         $attemptedLanguage = substr($identity->locale->getLocale(), 0, 2);
 
-        if (file_exists(Shopware()->OldPath() . "engine/Library/TinyMce/langs/".$attemptedLanguage.".js")) {
+        if (file_exists(Shopware()->DocPath() . "engine/Library/TinyMce/langs/".$attemptedLanguage.".js")) {
             return $attemptedLanguage;
         }
 
@@ -221,26 +208,36 @@ class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Action
         $this->View()->Engine()->setCompileId($this->View()->Engine()->getCompileId() . '_' . $this->Request()->getControllerName());
 
         foreach ($fileNames as $fileName) {
+            // Remove unwanted characters
+            $fileName = preg_replace('/[^a-z0-9\/_-]/i', '', $fileName);
+
+            // Replace multiple forward slashes
+            $fileName = preg_replace('#/+#', '/', $fileName);
+
+            // Remove leading and trailing forward slash
+            $fileName = trim($fileName, '/');
+
             // if string starts with "m/" replace with "model/"
             $fileName = preg_replace('/^m\//', 'model/', $fileName);
             $fileName = preg_replace('/^c\//', 'controller/', $fileName);
             $fileName = preg_replace('/^v\//', 'view/', $fileName);
 
-            $fileName = ltrim(dirname($fileName) . '/' . basename($fileName, '.js'), '/.');
             if (empty($fileName)) {
                 continue;
             }
+
             $templateBase = $inflector->filter(array(
-                'module' => $moduleName,
+                'module'     => $moduleName,
                 'controller' => $controllerName,
-                'file' => $fileName)
-            );
+                'file'       => $fileName
+            ));
 
             $templateExtend = $inflector->filter(array(
-                'module' => $moduleName,
+                'module'     => $moduleName,
                 'controller' => $this->Request()->getControllerName(),
-                'file' => $fileName)
-            );
+                'file'       => $fileName
+            ));
+
             if ($this->View()->templateExists($templateBase)) {
                 $template .= '{include file="' . $templateBase. '"}' . "\n";
             }

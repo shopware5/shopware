@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -54,17 +54,46 @@ class Shopware_Controllers_Frontend_Note extends Enlight_Controller_Action
         $this->forward('index');
     }
 
+    private function addNote($orderNumber)
+    {
+        if (empty($orderNumber)) {
+            return false;
+        }
+
+        $articleID = Shopware()->Modules()->Articles()->sGetArticleIdByOrderNumber($orderNumber);
+        $articleName = Shopware()->Modules()->Articles()->sGetArticleNameByOrderNumber($orderNumber);
+
+        if (empty($articleID)) {
+            return false;
+        }
+
+        Shopware()->Modules()->Basket()->sAddNote($articleID, $articleName, $orderNumber);
+
+        return true;
+    }
+
     public function addAction()
     {
-        $ordernumber = $this->Request()->ordernumber;
-        if (!empty($ordernumber)) {
-            $articleID = Shopware()->Modules()->Articles()->sGetArticleIdByOrderNumber($ordernumber);
-            $articleName = Shopware()->Modules()->Articles()->sGetArticleNameByOrderNumber($ordernumber);
-            $this->View()->sArticleName = $articleName;
-            if (!empty($articleID)) {
-                Shopware()->Modules()->Basket()->sAddNote($articleID, $articleName, $ordernumber);
-            }
+        $orderNumber = $this->Request()->getParam('ordernumber');
+
+        if ($this->addNote($orderNumber)) {
+            $this->View()->sArticleName = Shopware()->Modules()->Articles()->sGetArticleNameByOrderNumber($orderNumber);
         }
+
         $this->forward('index');
+    }
+
+    public function ajaxAddAction()
+    {
+        Shopware()->Plugins()->Controller()->Json()->setPadding();
+
+        $this->Front()->Plugins()->ViewRenderer()->setNoRender();
+
+        $this->Response()->setBody(json_encode(
+            [
+                'success' => $this->addNote($this->Request()->getParam('ordernumber')),
+                'notesCount' => (int) Shopware()->Modules()->Basket()->sCountNotes()
+            ]
+        ));
     }
 }

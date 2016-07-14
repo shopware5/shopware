@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -24,6 +24,7 @@
 
 
 use Shopware\Components\Model\ModelManager;
+use Shopware\Components\Snippet\DbAdapter;
 
 /**
  * @category  Shopware
@@ -62,22 +63,31 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
      */
     protected $extends = array();
 
-    public function __construct(ModelManager $modelManager, $snippetConfig = array())
+    /**
+     * @var array
+     */
+    private $pluginDirectories;
+
+    /**
+     * @param ModelManager $modelManager
+     * @param array $pluginDirectories
+     * @param array $snippetConfig
+     */
+    public function __construct(ModelManager $modelManager, array $pluginDirectories, array $snippetConfig)
     {
         $this->snippetConfig = $snippetConfig;
         $this->modelManager  = $modelManager;
+        $this->pluginDirectories = $pluginDirectories;
 
-        $configDir = array();
-        if (file_exists(Shopware()->DocPath('snippets'))) {
-            $configDir[] = Shopware()->DocPath('snippets');
+        if ($this->snippetConfig['readFromIni']) {
+            $configDir = $this->getConfigDirs();
+            $this->fileAdapter = new Enlight_Config_Adapter_File(array(
+                'configDir'   => $configDir,
+                'allowWrites' => $snippetConfig['writeToIni']
+            ));
         }
 
-        $this->fileAdapter = new Enlight_Config_Adapter_File(array(
-            'configDir'   => $configDir,
-            'allowWrites' => $snippetConfig['writeToIni']
-        ));
-
-        $this->adapter = new Enlight_Config_Adapter_DbTable(array(
+        $this->adapter = new DbAdapter(array(
             'table'           => 's_core_snippets',
             'namespaceColumn' => 'namespace',
             'sectionColumn'   => array('shopID', 'localeID'),
@@ -92,7 +102,7 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
      * @return      Enlight_Components_Snippet_Namespace
      * @deprecated  4.0 - 2012/04/01
      */
-    public function getSnippet($namespace)
+    public function getSnippet($namespace = null)
     {
         return parent::getNamespace($namespace);
     }
@@ -106,8 +116,8 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
     public function getNamespace($namespace = null)
     {
         $key = $namespace === null ? '__ignore' : (string) $namespace;
-        if (!isset($this->namespaces[$key])) {
 
+        if (!isset($this->namespaces[$key])) {
             if ($this->snippetConfig['readFromDb']) {
                 $this->namespaces[$key] = new $this->defaultNamespaceClass(array(
                     'adapter' => $this->adapter,
@@ -121,6 +131,8 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
             }
 
             if ($this->snippetConfig['readFromIni'] && (!isset($this->namespaces[$key]) || count($this->namespaces[$key]) == 0) && isset($this->fileAdapter)) {
+
+                /** @var \Enlight_Components_Snippet_Namespace $fullNamespace */
                 $fullNamespace = new $this->defaultNamespaceClass(array(
                     'adapter' => $this->fileAdapter,
                     'name' => $namespace,
@@ -128,7 +140,11 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
                 ));
 
                 $locale = $this->locale ? $this->locale->getLocale() : $this->getDefaultLocale()->getLocale();
-                if (!array_key_exists($locale, $fullNamespace->toArray()) && in_array($locale, array('en_GB', 'default')) && count(array_keys($fullNamespace->toArray()))) {
+                if (
+                    !array_key_exists($locale, $fullNamespace->toArray())
+                    && in_array($locale, array('en_GB', 'default'))
+                    && count(array_keys($fullNamespace->toArray()))
+                ) {
                     $locale = array_shift(array_diff(array('en_GB', 'default'), array($locale)));
                 }
 
@@ -175,6 +191,9 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
         return $this;
     }
 
+    /**
+     * @return \Shopware\Models\Shop\Locale
+     */
     protected function getDefaultLocale()
     {
         return $this->modelManager->getRepository('Shopware\Models\Shop\Shop')->getDefault()->getLocale();
@@ -212,8 +231,12 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
         }
 
 
-        // fallback to parent shop, parent locale
-        if ($main !== null) {
+        /**
+         * Fallback to parent shop, parent locale
+         * If parent locale is the same as current locale, skip this step
+         * as it was already added previously ("fallback to parent shop, current locale")
+         **/
+        if ($main !== null && $locale->getId() != $main->getLocale()->getId()) {
             $extends[] = array(
                 $main->getId(),
                 $main->getLocale()->getId(),
@@ -238,7 +261,54 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
      */
     public function addConfigDir($dir)
     {
+        if (!$this->fileAdapter) {
+            return $this;
+        }
+
         $this->fileAdapter->addConfigDir($dir);
+
         return $this;
+    }
+
+    /**
+     * @return string[]
+     */
+    protected function getConfigDirs()
+    {
+        $configDir = array();
+        if (file_exists(Shopware()->DocPath('snippets'))) {
+            $configDir[] = Shopware()->DocPath('snippets');
+        }
+
+        /** @var \Shopware\Models\Plugin\Plugin[] $plugins */
+        $plugins = $this->modelManager->getRepository('Shopware\Models\Plugin\Plugin')->findByActive(true);
+        foreach ($plugins as $plugin) {
+            $pluginPath = $this->pluginDirectories[$plugin->getSource()] . $plugin->getNamespace() . DIRECTORY_SEPARATOR . $plugin->getName();
+
+            // Add plugin snippets
+            $pluginSnippetPath = $pluginPath . DIRECTORY_SEPARATOR . 'Snippets' . DIRECTORY_SEPARATOR;
+
+            array_unshift($configDir, $pluginSnippetPath);
+
+            $pluginThemePath = $pluginPath . DIRECTORY_SEPARATOR . 'Themes' . DIRECTORY_SEPARATOR . 'Frontend' . DIRECTORY_SEPARATOR;
+            if (file_exists($pluginThemePath)) {
+                // Add plugin theme snippets
+                $directories = new \DirectoryIterator(
+                    $pluginThemePath
+                );
+
+                /** @var $directory \DirectoryIterator */
+                foreach ($directories as $directory) {
+                    //check valid directory
+                    if ($directory->isDot() || !$directory->isDir() || $directory->getFilename() == '_cache') {
+                        continue;
+                    }
+
+                    $configDir['themes/' . strtolower($directory->getFilename()) . '/'] = $directory->getPathname() . '/_private/snippets/';
+                }
+            }
+        }
+
+        return $configDir;
     }
 }

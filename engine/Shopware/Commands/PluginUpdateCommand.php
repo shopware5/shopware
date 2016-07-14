@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -24,7 +24,7 @@
 
 namespace Shopware\Commands;
 
-use Shopware\Components\Plugin\Manager;
+use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -63,19 +63,8 @@ EOF
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        // Disable error reporting for shopware menu legacy hack
-        set_error_handler(function ($errno, $errstr) {
-            if ($errno === E_RECOVERABLE_ERROR
-                    && stripos($errstr, 'Argument 1 passed to Shopware\Models\Menu\Repository::findOneBy() must be of the type array') === 0) {
-
-                return true;
-            }
-
-            return false;
-        });
-
-        /** @var Manager $pluginManager */
-        $pluginManager  = $this->container->get('shopware.plugin_manager');
+        /** @var InstallerService $pluginManager */
+        $pluginManager  = $this->container->get('shopware_plugininstaller.plugin_manager');
         $pluginName = $input->getArgument('plugin');
 
         try {
@@ -87,7 +76,7 @@ EOF
 
         if (!$plugin->getUpdateVersion()) {
             $output->writeln(sprintf('The plugin %s is up to date.', $pluginName));
-            return 1;
+            return 0;
         }
 
         $pluginManager->updatePlugin($plugin);

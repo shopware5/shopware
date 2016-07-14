@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,8 +23,9 @@
  */
 
 namespace   Shopware\Models\Payment;
-use         Shopware\Components\Model\ModelEntity,
-            Doctrine\ORM\Mapping AS ORM;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  *
@@ -146,6 +147,13 @@ class Payment extends ModelEntity
      * @ORM\Column(name="esdactive", type="boolean", nullable=false)
      */
     private $esdActive = false;
+
+    /**
+     * @var integer $mobileInactive
+     *
+     * @ORM\Column(name="mobile_inactive", type="boolean", nullable=false)
+     */
+    private $mobileInactive = false;
 
     /**
      * @var string $embedIFrame
@@ -544,6 +552,28 @@ class Payment extends ModelEntity
     public function getEsdActive()
     {
         return $this->esdActive;
+    }
+
+    /**
+     * Sets the mobile inactive state of a payment
+     *
+     * @param boolean $mobileInactive
+     * @return Payment
+     */
+    public function setMobileInactive($mobileInactive)
+    {
+        $this->mobileInactive = (bool) $mobileInactive;
+        return $this;
+    }
+
+    /**
+     * Gets the mobile inactive state of a payment
+     *
+     * @return boolean
+     */
+    public function getMobileInactive()
+    {
+        return $this->mobileInactive;
     }
 
     /**

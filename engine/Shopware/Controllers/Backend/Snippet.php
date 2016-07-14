@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,6 +23,7 @@
  */
 
 use Shopware\Models\Snippet\Snippet;
+
 /**
  * Shopware Backend Controller for the snippet module
  *
@@ -57,7 +58,11 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
         // Get locales from s_core_shops. Join over snippets in order to get default snippets referring onto main-shop
         // as well as snippets which have no own shop
         $locales = Shopware()->Db()->fetchAll("
-            SELECT DISTINCT s.id as shopId, IFNULL(sn.localeID, s.locale_id) as localeId, CONCAT(IF(s.id=1, 'Default', s.name), ' / ', IFNULL(l.locale, l2.locale)) as displayName FROM s_core_shops s
+            SELECT
+              DISTINCT s.id as shopId,
+              IFNULL(sn.localeID, s.locale_id) as localeId,
+              CONCAT(IF(s.id=1, 'Default', s.name), ' / ', IFNULL(l.locale, l2.locale)) as displayName
+            FROM s_core_shops s
             LEFT JOIN s_core_snippets sn ON s.id = sn.shopID
             LEFT JOIN s_core_locales l ON sn.localeID=l.id
             LEFT JOIN s_core_locales l2 ON s.locale_id=l2.id
@@ -121,9 +126,10 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
     {
         $start        = (int) $this->Request()->getParam('start', 0);
         $limit        = (int) $this->Request()->getParam('limit', 20);
-        $localeId     = (int) $this->Request()->getParam('localeId', 1);
-        $shopId       = (int) $this->Request()->getParam('shopId', 1);
+        $localeId     = (int) $this->Request()->getParam('localeId');
+        $shopId       = (int) $this->Request()->getParam('shopId');
         $namespace    = $this->Request()->getParam('namespace');
+        $name    = $this->Request()->getParam('name');
         $filterParams = $this->Request()->getParam('filter');
 
         $order = $this->Request()->getParam('sort', array());
@@ -161,20 +167,23 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
         $secondStmt->where('s2.id IS NULL');
 
         $stmt = Shopware()->Db()
-                          ->select()
-                          ->from(array('s' => 's_core_snippets'), array('id', 'namespace', 'name', 'value', 'value as defaultValue', 'shopId', 'localeId'));
+          ->select()
+          ->from(
+                array('s' => 's_core_snippets'),
+                array('id', 'namespace', 'name', 'value', 'value as defaultValue', 'shopId', 'localeId')
+            );
 
-        // Filter for locale
+        // Filter by locale
         if (!empty($localeId)) {
             $stmt->where('s.localeId = ?', $localeId);
         }
 
-        // Filter for shop
+        // Filter by shop
         if (!empty($shopId)) {
             $stmt->where('s.shopID = ?', $shopId);
         }
 
-        // Filter for namespace
+        // Filter by namespace
         if (!empty($namespace)) {
             $namespaceWildcard = $namespace . '/%';
             $stmt->where(
@@ -187,6 +196,17 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
                 Shopware()->Db()->quoteInto('s1.namespace LIKE ?', $namespace) .
                 ' OR ' .
                 Shopware()->Db()->quoteInto('s1.namespace LIKE ?', $namespaceWildcard)
+            );
+        }
+
+        // Filter by name
+        if (!empty($name)) {
+            $stmt->where(
+                Shopware()->Db()->quoteInto('s.name IN (?)', $name)
+            );
+
+            $secondStmt->where(
+                Shopware()->Db()->quoteInto('s1.name IN (?)', $name)
             );
         }
 
@@ -234,22 +254,40 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
      */
     public function createSnippetAction()
     {
-        $params = $this->Request()->getPost();
+        $snippets = $this->Request()->getPost();
+        $isSingleSnippet = false;
+        $result = array();
 
-        $snippet = new Snippet();
-        $snippet->fromArray($params);
-        $snippet->setDirty(true);
-
-        try {
-            Shopware()->Models()->persist($snippet);
-            Shopware()->Models()->flush();
-        } catch (Exception $e) {
-            $this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
-            return;
+        if (array_key_exists('namespace', $snippets)) {
+            $snippets = array($snippets);
+            $isSingleSnippet = true;
         }
 
-        $data = Shopware()->Models()->toArray($snippet);
-        $this->View()->assign(array('success' => true, 'data' => $data));
+        foreach ($snippets as $params) {
+            $snippet = new Snippet();
+            $snippet->fromArray($params);
+            $snippet->setDirty(true);
+
+            if (!$this->isSnippetValid($snippet)) {
+                continue;
+            }
+
+            try {
+                Shopware()->Models()->persist($snippet);
+                Shopware()->Models()->flush();
+            } catch (Exception $e) {
+                $this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
+                return;
+            }
+
+            $result[$snippet->getId()] = Shopware()->Models()->toArray($snippet);
+        }
+
+        if ($isSingleSnippet) {
+            $result = current($result);
+        }
+
+        $this->View()->assign(array('success' => !empty($result), 'data' => $result));
     }
 
     /**
@@ -267,6 +305,11 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
                 $dirty = ($snippetModel->getDirty() || strcmp($snippetModel->getValue(), $snippet['value']) != 0);
                 $snippetModel->setDirty($dirty);
                 $snippetModel->setValue($snippet['value']);
+
+                if (!$this->isSnippetValid($snippetModel)) {
+                    Shopware()->Models()->remove($snippetModel);
+                    continue;
+                }
             }
             Shopware()->Models()->flush();
             $this->View()->assign(array('success' => true));
@@ -290,6 +333,10 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
         $dirty = ($result->getDirty() || strcmp($result->getValue(), $params['value']) != 0);
         $result->setDirty($dirty);
         $result->fromArray($params);
+
+        if (!$this->isSnippetValid($result)) {
+            Shopware()->Models()->remove($result);
+        }
 
         Shopware()->Models()->flush();
 
@@ -405,7 +452,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
             $headers = $this->readXmlRow(current($snippets));
         } else {
             $snippets = new Shopware_Components_CsvIterator($filePath, ';');
-            $headers = $snippets->getHeader();
+            $headers = $snippets->GetHeader();
         }
 
         if (empty($headers) || !in_array('namespace', $headers) || !in_array('name', $headers)) {
@@ -423,7 +470,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
             if ($pos === false) {
                 continue;
             }
-            $row = explode('-',$header);
+            $row = explode('-', $header);
             $translations[] = array(
                 'both'     => $row[1] . '-'.$row[2],
                 'localeID' => $this->getLocaleId($row[1]),
@@ -495,10 +542,10 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
         if ($format=="csv" || $format=="csvexcel") {
             $sql = "
             SELECT DISTINCT s.shopID as shopId, l.id as localeId, l.locale
-            FROM s_core_snippets s, s_core_locales l, s_core_multilanguage o
+            FROM s_core_snippets s, s_core_locales l, s_core_shops o
             WHERE l.id = s.localeID
             AND o.id = s.shopID
-            ORDER BY s.id, l.id";
+            ORDER BY shopId, localeId";
             $locales = Shopware()->Db()->query($sql)->fetchAll();
 
             $baseLocale = $locales[0];
@@ -561,7 +608,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
         }
 
         if ($format == 'sql') {
-            $this->Response()->setHeader('Content-type: text/plain','');
+            $this->Response()->setHeader('Content-type: text/plain', '');
             $this->Response()->setHeader('Content-Disposition', 'attachment; filename="export.sql"');
 
             $sql = 'SELECT * FROM s_core_snippets ORDER BY namespace';
@@ -569,19 +616,18 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
 
             echo  "REPLACE INTO `s_core_snippets` (`namespace`, `name`, `value`, `localeID`, `shopID`,`created`, `updated`, `dirty`) VALUES \r\n";
             foreach ($result->fetchAll() as $row) {
-                $value = Shopware()->DB()->quote($row['value']);
+                $value = Shopware()->Db()->quote($row['value']);
                 $value = str_replace("\n", "\\n", $value);
 
                 $rows[] = sprintf("(%s, %s, %s, '%s', '%s', '%s', NOW(), %d)",
-                      Shopware()->DB()->quote($row['namespace']),
-                      Shopware()->DB()->quote($row['name']),
+                      Shopware()->Db()->quote($row['namespace']),
+                      Shopware()->Db()->quote($row['name']),
                       $value,
                       (int) $row['localeID'],
                       (int) $row['shopID'],
                       $row['created'],
                       $row['dirty']
                 );
-
             }
             echo implode(",\r\n", $rows) . ';';
 
@@ -815,9 +861,10 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
      */
     protected function getFormatSnippetForExport($string, $encoding = 'utf-8')
     {
-        if (function_exists('mb_convert_encoding') && $encoding != 'utf-8') {
+        if ($encoding != 'utf-8') {
             $string = mb_convert_encoding($string, $encoding, 'UTF-8');
         }
+
         return $string;
     }
 
@@ -852,11 +899,9 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
      */
     protected function getFormatSnippetForSave($string)
     {
-        if (function_exists('mb_convert_encoding')) {
-            $string = mb_convert_encoding($string, 'HTML-ENTITIES', mb_detect_encoding($string, array('utf-8', 'iso-8859-1', 'iso-8859-15', 'windows-1251')));
-        }
+        $string = mb_convert_encoding($string, 'HTML-ENTITIES', mb_detect_encoding($string, array('utf-8', 'iso-8859-1', 'iso-8859-15', 'windows-1251')));
 
-        $string = html_entity_decode($string, ENT_NOQUOTES);
+        $string = html_entity_decode($string, ENT_NOQUOTES, 'UTF-8');
 
         return $string;
     }
@@ -871,5 +916,23 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
         if (!empty($this->uploadedFilePath) && file_exists($this->uploadedFilePath)) {
             @unlink($this->uploadedFilePath);
         }
+    }
+
+    /**
+     * Validates the value of the snippet. Returns false if the snippet value is empty and the shopId/localeId is
+     * not 1.
+     *
+     * @param Snippet $snippet
+     * @return bool
+     */
+    private function isSnippetValid(Snippet $snippet)
+    {
+        if (!$snippet->getValue()) {
+            if ($snippet->getShopId() != 1 || $snippet->getLocaleId() != 1) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

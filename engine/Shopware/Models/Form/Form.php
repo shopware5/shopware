@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,8 +23,9 @@
  */
 
 namespace   Shopware\Models\Form;
-use         Shopware\Components\Model\ModelEntity,
-            Doctrine\ORM\Mapping AS ORM;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Shopware field model represents a single form
@@ -118,6 +119,34 @@ class Form extends ModelEntity
     private $isocode = 'de';
 
     /**
+     * @var string $metaTitle
+     *
+     * @ORM\Column(name="meta_title", type="string", length=255, nullable=true)
+     */
+    private $metaTitle = '';
+
+    /**
+     * @var string $metaKeywords
+     *
+     * @ORM\Column(name="meta_keywords", type="string", length=255, nullable=true)
+     */
+    private $metaKeywords = '';
+
+    /**
+     * @var string $metaDescription
+     *
+     * @ORM\Column(name="meta_description", type="text", nullable=true)
+     */
+    private $metaDescription = '';
+
+    /**
+     * @var string $shopIds
+     *
+     * @ORM\Column(name="shop_ids", type="string", nullable=false)
+     */
+    private $shopIds;
+
+    /**
      * INVERSE SIDE
      * @ORM\OneToMany(targetEntity="Shopware\Models\Form\Field", mappedBy="form", orphanRemoval=true, cascade={"persist"})
      * @var \Doctrine\Common\Collections\ArrayCollection
@@ -154,12 +183,6 @@ class Form extends ModelEntity
 
             // update owning side
             $clonedField->setForm($clonedForm);
-        }
-        $originalAtrribute = $this->getAttribute();
-        if (null !== $originalAtrribute) {
-            $clonedAttribute = clone $originalAtrribute;
-            $clonedAttribute->setForm($clonedForm);
-            $clonedForm->setAttribute($clonedAttribute);
         }
         return $clonedForm;
     }
@@ -384,6 +407,54 @@ class Form extends ModelEntity
     }
 
     /**
+     * @param string $metaTitle
+     */
+    public function setMetaTitle($metaTitle)
+    {
+        $this->metaTitle = $metaTitle;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMetaTitle()
+    {
+        return $this->metaTitle;
+    }
+
+    /**
+     * @param string $metaDescription
+     */
+    public function setMetaDescription($metaDescription)
+    {
+        $this->metaDescription = $metaDescription;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMetaDescription()
+    {
+        return $this->metaDescription;
+    }
+
+    /**
+     * @param string $metaKeywords
+     */
+    public function setMetaKeywords($metaKeywords)
+    {
+        $this->metaKeywords = $metaKeywords;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMetaKeywords()
+    {
+        return $this->metaKeywords;
+    }
+
+    /**
      * @return \Shopware\Models\Attribute\Form
      */
     public function getAttribute()
@@ -400,4 +471,21 @@ class Form extends ModelEntity
         return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\Form', 'attribute', 'form');
     }
 
+    /**
+     * Returns the unexploded shop ids string (ex: |1|2|)
+     *
+     * @return string
+     */
+    public function getShopIds()
+    {
+        return $this->shopIds;
+    }
+
+    /**
+     * @param string $shopIds
+     */
+    public function setShopIds($shopIds)
+    {
+        $this->shopIds = $shopIds;
+    }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2013 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -20,20 +20,10 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category  Shopware
- * @package   Shopware
- * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
  */
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Composer\Autoload\ClassLoader;
-
-set_include_path(
-    __DIR__ . PATH_SEPARATOR .
-    __DIR__ . '/engine/Library/' . PATH_SEPARATOR .   // Library
-    __DIR__ . '/templates/'                           // Templates
-);
 
 /**
  * @var ClassLoader $loader

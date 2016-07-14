@@ -1,0 +1,164 @@
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ *
+ * @category   Shopware
+ * @package    Shopware_Styling
+ * @subpackage Login
+ * @version    $Id$
+ * @author shopware AG
+ */
+
+// TODO@STP - Move to modules folder
+.login-window {
+    background: theme-image($theme, 'login_background.png') no-repeat;
+    color: #475c6a;
+
+    // Fade out transition
+    -webkit-transition: opacity ease-out 0.8s;
+    -moz-transition: opacity ease-out 0.8s;
+    -ms-transition: opacity ease-out 0.8s;
+    -o-transition: opacity ease-out 0.8s;
+    transition: opacity ease-out 0.8s;
+
+	// Enable transition
+    &.loggedin {
+        opacity: 0;
+    }
+
+	// Toolbar footer
+    .#{$prefix}toolbar-footer {
+        @include single-box-shadow('none');
+        border-left: 0 none;
+        border-right: 0 none;
+    	background: transparent !important;
+    	overflow: visible;
+
+    	.#{$prefix}box-inner {
+    		overflow: visible;
+    	}
+    }
+
+    h1 {
+        margin: 40px 0;
+        font-size: 18px;
+        line-height: 21px;
+        text-align: center;
+        color: #475c6a;
+        text-shadow: 1px 1px 1px #fff;
+    }
+    .#{$prefix}panel-body-default{
+        background: transparent;
+        padding: 0 50px;
+    }
+
+	// Form elements - field labels
+    .#{$prefix}form-item-label {
+        color: #475c6a;
+        font-weight: 700;
+        text-shadow: 1px 1px 0px #fff;
+        padding: 8px 0 0;
+    }
+
+	// Form elements - text fields
+    .#{$prefix}form-item-body {
+        @include border-radius(3px);
+        border: 1px solid rgba(255, 255, 255, 0.8);
+
+        .x-form-text {
+            @include border-radius(3px);
+            @include single-box-shadow(rgba(0, 51, 104, 0.26), 0, 1px, 2px, 0, true);
+            background: rgba(255, 255, 255, .5);
+            border-color: rgba(27, 60, 92, 0.3) rgba(27, 60, 92, 0.3) #D3DBE2;
+            width: 263px !important;
+            height: 30px;
+        }
+
+        .#{$prefix}form-text, textarea.#{$prefix}form-field {
+            padding: 1px 10px;
+             -webkit-transition: border linear 0.2s, box-shadow linear 0.2s;
+             -moz-transition: border linear 0.2s, box-shadow linear 0.2s;
+             -ms-transition: border linear 0.2s, box-shadow linear 0.2s;
+             -o-transition: border linear 0.2s, box-shadow linear 0.2s;
+             transition: border linear 0.2s, box-shadow linear 0.2s;
+             color: #475c6a;
+        }
+
+        .#{$prefix}form-text:focus, textarea.#{$prefix}form-field:focus {
+            border-color: rgba(82, 168, 236, 0.8);
+            -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
+            -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
+        }
+
+        .#{$prefix}form-invalid-field {
+            color: #7A0000;
+            &:focus {
+                  border-color: #CC3300;
+                  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(148, 0, 0, .6);
+                   -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(148, 0, 0, .6);
+                   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(148, 0, 0, .6);
+              }
+        }
+    }
+
+	// Form elements - combobox fields
+    .#{$prefix}form-combo {
+        .#{$prefix}form-text {
+            width: 246px !important
+        }
+    }
+
+    // Google Chrome hint
+    .#{$prefix}google-chrome-hint {
+        border-top: 1px solid #C1D2E2!important;
+        margin-top: 14px;
+        font-size: 11px;
+        text-shadow: 1px 1px 0 #fff;
+        color: lighten($font-color, 10%);
+
+        .inner {
+            border-top: 1px solid #fff;
+            padding-top: 8px;
+        }
+
+        a.logo-chrome {
+            background: theme-image($theme, 'logo-chrome.png') no-repeat;
+            display: block;
+            text-decoration: none;
+            height: 24px; width: 24px;
+        }
+        .right-content, a.logo-chrome {
+            float: left;
+        }
+        .right-content {
+            margin: 0 0 0 12px;
+            width: 333px;
+
+            a {
+                color: #009CFF;
+                border-bottom: 1px dotted transparent;
+                text-decoration: none;
+            }
+        }
+    }
+
+}

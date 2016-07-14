@@ -1,0 +1,106 @@
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ *
+ * @category   Shopware
+ * @package    Shopware_Styling
+ * @subpackage Slider
+ * @version    $Id$
+ * @author shopware AG
+ */
+table[id^=slider] {
+	td.#{$prefix}form-item-body {
+		@include reset-box-shadow;
+		@include reset-border-radius;
+		background: transparent;
+		padding: 0;
+		border: 0 none;
+		height: auto;
+
+		.#{$prefix}form-field {
+			padding: 0;
+			height: auto;
+		}
+	}
+
+	/** Slider element - All styles */
+	.#{$prefix}slider {
+		@include reset-box-shadow;
+		@include reset-border-radius;
+
+		&:focus {
+     		@include reset-box-shadow;
+     		border-color: transparent;
+     	}
+	}
+
+	/** Slider horizontal element */
+	.#{$prefix}slider-horz {
+		background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAARCAYAAAA7bUf6AAAAp0lEQVR42s2T2wrCMBBE8/+/JViEKEYQxWpb66X2Qm0Vm/qSMfu8UkKL1MCEeTpMZjcCgKgfTxRl1VuirGoywyB0/S/kEJ0g1RqT2cJFHLLdh5jKJTZ+gHOS4prmSLKiSxziSYVdcLT+jlej0egWun13iUMoHiUggDEGDudHEG++ss+JyROIx+f6VmxkQQp+GONyy6g4x2L5hKjg/iMef2PH/8XAcNAHvKM8Sb0Kzj4AAAAASUVORK5CYII=") no-repeat;
+		padding: 0 0 0 17px !important;
+		border: 0 none;
+
+
+		/** Slider end */
+		.#{$prefix}slider-end {
+			padding-right: 21px;
+			background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAARCAYAAAAyhueAAAAAqklEQVR42u2UXQvCIBiF9///VpAEFhlE0Wquz7UPliua68aTQuDFunHpXQeeSx88vi9GVS3gi+b+gE5kpZ6oRQMr9Ucg6WgywxAoW2KXHr9Ls6KCC5e8xCnLsYoTjOkc6y3vS2X3ggut7PBspT58wybZg1DWl2JAlFJGbG5sniK41NZ35FNf6PoHkOnil0FZztcCMTdCpgeV+lspQo2QB1n+vzTYL2WFOtEbl1Q8XNrLavwAAAAASUVORK5CYII=") no-repeat right 0;
+		}
+
+		/** Slider inner */
+		.#{$prefix}slider-inner {
+			background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAARCAMAAAArHTYgAAAAElBMVEXs7vDDyc7k5+n19vf+/v7l6OqtmmpLAAAAHklEQVR42j3HsQEAAAiDMLT6/8t2qWGCKBoxTqzvHQGxABhrIj+XAAAAAElFTkSuQmCC") repeat-x;
+		}
+
+		/** Slider button */
+		.#{$prefix}slider-thumb {
+			top: 0;
+			height: 18px; width: 18px;
+			background-position: 0 0;
+			background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAACzElEQVR42m2Uy0uUYRjFvz+g2nTRdEYry0zLzAKjxIVGICSt2hmBi6BFEC3aVbToAmWpKVhq3lBT0UyzNHXUMVPzlmDeKitTUzNpUanQcDrn5aPQZvHjfb7nOee8zwzfjAXgP3Ld35CQsoDtp39gXfxvodr0NPPmWfHQ/XYex27Pw3HRg10uIGYYOD4hWI8AoS2A45LHaKT1GtQ1MofYmwvYWQPE0hQl4xCwdZC8AcKG2RsF4saAkKc8by1AnhVB07NfEX9jBjvKgch+IPAVENBLXtsM2CdnW9jfz+fgShiPvCaotaMXF7K74HtuGdHdFLcCznaGdZEe0ivsmnNnBzWcx/QBvueXjVcZ1vjEFGIvf8C2PGCvG/BvoLiFvKDxJenkFgq1A5xtgMMFRLAOKoTxKsOamplDYOI8Imo5IH7E8Zwml7ZjSJtg7Sb6spuoqaOWRBJ5lWFNfpnF2qPLONwMbC4jlRTW0PCMRgU22jSwV8+Na6mpoqYCiG6F8SrD+jg5jbVHlnCQQt8CwKeYwnIaHtFYTZ7Y1LD3mLMK6h7ypO5QE4xXGdbo+09wnJhGGIcBDNqUS2EhhSWklGaGCj9tS41vES/Lo5aa3ZzLqwyrf3AEUWf7EJAMBPOWjZkUZhMF5ivUpkABJIeX3aO2BPIYrzKs2kY3Tl6pwvqkJewpo+guwzJ4ZpL7JEuoVoA9SwfCyyGP8SrD+jw9i+b2bhw40wnnNSDoAcUpwIZUkr6KNM2o4bbO65DHeJVh3uyhsXGklbgQmtQP51UgrBgm0D+DxjtCtXpmJo20xiPvip9Iz8AQkvPrEJHUZlZ28MYQ3ryvUphaPc2kkdZ46P0XJLSeBqXV9Ujk5w4/5YZPwjusifspVKunmTRGK4/XvxGla1V9bomziiqQmlMkVKunmTR/N/EaJDweD34tLmJ+4bveWL1sQrV6ZibNat8fwR2x/5qL1YQAAAAASUVORK5CYII=") no-repeat;
+		}
+	}
+
+	/** Slider vertical element */
+	.#{$prefix}slider-vert {
+		padding-top: 21px !important;
+		background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAAVCAYAAACg/AXsAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAt0lEQVQ4je3Ry47CMAxA0Wu30BaGlgD//4VV0mQxMxJJw4LHikeBFRJ3a+tIliXnjPMhj2Pm2VQF07WF2MG/BJyblQX6DgCwjwl9SzhV3hr0dsD5QIzxuFgUmHXLbmOmIb11OB/YGsOiqQD4/funt45ZWdK1q8eIGwK7rcF0LU19ROpqTkoJ58M0JKbEoqlp6uqCAKx+lvR2mHYOgKqiqogIACKC6vU/TP6OiFzAl5F7fZEv8lnIAfh3O2n6IH62AAAAAElFTkSuQmCC") no-repeat;
+
+		/** Slider end */
+		.#{$prefix}slider-end {
+			padding-bottom: 17px;
+			background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAARCAYAAAA7bUf6AAAAoklEQVR42u2OXQuCQBBF/f9/K0iCLdogiiw1+zBNTItce9nb3od98cWt6M2BA5ednTPjFWWFLqPJDGleQLUv2GLmG3vd/4NkkNhqVItzdv1McrrkeDYKWmsQ5mOauUt8IRFECTOHick3rIIQQi7dJOttBH8qsQkTbicm7zEWc+zig4vEimIjWvB8wusoZ69H0s8fJWVV/ySo7w94wPciznH+DUWlPElYGv+aAAAAAElFTkSuQmCC") no-repeat 0 bottom;
+		}
+
+		/** Slider inner */
+		.#{$prefix}slider-inner {
+			background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAABCAMAAAAPZbVTAAAAD1BMVEXs7vDDyc7n6uz3+Pn///9ABeUEAAAAGklEQVR42h3Gtw0AAAACINv/NxtlAkc5sbgXALwAFWwhS3sAAAAASUVORK5CYII=") repeat-y;
+		}
+
+		/** Slider button */
+		.#{$prefix}slider-thumb {
+			left: 0;
+			height: 18px; width: 18px;
+			background-position: 0 0;
+			background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAAC40lEQVR42o2TS09TURSF+wM0DgSsQvFBQATR+kgkigyEiQbjxJlxUuOAmIg/gERj4iMx+ECI+CgF1LaAFuQlBQQEeVmwoFgqVVRoUKCiI0AwLtc+l6RpysDByj33nL2+7LXPvToAYTr/6C2y8gKIz57HmiN/RbJWe3K2kifkxeULIOt6AJGnFxGbByTbgdRm4EAbYKwHtpQA+nNLqkZqVwT1eadx8EIAhstASgWQYAViy2ik1vM9jqCdHUCaC4ivBA5dm4V4QkCTUzM4fPU7DJdoKAaibgORRXxagHVWghzABoKimwl/Cex2A1trIZ5QUIHTj8hTS0i2EnCTKiTgAbt5SEglITTFNAGGdqoL2PiaHXm5n/sH4lWgickpZF4cR8wVrZuIW+ykiCALITZ2UUXIc3bSSsgrQvq4HgD2EbSNe+Kdm5+Hzvd5HLEnppFooamQoAKC7rGbUoLKCamhsUkiEdJN9XM9CCR5gPQRKG9g9hd077wfsTpzAbscjHRjGXRfYhFcSVAdi1uATZ2E9FIDGmjzMHBsHMrr/zYFnXvY+58gqm8ZNETQ+yDoi39SA0UfnwiPVsZhVhBUS2Mz1UFITzBa8gijeSFeAWnRUnMGg8POJ+guh13CGdlZ+IwwJ83tlNyYi083h/2Bc+IevRJNG3bOnS5EmBZCr9/Mrh4T9pSwesJeAIZOqocRGS9jlGe5i+JVw1bX39blwt7sXu2DtLCjgmBXejsN1YzZSFir1tUeziixAeIRr3b9AHSe0THk21qRZHLDwIg7OOQEG03yQVoJYVdxBBkJSX/DMwdrzgwrj3hDfpH+IQ/yShthNHViLWPKT7u9HNjPSGnyWzQSRnBUzm+pkVrloTcIoiSiOiivcSLrbDFSTrZBf3QMqzLmRLKWPTmTGlUrnrC/f+bHT6GrVs02B6xVDSh7UgezvVoka9mTM6lRtfSEgMLU0tELj28Mn7765RsRyVrtydlKnn9L+a9m01aCxQAAAABJRU5ErkJggg==") no-repeat;
+		}
+	}
+}

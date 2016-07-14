@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -22,8 +22,11 @@
  * our trademarks remain entirely with us.
  */
 
+use Doctrine\DBAL\Connection;
+use Shopware\Components\CSRFWhitelistAware;
+
 /**
- * Backend Controller for the Shopware 4 global configured stores.
+ * Backend Controller for the Shopware global configured stores.
  *
  * The following stores are configured global:
  *  - Article
@@ -34,11 +37,10 @@
  *  - Payments
  *  - Suppliers
  *  - Shops
- *  - Locales (By sth)
- *  - User (By ps)
- *
+ *  - Locales
+ *  - User
  */
-class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_ExtJs
+class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
     /**
      * Initials the script renderer and handles the json request.
@@ -53,7 +55,6 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         if (!$this->Request()->getActionName()
             || in_array($this->Request()->getActionName(), array('index', 'load'))
         ) {
-
             $this->View()->addTemplateDir('.');
             $this->Front()->Plugins()->ScriptRenderer()->setRender();
             Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
@@ -62,20 +63,35 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         }
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function getWhitelistedCSRFActions()
+    {
+        return [
+            'index'
+        ];
+    }
+
    /**
     * Add the table alias to the passed filter and sort parameters.
-    * @param $properties
-    * @param $fields
-    * @return array|mixed
+    * @param array $properties
+    * @param array $fields
+    * @return array
     */
     private function prepareParam($properties, $fields)
     {
-        foreach ($properties as $key => $property) {
-        if (array_key_exists($property['property'], $fields)) {
-            $property['property'] = $fields[$property['property']];
+        if (empty($properties)) {
+            return $properties;
         }
+
+        foreach ($properties as $key => $property) {
+            if (array_key_exists($property['property'], $fields)) {
+                $property['property'] = $fields[$property['property']];
+            }
             $properties[$key] = $property;
         }
+
         return $properties;
     }
 
@@ -154,7 +170,6 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
 
         //return the data and total count
         $this->View()->assign(array('success' => true, 'data' => $data, 'total' => $total));
-
     }
 
     /**
@@ -216,7 +231,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
     public function getCategoriesAction()
     {
         /** @var $repository \Shopware\Models\Category\Repository */
-        $repository = Shopware()->Models()->Category();
+        $repository = Shopware()->Models()->getRepository(\Shopware\Models\Category\Category::class);
 
         $query = $repository->getListQuery(
             $this->Request()->getParam('filter', array()),
@@ -466,6 +481,9 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         }
 
         //don't search for variant articles?
+        //this is deprecated, because it's the same as "configurator". Further it does not search for variant articles,
+        //this was replaced by the option to set another store. To search for look at the example explained in the
+        //search scope documentation of the Shopware.form.field.ArticleSearch.js
         $displayVariants = (bool) $this->Request()->getParam('variants', true);
         if (!$displayVariants) {
             $builder->andWhere('articles.configuratorSetId IS NULL');
@@ -499,15 +517,206 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
 
         $query = $builder->getQuery();
 
+        $paginator = Shopware()->Models()->createPaginator($query);
+
         //get total result of the query
-        $total = Shopware()->Models()->getQueryCount($query);
+        $total = $paginator->count();
 
         //select all shop as array
-        $data = $query->getArrayResult();
+        $data = $paginator->getIterator()->getArrayCopy();
 
         //return the data and total count
         $this->View()->assign(array('success' => true, 'data' => $data, 'total' => $total));
     }
+
+
+    /**
+     * Returns a list of articles with variants. Supports store paging, sorting and filtering over the standard ExtJs store parameters.
+     * This function is at the first look very similar to "getArticleAction()" but it differs in the query builder and the result very strong
+     *
+     * Each article has the following fields:
+     * <code>
+     *   [int]      id
+     *   [string]   name
+     *   [string]   number
+     *   [int]      supplierId
+     *   [string]   supplierName
+     *   [string]   description
+     *   [int]      active
+     *   [array]    changeTime
+     *   [int]      detailId
+     *   [int]      inStock
+     * </code>
+     */
+    public function getVariantsAction()
+    {
+        $builder = Shopware()->Container()->get('dbal_connection')->createQueryBuilder();
+
+        $fields = array(
+                'details.id',
+                'articles.name',
+                'articles.description',
+                'articles.active',
+                'details.ordernumber',
+                'articles.id as articleId',
+                'details.inStock',
+                'supplier.name as supplierName',
+                'supplier.id as supplierId',
+                'details.additionalText'
+        );
+
+        $builder->select($fields);
+        $builder->from('s_articles_details', 'details');
+        $builder->innerJoin('details', 's_articles', 'articles', 'details.articleID = articles.id');
+        $builder->innerJoin('articles', 's_articles_supplier', 'supplier', 'supplier.id = articles.supplierID');
+
+        $filters = $this->Request()->getParam('filter', array());
+        foreach ($filters as $filter) {
+            if ($filter['property'] === 'free') {
+                $builder->andWhere(
+                    $builder->expr()->orX(
+                        'details.ordernumber LIKE :free',
+                        'articles.name LIKE :free',
+                        'supplier.name LIKE :free'
+                    )
+                );
+                $builder->setParameter(':free', $filter['value']);
+            } else {
+                $builder->addFilter($filter);
+            }
+        }
+
+        $properties = $this->prepareVariantParam($this->Request()->getParam('sort', array()), $fields);
+        foreach ($properties as $property) {
+            $builder->addOrderBy($property['property'], $property['direction']);
+        }
+
+        $builder->setFirstResult($this->Request()->getParam('start'))
+                ->setMaxResults($this->Request()->getParam('limit'));
+
+        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
+        $statement = $builder->execute();
+        $result = $statement->fetchAll(\PDO::FETCH_ASSOC);
+
+        $total = (int) $builder->getConnection()->fetchColumn('SELECT FOUND_ROWS()');
+
+        $result = $this->addAdditionalTextForVariant($result);
+
+        $this->View()->assign(array('success' => true, 'data' => $result, 'total' => $total));
+    }
+
+    /**
+     * prepares the sort params for the variant search
+     *
+     * @param array $properties
+     * @param array $fields
+     * @return array
+     */
+    private function prepareVariantParam($properties, $fields)
+    {
+        //maps the fields to the correct table
+        foreach ($properties as $key => $property) {
+            foreach ($fields as $field) {
+                $asStr = ' as ';
+                $dotPos = strpos($field, '.');
+                $asPos = strpos($field, $asStr, true);
+
+                if ($asPos) {
+                    $fieldName = substr($field, $asPos + strlen($asStr));
+                } else {
+                    $fieldName = substr($field, $dotPos + 1);
+                }
+
+                if ($fieldName == $property['property']) {
+                    $properties[$key]['property'] = $field;
+                }
+            }
+        }
+
+        return $properties;
+    }
+
+    /**
+     * adds the additional text for variants
+     *
+     * @param array $data
+     * @return mixed
+     */
+    private function addAdditionalTextForVariant($data)
+    {
+        $variantIds  = [];
+        $tmpVariant = [];
+
+        //checks if an additional text is available
+        foreach ($data as $variantData) {
+            if (!empty($variantData['additionalText'])) {
+                $variantData['name'] = $variantData['name'] . ' ' . $variantData['additionalText'];
+            } else {
+                $variantIds[$variantData['id']] = $variantData['id'];
+            }
+
+            $tmpVariant[$variantData['id']] = $variantData;
+        }
+
+        if (empty($variantIds)) {
+            return $data;
+        }
+
+        $builder = Shopware()->Container()->get('dbal_connection')->createQueryBuilder();
+
+        $builder->select([
+            'details.id',
+            'groups.name AS groupName',
+            'options.name AS optionName'
+        ]);
+
+        $builder->from('s_articles_details', 'details');
+
+        $builder->innerJoin('details', 's_article_configurator_option_relations', 'mapping', 'mapping.article_id = details.id');
+        $builder->innerJoin('mapping', 's_article_configurator_options', 'options', 'options.id = mapping.option_id');
+        $builder->innerJoin('options', 's_article_configurator_groups', 'groups', 'options.group_id = groups.id');
+
+        $builder->where('details.id IN (:detailsId)');
+        $builder->setParameter('detailsId', $variantIds, Connection::PARAM_INT_ARRAY);
+
+        $statement = $builder->execute();
+        $result = $statement->fetchAll(\PDO::FETCH_ASSOC);
+
+        $tmpVariant = $this->buildDynamicText($tmpVariant, $result);
+
+        //maps the associative data array back to an normal indexed array
+        $data = [];
+        foreach ($tmpVariant as $variant) {
+            $data[] = $variant;
+        }
+
+        return $data;
+    }
+
+    /**
+     * helper function to generate the additional text dynamically
+     *
+     * @param array $data
+     * @param array $variantsWithoutAdditionalText
+     * @return array
+     */
+    private function buildDynamicText($data, $variantsWithoutAdditionalText)
+    {
+        foreach ($variantsWithoutAdditionalText as $variantWithoutAdditionalText) {
+            $variantData = &$data[$variantWithoutAdditionalText['id']];
+
+            if (empty($variantData['additionalText'])) {
+                $variantData['additionalText'] .= $variantWithoutAdditionalText['optionName'];
+                $variantData['name'] .= ' ' . $variantWithoutAdditionalText['optionName'];
+            } else {
+                $variantData['additionalText'] .= ' / ' . $variantWithoutAdditionalText['optionName'];
+                $variantData['name'] .= ' / ' . $variantWithoutAdditionalText['optionName'];
+            }
+        }
+
+        return $data;
+    }
+
 
     /**
      * Returns a list of all backend-users. Supports store paging, sorting and filtering over the standard ExtJs store parameters.
@@ -523,8 +732,6 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
      *    [string]   name
      *    [string]   email
      *    [int]      active
-     *    [int]      admin
-     *    [int]      salted
      *    [int]      failedLogins
      *    [date]     lockedUntil
      * </code>
@@ -545,8 +752,6 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
             'name' => 'user.name',
             'email' => 'user.email',
             'active' => 'user.active',
-            'admin' => 'user.admin',
-            'salted' => 'user.salted',
             'failedLogins' => 'user.failedLogins',
             'lockedUntil' => 'user.lockedUntil'
         );
@@ -593,22 +798,33 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         $this->View()->assign(array('success' => true, 'data' => $data, 'total' => $total));
     }
 
-    public function getTemplatesAction()
+    /**
+     * Returns a list of shops that have themes assigned
+     * Used for theme cache warm up in the backend
+     */
+    public function getShopsWithThemesAction()
     {
-        $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Template');
-        $builder = $repository->createQueryBuilder('t');
-        $builder->select(array(
-            't.id as id',
-            't.name as name',
-            't.template as template'
-        ));
-        $builder->addFilter((array) $this->Request()->getParam('filter', array()));
-        $builder->addOrderBy((array) $this->Request()->getParam('sort', array()));
+        //load shop repository
+        /** @var $repository \Shopware\Models\Shop\Repository */
+        $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
 
-        $builder->setFirstResult($this->Request()->getParam('start'))
-                ->setMaxResults($this->Request()->getParam('limit'));
+        $shopId = $this->Request()->getParam('shopId', null);
+        $filter = $this->Request()->getParam('filter', array());
+        if ($shopId) {
+            $filter[] = array(
+                'property' => 'shop.id',
+                'value' => $shopId,
+                'operator' => null,
+                'expression' => null
+            );
+        }
 
-        $query = $builder->getQuery();
+        $query = $repository->getShopsWithThemes(
+            $filter,
+            $this->Request()->getParam('sort', array()),
+            $this->Request()->getParam('start'),
+            $this->Request()->getParam('limit')
+        );
 
         //get total result of the query
         $total = Shopware()->Models()->getQueryCount($query);
@@ -618,6 +834,31 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
 
         //return the data and total count
         $this->View()->assign(array('success' => true, 'data' => $data, 'total' => $total));
+    }
+
+    public function getTemplatesAction()
+    {
+        $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Template');
+        $templates = $repository->findAll();
+
+        /**@var $template \Shopware\Models\Shop\Template**/
+        $result = [];
+        foreach ($templates as $template) {
+            $data = array(
+                'id' => $template->getId(),
+                'name' => $template->getName(),
+                'template' => $template->getTemplate()
+            );
+
+            $data = $this->get('theme_service')->translateTheme(
+                $template,
+                $data
+            );
+
+            $result[] = $data;
+        }
+
+        $this->View()->assign(array('success' => true, 'data' => $result));
     }
 
     public function getCurrenciesAction()
@@ -737,7 +978,6 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         $blacklist = array('prehashed', 'legacybackendmd5');
 
         foreach ($hashes as $hash) {
-
             if (in_array(strtolower($hash->getName()), $blacklist)) {
                 continue;
             }
@@ -754,5 +994,108 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
             'data' => $result,
             'total' => $totalResult,
         ));
+    }
+
+    /**
+     * Loads options for the 404 page config options.
+     * Returns an array of all defined emotion pages, plus the 2 default options.
+     *
+     * @return array
+     */
+    public function getPageNotFoundDestinationOptionsAction()
+    {
+        $limit = $this->Request()->getParam('limit', null);
+        $offset = $this->Request()->getParam('start', 0);
+        $sort = $this->Request()->getParam('sort', null);
+
+        $namespace = Shopware()->Snippets()->getNamespace('backend/base/page_not_found_destination_options');
+
+        $query = Shopware()->Models()->getRepository('Shopware\Models\Emotion\Emotion')
+            ->getNameListQuery(true, $sort, $offset, $limit);
+        $count = Shopware()->Models()->getQueryCount($query);
+        $emotions = $query->getArrayResult();
+        foreach ($emotions as &$emotion) {
+            $emotion['name'] = $namespace->get('emotion_page_prefix', 'Shopping world') . ': ' . $emotion['name'];
+        }
+
+        $options = array_merge(
+            array(
+                array(
+                    'id' => '-2',
+                    'name' => $namespace->get('show_homepage', 'Show homepage')
+                ),
+                array(
+                    'id' => '-1',
+                    'name' => $namespace->get('show_error_page', 'Show default error page')
+                )
+            ),
+            $emotions
+        );
+
+        $this->View()->assign(array(
+            'success' => true,
+            'data' => $options,
+            'total' => $count+2
+        ));
+    }
+
+    /**
+     * Validates the email address in parameter "value"
+     * Sets the response body to "1" if valid, to an empty string otherwise
+     */
+    public function validateEmailAction()
+    {
+        // disable template renderer and automatic json renderer
+        $this->Front()->Plugins()->ViewRenderer()->setNoRender();
+        $this->Front()->Plugins()->Json()->setRenderer(false);
+
+        $email = $this->Request()->getParam('value');
+
+        /** @var \Shopware\Components\Validator\EmailValidatorInterface $emailValidator */
+        $emailValidator = $this->container->get('validator.email');
+        if ($emailValidator->isValid($email)) {
+            $this->Response()->setBody(1);
+        } else {
+            $this->Response()->setBody("");
+        }
+    }
+
+    public function getSalutationsAction()
+    {
+        $value = $this->getAvailableSalutationKeys();
+
+        $namespace = Shopware()->Container()->get('snippets')->getNamespace('frontend/salutation');
+        $salutations = [];
+        foreach ($value as $key) {
+            $salutations[] = ['key' => $key, 'label' => $namespace->get($key, $key)];
+        }
+
+        $this->View()->assign('data', $salutations);
+    }
+
+    /**
+     * @return array
+     */
+    private function getAvailableSalutationKeys()
+    {
+        $builder = Shopware()->Container()->get('models')->createQueryBuilder();
+        $builder->select(['element', 'values'])
+            ->from('Shopware\Models\Config\Element', 'element')
+            ->leftJoin('element.values', 'values')
+            ->where('element.name = :name')
+            ->setParameter('name', 'shopsalutations');
+
+        $data = $builder->getQuery()->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+
+        $value = explode(',', $data['value']);
+        if (!empty($data['values'])) {
+            $value = [];
+        }
+
+        foreach ($data['values'] as $shopValue) {
+            $value = array_merge($value, explode(',', $shopValue['value']));
+        }
+        $value = array_unique(array_filter($value));
+        return $value;
     }
 }

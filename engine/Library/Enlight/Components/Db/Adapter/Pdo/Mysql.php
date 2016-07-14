@@ -19,6 +19,7 @@
  * @version    $Id$
  * @author     $Author$
  */
+use Doctrine\DBAL\Connection;
 
 /**
  * Pdo adapter for Mysql.
@@ -33,6 +34,26 @@
  */
 class Enlight_Components_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql
 {
+    /**
+     * @var Connection
+     */
+    protected $dbalConnection;
+
+    /**
+     * @param Connection $connection
+     * @param array $config
+     * @return self
+     */
+    public static function createFromDbalConnectionAndConfig(Connection $connection, $config)
+    {
+        $adapter = new self($config);
+        $adapter->dbalConnection= $connection;
+
+        unset($adapter->_config['username'], $adapter->_config['password']);
+
+        return $adapter;
+    }
+
     /**
      * Quote a raw string.
      *
@@ -88,21 +109,11 @@ class Enlight_Components_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql
             return;
         }
 
-        try {
-            parent::_connect();
-        } catch (Exception $e) {
-            $message = $e->getMessage();
-            $message = str_replace(array(
-                    $this->_config['username'],
-                    $this->_config['password']
-                ), '******', $message
-            );
-
-            throw new Zend_Db_Adapter_Exception($message, $e->getCode());
+        if (!$this->dbalConnection) {
+            throw new RuntimeException(sprintf("Class can only be constructed using %s::createFromDbalConnectionAndConfig().", __CLASS__));
         }
 
-        // finally, we delete the authorization data
-        unset($this->_config['username'], $this->_config['password']);
+        $this->_connection = $this->dbalConnection->getWrappedConnection();
     }
 
     /**
@@ -132,5 +143,16 @@ class Enlight_Components_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql
     public function executeQuery($query, array $params = array(), array $types = array())
     {
         return $this->query($query, $params);
+    }
+
+    /**
+     * Returns the error message of the last query, or null if none
+     *
+     * @return string|null
+     */
+    public function getErrorMessage()
+    {
+        $error = $this->getConnection()->errorInfo();
+        return isset($error[2]) ? $error[2] : null;
     }
 }

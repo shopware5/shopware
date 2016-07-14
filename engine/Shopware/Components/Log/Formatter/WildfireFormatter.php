@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -208,7 +208,6 @@ class WildfireFormatter extends BaseWildfireFormatter
         if (is_resource($object)) {
             return '** ' . (string) $object . ' **';
         } elseif (is_object($object)) {
-
             if ($objectDepth > $this->options['maxObjectDepth']) {
                 return '** Max Object Depth (' . $this->options['maxObjectDepth'] . ') **';
             }
@@ -231,7 +230,6 @@ class WildfireFormatter extends BaseWildfireFormatter
             $members = (array) $object;
 
             foreach ($properties as $just_name => $property) {
-
                 $name = $raw_name = $just_name;
 
                 if ($property->isStatic()) {
@@ -254,9 +252,7 @@ class WildfireFormatter extends BaseWildfireFormatter
                                 $this->objectFilters[$class]
                         ))
                 ) {
-
                     if (array_key_exists($raw_name, $members) && !$property->isStatic()) {
-
                         $return[$name] = $this->encodeObject($members[$raw_name], $objectDepth + 1, 1);
                     } else {
                         if (method_exists($property, 'setAccessible')) {
@@ -276,7 +272,6 @@ class WildfireFormatter extends BaseWildfireFormatter
             // Include all members that are not defined in the class
             // but exist in the object
             foreach ($members as $just_name => $value) {
-
                 $name = $raw_name = $just_name;
 
                 if ($name{0} == "\0") {
@@ -291,7 +286,6 @@ class WildfireFormatter extends BaseWildfireFormatter
                                     $this->objectFilters[$class]
                             ))
                     ) {
-
                         $return[$name] = $this->encodeObject($value, $objectDepth + 1, 1);
                     } else {
                         $return[$name] = '** Excluded by Filter **';
@@ -301,7 +295,6 @@ class WildfireFormatter extends BaseWildfireFormatter
 
             array_pop($this->objectStack);
         } elseif (is_array($object)) {
-
             if ($arrayDepth > $this->options['maxArrayDepth']) {
                 return '** Max Array Depth (' . $this->options['maxArrayDepth'] . ') **';
             }
@@ -313,7 +306,6 @@ class WildfireFormatter extends BaseWildfireFormatter
                 // a reference to itself. This is the only way I have come up
                 // with to stop infinite recursion in this case.
                 if ($key == 'GLOBALS' && is_array($val) && array_key_exists('GLOBALS', $val)) {
-
                     $val['GLOBALS'] = '** Recursion (GLOBALS) **';
                 }
                 $return[$key] = $this->encodeObject($val, 1, $arrayDepth + 1);

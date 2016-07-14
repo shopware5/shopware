@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -38,7 +38,6 @@ class Shopware_Plugins_Frontend_LastArticles_Bootstrap extends Shopware_Componen
             'Enlight_Controller_Action_PostDispatch',
             'onPostDispatch'
         );
-
         $form = $this->Form();
         $parent = $this->Forms()->findOneBy(array('name' => 'Frontend'));
         $form->setParent($parent);
@@ -57,11 +56,40 @@ class Shopware_Plugins_Frontend_LastArticles_Bootstrap extends Shopware_Componen
             'value' => 2,
             'scope' => Shopware\Models\Config\Element::SCOPE_SHOP
         ));
+        $form->setElement('number', 'lastarticlestoshow', array(
+            'label' => 'Anzahl Artikel in Verlauf (zuletzt angeschaut)',
+            'value' => 5
+        ));
         $form->setElement('number', 'time', array(
             'label' => 'Speicherfrist in Tagen',
             'value' => 15
         ));
 
+        $this->addFormTranslations(
+            array(
+                'en_GB' => array(
+                    'plugin_form' => array(
+                        'label' => 'Recently viewed items'
+                    ),
+                    'show' => array(
+                        'label' => 'Display recently viewed items'
+                    ),
+                    'controller' => array(
+                        'label' => 'Controller selection'
+                    ),
+                    'thumb' => array(
+                        'label' => 'Thumbnail size',
+                        'description' => 'Index of the thumbnail size of the associated album to use. Starts at 0'
+                    ),
+                    'lastarticlestoshow' => array(
+                        'label' => 'Maximum number of items to display'
+                    ),
+                    'time' => array(
+                        'label' => 'Storage period in days'
+                    )
+                )
+            )
+        );
         return true;
     }
 
@@ -100,13 +128,6 @@ class Shopware_Plugins_Frontend_LastArticles_Bootstrap extends Shopware_Componen
 
         $config = $this->Config();
 
-        if ($request->getControllerName() == 'detail'
-            && !Shopware()->Session()->Bot
-            && Shopware()->Shop()->getTemplate()->getVersion() == 1
-        ) {
-            $this->setLastArticleById($view->sArticle["articleID"]);
-        }
-
         if (rand(0, 100) === 0) {
             $time = $config->time > 0 ? (int) $config->time : 15;
             $sql = '
@@ -143,7 +164,7 @@ class Shopware_Plugins_Frontend_LastArticles_Bootstrap extends Shopware_Componen
         $article = $this->getArticleData((int) $articleId);
 
         Shopware()->Session()->sLastArticle = $articleId;
-        $sessionId = Shopware()->SessionID();
+        $sessionId = Shopware()->Session()->get('sessionId');
 
         if (empty($sessionId) || empty($article['articleName']) || empty($articleId)) {
             return;

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -24,7 +24,6 @@
  * @category   Shopware
  * @package    Shopware_Controllers
  * @subpackage Api
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
  * @version    $Id$
  * @author     Benjamin Cremer
  */
@@ -87,7 +86,6 @@ class Shopware_Controllers_Api_Caches extends Shopware_Controllers_Api_Rest
     public function putAction()
     {
         throw new \RuntimeException('Updating caches is not possible, yet. After updating a product or category the cache will be invalidated automatically, if configured in the HTTP-Cache settings..');
-
     }
 
     /**
@@ -100,18 +98,6 @@ class Shopware_Controllers_Api_Caches extends Shopware_Controllers_Api_Rest
         $id = $this->Request()->getParam('id');
 
         $this->resource->delete($id);
-
-        $this->View()->assign(array('success' => true));
-    }
-
-    /**
-     * Delete cache
-     *
-     * DELETE /api/caches/
-     */
-    public function batchDeleteAction()
-    {
-        $this->resource->delete('all');
 
         $this->View()->assign(array('success' => true));
     }

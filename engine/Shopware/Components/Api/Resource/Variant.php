@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -25,8 +25,10 @@
 namespace Shopware\Components\Api\Resource;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Shopware\Components\Api\Exception as ApiException;
 use Shopware\Models\Article\Article as ArticleModel;
+use Shopware\Models\Article\Configurator\Group;
 use Shopware\Models\Article\Configurator\Option;
 use Shopware\Models\Article\Detail;
 use Shopware\Models\Article\Image;
@@ -75,7 +77,7 @@ class Variant extends Resource implements BatchInterface
      * @param array $options
      * @return array|\Shopware\Models\Article\Detail
      */
-    public function getOneByNumber($number, array $options = array())
+    public function getOneByNumber($number, array $options = [])
     {
         $id = $this->getIdFromNumber($number);
         return $this->getOne($id, $options);
@@ -89,7 +91,7 @@ class Variant extends Resource implements BatchInterface
      * @throws \Shopware\Components\Api\Exception\ParameterMissingException
      * @return array|\Shopware\Models\Article\Detail
      */
-    public function getOne($id, array $options = array())
+    public function getOne($id, array $options = [])
     {
         $this->checkPrivilege('read');
 
@@ -112,33 +114,85 @@ class Variant extends Resource implements BatchInterface
         }
 
         if ($this->getResultMode() === self::HYDRATE_ARRAY) {
-
             if (isset($options['considerTaxInput']) && $options['considerTaxInput']) {
-                $tax = Shopware()->Db()->fetchOne(
-                    "SELECT tax
-                     FROM s_core_tax
-                         INNER JOIN s_articles
-                             ON s_articles.taxID = s_core_tax.id
-                             AND s_articles.id = :articleId",
-                    array(':articleId' => $variant['articleId'])
-                );
-
-                if (empty($tax)) {
-                    throw new ApiException\CustomValidationException(
-                        sprintf("No article tax configured for variant: %s", $id)
-                    );
-                }
-
-                $variant['prices'] = $this->getArticleResource()->getTaxPrices(
-                    $variant['prices'],
-                    $tax
-                );
+                $variant = $this->considerTaxInput($variant);
             }
         }
 
         return $variant;
     }
 
+    /**
+     * @param int $offset
+     * @param int $limit
+     * @param array $criteria
+     * @param array $orderBy
+     * @param array $options
+     * @return array
+     */
+    public function getList($offset = 0, $limit = 25, array $criteria = [], array $orderBy = [], array $options = [])
+    {
+        $this->checkPrivilege('read');
+
+        /** @var \Doctrine\DBAL\Query\QueryBuilder */
+        $builder = $this->getRepository()->createQueryBuilder('detail');
+
+        $builder->addSelect(['prices', 'attribute', 'customerGroup'])
+                ->leftJoin('detail.prices', 'prices')
+                ->innerJoin('prices.customerGroup', 'customerGroup')
+                ->leftJoin('detail.attribute', 'attribute')
+                ->addFilter($criteria)
+                ->addOrderBy($orderBy)
+                ->setFirstResult($offset)
+                ->setMaxResults($limit);
+
+        $query = $builder->getQuery();
+
+        $query->setHydrationMode($this->getResultMode());
+
+        $paginator = $this->getManager()->createPaginator($query);
+
+        //returns the total count of the query
+        $totalResult = $paginator->count();
+
+        //returns the article data
+        $variants = $paginator->getIterator()->getArrayCopy();
+
+        if ($this->getResultMode() === self::HYDRATE_ARRAY) {
+            if (isset($options['considerTaxInput']) && $options['considerTaxInput']) {
+                foreach ($variants as &$variant) {
+                    $variant = $this->considerTaxInput($variant);
+                }
+            }
+        }
+
+        return ['data' => $variants, 'total' => $totalResult];
+    }
+
+    private function considerTaxInput($variant)
+    {
+        $tax = Shopware()->Db()->fetchOne(
+            "SELECT tax
+                 FROM s_core_tax
+                     INNER JOIN s_articles
+                         ON s_articles.taxID = s_core_tax.id
+                         AND s_articles.id = :articleId",
+            [':articleId' => $variant['articleId']]
+        );
+
+        if (empty($tax)) {
+            throw new ApiException\CustomValidationException(
+                sprintf("No article tax configured for variant: %s", $variant['id'])
+            );
+        }
+
+        $variant['prices'] = $this->getArticleResource()->getTaxPrices(
+            $variant['prices'],
+            $tax
+        );
+
+        return $variant;
+    }
 
     /**
      * Little helper function for the ...ByNumber methods
@@ -154,7 +208,7 @@ class Variant extends Resource implements BatchInterface
         }
 
         /** @var $articleDetail \Shopware\Models\Article\Detail */
-        $articleDetail = $this->getRepository()->findOneBy(array('number' => $number));
+        $articleDetail = $this->getRepository()->findOneBy(['number' => $number]);
 
         if (!$articleDetail) {
             throw new ApiException\NotFoundException("Variant by number {$number} not found");
@@ -207,6 +261,20 @@ class Variant extends Resource implements BatchInterface
         return $articleDetail;
     }
 
+    /**
+     * Convenience method to update a variant by number
+     * @param string $number
+     * @param array $params
+     * @return Detail
+     * @throws \Shopware\Components\Api\Exception\ValidationException
+     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
+     */
+    public function updateByNumber($number, array $params)
+    {
+        $id = $this->getIdFromNumber($number);
+        return $this->update($id, $params);
+    }
 
     /**
      * Updates a single variant entity.
@@ -367,6 +435,7 @@ class Variant extends Resource implements BatchInterface
      * @param ArticleModel $article
      * @param Detail $variant
      * @return array|mixed
+     * @throws \Shopware\Components\Api\Exception\CustomValidationException
      */
     protected function prepareData(array $data, ArticleModel $article, Detail $variant)
     {
@@ -381,6 +450,10 @@ class Variant extends Resource implements BatchInterface
             );
         }
 
+        if (isset($data['purchasePrice']) && is_string($data['purchasePrice'])) {
+            $data['purchasePrice'] = floatval(str_replace(',', '.', $data['purchasePrice']));
+        }
+
         $data = $this->prepareAttributeAssociation($data, $article, $variant);
 
         if (isset($data['configuratorOptions'])) {
@@ -388,6 +461,16 @@ class Variant extends Resource implements BatchInterface
         }
         if (isset($data['images'])) {
             $data = $this->prepareImageAssociation($data, $article, $variant);
+        }
+
+        if (!empty($data['number']) && $data['number'] !== $variant->getNumber()) {
+            $connection = Shopware()->Container()->get('dbal_connection');
+
+            // Number changed, hence make sure it does not already exist in another variant
+            $exists = $connection->fetchColumn('SELECT id FROM s_articles_details WHERE ordernumber = ?', [$data['number']]);
+            if ($exists) {
+                throw new ApiException\CustomValidationException(sprintf('A variant with the given order number "%s" already exists.', $data['number']));
+            }
         }
 
         return $data;
@@ -413,7 +496,9 @@ class Variant extends Resource implements BatchInterface
                 foreach ($variant->getImages() as $image) {
                     $mapping = $this->getVariantMappingOfImage($image, $variant);
 
-                    if ($mapping) $this->getManager()->remove($mapping);
+                    if ($mapping) {
+                        $this->getManager()->remove($mapping);
+                    }
                 }
             }
             return $data;
@@ -456,7 +541,6 @@ class Variant extends Resource implements BatchInterface
                         $article, $media
                     );
                 }
-
             } elseif (isset($imageData['link'])) {
 
                 //check if an url passed and upload the passed image url and create a new article image.
@@ -466,7 +550,6 @@ class Variant extends Resource implements BatchInterface
                 $image = $this->getArticleResource()->createNewArticleImage(
                     $article, $media
                 );
-
             } else {
                 throw new ApiException\CustomValidationException("One of the passed variant images doesn't contains a mediaId or link property!");
             }
@@ -544,11 +627,11 @@ class Variant extends Resource implements BatchInterface
     }
 
     /**
-     * @param ArrayCollection $options
+     * @param Collection|array $options
      * @param Image $image
      * @return Image\Mapping
      */
-    public function createImageMappingForOptions(ArrayCollection $options, Image $image)
+    public function createImageMappingForOptions($options, Image $image)
     {
         $mapping = new Image\Mapping();
         $mapping->setImage($image);
@@ -564,11 +647,11 @@ class Variant extends Resource implements BatchInterface
     }
 
     /**
-     * @param ArrayCollection $availableImages
+     * @param Collection|array $availableImages
      * @param $mediaId
      * @return bool|Image
      */
-    private function getAvailableMediaImage(ArrayCollection $availableImages, $mediaId)
+    private function getAvailableMediaImage($availableImages, $mediaId)
     {
         /**@var $image Image*/
         foreach ($availableImages as $image) {
@@ -603,6 +686,10 @@ class Variant extends Resource implements BatchInterface
                 $priceData['customerGroupKey'] = 'EK';
             }
 
+            if (empty($priceData['from']) && $price->getFrom() == 0) {
+                $priceData['from'] = 1;
+            }
+
             // load the customer group of the price definition
             $customerGroup = $this->getManager()
                 ->getRepository('Shopware\Models\Customer\Group')
@@ -613,40 +700,58 @@ class Variant extends Resource implements BatchInterface
                 throw new ApiException\CustomValidationException(sprintf('Customer Group by key %s not found', $priceData['customerGroupKey']));
             }
 
-            if (!isset($priceData['from'])) {
-                $priceData['from'] = 1;
-            }
-
-            $priceData['from'] = intval($priceData['from']);
-            $priceData['to']   = intval($priceData['to']);
-
-            if ($priceData['from'] <= 0) {
-                throw new ApiException\CustomValidationException(sprintf('Invalid Price "from" value'));
-            }
-
-            // if the "to" value isn't numeric, set the place holder "beliebig"
-            if ($priceData['to'] <= 0) {
-                $priceData['to'] = 'beliebig';
-            }
-
-            $priceData['price']       = floatval(str_replace(",", ".", $priceData['price']));
-            $priceData['basePrice']   = floatval(str_replace(",", ".", $priceData['basePrice']));
-            $priceData['pseudoPrice'] = floatval(str_replace(",", ".", $priceData['pseudoPrice']));
-            $priceData['percent']     = floatval(str_replace(",", ".", $priceData['percent']));
-
-            if ($customerGroup->getTaxInput()) {
-                $priceData['price'] = $priceData['price'] / (100 + $tax->getTax()) * 100;
-                $priceData['pseudoPrice'] = $priceData['pseudoPrice'] / (100 + $tax->getTax()) * 100;
-            }
-
             $priceData['customerGroup'] = $customerGroup;
             $priceData['article'] = $article;
             $priceData['detail'] = $variant;
+
+            $priceData = $this->mergePriceData($priceData, $tax);
 
             $price->fromArray($priceData);
         }
 
         return $prices;
+    }
+
+    /**
+     * Calculates and merges the numeric values of the Price entity
+     *
+     * @param $priceData
+     * @param $tax
+     * @return mixed
+     * @throws ApiException\CustomValidationException
+     */
+    private function mergePriceData($priceData, $tax)
+    {
+        if (array_key_exists('from', $priceData)) {
+            $priceData['from'] = intval($priceData['from']);
+            if ($priceData['from'] <= 0) {
+                throw new ApiException\CustomValidationException(sprintf('Invalid Price "from" value'));
+            }
+        }
+        if (array_key_exists('to', $priceData)) {
+            $priceData['to'] = intval($priceData['to']);
+            // if the "to" value isn't numeric, set the place holder "beliebig"
+            if ($priceData['to'] <= 0) {
+                $priceData['to'] = 'beliebig';
+            }
+        }
+
+        foreach (['price', 'pseudoPrice', 'percent'] as $key) {
+            if (array_key_exists($key, $priceData)) {
+                $priceData[$key] = floatval(str_replace(",", ".", $priceData[$key]));
+            }
+        }
+
+        if ($priceData['customerGroup']->getTaxInput()) {
+            if (array_key_exists('price', $priceData)) {
+                $priceData['price'] = $priceData['price'] / (100 + $tax->getTax()) * 100;
+            }
+            if (array_key_exists('pseudoPrice', $priceData)) {
+                $priceData['pseudoPrice'] = $priceData['pseudoPrice'] / (100 + $tax->getTax()) * 100;
+            }
+        }
+
+        return $priceData;
     }
 
 
@@ -657,7 +762,7 @@ class Variant extends Resource implements BatchInterface
      * @param array $data
      * @param ArticleModel $article
      * @param Detail $variant
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return Collection
      * @throws \Shopware\Components\Api\Exception\CustomValidationException
      */
     protected function prepareConfigurator(array $data, ArticleModel $article, Detail $variant)
@@ -671,10 +776,10 @@ class Variant extends Resource implements BatchInterface
         $options = new ArrayCollection();
 
         foreach ($data['configuratorOptions'] as $optionData) {
-            $availableGroup = $this->getAvailableGroup($availableGroups, array(
+            $availableGroup = $this->getAvailableGroup($availableGroups, [
                 'id' => $optionData['groupId'],
                 'name' => $optionData['group']
-            ));
+            ]);
 
             //group is in the article configurator set configured?
             if (!$availableGroup) {
@@ -682,15 +787,19 @@ class Variant extends Resource implements BatchInterface
             }
 
             //check if the option is available in the configured article configurator set.
-            $option = $this->getAvailableOption($availableGroup->getOptions(), array(
+            $option = $this->getAvailableOption($availableGroup->getOptions(), [
                 'id'   => $optionData['optionId'],
                 'name' => $optionData['option']
-            ));
+            ]);
 
             if (!$option) {
+                if (!$optionData['option']) {
+                    throw new ApiException\CustomValidationException('A new configurator option requires a name');
+                }
+
                 $option = new Option();
                 $option->setPosition(0);
-                $option->setName($option);
+                $option->setName($optionData['option']);
                 $option->setGroup($availableGroup);
                 $this->getManager()->persist($option);
             }
@@ -709,17 +818,16 @@ class Variant extends Resource implements BatchInterface
      * Checks if the passed group data is already existing in the passed array collection.
      * The group data are checked for "id" and "name".
      *
-     * @param ArrayCollection $availableGroups
+     * @param Collection|array $availableGroups
      * @param array $groupData
      * @return bool|Group
      */
-    private function getAvailableGroup(ArrayCollection $availableGroups, array $groupData)
+    private function getAvailableGroup($availableGroups, array $groupData)
     {
         /**@var $availableGroup Option */
         foreach ($availableGroups as $availableGroup) {
-            if ( ($availableGroup->getName() == $groupData['name'] && $groupData['name'] !== null)
+            if (($availableGroup->getName() == $groupData['name'] && $groupData['name'] !== null)
                 || ($availableGroup->getId() == $groupData['id']) && $groupData['id'] !== null) {
-
                 return $availableGroup;
             }
         }
@@ -731,17 +839,16 @@ class Variant extends Resource implements BatchInterface
      * Checks if the passed option data is already existing in the passed array collection.
      * The option data are checked for "id" and "name".
      *
-     * @param \Doctrine\Common\Collections\ArrayCollection $availableOptions
+     * @param Collection|array $availableOptions
      * @param array $optionData
      * @return bool
      */
-    private function getAvailableOption(ArrayCollection $availableOptions, array $optionData)
+    private function getAvailableOption($availableOptions, array $optionData)
     {
         /**@var $availableOption Option */
         foreach ($availableOptions as $availableOption) {
-            if ( ($availableOption->getName() == $optionData['name'] && $optionData['name'] !== null)
+            if (($availableOption->getName() == $optionData['name'] && $optionData['name'] !== null)
                 || ($availableOption->getId() == $optionData['id'] && $optionData['id'] !== null)) {
-
                 return $availableOption;
             }
         }
@@ -782,7 +889,6 @@ class Variant extends Resource implements BatchInterface
     {
         //if unit id passed, assign existing unit.
         if (!empty($data['unitId'])) {
-
             $data['unit'] = $this->getManager()->find('Shopware\Models\Article\Unit', $data['unitId']);
 
             if (empty($data['unit'])) {
@@ -844,15 +950,15 @@ class Variant extends Resource implements BatchInterface
     private function getUnitFindCondition($data)
     {
         if (isset($data['id'])) {
-            return array('id' => $data['id']);
+            return ['id' => $data['id']];
         }
 
         if (isset($data['unit'])) {
-            return array('unit' => $data['unit']);
+            return ['unit' => $data['unit']];
         }
 
         if (isset($data['name'])) {
-            return array('name' => $data['name']);
+            return ['name' => $data['name']];
         }
 
         throw new ApiException\CustomValidationException(sprintf('To create a unit you need to pass `name` and `unit`'));

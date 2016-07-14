@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -19,14 +19,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    ExtJS
- * @subpackage FileUpload
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Stephan Pohl
- * @author     $Author$
  */
 
  /**
@@ -161,24 +153,8 @@ Ext.define('Ext.util.FileUpload', {
 	        iconCls: 'sprite-inbox-image'
         }
     },
-    
-    inputConfig: {},
 
-    /**
-     * Rendering template for the drop zone
-     *
-     * @array
-     */
-    dropZoneTpl: [
-        '{literal}<div class="inner-dropzone">',
-            '<span class="text">',
-                '<tpl if="actualQuantity">',
-                    "{actualQuantity} " + "{s name=file_upload/progress_bar_text}from{/s}" + " {totalQuantity}&nbsp;",
-                '</tpl>',
-                '{text}',
-            '</span>',
-        '</div>{/literal}'
-    ],
+    inputConfig: {},
 
     /**
      * Default class name for the drop zone
@@ -306,9 +282,10 @@ Ext.define('Ext.util.FileUpload', {
      */
     snippets: {
         uploadReady: '{s name=file_upload/upload_ready_info}files uploaded{/s}',
+        filesFrom: '{s name=file_upload/progress_bar_text}from{/s}',
         messageText: '{s name=file_upload/upload_ready_message}[0] files uploaded{/s}',
         messageTitle: '{s name=file_upload/upload_ready_title}Media manager{/s}',
-        legacyMessage: "{s name=file_upload/legacy_message}Your browser doesn't support the neccessary feature to support drag'n'drop uploads.{/s}",
+        legacyMessage: '{s name=file_upload/legacy_message}Your browser doesn\'t support the necessary feature to support drag &drop uploads.{/s}',
         maxUploadSizeTitle: '{s name=file_upload/max_upload_size_title}The file exceeds the file size limit{/s}',
         maxUploadSizeText: "{s name=file_upload/max_upload_size_text}The selected file exceeds the configured maximum file size for uploads. Please select another file to upload.{/s}",
         blackListTitle:'{s name=file_upload/black_list_title}Blacklist{/s}',
@@ -354,7 +331,7 @@ Ext.define('Ext.util.FileUpload', {
         	if(me.showLegacyBrowserNotice) {
 	            me.fileInputConfig.supportText = me.snippets.legacyMessage;
             }
-        
+
             me.fileInput = me.createFileInputField();
             me.items.push(me.fileInput);
         }
@@ -416,8 +393,8 @@ Ext.define('Ext.util.FileUpload', {
 
         //create default drop zone
         var text = Ext.create('Ext.Component', {
-            renderTpl: me.dropZoneTpl,
-            tpl : me.dropZoneTpl,
+            renderTpl: me.createDropZoneTemplate(),
+            tpl : me.createDropZoneTemplate(),
             renderData: {
                 text: me.dropZoneText
             }
@@ -439,7 +416,7 @@ Ext.define('Ext.util.FileUpload', {
             '{literal}<div class="inner-dropzone">',
                 '<span class="text">',
                     '<tpl if="actualQuantity">',
-                        "{actualQuantity} " + "{s name=file_upload/progress_bar_text}from{/s}" + " {totalQuantity}&nbsp;",
+                        "{actualQuantity} " + me.snippets.filesFrom + " {totalQuantity}&nbsp;",
                     '</tpl>',
                     '{text}',
                 '</span>',
@@ -519,7 +496,7 @@ Ext.define('Ext.util.FileUpload', {
                 el.setAttribute('size', '5');
             }
         }, me);
-        
+
         if(Ext.isIE || Ext.isSafari) {
 	        me.form = Ext.create('Ext.form.Panel', {
 		        unstyled: true,
@@ -527,13 +504,13 @@ Ext.define('Ext.util.FileUpload', {
 		        url: me.requestURL,
 		        items: [ file ]
 	        });
-	        
+
 	        ret = me.form;
         }
 
         file.on('change', function(field) {
             var fileField = field.getEl().down('input[type=file]').dom;
-            
+
             if(Ext.isIE || Ext.isSafari) {
 	            me.form.getForm().submit({
 	            	method: 'POST',
@@ -607,8 +584,8 @@ Ext.define('Ext.util.FileUpload', {
             me.dropZone.removeAll();
 
             var text = Ext.create('Ext.Component', {
-                renderTpl: me.dropZoneTpl,
-                tpl: me.dropZoneTpl,
+                renderTpl: me.createDropZoneTemplate(),
+                tpl: me.createDropZoneTemplate(),
                 renderData: {
                     actualQuantity: '0',
                     totalQuantity: files.length,
@@ -834,8 +811,8 @@ Ext.define('Ext.util.FileUpload', {
 
                     //create default drop zone
                     var text = Ext.create('Ext.Component', {
-                        renderTpl: me.dropZoneTpl,
-                        tpl : me.dropZoneTpl,
+                        renderTpl: me.createDropZoneTemplate(),
+                        tpl : me.createDropZoneTemplate(),
                         renderData: {
                             text: me.dropZoneText
                         }
@@ -846,7 +823,14 @@ Ext.define('Ext.util.FileUpload', {
                 if (response.success) {
                     //show info how much files uploaded
                     Shopware.Msg.createGrowlMessage(me.snippets.messageTitle, Ext.String.format(me.snippets.messageText, count), 'Media-Manager');
-                }else{
+
+                //check if error message send
+                } else if (response.error) {
+                    Shopware.Msg.createGrowlMessage(
+                        me.snippets.messageTitle,
+                        response.error
+                    );
+                } else {
 					// Throw alert box
 					Ext.Msg.alert(me.snippets.maxUploadSizeTitle, me.snippets.maxUploadSizeText);
 				}
@@ -855,6 +839,9 @@ Ext.define('Ext.util.FileUpload', {
             }
 
         }, false);
+
+        // enable CSRF
+        xhr.setRequestHeader('X-CSRF-Token', Ext.CSRFService.getToken());
 
         //send xml http request
         var formData = new FormData();

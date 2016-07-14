@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -69,12 +69,16 @@ class Shopware_Controllers_Backend_Vote extends Shopware_Controllers_Backend_Ext
      * Index action for the controller
      * @return void|string
      */
-    public function indexAction() { }
+    public function indexAction()
+    {
+    }
 
     /**
      * Load action for the script renderer.
      */
-    public function loadAction() { }
+    public function loadAction()
+    {
+    }
 
 
     /**
@@ -87,7 +91,7 @@ class Shopware_Controllers_Backend_Vote extends Shopware_Controllers_Backend_Ext
         $limit = $this->Request()->get('limit');
 
         //order data
-        $order = (array) $this->Request()->getParam('sort', array());
+        $order = (array)$this->Request()->getParam('sort', array());
 
         $filterValue = null;
         //filter from the search-field
@@ -96,16 +100,12 @@ class Shopware_Controllers_Backend_Vote extends Shopware_Controllers_Backend_Ext
             $filterValue = $filter[0]['value'];
         }
 
-        try {
-            $query = $this->getArticleRepository()->getVoteListQuery($filterValue, $start, $limit, $order);
-            //total count for paging
-            $totalResult = Shopware()->Models()->getQueryCount($query);
-            $result = $query->getArrayResult();
+        $query = $this->getArticleRepository()->getVoteListQuery($filterValue, $start, $limit, $order);
+        //total count for paging
+        $totalResult = Shopware()->Models()->getQueryCount($query);
+        $result = $query->getArrayResult();
 
-            $this->View()->assign(array("success"=>true, 'data'=>$result, 'total'=>$totalResult));
-        } catch (Exception $e) {
-            $this->View()->assign(array("success"=>false, 'errorMsg'=>$e->getMessage()));
-        }
+        $this->View()->assign(array("success" => true, 'data' => $result, 'total' => $totalResult));
     }
 
     /**
@@ -114,78 +114,74 @@ class Shopware_Controllers_Backend_Vote extends Shopware_Controllers_Backend_Ext
      */
     public function editVoteAction()
     {
-        try {
-            $params = $this->Request()->getParams();
-            unset($params['module']);
-            unset($params['controller']);
-            unset($params['action']);
-            unset($params['_dc']);
+        $params = $this->Request()->getParams();
+        unset($params['module']);
+        unset($params['controller']);
+        unset($params['action']);
+        unset($params['_dc']);
 
-            if ($params[0]) {
-                $data = array();
-                foreach ($params as $values) {
-                    /**
-                     * @var $vote \Shopware\Models\Article\Vote
-                     */
-                    $voteModel = Shopware()->Models()->find('\Shopware\Models\Article\Vote', $values['id']);
-                    //unset because the datum-format is wrong
-                    unset($values['datum']);
-                    $date = get_object_vars($voteModel->getAnswerDate());
-
-                    //to prevent resetting an already set datum
-                    if (substr($date['date'],0,4) =="0000") {
-                        //Set the datum of the answer manually
-                        $voteModel->setAnswerDate($values['answer_datum']);
-                    }
-
-                    //<br> is set, when the WYSIWYG-Editor is empty
-                    //Delete the <br> then
-                    if ($values['answer'] == '<br>') {
-                        $values['answer'] = '';
-                    }
-
-                    //Fill the model by using an array
-                    $voteModel->fromArray($values);
-                    //save model
-                    Shopware()->Models()->persist($voteModel);
-                    Shopware()->Models()->flush();
-
-                    $data[] = Shopware()->Models()->toArray($voteModel);
-                }
-            } else {
+        if ($params[0]) {
+            $data = array();
+            foreach ($params as $values) {
                 /**
                  * @var $vote \Shopware\Models\Article\Vote
                  */
-                $voteModel = Shopware()->Models()->find('\Shopware\Models\Article\Vote', $params['id']);
+                $voteModel = Shopware()->Models()->find('\Shopware\Models\Article\Vote', $values['id']);
                 //unset because the datum-format is wrong
-                unset($params['datum']);
+                unset($values['datum']);
                 $date = get_object_vars($voteModel->getAnswerDate());
 
                 //to prevent resetting an already set datum
-                if (substr($date['date'],0,4) =="0000") {
+                if (substr($date['date'], 0, 4) == "0000") {
                     //Set the datum of the answer manually
-                    $voteModel->setAnswerDate($params['answer_datum']);
+                    $voteModel->setAnswerDate($values['answer_datum']);
                 }
 
                 //<br> is set, when the WYSIWYG-Editor is empty
                 //Delete the <br> then
-                if ($params['answer'] == '<br>') {
-                    $params['answer'] = '';
+                if ($values['answer'] == '<br>') {
+                    $values['answer'] = '';
                 }
 
                 //Fill the model by using an array
-                $voteModel->fromArray($params);
+                $voteModel->fromArray($values);
                 //save model
                 Shopware()->Models()->persist($voteModel);
                 Shopware()->Models()->flush();
 
-                $data = Shopware()->Models()->toArray($voteModel);
+                $data[] = Shopware()->Models()->toArray($voteModel);
+            }
+        } else {
+            /**
+             * @var $vote \Shopware\Models\Article\Vote
+             */
+            $voteModel = Shopware()->Models()->find('\Shopware\Models\Article\Vote', $params['id']);
+            //unset because the datum-format is wrong
+            unset($params['datum']);
+            $date = get_object_vars($voteModel->getAnswerDate());
+
+            //to prevent resetting an already set datum
+            if (substr($date['date'], 0, 4) == "0000") {
+                //Set the datum of the answer manually
+                $voteModel->setAnswerDate($params['answer_datum']);
             }
 
-            $this->View()->assign(array("success"=>true, 'data'=>$data));
-        } catch (Exception $e) {
-            $this->View()->assign(array("success" => false, 'message' => $e->getMessage()));
+            //<br> is set, when the WYSIWYG-Editor is empty
+            //Delete the <br> then
+            if ($params['answer'] == '<br>') {
+                $params['answer'] = '';
+            }
+
+            //Fill the model by using an array
+            $voteModel->fromArray($params);
+            //save model
+            Shopware()->Models()->persist($voteModel);
+            Shopware()->Models()->flush();
+
+            $data = Shopware()->Models()->toArray($voteModel);
         }
+
+        $this->View()->assign(array("success" => true, 'data' => $data));
     }
 
     /**
@@ -195,40 +191,35 @@ class Shopware_Controllers_Backend_Vote extends Shopware_Controllers_Backend_Ext
      */
     public function deleteVoteAction()
     {
-        try {
+        $params = $this->Request()->getParams();
+        unset($params['module']);
+        unset($params['controller']);
+        unset($params['action']);
+        unset($params['_dc']);
 
-            $params = $this->Request()->getParams();
-            unset($params['module']);
-            unset($params['controller']);
-            unset($params['action']);
-            unset($params['_dc']);
-
-            if ($params[0]) {
-                $data = array();
-                foreach ($params as $values) {
-                    /**
-                     * @var $vote \Shopware\Models\Article\Vote
-                     */
-                    $voteModel = Shopware()->Models()->find('\Shopware\Models\Article\Vote', $values['id']);
-                    //delete model
-                    Shopware()->Models()->remove($voteModel);
-                    Shopware()->Models()->flush();
-                    $data[] = Shopware()->Models()->toArray($voteModel);
-                }
-            } else {
+        if ($params[0]) {
+            $data = array();
+            foreach ($params as $values) {
                 /**
                  * @var $vote \Shopware\Models\Article\Vote
                  */
-                $voteModel = Shopware()->Models()->find('\Shopware\Models\Article\Vote', $params['id']);
+                $voteModel = Shopware()->Models()->find('\Shopware\Models\Article\Vote', $values['id']);
                 //delete model
                 Shopware()->Models()->remove($voteModel);
                 Shopware()->Models()->flush();
-                $data = Shopware()->Models()->toArray($voteModel);
+                $data[] = Shopware()->Models()->toArray($voteModel);
             }
-
-            $this->View()->assign(array("success"=>true, 'data'=>$data));
-        } catch (Exception $e) {
-            $this->View()->assign(array("success"=>false, 'message' => $e->getMessage()));
+        } else {
+            /**
+             * @var $vote \Shopware\Models\Article\Vote
+             */
+            $voteModel = Shopware()->Models()->find('\Shopware\Models\Article\Vote', $params['id']);
+            //delete model
+            Shopware()->Models()->remove($voteModel);
+            Shopware()->Models()->flush();
+            $data = Shopware()->Models()->toArray($voteModel);
         }
+
+        $this->View()->assign(array("success" => true, 'data' => $data));
     }
 }

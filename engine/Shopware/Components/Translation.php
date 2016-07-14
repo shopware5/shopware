@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Shopware\Bundle\AttributeBundle\Service\CrudService;
 
 /**
  * Shopware Translation Component
@@ -166,7 +167,7 @@ class Shopware_Components_Translation
     }
 
     /**
-     * Reads translation data from the storage.
+     * Reads a single translation data from the storage.
      *
      * @param   $language
      * @param   $type
@@ -194,6 +195,170 @@ class Shopware_Components_Translation
         ));
 
         return $this->unFilterData($type, $data, $merge ? $key : null);
+    }
+
+    /**
+     * Reads a single translation data from the storage.
+     * Also loads fallback (has less priority)
+     *
+     * @param   $language
+     * @param   $fallback
+     * @param   $type
+     * @param   int $key
+     * @param   bool $merge
+     * @return  array
+     */
+    public function readWithFallback($language, $fallback, $type, $key = 1, $merge = false)
+    {
+        $translation = $this->read($language, $type, $key, $merge);
+        if ($fallback) {
+            $translationFallback = $this->read($fallback, $type, $key, $merge);
+        } else {
+            $translationFallback = array();
+        }
+
+        return $translation + $translationFallback;
+    }
+
+    /**
+     * Reads multiple translation data from storage.
+     *
+     * @param   $language
+     * @param   $type
+     * @param   int $key
+     * @param   bool $merge
+     * @return  array
+     */
+    public function readBatch($language, $type, $key = 1, $merge = false)
+    {
+        if ($type == 'variantMain') {
+            $type = 'article';
+        }
+
+        $queryBuilder = Shopware()->Models()->getDBALQueryBuilder()
+            ->select('objectdata, objectlanguage, objecttype, objectkey')
+            ->from('s_core_translations', 't');
+
+        if ($language) {
+            $queryBuilder
+                ->andWhere('t.objectlanguage = :objectLanguage')
+                ->setParameter('objectLanguage', $language);
+        }
+        if ($type) {
+            $queryBuilder
+                ->andWhere('t.objecttype = :objectType')
+                ->setParameter('objectType', $type);
+        }
+        if ($key) {
+            $queryBuilder
+                ->andWhere('t.objectkey = :objectKey')
+                ->setParameter('objectKey', $merge ? 1 : $key);
+        }
+
+        $data = $queryBuilder->execute()->fetchAll();
+
+        foreach ($data as &$translation) {
+            $translation['objectdata'] = $this->unFilterData(
+                $translation['objecttype'],
+                $translation['objectdata'],
+                null
+            );
+
+            if ($merge) {
+                return $translation['objectdata'];
+            }
+        }
+        return $data;
+    }
+
+    /**
+     * Reads multiple translations including their fallbacks
+     * Merges the two (fallback has less priority) and returns the results
+     *
+     * @param int $language
+     * @param int $fallback
+     * @param $type
+     * @return array|mixed
+     */
+    public function readBatchWithFallback($language, $fallback, $type)
+    {
+        $translationData = $this->readBatch($language, $type, 1, true);
+
+        // Look for a fallback and correspondent translations
+        if (!empty($fallback)) {
+            $translationFallback = $this->readBatch($fallback, $type, 1, true);
+
+            if (!empty($translationFallback)) {
+                // We need something like array_merge_recursive, but that also
+                // recursively merges elements with int keys.
+                foreach ($translationFallback as $key => $data) {
+                    if (array_key_exists($key, $translationData)) {
+                        $translationData[$key] += $data;
+                    } else {
+                        $translationData[$key] = $data;
+                    }
+                }
+            }
+        }
+
+        return $translationData;
+    }
+
+    /**
+     * Deletes translations from storage.
+     *
+     * @param   $language
+     * @param   $type
+     * @param   int $key
+     * @return  array
+     */
+    public function delete($language, $type, $key = 1)
+    {
+        $queryBuilder = Shopware()->Models()->getDBALQueryBuilder()
+            ->delete('s_core_translations');
+
+        if ($language) {
+            $queryBuilder
+                ->andWhere('objectlanguage = :objectLanguage')
+                ->setParameter('objectLanguage', $language);
+        }
+        if ($type) {
+            $queryBuilder
+                ->andWhere('objecttype = :objectType')
+                ->setParameter('objectType', $type);
+        }
+        if ($key) {
+            $queryBuilder
+                ->andWhere('objectkey = :objectKey')
+                ->setParameter('objectKey', $key);
+        }
+
+        $queryBuilder->execute();
+    }
+
+    /**
+     * Writes multiple translation data to storage.
+     *
+     * @param mixed $data
+     * @param bool $merge
+     */
+    public function writeBatch($data, $merge = false)
+    {
+        $requiredKeys = array('objectdata', 'objectlanguage', 'objecttype', 'objectkey');
+
+        foreach ($data as $translation) {
+            if (count(array_intersect_key(array_flip($requiredKeys), $translation)) !== count($requiredKeys)) {
+                continue;
+            }
+
+            $this->write(
+                $translation['objectlanguage'],
+                $translation['objecttype'],
+                $translation['objectkey'] ? : 1,
+                $translation['objectdata'],
+                $merge
+            );
+        }
     }
 
     /**
@@ -227,10 +392,10 @@ class Shopware_Components_Translation
         if (!empty($data)) {
             $sql = '
                 INSERT INTO `s_core_translations` (
-                  `objecttype`, `objectdata`, `objectkey`, `objectlanguage`
+                  `objecttype`, `objectdata`, `objectkey`, `objectlanguage`, `dirty`
                 ) VALUES (
-                  ?, ?, ?, ?
-                ) ON DUPLICATE KEY UPDATE `objectdata`=VALUES(`objectdata`);
+                  ?, ?, ?, ?, 1
+                ) ON DUPLICATE KEY UPDATE `objectdata`=VALUES(`objectdata`), `dirty` = 1;
             ';
             Shopware()->Db()->query($sql, array(
                 $type, $data, $merge ? 1 : $key, $language
@@ -247,94 +412,131 @@ class Shopware_Components_Translation
             ));
         }
         if ($type == 'article') {
-            $this->fixArticleTranslation($language, $key);
+            $this->fixArticleTranslation($language, $key, $data);
         }
     }
 
     /**
      * Fix article translation table data.
      *
-     * @param $languageId
-     * @param $articleId
+     * @param int $languageId
+     * @param int $articleId
+     * @param string $data
      */
-    protected function fixArticleTranslation($languageId, $articleId)
+    protected function fixArticleTranslation($languageId, $articleId, $data)
     {
-        $sql = "
-            SELECT ct.objectdata as data, ct.objectkey as articleId, cm.id as languageId
-            FROM s_core_multilanguage cm, s_core_translations ct
-            WHERE ct.objectlanguage=cm.isocode
-            AND ct.objecttype = 'article'
-            AND ct.objectkey = ?
-            AND ct.objectlanguage = ?
+        $connection = Shopware()->Container()->get('dbal_connection');
+        $fallbacks = $connection->fetchAll("SELECT id FROM s_core_shops WHERE fallback_id = :languageId", [':languageId' => $languageId]);
+        $fallbacks = array_column($fallbacks, 'id');
 
-            UNION ALL
+        $data = $this->prepareArticleData($data);
 
-            SELECT ct.objectdata as data, ct.objectkey as articleId, cm.id as languageId
+        $this->addArticleTranslation($articleId, $languageId, $data);
 
-            FROM s_core_multilanguage cm
+        $existQuery = $connection->prepare("SELECT id FROM s_core_translations WHERE objectlanguage = :language");
+        foreach ($fallbacks as $id) {
+            $existQuery->execute([':language' => $id]);
+            $exist = $existQuery->fetch(PDO::FETCH_COLUMN);
 
-            INNER JOIN s_core_translations ct
-            ON ct.objectlanguage=cm.fallback
-            AND ct.objecttype = 'article'
-            AND ct.objectkey = ?
-
-            LEFT JOIN s_core_translations ct2
-            ON ct2.objectlanguage = cm.isocode
-            AND ct2.objecttype = 'article'
-            AND ct2.objectkey = ct.objectkey
-
-            WHERE cm.fallback = ?
-            AND ct2.id IS NULL
-        ";
-        $translations = Shopware()->Db()->fetchAll($sql, array(
-            $articleId, $languageId,
-            $articleId, $languageId
-        ));
-
-        foreach ($translations as $data) {
-            $languageId = (int) $data['languageId'];
-            $articleId = (int) $data['articleId'];
-            $data = unserialize($data['data']);
-
-            if (!empty($data['txtlangbeschreibung']) && strlen($data['txtlangbeschreibung']) > 1000) {
-                $data['txtlangbeschreibung'] = substr(strip_tags($data['txtlangbeschreibung']), 0, 1000);
+            if ($exist) {
+                continue;
             }
+            $this->addArticleTranslation($articleId, $id, $data);
+        }
+    }
 
-            $sql = '
-                INSERT INTO `s_articles_translations` (
-                  articleID, languageID, name, keywords, description, description_long
-                ) VALUES (
-                  ?, ?, ?, ?, ?, ?
-                ) ON DUPLICATE KEY UPDATE
-                  name = VALUES(name),
-                  keywords = VALUES(keywords),
-                  description = VALUES(description),
-                  description_long = VALUES(description_long);
-            ';
-            Shopware()->Db()->query($sql, array(
-                $articleId,
-                $languageId,
-                isset($data['txtArtikel']) ? (string) $data['txtArtikel'] : '',
-                ($data['txtkeywords']) ? (string) $data['txtkeywords'] : '',
-                isset($data['txtshortdescription']) ? (string) $data['txtshortdescription'] : '',
-                isset($data['txtlangbeschreibung']) ? (string) $data['txtlangbeschreibung'] : '',
-            ));
+    /**
+     * @param string $data
+     * @return array
+     */
+    private function prepareArticleData($data)
+    {
+        $data = unserialize($data);
+        if (!empty($data['txtlangbeschreibung']) && strlen($data['txtlangbeschreibung']) > 1000) {
+            $data['txtlangbeschreibung'] = substr(strip_tags($data['txtlangbeschreibung']), 0, 1000);
         }
 
-        $sql = "
-            DELETE at FROM s_articles_translations at
-            LEFT JOIN s_core_multilanguage cm
-            ON  cm.id=at.languageID
-            LEFT JOIN s_core_translations ct
-            ON ct.objectkey=at.articleID
-            AND ct.objectlanguage=cm.isocode
-            AND ct.objecttype='article'
-            LEFT JOIN s_core_translations ct2
-            ON ct2.objectkey=at.articleID
-            AND ct2.objectlanguage=cm.fallback
-            AND ct2.objecttype='article'
-            WHERE ct.id IS NULL AND ct2.id IS NULL
-        ";
-        Shopware()->Db()->exec($sql);
+        $data = array_merge($data, [
+            'name' => (string)$data['txtArtikel'],
+            'keywords' => (string)$data['txtkeywords'],
+            'description' => (string)$data['txtshortdescription'],
+            'description_long' => (string)$data['txtlangbeschreibung'],
+        ]);
+
+        $schemaManager = Shopware()->Container()->get('dbal_connection')->getSchemaManager();
+        $columns = $schemaManager->listTableColumns('s_articles_translations');
+        $columns = array_keys($columns);
+
+        foreach ($data as $key => $value) {
+            $column = strtolower($key);
+            $column = str_replace(CrudService::EXT_JS_PREFIX, '', $column);
+
+            unset($data[$key]);
+            if (in_array($column, $columns)) {
+                $data[$column] = $value;
+            }
+        }
+
+        return $data;
+    }
+
+    /**
+     * @param int $articleId
+     * @param int $languageId
+     * @param array $data
+     */
+    private function addArticleTranslation($articleId, $languageId, array $data)
+    {
+        $connection = Shopware()->Container()->get('dbal_connection');
+        $query = $connection->executeQuery(
+            "SELECT id FROM s_articles_translations WHERE articleID = :articleId AND languageID = :languageId LIMIT 1",
+            [':articleId' => $articleId, ':languageId' => $languageId]
+        );
+        $exist = $query->fetch(PDO::FETCH_COLUMN);
+
+        if ($exist) {
+            $this->updateArticleTranslation($exist, $data);
+        } else {
+            $this->insertArticleTranslation($articleId, $languageId, $data);
+        }
+    }
+
+    /**
+     * @param int $articleId
+     * @param int $languageId
+     * @param array $data
+     */
+    private function insertArticleTranslation($articleId, $languageId, array $data)
+    {
+        $data = array_merge($data, ['languageID' => $languageId, 'articleID' => $articleId]);
+
+        $connection = Shopware()->Container()->get('dbal_connection');
+        $query = $connection->createQueryBuilder();
+        $query->insert('s_articles_translations');
+        foreach ($data as $key => $value) {
+            $query->setValue($key, ':' . $key);
+            $query->setParameter(':' . $key, $value);
+        }
+        $query->execute();
+    }
+
+    /**
+     * @param int $id
+     * @param array $data
+     */
+    private function updateArticleTranslation($id, array $data)
+    {
+        $connection = Shopware()->Container()->get('dbal_connection');
+        $query = $connection->createQueryBuilder();
+
+        $query->update('s_articles_translations', 'translation');
+        foreach ($data as $key => $value) {
+            $query->set($key, ':' . $key);
+            $query->setParameter(':' . $key, $value);
+        }
+
+        $query->where('id = :id');
+        $query->setParameter(':id', $id);
+        $query->execute();
     }
 }

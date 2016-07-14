@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -22,8 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Models\Form\Form,
-    Shopware\Models\Form\Field;
+use Shopware\Models\Form\Form;
+use Shopware\Models\Form\Field;
+
 /**
  * Shopware Backend Controller for the form module
  */
@@ -69,7 +70,7 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
     private function getManager()
     {
         if ($this->manager === null) {
-            $this->manager= Shopware()->Models();
+            $this->manager = Shopware()->Models();
         }
         return $this->manager;
     }
@@ -100,7 +101,7 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
         $offset = $this->Request()->getParam('start');
         $limit = $this->Request()->getParam('limit', 20);
         $filter = $this->prefixProperties($this->Request()->getParam('filter', array()), 'form');
-        $order  = $this->prefixProperties($this->Request()->getParam('sort', array()), 'form');
+        $order = $this->prefixProperties($this->Request()->getParam('sort', array()), 'form');
 
         $query = $this->getRepository()->getListQuery($filter, $order, $offset, $limit);
 
@@ -108,6 +109,10 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
         $totalResult = $this->getManager()->getQueryCount($query);
 
         $forms = $query->getArrayResult();
+
+        foreach ($forms as &$form) {
+            $form['shopIds'] = $this->explodeShopIds($form['shopIds']);
+        }
 
         $this->View()->assign(array('success' => true, 'data' => $forms, 'total' => $totalResult));
     }
@@ -121,6 +126,10 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
     {
         $data = $this->getRepository()->getFormQuery($id)->getArrayResult();
 
+        foreach ($data as &$form) {
+            $form['shopIds'] = $this->explodeShopIds($form['shopIds']);
+        }
+
         if (empty($data)) {
             $this->View()->assign(array('success' => false, 'message' => 'Form not found'));
             return;
@@ -131,6 +140,28 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
     }
 
     /**
+     * Gets a | delimited and separated shop id list
+     * and converts it into an array of ints
+     *
+     * @param string $shopIds
+     * @return array The list of shop ids
+     */
+    private function explodeShopIds($shopIds)
+    {
+        if (empty($shopIds)) {
+            return array();
+        }
+
+        $explodedShopIds = explode('|', trim($shopIds, '|'));
+
+        $explodedShopIds = array_map(function ($elem) {
+            return (int)$elem;
+        }, $explodedShopIds);
+
+        return $explodedShopIds;
+    }
+
+    /**
      * Creates new form
      */
     public function createFormAction()
@@ -138,7 +169,7 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
         $params = $this->Request()->getParams();
 
         $formModel = new Form();
-        $params['attribute'] = $params['attribute'][0];
+        $params['shopIds'] = $params['shopIds'] ? '|' . implode('|', $params['shopIds']) . '|' : null;
 
         $formModel->fromArray($params);
 
@@ -146,6 +177,8 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
         $this->getManager()->flush();
 
         $data = $this->getManager()->toArray($formModel);
+        $data['shopIds'] = $this->explodeShopIds($data['shopIds']);
+
         $this->View()->assign(array('success' => true, 'data' => $data));
     }
 
@@ -167,10 +200,11 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
         }
 
         $params = $this->Request()->getParams();
-        $params['attribute'] = $params['attribute'][0];
 
         // unset fields - fields should only be updated via the updateField-Action
         unset($params['fields']);
+
+        $params['shopIds'] = $params['shopIds'] ? '|' . implode('|', $params['shopIds']) . '|' : null;
 
         $result->fromArray($params);
         $this->getManager()->persist($result);
@@ -225,6 +259,9 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
 
         $this->getManager()->persist($clonedForm);
         $this->getManager()->flush();
+
+        $persister = Shopware()->Container()->get('shopware_attribute.data_persister');
+        $persister->cloneAttribute('s_cms_support_attributes', $id, $clonedForm->getId());
 
         $this->View()->assign(array('success' => true));
     }
@@ -339,13 +376,13 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
 
         $qb = $this->getManager()->createQueryBuilder();
         $qb->update('Shopware\Models\Form\Field', 'field')
-           ->andWhere('field.id = :fieldId');
+            ->andWhere('field.id = :fieldId');
 
         foreach ($positions as $position => $fieldid) {
             $qb->set('field.position', $position)
-               ->setParameter('fieldId', $fieldid)
-               ->getQuery()
-               ->execute();
+                ->setParameter('fieldId', $fieldid)
+                ->getQuery()
+                ->execute();
         }
 
         $this->View()->assign(array('success' => true));

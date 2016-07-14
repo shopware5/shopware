@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -24,8 +24,8 @@
 
 namespace Shopware\Components\Log\Handler;
 
-use Enlight_Controller_Request_RequestHttp as Request;
-use Enlight_Controller_Response_ResponseHttp as Response;
+use Enlight_Controller_Request_Request as Request;
+use Enlight_Controller_Response_Response as Response;
 use Monolog\Handler\FirePHPHandler as BaseFirePHPHandler;
 
 /**
@@ -172,7 +172,6 @@ class FirePHPHandler extends BaseFirePHPHandler
             self::$sendHeaders = $this->headersAccepted();
 
             foreach ($this->getInitHeaders() as $header => $content) {
-
                 $this->sendHeader($header, $content);
             }
 
@@ -181,7 +180,7 @@ class FirePHPHandler extends BaseFirePHPHandler
 
         $headers = $this->createRecordHeader($record);
 
-        if (is_array($headers[0])) {
+        if (isset($headers[0]) && is_array($headers[0])) {
             foreach ($headers as $header) {
                 $this->sendHeader(key($header), current($header));
             }

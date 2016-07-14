@@ -1,7 +1,7 @@
 <?php
 class Migrations_Migration203 Extends Shopware\Components\Migrations\AbstractMigration
 {
-    public function up()
+    public function up($modus)
     {
         $sql = <<<'EOD'
 SET @plugin_id = (SELECT id FROM s_core_plugins WHERE name='HttpCache');

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,9 +23,10 @@
  */
 
 namespace Shopware\Models\Config;
-use Shopware\Components\Model\ModelEntity,
-    Doctrine\ORM\Mapping as ORM,
-    Doctrine\Common\Collections\ArrayCollection;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  *
@@ -34,8 +35,8 @@ use Shopware\Components\Model\ModelEntity,
  */
 class Element extends ModelEntity
 {
+    const SCOPE_LOCALE = 0;
     const SCOPE_SHOP = 1;
-    const SCOPE_LOCALE = 2;
 
     /**
      * @var integer $id
@@ -52,7 +53,7 @@ class Element extends ModelEntity
     private $name;
 
     /**
-     * @var string $description
+     * @var string $value
      * @ORM\Column(name="value", type="object", nullable=true)
      */
     private $value;
@@ -256,7 +257,7 @@ class Element extends ModelEntity
      */
     public function setOptions(array $options)
     {
-        $fields = array('label', 'value', 'description', 'required', 'scope');
+        $fields = array('label', 'value', 'description', 'required', 'scope', 'position');
         foreach ($fields as $field) {
             if (array_key_exists($field, $options)) {
                 $method = 'set' . ucfirst($field);
@@ -264,6 +265,7 @@ class Element extends ModelEntity
                 unset($options[$field]);
             }
         }
+
         $this->options = $options;
     }
 
@@ -399,5 +401,4 @@ class Element extends ModelEntity
     {
         return $this->translations->count() > 0;
     }
-
 }

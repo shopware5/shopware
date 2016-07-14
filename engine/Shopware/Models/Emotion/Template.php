@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -24,15 +24,15 @@
 namespace Shopware\Models\Emotion;
 
 use Shopware\Components\Model\ModelEntity;
-use Doctrine\ORM\Mapping AS ORM;
+use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Shopware Emotion Model - Template
  *
- * @category  Shopware
- * @package   Shopware\Models\Emotion
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
+ * @category   Shopware
+ * @package    Shopware\Models
+ * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  * @ORM\Entity
  * @ORM\Table(name="s_emotion_templates")
@@ -111,7 +111,7 @@ class Template extends ModelEntity
     }
 
     /**
-     * @return
+     * @return string
      */
     public function getFile()
     {
@@ -119,7 +119,7 @@ class Template extends ModelEntity
     }
 
     /**
-     * @param  $file
+     * @param string $file
      */
     public function setFile($file)
     {

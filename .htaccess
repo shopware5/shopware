@@ -11,7 +11,7 @@ RewriteRule shopware.dll shopware.php
 RewriteRule files/documents/.* engine [NC,L]
 RewriteRule backend/media/(.*) media/$1 [NC,L]
 
-RewriteCond %{REQUEST_URI} !(\/(engine|files|templates)\/)
+RewriteCond %{REQUEST_URI} !(\/(engine|files|templates|themes|web)\/)
 RewriteCond %{REQUEST_URI} !(\/media\/(archive|banner|image|music|pdf|unknown|video)\/)
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
@@ -21,8 +21,20 @@ RewriteRule ^(.*)$ shopware.php [PT,L,QSA]
 RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization},L]
 </IfModule>
 
-# Staging-Rules start
-#SetEnvIf Host "staging.test.shopware.in" ENV=staging
+<IfModule mod_alias.c>
+    # Block access to VCS directories
+    RedirectMatch 404 /\\.(svn|git|hg|bzr|cvs)(/|$)
+
+    # Restrict access to root folder files
+    RedirectMatch 404 /(composer\.(json|lock)|README\.md|UPGRADE\.md)$
+</IfModule>
+
+# Staging environment
+#SetEnvIf Host "staging.test.shopware.in" SHOPWARE_ENV=staging
+
+# Development environment
+#SetEnvIf Host "dev.shopware.in" SHOPWARE_ENV=dev
+#SetEnv SHOPWARE_ENV dev
 
 DirectoryIndex index.html
 DirectoryIndex index.php
@@ -30,25 +42,49 @@ DirectoryIndex shopware.php
 
 # Disables download of configuration
 <Files ~ "\.(tpl|yml|ini)$">
-    Deny from all
+    # Deny all requests from Apache 2.4+.
+    <IfModule mod_authz_core.c>
+          Require all denied
+    </IfModule>
+
+    # Deny all requests from Apache 2.0-2.2.
+    <IfModule !mod_authz_core.c>
+        Deny from all
+    </IfModule>
 </Files>
 
 # Enable gzip compression
 <IfModule mod_deflate.c>
-    AddOutputFilterByType DEFLATE text/html text/xml text/plain text/css text/javascript application/json
+    AddOutputFilterByType DEFLATE text/html text/xml text/plain text/css text/javascript application/javascript application/json
 </IfModule>
 
-<IfModule mod_expires.c>
-<Files ~ "\.(jpe?g|png|gif|css|js)$">
-    ExpiresActive on
-    ExpiresDefault "access plus 1 month"
-    FileETag None
+<Files ~ "\.(jpe?g|png|gif|css|js|woff|eot)$">
+    <IfModule mod_expires.c>
+        ExpiresActive on
+        ExpiresDefault "access plus 1 month"
+    </IfModule>
+
     <IfModule mod_headers.c>
         Header append Cache-Control "public"
         Header unset ETag
     </IfModule>
+
+    FileETag None
 </Files>
-</IfModule>
+
+# Match generated files like:
+# 1429684458_t22_s1.css
+# 1429684458_t22_s1.js
+<FilesMatch "([0-9]{10})_(.+)\.(js|css)$">
+    <ifModule mod_headers.c>
+        Header set Cache-Control "max-age=31536000, public"
+    </ifModule>
+
+    <IfModule mod_expires.c>
+        ExpiresActive on
+        ExpiresDefault "access plus 1 year"
+    </IfModule>
+</FilesMatch>
 
 # Disables auto directory index
 <IfModule mod_autoindex.c>
@@ -60,7 +96,7 @@ DirectoryIndex shopware.php
 </IfModule>
 
 <IfModule mod_php5.c>
-#  php_value memory_limit 128M
+#  php_value memory_limit 256M
 #  php_value max_execution_time 120
 #  php_value upload_max_filesize 20M
    php_flag phar.readonly off
@@ -68,7 +104,12 @@ DirectoryIndex shopware.php
    php_flag session.auto_start off
    php_flag suhosin.session.cryptua off
    php_flag zend.ze1_compatibility_mode off
+   php_value always_populate_raw_post_data -1
 </IfModule>
 
 #   AddType x-mapp-php5 .php
 #   AddHandler x-mapp-php5 .php
+
+<IfModule mod_headers.c>
+    Header append X-Frame-Options SAMEORIGIN
+</IfModule>

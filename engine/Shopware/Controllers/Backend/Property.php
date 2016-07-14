@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -22,9 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Models\Property\Value,
-    Shopware\Models\Property\Option,
-    Shopware\Models\Property\Group;
+use Shopware\Models\Property\Value;
+use Shopware\Models\Property\Option;
+use Shopware\Models\Property\Group;
 
 /**
  * Shopware Backend Controller for the property module
@@ -66,13 +66,11 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
         return $this->manager;
     }
 
-
     /**
      * returns the groups for the sets grids
      */
     public function getSetsAction()
     {
-
         $limit = intval($this->Request()->limit);
         $offset = intval($this->Request()->start);
         $filter = $this->Request()->getParam('filter', array());
@@ -88,7 +86,6 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
             )
         );
     }
-
 
     /**
      * returns the groups for the sets grids
@@ -109,11 +106,9 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
         );
     }
 
-
     public function createSetAction()
     {
         $params = $this->Request()->getPost();
-        $params['attribute'] = $params['attribute'][0];
 
         $group = new Group();
         $group->fromArray($params);
@@ -130,34 +125,6 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
                      ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
 
         $this->View()->assign(array('success' => true, 'data' => $data));
-    }
-
-    /**
-     * Internal helper function to save the dynamic attributes of an article price.
-     * @param $group
-     * @param $attributeData
-     * @return mixed
-     */
-    private function saveGroupAttributes($group, $attributeData)
-    {
-        if (empty($attributeData)) {
-            return;
-        }
-        if ($group->getId() > 0) {
-            $result = $this->getPropertyRepository()
-                           ->getAttributesQuery($group->getId())
-                           ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
-            if (empty($result)) {
-                $attributes = new \Shopware\Models\Attribute\PropertyGroup();
-            } else {
-                $attributes = $result;
-            }
-        } else {
-            $attributes = new \Shopware\Models\Attribute\PropertyGroup();
-        }
-        $attributes->fromArray($attributeData);
-        $attributes->setPropertyGroup($group);
-        $this->getManager()->persist($attributes);
     }
 
     /**
@@ -178,7 +145,6 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
         }
 
         $params = $this->Request()->getPost();
-        $params['attribute'] = $params['attribute'][0];
         $group->fromArray($params);
 
         try {
@@ -402,8 +368,6 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
             return;
         }
 
-
-
         $values = $this->getPropertyRepository()
                        ->getPropertyValueByOptionIdQuery($optionId)
                        ->getArrayResult();
@@ -460,6 +424,13 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
 
         $value->setValue($this->Request()->getPost('value'));
 
+        if ($this->Request()->has('mediaId') && $this->Request()->getParam('mediaId', null)) {
+            $media = $this->get('models')->find('Shopware\Models\Media\Media', $this->Request()->getPost('mediaId'));
+            $value->setMedia($media);
+        } else {
+            $value->setMedia(null);
+        }
+
         try {
             Shopware()->Models()->flush();
         } catch (Exception $e) {
@@ -467,7 +438,11 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
             return;
         }
 
-        $data = Shopware()->Models()->toArray($value);
+        $query = $this->getPropertyRepository()->getPropertyValueByOptionIdQueryBuilder(1);
+        $query->where('value.id = ?0')
+            ->setParameter(0, $value->getId());
+
+        $data = $query->getQuery()->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
         $this->View()->assign(array('success' => true, 'data' => $data));
     }
 
@@ -550,7 +525,7 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
         $positions = json_decode($data);
 
         foreach ($positions as $position => $valueId) {
-           $test[] = (array(array("position"=>$position,"optionId"=>$valueId,"groupId"=>$setId)));
+            $test[] = (array(array("position"=>$position, "optionId"=>$valueId, "groupId"=>$setId)));
 
             Shopware()->Db()->update(
                 's_filter_relations',

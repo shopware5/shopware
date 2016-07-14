@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -44,16 +44,14 @@ class Shopware_Plugins_Core_CronBirthday_Bootstrap extends Shopware_Components_P
                 userID,
                 company,
                 department,
-                salutation,
-                customernumber,
-                firstname,
-                lastname,
+                u.salutation,
+                u.customernumber,
+                u.firstname,
+                u.lastname,
                 street,
-                streetnumber,
                 zipcode,
                 city,
                 phone,
-                fax,
                 countryID,
                 ustid,
                 at.text1,
@@ -132,7 +130,7 @@ class Shopware_Plugins_Core_CronBirthday_Bootstrap extends Shopware_Components_P
             $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
             $shopId = is_numeric($user['language']) ? $user['language'] : $user['subshopID'];
             $shop = $repository->getActiveById($shopId);
-            $shop->registerResources(Shopware()->Bootstrap());
+            $shop->registerResources();
 
             //language 	subshopID
             $context = array(

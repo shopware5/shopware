@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -100,7 +100,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
      */
     public function TopSeller()
     {
-        return Shopware()->TopSeller();
+        return Shopware()->Container()->get('TopSeller');
     }
 
     /**
@@ -110,7 +110,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
      */
     public function AlsoBought()
     {
-        return Shopware()->AlsoBought();
+        return Shopware()->Container()->get('AlsoBought');
     }
 
     /**
@@ -120,7 +120,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
      */
     public function SimilarShown()
     {
-        return Shopware()->SimilarShown();
+        return Shopware()->Container()->get('SimilarShown');
     }
 
     /**
@@ -181,7 +181,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
     protected function subscribeAlsoBoughtEvents()
     {
         $this->subscribeEvent('Shopware_Modules_Order_SaveOrder_ProcessDetails', 'addNewAlsoBought');
-        $this->subscribeEvent('Enlight_Controller_Dispatcher_ControllerPath_Backend_AlsoBought','getAlsoBoughtBackendController');
+        $this->subscribeEvent('Enlight_Controller_Dispatcher_ControllerPath_Backend_AlsoBought', 'getAlsoBoughtBackendController');
         $this->subscribeEvent('Enlight_Bootstrap_InitResource_AlsoBought', 'initAlsoBoughtResource');
     }
 
@@ -193,8 +193,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
         $this->subscribeEvent('Shopware_Modules_Order_SaveOrder_ProcessDetails', 'incrementTopSeller');
         $this->subscribeEvent('Shopware_Modules_Articles_GetArticleCharts', 'afterTopSellerSelected');
         $this->subscribeEvent('Enlight_Bootstrap_InitResource_TopSeller', 'initTopSellerResource');
-        $this->subscribeEvent('Enlight_Controller_Action_Backend_Config_InitTopSeller', 'initTopSeller');
-        $this->subscribeEvent('Enlight_Controller_Dispatcher_ControllerPath_Backend_TopSeller','getTopSellerBackendController');
+        $this->subscribeEvent('Enlight_Controller_Dispatcher_ControllerPath_Backend_TopSeller', 'getTopSellerBackendController');
 
         $this->createCronJob('Topseller Refresh', 'RefreshTopSeller', 86400, true);
         $this->subscribeEvent('Shopware_CronJob_RefreshTopSeller', 'refreshTopSeller');
@@ -227,7 +226,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
         );
 
         $similarShown = Enlight_Class::Instance('Shopware_Components_SimilarShown');
-        $this->Application()->Bootstrap()->registerResource('SimilarShown', $similarShown);
+        Shopware()->Container()->set('SimilarShown', $similarShown);
         return $similarShown;
     }
 
@@ -285,7 +284,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
                 AND   articleID = :articleId";
 
         $alreadyViewed = Shopware()->Db()->fetchOne($sql, array(
-            'sessionId' => Shopware()->SessionID(),
+            'sessionId' => Shopware()->Session()->get('sessionId'),
             'articleId' => $articleId
         ));
 
@@ -302,7 +301,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
         ";
 
         $articles = Shopware()->Db()->fetchCol($sql, array(
-            'sessionId' => Shopware()->SessionID(),
+            'sessionId' => Shopware()->Session()->get('sessionId'),
             'articleId' => $articleId
         ));
 
@@ -364,7 +363,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
         );
 
         $alsoBought = Enlight_Class::Instance('Shopware_Components_AlsoBought');
-        $this->Application()->Bootstrap()->registerResource('AlsoBought', $alsoBought);
+        Shopware()->Container()->set('AlsoBought', $alsoBought);
         return $alsoBought;
     }
 
@@ -396,15 +395,10 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
             WHERE basket1.sessionID = :sessionId
         ";
         $combinations = Shopware()->Db()->fetchAll($sql, array(
-            'sessionId' => Shopware()->SessionID()
+            'sessionId' => Shopware()->Session()->get('sessionId')
         ));
 
-        foreach ($combinations as $combination) {
-            $this->AlsoBought()->refreshBoughtArticles(
-                $combination['article_id'],
-                $combination['related_article_id']
-            );
-        }
+        $this->AlsoBought()->refreshMultipleBoughtArticles($combinations);
         return $arguments->getReturn();
     }
 
@@ -434,7 +428,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
         );
 
         $topSeller = Enlight_Class::Instance('Shopware_Components_TopSeller');
-        $this->Application()->Bootstrap()->registerResource('TopSeller', $topSeller);
+        Shopware()->Container()->set('TopSeller', $topSeller);
 
         return $topSeller;
     }
@@ -514,15 +508,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
             return $arguments->getReturn();
         }
 
-        if (Shopware()->Front()->returnResponse()) {
-            $this->TopSeller()->updateElapsedTopSeller(50);
-        } else {
-            $event = new Enlight_Event_EventHandler(
-                'Enlight_Controller_Front_AfterSendResponse',
-                array($this, 'afterSendResponseOnTopSeller')
-            );
-            Shopware()->Events()->registerListener($event);
-        }
+        $this->TopSeller()->updateElapsedTopSeller(50);
 
         return $arguments->getReturn();
     }
@@ -565,5 +551,4 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
     {
         $this->TopSeller()->updateElapsedTopSeller(50);
     }
-
 }

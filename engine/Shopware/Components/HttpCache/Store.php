@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -26,7 +26,7 @@ namespace Shopware\Components\HttpCache;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\HttpCache\StoreInterface;
+use Symfony\Component\HttpKernel\HttpCache\Store as BaseStore;
 
 /**
  * <code>
@@ -34,54 +34,49 @@ use Symfony\Component\HttpKernel\HttpCache\StoreInterface;
  * $httpCacheStore->purgeByHeader($name);
  * </code>
  *
- * @category  Shopware
  * @package   Shopware\Components\HttpCache
- * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Store implements StoreInterface
+class Store extends BaseStore
 {
-    protected $root;
-    private $keyCache;
-    private $locks;
+    /**
+     * @var string[]
+     */
+    private $cacheCookies;
 
     /**
-     * Constructor.
-     *
-     * @param string $root The path to the cache directory
+     * @var bool
      */
-    public function __construct($root)
+    private $lookupOptimization;
+
+    /**
+     * @param string $root
+     * @param string[] $cacheCookies
+     */
+    public function __construct($root, array $cacheCookies, $lookupOptimization)
     {
-        $this->root = $root;
-        if (!is_dir($this->root)) {
-            mkdir($this->root, 0777, true);
-        }
-        $this->keyCache = new \SplObjectStorage();
-        $this->locks = array();
+        $this->cacheCookies = $cacheCookies;
+
+        parent::__construct($root);
+        $this->lookupOptimization = $lookupOptimization;
     }
 
     /**
-     * Returns a cache key for the given Request.
+     * Generate custom cache key including
+     * additional state from cookie and headers.
      *
-     * @param Request $request A Request instance
-     *
-     * @return string A key for the given Request
+     * {@inheritdoc}
      */
-    protected function getCacheKey(Request $request)
+    protected function generateCacheKey(Request $request)
     {
-        if (isset($this->keyCache[$request])) {
-            return $this->keyCache[$request];
-        }
         $uri = $request->getUri();
 
-        if ($request->cookies->has('shop')) {
-            $uri .= '&__shop=' . $request->cookies->get('shop');
+        foreach ($this->cacheCookies as $cookieName) {
+            if ($request->cookies->has($cookieName)) {
+                $uri .= '&__' . $cookieName . '=' . $request->cookies->get($cookieName);
+            }
         }
 
-        if ($request->cookies->has('currency')) {
-            $uri .= '&__currency=' . $request->cookies->get('currency');
-        }
-
-        return $this->keyCache[$request] = 'md' . sha1($uri);
+        return 'md' . hash('sha256', $uri);
     }
 
     /**
@@ -95,8 +90,6 @@ class Store implements StoreInterface
             return false;
         }
 
-        $result = false;
-
         /** @var $file \SplFileInfo */
         foreach ($this->createRecursiveFileIterator($this->root) as $file) {
             if (!$file->isFile()) {
@@ -104,15 +97,14 @@ class Store implements StoreInterface
             }
 
             // skip .gitkeep
-            if ($file->getFileName() === '.gitkeep') {
+            if ($file->getFilename() === '.gitkeep') {
                 continue;
             }
 
             unlink($file->getPathname());
-            $result = true;
         }
 
-        return $result;
+        return true;
     }
 
     /**
@@ -124,6 +116,11 @@ class Store implements StoreInterface
      */
     public function purgeByHeader($name, $value = null)
     {
+        // optimized purging for x-shopware-cache-id
+        if ($this->lookupOptimization && $name == 'x-shopware-cache-id') {
+            return $this->purgeByShopwareId($value);
+        }
+
         $headerDir = $this->root . DIRECTORY_SEPARATOR . 'md';
 
         if (!file_exists($headerDir)) {
@@ -182,7 +179,7 @@ class Store implements StoreInterface
      * @param string $path The path of the directory to be iterated over.
      * @return \RecursiveIteratorIterator
      */
-    protected function createRecursiveFileIterator($path)
+    private function createRecursiveFileIterator($path)
     {
         $directoryIterator = new \RecursiveDirectoryIterator(
             $path,
@@ -196,274 +193,82 @@ class Store implements StoreInterface
     }
 
     /**
-     * Cleanups storage.
+     * When saving a page, also save the page's cacheKey in an optimized version
+     * so we can look it up more quickly
+     *
+     * @param Request $request
+     * @param Response $response
+     * @return string
      */
-    public function cleanup()
+
+    public function write(Request $request, Response $response)
     {
-        // unlock everything
-        foreach ($this->locks as $lock) {
-            if (file_exists($lock)) {
-                @unlink($lock);
+        $headerKey = parent::write($request, $response);
+
+        if (!$this->lookupOptimization) {
+            return $headerKey;
+        }
+
+        if (!$response->headers->has('x-shopware-cache-id') || !$response->headers->has('x-content-digest')) {
+            return $headerKey;
+        }
+
+        $cacheIds = array_filter(explode(';', $response->headers->get('x-shopware-cache-id')));
+        $cacheKey = $response->headers->get('x-content-digest');
+
+        foreach ($cacheIds as $cacheId) {
+            $key = 'ci' . hash('sha256', $cacheId);
+            if (!$content = json_decode($this->load($key), true)) {
+                $content = [];
+            }
+
+
+            // Storing the headerKey and the cacheKey will increase the lookup file size a bit
+            // but save a lot of reads when invalidating
+            $content[$cacheKey] = $headerKey;
+
+            if (!false === $this->save($key, json_encode($content))) {
+                throw new \RuntimeException("Could not write cacheKey $key");
             }
         }
 
-        $error = error_get_last();
-        if (1 === $error['type'] && false === headers_sent()) {
-            // send a 503
-            header('HTTP/1.0 503 Service Unavailable');
-            header('Retry-After: 10');
-            echo '503 Service Unavailable';
-        }
+        return $headerKey;
     }
 
+
     /**
-     * Locks the cache for a given Request.
+     * Delete all pages with the given cache id
      *
-     * @param Request $request A Request instance
-     * @return Boolean|string true if the lock is acquired, the path to the current lock otherwise
+     * @param $id
+     * @return bool
      */
-    public function lock(Request $request)
+    private function purgeByShopwareId($id)
     {
-        $path = $this->getPath($this->getCacheKey($request).'.lck');
-        if (!is_dir(dirname($path)) && false === @mkdir(dirname($path), 0777, true)) {
+        if (!$id) {
             return false;
         }
 
-        $lock = @fopen($path, 'x');
-        if (false !== $lock) {
-            fclose($lock);
+        $cacheInvalidateKey = 'ci' . hash('sha256', $id);
+        $cacheInvalidatePath = $this->getPath($cacheInvalidateKey);
 
-            $this->locks[] = $path;
-
-            return true;
+        if (!$content = json_decode($this->load($cacheInvalidateKey), true)) {
+            return false;
         }
 
-        return !file_exists($path) ?: $path;
-    }
+        // unlink all cache files which contain the given id
+        foreach ($content as $cacheKey => $headerKey) {
+            $contentPath = $this->getPath($cacheKey);
+            $headerPath = $this->getPath($headerKey);
 
-    /**
-     * Releases the lock for the given Request.
-     *
-     * @param Request $request A Request instance
-     *
-     * @return Boolean False if the lock file does not exist or cannot be unlocked, true otherwise
-     */
-    public function unlock(Request $request)
-    {
-        $file = $this->getPath($this->getCacheKey($request).'.lck');
-
-        return is_file($file) ? @unlink($file) : false;
-    }
-
-    public function isLocked(Request $request)
-    {
-        return is_file($this->getPath($this->getCacheKey($request).'.lck'));
-    }
-
-    /**
-     * Locates a cached Response for the Request provided.
-     *
-     * @param Request $request A Request instance
-     *
-     * @return Response|null A Response instance, or null if no cache entry was found
-     */
-    public function lookup(Request $request)
-    {
-        $key = $this->getCacheKey($request);
-
-        if (!$entries = $this->getMetadata($key)) {
-            return null;
+            @unlink($contentPath);
+            @unlink($headerPath);
         }
 
-        // find a cached entry that matches the request.
-        $match = null;
-        foreach ($entries as $entry) {
-            if ($this->requestsMatch(isset($entry[1]['vary'][0]) ? $entry[1]['vary'][0] : '', $request->headers->all(), $entry[0])) {
-                $match = $entry;
-
-                break;
-            }
-        }
-
-        if (null === $match) {
-            return null;
-        }
-
-        list($req, $headers) = $match;
-        if (is_file($body = $this->getPath($headers['x-content-digest'][0]))) {
-            return $this->restoreResponse($headers, $body);
-        }
-
-        // TODO the metaStore referenced an entity that doesn't exist in
-        // the entityStore. We definitely want to return nil but we should
-        // also purge the entry from the meta-store when this is detected.
-        return null;
-    }
-
-    /**
-     * Writes a cache entry to the store for the given Request and Response.
-     *
-     * Existing entries are read and any that match the response are removed. This
-     * method calls write with the new list of cache entries.
-     *
-     * @param Request  $request  A Request instance
-     * @param Response $response A Response instance
-     *
-     * @return string The key under which the response is stored
-     *
-     * @throws \RuntimeException
-     */
-    public function write(Request $request, Response $response)
-    {
-        $key = $this->getCacheKey($request);
-        $storedEnv = $this->persistRequest($request);
-
-        // write the response body to the entity store if this is the original response
-        if (!$response->headers->has('X-Content-Digest')) {
-            $digest = $this->generateContentDigest($response);
-
-            if (false === $this->save($digest, $response->getContent())) {
-                throw new \RuntimeException('Unable to store the entity.');
-            }
-
-            $response->headers->set('X-Content-Digest', $digest);
-
-            if (!$response->headers->has('Transfer-Encoding')) {
-                $response->headers->set('Content-Length', strlen($response->getContent()));
-            }
-        }
-
-        // read existing cache entries, remove non-varying, and add this one to the list
-        $entries = array();
-        $vary = $response->headers->get('vary');
-        foreach ($this->getMetadata($key) as $entry) {
-            if (!isset($entry[1]['vary'][0])) {
-                $entry[1]['vary'] = array('');
-            }
-
-            if ($vary != $entry[1]['vary'][0] || !$this->requestsMatch($vary, $entry[0], $storedEnv)) {
-                $entries[] = $entry;
-            }
-        }
-
-        $headers = $this->persistResponse($response);
-        unset($headers['age']);
-
-        array_unshift($entries, array($storedEnv, $headers));
-
-        if (false === $this->save($key, serialize($entries))) {
-            throw new \RuntimeException('Unable to store the metadata.');
-        }
-
-        return $key;
-    }
-
-    /**
-     * Returns content digest for $response.
-     *
-     * @param Response $response
-     *
-     * @return string
-     */
-    protected function generateContentDigest(Response $response)
-    {
-        return 'en'.sha1($response->getContent());
-    }
-
-    /**
-     * Invalidates all cache entries that match the request.
-     *
-     * @param Request $request A Request instance
-     *
-     * @throws \RuntimeException
-     */
-    public function invalidate(Request $request)
-    {
-        $modified = false;
-        $key = $this->getCacheKey($request);
-
-        $entries = array();
-        foreach ($this->getMetadata($key) as $entry) {
-            $response = $this->restoreResponse($entry[1]);
-            if ($response->isFresh()) {
-                $response->expire();
-                $modified = true;
-                $entries[] = array($entry[0], $this->persistResponse($response));
-            } else {
-                $entries[] = $entry;
-            }
-        }
-
-        if ($modified) {
-            if (false === $this->save($key, serialize($entries))) {
-                throw new \RuntimeException('Unable to store the metadata.');
-            }
-        }
-    }
-
-    /**
-     * Determines whether two Request HTTP header sets are non-varying based on
-     * the vary response header value provided.
-     *
-     * @param string $vary A Response vary header
-     * @param array  $env1 A Request HTTP header array
-     * @param array  $env2 A Request HTTP header array
-     *
-     * @return Boolean true if the two environments match, false otherwise
-     */
-    private function requestsMatch($vary, $env1, $env2)
-    {
-        if (empty($vary)) {
-            return true;
-        }
-
-        foreach (preg_split('/[\s,]+/', $vary) as $header) {
-            $key = strtr(strtolower($header), '_', '-');
-            $v1 = isset($env1[$key]) ? $env1[$key] : null;
-            $v2 = isset($env2[$key]) ? $env2[$key] : null;
-            if ($v1 !== $v2) {
-                return false;
-            }
-        }
+        @unlink($cacheInvalidatePath);
 
         return true;
     }
 
-    /**
-     * Gets all data associated with the given key.
-     *
-     * Use this method only if you know what you are doing.
-     *
-     * @param string $key The store key
-     *
-     * @return array An array of data associated with the key
-     */
-    private function getMetadata($key)
-    {
-        if (false === $entries = $this->load($key)) {
-            return array();
-        }
-
-        return unserialize($entries);
-    }
-
-    /**
-     * Purges data for the given URL.
-     *
-     * @param string $url A URL
-     *
-     * @return Boolean true if the URL exists and has been purged, false otherwise
-     */
-    public function purge($url)
-    {
-        if (is_file($path = $this->getPath($this->getCacheKey(Request::create($url))))) {
-            unlink($path);
-
-            return true;
-        }
-
-        return false;
-    }
 
     /**
      * Loads data for the given key.
@@ -485,12 +290,12 @@ class Store implements StoreInterface
      * @param string $key  The store key
      * @param string $data The data to store
      *
-     * @return Boolean
+     * @return bool
      */
     private function save($key, $data)
     {
         $path = $this->getPath($key);
-        if (!is_dir(dirname($path)) && false === @mkdir(dirname($path), 0777, true)) {
+        if (!is_dir(dirname($path)) && false === @mkdir(dirname($path), 0777, true) && !is_dir(dirname($path))) {
             return false;
         }
 
@@ -510,57 +315,5 @@ class Store implements StoreInterface
         }
 
         @chmod($path, 0666 & ~umask());
-    }
-
-    public function getPath($key)
-    {
-        return $this->root.DIRECTORY_SEPARATOR.substr($key, 0, 2).DIRECTORY_SEPARATOR.substr($key, 2, 2).DIRECTORY_SEPARATOR.substr($key, 4, 2).DIRECTORY_SEPARATOR.substr($key, 6);
-    }
-
-    /**
-     * Persists the Request HTTP headers.
-     *
-     * @param Request $request A Request instance
-     *
-     * @return array An array of HTTP headers
-     */
-    private function persistRequest(Request $request)
-    {
-        return $request->headers->all();
-    }
-
-    /**
-     * Persists the Response HTTP headers.
-     *
-     * @param Response $response A Response instance
-     *
-     * @return array An array of HTTP headers
-     */
-    private function persistResponse(Response $response)
-    {
-        $headers = $response->headers->all();
-        $headers['X-Status'] = array($response->getStatusCode());
-
-        return $headers;
-    }
-
-    /**
-     * Restores a Response from the HTTP headers and body.
-     *
-     * @param array  $headers An array of HTTP headers for the Response
-     * @param string $body    The Response body
-     *
-     * @return Response
-     */
-    private function restoreResponse($headers, $body = null)
-    {
-        $status = $headers['X-Status'][0];
-        unset($headers['X-Status']);
-
-        if (null !== $body) {
-            $headers['X-Body-File'] = array($body);
-        }
-
-        return new Response($body, $status, $headers);
     }
 }

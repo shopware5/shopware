@@ -1,6 +1,6 @@
 /**
- * Shopware 4.0
- * Copyright © 2012 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -19,14 +19,6 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    ExtJS
- * @subpackage WindowManagement
- * @copyright  Copyright (c) 2012, shopware AG (http://www.shopware.de)
- * @version    $Id$
- * @author     Stephan Pohl
- * @author     $Author$
  */
 
 /**
@@ -62,7 +54,7 @@ Ext.define('Enlight.app.WindowManagement', {
     extend: 'Ext.app.Controller',
 
     /**
-     * Requires class object for is neccessary for this
+     * Requires class object for is necessary for this
      * class to work
      *
      * @array
@@ -84,7 +76,7 @@ Ext.define('Enlight.app.WindowManagement', {
     defaultIconCls: 'closeable',
 
     /**
-     * Indicates if the controller initalizes the neccessary view
+     * Indicates if the controller initializes the necessary view
      *
      * @private
      * @boolean
@@ -282,8 +274,7 @@ Ext.define('Enlight.app.WindowManagement', {
             }
             return false;
         }
-
-        if(viewport.getActiveDesktopPosition() !== view.desktop) {
+        if(viewport.getActiveDesktop() !== view.desktop) {
             viewport.jumpTo(view.desktopPosition);
         }
 
@@ -328,8 +319,9 @@ Ext.define('Enlight.app.WindowManagement', {
      */
     minimizeAll: function() {
         var wins = this.getActiveWindows();
+
         Ext.each(wins, function(win) {
-          win.minimize();
+            win.minimize();
         });
 
         return true;
@@ -344,9 +336,13 @@ Ext.define('Enlight.app.WindowManagement', {
      * @return [boolean]
      */
     closeAll: function() {
-
         var wins = this.getActiveWindows();
+
         Ext.each(wins, function(win) {
+            if (win.xtype === 'widget-sidebar-window') {
+                return true;
+            }
+
             win.destroy();
         });
 

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -38,11 +38,6 @@ class Shopware_Controllers_Widgets_Campaign extends Shopware_Controllers_Widgets
         $emotionId = (int) $this->Request()->getParam('emotionId');
         $query = $repository->getEmotionById($emotionId);
         $emotion = $query->getQuery()->getArrayResult();
-        $emotion['rows'] = $emotion['grid']['rows'];
-        $emotion['cols'] = $emotion['grid']['cols'];
-        $emotion['cellHeight'] = $emotion['grid']['cellHeight'];
-        $emotion['articleHeight'] = $emotion['grid']['articleHeight'];
-        $emotion['gutter'] = $emotion['grid']['gutter'];
         return $emotion;
     }
 

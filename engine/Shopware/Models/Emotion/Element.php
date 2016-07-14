@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -22,28 +22,15 @@
  * our trademarks remain entirely with us.
  */
 
-namespace   Shopware\Models\Emotion;
-use         Shopware\Components\Model\ModelEntity,
-            Doctrine\ORM\Mapping AS ORM;
+namespace Shopware\Models\Emotion;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
- *
- * Associations:
- * <code>
- *
- * </code>
- *
- *
- * Indices:
- * <code>
- *
- * </code>
- *
  * @category   Shopware
- * @package    Models
- * @subpackage Emotion
- * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
- * @license    http://enlight.de/license     New BSD License
+ * @package    Shopware\Models
+ * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  * @ORM\Entity
  * @ORM\Table(name="s_emotion_element")
@@ -115,6 +102,14 @@ class Element extends ModelEntity
     private $endCol;
 
     /**
+     * Defines a custom user CSS class for every element.
+     * @var string $cssClass
+     *
+     * @ORM\Column(name="css_class", type="string", length=255, nullable=true)
+     */
+    private $cssClass;
+
+    /**
      * OWNING SIDE
      * Contains the assigned \Shopware\Models\Emotion\Emotion
      * which can be configured in the backend emotion module.
@@ -145,6 +140,22 @@ class Element extends ModelEntity
      * @var \Doctrine\Common\Collections\ArrayCollection
      */
     protected $data;
+
+    /**
+     * INVERSE SIDE
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Emotion\ElementViewport", mappedBy="element", orphanRemoval=true, cascade={"persist"})
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     */
+    protected $viewports;
+
+    /**
+     * Class constructor.
+     */
+    public function __construct()
+    {
+        $this->data = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->viewports = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Unique identifier field of the element model.
@@ -197,46 +208,6 @@ class Element extends ModelEntity
     }
 
     /**
-     * Defines how many rows over the element draws.
-     *
-     * @return int
-     */
-    public function getHeight()
-    {
-        return $this->height;
-    }
-
-    /**
-     * Defines how many rows over the element draws.
-     *
-     * @param int $height
-     */
-    public function setHeight($height)
-    {
-        $this->height = $height;
-    }
-
-    /**
-     * Defines how many columns over the element draws.
-     *
-     * @return int
-     */
-    public function getWidth()
-    {
-        return $this->width;
-    }
-
-    /**
-     * Defines how many columns over the element draws.
-     *
-     * @param int $width
-     */
-    public function setWidth($width)
-    {
-        $this->width = $width;
-    }
-
-    /**
      * @return int
      */
     public function getEndRow()
@@ -261,6 +232,22 @@ class Element extends ModelEntity
     }
 
     /**
+     * @param string $cssClass
+     */
+    public function setCssClass($cssClass)
+    {
+        $this->cssClass = $cssClass;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCssClass()
+    {
+        return $this->cssClass;
+    }
+
+    /**
      * @param int $endCol
      */
     public function setEndCol($endCol)
@@ -275,7 +262,7 @@ class Element extends ModelEntity
      * The emotion model is the owning side (primary key in this table) of the association between
      * emotion and grid.
      *
-     * @return \Shopware\Models\Emotion\Grid
+     * @return \Shopware\Models\Emotion\Emotion
      */
     public function getEmotion()
     {
@@ -305,12 +292,29 @@ class Element extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection|array|null $data
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @param array $data
+     * @return ModelEntity
      */
     public function setData($data)
     {
         return $this->setOneToMany($data, '\Shopware\Models\Emotion\Data', 'data', 'element');
+    }
+
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getViewports()
+    {
+        return $this->viewports;
+    }
+
+    /**
+     * @param array $viewports
+     * @return ModelEntity
+     */
+    public function setViewports($viewports)
+    {
+        return $this->setOneToMany($viewports, '\Shopware\Models\Emotion\ElementViewport', 'viewports', 'element');
     }
 
     /**
@@ -337,4 +341,33 @@ class Element extends ModelEntity
         $this->component = $component;
     }
 
+
+    public function __clone()
+    {
+        $this->id = null;
+
+        $this->emotionId = null;
+
+        $dataArray = [];
+        foreach ($this->data as $data) {
+            $newData = clone $data;
+
+            $newData->setElement($this);
+
+            $dataArray[] = $newData;
+        }
+
+        $this->data = $dataArray;
+
+        $viewportData = [];
+        foreach ($this->viewports as $viewport) {
+            $newViewport = clone $viewport;
+
+            $newViewport->setElement($this);
+
+            $viewportData[] = $newViewport;
+        }
+
+        $this->viewports = $viewportData;
+    }
 }

@@ -143,7 +143,6 @@ class Enlight_Config_Format_Ini extends Enlight_Config_BaseConfig
                     throw new Enlight_Config_Exception("Section '$sectionName' cannot be found in $filename");
                 }
                 $dataArray = $this->_arrayMergeRecursive($this->_processSection($iniArray, $sectionName), $dataArray);
-
             }
             parent::__construct($dataArray, $allowModifications);
         }

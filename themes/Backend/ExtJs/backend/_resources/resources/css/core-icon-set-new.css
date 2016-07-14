@@ -1,0 +1,201 @@
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
+.min-all,.close-all,.sprite-application--arrow,.settings--plugin-manager,.contents--blog,.contents--forms,.sprite-application-search-result,.sprite-application-text,.sprite-arrow-045-small,.sprite-arrow-225-small,.sprite-arrow-circle-315,.contents--import-export,.sprite-arrow-circle-double,.sprite-balloon--pencil,.article--ratings,.misc--help--board,.settings--performance,.sprite-block,.sprite-blue-document--minus,.sprite-blue-document--plus,.sprite-blue-document-copy,.sprite-blue-document-pdf-text,.sprite-blue-document-template,.sprite-blue-folder--exclamation,.sprite-blue-folder--minus,.sprite-blue-folder--plus,.sprite-blue-folder,.article--categories,.settings--system-info,.sprite-box,.misc--send-feedback,.sprite-btn_taskbar_cap_fenster_tooltip_ico1,.sprite-btn_taskbar_cap_fenster_tooltip_ico2,.sprite-btn_taskbar_cap_fenster_tooltip_ico3,.sprite-btn_taskbar_cap_fenster_tooltip_ico4,.sprite-calendar-month,.sprite-calendar-select-days,.sprite-calendar-select-week,.sprite-camera-lens,.settings--logfile,.sprite-category,.marketing--analyses--abort-analyses,.sprite-chart-pie-separate,.sprite-chart-up-color,.marketing--analyses,.sprite-clock--minus,.sprite-clock,.sprite-construction,.settings--payment-methods,.sprite-cross-circle,.sprite-cross-small,.sprite-cross,.sprite-disk-return-black,.sprite-disk,.sprite-document-pdf,.sprite-document-template,.sprite-documents-stack,.contents--shopsites,.sprite-drive-download,.sprite-drive-upload,.settings--performance--cache,.sprite-edit,.settings--delivery-charges,.sprite-exclamation-diamond,.sprite-exclamation,.sprite-eye,.sprite-films,.marketing--product-exports,.settings--riskmanagement,.sprite-gear--arrow,.sprite-gear,.sprite-globe--arrow,.sprite-globe-green,.sprite-globe,.sprite-grid,.sprite-hard-hat,.sprite-icon_taskbar_cap_fenster,.sprite-icon_taskbar_cap_fenster_active,.sprite-icon_taskbar_cap_logout,.sprite-icon_taskbar_cap_logout_active,.sprite-icon_taskbar_top_artikel,.sprite-icon_taskbar_top_artikel_active,.sprite-icon_taskbar_top_einstellungen,.sprite-icon_taskbar_top_einstellungen_active,.sprite-icon_taskbar_top_hilfe,.sprite-icon_taskbar_top_hilfe_active,.sprite-icon_taskbar_top_inhalte,.sprite-icon_taskbar_top_inhalte_active,.sprite-icon_taskbar_top_kunden,.sprite-icon_taskbar_top_kunden_active,.sprite-icon_taskbar_top_marketing,.sprite-icon_taskbar_top_marketing_active,.sprite-image--exclamation,.marketing--banner,.sprite-images-stack,.sprite-images,.article--add-article,.sprite-inbox-document-music,.sprite-inbox-document-text,.sprite-inbox-download,.sprite-inbox-film,.contents--media-manager,.sprite-inbox-upload,.sprite-inbox,.sprite-information,.sprite-key,.sprite-key--arrow,.sprite-key--pencil,.misc--shortcuts,.sprite-layer-select,.sprite-layout-header-3-mix,.sprite-layout-header,.sprite-layout-hf-3-mix,.sprite-leaf,.sprite-license-key,.misc--help,.sprite-lightning,.sprite-locale,.sprite-mail--minus,.settings--mail-presets,.sprite-mail--plus,.marketing--vouchers,.sprite-mail-send,.sprite-mails-stack,.sprite-megaphone,.sprite-minus-circle-frame,.sprite-minus-circle,.sprite-money--arrow,.sprite-money-coin,.sprite-moneys,.sprite-music-beam,.sprite-newspapers,.marketing--newsletters,.sprite-pencil,.sprite-photo-album--minus,.sprite-photo-album--plus,.sprite-picture--arrow,.sprite-picture--minus,.sprite-picture,.sprite-pictures,.marketing--shopping-worlds,.sprite-plus-circle-frame,.sprite-plus-circle,.sprite-property-blue,.sprite-puzzle--minus,.sprite-puzzle--plus,.marketing--analyses--overview,.sprite-sd-memory-card,.misc--about-shopware,.sprite-star-empty,.sprite-star-half,.marketing--premium-items,.sprite-sticky-note--pencil,.customers--orders,.sprite-store,.sprite-table,.sprite-target,.sprite-tick-circle,.sprite-tick-small,.sprite-tick,.sprite-ticket--pencil,.sprite-toolbox,.sprite-truck-box-label,.article--manufacturers,.customers--customer-list,.sprite-ui-scroll-pane-horizontal,.article--overview,.sprite-user--arrow,.sprite-user--pencil,.customers--add-customer,.settings--user-management,.sprite-user,.sprite-users,.settings--basic-settings,.marketing--partner-program,.marketing--analyses--email-notification,.misc--software-update,.settings--theme-manager,.article--properties,.settings--snippets,.misc--help--online-help,.marketing--analyses--stats-charts,.sprite-bin-metal-full,.sprite-inbox-image,.sprite-application-table,.sprite-application-icon-large,.sprite-star,.sprite-inbox--minus,.sprite-color--pencil,.sprite-mail,.sprite-chart,.sprite-application-home,.sprite-xfn-colleague,sprite-user-silhouette-question,.sprite-magnifier,.sprite-media-player-phone,.sprite-user-silhouette-question,.sprite-inbox-document-text,.sprite-inbox--plus,.sprite-sticky-notes-pin,.sprite-imac,.sprite-ipad--portrait,.sprite-ipad--landscape,.sprite-iphone--portrait,.sprite-iphone--landscape,.sprite-document-copy,.sprite-arrow-circle-135,.sprite-application--plus,.sprite-arrow-circle-225-left,.sprite-inbox-select,.sprite-duplicate-article,.sprite-inbox-document-image,.sprite-inbox-document-folder,.sprite-user--list,.sprite-arrow-circle-double-135,.sprite-chart-impressions,.sprite-article-sales,.sprite-duplicate-grid,.sprite-duplicate-template,.sprite-partner-stats,.sprite-ui-split-panel,.sprite-application,.sprite-filter,.sprite-baggage-cart-box-label,.sprite-view-as,.sprite-multi-edit,.sprite-magnifier--arrow,.sprite-application-dock,.sprite-application-dock-180,.sprite-chain-small,.sprite-blue-document-text,.sprite-mail--pencil,.sprite-ui-check-box, .sprite-ui-check-box-uncheck,.sprite-google,.sprite-attributes {
+    background: url("../themes/images/icons/core-icon-set-new.png") no-repeat !important;
+}
+
+/** Misc icons */
+.sprite-minus-circle-frame { background-position: -36px -36px !important }
+.sprite-minus-circle, .sprite-picture--minus { background-position: -36px -36px !important }
+.sprite-plus-circle-frame { background-position: -36px 0px !important }
+.sprite-plus-circle { background-position: -36px 0px !important } /* has to be under the minus icons */
+.sprite-tick-circle, .sprite-money--arrow { background-position: -36px -72px !important }
+.sprite-cross-circle { background-position: -36px -108px !important }
+.sprite-pencil, .sprite-mail--pencil { background-position: -36px -216px !important }
+.sprite-bin-metal-full { background-position: -36px -252px !important }
+.sprite-globe-green, .sprite-globe, .sprite-google { background-position: -36px -288px !important }
+.sprite-duplicate-article, .sprite-duplicate-grid, .sprite-duplicate-template, .sprite-picture--arrow { background-position: -36px -180px !important }
+.sprite-blue-folder--plus { background-position: -36px -1080px !important }
+.sprite-document-copy, .sprite-blue-document-copy { background-position: -36px -180px !important }
+.sprite-inbox-image { background-position: -36px -360px !important }
+.sprite-inbox-upload { background-position: -36px -396px !important }
+.sprite-camera-lens { background-position: -36px -432px !important }
+.sprite-application-icon-large { background-position: -36px -468px !important }
+.sprite-application-table, .sprite-table { background-position: -36px -504px !important }
+.sprite-gear, .sprite-gear--arrow { background-position: -36px -540px !important }
+.sprite-tick { background-position: -36px -576px !important }
+.sprite-tick-small, .sprite-ui-check-box { background-position: -36px -612px !important }
+.sprite-cross { background-position: -36px -648px !important }
+.sprite-cross-small, .sprite-ui-check-box-uncheck { background-position: -36px -684px !important }
+.sprite-blue-folder--exclamation { background-position: -36px -720px !important }
+.sprite-image--exclamation { background-position: -36px -756px !important }
+.sprite-star-empty { background-position: -36px -792px !important }
+.sprite-star-half { background-position: -36px -828px !important }
+.sprite-star { background-position: 0px -108px !important }
+.sprite-inbox { background-position: -36px -864px !important }
+.sprite-inbox-select { background-position: -36px -900px !important }
+.sprite-inbox--minus { background-position: -36px -936px !important }
+.sprite-color--pencil { background-position: -36px -972px !important }
+.sprite-blue-document--minus { background-position: -36px -1008px !important }
+.sprite-blue-document--plus { background-position: -36px -1044px !important }
+.sprite-blue-folder--minus { background-position: -36px -1116px !important }
+.sprite-license-key, .sprite-key--arrow, .sprite-key { background-position: -36px -1152px !important }
+.sprite-user { background-position: -36px -1188px !important }
+.sprite-user--list { background-position: -36px -1224px !important }
+.sprite-user--pencil, .sprite-user--arrow { background-position: -36px -1260px !important }
+.sprite-users { background-position: -36px -1296px !important }
+.sprite-key--pencil { background-position: -36px -1332px !important }
+.sprite-exclamation { background-position: -36px -1368px !important }
+.sprite-mail { background-position: -36px -1404px !important }
+.sprite-mail--plus { background-position: -36px -1440px !important }
+.sprite-mail--minus { background-position: -36px -1476px !important }
+.sprite-layer-select { background-position: -72px -1368px !important }
+.sprite-blue-document-template { background-position: -36px -1512px !important }
+.sprite-construction { background-position: -36px -1548px !important }
+.sprite-globe--arrow, .sprite-view-as, .sprite-document-pdf { background-position: -36px -1584px !important }
+.sprite-lightning { background-position: -72px -1188px !important }
+.sprite-arrow-circle-135 { background-position: -36px -144px !important }
+.sprite-application--plus { background-position: -72px -1404px !important }
+.sprite-arrow-circle-225-left { background-position: -72px -1440px !important }
+.sprite-arrow-circle-double-135 { background-position: 0 -612px !important }
+.sprite-partner-stats { background-position: -72px -936px !important }
+.sprite-ui-split-panel { background-position: -72px -1476px !important }
+.sprite-documents-stack { background-position: -108px -396px !important }
+.min-all { background-position: -108px -144px !important }
+.close-all { background-position: -108px -180px !important }
+.sprite-document-template { background-position: -108px -216px !important }
+.sprite-balloon--pencil { background-position: -108px -360px !important }
+.sprite-mail-send { background-position: -108px -108px !important }
+.sprite-application { background-position: -72px -1585px !important }
+.sprite-filter { background-position: -108px -288px !important }
+.sprite-blue-folder { background-position: -108px -468px !important }
+.sprite-clock--minus { background-position: -108px 0 !important }
+.sprite-arrow-circle-315 { background-position: -72px -1440px !important }
+.sprite-baggage-cart-box-label { background-position: -72px -1224px !important }
+.sprite-multi-edit { background-position: -108px -432px !important }
+.sprite-chain-small, .sprite-blue-document-text { background-position: -108px -252px !important }
+.sprite-disk { background-position: -108px -504px !important }
+.sprite-layout-header { background-position: -108px -540px !important }
+.sprite-layout-header-3-mix { background-position: -108px -576px !important }
+.sprite-application-dock-180 { background-position: -108px -612px !important }
+.sprite-application-dock { background-position: -108px -648px !important }
+.sprite-inbox-download, .sprite-drive-download { background-position: -108px -684px !important }
+.sprite-attributes { background-position: -108px -720px !important }
+
+/** Media Manager Icons */
+.sprite-inbox-document-folder { background-position: -72px 0 !important }
+.sprite-inbox-document-text { background-position: -72px -36px !important }
+.sprite-inbox-document-music { background-position: -72px -72px !important }
+.sprite-inbox-film { background-position: -72px -108px !important }
+.sprite-inbox-document-image { background-position: -72px -144px !important }
+.sprite-images-stack { background-position: -36px -360px !important }
+.sprite-music-beam { background-position: -72px -252px !important }
+.sprite-films { background-position: -72px -288px !important }
+.sprite-blue-document-pdf-text { background-position: -72px -324px !important }
+.sprite-box { background-position: -72px -360px !important }
+.sprite-target { background-position: -72px -396px !important }
+.sprite-leaf { background-position: -72px -432px !important }
+.sprite-hard-hat { background-position: 0 -468px !important }
+.sprite-pictures { background-position: -72px -468px !important }
+.sprite-inbox--plus { background-position: -72px -1260px !important }
+.sprite-sticky-notes-pin { background-position: -72px -1296px !important }
+.sprite-store { background-position: -72px -1548px !important }
+.sprite-sd-memory-card { background-position: -108px -36px !important }
+
+/** Statistics Icons */
+.sprite-chart { background-position: 0 -288px !important }
+.sprite-application-home { background-position: -72px -504px !important }
+.sprite-application-search-result { background-position: -72px -540px !important }
+.sprite-xfn-colleague { background-position: 0 -900px !important }
+.sprite-article-sales { background-position: -72px -360px !important }
+.sprite-user-silhouette-question { background-position: -72px -576px !important }
+.sprite-calendar-month { background-position: -72px -612px !important }
+.sprite-calendar-select-week { background-position: -72px -648px !important }
+.sprite-calendar-select-days { background-position: -72px -684px !important }
+.sprite-clock { background-position: -72px -720px !important }
+.sprite-category { background-position: -72px -756px !important }
+.sprite-locale { background-position: -72px -792px !important }
+.sprite-moneys { background-position: 0px -936px !important }
+.sprite-truck-box-label { background-position: 0 -1224px !important }
+.sprite-toolbox { background-position: 0 -468px !important }
+.sprite-media-player-phone { background-position: -72px -828px !important }
+.sprite-magnifier { background-position: -72px -864px !important }
+.sprite-magnifier--arrow { background-position: -108px -324px !important }
+.sprite-chart-up-color { background-position: -72px -900px !important }
+.sprite-chart-impressions { background-position: -72px -936px !important }
+
+/** Device icons */
+.sprite-imac { background-position: -72px -1008px !important }
+.sprite-ipad--portrait { background-position: -72px -1044px !important }
+.sprite-ipad--landscape { background-position: -72px -1080px !important }
+.sprite-iphone--portrait { background-position: -72px -1116px !important }
+.sprite-iphone--landscape { background-position: -72px -1152px !important }
+
+/** DropDown menu icons */
+.marketing--analyses--abort-analyses { background-position: 0 0 !important }
+.article--add-article { background-position: 0 -36px !important }
+.marketing--banner { background-position: 0 -72px !important }
+.article--ratings { background-position: 0 -108px !important }
+.contents--blog { background-position: 0 -144px !important }
+.misc--help { background-position: 0 -180px !important }
+.settings--performance--cache { background-position: 0 -216px !important }
+.article--categories { background-position: -72px -756px !important }
+.marketing--analyses, .marketing--analyses--stats-charts { background-position: 0 -288px !important }
+.article--properties { background-position: 0 -324px !important }
+.customers--customer-list { background-position: 0 -360px !important }
+.marketing--analyses--email-notification { background-position: 0 -396px !important }
+.settings--mail-presets { background-position: 0 -432px !important }
+.article--manufacturers { background-position: 0 -468px !important }
+.contents--forms { background-position: 0 -504px !important }
+.misc--help--board { background-position: 0 -540px !important }
+.marketing--shopping-worlds { background-position: 0 -576px !important }
+.contents--import-export { background-position: 0 -612px !important }
+.settings--logfile { background-position: 0 -648px !important }
+.marketing--vouchers { background-position: 0 -684px !important }
+.contents--media-manager { background-position: 0 -720px !important }
+.marketing--newsletters { background-position: 0 -756px !important }
+.misc--help--online-help { background-position: 0 -792px !important }
+.marketing--analyses--overview { background-position: 0 -828px !important }
+.article--overview { background-position: 0 -864px !important }
+.marketing--partner-program { background-position: 0 -900px !important }
+.settings--payment-methods { background-position: 0 -936px !important }
+.misc--send-feedback { background-position: 0 -972px !important }
+.settings--performance { background-position: 0 -1008px !important }
+.customers--orders { background-position: 0 -1044px !important }
+.settings--plugin-manager { background-position: 0 -1080px !important }
+.marketing--premium-items { background-position: 0 -1116px !important }
+.marketing--product-exports { background-position: 0 -1152px !important }
+.settings--riskmanagement { background-position: 0 -1188px !important }
+.settings--delivery-charges { background-position: 0 -1224px !important }
+.contents--shopsites { background-position: 0 -1260px !important }
+.misc--shortcuts { background-position: 0 -1296px !important }
+.settings--snippets { background-position: 0 -1332px !important }
+.misc--software-update { background-position: 0 -1368px !important }
+.settings--system-info { background-position: 0 -1404px !important }
+.settings--theme-manager { background-position: 0 -1440px !important }
+.settings--basic-settings { background-position: 0 -1476px !important }
+.customers--add-customer { background-position: 0 -1512px !important }
+.settings--user-management { background-position: 0 -1548px !important }
+.misc--about-shopware { background-position: 0 -1584px !important }
+.settings--premium-plugins { background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACZUlEQVR4AZ2MA5MdWwAG5088K75GrLWtuVjbim3btm3bKEQvtm0bnTknWZb3q+rBmelWPEr69rY7sqgJwlVqKpeh2NUsBOLFHJOOJS6DjG6DWbJ+O8dPXeDk2cus3b6Pwv5jaJ6Yj03NlP+WOYo1LhMNTU6jWXw+c1Zt5uuXr4h9+PCRa7fucubyNQ4fP0XpgDHYtH9FRDg/ArEZlDFv9RbKdubiFToPnYB/ShG6EDe/eoTRWE2nqStbiuJ/GbBEpyNQi3vy6eNnxM5fvk5kTgf+9YuhQaib8Ox2pHfuj2dCHnWDHJqcJh0ZMEemIRg1cyllGzdnKbV8YzFFJNJu4Bhu3rnPoyfPuHj1JjOXrqV1Yp507HHpKKbwVAQzFq2nbP0nzuIvj0jMEUkMmTSHKvsGY2cvkY4tJhXFGJqCYMq81ZRtxcadGALd1A900Tg6lUET5nL99j3evn2H2PRFa6Rji07RAsHJCLoNmULZPn74RPfhk6njHUtt3zhq+6k0ikyluNcIDh09SXbXwdKxRWkBQ2ASgsDktty7/5iyff70hVnL1hOX2xm9n4u/WkdqMRVdoBu7FhOOJTJZC/gnIqjr5aSgy3Bev3pD5d2+84DNuw/TddgkmkanowtwYQpJkI45PAlF75uAoL6Xi9qtVAq1yM2b96i+S5duEpJcSh0fVQSkYw5NRNF5uZF4uqjn4aReayctI7NILenDuKlLJKmlffGMy8MWkoTB340xMF44WkgLNGjtoqaYguJRTEGFvRu0csoDnYeGp0vW9V5ODYfE4O3E4OPE6OvC6PcTfzeNYgsGfweghFMydvuXwQAAAABJRU5ErkJggg==") no-repeat !important }
+.sprite-product-streams { background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAOVBMVEUAAAAfN2U1Y1YfN2VQmkMkQmE/eU5Kj0c6blJFhEtVpT9r0TBw3C115ikvWFpguzgqTV1asDxlxjRTjgHgAAAAAnRSTlMAoKBFbtAAAABwSURBVHheZc85EsQwCERRuRvQLttz/8OOZBIvP+MRUISw8dbm80P4ymHkPO5Q+uwXU44OEgchtTdRB837XoyriAlofVUlSRUGWkuAXNiMDKPoAVCRoiknUM+1k0FNfva0Q61OrHDwYFA6vPo893n/D77kBR35iz4XAAAAAElFTkSuQmCC") no-repeat !important; }

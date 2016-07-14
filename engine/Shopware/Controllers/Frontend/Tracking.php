@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -21,6 +21,8 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
+use Shopware\Models\Banner\Banner;
 
 /**
  * Shopware Backend Tacking
@@ -61,7 +63,7 @@ class Shopware_Controllers_Frontend_Tracking extends Enlight_Controller_Action
             return false;
         }
         /** @var $bannerMgn \Shopware\Models\Banner\Repository */
-        $bannerMgn = Shopware()->Models()->Banner();
+        $bannerMgn = Shopware()->Models()->getRepository(Banner::class);
         $banner = $bannerMgn->findOneBy(array('id'=>$bannerId));
         if (is_null($banner)) {
             return false;

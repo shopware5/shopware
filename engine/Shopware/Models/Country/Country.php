@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,8 +23,10 @@
  */
 
 namespace   Shopware\Models\Country;
-use         Shopware\Components\Model\ModelEntity,
-            Doctrine\ORM\Mapping AS ORM;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  *
@@ -137,14 +139,14 @@ class Country extends ModelEntity
     *
     * @ORM\Column(name="display_state_in_registration", type="boolean", nullable=false)
     */
-    private $displayStateInRegistration;
+    private $displayStateInRegistration = false;
 
     /**
     * @var integer $forceStateInRegistration
     *
     * @ORM\Column(name="force_state_in_registration", type="boolean", nullable=false)
     */
-    private $forceStateInRegistration;
+    private $forceStateInRegistration = false;
 
     /**
      * @var \Doctrine\Common\Collections\ArrayCollection
@@ -189,6 +191,12 @@ class Country extends ModelEntity
      * @ORM\Column(name="areaID", type="integer", nullable=false)
      */
     private $areaId;
+
+    public function __construct()
+    {
+        $this->payments = new ArrayCollection();
+        $this->states = new ArrayCollection();
+    }
 
     /**
      * Get id

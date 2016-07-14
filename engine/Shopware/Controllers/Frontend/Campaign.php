@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -21,43 +21,56 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
+use Shopware\Components\Emotion\DeviceConfiguration;
 
-/**
- */
 class Shopware_Controllers_Frontend_Campaign extends Enlight_Controller_Action
 {
     public function indexAction()
     {
-        if (Shopware()->Shop()->get('esi')) {
-            $emotionData = Shopware()->Db()->fetchRow('
-                SELECT * FROM s_emotion
-                WHERE id = ? and active = 1
-                AND (valid_from IS NULL || valid_from <= now())
-                AND (valid_to IS NULL || valid_to >= now())
-            ', array($this->Request()->getParam('emotionId')));
+        $emotionId = $this->Request()->getParam('emotionId');
 
-            if (empty($emotionData)) {
-                $this->Response()->setHttpResponseCode(404);
-                return $this->forward('index', 'index');
-            }
-            $this->View()->assign('sBreadcrumb', array(0 => array('name' => $emotionData['name'])));
-            $this->View()->assign('seo_keywords', $emotionData['seo_keywords']);
-            $this->View()->assign('seo_description', $emotionData['seo_description']);
+        /**@var $service DeviceConfiguration*/
+        $service = $this->get('emotion_device_configuration');
+        $landingPage = $service->getLandingPage($emotionId);
+        $landingPageShops = $service->getLandingPageShops($emotionId);
 
-            $this->View()->assign('emotionId', intval($this->Request()->getParam('emotionId')));
-            $this->View()->assign('isEmotionLandingPage', true);
-        } else {
-            // @deprecated - support for shopware 3.x campaigns
-            $campaignId = (int) $this->Request()->sCampaign;
-            if (empty($campaignId)) {
-                return $this->forward('index', 'index');
-            }
-            $campaign = Shopware()->Modules()->Marketing()->sCampaignsGetDetail($campaignId);
-            if (empty($campaign['id'])) {
-                return $this->forward('index', 'index');
-            }
-            $this->View()->loadTemplate("frontend/campaign/old.tpl");
-            $this->View()->sCampaign = $campaign;
+        /** @var $context ShopContext */
+        $context = $this->get('shopware_storefront.context_service')->getShopContext();
+        $shopId = $context->getShop()->getId();
+        $fallbackId = $context->getShop()->getFallbackId();
+
+        if (!$landingPage || !in_array($shopId, $landingPageShops)) {
+            throw new Enlight_Controller_Exception(
+                'Landing page missing, non-existent or invalid for the current shop',
+                404
+            );
         }
+
+        $translator = new Shopware_Components_Translation();
+        $translation = $translator->readWithFallback($shopId, $fallbackId, 'emotion', $emotionId);
+
+        if (!empty($translation['seoTitle'])) {
+            $landingPage['seo_title'] = $translation['seoTitle'];
+        }
+
+        if (!empty($translation['seoKeywords'])) {
+            $landingPage['seo_keywords'] = $translation['seoKeywords'];
+        }
+
+        if (!empty($translation['seoDescription'])) {
+            $landingPage['seo_description'] = $translation['seoDescription'];
+        }
+
+        $this->View()->assign([
+            'sBreadcrumb'          => [['name' => $landingPage['name']]],
+            'seo_title'            => $landingPage['seo_title'],
+            'seo_keywords'         => $landingPage['seo_keywords'],
+            'seo_description'      => $landingPage['seo_description'],
+            'landingPage'          => $landingPage,
+            'hasEmotion'           => true,
+            'isEmotionLandingPage' => true,
+            'hasEscapedFragment'   => $this->Request()->has('_escaped_fragment_'),
+        ]);
     }
 }

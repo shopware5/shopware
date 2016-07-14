@@ -90,6 +90,7 @@ class Enlight_Config extends Enlight_Config_BaseConfig implements ArrayAccess
      *
      * @param array|null|string $config
      * @param array|bool $options
+     * @throws Enlight_Config_Exception
      * @return \Enlight_Config
      */
     public function __construct($config, $options = null)
@@ -147,7 +148,7 @@ class Enlight_Config extends Enlight_Config_BaseConfig implements ArrayAccess
      * If one of the data array elements is an array the function will capsule this value into a new config class.
      * @param array $data
      */
-    public function setData(array $data)
+    public function setData($data)
     {
         $this->_loadedSection = null;
         $this->_index = 0;
@@ -225,6 +226,7 @@ class Enlight_Config extends Enlight_Config_BaseConfig implements ArrayAccess
      *
      * @param string $name
      * @param mixed $value
+     * @throws Enlight_Config_Exception
      */
     public function __set($name, $value)
     {
@@ -482,6 +484,4 @@ class Enlight_Config extends Enlight_Config_BaseConfig implements ArrayAccess
     {
         return $this->_sectionSeparator;
     }
-
-
 }

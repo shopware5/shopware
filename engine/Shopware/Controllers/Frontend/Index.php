@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -22,6 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+
 /**
  * @category  Shopware
  * @package   Shopware\Controllers\Frontend
@@ -31,25 +33,30 @@ class Shopware_Controllers_Frontend_Index extends Enlight_Controller_Action
 {
     public function preDispatch()
     {
-        if ($this->Request()->getActionName() != 'index') {
-            $this->forward('index'); return;
-        }
         $this->View()->loadTemplate('frontend/home/index.tpl');
     }
 
     public function indexAction()
     {
-        $category = Shopware()->Shop()->get('parentID');
+        /**@var $context ShopContextInterface*/
+        $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
+        $categoryId = $context->getShop()->getCategory()->getId();
 
-        $this->View()->sCategoryContent = Shopware()->Modules()->Categories()->sGetCategoryContent($category);
+        $emotions = $this->get('emotion_device_configuration')->get($categoryId);
 
-        if (Shopware()->Shop()->getTemplate()->getVersion() == 1) {
-            $this->View()->sOffers = Shopware()->Modules()->Articles()->sGetPromotions($category);
+        // media fix
+        $categoryContent = Shopware()->Modules()->Categories()->sGetCategoryContent($categoryId);
+        if (isset($categoryContent['media']['path'])) {
+            $mediaService = $this->get('shopware_media.media_service');
+            $categoryContent['media']['path'] = $mediaService->getUrl($categoryContent['media']['path']);
         }
-        $this->View()->sBanner = Shopware()->Modules()->Marketing()->sBanner($category);
 
-        if ($this->Request()->getPathInfo() != '/') {
-             $this->Response()->setHttpResponseCode(404);
-        }
+        $this->View()->assign([
+            'emotions' => $emotions,
+            'hasEmotion' => !empty($emotions),
+            'sCategoryContent' => $categoryContent,
+            'sBanner' => Shopware()->Modules()->Marketing()->sBanner($categoryId),
+            'hasEscapedFragment' => $this->Request()->has('_escaped_fragment_')
+        ]);
     }
 }

@@ -1,7 +1,7 @@
 <?php
 class Migrations_Migration109 Extends Shopware\Components\Migrations\AbstractMigration
 {
-    public function up()
+    public function up($modus)
     {
         $sql = <<<'EOD'
 SET @formID = (SELECT id FROM s_core_config_forms WHERE `name`='Mail');

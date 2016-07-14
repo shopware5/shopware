@@ -1,0 +1,45 @@
+{
+  "name": "shopwareresponsivetheme",
+  "version": "1.0.0",
+  "description": "The default responsive theme for Shopware",
+  "main": "karma.conf.js",
+  "private": true,
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "build": "grunt",
+    "test": "karma start karma.conf.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shopware/shopware.git"
+  },
+  "keywords": [
+    "shopware",
+    "theme",
+    "responsive",
+    "default",
+    "ecommcerce"
+  ],
+  "author": "shopware AG",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://issues.shopware.com"
+  },
+  "homepage": "https://github.com/shopware/shopware#readme",
+  "dependencies": {
+    "jquery": "^2.1.4",
+    "jquery.event.swipe": "^0.5.4",
+    "jquery.transit": "^0.9.12",
+    "normalize.css.less": "^3.0.3",
+    "open-sans-fontface": "^1.4.0",
+    "picturefill": "^3.0.1",
+    "pocketgrid-less": "^1.0.1"
+  },
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-clean": "^0.7.0",
+    "grunt-contrib-copy": "^0.8.2"
+  }
+}

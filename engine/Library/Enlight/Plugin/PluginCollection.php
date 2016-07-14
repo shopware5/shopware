@@ -54,7 +54,7 @@ abstract class Enlight_Plugin_PluginCollection extends Enlight_Class implements 
     /**
      * Returns the application instance.
      *
-     * @return Enlight_Application
+     * @return Shopware
      */
     abstract public function Application();
 
@@ -96,7 +96,11 @@ abstract class Enlight_Plugin_PluginCollection extends Enlight_Class implements 
         if (!$this->plugins->offsetExists($name)) {
             $this->load($name, $throwException);
         }
-        return $this->plugins->offsetGet($name);
+        if ($this->plugins->offsetExists($name)) {
+            return $this->plugins->offsetGet($name);
+        } else {
+            return null;
+        }
     }
 
     /**

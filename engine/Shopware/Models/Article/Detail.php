@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,10 +23,12 @@
  */
 
 namespace Shopware\Models\Article;
-use Shopware\Components\Model\ModelEntity,
-    Doctrine\ORM\Mapping AS ORM,
-    Symfony\Component\Validator\Constraints as Assert,
-    Doctrine\Common\Collections\ArrayCollection;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
+
 /**
  *
  * @ORM\Entity(repositoryClass="Repository")
@@ -60,7 +62,7 @@ class Detail extends ModelEntity
     /**
      * @var string $number
      * @Assert\NotBlank
-     * @Assert\Regex("/^[a-zA-Z0-9-_. ]+$/")
+     * @Assert\Regex("/^[a-zA-Z0-9-_.]+$/")
      *
      * @ORM\Column(name="ordernumber", type="string", nullable=false, unique = true)
      */
@@ -90,7 +92,7 @@ class Detail extends ModelEntity
     /**
      * @var integer $active
      *
-     * @ORM\Column(name="active", type="integer", nullable=false)
+     * @ORM\Column(name="active", type="boolean", nullable=false)
      */
     private $active = false;
 
@@ -141,6 +143,13 @@ class Detail extends ModelEntity
     private $ean = null;
 
     /**
+     * @var float $purchasePrice
+     *
+     * @ORM\Column(name="purchaseprice", type="decimal", nullable=false)
+     */
+    private $purchasePrice = 0;
+
+    /**
      * @var integer $position
      * @ORM\Column(name="position", type="integer", nullable=false)
      */
@@ -148,9 +157,9 @@ class Detail extends ModelEntity
 
     /**
      * @var integer $minPurchase
-     * @ORM\Column(name="minpurchase", type="integer", nullable=true)
+     * @ORM\Column(name="minpurchase", type="integer", nullable=false)
      */
-    private $minPurchase = null;
+    private $minPurchase = 1;
 
     /**
      * @var integer $purchaseSteps
@@ -499,6 +508,14 @@ class Detail extends ModelEntity
     }
 
     /**
+     * @return integer
+     */
+    public function getArticleId()
+    {
+        return $this->articleId;
+    }
+
+    /**
      * @return Article
      */
     public function getArticle()
@@ -615,6 +632,28 @@ class Detail extends ModelEntity
     }
 
     /**
+     * Set purchase price
+     *
+     * @param float $purchasePrice
+     * @return Article
+     */
+    public function setPurchasePrice($purchasePrice)
+    {
+        $this->purchasePrice = $purchasePrice;
+        return $this;
+    }
+
+    /**
+     * Get purchase price
+     *
+     * @return float
+     */
+    public function getPurchasePrice()
+    {
+        return $this->purchasePrice;
+    }
+
+    /**
      * Set shipping time
      *
      * @param string $shippingTime
@@ -677,7 +716,7 @@ class Detail extends ModelEntity
     /**
      * Get releaseDate
      *
-     * @return \Date
+     * @return \DateTime
      */
     public function getReleaseDate()
     {
@@ -692,6 +731,10 @@ class Detail extends ModelEntity
      */
     public function setMinPurchase($minPurchase)
     {
+        if ($minPurchase <= 0) {
+            $minPurchase = 1;
+        }
+
         $this->minPurchase = $minPurchase;
         return $this;
     }

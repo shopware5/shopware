@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -204,8 +204,15 @@ class PropertyGroup extends Resource
                 // Set comparable
                 $params['comparable'] = 0;
             }
+
             if (!isset($params['sortmode']) || empty($params['sortmode'])) {
                 // Set sortmode
+                $params['sortmode'] = 0;
+            }
+
+            //sortmode equals the old article_count sorting?
+            if ($params['sortmode'] == 2) {
+                //fallback to the default sorting
                 $params['sortmode'] = 0;
             }
         } else {

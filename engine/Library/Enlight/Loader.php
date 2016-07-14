@@ -146,7 +146,7 @@ class Enlight_Loader
             return $path;
         }
 
-		return stream_resolve_include_path($path);
+        return stream_resolve_include_path($path);
     }
 
     /**

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,10 +23,11 @@
  */
 
 namespace Shopware\Models\Article\Configurator\Template;
-use Shopware\Components\Model\ModelEntity,
-    Doctrine\ORM\Mapping AS ORM,
-    Symfony\Component\Validator\Constraints as Assert,
-    Doctrine\Common\Collections\ArrayCollection;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity
@@ -133,6 +134,13 @@ class Template extends ModelEntity
      * @ORM\Column(name="ean", type="string", nullable=true)
      */
     private $ean = null;
+
+    /**
+     * @var float $purchasePrice
+     *
+     * @ORM\Column(name="purchaseprice", type="decimal", nullable=false)
+     */
+    private $purchasePrice = 0;
 
     /**
      * @var integer $position
@@ -253,7 +261,7 @@ class Template extends ModelEntity
      * Set number
      *
      * @param string $number
-     * @return Detail
+     * @return Template
      */
     public function setNumber($number)
     {
@@ -365,7 +373,7 @@ class Template extends ModelEntity
      * Set stockMin
      *
      * @param integer $stockMin
-     * @return Detail
+     * @return Template
      */
     public function setStockMin($stockMin)
     {
@@ -428,7 +436,7 @@ class Template extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Article\Configurator\Template\Template
+     * @return \Shopware\Models\Article\Article
      */
     public function getArticle()
     {
@@ -438,7 +446,7 @@ class Template extends ModelEntity
     /**
      * @param $article
      *
-     * @return Template
+     * @return \Shopware\Models\Article\Article
      */
     public function setArticle($article)
     {
@@ -545,6 +553,28 @@ class Template extends ModelEntity
     }
 
     /**
+     * Set purchase price
+     *
+     * @param float $purchasePrice
+     * @return Article
+     */
+    public function setPurchasePrice($purchasePrice)
+    {
+        $this->purchasePrice = $purchasePrice;
+        return $this;
+    }
+
+    /**
+     * Get purchase price
+     *
+     * @return float
+     */
+    public function getPurchasePrice()
+    {
+        return $this->purchasePrice;
+    }
+
+    /**
      * Set shipping time
      *
      * @param string $shippingTime
@@ -607,7 +637,7 @@ class Template extends ModelEntity
     /**
      * Get releaseDate
      *
-     * @return \Date
+     * @return \DateTime
      */
     public function getReleaseDate()
     {
@@ -766,5 +796,4 @@ class Template extends ModelEntity
         $this->unit = $unit;
         return $this;
     }
-
 }

@@ -1,12 +1,26 @@
 language: php
 
 php:
-    - "5.5"
-    - "5.4"
-    - "5.3"
+  - 5.6
+  - 7.0
+  - nightly
+
+sudo: false
+
+cache:
+   directories:
+     - $HOME/.composer/cache/files
+
+before_script:
+    - phpenv config-rm xdebug.ini
 
 script:
-    - ant -f build/build.xml -Ddb.user=travis -Ddb.host=127.0.0.1 -Ddb.name=shopware build-continuous static-lint
+    - ant -f build/build.xml -Dapp.host=localhost -Ddb.user=travis -Ddb.host=127.0.0.1 -Ddb.name=shopware build-continuous static-lint
 
 notifications:
     email: false
+    irc: "chat.freenode.net#shopware-dev"
+
+matrix:
+  allow_failures:
+    - php: nightly

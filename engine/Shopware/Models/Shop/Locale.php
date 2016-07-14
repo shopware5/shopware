@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,9 +23,9 @@
  */
 
 namespace Shopware\Models\Shop;
-use Doctrine\Common\Collections\ArrayCollection;
-use Shopware\Components\Model\ModelEntity,
-    Doctrine\ORM\Mapping AS ORM;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Locale Model Entity
@@ -64,17 +64,6 @@ class Locale extends ModelEntity
      * @ORM\Column(name="territory", type="string", length=255, nullable=false)
      */
     private $territory;
-
-    /**
-     * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Translation\Translation", mappedBy="locale")
-     */
-    protected $translations;
-
-    public function __construct()
-    {
-        $this->translations = new ArrayCollection();
-    }
 
     /**
      * Get id
@@ -158,21 +147,5 @@ class Locale extends ModelEntity
     public function toString()
     {
         return $this->getLocale();
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getTranslations()
-    {
-        return $this->translations;
-    }
-
-    /**
-     * @param mixed $translations
-     */
-    public function setTranslations($translations)
-    {
-        $this->translations = $translations;
     }
 }

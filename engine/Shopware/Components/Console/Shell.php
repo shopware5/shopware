@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -42,11 +42,11 @@ class Shell extends BaseShell
     {
         return <<<EOF
 <info>
-         _                                         _  _
-     ___| |__   ___  _ ____      ____ _ _ __ ___  | || |
-    / __| '_ \ / _ \| '_ \ \ /\ / / _` | '__/ _ \ | || |_
-    \__ \ | | | (_) | |_) \ V  V / (_| | | |  __/ |__   _|
-    |___/_| |_|\___/| .__/ \_/\_/ \__,_|_|  \___|    |_|
+         _
+     ___| |__   ___  _ ____      ____ _ _ __ ___
+    / __| '_ \ / _ \| '_ \ \ /\ / / _` | '__/ _ \
+    \__ \ | | | (_) | |_) \ V  V / (_| | | |  __/
+    |___/_| |_|\___/| .__/ \_/\_/ \__,_|_|  \___|
                     |_|
 </info>
 EOF

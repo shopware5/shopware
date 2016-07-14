@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -39,7 +39,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 class Plugin extends ModelEntity
 {
     /**
-     * @var integer $id
+     * @var integer
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -47,62 +47,61 @@ class Plugin extends ModelEntity
     private $id;
 
     /**
-     * @var string $name
+     * @var string
      * @ORM\Column(name="name", type="string", nullable=false)
      */
     private $name;
 
     /**
-     * @var string $label
+     * @var string
      * @ORM\Column(name="label", type="string", nullable=false)
      */
     private $label;
 
     /**
-     * @var string $namespace
+     * @var string
      * @ORM\Column(name="namespace", type="string", nullable=false)
      */
     private $namespace;
 
     /**
-     * @var string $source
+     * @var string
      * @ORM\Column(name="source", type="string", nullable=false)
      */
     private $source;
 
-
     /**
-     * @var string $description
+     * @var string
      * @ORM\Column(name="description", type="string", nullable=false)
      */
     private $description;
 
     /**
-     * @var boolean $active
+     * @var boolean
      * @ORM\Column(name="active", type="boolean")
      */
     private $active = false;
 
     /**
-     * @var \DateTime $installed
+     * @var \DateTime
      * @ORM\Column(name="added", type="datetime", nullable=false)
      */
     private $added;
 
     /**
-     * @var \DateTime $installationDate
+     * @var \DateTime
      * @ORM\Column(name="installation_date", type="datetime", nullable=true)
      */
     private $installed;
 
     /**
-     * @var \DateTime $updated
+     * @var \DateTime
      * @ORM\Column(name="update_date", type="datetime", nullable=true)
      */
     private $updated;
 
     /**
-     * @var \DateTime $refreshed
+     * @var \DateTime
      * @ORM\Column(name="refresh_date", type="datetime", nullable=true)
      */
     private $refreshed;
@@ -114,80 +113,80 @@ class Plugin extends ModelEntity
     private $author;
 
     /**
-     * @var string $copyright
+     * @var string
      * @ORM\Column(name="copyright", type="string", nullable=true)
      */
     private $copyright;
 
     /**
-     * @var string $license
+     * @var string
      * @ORM\Column(name="license", type="string", nullable=false)
      */
     private $license;
 
     /**
-     * @var string $version
+     * @var string
      * @ORM\Column(name="version", type="string", nullable=false)
      */
     private $version;
 
     /**
-     * @var string $support
+     * @var string
      * @ORM\Column(name="support", type="string", nullable=false)
      */
     private $support;
 
     /**
-     * @var string $changes
+     * @var string
      * @ORM\Column(name="changes", type="string", nullable=false)
      */
     private $changes;
 
     /**
-     * @var string $link
+     * @var string
      * @ORM\Column(name="link", type="string", nullable=false)
      */
     private $link;
 
     /**
-     * @var string $changes
+     * @var string
      * @ORM\Column(name="update_version", type="string", nullable=false)
      */
     private $updateVersion;
 
     /**
-     * @var string $link
+     * @var string
      * @ORM\Column(name="update_source", type="string", nullable=false)
      */
     private $updateSource;
 
     /**
-     * @var boolean $capabilityUpdate
+     * @var boolean
      * @ORM\Column(name="capability_update", type="boolean")
      */
     private $capabilityUpdate = true;
 
     /**
-     * @var boolean $capabilityInstall
+     * @var boolean
      * @ORM\Column(name="capability_install", type="boolean")
      */
     private $capabilityInstall = true;
 
     /**
-     * @var boolean $capabilityEnable
+     * @var boolean
      * @ORM\Column(name="capability_enable", type="boolean")
      */
     private $capabilityEnable = true;
 
     /**
-     * @var boolean $capabilityDummy
-     * @ORM\Column(name="capability_dummy", type="boolean")
+     * @var boolean
+     * @ORM\Column(name="capability_secure_uninstall", type="boolean")
      */
-    private $capabilityDummy = false;
+    private $capabilitySecureUninstall = false;
 
     /**
      * INVERSE SIDE
-     * @var \Shopware\Models\Config\Form[]|ArrayCollection $configForms
+     * @var \Shopware\Models\Config\Form[]|ArrayCollection
      * @ORM\OneToMany(targetEntity="\Shopware\Models\Config\Form", mappedBy="plugin", cascade={"all"})
      * @ORM\JoinColumn(name="id", referencedColumnName="plugin_id")
      * @ORM\OrderBy({"position" = "ASC", "id" = "ASC"})
@@ -196,7 +195,7 @@ class Plugin extends ModelEntity
 
     /**
      * INVERSE SIDE
-     * @var \Shopware\Models\Menu\Menu[]|ArrayCollection $elements
+     * @var \Shopware\Models\Menu\Menu[]|ArrayCollection
      * @ORM\OneToMany(targetEntity="\Shopware\Models\Menu\Menu", mappedBy="plugin", cascade={"all"})
      * @ORM\JoinColumn(name="id", referencedColumnName="pluginID")
      * @ORM\OrderBy({"position" = "ASC", "id" = "ASC"})
@@ -205,7 +204,7 @@ class Plugin extends ModelEntity
 
     /**
      * INVERSE SIDE
-     * @var \Shopware\Models\Payment\Payment[]|ArrayCollection $elements
+     * @var \Shopware\Models\Payment\Payment[]|ArrayCollection
      * @ORM\OneToMany(targetEntity="\Shopware\Models\Payment\Payment", mappedBy="plugin", cascade={"all"})
      * @ORM\JoinColumn(name="id", referencedColumnName="pluginID")
      * @ORM\OrderBy({"id" = "ASC"})
@@ -214,12 +213,21 @@ class Plugin extends ModelEntity
 
     /**
      * INVERSE SIDE
-     * @var \Shopware\Models\Shop\Template[]|ArrayCollection $elements
+     * @var \Shopware\Models\Shop\Template[]|ArrayCollection
      * @ORM\OneToMany(targetEntity="\Shopware\Models\Shop\Template", mappedBy="plugin", cascade={"all"})
      * @ORM\JoinColumn(name="id", referencedColumnName="plugin_id")
      * @ORM\OrderBy({"id" = "ASC"})
      */
     private $templates;
+
+    /**
+     * INVERSE SIDE
+     * @var \Shopware\Models\Widget\Widget[]|ArrayCollection
+     * @ORM\OneToMany(targetEntity="\Shopware\Models\Widget\Widget", mappedBy="plugin", cascade={"all"})
+     * @ORM\JoinColumn(name="id", referencedColumnName="plugin_id")
+     * @ORM\OrderBy({"id" = "ASC"})
+     */
+    private $widgets;
 
     /**
      * @var ArrayCollection
@@ -229,9 +237,8 @@ class Plugin extends ModelEntity
     private $licenses;
 
     /**
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Emotion\Library\Component", mappedBy="plugin", orphanRemoval=true, cascade={"all"})
-     *
      * @var ArrayCollection
+     * @ORM\OneToMany(targetEntity="Shopware\Models\Emotion\Library\Component", mappedBy="plugin", orphanRemoval=true, cascade={"all"})
      */
     protected $emotionComponents;
 
@@ -247,22 +254,7 @@ class Plugin extends ModelEntity
         $this->payments = new ArrayCollection();
         $this->templates = new ArrayCollection();
         $this->licenses = new ArrayCollection();
-    }
-
-    /**
-     * @return bool
-     */
-    public function isDummy()
-    {
-        return (bool) $this->capabilityDummy;
-    }
-
-    /**
-     * Disables dummy capability
-     */
-    public function disableDummy()
-    {
-        $this->capabilityDummy = false;
+        $this->widgets = new ArrayCollection();
     }
 
     /**
@@ -538,7 +530,7 @@ class Plugin extends ModelEntity
     }
 
     /**
-     * @param Doctrine\Common\Collections\ArrayCollection|\Shopware\Models\Menu\Menu[] $configForms
+     * @param \Doctrine\Common\Collections\ArrayCollection|\Shopware\Models\Menu\Menu[] $configForms
      */
     public function setConfigForms($configForms)
     {
@@ -655,5 +647,61 @@ class Plugin extends ModelEntity
     public function setEmotionComponents($emotionComponents)
     {
         $this->emotionComponents = $emotionComponents;
+    }
+
+    /**
+     * @return \Doctrine\Common\Collections\ArrayCollection
+     */
+    public function getWidgets()
+    {
+        return $this->widgets;
+    }
+
+    /**
+     * @param \Doctrine\Common\Collections\ArrayCollection $widgets
+     */
+    public function setWidgets($widgets)
+    {
+        $this->widgets = $widgets;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function hasCapabilitySecureUninstall()
+    {
+        return $this->capabilitySecureUninstall;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function hasCapabilityEnable()
+    {
+        return $this->capabilityEnable;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function hasCapabilityInstall()
+    {
+        return $this->capabilityInstall;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function hasCapabilityUpdate()
+    {
+        return $this->capabilityUpdate;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isLegacyPlugin()
+    {
+        return $this->namespace !== 'ShopwarePlugins';
     }
 }

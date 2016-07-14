@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,10 +23,10 @@
  */
 
 namespace   Shopware\Models\Newsletter;
-use         Shopware\Components\Model\ModelEntity,
-            Doctrine\ORM\Mapping AS ORM,
-            Symfony\Component\Validator\Constraints as Assert,
-            Doctrine\Common\Collections\ArrayCollection;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Shopware newsletter model represents a newsletter.
@@ -174,6 +174,13 @@ class Newsletter extends ModelEntity
     private $publish = false;
 
     /**
+     * Should the mail delivered in future?
+     * @var \DateTime $timedDelivery
+     * @ORM\Column(name="timed_delivery", type="datetime", nullable=true)
+     */
+    private $timedDelivery = null;
+
+    /**
      * INVERSE SIDE
      *
      * Inverse side of the mailing-container association
@@ -191,7 +198,7 @@ class Newsletter extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Newsletter\date $date
+     * @param \DateTime $date
      */
     public function setDate($date)
     {
@@ -199,7 +206,7 @@ class Newsletter extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Newsletter\date
+     * @return \DateTime
      */
     public function getDate()
     {
@@ -435,7 +442,7 @@ class Newsletter extends ModelEntity
      */
     public function setContainers($containers)
     {
-//        $this->containers = $containers;
+        //        $this->containers = $containers;
         return $this->setOneToMany($containers, '\Shopware\Models\Newsletter\Container', 'containers', 'newsletter');
     }
 
@@ -469,5 +476,21 @@ class Newsletter extends ModelEntity
     public function getAlreadySendTo()
     {
         return $this->alreadySendTo;
+    }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getTimedDelivery()
+    {
+        return $this->timedDelivery;
+    }
+
+    /**
+     * @param \DateTime $timedDelivery
+     */
+    public function setTimedDelivery($timedDelivery)
+    {
+        $this->timedDelivery = $timedDelivery;
     }
 }

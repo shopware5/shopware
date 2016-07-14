@@ -1,23 +1,25 @@
 <?php
 /**
- * Enlight
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
- * LICENSE
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://enlight.de/license
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@shopware.de so we can send you a copy immediately.
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
  *
- * @category   Enlight
- * @package    Enlight_Cron
- * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
- * @license    http://enlight.de/license     New BSD License
- * @version    $Id$
- * @author     $Author$
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
  */
 
 /**
@@ -50,12 +52,14 @@ class Enlight_Components_Cron_Manager
      *
      * @param Enlight_Components_Cron_Adapter $adapter
      * @param Enlight_Event_EventManager|null $eventManager
+     * @param string $eventArgsClass
      * @return Enlight_Components_Cron_Manager
      */
-    public function __construct(Enlight_Components_Cron_Adapter $adapter,
-                                 Enlight_Event_EventManager $eventManager, $eventArgsClass = null
-    )
-    {
+    public function __construct(
+        Enlight_Components_Cron_Adapter $adapter,
+        Enlight_Event_EventManager $eventManager,
+        $eventArgsClass = null
+    ) {
         $this->setAdapter($adapter);
         $this->setEventManager($eventManager);
         if ($eventArgsClass !== null) {
@@ -116,6 +120,7 @@ class Enlight_Components_Cron_Manager
     public function disableJob(Enlight_Components_Cron_Job $job)
     {
         $job->setActive(false);
+
         return $this->adapter->updateJob($job);
     }
 
@@ -148,7 +153,7 @@ class Enlight_Components_Cron_Manager
     /**
      * Returns an array of Enlight_Components_Cron_Job from crontab
      *
-     * @return null|array of Enlight_Components_Cron_Job
+     * @return Enlight_Components_Cron_Job[]
      */
     public function getAllJobs()
     {
@@ -186,6 +191,21 @@ class Enlight_Components_Cron_Manager
     }
 
     /**
+     * Receives a single cron job by its action from the crontab
+     *
+     * @param String $action
+     * @return null|Enlight_Components_Cron_Job
+     */
+    public function getJobByAction($action)
+    {
+        $retVal = $this->adapter->getJobByAction((string) $action);
+        if (empty($retVal)) {
+            return null;
+        }
+        return $retVal;
+    }
+
+    /**
      * Adds an job to the crontab
      *
      * @param Enlight_Components_Cron_Job $job
@@ -200,11 +220,12 @@ class Enlight_Components_Cron_Manager
     /**
      * Returns the next cron job who is due to execute
      *
+     * @param bool $force
      * @return null|Enlight_Components_Cron_Job
      */
-    public function getNextJob()
+    public function getNextJob($force = false)
     {
-        return $this->adapter->getNextJob();
+        return $this->adapter->getNextJob($force);
     }
 
     /**
@@ -216,6 +237,13 @@ class Enlight_Components_Cron_Manager
      */
     public function runJob(Enlight_Components_Cron_Job $job)
     {
+        // Fix cron action name
+        $action = $job->getAction();
+        if (strpos($action, 'Shopware_') !== 0) {
+            $action = str_replace(' ', '', ucwords(str_replace('_', ' ', $job->getAction())));
+            $job->setAction('Shopware_CronJob_' . $action);
+        }
+
         try {
             if ($this->adapter->startJob($job)) {
                 $jobArgs = new $this->eventArgsClass(array(
@@ -223,9 +251,12 @@ class Enlight_Components_Cron_Manager
                     'job' => $job
                 ));
                 $jobArgs->setReturn($job->getData());
+
                 $jobArgs = $this->eventManager->notifyUntil(
-                    $job->getAction(), $jobArgs
+                    $job->getAction(),
+                    $jobArgs
                 );
+
                 if ($jobArgs !== null) {
                     $job->setData($jobArgs->getReturn());
                     $this->adapter->updateJob($job);
@@ -257,6 +288,7 @@ class Enlight_Components_Cron_Manager
         } while ($now >= $next);
         $job->setNext($next);
         $job->setEnd($now);
+
         $this->adapter->updateJob($job);
     }
 }

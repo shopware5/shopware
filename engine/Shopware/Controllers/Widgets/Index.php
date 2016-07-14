@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -36,17 +36,6 @@ class Shopware_Controllers_Widgets_Index extends Enlight_Controller_Action
         if ($this->Request()->getActionName() == 'refreshStatistic') {
             $this->Front()->Plugins()->ViewRenderer()->setNoRender();
         }
-    }
-
-    /**
-     * Sets a template variable with the last views articles.
-     *
-     * @return void
-     * @deprecated
-     */
-    public function lastArticlesAction()
-    {
-        $this->forward('index', 'LastArticles', 'widgets', $this->Request()->getParams());
     }
 
     /**
@@ -87,7 +76,9 @@ class Shopware_Controllers_Widgets_Index extends Enlight_Controller_Action
         Shopware()->Models()->detach($main);
 
         $this->View()->shop = $shop;
-        $this->View()->currencies = $shop->getCurrencies();
+        if (!$this->Request()->getParam('hideCurrency', false)) {
+            $this->View()->currencies = $shop->getCurrencies();
+        }
         $languages = $shop->getChildren()->toArray();
         foreach ($languages as $languageKey => $language) {
             Shopware()->Models()->detach($language);

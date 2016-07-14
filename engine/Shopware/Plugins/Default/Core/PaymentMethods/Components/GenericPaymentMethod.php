@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -25,7 +25,6 @@
 namespace ShopwarePlugin\PaymentMethods\Components;
 
 use Doctrine\ORM\AbstractQuery;
-use Shopware\Models\Payment\PaymentInstance;
 
 /**
  * Class GenericPaymentMethod
@@ -38,7 +37,7 @@ class GenericPaymentMethod extends BasePaymentMethod
     /**
      * @inheritdoc
      */
-    public function validate(\Enlight_Controller_Request_Request $request)
+    public function validate($paymentData)
     {
         return array();
     }
@@ -84,7 +83,7 @@ class GenericPaymentMethod extends BasePaymentMethod
             'user_id' => $userId,
             'firstname' => $addressData['firstName'],
             'lastname' => $addressData['lastName'],
-            'address' => $addressData['street'] . ' ' . $addressData['streetNumber'],
+            'address' => $addressData['street'],
             'zipcode' => $addressData['zipCode'],
             'city' => $addressData['city'],
             'amount' => $orderAmount,

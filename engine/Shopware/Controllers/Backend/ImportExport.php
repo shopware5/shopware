@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -22,6 +22,11 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\CSRFWhitelistAware;
+use Shopware\Models\Newsletter\Address;
+use Shopware\Models\Newsletter\ContactData;
+use Shopware\Models\Newsletter\Group;
+
 /**
  * Backend Controller for the Import/Export backend module
  *
@@ -30,18 +35,13 @@
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 
-use Shopware\Models\Newsletter\Address;
-use Shopware\Models\Newsletter\ContactData;
-use Shopware\Models\Newsletter\Group;
-
-class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Backend_ExtJs
+class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
     /**
      * Inits ACL-Permissions
      */
     protected function initAcl()
     {
-        $this->addAclPermission('exportCustomers', 'export', 'Insufficient Permissions');
         $this->addAclPermission('exportArticles', 'export', 'Insufficient Permissions');
         $this->addAclPermission('exportInStock', 'export', 'Insufficient Permissions');
         $this->addAclPermission('exportNotInStock', 'export', 'Insufficient Permissions');
@@ -52,6 +52,24 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         $this->addAclPermission('exportOrders', 'export', 'Insufficient Permissions');
 
         $this->addAclPermission('import', 'import', 'Insufficient Permissions');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getWhitelistedCSRFActions()
+    {
+        return [
+            'exportArticles',
+            'exportInStock',
+            'exportNotInStock',
+            'exportPrices',
+            'exportNewsletter',
+            'exportCategories',
+            'exportArticleImages',
+            'exportOrders',
+            'import'
+        ];
     }
 
     /**
@@ -77,12 +95,6 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
      * @var \Shopware\Models\Category\Repository
      */
     protected $categoryRepository = null;
-
-    /**
-     * Repository for the customer model
-     * @var \Shopware\Models\Customer\Repository
-     */
-    protected $customerRepository = null;
 
     /**
      * Repository for the Group model
@@ -192,146 +204,6 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
     }
 
     /**
-     * Helper function to get access to the customer repository.
-     * @return Shopware\Models\Article\Repository
-     */
-    protected function getCustomerRepository()
-    {
-        if ($this->customerRepository === null) {
-            $this->customerRepository = $this->getManager()->getRepository('Shopware\Models\Customer\Customer');
-        }
-        return $this->customerRepository;
-    }
-
-    /**
-     * Exports list of customers as CSV
-     */
-    public function exportCustomersAction()
-    {
-        $this->Front()->Plugins()->Json()->setRenderer(false);
-
-        $metaDataFactory = $this->getManager()->getMetadataFactory();
-        $billingAttributeFields = $metaDataFactory->getMetadataFor('Shopware\Models\Attribute\CustomerBilling')->getFieldNames();
-        $billingAttributeFields = array_flip($billingAttributeFields);
-        unset($billingAttributeFields['id']);
-        unset($billingAttributeFields['customerBillingId']);
-        $billingAttributeFields = array_flip($billingAttributeFields);
-
-        $shippingAttributeFields = $metaDataFactory->getMetadataFor('Shopware\Models\Attribute\CustomerShipping')->getFieldNames();
-        $shippingAttributeFields = array_flip($shippingAttributeFields);
-        unset($shippingAttributeFields['id']);
-        unset($shippingAttributeFields['customerShippingId']);
-        $shippingAttributeFields = array_flip($shippingAttributeFields);
-
-        $customerAttributeFields = $metaDataFactory->getMetadataFor('Shopware\Models\Attribute\Customer')->getFieldNames();
-        $customerAttributeFields = array_flip($customerAttributeFields);
-        unset($customerAttributeFields['id']);
-        unset($customerAttributeFields['customerId']);
-        $customerAttributeFields = array_flip($customerAttributeFields);
-
-        $selectBillingAttributes = array();
-        foreach ($billingAttributeFields as $field) {
-            $selectBillingAttributes[] = 'billingAttribute.' . $field . ' as billing_attr_' . $field;
-        }
-
-        $selectShippingAttributes = array();
-        foreach ($shippingAttributeFields as $field) {
-            $selectShippingAttributes[] = 'shippingAttribute.' . $field . ' as shipping_attr_' . $field;
-        }
-
-        $selectCustomerAttributes = array();
-        foreach ($customerAttributeFields as $field) {
-            $selectCustomerAttributes[] = 'attribute.' . $field . ' as attr_' . $field;
-        }
-
-        $select = array(
-            'billing.number as customernumber',
-            'customer.email',
-            'customer.hashPassword as password',
-            'customer.hashPassword as md5_password',
-            'billing.company as billing_company',
-            'billing.department as billing_department',
-            'billing.salutation as billing_salutation',
-            'billing.firstName as billing_firstname',
-            'billing.lastName as billing_lastname',
-            'billing.street as billing_street',
-            'billing.streetNumber as billing_streetnumber',
-            'billing.zipCode as billing_zipcode',
-            'billing.city as billing_city',
-            'billing.phone',
-            'billing.fax',
-            'billing.countryId as billing_countryID',
-            'billing.stateId as billing_stateID',
-            'billing.vatId as ustid'
-        );
-
-        $select = array_merge($select, $selectBillingAttributes);
-        $select = array_merge($select, array(
-            'shipping.company as shipping_company',
-            'shipping.department as shipping_department',
-            'shipping.salutation as shipping_salutation',
-            'shipping.firstName as shipping_firstname',
-            'shipping.lastName as shipping_lastname',
-            'shipping.street as shipping_street',
-            'shipping.streetNumber as shipping_streetnumber',
-            'shipping.zipCode as shipping_zipcode',
-            'shipping.city as shipping_city',
-            'shipping.countryId as shipping_countryID',
-            'shipping.stateId as shipping_stateID'
-        ));
-
-        $select = array_merge($select, $selectShippingAttributes);
-        $select = array_merge($select, array(
-            'customer.paymentId as paymentID',
-            'customer.newsletter ',
-            'customer.accountMode as accountmode',
-            'customer.affiliate ',
-            'customer.groupKey as customergroup',
-            'customer.languageId as language',
-            'customer.shopId as subshopID',
-            'customer.email as email',
-            'count(orders.id) as orders_count',
-            'SUM(orders.invoiceAmount) as invoice_amount',
-        ));
-        $select = array_merge($select, $selectCustomerAttributes);
-
-        $builder = $this->getManager()->createQueryBuilder();
-        $builder->select($select)
-                ->from('\Shopware\Models\Customer\Customer', 'customer')
-                ->join('customer.billing', 'billing')
-                ->leftJoin('customer.shipping', 'shipping')
-                ->leftJoin('customer.orders', 'orders', 'WITH', 'orders.status <> -1 AND orders.status <> 4' )
-                ->leftJoin('billing.attribute', 'billingAttribute')
-                ->leftJoin('shipping.attribute', 'shippingAttribute')
-                ->leftJoin('customer.attribute', 'attribute')
-                ->groupBy('customer.id');
-
-        $x = $builder->getQuery()->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-
-        $paginator = $this->getModelManager()->createPaginator($builder->getQuery());
-
-        $this->Response()->setHeader('Content-Type', 'text/x-comma-separated-values;charset=utf-8');
-        $this->Response()->setHeader('Content-Disposition', 'attachment; filename="export.customers.'.date("Y.m.d").'.csv"');
-        $this->Response()->setHeader('Content-Transfer-Encoding', 'binary');
-
-        $convert = new Shopware_Components_Convert_Csv();
-        $first   = true;
-        $keys    = array();
-
-        foreach ($paginator as $row) {
-            if ($first) {
-                $first = false;
-                $keys = array_keys($row);
-                echo "\xEF\xBB\xBF"; // UTF-8 BOM
-                echo $convert->_encode_line(array_combine($keys, $keys), $keys) . "\r\n";
-            }
-
-            $row['password'] = '';
-            echo $convert->_encode_line($row, $keys) . "\r\n";
-        }
-    }
-
-    /**
      * Exports article-prices as CSV
      */
     public function exportArticlesAction()
@@ -436,7 +308,6 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             $article['propertyValues'] = $this->prepareXmlArray($article['propertyValues'], 'propertyValue');
 
             $article['mainDetail']['prices'] = $this->prepareXmlArray($article['mainDetail']['prices'], 'price');
-
         }
 
         array_walk_recursive($result, function (&$value) {
@@ -590,7 +461,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         }
 
         $shop = $this->getManager()->getRepository('Shopware\Models\Shop\Shop')->getActiveDefault();
-        $shop->registerResources(Shopware()->Bootstrap());
+        $shop->registerResources();
 
         $imagePath = 'http://'. $shop->getHost() . $shop->getBasePath()  . '/media/image/';
 
@@ -606,7 +477,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 REPLACE(p.price,'.',',') as net_price,
                 REPLACE(ROUND(p.pseudoprice*(100+t.tax)/100,2),'.',',') as pseudoprice,
                 REPLACE(ROUND(p.pseudoprice,2),'.',',') as net_pseudoprice,
-                REPLACE(ROUND(p.baseprice,2),'.',',') as baseprice,
+                REPLACE(ROUND(d.purchaseprice,2),'.',',') as purchaseprice,
                 a.active,
                 d.instock,
                 d.stockmin,
@@ -631,7 +502,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 a.pricegroupActive,
                 a.laststock,
                 d.suppliernumber,
-                d.impressions,
+                COALESCE(sai.impressions, 0) as impressions,
                 d.sales,
                 IF(e.file IS NULL,0,1) as esd,
                 d.weight,
@@ -706,6 +577,13 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
 
             LEFT JOIN s_article_configurator_sets acs
             ON a.configurator_set_id = acs.id
+
+            LEFT JOIN
+            (
+              SELECT articleId AS id, SUM(s.impressions) AS impressions
+              FROM s_statistics_article_impression s
+              GROUP BY articleId
+            ) sai ON sai.id = a.id
 
             {$joinStatements}
 
@@ -793,7 +671,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                     $categorypaths[] = $categorypath;
                 }
             }
-            $row['categorypaths'] = implode("\r\n",$categorypaths);
+            $row['categorypaths'] = implode("\r\n", $categorypaths);
         }
 
         if (!empty($languages)) {
@@ -989,7 +867,6 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             p.pricegroup as pricegroup,
             IF(p.`from`=1,NULL,p.`from`) as `from`,
             REPLACE(ROUND(p.pseudoprice*(100+t.tax)/100,2),'.',',') as pseudoprice,
-            REPLACE(ROUND(p.baseprice,2),'.',',') as baseprice,
             a.name as `_name`,
             d.additionaltext as `_additionaltext`,
             s.name as `_supplier`
@@ -1033,7 +910,6 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             IFNULL(ub.firstname, nd.firstname) as firstname,
             IFNULL(ub.lastname, nd.lastname) as lastname,
             IFNULL(ub.street, nd.street) as street,
-            IFNULL(ub.streetnumber, nd.streetnumber) as streetnumber,
             IFNULL(ub.zipcode, nd.zipcode) as zipcode,
             IFNULL(ub.city, nd.city) as city,
             lastmailing,
@@ -1293,6 +1169,9 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 'details.articleName as name',
                 'details.price as price',
                 'details.quantity as quantity',
+                'details.ean as ean',
+                'details.unit as unit',
+                'details.packUnit as packUnit',
 
                 'details.price * details.quantity as invoice',
 
@@ -1301,7 +1180,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 'details.esdArticle as esd',
                 'details.mode as modus',
 
-                'customerBilling.number as customernumber',
+                'customer.number as customernumber',
 
                 'billing.company as billing_company',
                 'billing.department as billing_department',
@@ -1309,7 +1188,6 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 'billing.firstName as billing_firstname',
                 'billing.lastName as billing_lastname',
                 'billing.street as billing_street',
-                'billing.streetNumber as billing_streetnumber',
                 'billing.zipCode as billing_zipcode',
                 'billing.city as billing_city',
                 'billingCountry.name as billing_country',
@@ -1322,7 +1200,6 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 'shipping.firstName as shipping_firstname',
                 'shipping.lastName as shipping_lastname',
                 'shipping.street as shipping_street',
-                'shipping.streetNumber as shipping_streetnumber',
                 'shipping.zipCode as shipping_zipcode',
                 'shipping.city as shipping_city',
                 'shippingCountry.name as shipping_country',
@@ -1331,7 +1208,6 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
 
                 'billing.vatId as ustid',
                 'billing.phone as phone',
-                'billing.fax as fax',
                 'customer.email as email',
                 'customer.groupKey as customergroup',
                 'customer.newsletter as newsletter',
@@ -1538,11 +1414,6 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 return;
             }
 
-            if ($type === 'customers') {
-                $this->importCustomers($filePath);
-                return;
-            }
-
             if ($type === 'prices') {
                 $this->importPrices($filePath);
                 return;
@@ -1717,7 +1588,6 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 }
 
                 $recreateImagesLater[] = $article->getId();
-
             }
 
             // Prevent multiple images from being a preview
@@ -1861,7 +1731,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             $this->getManager()->getConnection()->commit();
             $this->getManager()->clear();
         } catch (\Exception $e) {
-            $this->getManager()->getConnection()->rollback();
+            $this->getManager()->getConnection()->rollBack();
             $this->getManager()->close();
             echo json_encode(array(
                 'success' => false,
@@ -1940,8 +1810,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
 
         $errors = array();
 
-        $emailValidator = new Zend_Validate_EmailAddress();
-
+        $emailValidator = $this->container->get('validator.email');
         foreach ($results as $newsletterData) {
             if (empty($newsletterData['email'])) {
                 $errors[] = "Empty email field";
@@ -2100,9 +1969,8 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 $articleData['pricegroup'] = 'EK';
             }
 
-            $articleData['price']       = floatval(str_replace(',' , '.', $articleData['price']));
-            $articleData['pseudoprice'] = floatval(str_replace(',' , '.', $articleData['pseudoprice']));
-            $articleData['baseprice']   = floatval(str_replace(',' , '.', $articleData['baseprice']));
+            $articleData['price']       = floatval(str_replace(',', '.', $articleData['price']));
+            $articleData['pseudoprice'] = floatval(str_replace(',', '.', $articleData['pseudoprice']));
 
             if (!empty($customergroups[$articleData['pricegroup']]['taxinput'])) {
                 $articleData['price'] = $articleData['price']/(100+$tax)*100;
@@ -2112,12 +1980,6 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 } else {
                     $articleData['pseudoprice'] = 0;
                 }
-            }
-
-            if (isset($articleData['baseprice'])) {
-                $articleData['baseprice'] = $this->sValFloat($articleData['baseprice']);
-            } else {
-                $articleData['baseprice'] = 0;
             }
 
             if (isset($articleData['percent'])) {
@@ -2167,7 +2029,6 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 'to'               => 'beliebig',
                 'price'            => $articleData['price'],
                 'pseudoprice'      => $articleData['pseudoprice'],
-                'baseprice'        => $articleData['baseprice'],
                 'percent'          => $articleData['percent'],
             ));
             $total++;
@@ -2275,7 +2136,6 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                         $updateData['configuratorSet']['groups'][$groupKey] = $group;
                         foreach ($group['options'] as $optionKey => $option) {
                             $updateData['configuratorSet']['groups'][$groupKey]['options'][$optionKey] = array_pop($option);
-
                         }
                     }
                 }
@@ -2446,7 +2306,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
 
             $this->getManager()->getConnection()->commit();
         } catch (\Exception $e) {
-            $this->getManager()->getConnection()->rollback();
+            $this->getManager()->getConnection()->rollBack();
 
             if ($e instanceof Shopware\Components\Api\Exception\ValidationException) {
                 $messages = array();
@@ -2526,7 +2386,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
 
             // delete old and save new prices
             foreach ($customerPriceGroups as $customerGroup => $price) {
-                $price = floatval(str_replace(',' , '.', $price));
+                $price = floatval(str_replace(',', '.', $price));
 
                 // if customer group is a preTax group (taxinput=true), recalculate the price
                 $isPreTax = $localCustomerGroups[$customerGroup]['taxinput'];
@@ -2549,13 +2409,10 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                     'to'               => 'beliebig',
                     'price'            => $price,
                     'pseudoprice'      => 0,
-                    'baseprice'        => 0,
                     'percent'          => 0
                 ));
             }
-
         }
-
     }
 
     /**
@@ -2589,7 +2446,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         $isNewConfigurator = false;
         if (isset($articleData['configuratorOptions']) && !empty($articleData['configuratorOptions'])) {
             if (!isset($articleData['configuratorsetID']) || empty($articleData['configuratorsetID'])) {
-                return sprintf("Article with ordernumber %s is a variant but has no configuratorSetID. It is probably broken and was skipped",$articleData['ordernumber'] );
+                return sprintf("Article with ordernumber %s is a variant but has no configuratorSetID. It is probably broken and was skipped", $articleData['ordernumber']);
             }
             list($configuratorSet, $configuratorOptions) = $this->prepareNewConfiguratorImport($articleData['configuratorOptions']);
             $isNewConfigurator = true;
@@ -2629,7 +2486,13 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         unset($articleData['attributegroupID']);
         unset($articleData['attributevalues']);
 
-        $updateData = $this->mapFields($articleData, $articleMapping, array('taxId', 'tax', 'supplierId', 'supplier', 'whitelist', 'translations', 'baseprice', 'pseudoprice'));
+        // Check for legacy purchase price ('baseprice')
+        if (isset($articleData['baseprice'])) {
+            $articleData['purchaseprice'] = $this->sValFloat($articleData['baseprice']);
+            unset($articleData['baseprice']);
+        }
+
+        $updateData = $this->mapFields($articleData, $articleMapping, array('taxId', 'tax', 'supplierId', 'supplier', 'whitelist', 'translations', 'pseudoprice'));
         $detailData = $this->mapFields($articleData, $articleDetailMapping);
 
         if (!empty($articleData['categorypaths'])) {
@@ -2648,7 +2511,6 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
 
         $prices = array(
             'price' => 'price',
-            'baseprice' => 'basePrice',
             'pseudoprice' => 'pseudoPrice'
         );
         $detailData['prices'] = array();
@@ -2848,17 +2710,12 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
             $configuratorGroups[] = $currentGroup;
 
             $configuratorOptions[]= array("option" => $option, "group" => $group);
-
         }
 
         return array(
             array('groups' => $configuratorGroups),      // ConfiguratorSet
             $configuratorOptions                         // ConfiguratorOptions
         );
-
-
-
-
     }
 
     /**
@@ -2987,200 +2844,6 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
 
         $data['translations'] = $translationByLanguage;
         return $data;
-
-    }
-
-    /**
-     * Imports customers from CSV file
-     * @param string $filePath
-     */
-    protected function importCustomers($filePath)
-    {
-        $results = new Shopware_Components_CsvIterator($filePath, ';');
-
-        $customerIds = array();
-        $errors = array();
-        $counter = 0;
-
-        $this->getManager()->getConnection()->beginTransaction(); // suspend auto-commit
-
-        foreach ($results as $customerData) {
-            try {
-                $counter++;
-                $result = $this->saveCustomer($customerData);
-                if ($result) {
-                    $customerIds[] = $result->getId();
-                }
-            } catch (\Exception $e) {
-                if ($e instanceof Shopware\Components\Api\Exception\ValidationException) {
-                    $messages = array();
-                    /** @var \Symfony\Component\Validator\ConstraintViolation $violation */
-                    foreach ($e->getViolations() as $violation) {
-                        $messages[] = sprintf(
-                            '%s: %s',
-                            $violation->getPropertyPath(),
-                            $violation->getMessage()
-                        );
-                    }
-
-                    $errormessage = implode("\n", $messages);
-                } else {
-                    $errormessage = $e->getMessage();
-                }
-
-                $errors[] = "Error in line {$counter}: $errormessage";
-            }
-        }
-
-        if (!empty($errors)) {
-            $this->getManager()->getConnection()->rollback();
-            $message = implode("<br>\n", $errors);
-            echo json_encode(array(
-                'success' => false,
-                'message' => sprintf("Errors: $message"),
-            ));
-            return;
-        } else {
-            $this->getManager()->getConnection()->commit();
-        }
-
-        echo json_encode(array(
-            'success' => true,
-            'message' => sprintf("Successfully saved: %s", count($customerIds))
-        ));
-    }
-
-    /**
-     * @param array $customerData
-     * @return Shopware\Models\Customer\Customer
-     */
-    protected function saveCustomer($customerData)
-    {
-        $customerData = $this->toUtf8($customerData);
-
-        $customerRepository = $this->getCustomerRepository();
-
-        /** @var \Shopware\Components\Api\Resource\Customer $customerResource */
-        $customerResource = \Shopware\Components\Api\Manager::getResource('customer');
-
-        $customerModel = null;
-
-        if (empty($customerData['email'])) {
-            return false;
-        }
-
-
-        // userId and custumernumber will be ignored as there is not distinction between accountmode 0 and 1 in
-        // old export files
-        if (!empty($customerData['email']) && !empty($customerData['subshopID'])) {
-            /** \Shopware\Models\Customer\Customer $customerModel */
-            $customerModel = $customerRepository->findOneBy(array('email' => $customerData['email'], 'shopId' => $customerData['subshopID']));
-
-        } elseif (!empty($customerData['email'])) {
-            /** \Shopware\Models\Customer\Customer $customerModel */
-            $customerModel = $customerRepository->findOneBy(array('email' => $customerData['email']));
-        }
-
-        // if no user was found by email, its save to find one via customernumber
-        if (!$customerModel && !empty($customerData['customernumber'])) {
-            /** \Shopware\Models\Customer\Billing $billingModel */
-            $billingModel = Shopware()->Models()->getRepository('\Shopware\Models\Customer\Billing')->findOneBy(array('number' => $customerData['customernumber']));
-            if ($billingModel) {
-                /** \Shopware\Models\Customer\Customer $customerModel */
-                $customerModel = $billingModel->getCustomer();
-            }
-        }
-
-        if (!$customerModel) {
-            /** \Shopware\Models\Customer\Customer $customerModel */
-            $customerModel = new \Shopware\Models\Customer\Customer();
-        }
-
-        $customerData = $this->prepareCustomerData($customerData);
-
-        if ($customerModel->getId() > 0) {
-            $result = $customerResource->update($customerModel->getId(), $customerData);
-        } else {
-            $result = $customerResource->create($customerData);
-        }
-
-        return $result;
-    }
-
-    /**
-     * @param array $customerData
-     * @return array
-     */
-    public function prepareCustomerData($customerData)
-    {
-        $customerMapping = array(
-            'subshopID'      => 'shopId',
-            'customergroup'  => 'groupKey',
-            'md5_password'   => 'rawPassword',
-            'phone'          => 'billing_phone',
-            'fax'            => 'billing_fax',
-            'customernumber' => 'billing_number',
-            'accountmode'    => 'accountMode',
-
-            'ustid'          => 'billing_vatId',
-
-            'billing_text1'  => 'billing_attr_text1',
-            'billing_text2'  => 'billing_attr_text2',
-            'billing_text3'  => 'billing_attr_text3',
-            'billing_text4'  => 'billing_attr_text4',
-            'billing_text5'  => 'billing_attr_text5',
-            'billing_text6'  => 'billing_attr_text6',
-
-            'shipping_text1'  => 'shipping_attr_text1',
-            'shipping_text2'  => 'shipping_attr_text2',
-            'shipping_text3'  => 'shipping_attr_text3',
-            'shipping_text4'  => 'shipping_attr_text4',
-            'shipping_text5'  => 'shipping_attr_text5',
-            'shipping_text6'  => 'shipping_attr_text6',
-        );
-
-        $customerData = $this->mapFields($customerData, $customerMapping) + $customerData;
-
-        $attribute = $this->prefixToArray($customerData, 'attr_');
-        if (!empty($attribute)) {
-            $customerData['attribute'] = $attribute;
-        }
-
-        $billing = $this->prefixToArray($customerData, 'billing_');
-        if (!empty($billing)) {
-            $customerData['billing'] = $billing;
-
-            $billingMapping = array(
-                'firstname' => 'firstName',
-                'lastname'  => 'lastName',
-            );
-            $customerData['billing'] = $this->mapFields($customerData['billing'], $billingMapping) + $customerData['billing'];
-
-            $billingAttribute = $this->prefixToArray($customerData['billing'], 'attr_');
-
-            if (!empty($billingAttribute)) {
-                $customerData['billing']['attribute'] = $billingAttribute;
-            }
-        }
-
-        $shipping = $this->prefixToArray($customerData, 'shipping_');
-        if (!empty($shipping)) {
-            $customerData['shipping'] = $shipping;
-
-            $shippingMapping = array(
-                'firstname' => 'firstName',
-                'lastname'  => 'lastName',
-            );
-            $customerData['shipping'] = $this->mapFields($customerData['shipping'], $shippingMapping) + $customerData['shipping'];
-
-            $shippingAttribute = $this->prefixToArray($customerData['shipping'], 'attr_');
-
-            if (!empty($shippingAttribute)) {
-                $customerData['shipping']['attribute'] = $shippingAttribute;
-            }
-        }
-
-        return $customerData;
     }
 
     /**
@@ -3230,7 +2893,6 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 c.template,
                 c.active,
                 c.blog,
-                c.showfiltergroups,
                 c.external,
                 c.hidefilter
                 $attributesSelect
@@ -3277,31 +2939,6 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         $builder->andWhere('orders.status != -1');
 
         $builder->getQuery()->execute();
-    }
-
-    /**
-     * @param int $articleId
-     * @param array $imageIds
-     * @return bool
-     */
-    public function deleteOtherArticleImages($articleId, $imageIds = null)
-    {
-        if (empty($articleId)) {
-            return false;
-        }
-
-        if (!empty($imageIds)) {
-            $sql = 'DELETE FROM s_articles_img WHERE id NOT IN (?) AND articleID = ?';
-        } else {
-            $sql = 'DELETE FROM s_articles_img WHERE articleID = ?';
-        }
-
-        $result = $this->sDB->Execute($sql);
-        if ($result === false) {
-            return false;
-        }
-
-        return true;
     }
 
     /**
@@ -3355,8 +2992,6 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         }
 
         Shopware()->Db()->exec("TRUNCATE s_articles_categories");
-//        Shopware()->Db()->exec("TRUNCATE s_emarketing_banners");
-//        Shopware()->Db()->exec("TRUNCATE s_emarketing_promotions");
 
         return $result;
     }
@@ -3507,17 +3142,23 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         if (get_class($xml) == 'SimpleXMLElement') {
             $attributes = $xml->attributes();
             foreach ($attributes as $k=>$v) {
-                if ($v) $a[$k] = (string) $v;
+                if ($v) {
+                    $a[$k] = (string) $v;
+                }
             }
             $x = $xml;
             $xml = get_object_vars($xml);
         }
         if (is_array($xml)) {
-            if (count($xml) == 0) return (string) $x; // for CDATA
+            if (count($xml) == 0) {
+                return (string) $x;
+            } // for CDATA
             foreach ($xml as $key=>$value) {
                 $r[$key] = $this->simplexml2array($value);
             }
-            if (isset($a)) $r['@attributes'] = $a;    // Attributes
+            if (isset($a)) {
+                $r['@attributes'] = $a;
+            }    // Attributes
             return $r;
         }
         return (string) $xml;
@@ -3586,7 +3227,6 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 if (!in_array($categoryId, $categoryIds)) {
                     $categoryIds[] = $categoryId;
                 }
-
             }
         }
 
@@ -3620,7 +3260,7 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
         }
 
         $urlArray = parse_url($url);
-        $urlArray['path'] = explode("/",$urlArray['path']);
+        $urlArray['path'] = explode("/", $urlArray['path']);
         switch ($urlArray['scheme']) {
             case "ftp":
             case "http":

@@ -1,52 +1,97 @@
 {
-    "name": "shopware-ag/shopware",
-    "description": "Shopware 4 is the next generation of open source e-commerce software made in Germany",
+    "name": "shopware/shopware",
+    "description": "Shopware is the next generation of open source e-commerce software made in Germany",
     "keywords": ["shopware", "shop"],
-    "homepage": "http://http://www.shopware.de",
+    "homepage": "http://www.shopware.com",
     "type": "project",
     "license": [
         "AGPL-3.0",
         "proprietary"
     ],
     "support": {
-        "forum": "http://forum.shopware.de",
-        "wiki": "http://wiki.shopware.de",
-        "source": "https://github.com/ShopwareAG/shopware-4",
-        "issues": "http://jira.shopware.de"
+        "forum": "http://forum.shopware.com",
+        "wiki": "http://wiki.shopware.com",
+        "source": "https://github.com/shopware/shopware",
+        "issues": "https://issues.shopware.com"
     },
     "require": {
-        "php": ">=5.3.2",
+        "php": "^5.6.4||^7.0",
         "ext-curl": "*",
         "ext-mbstring": "*",
         "ext-gd": "*",
-        "symfony/http-kernel": "2.4.*",
-        "symfony/config": "2.4.*",
-        "symfony/dependency-injection": "2.4.*",
-        "symfony/validator": "2.4.*",
-        "symfony/filesystem": "2.4.*",
-        "symfony/finder": "2.4.*",
-        "symfony/console": "2.4.*",
-        "monolog/monolog": "1.6.*",
-        "ircmaxell/password-compat": "1.0.3",
-        "rhumsaa/array_column": "~1.1",
-        "doctrine/common": "2.4.*",
-        "doctrine/dbal": "2.4.1",
-        "doctrine/orm": "2.4.1"
+        "symfony/http-kernel": "2.8.6",
+        "symfony/config": "2.8.6",
+        "symfony/class-loader": "2.8.6",
+        "symfony/dependency-injection": "2.8.6",
+        "symfony/validator": "2.8.6",
+        "symfony/filesystem": "2.8.6",
+        "symfony/finder": "2.8.6",
+        "symfony/console": "2.8.6",
+        "symfony/form": "2.8.6",
+        "monolog/monolog": "1.19.0",
+        "doctrine/common": "2.6.1",
+        "doctrine/dbal": "2.5.4",
+        "doctrine/orm": "2.5.4",
+        "doctrine/cache": "1.6.0",
+        "beberlei/assert": "2.5.0",
+        "zendframework/zend-escaper": "2.5.1",
+        "oyejorge/less.php": "1.7.0.10",
+        "guzzlehttp/guzzle": "5.3.0",
+        "egulias/email-validator": "1.2.12",
+        "elasticsearch/elasticsearch": "2.2.0",
+        "ongr/elasticsearch-dsl": "2.0.1",
+        "league/flysystem": "1.0.22",
+        "paragonie/random_compat": "1.4.1"
     },
     "require-dev": {
-        "phpunit/phpunit": "3.7.*",
-        "phpunit/dbunit": ">=1.2"
+        "phpunit/phpunit": "~5.4",
+        "phpunit/dbunit": "~1.4",
+        "behat/behat": "~3.1",
+        "behat/mink": "~1.7",
+        "behat/mink-extension": "~2.1",
+        "behat/mink-goutte-driver": "~1.2",
+        "behat/mink-selenium2-driver": "~1.3",
+        "sensiolabs/behat-page-object-extension": "~2.0.0-rc1",
+        "symfony/dom-crawler": "~2.8"
     },
+    "include-path": [
+        "engine/Library/"
+    ],
     "autoload": {
         "psr-0": {
-            "Doctrine\\ORM\\Persisters\\BasicEntityPersister": "engine/Library/",
+            "Doctrine\\Common\\Proxy\\AbstractProxyFactory": "engine/Library/",
+            "Doctrine\\ORM\\Persisters\\Entity\\BasicEntityPersister": "engine/Library/",
             "Shopware": "engine/",
             "Enlight": "engine/Library/",
-            "Zend": "engine/Library/"
+            "Zend": "engine/Library/",
+            "JSMin": "engine/Library/minify/"
         },
         "classmap": [
-            "engine/core/class/"
+            "engine/Shopware/Core/"
         ],
-        "files": ["engine/Shopware/Application.php"]
+        "files": ["engine/Shopware/Application.php"],
+        "exclude-from-classmap": [
+            "engine/Shopware/Plugins/Community/",
+            "engine/Shopware/Plugins/Local/",
+            "custom/plugins/"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Shopware\\Behat\\ShopwareExtension\\": "tests/Mink/Extension/ShopwareExtension",
+            "Shopware\\Tests\\Mink\\": "tests/Mink/features/bootstrap",
+            "Shopware\\Tests\\": "tests/Functional"
+        }
+    },
+    "config": {
+        "autoloader-suffix": "Shopware",
+        "optimize-autoloader": true,
+        "platform": {
+            "php": "5.6.4"
+        }
+    },
+    "scripts": {
+        "test": "phpunit -c tests/",
+        "test-unit": "phpunit -c tests/phpunit_unit.xml.dist"
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,8 +23,10 @@
  */
 
 namespace   Shopware\Models\Order;
-use         Shopware\Components\Model\ModelEntity,
-            Doctrine\ORM\Mapping AS ORM;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
+use Shopware\Models\Customer\Address;
 
 /**
  * Shopware order billing model represents a single billing address of an order.
@@ -86,6 +88,13 @@ class Billing extends ModelEntity
     private $countryId = 0;
 
     /**
+     * Contains the id of the state. Used for billing - state association.
+     * @var integer $stateId
+     * @ORM\Column(name="stateID", type="integer", nullable=true)
+     */
+    private $stateId = null;
+
+    /**
      * Contains the name of the billing address company
      * @var string $company
      * @ORM\Column(name="company", type="string", length=255, nullable=false)
@@ -105,6 +114,12 @@ class Billing extends ModelEntity
      * @ORM\Column(name="salutation", type="string", length=30, nullable=false)
      */
     private $salutation = '';
+
+    /**
+     * @var string
+     * @ORM\Column(name="title", type="string", length=100, nullable=true)
+     */
+    protected $title;
 
     /**
      * Contains the unique customer number
@@ -130,16 +145,9 @@ class Billing extends ModelEntity
     /**
      * Contains the street name of the billing address
      * @var string $street
-     * @ORM\Column(name="street", type="string", length=100, nullable=false)
+     * @ORM\Column(name="street", type="string", length=255, nullable=false)
      */
     private $street = '';
-
-    /**
-     * Contains the street number of the billing address
-     * @var string $streetNumber
-     * @ORM\Column(name="streetnumber", type="string", length=50, nullable=false)
-     */
-    private $streetNumber = '';
 
     /**
      * Contains the zip code of the billing address
@@ -163,18 +171,27 @@ class Billing extends ModelEntity
     private $phone = '';
 
     /**
-     * Contains the fax of the billing address
-     * @var string $fax
-     * @ORM\Column(name="fax", type="string", length=40, nullable=false)
-     */
-    private $fax = '';
-
-    /**
      * Contains the vat id of the billing address
      * @var string $vatId
-     * @ORM\Column(name="ustid", type="string", length=50, nullable=false)
+     * @ORM\Column(name="ustid", type="string", length=50, nullable=true)
      */
     private $vatId = '';
+
+    /**
+     * Contains the additional address line data
+     *
+     * @var string $additionalAddressLine1
+     * @ORM\Column(name="additional_address_line1", type="string", length=255, nullable=true)
+     */
+    protected $additionalAddressLine1 = null;
+
+    /**
+     * Contains the additional address line data 2
+     *
+     * @var string $additionalAddressLine2
+     * @ORM\Column(name="additional_address_line2", type="string", length=255, nullable=true)
+     */
+    protected $additionalAddressLine2 = null;
 
     /**
      * The customer property is the owning side of the association between customer and billing.
@@ -202,6 +219,13 @@ class Billing extends ModelEntity
      * @var \Shopware\Models\Country\Country
      */
     private $country;
+
+    /**
+     * @ORM\OneToOne(targetEntity="\Shopware\Models\Country\State")
+     * @ORM\JoinColumn(name="stateID", referencedColumnName="id")
+     * @var \Shopware\Models\Country\State
+     */
+    private $state;
 
     /**
      * INVERSE SIDE
@@ -375,28 +399,6 @@ class Billing extends ModelEntity
     }
 
     /**
-     * Setter function for the streetNumber column property.
-     *
-     * @param string $streetNumber
-     * @return Billing
-     */
-    public function setStreetNumber($streetNumber)
-    {
-        $this->streetNumber = $streetNumber;
-        return $this;
-    }
-
-    /**
-     * Getter function for the streetNumber column property.
-     *
-     * @return string
-     */
-    public function getStreetNumber()
-    {
-        return $this->streetNumber;
-    }
-
-    /**
      * Setter function for the zipCode column property.
      *
      * @param string $zipCode
@@ -460,28 +462,6 @@ class Billing extends ModelEntity
     public function getPhone()
     {
         return $this->phone;
-    }
-
-    /**
-     * Setter function for the fax column property.
-     *
-     * @param string $fax
-     * @return Billing
-     */
-    public function setFax($fax)
-    {
-        $this->fax = $fax;
-        return $this;
-    }
-
-    /**
-     * Getter function for the fax column property.
-     *
-     * @return string
-     */
-    public function getFax()
-    {
-        return $this->fax;
     }
 
     /**
@@ -551,7 +531,9 @@ class Billing extends ModelEntity
     }
 
     /**
-     * @return
+     * Getter for the country association
+     *
+     * @return \Shopware\Models\Country\Country
      */
     public function getCountry()
     {
@@ -559,11 +541,33 @@ class Billing extends ModelEntity
     }
 
     /**
-     * @param  $country
+     * Setter for the country association
+     *
+     * @param \Shopware\Models\Country\Country $country
      */
     public function setCountry($country)
     {
         $this->country = $country;
+    }
+
+    /**
+     * Setter for the state association
+     *
+     * @param \Shopware\Models\Country\State $state
+     */
+    public function setState($state)
+    {
+        $this->state = $state;
+    }
+
+    /**
+     * Getter for the state association
+     *
+     * @return \Shopware\Models\Country\State
+     */
+    public function getState()
+    {
+        return $this->state;
     }
 
     /**
@@ -583,4 +587,91 @@ class Billing extends ModelEntity
         return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\OrderBilling', 'attribute', 'orderBilling');
     }
 
+    /**
+     * Setter function for the setAdditionalAddressLine2 column property.
+     *
+     * @param string $additionalAddressLine2
+     */
+    public function setAdditionalAddressLine2($additionalAddressLine2)
+    {
+        $this->additionalAddressLine2 = $additionalAddressLine2;
+    }
+
+    /**
+     * Getter function for the getAdditionalAddressLine2 column property.
+     *
+     * @return string
+     */
+    public function getAdditionalAddressLine2()
+    {
+        return $this->additionalAddressLine2;
+    }
+
+    /**
+     * Setter function for the setAdditionalAddressLine1 column property.
+     *
+     * @param string $additionalAddressLine1
+     */
+    public function setAdditionalAddressLine1($additionalAddressLine1)
+    {
+        $this->additionalAddressLine1 = $additionalAddressLine1;
+    }
+
+    /**
+     * Getter function for the getAdditionalAddressLine1 column property.
+     *
+     * @return string
+     */
+    public function getAdditionalAddressLine1()
+    {
+        return $this->additionalAddressLine1;
+    }
+
+    /**
+     * Transfer values from the new address object
+     *
+     * @param Address $address
+     */
+    public function fromAddress(Address $address)
+    {
+        $this->setCompany((string) $address->getCompany());
+        $this->setDepartment((string) $address->getDepartment());
+        $this->setSalutation((string) $address->getSalutation());
+        $this->setFirstName((string) $address->getFirstname());
+        $this->setLastName((string) $address->getLastname());
+        $this->setStreet((string) $address->getStreet());
+        $this->setCity((string) $address->getCity());
+        $this->setZipCode((string) $address->getZipcode());
+        $this->setAdditionalAddressLine1((string) $address->getAdditionalAddressLine1());
+        $this->setAdditionalAddressLine2((string) $address->getAdditionalAddressLine2());
+        $this->setCountry($address->getCountry());
+        $this->setPhone((string) $address->getPhone());
+        $this->setVatId((string) $address->getVatId());
+        $this->setTitle($address->getTitle());
+
+        if ($address->getState()) {
+            $this->setState($address->getState());
+        } else {
+            $this->setState(null);
+        }
+
+        $attributeData = Shopware()->Models()->toArray($address->getAttribute());
+        $this->setAttribute($attributeData);
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param string $title
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+    }
 }

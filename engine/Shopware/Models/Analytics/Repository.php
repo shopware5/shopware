@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -53,7 +53,7 @@ class Repository
      * @param Connection $connection
      * @param \Enlight_Event_EventManager $eventManager
      */
-    function __construct(Connection $connection, \Enlight_Event_EventManager $eventManager)
+    public function __construct(Connection $connection, \Enlight_Event_EventManager $eventManager)
     {
         $this->connection = $connection;
         $this->eventManager = $eventManager;
@@ -108,7 +108,7 @@ class Repository
     {
         $builder = $this->createDailyVisitorsBuilder($from, $to);
 
-        foreach($shopIds as $shopId) {
+        foreach ($shopIds as $shopId) {
             $builder->addSelect(
                 "SUM(IF(visitor.shopID = " . $shopId . ", visitor.uniquevisits, 0)) as visits" . $shopId
             );
@@ -142,7 +142,7 @@ class Repository
      * @param array $shopIds
      * @return Result
      */
-    public function getDailyShopOrders(\DateTime $from = null, \DateTime $to = null, array $shopIds = array())
+    public function getDailyShopOrders(\DateTime $from, \DateTime $to, array $shopIds)
     {
         $builder = $this->createDailyShopOrderBuilder($from, $to, $shopIds);
 
@@ -173,7 +173,7 @@ class Repository
      * @param array $shopIds
      * @return DBALQueryBuilder
      */
-    protected function createDailyShopOrderBuilder(\DateTime $from = null, \DateTime $to = null, array $shopIds = array())
+    protected function createDailyShopOrderBuilder(\DateTime $from, \DateTime $to, array $shopIds)
     {
         $builder = $this->connection->createQueryBuilder();
 
@@ -191,7 +191,7 @@ class Repository
 		    )) as cancelledOrders"
         ));
 
-        foreach($shopIds as $shopId) {
+        foreach ($shopIds as $shopId) {
             $builder->addSelect(
                 "SUM( IF(
 	   		        orders.language = ".$shopId." AND orders.status NOT IN (-1, 4),
@@ -359,10 +359,14 @@ class Repository
 
         $builder->select(array(
             'firstlogin as firstLogin',
-            'COUNT(id) as registrations'
+            'COUNT(users.id) as registrations',
+            'COUNT(orders.id) as customers'
         ));
 
         $builder->from('s_user', 'users')
+            ->leftJoin('users', 's_order', 'orders',
+                'orders.userID = users.id AND (DATE(orders.ordertime) = DATE(users.firstlogin)) AND orders.status NOT IN (-1, 4)'
+            )
             ->orderBy('users.firstlogin', 'DESC')
             ->groupBy('users.firstlogin');
 
@@ -601,6 +605,37 @@ class Repository
     }
 
     /**
+     * Returns a result which displays count and purchase amount of order for each device type.
+     * @param \DateTime $from
+     * @param \DateTime $to
+     * @param array $shopIds
+     * @return Result
+     *      array (
+     *         'count' => '122',
+     *         'amount' => '9303.713999999969',
+     *         'deviceType' => 'desktop',
+     *      ),
+     *      array (
+     *         'count' => '121',
+     *         'amount' => '15352.479999999925',
+     *         'deviceType' => 'tablet',
+     *      )
+     */
+    public function getProductAmountPerDevice(\DateTime $from = null, \DateTime $to = null, array $shopIds = array())
+    {
+        $builder = $this->createAmountBuilder($from, $to, $shopIds)
+            ->addSelect('orders.deviceType')
+            ->groupBy('orders.deviceType')
+            ->orderBy('turnover', 'DESC');
+
+        $builder = $this->eventManager->filter('Shopware_Analytics_ProductAmountPerDevice', $builder, array(
+            'subject' => $this
+        ));
+
+        return new Result($builder);
+    }
+
+    /**
      * Returns an array which displays which search term executed in the shop.
      * The data result contains the executed search term, the count of request
      * which sends this search term and how many result are returned for this term.
@@ -623,16 +658,18 @@ class Repository
      *          'countResults' => '1390',
      *      )
      */
-    public function getSearchTerms($offset, $limit, \DateTime $from = null, \DateTime $to = null, $sort = array())
+    public function getSearchTerms($offset, $limit, \DateTime $from = null, \DateTime $to = null, $sort = array(), array $shopIds = array())
     {
         $builder = $this->connection->createQueryBuilder();
 
         $builder->select(array(
             'COUNT(search.searchterm) AS countRequests',
             'search.searchterm',
-            'MAX(search.results) as countResults'
+            'MAX(search.results) as countResults',
+            'GROUP_CONCAT(DISTINCT shops.name SEPARATOR ", ") as shop'
         ))
             ->from('s_statistics_search', 'search')
+            ->leftJoin('search', 's_core_shops', 'shops', 'search.shop_id = shops.id')
             ->groupBy('search.searchterm')
             ->setFirstResult($offset)
             ->setMaxResults($limit);
@@ -644,6 +681,10 @@ class Repository
                     $condition['direction']
                 );
             }
+        }
+        if (!empty($shopIds)) {
+            $builder->andWhere('search.shop_id IN (:shopIds)')
+                ->setParameter('shopIds', $shopIds, Connection::PARAM_INT_ARRAY);
         }
 
         $this->addDateRangeCondition($builder, $from, $to, 'datum');
@@ -757,9 +798,27 @@ class Repository
                 $shopId = (int) $shopId;
 
                 $builder->addSelect(
+                    "SUM(IF(IF(shops.main_id is null, shops.id, shops.main_id)=" . $shopId . ", (CASE WHEN deviceType = 'desktop' THEN pageimpressions ELSE 0 END), 0)) as desktopImpressions" . $shopId
+                );
+                $builder->addSelect(
+                    "SUM(IF(IF(shops.main_id is null, shops.id, shops.main_id)=" . $shopId . ", (CASE WHEN deviceType = 'tablet' THEN pageimpressions ELSE 0 END), 0)) as tabletImpressions" . $shopId
+                );
+                $builder->addSelect(
+                    "SUM(IF(IF(shops.main_id is null, shops.id, shops.main_id)=" . $shopId . ", (CASE WHEN deviceType = 'mobile' THEN pageimpressions ELSE 0 END), 0)) as mobileImpressions" . $shopId
+                );
+                $builder->addSelect(
                     "SUM(IF(IF(shops.main_id is null, shops.id, shops.main_id)=" . $shopId . ", visitors.pageimpressions, 0)) as totalImpressions" . $shopId
                 );
 
+                $builder->addSelect(
+                    "SUM(IF(IF(shops.main_id is null, shops.id, shops.main_id)=" . $shopId . ", (CASE WHEN deviceType = 'desktop' THEN uniquevisits ELSE 0 END), 0)) as desktopVisits" . $shopId
+                );
+                $builder->addSelect(
+                    "SUM(IF(IF(shops.main_id is null, shops.id, shops.main_id)=" . $shopId . ", (CASE WHEN deviceType = 'tablet' THEN uniquevisits ELSE 0 END), 0)) as tabletVisits" . $shopId
+                );
+                $builder->addSelect(
+                    "SUM(IF(IF(shops.main_id is null, shops.id, shops.main_id)=" . $shopId . ", (CASE WHEN deviceType = 'mobile' THEN uniquevisits ELSE 0 END), 0)) as mobileVisits" . $shopId
+                );
                 $builder->addSelect(
                     "SUM(IF(IF(shops.main_id is null, shops.id, shops.main_id)=" . $shopId . ", visitors.uniquevisits, 0)) as  totalVisits" . $shopId
                 );
@@ -1003,7 +1062,7 @@ class Repository
         $builder = $this->createAmountBuilder($from, $to, $shopIds)
             ->addSelect('DATE_FORMAT(ordertime, \'%Y-%m-%d\') AS date')
             ->groupBy('WEEKDAY(ordertime)')
-            ->orderBy('date', 'DESC');
+            ->orderBy('WEEKDAY(ordertime)', 'ASC');
 
         $builder = $this->eventManager->filter('Shopware_Analytics_AmountPerWeekday', $builder, array(
             'subject' => $this
@@ -1134,6 +1193,9 @@ class Repository
         $builder->select(array(
             'articleImpression.articleId',
             'article.name as articleName',
+            'SUM(CASE WHEN deviceType = "desktop" THEN impressions ELSE 0 END) as desktopImpressions',
+            'SUM(CASE WHEN deviceType = "tablet" THEN impressions ELSE 0 END) as tabletImpressions',
+            'SUM(CASE WHEN deviceType = "mobile" THEN impressions ELSE 0 END) as mobileImpressions',
             'SUM(articleImpression.impressions) as totalImpressions'
         ));
 
@@ -1213,10 +1275,10 @@ class Repository
             foreach ($shopIds as $shopId) {
                 $shopId = (int) $shopId;
                 $builder->addSelect(
-                    "SUM(IF(orders.language=" . $shopId . ", (invoice_amount - invoice_shipping)/currencyFactor, 0)) as turnover" . $shopId
+                    "SUM(IF(orders.language=" . $shopId . ", invoice_amount / currencyFactor, 0)) as turnover" . $shopId
                 );
                 $builder->addSelect(
-                    "IF(orders.language=" . $shopId . ", COUNT(orders.id), 0) as orderCount" . $shopId
+                    "SUM(orders.language=" . $shopId . ") as orderCount" . $shopId
                 );
             }
         }
@@ -1241,7 +1303,13 @@ class Repository
         $builder = $this->connection->createQueryBuilder();
         $builder->select(array(
             'visitors.datum',
+            'SUM(CASE WHEN deviceType = "desktop" THEN pageimpressions ELSE 0 END) as desktopImpressions',
+            'SUM(CASE WHEN deviceType = "tablet" THEN pageimpressions ELSE 0 END) as tabletImpressions',
+            'SUM(CASE WHEN deviceType = "mobile" THEN pageimpressions ELSE 0 END) as mobileImpressions',
             'SUM(visitors.pageimpressions) AS totalImpressions',
+            'SUM(CASE WHEN deviceType = "desktop" THEN uniquevisits ELSE 0 END) as desktopVisits',
+            'SUM(CASE WHEN deviceType = "tablet" THEN uniquevisits ELSE 0 END) as tabletVisits',
+            'SUM(CASE WHEN deviceType = "mobile" THEN uniquevisits ELSE 0 END) as mobileVisits',
             'SUM(visitors.uniquevisits) AS totalVisits'
         ));
 
@@ -1268,13 +1336,12 @@ class Repository
         $builder = $builder = $this->connection->createQueryBuilder();
         $builder->select(array(
             'users.firstlogin as firstLogin',
-            'billing.birthday'
+            'users.birthday'
         ))
             ->from('s_user', 'users')
-            ->innerJoin('users', 's_user_billingaddress', 'billing', 'billing.userID = users.id')
-            ->andWhere('billing.birthday IS NOT NULL')
-            ->andWhere("billing.birthday != '0000-00-00'")
-            ->orderBy('birthday', 'DESC');
+            ->andWhere('users.birthday IS NOT NULL')
+            ->andWhere("users.birthday != '0000-00-00'")
+            ->orderBy('users.birthday', 'DESC');
 
         $this->addDateRangeCondition($builder, $from, $to, 'users.firstlogin');
 
@@ -1282,7 +1349,7 @@ class Repository
             foreach ($shopIds as $shopId) {
                 $shopId = (int) $shopId;
                 $builder->addSelect(
-                    "IF(users.subshopID = {$shopId}, billing.birthday, NULL) as birthday" . $shopId
+                    "IF(users.subshopID = {$shopId}, users.birthday, NULL) as birthday" . $shopId
                 );
             }
         }
@@ -1483,7 +1550,7 @@ class Repository
      * @param $column
      * @return $this
      */
-    private function addDateRangeCondition(DBALQueryBuilder $builder, \DateTime $from = null, \DateTime $to = null, $column)
+    private function addDateRangeCondition(DBALQueryBuilder $builder, \DateTime $from = null, \DateTime $to = null, $column = null)
     {
         if ($from instanceof \DateTime) {
             $builder->andWhere($column . ' >= :fromDate')
@@ -1533,6 +1600,4 @@ class Repository
 
         return $this;
     }
-
-
 }

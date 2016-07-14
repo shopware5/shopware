@@ -81,11 +81,17 @@ class Enlight_Controller_Plugins_JsonRequest_Bootstrap extends Enlight_Plugin_Bo
         $request = $subject->Request();
 
         // Parses the json input data, if the content type is correct
-        if($this->parseInput === true
-          && ($contentType = $request->getHeader('Content-Type')) !== false
-          && strpos($contentType, 'application/json') === 0
-          && ($input = file_get_contents('php://input')) !== false) {
-            $input = Zend_Json::decode($input);
+        if (
+            $this->parseInput === true
+            && ($contentType = $request->getHeader('Content-Type')) !== false
+            && strpos($contentType, 'application/json') === 0
+            && ($input = file_get_contents('php://input')) !== false
+        ) {
+            if ($input != '') {
+                $input = Zend_Json::decode($input);
+            } else {
+                $input = null;
+            }
 
             if ($this->padding !== null && isset($input[0])) {
                 $request->setPost($this->padding, $input);

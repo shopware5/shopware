@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,8 +23,9 @@
  */
 
 namespace Shopware\Models\Order;
-use       Shopware\Components\Model\ModelEntity,
-          Doctrine\ORM\Mapping AS ORM;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Shopware order detail model represents a single detail data of an order .
@@ -93,14 +94,14 @@ class Detail extends ModelEntity
     /**
      * @var string $number
      *
-     * @ORM\Column(name="ordernumber", type="string", length=40, nullable=false)
+     * @ORM\Column(name="ordernumber", type="string", length=255, nullable=false)
      */
     private $number;
 
     /**
      * @var string $articleNumber
      *
-     * @ORM\Column(name="articleordernumber", type="string", length=30, nullable=false)
+     * @ORM\Column(name="articleordernumber", type="string", length=255, nullable=false)
      */
     private $articleNumber;
 
@@ -139,7 +140,7 @@ class Detail extends ModelEntity
     private $shippedGroup = 0;
 
     /**
-     * @var date $releaseDate
+     * @var \DateTime $releaseDate
      *
      * @ORM\Column(name="releasedate", type="date", nullable=true)
      */
@@ -165,6 +166,27 @@ class Detail extends ModelEntity
      * @ORM\Column(name="config", type="text", nullable=false)
      */
     private $config = '';
+
+    /**
+     * @var string $ean
+     *
+     * @ORM\Column(name="ean", type="string", length=255, nullable=true)
+     */
+    private $ean;
+
+    /**
+     * @var string $unit
+     *
+     * @ORM\Column(name="unit", type="string", length=255, nullable=true)
+     */
+    private $unit;
+
+    /**
+     * @var string $packUnit
+     *
+     * @ORM\Column(name="pack_unit", type="string", length=255, nullable=true)
+     */
+    private $packUnit;
 
     /**
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Order\Order", inversedBy="details")
@@ -369,7 +391,7 @@ class Detail extends ModelEntity
     /**
      * Set releaseDate
      *
-     * @param date $releaseDate
+     * @param \DateTime $releaseDate
      * @return Detail
      */
     public function setReleaseDate($releaseDate)
@@ -381,7 +403,7 @@ class Detail extends ModelEntity
     /**
      * Get releaseDate
      *
-     * @return date
+     * @return \DateTime
      */
     public function getReleaseDate()
     {
@@ -435,7 +457,7 @@ class Detail extends ModelEntity
     /**
      * Set config
      *
-     * @param text $config
+     * @param string $config
      * @return Detail
      */
     public function setConfig($config)
@@ -447,7 +469,7 @@ class Detail extends ModelEntity
     /**
      * Get config
      *
-     * @return text
+     * @return string
      */
     public function getConfig()
     {
@@ -533,7 +555,6 @@ class Detail extends ModelEntity
      */
     public function beforeInsert()
     {
-
     }
 
     /**
@@ -613,7 +634,6 @@ class Detail extends ModelEntity
                 $oldArticle->setInStock($oldArticle->getInStock() + $oldQuantity);
                 Shopware()->Models()->persist($oldArticle);
             }
-
         } elseif ($article instanceof \Shopware\Models\Article\Detail) {
             $article->setInStock($article->getInStock() + $quantityDiff);
             Shopware()->Models()->persist($article);
@@ -706,5 +726,53 @@ class Detail extends ModelEntity
     public function getTaxRate()
     {
         return $this->taxRate;
+    }
+
+    /**
+     * @param string $ean
+     */
+    public function setEan($ean)
+    {
+        $this->ean = $ean;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEan()
+    {
+        return $this->ean;
+    }
+
+    /**
+     * @param string $unit
+     */
+    public function setUnit($unit)
+    {
+        $this->unit = $unit;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUnit()
+    {
+        return $this->unit;
+    }
+
+    /**
+     * @param string $packUnit
+     */
+    public function setPackUnit($packUnit)
+    {
+        $this->packUnit = $packUnit;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPackUnit()
+    {
+        return $this->packUnit;
     }
 }

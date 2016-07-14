@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -180,7 +180,7 @@ class Shopware_Components_TemplateMail
 
         $this->getStringCompiler()->setContext(array_merge($defaultContext, $context));
 
-        $mail = clone Shopware()->Mail();
+        $mail = clone Shopware()->Container()->get('mail');
 
         return $this->loadValues($mail, $mailModel, $overrideConfig);
     }
@@ -235,12 +235,13 @@ class Shopware_Components_TemplateMail
                 continue;
             }
 
-            if (false === ($fileHandle = fopen($attachment->getPath(), 'r'))) {
-                throw new \Enlight_Exception('Could not load file: ' . $attachment->getPath());
+            $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+            if (!$mediaService->has($attachment->getPath())) {
+                Shopware()->Container()->get('corelogger')->error('Could not load file: ' . $attachment->getPath());
+            } else {
+                $fileAttachment = $mail->createAttachment($mediaService->read($attachment->getPath()));
+                $fileAttachment->filename = $attachment->getFileName();
             }
-
-            $fileAttachment = $mail->createAttachment($fileHandle);
-            $fileAttachment->filename = $attachment->getFileName();
         }
 
         return $mail;

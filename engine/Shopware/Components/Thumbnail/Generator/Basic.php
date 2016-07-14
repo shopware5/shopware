@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -24,6 +24,8 @@
 
 namespace Shopware\Components\Thumbnail\Generator;
 
+use Shopware\Bundle\MediaBundle\MediaServiceInterface;
+
 /**
  * Shopware Basic Thumbnail Generator
  *
@@ -39,47 +41,177 @@ namespace Shopware\Components\Thumbnail\Generator;
 class Basic implements GeneratorInterface
 {
     /**
-     * This method creates a new thumbnail based on the given parameters
-     *
-     * @param String $imagePath - full path of the original image
-     * @param String $destination - full path of the thumbnail where it should be created
-     * @param Int $width - width of the thumbnail
-     * @param Int $height - height of the thumbnail
-     * @param bool $keepProportions - Whether or not keeping the proportions of the original image, the size can be affected when true
-     * @throws \Exception
-     * @return void
+     * @var \Shopware_Components_Config
      */
-    public function createThumbnail($imagePath, $destination, $width, $height, $keepProportions = false)
+    private $config;
+
+    /**
+     * @var bool
+     */
+    private $fixGdImageBlur;
+
+    /**
+     * @var MediaServiceInterface
+     */
+    private $mediaService;
+
+    /**
+     * @param $config \Shopware_Components_Config
+     * @param MediaServiceInterface $mediaService
+     */
+    public function __construct($config, MediaServiceInterface $mediaService)
     {
-        if (!file_exists($imagePath)) {
+        $this->config = $config;
+        $this->fixGdImageBlur = $this->config->get('thumbnailNoiseFilter');
+        $this->mediaService = $mediaService;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createThumbnail($imagePath, $destination, $maxWidth, $maxHeight, $keepProportions = false, $quality = 90)
+    {
+        if (!$this->mediaService->has($imagePath)) {
             throw new \Exception("File not found: " . $imagePath);
         }
 
-        // Saves image data to memory for usage
-        $image = $this->createFileImage($imagePath);
-
-        if($image === false){
-            throw new \Exception("Image could not be created: " . $imagePath);
-        }
+        $content = $this->mediaService->read($imagePath);
+        $image = $this->createImageResource($content, $imagePath);
 
         // Determines the width and height of the original image
-        $originalSize = $this->getOriginalImageSize($imagePath);
+        $originalSize = $this->getOriginalImageSize($image);
 
-        if (empty($height)) {
-            $height = $width;
+        if (empty($maxHeight)) {
+            $maxHeight = $maxWidth;
         }
 
-        $newSize = array('width' => $width, 'height' => $height);
+        $newSize = array(
+            'width'  => $maxWidth,
+            'height' => $maxHeight
+        );
 
-        if($keepProportions === true){
-            $newSize = $this->calculateProportionalThumbnailSize($originalSize, $width, $height);
+        if ($keepProportions) {
+            $newSize = $this->calculateProportionalThumbnailSize($originalSize, $maxWidth, $maxHeight);
         }
 
+        $newImage = $this->createNewImage($image, $originalSize, $newSize, $this->getImageExtension($destination));
+
+        if ($this->fixGdImageBlur) {
+            $this->fixGdImageBlur($newSize, $newImage);
+        }
+
+        $this->saveImage($destination, $newImage, $quality);
+
+        // Removes both the original and the new created image from memory
+        imagedestroy($newImage);
+        imagedestroy($image);
+    }
+
+    /**
+     * Returns an array with a width and height index
+     * according to the passed sizes
+     *
+     * @param resource $imageResource
+     * @return array
+     */
+    private function getOriginalImageSize($imageResource)
+    {
+        return array(
+            'width'  => imagesx($imageResource),
+            'height' => imagesy($imageResource)
+        );
+    }
+
+    /**
+     * Determines the extension of the file according to
+     * the given path and calls the right creation
+     * method for the image extension
+     *
+     * @param string $fileContent
+     * @return resource
+     * @throws \RuntimeException
+     */
+    private function createImageResource($fileContent, $imagePath)
+    {
+        if (!$image = @imagecreatefromstring($fileContent)) {
+            throw new \RuntimeException(sprintf("Image is not in a recognized format (%s)", $imagePath));
+        }
+
+        return $image;
+    }
+
+    /**
+     * Returns the extension of the file with passed path
+     *
+     * @param string
+     * @return string
+     */
+    private function getImageExtension($path)
+    {
+        $pathInfo = pathinfo($path);
+
+        return $pathInfo['extension'];
+    }
+
+    /**
+     * Calculate image proportion and set the new resolution
+     *
+     * @param array $originalSize
+     * @param int   $width
+     * @param int   $height
+     * @return array
+     */
+    private function calculateProportionalThumbnailSize(array $originalSize, $width, $height)
+    {
+        // Source image size
+        $srcWidth = $originalSize['width'];
+        $srcHeight = $originalSize['height'];
+
+        // Calculate the scale factor
+        if ($width === 0) {
+            $factor = $height / $srcHeight;
+        } elseif ($height === 0) {
+            $factor = $width / $srcWidth;
+        } else {
+            $factor = min($width / $srcWidth, $height / $srcHeight);
+        }
+
+        if ($factor >= 1) {
+            $dstWidth  = $srcWidth;
+            $dstHeight = $srcHeight;
+            $factor = 1;
+        } else {
+            //Get the destination size
+            $dstWidth  = round($srcWidth * $factor);
+            $dstHeight = round($srcHeight * $factor);
+        }
+
+        return array(
+            'width' => $dstWidth,
+            'height' => $dstHeight,
+            'proportion' => $factor
+        );
+    }
+
+    /**
+     * @param resource $image
+     * @param array    $originalSize
+     * @param array    $newSize
+     * @param boolean  $extension
+     * @return resource
+     */
+    private function createNewImage($image, $originalSize, $newSize, $extension)
+    {
         // Creates a new image with given size
         $newImage = imagecreatetruecolor($newSize['width'], $newSize['height']);
 
-        // Disables blending
-        imagealphablending($newImage, false);
+        if (in_array($extension, ['jpg', 'jpeg'])) {
+            $background = imagecolorallocate($newImage, 255, 255, 255);
+            imagefill($newImage, 0, 0, $background);
+        } else {
+            // Disables blending
+            imagealphablending($newImage, false);
+        }
         // Saves the alpha informations
         imagesavealpha($newImage, true);
         // Copies the original image into the new created image with resampling
@@ -96,109 +228,57 @@ class Basic implements GeneratorInterface
             $originalSize['height']
         );
 
+        return $newImage;
+    }
+
+    /**
+     * Fix #fefefe in white backgrounds
+     *
+     * @param array $newSize
+     * @param resource $newImage
+     */
+    private function fixGdImageBlur($newSize,  $newImage)
+    {
+        $colorWhite = imagecolorallocate($newImage, 255, 255, 255);
+        $processHeight = $newSize['height'] + 0;
+        $processWidth = $newSize['width'] + 0;
+        for ($y = 0; $y < ($processHeight); ++$y) {
+            for ($x = 0; $x < ($processWidth); ++$x) {
+                $colorat = imagecolorat($newImage, $x, $y);
+                $r = ($colorat >> 16) & 0xFF;
+                $g = ($colorat >> 8) & 0xFF;
+                $b = $colorat & 0xFF;
+                if (($r == 253 && $g == 253 && $b == 253) || ($r == 254 && $g == 254 && $b == 254)) {
+                    imagesetpixel($newImage, $x, $y, $colorWhite);
+                }
+            }
+        }
+    }
+
+    /**
+     * @param string $destination
+     * @param resource $newImage
+     * @param int $quality - JPEG quality
+     */
+    private function saveImage($destination, $newImage, $quality)
+    {
+        ob_start();
         // saves the image information into a specific file extension
-        switch(strtolower($this->getImageExtension($destination))){
+        switch (strtolower($this->getImageExtension($destination))) {
             case 'png':
-                imagepng($newImage, $destination);
+                imagepng($newImage);
                 break;
             case 'gif':
-                imagegif($newImage, $destination);
+                imagegif($newImage);
                 break;
             default:
-                imagejpeg($newImage, $destination, 90);
+                imagejpeg($newImage, null, $quality);
                 break;
         }
 
-        // Removes both the original and the new created image from memory
-        imagedestroy($newImage);
-        imagedestroy($image);
-    }
+        $content = ob_get_contents();
+        ob_end_clean();
 
-    /**
-     * Returns an array with a width and height index
-     * according to the passed sizes
-     *
-     * @param $path
-     * @return array
-     */
-    private function getOriginalImageSize($path)
-    {
-        $size = getimagesize($path);
-
-        return array('width' => $size[0], 'height' => $size[1]);
-    }
-
-    /**
-     * Determines the extension of the file according to
-     * the given path and calls the right creation
-     * method for the image extension
-     *
-     * @param $path
-     * @return bool|resource
-     * @throws \Exception
-     */
-    private function createFileImage($path)
-    {
-        // Determines the image creation by the file extension
-        switch (strtolower($this->getImageExtension($path))) {
-            case 'gif':
-                $image = imagecreatefromgif($path);
-                break;
-            case 'png':
-                $image = imagecreatefrompng($path);
-                break;
-            case 'jpg':
-                $image = imagecreatefromjpeg($path);
-                break;
-            default:
-                throw new \Exception("Extension is not supported");
-        }
-
-        return $image;
-    }
-
-    /**
-     * Returns the extension of the file with passed path
-     *
-     * @param $path
-     * @return mixed
-     */
-    private function getImageExtension($path)
-    {
-        $pathInfo = pathinfo($path);
-        return $pathInfo['extension'];
-    }
-
-    /**
-     * Calculate image proportion and set the new resolution
-     * @param $originalSize
-     * @param $width
-     * @param $height
-     * @return array
-     */
-    private function calculateProportionalThumbnailSize(array $originalSize, $width, $height)
-    {
-        // Source image size
-        $srcWidth = $originalSize['width'];
-        $srcHeight = $originalSize['height'];
-
-        // Calculate the scale factor
-        if($width === 0) {
-            $factor = $height / $srcHeight;
-        } else if($height === 0) {
-            $factor = $width / $srcWidth;
-        } else {
-            $factor = min($width / $srcWidth, $height / $srcHeight);
-        }
-
-        // Get the destination size
-        $dstWidth = round($srcWidth * $factor);
-        $dstHeight = round($srcHeight * $factor);
-
-        return array(
-            'width' => $dstWidth,
-            'height' => $dstHeight,
-            'proportion' => $factor
-        );
+        $this->mediaService->write($destination, $content);
     }
 }

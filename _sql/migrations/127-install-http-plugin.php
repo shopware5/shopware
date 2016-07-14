@@ -1,7 +1,7 @@
 <?php
 class Migrations_Migration127 Extends Shopware\Components\Migrations\AbstractMigration
 {
-    public function up()
+    public function up($modus)
     {
         $sql = <<<'EOD'
 INSERT IGNORE INTO `s_core_plugins` (`namespace`, `name`, `label`, `source`, `description`, `description_long`, `active`, `added`, `installation_date`, `update_date`, `refresh_date`, `author`, `copyright`, `license`, `version`, `support`, `changes`, `link`, `store_version`, `store_date`, `capability_update`, `capability_install`, `capability_enable`, `capability_dummy`, `update_source`, `update_version`) VALUES ('Core', 'HttpCache', 'Frontendcache (HttpCache)', 'Default', NULL, NULL, '0', '2013-05-27 15:57:59', '2013-05-27 15:58:09', '2013-05-27 15:58:09', '2013-05-27 15:58:10', 'shopware AG', 'Copyright © 2012, shopware AG', NULL, '1.1.0', NULL, NULL, NULL, NULL, NULL, '1', '0', '1', '0', NULL, NULL);

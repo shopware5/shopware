@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,8 +23,9 @@
  */
 
 namespace   Shopware\Models\Media;
-use         Shopware\Components\Model\ModelEntity,
-            Doctrine\ORM\Mapping AS ORM;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * The album settings model contains all settings around one album.
@@ -81,6 +82,27 @@ class Settings extends ModelEntity
      * @ORM\Column(name="icon", type="string", length=50, nullable=false)
      */
     private $icon;
+
+    /**
+     * Generate high dpi thumbnails
+     * @var bool $thumbnailHighDpi
+     * @ORM\Column(name="thumbnail_high_dpi", type="boolean", nullable=false)
+     */
+    private $thumbnailHighDpi;
+
+    /**
+     * Thumbnail quality
+     * @var int $thumbnailHighDpi
+     * @ORM\Column(name="thumbnail_quality", type="integer", nullable=false)
+     */
+    private $thumbnailQuality;
+
+    /**
+     * high dpi thumbnails quality
+     * @var int $thumbnailHighDpi
+     * @ORM\Column(name="thumbnail_high_dpi_quality", type="integer", nullable=false)
+     */
+    private $thumbnailHighDpiQuality;
 
     /**
      * @var \Shopware\Models\Media\Album $album
@@ -165,21 +187,21 @@ class Settings extends ModelEntity
         return explode(';', $this->thumbnailSize);
     }
 
-	/**
-	 * If the album settings updated and the thumbnail configuration changed,
-	 * the new configuration have to be executed on each assigned media.
-	 * To notify the configuration change the model gets the entity change set
-	 * over the doctrine unit of work instance.
-	 * When update is checked whether the old thumbnails should be deleted,
-	 * and whether new thumbnail files must be generated.
-	 *
-	 * @ORM\PreUpdate
-	 * @deprecated
-	 */
-	public function onUpdate()
-	{
-		return;
-	}
+    /**
+     * If the album settings updated and the thumbnail configuration changed,
+     * the new configuration have to be executed on each assigned media.
+     * To notify the configuration change the model gets the entity change set
+     * over the doctrine unit of work instance.
+     * When update is checked whether the old thumbnails should be deleted,
+     * and whether new thumbnail files must be generated.
+     *
+     * @ORM\PreUpdate
+     * @deprecated
+     */
+    public function onUpdate()
+    {
+        return;
+    }
 
     /**
      * @return \Shopware\Models\Media\Album
@@ -195,5 +217,53 @@ class Settings extends ModelEntity
     public function setAlbum($album)
     {
         $this->album = $album;
+    }
+
+    /**
+     * @return int
+     */
+    public function getThumbnailHighDpiQuality()
+    {
+        return $this->thumbnailHighDpiQuality;
+    }
+
+    /**
+     * @param int $thumbnailHighDpiQuality
+     */
+    public function setThumbnailHighDpiQuality($thumbnailHighDpiQuality)
+    {
+        $this->thumbnailHighDpiQuality = $thumbnailHighDpiQuality;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isThumbnailHighDpi()
+    {
+        return $this->thumbnailHighDpi;
+    }
+
+    /**
+     * @param boolean $thumbnailHighDpi
+     */
+    public function setThumbnailHighDpi($thumbnailHighDpi)
+    {
+        $this->thumbnailHighDpi = $thumbnailHighDpi;
+    }
+
+    /**
+     * @return int
+     */
+    public function getThumbnailQuality()
+    {
+        return $this->thumbnailQuality;
+    }
+
+    /**
+     * @param int $thumbnailQuality
+     */
+    public function setThumbnailQuality($thumbnailQuality)
+    {
+        $this->thumbnailQuality = $thumbnailQuality;
     }
 }

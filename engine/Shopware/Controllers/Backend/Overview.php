@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,7 +32,6 @@ class Shopware_Controllers_Backend_Overview extends Shopware_Controllers_Backend
      */
     protected function initAcl()
     {
-        $this->setAclResourceName('overview');
         $this->addAclPermission('getOrderSummary', 'read');
     }
 
@@ -42,66 +41,53 @@ class Shopware_Controllers_Backend_Overview extends Shopware_Controllers_Backend
         $endDate   = $this->Request()->getParam('toDate', date("Y-m-d"));
 
         $sql = "
-         SELECT
-           SUM(v.uniquevisits) AS `visits`,
-           SUM(v.uniquevisits)/SUM(o.`Bestellungen`) AS `averageUsers`,
-           SUM(v.pageimpressions) AS `hits`,
-           o.`Bestellungen` AS `countOrders`,
-           SUM(u.`Neukunden`) AS `countCustomers`,
-           ou.`Umsatz` AS `amount`,
-           v.datum AS `date`
-         FROM
-          `s_statistics_visitors` as v
-         LEFT OUTER JOIN
-          (
-           SELECT
-            COUNT(DISTINCT id) AS `Bestellungen`,
-            DATE (ordertime) as `date`
-           FROM
-            `s_order`
-           WHERE
-            status != 4
-           AND
-            status != -1
-           GROUP BY
-            DATE (ordertime)
-          ) as o
-         ON
-          `o`.`date`=v.datum
-         LEFT OUTER JOIN
-          (
-           SELECT
-            SUM(invoice_amount/currencyFactor) AS `Umsatz`,
-            DATE (ordertime) as `date`
-           FROM
-            `s_order`
-           WHERE
-            status != 4
-           AND
-            status != -1
-           GROUP BY
-            DATE (ordertime)
-          ) as ou
-         ON
-          `ou`.`date`=v.datum
-         LEFT OUTER JOIN
-          (
-           SELECT
-            COUNT(DISTINCT  id) AS `Neukunden`,
-            firstlogin as `date`
-           FROM
-            `s_user`
-           GROUP BY
-            firstlogin
-          ) as u
-         ON
-          `u`.`date`=v.datum
-         WHERE
-          v.datum <= :endDate
-         AND
-          v.datum >= :startDate
-         GROUP BY TO_DAYS(v.datum)
-         ORDER BY v.datum DESC
+            SELECT
+                SUM(visitors.uniquevisits) AS visits,
+                SUM(visitors.uniquevisits)/SUM(order_count.order_count) AS averageUsers,
+                SUM(visitors.pageimpressions) AS hits,
+                order_count.order_count AS countOrders,
+                customer_count.new_customer_count AS countUsers,
+                customer_count.new_customer_order_count AS countCustomers,
+                order_amount.amount AS amount,
+                visitors.datum AS `date`
+            FROM s_statistics_visitors AS visitors
+            LEFT OUTER JOIN
+            (
+                SELECT
+                    COUNT(DISTINCT id) AS order_count,
+                    DATE (ordertime) AS order_date
+                FROM s_order
+                WHERE status NOT IN (-1, 4)
+                GROUP BY DATE (order_date)
+            ) AS order_count
+            ON order_count.order_date = visitors.datum
+            LEFT OUTER JOIN
+            (
+                SELECT
+                    SUM(invoice_amount/currencyFactor) AS amount,
+                    DATE (ordertime) AS order_date
+                FROM s_order
+                WHERE status NOT IN (-1, 4)
+                GROUP BY DATE (order_date)
+            ) AS order_amount
+            ON order_amount.order_date = visitors.datum
+            LEFT OUTER JOIN
+            (
+                SELECT
+                    COUNT(DISTINCT s_user.id) AS new_customer_count,
+                    COUNT(DISTINCT s_order.id) AS new_customer_order_count,
+                    firstlogin AS first_login_date
+                FROM s_user
+                LEFT JOIN s_order ON s_order.userID = s_user.id
+                    AND (DATE(s_order.ordertime) = DATE(s_user.firstlogin))
+                    AND s_order.status NOT IN (-1, 4)
+                GROUP BY first_login_date
+            ) AS customer_count
+            ON customer_count.first_login_date = visitors.datum
+            WHERE visitors.datum <= :endDate
+                AND visitors.datum >= :startDate
+            GROUP BY TO_DAYS(visitors.datum)
+            ORDER BY visitors.datum DESC
         ";
 
         $stmt = Shopware()->Db()->query($sql, array(
@@ -117,7 +103,7 @@ class Shopware_Controllers_Backend_Overview extends Shopware_Controllers_Backend
                     $order[$key] = 0;
                 }
             }
-            if (!empty($order['countOrders'])) {
+            if ($order['countOrders'] != 0) {
                 $order['averageOrders'] = $order['amount'] / $order['countOrders'];
             } else {
                 $order['averageOrders'] = 0;
@@ -125,6 +111,7 @@ class Shopware_Controllers_Backend_Overview extends Shopware_Controllers_Backend
             $order['amount'] = round($order['amount'], 2);
             $orders[] = $order;
         }
+
         $this->View()->assign(array(
             'success' => true,
             'data'    => $orders,

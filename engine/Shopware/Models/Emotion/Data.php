@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -22,29 +22,15 @@
  * our trademarks remain entirely with us.
  */
 
-namespace   Shopware\Models\Emotion;
-use         Shopware\Components\Model\ModelEntity,
-            Doctrine\ORM\Mapping AS ORM;
+namespace Shopware\Models\Emotion;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
- *
- *
- * Associations:
- * <code>
- *
- * </code>
- *
- *
- * Indices:
- * <code>
- *
- * </code>
- *
  * @category   Shopware
- * @package    Models
- * @subpackage Emotion
- * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
- * @license    http://enlight.de/license     New BSD License
+ * @package    Shopware\Models
+ * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  * @ORM\Entity
  * @ORM\Table(name="s_emotion_element_value")
@@ -104,6 +90,12 @@ class Data extends ModelEntity
      * @ORM\JoinColumn(name="elementID", referencedColumnName="id")
      */
     protected $element;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="\Shopware\Models\Emotion\Emotion")
+     * @ORM\JoinColumn(name="emotionID", referencedColumnName="id")
+     */
+    protected $emotion;
 
     /**
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Emotion\Library\Component")
@@ -233,5 +225,32 @@ class Data extends ModelEntity
     public function setEmotionId($emotionId)
     {
         $this->emotionId = $emotionId;
+    }
+
+    public function __clone()
+    {
+        $this->id = null;
+
+        $this->emotionId = null;
+
+        $this->elementId = null;
+
+        $this->fieldId = null;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEmotion()
+    {
+        return $this->emotion;
+    }
+
+    /**
+     * @param mixed $emotion
+     */
+    public function setEmotion($emotion)
+    {
+        $this->emotion = $emotion;
     }
 }

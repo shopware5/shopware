@@ -1,0 +1,213 @@
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ *
+ * @category   Shopware
+ * @package    Shopware_Styling
+ * @subpackage Login
+ * @version    $Id$
+ * @author shopware AG
+ */
+.login-window {
+    background: theme-image($theme, 'login_background.png') no-repeat;
+    color: #475c6a;
+
+    .#{$prefix}window-body {
+	    background: transparent;
+	    border: 0 none !important;
+    }
+
+	/** Footer toolbar */
+    .#{$prefix}toolbar-footer {
+        @include single-box-shadow('none');
+        border-left: 0 none;
+        border-right: 0 none;
+    	background: transparent !important;
+    	overflow: visible;
+
+    	.#{$prefix}box-inner {
+    		overflow: visible;
+    	}
+    }
+
+    h1 {
+        margin: 120px 0 25px 0;
+        font-size: 18px;
+        line-height: 21px;
+        text-align: center;
+        color: #475c6a;
+    }
+    .#{$prefix}panel-body-default {
+        background: transparent !important;
+        padding: 0 50px;
+
+        .#{$prefix}container-default {
+            width: auto !important;
+        }
+    }
+
+	// Form elements - field labels
+    .#{$prefix}form-item {
+        width: 266px !important;
+    }
+
+    .#{$prefix}form-item-label {
+        color: #475c6a;
+        font-weight: 700;
+        text-shadow: 1px 1px 0px #fff;
+        padding: 8px 0 0;
+    }
+
+	// Form elements - text fields
+    .#{$prefix}form-item-body {
+        @include border-radius(6px);
+        background: none;
+
+        .x-form-text {
+            @include border-radius(6px);
+            background: rgba(255, 255, 255, .5);
+            border-color: #fff;
+            font-size: 12px;
+            width: 263px !important;
+            height: 35px;
+            text-align: center;
+            line-height: 16px;
+
+            &:focus {
+                background: #fff !important;
+                border-color: #2eb5f9 !important;
+                @include box-shadow(0 0 3px #52A8EC !important);
+            }
+        }
+
+        .#{$prefix}form-text, textarea.#{$prefix}form-field {
+        	@include form-item-focus;
+            padding: 1px 10px;
+            color: #475c6a;
+        }
+
+        .#{$prefix}form-invalid-field {
+            color: #7A0000;
+            &:focus {
+                  border-color: #CC3300;
+                  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(148, 0, 0, .6);
+                   -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(148, 0, 0, .6);
+                   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(148, 0, 0, .6);
+              }
+        }
+    }
+
+	// Form elements - combobox fields
+    .#{$prefix}form-combo {
+        .#{$prefix}form-text {
+        	@include border-radius(6px 0 0 6px);
+            width: 226px !important;
+            line-height: 16px;
+        }
+
+        .#{$prefix}trigger-cell {
+	        width: 37px !important;
+        }
+        .#{$prefix}form-trigger {
+            @include border-radius(0 6px 6px 0);
+            border: 1px solid #fff;
+        	height: 35px;
+        	width: 38px !important;
+	        background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAhCAYAAACxzQkrAAABzklEQVR4AcXRvYsUQRCG8fvPTQQzQwMDMVID95JDOEExOARhRRADL9HA8ALRU/drurt0avZBg1deKrqBB4pmmf5N7cmhj6Dpn9qgiH5sUGTyGTSW+rGWjWzqRPNv8o2nJVAvgroHxYHaSFSCFKp1DxoSY0ACM7dvy1kdRKEDUwdlgIp/G9Uw2eRADAIktiRQom62kwmMBJktiTSCKtvZASIJ8iiPsdsxIIdqHuIxBlRAUeiA1DEGBErCTEAkxoAYDErABK4DKWIUyKPqVTFbQB5FdUgFs50AaZSGkblcIBSGEpMgBo3SsBfrD/Ho+UVcb/acZW8vP8WDs5dx9e2HgBhM1gHVUKtXb+LW/Sdxb3Ue19v9gvn4Oc/mvlx9LWFoA4iy5mHfN7u/qKfncfH+Muc7D09j/QfmEAkBM1FfQJtlyAOBIokDtWBWbEYhNAYIAZIoA6Nnr9/F3cdnidmVIGA0SKM8rI7QGA3yMPIIchD6deyE4b8wgavXNQQMHQCBcjAqIIB4DKB5IGCF7MVkIBoEqg4rQjTmpwTRVMcZhIaAAcQwZ3DFNEJDNMjACsgDeYgDFXD17F2AKpUAxbbTAHSz8aGt3zyIzSQmIm7/BtC/NeJ5aEtBAAAAAElFTkSuQmCC") no-repeat !important;
+        }
+    }
+
+    .#{$prefix}form-trigger-wrap-focus {
+	    .#{$prefix}form-trigger {
+            border: 1px solid;
+            border-color: #2eb5f9 !important;
+            -webkit-box-shadow: 0 0 3px rgba(82, 168, 236, 0.6) !important;
+            -moz-box-shadow: 0 0 3px rgba(82, 168, 236, 0.6) !important;
+            box-shadow: 0 0 3px rgba(82, 168, 236, 0.6) !important;
+	    }
+    }
+
+    // Form submit button
+    .#{$prefix}toolbar-shopware-ui-docked-bottom {
+        .#{$prefix}btn {
+            left: 43px !important;
+            width: 265px !important;
+            height: 35px !important;
+        }
+    }
+
+    // Google Chrome hint
+    .#{$prefix}google-chrome-hint {
+        margin: 14px 0;
+        font-size: 11px;
+        color: lighten($font-color, 10%);
+
+        a.logo-chrome {
+            background: theme-image($theme, 'logo-chrome.png') no-repeat;
+            display: block;
+            text-decoration: none;
+            height: 24px; width: 24px;
+        }
+        .right-content, a.logo-chrome {
+            float: left;
+        }
+        .right-content {
+            margin: 0 0 0 12px;
+            width: 220px;
+
+            a {
+                color: #009CFF;
+                text-decoration: none;
+            }
+        }
+    }
+
+    // IE Notice
+    .#{$prefix}ie-notice {
+        text-shadow: 1px 1px 0 #fff;
+        color: lighten($font-color, 10%);
+        font-size: 12px;
+        line-height: 18px;
+
+        .teaser { margin: 0 0 12px }
+
+        .browsers {
+            height: 32px;
+            margin: 12px auto 0;
+
+            li { float: left; width: 72px; height: 32px; display: block; margin: 0 10px }
+            a { display: block; width: 72px; height: 32px; }
+            .chrome {
+                background: theme-image($theme, '32-chrome.png') no-repeat top center;
+            }
+            .firefox {
+                background: theme-image($theme, '32-firefox.png') no-repeat top center;
+            }
+            .safari {
+                background: theme-image($theme, '32-safari.png') no-repeat top center;
+            }
+            .ie {
+                background: theme-image($theme, '32-ie.png') no-repeat top center;
+            }
+        }
+    }
+
+}

@@ -1,130 +1,94 @@
-# Shopware 4
+# Shopware 5
+
+[![Build Status](https://travis-ci.org/shopware/shopware.svg?branch=5.2)](https://travis-ci.org/shopware/shopware)
+[![Crowdin](https://d322cqt584bo4o.cloudfront.net/shopware/localized.svg)](https://crowdin.com/project/shopware)
 
 - **License**: Dual license AGPL v3 / Proprietary
-- **Github Repository**: <https://github.com/ShopwareAG/shopware-4>
-- **Issue-Tracker**: <http://jira.shopware.de/jira>
+- **Github Repository**: <https://github.com/shopware/shopware>
+- **Issue Tracker**: <https://issues.shopware.com>
 
 ## Overview
 
-![](http://www.shopware.de/templates/0/de/media/img/sw4_home/banner_home_top.png)
+![Shopware 5 collage](http://cdn.shopware.de/github/readme_screenshot.png)
 
-Shopware 4 is the next generation of open source e-commerce software made in Germany. Based on bleeding edge technologies like `Symfony 2`, `Doctrine 2` & `Zend Framework` Shopware comes as the perfect platform for your next eCommerce project.
-Furthermore Shopware 4 provides an event-driven plugin-system and an advanced hook system, which unleashes the truth power and gives you the ability to customize every part of it.
+Shopware 5 is the next generation of open source e-commerce software made in Germany. Based on bleeding edge technologies like `Symfony 2`, `Doctrine 2` & `Zend Framework` Shopware comes as the perfect platform for your next e-commerce project.
+Furthermore Shopware 5 provides an event-driven plugin system and an advanced hook system, giving you the ability to customize every part of the platform.
 
-Visit the forum at <http://forum.shopware.de/>
+Visit the forum at <http://forum.shopware.com/>
 
 ### Shopware Server Requirements
 
-- PHP 5.3.2 or above
-- PHP's `cURL` and `GD` library
+- PHP 5.6.4 or above
+- PHP extensions `curl`, `mbstring` and `gd`
 - An Apache web server
 - Apache's `mod_rewrite` module
-- MySQL 5.1.0 or above
+- MySQL 5.5.0 or above
 
 ### Installation via Git
 
-Follow the instruction below if you want to install Shopware 4 using Git.
+Follow the instruction below if you want to install Shopware 5 using Git.
 
 1.) Clone the git repository to the desired location using:
 
-    git clone https://github.com/ShopwareAG/shopware-4.git
+    git clone https://github.com/shopware/shopware.git
 
-In case you wish to contribute to Shopware, fork the master tree rather than cloning it and create a pull request via Github. For further information please visit the section "Get involved" in this document.
+In case you wish to contribute to Shopware, fork the `5.2` branch rather than cloning it, and create a pull request via Github. For further information please read the section "Get involved" of this document.
 
 2.) Set the correct directory permissions:
 
     chmod 755 config.php
-    chmod 755 -R cache
-    chmod 755 -R files
-    chmod 755 -R media
-    chmod 755 -R engine/Shopware/Plugins/Community
+    chmod -R 755 var
+    chmod -R 755 web
+    chmod -R 755 files
+    chmod -R 755 media
+    chmod -R 755 engine/Shopware/Plugins/Community
 
-
-Depending on your server configuration it might be neccesarry to set whole write permissions (777) to the files and folders above.
-Also you can start testing with lower permissions due to security reasons (644 for example), if your php-process can write to
-those files.
+Depending on your server configuration, it might be necessary to set whole write permissions (777) to the files and folders above.
+You can also start testing with lower permissions due to security reasons (644 for example) as long as your php process can write to those files.
 
 3.) An [Ant](http://ant.apache.org/) Buildfile is used to set up the configuration and database connection:
 
     cd build/
     ant configure
-    ant build-config build-composer-install build-database
+    ant build-unit
 
-4.) Download the demo data files and extract them:
+4.) Download the test images and extract them:
 
-Go to the checkout directory and download the demo data files:
+Go to the checkout directory and download the test images:
 
-	wget -O demo.zip files.shopware.de/download.php?package=demo
+	wget -O test_images.zip http://releases.s3.shopware.com/test_images.zip
 
 Unzip the files to the checkout directory:
 
-	unzip demo.zip
+	unzip test_images.zip
 
 You can now access your shop
 
+# Backend
+
+The backend is located at `/backend` example `http://your.shop.com/backend`.
 Backend Login: demo/demo
 
-## Get involved
+The test_images.zip file includes thumbnails for the new responsive theme and the old deprecated template.
 
-Shopware is available under dual license (AGPL v3 and proprietary license). If you want to contribute code (features or bugfixes) you have to create a pull request that considers a valid license information. You can either contribute your code under New BSD or MIT license.
+If you want to have full featured demo data, you should download the respective demo data plugin in the First Run Wizard or in the Plugin Manager.
 
-If you want to contribute to the backend part of Shopware and you got in touch with `ExtJS`-based code these parts must be licensed under GPL V3, this is due to the license terms of Sencha Inc.
+# Get involved
 
-If you are not sure, how to contribute code under right license and right way you can contact us under <info@shopware.de>. Further you can conclude a contribution aggreement with us to get more safety around your code submits.
+Shopware is available under dual license (AGPL v3 and proprietary license). If you want to contribute code (features or bugfixes), you have to create a pull request and include valid license information. You can either contribute your code under New BSD or MIT license.
 
-### Start hacking
+If you want to contribute to the backend part of Shopware, and your changes affect or are based on ExtJS code, they must be licensed under GPL V3, as per license requirements from Sencha Inc.
 
-To start contributing, just fork the repository and clone your fork to your local machine:
+If you are not sure which license to use, or want more details about available licensing or the contribution agreements we offer, you can contact us at <contact@shopware.com>.
 
-    git clone git@github.com:[YOUR USERNAME]/shopware-4.git
-
-After having done this, configure the upstream remote:
-
-    cd shopware-4
-    git remote add upstream git://github.com/ShopwareAG/shopware-4.git
-    git config branch.master.remote upstream
-
-To keep your master up-to-date:
-
-    git checkout master
-    git pull --rebase
-    php build/ApplyDeltas.php
-
-Checkout a new topic-branch and you're ready to start hacking and contributing to Shopware:
-
-    git checkout -b feature/your-cool-feature
-
-If you're done hacking, filling bugs or building fancy new features push your changes to your forked repo:
-
-    git push origin feature/your-cool-feature
+For more information about contributing to Shopware, please see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 
-... and send us a pull request with your changes. We'll verify the pull request and merge it with the `master` Branch.
+### How to report bugs / request features?
 
-### Running Tests
-#### Database
-For mosts tests a configured database connection is required.
+We've always had a sympathetic ear for our community, so please feel free to submit tickets with bug reports or feature requests. In order to have a single issue tracking tool, we've decided to close the GitHub issue panel in favor of our Jira issue tracker, which is directly connected to our development division.
 
-#### Running the tests
-The tests are located in the `tests/Shopware/` directory
-You can run the entire test suite with the following command:
-
-    vendor/bin/phpunit -c tests/Shopware
-
-If you want to test a single component, add its path after the phpunit command, e.g.:
-
-    vendor/bin/phpunit -c tests/Shopware tests/Shopware/Tests/Components/Api/
-
-### Coding standards
-All contributions should follow the [PSR-1](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-1-basic-coding-standard.md) and [PSR-2](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md) coding
-standards.
-
-
-### How to report bugs / feature requests?
-
-We've always had a sympathetic ear for our community, so please feel free to submit tickets with bug reports or feature requests. In order to have one place to go, we've decided to close the GitHub issue tracker in favor of our Jira issue tracker, which is directly connected to our development division.
-
-* [Shopware Jira ticket submit form](http://jira.shopware.de/jira)
+* [Shopware Jira ticket submit form](https://issues.shopware.com)
 
 # Copying / License
 
@@ -132,13 +96,13 @@ Shopware is distributed under a dual license (AGPL v3 and proprietary license). 
 
 # Changelog
 
-The changelog and all available commits are located under <https://github.com/ShopwareAG/shopware-4/commits/master>.
+The changelog and all available commits are located under <https://github.com/shopware/shopware/commits/5.2>.
 
 ## Further reading
 
-* [Shopware AG](http://www.shopware.de) - Homepage of shopware AG
-* [Shopware Wiki](http://wiki.shopware.de) - Shopware Wiki
-* [Shopware Forum](http://forum.shopware.de) - Community forum
-* [Shopware Marketplace](http://store.shopware.de) - Shopware Store
-* [Shopware Developer Guide](http://wiki.shopware.de/Developers-Guide_cat_487.html) - Shopware 4 Developer Guide
-* [Shopware Designer Guide](http://wiki.shopware.de/Designers-Guide_cat_486.html) - Shopware 4 Designer Guide
+* [Shopware AG](http://www.shopware.com) - Homepage of shopware AG
+* [Shopware Developer Documentation](https://devdocs.shopware.com/)
+* [Shopware Community](http://community.shopware.com/) - Shopware Community
+* [Shopware Forum](http://forum.shopware.com) - Community forum
+* [Shopware Marketplace](http://store.shopware.com) - Shopware Store
+* [Shopware on Crowdin](https://crowdin.com/project/shopware) - Crowdin (Translations)

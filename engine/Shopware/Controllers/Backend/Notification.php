@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -22,8 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Models\Article\Detail as Detail,
-    Doctrine\ORM\AbstractQuery;
 /**
  * Shopware Backend Controller for the Notification Module
  *
@@ -31,7 +29,6 @@ use Shopware\Models\Article\Detail as Detail,
  */
 class Shopware_Controllers_Backend_Notification extends Shopware_Controllers_Backend_ExtJs
 {
-
     /**
      * Registers the different acl permission for the different controller actions.
      *
@@ -42,8 +39,8 @@ class Shopware_Controllers_Backend_Notification extends Shopware_Controllers_Bac
         /**
          * permission to list all notifications
          */
-        $this->addAclPermission('getArticleList', 'read','Insufficient Permissions');
-        $this->addAclPermission('getCustomerList', 'read','Insufficient Permissions');
+        $this->addAclPermission('getArticleList', 'read', 'Insufficient Permissions');
+        $this->addAclPermission('getCustomerList', 'read', 'Insufficient Permissions');
     }
 
 
@@ -65,7 +62,7 @@ class Shopware_Controllers_Backend_Notification extends Shopware_Controllers_Bac
             $order = (array) $this->Request()->getParam('sort', array());
 
             /** @var $repository \Shopware\Models\Article\Repository */
-            $repository = Shopware()->Models()->Article();
+            $repository = Shopware()->Models()->getRepository(\Shopware\Models\Article\Article::class);
             $dataQuery = $repository->getArticlesWithRegisteredNotificationsQuery($filter, $offset, $limit, $order);
             $data = $dataQuery->getArrayResult();
 
@@ -112,7 +109,7 @@ class Shopware_Controllers_Backend_Notification extends Shopware_Controllers_Bac
             $order = (array) $this->Request()->getParam('sort', array());
 
             /** @var $repository \Shopware\Models\Article\Repository */
-            $repository = Shopware()->Models()->Article();
+            $repository = Shopware()->Models()->getRepository(\Shopware\Models\Article\Article::class);
             $dataQuery = $repository->getNotificationCustomerByArticleQuery($articleOrderNumber, $filter, $offset, $limit, $order);
             $totalCount = Shopware()->Models()->getQueryCount($dataQuery);
             $data = $dataQuery->getArrayResult();
@@ -123,5 +120,4 @@ class Shopware_Controllers_Backend_Notification extends Shopware_Controllers_Bac
             $this->View()->assign(array('success' => false, 'errorMsg' => $e->getMessage()));
         }
     }
-
 }

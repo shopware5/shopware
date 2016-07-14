@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -67,12 +67,12 @@ class Shopware_Plugins_Core_PasswordEncoder_Bootstrap extends Shopware_Component
      */
      private function subscribeEvents()
      {
-        $this->subscribeEvent(
+         $this->subscribeEvent(
             'Enlight_Bootstrap_InitResource_PasswordEncoder',
             'onInitResourcePasswordEncoder'
         );
 
-        $this->subscribeEvent(
+         $this->subscribeEvent(
             'Shopware_Components_Password_Manager_AddEncoder',
             'onAddEncoder'
         );
@@ -89,7 +89,7 @@ class Shopware_Plugins_Core_PasswordEncoder_Bootstrap extends Shopware_Component
             'label' => 'Passwörter verschlüsseln mit...',
             'editable' => false,
             'value' => 'Auto',
-            'valueField' => 'id','displayField'=>'id',
+            'valueField' => 'id', 'displayField'=>'id',
             'triggerAction' => 'all',
             'store' => 'base.EncoderName'
         ));
@@ -122,14 +122,14 @@ class Shopware_Plugins_Core_PasswordEncoder_Bootstrap extends Shopware_Component
         $form->setParent(
             $this->Forms()->findOneBy(array('name' => 'Core'))
         );
-     }
+    }
 
     /**
      * @return array
      */
     public function getBcryptOptions()
     {
-        $config = $this->config();
+        $config = $this->Config();
 
         $options = array(
             'cost' => $config['bcryptCost']
@@ -143,7 +143,7 @@ class Shopware_Plugins_Core_PasswordEncoder_Bootstrap extends Shopware_Component
      */
     public function getSha256Options()
     {
-        $config = $this->config();
+        $config = $this->Config();
 
         $options = array(
             'iterations' => $config['sha256iterations'],
@@ -160,7 +160,7 @@ class Shopware_Plugins_Core_PasswordEncoder_Bootstrap extends Shopware_Component
     public function onInitResourcePasswordEncoder(Enlight_Event_EventArgs $args)
     {
         // Get a list of all available hashes
-        $availableHasher = Enlight()->Events()->filter(
+        $availableHasher = Shopware()->Events()->filter(
             'Shopware_Components_Password_Manager_AddEncoder',
             array(),
             array('subject' => $this)

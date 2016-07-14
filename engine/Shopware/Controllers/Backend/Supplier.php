@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -66,7 +66,7 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
             return;
         }
 
-        $id            = (int) $this->Request()->get('id');
+        $id = (int)$this->Request()->get('id');
         $supplierModel = Shopware()->Models()->find('Shopware\Models\Article\Supplier', $id);
 
         Shopware()->Models()->remove($supplierModel);
@@ -97,23 +97,25 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
         }
 
         $filter = $this->Request()->getParam('filter', null);
-        $sort   = $this->Request()->getParam('sort', array(array('property' => 'name')));
-        $limit  = $this->Request()->getParam('limit', 20);
+        $sort = $this->Request()->getParam('sort', array(array('property' => 'name')));
+        $limit = $this->Request()->getParam('limit', 20);
         $offset = $this->Request()->getParam('start', 0);
 
         $query = $this->getRepository()->getSupplierListQuery($filter, $sort, $limit, $offset);
         $total = Shopware()->Models()->getQueryCount($query);
 
         $suppliers = $query->getArrayResult();
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
 
         foreach ($suppliers as &$supplier) {
             $supplier["description"] = strip_tags($supplier["description"]);
+            $supplier['image'] = $mediaService->getUrl($supplier['image']);
         }
 
         $this->View()->assign(array(
             'success' => !empty($suppliers),
-            'data'    => $suppliers,
-            'total'   => $total
+            'data' => $suppliers,
+            'total' => $total
         ));
     }
 
@@ -161,23 +163,28 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
             return;
         }
 
-        $id = (int) $this->Request()->get('id');
+        $id = (int)$this->Request()->get('id');
         if ($id > 0) {
             $supplierModel = Shopware()->Models()->find('Shopware\Models\Article\Supplier', $id);
         } else {
             $supplierModel = new \Shopware\Models\Article\Supplier();
         }
 
-        $params              = $this->Request()->getParams();
-        $params['attribute'] = $params['attribute'][0];
+        $params = $this->Request()->getParams();
 
         // set data to model and overwrite the image field
         $supplierModel->fromArray($params);
+        $supplierModel->setChanged();
 
         $mediaData = $this->Request()->get('media-manager-selection');
         if (!empty($mediaData) && !is_null($mediaData)) {
             $supplierModel->setImage($this->Request()->get('media-manager-selection'));
         }
+
+        // strip full qualified url
+        $mediaService = $this->get('shopware_media.media_service');
+        $supplierModel->setImage($mediaService->normalize($supplierModel->getImage()));
+
 
         // backend checks
         $name = $supplierModel->getName();
@@ -190,18 +197,10 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
             return;
         }
 
-        try {
-            $manager = Shopware()->Models();
-            $manager->persist($supplierModel);
-            $manager->flush();
-            $params['id'] = $supplierModel->getId();
-        } catch (Exception $e) {
-            $errorMsg = $e->getMessage();
-            $this->View()->assign(array('success' => false, 'errorMsg' => $errorMsg));
-
-            return;
-        }
-
+        $manager = Shopware()->Models();
+        $manager->persist($supplierModel);
+        $manager->flush();
+        $params['id'] = $supplierModel->getId();
         $this->View()->assign(array('success' => true, 'data' => $params));
 
         return;
@@ -214,7 +213,9 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
      */
     protected function getSingleSupplier($id)
     {
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
         $data = $this->getRepository()->getSupplierQuery($id)->getArrayResult();
+        $data[0]['image'] = $data[0]['image'] ? $mediaService->getUrl($data[0]['image']) : null;
 
         if (empty($data)) {
             $this->View()->assign(array('success' => false, 'message' => 'Supplier not found'));
@@ -236,8 +237,8 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
     public function getAllSupplier()
     {
         $filter = $this->Request()->getParam('filter', null);
-        $sort   = $this->Request()->getParam('sort', array(array('property' => 'name')));
-        $limit  = $this->Request()->getParam('limit', 20);
+        $sort = $this->Request()->getParam('sort', array(array('property' => 'name')));
+        $limit = $this->Request()->getParam('limit', 20);
         $offset = $this->Request()->getParam('start', 0);
 
         $query = $this->getRepository()->getSupplierListQuery($filter, $sort, $limit, $offset);
@@ -259,7 +260,7 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
     {
         $namespace = Shopware()->Snippets()->getNamespace('backend/supplier');
 
-        $this->addAclPermission('getSuppliersAction',   'read',   $namespace->get('no_list_rights', 'Read access denied.'));
+        $this->addAclPermission('getSuppliersAction', 'read', $namespace->get('no_list_rights', 'Read access denied.'));
         $this->addAclPermission('deleteSupplierAction', 'delete', $namespace->get('no_list_rights', 'Delete access denied.'));
         $this->addAclPermission('updateSupplierAction', 'update', $namespace->get('no_update_rights', 'Update access denied.'));
         $this->addAclPermission('createSupplierAction', 'create', $namespace->get('no_create_rights', 'Create access denied.'));

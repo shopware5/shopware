@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -32,7 +32,6 @@ use Shopware\Models\Article\Configurator\Group as ConfiguratorGroup;
 use Shopware\Models\Article\Configurator\Option as ConfiguratorOption;
 use Shopware\Models\Article\Detail;
 use Shopware\Models\Article\Supplier;
-use Shopware\Models\Country\Country;
 use Shopware\Models\Country\State;
 use Shopware\Models\Dispatch\Dispatch;
 use Shopware\Models\Payment\Payment;
@@ -166,9 +165,9 @@ class Translation extends Resource implements BatchInterface
     protected function getListQuery($offset = 0, $limit = 25, array $criteria = array(), array $orderBy = array())
     {
         $builder = $this->getManager()->createQueryBuilder();
-        $builder->select(array('translation', 'locale'))
+        $builder->select(array('translation'))
             ->from('Shopware\Models\Translation\Translation', 'translation')
-            ->leftJoin('translation.locale', 'locale');
+            ->join('translation.shop', 'shop');
 
         $builder->setFirstResult($offset)
             ->setMaxResults($limit);
@@ -192,7 +191,7 @@ class Translation extends Resource implements BatchInterface
      * A translation will be identified over the following parameters:
      *  - type      => Type of the translation
      *  - key       => Identifier of the translated object (like article, variant, ...)
-     *  - localeId  => Identifier of the locale entity.
+     *  - shopId  => Identifier of the shop entity.
      *
      * This three parameters are required in each function: create, update, delete / *-byNumber
      *
@@ -223,7 +222,7 @@ class Translation extends Resource implements BatchInterface
      * A translation will be identified over the following parameters:
      *  - type      => Type of the translation
      *  - key       => Identifier of the translated object (like article, variant, ...)
-     *  - localeId  => Identifier of the locale entity.
+     *  - shopId  => Identifier of the shop entity.
      *
      * This three parameters are required in each function: create, update, delete / *-byNumber
      *
@@ -260,7 +259,7 @@ class Translation extends Resource implements BatchInterface
      * A translation will be identified over the following parameters:
      *  - type      => Type of the translation
      *  - key       => Identifier of the translated object (like article, variant, ...)
-     *  - localeId  => Identifier of the locale entity.
+     *  - shopId  => Identifier of the shop entity.
      *
      * This three parameters are required in each function: create, update, delete / *-byNumber
      *
@@ -296,7 +295,7 @@ class Translation extends Resource implements BatchInterface
      * A translation will be identified over the following parameters:
      *  - type      => Type of the translation
      *  - key       => Identifier of the translated object (like article, variant, ...)
-     *  - localeId  => Identifier of the locale entity.
+     *  - shopId  => Identifier of the shop entity.
      *
      * This three parameters are required in each function: create, update, delete / *-byNumber
      *
@@ -335,7 +334,7 @@ class Translation extends Resource implements BatchInterface
      * A translation will be identified over the following parameters:
      *  - type      => Type of the translation
      *  - key       => Identifier of the translated object (like article, variant, ...)
-     *  - localeId  => Identifier of the locale entity.
+     *  - shopId  => Identifier of the shop entity.
      *
      * This three parameters are required in each function: create, update, delete / *-byNumber
      *
@@ -358,16 +357,16 @@ class Translation extends Resource implements BatchInterface
         $translation = $this->getObjectTranslation(
             $data['type'],
             $id,
-            $data['localeId'],
+            $data['shopId'],
             AbstractQuery::HYDRATE_OBJECT
         );
 
         if (!$translation) {
             throw new ApiException\NotFoundException(
                 sprintf(
-                    "No translation found for type %s, locale id %s and foreign key %s",
+                    "No translation found for type %s, shop id %s and foreign key %s",
                     $data['type'],
-                    $data['localeId'],
+                    $data['shopId'],
                     $id
                 )
             );
@@ -386,7 +385,7 @@ class Translation extends Resource implements BatchInterface
      * A translation will be identified over the following parameters:
      *  - type      => Type of the translation
      *  - key       => Identifier of the translated object (like article, variant, ...)
-     *  - localeId  => Identifier of the locale entity.
+     *  - shopId  => Identifier of the shop entity.
      *
      * This three parameters are required in each function: create, update, delete / *-byNumber
      *
@@ -427,7 +426,7 @@ class Translation extends Resource implements BatchInterface
         $existing = $this->getObjectTranslation(
             $data['type'], //translation object type
             $data['key'], //identifier of the translatable entity (s_articles.id)
-            $data['localeId'] //identifier of the locale object
+            $data['shopId'] //identifier of the shop object
         );
 
         if (!$existing) {
@@ -443,7 +442,7 @@ class Translation extends Resource implements BatchInterface
         );
 
         $this->getTranslationComponent()->write(
-            $data['localeId'],
+            $data['shopId'],
             $data['type'],
             $data['key'],
             $data['data']
@@ -452,7 +451,7 @@ class Translation extends Resource implements BatchInterface
         return $this->getObjectTranslation(
             $data['type'],
             $data['key'],
-            $data['localeId'],
+            $data['shopId'],
             AbstractQuery::HYDRATE_OBJECT
         );
     }
@@ -462,11 +461,11 @@ class Translation extends Resource implements BatchInterface
      *
      * @param string $type - Type of the translatable object, see class constants
      * @param int $key - Identifier of the translatable object. (s_articles.id)
-     * @param int $localeId - Identifier of the locale object. (s_core_locales.id)
+     * @param int $shopId - Identifier of the shop object. (s_core_shops.id)
      * @param int $resultMode - Flag which handles the return value between array and \Shopware\Models\Translation\Translation
      * @return array|TranslationModel
      */
-    protected function getObjectTranslation($type, $key, $localeId, $resultMode = AbstractQuery::HYDRATE_ARRAY)
+    protected function getObjectTranslation($type, $key, $shopId, $resultMode = AbstractQuery::HYDRATE_ARRAY)
     {
         $builder = $this->getRepository()->createQueryBuilder('translations');
         $builder->setFirstResult(0)
@@ -475,7 +474,7 @@ class Translation extends Resource implements BatchInterface
         $builder->addFilter(array(
             'key' => $key,
             'type' => $type,
-            'localeId' => $localeId
+            'shopId' => $shopId
         ));
 
         return $builder->getQuery()->getOneOrNullResult($resultMode);
@@ -496,8 +495,9 @@ class Translation extends Resource implements BatchInterface
     {
         switch (strtolower($type)) {
             case self::TYPE_PRODUCT:
-            case self::TYPE_VARIANT:
                 return $this->getProductIdByNumber($number);
+            case self::TYPE_VARIANT:
+                return $this->getProductVariantIdByNumber($number);
             case self::TYPE_PRODUCT_LINK:
                 return $this->getLinkIdByNumber($number);
             case self::TYPE_PRODUCT_DOWNLOAD:
@@ -527,12 +527,11 @@ class Translation extends Resource implements BatchInterface
                     sprintf("Unknown translation type %s", $type)
                 );
         }
-
     }
 
     /**
      * Returns the identifier of the product (s_articles.id).
-     * The function expects a variant order number as alphanumeric identifier (s_articles_details.id)
+     * The function expects a variant order number as alphanumeric identifier (s_articles_details.ordernumber)
      *
      * @param $number - Alphanumeric order number of the variant.
      * @return int - Identifier of the article.
@@ -557,6 +556,32 @@ class Translation extends Resource implements BatchInterface
 
 
     /**
+     * Returns the identifier of the product (s_articles_details.id).
+     * The function expects a variant order number as alphanumeric identifier (s_articles_details.ordernumber)
+     *
+     * @param $number - Alphanumeric order number of the variant.
+     * @return int - Identifier of the article.
+     * @throws \Exception
+     */
+    protected function getProductVariantIdByNumber($number)
+    {
+        /**@var $entity Detail */
+        $entity = $this->findEntityByConditions(
+            'Shopware\Models\Article\Detail',
+            array(array('number' => $number))
+        );
+
+        if (!$entity) {
+            throw new ApiException\NotFoundException(
+                sprintf("Variant by order number %s not found", $number)
+            );
+        }
+
+        return $entity->getId();
+    }
+
+
+    /**
      * Would be used to select the primary key of the article links.
      * But the article links have no alphanumeric identifier, so the function
      * throws only an exception.
@@ -567,7 +592,7 @@ class Translation extends Resource implements BatchInterface
     protected function getLinkIdByNumber($number)
     {
         throw new ApiException\CustomValidationException(
-            "Article links can not be founded over an alphanumeric key"
+            "Article links can not be found via an alphanumeric key"
         );
     }
 
@@ -582,7 +607,7 @@ class Translation extends Resource implements BatchInterface
     protected function getDownloadIdByNumber($number)
     {
         throw new ApiException\CustomValidationException(
-            "Article downloads can not be founded over an alphanumeric key"
+            "Article downloads can not be found via an alphanumeric key"
         );
     }
 
@@ -948,9 +973,9 @@ class Translation extends Resource implements BatchInterface
             );
         }
 
-        if (!isset($data['localeId']) || empty($data['localeId'])) {
+        if (empty($data['shopId'])) {
             throw new ApiException\ParameterMissingException(
-                "Passed translation contains no locale id"
+                "Passed translation contains no shop id"
             );
         }
 
@@ -968,7 +993,4 @@ class Translation extends Resource implements BatchInterface
             }
         }
     }
-
-
-
 }

@@ -1,196 +1,175 @@
 <?php
-
 // Load custom config
 if (file_exists($this->DocPath() . 'config_' . $this->Environment() . '.php')) {
     $customConfig = $this->loadConfig($this->DocPath() . 'config_' . $this->Environment() . '.php');
 } elseif (file_exists($this->DocPath() . 'config.php')) {
     $customConfig = $this->loadConfig($this->DocPath() . 'config.php');
-} elseif (file_exists(__DIR__ . '/Custom.php')) {
-    $customConfig = $this->loadConfig(__DIR__ . '/Custom.php');
 } else {
-    $customConfig = array();
+    $customConfig = [];
 }
 
 if (!is_array($customConfig)) {
     throw new Enlight_Exception('The custom configuration file must return an array.');
 }
 
-// Allow partial override
-$customConfig = array_merge(array(
-    'db' => array(),
-    'snippet' => array(),
-    'front' => array(),
-    'template' => array(),
-    'mail' => array(),
-    'httpCache' => array(),
-    'session' => array(),
-    'phpSettings' => array(),
-    'cache' => array(
-        'backendOptions' => array(),
-        'frontendOptions' => array()
-    ),
-    'hook' => array(),
-    'model' => array(),
-    'config' => array(),
-    'custom' => array(),
-    'backendSession' => array(),
-    'plugins' => array()
-), $customConfig);
+return array_replace_recursive([
+    'custom' => [],
+    'trustedproxies' => [],
+    'cdn' => [
+        'backend' => 'local',
+        'strategy' => 'md5',
+        'adapters' => [
+            'local' => [
+                'type' => 'local',
+                'mediaUrl' => '',
+                'permissions' => [
+                    'file' => [
+                        'public' => 0666 & ~umask(),
+                        'private' => 0600 & ~umask(),
+                    ],
+                    'dir' => [
+                        'public' => 0777 & ~umask(),
+                        'private' => 0700 & ~umask(),
+                    ]
+                ],
+                'path' => realpath(__DIR__ . '/../../../')
+            ],
+            'ftp' => [
+                'type' => 'ftp',
+                'mediaUrl' => '',
 
-return array_merge($customConfig, array(
-    'custom' => $customConfig['custom'],
-    'snippet' => array_merge(array(
+                'host' => '',
+                'username' => '',
+                'password' => '',
+                'port' => 21,
+                'root' => '/',
+                'passive' => true,
+                'ssl' => false,
+                'timeout' => 30
+            ]
+        ]
+    ],
+    'csrfProtection' => [
+        'frontend' => true,
+        'backend' => true
+    ],
+    'snippet' => [
         'readFromDb' => true,
         'writeToDb' => true,
         'readFromIni' => false,
         'writeToIni' => false,
-    ), $customConfig['snippet']),
-    'db' => array_merge(array(
+        'showSnippetPlaceholder' => false,
+    ],
+    'errorHandler' => [
+        'throwOnRecoverableError' => false,
+    ],
+    'db' => [
         'username' => 'root',
         'password' => '',
         'dbname' => 'shopware',
         'host' => 'localhost',
         'charset' => 'utf8',
         'adapter' => 'pdo_mysql'
-    ), $customConfig['db']),
-    'front' => array_merge(array(
+    ],
+    'es' => [
+        'prefix' => 'sw_shop',
+        'enabled' => false,
+        'number_of_replicas' => null,
+        'number_of_shards' => null,
+        'client' => [
+            'hosts' => [
+                'localhost:9200'
+            ]
+        ]
+    ],
+    'front' => [
         'noErrorHandler' => false,
         'throwExceptions' => false,
-        'useDefaultControllerAlways' => true,
         'disableOutputBuffering' => false,
-        'showException' => true,
+        'showException' => false,
         'charset' => 'utf-8'
-    ), $customConfig['front']),
-    'config' => array_merge(array(), $customConfig['config']),
-    'plugins' => array_merge(array(), $customConfig['plugins']),
-    'template' => array_merge(array(
+    ],
+    'config' => [],
+    'store' => [
+        'apiEndpoint' => 'https://api.shopware.com',
+    ],
+    'plugin_directories' => [
+        'Default'   => $this->AppPath('Plugins_' . 'Default'),
+        'Local'     => $this->AppPath('Plugins_' . 'Local'),
+        'Community' => $this->AppPath('Plugins_' . 'Community'),
+    ],
+    'template' => [
         'compileCheck' => true,
         'compileLocking' => true,
-        'useSubDirs' => !ini_get('safe_mode'),
+        'useSubDirs' => true,
         'forceCompile' => false,
         'useIncludePath' => true,
         'charset' => 'utf-8',
         'forceCache' => false,
-        'cacheDir' => $this->DocPath('cache_templates'),
-        'compileDir' => $this->DocPath('cache_templates')
-    ), $customConfig['template']),
-    'mail' => array_merge(array(
+        'cacheDir' => $this->getCacheDir().'/templates',
+        'compileDir' => $this->getCacheDir().'/templates',
+    ],
+    'mail' => [
         'charset' => 'utf-8'
-    ), $customConfig['mail']),
-    'httpCache' => array_merge(array(
+    ],
+    'httpcache' => [
         'enabled' => true,
+        'lookup_optimization' => true,
         'debug' => false,
         'default_ttl' => 0,
-        'private_headers' => array('Authorization', 'Cookie'),
+        'private_headers' => ['Authorization', 'Cookie'],
         'allow_reload' => false,
         'allow_revalidate' => false,
         'stale_while_revalidate' => 2,
         'stale_if_error' => false,
-        'cache_dir' => $this->DocPath('cache_html')
-    ), $customConfig['httpCache']),
-    'session' => array_merge(array(
-        'name' => 'SHOPWARESID',
-        'cookie_lifetime' => 0,
-        //'cookie_httponly' => 1,
-        'use_trans_sid' => false,
-        'gc_probability' => 1,
-        'gc_divisor' => 100,
-        'save_handler' => 'db'
-    ), $customConfig['session']),
-    'phpSettings' => array_merge(array(
-        'error_reporting' => E_ALL | E_STRICT,
-        'display_errors' => 1,
-        'date.timezone' => 'Europe/Berlin',
-        'zend.ze1_compatibility_mode' => 0
-    ), $customConfig['phpSettings']),
-    'cache' => array(
-        'frontendOptions' => array_merge(array(
-            'automatic_serialization' => true,
-            'automatic_cleaning_factor' => 0,
-            'lifetime' => 3600
-        ), $customConfig['cache']['frontendOptions']),
-        'backend' => isset($customConfig['cache']['backend']) ? $customConfig['cache']['backend'] : 'File',
-        'backendOptions' => array_merge(array(
-            'hashed_directory_perm' => 0771,
-            'cache_file_perm' => 0644,
-            'hashed_directory_level' => ini_get('safe_mode') ? 0 : 3,
-            'cache_dir' => $this->DocPath('cache_general'),
-            'file_name_prefix' => 'shopware'
-        ), $customConfig['cache']['backendOptions']),
-    ),
-    'hook' => array_merge(array(
-        'proxyDir' => $this->DocPath('cache_proxies'),
-        'proxyNamespace' => $this->App() . '_Proxies'
-    ), $customConfig['hook']),
-    'model' => array_merge(array(
-        'autoGenerateProxyClasses' => false,
-        'fileCacheDir'     => $this->DocPath('cache_doctrine_filecache'),
-        'attributeDir' => $this->DocPath('cache_doctrine_attributes'),
-        'proxyDir' => $this->DocPath('cache_doctrine_proxies'),
-        'proxyNamespace' => $this->App() . '\Proxies',
-        'cacheProvider' => 'auto' // supports null, auto, Apc, Array, Wincache and Xcache
-    ), $customConfig['model']),
-    'backendSession' => array_merge(array(
-        'name' => 'SHOPWAREBACKEND',
-//        'gc_maxlifetime' => 60 * 90,
+        'cache_dir' => $this->getCacheDir().'/html',
+        'cache_cookies' => ['shop', 'currency', 'x-cache-context-hash'],
+    ],
+    'session' => [
         'cookie_lifetime' => 0,
         'cookie_httponly' => 1,
-        'use_trans_sid' => false,
-        'referer_check' => true, // true, false or a fix value
-        'client_check' => false // true or false (is not compatible with firebug)
-    ), $customConfig['backendSession']),
-    /*
-    'cache' => array(
-        'backend' => 'Two Levels',
-        'backendOptions' => array(
-            'slow_backend' => 'File',
-            'slow_backend_options' =>  array(
-                'hashed_directory_umask' => 0771,
-                'cache_file_umask' => 0644,
-                'hashed_directory_level' => 2,
-                'cache_dir' => $this->DocPath('cache_general'),
-                'file_name_prefix' => 'shopware'
-            ),
-            'fast_backend'  => 'Memcached',
-            'fast_backend_options' => array(
-                'servers' => array(
-                    array(
-                        'host' => 'localhost',
-                        'port' => 11211,
-                        'persistent' => true,
-                        'weight' => 1,
-                        'timeout' => 5,
-                        'retry_interval' => 15,
-                        'status' => true,
-                        'failure_callback' => null
-                    )
-                ),
-                'compression' => false,
-                'compatibility' => false
-            )
-        ),
-    ),
-    */
-    /*
-     'session' => array(
-         ...
-         'save_handler' => 'memcache',
-         'save_path' => 'tcp://localhost:11211?persistent=1&weight=1&timeout=1&retry_interval=15'
-     ),
-     'session' => array(
-         ...
-         'save_handler' => 'files'
-     ),
-     */
-    /*
-    'shop'=>array(
-        'options' => array(
-            'host' => 'test.shopware.de'
-        ),
-        'config' => array('data'=>array(
-            'hostOriginal' => 'test.shopware.de',
-            'basePath' => 'test.shopware.de/shopware',
-        ))
-    ),
-    */
-));
+        'gc_probability' => 1,
+        'gc_divisor' => 100,
+        'save_handler' => 'db',
+        'use_trans_sid' => 0,
+    ],
+    'phpsettings' => [
+        'error_reporting' => E_ALL & ~E_USER_DEPRECATED,
+        'display_errors' => 0,
+        'date.timezone' => 'Europe/Berlin',
+    ],
+    'cache' => [
+        'frontendOptions' => [
+            'automatic_serialization' => true,
+            'automatic_cleaning_factor' => 0,
+            'lifetime' => 3600,
+            'cache_id_prefix' => md5($this->getCacheDir())
+        ],
+        'backend' => 'auto', // e.G auto, apcu, xcache
+        'backendOptions' => [
+            'hashed_directory_perm' => 0777 & ~umask(),
+            'cache_file_perm' => 0666 & ~umask(),
+            'hashed_directory_level' => 3,
+            'cache_dir' => $this->getCacheDir().'/general',
+            'file_name_prefix' => 'shopware'
+        ],
+    ],
+    'hook' => [
+        'proxyDir' => $this->getCacheDir().'/proxies',
+        'proxyNamespace' => $this->App() . '_Proxies'
+    ],
+    'model' => [
+        'autoGenerateProxyClasses' => false,
+        'attributeDir' => $this->getCacheDir().'/doctrine/attributes',
+        'proxyDir'     => $this->getCacheDir().'/doctrine/proxies',
+        'proxyNamespace' => $this->App() . '\Proxies',
+        'cacheProvider' => 'auto', // supports null, auto, Apcu, Array, Wincache and Xcache
+        'cacheNamespace' => null // custom namespace for doctrine cache provider (optional; null = auto-generated namespace)
+    ],
+    'backendsession' => [
+        'name' => 'SHOPWAREBACKEND',
+        'cookie_lifetime' => 0,
+        'cookie_httponly' => 1,
+        'use_trans_sid' => 0,
+    ],
+], $customConfig);

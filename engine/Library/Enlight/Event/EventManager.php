@@ -20,8 +20,8 @@
  * @author     Heiner Lohaus
  * @author     $Author$
  */
-use Doctrine\Common\Collections\ArrayCollection;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Enlight\Event\SubscriberInterface;
 
 /**
@@ -32,7 +32,7 @@ use Enlight\Event\SubscriberInterface;
  * notify function. <br><br>
  *
  * Example to execute an event manuel:<br>
- *       Enlight_Application::Instance()->Events()->notify(
+ *       Shopware()->Events()->notify(
  *           'Enlight_Controller_Front_StartDispatch',
  *           array('subject' => $this)
  *       );
@@ -45,15 +45,15 @@ use Enlight\Event\SubscriberInterface;
 class Enlight_Event_EventManager extends Enlight_Class
 {
     /**
-     * @var array Contains all registered event listeners. A listener can be registered by the
+     * @var Enlight_Event_Handler[] Contains all registered event listeners. A listener can be registered by the
      * registerListener(Enlight_Event_Handler $handler) function.
      */
-    protected $listeners = array();
+    protected $listeners = [];
 
     /**
      * Returns all event listeners of the Enlight_Event_EventManager
      *
-     * @return array
+     * @return Enlight_Event_Handler[]
      */
     public function getAllListeners()
     {
@@ -127,8 +127,15 @@ class Enlight_Event_EventManager extends Enlight_Class
     {
         $eventName = strtolower($handler->getName());
 
-        if (!empty($this->listeners[$eventName])) {
-            $this->listeners[$eventName] = array_diff($this->listeners[$eventName], array($handler));
+        if (!isset($this->listeners[$eventName])) {
+            return $this;
+        }
+
+        $listenerToRemove = $handler->getListener();
+        foreach ($this->listeners[$eventName] as $i => $handler) {
+            if ($listenerToRemove === $handler->getListener()) {
+                unset($this->listeners[$eventName][$i]);
+            }
         }
 
         return $this;
@@ -162,7 +169,7 @@ class Enlight_Event_EventManager extends Enlight_Class
         if (isset($this->listeners[$event])) {
             return $this->listeners[$event];
         } else {
-            return array();
+            return [];
         }
     }
 
@@ -197,16 +204,12 @@ class Enlight_Event_EventManager extends Enlight_Class
         if (!$this->hasListeners($event)) {
             return null;
         }
-        if (isset($eventArgs) && is_array($eventArgs)) {
-            $eventArgs = new Enlight_Event_EventArgs($eventArgs);
-        } elseif (!isset($eventArgs)) {
-            $eventArgs = new Enlight_Event_EventArgs();
-        } elseif (!$eventArgs instanceof Enlight_Event_EventArgs) {
-            throw new Enlight_Event_Exception('Parameter "eventArgs" must be an instance of "Enlight_Event_EventArgs"');
-        }
+
+        $eventArgs = $this->buildEventArgs($eventArgs);
         $eventArgs->setReturn(null);
         $eventArgs->setName($event);
         $eventArgs->setProcessed(false);
+
         foreach ($this->getListeners($event) as $listener) {
             $listener->execute($eventArgs);
         }
@@ -238,16 +241,12 @@ class Enlight_Event_EventManager extends Enlight_Class
         if (!$this->hasListeners($event)) {
             return null;
         }
-        if (isset($eventArgs) && is_array($eventArgs)) {
-            $eventArgs = new Enlight_Event_EventArgs($eventArgs);
-        } elseif (!isset($eventArgs)) {
-            $eventArgs = new Enlight_Event_EventArgs();
-        } elseif (!$eventArgs instanceof Enlight_Event_EventArgs) {
-            throw new Enlight_Exception('Parameter "eventArgs" must be an instance of "Enlight_Event_EventArgs"');
-        }
+
+        $eventArgs = $this->buildEventArgs($eventArgs);
         $eventArgs->setReturn(null);
         $eventArgs->setName($event);
         $eventArgs->setProcessed(false);
+
         foreach ($this->getListeners($event) as $listener) {
             if (null !== ($return = $listener->execute($eventArgs))
                 || $eventArgs->isProcessed()
@@ -287,16 +286,12 @@ class Enlight_Event_EventManager extends Enlight_Class
         if (!$this->hasListeners($event)) {
             return $value;
         }
-        if (isset($eventArgs) && is_array($eventArgs)) {
-            $eventArgs = new Enlight_Event_EventArgs($eventArgs);
-        } elseif (!isset($eventArgs)) {
-            $eventArgs = new Enlight_Event_EventArgs();
-        } elseif (!$eventArgs instanceof Enlight_Event_EventArgs) {
-            throw new Enlight_Event_Exception('Parameter "eventArgs" must be an instance of "Enlight_Event_EventArgs"');
-        }
+
+        $eventArgs = $this->buildEventArgs($eventArgs);
         $eventArgs->setReturn($value);
         $eventArgs->setName($event);
         $eventArgs->setProcessed(false);
+
         foreach ($this->getListeners($event) as $listener) {
             if (null !== ($return = $listener->execute($eventArgs))) {
                 $eventArgs->setReturn($return);
@@ -316,23 +311,18 @@ class Enlight_Event_EventManager extends Enlight_Class
      * @param null            $eventArgs
      *
      * @throws Enlight_Event_Exception
-     * @return Enlight_Event_EventArgs|null
+     * @return ArrayCollection|null
      */
     public function collect($event, ArrayCollection $collection, $eventArgs = null)
     {
         if (!$this->hasListeners($event)) {
             return $collection;
         }
-        if (isset($eventArgs) && is_array($eventArgs)) {
-            $eventArgs = new Enlight_Event_EventArgs($eventArgs);
-        } elseif (!isset($eventArgs)) {
-            $eventArgs = new Enlight_Event_EventArgs();
-        } elseif (!$eventArgs instanceof Enlight_Event_EventArgs) {
-            throw new Enlight_Event_Exception('Parameter "eventArgs" must be an instance of "Enlight_Event_EventArgs"');
-        }
 
+        $eventArgs = $this->buildEventArgs($eventArgs);
         $eventArgs->setName($event);
         $eventArgs->setProcessed(false);
+
         foreach ($this->getListeners($event) as $listener) {
             $listenerCollection = $listener->execute($eventArgs);
             if ($listenerCollection instanceof ArrayCollection) {
@@ -344,6 +334,7 @@ class Enlight_Event_EventManager extends Enlight_Class
             }
         }
         $eventArgs->setProcessed(true);
+
         return $collection;
     }
 
@@ -354,12 +345,12 @@ class Enlight_Event_EventManager extends Enlight_Class
     {
         foreach ($subscriber->getSubscribedEvents() as $eventName => $params) {
             if (is_string($params)) {
-                $this->addListener($eventName, array($subscriber, $params));
+                $this->addListener($eventName, [$subscriber, $params]);
             } elseif (is_string($params[0])) {
-                $this->addListener($eventName, array($subscriber, $params[0]), isset($params[1]) ? $params[1] : 0);
+                $this->addListener($eventName, [$subscriber, $params[0]], isset($params[1]) ? $params[1] : 0);
             } else {
                 foreach ($params as $listener) {
-                    $this->addListener($eventName, array($subscriber, $listener[0]), isset($listener[1]) ? $listener[1] : 0);
+                    $this->addListener($eventName, [$subscriber, $listener[0]], isset($listener[1]) ? $listener[1] : 0);
                 }
             }
         }
@@ -375,6 +366,7 @@ class Enlight_Event_EventManager extends Enlight_Class
     public function registerSubscriber(Enlight_Event_Subscriber $subscriber)
     {
         $listeners = $subscriber->getListeners();
+
         foreach ($listeners as $listener) {
             $this->registerListener($listener);
         }
@@ -387,8 +379,26 @@ class Enlight_Event_EventManager extends Enlight_Class
      */
     public function reset()
     {
-        $this->listeners = array();
+        $this->listeners = [];
 
         return $this;
+    }
+
+    /**
+     * @param Enlight_Event_EventArgs|array|null $eventArgs
+     * @return Enlight_Event_EventArgs
+     * @throws Enlight_Event_Exception
+     */
+    private function buildEventArgs($eventArgs = null)
+    {
+        if (isset($eventArgs) && is_array($eventArgs)) {
+            return new Enlight_Event_EventArgs($eventArgs);
+        } elseif (!isset($eventArgs)) {
+            return new Enlight_Event_EventArgs();
+        } elseif (!$eventArgs instanceof Enlight_Event_EventArgs) {
+            throw new Enlight_Event_Exception('Parameter "eventArgs" must be an instance of "Enlight_Event_EventArgs"');
+        }
+
+        return $eventArgs;
     }
 }

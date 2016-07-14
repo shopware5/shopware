@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -21,12 +21,13 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Shopware\Components\Model\QueryBuilder;
 
 /**
  * Base controller for a single backend sub application.
  * This controller contains many functions for the quad operations for a single model
  * The Shopware_Controllers_Backend_Application can only be used if the application works
- * with the Shopware 4 Doctrine models.
+ * with the Shopware Doctrine models.
  * Otherwise the controller functions throws different exception that the model has to be configured.
  * In this case use the Shopware_Controllers_Backend_ExtJs controller for your backend application.
  *
@@ -35,7 +36,7 @@
  *      Example:
  *      - Your backend application is called "Shopware.apps.Product"
  *      - So create a new backend php controller "Shopware_Controllers_Backend_Product"
- *  - The only think you have to do now, is to configure the doctrine model in the $model class property.
+ *  - The only thing you have to do now is to configure the doctrine model in the $model class property.
  *  - For example $model = 'Shopware\Models\Article\Article'
  *  - After you have configured the model property, the whole backend application works.
  *   - Loading an filtered, sorted and paginated list of your models - listAction().
@@ -332,7 +333,8 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
                 $this->Request()->getParam('query', null),
                 $this->Request()->getParam('association', null),
                 $this->Request()->getParam('start', 0),
-                $this->Request()->getParam('limit', 20)
+                $this->Request()->getParam('limit', 20),
+                $this->Request()->getParam('id', null)
             )
         );
     }
@@ -442,40 +444,36 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      */
     public function save($data)
     {
-        try {
-            /**@var $model \Shopware\Components\Model\ModelEntity */
-            if (!empty($data['id'])) {
-                $model = $this->getRepository()->find($data['id']);
-            } else {
-                $model = new $this->model();
-                $this->getManager()->persist($model);
-            }
-
-            $data = $this->resolveExtJsData($data);
-            $model->fromArray($data);
-
-            $violations = $this->getManager()->validate($model);
-            $errors = array();
-            /** @var $violation Symfony\Component\Validator\ConstraintViolation */
-            foreach ($violations as $violation) {
-                $errors[] = array(
-                    'message' => $violation->getMessage(),
-                    'property' => $violation->getPropertyPath()
-                );
-            }
-
-            if (!empty($errors)) {
-                return array('success' => false, 'violations' => $errors);
-            }
-
-            $this->getManager()->flush();
-
-            $detail = $this->getDetail($model->getId());
-
-            return array('success' => true, 'data' => $detail['data']);
-        } catch (Exception $e) {
-            return array('success' => true, 'error' => $e->getMessage());
+        /**@var $model \Shopware\Components\Model\ModelEntity */
+        if (!empty($data['id'])) {
+            $model = $this->getRepository()->find($data['id']);
+        } else {
+            $model = new $this->model();
+            $this->getManager()->persist($model);
         }
+
+        $data = $this->resolveExtJsData($data);
+        $model->fromArray($data);
+
+        $violations = $this->getManager()->validate($model);
+        $errors = array();
+        /** @var $violation Symfony\Component\Validator\ConstraintViolation */
+        foreach ($violations as $violation) {
+            $errors[] = array(
+                'message' => $violation->getMessage(),
+                'property' => $violation->getPropertyPath()
+            );
+        }
+
+        if (!empty($errors)) {
+            return array('success' => false, 'violations' => $errors);
+        }
+
+        $this->getManager()->flush();
+
+        $detail = $this->getDetail($model->getId());
+
+        return array('success' => true, 'data' => $detail['data']);
     }
 
     /**
@@ -573,7 +571,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
         $builder->setParameter('id', $id);
 
         $builder->setFirstResult($offset)
-                ->setMaxResults($limit);
+            ->setMaxResults($limit);
 
         $paginator = $this->getQueryPaginator($builder);
 
@@ -602,16 +600,22 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      * @param int $limit
      * @return array
      */
-    public function searchAssociation($search, $association, $offset, $limit)
+    public function searchAssociation($search, $association, $offset, $limit, $id = null)
     {
+        $associationModel = $this->getAssociatedModelByProperty($this->model, $association);
+
         $builder = $this->getSearchAssociationQuery(
             $association,
-            $this->getAssociatedModelByProperty($this->model, $association),
+            $associationModel,
             $search
         );
 
         $builder->setFirstResult($offset)
             ->setMaxResults($limit);
+
+        if ($id !== null) {
+            $this->addIdentifierCondition($association, $id, $builder);
+        }
 
         $paginator = $this->getQueryPaginator($builder);
         $data = $paginator->getIterator()->getArrayCopy();
@@ -628,7 +632,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      * If the class property model isn't configured, the init function throws an exception.
      * The listing alias for the from table can be configured over the class property alias.
      *
-     * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
+     * @return QueryBuilder
      */
     protected function getListQuery()
     {
@@ -661,7 +665,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      *
      *
      * @param $id
-     * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
+     * @return \Doctrine\ORM\QueryBuilder|QueryBuilder
      */
     protected function getDetailQuery($id)
     {
@@ -683,7 +687,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      * @param $association
      * @param $model
      * @param $search
-     * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
+     * @return QueryBuilder
      */
     protected function getSearchAssociationQuery($association, $model, $search)
     {
@@ -709,7 +713,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      * @param $alias - Query alias for the selected model
      * @param $fieldName - Property name of the foreign key column in the associated model.
      *
-     * @return \Doctrine\ORM\QueryBuilder|\Shopware\Components\Model\QueryBuilder
+     * @return QueryBuilder
      */
     protected function getReloadAssociationQuery($model, $alias, $fieldName)
     {
@@ -717,7 +721,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
 
         $builder->select(array($alias));
         $builder->from($model, $alias);
-        $builder->innerJoin($alias. '.' . $fieldName, $fieldName);
+        $builder->innerJoin($alias . '.' . $fieldName, $fieldName);
 
         return $builder;
     }
@@ -725,20 +729,20 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
     /**
      * Helper function which resolves the passed Ext JS data of an model.
      * This function resolves the following associations automatically:
-     *  @ORM\OneToOne associations
+     * @ORM\OneToOne associations
      *      => Ext JS sends even for @ORM\OneToOne associations, a multi dimensional array
      *      => array('billing' => array( 0 => array('id' => ...) ))
      *      => The function removes the first level of the array to have to model data directly in the association property.
      *      => array('billing' => array('id' => ...))
      *
-     *  @ORM\ManyToOne associations
+     * @ORM\ManyToOne associations
      *      => @ORM\ManyToOne requires the related doctrine model in the association key property.
      *      => But Ext JS sends only the foreign key property.
      *      => 'article' => array('id' => 1, ... , 'shopId' => 1, 'shop' => null)
      *      => This function resolves the foreign key, removes the foreign key property from the data array and sets the founded doctrine model into the association property.
      *      => 'article' => array('id' => 1, ... , 'shop' => $this->getManager()->find(Model, $data['shopId']);
      *
-     *  @ORM\ManyToMany associations
+     * @ORM\ManyToMany associations
      *      => @ORM\ManyToMany requires like the @ORM\ManyToOne associations the resolved doctrine models in the association property.
      *      => But Ext JS sends only an array of foreign keys.
      *      => 'article' => array('id' => 1, 'categories' => array(array('id'=>1), array('id'=>2), ...)
@@ -818,7 +822,6 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
                     //remove the foreign key data.
                     unset($data[$field]);
                 }
-
             } elseif ($mapping['type'] === 8) {
                 /**
                  * @ORM\ManyToMany associations.
@@ -846,7 +849,6 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
                 }
                 $data[$mapping['fieldName']] = $associationModels;
             }
-
         }
         return $data;
     }
@@ -1021,7 +1023,6 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
                         'value' => $value
                     );
                 }
-
             } elseif (array_key_exists($condition['property'], $fields)) {
                 //check if the developer limited the filterable fields and the passed property defined in the filter fields parameter.
                 if (!empty($whiteList) && !in_array($condition['property'], $whiteList)) {
@@ -1048,7 +1049,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      *
      * @param Doctrine\ORM\QueryBuilder $builder
      * @param int $hydrationMode
-     * @return Paginator
+     * @return \Doctrine\ORM\Tools\Pagination\Paginator
      */
     protected function getQueryPaginator(
         \Doctrine\ORM\QueryBuilder $builder,
@@ -1073,7 +1074,6 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      */
     protected function formatSearchValue($value, array $field)
     {
-
         switch ($field['type']) {
             case 'boolean':
                 break;
@@ -1129,5 +1129,47 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
         }
 
         return $fields;
+    }
+
+    /**
+     * Returns the reference column for the provided association property
+     * @param string $association
+     * @return string|null
+     */
+    private function getReferencedColumnName($association)
+    {
+        $metaData = Shopware()->Models()->getClassMetadata($this->model);
+        $mappings = $metaData->getAssociationMappings();
+
+        if (!isset($mappings[$association])) {
+            return null;
+        }
+
+        $mapping = $mappings[$association];
+        $column = array_shift($mapping['joinColumns']);
+        $column = $column['referencedColumnName'];
+
+        return $column;
+    }
+
+    /**
+     * Filters the search association query by the identifier field.
+     * Used for form loading if the raw value is set to the value.
+     * @param string $association
+     * @param int $id
+     * @param QueryBuilder $builder
+     */
+    private function addIdentifierCondition($association, $id, QueryBuilder $builder)
+    {
+        $column = $this->getReferencedColumnName($association);
+
+        if (!isset($column)) {
+            return;
+        }
+
+        $builder->where($association . '.' . $column . ' = :id')
+            ->setParameters(['id' => $id])
+            ->setFirstResult(0)
+            ->setMaxResults(1);
     }
 }

@@ -1,24 +1,25 @@
 <?php
 /**
- * Enlight
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
- * LICENSE
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://enlight.de/license
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@shopware.de so we can send you a copy immediately.
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
  *
- * @category   Enlight
- * @package    Enlight_Template_Plugins
- * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
- * @license    http://enlight.de/license     New BSD License
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
  */
 
 /**
@@ -32,7 +33,6 @@
  */
 class Smarty_Compiler_Url extends Smarty_Internal_CompileBase
 {
-
     /**
      * Attribute definition: Overwrites base class.
      *
@@ -87,7 +87,7 @@ class Smarty_Compiler_Url extends Smarty_Internal_CompileBase
         }
 
         if (isset($extractParams) && empty($_attr)) {
-            return '<?php echo Enlight_Application::Instance()->Front()->Router()->assemble((array) ' . $extractParams . '); ?>';
+            return '<?php echo htmlspecialchars(Shopware()->Front()->Router()->assemble((array) ' . $extractParams . ')); ?>';
         }
 
         $params = array();
@@ -99,16 +99,16 @@ class Smarty_Compiler_Url extends Smarty_Internal_CompileBase
                 }
 
                 if (isset($extractParams)) {
-                    return '<?php echo Enlight_Application::Instance()->Front()->Router()->assemble(array(' . $params . ')+(array) ' . $extractParams . '); ?>';
+                    return '<?php echo htmlspecialchars(Shopware()->Front()->Router()->assemble(array(' . $params . ')+(array) ' . $extractParams . ')); ?>';
                 } else {
-                    return '<?php echo Enlight_Application::Instance()->Front()->Router()->assemble(array(' . $params . ')); ?>';
+                    return '<?php echo htmlspecialchars(Shopware()->Front()->Router()->assemble(array(' . $params . '))); ?>';
                 }
             }
             $params[$index] = is_numeric($param) ? $param : substr($param, 1, -1);
         }
 
-        $url = Enlight_Application::Instance()->Front()->Router()->assemble($params);
+        $url = Shopware()->Front()->Router()->assemble($params);
 
-        return '<?php echo ' . var_export($url, true) . ';?>';
+        return '<?php echo ' . var_export(htmlspecialchars($url), true) . ';?>';
     }
 }

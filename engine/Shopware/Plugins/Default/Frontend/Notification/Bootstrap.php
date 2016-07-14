@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -98,11 +98,7 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
         $view->NotifyHideBasket = Shopware()->Config()->sDEACTIVATEBASKETONNOTIFICATION;
 
         $view->NotificationVariants = $notificationVariants;
-        $view->NotifyEmailError = $view->NotifyEmailError;
-        $view->NotifyValid = $view->NotifyValid;
-        $view->NotifyInvalid = $view->NotifyInvalid;
         $view->ShowNotification = true;
-        $view->NotifyAlreadyRegistered = $view->NotifyAlreadyRegistered;
         $view->WaitingForOptInApprovement = Shopware()->Session()->sNotifcationArticleWaitingForOptInApprovement[$view->sArticle['ordernumber']];
     }
 
@@ -126,7 +122,7 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
         $action->View()->NotifyEmailError = false;
         $notifyOrderNumber = $action->Request()->notifyOrdernumber;
         if (!empty($notifyOrderNumber)) {
-            $validator = new Zend_Validate_EmailAddress();
+            $validator = Shopware()->Container()->get('validator.email');
             if (empty($email) || !$validator->isValid($email)) {
                 $sError = true;
                 $action->View()->NotifyEmailError = true;
@@ -157,28 +153,27 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
                 if (empty($AlreadyNotified)) {
                     $action->View()->NotifyAlreadyRegistered = false;
 
-                    $hash = md5(uniqid(rand()));
+                    $hash = \Shopware\Components\Random::getAlphanumericString(32);
                     $link = $action->Front()->Router()->assemble(array(
                         'sViewport' => 'detail',
                         'sArticle' => $id,
                         'sNotificationConfirmation' => $hash,
                         'sNotify' => '1',
-                        'action' => 'notifyConfirm'
+                        'action' => 'notifyConfirm',
+                        'number' => $notifyOrderNumber
                     ));
 
                     $name = Shopware()->Modules()->Articles()->sGetArticleNameByOrderNumber($notifyOrderNumber);
 
-
                     $basePath = $action->Front()->Router()->assemble(array('sViewport' => 'index'));
-                    Shopware()->System()->_POST['sLanguage'] = Shopware()->System()->sLanguageData[Shopware()->System()->sLanguage]['isocode'];
+                    Shopware()->System()->_POST['sLanguage'] = Shopware()->Shop()->getId();
                     Shopware()->System()->_POST['sShopPath'] = $basePath . Shopware()->Config()->sBASEFILE;
-
 
                     $sql = '
                         INSERT INTO s_core_optin (datum, hash, data)
                         VALUES (NOW(), ?, ?)
                     ';
-                    Shopware()->Db()->query($sql, array($hash, serialize(Shopware()->System()->_POST)));
+                    Shopware()->Db()->query($sql, array($hash, serialize(Shopware()->System()->_POST->toArray())));
 
                     $context = array(
                         'sConfirmLink' => $link,
@@ -189,7 +184,6 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
                     $mail->addTo($email);
                     $mail->send();
                     Shopware()->Session()->sNotifcationArticleWaitingForOptInApprovement[$notifyOrderNumber] = true;
-
                 } else {
                     $action->View()->NotifyAlreadyRegistered = true;
                 }
@@ -249,7 +243,6 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
                 $action->View()->NotifyValid = true;
                 Shopware()->Session()->sNotifcationArticleWaitingForOptInApprovement[$json_data['notifyOrdernumber']] = false;
             } else {
-
                 $action->View()->NotifyInvalid = true;
             }
         }
@@ -276,7 +269,9 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
             $sArticle = Shopware()->Db()->fetchRow("SELECT a.id as articleID, d.ordernumber, d.instock, a.active FROM s_articles_details d, s_articles a WHERE d.articleID=a.id AND d.ordernumber=?", array($ordernumber));
 
             $sArticleID = $sArticle["articleID"];
-            if (empty($sArticleID)) continue;
+            if (empty($sArticleID)) {
+                continue;
+            }
 
             $instock = $sArticle["instock"];
 

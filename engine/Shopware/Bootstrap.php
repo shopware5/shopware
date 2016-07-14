@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -22,8 +22,10 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\DependencyInjection\Container;
+
 /**
- * Shopware Application
+ * @deprecated since 5.2 will be removed in 5.3
  *
  * @category  Shopware
  * @package   Shopware\Bootstrap
@@ -32,75 +34,37 @@
 class Shopware_Bootstrap extends Enlight_Bootstrap
 {
     /**
-     * @var \Shopware\Components\DependencyInjection\Container
+     * @var Container
      */
     protected $container;
 
     /**
-     * Instance of the enlight application.
-     *
-     * @var Enlight_Application
+     * @param Container $container
      */
-    protected $application;
-
-    /**
-     * The class constructor sets the instance of the given enlight application into
-     * the internal $application property.
-     *
-     * @param Shopware $application
-     */
-    public function __construct(Shopware $application)
+    public function __construct(Container $container)
     {
-        $this->setApplication($application);
-        $this->container = $application->Container();
-
-        parent::__construct();
+        $this->container = $container;
     }
 
     /**
      * Returns the application instance.
      *
-     * @return Enlight_Application|Shopware
+     * @deprecated since 5.2 will be removed in 5.3
+     *
+     * @return Shopware
      */
     public function Application()
     {
-        return $this->application;
-    }
+        trigger_error('Shopware()->Bootstrap()->Application() is deprecated since version 5.2 and will be removed in 5.3. Use Shopware()->Container() instead', E_USER_DEPRECATED);
 
-    /**
-     * Sets the application instance into the internal $application property.
-     *
-     * @param  Enlight_Application $application
-     * @return Enlight_Bootstrap
-     */
-    public function setApplication(Enlight_Application $application)
-    {
-        $this->application = $application;
-
-        return $this;
-    }
-
-    /**
-     * Run application method
-     *
-     * @deprecated 4.2 Dispatching is done in \Shopware\Kernel::handle()
-     * @return mixed
-     */
-    public function run()
-    {
-        /** @var $front Enlight_Controller_Front */
-        $front = $this->getResource('Front');
-        $front->Response()->setHeader(
-            'Content-Type',
-            'text/html; charset=' . $front->getParam('charset')
-        );
-
-        $front->dispatch();
+        return $this->container->get('application');
     }
 
     /**
      * Adds the given resource to the internal resource list and sets the STATUS_ASSIGNED status.
      * The given name will be used as identifier.
+     *
+     * @deprecated since 5.2 will be removed in 5.3
      *
      * @param string $name
      * @param mixed $resource
@@ -108,6 +72,8 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      */
     public function registerResource($name, $resource)
     {
+        trigger_error('Shopware()->Bootstrap()->registerResource() is deprecated since version 5.2 and will be removed in 5.3. Use Shopware()->Container() instead', E_USER_DEPRECATED);
+
         $this->container->set($name, $resource);
 
         return $this;
@@ -116,11 +82,15 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
     /**
      * Checks if the given resource name is already registered. If not the resource is loaded.
      *
+     * @deprecated since 5.2 will be removed in 5.3
+     *
      * @param string $name
      * @return bool
      */
     public function hasResource($name)
     {
+        trigger_error('Shopware()->Bootstrap()->hasResource() is deprecated since version 5.2 and will be removed in 5.3. Use Shopware()->Container() instead', E_USER_DEPRECATED);
+
         return $this->container->has($name);
     }
 
@@ -128,11 +98,15 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      * Checks if the given resource name is already registered.
      * Unlike as the hasResource method is, if the resource does not exist the resource will not even loaded.
      *
+     * @deprecated since 5.2 will be removed in 5.3
+     *
      * @param string $name
      * @return bool
      */
     public function issetResource($name)
     {
+        trigger_error('Shopware()->Bootstrap()->issetResource() is deprecated since version 5.2 and will be removed in 5.3. Use Shopware()->Container() instead', E_USER_DEPRECATED);
+
         return $this->container->initialized($name);
     }
 
@@ -141,11 +115,15 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      * load the resource automatically. In case the resource is not found the status STATUS_NOT_FOUND is
      * set and an Enlight_Exception is thrown.
      *
+     * @deprecated since 5.2 will be removed in 5.3
+     *
      * @param string $name
      * @return mixed
      */
     public function getResource($name)
     {
+        trigger_error('Shopware()->Bootstrap()->getResource() is deprecated since version 5.2 and will be removed in 5.3. Use Shopware()->Container() instead', E_USER_DEPRECATED);
+
         return $this->container->get($name);
     }
 
@@ -160,11 +138,15 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      * Enlight sets the status STATUS_NOT_FOUND for the resource in the resource status list.
      * In case the resource successfully initialed the resource has the status STATUS_LOADED
      *
+     * @deprecated since 5.2 will be removed in 5.3
+     *
      * @param string $name
      * @return bool
      */
     public function loadResource($name)
     {
+        trigger_error('Shopware()->Bootstrap()->loadResource() is deprecated since version 5.2 and will be removed in 5.3. Use Shopware()->Container() instead', E_USER_DEPRECATED);
+
         return $this->container->load($name);
     }
 
@@ -172,11 +154,15 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      * If the given resource is set, the resource and the resource status are removed from the
      * list properties.
      *
+     * @deprecated since 5.2 will be removed in 5.3
+     *
      * @param string $name
      * @return Enlight_Bootstrap
      */
     public function resetResource($name)
     {
+        trigger_error('Shopware()->Bootstrap()->resetResource() is deprecated since version 5.2 and will be removed in 5.3. Use Shopware()->Container() instead', E_USER_DEPRECATED);
+
         $this->container->reset($name);
 
         return $this;
@@ -185,6 +171,8 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
     /**
      * Returns called resource
      *
+     * @deprecated since 5.2 will be removed in 5.3
+     *
      * @param string $name
      * @param array $arguments
      * @deprecated 4.2
@@ -192,6 +180,8 @@ class Shopware_Bootstrap extends Enlight_Bootstrap
      */
     public function __call($name, $arguments = null)
     {
+        trigger_error('Shopware()->Bootstrap()->__call() is deprecated since version 5.2 and will be removed in 5.3. Use Shopware()->Container() instead', E_USER_DEPRECATED);
+
         return $this->container->get($name);
     }
 }

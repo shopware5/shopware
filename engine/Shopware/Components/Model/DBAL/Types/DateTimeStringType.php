@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -24,6 +24,7 @@
 
 namespace Shopware\Components\Model\DBAL\Types;
 
+use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 
@@ -49,7 +50,7 @@ class DateTimeStringType extends Type
 
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
-        if (!$value instanceof \DateTime && !empty($value)) {
+        if (!$value instanceof \DateTimeInterface && !empty($value)) {
             $value = new \DateTime($value);
         } elseif (empty($value)) {
             $value = null;

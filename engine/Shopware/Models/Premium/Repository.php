@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,8 +23,10 @@
  */
 
 namespace   Shopware\Models\Premium;
-use         Shopware\Components\Model\ModelRepository,
-            Doctrine\ORM\Query\Expr;
+
+use Shopware\Components\Model\ModelRepository;
+use Doctrine\ORM\Query\Expr;
+
 /**
  * Repository for the premium model (Shopware\Models\Premium\Premium).
  * <br>
@@ -41,7 +43,7 @@ class Repository extends ModelRepository
      * @param null $filterValue
      * @return \Doctrine\ORM\Query
      */
-    public function getBackendPremiumListQuery($start,$limit, $order, $filterValue=null)
+    public function getBackendPremiumListQuery($start, $limit, $order, $filterValue=null)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array(
@@ -53,7 +55,7 @@ class Repository extends ModelRepository
                 'subshop.name as subShopName',
                 'article.name as name'
                     ))
-                ->from($this->getEntityName(),'premium')
+                ->from($this->getEntityName(), 'premium')
                 ->leftJoin('premium.shop', 'subshop')
                 ->leftJoin('premium.articleDetail', 'detail')
                 ->leftJoin('detail.article', 'article');

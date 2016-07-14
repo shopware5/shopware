@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,12 +23,13 @@
  */
 
 namespace Shopware\Models\Mail;
+
 use Shopware\Components\Model\ModelRepository;
+
 /**
  */
 class Repository extends ModelRepository
 {
-
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which selects a list of all mails.
      * @param $mailId
@@ -121,5 +122,4 @@ class Repository extends ModelRepository
 
         return $builder;
     }
-
 }

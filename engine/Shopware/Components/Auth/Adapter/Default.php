@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -116,6 +116,11 @@ class Shopware_Components_Auth_Adapter_Default extends Enlight_Components_Auth_A
             }
 
             Enlight_Components_Session::regenerateId();
+
+            // close and restart session to make sure the db session handler writes updates.
+            session_write_close();
+            session_start();
+
             $this->setSessionId(Enlight_Components_Session::getId());
 
             $this->updateExpiry();
@@ -145,13 +150,13 @@ class Shopware_Components_Auth_Adapter_Default extends Enlight_Components_Auth_A
 
     protected function updateExpiry()
     {
-       if ($this->expiryColumn === null) {
-           return;
-       }
+        if ($this->expiryColumn === null) {
+            return;
+        }
 
-       $user = $this->getResultRowObject();
+        $user = $this->getResultRowObject();
 
-       $this->_zendDb->update(
+        $this->_zendDb->update(
            $this->_tableName,
            array($this->expiryColumn => Zend_Date::now()),
            $this->_zendDb->quoteInto(
@@ -250,9 +255,9 @@ class Shopware_Components_Auth_Adapter_Default extends Enlight_Components_Auth_A
     {
         $newHash = Shopware()->PasswordEncoder()->reencodePassword($plaintext, $hash, $encoderName);
 
-         if ($newHash === $hash) {
-             return;
-         }
+        if ($newHash === $hash) {
+            return;
+        }
 
         $this->_zendDb->update(
             $this->_tableName,

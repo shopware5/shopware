@@ -7,17 +7,6 @@
  *
  * The plugins injects the selected media directly to the current cursor position,
  * so the user wouldn't be interrupted in their workflow.
- *
- * shopware AG (c) 2012. All rights reserved.
- *
- * @class Provides a new ui control element to open up the media selection
- * @link http://www.shopware.de/
- * @author st.pohl <stp@shopware.de>
- * @date 2012-03-14
- * @modifed 2012-11-12
- * @license http://www.shopware.de/license
- * @package tinymce-plugins
- * @subpackage media-selection
  */
 (function()
 /** @lends tinymce# */
@@ -56,6 +45,12 @@
          */
         audioCls: 'tinymce-editor-audio',
 
+        /**
+         * URL of the current location of the tinymce
+         * @string|null
+         */
+        url: null,
+
 
         /**
          * Initializes the plugin, this will be executed after the plugin has been created.
@@ -74,6 +69,7 @@
             var me = this;
 
             me.ed = ed;
+            me.url = url;
 
             // Register the command so that it can be invoked
             // by using tinyMCE.activeEditor.execCommand('mceMediaSelection');
@@ -107,7 +103,7 @@
                 title : 'Media Selection',
                 cls: 'tinymce-media-selection',
                 cmd : 'mceMediaSelection',
-                image : url + '/icons/inbox-image.png'
+                image : url + '/assets/inbox-image.png'
             });
         },
 
@@ -122,9 +118,9 @@
             return {
                 longname : 'MediaManager - MediaSelection',
                 author : 'shopware AG - st.pohl',
-                authorurl : 'http://www.shopware.de',
-                infourl : 'http://wiki.shopware.de/',
-                version : '1.0.0'
+                authorurl : 'http://www.shopware.com',
+                infourl : 'http://developers.shopware.com',
+                version : '1.1.1'
             };
         },
 
@@ -183,23 +179,22 @@
         _insertImage: function(record) {
             var me = this,
                 ed = me.ed,
-                settings = ed.settings, path,
                 args;
 
-            if(settings.document_base_url.length && settings.relative_urls == false) {
-                path = settings.document_base_url + record.get('path');
-            }else
-                path = record.get('path');
+            var uuid = Shopware.ModuleManager.uuidGenerator.generate();
 
             args = {
-                'class': me.imageCls,
-                width: record.get('width'),
-                height: record.get('height'),
-                alt: record.get('name'),
-                src: path
+                'id': me.imageCls + '-' + uuid,
+                'class': me.imageCls + ' ' + me.imageCls + '-' + uuid,
+                'alt': record.get('name'),
+                'data-src': record.get('virtualPath'),
+                'src': me.url + '/assets/placeholder-image.png'
             };
 
             ed.execCommand('mceInsertContent', false, tinymce.DOM.createHTML('img', args), { skip_undo : 1 });
+
+            var evt = new Event('insertMedia');
+            document.dispatchEvent(evt);
 
             return true;
         },
@@ -251,7 +246,7 @@
                 'class': me.videoCls,
                 width: 320,
                 height: 240,
-                src:  ed.settings.document_base_url + record.get('path'),
+                src: record.get('path'),
                 controls: true
             };
 

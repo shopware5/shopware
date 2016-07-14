@@ -385,7 +385,7 @@ class Zend_Session extends Zend_Session_Abstract
     {
         if ((bool)ini_get('session.use_cookies') == true && isset($_COOKIE[session_name()])) {
             return true;
-        } elseif ((bool)ini_get('session.use_only_cookies') == false && isset($_REQUEST[session_name()])) {
+        } elseif (isset($_REQUEST[session_name()])) {
             return true;
         } elseif (self::$_unitTestEnabled) {
             return true;
@@ -441,14 +441,14 @@ class Zend_Session extends Zend_Session_Abstract
             self::setOptions(is_array($options) ? $options : array());
         }
 
-        if(!self::getId() && ini_get('session.use_cookies')==1 && !empty($_COOKIE[session_name()])) {
-            self::setId($_COOKIE[session_name()]);
-        }
         if(!self::getId() && !empty($_REQUEST[session_name()])) {
             self::setId($_REQUEST[session_name()]);
         }
+        if(!self::getId() && ini_get('session.use_cookies')==1 && !empty($_COOKIE[session_name()])) {
+            self::setId($_COOKIE[session_name()]);
+        }
         if(!self::getId()) {
-            self::setId(sha1(uniqid('', true)));
+            self::setId(self::createSessionId());
         }
 
         // In strict mode, do not allow auto-starting Zend_Session, such as via "new Zend_Session_Namespace()"
@@ -488,8 +488,6 @@ class Zend_Session extends Zend_Session_Abstract
                 set_error_handler(array('Zend_Session_Exception', 'handleSessionStartError'), $errorLevel);
             }
 
-            $hasSessionId = (bool) self::getId();
-
             $startedCleanly = session_start();
 
             if (self::$_throwStartupExceptions) {
@@ -509,7 +507,7 @@ class Zend_Session extends Zend_Session_Abstract
         } else {
             $_SESSION = array();
             if(!session_id()) {
-                session_id(md5(uniqid(mt_rand(), true)));
+                session_id(self::createSessionId());
             }
         }
 
@@ -648,7 +646,7 @@ class Zend_Session extends Zend_Session_Abstract
                     }
                 }
             }
-                
+
             if (isset($namespace) && empty($_SESSION['__ZF'][$namespace])) {
                 unset($_SESSION['__ZF'][$namespace]);
             }
@@ -954,4 +952,11 @@ class Zend_Session extends Zend_Session_Abstract
         return parent::$_readable;
     }
 
+    /**
+     * @return string
+     */
+    private static function createSessionId()
+    {
+        return bin2hex(random_bytes(32));
+    }
 }

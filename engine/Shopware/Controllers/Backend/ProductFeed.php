@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -22,8 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Models\ProductFeed\ProductFeed as ProductFeed,
-    Doctrine\ORM\AbstractQuery;
+use Shopware\Models\ProductFeed\ProductFeed as ProductFeed;
+
 /**
  * Shopware Backend Controller for the Voucher Module
  *
@@ -113,17 +113,17 @@ class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Back
         /**
          * permission to list all feeds
          */
-        $this->addAclPermission('getFeedsAction', 'read','Insufficient Permissions');
+        $this->addAclPermission('getFeedsAction', 'read', 'Insufficient Permissions');
 
         /**
          * permission to show detail information of a feed
          */
-        $this->addAclPermission('getDetailFeedAction', 'read','Insufficient Permissions');
+        $this->addAclPermission('getDetailFeedAction', 'read', 'Insufficient Permissions');
 
         /**
          * permission to delete the feed
          */
-        $this->addAclPermission('deleteFeedAction', 'delete','Insufficient Permissions');
+        $this->addAclPermission('deleteFeedAction', 'delete', 'Insufficient Permissions');
     }
 
 
@@ -136,7 +136,7 @@ class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Back
     {
         try {
             /** @var $repository \Shopware\Models\ProductFeed\Repository */
-            $repository = Shopware()->Models()->ProductFeed();
+            $repository = Shopware()->Models()->getRepository(ProductFeed::class);
             $dataQuery = $repository->getListQuery(
                 $this->Request()->getParam('sort', array()),
                 $this->Request()->getParam('start'),
@@ -172,7 +172,7 @@ class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Back
     private function getFeed($id)
     {
         /** @var $repository \Shopware\Models\ProductFeed\Repository */
-        $repository = Shopware()->Models()->ProductFeed();
+        $repository = Shopware()->Models()->getRepository(ProductFeed::class);
         $dataQuery = $repository->getDetailQuery($id);
         $feed = $dataQuery->getArrayResult();
         return $feed[0];
@@ -242,6 +242,7 @@ class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Back
     /**
      * Creates or updates a new Product Feed
      *
+     * @throws RuntimeException
      * @return void
      */
     public function saveFeedAction()
@@ -251,7 +252,7 @@ class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Back
         $feedId = $params["id"];
         if (!empty($feedId)) {
             //edit Product Feed
-            $productFeed = Shopware()->Models()->ProductFeed()->find($feedId);
+            $productFeed = Shopware()->Models()->getRepository(ProductFeed::class)->find($feedId);
             //clear all previous associations
             $productFeed->getCategories()->clear();
             $productFeed->getSuppliers()->clear();
@@ -277,20 +278,38 @@ class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Back
         }
 
         //save data of the category tree
-        $params['categories'] = $this->prepareAssociationDataForSaving('categories','Shopware\Models\Category\Category',$params);
+        $params['categories'] = $this->prepareAssociationDataForSaving('categories', 'Shopware\Models\Category\Category', $params);
 
         //save data of the supplier filter
-        $params['suppliers'] = $this->prepareAssociationDataForSaving('suppliers','Shopware\Models\Article\Supplier',$params);
+        $params['suppliers'] = $this->prepareAssociationDataForSaving('suppliers', 'Shopware\Models\Article\Supplier', $params);
 
         //save data of the article filter
-        $params['articles'] = $this->prepareAssociationDataForSaving('articles','Shopware\Models\Article\Article',$params);
+        $params['articles'] = $this->prepareAssociationDataForSaving('articles', 'Shopware\Models\Article\Article', $params);
 
-        $params['attribute'] = $params['attribute'][0];
+        $productFeed = $this->setDirty($productFeed, $params);
         $productFeed->fromArray($params);
 
         //just for future use
-        $productFeed->setExpiry(date("d-m-Y", time()));
-        $productFeed->setLastChange(date("d-m-Y", time()));
+        $productFeed->setExpiry(new DateTime());
+        $productFeed->setLastChange(new DateTime());
+
+        // Clear feed cache
+        $cacheDir = $this->container->getParameter('kernel.cache_dir');
+        $cacheDir .= '/productexport/';
+        if (!is_dir($cacheDir)) {
+            if (false === @mkdir($cacheDir, 0777, true)) {
+                throw new \RuntimeException(sprintf("Unable to create the %s directory (%s)\n", "Productexport", $cacheDir));
+            }
+        } elseif (!is_writable($cacheDir)) {
+            throw new \RuntimeException(sprintf("Unable to write in the %s directory (%s)\n", "Productexport", $cacheDir));
+        }
+
+        $fileName = $productFeed->getHash() . '_' . $productFeed->getFileName();
+        $filePath = $cacheDir . $fileName;
+        if (file_exists($filePath)) {
+            unlink($filePath);
+        }
+        $productFeed->setCacheRefreshed('2000-01-01');
 
         try {
             Shopware()->Models()->persist($productFeed);
@@ -304,6 +323,34 @@ class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Back
     }
 
     /**
+     * Determines if a feed needs to be marked as dirty
+     * New feeds, feeds whose header, body or footer have been
+     * changed are marked as dirty
+     *
+     * @param ProductFeed $productFeed
+     * @param array $params
+     * @return ProductFeed
+     */
+    private function setDirty($productFeed, $params)
+    {
+        if ($productFeed->isDirty()) {
+            return $productFeed;
+        }
+
+        if (!$productFeed->getId()) {
+            $productFeed->setDirty(true);
+        } elseif (isset($params['header']) && $params['header'] != $productFeed->getHeader()) {
+            $productFeed->setDirty(true);
+        } elseif (isset($params['body']) && $params['body'] != $productFeed->getBody()) {
+            $productFeed->setDirty(true);
+        } elseif (isset($params['footer']) && $params['footer'] != $productFeed->getFooter()) {
+            $productFeed->setDirty(true);
+        }
+
+        return $productFeed;
+    }
+
+    /**
      * Deletes a Feed from the database
      *
      * @return void
@@ -312,7 +359,7 @@ class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Back
     {
         try {
             /**@var $model \Shopware\Models\ProductFeed\ProductFeed*/
-            $model = Shopware()->Models()->ProductFeed()->find($this->Request()->id);
+            $model = Shopware()->Models()->getRepository(ProductFeed::class)->find($this->Request()->id);
             Shopware()->Models()->remove($model);
             Shopware()->Models()->flush();
             $this->View()->assign(array('success' => true, 'data' => $this->Request()->getParams()));
@@ -341,5 +388,4 @@ class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Back
         }
         return $collection;
     }
-
 }

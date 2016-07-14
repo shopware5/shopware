@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,8 +23,9 @@
  */
 
 namespace   Shopware\Models\Dispatch;
-use         Shopware\Components\Model\ModelEntity,
-Doctrine\ORM\Mapping AS ORM;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * The Shopware Model represents the Holidays stored in the DB.
@@ -79,7 +80,7 @@ class Holiday extends ModelEntity
     /**
      * Next date on which this is due.
      *
-     * @var date $date
+     * @var \DateTime $date
      *
      * @ORM\Column(name="date", type="date", nullable=false)
      */
@@ -142,7 +143,7 @@ class Holiday extends ModelEntity
     /**
      * Set date
      *
-     * @param date $date
+     * @param \DateTime $date
      * @return Holiday
      */
     public function setDate($date)
@@ -154,7 +155,7 @@ class Holiday extends ModelEntity
     /**
      * Get date
      *
-     * @return date
+     * @return \DateTime
      */
     public function getDate()
     {

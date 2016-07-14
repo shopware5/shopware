@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -88,7 +88,7 @@ class PluginListCommand extends ShopwareCommand
 
         $namespace = $input->getOption('namespace');
         if (count($namespace)) {
-            $builder->andWhere('p.namespace IN (:namespace)');
+            $builder->andWhere('plugin.namespace IN (:namespace)');
             $builder->setParameter('namespace', $namespace);
         }
 

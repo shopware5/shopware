@@ -1,0 +1,240 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="shopware_search.product_number_search" class="Shopware\Bundle\SearchBundleDBAL\ProductNumberSearch">
+            <argument type="service" id="shopware_searchdbal.dbal_query_builder_factory"/>
+            <argument type="service" id="shopware_storefront.attribute_hydrator_dbal"/>
+            <argument type="service" id="events" />
+
+            <!--facet handler-->
+            <argument type="collection" />
+        </service>
+
+        <service id="shopware_searchdbal.search_price_helper_dbal" class="Shopware\Bundle\SearchBundleDBAL\PriceHelper">
+            <argument type="service" id="dbal_connection" />
+            <argument type="service" id="config" />
+        </service>
+
+        <!-- Search handlers -->
+        <service id="shopware_searchdbal.search_query_builder_dbal" class="Shopware\Bundle\SearchBundleDBAL\SearchTerm\SearchTermQueryBuilder">
+            <argument type="service" id="config" />
+            <argument type="service" id="dbal_connection" />
+            <argument type="service" id="shopware_searchdbal.cache_keyword_finder" />
+            <argument type="service" id="shopware_searchdbal.search_indexer" />
+            <argument type="service" id="shopware_searchdbal.search_term_helper" />
+        </service>
+
+        <service id="shopware_searchdbal.cache_keyword_finder" class="Shopware\Bundle\SearchBundleDBAL\SearchTerm\CacheKeywordFinder">
+            <argument type="service" id="shopware_storefront.storefront_cache" />
+            <argument type="service" id="config" />
+            <argument type="service" id="shopware_searchdbal.keyword_finder_dbal" />
+        </service>
+
+        <service id="shopware_searchdbal.keyword_finder_dbal" class="Shopware\Bundle\SearchBundleDBAL\SearchTerm\KeywordFinder">
+            <argument type="service" id="config" />
+            <argument type="service" id="dbal_connection" />
+            <argument type="service" id="shopware_searchdbal.search_term_helper" />
+        </service>
+
+        <service id="shopware_searchdbal.search_indexer" class="Shopware\Bundle\SearchBundleDBAL\SearchTerm\SearchIndexer">
+            <argument type="service" id="config" />
+            <argument type="service" id="dbal_connection" />
+            <argument type="service" id="shopware_searchdbal.search_term_helper" />
+        </service>
+
+        <service id="shopware_searchdbal.search_term_helper" class="Shopware\Bundle\SearchBundleDBAL\SearchTerm\TermHelper">
+            <argument type="service" id="config" />
+        </service>
+
+        <service id="shopware_searchdbal.search_term_logger" class="Shopware\Bundle\SearchBundleDBAL\SearchTerm\SearchTermLogger">
+            <argument type="service" id="dbal_connection" />
+        </service>
+
+
+        <!-- Facet handler -->
+        <service id="shopware_searchdbal.vote_average_facet_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\FacetHandler\VoteAverageFacetHandler">
+            <argument type="service" id="shopware_searchdbal.dbal_query_builder_factory" />
+            <argument type="service" id="dbal_connection" />
+            <argument type="service" id="snippets" />
+            <argument type="service" id="query_alias_mapper" />
+            <tag name="facet_handler_dbal"/>
+        </service>
+
+        <service id="shopware_searchdbal.shipping_free_facet_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\FacetHandler\ShippingFreeFacetHandler">
+            <argument type="service" id="shopware_searchdbal.dbal_query_builder_factory" />
+            <argument type="service" id="snippets" />
+            <argument type="service" id="query_alias_mapper" />
+            <tag name="facet_handler_dbal"/>
+        </service>
+
+        <service id="shopware_searchdbal.product_attribute_facet_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\FacetHandler\ProductAttributeFacetHandler">
+            <argument type="service" id="shopware_searchdbal.dbal_query_builder_factory" />
+            <argument type="service" id="snippets" />
+            <tag name="facet_handler_dbal"/>
+        </service>
+
+        <service id="shopware_searchdbal.immediate_delivery_facet_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\FacetHandler\ImmediateDeliveryFacetHandler">
+            <argument type="service" id="shopware_searchdbal.dbal_query_builder_factory" />
+            <argument type="service" id="snippets" />
+            <argument type="service" id="query_alias_mapper" />
+            <tag name="facet_handler_dbal"/>
+        </service>
+
+        <service id="shopware_searchdbal.manufacturer_facet_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\FacetHandler\ManufacturerFacetHandler">
+            <argument type="service" id="shopware_storefront.manufacturer_service"/>
+            <argument type="service" id="shopware_searchdbal.dbal_query_builder_factory" />
+            <argument type="service" id="snippets" />
+            <argument type="service" id="query_alias_mapper" />
+            <tag name="facet_handler_dbal"/>
+        </service>
+
+        <service id="shopware_searchdbal.property_facet_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\FacetHandler\PropertyFacetHandler">
+            <argument type="service" id="shopware_storefront.property_gateway"/>
+            <argument type="service" id="shopware_searchdbal.dbal_query_builder_factory" />
+            <argument type="service" id="query_alias_mapper" />
+            <tag name="facet_handler_dbal"/>
+        </service>
+
+        <service id="shopware_searchdbal.category_facet_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\FacetHandler\CategoryFacetHandler">
+            <argument type="service" id="shopware_storefront.category_service"/>
+            <argument type="service" id="shopware_searchdbal.dbal_query_builder_factory" />
+            <argument type="service" id="snippets" />
+            <argument type="service" id="query_alias_mapper" />
+            <argument type="service" id="dbal_connection" />
+            <tag name="facet_handler_dbal"/>
+        </service>
+
+        <service id="shopware_searchdbal.price_facet_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\FacetHandler\PriceFacetHandler">
+            <argument type="service" id="shopware_searchdbal.search_price_helper_dbal"/>
+            <argument type="service" id="shopware_searchdbal.dbal_query_builder_factory" />
+            <argument type="service" id="snippets" />
+            <argument type="service" id="query_alias_mapper" />
+            <tag name="facet_handler_dbal"/>
+        </service>
+
+        <!-- Condition handler -->
+        <service id="shopware_searchdbal.vote_average_condition_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\VoteAverageConditionHandler">
+            <tag name="condition_handler_dbal"/>
+        </service>
+
+        <service id="shopware_searchdbal.is_available_condition_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\IsAvailableConditionHandler">
+            <argument type="service" id="shopware_searchdbal.search_price_helper_dbal" />
+            <tag name="condition_handler_dbal"/>
+        </service>
+
+        <service id="shopware_searchdbal.closeout_condition_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\CloseoutConditionHandler">
+            <tag name="condition_handler_dbal"/>
+        </service>
+
+        <service id="shopware_searchdbal.has_pseudo_price_condition_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\HasPseudoPriceConditionHandler">
+            <argument type="service" id="shopware_searchdbal.search_price_helper_dbal" />
+            <argument type="service" id="config" />
+            <tag name="condition_handler_dbal"/>
+        </service>
+
+        <service id="shopware_searchdbal.is_new_condition_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\IsNewConditionHandler">
+            <argument type="service" id="config" />
+            <tag name="condition_handler_dbal"/>
+        </service>
+
+        <service id="shopware_searchdbal.release_date_condition_handler" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\ReleaseDateConditionHandler">
+            <tag name="condition_handler_dbal"/>
+        </service>
+
+        <service id="shopware_searchdbal.create_date_condition_handler" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\CreateDateConditionHandler">
+            <tag name="condition_handler_dbal"/>
+        </service>
+
+
+        <service id="shopware_searchdbal.search_condition_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\SearchTermConditionHandler">
+            <argument type="service" id="shopware_searchdbal.search_query_builder_dbal" />
+            <tag name="condition_handler_dbal"/>
+        </service>
+
+        <service id="shopware_searchdbal.category_condition_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\CategoryConditionHandler">
+            <tag name="condition_handler_dbal"/>
+        </service>
+
+        <service id="shopware_searchdbal.ordernumber_condition_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\OrdernumberConditionHandler">
+            <tag name="condition_handler_dbal"/>
+        </service>
+
+        <service id="shopware_searchdbal.product_attribute_condition_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\ProductAttributeConditionHandler">
+            <tag name="condition_handler_dbal"/>
+        </service>
+
+        <service id="shopware_searchdbal.customer_group_condition_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\CustomerGroupConditionHandler">
+            <tag name="condition_handler_dbal"/>
+        </service>
+
+        <service id="shopware_searchdbal.immediate_delivery_condition_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\ImmediateDeliveryConditionHandler">
+            <tag name="condition_handler_dbal"/>
+        </service>
+
+        <service id="shopware_searchdbal.manufacturer_condition_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\ManufacturerConditionHandler">
+            <tag name="condition_handler_dbal"/>
+        </service>
+
+        <service id="shopware_searchdbal.property_condition_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\PropertyConditionHandler">
+            <tag name="condition_handler_dbal"/>
+        </service>
+
+        <service id="shopware_searchdbal.shipping_free_condition_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\ShippingFreeConditionHandler">
+            <tag name="condition_handler_dbal"/>
+        </service>
+
+        <service id="shopware_searchdbal.sales_condition_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\SalesConditionHandler">
+            <tag name="condition_handler_dbal"/>
+        </service>
+
+        <service id="shopware_searchdbal.price_condition_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\PriceConditionHandler" >
+            <argument type="service" id="shopware_searchdbal.search_price_helper_dbal" />
+            <tag name="condition_handler_dbal"/>
+        </service>
+
+        <service id="shopware_searchdbal.similar_products_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\SimilarProductConditionHandler">
+            <tag name="condition_handler_dbal"/>
+        </service>
+
+        <!-- Sorting handler -->
+        <service id="shopware_searchdbal.product_name_sorting_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\SortingHandler\ProductNameSortingHandler">
+            <tag name="sorting_handler_dbal"/>
+        </service>
+
+        <service id="shopware_searchdbal.popularity_sorting_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\SortingHandler\PopularitySortingHandler">
+            <tag name="sorting_handler_dbal"/>
+        </service>
+
+        <service id="shopware_searchdbal.shopware_searchdbal.product_attribute_sorting_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\SortingHandler\ProductAttributeSortingHandler">
+            <tag name="sorting_handler_dbal"/>
+        </service>
+
+        <service id="shopware_searchdbal.release_date_sorting_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\SortingHandler\ReleaseDateSortingHandler">
+            <tag name="sorting_handler_dbal"/>
+        </service>
+
+        <service id="shopware_searchdbal.price_sorting_handler_sorting_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\SortingHandler\PriceSortingHandler" >
+            <argument type="service" id="shopware_searchdbal.search_price_helper_dbal" />
+            <tag name="sorting_handler_dbal"/>
+        </service>
+
+        <service id="shopware_searchdbal.search_ranking_sorting_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\SortingHandler\SearchRankingSortingHandler">
+            <tag name="sorting_handler_dbal"/>
+        </service>
+
+        <service id="shopware_searchdbal.dbal_query_builder_factory" class="Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactory">
+            <argument type="service" id="dbal_connection" />
+            <argument type="service" id="events" />
+
+            <!--condition handlers-->
+            <argument type="collection" />
+
+            <!--sorting handlers-->
+            <argument type="collection" />
+        </service>
+    </services>
+</container>

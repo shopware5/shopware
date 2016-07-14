@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,8 +23,9 @@
  */
 
 namespace   Shopware\Models\Premium;
-use         Shopware\Components\Model\ModelEntity,
-            Doctrine\ORM\Mapping AS ORM;
+
+use Shopware\Components\Model\LazyFetchModelEntity;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Shopware Model Premium
@@ -36,7 +37,7 @@ use         Shopware\Components\Model\ModelEntity,
  * @ORM\Table(name="s_addon_premiums")
  * @ORM\HasLifecycleCallbacks
  */
-class Premium extends ModelEntity
+class Premium extends LazyFetchModelEntity
 {
     /**
      * @var integer $id
@@ -57,14 +58,14 @@ class Premium extends ModelEntity
     /**
      * @var string $orderNumber
      *
-     * @ORM\Column(name="ordernumber", type="string", length=30, nullable=false)
+     * @ORM\Column(name="ordernumber", type="string", length=255, nullable=false)
      */
     private $orderNumber;
 
     /**
      * @var string $orderNumberExport
      *
-     * @ORM\Column(name="ordernumber_export", type="string", length=30, nullable=false)
+     * @ORM\Column(name="ordernumber_export", type="string", length=255, nullable=false)
      */
     private $orderNumberExport;
 
@@ -185,8 +186,8 @@ class Premium extends ModelEntity
 
     /**
      * Sets the assigned article
-     * \Shopware\Models\Article\Detail
-     * @param $articleDetail
+     *
+     * @param $articleDetail  \Shopware\Models\Article\Detail
      * @return \Shopware\Models\Premium\Premium
      */
     public function setArticleDetail($articleDetail)
@@ -197,11 +198,11 @@ class Premium extends ModelEntity
 
     /**
      * Gets the instance of the assigned article
-     * @return mixed
+     * @return \Shopware\Models\Article\Detail
      */
     public function getArticleDetail()
     {
-        return $this->articleDetail;
+        return $this->fetchLazy($this->articleDetail, array('number' => $this->orderNumber));
     }
 
     /**

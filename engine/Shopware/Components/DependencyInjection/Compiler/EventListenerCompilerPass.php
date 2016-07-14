@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -25,7 +25,6 @@ namespace Shopware\Components\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * @category  Shopware
@@ -40,23 +39,28 @@ class EventListenerCompilerPass implements CompilerPassInterface
             return;
         }
 
-        $definition = $container->getDefinition(
-            'events'
-        );
+        $definition = $container->getDefinition('events');
 
-        $taggedServices = $container->findTaggedServiceIds(
-            'shopware.event_listener'
-        );
+        foreach ($container->findTaggedServiceIds('shopware.event_listener') as $id => $events) {
+            $def = $container->getDefinition($id);
+            if (!$def->isPublic()) {
+                throw new \InvalidArgumentException(sprintf('The service "%s" must be public as event listeners are lazy-loaded.', $id));
+            }
+            if ($def->isAbstract()) {
+                throw new \InvalidArgumentException(sprintf('The service "%s" must not be abstract as event listeners are lazy-loaded.', $id));
+            }
 
-        foreach ($taggedServices as $id => $tagAttributes) {
-            foreach ($tagAttributes as $attributes) {
+            foreach ($events as $event) {
+                $priority = isset($event['priority']) ? $event['priority'] : 0;
+                if (!isset($event['event'])) {
+                    throw new \InvalidArgumentException(sprintf('Service "%s" must define the "event" attribute on "%s" tags.', $id, 'shopware.event_listener'));
+                }
 
-                $callback = array(new Reference($id), $attributes["method"]);
+                if (!isset($event['method'])) {
+                    throw new \InvalidArgumentException(sprintf('Service "%s" must define the "method" attribute on "%s" tags.', $id, 'shopware.event_listener'));
+                }
 
-                $definition->addMethodCall(
-                    'addListener',
-                    array($attributes['event'], $callback)
-                );
+                $definition->addMethodCall('addListenerService', [$event['event'], [$id, $event['method']], $priority]);
             }
         }
     }

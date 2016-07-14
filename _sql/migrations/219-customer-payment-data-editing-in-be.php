@@ -1,7 +1,7 @@
 <?php
 class Migrations_Migration219 Extends Shopware\Components\Migrations\AbstractMigration
 {
-    public function up()
+    public function up($modus)
     {
         $sql = <<<'EOD'
         INSERT IGNORE INTO `s_core_payment_data` (payment_mean_id, user_id, bankname, account_number, bank_code, account_holder, created_at)

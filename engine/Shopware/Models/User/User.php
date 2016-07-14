@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,8 +23,9 @@
  */
 
 namespace Shopware\Models\User;
-use Shopware\Components\Model\ModelEntity,
-    Doctrine\ORM\Mapping AS ORM;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Shopware backend user model represents a single backend user.
@@ -132,20 +133,6 @@ class User extends ModelEntity
      * @ORM\Column(name="active", type="integer", nullable=false)
      */
     private $active = 1;
-
-    /**
-     * @var integer $admin
-     *
-     * @ORM\Column(name="admin", type="integer", nullable=false)
-     */
-    private $admin = 0;
-
-    /**
-     * @var integer $salted
-     *
-     * @ORM\Column(name="salted", type="integer", nullable=false)
-     */
-    private $salted = 1;
 
     /**
      * @var integer $failedLogins
@@ -404,50 +391,6 @@ class User extends ModelEntity
     }
 
     /**
-     * Set admin
-     *
-     * @param integer $admin
-     * @return User
-     */
-    public function setAdmin($admin)
-    {
-        $this->admin = $admin;
-        return $this;
-    }
-
-    /**
-     * Get admin
-     *
-     * @return integer
-     */
-    public function getAdmin()
-    {
-        return $this->admin;
-    }
-
-    /**
-     * Set salted
-     *
-     * @param integer $salted
-     * @return User
-     */
-    public function setSalted($salted)
-    {
-        $this->salted = $salted;
-        return $this;
-    }
-
-    /**
-     * Get salted
-     *
-     * @return integer
-     */
-    public function getSalted()
-    {
-        return $this->salted;
-    }
-
-    /**
      * Set failedLogins
      *
      * @param integer $failedLogins
@@ -472,7 +415,7 @@ class User extends ModelEntity
     /**
      * Set lockedUntil
      *
-     * @param $lockedUntil|string
+     * @param \DateTime|string $lockedUntil|
      * @return User
      */
     public function setLockedUntil($lockedUntil)
@@ -632,7 +575,4 @@ class User extends ModelEntity
     {
         return $this->encoder;
     }
-
-
-
 }

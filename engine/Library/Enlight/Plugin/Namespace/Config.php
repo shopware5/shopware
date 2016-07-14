@@ -79,17 +79,20 @@ class Enlight_Plugin_Namespace_Config extends Enlight_Plugin_Namespace
     public function load($name, $throwException = true)
     {
         $item = $this->Storage()->plugins->$name;
-        if ($item === null || $this->plugins->offsetExists($name) || !class_exists($item->class)) {
+        if ($item === null || $this->plugins->offsetExists($name) || !(class_exists($item->class) || class_exists($item->class.'Dummy'))) {
             return parent::load($name, $throwException);
         }
 
         /** @var $item \Enlight_Config */
         $classname = $item->get('class');
+        if (!class_exists($classname)) {
+            $classname .= 'Dummy';
+        }
 
         /** @var $plugin Enlight_Plugin_Bootstrap_Config */
         $plugin = new $classname($name, $item);
 
-        return parent::registerPlugin($plugin, $throwException);
+        return parent::registerPlugin($plugin);
     }
 
     /**
@@ -146,7 +149,6 @@ class Enlight_Plugin_Namespace_Config extends Enlight_Plugin_Namespace
      */
     protected function initStorage()
     {
-
     }
 
     /**

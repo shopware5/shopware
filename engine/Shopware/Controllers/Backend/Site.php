@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -100,7 +100,7 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
         /**
          * permission to create a site
          */
-        $this->addAclPermission('saveSite', 'updateSite','Insufficient Permissions');
+        $this->addAclPermission('saveSite', 'updateSite', 'Insufficient Permissions');
     }
 
     /**
@@ -133,7 +133,6 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
                 $this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
             }
         }
-
     }
 
     /**
@@ -144,9 +143,7 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
      */
     private function getSitesByNodeName($nodeName)
     {
-
         if (!empty($nodeName)) {
-
             $sites = $this->getSiteRepository()
                 ->getSitesByNodeNameQuery($nodeName)
                 ->getResult();
@@ -163,16 +160,16 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
         }
     }
 
+
     /**
      * helper function to build the final array to be handed to the view
      *
      * @param $idPrefix
-     * @param $site
+     * @param Site $site
      * @return array
      */
-    private function getSiteNode($idPrefix, $site)
+    private function getSiteNode($idPrefix, Site $site)
     {
-
         //set icons
         if ($site->getLink()) {
             $iconCls = 'sprite-chain-small';
@@ -181,28 +178,31 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
         }
 
         //build the structure
-        $node = array(
+        $node = [
             'id' => $idPrefix . $site->getId(),
             'text' => $site->getDescription() . "(" . $site->getId() . ")",
-            'description' => $site->getDescription(),
             'helperId' => $site->getId(),
+            'iconCls' => $iconCls,
             'tpl1variable' => $site->getTpl1Variable(),
-            'tpl2variable' => $site->getTpl2Variable(),
-            'tpl3variable' => $site->getTpl3Variable(),
             'tpl1path' => $site->getTpl1Path(),
+            'tpl2variable' => $site->getTpl2Variable(),
             'tpl2path' => $site->getTpl2Path(),
+            'tpl3variable' => $site->getTpl3Variable(),
             'tpl3path' => $site->getTpl3Path(),
-            'grouping' => $site->getGrouping(),
-            'position' => $site->getPosition(),
+            'description' => $site->getDescription(),
             'pageTitle' => $site->getPageTitle(),
             'metaKeywords' => $site->getMetaKeywords(),
             'metaDescription' => $site->getMetaDescription(),
             'html' => $site->getHtml(),
+            'grouping' => $site->getGrouping(),
+            'position' => $site->getPosition(),
             'link' => $site->getLink(),
             'target' => $site->getTarget(),
-            'leaf' => true,
-            'iconCls' => $iconCls
-        );
+            'shopIds' => $site->getShopIds(),
+            'changed' => $site->getChanged(),
+            'parentId' => $site->getParentId(),
+            'leaf' => true
+        ];
 
         //if the site has children, append them
         if ($site->getChildren()->count() > 0) {
@@ -241,8 +241,8 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
 
         if ($name === null) {
             $this->View()->assign(array(
-               'success' => false,
-               'message' => 'Name may not be empty'
+                'success' => false,
+                'message' => 'Name may not be empty'
             ));
             return;
         }
@@ -251,8 +251,8 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
         $model = $repository->findOneBy(array('name' => $name));
         if ($model !== null) {
             $this->View()->assign(array(
-                   'success' => false,
-                   'message' => 'nameExists'
+                'success' => false,
+                'message' => 'nameExists'
             ));
             return;
         }
@@ -264,8 +264,8 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
             $model->setKey($key);
         } else {
             $this->View()->assign(array(
-               'success' => false,
-               'message' => 'variableExists'
+                'success' => false,
+                'message' => 'variableExists'
             ));
             return;
         }
@@ -293,7 +293,7 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
 
         $key = empty($data['templateVar']) ? null : $data['templateVar'];
 
-        /** @var \Shopware\Models\Site\Group $model  */
+        /** @var \Shopware\Models\Site\Group $model */
         $model = $repository->findOneBy(array('key' => $key));
         if ($model !== null) {
             $manager->remove($model);
@@ -317,17 +317,20 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
                 if (in_array($key, $groups) && sizeof($groups) == 1) {
 
                     //set group to gDisabled to prevent orphanage
-                    Shopware()->Db()->query("UPDATE s_cms_static SET grouping = ? WHERE id = ?", array("gDisabled", $site['id']));
+                    Shopware()->Db()->query("UPDATE s_cms_static SET grouping = ? WHERE id = ?",
+                        array("gDisabled", $site['id']));
                 } //if the current site is associated with the requested group and does have other associations
-                else if (in_array($key, $groups) && sizeof($groups) > 1) {
+                else {
+                    if (in_array($key, $groups) && sizeof($groups) > 1) {
 
-                    //remove the requested group from the groupings field
-                    str_replace($key, "", $site['grouping']);
-                    str_replace("|", "", $site['grouping']);
+                        //remove the requested group from the groupings field
+                        str_replace($key, "", $site['grouping']);
+                        str_replace("|", "", $site['grouping']);
 
-                    //update the table
-                    $sql = "UPDATE s_cms_static SET grouping = ? WHERE id = ?";
-                    Shopware()->Db()->query($sql, array($site['grouping'], $site['id']));
+                        //update the table
+                        $sql = "UPDATE s_cms_static SET grouping = ? WHERE id = ?";
+                        Shopware()->Db()->query($sql, array($site['grouping'], $site['id']));
+                    }
                 }
             }
             //success
@@ -336,7 +339,6 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
             //catch all errors
             $this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
         }
-
     }
 
     /**
@@ -388,11 +390,12 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
         //change it back to the actual db format
         $params['grouping'] = str_replace(",", "|", $params['grouping']);
 
+        $params['shopIds'] = array_filter($params['shopIds']) ? '|' . implode('|', $params['shopIds']) . '|' : null;
+
         //check whether we create a new site or are updating one
         //also, check if we have the necessary rights
         try {
             if (!empty($siteId)) {
-
                 if (!$this->_isAllowed('updateSite', 'site')) {
                     $this->View()->assign(array('success' => false, 'message' => 'Permission denied.'));
                     return;
@@ -400,7 +403,6 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
 
                 $site = $this->getSiteRepository()->find($siteId);
             } else {
-
                 if (!$this->_isAllowed('createSite', 'site')) {
                     $this->View()->assign(array('success' => false, 'message' => 'Permission denied.'));
                     return;
@@ -409,8 +411,8 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
                 $site = new Site();
             }
 
-            $params['attribute'] = $params['attribute'][0];
             $site->fromArray($params);
+            $site->setChanged();
 
             $this->getManager()->persist($site);
 
@@ -425,34 +427,6 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
             //catch all errors
             $this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
         }
-    }
-
-    /**
-     * Internal helper function to save the dynamic attributes of an site.
-     * @param $site
-     * @param $attributeData
-     * @return mixed
-     */
-    private function saveSiteAttributes($site, $attributeData)
-    {
-        if (empty($attributeData)) {
-            return;
-        }
-        if ($site->getId() > 0) {
-            $result = $this->getSiteRepository()
-                ->getAttributesQuery($site->getId())
-                ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
-            if (empty($result)) {
-                $attributes = new \Shopware\Models\Attribute\Site();
-            } else {
-                $attributes = $result;
-            }
-        } else {
-            $attributes = new \Shopware\Models\Attribute\Site();
-        }
-        $attributes->fromArray($attributeData);
-        $attributes->setSite($site);
-        $this->getManager()->persist($attributes);
     }
 
     /**

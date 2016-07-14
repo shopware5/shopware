@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,9 +23,10 @@
  */
 
 namespace Shopware\Models\Menu;
-use Shopware\Components\Model\ModelEntity,
-    Doctrine\ORM\Mapping as ORM,
-    Doctrine\Common\Collections\ArrayCollection;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Shopware Model Menu
@@ -54,12 +55,6 @@ class Menu extends ModelEntity
      * @ORM\Column(name="onclick", type="string", length=255, nullable=true)
      */
     public $onclick;
-
-    /**
-     * @var string $style
-     * @ORM\Column(name="style", type="string", length=255, nullable=true)
-     */
-    public $style;
 
     /**
      * @var string $class
@@ -176,22 +171,6 @@ class Menu extends ModelEntity
     public function setOnclick($onclick)
     {
         $this->onclick = $onclick;
-    }
-
-    /**
-     * @return string
-     */
-    public function getStyle()
-    {
-        return $this->style;
-    }
-
-    /**
-     * @param string $style
-     */
-    public function setStyle($style)
-    {
-        $this->style = $style;
     }
 
     /**
@@ -317,9 +296,12 @@ class Menu extends ModelEntity
     /**
      * @param Menu $parent
      */
-    public function setParent(Menu $parent)
+    public function setParent(Menu $parent = null)
     {
-        $parent->getChildren()->add($this);
+        // Parent may be null when this menu item should be a main menu item
+        if ($parent) {
+            $parent->getChildren()->add($this);
+        }
         $this->parent = $parent;
     }
 

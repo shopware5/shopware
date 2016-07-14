@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -70,7 +70,7 @@ class Shopware_Controllers_Api_Categories extends Shopware_Controllers_Api_Rest
     /**
      * Create new category
      *
-     * POST /api/category
+     * POST /api/categories
      */
     public function postAction()
     {
@@ -105,13 +105,12 @@ class Shopware_Controllers_Api_Categories extends Shopware_Controllers_Api_Rest
         );
 
         $this->View()->assign(array('success' => true, 'data' => $data));
-        $this->Response()->setHeader('Location', $location);
     }
 
     /**
      * Delete article
      *
-     * DELETE /api/articles/{id}
+     * DELETE /api/categories/{id}
      */
     public function deleteAction()
     {

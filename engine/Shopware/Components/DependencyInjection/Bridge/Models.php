@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -24,12 +24,11 @@
 
 namespace Shopware\Components\DependencyInjection\Bridge;
 
-use Doctrine\Common\Annotations\AnnotationRegistry;
 use Doctrine\Common\EventManager;
-use Doctrine\DBAL\DriverManager;
+use Doctrine\DBAL\Connection;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
-use Doctrine\ORM\Proxy\Autoloader;
 use Shopware\Components\Model\Configuration;
+use Shopware\Components\Model\LazyFetchModelEntity;
 use Shopware\Components\Model\ModelManager;
 
 /**
@@ -50,8 +49,7 @@ class Models
      * @param EventManager      $eventManager
      * @param Configuration     $config
      * @param \Enlight_Loader   $loader
-     * @param \Pdo              $db
-     * @param string            $kernelRootDir
+     * @param Connection        $connection
      * @param AnnotationDriver  $modelAnnotation
      *
      * @return ModelManager
@@ -60,46 +58,39 @@ class Models
         EventManager $eventManager,
         Configuration $config,
         \Enlight_Loader $loader,
-        \Pdo $db,
-        $kernelRootDir,
+        Connection $connection,
         // annotation driver is not really used here but has to be loaded first
         AnnotationDriver $modelAnnotation
     ) {
-        $vendorPath = $kernelRootDir . '/vendor';
-
-        // register standard doctrine annotations
-        AnnotationRegistry::registerFile(
-            $vendorPath . '/doctrine/orm/lib/Doctrine/ORM/Mapping/Driver/DoctrineAnnotations.php'
-        );
-
-        // register symfony validation annotations
-        AnnotationRegistry::registerAutoloadNamespace(
-            'Symfony\Component\Validator\Constraint',
-            realpath($vendorPath . '/symfony/validator')
-        );
-
         $loader->registerNamespace(
             'Shopware\Models\Attribute',
             $config->getAttributeDir()
         );
 
-        // now create the entity manager and use the connection
-        // settings we defined in our application.ini
-        $conn = DriverManager::getConnection(
-            array('pdo' => $db),
-            $config,
-            $eventManager
-        );
-
-        $conn->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');
-        $conn->getDatabasePlatform()->registerDoctrineTypeMapping('bit', 'boolean');
+        $connection->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');
+        $connection->getDatabasePlatform()->registerDoctrineTypeMapping('bit', 'boolean');
 
         $entityManager = ModelManager::createInstance(
-            $conn,
+            $connection,
             $config,
             $eventManager
         );
 
+        LazyFetchModelEntity::setEntityManager($entityManager);
+
+        $this->generateAttributeModels($entityManager);
+
         return $entityManager;
+    }
+
+    /**
+     * @param ModelManager $entityManager
+     */
+    protected function generateAttributeModels($entityManager)
+    {
+        // CustomerGroup model is arbitrarily chosen
+        if (!class_exists('Shopware\Models\Attribute\CustomerGroup')) {
+            $entityManager->generateAttributeModels();
+        }
     }
 }

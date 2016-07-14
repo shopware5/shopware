@@ -44,11 +44,6 @@
 class Enlight_Hook_HookManager extends Enlight_Class
 {
     /**
-     * @var Enlight_Application
-     */
-    protected $application;
-
-    /**
      * @var null|Enlight_Hook_ProxyFactory instance of the Enlight_Hook_ProxyFactory.
      */
     protected $proxyFactory = null;
@@ -65,6 +60,7 @@ class Enlight_Hook_HookManager extends Enlight_Class
 
     /**
      * @param Enlight_Event_EventManager $eventManager
+     * @param Enlight_Loader $loader
      * @param array $options
      * @throws Exception
      */

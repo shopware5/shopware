@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -24,15 +24,16 @@
 
 namespace Shopware\Components\Model;
 
+use Doctrine\Common\Annotations\Reader;
+use Doctrine\Common\Cache\ApcuCache;
 use Doctrine\Common\Proxy\AbstractProxyFactory;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Configuration as BaseConfiguration;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\CachedReader;
-use Doctrine\Common\Annotations\FileCacheReader;
-use Doctrine\Common\Cache\ApcCache;
 use Doctrine\Common\Cache\CacheProvider;
 use Doctrine\Common\Cache\XcacheCache;
+use Doctrine\ORM\Repository\RepositoryFactory;
 
 /**
  * @category  Shopware
@@ -49,21 +50,19 @@ class Configuration extends BaseConfiguration
     protected $attributeDir;
 
     /**
-     * Directory for cached anotations
+     * Custom namespace for doctrine cache provider
      *
      * @var string
      */
-    protected $fileCacheDir;
+    protected $cacheNamespace = null;
 
     /**
      * @param array $options
      * @param \Zend_Cache_Core $cache
-     * @param \Enlight_Hook_HookManager $hookManager
+     * @param RepositoryFactory $repositoryFactory
      */
-    public function __construct($options, \Zend_Cache_Core $cache, \Enlight_Hook_HookManager $hookManager)
+    public function __construct($options, \Zend_Cache_Core $cache, RepositoryFactory $repositoryFactory)
     {
-        $this->setHookManager($hookManager);
-
         // Specifies the FQCN of a subclass of the EntityRepository.
         // That will be available for all entities without a custom repository class.
         $this->setDefaultRepositoryClassName('Shopware\Components\Model\ModelRepository');
@@ -71,14 +70,10 @@ class Configuration extends BaseConfiguration
         $this->setProxyDir($options['proxyDir']);
         $this->setProxyNamespace($options['proxyNamespace']);
 
-
+        $this->setRepositoryFactory($repositoryFactory);
         $this->setAutoGenerateProxyClasses(AbstractProxyFactory::AUTOGENERATE_FILE_NOT_EXISTS);
 
         $this->setAttributeDir($options['attributeDir']);
-        $this->setFileCacheDir($options['fileCacheDir']);
-
-        $this->addEntityNamespace('Shopware', 'Shopware\Models');
-        $this->addEntityNamespace('Custom', 'Shopware\CustomModels');
 
         Type::overrideType('datetime', 'Shopware\Components\Model\DBAL\Types\DateTimeStringType');
         Type::overrideType('date', 'Shopware\Components\Model\DBAL\Types\DateStringType');
@@ -86,6 +81,13 @@ class Configuration extends BaseConfiguration
 
         $this->addCustomStringFunction('DATE_FORMAT', 'Shopware\Components\Model\Query\Mysql\DateFormat');
         $this->addCustomStringFunction('IFNULL', 'Shopware\Components\Model\Query\Mysql\IfNull');
+        $this->addCustomStringFunction('RegExp', 'Shopware\Components\Model\Query\Mysql\RegExp');
+        $this->addCustomStringFunction('Replace', 'Shopware\Components\Model\Query\Mysql\Replace');
+
+        // Load custom namespace for doctrine cache provider, if provided
+        if (isset($options['cacheNamespace'])) {
+            $this->cacheNamespace = $options['cacheNamespace'];
+        }
 
         if (isset($options['cacheProvider'])) {
             $this->setCacheProvider($options['cacheProvider']);
@@ -102,7 +104,9 @@ class Configuration extends BaseConfiguration
      */
     public function setCache(CacheProvider $cache)
     {
-        $cache->setNamespace("dc2_" . md5($this->getProxyDir() . \Shopware::REVISION) . "_"); // to avoid collisions
+        // Set namespace for doctrine cache provider to avoid collisions
+        $namespace =  ! is_null($this->cacheNamespace) ? $this->cacheNamespace : md5($this->getProxyDir() . \Shopware::REVISION);
+        $cache->setNamespace("dc2_" . $namespace  . "_");
 
         $this->setMetadataCacheImpl($cache);
         $this->setQueryCacheImpl($cache);
@@ -118,8 +122,8 @@ class Configuration extends BaseConfiguration
     {
         $cache = null;
 
-        if (extension_loaded('apc') && version_compare(phpversion('apc'), '3.1.13', '>=')) {
-            $cache = new ApcCache();
+        if (extension_loaded('apcu')) {
+            $cache = new ApcuCache();
         } elseif (extension_loaded('xcache')) {
             $cache = new XcacheCache();
         }
@@ -138,6 +142,10 @@ class Configuration extends BaseConfiguration
         if (strtolower($provider) === 'auto') {
             $cache = $this->detectCacheProvider();
         } else {
+            if (strtolower($provider) === 'apc') {
+                $provider = 'apcu';
+            }
+
             if (!class_exists($provider, false)) {
                 $provider = ucfirst($provider);
                 $provider = "Doctrine\\Common\\Cache\\{$provider}Cache";
@@ -165,57 +173,34 @@ class Configuration extends BaseConfiguration
     }
 
     /**
-     * @return AnnotationReader
+     * @return Reader
      */
     public function getAnnotationsReader()
     {
         $reader = new AnnotationReader;
         $cache = $this->getMetadataCacheImpl();
-        if ($this->getMetadataCacheImpl() instanceof Cache) {
-            $reader = new FileCacheReader(
-                $reader,
-                $this->getFileCacheDir()
-            );
-        } else {
-            $reader = new CachedReader(
-                $reader,
-                $cache
-            );
-        }
+
+        $reader = new CachedReader(
+            $reader,
+            $cache
+        );
 
         return $reader;
     }
 
     /**
-     * @param null $hookManager
-     */
-    public function setHookManager($hookManager = null)
-    {
-        $this->_attributes['hookManager'] = $hookManager;
-    }
-
-    /**
-     * @return null
-     */
-    public function getHookManager()
-    {
-        return isset($this->_attributes['hookManager']) ?
-            $this->_attributes['hookManager'] : null;
-    }
-
-    /**
      * @param string $dir
-     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
      * @return Configuration
      */
     public function setAttributeDir($dir)
     {
         if (!is_dir($dir)) {
-            throw new \InvalidArgumentException(sprintf('The directory "%s" does not exist.', $dir));
-        }
-
-        if (!is_writable($dir)) {
-            throw new \InvalidArgumentException(sprintf('The directory "%s" is not writable.', $dir));
+            if (false === @mkdir($dir, 0777, true) && !is_dir($dir)) {
+                throw new \RuntimeException(sprintf("Unable to create the doctrine attribute directory (%s)\n", $dir));
+            }
+        } elseif (!is_writable($dir)) {
+            throw new \RuntimeException(sprintf("Unable to write in the doctrine attribute directory (%s)\n", $dir));
         }
 
         $dir = rtrim(realpath($dir), '\\/') . DIRECTORY_SEPARATOR;
@@ -234,58 +219,19 @@ class Configuration extends BaseConfiguration
     }
 
     /**
-     * @param string $dir
-     * @throws \InvalidArgumentException
-     * @return Configuration
-     */
-    public function setFileCacheDir($dir)
-    {
-        if (!is_dir($dir)) {
-            throw new \InvalidArgumentException(sprintf('The directory "%s" does not exist.', $dir));
-        }
-
-        if (!is_writable($dir)) {
-            throw new \InvalidArgumentException(sprintf('The directory "%s" is not writable.', $dir));
-        }
-
-        $dir = rtrim(realpath($dir), '\\/') . DIRECTORY_SEPARATOR;
-
-        $this->fileCacheDir = $dir;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getFileCacheDir()
-    {
-        return $this->fileCacheDir;
-    }
-
-    /**
      * Sets the directory where Doctrine generates any necessary proxy class files.
      *
      * @param string $dir
-     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
      */
     public function setProxyDir($dir)
     {
         if (!is_dir($dir)) {
-            throw new \InvalidArgumentException(sprintf('The directory "%s" does not exist.', $dir));
-        }
-
-        if (!is_writable($dir)) {
-            throw new \InvalidArgumentException(sprintf('The directory "%s" is not writable.', $dir));
-        }
-
-        $dir = rtrim(realpath($dir), '\\/') . DIRECTORY_SEPARATOR . \Shopware::REVISION;
-        if (!is_dir($dir)) {
-            mkdir($dir, 0775);
-        }
-
-        if (!is_writable($dir)) {
-            throw new \InvalidArgumentException(sprintf('The directory "%s" is not writable.', $dir));
+            if (false === @mkdir($dir, 0777, true) && !is_dir($dir)) {
+                throw new \RuntimeException(sprintf("Unable to create the doctrine proxy directory (%s)\n", $dir));
+            }
+        } elseif (!is_writable($dir)) {
+            throw new \RuntimeException(sprintf("Unable to write in the doctrine proxy directory (%s)\n", $dir));
         }
 
         parent::setProxyDir($dir);

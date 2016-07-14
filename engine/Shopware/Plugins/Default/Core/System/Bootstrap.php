@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -47,10 +47,24 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
             'onInitResourceModules'
         );
         $this->subscribeEvent(
-            'Enlight_Bootstrap_InitResource_Adodb',
-            'onInitResourceAdodb'
+            'Enlight_Controller_Front_DispatchLoopShutdown',
+            'onDispatchLoopShutdown'
         );
         return true;
+    }
+
+    /**
+     * Listener method of the Enlight_Controller_Front_DispatchLoopShutdown event.
+     * If the request is from a Bot, discard the session
+     *
+     * @param \Enlight_Event_EventArgs $args
+     */
+    public function onDispatchLoopShutdown(\Enlight_Event_EventArgs $args)
+    {
+        $container = Shopware()->Container();
+        if ($container->initialized('session') && $container->get('session')->Bot && PHP_SAPI !== 'cli') {
+            Enlight_Components_Session::destroy();
+        }
     }
 
     /**
@@ -59,30 +73,24 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
      * @param Enlight_Event_EventArgs $args
      * @return \sSystem
      */
-    public static function onInitResourceSystem(Enlight_Event_EventArgs $args)
+    public function onInitResourceSystem(Enlight_Event_EventArgs $args)
     {
         $config = Shopware()->Config();
 
-        $system = new sSystem();
-        Shopware()->Bootstrap()->registerResource('System', $system);
+        $request = Shopware()->Front()->Request();
+        $system = new sSystem($request);
+
+        Shopware()->Container()->set('System', $system);
 
         $system->sMODULES = Shopware()->Modules();
-        $system->sDB_CONNECTION = Shopware()->Adodb();
         $system->sSMARTY = Shopware()->Template();
         $system->sCONFIG = $config;
-        $system->sMailer = Shopware()->Mail();
+        $system->sMailer = Shopware()->Container()->get('mail');
 
-        $request = Shopware()->Front()->Request();
-        if ($request !== null) {
-            $system->_GET = $request->getQuery();
-            $system->_POST = $request->getPost();
-            $system->_COOKIE = $request->getCookie();
-        }
-
-        if (Shopware()->Bootstrap()->issetResource('Session')) {
+        if (Shopware()->Container()->initialized('Session')) {
             $system->_SESSION = Shopware()->Session();
-            $system->sSESSION_ID = Shopware()->SessionID();
-            if (Shopware()->Session()->Bot === null) {
+            $system->sSESSION_ID = Shopware()->Session()->get('sessionId');
+            if ($request !== null && Shopware()->Session()->Bot === null) {
                 /** @var $plugin Shopware_Plugins_Frontend_Statistics_Bootstrap */
                 $plugin = Shopware()->Plugins()->Frontend()->Statistics();
                 Shopware()->Session()->Bot = $plugin->checkIsBot($request->getHeader('USER_AGENT'));
@@ -90,13 +98,8 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
             $system->sBotSession = Shopware()->Session()->Bot;
         }
 
-        if (Shopware()->Bootstrap()->issetResource('Shop')) {
+        if (Shopware()->Container()->initialized('Shop')) {
             $shop = Shopware()->Shop();
-            $system->sSubShops = self::getShopData();
-            $system->sLanguageData = $system->sSubShops;
-
-            $system->sLanguage = $shop->getId();
-            $system->sSubShop = $system->sSubShops[$shop->getId()];
             $system->sCurrency = $shop->getCurrency()->toArray();
 
             $system->sUSERGROUP = $shop->getCustomerGroup()->getKey();
@@ -104,11 +107,10 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
             $config->defaultCustomerGroup = $system->sUSERGROUP;
         }
 
-        if (Shopware()->Bootstrap()->issetResource('Session')) {
+        if (Shopware()->Container()->initialized('Session')) {
             if (!empty(Shopware()->Session()->sUserGroup)
                     && Shopware()->Session()->sUserGroup != $system->sUSERGROUP) {
                 $system->sUSERGROUP = Shopware()->Session()->sUserGroup;
-                //$system->sUSERGROUPDATA = Shopware()->Session()->sUserGroupData;
                 $system->sUSERGROUPDATA = Shopware()->Db()->fetchRow("
                     SELECT * FROM s_core_customergroups
                     WHERE groupkey = ?
@@ -123,33 +125,18 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
         }
 
         if ($request !== null) {
-            $system->sPathBase = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath();
+            $sPathBase = $request->getScheme() . '://' . $request->getHttpHost() . $request->getBasePath();
         } else {
-            $system->sPathBase = 'http://' . $config->basePath;
+            $sPathBase = 'http://' . $config->basePath;
         }
-        $system->sPathArticleImg = $system->sPathBase . '/media/image/';
-        $system->sPathBanner = $system->sPathBase . $config->banner . '/';
-        $system->sPathSupplierImg = $system->sPathBase . $config->supplierImages . '/';
-        $system->sPathCmsImg = $system->sPathBase . $config->cmsImages . '/';
-        $system->sPathStart = $system->sPathBase . $config->baseFile;
-        $system->sPathArticleFiles = $system->sPathBase . $config->articleFiles;
-        $system->sBasefile = $config->baseFile;
+        $system->sPathArticleImg = $sPathBase . '/media/image/';
+        $system->sPathBanner = $sPathBase . $config->banner . '/';
+        $system->sPathStart = $sPathBase . $config->baseFile;
 
         $config['sCURRENCY'] = $system->sCurrency['currency'];
         $config['sCURRENCYHTML'] = $system->sCurrency['symbol'];
 
         return $system;
-    }
-
-    /**
-     * Returns shop data
-     *
-     * @return array
-     */
-    public static function getShopData()
-    {
-        $data = Shopware()->Db()->fetchAssoc('SELECT id as `key`, m.* FROM s_core_multilanguage m');
-        return $data;
     }
 
     /**
@@ -161,25 +148,10 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
     public static function onInitResourceModules(Enlight_Event_EventArgs $args)
     {
         $modules = new Shopware_Components_Modules();
-        Shopware()->Bootstrap()->registerResource('Modules', $modules);
+        Shopware()->Container()->set('Modules', $modules);
         $modules->setSystem(Shopware()->System());
 
         return $modules;
-    }
-
-    /**
-     * Event listener method
-     *
-     * @param Enlight_Event_EventArgs $args
-     * @return \Enlight_Components_Adodb
-     */
-    public static function onInitResourceAdodb(Enlight_Event_EventArgs $args)
-    {
-        $db = new Enlight_Components_Adodb(array(
-            'db' => Shopware()->Db()
-        ));
-
-        return $db;
     }
 
     /**

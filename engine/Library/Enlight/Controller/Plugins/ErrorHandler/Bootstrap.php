@@ -78,26 +78,6 @@ class Enlight_Controller_Plugins_ErrorHandler_Bootstrap extends Enlight_Plugin_B
     }
 
     /**
-     * Const - No controller exception;
-     */
-    const EXCEPTION_NO_CONTROLLER = 'EXCEPTION_NO_CONTROLLER';
-
-    /**
-     * Const - No action exception; controller exists, but action does not exist
-     */
-    const EXCEPTION_NO_ACTION = 'EXCEPTION_NO_ACTION';
-
-    /**
-     * Const - No route exception; no routing was possible
-     */
-    const EXCEPTION_NO_ROUTE = 'EXCEPTION_NO_ROUTE';
-
-    /**
-     * Const - Other Exception; exceptions thrown by application controllers
-     */
-    const EXCEPTION_OTHER = 'EXCEPTION_OTHER';
-
-    /**
      * Flag; are we already inside the error handler loop?
      *
      * @var bool
@@ -147,28 +127,6 @@ class Enlight_Controller_Plugins_ErrorHandler_Bootstrap extends Enlight_Plugin_B
             $exceptions       = $response->getException();
             $exception        = $exceptions[0];
             $error->exception = $exception;
-            switch (true) {
-                case $exception instanceof Zend_Controller_Router_Exception:
-                    if (404 == $exception->getCode()) {
-                        $error->type = self::EXCEPTION_NO_ROUTE;
-                    } else {
-                        $error->type = self::EXCEPTION_OTHER;
-                    }
-                    break;
-                case $exception instanceof Zend_Controller_Dispatcher_Exception:
-                    $error->type = self::EXCEPTION_NO_CONTROLLER;
-                    break;
-                case $exception instanceof Zend_Controller_Action_Exception:
-                    if (404 == $exception->getCode()) {
-                        $error->type = self::EXCEPTION_NO_ACTION;
-                    } else {
-                        $error->type = self::EXCEPTION_OTHER;
-                    }
-                    break;
-                default:
-                    $error->type = self::EXCEPTION_OTHER;
-                    break;
-            }
 
             // Keep a copy of the original request
             $error->request = clone $request;
@@ -181,9 +139,6 @@ class Enlight_Controller_Plugins_ErrorHandler_Bootstrap extends Enlight_Plugin_B
                     ->setControllerName('error')
                     ->setActionName('error')
                     ->setDispatched(false);
-                    //->setModuleName($this->getErrorHandlerModule())
-                    //->setControllerName($this->getErrorHandlerController())
-                    //->setActionName($this->getErrorHandlerAction())
         }
     }
 }

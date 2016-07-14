@@ -42,34 +42,42 @@ abstract class Enlight_Components_Test_TestCase extends PHPUnit_Framework_TestCa
     /**
      * Returns a mock object for the specified class.
      *
-     * @param  string  $originalClassName
-     * @param  array   $methods
-     * @param  array   $arguments
-     * @param  string  $mockClassName
+     * @param  string $originalClassName
+     * @param  array $methods
+     * @param  array $arguments
+     * @param  string $mockClassName
      * @param  boolean $callOriginalConstructor
      * @param  boolean $callOriginalClone
      * @param  boolean $callAutoload
+     * @param bool $cloneArguments
+     * @param bool $callOriginalMethods
      * @return PHPUnit_Framework_MockObject_MockObject
-     * @throws InvalidArgumentException
+     * @throws Enlight_Exception
      * @since  Method available since Release 3.0.0
      */
-    public function getMock($originalClassName,
-                            $methods = array(),
-                            array $arguments = array(),
-                            $mockClassName = '',
-                            $callOriginalConstructor = true,
-                            $callOriginalClone = true,
-                            $callAutoload = true
-    )
-    {
+    public function getMock(
+        $originalClassName,
+        $methods = array(),
+        array $arguments = array(),
+        $mockClassName = '',
+        $callOriginalConstructor = true,
+        $callOriginalClone = true,
+        $callAutoload = true,
+        $cloneArguments = false,
+        $callOriginalMethods = false
+    ) {
         $originalClassName = Enlight_Class::getClassName($originalClassName);
-        return parent::getMock($originalClassName,
+
+        return parent::getMock(
+            $originalClassName,
             $methods,
             $arguments,
             $mockClassName,
             $callOriginalConstructor,
             $callOriginalClone,
-            $callAutoload
+            $callAutoload,
+            $cloneArguments,
+            $callOriginalMethods
         );
     }
 
@@ -151,79 +159,5 @@ abstract class Enlight_Components_Test_TestCase extends PHPUnit_Framework_TestCa
     protected function createXMLDataSet($xmlFile)
     {
         return new PHPUnit_Extensions_Database_DataSet_XmlDataSet($xmlFile);
-    }
-
-    /**
-     * Asserts that a link exists.
-     *
-     * @param  string $link
-     * @param  string $message
-     */
-    public static function assertLinkExists($link, $message = '')
-    {
-        if (!is_string($link)) {
-            throw PHPUnit_Util_InvalidArgumentHelper::factory(1, 'string');
-        }
-
-        $constraint = new Enlight_Components_Test_Constraint_LinkExists;
-
-        self::assertThat($link, $constraint, $message);
-    }
-
-    /**
-     * Asserts that a link does not exist.
-     *
-     * @param  string $link
-     * @param  string $message
-     */
-    public static function assertLinkNotExists($link, $message = '')
-    {
-        if (!is_string($link)) {
-            throw PHPUnit_Util_InvalidArgumentHelper::factory(1, 'string');
-        }
-
-        $constraint = new PHPUnit_Framework_Constraint_Not(new Enlight_Components_Test_Constraint_LinkExists);
-
-        self::assertThat($link, $constraint, $message);
-    }
-
-    /**
-     * @deprecated please use assertCount instead
-     *
-     * Asserts that an array has count values.
-     *
-     * @param int    $count
-     * @param array  $array
-     * @param string $message
-     */
-    public static function assertArrayCount($count, array $array, $message = '')
-    {
-        if (!is_int($count)) {
-            throw PHPUnit_Util_InvalidArgumentHelper::factory(1, 'integer');
-        }
-
-        $constraint = new PHPUnit_Framework_Constraint_Count($count);
-
-        self::assertThat($array, $constraint, $message);
-    }
-
-    /**
-     * @deprecated
-     *
-     * Asserts that an array does not have count values.
-     *
-     * @param int    $count
-     * @param array  $array
-     * @param string $message
-     */
-    public static function assertArrayNotCount($count, array $array, $message = '')
-    {
-        if (!is_int($count)) {
-            throw PHPUnit_Util_InvalidArgumentHelper::factory(1, 'integer');
-        }
-
-        $constraint = new PHPUnit_Framework_Constraint_Not(new PHPUnit_Framework_Constraint_Count($count));
-
-        self::assertThat($array, $constraint, $message);
     }
 }

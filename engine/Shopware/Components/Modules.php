@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -30,8 +30,7 @@
 class Shopware_Components_Modules extends Enlight_Class implements ArrayAccess
 {
     /**
-     * Name of system class
-     * @var string
+     * @var sSystem
      */
     protected $system;
 
@@ -40,15 +39,6 @@ class Shopware_Components_Modules extends Enlight_Class implements ArrayAccess
      * @var array
      */
     protected $modules_container = array();
-
-    /**
-     * Initiate class parameters
-     * @deprecated 4.2
-     * @return void
-     */
-    public function init()
-    {
-    }
 
     /**
      * Set class property
@@ -64,22 +54,30 @@ class Shopware_Components_Modules extends Enlight_Class implements ArrayAccess
      * Possible values for $name - sBasket, sAdmin etc.
      * @param $name
      */
-    public function loadModule($name)
+    private function loadModule($name)
     {
-        if (!isset($this->modules_container[$name])) {
-            $this->modules_container[$name] = null;
-            $name = basename($name);
-
-            Shopware()->Hooks()->setAlias($name, $name);
-            $proxy = Shopware()->Hooks()->getProxy($name);
-            $this->modules_container[$name] = new $proxy;
-            $this->modules_container[$name]->sSYSTEM = $this->system;
+        if (isset($this->modules_container[$name])) {
+            return;
         }
+
+        $this->modules_container[$name] = null;
+        $name = basename($name);
+
+        if ($name == 'sSystem') {
+            $this->modules_container[$name] = $this->system;
+            return;
+        }
+
+        Shopware()->Hooks()->setAlias($name, $name);
+        $proxy = Shopware()->Hooks()->getProxy($name);
+        $this->modules_container[$name] = new $proxy;
+        $this->modules_container[$name]->sSYSTEM = $this->system;
     }
 
     /**
      * Reformat module name and return reference to module
-     * @param $name
+     *
+     * @param string $name
      * @return mixed
      */
     public function getModule($name)
@@ -205,5 +203,37 @@ class Shopware_Components_Modules extends Enlight_Class implements ArrayAccess
     public function Order()
     {
         return $this->getModule("Order");
+    }
+
+    /**
+     * @return sCms
+     */
+    public function Cms()
+    {
+        return $this->getModule("Cms");
+    }
+
+    /**
+     * @return sCore
+     */
+    public function Core()
+    {
+        return $this->getModule("Core");
+    }
+
+    /**
+     * @return sRewriteTable
+     */
+    public function RewriteTable()
+    {
+        return $this->getModule("RewriteTable");
+    }
+
+    /**
+     * @return sExport
+     */
+    public function Export()
+    {
+        return $this->getModule("Export");
     }
 }

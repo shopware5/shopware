@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,10 +23,11 @@
  */
 
 namespace Shopware\Models\Article\Configurator;
-use Shopware\Components\Model\ModelEntity,
-    Doctrine\ORM\Mapping AS ORM,
-    Symfony\Component\Validator\Constraints as Assert,
-    Doctrine\Common\Collections\ArrayCollection;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity
@@ -79,18 +80,6 @@ class Option extends ModelEntity
      * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Configurator\Dependency", mappedBy="childOption", orphanRemoval=true)
      */
     private $dependencyChildren;
-
-    /**
-     * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Configurator\PriceSurcharge", mappedBy="parentOption", orphanRemoval=true)
-     */
-    private $surchargeParents;
-
-    /**
-     * @var ArrayCollection
-     * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Configurator\PriceSurcharge", mappedBy="childOption", orphanRemoval=true)
-     */
-    private $surchargeChildren;
 
     /**
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Article\Detail", mappedBy="configuratorOptions")
@@ -207,37 +196,5 @@ class Option extends ModelEntity
     public function setDependencyChildren($dependencyChildren)
     {
         $this->dependencyChildren = $dependencyChildren;
-    }
-
-    /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
-     */
-    public function getSurchargeParents()
-    {
-        return $this->surchargeParents;
-    }
-
-    /**
-     * @param \Doctrine\Common\Collections\ArrayCollection $surchargeParents
-     */
-    public function setSurchargeParents($surchargeParents)
-    {
-        $this->surchargeParents = $surchargeParents;
-    }
-
-    /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
-     */
-    public function getSurchargeChildren()
-    {
-        return $this->surchargeChildren;
-    }
-
-    /**
-     * @param \Doctrine\Common\Collections\ArrayCollection $surchargeChildren
-     */
-    public function setSurchargeChildren($surchargeChildren)
-    {
-        $this->surchargeChildren = $surchargeChildren;
     }
 }

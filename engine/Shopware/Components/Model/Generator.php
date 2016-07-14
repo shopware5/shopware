@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -24,6 +24,8 @@
 
 namespace Shopware\Components\Model;
 
+use Doctrine\DBAL\Schema\AbstractSchemaManager;
+
 class Generator
 {
     /**
@@ -41,8 +43,8 @@ class Generator
      */
     const SHOPWARE_LICENCE = '
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -121,6 +123,16 @@ class %className% extends ModelEntity
     ';
 
     /**
+     * Definitition of a constructor for initializing properties.
+     */
+    const CONSTRUCTOR = '
+    public function __construct()
+    {
+        %propertyInitializations%
+    }
+    ';
+
+    /**
      * Definition of the standard shopware getter and setter
      * functions of a single model column property.
      */
@@ -156,7 +168,7 @@ class %className% extends ModelEntity
 
     /**
      * Contains the schema manager which is used to get the database definition
-     * @var \Doctrine\DBAL\Schema\AbstractSchemaManager
+     * @var AbstractSchemaManager
      */
     protected $schemaManager = null;
 
@@ -178,13 +190,16 @@ class %className% extends ModelEntity
      */
     protected $modelPath = '';
 
-
     /**
+     * @param AbstractSchemaManager $schemaManager
+     * @param string $path
      * @param string $modelPath
      */
-    public function setModelPath($modelPath)
+    public function __construct(AbstractSchemaManager $schemaManager, $path, $modelPath)
     {
-        $this->modelPath = $modelPath;
+        $this->schemaManager = $schemaManager;
+        $this->path          = $path;
+        $this->modelPath     = $modelPath;
     }
 
     /**
@@ -196,14 +211,6 @@ class %className% extends ModelEntity
     }
 
     /**
-     * @param string $path
-     */
-    public function setPath($path)
-    {
-        $this->path = $path;
-    }
-
-    /**
      * @return string
      */
     public function getPath()
@@ -212,15 +219,7 @@ class %className% extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\DBAL\Schema\AbstractSchemaManager $schemaManager
-     */
-    public function setSchemaManager($schemaManager)
-    {
-        $this->schemaManager = $schemaManager;
-    }
-
-    /**
-     * @return \Doctrine\DBAL\Schema\AbstractSchemaManager
+     * @return AbstractSchemaManager
      */
     public function getSchemaManager()
     {
@@ -272,26 +271,28 @@ class %className% extends ModelEntity
             $this->tableMapping = $this->createTableMapping();
         }
 
-        $this->createTargetDirectory();
-        if (!file_exists($this->getPath())) {
-            return array('success' => false, 'error' => self::CREATE_TARGET_DIRECTORY_FAILED);
+        try {
+            $this->createTargetDirectory($this->getPath());
+        } catch (\Exception $e) {
+            return array('success' => false, 'error' => self::CREATE_TARGET_DIRECTORY_FAILED, 'message' => $e->getMessage());
         }
 
         $errors = array();
-        /**@var $table \Doctrine\DBAL\Schema\Table*/
-        foreach ($this->getSchemaManager()->listTables() as $table) {
-            if (!empty($tableNames) && !in_array($table->getName(), $tableNames)) {
+        foreach ($this->getSchemaManager()->listTableNames() as $tableName) {
+            if (!empty($tableNames) && !in_array($tableName, $tableNames)) {
                 continue;
             }
-            if (strpos($table->getName(), '_attributes') === false) {
+
+            if (!$this->stringEndsWith($tableName, '_attributes')) {
                 continue;
             }
+
+            $table = $this->getSchemaManager()->listTableDetails($tableName);
             $sourceCode = $this->generateModel($table);
             $result = $this->createModelFile($table, $sourceCode);
             if ($result === false) {
                 $errors[] = $table->getName();
             }
-
         }
 
         return array('success' => empty($errors), 'errors' => $errors);
@@ -313,6 +314,10 @@ class %className% extends ModelEntity
             $className = $this->getClassNameOfTableName($tableName);
         }
 
+        if ($className === '') {
+            return false;
+        }
+
         $file = $this->getPath() . $className . '.php';
 
         if (file_exists($file) && !is_writable($file)) {
@@ -326,13 +331,17 @@ class %className% extends ModelEntity
 
     /**
      * Creates a new directory for the models which will be generated.
+     * @param string $dir
      */
-    protected function createTargetDirectory()
+    protected function createTargetDirectory($dir)
     {
-        if (file_exists($this->getPath())) {
-            return true;
+        if (!is_dir($dir)) {
+            if (false === @mkdir($dir, 0777, true) && !is_dir($dir)) {
+                throw new \RuntimeException(sprintf("Unable to create directory (%s)\n", $dir));
+            }
+        } elseif (!is_writable($dir)) {
+            throw new \RuntimeException(sprintf("Unable to write in directory (%s)\n", $dir));
         }
-        return mkdir($this->getPath(), 0777);
     }
 
     /**
@@ -363,6 +372,9 @@ class %className% extends ModelEntity
         //after the normal column properties created, we can add the association properties.
         $associationProperties = $this->getAssociationProperties($table);
 
+        // Add the constructor
+        $constructor = $this->getConstructor($table);
+
         //now all properties are declared, but the properties needs getter and setter function to get access from extern
         $columnFunctions = $this->getColumnsFunctions($table);
 
@@ -377,6 +389,7 @@ class %className% extends ModelEntity
             $classHeader,
             implode("\n", $columnProperties),
             implode("\n", $associationProperties),
+            $constructor,
             implode("\n", $columnFunctions),
             implode("\n", $associationFunctions),
             '}'
@@ -458,7 +471,7 @@ class %className% extends ModelEntity
         $columns = array();
         /**@var $column \Doctrine\DBAL\Schema\Column*/
         foreach ($table->getColumns() as $column) {
-            $columns[] = $this->getColumnProperty($table,$column);
+            $columns[] = $this->getColumnProperty($table, $column);
         }
         return $columns;
     }
@@ -532,7 +545,9 @@ class %className% extends ModelEntity
      */
     protected function underscoreToCamelCase($str)
     {
-        $func = create_function('$c', 'return strtoupper($c[1]);');
+        $func = function ($c) {
+            return strtoupper($c[1]);
+        };
 
         return preg_replace_callback('/_([a-zA-Z])/', $func, $str);
     }
@@ -667,6 +682,64 @@ class %className% extends ModelEntity
     }
 
     /**
+     * Creates the source code for the custom constructor, which initializes all
+     * not-null properties with their respective default vaulue.
+     *
+     * @param $table \Doctrine\DBAL\Schema\Table
+     * @return string
+     */
+    protected function getConstructor($table)
+    {
+        // Create the property initializations
+        $initializations = array();
+        foreach ($table->getColumns() as $column) {
+            if ($column->getDefault() === null || $this->isPrimaryColumn($table, $column)) {
+                continue;
+            }
+
+            // Make sure not to set default values for foreign key properties
+            $isForeignKeyColumn = false;
+            foreach ($table->getForeignKeys() as $foreignKey) {
+                if (in_array($column->getName(), $foreignKey->getLocalColumns())) {
+                    $isForeignKeyColumn = true;
+                    break;
+                }
+            }
+            if ($isForeignKeyColumn) {
+                continue;
+            }
+
+            // Determine property name, type and default value
+            $property = $this->getPropertyNameOfColumnName($table, $column);
+            $type = $this->getPropertyTypeOfColumnType($column);
+            $default = $column->getDefault();
+            switch ($type) {
+                case 'string':
+                    $default = '"'.$default.'"';
+                    break;
+                case 'boolean':
+                    $default = ($default) ? 'true' : 'false';
+                    break;
+                case 'date':
+                case 'datetime':
+                    $default = 'new \DateTime("'.$default.'")';
+            }
+
+            $initializations[] = '$this->'.lcfirst($property).' = '.$default.';';
+        }
+        if (count($initializations) === 0) {
+            // No need for a constructor
+            return '';
+        }
+
+        // Compile the source snippet
+        $source = self::CONSTRUCTOR;
+        $source = str_replace('%propertyInitializations%', implode("\n        ", $initializations), $source);
+
+        return $source;
+    }
+
+    /**
      * The getColumnsFunctions function creates the source code for the
      * getter and setter for all table columns properties.
      *
@@ -680,7 +753,6 @@ class %className% extends ModelEntity
             $functions[] = $this->getColumnFunctions($table, $column);
         }
         return $functions;
-
     }
 
     /**
@@ -764,6 +836,9 @@ class %className% extends ModelEntity
             //preg match for the model class name!
             $matches = array();
             preg_match('/class\s+([a-zA-Z0-9_]+)/', $content, $matches);
+            if (count($matches) === 0) {
+                continue;
+            }
             $className = $matches[1];
 
             //preg match for the model namespace!
@@ -792,4 +867,20 @@ class %className% extends ModelEntity
         return $classes;
     }
 
+    /**
+     * Checks if given string in $haystack end the with string in $needle
+     *
+     * @param string $haystack
+     * @param string $needle
+     * @return bool
+     */
+    private function stringEndsWith($haystack, $needle)
+    {
+        $length = strlen($needle);
+        if ($length == 0) {
+            return true;
+        }
+
+        return (substr($haystack, -$length) === $needle);
+    }
 }

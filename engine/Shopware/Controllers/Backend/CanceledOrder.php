@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,7 +23,7 @@
  */
 
 use Shopware\Models\Order\Order;
-use Doctrine\ORM\AbstractQuery;
+
 /**
  * Shopware Backend Controller
  * Backend for various ajax queries
@@ -39,7 +39,6 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
      */
     protected function initAcl()
     {
-        $this->setAclResourceName('canceled_order');
         // read
         $this->addAclPermission('getStatistics', 'read', 'Insufficient Permissions');
         $this->addAclPermission('getArticle', 'read', 'Insufficient Permissions');
@@ -54,7 +53,10 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
     public function convertOrderAction()
     {
         if (!($orderId = $this->Request()->getParam('orderId'))) {
-            $this->View()->assign(array('success' => false, 'message' => 'No orderId passed'));
+            $this->View()->assign([
+                'success' => false,
+                'message' => $this->translateMessage('errorMessage/noOrderId', 'No orderId passed.')
+            ]);
             return;
         }
 
@@ -73,7 +75,10 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
 
         // Check requiered fields
         if (empty($result) || $result[0]['customer'] === null || $result[0]['customer']['billing'] === null) {
-            $this->View()->assign(array('success' => false, 'message' => 'Could not get required customer data'));
+            $this->View()->assign([
+                'success' => false,
+                'message' => $this->translateMessage('errorMessage/noCustomerData', 'Could not get required customer data.')
+            ]);
             return;
         }
 
@@ -81,7 +86,10 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         $numberRepository = Shopware()->Models()->getRepository('Shopware\Models\Order\Number');
         $numberModel = $numberRepository->findOneBy(array('name' => 'invoice'));
         if ($numberModel === null) {
-            $this->View()->assign(array('success' => false, 'message' => 'Could not get ordernumber'));
+            $this->View()->assign([
+                'success' => false,
+                'message' => $this->translateMessage('errorMessage/noOrdernumber', 'Could not get ordernumber.')
+            ]);
             return;
         }
         $newOrderNumber = $numberModel->getNumber() + 1;
@@ -93,10 +101,24 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         $orderModel = Shopware()->Models()->find('Shopware\Models\Order\Order', $orderId);
         $orderModel->setNumber($newOrderNumber);
 
-        // set new ordernumber to order details
-        $orderDetailRepository = Shopware()->Models()->getRepository('Shopware\Models\Order\Detail');
-        $orderDetailModel = $orderDetailRepository->findOneBy(array('orderId' => $orderId));
-        $orderDetailModel->setNumber($newOrderNumber);
+        // refreshes the in stock correctly for this order if the user confirmed it
+        if ((bool) $this->Request()->getParam('refreshInStock')) {
+            $outOfStock = $this->getOutOfStockProducts($orderModel);
+
+            if (!empty($outOfStock)) {
+                $numbers = array_map(function (\Shopware\Models\Article\Detail $variant) {
+                    return $variant->getNumber();
+                }, $outOfStock);
+
+                $this->View()->assign([
+                    'success' => false,
+                    'message' => $this->translateMessage('errorMessage/notEnoughStock', "The following products haven't enough stock") . implode(', ', $numbers)
+                ]);
+                return;
+            }
+
+            $this->convertCancelledOrderInStock($orderModel);
+        }
 
         // If there is no shipping address, set billing address to be the shipping address
         if ($result[0]['customer']['shipping'] === null) {
@@ -126,7 +148,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
 
         Shopware()->Models()->flush();
 
-        $this->View()->assign(array('success' => true));
+        $this->View()->assign(['success' => true]);
     }
 
     /**
@@ -156,7 +178,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         if (is_array($filter) && isset($filter[0]['value'])) {
             $params['filter'] = '%' . $filter[0]['value'] . '%';
             $filter = 'AND lastviewport LIKE :filter';
-         } else {
+        } else {
             $filter = '';
         }
 
@@ -205,19 +227,21 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         $data = Shopware()->Db()->fetchAll($sql, $params);
 
         // Insert the percentage into each field manually
-        $sum = 0;
         if ($data !== null && isset($total)) {
-            for ($i=0;$i<count($data);$i++) {
-                $data[$i]['percent'] = round($data[$i]['number'] / $total * 100, 1);
+            for ($i = 0; $i < count($data); $i++) {
+                if ($total != 0) {
+                    $data[$i]['percent'] = round($data[$i]['number'] / $total * 100, 1);
+                } else {
+                    $data[$i]['percent'] = 0;
+                }
             }
         }
 
-
-        $this->View()->assign(array(
+        $this->View()->assign([
             'success' => true,
             'data' => $data,
             'total' => count($data),
-        ));
+        ]);
     }
 
     /**
@@ -242,12 +266,11 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
 
         $data = Shopware()->Db()->fetchAll($sql);
 
-        $this->View()->assign(array(
+        $this->View()->assign([
             'success' => true,
             'data' => $data,
             'total' => count($data),
-        ));
-
+        ]);
     }
 
     /**
@@ -284,27 +307,42 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
     public function sendCanceledQuestionMailAction()
     {
         if (!($mailTo = $this->Request()->getParam('mail'))) {
-            $this->View()->assign(array('success' => false, 'message' => 'No mail passed'));
+            $this->View()->assign([
+                'success' => false,
+                'message' => $this->translateMessage('errorMessage/noMail', 'No mail passed.')
+            ]);
             return;
         }
 
         if (!($template = $this->Request()->getParam('template'))) {
-            $this->View()->assign(array('success' => false, 'message' => 'No template passed'));
+            $this->View()->assign([
+                'success' => false,
+                'message' => $this->translateMessage('errorMessage/noTemplate', 'No template passed.')
+            ]);
             return;
         }
 
         if (($template === 'sCANCELEDVOUCHER') && !($voucherId = $this->Request()->getParam('voucherId'))) {
-            $this->View()->assign(array('success' => false, 'message' => 'No voucherId passed'));
+            $this->View()->assign([
+                'success' => false,
+                'message' => $this->translateMessage('errorMessage/noVoucherId', 'No voucherId passed.')
+            ]);
             return;
         }
 
         if (!($customerId = $this->Request()->getParam('customerId'))) {
-            $this->View()->assign(array('success' => false, 'message' => 'No customerId passed'));
+            $this->View()->assign([
+                'success' => false,
+                'message' => $this->translateMessage('errorMessage/noCustomerId', 'No customerId passed.')
+            ]);
             return;
         }
 
         if (!($orderId = $this->Request()->getParam('orderId'))) {
-            $this->View()->assign(array('success' => false, 'message' => 'No orderId passed'));
+            $this->View()->assign([
+                'success' => false,
+                'message' => $this->translateMessage('errorMessage/noOrderId', 'No orderId passed.')
+            ]);
             return;
         }
 
@@ -315,7 +353,10 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         } else {
             $code = $this->getFreeVoucherCode($voucherId);
             if ($code === null) {
-                $this->View()->assign(array('success' => false, 'message' => 'Mo more free codes available'));
+                $this->View()->assign([
+                    'success' => false,
+                    'message' => $this->translateMessage('errorMessage/noVoucherCodes', 'No more free codes available.')
+                ]);
                 return;
             }
             $context = array(
@@ -330,7 +371,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         } else {
             $shop = $orderModel->getLanguageSubShop();
         }
-        $shop->registerResources(Shopware()->Bootstrap());
+        $shop->registerResources();
 
         // Try to send the actual mail
         try {
@@ -338,7 +379,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
             $mail->addTo($mailTo);
             $mail->send();
         } catch (\Exception $e) {
-            $this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
+            $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
             return;
         }
 
@@ -370,8 +411,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
             Shopware()->Models()->flush();
         }
 
-        $this->View()->assign(array('success' => true));
-
+        $this->View()->assign(['success' => true]);
     }
 
     /*
@@ -391,7 +431,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         if (is_array($filter) && isset($filter[0]['value'])) {
             $params['filter'] = '%' . $filter[0]['value'] . '%';
             $filter = 'AND s_core_paymentmeans.description LIKE :filter';
-         } else {
+        } else {
             $filter = '';
         }
 
@@ -407,12 +447,11 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
 
         $data = Shopware()->Db()->fetchAll($sql, $params);
 
-        $this->View()->assign(array(
+        $this->View()->assign([
             'success' => true,
             'data' => $data,
             'total' => count($data),
-        ));
-
+        ]);
     }
 
     /**
@@ -433,7 +472,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         if (is_array($filter) && isset($filter[0]['value'])) {
             $params['filter'] = '%' . $filter[0]['value'] . '%';
             $filter = 'AND (s_articles.name LIKE :filter OR s_order_basket.ordernumber LIKE :filter)';
-         } else {
+        } else {
             $filter = '';
         }
 
@@ -479,11 +518,11 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
 
         $data = Shopware()->Db()->fetchAll($sql, $params);
 
-        $this->View()->assign(array(
+        $this->View()->assign([
             'success' => true,
             'data' => $data,
             'total' => count($data),
-        ));
+        ]);
     }
 
     /**
@@ -504,7 +543,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         if (is_array($filter) && isset($filter[0]['value'])) {
             $params['filter'] = '%' . $filter[0]['value'] . '%';
             $filter = 'AND s_order_basket.datum LIKE :filter';
-         } else {
+        } else {
             $filter = '';
         }
 
@@ -555,11 +594,11 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
 
         $data = Shopware()->Db()->fetchAll($sql, $params);
 
-        $this->View()->assign(array(
+        $this->View()->assign([
             'success' => true,
             'data' => $data,
             'total' => count($data),
-        ));
+        ]);
     }
 
     /**
@@ -567,7 +606,6 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
      */
     public function getOrderAction()
     {
-
         $limit = $this->Request()->getParam('limit', 20);
         $offset = $this->Request()->getParam('start', 0);
         $filter = $this->Request()->getParam('filter', null);
@@ -602,14 +640,16 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
                 ->setMaxResults($limit);
 
         $query = $builder->getQuery();
-        $total = Shopware()->Models()->getQueryCount($query);
-        $orders = $query->getArrayResult();
+        $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        $paginator = $this->getModelManager()->createPaginator($query);
+        $total = $paginator->count();
+        $orders = $paginator->getIterator()->getArrayCopy();
 
-        $this->View()->assign(array(
+        $this->View()->assign([
             'success' => true,
             'data' => $orders,
             'total' => $total,
-        ));
+        ]);
     }
 
     /**
@@ -642,10 +682,146 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         }
 
         Shopware()->Models()->flush();
-        $this->View()->assign(array(
-            'success' => true
-        ));
+        $this->View()->assign(['success' => true]);
+    }
+
+    /**
+     * @param Order $order
+     * @return \Shopware\Models\Article\Detail[]
+     */
+    private function getOutOfStockProducts(Order $order)
+    {
+        $products = $this->getProductsOfOrder($order);
+
+        $invalid = [];
+        foreach ($products as $product) {
+            $position = $this->getOrderPositionByProduct($product, $order);
+
+            if (!$position) {
+                continue;
+            }
+
+            $newStock = $product->getInStock() - $position->getQuantity();
+
+            if (!$this->isValidStock($product, $newStock)) {
+                $invalid[] = $product;
+            }
+        }
+
+        return $invalid;
+    }
+
+    /**
+     * @param \Shopware\Models\Article\Detail $variant
+     * @param Order $order
+     * @return null|\Shopware\Models\Order\Detail
+     */
+    private function getOrderPositionByProduct(\Shopware\Models\Article\Detail $variant, Order $order)
+    {
+        /**@var $detail \Shopware\Models\Order\Detail*/
+        foreach ($order->getDetails() as $detail) {
+            if (!$this->isProductPosition($detail)) {
+                continue;
+            }
+            if ($detail->getArticleNumber() === $variant->getNumber()) {
+                return $detail;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param Order $order
+     * @return \Shopware\Models\Article\Detail[]
+     */
+    private function getProductsOfOrder(Order $order)
+    {
+        /**@var $repository \Shopware\Components\Model\ModelRepository*/
+        $repository = $this->get('models')->getRepository('Shopware\Models\Article\Detail');
+
+        $products = [];
+        foreach ($order->getDetails() as $detail) {
+            /**@var $detail \Shopware\Models\Order\Detail*/
+            if (!$this->isProductPosition($detail)) {
+                continue;
+            }
+            $variant = $repository->findOneBy(['number' => $detail->getArticleNumber()]);
+            $products[] = $variant;
+        }
+
+        return $products;
     }
 
 
+    /**
+     * Function which calculates, validates and updates the new in stock when a cancelled order will be transformed into
+     * a regular order
+     *
+     * @param Shopware\Models\Order\Order $orderModel
+     * @return bool
+     */
+    private function convertCancelledOrderInStock(Shopware\Models\Order\Order $orderModel)
+    {
+        /** @var $entityManager \Shopware\Components\Model\ModelManager */
+        $entityManager = $this->get('models');
+
+        $products = $this->getProductsOfOrder($orderModel);
+
+        foreach ($products as $product) {
+            $position = $this->getOrderPositionByProduct($product, $orderModel);
+            if (!$position) {
+                continue;
+            }
+
+            $product->setInStock(
+                $product->getInStock() - $position->getQuantity()
+            );
+
+            $entityManager->persist($product);
+        }
+
+        return true;
+    }
+
+    /**
+     * Helper function to check if the stock is valid if the article is on sale
+     *
+     * @param \Shopware\Models\Article\Detail $variant
+     * @param int $newStock
+     * @return bool
+     */
+    private function isValidStock(Shopware\Models\Article\Detail $variant, $newStock)
+    {
+        if ($variant->getArticle()->getLastStock() && $newStock < 0) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Checks if the order position is a regular product
+     *
+     * @param Shopware\Models\Order\Detail $orderDetailModel
+     * @return bool
+     */
+    private function isProductPosition(Shopware\Models\Order\Detail $orderDetailModel)
+    {
+        return ($orderDetailModel->getMode() == 0);
+    }
+
+    /**
+     * Helper function to get the correct translation
+     *
+     * @param string $name
+     * @param string $default
+     * @return string
+     */
+    private function translateMessage($name, $default = null)
+    {
+        $namespace = Shopware()->Snippets()->getNamespace('backend/canceled_order/controller/main');
+        $translation = $namespace->get($name, $default);
+
+        return $translation;
+    }
 }

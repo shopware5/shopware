@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -40,11 +40,16 @@ abstract class ModelEntity
      * $model->setShipping($shippingModel->fromArray($shippingData));
      *
      * @param array $array
-     * @return \Shopware\Components\Model\ModelEntity
+     * @param array $fillable optional property whitelist for mass-assignment
+     * @return ModelEntity
      */
-    public function fromArray(array $array = array())
+    public function fromArray(array $array = array(), array $fillable = [])
     {
         foreach ($array as $key => $value) {
+            if (count($fillable) && !in_array($key, $fillable)) {
+                continue;
+            }
+
             $method = 'set' . ucfirst($key);
             if (method_exists($this, $method)) {
                 $this->$method($value);
@@ -83,11 +88,11 @@ abstract class ModelEntity
      * <li>So the parameter expect <b>"customer"</b></li>
      * </ul>
      *
-     * @param \Shopware\Components\Model\ModelEntity|array|null $data Model data, example: an instance of \Shopware\Models\Order\Order
+     * @param ModelEntity|array|null $data Model data, example: an instance of \Shopware\Models\Order\Order
      * @param string $model Full namespace of the association model, example: '\Shopware\Models\Order\Order'
      * @param string $property Name of the association property, example: 'orders'
      * @param string|null $reference Name of the reference property, example: 'customer'
-     * @return \Shopware\Components\Model\ModelEntity
+     * @return ModelEntity
      */
     public function setOneToOne($data, $model, $property, $reference = null)
     {
@@ -165,7 +170,7 @@ abstract class ModelEntity
      * @param string $model Full namespace of the association model, example: '\Shopware\Models\Order\Order'
      * @param string $property Name of the association property, example: 'orders'
      * @param string $reference Name of the reference property, example: 'customer'
-     * @return \Shopware\Components\Model\ModelEntity
+     * @return ModelEntity
      */
     public function setOneToMany($data, $model, $property, $reference = null)
     {
@@ -174,8 +179,6 @@ abstract class ModelEntity
         if ($reference !== null) {
             $setterFunction = "set" . ucfirst($reference);
         }
-
-
 
         //to remove the whole one to many association, u can pass null as parameter.
         if ($data === null) {
@@ -189,8 +192,6 @@ abstract class ModelEntity
 
         //create a new collection to collect all updated and created models.
         $updated = new \Doctrine\Common\Collections\ArrayCollection();
-
-
 
         //iterate all passed items
         foreach ($data as $item) {
@@ -262,11 +263,12 @@ abstract class ModelEntity
      * <ul>
      * <li>In the setSupplier() function of the article model we would expects <b>"supplier"</b>.</li>
      * </ul>
-     * @param array|null $data Model data, example: an data array or an instance of the model
+     *
+     * @param ModelEntity|array|null $data Model data, example: an data array or an instance of the model
      * @param string $model Full namespace of the association model, example: '\Shopware\Models\Article\Supplier'
      * @param string $property Name of the association property, example: 'supplier'
      * @throws \InvalidArgumentException
-     * @return \Shopware\Components\Model\ModelEntity
+     * @return ModelEntity
      */
     public function setManyToOne($data, $model, $property)
     {
@@ -313,7 +315,7 @@ abstract class ModelEntity
     /**
      * @param \Doctrine\Common\Collections\ArrayCollection|array $collection
      * @param int $id
-     * @return null|\Shopware\Components\Model\ModelEntity
+     * @return null|ModelEntity
      */
     private function getArrayCollectionElementById($collection, $id)
     {

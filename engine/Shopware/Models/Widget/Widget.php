@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,8 +23,9 @@
  */
 
 namespace Shopware\Models\Widget;
-use Shopware\Components\Model\ModelEntity,
-Doctrine\ORM\Mapping as ORM;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  *
@@ -50,6 +51,7 @@ class Widget extends ModelEntity
     /**
      * @var string $label
      * @ORM\Column(name="label", type="string", nullable=false)
+     * @deprecated
      */
     private $label;
 
@@ -58,6 +60,19 @@ class Widget extends ModelEntity
      * @ORM\OneToMany(targetEntity="Shopware\Models\Widget\View", mappedBy="widget")
      */
     private $views;
+
+    /**
+     * @var integer $pluginId
+     * @ORM\Column(name="plugin_id", type="integer", nullable=true)
+     */
+    private $pluginId;
+
+    /**
+     * @var \Shopware\Models\Plugin\Plugin
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Plugin\Plugin", inversedBy="widgets")
+     * @ORM\JoinColumn(name="plugin_id", referencedColumnName="id")
+     */
+    private $plugin;
 
     /**
      * @return int
@@ -84,6 +99,7 @@ class Widget extends ModelEntity
     }
 
     /**
+     * @deprecated Use 'label' snippet from 'backend/widget/<your-widget-name>' namespace instead
      * @return string
      */
     public function getLabel()
@@ -92,6 +108,7 @@ class Widget extends ModelEntity
     }
 
     /**
+     * @deprecated Use 'label' snippet from 'backend/widget/<your-widget-name>' namespace instead
      * @param string $label
      */
     public function setLabel($label)
@@ -113,5 +130,21 @@ class Widget extends ModelEntity
     public function setViews($views)
     {
         $this->views = $views;
+    }
+
+    /**
+     * @param \Shopware\Models\Plugin\Plugin $plugin
+     */
+    public function setPlugin($plugin)
+    {
+        $this->plugin = $plugin;
+    }
+
+    /**
+     * @return \Shopware\Models\Plugin\Plugin
+     */
+    public function getPlugin()
+    {
+        return $this->plugin;
     }
 }

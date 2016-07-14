@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,6 +23,7 @@
  */
 
 namespace Shopware\Models\Article;
+
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Model\QueryBuilder;
 
@@ -30,7 +31,6 @@ use Shopware\Components\Model\QueryBuilder;
  */
 class Repository extends ModelRepository
 {
-
     /**
      * Used for the article backend module to load the article data into
      * the module. This function selects only some fragments for the whole article
@@ -128,6 +128,32 @@ class Repository extends ModelRepository
                 ->leftJoin('article.similar', 'similar')
                 ->leftJoin('similar.mainDetail', 'similarDetail')
                 ->where('article.id = :articleId')
+                ->setParameters(array('articleId' => $articleId));
+
+        return $builder;
+    }
+
+    /**
+     * @param $articleId
+     * @return \Doctrine\ORM\Query
+     */
+    public function getArticleRelatedProductStreamsQuery($articleId)
+    {
+        return $this->getArticleRelatedProductStreamsQueryBuilder($articleId)->getQuery();
+    }
+
+    /**
+     * @param $articleId
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getArticleRelatedProductStreamsQueryBuilder($articleId)
+    {
+        $builder = $this->getEntityManager()->createQueryBuilder();
+        $builder->select(array('article.id', 'relatedProductStreams.id', 'relatedProductStreams.name', 'relatedProductStreams.description'))
+                ->from('Shopware\Models\Article\Article', 'article')
+                ->leftJoin('article.relatedProductStreams', 'relatedProductStreams')
+                ->where('article.id = :articleId')
+                ->andWhere('relatedProductStreams.id IS NOT NULL')
                 ->setParameters(array('articleId' => $articleId));
 
         return $builder;
@@ -790,7 +816,7 @@ class Repository extends ModelRepository
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array('details', 'prices', 'options'))
                 ->from('Shopware\Models\Article\Detail', 'details')
-                ->leftJoin('details.prices', 'prices','WITH', 'prices.customerGroupKey = :key')
+                ->leftJoin('details.prices', 'prices', 'WITH', 'prices.customerGroupKey = :key')
                 ->leftJoin('prices.customerGroup', 'customerGroup')
                 ->innerJoin('details.configuratorOptions', 'options', null, null, 'options.groupId')
                 ->where('details.articleId = ?1')
@@ -939,27 +965,25 @@ class Repository extends ModelRepository
      * @param $configuratorSetId
      * @return \Doctrine\ORM\Query
      */
-    public function getConfiguratorPriceSurchargesQuery($configuratorSetId)
+    public function getConfiguratorPriceVariationsQuery($configuratorSetId)
     {
-        $builder = $this->getConfiguratorPriceSurchargesQueryBuilder($configuratorSetId);
+        $builder = $this->getConfiguratorPriceVariationsQueryBuilder($configuratorSetId);
         return $builder->getQuery();
     }
 
 
     /**
-     * Helper function to create the query builder for the "getConfiguratorPriceSurchargesQuery" function.
+     * Helper function to create the query builder for the "getConfiguratorPriceVariationsQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      * @param $configuratorSetId
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getConfiguratorPriceSurchargesQueryBuilder($configuratorSetId)
+    public function getConfiguratorPriceVariationsQueryBuilder($configuratorSetId)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(array('priceSurcharges', 'priceSurchargesParent', 'priceSurchargesChild'))
-                ->from('Shopware\Models\Article\Configurator\PriceSurcharge', 'priceSurcharges')
-                ->leftJoin('priceSurcharges.parentOption', 'priceSurchargesParent')
-                ->leftJoin('priceSurcharges.childOption', 'priceSurchargesChild')
-                ->where('priceSurcharges.configuratorSetId = ?1')
+        $builder->select(array('priceVariations'))
+                ->from('Shopware\Models\Article\Configurator\PriceVariation', 'priceVariations')
+                ->where('priceVariations.configuratorSetId = ?1')
                 ->setParameter(1, $configuratorSetId);
         return $builder;
     }
@@ -1047,12 +1071,20 @@ class Repository extends ModelRepository
     }
 
     /**
-     * Returns an instance of the \Doctrine\ORM\Query object which .....
+     * Returns an instance of the \Doctrine\ORM\Query object that returns a list
+     * of configurator options
+     *
+     * @param array|null $filter
      * @return \Doctrine\ORM\Query
      */
-    public function getAllConfiguratorOptionsIndexedByIdQuery()
+    public function getAllConfiguratorOptionsIndexedByIdQuery($filter = null)
     {
         $builder = $this->getAllConfiguratorOptionsIndexedByIdQueryBuilder();
+
+        if ($filter) {
+            $builder->addFilter($filter);
+        }
+
         return $builder->getQuery();
     }
 
@@ -1147,7 +1179,7 @@ class Repository extends ModelRepository
     public function getDetailsByIdsQueryBuilder($ids, $sort = null)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(array('details','attribute','prices','customerGroup','configuratorOptions'))
+        $builder->select(array('details', 'attribute', 'prices', 'customerGroup', 'configuratorOptions'))
                 ->from('Shopware\Models\Article\Detail', 'details')
                 ->leftJoin('details.configuratorOptions', 'configuratorOptions')
                 ->leftJoin('details.prices', 'prices')
@@ -1537,8 +1569,8 @@ class Repository extends ModelRepository
                 ->leftJoin('articles.supplier', 'supplier');
 
         if (!empty($ids)) {
-            $ids = implode(",",$ids);
-            $builder->where($builder->expr()->notIn("articles.id",$ids));
+            $ids = implode(",", $ids);
+            $builder->where($builder->expr()->notIn("articles.id", $ids));
         }
 
         if (!empty($filter) && $filter[0]["property"] == "filter" && !empty($filter[0]["value"])) {
@@ -1574,9 +1606,8 @@ class Repository extends ModelRepository
     public function getSupplierQueryBuilder($supplierId)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(array('supplier', 'attribute'))
+        $builder->select(array('supplier'))
                 ->from('Shopware\Models\Article\Supplier', 'supplier')
-                ->leftJoin('supplier.attribute', 'attribute')
                 ->where('supplier.id = ?1')
                 ->setParameter(1, $supplierId);
 
@@ -1644,8 +1675,8 @@ class Repository extends ModelRepository
         ));
         $builder->from('Shopware\Models\Article\Supplier', 'suppliers');
         if (!empty($ids)) {
-            $ids = implode(",",$ids);
-            $builder->where($builder->expr()->notIn("suppliers.id",$ids));
+            $ids = implode(",", $ids);
+            $builder->where($builder->expr()->notIn("suppliers.id", $ids));
         }
         if (!empty($filter) && $filter[0]["property"] == "filter" && !empty($filter[0]["value"])) {
             $builder->andWhere('suppliers.name LIKE ?1')
@@ -1655,15 +1686,7 @@ class Repository extends ModelRepository
     }
 
     /**
-     * Retrieves the following fields
-     * - id             Integer
-     * - name           String
-     * - image          String
-     * - link           String
-     * - description    String
-     *
-     * The filter param will be uses to search for a part of the suppliers name or description.
-     *
+     * Returns an instance of the \Doctrine\ORM\Query object which select a list of supplier.
      *
      * @param array $filter
      * @param   array $orderBy
@@ -1672,6 +1695,26 @@ class Repository extends ModelRepository
      * @return  \Doctrine\ORM\Query
      */
     public function getSupplierListQuery($filter = null, array $orderBy, $limit = null, $offset = null)
+    {
+        $builder = $this->getSupplierListQueryBuilder($filter, $orderBy);
+
+        if ($limit !== null) {
+            $builder->setFirstResult($offset)
+                ->setMaxResults($limit);
+        }
+
+        return $builder->getQuery();
+    }
+
+    /**
+     * Helper function to create the query builder for the "getSupplierListQuery" function.
+     * This function can be hooked to modify the query builder of the query object.
+     *
+     * @param   array $filter
+     * @param   array $orderBy
+     * @return  \Doctrine\ORM\QueryBuilder
+     */
+    public function getSupplierListQueryBuilder($filter = null, array $orderBy)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array(
@@ -1688,8 +1731,9 @@ class Repository extends ModelRepository
 
         if (is_array($filter) && ('name' == $filter[0]['property'])) {
             //filter the displayed columns with the passed filter
-            $builder->where("supplier.name LIKE ?1") //Search only the beginning of the customer number.
-                    ->orWhere("supplier.description LIKE ?1"); //Full text search for the first name of the customer
+            $builder
+                ->where("supplier.name LIKE ?1") //Search only the beginning of the customer number.
+                ->orWhere("supplier.description LIKE ?1"); //Full text search for the first name of the customer
 
             //set the filter parameter for the different columns.
             $builder->setParameter(1, '%' . $filter[0]['value'] . '%');
@@ -1697,10 +1741,7 @@ class Repository extends ModelRepository
 
         $builder->addOrderBy($orderBy);
 
-        $builder->setFirstResult($offset)
-                ->setMaxResults($limit);
-
-        return $builder->getQuery();
+        return $builder;
     }
 
     /**
@@ -1741,10 +1782,11 @@ class Repository extends ModelRepository
             'vote.datum as datum',
             'vote.active as active',
             'vote.answer as answer',
+            'vote.email as email',
             'article.name as articleName'
         ));
         $builder->from('Shopware\Models\Article\Vote', 'vote');
-        $builder->join('vote.article','article');
+        $builder->join('vote.article', 'article');
         if (!empty($filter)) {
             $builder->where('article.name LIKE ?1')
                     ->setParameter(1, '%'.$filter.'%');
@@ -1868,7 +1910,7 @@ class Repository extends ModelRepository
                 ->leftJoin('notification.customer', 'customer', 'with', 'customer.accountMode = 0 AND customer.languageId = notification.language')
                 ->leftJoin('customer.billing', 'billing')
                 ->where('notification.articleNumber = :orderNumber')
-                ->setParameter("orderNumber",$articleOrderNumber);
+                ->setParameter("orderNumber", $articleOrderNumber);
 
         //search part
         if (isset($filter[0]['property']) && $filter[0]['property'] == 'search') {
@@ -1923,7 +1965,7 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
 
-        $builder->select(array(
+        $builder->select([
             'esd.id as id',
             'esd.date as date',
             'esd.file as file',
@@ -1933,18 +1975,19 @@ class Repository extends ModelRepository
             'COUNT(esdOrder.id) as downloads',
             'article.name as name',
             'articleDetail.id as articleDetailId',
+            'articleDetail.number',
             'articleDetail.additionalText as additionalText',
             'article.id as articleId',
-        ))
-                ->from('Shopware\Models\Article\Esd', 'esd')
-                ->leftJoin('esd.serials', 'serials')
-                ->leftJoin('serials.esdOrder', 'esdOrder')
-                ->leftJoin('esd.article', 'article')
-                ->leftJoin('esd.articleDetail', 'articleDetail')
-                ->leftJoin('esd.attribute', 'attribute')
-                ->groupBy('esd.id')
-                ->where('esd.article = :articleId')
-                ->setParameter('articleId', $articleId);
+        ]);
+        $builder->from('Shopware\Models\Article\Esd', 'esd')
+            ->leftJoin('esd.serials', 'serials')
+            ->leftJoin('serials.esdOrder', 'esdOrder')
+            ->leftJoin('esd.article', 'article')
+            ->leftJoin('esd.articleDetail', 'articleDetail')
+            ->leftJoin('esd.attribute', 'attribute')
+            ->groupBy('esd.id')
+            ->where('esd.article = :articleId')
+            ->setParameter('articleId', $articleId);
 
         if ($filter !== null) {
             $builder->andWhere($builder->expr()->orX(
@@ -1962,7 +2005,6 @@ class Repository extends ModelRepository
 
         return $builder;
     }
-
 
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which selects all serials by the given esdId
@@ -1997,19 +2039,19 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
 
-        $builder->select(array(
+        $builder->select([
             'serial.id as id',
             'serial.serialnumber as serialnumber',
             'esdOrder.date as date',
             'customer.id as customerId',
             'customer.accountMode as accountMode',
             'customer.email as customerEmail'
-        ))
-                ->from('Shopware\Models\Article\EsdSerial', 'serial')
-                ->leftJoin('serial.esdOrder', 'esdOrder')
-                ->leftJoin('esdOrder.customer', 'customer')
-                ->where('serial.esd = :esdId')
-                ->setParameter('esdId', $esdId);
+        ])
+            ->from('Shopware\Models\Article\EsdSerial', 'serial')
+            ->leftJoin('serial.esdOrder', 'esdOrder')
+            ->leftJoin('esdOrder.customer', 'customer')
+            ->where('serial.esd = :esdId')
+            ->setParameter('esdId', $esdId);
 
 
         if ($filter !== null) {
@@ -2116,7 +2158,7 @@ class Repository extends ModelRepository
     public function getArticleCoverImageQueryBuilder($articleId)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(array('images', 'attribute'))
+        $builder->select(['images', 'attribute'])
                 ->from('Shopware\Models\Article\Image', 'images')
                 ->leftJoin('images.attribute', 'attribute')
                 ->leftJoin('images.children', 'children')
@@ -2154,7 +2196,7 @@ class Repository extends ModelRepository
     public function getArticleFallbackCoverQueryBuilder($articleId)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(array('images', 'attribute'))
+        $builder->select(['images', 'attribute'])
                 ->from('Shopware\Models\Article\Image', 'images')
                 ->leftJoin('images.attribute', 'attribute')
                 ->where('images.articleId = :articleId')
@@ -2196,7 +2238,7 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
 
-        $builder->select(array(
+        $builder->select([
             'imageParent.id',
             'imageParent.articleId',
             'imageParent.articleDetailId',
@@ -2211,15 +2253,15 @@ class Repository extends ModelRepository
             'attribute.attribute1',
             'attribute.attribute2',
             'attribute.attribute3',
-        ))
-                ->from('Shopware\Models\Article\Image', 'images')
-                ->innerJoin('images.articleDetail', 'articleDetail')
-                ->innerJoin('images.parent', 'imageParent')
-                ->leftJoin('imageParent.attribute', 'attribute')
-                ->where('articleDetail.number = ?1')
-                ->setParameter(1, $number)
-                ->orderBy('imageParent.main', 'ASC')
-                ->addOrderBy('imageParent.position', 'ASC');
+        ])
+            ->from('Shopware\Models\Article\Image', 'images')
+            ->innerJoin('images.articleDetail', 'articleDetail')
+            ->innerJoin('images.parent', 'imageParent')
+            ->leftJoin('imageParent.attribute', 'attribute')
+            ->where('articleDetail.number = ?1')
+            ->setParameter(1, $number)
+            ->orderBy('imageParent.main', 'ASC')
+            ->addOrderBy('imageParent.position', 'ASC');
 
         return $builder;
     }
@@ -2244,9 +2286,9 @@ class Repository extends ModelRepository
     public function getArticleImagesQueryBuilder($articleId)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(array('images'))
+        $builder->select(['images'])
                 ->from('Shopware\Models\Article\Image', 'images')
-                ->leftJoin('images.children','children')
+                ->leftJoin('images.children', 'children')
                 ->where('images.articleId = :articleId')
                 ->andWhere('images.parentId IS NULL')
                 ->andWhere('images.articleDetailId IS NULL')
@@ -2281,7 +2323,7 @@ class Repository extends ModelRepository
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->delete('Shopware\Models\Article\Price', 'prices')
                 ->where('prices.articleId = :id')
-                ->setParameter('id',$articleId);
+                ->setParameter('id', $articleId);
 
         return $builder;
     }
@@ -2309,7 +2351,7 @@ class Repository extends ModelRepository
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->delete('Shopware\Models\Attribute\Article', 'attribute')
                 ->where('attribute.articleId = :id')
-                ->setParameter('id',$articleId);
+                ->setParameter('id', $articleId);
 
         return $builder;
     }
@@ -2336,7 +2378,65 @@ class Repository extends ModelRepository
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->delete('Shopware\Models\Article\Esd', 'esd')
                 ->where('esd.articleId = :id')
-                ->setParameter('id',$articleId);
+                ->setParameter('id', $articleId);
+
+        return $builder;
+    }
+
+    /**
+     * Returns an instance of the \Doctrine\ORM\Query object which allows you to remove translations associated
+     * with the given articleId
+     * @param $articleId
+     * @return \Doctrine\ORM\Query
+     */
+    public function getRemoveArticleTranslationsQuery($articleId)
+    {
+        $builder = $this->getRemoveArticleTranslationsQueryBuilder($articleId);
+        return $builder->getQuery();
+    }
+
+    /**
+     * Helper function to create the query builder for the "getRemoveArticleTranslationsQuery" function.
+     * This function can be hooked to modify the query builder of the query object.
+     * @param $articleId
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getRemoveArticleTranslationsQueryBuilder($articleId)
+    {
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder->delete('Shopware\Models\Translation\Translation', 'translation')
+            ->where('translation.key = :id')
+            ->andWhere('translation.type = \'article\'')
+            ->setParameter('id', $articleId);
+
+        return $builder;
+    }
+
+    /**
+     * Returns an instance of the \Doctrine\ORM\Query object which allows you to remove translations associated
+     * with the given articleDetailId
+     * @param $detailId
+     * @return \Doctrine\ORM\Query
+     */
+    public function getRemoveVariantTranslationsQuery($detailId)
+    {
+        $builder = $this->getRemoveVariantTranslationsQueryBuilder($detailId);
+        return $builder->getQuery();
+    }
+
+    /**
+     * Helper function to create the query builder for the "getRemoveVariantTranslationsQuery" function.
+     * This function can be hooked to modify the query builder of the query object.
+     * @param $detailId
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getRemoveVariantTranslationsQueryBuilder($detailId)
+    {
+        $builder = Shopware()->Models()->createQueryBuilder();
+        $builder->delete('Shopware\Models\Translation\Translation', 'translation')
+            ->where('translation.key = :id')
+            ->andWhere('translation.type = \'variant\'')
+            ->setParameter('id', $detailId);
 
         return $builder;
     }
@@ -2405,14 +2505,14 @@ class Repository extends ModelRepository
     public function getVariantDetailQuery()
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->select(array(
+        $builder->select([
             'variants',
             'attribute',
             'prices',
             'customerGroup',
             'options',
             'images'
-        ));
+        ]);
 
         $builder->from('Shopware\Models\Article\Detail', 'variants')
             ->innerJoin('variants.article', 'article')

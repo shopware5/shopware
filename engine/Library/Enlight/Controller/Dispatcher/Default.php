@@ -346,7 +346,7 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
         $moduleName = $this->formatModuleName($module);
         $controllerName = $this->formatControllerName($request->getControllerName());
 
-        $class = array(Enlight_Application::Instance()->App(), 'Controllers', $moduleName, $controllerName);
+        $class = array('Shopware', 'Controllers', $moduleName, $controllerName);
         $class = implode('_', $class);
         return $class;
     }
@@ -362,7 +362,7 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
         $controllerName = $request->getControllerName();
         $controllerName = $this->formatControllerName($controllerName);
         $moduleName = $this->formatModuleName($this->curModule);
-        if ($event = Enlight_Application::Instance()->Events()->notifyUntil(
+        if ($event = Shopware()->Events()->notifyUntil(
                 'Enlight_Controller_Dispatcher_ControllerPath_' . $moduleName . '_' . $controllerName,
                 array('subject' => $this, 'request' => $request)
                 )
@@ -479,38 +479,33 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
      */
     public function dispatch(Enlight_Controller_Request_Request $request,
                              Enlight_Controller_Response_Response $response
-    )
-    {
+    ) {
         $this->setResponse($response);
 
         if (!$this->isDispatchable($request)) {
-            $controller = $request->getControllerName();
-            if (!$this->Front()->getParam('useDefaultControllerAlways') && !empty($controller)) {
-                throw new Enlight_Controller_Exception(
-                    'Controller "' . $controller . '" not found',
-                    Enlight_Controller_Exception::Controller_Dispatcher_Controller_Not_Found
-                );
-            }
-            $request->setControllerName($this->defaultController);
+            throw new Enlight_Controller_Exception(
+                'Controller "' . $request->getControllerName() . '" not found',
+                Enlight_Controller_Exception::Controller_Dispatcher_Controller_Not_Found
+            );
         }
 
         $class = $this->getControllerClass($request);
         $path = $this->getControllerPath($request);
 
         try {
-            Enlight_Application::Instance()->Loader()->loadClass($class, $path);
+            Shopware()->Loader()->loadClass($class, $path);
         } catch (Exception $e) {
             throw new Enlight_Exception('Controller "' . $class . '" can\'t load failure');
         }
 
-        $proxy = Enlight_Application::Instance()->Hooks()->getProxy($class);
+        $proxy = Shopware()->Hooks()->getProxy($class);
 
         /** @var $controller Enlight_Controller_Action */
         $controller = new $proxy($request, $response);
         $controller->setFront($this->Front());
 
         if ($controller instanceof ContainerAwareInterface) {
-            $container = Enlight_Application::Instance()->Container();
+            $container = Shopware()->Container();
             $controller->setContainer($container);
         }
 

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -24,8 +24,8 @@
 
 namespace Shopware\Commands;
 
+use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
 use Shopware\Components\Model\ModelManager;
-use Shopware\Components\Plugin\Manager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -59,7 +59,7 @@ class PluginConfigListCommand extends ShopwareCommand
                 'Name of the plugin to list config.'
             )
             ->setHelp(<<<EOF
-The <info>%command.name%</info> lists a pluginc configuration.
+The <info>%command.name%</info> lists a plugin configuration.
 EOF
             );
         ;
@@ -70,8 +70,8 @@ EOF
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        /** @var Manager $pluginManager */
-        $pluginManager  = $this->container->get('shopware.plugin_manager');
+        /** @var InstallerService $pluginManager */
+        $pluginManager  = $this->container->get('shopware_plugininstaller.plugin_manager');
         $pluginName = $input->getArgument('plugin');
 
         try {

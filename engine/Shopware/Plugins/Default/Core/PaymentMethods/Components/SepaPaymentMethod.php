@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -37,26 +37,28 @@ class SepaPaymentMethod extends GenericPaymentMethod
     /**
      * @inheritdoc
      */
-    public function validate(\Enlight_Controller_Request_Request $request)
+    public function validate($paymentData)
     {
         $sErrorFlag = array();
+        $sErrorMessages = array();
 
-        if (!$request->getParam("sSepaIban") || strlen(trim($request->getParam("sSepaIban"))) === 0 ) {
+        if (!$paymentData["sSepaIban"] || strlen(trim($paymentData["sSepaIban"])) === 0) {
             $sErrorFlag["sSepaIban"] = true;
         }
-        if (Shopware()->Config()->sepaShowBic && Shopware()->Config()->sepaRequireBic && (!$request->getParam("sSepaBic") || strlen(trim($request->getParam("sSepaBic"))) === 0 )) {
+        if (Shopware()->Config()->sepaShowBic && Shopware()->Config()->sepaRequireBic && (!$paymentData["sSepaBic"] || strlen(trim($paymentData["sSepaBic"])) === 0)) {
             $sErrorFlag["sSepaBic"] = true;
         }
-        if (Shopware()->Config()->sepaShowBankName && Shopware()->Config()->sepaRequireBankName && (!$request->getParam("sSepaBankName") || strlen(trim($request->getParam("sSepaBankName"))) === 0 )) {
+        if (Shopware()->Config()->sepaShowBankName && Shopware()->Config()->sepaRequireBankName && (!$paymentData["sSepaBankName"] || strlen(trim($paymentData["sSepaBankName"])) === 0)) {
             $sErrorFlag["sSepaBankName"] = true;
-        }
-        if ($request->getParam("sSepaIban") && !$this->validateIBAN($request->getParam("sSepaIban"))) {
-            $sErrorMessages[] = Shopware()->Snippets()->getNamespace('frontend/plugins/payment/sepa')
-                ->get('ErrorIBAN', 'Invalid IBAN');
         }
 
         if (count($sErrorFlag)) {
             $sErrorMessages[] = Shopware()->Snippets()->getNamespace('frontend/account/internalMessages')->get('ErrorFillIn', 'Please fill in all red fields');
+        }
+
+        if ($paymentData["sSepaIban"] && !$this->validateIBAN($paymentData["sSepaIban"])) {
+            $sErrorMessages[] = Shopware()->Snippets()->getNamespace('frontend/plugins/payment/sepa')->get('ErrorIBAN', 'Invalid IBAN');
+            $sErrorFlag["sSepaIban"] = true;
         }
 
         if (count($sErrorMessages)) {
@@ -184,7 +186,7 @@ class SepaPaymentMethod extends GenericPaymentMethod
 
             'firstname' => $paymentData['sSepaUseBillingData']?$addressData['firstName']:null,
             'lastname' => $paymentData['sSepaUseBillingData']?$addressData['lastName']:null,
-            'address' => $paymentData['sSepaUseBillingData']?($addressData['street'] . ' ' . $addressData['streetNumber']):null,
+            'address' => $paymentData['sSepaUseBillingData']?$addressData['street']:null,
             'zipcode' => $paymentData['sSepaUseBillingData']?$addressData['zipCode']:null,
             'city' => $paymentData['sSepaUseBillingData']?$addressData['city']:null,
 
@@ -208,7 +210,7 @@ class SepaPaymentMethod extends GenericPaymentMethod
 
     private function sendSepaEmail($orderNumber, $userId, $data)
     {
-        require_once(Shopware()->OldPath() . "engine/Library/Mpdf/mpdf.php");
+        require_once(Shopware()->DocPath() . "engine/Library/Mpdf/mpdf.php");
 
         $mail = Shopware()->TemplateMail()->createMail('sORDERSEPAAUTHORIZATION', array(
             'paymentInstance' => array(

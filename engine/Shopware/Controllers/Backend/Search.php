@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Doctrine\DBAL\Connection;
 
 /**
  * Backend search controller
@@ -31,9 +32,210 @@
  */
 class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_ExtJs
 {
+    /**
+     * Generic search action for entities
+     */
+    public function searchAction()
+    {
+        $entity = $this->Request()->getParam('entity', null);
+        $ids    = $this->Request()->getParam('ids', []);
+        $id     = $this->Request()->getParam('id', null);
+        $term   = $this->Request()->getParam('query', null);
+        $offset = $this->Request()->getParam('start', 0);
+        $limit  = $this->Request()->getParam('limit', 20);
 
-    /** @var int - The limit for all SQL queries */
-    public $searchLimit = 5;
+        $builder = $this->createEntitySearchQuery($entity);
+
+        if (!empty($ids)) {
+            $ids = json_decode($ids, true);
+            $this->addIdsCondition($builder, $ids);
+        } elseif (!empty($id)) {
+            $this->addIdsCondition($builder, [$id]);
+        } else {
+            if (!empty($term)) {
+                $this->addSearchTermCondition($entity, $builder, $term);
+            }
+
+            $builder->setFirstResult($offset)
+                ->setMaxResults($limit);
+        }
+
+        $pagination = $this->getPaginator($builder);
+        $data  = $pagination->getIterator()->getArrayCopy();
+
+        $data = $this->hydrateSearchResult($entity, $data);
+
+        $this->View()->assign([
+            'success' => true,
+            'data' => $data,
+            'total' => $pagination->count()
+        ]);
+    }
+
+    /**
+     * @param string $entity
+     * @param array[] $data
+     * @return array[]
+     */
+    private function hydrateSearchResult($entity, $data)
+    {
+        switch ($entity) {
+            case 'Shopware\Models\Category\Category':
+                $data = $this->resolveCategoryPath($data);
+                break;
+        }
+        return $data;
+    }
+
+    /**
+     * @param string $entity
+     * @return string[]
+     */
+    private function getEntitySearchFields($entity)
+    {
+        /** @var \Shopware\Components\Model\ModelManager $entityManager */
+        $entityManager = $this->get('models');
+        $metaData = $entityManager->getClassMetadata($entity);
+        return $metaData->getFieldNames();
+    }
+
+    /**
+     * @param $entity
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    private function createEntitySearchQuery($entity)
+    {
+        /** @var \Doctrine\ORM\QueryBuilder $query */
+        $query = $this->get('models')->createQueryBuilder();
+        $query->select('entity')
+            ->from($entity, 'entity');
+
+        switch ($entity) {
+            case 'Shopware\Models\Article\Article':
+                $query->select(['entity.id', 'entity.name', 'mainDetail.number'])
+                    ->innerJoin('entity.mainDetail', 'mainDetail')
+                    ->leftJoin('entity.details', 'details');
+                break;
+
+            case 'Shopware\Models\Property\Value':
+                if ($groupId = $this->Request()->getParam('groupId')) {
+                    $query->andWhere('entity.optionId = :optionId')
+                        ->setParameter(':optionId', $this->Request()->getParam('groupId'));
+                }
+                break;
+
+            case 'Shopware\Models\Property\Option':
+                if ($setId = $this->Request()->getParam('setId')) {
+                    $query->innerJoin('entity.relations', 'relations', 'WITH', 'relations.groupId = :setId')
+                        ->setParameter(':setId', $setId);
+                }
+                break;
+            case 'Shopware\Models\Category\Category':
+                $query->andWhere('entity.parent IS NOT NULL')
+                    ->addOrderBy('entity.parentId')
+                    ->addOrderBy('entity.position');
+                break;
+        }
+
+        return $query;
+    }
+
+    /**
+     * @param string $entity
+     * @param \Doctrine\ORM\QueryBuilder $query
+     * @param string $term
+     */
+    private function addSearchTermCondition($entity, $query, $term)
+    {
+        $fields = $this->getEntitySearchFields($entity);
+        $where = [];
+        foreach ($fields as $field) {
+            $field = 'entity.' . $field;
+            $where[] = $field . ' LIKE :search';
+        }
+
+        foreach ($this->getCustomSearchConditions($entity) as $condition) {
+            $where[] = $condition;
+        }
+
+        $where = implode(' OR ', $where);
+        $query->andWhere('('.$where.')');
+        $query->setParameter('search', '%' . $term . '%');
+    }
+
+    /**
+     * Gets custom search conditions
+     *
+     * @param string $entity
+     * @return array
+     */
+    private function getCustomSearchConditions($entity)
+    {
+        $where = [];
+        switch ($entity) {
+            case 'Shopware\Models\Article\Article':
+                $where[] = $this->createCustomFieldToSearchTermCondition('details', 'number');
+                break;
+            default:
+                break;
+        }
+
+        return $where;
+    }
+
+    /**
+     * Creates a custom search term condition
+     *
+     * @param string $entity
+     * @param string $column
+     * @return string
+     */
+    private function createCustomFieldToSearchTermCondition($entity, $column)
+    {
+        $field = $entity . '.' . $column;
+        $where = $field . ' LIKE :search';
+        return $where;
+    }
+
+    /**
+     * @param \Doctrine\ORM\QueryBuilder $query
+     * @param int[] $ids
+     */
+    private function addIdsCondition($query, $ids)
+    {
+        $query->andWhere('entity.id IN (:ids)')
+            ->setParameter('ids', $ids, Connection::PARAM_INT_ARRAY);
+    }
+
+    /**
+     * @param $data
+     * @return array[]
+     */
+    private function resolveCategoryPath($data)
+    {
+        $ids = [];
+        foreach ($data as $row) {
+            $ids = array_merge($ids, explode('|', $row['path']));
+            $ids[] = $row['id'];
+        }
+        $ids = array_values(array_unique(array_filter($ids)));
+        $categories = $this->getCategories($ids);
+
+        foreach ($data as &$row) {
+            $parents = array_filter(explode('|', $row['path']));
+            $parents = array_reverse($parents);
+            $path = [];
+            foreach ($parents as $parent) {
+                $path[] = $categories[$parent];
+            }
+            $path[] = $row['name'];
+            $row['name'] = implode('>', $path);
+        }
+
+        return $data;
+    }
+
+
 
     /**
      * Sanitizes the passed term and queries the different areas of the search
@@ -98,7 +300,7 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
                 OR d.id IS NOT NULL
             )
         ";
-        $sql = Shopware()->Db()->limit($sql, $this->searchLimit);
+        $sql = Shopware()->Db()->limit($sql, 5);
         return Shopware()->Db()->fetchAll($sql);
     }
 
@@ -115,21 +317,21 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
 
         $sql = "
             SELECT userID as id,
-            IF(b.company != '', b.company, CONCAT(b.firstname, ' ', b.lastname)) as name,
-            CONCAT(street, ' ', streetnumber, ' ', zipcode, ' ', city) as description
+            IF(b.company != '', b.company, CONCAT(u.firstname, ' ', u.lastname)) as name,
+            CONCAT(street, ' ', zipcode, ' ', city) as description
             FROM s_user_billingaddress b, s_user u
             WHERE (
                 email LIKE $search
-                OR customernumber LIKE $search2
-                OR TRIM(CONCAT(company,' ', department)) LIKE $search
-                OR TRIM(CONCAT(firstname,' ',lastname)) LIKE $search
+                OR u.customernumber LIKE $search2
+                OR TRIM(CONCAT(b.company,' ', b.department)) LIKE $search
+                OR TRIM(CONCAT(b.firstname,' ',b.lastname)) LIKE $search
             )
             AND u.id = b.userID
-            GROUP BY id
+            GROUP BY u.id
             ORDER BY name ASC
         ";
 
-        $sql = Shopware()->Db()->limit($sql, $this->searchLimit);
+        $sql = Shopware()->Db()->limit($sql, 5);
         $result = Shopware()->Db()->fetchAll($sql);
 
         return $result;
@@ -175,7 +377,37 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
             GROUP BY o.id
             ORDER BY o.ordertime DESC
         ";
-        $sql = Shopware()->Db()->limit($sql, $this->searchLimit);
+        $sql = Shopware()->Db()->limit($sql, 5);
         return Shopware()->Db()->fetchAll($sql);
+    }
+
+    /**
+     * @param $builder
+     * @return \Doctrine\ORM\Tools\Pagination\Paginator
+     */
+    protected function getPaginator($builder)
+    {
+        $query = $builder->getQuery();
+        $query->setHydrationMode(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+
+        /** @var \Shopware\Components\Model\ModelManager $entityManager */
+        $entityManager = $this->get('models');
+        $pagination = $entityManager->createPaginator($query);
+        return $pagination;
+    }
+
+    /**
+     * @param $ids
+     */
+    private function getCategories($ids)
+    {
+        /** @var \Doctrine\DBAL\Query\QueryBuilder $query */
+        $query = $this->get('dbal_connection')->createQueryBuilder();
+        $query->select(['id', 'description'])
+            ->from('s_categories', 'category')
+            ->where('category.id IN (:ids)')
+            ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
+
+        return $query->execute()->fetchAll(PDO::FETCH_KEY_PAIR);
     }
 }

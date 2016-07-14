@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -22,6 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\CSRFWhitelistAware;
+
 /**
  * Shopware Backend Controller
  *
@@ -29,8 +31,10 @@
  * @package   Shopware\Controllers\Backend
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action
+class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action implements CSRFWhitelistAware
 {
+    const MIN_DAYS_INSTALLATION_SURVEY = 14;
+
     /**
      * @var Shopware_Plugins_Backend_Auth_Bootstrap
      */
@@ -47,12 +51,26 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action
     }
 
     /**
+     * @inheritdoc
+     */
+    public function getWhitelistedCSRFActions()
+    {
+        return [
+            'index',
+            'auth',
+            'changeLocale',
+            'load',
+            'menu'
+        ];
+    }
+
+    /**
      * Activate caching, set backend redirect
      */
     public function preDispatch()
     {
         // Redirect broken backend urls to frontend
-        if (!in_array($this->Request()->getActionName(), array('index', 'load', 'menu', 'auth'))) {
+        if (!in_array($this->Request()->getActionName(), array('index', 'load', 'menu', 'auth', 'changeLocale'))) {
             $uri = $this->Request()->getRequestUri();
             $uri = str_replace('shopware.php/', '', $uri);
             $uri = str_replace('/backend/', '/', $uri);
@@ -81,9 +99,9 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action
 
         // Check session
         try {
-            $this->Request()->setHeader('referer', '');
             $auth = $this->auth->checkAuth();
-        } catch (Exception $e) { }
+        } catch (Exception $e) {
+        }
 
         // No session
         if ($auth === null) {
@@ -106,15 +124,41 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action
         $controller = Zend_Json::encode($controller);
         $this->View()->assign('controller', $controller, true);
 
-        $this->View()->assign('product', '', true);
         $this->View()->assign('maxParameterLength', (int) ini_get('suhosin.get.max_value_length') + 0, true);
 
-        if (Shopware()->Bootstrap()->issetResource('License')) {
-            $l = Shopware()->License();
-            $m = 'SwagCommercial';
-            $o = $l->getLicenseInfo($m);
-            $r = isset($o['product']) ? $o['product'] : null;
-            $this->View()->assign('product', $r, true);
+        $firstRunWizardEnabled = $this->isFirstRunWizardEnabled($identity);
+        $sbpLogin = 0;
+        if ($firstRunWizardEnabled) {
+            /** @var \Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct $tokenData */
+            $tokenData = Shopware()->BackendSession()->accessToken;
+
+            $sbpLogin = (int) (!empty($tokenData) && $tokenData->getExpire() >= new DateTime("+30 seconds"));
+        }
+        $this->View()->assign('sbpLogin', $sbpLogin, true);
+        $this->View()->assign('firstRunWizardEnabled', $firstRunWizardEnabled, true);
+        $this->View()->assign('installationSurvey', $this->checkForInstallationSurveyNecessity($identity), true);
+
+        /** @var Shopware_Components_Config $config */
+        $config = $this->get('config');
+
+        $this->View()->assign('updateWizardStarted', $config->get('updateWizardStarted'));
+        $this->View()->assign('feedbackRequired', $this->checkIsFeedbackRequired());
+    }
+
+    /**
+     * Returns if the first run wizard should be loaded in the current backend instance
+     *
+     * @param stdClass $identity
+     * @return bool
+     * @throws Exception
+     */
+    private function isFirstRunWizardEnabled($identity)
+    {
+        // Only admins can see the wizard
+        if ($identity->role->getAdmin()) {
+            return $this->container->get('config')->get('firstRunWizardEnabled', false);
+        } else {
+            return false;
         }
     }
 
@@ -123,7 +167,49 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action
      */
     public function authAction()
     {
+    }
 
+    /**
+     *
+     */
+    public function changeLocaleAction()
+    {
+        $this->Front()->Plugins()->Json()->setRenderer();
+
+        $localeId = $this->Request()->getParam('localeId');
+        if ($localeId == null) {
+            $this->View()->assign(array(
+                'success' => false,
+                'message' => false
+            ));
+            return;
+        }
+
+        $locale = $this->container->get('models')
+            ->getRepository('Shopware\Models\Shop\Locale')
+            ->find($localeId);
+
+        if ($locale == null) {
+            $this->View()->assign(array(
+                'success' => false,
+                'message' => false
+            ));
+            return;
+        }
+
+        $auth = $this->auth->checkAuth();
+
+        if ($auth !== null) {
+            $identity = $auth->getIdentity();
+            if (!empty($identity)) {
+                $identity->locale = $locale;
+
+                $this->View()->assign(array(
+                    'success' => true,
+                    'message' => true
+                ));
+            }
+        }
     }
 
     /**
@@ -147,10 +233,65 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action
         }
 
         /** @var $menu \Shopware\Models\Menu\Repository */
-        $menu = Shopware()->Models()->getRepository(
-            'Shopware\Models\Menu\Menu'
-        );
-        $menuItems = $menu->findBy(array('parentId' => null), array('position' => 'ASC'));
+        $menu = Shopware()->Models()->getRepository('Shopware\Models\Menu\Menu');
+        $nodes = $menu->createQueryBuilder('m')
+            ->select('m')
+            ->leftJoin('m.plugin', 'p')
+            ->where('m.active = 1')
+            ->andWhere('m.pluginId IS NULL OR p.active = 1')
+            ->orderBy('m.parentId', 'ASC')
+            ->addOrderBy('m.position', 'ASC')
+            ->getQuery()
+            ->getArrayResult();
+
+        $menuItems = $this->buildTree($nodes);
         $this->View()->menu = $menuItems;
+    }
+
+    /**
+     * @param array $nodes
+     * @param int|null $parentId
+     * @return array
+     */
+    private function buildTree(array $nodes, $parentId = null)
+    {
+        $menuTree = [];
+        foreach ($nodes as $key => $node) {
+            if ($node['parentId'] == $parentId) {
+                $subTree = $this->buildTree($nodes, $node['id']);
+                if ($subTree) {
+                    $node['children'] = $subTree;
+                }
+                $menuTree[] = $node;
+            }
+        }
+        return $menuTree;
+    }
+
+    /**
+     * @return bool
+     */
+    private function checkIsFeedbackRequired()
+    {
+        return (Shopware::VERSION_TEXT !== '___VERSION_TEXT___' && strlen(Shopware::VERSION_TEXT) !== 0);
+    }
+
+    /**
+     * @param stdClass $identity
+     * @return bool
+     */
+    private function checkForInstallationSurveyNecessity($identity)
+    {
+        if (!$identity->role->getAdmin() || Shopware::VERSION_TEXT === '___VERSION_TEXT___') {
+            return false;
+        }
+        $installationSurvey = $this->container->get('config')->get('installationSurvey', false);
+        $installationDate = \DateTime::createFromFormat('Y-m-d H:i', $this->container->get('config')->get('installationDate'));
+        if (!$installationSurvey || !$installationDate) {
+            return false;
+        }
+        $now = new \DateTime();
+        $interval = $installationDate->diff($now);
+        return self::MIN_DAYS_INSTALLATION_SURVEY <= $interval->days;
     }
 }

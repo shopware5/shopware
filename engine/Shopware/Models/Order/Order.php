@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,10 +23,11 @@
  */
 
 namespace   Shopware\Models\Order;
-use Shopware\Components\Model\ModelEntity,
-    Doctrine\ORM\Mapping AS ORM,
-    Symfony\Component\Validator\Constraints as Assert,
-    Doctrine\Common\Collections\ArrayCollection;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Shopware order model represents a single order in your shop.
@@ -81,7 +82,7 @@ class Order extends ModelEntity
     /**
      * Contains the alphanumeric order number. If the
      * @var string $number
-     * @ORM\Column(name="ordernumber", type="string", length=30, nullable=true)
+     * @ORM\Column(name="ordernumber", type="string", length=255, nullable=true)
      */
     private $number;
 
@@ -250,7 +251,7 @@ class Order extends ModelEntity
      *
      * Used for the language subshop association
      * @var \Shopware\Models\Shop\Shop
-     * @ORM\ManyToOne(targetEntity="Shopware\Models\Shop\Shop", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Shop\Shop")
      * @ORM\JoinColumn(name="language", referencedColumnName="id")
      */
     private $languageSubShop;
@@ -278,7 +279,14 @@ class Order extends ModelEntity
     private $remoteAddress;
 
     /**
-     * @var
+     * @var string $deviceType
+     *
+     * @ORM\Column(name="deviceType", type="string", length=50, nullable=true)
+     */
+    private $deviceType = 'desktop';
+
+    /**
+     * @var \Shopware\Models\Customer\Customer
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Customer\Customer", inversedBy="orders")
      * @ORM\JoinColumn(name="userID", referencedColumnName="id")
      */
@@ -522,7 +530,7 @@ class Order extends ModelEntity
     /**
      * Set orderTime
      *
-     * @param \DateTime $orderTime
+     * @param \DateTime|string $orderTime
      * @return Order
      */
     public function setOrderTime($orderTime)
@@ -723,7 +731,7 @@ class Order extends ModelEntity
     /**
      * Set clearedDate
      *
-     * @param \DateTime $clearedDate
+     * @param \DateTime|string $clearedDate
      * @return Order
      */
     public function setClearedDate($clearedDate)
@@ -856,7 +864,7 @@ class Order extends ModelEntity
     }
 
     /**
-     * @return
+     * @return \Shopware\Models\Customer\Customer
      */
     public function getCustomer()
     {
@@ -1035,7 +1043,7 @@ class Order extends ModelEntity
 
             $tax = $detail->getTax();
 
-            $taxValue = 0;
+            $taxValue = $detail->getTaxRate();
 
             // additional tax checks required for sw-2238, sw-2903 and sw-3164
             if ($tax && $tax->getId() !== 0 && $tax->getId() !== null && $tax->getTax() !== null) {
@@ -1043,20 +1051,22 @@ class Order extends ModelEntity
             }
 
             if ($this->net) {
-                $invoiceAmountNet += ($detail->getPrice() * $detail->getQuantity()) / 100 * (100 + $taxValue);
+                $invoiceAmountNet += round(($detail->getPrice() * $detail->getQuantity()) / 100 * (100 + $taxValue), 2);
             } else {
                 $invoiceAmountNet += ($detail->getPrice() * $detail->getQuantity()) / (100 + $taxValue) * 100;
             }
         }
 
-        if ($this->net) {
+        if ($this->taxFree) {
+            $this->invoiceAmountNet = $invoiceAmount + $this->invoiceShippingNet;
+            $this->invoiceAmount = $this->invoiceAmountNet;
+        } elseif ($this->net) {
             $this->invoiceAmountNet = $invoiceAmount + $this->invoiceShippingNet;
             $this->invoiceAmount = $invoiceAmountNet + $this->invoiceShipping;
         } else {
             $this->invoiceAmount = $invoiceAmount + $this->invoiceShipping;
             $this->invoiceAmountNet = $invoiceAmountNet + $this->invoiceShippingNet;
         }
-
     }
 
     /**
@@ -1131,7 +1141,7 @@ class Order extends ModelEntity
 
 
     /**
-     * @param \Shopware\Models\Shop\Shop $shop
+     * @param \Shopware\Models\Shop\Shop $languageSubShop
      */
     public function setLanguageSubShop($languageSubShop)
     {
@@ -1160,5 +1170,21 @@ class Order extends ModelEntity
     public function getPaymentInstances()
     {
         return $this->paymentInstances;
+    }
+
+    /**
+     * @param string $deviceType
+     */
+    public function setDeviceType($deviceType)
+    {
+        $this->deviceType = $deviceType;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDeviceType()
+    {
+        return $this->deviceType;
     }
 }

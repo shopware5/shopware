@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -24,7 +24,7 @@
 
 namespace Shopware\Commands;
 
-use CommunityStore;
+use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -41,17 +41,12 @@ abstract class StoreCommand extends ShopwareCommand
     /**
      * @var OutputInterface
      */
-    private $output;
+    protected $output;
 
     /**
      * @var InputInterface
      */
-    private $input;
-
-    /**
-     * @var \CommunityStore
-     */
-    private $store;
+    protected $input;
 
     protected function addConfigureAuth()
     {
@@ -107,30 +102,27 @@ abstract class StoreCommand extends ShopwareCommand
 
     /**
      * @param InputInterface $input
-     * @return int|\Shopware_StoreApi_Models_Auth
+     * @return string
      */
     protected function setupShopwareVersion(InputInterface $input)
     {
         $version = $input->getOption('shopware-version');
-
-        if (!empty($version)) {
-            $this->container->get('config')->offsetSet('version', (int) $version);
+        if (empty($version)) {
+            $version = \Shopware::VERSION;
         }
+        return $version;
     }
 
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
      * @throws \Exception
-     * @return int|\Shopware_StoreApi_Models_Auth
+     * @return AccessTokenStruct
      */
     protected function setupAuth(InputInterface $input, OutputInterface $output)
     {
         $this->output = $output;
         $this->input  = $input;
-
-        /** @var \CommunityStore $store */
-        $this->store = $this->container->get('CommunityStore');
 
         $username = $input->getOption('username');
         $password = $input->getOption('password');
@@ -159,78 +151,32 @@ abstract class StoreCommand extends ShopwareCommand
 
         $output->writeln(sprintf("Connect to Store with username: %s...", $username));
 
-        return $this->login($username, $password);
+        return $this->container->get('shopware_plugininstaller.store_client')->getAccessToken(
+            $username,
+            $password
+        );
     }
 
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
-     * @param \Shopware_StoreApi_Models_Auth $auth
      * @throws \Exception
-     * @return int|\Shopware_StoreApi_Models_Domain
+     * @return string
      */
-    protected function setupDomain(InputInterface $input, OutputInterface $output, \Shopware_StoreApi_Models_Auth $auth)
+    protected function setupDomain(InputInterface $input, OutputInterface $output)
     {
         $this->output = $output;
         $this->input  = $input;
 
         $hostname = $input->getOption('hostname');
         if (empty($hostname)) {
-            $em = $this->container->get('models');
-            $shop = $em->getRepository('Shopware\Models\Shop\Shop')->findOneBy(array('default' => true));
-            $hostname = $shop->getHost();
+            $hostname = $this->container->get('shopware_plugininstaller.account_manager_service')->getDomain();
         }
 
         if (empty($hostname)) {
             throw new \Exception("Hostname is required");
         }
 
-        $output->writeln(sprintf("Connect to Domain: %s...", $hostname));
-        return $this->connect($auth, $hostname);
-    }
-
-
-    /**
-     * @param $user
-     * @param $password
-     * @return int|\Shopware_StoreApi_Models_Auth
-     */
-    private function login($user, $password)
-    {
-        $auth = $this->store->getAuthService()->login($user, $password);
-        if ($auth instanceof \Shopware_StoreApi_Exception_Response) {
-            $this->handleError(array(
-                'success' => false,
-                'source'  => 'auth',
-                'code'    => $auth->getCode(),
-                'message' => $auth->getMessage()
-            ));
-        }
-
-        return $auth;
-    }
-
-    /**
-     * @param \Shopware_StoreApi_Models_Auth $auth
-     * @param string $hostname
-     * @return int|\Shopware_StoreApi_Models_Domain
-     */
-    private function connect(\Shopware_StoreApi_Models_Auth $auth, $hostname)
-    {
-        /** @var $domain \Shopware_StoreApi_Models_Domain */
-        $domain = $this->store->getAccountService()->getDomain(
-            $auth,
-            $hostname
-        );
-
-        if ($domain instanceof \Shopware_StoreApi_Exception_Response) {
-            $this->handleError(array(
-                'success' => false,
-                'code'    => $domain->getCode(),
-                'message' => "Your currently used shop domain isn't associated with your shopware account."
-            ));
-        }
-
-        return $domain;
+        return $hostname;
     }
 }

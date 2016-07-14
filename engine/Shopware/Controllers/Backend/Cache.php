@@ -1,9 +1,11 @@
 <?php
+
 use Shopware\Components\CacheManager;
+use Doctrine\ORM\AbstractQuery;
 
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -63,9 +65,10 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
             $this->cacheManager->getConfigCacheInfo(),
             $this->cacheManager->getHttpCacheInfo($this->Request()),
             $this->cacheManager->getTemplateCacheInfo(),
+            $this->cacheManager->getThemeCacheInfo(),
             $this->cacheManager->getShopwareProxyCacheInfo(),
-            $this->cacheManager->getDoctrineFileCacheInfo(),
             $this->cacheManager->getDoctrineProxyCacheInfo(),
+            $this->cacheManager->getOpCacheCacheInfo()
         );
 
         $this->View()->assign(array(
@@ -124,6 +127,9 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
         if ($cache['template'] == 'on' || $cache['backend'] == 'on' || $cache['frontend'] == 'on') {
             $this->cacheManager->clearTemplateCache();
         }
+        if ($cache['theme'] == 'on' || $cache['frontend'] == 'on') {
+            $this->cacheManager->clearHttpCache();
+        }
         if ($cache['http'] == 'on' || $cache['frontend'] == 'on') {
             $this->cacheManager->clearHttpCache();
         }
@@ -134,6 +140,79 @@ class Shopware_Controllers_Backend_Cache extends Shopware_Controllers_Backend_Ex
         $this->View()->assign(array(
             'success' => true
         ));
+    }
+
+    /**
+     * Warms up the cache for a theme shop
+     */
+    public function themeCacheWarmUpAction()
+    {
+        $shopId = $this->Request()->get('shopId');
+
+        $repository = $this->get('models')->getRepository('Shopware\Models\Shop\Shop');
+
+        $query = $repository->getShopsWithThemes(array('shop.id' => $shopId));
+
+        /**@var $shop \Shopware\Models\Shop\Shop*/
+        $shop = $query->getResult(
+            AbstractQuery::HYDRATE_OBJECT
+        )[0];
+
+        if (!$shop) {
+            $this->View()->assign(array(
+                'success' => false
+            ));
+            return;
+        }
+
+        if ($shop->getMain()) {
+            $shop = $shop->getMain();
+        }
+
+        /** @var $compiler \Shopware\Components\Theme\Compiler */
+        $compiler = $this->container->get('theme_compiler');
+        $compiler->compileJavascript('new', $shop->getTemplate(), $shop);
+        $compiler->compileLess('new', $shop->getTemplate(), $shop);
+
+        $this->View()->assign(array(
+            'success' => true
+        ));
+    }
+
+    public function moveThemeFilesAction()
+    {
+        /**@var $repository \Shopware\Models\Shop\Repository*/
+        $repository = $this->get('models')->getRepository('Shopware\Models\Shop\Shop');
+        $shops = $repository->getShopsWithThemes()->getResult();
+        $compiler = $this->container->get('theme_compiler');
+        $pathResolver = $this->container->get('theme_path_resolver');
+
+        $time = time();
+
+        foreach ($shops as $shop) {
+            $oldTimestamp = $compiler->getThemeTimestamp($shop);
+            if ($oldTimestamp == $time) {
+                $time++;
+            }
+
+            $new = $pathResolver->getCssFilePath($shop, 'new');
+            if (!file_exists($new)) {
+                continue;
+            }
+
+            rename(
+                $pathResolver->getCssFilePath($shop, 'new'),
+                $pathResolver->getCssFilePath($shop, $time)
+            );
+
+            rename(
+                $pathResolver->getJsFilePath($shop, 'new'),
+                $pathResolver->getJsFilePath($shop, $time)
+            );
+
+            $compiler->clearThemeCache($shop, $oldTimestamp);
+            $compiler->createThemeTimestamp($shop, $time);
+        }
     }
 
     /**

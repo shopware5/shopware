@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -59,7 +59,7 @@ class DatabaseHandler
     protected $output;
 
     /**
-     * @param ModelManager $em
+     * @param ModelManager                            $em
      * @param Enlight_Components_Db_Adapter_Pdo_Mysql $db
      * @param $kernelRoot
      */
@@ -82,17 +82,18 @@ class DatabaseHandler
      * Loads all snippets from all files in $snippetsDir
      * (including subfolders) and writes them to the database.
      *
-     * @param null $snippetsDir
-     * @param bool $force
+     * @param null   $snippetsDir
+     * @param bool   $force
      * @param string $namespacePrefix Allows to prefix the snippet namespace.
      */
     public function loadToDatabase($snippetsDir = null, $force = false, $namespacePrefix = '')
     {
         $snippetsDir = $snippetsDir ? : $this->kernelRoot . '/snippets/';
         if (!file_exists($snippetsDir)) {
-            if ($this->output && $snippetsDir == ($this->kernelRoot . '/snippets/')) {
-                $this->output->writeln('<info>No snippets folder found in Shopware core, skipping</info>');
+            if ($snippetsDir == ($this->kernelRoot . '/snippets/')) {
+                $this->printWarning('<info>No snippets folder found in Shopware core, skipping</info>');
             }
+
             return;
         }
 
@@ -120,9 +121,7 @@ class DatabaseHandler
                 continue;
             }
 
-            if ($this->output) {
-                $this->output->writeln('<info>Importing ' . $namespace . ' namespace</info>');
-            }
+            $this->printNotice('<info>Importing ' . $namespace . ' namespace</info>');
 
             $namespaceData = new \Enlight_Components_Snippet_Namespace(array(
                 'adapter' => $inputAdapter,
@@ -138,22 +137,18 @@ class DatabaseHandler
 
                 $databaseWriter->write($values, $namespacePrefix . $namespace, $locale->getId(), 1);
 
-                if ($this->output) {
-                    $this->output->writeln('<info>Imported ' . count($values) . ' snippets into ' . $locale->getLocale() . '</info>');
-                }
+                $this->printNotice('<info>Imported ' . count($values) . ' snippets into ' . $locale->getLocale() . '</info>');
             }
 
-            if ($this->output) {
-                $this->output->writeln('<info></info>');
-            }
+            $this->printNotice('<info></info>');
         }
     }
 
     /**
      * Dumps all snippets from database into the provided $snippetsDir
      *
-     * @param string|null $snippetsDir
-     * @param string $localeName
+     * @param  string|null $snippetsDir
+     * @param  string      $localeName
      * @throws \Exception
      */
     public function dumpFromDatabase($snippetsDir, $localeName)
@@ -188,9 +183,8 @@ class DatabaseHandler
         );
 
         if (count($namespaces) == 0) {
-            if ($this->output) {
-                $this->output->writeln('<error>No snippets found for the given locale(s)</error>');
-            }
+            $this->printWarning('<error>No snippets found for the given locale(s)</error>');
+
             return;
         }
 
@@ -217,7 +211,7 @@ class DatabaseHandler
      * Loads all snippets from all files in $snippetsDir
      * (including subfolders) and removes them from the database.
      *
-     * @param null $snippetsDir
+     * @param null    $snippetsDir
      * @param boolean $removeDirty
      */
     public function removeFromDatabase($snippetsDir = null, $removeDirty = false)
@@ -252,9 +246,7 @@ class DatabaseHandler
                 continue;
             }
 
-            if ($this->output) {
-                $this->output->writeln('<info>Processing ' . $namespace . ' namespace</info>');
-            }
+            $this->printNotice('<info>Processing ' . $namespace . ' namespace</info>');
 
             $namespaceData = new \Enlight_Components_Snippet_Namespace(array(
                 'adapter' => $inputAdapter,
@@ -271,14 +263,35 @@ class DatabaseHandler
                 $namespaceData->setSection(array(1, $locale->getId()))->read();
                 $namespaceData->setData($values);
                 $outputAdapter->delete($namespaceData, array_keys($values), $removeDirty);
-                if ($this->output) {
-                    $this->output->writeln('<info>Deleted ' . count($values) . ' snippets from ' . $locale->getLocale() . '</info>');
-                }
+
+                $this->printNotice('<info>Deleted ' . count($values) . ' snippets from ' . $locale->getLocale() . '</info>');
             }
 
-            if ($this->output) {
-                $this->output->writeln('<info></info>');
-            }
+            $this->printNotice('<info></info>');
+        }
+    }
+
+    /**
+     * Prints given $message if output interface is set and it is verbose
+     *
+     * @param string $message
+     */
+    private function printNotice($message)
+    {
+        if ($this->output && $this->output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
+            $this->output->writeln($message);
+        }
+    }
+
+    /**
+     * Prints given $message if output interface is set
+     *
+     * @param string $message
+     */
+    private function printWarning($message)
+    {
+        if ($this->output) {
+            $this->output->writeln($message);
         }
     }
 }

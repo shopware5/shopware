@@ -1,0 +1,88 @@
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ *
+ * @category   Shopware
+ * @package    Shopware_Styling
+ * @subpackage Tree
+ * @version    $Id$
+ * @author shopware AG
+ */
+@mixin shopware-tree {
+    .#{$prefix}tree-panel {
+
+        // Header
+        .#{$prefix}grid-header-ct {
+            border-right-color: $border-color;
+
+            // Last column
+            .#{$prefix}column-header-last {
+                border-right: 1px solid #fff;
+            }
+
+            // Header text
+            .#{$prefix}column-header-text {
+                text-shadow: 0 1px 0 #fff;
+            }
+        }
+
+        // Tree panel body
+        .#{$prefix}panel-body {
+            border-right-color: $border-color;
+
+            .#{$prefix}grid-view {
+                @include single-box-shadow($font-color, 0, 1px, 3px, -2px, true);
+                padding: 5px 0 0;
+
+                // Action column
+                .#{$prefix}action-col-icon {
+                    width: 16px; height: 16px;
+                    margin-left: 10px;
+                }
+
+                .#{$prefix}grid-cell {
+                	border-bottom: 1px solid transparent !important;
+                }
+
+                // Column styling
+                .#{$prefix}grid-row-selected .#{$prefix}grid-cell {
+                    border-top: 1px solid #d0dfeb;
+                    border-bottom: 1px solid #d0dfeb !important;
+                    background: #ddedf7 !important;
+                    color: $font-color;
+                }
+            }
+        }
+
+        // Icons
+       	.#{$prefix}tree-icon-parent {
+       		background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAALdJREFUeNpi/P//PwMlgImBQsCS0Tr7v5iQAFzg+89fDL///L04sTTegCgDhAX4GIw0VeECr999YLhy9yHxLvj77x/IRoQACysDOxurftmEZQQD5/3nLwws//79Z/jz5x9ckIONjcFQXZUo28/fvA1xwZ+/f8kKQJBeiAv+/iPLAJBeoAGoYUCaAf9gXvhHqRf+ku+Fv2ixQJoLYGHwl4Iw+PLtO8PNBw/IMuD7j58MjAOeGwECDAD8xnLIEOBgXwAAAABJRU5ErkJggg==") no-repeat;
+       	}
+
+       	.#{$prefix}tree-icon-leaf {
+       		background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAPlJREFUeNqcUjsOgzAMJRVjhdStZ+jega0n6MzKxTgANwhS1QG4RTMhcQE+E5BiVY4ck9CqlqLYlt/Lsx2htQ6KotBw+0wIEURRdIzjeIA4yzKRpukHAEAppd6zFaDzPH+WZXlCUsDBOWCwLItJ0oP5rutubdvKqqrOVF2IEqdpCr7ZMAzXpmkedV3f11AZAnwNfSCkUqk/juOl7/sXvLtRQIGULEkSK17bsFvAXjnQpYirCtGZ59lZ7CKlNYYAFfD/AMUIdtVYCjiAFmOemyH4ZY1UlbcFX6FrgNYaoQU+eXrzmeyu0bc+l22G+PcMlFK7K+RtoL0FGAA09fQsbY2d4gAAAABJRU5ErkJggg==") no-repeat;
+       	}
+
+       	.#{$prefix}grid-tree-node-expanded .#{$prefix}tree-icon-parent {
+       		background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAgBJREFUeNrEU79LHEEUnpmbnbtDc4enkSN4jcm/INiENCmUQCDFkSCEQIqkUA4LEUW0UxQDObSxuEohcAELQxBSJmUquwSSIrERMXE9T73b2fmR92Z3DVGwscjA7rz58b7ve9/MUGstuU5j5JqNJsHUSn3o597+dkZ4EsdBGIpSsbe2VHny4ioAngShUkM3u/KfVyafDeL45Xztlzamc2q1PgMsFFrESJGUuh5DOvH6zQOYKAShfJ5izM8IUV2sPP40/mrjo9a6N94cJ0dR0v8+atzhrUC+K3Z3gRcdhMH/wG8MwFqpOvH03lXS59Y277aD4D3PpsVJIZ/PMRTEKDlsNLsry+vbNPJHwCl1/CUGmmx2YX60vCWlephJi12utDmBWnMWVhnk9PfdyhJLhj2PEwRljLpMjKVS5OuP3REA2wKTB4Xn7TBjzLExlgAI0dq4g0ElBsfxl8QeT+GeEsppB/I2T/EPkQJIRCYLEq01DgBjhmPYbKl1KixMgtH5CCAoEHJjExToxkWmy+yWRCotELHc9OrbHsRdGCu3OGDvSRkST3j/sLoemJEVklzsjKY0p5R+lBZi310k2Pe9HYYkBfWhkYmZNjYuKYudl0U7W0reBwO/OABg+3bg+6R5KlydNLpn0ZnR+LEk8/Brnp4x/7hZLvYUZt3Sf3+NfwQYADqq9AQtp/0GAAAAAElFTkSuQmCC") no-repeat;
+       	}
+    }
+}

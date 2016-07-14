@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -25,30 +25,16 @@
 namespace Shopware\Models\Emotion\Library;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use         Shopware\Components\Model\ModelEntity,
-    Doctrine\ORM\Mapping AS ORM;
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
 use Shopware\Models\Plugin\Plugin;
 
 /**
- *
- * Associations:
- * <code>
- *
- * </code>
- *
- *
- * Indices:
- * <code>
- *
- * </code>
- *
  * @category   Shopware
- * @package    Models
- * @subpackage Emotion
- * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
- * @license    http://enlight.de/license     New BSD License
+ * @package    Shopware\Models
+ * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
- * @ORM\Entity(repositoryClass="Repository")
+ * @ORM\Entity
  * @ORM\Table(name="s_library_component")
  */
 class Component extends ModelEntity
@@ -141,6 +127,14 @@ class Component extends ModelEntity
      * @var \Doctrine\Common\Collections\ArrayCollection
      */
     protected $fields;
+
+    /**
+     * Private var that holds the max position value of the form fields
+     * The value is kept up to date on a "best effort" policy
+     *
+     * @var int
+     */
+    private $maxFieldPositionValue = null;
 
     /**
      * Class constructor.
@@ -353,8 +347,12 @@ class Component extends ModelEntity
             'defaultValue' => '',
             'displayField' => '',
             'valueField' => '',
-            'allowBlank' => false
+            'allowBlank' => false,
+            'translatable' => false,
+            'position' => $this->getMaxPositionValue()
         );
+
+        $this->maxFieldPositionValue = max($data['position'], $this->maxFieldPositionValue) + 1;
 
         $field = new Field();
         $field->fromArray($data);
@@ -436,6 +434,7 @@ class Component extends ModelEntity
      *     @type string $name               Required; Logical name of the component field
      *     @type string $fieldLabel         Optional; Ext JS form field label.
      *     @type string $allowBlank         Optional; Defines if the value can contains null
+     *     @type string $defaultValue       Optional; date string in format Y-m-d
      * }
      *
      * @param array $options
@@ -590,7 +589,6 @@ class Component extends ModelEntity
         );
 
         return $this->createField($options);
-
     }
 
 
@@ -613,7 +611,6 @@ class Component extends ModelEntity
         );
 
         return $this->createField($options);
-
     }
 
 
@@ -625,6 +622,7 @@ class Component extends ModelEntity
      *     @type string $name               Required; Logical name of the component field
      *     @type string $fieldLabel         Optional; Ext JS form field label.
      *     @type string $allowBlank         Optional; Defines if the value can contains null
+     *     @type string $defaultValue       Optional; default value as string in format H:i
      * }
      *
      * @return Field
@@ -636,7 +634,6 @@ class Component extends ModelEntity
         );
 
         return $this->createField($options);
-
     }
 
     /**
@@ -677,5 +674,40 @@ class Component extends ModelEntity
         );
 
         return $this->createField($options);
+    }
+
+    /**
+     * Creates a media selection component field.
+     * @param array $options {
+     *     @type string $name               Required; Logical name of the component field
+     *     @type string $fieldLabel         Optional; Ext JS form field label.
+     *     @type string $allowBlank         Optional; Defines if the value can contains null
+     * }
+     *
+     * @return Field
+     */
+    public function createMediaField(array $options)
+    {
+        $options += array(
+            'xtype' => 'mediafield'
+        );
+
+        return $this->createField($options);
+    }
+
+    public function getMaxPositionValue()
+    {
+        if (is_null($this->maxFieldPositionValue)) {
+            $this->maxFieldPositionValue = 0;
+
+            $positions = array_map(
+                function ($field) {return $field->getPosition();},
+                $this->getFields()->toArray()
+            );
+            
+            $this->maxFieldPositionValue = !empty($positions) ? max($positions) : 0;
+        }
+
+        return $this->maxFieldPositionValue;
     }
 }

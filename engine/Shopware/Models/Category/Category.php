@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -28,6 +28,7 @@ use Shopware\Components\Model\ModelEntity;
 use Shopware\Models\Article\Article;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Models\ProductStream\ProductStream;
 
 /**
  * Shopware Categories
@@ -62,6 +63,19 @@ class Category extends ModelEntity
     private $parentId;
 
     /**
+     * @var int
+     * @ORM\Column(name="stream_id", type="integer", nullable=true)
+     */
+    private $streamId;
+
+    /**
+     * @var ProductStream
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\ProductStream\ProductStream")
+     * @ORM\JoinColumn(name="stream_id", referencedColumnName="id")
+     */
+    private $stream;
+
+    /**
      * The parent category
      *
      * OWNING SIDE
@@ -90,6 +104,15 @@ class Category extends ModelEntity
      * @ORM\Column(name="position", type="integer", nullable=true)
      */
     private $position;
+
+    /**
+     * SEO friendly title which is displayed in the HTML page.
+     *
+     * @var string $metaTitle
+     *
+     * @ORM\Column(name="meta_title", type="text", nullable=true)
+     */
+    private $metaTitle;
 
     /**
      * Keeps the meta keywords which are displayed in the HTML page.
@@ -148,6 +171,13 @@ class Category extends ModelEntity
     private $template;
 
     /**
+     * @var string $productBoxLayout
+     *
+     * @ORM\Column(name="product_box_layout", type="string", length=50, nullable=true)
+     */
+    private $productBoxLayout = null;
+
+    /**
      * @var boolean $blog
      *
      * @ORM\Column(name="blog", type="boolean", nullable=false)
@@ -160,15 +190,6 @@ class Category extends ModelEntity
      * @ORM\Column(name="path", type="string", nullable=false)
      */
     private $path = '';
-
-    /**
-     * Flag shows if the category filterable
-     *
-     * @var integer $showFilterGroups
-     *
-     * @ORM\Column(name="showfiltergroups", type="boolean", nullable=false)
-     */
-    private $showFilterGroups = true;
 
     /**
      * Is this category based outside from the shop?
@@ -196,16 +217,6 @@ class Category extends ModelEntity
      * @ORM\Column(name="hidetop", type="boolean", nullable=false)
      */
     private $hideTop = false;
-
-    /**
-     * Can this category used even there is no view selected?
-     *
-     * @var integer $noViewSelect
-     *
-     * @ORM\Column(name="noviewselect", type="boolean", nullable=false)
-     */
-    private $noViewSelect;
-
 
     /**
      * INVERSE SIDE
@@ -275,6 +286,13 @@ class Category extends ModelEntity
      * @ORM\Column(name="added", type="datetime", nullable=false)
      */
     private $added;
+
+    /**
+     * @var int $mediaId
+     *
+     * @ORM\Column(name="mediaID", type="integer", nullable=true)
+     */
+    private $mediaId;
 
     /**
      * INVERSE SIDE
@@ -638,29 +656,6 @@ class Category extends ModelEntity
     }
 
     /**
-     * Set no view select
-     *
-     * @param bool $noViewSelect
-     * @return Category
-     */
-    public function setNoViewSelect($noViewSelect)
-    {
-        $this->noViewSelect = (bool) $noViewSelect;
-
-        return $this;
-    }
-
-    /**
-     * Get no view select
-     *
-     * @return integer
-     */
-    public function getNoViewSelect()
-    {
-        return $this->noViewSelect;
-    }
-
-    /**
      * Set active
      *
      * @param bool $active
@@ -701,29 +696,6 @@ class Category extends ModelEntity
     public function setBlog($blog)
     {
         $this->blog = $blog;
-    }
-
-    /**
-     * Set the flag if filter groups should be displayed
-     *
-     * @param boolean $showFilterGroups
-     * @return Category
-     */
-    public function setShowFilterGroups($showFilterGroups)
-    {
-        $this->showFilterGroups = (bool) $showFilterGroups;
-
-        return $this;
-    }
-
-    /**
-     * Get the flag if the filter groups should be displayed
-     *
-     * @return boolean
-     */
-    public function getShowFilterGroups()
-    {
-        return $this->showFilterGroups;
     }
 
     /**
@@ -962,5 +934,64 @@ class Category extends ModelEntity
         }
 
         return false;
+    }
+
+    /**
+     * @return integer
+     */
+    public function getProductBoxLayout()
+    {
+        return $this->productBoxLayout;
+    }
+
+    /**
+     * @param integer $productBoxLayout
+     * @return Category
+     */
+    public function setProductBoxLayout($productBoxLayout)
+    {
+        $this->productBoxLayout = $productBoxLayout;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMetaTitle()
+    {
+        return $this->metaTitle;
+    }
+
+    /**
+     * @param string $metaTitle
+     */
+    public function setMetaTitle($metaTitle)
+    {
+        $this->metaTitle = $metaTitle;
+    }
+
+    /**
+     * @return ProductStream
+     */
+    public function getStream()
+    {
+        return $this->stream;
+    }
+
+    /**
+     * @param ProductStream $stream
+     */
+    public function setStream(ProductStream $stream = null)
+    {
+        $this->stream = $stream;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMediaId()
+    {
+        return $this->mediaId;
     }
 }

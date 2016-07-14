@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,10 +23,11 @@
  */
 
 namespace Shopware\Models\Article;
-use Shopware\Components\Model\ModelEntity,
-    Doctrine\ORM\Mapping AS ORM,
-    Symfony\Component\Validator\Constraints as Assert,
-    Doctrine\Common\Collections\ArrayCollection;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Supplier Model
@@ -124,6 +125,13 @@ class Supplier extends ModelEntity
      */
     protected $metaKeywords;
 
+    /**
+     * @var \DateTime $changed
+     *
+     * @ORM\Column(name="changed", type="datetime", nullable=false)
+     */
+    private $changed;
+
    /**
     * INVERSE SIDE
     * Articles can be bound to a specific supplier
@@ -143,6 +151,17 @@ class Supplier extends ModelEntity
     public function __construct()
     {
         $this->articles = new ArrayCollection();
+        $this->changed = new \DateTime();
+    }
+
+    /**
+     * Sets the primary key
+     *
+     * @param $id
+     */
+    public function setPrimaryIdentifier($id)
+    {
+        $this->id = (int) $id;
     }
 
     /**
@@ -330,5 +349,31 @@ class Supplier extends ModelEntity
     public function getMetaKeywords()
     {
         return $this->metaKeywords;
+    }
+
+    /**
+     * Set changed
+     *
+     * @param \DateTime|string $changed
+     * @return Supplier
+     */
+    public function setChanged($changed = 'now')
+    {
+        if (!$changed instanceof \DateTime) {
+            $this->changed = new \DateTime($changed);
+        } else {
+            $this->changed = $changed;
+        }
+        return $this;
+    }
+
+    /**
+     * Get changed
+     *
+     * @return \DateTime
+     */
+    public function getChanged()
+    {
+        return $this->changed;
     }
 }

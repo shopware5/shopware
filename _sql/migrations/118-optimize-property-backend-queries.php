@@ -1,7 +1,7 @@
 <?php
 class Migrations_Migration118 Extends Shopware\Components\Migrations\AbstractMigration
 {
-    public function up()
+    public function up($modus)
     {
         $sql = <<<'EOD'
 ALTER TABLE `s_filter_relations` ADD INDEX  `get_set_assigns_query` (  `groupID`, `position` );

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -44,7 +44,7 @@ abstract class Random
      * Generate random bytes using OpenSSL, Mcrypt, /dev/urandom and mt_rand() as fallback
      *
      * @param  integer $length
-     * @param  bool $strong true if you need a strong random generator (cryptography)
+     * @param  bool $strong If true, an exception is thrown if no secure random generator is available
      * @return string
      * @throws \Exception
      */
@@ -54,39 +54,7 @@ abstract class Random
             return false;
         }
 
-        if (function_exists('openssl_random_pseudo_bytes')
-            && (version_compare(PHP_VERSION, '5.3.4') >= 0
-            || strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN')
-        ) {
-            $bytes = openssl_random_pseudo_bytes($length, $usable);
-            if (true === $usable) {
-                return $bytes;
-            }
-        }
-
-        if (function_exists('mcrypt_create_iv')
-            && (version_compare(PHP_VERSION, '5.3.7') >= 0
-            || strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN')
-        ) {
-            $bytes = mcrypt_create_iv($length, MCRYPT_DEV_URANDOM);
-            if ($bytes !== false && strlen($bytes) === $length) {
-                return $bytes;
-            }
-        }
-
-        if ($strong) {
-            throw new \Exception(
-                'This PHP environment doesn\'t support secure random number generation. ' .
-                'Please consider to install the OpenSSL and/or Mcrypt extensions'
-            );
-        }
-
-        $rand = '';
-        for ($i = 0; $i < $length; $i++) {
-            $rand .= chr(mt_rand(0, 255));
-        }
-
-        return $rand;
+        return random_bytes($length);
     }
 
     /**
@@ -103,7 +71,7 @@ abstract class Random
     }
 
     /**
-     * Generate a random integer between $min and $max
+     * Generate a random integer between $min and $max inclusive
      *
      * @param  integer $min
      * @param  integer $max
@@ -118,24 +86,8 @@ abstract class Random
                 'The min parameter must be lower than max parameter'
             );
         }
-        $range = $max - $min;
-        if ($range == 0) {
-            return $max;
-        } elseif ($range > PHP_INT_MAX || is_float($range)) {
-            throw new \DomainException(
-                'The supplied range is too great to generate'
-            );
-        }
-        $log    = log($range, 2);
-        $bytes  = (int) ($log / 8) + 1;
-        $bits   = (int) $log + 1;
-        $filter = (int) (1 << $bits) - 1;
-        do {
-            $rnd = hexdec(bin2hex(self::getBytes($bytes, $strong)));
-            $rnd = $rnd & $filter;
-        } while ($rnd > $range);
 
-        return ($min + $rnd);
+        return random_int($min, $max);
     }
 
     /**
@@ -162,13 +114,15 @@ abstract class Random
 
     /**
      * Generate a random string of specified length.
+     * Prioritizes secure random generators (OpenSSL/Mcrypt)
+     * and uses a non-secure random generator as fallback
      *
      * Uses supplied character list for generating the new string.
      * If no character list provided - uses Base 64 character set.
      *
      * @param  integer $length
      * @param  string|null $charlist
-     * @param  bool $strong  true if you need a strong random generator (cryptography)
+     * @param  bool $strong If true, an exception is thrown if no secure random generator is available
      * @return string
      * @throws \DomainException
      */
@@ -204,11 +158,13 @@ abstract class Random
 
     /**
      * Generate a random alphanumeric string of specified length.
+     * Prioritizes secure random generators (OpenSSL/Mcrypt)
+     * and uses a non-secure random generator as fallback
      *
      * Charlist: a-zA-Z0-9
      *
      * @param  integer $length
-     * @param  bool $strong  true if you need a strong random generator (cryptography)
+     * @param  bool $strong If true, an exception is thrown if no secure random generator is available
      * @return string
      * @throws \DomainException
      */

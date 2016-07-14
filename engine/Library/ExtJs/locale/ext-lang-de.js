@@ -327,7 +327,7 @@ Ext.onReady(function() {
     });
 
     /**
-     * Shopware 4.0
+     * Shopware 5
      *
      * Code beyond this point is no longer part of ExtJs core
      * and must be ported manually when ExtJs is updated
@@ -377,6 +377,27 @@ Ext.onReady(function() {
             orderNumber: 'Bestell-Nr.',
             dropDownTitle: 'Artikel'
         }
+    });
+    Ext.define('Shopware.listing.de.InfoPanel', {
+        override: 'Shopware.listing.InfoPanel',
+        title: 'Detaillierte Informationen',
+        emptyText: 'Kein Eintrag selektiert'
+    });
+    Ext.define('Shopware.window.de.Detail', {
+        override: 'Shopware.window.Detail',
+        cancelButtonText: 'Abbrechen',
+        saveButtonText: 'Speichern'
+    });
+    Ext.define('Shopware.window.de.Progress', {
+        override: 'Shopware.window.Progress',
+        title: 'Einträge löschen',
+        cancelButtonText: 'Abbrechen',
+        closeButtonText: 'Fenster schließen',
+        successHeader: 'Erfolgreich',
+        requestHeader: 'Request',
+        errorHeader: 'Fehlermeldung',
+        requestResultTitle: 'Request Ergebnis',
+        processCanceledText: 'Prozess wurde an Position [0] von [1] unterbrochen'
     });
     Ext.define('Shopware.form.field.de.TinyMCE', {
         override:'Shopware.form.field.TinyMCE',
@@ -448,9 +469,131 @@ Ext.onReady(function() {
         }
     });
     Ext.apply(Ext.form.VTypes, {
-        passwordText : "Das Feld Passwort is nicht gültig"
+        passwordText : "Das Feld Passwort ist nicht gültig"
     });
     Ext.apply(Ext.form.field.VTypes, {
         missingValidationErrorText: 'Die vType Validierung braucht eine ValidationErrorMsg-Eigenschaft'
+    });
+    Ext.define('Ext.grid.de.RowEditor', {
+        override:'Ext.grid.RowEditor',
+        saveBtnText: 'Aktualisieren',
+        cancelBtnText: 'Abbrechen',
+        errorsText: 'Fehler',
+        dirtyText: 'Sie müssen die Änderungen übernehmen oder abbrechen'
+    });
+    Ext.define('Ext.util.de.FileUpload', {
+        override:'Ext.util.FileUpload',
+        snippets: {
+            uploadReady: 'Dateien hochgeladen',
+            filesFrom: 'von',
+            messageText: '[0] Dateien hochgeladen',
+            messageTitle: 'Medienverwaltung',
+            legacyMessage: "Ihr Browser unterstützt nicht die benötigten Funktionen für einen Drag&Drop-Upload. ",
+            maxUploadSizeTitle: 'Die Datei ist zu groß',
+            maxUploadSizeText: "Die selektierte Datei überschreitet die maximal erlaubte Uploadgröße. Bitte wählen Sie eine andere Datei aus.",
+            blackListTitle: 'Blacklist',
+            blackListMessage: "Die Datei [0] ist nicht erlaubt!"
+        }
+    });
+    Ext.define('Shopware.de.Notification', {
+        override: 'Shopware.Notification',
+        closeText: 'Schließen'
+    });
+    Ext.define('Enlight.app.de.Window', {
+        override: 'Enlight.app.Window',
+        closePopupTitle: 'Modul schließen',
+        closePopupMessage: 'Sollen alle Unterfenster vom "__MODULE__"-Modul geschlossen werden?'
+    });
+    Ext.define('Shopware.detail.de.Controller', {
+        override: 'Shopware.detail.Controller',
+        closeText: 'Schließen',
+        saveSuccessTitle: 'Erfolgreich',
+        saveSuccessMessage: 'Eintrag wurde erfolgreich gespeichert',
+        violationErrorTitle: 'Validierung Fehler',
+        invalidFormTitle: 'Formularvalidierungs Fehler',
+        invalidFormMessage: 'Das Formular beinhaltet invalidate Daten, bitte prüfen Sie ihre Eingabe.'
+    });
+    Ext.define('Shopware.form.field.de.Media', {
+        override: 'Shopware.form.field.Media',
+        selectButtonText: 'Medium selektieren',
+        resetButtonText: 'Medium zurücksetzen'
+    });
+    Ext.define('Shopware.grid.de.Association', {
+        override: 'Shopware.grid.Association',
+        searchComboLabel: 'Suche nach'
+    })
+    Ext.define('Shopware.grid.de.Controller', {
+        override: 'Shopware.grid.Controller',
+        deleteConfirmTitle: 'Einträge löschen',
+        deleteConfirmText: 'Sind Sie sicher, dass Sie die markierten Einträge löschen möchen?',
+        deleteInfoText: '<b>Die Einträge werden gelöscht.</b> <br>Um den Prozess abzubrechen, können Sie den <b><i>`Cancel process`</i></b> Button verwenden. Abhänging von der Datenmenge kann dieser Prozess einige Minuten in Anspruch nehmen.',
+        deleteProgressBarText: 'Eintrag [0] von [1]'
+    });
+    Ext.define('Shopware.listing.de.FilterPanel', {
+        override: 'Shopware.listing.FilterPanel',
+        infoTextSnippet: 'Aktivieren Sie der verschiedenen Felder über die davor angezeigte Checkbox. Aktivierte Felder werden mit einer UND Bedingung verknüpft.',
+        filterButtonText: 'Filter anwenden',
+        resetButtonText: 'Filter zurücksetzen'
+    });
+    Ext.define('Shopware.grid.de.Panel', {
+        override: 'Shopware.grid.Panel',
+        pageSizeLabel: 'Einträge pro Seite',
+        addButtonText: 'Hinzufügen',
+        deleteButtonText: 'Markierte Einträge löschen',
+        searchFieldText: 'Suche...'
+    });
+    Ext.define('Shopware.grid.plugin.de.Translation', {
+        override: 'Shopware.grid.plugin.Translation',
+        snippets: {
+            tooltip: "Übersetzen"
+        }
+    });
+    Ext.define('Shopware.apps.Base.view.element.de.ProductBoxLayoutSelect', {
+        override: 'Shopware.apps.Base.view.element.ProductBoxLayoutSelect',
+
+        fieldLabel: 'Produkt Layout',
+        helpText: 'Mit Hilfe des Produkt Layouts können Sie entscheiden, wie Ihre Produkte auf der Kategorie-Seite dargestellt werden sollen. Wählen Sie eines der drei unterschiedlichen Layouts um die Ansicht perfekt auf Ihr Produktsortiment abzustimmen. Sie können für jede Kategorie ein eigenes Layout wählen oder über die Vererbungsfunktion automatisch die Einstellungen der Eltern-Kategorie übernehmen.'
+    });
+    Ext.define('Shopware.apps.Base.store.de.ProductBoxLayout', {
+        override: 'Shopware.apps.Base.store.ProductBoxLayout',
+
+        snippets: {
+            displayExtendLayout: {
+                label: 'Vererbt',
+                description: 'Das Layout der Produkt-Box wird von der Eltern-Kategorie übernommen.'
+            },
+            displayBasicLayout: {
+                label: 'Detaillierte Informationen',
+                description: 'Das Layout der Produkt-Box zeigt detaillierte Informationen an.'
+            },
+            displayMinimalLayout: {
+                label: 'Nur wichtige Informationen',
+                description: 'Das Layout der Produkt-Box zeigt nur die wichtigsten Informationen an.'
+            },
+            displayImageLayout: {
+                label: 'Großes Bild',
+                description: 'Das Layout der Produkt-Box zeigt ein besonders großes Produkt-Bild.'
+            }
+        }
+    });
+
+    Ext.define('Shopware.notification.de.SubscriptionWarning', {
+        override: 'Shopware.notification.SubscriptionWarning',
+
+        snippets: {
+            licence_upgrade_warning: 'Es stehen noch Lizenzupgrades für [0] Plugin(s) aus. <a target="_blank" href="https://account.shopware.com">Account aufrufen</a><br /><br /><b>Nötige Upgrades:</b><br />[1]',
+            subscription_warning: 'Es sind [0] Plugin Subscription(s) abgelaufen. <a target="_blank" href="https://account.shopware.com">Account aufrufen</a><br /><br /><b>Abgelaufene Plugins:</b><br />[1]',
+            expired_soon_subscription_warning: 'Es laufen [0] Plugin Subscription(s) aus. <a target="_blank" href="https://account.shopware.com">Account aufrufen</a><br /><br /><b>Bald abgelaufene Plugins:</b><br />[1]',
+            expired_soon_subscription_days_warning: ' Tage',
+            invalid_licence: 'Lizenz von [0] Plugin(s) sind ungültig. <a target="_blank" href="https://account.shopware.com">Account aufrufen</a><br /><br /><b>Ungültige Lizenzen:</b><br />[1]',
+            shop_license_upgrade : 'Das Lizenzupgrade für den Shop wurde noch nicht ausgeführt. <a target="_blank" href="https://account.shopware.com">Account aufrufen</a>',
+            no_license: 'Möglicherweise sind Sie Opfer einer Produktfälschung geworden. <a target="_blank" href="https://account.shopware.com">Account aufrufen</a><br /><br /><b>Für die folgenden Plugins liegt keine gültige Lizenz vor:</b><br />[1]',
+            expiring_license: 'Ablaufende Lizenz(en)',
+            expired_license: 'Abgelaufene Lizenz(en)',
+            expiring_license_warning: 'Es laufen [0]x Plugin Lizenz(en) aus.<br /><br /><b>Bald abgelaufene Lizenz(en):</b><br />[1]',
+            expired_license_warning: 'Es sind [0] Plugin Lizenz(en) abgelaufen.<br /><br /><b>Abgelaufene Lizenz(en):</b><br/>[1]',
+            unknown_license: 'Nicht lizensierte Plugins',
+            confirm_open_pluginmanager: 'Sie haben nicht lizensierte Plugins installiert. Bitte erwerben Sie eine gültige Lizenz oder deinstallieren und entfernen Sie die Plugins über den Plugin Manager.'
+        }
     });
 });

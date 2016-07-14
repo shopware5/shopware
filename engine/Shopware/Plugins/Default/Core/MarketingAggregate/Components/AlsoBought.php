@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -103,6 +103,32 @@ class Shopware_Components_AlsoBought extends Enlight_Class
             'articleId' => $articleId,
             'relatedArticleId' => $relatedArticleId
         ));
+    }
+
+    /**
+     * This function is used to insert or update the bought articles table
+     * for multiple buy combinations.
+     *
+     * @param array $combinations
+     */
+    public function refreshMultipleBoughtArticles($combinations = [])
+    {
+        if (empty($combinations)) {
+            return;
+        }
+
+        $sqlCombinations = [];
+        $sql = "INSERT INTO s_articles_also_bought_ro (article_id, related_article_id, sales) VALUES ";
+
+        foreach ($combinations as $combination) {
+            $sqlCombinations[] = "(" . (int) $combination['article_id'] . ", " . (int) $combination['related_article_id'] . ", 1)";
+        }
+
+        $sql .= join(",", $sqlCombinations);
+
+        $sql .= " ON DUPLICATE KEY UPDATE sales = sales + 1;";
+
+        Shopware()->Db()->query($sql);
     }
 
 

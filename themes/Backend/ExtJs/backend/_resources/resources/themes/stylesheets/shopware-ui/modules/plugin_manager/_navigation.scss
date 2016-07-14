@@ -1,0 +1,144 @@
+.plugin-manager-navigation{
+
+    font-size: 12px;
+    border-right: 1px solid #A8B9C3 !important;
+    background: #EFF3F4 !important;
+
+    .account-container {
+        .navigation-item {
+            margin-left: 10px;
+        }
+    }
+
+    .account-avatar {
+        color: #667A85;
+        height: 40px;
+        cursor: pointer;
+        padding-left: 10px;
+
+        .picture {
+            width: 40px;
+            height: 40px;
+            float: left;
+            margin-right: 10px;
+            background: theme-image($theme, 'plugin_manager/default-avatar.png') no-repeat;
+            background-size: 40px;
+        }
+        .right-side {
+            padding-top: 2px;
+        }
+        .headline {
+            font-size: 20px;
+        }
+    }
+
+    .account-avatar.disabled {
+        cursor: default;
+    }
+
+    .navigation-headline {
+        color: #93a3af;
+        border-bottom: 1px solid #D5DFE4;
+        padding-bottom: 5px !important;
+    }
+
+    .navigation-item {
+        color: #667A85;
+        cursor: pointer;
+        margin-bottom: 5px;
+        position: relative;
+
+        a {
+            text-decoration: none;
+            color: #667A85;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #415c69;
+            color: #fff;
+            border-radius: 20px;
+            margin-left: 10px;
+            padding: 2px 10px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .content {
+            padding: 3px 10px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+
+        .content.has-badge {
+            padding: 2px 2px 2px 10px;
+        }
+
+        .node-lines {
+            height: 16px;
+            width: 10px;
+            left: -9px;
+            position: absolute;
+            top: -4px;
+            border-bottom: 1px dotted #c4c4c4;
+            border-left: 1px dotted #c4c4c4;
+        }
+    }
+
+    .navigation-level {
+        padding-left: 10px;
+    }
+    .navigation-level.sub-level {
+        padding-left: 25px;
+    }
+
+    .navigation-item:hover {
+        .content {
+            background: #415c69;
+            color: #fff;
+            a {
+                background: #415c69;
+                color: #fff;
+            }
+        }
+        .badge {
+            background: #fff;
+            color: #415c69;
+        }
+    }
+
+    .navigation-item.active {
+        .content {
+            background: #00a4ef;
+            color: #fff;
+        }
+        .badge {
+            background: #fff;
+            color: #415c69;
+        }
+    }
+
+    .navigation-item.x-item-disabled:hover {
+        .content {
+            background: none;
+            color: #c4c4c4 !important;
+        }
+        a {
+            background: none;
+            color: #c4c4c4 !important;
+        }
+    }
+
+    .navigation-item.x-item-disabled {
+        color: #c4c4c4 !important;
+
+        .x-mask {
+            background: none;
+        }
+
+        a {
+            color: #c4c4c4 !important;
+        }
+    }
+
+}

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,16 +23,16 @@
  */
 
 namespace Shopware\Models\Article\Configurator\Template;
-use Shopware\Components\Model\ModelEntity,
-    Doctrine\ORM\Mapping AS ORM,
-    Symfony\Component\Validator\Constraints as Assert,
-    Doctrine\Common\Collections\ArrayCollection;
+
+use Shopware\Components\Model\LazyFetchModelEntity;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="s_article_configurator_template_prices")
  */
-class Price extends ModelEntity
+class Price extends LazyFetchModelEntity
 {
     /**
      * @var integer $id
@@ -82,13 +82,6 @@ class Price extends ModelEntity
      * @ORM\Column(name="pseudoprice", type="float", nullable=false)
      */
     private $pseudoPrice = 0;
-
-    /**
-     * @var float $basePrice
-     *
-     * @ORM\Column(name="baseprice", type="float", nullable=false)
-     */
-    private $basePrice = 0;
 
     /**
      * @var float $percent
@@ -151,7 +144,7 @@ class Price extends ModelEntity
      */
     public function getCustomerGroup()
     {
-        return $this->customerGroup;
+        return $this->fetchLazy($this->customerGroup, array('key' => $this->customerGroupKey));
     }
 
     /**
@@ -247,29 +240,6 @@ class Price extends ModelEntity
     public function getPseudoPrice()
     {
         return $this->pseudoPrice;
-    }
-
-    /**
-     * Set basePrice
-     *
-     * @param $basePrice
-     *
-     * @return \Shopware\Models\Article\Configurator\Template\Price
-     */
-    public function setBasePrice($basePrice)
-    {
-        $this->basePrice = $basePrice;
-        return $this;
-    }
-
-    /**
-     * Get basePrice
-     *
-     * @return float
-     */
-    public function getBasePrice()
-    {
-        return $this->basePrice;
     }
 
     /**

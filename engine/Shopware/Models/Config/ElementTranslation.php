@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,7 +23,9 @@
  */
 
 namespace Shopware\Models\Config;
-use Shopware\Components\Model\ModelEntity, Doctrine\ORM\Mapping as ORM;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  *
@@ -96,7 +98,7 @@ class ElementTranslation extends ModelEntity
      * Set description
      *
      * @param string $description
-     * @return Element
+     * @return ElementTranslation
      */
     public function setDescription($description)
     {
@@ -118,7 +120,7 @@ class ElementTranslation extends ModelEntity
      * Set label
      *
      * @param string $label
-     * @return Element
+     * @return ElementTranslation
      */
     public function setLabel($label)
     {

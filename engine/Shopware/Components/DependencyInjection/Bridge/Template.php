@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -24,6 +24,8 @@
 
 namespace Shopware\Components\DependencyInjection\Bridge;
 
+use Shopware\Components\Escaper\EscaperInterface;
+
 /**
  * @category  Shopware
  * @package   Shopware\Components\DependencyInjection\Bridge
@@ -32,39 +34,33 @@ namespace Shopware\Components\DependencyInjection\Bridge;
 class Template
 {
     /**
-     * @param \Enlight_Event_EventManager           $eventManager
-     * @param \Shopware_Components_Snippet_Manager  $snippetManager
-     * @param array                                 $options
+     * @param \Enlight_Event_EventManager $eventManager
+     * @param \Enlight_Components_Snippet_Resource $snippetResource
+     * @param EscaperInterface $escaper
      * @return \Enlight_Template_Manager
+     * @param array $templateConfig
      */
     public function factory(
         \Enlight_Event_EventManager $eventManager,
-        \Shopware_Components_Snippet_Manager $snippetManager,
-        array $options
+        \Enlight_Components_Snippet_Resource $snippetResource,
+        EscaperInterface $escaper,
+        array $templateConfig
     ) {
 
         /** @var $template \Enlight_Template_Manager */
         $template = \Enlight_Class::Instance('Enlight_Template_Manager');
 
-        $template->setCompileDir(Shopware()->AppPath('Cache_Compiles'));
-        $template->setCacheDir(Shopware()->AppPath('Cache_Templates'));
-        $template->setTemplateDir(Shopware()->AppPath('Views'));
-
-        $template->setOptions($options);
+        $template->setOptions($templateConfig);
         $template->setEventManager($eventManager);
 
-        $template->setTemplateDir(array(
-            'custom'      => '_local',
-            'local'       => '_local',
-            'emotion'     => '_default',
-            'default'     => '_default',
-            'base'        => 'templates',
-            'include_dir' => '.',
-        ));
-
-        $resource = new \Enlight_Components_Snippet_Resource($snippetManager);
-        $template->registerResource('snippet', $resource);
+        $template->registerResource('snippet', $snippetResource);
         $template->setDefaultResourceType('snippet');
+
+        $template->registerPlugin(\Smarty::PLUGIN_MODIFIER, 'escapeHtml', array($escaper, 'escapeHtml'));
+        $template->registerPlugin(\Smarty::PLUGIN_MODIFIER, 'escapeHtmlAttr', array($escaper, 'escapeHtmlAttr'));
+        $template->registerPlugin(\Smarty::PLUGIN_MODIFIER, 'escapeJs', array($escaper, 'escapeJs'));
+        $template->registerPlugin(\Smarty::PLUGIN_MODIFIER, 'escapeCss', array($escaper, 'escapeCss'));
+        $template->registerPlugin(\Smarty::PLUGIN_MODIFIER, 'escapeUrl', array($escaper, 'escapeUrl'));
 
         return $template;
     }

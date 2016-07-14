@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -22,7 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Components;;
+namespace Shopware\Components;
+
+;
 
 /**
  * Class Config
@@ -47,6 +49,11 @@ class ConfigLoader
     protected $documentRoot;
 
     /**
+     * @var string
+     */
+    protected $cacheDir;
+
+    /**
      * Contains the environment name.
      *
      * @var string
@@ -61,12 +68,14 @@ class ConfigLoader
 
     /**
      * @param string $documentRoot
+     * @param string $cacheDir
      * @param string $environment
      * @param string $applicationName
      */
-    public function __construct($documentRoot, $environment, $applicationName)
+    public function __construct($documentRoot, $cacheDir, $environment, $applicationName)
     {
-        $this->documentRoot    = $documentRoot;
+        $this->documentRoot    = rtrim($documentRoot, '/') . '/';
+        $this->cacheDir        = $cacheDir;
         $this->environment     = $environment;
         $this->applicationName = $applicationName;
     }
@@ -130,10 +139,10 @@ class ConfigLoader
     {
         if ($path !== null) {
             $path = str_replace('_', DIRECTORY_SEPARATOR, $path);
-            return $this->documentRoot . '/engine/Shopware/'. $path . DIRECTORY_SEPARATOR;
+            return $this->documentRoot . 'engine/Shopware/'. $path . DIRECTORY_SEPARATOR;
         }
 
-        return $this->documentRoot . '/engine/Shopware/';
+        return $this->documentRoot . 'engine/Shopware/';
     }
 
     /**
@@ -146,10 +155,10 @@ class ConfigLoader
     {
         if ($path !== null) {
             $path = str_replace('_', DIRECTORY_SEPARATOR, $path);
-            return $this->documentRoot . '/tests/Shopware/'. $path . DIRECTORY_SEPARATOR;
+            return $this->documentRoot . 'tests/Shopware/'. $path . DIRECTORY_SEPARATOR;
         }
 
-        return $this->documentRoot . '/tests/Shopware/';
+        return $this->documentRoot . 'tests/Shopware/';
     }
 
     /**
@@ -166,5 +175,13 @@ class ConfigLoader
     public function App()
     {
         return $this->applicationName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCacheDir()
+    {
+        return $this->cacheDir;
     }
 }

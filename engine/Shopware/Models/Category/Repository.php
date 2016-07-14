@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -259,6 +259,7 @@ class Repository extends ModelRepository
             'c.name as name',
             'c.position as position',
             'c.parentId as parentId',
+            'c.mediaId as mediaId',
         ));
         $builder = $this->addChildrenCountSelect($builder);
         $builder = $this->addArticleCountSelect($builder);
@@ -332,6 +333,23 @@ class Repository extends ModelRepository
     }
 
     /**
+     * Returns the \Doctrine\ORM\Query to select the category detail information based on the category id
+     * Used for detail information in the api resource.
+     *
+     * @param $categoryId
+     *
+     * @return \Doctrine\ORM\Query
+     */
+    public function getDetailQueryWithoutArticles($categoryId)
+    {
+        $builder = $this->getDetailQueryBuilderWithoutArticles($categoryId);
+        $builder = $this->addChildrenCountSelect($builder);
+        $builder = $this->addArticleCountSelect($builder);
+
+        return $builder->getQuery();
+    }
+
+    /**
      * Helper function to create the query builder for the "getDetailQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
@@ -359,6 +377,35 @@ class Repository extends ModelRepository
             ->leftJoin('category.media', 'media')
             ->leftJoin('category.customerGroups', 'customerGroups')
             ->where('category.id = ?1')
+            ->setParameter(1, $categoryId);
+
+        return $builder;
+    }
+
+    /**
+     * Helper function to create the query builder for the "getDetailWithoutArticlesQuery" function.
+     * This function can be hooked to modify the query builder of the query object.
+     *
+     * @param $categoryId
+     *
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getDetailQueryBuilderWithoutArticles($categoryId)
+    {
+        $builder = $this->getEntityManager()->createQueryBuilder();
+        $builder->select(array(
+            'c',
+            'attribute',
+            'emotions',
+            'customerGroups',
+            'media'
+        ))
+            ->from($this->getEntityName(), 'c')
+            ->leftJoin('c.attribute', 'attribute')
+            ->leftJoin('c.emotions', 'emotions')
+            ->leftJoin('c.media', 'media')
+            ->leftJoin('c.customerGroups', 'customerGroups')
+            ->where('c.id = ?1')
             ->setParameter(1, $categoryId);
 
         return $builder;
@@ -544,6 +591,34 @@ class Repository extends ModelRepository
         }
         return $categories;
     }
+
+    /**
+     * @param int $id
+     * @return array
+     */
+    public function getChildrenCountList($id)
+    {
+        $builder = $this->getCategoriesByParentBuilder($id);
+        $builder->select('COUNT(categories) as categoriesCount');
+
+        $count = $builder->getQuery()->getSingleScalarResult();
+
+        return $count;
+    }
+
+    /**
+     * @param int $id
+     * @return array
+     */
+    public function getFullChildrenList($id)
+    {
+        $builder = $this->getCategoriesByParentBuilder($id);
+
+        $categories = $builder->getQuery()->getArrayResult();
+
+        return $categories;
+    }
+
     /**
      * Returns first active articleId for given category
      *
@@ -602,9 +677,23 @@ class Repository extends ModelRepository
      */
     public function getBlogCategoriesByParentBuilder($parentId, $offset = null, $limit = null)
     {
-        $builder = $this->createQueryBuilder('categories')
-                ->select(array('categories'))
+        return $this->getCategoriesByParentBuilder($parentId, $offset, $limit)
                 ->andWhere('categories.blog = 1');
+    }
+
+    /**
+     * Helper method to create the query builder for the "getBlogCategoriesByParentQuery" function.
+     * This function can be hooked to modify the query builder of the query object.
+     *
+     * @param int $parentId
+     * @param int $offset
+     * @param int $limit
+     * @return  \Shopware\Components\Model\QueryBuilder
+     */
+    public function getCategoriesByParentBuilder($parentId, $offset = null, $limit = null)
+    {
+        $builder = $this->createQueryBuilder('categories')
+                ->select(array('categories'));
 
         if ($parentId > 1) {
             $builder->andWhere('categories.path LIKE :path')
@@ -613,7 +702,6 @@ class Repository extends ModelRepository
 
         $builder->setFirstResult($offset)
                 ->setMaxResults($limit);
-
 
         return $builder;
     }

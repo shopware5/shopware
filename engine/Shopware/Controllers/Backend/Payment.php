@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+use Shopware\Models\Payment\Payment;
 
 /**
  * Shopware Payment Controller
@@ -97,7 +98,7 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
      */
     public function getPaymentsAction()
     {
-        $this->repository = Shopware()->Models()->Payment();
+        $this->repository = Shopware()->Models()->getRepository(Payment::class);
 
         $query = $this->repository->getListQuery();
         $results = $query->getArrayResult();
@@ -129,10 +130,10 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
             //Matches the surcharges with the countries
             if (!empty($result['surchargeString'])) {
                 $surchargeString = $result['surchargeString'];
-                $surcharges = explode(";",$surchargeString);
+                $surcharges = explode(";", $surchargeString);
                 $specificSurcharges = array();
                 foreach ($surcharges as $surcharge) {
-                    $specificSurcharges[] = explode(":",$surcharge);
+                    $specificSurcharges[] = explode(":", $surcharge);
                 }
                 $surchargeCollection[$result['name']] = $specificSurcharges;
             }
@@ -141,13 +142,11 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
             }
             foreach ($result['countries'] as &$country) {
                 foreach ($surchargeCollection[$result['name']] as $singleSurcharge) {
-
                     if ($country['iso']==$singleSurcharge[0]) {
                         $country['surcharge'] = $singleSurcharge[1];
                     }
                 }
             }
-
         }
         return $results;
     }
@@ -169,7 +168,6 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
     public function createPaymentsAction()
     {
         try {
-
             $params = $this->Request()->getParams();
             unset($params["action"]);
             $repository = Shopware()->Models()->getRepository('Shopware\Models\Payment\Payment');
@@ -182,8 +180,7 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
                 $params['source'] = null;
             }
 
-            $paymentModel = new \Shopware\Models\Payment\Payment();
-            $params['attribute'] = $params['attribute'][0];
+            $paymentModel = new Payment();
             $countries = $params['countries'];
             $countryArray = array();
             foreach ($countries as $country) {
@@ -211,12 +208,12 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
     {
         try {
             $id = $this->Request()->getParam('id', null);
-            /**@var $payment \Shopware\Models\Payment\Payment  */
+            /**@var $payment Payment  */
             $payment = Shopware()->Models()->find('Shopware\Models\Payment\Payment', $id);
             $action = $payment->getAction();
             $data = $this->Request()->getParams();
-            $data['surcharge'] = str_replace(',','.',$data['surcharge']);
-            $data['debitPercent'] = str_replace(',','.',$data['debitPercent']);
+            $data['surcharge'] = str_replace(',', '.', $data['surcharge']);
+            $data['debitPercent'] = str_replace(',', '.', $data['debitPercent']);
 
             $countries = new \Doctrine\Common\Collections\ArrayCollection();
             if (!empty($data['countries'])) {
@@ -241,7 +238,6 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
                 $data['shops'] = $shops;
             }
 
-            $data['attribute'] = $data['attribute'][0];
             $payment->fromArray($data);
 
             //A default parameter "action" is sent
@@ -270,7 +266,6 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
             }
 
             $this->View()->assign(array('success'=>true, 'data'=>$data));
-
         } catch (\Doctrine\ORM\ORMException $e) {
             $this->View()->assign(array('success'=>false, 'errorMsg'=>$e->getMessage()));
         }
@@ -282,9 +277,9 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
             $this->View()->assign(array("success" => false, 'errorMsg' => 'Empty Post Request'));
             return;
         }
-        $repository = Shopware()->Models()->Payment();
+        $repository = Shopware()->Models()->getRepository(Payment::class);
         $id = $this->Request()->get('id');
-        /**@var $model \Shopware\Models\Payment\Payment  */
+        /**@var $model Payment  */
         $model = $repository->find($id);
         if ($model->getSource() == 1) {
             try {

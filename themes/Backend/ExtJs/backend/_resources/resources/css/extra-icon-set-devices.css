@@ -1,0 +1,9 @@
+.sprite-imac, .sprite-ipad--landscape, .sprite-ipad--portrait, .sprite-iphone--landscape, .sprite-iphone--portrait {
+    background: url("../themes/images/icons/extra-icon-set-devices.png") no-repeat !important;
+}
+
+.sprite-imac{ background-position: 0 0 !important }
+.sprite-ipad--landscape{ background-position: 0 -66px !important }
+.sprite-ipad--portrait{ background-position: 0 -132px !important }
+.sprite-iphone--landscape{ background-position: 0 -198px !important }
+.sprite-iphone--portrait{ background-position: 0 -264px !important }

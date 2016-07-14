@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -22,10 +22,10 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Models\Blog\Blog as Blog,
-    Shopware\Models\Blog\Tag as Tag,
-    Shopware\Models\Blog\Media as Media,
-    Doctrine\ORM\AbstractQuery;
+use Shopware\Models\Blog\Blog as Blog;
+use Shopware\Models\Blog\Tag as Tag;
+use Shopware\Models\Blog\Media as Media;
+
 /**
  * Shopware Backend Controller for the Blog Module
  *
@@ -167,7 +167,6 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
      */
     public function getListAction()
     {
-
         try {
             $limit = intval($this->Request()->limit);
             $offset = intval($this->Request()->start);
@@ -252,7 +251,6 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
         $this->prepareTagAssociatedData($params, $blogModel);
         $params = $this->prepareAssignedArticlesAssociatedData($params);
         $params = $this->prepareAuthorAssociatedData($params);
-        $params = $this->prepareAttributeAssociatedData($params);
 
         unset($params["tags"]);
         $params["media"] = $this->prepareMediaDataForSaving($params["media"]);
@@ -284,6 +282,7 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
     {
         /** @var $filter array */
         $filter = $this->Request()->getParam('filter', array());
+        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
 
         $dataQuery = $this->getRepository()->getBackendDetailQuery($filter);
         $data = $dataQuery->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
@@ -291,6 +290,7 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
         foreach ($data["media"] as $key => $media) {
             unset($data["media"][$key]["media"]);
             $data["media"][$key] = array_merge($data["media"][$key], $media["media"]);
+            $data['media'][$key]['path'] = $mediaService->getUrl($data['media'][$key]['path']);
         }
 
         $data["tags"] = $this->flatBlogTags($data["tags"]);
@@ -474,18 +474,6 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
         }
 
         return $mediaModels;
-    }
-
-    /**
-     * This method prepares the attribute associated data for saving to the blog model
-     *
-     * @param $data
-     * @return array
-     */
-    protected function prepareAttributeAssociatedData($data)
-    {
-        $data['attribute'] = $data['attribute'][0];
-        return $data;
     }
 
     /**

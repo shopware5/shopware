@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4.0
- * Copyright © 2013 shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -107,7 +107,6 @@ class Enlight_Controller_Plugins_ScriptRenderer_Bootstrap extends Enlight_Plugin
         if ($this->viewRenderer->Action()->View()->hasTemplate()
             || !$this->viewRenderer->shouldRender()
         ) {
-
             return;
         }
 
@@ -171,28 +170,35 @@ class Enlight_Controller_Plugins_ScriptRenderer_Bootstrap extends Enlight_Plugin
         }
 
         $templateNames = array();
-
         foreach ($fileNames as $fileName) {
+            // Remove unwanted characters
+            $fileName = preg_replace('/[^a-z0-9\/_-]/i', '', $fileName);
+
+            // Replace multiple forward slashes
+            $fileName = preg_replace('#/+#', '/', $fileName);
+
+            // Remove leading and trailing forward slash
+            $fileName = trim($fileName, '/');
+
             // if string starts with "m/" replace with "model/"
             $fileName = preg_replace('/^m\//', 'model/', $fileName);
             $fileName = preg_replace('/^c\//', 'controller/', $fileName);
             $fileName = preg_replace('/^v\//', 'view/', $fileName);
 
-            $fileName = ltrim(dirname($fileName) . '/' . basename($fileName, '.js'), '/.');
-
             if (empty($fileName)) {
                 continue;
             }
 
-            $templateNames[] = $inflector->filter(array(
+            $fileName = $inflector->filter(array(
                 'module'     => $moduleName,
                 'controller' => $controllerName,
-                'file'       => $fileName)
-            );
+                'file'       => $fileName
+            ));
+
+            $templateNames[]  = $fileName;
         }
 
         $count = count($templateNames);
-
         if ($count === 0) {
             return null;
         } elseif ($count === 1) {

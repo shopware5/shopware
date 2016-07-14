@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -40,7 +40,6 @@ class Front
      * the plugin namespace of the front resource is set.
      *
      * @param Container $container
-     * @param \Shopware_Bootstrap $bootstrap
      * @param \Enlight_Event_EventManager $eventManager
      * @param array $options
      * @throws \Exception
@@ -48,16 +47,19 @@ class Front
      */
     public function factory(
         Container $container,
-        \Shopware_Bootstrap $bootstrap,
         \Enlight_Event_EventManager $eventManager,
         array $options
     ) {
         /** @var $front \Enlight_Controller_Front */
         $front = \Enlight_Class::Instance('Enlight_Controller_Front', array($eventManager));
 
+        $front->setDispatcher($container->get('Dispatcher'));
+
         $front->Dispatcher()->addModuleDirectory(
             Shopware()->AppPath('Controllers')
         );
+
+        $front->setRouter($container->get('Router'));
 
         $front->setParams($options);
 
@@ -65,8 +67,6 @@ class Front
         $plugins = $container->get('Plugins');
 
         $plugins->registerNamespace($front->Plugins());
-
-        $front->setParam('bootstrap', $bootstrap);
 
         if (!empty($options['throwExceptions'])) {
             $front->throwExceptions((bool) $options['throwExceptions']);

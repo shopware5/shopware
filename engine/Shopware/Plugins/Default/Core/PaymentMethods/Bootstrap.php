@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -55,16 +55,14 @@ class Shopware_Plugins_Core_PaymentMethods_Bootstrap extends Shopware_Components
         );
     }
 
-    /**
-     * @return array
-     */
     public function getCapabilities()
     {
-        return array(
+        return [
             'install' => false,
-            'enable' => true,
-            'update' => true
-        );
+            'update' => false,
+            'enable' => false,
+            'secureUninstall' => false
+        ];
     }
 
     /**
@@ -144,9 +142,10 @@ class Shopware_Plugins_Core_PaymentMethods_Bootstrap extends Shopware_Components
      */
     public function addPaths(Enlight_Event_EventArgs $arguments)
     {
-        // Add templates folder
         $this->Application()->Template()->addTemplateDir(
-            $this->Path() . 'Views/', 'payment', Enlight_Template_Manager::POSITION_APPEND
+            $this->Path() . 'Views/responsive/',
+            'payment',
+            Enlight_Template_Manager::POSITION_APPEND
         );
     }
 
@@ -162,6 +161,7 @@ class Shopware_Plugins_Core_PaymentMethods_Bootstrap extends Shopware_Components
 
         //if the controller action name equals "load" we have to load all application components
         if ($args->getRequest()->getActionName() === 'load') {
+            $view->addTemplateDir($this->Path() . 'Views/emotion/');
             $view->extendsTemplate(
                 'backend/order/payment_methods/controller/detail.js'
             );
@@ -183,6 +183,8 @@ class Shopware_Plugins_Core_PaymentMethods_Bootstrap extends Shopware_Components
 
         //if the controller action name equals "load" we have to load all application components
         if ($args->getRequest()->getActionName() === 'load') {
+            $view->addTemplateDir($this->Path() . 'Views/emotion/');
+
             $view->extendsTemplate(
                 'backend/customer/payment_methods/controller/detail.js'
             );

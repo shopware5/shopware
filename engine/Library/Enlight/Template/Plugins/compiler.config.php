@@ -1,24 +1,25 @@
 <?php
 /**
- * Enlight
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
- * LICENSE
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://enlight.de/license
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@shopware.de so we can send you a copy immediately.
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
  *
- * @category   Enlight
- * @package    Enlight_Template_Plugins
- * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
- * @license    http://enlight.de/license     New BSD License
- * @version    $Id$
- * @author     Heiner Lohaus
- * @author     $Author$
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
  */
 
 /**
@@ -54,7 +55,7 @@ class Smarty_Compiler_Config extends Smarty_Internal_CompileBase
     {
         $_attr = $this->getAttributes($compiler, $args);
 
-        if (!Enlight_Application::Instance()->Bootstrap()->hasResource('Config')) {
+        if (!Shopware()->Container()->has('Config')) {
             if (!isset($_attr['default'])) {
                 $_attr['default'] = 'null';
             }
@@ -67,17 +68,17 @@ class Smarty_Compiler_Config extends Smarty_Internal_CompileBase
                 $return .= ', ' . $_attr['default'];
             }
             if (isset($_attr['namespace'])) {
-                return '<?php echo Enlight_Application::Instance()->Config()->getByNamespace(' . $_attr['namespace'] . ', ' . $return . '); ?>';
+                return '<?php echo Shopware()->Config()->getByNamespace(' . $_attr['namespace'] . ', ' . $return . '); ?>';
             }
-            return '<?php echo Enlight_Application::Instance()->Config()->get(' . $return . '); ?>';
+            return '<?php echo Shopware()->Config()->get(' . $return . '); ?>';
         }
 
         $name = substr($_attr['name'], 1, -1);
         if (isset($_attr['namespace'])) {
             $namespace = substr($_attr['namespace'], 1, -1);
-            $value = Enlight_Application::Instance()->Config()->getByNamespace($namespace, $name);
+            $value = Shopware()->Config()->getByNamespace($namespace, $name);
         } else {
-            $value = Enlight_Application::Instance()->Config()->get($name);
+            $value = Shopware()->Config()->get($name);
         }
 
         if ($value !== null) {

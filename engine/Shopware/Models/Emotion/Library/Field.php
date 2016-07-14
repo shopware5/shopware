@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,27 +23,14 @@
  */
 
 namespace   Shopware\Models\Emotion\Library;
-use         Shopware\Components\Model\ModelEntity,
-            Doctrine\ORM\Mapping AS ORM;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
- *
- * Associations:
- * <code>
- *
- * </code>
- *
- *
- * Indices:
- * <code>
- *
- * </code>
- *
  * @category   Shopware
- * @package    Models
- * @subpackage Emotion
- * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
- * @license    http://enlight.de/license     New BSD License
+ * @package    Shopware\Models
+ * @copyright  Copyright (c) shopware AG (http://www.shopware.de)
  *
  * @ORM\Entity
  * @ORM\Table(name="s_library_component_field")
@@ -166,6 +153,18 @@ class Field extends ModelEntity
      * @ORM\Column(name="help_text", type="text",  nullable=false)
      */
     private $helpText;
+
+    /**
+     * @var integer $translatable
+     * @ORM\Column(name="translatable", type="integer", length=1, nullable=false)
+     */
+    private $translatable;
+
+    /**
+     * @var integer $position
+     * @ORM\Column(name="position", type="integer", nullable=false)
+     */
+    private $position;
 
     /**
      * Contains the assigned \Shopware\Models\Emotion\Library\Component
@@ -439,5 +438,37 @@ class Field extends ModelEntity
     public function getDefaultValue()
     {
         return $this->defaultValue;
+    }
+
+    /**
+     * @param int $position
+     */
+    public function setPosition($position)
+    {
+        $this->position = $position;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPosition()
+    {
+        return $this->position;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTranslatable()
+    {
+        return $this->translatable;
+    }
+
+    /**
+     * @param int $translatable
+     */
+    public function setTranslatable($translatable)
+    {
+        $this->translatable = $translatable;
     }
 }

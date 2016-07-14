@@ -1,1 +1,0 @@
-{link file="frontend/_resources/favicon.ico"}

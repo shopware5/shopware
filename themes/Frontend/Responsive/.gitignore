@@ -1,0 +1,3 @@
+# Prevent committing npm modules or logs
+node_modules
+npm-debug.log

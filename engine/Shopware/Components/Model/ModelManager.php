@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -24,6 +24,7 @@
 
 namespace Shopware\Components\Model;
 
+use Doctrine\DBAL\Query\QueryBuilder as DBALQueryBuilder;
 use Shopware\Components\Model\Query\SqlWalker;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMException;
@@ -31,14 +32,10 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Query\QueryBuilder as DBALQueryBuilder;
 use Doctrine\Common\Util\Inflector;
 use Doctrine\Common\EventManager;
-use Symfony\Component\Translation\Translator;
-use Symfony\Component\Validator\ConstraintValidatorFactory;
-use Symfony\Component\Validator\Mapping\ClassMetadataFactory;
-use Symfony\Component\Validator\Mapping\Loader\AnnotationLoader;
-use Symfony\Component\Validator\Validator;
+use Symfony\Component\Validator\ConstraintViolationListInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * Global Manager which is responsible for initializing the adapter classes.
@@ -49,11 +46,6 @@ use Symfony\Component\Validator\Validator;
  */
 class ModelManager extends EntityManager
 {
-    /**
-     * @var \Symfony\Component\Validator\Validator
-     */
-    protected $validator;
-
     /**
      * Debug mode flag for the query builders.
      * @var bool
@@ -93,52 +85,23 @@ class ModelManager extends EntityManager
     /**
      * Magic method to build this liquid interface ...
      *
+     * @deprecated since 5.2, to be removed in 5.3
      * @param   string $name
      * @param   array|null $args
      * @return  ModelRepository
      */
     public function __call($name, $args)
     {
-        /** @todo make path custom able */
+        $backTrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1)[0];
+        $string = sprintf("Shopware()->Models()->__call() is deprecated since version 5.2 and will be removed in 5.3. File %s:%s", $backTrace['file'], $backTrace['line']);
+        trigger_error($string, E_USER_DEPRECATED);
+
         if (strpos($name, '\\') === false) {
             $name = $name .'\\' . $name;
         }
         $name = 'Shopware\\Models\\' . $name;
+
         return $this->getRepository($name);
-    }
-
-    /**
-     * The EntityRepository instances.
-     *
-     * @var array
-     */
-    private $repositories = array();
-
-    /**
-     * Gets the repository for an entity class.
-     *
-     * @param string $entityName The name of the entity.
-     * @return ModelRepository The repository class.
-     */
-    public function getRepository($entityName)
-    {
-        $entityName = ltrim($entityName, '\\');
-
-        if (!isset($this->repositories[$entityName])) {
-            $metadata = $this->getClassMetadata($entityName);
-            $repositoryClassName = $metadata->customRepositoryClassName;
-
-            if ($repositoryClassName === null) {
-                $repositoryClassName = $this->getConfiguration()->getDefaultRepositoryClassName();
-            }
-
-            $repositoryClassName = $this->getConfiguration()
-                ->getHookManager()->getProxy($repositoryClassName);
-
-            $this->repositories[$entityName] = new $repositoryClassName($this, $metadata);
-        }
-
-        return $this->repositories[$entityName];
     }
 
     /**
@@ -153,6 +116,10 @@ class ModelManager extends EntityManager
      */
     protected function serializeEntity($entity)
     {
+        if ($entity === null) {
+            return [];
+        }
+
         if ($entity instanceof \Doctrine\ORM\Proxy\Proxy) {
             /** @var $entity \Doctrine\ORM\Proxy\Proxy */
             $entity->__load();
@@ -214,14 +181,14 @@ class ModelManager extends EntityManager
     /**
      * Returns the total count of the passed query builder.
      *
-     * @param \Doctrine\ORM\Query $query
+     * @param Query $query
      * @return int|null
      */
-    public function getQueryCount(\Doctrine\ORM\Query $query)
+    public function getQueryCount(Query $query)
     {
         $pagination = $this->createPaginator($query);
 
-        return $pagination->count($query);
+        return $pagination->count();
     }
 
     /**
@@ -236,7 +203,7 @@ class ModelManager extends EntityManager
      * @param Query $query
      * @return Paginator
      */
-    public function createPaginator(\Doctrine\ORM\Query $query)
+    public function createPaginator(Query $query)
     {
         $paginator = new Paginator($query);
         $paginator->setUseOutputWalkers(false);
@@ -253,25 +220,16 @@ class ModelManager extends EntityManager
     }
 
     /**
-     * @return Validator
+     * @return ValidatorInterface
      */
     public function getValidator()
     {
-        if (null === $this->validator) {
-            $reader = $this->getConfiguration()->getAnnotationsReader();
-            $this->validator = new Validator(
-                new ClassMetadataFactory(new AnnotationLoader($reader)),
-                new ConstraintValidatorFactory(),
-                new Translator('en_us')
-            );
-        }
-
-        return $this->validator;
+        return Shopware()->Container()->get('validator');
     }
 
     /**
      * @param $object
-     * @return \Symfony\Component\Validator\ConstraintViolationList
+     * @return ConstraintViolationListInterface
      */
     public function validate($object)
     {
@@ -283,12 +241,7 @@ class ModelManager extends EntityManager
      */
     public function generateAttributeModels($tableNames = array())
     {
-        /** @var $generator \Shopware\Components\Model\Generator*/
-        $generator = new \Shopware\Components\Model\Generator();
-
-        $generator->setPath($this->getConfiguration()->getAttributeDir());
-        $generator->setModelPath(Shopware()->AppPath('Models'));
-        $generator->setSchemaManager($this->getConnection()->getSchemaManager());
+        $generator = $this->createModelGenerator();
         $generator->generateAttributeModels($tableNames);
 
         $this->regenerateAttributeProxies($tableNames);
@@ -345,6 +298,7 @@ class ModelManager extends EntityManager
      * @param bool $nullable Allow null property
      * @param null $default Default value of the column
      * @throws \InvalidArgumentException
+     * @deprecated since version 5.2.2, to be removed in 5.3 - Use \Shopware\Bundle\AttributeBundle\Service\CrudService::update instead
      */
     public function addAttribute($table, $prefix, $column, $type, $nullable = true, $default = null)
     {
@@ -376,8 +330,10 @@ class ModelManager extends EntityManager
 
         $null = ($nullable) ? " NULL " : " NOT NULL ";
 
-        if (is_string($default) && strlen($default) > 0) {
+        if (is_string($default)) {
             $defaultValue = "'". $default ."'";
+        } elseif (is_bool($default)) {
+            $defaultValue = ($default) ? 1 : 0;
         } elseif (is_null($default)) {
             $defaultValue = " NULL ";
         } else {
@@ -395,6 +351,7 @@ class ModelManager extends EntityManager
      * @param $prefix
      * @param $column
      * @throws \InvalidArgumentException
+     * @deprecated since version 5.2.2, to be removed in 5.3 - Use \Shopware\Bundle\AttributeBundle\Service\CrudService::delete instead
      */
     public function removeAttribute($table, $prefix, $column)
     {
@@ -456,7 +413,7 @@ class ModelManager extends EntityManager
     /**
      * Helper function to add mysql specified command to increase the sql performance.
      *
-     * @param \Doctrine\ORM\Query $query
+     * @param Query $query
      * @param null $index Name of the forced index
      * @param bool $straightJoin true or false. Allow to add STRAIGHT_JOIN select condition
      * @param bool $sqlNoCache
@@ -505,5 +462,19 @@ class ModelManager extends EntityManager
     public function enableDebugMode()
     {
         $this->debugMode = true;
+    }
+
+    /**
+     * @return Generator
+     */
+    public function createModelGenerator()
+    {
+        $generator = new Generator(
+            $this->getConnection()->getSchemaManager(),
+            $this->getConfiguration()->getAttributeDir(),
+            Shopware()->AppPath('Models')
+        );
+
+        return $generator;
     }
 }

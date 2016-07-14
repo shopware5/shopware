@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,10 +23,13 @@
  */
 
 namespace Shopware\Models\Tax;
-use Shopware\Components\Model\ModelEntity,
-    Symfony\Component\Validator\Constraints as Assert,
-    Doctrine\ORM\Mapping AS ORM,
-    Doctrine\Common\Collections\ArrayCollection;;
+
+use Shopware\Components\Model\ModelEntity;
+use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+
+;
 
 /**
  * The Shopware Model represents the Taxes.
@@ -42,8 +45,8 @@ use Shopware\Components\Model\ModelEntity,
  *   - PRIMARY KEY (`id`)
  * </code>
  *
- * @ORM\Entity
  * @ORM\Table(name="s_core_tax")
+ * @ORM\Entity(repositoryClass="Repository")
  */
 class Tax extends ModelEntity
 {

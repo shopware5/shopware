@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,8 +23,9 @@
  */
 
 namespace   Shopware\Models\Site;
-use         Shopware\Components\Model\ModelEntity,
-            Doctrine\ORM\Mapping AS ORM;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Shopware Model Site
@@ -151,6 +152,20 @@ class Site extends ModelEntity
     private $target;
 
     /**
+     * @var string $shopIds
+     *
+     * @ORM\Column(name="shop_ids", type="string", nullable=false)
+     */
+    private $shopIds;
+
+    /**
+     * @var \DateTime $changed
+     *
+     * @ORM\Column(name="changed", type="datetime", nullable=false)
+     */
+    private $changed;
+
+    /**
      * @var \Doctrine\Common\Collections\ArrayCollection
      * @ORM\OneToMany(targetEntity="Site", mappedBy="parent")
      * @ORM\OrderBy({"position" = "ASC"})
@@ -178,6 +193,11 @@ class Site extends ModelEntity
      * @var \Shopware\Models\Attribute\Site
      */
     protected $attribute;
+
+    public function __construct()
+    {
+        $this->changed = new \DateTime();
+    }
 
     /**
      * Returns the primary-key id
@@ -516,5 +536,68 @@ class Site extends ModelEntity
     public function getPageTitle()
     {
         return $this->pageTitle;
+    }
+
+    /**
+     * Set changed
+     *
+     * @param \DateTime|string $changed
+     * @return Site
+     */
+    public function setChanged($changed = 'now')
+    {
+        if (!$changed instanceof \DateTime) {
+            $this->changed = new \DateTime($changed);
+        } else {
+            $this->changed = $changed;
+        }
+        return $this;
+    }
+
+    /**
+     * Get changed
+     *
+     * @return \DateTime
+     */
+    public function getChanged()
+    {
+        return $this->changed;
+    }
+
+    /**
+     * Returns the unexploded shop ids string (ex: |1|2|)
+     *
+     * @return string
+     */
+    public function getShopIds()
+    {
+        return $this->shopIds;
+    }
+
+    /**
+     * Returns the exploded shop ids (ex: [1, 2])
+     *
+     * @return int[]
+     */
+    public function getExplodedShopIds()
+    {
+        if (empty($this->shopIds)) {
+            return array();
+        }
+
+        $explodedShopIds = explode('|', trim($this->shopIds, '|'));
+
+        // cast to ints
+        $explodedShopIds = array_map(function ($elem) {return (int) $elem;}, $explodedShopIds);
+
+        return $explodedShopIds;
+    }
+
+    /**
+     * @param string $shopIds
+     */
+    public function setShopIds($shopIds)
+    {
+        $this->shopIds = $shopIds;
     }
 }

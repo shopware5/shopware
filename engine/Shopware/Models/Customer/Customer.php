@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,9 +23,11 @@
  */
 
 namespace   Shopware\Models\Customer;
-use         Shopware\Components\Model\ModelEntity,
-            Symfony\Component\Validator\Constraints as Assert,
-            Doctrine\ORM\Mapping AS ORM;
+
+use Doctrine\Common\Collections\ArrayCollection;
+use Shopware\Components\Model\LazyFetchModelEntity;
+use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  *
@@ -37,9 +39,8 @@ use         Shopware\Components\Model\ModelEntity,
  * <code>
  *   - Billing  =>  Shopware\Models\Customer\Billing    [1:1] [s_user_billingaddress]
  *   - Shipping =>  Shopware\Models\Customer\Shipping   [1:1] [s_user_shippingaddress]
- *   - Debit    =>  Shopware\Models\Customer\Debit      [1:1] [s_user_debit]
  *   - Group    =>  Shopware\Models\Customer\Group      [n:1] [s_core_customergroups]
- *   - Shop     =>  Shopware\Models\Shop\Shop           [n:1] [s_core_multilanguage]
+ *   - Shop     =>  Shopware\Models\Shop\Shop           [n:1] [s_core_shops]
  *   - Orders   =>  Shopware\Models\Order\Order         [1:n] [s_order]
  * </code>
  * The s_user table has the follows indices:
@@ -56,8 +57,14 @@ use         Shopware\Components\Model\ModelEntity,
  * @ORM\Table(name="s_user")
  * @ORM\HasLifecycleCallbacks
  */
-class Customer extends ModelEntity
+class Customer extends LazyFetchModelEntity
 {
+    const ACCOUNT_MODE_CUSTOMER = 0;
+    const ACCOUNT_MODE_FAST_LOGIN = 1;
+
+    const CUSTOMER_TYPE_PRIVATE = 'private';
+    const CUSTOMER_TYPE_BUSINESS = 'business';
+
     /**
      * The id property is an identifier property which means
      * doctrine associations can be defined over this field
@@ -137,7 +144,7 @@ class Customer extends ModelEntity
      * Contains the customer email address which is used to send the order confirmation mail
      * or the newsletter.
      * @var string $email
-     * @Assert\Email
+     * @Assert\Email(strict=false)
      * @Assert\NotBlank
      * @ORM\Column(name="email", type="string", length=70, nullable=false)
      */
@@ -252,6 +259,52 @@ class Customer extends ModelEntity
     private $lockedUntil = null;
 
     /**
+     * @var string $salutation
+     *
+     * @Assert\NotBlank
+     *
+     * @ORM\Column(name="salutation", type="text", nullable=false)
+     */
+    private $salutation;
+
+    /**
+     * @var string $title
+     * @ORM\Column(name="title", type="text", nullable=false)
+     */
+    private $title;
+
+    /**
+     * @var string $firstname
+     *
+     * @Assert\NotBlank
+     *
+     * @ORM\Column(name="firstname", type="text", nullable=false)
+     */
+    private $firstname;
+
+    /**
+     * Contains the unique customer number
+     * @var string $number
+     * @ORM\Column(name="customernumber", type="string", length=30, nullable=true)
+     */
+    protected $number = '';
+
+    /**
+     * @var string $lastname
+     *
+     * @Assert\NotBlank
+     *
+     * @ORM\Column(name="lastname", type="text", nullable=false)
+     */
+    private $lastname;
+
+    /**
+     * @var \DateTime $birthday
+     * @ORM\Column(name="birthday", type="date", nullable=true)
+     */
+    private $birthday;
+
+    /**
      * INVERSE SIDE
      * The billing property is the inverse side of the association between customer and billing.
      * The association is joined over the billing userID field and the id field of the customer
@@ -276,17 +329,6 @@ class Customer extends ModelEntity
     protected $shipping;
 
     /**
-     * INVERSE SIDE
-     * The debit property is the inverse side of the association between customer and debit.
-     * The association is joined over the debit userID field and the id field of the customer.
-     *
-     * @var \Shopware\Models\Customer\Debit
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Customer\Debit", mappedBy="customer", orphanRemoval=true, cascade={"persist"})
-     * @Assert\Valid
-     */
-    protected $debit;
-
-    /**
      * OWNING SIDE
      * The group property is the owning side of the association between customer and customer group.
      * The association is joined over the group id field and the groupkey field of the customer.
@@ -302,7 +344,7 @@ class Customer extends ModelEntity
      * The orders property is the inverse side of the association between customer and orders.
      * The association is joined over the customer id field and the userID field of the order.
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var ArrayCollection
      * @ORM\OneToMany(targetEntity="Shopware\Models\Order\Order", mappedBy="customer")
      */
     protected $orders;
@@ -335,7 +377,6 @@ class Customer extends ModelEntity
      */
     protected $priceGroup;
 
-
     /**
      * INVERSE SIDE
      *
@@ -345,30 +386,58 @@ class Customer extends ModelEntity
     protected $notifications;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection $paymentInstances
+     * @var ArrayCollection $paymentInstances
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Payment\PaymentInstance", mappedBy="customer")
      */
     protected $paymentInstances;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection $paymentData
+     * @var ArrayCollection $paymentData
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Customer\PaymentData", mappedBy="customer", orphanRemoval=true, cascade={"persist"})
      */
     protected $paymentData;
 
     /**
+     * OWNING SIDE
+     *
+     * @var \Shopware\Models\Customer\Address $defaultBillingAddress
+     * @ORM\ManyToOne(targetEntity="\Shopware\Models\Customer\Address", inversedBy="customer")
+     * @ORM\JoinColumn(name="default_billing_address_id", referencedColumnName="id")
+     */
+    protected $defaultBillingAddress;
+
+    /**
+     * OWNING SIDE
+     *
+     * @var \Shopware\Models\Customer\Address $defaultShippingAddress
+     * @ORM\ManyToOne(targetEntity="\Shopware\Models\Customer\Address", inversedBy="customer")
+     * @ORM\JoinColumn(name="default_shipping_address_id", referencedColumnName="id")
+     */
+    protected $defaultShippingAddress;
+
+    /**
+     * @var string
+     */
+    private $customerType;
+
+    /**
+     * @var array
+     */
+    protected $additional;
+
+    /**
      * Class constructor. Initials the orders array and the date fields.
      */
     public function __construct()
     {
-        $this->orders     = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->orders     = new ArrayCollection();
         $this->firstLogin = new \DateTime();
         $this->lastLogin  = new \DateTime();
-        $this->notifications = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->paymentInstances = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->paymentData = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->notifications = new ArrayCollection();
+        $this->paymentInstances = new ArrayCollection();
+        $this->paymentData = new ArrayCollection();
     }
 
     /**
@@ -516,7 +585,7 @@ class Customer extends ModelEntity
      * with the date when the customer creates the account. The parameter can be a DateTime object
      * or a string with the date. If a string is passed, the string converts to an DateTime object.
      *
-     * @param $firstLogin
+     * @param \DateTime|string $firstLogin
      * @return Customer
      */
     public function setFirstLogin($firstLogin)
@@ -544,7 +613,7 @@ class Customer extends ModelEntity
      * with the date when the customer last logged in. The parameter can be a DateTime object
      * or a string with the date. If a string is passed, the string converts to an DateTime object.
      *
-     * @param $lastLogin
+     * @param \DateTime|string $lastLogin
      * @return Customer
      */
     public function setLastLogin($lastLogin)
@@ -865,7 +934,7 @@ class Customer extends ModelEntity
      * the Customer.orders property (INVERSE SIDE) and the Order.customer (OWNING SIDE) property.
      * The order data is joined over the s_order.userID field.
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return ArrayCollection
      */
     public function getOrders()
     {
@@ -878,7 +947,7 @@ class Customer extends ModelEntity
      * the Customer.orders property (INVERSE SIDE) and the Order.customer (OWNING SIDE) property.
      * The order data is joined over the s_order.userID field.
      *
-     * @param \Doctrine\Common\Collections\ArrayCollection|array|null $orders
+     * @param ArrayCollection|array|null $orders
      * @return \Shopware\Models\Customer\Customer
      */
     public function setOrders($orders)
@@ -899,7 +968,7 @@ class Customer extends ModelEntity
      */
     public function getGroup()
     {
-        return $this->group;
+        return $this->fetchLazy($this->group, array('key' => $this->groupKey));
     }
 
     /**
@@ -915,35 +984,6 @@ class Customer extends ModelEntity
     {
         return $this->setManyToOne($group, '\Shopware\Models\Customer\Group', 'group');
     }
-
-
-    /**
-     * Returns the instance of the Shopware\Models\Customer\Debit model which
-     * contains all data about the customer debit. The association is defined over
-     * the Customer.debit property (INVERSE SIDE) and the Debit.customer (OWNING SIDE) property.
-     * The debit data is joined over the s_user_debit.userID field.
-     *
-     * @return \Shopware\Models\Customer\Debit
-     */
-    public function getDebit()
-    {
-        return $this->debit;
-    }
-
-    /**
-     * Setter function for the debit association property which contains an instance of the Shopware\Models\Customer\Debit model which
-     * contains all data about the customer debit. The association is defined over
-     * the Customer.debit property (INVERSE SIDE) and the Debit.customer (OWNING SIDE) property.
-     * The debit data is joined over the s_user_debit.userID field.
-     *
-     * @param \Shopware\Models\Customer\Debit|array|null $debit
-     * @return \Shopware\Models\Customer\Debit
-     */
-    public function setDebit($debit)
-    {
-        return $this->setOneToOne($debit, '\Shopware\Models\Customer\Debit', 'debit', 'customer');
-    }
-
 
     /**
      * Returns the instance of the Shopware\Models\Customer\Shipping model which
@@ -1053,7 +1093,7 @@ class Customer extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection $paymentInstances
+     * @param ArrayCollection $paymentInstances
      */
     public function setPaymentInstances($paymentInstances)
     {
@@ -1061,7 +1101,7 @@ class Customer extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return ArrayCollection
      */
     public function getPaymentInstances()
     {
@@ -1069,7 +1109,7 @@ class Customer extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection $paymentData
+     * @param ArrayCollection $paymentData
      */
     public function setPaymentData($paymentData)
     {
@@ -1077,7 +1117,7 @@ class Customer extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return ArrayCollection
      */
     public function getPaymentData()
     {
@@ -1092,5 +1132,194 @@ class Customer extends ModelEntity
         $paymentData->setCustomer($this);
 
         $this->paymentData[] = $paymentData;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGroupKey()
+    {
+        return $this->groupKey;
+    }
+
+
+    /**
+     * @return Address
+     */
+    public function getDefaultBillingAddress()
+    {
+        return $this->defaultBillingAddress;
+    }
+
+    /**
+     * @param Address $defaultBillingAddress
+     */
+    public function setDefaultBillingAddress(Address $defaultBillingAddress)
+    {
+        $this->defaultBillingAddress = $defaultBillingAddress;
+    }
+
+    /**
+     * @return Address
+     */
+    public function getDefaultShippingAddress()
+    {
+        return $this->defaultShippingAddress;
+    }
+
+    /**
+     * @param Address $defaultShippingAddress
+     */
+    public function setDefaultShippingAddress(Address $defaultShippingAddress)
+    {
+        $this->defaultShippingAddress = $defaultShippingAddress;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSalutation()
+    {
+        return $this->salutation;
+    }
+
+    /**
+     * @param string $salutation
+     */
+    public function setSalutation($salutation)
+    {
+        $this->salutation = $salutation;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param string $title
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFirstname()
+    {
+        return $this->firstname;
+    }
+
+    /**
+     * @param string $firstname
+     */
+    public function setFirstname($firstname)
+    {
+        $this->firstname = $firstname;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLastname()
+    {
+        return $this->lastname;
+    }
+
+    /**
+     * @param string $lastname
+     */
+    public function setLastname($lastname)
+    {
+        $this->lastname = $lastname;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getBirthday()
+    {
+        return $this->birthday;
+    }
+
+    /**
+     * @param \DateTime|string $birthday
+     */
+    public function setBirthday($birthday = null)
+    {
+        if ($birthday instanceof \DateTime) {
+            $birthday = $birthday->format('Y-m-d');
+        }
+
+        $this->birthday = $birthday;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEncoderName()
+    {
+        return $this->encoderName;
+    }
+
+    /**
+     * @param string $encoderName
+     */
+    public function setEncoderName($encoderName)
+    {
+        $this->encoderName = $encoderName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNumber()
+    {
+        return $this->number;
+    }
+
+    /**
+     * @param string $number
+     */
+    public function setNumber($number)
+    {
+        $this->number = $number;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCustomerType()
+    {
+        return $this->customerType;
+    }
+
+    /**
+     * @param string $customerType
+     */
+    public function setCustomerType($customerType)
+    {
+        $this->customerType = $customerType;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAdditional()
+    {
+        return $this->additional;
+    }
+
+    /**
+     * @param array $additional
+     */
+    public function setAdditional($additional)
+    {
+        $this->additional = $additional;
     }
 }

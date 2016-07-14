@@ -1,0 +1,33 @@
+div[id^=category-main-window] {
+    .#{$prefix}tree-toolbar {
+        @include reset-box-shadow;
+        background: transparent !important;
+        border: 0 none;
+        border-right: 1px solid #a4b5c0;
+    }
+
+    div[id^=category-category-tree] {
+        border-bottom: 0 none;
+    }
+
+    & > .#{$prefix}tree-panel {
+        .#{$prefix}grid-header-ct {
+            border-top: 0 none;
+        }
+    }
+}
+
+.layout-select-item {
+
+	.layout-picto {
+		width: 70px;
+		height: 50px;
+		float: left;
+		border: 1px solid #cfd9e4;
+	}
+
+	.layout-info {
+		margin-left: 90px;
+		padding-top: 10px;
+	}
+}

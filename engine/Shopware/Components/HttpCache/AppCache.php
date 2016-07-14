@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -24,10 +24,10 @@
 
 namespace Shopware\Components\HttpCache;
 
+use Symfony\Component\HttpKernel\HttpCache\Esi;
 use Symfony\Component\HttpKernel\HttpCache\StoreInterface;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\HttpCache\HttpCache;
-use Symfony\Component\HttpKernel\HttpCache\Esi;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -77,6 +77,7 @@ class AppCache extends HttpCache
         $this->options = array_merge(array(
             'purge_allowed_ips' => array('127.0.0.1', '::1'),
             'debug'             => false,
+            'cache_cookies'     => array('shop', 'currency', 'x-cache-context-hash'),
         ), $options);
 
         parent::__construct(
@@ -150,14 +151,13 @@ class AppCache extends HttpCache
             if ($result) {
                 $response->setStatusCode(200, 'Banned');
             } else {
-                $response->setStatusCode(404, 'Not Banned');
+                $response->setStatusCode(200, 'Not Banned');
             }
-
         } elseif ($request->getMethod() === 'PURGE') {
             if ($this->getStore()->purge($request->getUri())) {
                 $response->setStatusCode(200, 'Purged');
             } else {
-                $response->setStatusCode(404, 'Not purged');
+                $response->setStatusCode(200, 'Not purged');
             }
         }
 
@@ -203,7 +203,7 @@ class AppCache extends HttpCache
             return;
         }
 
-        return parent::store($request, $response);
+        parent::store($request, $response);
     }
 
     /**
@@ -219,7 +219,6 @@ class AppCache extends HttpCache
         // Not cache sites with nocache header
         if (!$response->headers->has('x-shopware-allow-nocache')
             || !$request->cookies->has('nocache')) {
-
             return false;
         }
 
@@ -249,7 +248,7 @@ class AppCache extends HttpCache
     {
         $this->getKernel()->boot();
 
-        /** @var $bootstrap \Shopware\Components\DependencyInjection\Container */
+        /** @var $container \Shopware\Components\DependencyInjection\Container */
         $container = $this->getKernel()->getContainer();
         $container->set('HttpCache', $this);
 
@@ -269,7 +268,7 @@ class AppCache extends HttpCache
      */
     protected function createStore()
     {
-        return new Store($this->cacheDir? $this->cacheDir : $this->kernel->getCacheDir().'/http_cache');
+        return new Store($this->cacheDir? $this->cacheDir : $this->kernel->getCacheDir().'/http_cache', $this->options['cache_cookies'], $this->options['lookup_optimization']);
     }
 
     /**
@@ -289,7 +288,7 @@ class AppCache extends HttpCache
     protected function isPurgeRequestAllowed(Request $request)
     {
         if ($request->server->has('SERVER_ADDR')) {
-            if ($request->server->has('SERVER_ADDR') == $request->getClientIp()) {
+            if ($request->server->get('SERVER_ADDR') == $request->getClientIp()) {
                 return true;
             }
         }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -33,21 +33,20 @@ namespace ShopwarePlugin\PaymentMethods\Components;
  */
 abstract class BasePaymentMethod
 {
-
     /**
      * Validates the input received from the client
      *
-     * @param \Enlight_Controller_Request_Request $request The Request object
+     * @param array $paymentData
      * @return array List of fields containing errors
      */
-    abstract public function validate(\Enlight_Controller_Request_Request $request);
+    abstract public function validate($paymentData);
 
     /**
      * Called when the customer edits his payment data.
      * Creates/updates the payment information for the current
      * method.
      *
-     * @param $userId The user id
+     * @param int $userId The user id
      * @param \Enlight_Controller_Request_Request $request The Request object
      * @return null
      */
@@ -57,7 +56,7 @@ abstract class BasePaymentMethod
      * Fetches the customer's current payment data for this
      * payment method as array
      *
-     * @param $userId The user id
+     * @param int $userId The user id
      * @return array|null
      */
     abstract public function getCurrentPaymentDataAsArray($userId);
@@ -66,9 +65,9 @@ abstract class BasePaymentMethod
      * Creates the Payment Instance for the given order
      * based on the current Payment Method policy.
      *
-     * @param $orderId The Order Id associated with the current payment
-     * @param $userId The User/Customer Id associated with the current payment
-     * @param $paymentId The Payment Method Id associated with the current payment
+     * @param int $orderId The Order Id associated with the current payment
+     * @param int $userId The User/Customer Id associated with the current payment
+     * @param int $paymentId The Payment Method Id associated with the current payment
      * @return true|null
      */
     abstract public function createPaymentInstance($orderId, $userId, $paymentId);

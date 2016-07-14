@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,8 +23,10 @@
  */
 
 namespace Shopware\Models\Config;
-use Shopware\Components\Model\ModelEntity,
-    Doctrine\ORM\Mapping as ORM;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
+use Shopware\Models\Shop\Shop;
 
 /**
  *
@@ -49,7 +51,7 @@ class Value extends ModelEntity
     private $element;
 
     /**
-     * @var string $shop
+     * @var Shop $shop
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Shop\Shop")
      * @ORM\JoinColumn(name="shop_id", referencedColumnName="id")
      */
@@ -102,7 +104,7 @@ class Value extends ModelEntity
     /**
      * Set shop
      *
-     * @param string $shop
+     * @param Shop $shop
      * @return Element
      */
     public function setShop($shop)
@@ -114,7 +116,7 @@ class Value extends ModelEntity
     /**
      * Get shop
      *
-     * @return string
+     * @return Shop
      */
     public function getShop()
     {

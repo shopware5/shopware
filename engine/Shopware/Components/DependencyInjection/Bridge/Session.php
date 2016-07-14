@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -27,6 +27,9 @@ namespace Shopware\Components\DependencyInjection\Bridge;
 use Shopware\Components\DependencyInjection\Container;
 
 /**
+ * Session Dependency Injection Bridge
+ * Starts and handles the session
+ *
  * @category  Shopware
  * @package   Shopware\Components\DependencyInjection\Bridge
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
@@ -39,7 +42,7 @@ class Session
      */
     public function factory(Container $container)
     {
-        $sessionOptions = Shopware()->getOption('session', array());
+        $sessionOptions = $container->getParameter('shopware.session');
 
         if (!empty($sessionOptions['unitTestEnabled'])) {
             \Enlight_Components_Session::$_unitTestEnabled = true;
@@ -55,6 +58,11 @@ class Session
 
         $name = 'session-' . $shop->getId();
         $sessionOptions['name'] = $name;
+
+        $mainShop = $shop->getMain() ?: $shop;
+        if ($mainShop->getAlwaysSecure()) {
+            $sessionOptions['cookie_secure'] = true;
+        }
 
         if (!isset($sessionOptions['save_handler']) || $sessionOptions['save_handler'] == 'db') {
             $config_save_handler = array(

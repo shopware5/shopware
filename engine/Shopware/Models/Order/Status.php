@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -22,9 +22,10 @@
  * our trademarks remain entirely with us.
  */
 
-namespace   Shopware\Models\Order;
-use         Shopware\Components\Model\ModelEntity,
-            Doctrine\ORM\Mapping AS ORM;
+namespace Shopware\Models\Order;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Shopware order status model represents the status of an order (payment or order state).
@@ -47,6 +48,43 @@ class Status extends ModelEntity
     const GROUP_PAYMENT = 'payment';
 
     /**
+     * Consts defining order states
+     */
+    const ORDER_STATE_CANCELLED = -1;
+    const ORDER_STATE_OPEN = 0;
+    const ORDER_STATE_IN_PROCESS = 1;
+    const ORDER_STATE_COMPLETED = 2;
+    const ORDER_STATE_PARTIALLY_COMPLETED = 3;
+    const ORDER_STATE_CANCELLED_REJECTED = 4;
+    const ORDER_STATE_READY_FOR_DELIVERY = 5;
+    const ORDER_STATE_PARTIALLY_DELIVERED = 6;
+    const ORDER_STATE_COMPLETELY_DELIVERED = 7;
+    const ORDER_STATE_CLARIFICATION_REQUIRED = 8;
+
+    /**
+     * Consts defining payment states
+     */
+    const PAYMENT_STATE_PARTIALLY_INVOICED = 9;
+    const PAYMENT_STATE_COMPLETELY_INVOICED = 10;
+    const PAYMENT_STATE_PARTIALLY_PAID = 11;
+    const PAYMENT_STATE_COMPLETELY_PAID = 12;
+    const PAYMENT_STATE_1ST_REMINDER = 13;
+    const PAYMENT_STATE_2ND_REMINDER = 14;
+    const PAYMENT_STATE_3RD_REMINDER = 15;
+    const PAYMENT_STATE_ENCASHMENT = 16;
+    const PAYMENT_STATE_OPEN = 17;
+    const PAYMENT_STATE_RESERVED = 18;
+    const PAYMENT_STATE_DELAYED = 19;
+    const PAYMENT_STATE_RE_CREDITING = 20;
+    const PAYMENT_STATE_REVIEW_NECESSARY = 21;
+    const PAYMENT_STATE_NO_CREDIT_APPROVED = 30;
+    const PAYMENT_STATE_THE_CREDIT_HAS_BEEN_PRELIMINARILY_ACCEPTED = 31;
+    const PAYMENT_STATE_THE_CREDIT_HAS_BEEN_ACCEPTED = 32;
+    const PAYMENT_STATE_THE_PAYMENT_HAS_BEEN_ORDERED_BY_HANSEATIC_BANK = 33;
+    const PAYMENT_STATE_A_TIME_EXTENSION_HAS_BEEN_REGISTERED = 34;
+    const PAYMENT_STATE_THE_PROCESS_HAS_BEEN_CANCELLED = 35;
+
+    /**
      * @var integer $id
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
@@ -56,7 +94,15 @@ class Status extends ModelEntity
     private $id;
 
     /**
+     * @var string $name
+     *
+     * @ORM\Column(name="name", type="string", length=50, nullable=false)
+     */
+    private $name;
+
+    /**
      * @var string $description
+     * @deprecated Use 'name' in conjunction with the 'backend/static/*' snippet namespaces instead
      *
      * @ORM\Column(name="description", type="string", length=255, nullable=false)
      */
@@ -72,7 +118,7 @@ class Status extends ModelEntity
     /**
      * @var string $group
      *
-     * @ORM\Column(name="group", type="string", length=25, nullable=false)
+     * @ORM\Column(name="`group`", type="string", length=25, nullable=false)
      */
     private $group;
 
@@ -101,7 +147,24 @@ class Status extends ModelEntity
     }
 
     /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
      * Set description
+     * @deprecated Use getName() + snippets instead
      *
      * @param string $description
      * @return Status
@@ -114,6 +177,7 @@ class Status extends ModelEntity
 
     /**
      * Get description
+     * @deprecated Use getName() + snippets instead
      *
      * @return string
      */

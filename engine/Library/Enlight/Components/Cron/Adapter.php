@@ -1,23 +1,25 @@
 <?php
 /**
- * Enlight
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
- * LICENSE
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
  *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.txt.
- * It is also available through the world-wide-web at this URL:
- * http://enlight.de/license
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to license@shopware.de so we can send you a copy immediately.
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
  *
- * @category   Enlight
- * @package    Enlight_Cron
- * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
- * @license    http://enlight.de/license     New BSD License
- * @version    $Id$
- * @author     $Author$
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
  */
 
 /**
@@ -49,16 +51,17 @@ interface Enlight_Components_Cron_Adapter
     /**
      * Returns an array of Enlight_Components_Cron_Job from the crontab
      *
-     * @return array
+     * @return Enlight_Components_Cron_Job[]
      */
     public function getAllJobs();
 
     /**
      * Returns the next cron job
      *
+     * @param bool $force
      * @return null|Enlight_Components_Cron_Job
      */
-    public function getNextJob();
+    public function getNextJob($force = false);
 
     /**
      * Receives a single Cron job defined by its id from the crontab
@@ -77,6 +80,15 @@ interface Enlight_Components_Cron_Adapter
      * @return Enlight_Components_Cron_Job
      */
     public function getJobByName($name);
+
+    /**
+     * Receives a single cron job by its action name
+     *
+     * @abstract
+     * @param String $action
+     * @return Enlight_Components_Cron_Job
+     */
+    public function getJobByAction($action);
 
     /**
      * Adds a job to the crontab

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -22,16 +22,23 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\CSRFWhitelistAware;
+
 /**
  * Export controller
  *
- * This controller is used by the ProductFeed modul.
- * The ProductFeed modul will call this controller to export the chosen ProductFeed with all options.
+ * This controller is used by the ProductFeed module.
+ * The ProductFeed module will call this controller to export the chosen ProductFeed with all options.
  * The controller uses the base class sExport for all export relevant methods.
  * Sets a different header to return a downloadable export file.
  */
-class Shopware_Controllers_Backend_Export extends Enlight_Controller_Action
+class Shopware_Controllers_Backend_Export extends Enlight_Controller_Action implements CSRFWhitelistAware
 {
+    /**
+     * @var sExport
+     */
+    private $export;
+
     /**
      * Init controller method
      *
@@ -42,10 +49,8 @@ class Shopware_Controllers_Backend_Export extends Enlight_Controller_Action
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
         Shopware()->Plugins()->Controller()->ViewRenderer()->setNoRender();
         $this->Front()->setParam('disableOutputBuffering', true);
-        $this->Front()->returnResponse(true);
+        $this->export = Shopware()->Modules()->Export();
     }
-
-
 
     /**
      * Index action method
@@ -54,130 +59,137 @@ class Shopware_Controllers_Backend_Export extends Enlight_Controller_Action
      */
     public function indexAction()
     {
-        /**
-         * initialize the base class sExport
-         */
-        $export = Shopware()->Modules()->Export();
-        $export->sSystem = Shopware()->System();
-        $export->request = $this->Request();
-        $export->sFeedID = (int) $this->Request()->feedID;
-        $export->sHash = $this->Request()->hash;
-        $export->sDB = Shopware()->Adodb();
+        $this->prepareExport();
+        $this->sendHeaders();
 
-        $export->sInitSettings();
+        $productFeed = Shopware()->Models()->getRepository('\Shopware\Models\ProductFeed\ProductFeed')->find((int) $this->Request()->feedID);
 
-        /**
-         * initialize smarty
-         */
-        $export->sSmarty = $this->View()->Engine();
-        $export->sInitSmarty();
-
-        /**
-         * set feed specific options to the export and sets
-         * the right header
-         */
-        if (!empty($export->sSettings['encodingID'])&&$export->sSettings['encodingID']==2) {
-            if (!empty($export->sSettings['formatID'])&&$export->sSettings['formatID']==3) {
-                $this->Response()->setHeader('Content-Type', 'text/xml;charset=utf-8');
-            } else {
-                $this->Response()->setHeader('Content-Type', 'text/x-comma-separated-values;charset=utf-8');
-            }
-        } else {
-            if (!empty($export->sSettings['formatID'])&&$export->sSettings['formatID']==3) {
-                $this->Response()->setHeader('Content-Type', 'text/xml;charset=iso-8859-1');
-            } else {
-                $this->Response()->setHeader('Content-Type', 'text/x-comma-separated-values;charset=iso-8859-1');
-            }
-        }
-        $this->Response()->sendHeaders();
-        $export->sSmarty->display('string:'.$export->sSettings['header'], $export->sFeedID);
-
-        $sql = $export->sCreateSql();
-
-        $result = Shopware()->Db()->query($sql);
-
-        if ($result===false) {
+        // Live generation
+        if ($productFeed->getInterval() === 0) {
+            $this->generateExport("php://output");
             return;
         }
 
-        // updates the db with the latest informations
-        $count = (int) $result->rowCount();
-        $sql = 'UPDATE s_export SET last_export=NOW(), count_articles=? WHERE id=?';
-        Shopware()->Db()->query($sql, array($count, $export->sFeedID));
+        $directory = $this->createOutputDirectory();
+        $fileName = $productFeed->getHash() . '_' . $productFeed->getFileName();
+        $filePath = $directory . $fileName;
 
-        // fetches all required data to smarty
-        $rows = array();
-        for ($rowIndex=1; $row = $result->fetch(); $rowIndex++) {
-
-            if (!empty($row['group_ordernumber_2'])) {
-                $row['group_ordernumber'] = $export->_decode_line($row['group_ordernumber_2']);
-                $row['group_pricenet'] = explode(';',$row['group_pricenet_2']);
-                $row['group_price'] = explode(';',$row['group_price_2']);
-                $row['group_instock'] = explode(';',$row['group_instock_2']);
-                $row['group_active'] = explode(';',$row['group_active_2']);
-                unset($row['group_ordernumber_2'], $row['group_pricenet_2']);
-                unset($row['group_price_2'], $row['group_instock_2'], $row['group_active_2']);
-                for ($i=1;$i<=10;$i++) {
-                    if (!empty($row['group_group'.$i])) {
-                        $row['group_group'.$i] = $export->_decode_line($row['group_group'.$i]);
-                    } else {
-                        unset($row['group_group'.$i]);
-                    }
-                    if (!empty($row['group_option'.$i])) {
-                        $row['group_option'.$i] = $export->_decode_line($row['group_option'.$i]);
-                    } else {
-                        unset($row['group_option'.$i]);
-                    }
-                }
-                unset($row['group_additionaltext']);
-            } elseif (!empty($row['group_ordernumber'])) {
-                $row['group_ordernumber'] = $export->_decode_line($row['group_ordernumber']);
-                $row['group_additionaltext'] = $export->_decode_line($row['group_additionaltext']);
-                $row['group_pricenet'] = explode(';', $row['group_pricenet']);
-                $row['group_price'] = explode(';', $row['group_price']);
-                $row['group_instock'] = explode(';', $row['group_instock']);
-                $row['group_active'] = explode(';', $row['group_active']);
-            }
-            if (!empty($row['article_translation'])) {
-                $translation = $export->sMapTranslation('article', $row['article_translation']);
-                $row = array_merge($row, $translation);
-            } elseif (!empty($row['article_translation_fallback'])) {
-                $translation = $export->sMapTranslation('article', $row['article_translation_fallback']);
-                $row = array_merge($row, $translation);
-            }
-            if (!empty($row['detail_translation'])) {
-                $translation = $export->sMapTranslation('detail', $row['detail_translation']);
-                $row = array_merge($row, $translation);
-            } elseif (!empty($row['detail_translation_fallback'])) {
-                $translation = $export->sMapTranslation('detail', $row['detail_translation_fallback']);
-                $row = array_merge($row, $translation);
-            }
-            $row['name'] = htmlspecialchars_decode($row['name']);
-            $row['supplier'] = htmlspecialchars_decode($row['supplier']);
-
-            //cast it to float to prevent the devision by zero warning
-            $row['purchaseunit'] = floatval($row['purchaseunit']);
-            $row['referenceunit'] = floatval($row['referenceunit']);
-            if (!empty($row['purchaseunit']) && !empty($row['referenceunit'])) {
-                $row['referenceprice'] = Shopware()->Modules()->Articles()->calculateReferencePrice($row['price'], $row['purchaseunit'], $row['referenceunit']);
-            }
-
-            $rows[] = $row;
-
-
-            if ($rowIndex==$count || count($rows)>=50) {
-
-                @set_time_limit(30);
-
-                $export->sSmarty->assign('sArticles', $rows);
-                $rows = array();
-
-                $template = 'string:{foreach $sArticles as $sArticle}' . $export->sSettings['body'] . '{/foreach}';
-
-                $export->sSmarty->display($template, $export->sFeedID);
-            }
+        if ($productFeed->getInterval() === -1 && file_exists($filePath)) {
+            readfile($filePath);
+            return;
         }
 
-        $export->sSmarty->display('string:'.$export->sSettings['footer'], $export->sFeedID);
+        $diffInterval = time();
+        if ($productFeed->getCacheRefreshed()) {
+            $diffInterval = $diffInterval - $productFeed->getCacheRefreshed()->getTimestamp();
+        }
+
+        if ($diffInterval >= $productFeed->getInterval() || !file_exists($filePath)) {
+            $this->generateExport($filePath);
+
+            // update last refresh
+            $productFeed->setCacheRefreshed('now');
+            Shopware()->Models()->persist($productFeed);
+            Shopware()->Models()->flush($productFeed);
+        }
+
+        if (!file_exists($filePath)) {
+            $this->Response()
+                ->clearHeaders()
+                ->setHttpResponseCode(204)
+                ->appendBody("Empty feed found.");
+            return;
+        }
+
+        readfile($filePath);
+    }
+
+    /**
+     * @param string $output Path to output file
+     */
+    private function generateExport($output)
+    {
+        $outputHandle = fopen($output, 'w');
+
+        $this->export->sSmarty = $this->View()->Engine();
+        $this->export->sInitSmarty();
+
+        // Export the feed
+        $this->export->executeExport($outputHandle);
+    }
+
+    /**
+     * initialize the base class sExport
+     */
+    private function prepareExport()
+    {
+        $this->export->sSYSTEM = Shopware()->System();
+        $this->export->sFeedID = (int)$this->Request()->feedID;
+        $this->export->sHash = $this->Request()->hash;
+
+        $this->export->sInitSettings();
+    }
+
+    /**
+     * set feed specific options to the export and sets
+     * the right header
+     */
+    private function sendHeaders()
+    {
+        $encoding = $this->getExportEncoding();
+        $contentType = $this->getExportContentType();
+
+        $this->Response()->setHeader('Content-Type', $contentType . ";charset=" . $encoding);
+        $this->Response()->sendHeaders();
+    }
+
+    /**
+     * @return string
+     */
+    private function getExportEncoding()
+    {
+        if (!empty($this->export->sSettings['encodingID']) && $this->export->sSettings['encodingID'] == 2) {
+            return "utf-8";
+        }
+
+        return "iso-8859-1";
+    }
+
+    /**
+     * @return string
+     */
+    private function getExportContentType()
+    {
+        if (!empty($this->export->sSettings['formatID']) && $this->export->sSettings['formatID'] == 3) {
+            return "text/xml";
+        }
+
+        return "text/x-comma-separated-values";
+    }
+
+    /**
+     * @return string Path to new output directory
+     */
+    private function createOutputDirectory()
+    {
+        $dirName = $this->container->getParameter('kernel.cache_dir');
+        $dirName .= '/productexport/';
+        if (!file_exists($dirName)) {
+            mkdir($dirName, 0777);
+        }
+
+        return $dirName;
+    }
+
+    /**
+     * Returns a list with actions which should not be validated for CSRF protection
+     *
+     * @return string[]
+     */
+    public function getWhitelistedCSRFActions()
+    {
+        return [
+            'index'
+        ];
     }
 }

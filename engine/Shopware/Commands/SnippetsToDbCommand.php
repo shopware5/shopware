@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -25,6 +25,7 @@
 namespace Shopware\Commands;
 
 use Shopware\Components\Snippet\DatabaseHandler;
+use Shopware\Models\Plugin\Plugin;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -32,7 +33,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * @category  Shopware
  * @package   Shopware\Command
- * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class SnippetsToDbCommand extends ShopwareCommand
 {
@@ -56,6 +57,13 @@ class SnippetsToDbCommand extends ShopwareCommand
                 InputOption::VALUE_NONE,
                 'If given, the file will be overwritten if it already exists'
             )
+            ->addOption(
+                'source',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'The folder from where the snippets should be imported, relative to Shopware\'s root folder',
+                'snippets'
+            )
         ;
     }
 
@@ -68,22 +76,22 @@ class SnippetsToDbCommand extends ShopwareCommand
         $databaseLoader = $this->container->get('shopware.snippet_database_handler');
         $force = $input->getOption('force');
 
+        $sourceDir = $this->container->getParameter('kernel.root_dir') . DIRECTORY_SEPARATOR . $input->getOption('source') . DIRECTORY_SEPARATOR;
+
         $databaseLoader->setOutput($output);
-        $databaseLoader->loadToDatabase(null, $force);
+        $databaseLoader->loadToDatabase($sourceDir, $force);
 
         //Import plugin snippets
         if ($input->getOption('include-plugins')) {
             $pluginRepository = $this->container->get('shopware.model_manager')->getRepository('Shopware\Models\Plugin\Plugin');
-            $plugins = $pluginRepository->findByActive(true);
-            $pluginBasePath = $this->container->get('application')->AppPath('Plugins');
+
+            /** @var Plugin[] $plugins */
+            $plugins = $pluginRepository->findBy(['active' => true]);
+
+            $pluginDirectories = $this->container->getParameter('shopware.plugin_directories');
 
             foreach ($plugins as $plugin) {
-                $pluginPath = implode('/', array(
-                    rtrim($pluginBasePath, '/'),
-                    $plugin->getSource(),
-                    $plugin->getNamespace(),
-                    $plugin->getName()
-                ));
+                $pluginPath = $pluginDirectories[$plugin->getSource()] . $plugin->getNamespace() . DIRECTORY_SEPARATOR . $plugin->getName();
 
                 $output->writeln('<info>Importing snippets for '.$plugin->getName().' plugin</info>');
                 $databaseLoader->loadToDatabase($pluginPath.'/Snippets/', $force);

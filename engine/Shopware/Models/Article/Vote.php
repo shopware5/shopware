@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,10 +23,10 @@
  */
 
 namespace   Shopware\Models\Article;
-use Shopware\Components\Model\ModelEntity,
-    Doctrine\ORM\Mapping AS ORM,
-    Symfony\Component\Validator\Constraints as Assert,
-    Doctrine\Common\Collections\ArrayCollection;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Shopware Vote Model
@@ -86,7 +86,7 @@ class Vote extends ModelEntity
     private $points;
 
     /**
-     * @var datetime $datum
+     * @var \DateTime $datum
      *
      * @ORM\Column(name="datum", type="datetime", nullable=false)
      */
@@ -114,7 +114,7 @@ class Vote extends ModelEntity
     private $answer;
 
     /**
-     * @var datetime $answer_date
+     * @var \DateTime $answer_date
      *
      * @ORM\Column(name="answer_date", type="datetime", nullable=false)
      */
@@ -230,7 +230,7 @@ class Vote extends ModelEntity
     /**
      * Sets the datum of the vote
      *
-     * @param datetime $datum
+     * @param \DateTime $datum
      * @return Vote
      */
     public function setDatum($datum)
@@ -242,7 +242,7 @@ class Vote extends ModelEntity
     /**
      * Gets the datum of the vote
      *
-     * @return datetime
+     * @return \DateTime
      */
     public function getDatum()
     {
@@ -320,7 +320,7 @@ class Vote extends ModelEntity
     /**
      * Sets the datum of the answer
      *
-     * @param datetime $answer_date
+     * @param \DateTime|string $answer_date
      * @return Vote
      */
     public function setAnswerDate($answer_date)
@@ -335,7 +335,7 @@ class Vote extends ModelEntity
     /**
      * Gets the datum of the answer
      *
-     * @return datetime
+     * @return \DateTime
      */
     public function getAnswerDate()
     {

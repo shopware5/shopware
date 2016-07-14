@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,10 +23,11 @@
  */
 
 namespace Shopware\Models\Article;
-use Shopware\Components\Model\ModelEntity,
-Doctrine\ORM\Mapping AS ORM,
-Symfony\Component\Validator\Constraints as Assert,
-Doctrine\Common\Collections\ArrayCollection;
+
+use Shopware\Components\Model\ModelEntity;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity
@@ -51,6 +52,12 @@ class Esd extends ModelEntity
      */
     private $articleId;
 
+    /**
+     * @var integer $articleDetailId
+     *
+     * @ORM\Column(name="articleDetailsID", type="integer", nullable=false)
+     */
+    private $articleDetailId;
 
     /**
      * @var string $file
@@ -176,7 +183,6 @@ class Esd extends ModelEntity
     public function setArticle($article)
     {
         throw new \Exception('Article should be set implicit with setArticleDetail');
-
     }
 
     /**
@@ -205,7 +211,7 @@ class Esd extends ModelEntity
     }
 
     /**
-     * @param null|\DateTime $date
+     * @param null|\DateTime|string $date
      * @return Esd
      */
     public function setDate($date = null)

@@ -299,7 +299,7 @@ Ext.onReady(function() {
     });
 
     /**
-     * Shopware 4.0
+     * Shopware 5
      *
      * Code beyond this point is no longer part of ExtJs core
      * and must be ported manually when ExtJs is updated
@@ -349,6 +349,27 @@ Ext.onReady(function() {
             orderNumber: 'Order number',
             dropDownTitle: 'Articles'
         }
+    });
+    Ext.define('Shopware.listing.en_GB.InfoPanel', {
+        override: 'Shopware.listing.InfoPanel',
+        title: 'Detailed information',
+        emptyText: 'No entry selected.'
+    });
+    Ext.define('Shopware.window.en_GB.Detail', {
+        override: 'Shopware.window.Detail',
+        cancelButtonText: 'Cancel',
+        saveButtonText: 'Save'
+    });
+    Ext.define('Shopware.window.en_GB.Progress', {
+        override: 'Shopware.window.Progress',
+        title: 'Delete items',
+        cancelButtonText: 'Cancel process',
+        closeButtonText: 'Close window',
+        successHeader: 'Success',
+        requestHeader: 'Request',
+        errorHeader: 'Error message',
+        requestResultTitle: 'Request results',
+        processCanceledText: 'Process canceled at position [0] of [1]'
     });
     Ext.define('Shopware.form.field.en_GB.TinyMCE', {
         override:'Shopware.form.field.TinyMCE',
@@ -424,5 +445,129 @@ Ext.onReady(function() {
     });
     Ext.apply(Ext.form.field.VTypes, {
         missingValidationErrorText: 'The remote vType validation needs a validationErrorMsg property'
+    });
+    Ext.define('Ext.grid.en_GB.RowEditor', {
+        override:'Ext.grid.RowEditor',
+        saveBtnText: 'Update',
+        cancelBtnText: 'Cancel',
+        errorsText: 'Errors',
+        dirtyText: 'You need to commit or cancel your changes'
+    });
+    Ext.define('Ext.util.en_GB.FileUpload', {
+        override:'Ext.util.FileUpload',
+        snippets: {
+            uploadReady: 'file(s) uploaded',
+            filesFrom: 'from',
+            messageText: '[0] file(s) uploaded',
+            messageTitle: 'Media manager',
+            legacyMessage: "Your browser doesn't support the necessary feature to support drag & drop uploads.",
+            maxUploadSizeTitle: 'The file exceeds the file size limit',
+            maxUploadSizeText: "The selected file exceeds the configured maximum file size for uploads. Please select another file to upload.",
+            blackListTitle: 'Blacklist',
+            blackListMessage: "File extension [0] isn\'t allowed"
+        }
+    });
+    Ext.define('Shopware.en_GB.Notification', {
+        override: 'Shopware.Notification',
+        closeText: 'Close'
+    });
+    Ext.define('Enlight.app.en_GB.Window', {
+        override: 'Enlight.app.Window',
+
+        closePopupTitle: 'Close module',
+        closePopupMessage: 'This will close all windows of the "__MODULE__" module. Do you want to continue?'
+    });
+    Ext.define('Shopware.detail.en_GB.Controller', {
+        override: 'Shopware.detail.Controller',
+        closeText: 'Close',
+        saveSuccessTitle: 'Success',
+        saveSuccessMessage: 'Item saved successfully',
+        violationErrorTitle: 'Violation errors',
+        invalidFormTitle: 'Form validation error',
+        invalidFormMessage: 'The form contains invalid data, please check the inserted values.'
+    });
+    Ext.define('Shopware.form.field.en_GB.Media', {
+        override: 'Shopware.form.field.Media',
+        selectButtonText: 'Select media',
+        resetButtonText: 'Reset media'
+    });
+    Ext.define('Shopware.grid.en_GB.Association', {
+        override: 'Shopware.grid.Association',
+        searchComboLabel: 'Search for'
+    });
+    Ext.define('Shopware.grid.en_GB.Controller', {
+        override: 'Shopware.grid.Controller',
+        deleteConfirmTitle: 'Delete items',
+        deleteConfirmText: 'Are you sure you want to delete the selected items?',
+        deleteInfoText: '<b>The records will be deleted.</b> <br>To cancel the process, you can use the <b><i>`Cancel process`</i></b> Button. Depending on the selected volume of data may take several seconds to complete this process.',
+        deleteProgressBarText: 'Item [0] of [1]'
+    });
+    Ext.define('Shopware.listing.en_GB.FilterPanel', {
+        override: 'Shopware.listing.FilterPanel',
+        infoTextSnippet: 'Activate the filter fields over the checkbox which displayed for each field. Activated fields will be joined with an AND condition.',
+        filterButtonText: 'Filter result',
+        resetButtonText: 'Reset filters'
+    });
+    Ext.define('Shopware.grid.en_GB.Panel', {
+        override: 'Shopware.grid.Panel',
+        pageSizeLabel: 'Items per page',
+        addButtonText: 'Add item',
+        deleteButtonText: 'Delete all selected',
+        searchFieldText: 'Search...'
+    });
+    Ext.define('Shopware.grid.plugin.en_GB.Translation', {
+        override: 'Shopware.grid.plugin.Translation',
+        snippets: {
+            tooltip: "Translate"
+        }
+    });
+    Ext.define('Shopware.apps.Base.view.element.en_GB.ProductBoxLayoutSelect', {
+        override: 'Shopware.apps.Base.view.element.ProductBoxLayoutSelect',
+
+        fieldLabel: 'Product layout',
+        helpText: 'Product layout allows you to control how your products are presented on the category page. Choose between three different layouts to fine-tune your product display. You can select a layout for each category or automatically adopt the settings from the parent category.'
+    });
+
+    Ext.define('Shopware.apps.Base.store.en_GB.ProductBoxLayout', {
+        override: 'Shopware.apps.Base.store.ProductBoxLayout',
+
+        snippets: {
+            displayExtendLayout: {
+                label: 'Parent setting',
+                description: 'The layout of the product box will be set by the value of the parent category.'
+            },
+            displayBasicLayout: {
+                label: 'Detailed information',
+                description: 'The layout of the product box will show very detailed information.'
+            },
+            displayMinimalLayout: {
+                label: 'Only important information',
+                description: 'The layout of the product box will only show the most important information.'
+            },
+            displayImageLayout: {
+                label: 'Big image',
+                description: 'The layout of the product box is based on a big image of the product.'
+            }
+        }
+    });
+
+    Ext.define('Shopware.notification.en_GB.SubscriptionWarning', {
+        override: 'Shopware.notification.SubscriptionWarning',
+
+        snippets: {
+            licence_upgrade_warning: '[0] plugin(s) require a license upgrade. <a target="_blank" href="https://account.shopware.com">Open account</a><br /><br /><b>Required upgrades:</b><br />[1]',
+            subscription_warning: 'Subscription(s) for [0] plugin(s) have expired. <a target="_blank" href="https://account.shopware.com">Open account</a><br /><br /><b>Expired plugins:</b><br />[1]',
+            expired_soon_subscription_warning: 'Subscription(s) for [0] plugin(s) will expire soon. <a target="_blank" href="https://account.shopware.com">Open account</a><br /><br /><b>Soon expiring plugins:</b><br />[1]',
+            expired_soon_subscription_days_warning: ' days',
+            invalid_licence: 'License(s) of [0] plugin(s) are invalid. <a target="_blank" href="https://account.shopware.com">Open account</a><br /><b>Invalid licences:</b><br />[1]',
+            shop_license_upgrade : 'The license upgrade for the shop hasn\'t been executed yet. <a target="_blank" href="https://account.shopware.com">Open account</a>',
+            no_license: 'You may be a victim of counterfeiting. <a target="_blank" href="https://account.shopware.com">Open account</a><br /><br /><b>No valid license found for plugins:</b><br />[1]',
+            expiring_license: 'Expiring license(s)',
+            expired_license: 'Expired license(s)',
+            expiring_license_warning: 'License(s) of [0]x plugin(s) are soon expiring.<br /><br /><b>Soon expired license(s):</b><br />[1]',
+            expired_license_warning: 'License(s) of [0]x plugin(s) are expired.<br /><br /><b>Expired license(s):</b><br/>[1]',
+            unknown_license: "Unlicensed plugins",
+            confirm_plugin_deactivation: 'You have installed unlicensed plugins. Please buy a valid license or install and remove the plugins with help of the Plugin Manager now.'
+        }
     });
 });

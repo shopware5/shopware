@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -23,7 +23,9 @@
  */
 
 namespace Shopware\Models\Partner;
-use Shopware\Components\Model\ModelRepository, Doctrine\ORM\Query;
+
+use Shopware\Components\Model\ModelRepository;
+use Doctrine\ORM\Query;
 
 /**
  *
@@ -36,7 +38,6 @@ use Shopware\Components\Model\ModelRepository, Doctrine\ORM\Query;
  */
 class Repository extends ModelRepository
 {
-
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select the partners for the backend list
      * @param null $order
@@ -122,11 +123,12 @@ class Repository extends ModelRepository
      * @param bool $summary
      * @param      $fromDate
      * @param      $toDate
+     * @param      $userCurrencyFactor
      * @return \Doctrine\ORM\Query
      */
-    public function getStatisticListQuery($order = null, $offset = null, $limit = null, $partnerId, $summary = false, $fromDate, $toDate)
+    public function getStatisticListQuery($order = null, $offset = null, $limit = null, $partnerId, $summary = false, $fromDate, $toDate, $userCurrencyFactor = 1)
     {
-        $builder = $this->getStatisticListQueryBuilder($order, $partnerId, $summary, $fromDate, $toDate);
+        $builder = $this->getStatisticListQueryBuilder($order, $partnerId, $summary, $fromDate, $toDate, $userCurrencyFactor);
         if (!$summary && !empty($limit)) {
             $builder->setFirstResult($offset);
             $builder->setMaxResults($limit);
@@ -142,9 +144,10 @@ class Repository extends ModelRepository
      * @param bool $summary
      * @param      $fromDate
      * @param      $toDate
+     * @param      $userCurrencyFactor
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getStatisticListQueryBuilder($order = null, $partnerId, $summary = false, $fromDate,$toDate)
+    public function getStatisticListQueryBuilder($order = null, $partnerId, $summary = false, $fromDate, $toDate, $userCurrencyFactor = 1)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $expr = $this->getEntityManager()->getExpressionBuilder();
@@ -154,29 +157,30 @@ class Repository extends ModelRepository
                 'o.orderTime as orderTime',
                 'o.id as id',
                 'o.number as number',
-                'SUM((o.invoiceAmountNet - o.invoiceShippingNet) / o.currencyFactor) as netTurnOver',
-                'SUM((o.invoiceAmountNet - o.invoiceShippingNet) / o.currencyFactor / 100 * partner.percent) as provision',
+                'SUM((o.invoiceAmountNet - o.invoiceShippingNet) / (o.currencyFactor / :userCurrencyFactor)) as netTurnOver',
+                'SUM((o.invoiceAmountNet - o.invoiceShippingNet) / (o.currencyFactor / :userCurrencyFactor) / 100 * partner.percent) as provision',
                 'customer.email as customerEmail',
                 'billing.company as customerCompany',
                 'billing.firstName as customerFirstName',
                 'billing.lastName as customerLastName',
-                'billing.number as customerNumber',
+                'customer.number as customerNumber',
                 'orderState.description as orderStatus',
                 'orderState.id as orderStatusId'
             ))
             ->from('Shopware\Models\Order\Order', 'o')
-            ->leftJoin("o.partner","partner")
+            ->leftJoin("o.partner", "partner")
             ->leftJoin("o.orderStatus", "orderState")
             ->leftJoin("o.customer", "customer")
             ->leftJoin("customer.billing", "billing")
-            ->where($expr->eq("partner.id" ,"?1"))
+            ->where($expr->eq("partner.id", "?1"))
             ->andWhere("o.status != 4")
             ->andWhere("o.status != -1")
-            ->andWhere($expr->gt('o.orderTime','?2' ))
-            ->andWhere($expr->lt('o.orderTime','?3' ))
-            ->setParameter(1,$partnerId)
-            ->setParameter(2,$fromDate)
-            ->setParameter(3,$toDate);
+            ->andWhere($expr->gt('o.orderTime', '?2'))
+            ->andWhere($expr->lt('o.orderTime', '?3'))
+            ->setParameter(1, $partnerId)
+            ->setParameter(2, $fromDate)
+            ->setParameter(3, $toDate)
+            ->setParameter('userCurrencyFactor', $userCurrencyFactor);
 
         if (!$summary) {
             $builder->groupBy("o.number");
@@ -194,11 +198,12 @@ class Repository extends ModelRepository
      * @param $partnerId
      * @param $fromDate
      * @param $toDate
+     * @param $userCurrencyFactor
      * @return \Doctrine\ORM\Query
      */
-    public function getStatisticChartQuery($partnerId, $fromDate, $toDate)
+    public function getStatisticChartQuery($partnerId, $fromDate, $toDate, $userCurrencyFactor = 1)
     {
-        $builder = $this->getStatisticChartQueryBuilder($partnerId, $fromDate, $toDate);
+        $builder = $this->getStatisticChartQueryBuilder($partnerId, $fromDate, $toDate, $userCurrencyFactor);
         return $builder->getQuery();
     }
 
@@ -208,20 +213,21 @@ class Repository extends ModelRepository
      * @param $partnerId
      * @param $fromDate
      * @param $toDate
+     * @param $userCurrencyFactor
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getStatisticChartQueryBuilder($partnerId, $fromDate, $toDate)
+    public function getStatisticChartQueryBuilder($partnerId, $fromDate, $toDate, $userCurrencyFactor = 1)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(
             array(
                 'o.orderTime as date',
                 'DATE_FORMAT(o.orderTime,\'%Y-%V\') as timeScale',
-                'SUM((o.invoiceAmountNet - o.invoiceShippingNet) / o.currencyFactor) as netTurnOver',
-                'SUM((o.invoiceAmountNet - o.invoiceShippingNet) / o.currencyFactor / 100 * partner.percent) as provision'
+                'SUM((o.invoiceAmountNet - o.invoiceShippingNet) / (o.currencyFactor / :userCurrencyFactor)) as netTurnOver',
+                'SUM((o.invoiceAmountNet - o.invoiceShippingNet) / (o.currencyFactor / :userCurrencyFactor) / 100 * partner.percent) as provision'
             ))
             ->from('Shopware\Models\Order\Order', 'o')
-            ->leftJoin('o.partner','partner')
+            ->leftJoin('o.partner', 'partner')
             ->where('partner.id = ?0')
             ->andWhere('o.status != 4')
             ->andWhere('o.status != -1')
@@ -232,6 +238,7 @@ class Repository extends ModelRepository
         $builder->setParameter(0, $partnerId);
         $builder->setParameter(1, $fromDate);
         $builder->setParameter(2, $toDate);
+        $builder->setParameter('userCurrencyFactor', $userCurrencyFactor);
         return $builder;
     }
 
@@ -257,8 +264,8 @@ class Repository extends ModelRepository
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(array(
             'customer.id as id',
-            'billing.number as customerNumber',
-            "CONCAT(CONCAT(billing.firstName, ' '), billing.lastName) as fullName",
+            'customer.number as customerNumber',
+            "CONCAT(CONCAT(customer.firstname, ' '), customer.lastname) as fullName",
             'billing.company as company',
             'customer.email as email'
         ));
@@ -266,11 +273,11 @@ class Repository extends ModelRepository
                 ->leftJoin('customer.billing', 'billing')
                 ->where("customer.accountMode = 0")
                 ->andWhere("customer.email = ?0")
-                ->orWhere("billing.number = ?1")
+                ->orWhere("customer.number = ?1")
                 ->orWhere("customer.id = ?2");
-        $builder->setParameter(0,$mappingValue);
-        $builder->setParameter(1,$mappingValue);
-        $builder->setParameter(2,$mappingValue);
+        $builder->setParameter(0, $mappingValue);
+        $builder->setParameter(1, $mappingValue);
+        $builder->setParameter(2, $mappingValue);
         return $builder;
     }
 
@@ -317,7 +324,6 @@ class Repository extends ModelRepository
      */
     private function getDatePartListDQL($alias, $monthlyAmount = false)
     {
-
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->from('Shopware\Models\Order\Order', $alias)
                 ->select(array('SUM('.$alias.'.invoiceAmountNet - '.$alias.'.invoiceShippingNet)'))
@@ -325,7 +331,7 @@ class Repository extends ModelRepository
                 ->andWhere($alias.'.status NOT IN(\'4\', \'-1\')')
                 ->andWhere($alias.'.partnerId = partner.idCode');
         if ($monthlyAmount) {
-            $builder->andwhere('DATE_FORMAT(CURRENT_DATE(),\'%m\') = DATE_FORMAT('.$alias.'.orderTime,\'%m\')');
+            $builder->andWhere('DATE_FORMAT(CURRENT_DATE(),\'%m\') = DATE_FORMAT('.$alias.'.orderTime,\'%m\')');
         }
         return $builder->getDQL();
     }

@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -24,7 +24,8 @@
 
 namespace Shopware\Commands;
 
-use CommunityStore;
+use Shopware\Bundle\PluginInstallerBundle\Context\UpdateListingRequest;
+use Shopware\Bundle\PluginInstallerBundle\Struct\UpdateResultStruct;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -56,47 +57,33 @@ class StoreListUpdatesCommand extends StoreCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->setupShopwareVersion($input);
-
-        /** @var \CommunityStore $store */
-        $store = $this->container->get('CommunityStore');
-
-        $em = $this->container->get('models');
-
-        $version = $store->getNumericShopwareVersion();
-
-        $builder = $em->createQueryBuilder();
-        $builder->select(array('plugin.name', 'plugin.version', $version . ' as shopwareVersion', 'plugin.id as pluginId'))
-                ->from('Shopware\Models\Plugin\Plugin', 'plugin', 'plugin.name')
-                ->where('plugin.capabilityUpdate = 1')
-                ->andWhere('plugin.name != :pluginManager')
-                ->andWhere('plugin.name != :storeApi')
-                ->setParameter('pluginManager', 'PluginManager')
-                ->setParameter('storeApi', 'StoreApi');
-
-        $plugins = $builder->getQuery()->getArrayResult();
-
-        // if the plugin has an invalid version number use a fallback to 1.0.0
-        foreach ($plugins as &$plugin) {
-            if (preg_match('/\d{1,2}\.\d{1,2}\.\d{1,2}/',$plugin["version"]) !== 1) {
-                $plugin['version'] = '1.0.0';
-            }
+        $version = $input->getOption('shopware-version');
+        if (empty($version)) {
+            $version = \Shopware::VERSION;
         }
 
-        $resultSet = $store->getProductService()->getProductUpdates($plugins);
+        $plugins = $this->container->get('shopware_plugininstaller.plugin_service_local')->getPluginsForUpdateCheck();
+        $domain  = $this->container->get('shopware_plugininstaller.account_manager_service')->getDomain();
+        $service = $this->container->get('shopware_plugininstaller.plugin_service_view');
+        $request = new UpdateListingRequest(null, $version, $domain, $plugins);
+        /** @var UpdateResultStruct $updates */
+        $updates = $service->getUpdates($request);
+        $plugins = $updates->getPlugins();
 
-        $updates = array();
-        foreach ($resultSet as $data) {
-            $updates[] = array(
-                $data['name'],
-                $data['currentVersion'],
-                $data['availableVersion'],
-            );
+        $result = array();
+        foreach ($plugins as $plugin) {
+            $result[] = [
+                $plugin->getId(),
+                $plugin->getTechnicalName(),
+                $plugin->getLabel(),
+                $plugin->getVersion(),
+                $plugin->getAvailableVersion()
+            ];
         }
 
         $table = $this->getHelperSet()->get('table');
-        $table->setHeaders(array('Name', 'CurrentVersion', 'AvailableVersion'))
-              ->setRows($updates);
+        $table->setHeaders(array('Id', 'Technical name', 'Label',  'CurrentVersion', 'AvailableVersion'))
+              ->setRows($result);
 
         $table->render($output);
     }

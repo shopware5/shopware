@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -61,6 +61,11 @@ class Application extends BaseApplication
     private $commandsRegistered = false;
 
     /**
+     * @var bool
+     */
+    private $skipDatabase = false;
+
+    /**
      * @param Kernel $kernel
      */
     public function __construct(Kernel $kernel)
@@ -94,11 +99,17 @@ class Application extends BaseApplication
      */
     public function doRun(InputInterface $input, OutputInterface $output)
     {
-        $this->kernel->boot();
+        try {
+            $this->kernel->boot();
+        } catch (\Exception $e) {
+            $this->kernel->boot(true);
+            $formatter = $this->getHelperSet()->get('formatter');
+            $output->writeln($formatter->formatBlock('WARNING! ' . $e->getMessage() . " in ". $e->getFile(), 'error'));
+            $this->skipDatabase = true;
+        }
 
         if (!$this->commandsRegistered) {
-            $this->registerCommands();
-
+            $this->registerCommands($output);
             $this->commandsRegistered = true;
         }
 
@@ -121,26 +132,39 @@ class Application extends BaseApplication
         return parent::doRun($input, $output);
     }
 
-    protected function registerCommands()
+    /**
+     * @param OutputInterface $output
+     */
+    protected function registerCommands(OutputInterface $output)
     {
-        //Wrap database related logic in a try-catch
-        //so that non-db commands can still execute
-        try {
-            $em = $this->kernel->getContainer()->get('models');
-
-            // setup doctrine commands
-            $helperSet = $this->getHelperSet();
-            $helperSet->set(new EntityManagerHelper($em), 'em');
-            $helperSet->set(new ConnectionHelper($em->getConnection()), 'db');
-
-            DoctrineConsoleRunner::addCommands($this);
-
-            $this->registerEventCommands();
-        } catch (\Exception $e) {
-        }
-
         $this->registerFilesystemCommands();
+        $this->registerTaggedServiceIds();
 
+        if (!$this->skipDatabase) {
+            //Wrap database related logic in a try-catch
+            //so that non-db commands can still execute
+            try {
+                $em = $this->kernel->getContainer()->get('models');
+
+                // setup doctrine commands
+                $helperSet = $this->getHelperSet();
+                $helperSet->set(new EntityManagerHelper($em), 'em');
+                $helperSet->set(new ConnectionHelper($em->getConnection()), 'db');
+
+                DoctrineConsoleRunner::addCommands($this);
+
+                $this->registerEventCommands();
+
+                foreach ($this->kernel->getPlugins() as $plugin) {
+                    if ($plugin->isActive()) {
+                        $plugin->registerCommands($this);
+                    }
+                }
+            } catch (\Exception $e) {
+                $formatter = $this->getHelperSet()->get('formatter');
+                $output->writeln($formatter->formatBlock('WARNING! ' . $e->getMessage() . " in ". $e->getFile(), 'error'));
+            }
+        }
     }
 
     protected function registerFilesystemCommands()
@@ -181,6 +205,20 @@ class Application extends BaseApplication
         foreach ($collection as $command) {
             if ($command instanceof Command) {
                 $this->add($command);
+            }
+        }
+    }
+
+    /**
+     * Register tagged commands in Symfony style
+     *
+     * @see Shopware\Components\DependencyInjection\Compiler\AddConsoleCommandPass
+     */
+    protected function registerTaggedServiceIds()
+    {
+        if ($this->kernel->getContainer()->hasParameter('console.command.ids')) {
+            foreach ($this->kernel->getContainer()->getParameter('console.command.ids') as $id) {
+                $this->add($this->kernel->getContainer()->get($id));
             }
         }
     }

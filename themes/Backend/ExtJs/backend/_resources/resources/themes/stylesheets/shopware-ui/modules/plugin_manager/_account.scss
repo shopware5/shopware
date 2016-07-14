@@ -1,0 +1,313 @@
+
+.plugin-manager-checkout-window {
+    background: #fff;
+
+    .booking-information {
+        font-family: 'Open Sans', Arial, sans-serif;
+        font-size: 16px;
+        -webkit-font-smoothing: antialiased;
+        color: rgb(153, 153, 153);
+
+        .booking-container {
+            padding: 20px;
+            border: 1px solid rgba(202, 217, 224, 0.9);
+            border-radius: 5px;
+            box-shadow: 0 2px 2px rgba(202, 217, 224, 0.4);
+        }
+
+        .licence-domain .domain {
+            margin-top: 20px;
+            color: rgb(14, 56, 79);
+            font-weight: 600;
+        }
+
+        .charge-amount {
+            position: absolute;
+            bottom: 10px;
+
+            a {
+                text-decoration: none;
+                color: #fff;
+            }
+        }
+
+        .booking-domain-amount.positive {
+            color: #37d046;
+        }
+
+        .booking-domain-amount.negative {
+            color: red;
+        }
+
+        .booking-domain-amount {
+            font-weight: 300;
+            font-size: 28px;
+        }
+
+        .headline {
+            font-size: 18px;
+            color: rgb(14, 56, 79);
+            font-weight: 600;
+            margin-bottom: 15px;
+            margin-top: 10px;
+            border: 0 none;
+        }
+
+    }
+
+    .toolbar {
+        background: #fff;
+        padding: 0 40px 40px;
+    }
+
+    .gtc {
+        margin-left: 190px;
+    }
+
+    .x-window-body {
+        border: 0 none !important;
+        background: #fff;
+    }
+
+    font-family: 'Open Sans', Arial, sans-serif !important;
+    -webkit-font-smoothing: antialiased !important;
+
+    .headline {
+        font-weight: 300;
+        font-size: 41px;
+        border-bottom: 1px solid #cad9e0;
+    }
+
+    .position-wrapper {
+        background: #ebf0f3;
+        border-radius: 5px;
+        border: 1px solid #dfdfdf;
+        padding: 10px 30px 30px;
+    }
+
+    .row {
+        padding: 30px 20px;
+        clear: both;
+        color: #5c6f7c !important;
+        font-weight: 400;
+        margin: 0 !important;
+        background: #fff;
+        border: 1px solid rgba(202, 217, 224, 0.9);
+        border-radius: 5px;
+
+        font-size: 14px;
+        line-height: 21px;
+
+        .plugin-data {
+            padding-left: 20px;
+            padding-right: 40px;
+        }
+
+        .image {
+            margin-top: 4px;
+        }
+
+        .image img {
+            height: 58px;
+            width: 58px;
+        }
+        .name {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        .plugin-price {
+            font-weight: 600;
+            line-height: 58px;
+        }
+    }
+
+    .position-header {
+        color: #5c6f7c;
+        font-size: 16px;
+        font-weight: bold;
+
+        .name-header {
+            float: left;
+            padding-left: 10px;
+            width: 578px;
+        }
+        .price-header {
+            float: left;
+            width: 150px;
+        }
+    }
+
+    .basket-amount-container {
+        padding-top: 40px;
+        float: right;
+        font-weight: bold;
+        font-size: 16px;
+        margin-right: 150px;
+        color: #5c6f7c !important;
+        line-height: 31px !important;
+
+        .amount {
+            font-size: 14px;
+            padding-bottom: 10px;
+            margin-bottom: 5px;
+            border-bottom: 1px solid #dfdfdf;
+        }
+
+        .label {
+            width: 300px;
+            float: left;
+        }
+        .value {
+            width: 90px;
+            float: left;
+            text-align: right;
+        }
+    }
+}
+
+
+.plugin-manager-login-window {
+    background: #fff;
+    font-family: 'Open Sans', Arial, sans-serif !important;
+    -webkit-font-smoothing: antialiased !important;
+
+    .x-window-body {
+        background: #fff;
+        border: 0 none !important;
+    }
+
+    .form-panel .x-panel-body, .toolbar  {
+        background: #fff;
+    }
+
+	.action-buttons {
+		position: relative;
+
+		.plugin-manager-action-button {
+			float: right;
+		}
+
+		&:after {
+			content: ".";
+			clear: both;
+			display: block;
+			visibility: hidden;
+			height: 0px;
+		}
+	}
+
+	.section-title {
+		font-weight: bold;
+		font-size: 14px;
+	}
+
+    .forgot {
+		margin: 0 0 10px 160px;
+
+		a {
+			text-decoration: none;
+			color: #1491e7;
+			cursor: pointer;
+			font-size: 12px;
+		}
+	}
+
+    .headline-container {
+		margin-bottom: 10px;
+
+		.headline {
+			font-weight: 300;
+			font-size: 41px;
+            line-height: 52px;
+			color: #0e384f;
+		}
+
+		.headline-close {
+            @include background-image(linear-gradient(#20b4fc, #0581d7));
+            @include border-radius(3px);
+            text-shadow: 0 1px 1px #0872c0;
+            font-size: 13px;
+            text-align: center;
+            top: 14px !important;
+            width: 18px;
+            height: 18px;
+            color: #fff;
+            cursor: pointer;
+            font-weight: bold;
+		}
+	}
+
+	.description-text {
+		margin-top: 10px;
+		padding-top: 15px;
+		border-top: 1px solid #cad9e0;
+        font-family: 'Open Sans', Arial, sans-serif;
+
+        .#{$prefix}panel-body-default {
+            line-height: 28px;
+            font-size: 14px !important;
+            color: #5c6f7c;
+        }
+	}
+
+    .plugin-manager-login-window {
+        td.#{$prefix}form-item-body {
+            padding: 0;
+
+            .#{$prefix}form-field:not(.#{$prefix}form-checkbox) {
+                @include border-radius(5px);
+                background: #fff;
+                border: 2px solid #cad9e0;
+                font-family: 'Open Sans', Arial, sans-serif;
+                font-size: 14px;
+                font-weight: 600;
+                line-height: 28px;
+                height: 32px;
+
+                &.#{$prefix}form-invalid-field {
+                    border-color: #FC9D9D;
+                }
+
+                &:focus {
+                    @include reset-box-shadow();
+                    border: 2px solid #1fb3fb !important;
+                }
+            }
+        }
+
+        .section-title {
+            font-family: 'Open Sans', Arial, sans-serif;
+            color: #0e384f;
+            font-size: 24px;
+            font-weight: 400;
+            line-height: 32px;
+        }
+    }
+
+    .plugin-manager-register-form .#{$prefix}panel-body {
+        @include border-radius(5px);
+        border: 1px solid #dfe4e7 !important;
+        background: #f1f5f7;
+        padding: 25px;
+
+        .#{$prefix}panel-body {
+            padding: 0 !important;
+            border: 0 none !important;
+        }
+    }
+
+    .input--field {
+		label {
+			font-size: 12px;
+		}
+
+        input[type=text], input[type=password] {
+            font-family: 'Open Sans', Arial, sans-serif !important;
+            -webkit-font-smoothing: antialiased !important;
+            font-size: 12px;
+            font-weight: 100;
+            color: rgb(92, 111, 124);
+
+        }
+    }
+}

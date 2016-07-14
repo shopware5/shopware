@@ -1,7 +1,7 @@
 <?php
 /**
- * Shopware 4
- * Copyright © shopware AG
+ * Shopware 5
+ * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
  * under the terms of the GNU Affero General Public License, version 3,
@@ -22,8 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-/**
- */
 class Shopware_Plugins_Core_Cron_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
     protected $results = array();
@@ -34,15 +32,59 @@ class Shopware_Plugins_Core_Cron_Bootstrap extends Shopware_Components_Plugin_Bo
             'Enlight_Controller_Dispatcher_ControllerPath_Backend_Cron',
             'onGetControllerPath'
         );
-        $this->subscribeEvent(
-            'Enlight_Controller_Front_AfterSendResponse',
-            'onAfterSendResponse'
-        );
-        $this->subscribeEvent(
-            'Enlight_Bootstrap_InitResource_Cron',
-            'onInitResourceCron'
-        );
+
+        $this->createForm();
+
         return true;
+    }
+
+    private function createForm()
+    {
+        $form = $this->Form();
+        $parent = $this->Forms()->findOneBy(array('name' => 'Other'));
+        $form->setParent($parent);
+        $form->setName('CronSecurity');
+        $form->setLabel('Cron-Sicherheit');
+
+        $form->setElement('text', 'cronSecureAllowedKey', array(
+            'label'    => 'Gültiger Schlüssel',
+            'description' => 'Hinterlegen Sie hier einen Key zum Ausführen der Cronjobs.',
+            'required' => false,
+            'value'    => ''
+        ));
+        $form->setElement('text', 'cronSecureAllowedIp', array(
+            'label' => 'Zulässige IP(s)',
+            'description' => 'Nur angegebene IP-Adressen können die Cron Anfragen auslösen. Mehrere IP-Adressen müssen durch ein \';\' getrennt werden.',
+            'required' => false,
+            'value' => ''
+        ));
+        $form->setElement('boolean', 'cronSecureByAccount', array(
+            'label' => 'Durch Benutzerkonto absichern',
+            'description' => 'Es werden nur Anfragen von authentifizierten Backend Benutzern akzeptiert',
+            'value' => false,
+        ));
+
+        $this->addFormTranslations(
+            array(
+                'en_GB' => array(
+                    'plugin_form' => array(
+                        'label' => 'Cron security'
+                    ),
+                    'cronSecureAllowedKey' => array(
+                        'label'    => 'Allowed key',
+                        'description' => 'If provided, cron requests will be executed if the inserted value is provided as \'key\' in the request'
+                    ),
+                    'cronSecureAllowedIp' => array(
+                        'label' => 'Allowed IP(s)',
+                        'description' => 'If provided, cron requests will be executed if triggered from the given IP address(es). Use \';\' to separate multiple addresses.'
+                    ),
+                    'cronSecureByAccount' => array(
+                        'label' => 'Secure using account',
+                        'description' => 'If set, requests received from authenticated backend users will be accepted'
+                    )
+                )
+            )
+        );
     }
 
     public function onGetControllerPath(Enlight_Event_EventArgs $args)
@@ -50,20 +92,55 @@ class Shopware_Plugins_Core_Cron_Bootstrap extends Shopware_Components_Plugin_Bo
         return $this->Path() . 'Cron.php';
     }
 
-    public function onAfterSendResponse(Enlight_Event_EventArgs $args)
+    /**
+     * Secure cron actions according to system settings
+     *
+     * @param Enlight_Controller_Request_Request $request
+     * @return bool If cron action is authorized
+     */
+    public function authorizeCronAction($request)
     {
-        //Shopware()->Cron()->runCronJobs();
-    }
+        // If called using CLI, always execute the cron tasks
+        if (php_sapi_name() == 'cli') {
+            return true;
+        }
 
-    public function onInitResourceCron(Enlight_Event_EventArgs $args)
-    {
-        $eventManager = $this->Application()->Events();
-        $adapter = new Enlight_Components_Cron_Adapter_DbTable(array(
-            'name' => 's_crontab'
-        ));
-        $manager = new Enlight_Components_Cron_Manager(
-            $adapter, $eventManager, 'Shopware_Components_Cron_CronJob'
-        );
-        return $manager;
+        // At least one of the security policies is enabled.
+        // If at least one of them validates, cron tasks will be executed
+        $cronSecureAllowedKey = Shopware()->Config()->get('cronSecureAllowedKey');
+        $cronSecureAllowedIp = Shopware()->Config()->get('cronSecureAllowedIp');
+        $cronSecureByAccount = Shopware()->Config()->get('cronSecureByAccount');
+
+        // No security policy specified, accept all requests
+        if (empty($cronSecureAllowedKey) && empty($cronSecureAllowedIp) && !$cronSecureByAccount) {
+            return true;
+        }
+
+        // Validate key
+        if (!empty($cronSecureAllowedKey)) {
+            $urlKey = $request->getParam('key');
+
+            if (strcmp($cronSecureAllowedKey, $urlKey) == 0) {
+                return true;
+            }
+        }
+
+        // Validate ip
+        if (!empty($cronSecureAllowedIp)) {
+            $requestIp = $request->getServer('REMOTE_ADDR');
+
+            if (in_array($requestIp, explode(';', $cronSecureAllowedIp))) {
+                return true;
+            }
+        }
+
+        // Validate user auth
+        if ($cronSecureByAccount) {
+            if (Shopware()->Container()->get('Auth')->hasIdentity() === true) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
