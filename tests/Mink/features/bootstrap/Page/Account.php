@@ -183,7 +183,7 @@ class Account extends Page implements HelperSelectorInterface
         $this->fillField('email', $email);
         $this->fillField('password', $password);
 
-        $this->pressButton('Anmelden');
+        Helper::pressNamedButton($this, 'loginButton');
     }
 
     /**
