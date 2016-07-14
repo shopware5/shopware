@@ -603,7 +603,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($result['sErrorFlag']);
         $this->assertContains(
             $this->snippetManager->getNamespace('frontend/basket/internalMessages')
-                ->get('VoucherFailureNotFound', 'Voucher could not be found or is not valid anymore'),
+                ->get('VoucherFailureNotEntered', 'No voucher code entered'),
             $result['sErrorMessages']
         );
 
@@ -617,7 +617,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($result['sErrorFlag']);
         $this->assertContains(
             $this->snippetManager->getNamespace('frontend/basket/internalMessages')
-                ->get('VoucherFailureNotFound', 'Voucher could not be found or is not valid anymore'),
+                ->get('VoucherFailureNotEntered', 'No voucher code entered'),
             $result['sErrorMessages']
         );
 
@@ -625,6 +625,7 @@ class sBasketTest extends PHPUnit_Framework_TestCase
             'vouchercode' => 'testOne',
             'description' => 'testOne description',
             'numberofunits' => 1,
+            'numorder' => 1,
             'value' => 10,
             'minimumcharge' => 10,
             'ordercode' => uniqid(rand()),
