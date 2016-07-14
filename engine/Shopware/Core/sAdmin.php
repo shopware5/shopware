@@ -2175,7 +2175,7 @@ class sAdmin
             }
 
             $getOrderDetails = $this->db->fetchAll(
-                'SELECT * FROM s_order_details WHERE orderID = ?',
+                'SELECT * FROM s_order_details WHERE orderID = ? ORDER BY `id` DESC',
                 array($orderValue["id"])
             );
 
