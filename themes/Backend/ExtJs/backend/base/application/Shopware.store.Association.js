@@ -205,7 +205,7 @@ Ext.define('Shopware.store.Association', {
         proxy = Ext.create('Ext.data.proxy.Ajax', {
             url: me.getConfig('searchUrl'),
             extraParams: me.extraParams,
-            reader: Ext.create('Ext.data.reader.Json', {
+            reader: Ext.create('Shopware.data.reader.Application', {
                 root: 'data',
                 totalProperty: 'total',
                 model: me.model

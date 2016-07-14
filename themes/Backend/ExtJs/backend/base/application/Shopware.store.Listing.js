@@ -105,7 +105,7 @@ Ext.define('Shopware.store.Listing', {
                     read: '{url controller="base" action="list"}'
                 },
                 reader: {
-                    type: 'json',
+                    type: 'application',
                     root: 'data',
                     totalProperty: 'total'
                 }
