@@ -173,7 +173,9 @@ class Shopware_Controllers_Backend_Attributes extends Shopware_Controllers_Backe
                 $this->Request()->getParam('originalName'),
                 $this->Request()->getParam('columnType'),
                 $data,
-                $this->Request()->getParam('columnName')
+                $this->Request()->getParam('columnName'),
+                false,
+                $this->Request()->getParam('defaultValue')
             );
         } catch (Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);

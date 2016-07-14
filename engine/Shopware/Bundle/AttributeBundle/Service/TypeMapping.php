@@ -40,56 +40,78 @@ class TypeMapping
         'string'   => [
             'sql' => 'VARCHAR(500)',
             'dbal' => 'string',
+            'allowDefaultValue' => true,
+            'quoteDefaultValue' => true,
             'elastic' => ['type' => 'string']
         ],
         'text'     => [
             'sql' => 'TEXT',
             'dbal' => 'text',
+            'allowDefaultValue' => false,
+            'quoteDefaultValue' => false,
             'elastic' => ['type' => 'string']
         ],
         'html'     => [
             'sql' => 'MEDIUMTEXT',
             'dbal' => 'text',
+            'allowDefaultValue' => false,
+            'quoteDefaultValue' => false,
             'elastic' => ['type' => 'string']
         ],
         'integer'  => [
             'sql' => 'INT(11)',
             'dbal' => 'integer',
+            'allowDefaultValue' => true,
+            'quoteDefaultValue' => false,
             'elastic' => ['type' => 'long']
         ],
         'float'    => [
             'sql' => 'DOUBLE',
             'dbal' => 'float',
+            'allowDefaultValue' => true,
+            'quoteDefaultValue' => false,
             'elastic' => ['type' => 'double']
         ],
         'boolean'  => [
             'sql' => 'INT(1)',
             'dbal' => 'boolean',
+            'allowDefaultValue' => true,
+            'quoteDefaultValue' => false,
             'elastic' => ['type' => 'boolean']
         ],
         'date'     => [
             'sql' => 'DATE',
             'dbal' => 'date',
+            'allowDefaultValue' => true,
+            'quoteDefaultValue' => true,
             'elastic' => ['type' => 'date', 'format' => 'yyyy-MM-dd']
         ],
         'datetime' => [
             'sql' => 'DATETIME',
             'dbal' => 'datetime',
+            'allowDefaultValue' => true,
+            'quoteDefaultValue' => true,
             'elastic' => ['type' => 'date', 'format' => 'yyyy-MM-dd']
         ],
         'combobox' => [
             'sql' => 'MEDIUMTEXT',
             'dbal' => 'text',
+            'allowDefaultValue' => false,
+            'quoteDefaultValue' => false,
             'elastic' => ['type' => 'string']
         ],
         'single_selection' => [
             'sql' => 'VARCHAR(500)',
             'dbal' => 'text',
+            'allowDefaultValue' => true,
+            'quoteDefaultValue' => true,
             'elastic' => ['type' => 'string']
         ],
         'multi_selection' => [
             'sql' => 'MEDIUMTEXT',
             'dbal' => 'text',
+            'allowDefaultValue' => false,
+            'quoteDefaultValue' => false,
             'elastic' => ['type' => 'string']
         ]
     ];

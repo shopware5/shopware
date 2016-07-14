@@ -51,6 +51,9 @@ Ext.define('Shopware.form.field.SingleSelection', {
         me.items = me.createItems();
 
         me.callParent(arguments);
+        if (me.value) {
+            me.setValue(me.value);
+        }
     },
 
     insertGlobeIcon: function(icon) {
