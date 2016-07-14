@@ -280,6 +280,12 @@ class sAdmin
         }
 
         if ($resetPayment && $user["additional"]["user"]["id"]) {
+            $this->eventManager->notify(
+                'Shopware_Modules_Admin_Payment_Fallback',
+                $data,
+                ['userId' => $user["additional"]["user"]["id"], 'paymentId' => $resetPayment]
+            );
+
             $this->db->update(
                 's_user',
                 array('paymentID' => $resetPayment),

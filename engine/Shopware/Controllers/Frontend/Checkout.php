@@ -70,10 +70,21 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
      */
     public function preDispatch()
     {
+        $events = Shopware()->Container()->get('events');
+        $events->addListener('Shopware_Modules_Admin_Payment_Fallback', [$this, 'flagPaymentBlocked']);
+
         $this->View()->setScope(Enlight_Template_Manager::SCOPE_PARENT);
 
         $this->View()->sUserLoggedIn = $this->admin->sCheckUser();
         $this->View()->sUserData = $this->getUserData();
+    }
+
+    /**
+     * Called if the sAdmin resets the selected customer payment to the shop preset
+     */
+    public function flagPaymentBlocked()
+    {
+        $this->View()->assign('paymentBlocked', true);
     }
 
     /**
@@ -1321,6 +1332,8 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action
         $this->front->Request()->setPost('sPayment', (int)$payment['id']);
         $this->admin->sUpdatePayment();
 
+        $this->flagPaymentBlocked();
+        
         return $payment;
     }
 

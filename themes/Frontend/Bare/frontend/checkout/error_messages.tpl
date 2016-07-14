@@ -12,6 +12,12 @@
 	{/if}
 {/block}
 
+{block name="frontend_checkout_error_payment_blocked"}
+	{if $paymentBlocked}
+		{include file="frontend/_includes/messages.tpl" type="error" content="{s name='ConfirmInfoPaymentBlocked'}{/s}"}
+	{/if}
+{/block}
+
 {block name="frontend_checkout_error_messages_esd_note"}
 	{if $sShowEsdNote}
 		{include file="frontend/_includes/messages.tpl" type="warning" content="{s name='ConfirmInfoPaymentNotCompatibleWithESD'}{/s}"}
