@@ -567,11 +567,12 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
 
         foreach ($result['data'] as &$item) {
             $number = $item['Detail_number'];
+            $item['Detail_additionalText_dynamic'] = null;
             if (!isset($products[$number])) {
                 continue;
             }
             $product = $products[$number];
-            $item['Detail_additionalText'] = $product->getAdditional();
+            $item['Detail_additionalText_dynamic'] = $product->getAdditional();
         }
         return $result;
     }
