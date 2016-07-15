@@ -12,6 +12,17 @@ Ext.define('Shopware.data.Model', {
     extend: 'Ext.data.Model',
 
     /**
+     * Define default proxy and reader to use every time the Shopware.data.reader.Application.
+     * This own reader contains an ext js fix for deep association loading
+     */
+    proxy: {
+        type: 'ajax',
+        reader: {
+            type: 'application'
+        }
+    },
+
+    /**
      * Get the reference to the class from which this object was instantiated.
      * Note that unlike self, this.statics() is scope-independent and it always
      * returns the class from which it was called, regardless of what this points to during run-time
@@ -114,7 +125,7 @@ Ext.define('Shopware.data.Model', {
                     destroy: '{url controller="base" action="delete"}'
                 },
                 reader: {
-                    type: 'json',
+                    type: 'application',
                     root: 'data',
                     totalProperty: 'total'
                 }
