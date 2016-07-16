@@ -1,3 +1,4 @@
+{block name='widgets_index_menu'}
 {if $sMenu[$sGroup]}
     <ul class="service--list is--rounded" role="menu">
         {foreach $sMenu[$sGroup] as $item}
@@ -9,3 +10,4 @@
         {/foreach}
     </ul>
 {/if}
+{/block}
