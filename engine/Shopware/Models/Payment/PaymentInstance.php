@@ -156,7 +156,7 @@ class PaymentInstance extends ModelEntity
     /**
      * @var \DateTime $createdAt
      *
-     * @ORM\Column(name="created_at", type="date", nullable=false)
+     * @ORM\Column(name="created_at", type="datetime", nullable=false)
      */
     protected $createdAt;
 
