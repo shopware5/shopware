@@ -773,6 +773,19 @@ class sBasket
             )
         );
 
+        $params = $this->eventManager->filter(
+            'Shopware_Modules_Basket_AddVoucher_FilterParams',
+            $params,
+            array(
+                'subject' => $this,
+                "sql" => $sql,
+                "voucher" => $voucherDetails,
+                "name" => $voucherName,
+                "shippingfree" => $freeShipping,
+                "tax" => $tax
+            )
+        );
+
         return (bool) ($this->db->query($sql, $params));
     }
 
