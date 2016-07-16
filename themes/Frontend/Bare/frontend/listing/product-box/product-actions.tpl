@@ -1,5 +1,7 @@
 {namespace name="frontend/listing/box_article"}
 
+{* Listing actions *}
+{block name='frontend_listing_box_article_actions_detail'}
 <div class="product--actions">
 
     {* Compare button *}
@@ -33,3 +35,4 @@
     {* @deprecated: misleading name *}
     {block name="frontend_listing_box_article_actions_inline"}{/block}
 </div>
+{/block}
