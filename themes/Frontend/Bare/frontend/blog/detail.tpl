@@ -17,8 +17,24 @@
                     {if $sArticle.author.name}
                         <meta itemprop="author" content="{$sArticle.author.name}">
                     {/if}
-
                     <meta itemprop="wordCount" content="{$sArticle.description|strip_tags|count_words}">
+                    <meta itemprop="datePublished" content="{$sArticle.displayDate|date:"W3C"}">
+                    <meta itemprop="headline" content="{$sArticle.title}">
+                    <div itemprop="image" itemscope itemtype="https://schema.org/ImageObject">
+                        <meta itemprop="url" content="{$sArticle.preview.thumbnails[2].source}">
+                        <meta itemprop="width" content="1280">
+                        <meta itemprop="height" content="669">
+                    </div>
+                    <div itemprop="publisher" itemscope itemtype="https://schema.org/Organization">
+                        <div itemprop="logo" itemscope itemtype="https://schema.org/ImageObject">
+                            <meta itemprop="url" content="{link file=$theme.desktopLogo}">
+                            <meta itemprop="width" content="2370">
+                            <meta itemprop="height" content="1071">
+                        </div>
+                        <meta itemprop="name" content="{s name='BlogPublisherRichSnippet'}{/s}">
+                    </div>
+                    <meta itemprop="dateModified" content="{$sArticle.displayDate|date:"W3C"}">
+                    <meta itemprop="mainEntityOfPage" content="{url controller=blog action=detail sCategory=$sArticle.categoryId blogArticle=$sArticle.id}">
                 {/block}
 
                 {* Detail Box Header *}
