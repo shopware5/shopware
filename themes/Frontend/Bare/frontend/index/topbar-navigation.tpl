@@ -1,8 +1,10 @@
 {* Top bar main *}
 {block name="frontend_index_top_bar_main"}
 <div class="top-bar">
+
 	{* Top bar main container *}
 	{block name="frontend_index_top_bar_main_container"}
+
 	<div class="container block-group">
 
 		{* Top bar navigation *}
