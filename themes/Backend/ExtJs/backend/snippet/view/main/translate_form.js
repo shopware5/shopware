@@ -103,8 +103,9 @@ Ext.define('Shopware.apps.Snippet.view.main.TranslateForm', {
             fieldSetItems.push({
                 fieldLabel: locale.get('displayName'),
                 name: translation.internalId,
-                emptyText: translation.get('defaultValue'),
-                value: translation.get('value')
+                emptyText: Ext.String.htmlEncode(translation.get('defaultValue')),
+                value: translation.get('value'),
+                fieldStyle: 'line-height: normal;'
             });
         });
 
