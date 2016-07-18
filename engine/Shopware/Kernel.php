@@ -357,8 +357,13 @@ class Kernel implements HttpKernelInterface
         );
 
         // Set up mpdf cache dirs
-        define("_MPDF_TEMP_PATH", $this->getCacheDir() .'/mpdf/tmp/');
-        define("_MPDF_TTFONTDATAPATH", $this->getCacheDir() .'/mpdf/ttfontdata/');
+        if (!defined('_MPDF_TEMP_PATH')) {
+            define("_MPDF_TEMP_PATH", $this->getCacheDir() .'/mpdf/tmp/');
+        }
+
+        if (!defined('_MPDF_TTFONTDATAPATH')) {
+            define("_MPDF_TTFONTDATAPATH", $this->getCacheDir() .'/mpdf/ttfontdata/');
+        }
     }
 
     /**
