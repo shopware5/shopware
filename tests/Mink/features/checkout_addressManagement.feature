@@ -1,9 +1,9 @@
-@checkout
+@checkout @checkoutadressmanagement
 Feature: Checkout address management
 
   Background:
     Given I am on the page "Account"
-    And   I log in successful as "Max Mustermann" with email "test@example.com" and password "shopware"
+    And   I log in successful as "Max Mustermann" with email "checkout@adressmanagement.localhost" and password "shopware"
     And   the cart contains the following products:
       | number  | name                    | quantity |
       | SW10167 | Sonnenbrille Speed Eyes | 3        |
@@ -84,9 +84,9 @@ Feature: Checkout address management
       | city                     | <new_city>       |
     Then I should see appear "<new_firstname> <new_lastname>, <street>, <new_zipcode> <new_city>, <country>" in addressbox "Lieferadresse" after "Adresse bearbeiten" disappeared
     Examples:
-      | street              | country     | new_type | new_salutation | new_firstname | new_lastname | new_zipcode | new_city     |
-      | Mustermannstraße 92 | Deutschland | private  | ms             | Susanne       | Musterfrau   | 54875       | Sindelfingen |
-      | Mustermannstraße 92 | Deutschland | private  | mr             | Max           | Mustermann   | 48624       | Schöppingen  |
+      | street        | country     | new_type | new_salutation | new_firstname | new_lastname | new_zipcode | new_city     |
+      | Musterstr. 55 | Deutschland | private  | ms             | Susanne       | Musterfrau   | 54875       | Sindelfingen |
+      | Musterstr. 55 | Deutschland | private  | mr             | Max           | Mustermann   | 48624       | Schöppingen  |
 
   @javascript
   Scenario Outline: I can change the billing address
