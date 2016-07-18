@@ -123,7 +123,9 @@ class Order extends Resource
     {
         $this->checkPrivilege('read');
 
-        $builder = $this->getRepository()->createQueryBuilder('orders');
+        $builder = $this->getRepository()->createQueryBuilder('orders')
+            ->addSelect(['attribute'])
+            ->leftJoin('orders.attribute', 'attribute');
 
         $builder->addFilter($criteria);
         $builder->addOrderBy($orderBy);
