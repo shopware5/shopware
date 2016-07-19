@@ -9,6 +9,7 @@ This changelog references changes done in Shopware 5.2 patch versions.
 * Updated `guzzlehttp/guzzle` to version 5.3.1 to mitigate [httproxy](https://httpoxy.org/) vulnerability
 * Set timeouts from install/update/(secure) uninstall operations in plugin manager to 300 seconds
 * Fix countries rest api response data and header
+* Added exception to Shopware updater if `php-curl` is missing
 
 ## 5.2.2 (2016-07-13)
 
