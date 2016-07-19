@@ -321,11 +321,17 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
         /** @var Version $version */
         $version = $this->getCachedVersion();
 
-        $destination  = $this->createDestinationFromVersion($version);
-        $downloadStep = new DownloadStep($version, $destination);
-        $result       = $downloadStep->run($offset);
+        try {
+            $destination  = $this->createDestinationFromVersion($version);
+            $downloadStep = new DownloadStep($version, $destination);
+            $result       = $downloadStep->run($offset);
+            $this->view->assign($this->mapResult($result));
+        } catch (Exception $e) {
+            $this->Response()->setHttpResponseCode(500);
+            $this->View()->assign('message', $e->getMessage());
+            $this->View()->assign('success', false);
+        }
 
-        $this->view->assign($this->mapResult($result));
     }
 
     public function unpackAction()
