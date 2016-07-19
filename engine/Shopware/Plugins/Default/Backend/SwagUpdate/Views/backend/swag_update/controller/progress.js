@@ -144,16 +144,11 @@ Ext.define('Shopware.apps.SwagUpdate.controller.Progress', {
 
                 try {
                     json = JSON.parse(response.responseText)
-                } catch (err) {
-
-                }
-
-                if (typeof json.message != 'undefined') {
-                    Shopware.Msg.createStickyGrowlMessage({
+		    Shopware.Msg.createStickyGrowlMessage({
                         title: '{s name=progress/timeOutTitle}An error occured{/s}',
                         text: json.message
                     });
-                } else {
+                } catch (err) {
                     Shopware.Msg.createStickyGrowlMessage({
                         title: '{s name=progress/timeOutTitle}An error occured{/s}',
                         text: "{s name=progress/timeOut}The server could not handle the request. Please choose a smaller batch size.{/s}"
