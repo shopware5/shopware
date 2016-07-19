@@ -144,7 +144,8 @@ Ext.define('Shopware.apps.SwagUpdate.controller.Progress', {
 
                 try {
                     json = JSON.parse(response.responseText)
-		    Shopware.Msg.createStickyGrowlMessage({
+                    
+                    Shopware.Msg.createStickyGrowlMessage({
                         title: '{s name=progress/timeOutTitle}An error occured{/s}',
                         text: json.message
                     });
