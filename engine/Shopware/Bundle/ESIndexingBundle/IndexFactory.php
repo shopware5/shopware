@@ -40,11 +40,25 @@ class IndexFactory implements IndexFactoryInterface
     private $prefix;
 
     /**
-     * @param string $prefix
+     * @var int|null
      */
-    public function __construct($prefix)
+    private $numberOfShards;
+
+    /**
+     * @var int|null
+     */
+    private $numberOfReplicas;
+
+    /**
+     * @param string $prefix
+     * @param int|null $numberOfShards
+     * @param int|null $numberOfReplicas
+     */
+    public function __construct($prefix, $numberOfShards = null, $numberOfReplicas = null)
     {
         $this->prefix = $prefix;
+        $this->numberOfShards = $numberOfShards;
+        $this->numberOfReplicas = $numberOfReplicas;
     }
 
     /**
@@ -55,7 +69,9 @@ class IndexFactory implements IndexFactoryInterface
     {
         return new IndexConfiguration(
             $this->getIndexName($shop) . '_' . $this->getTimestamp(),
-            $this->getIndexName($shop)
+            $this->getIndexName($shop),
+            $this->numberOfShards,
+            $this->numberOfReplicas
         );
     }
 

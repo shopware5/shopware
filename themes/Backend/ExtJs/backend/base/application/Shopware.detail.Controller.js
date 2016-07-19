@@ -416,6 +416,11 @@ Ext.define('Shopware.detail.Controller', {
 
         }, me, { single: true });
 
+        if (!me.hasModelAction(record, 'update') || !me.hasModelAction(record, 'create')) {
+            window.destroy();
+            return;
+        }
+
         //active loading mask of the detail window
         window.setLoading(true);
 

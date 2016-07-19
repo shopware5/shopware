@@ -93,12 +93,9 @@ class Db
         $options['driver'] = $options['adapter'];
         $options['user'] = $options['username'];
 
-        unset($options['username']);
-        unset($options['adapter']);
+        unset($options['username'], $options['adapter']);
 
-        $conn = DriverManager::getConnection($options, $config, $eventManager);
-
-        return $conn;
+        return DriverManager::getConnection($options, $config, $eventManager);
     }
 
     /**
@@ -136,8 +133,8 @@ class Db
         }
 
 
-        if (!empty($dbConfig['socket'])) {
-            $connectionSettings[] = 'unix_socket=' . $dbConfig['socket'];
+        if (!empty($dbConfig['port'])) {
+            $connectionSettings[] = 'port=' . $dbConfig['port'];
         }
 
         if (!empty($dbConfig['charset'])) {
@@ -148,9 +145,6 @@ class Db
             $connectionSettings[] = 'dbname=' . $dbConfig['dbname'];
         }
 
-
-        $connectionString = implode(';', $connectionSettings);
-
-        return $connectionString;
+        return implode(';', $connectionSettings);
     }
 }

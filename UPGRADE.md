@@ -1,6 +1,9 @@
 # Shopware Upgrade Information
 In this document you will find a changelog of the important changes related to the code base of Shopware.
 
+## 5.2.2
+* Add support for Symfony `console.command` service tag to register commands directly inside service container
+
 ## 5.2.0
 * Increased minimum required PHP version to PHP >= 5.6.4.
 * Added CSRF protection to frontend and backend which is enabled by default.

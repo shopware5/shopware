@@ -61,6 +61,12 @@ class Configuration extends ModelEntity
     private $columnType;
 
     /**
+     * @var string $type
+     * @ORM\Column(name="default_value", type="string", nullable=true)
+     */
+    private $defaultValue;
+
+    /**
      * @var string
      * @ORM\Column(name="entity", type="string", nullable=false)
      */
@@ -312,5 +318,21 @@ class Configuration extends ModelEntity
     public function setArrayStore($arrayStore)
     {
         $this->arrayStore = $arrayStore;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDefaultValue()
+    {
+        return $this->defaultValue;
+    }
+
+    /**
+     * @param string $defaultValue
+     */
+    public function setDefaultValue($defaultValue)
+    {
+        $this->defaultValue = $defaultValue;
     }
 }

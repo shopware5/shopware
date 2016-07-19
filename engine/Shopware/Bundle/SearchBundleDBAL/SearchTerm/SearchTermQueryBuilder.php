@@ -200,20 +200,12 @@ class SearchTermQueryBuilder implements SearchTermQueryBuilderInterface
      */
     private function addToleranceCondition(QueryBuilder $query)
     {
-        $query->select("MAX(" . $this->getRelevanceSelection() . ")");
-
-        /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
-        $statement = $query->execute();
-
-        $highestRanking = $statement->fetch(\PDO::FETCH_COLUMN);
+        $distance = $this->config->get('fuzzySearchMinDistancenTop', 20);
+        $query->select("MAX(" . $this->getRelevanceSelection() . ") / 100 * $distance");
 
         //calculates the tolerance limit
-        $distance = $this->config->get('fuzzySearchMinDistancenTop', 20);
-
-        if ($highestRanking && $distance) {
-            $toleranceLimit = $highestRanking / 100 * $distance;
-
-            $query->andWhere('(' . $this->getRelevanceSelection() . ') > ' . $toleranceLimit);
+        if ($distance) {
+            $query->andWhere('(' . $this->getRelevanceSelection() . ') > (' . $query->getSQL() . ')');
         }
     }
 

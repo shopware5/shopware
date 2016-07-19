@@ -3887,6 +3887,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                 AND s_order.id = s_order_details.orderID
                 AND s_order.status != 4
                 AND s_order.status != -1
+                AND s_order_details.modus = 0
             GROUP BY groupdate
             ORDER BY groupdate ASC
             LIMIT %d
@@ -4159,6 +4160,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             AND s_order.id = s_order_details.orderID
             AND s_order.status != 4
             AND s_order.status != -1
+            AND s_order_details.modus = 0
             AND TO_DAYS(ordertime) <= TO_DAYS(:endDate)
             AND TO_DAYS(ordertime) >= TO_DAYS(:startDate)
             GROUP BY TO_DAYS(ordertime)

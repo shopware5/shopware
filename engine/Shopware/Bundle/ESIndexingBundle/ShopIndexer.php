@@ -137,7 +137,7 @@ class ShopIndexer implements ShopIndexerInterface
      */
     private function updateSettings(ShopIndex $index)
     {
-        $this->client->cluster()->health(['wait_for_status' => 'yellow']);
+        $this->client->cluster()->health(['index' => $index->getName(), 'wait_for_status' => 'green']);
         $this->client->indices()->close(['index' => $index->getName()]);
 
         foreach ($this->settings as $setting) {
@@ -154,7 +154,7 @@ class ShopIndexer implements ShopIndexerInterface
 
         $this->client->indices()->open(['index' => $index->getName()]);
         $this->client->indices()->refresh(['index' => $index->getName()]);
-        $this->client->cluster()->health(['wait_for_status' => 'yellow']);
+        $this->client->cluster()->health(['index' => $index->getName(), 'wait_for_status' => 'green']);
     }
 
     /**

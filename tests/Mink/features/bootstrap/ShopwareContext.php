@@ -356,4 +356,12 @@ class ShopwareContext extends SubContext
 
         $page->checkSlider($slider, $products);
     }
+
+    /**
+     * @Then /^I the language should be "([^"]*)"$/
+     */
+    public function iTheLanguageShouldBe($language)
+    {
+        Helper::setCurrentLanguage($language);
+    }
 }
