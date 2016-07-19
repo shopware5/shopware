@@ -1,6 +1,9 @@
 # Shopware Upgrade Information
 In this document you will find a changelog of the important changes related to the code base of Shopware.
 
+## 5.2.3
+* Updated `guzzlehttp/guzzle` to version 5.3.1 to mitigate [httproxy](https://httpoxy.org/) vulnerability
+
 ## 5.2.2
 * Add support for Symfony `console.command` service tag to register commands directly inside service container
 

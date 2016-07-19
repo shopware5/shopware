@@ -36,7 +36,7 @@
         "beberlei/assert": "2.5.0",
         "zendframework/zend-escaper": "2.5.1",
         "oyejorge/less.php": "1.7.0.10",
-        "guzzlehttp/guzzle": "5.3.0",
+        "guzzlehttp/guzzle": "5.3.1",
         "egulias/email-validator": "1.2.12",
         "elasticsearch/elasticsearch": "2.2.0",
         "ongr/elasticsearch-dsl": "2.0.1",
