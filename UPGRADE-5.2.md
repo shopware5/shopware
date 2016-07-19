@@ -10,13 +10,13 @@ This changelog references changes done in Shopware 5.2 patch versions.
 * Set timeouts from install/update/(secure) uninstall operations in plugin manager to 300 seconds
 * Fix countries rest api response data and header
 * Added exception to Shopware updater if `php-curl` is missing
+* Add support for integer and array values to the `sw:plugin:config:set` cli command
 
 ## 5.2.2 (2016-07-13)
 
 [View all changes from v5.2.0...v5.2.2](https://github.com/shopware/shopware/compare/v5.2.0...v5.2.2)
 
 * Add support for Symfony `console.command` service tag to register commands directly inside service container
-* Add support for integer and array values to the `sw:plugin:config:set` cli command
 
 ## 5.2.0 (2016-07-01)
 
