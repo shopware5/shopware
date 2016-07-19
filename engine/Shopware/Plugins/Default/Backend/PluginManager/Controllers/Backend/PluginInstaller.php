@@ -53,7 +53,7 @@ class Shopware_Controllers_Backend_PluginInstaller extends Shopware_Controllers_
 
     public function installPluginAction()
     {
-        @set_time_limit(0);
+        @set_time_limit(300);
 
         $plugin = $this->getPluginModel($this->Request()->getParam('technicalName'));
 
@@ -80,7 +80,7 @@ class Shopware_Controllers_Backend_PluginInstaller extends Shopware_Controllers_
 
     public function updateAction()
     {
-        @set_time_limit(0);
+        @set_time_limit(300);
 
         $technicalName = $this->Request()->getParam('technicalName');
 
@@ -116,7 +116,7 @@ class Shopware_Controllers_Backend_PluginInstaller extends Shopware_Controllers_
 
     public function uninstallPluginAction()
     {
-        @set_time_limit(0);
+        @set_time_limit(300);
 
         $plugin = $this->getPluginModel($this->Request()->getParam('technicalName'));
 
@@ -130,7 +130,7 @@ class Shopware_Controllers_Backend_PluginInstaller extends Shopware_Controllers_
 
     public function secureUninstallPluginAction()
     {
-        @set_time_limit(0);
+        @set_time_limit(300);
 
         $plugin = $this->getPluginModel($this->Request()->getParam('technicalName'));
 

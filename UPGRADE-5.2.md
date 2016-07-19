@@ -7,13 +7,13 @@ This changelog references changes done in Shopware 5.2 patch versions.
 [View all changes from v5.2.2...v5.2.3](https://github.com/shopware/shopware/compare/v5.2.2...v5.2.3)
 
 * Updated `guzzlehttp/guzzle` to version 5.3.1 to mitigate [httproxy](https://httpoxy.org/) vulnerability
+* Set timeouts from install/update/(secure) uninstall operations in plugin manager to 300 seconds
 
 ## 5.2.2 (2016-07-13)
 
 [View all changes from v5.2.0...v5.2.2](https://github.com/shopware/shopware/compare/v5.2.0...v5.2.2)
 
 * Add support for Symfony `console.command` service tag to register commands directly inside service container
-* Set timeouts from install/update/(secure) uninstall operations in plugin manager to 300 seconds
 
 ## 5.2.0 (2016-07-01)
 
