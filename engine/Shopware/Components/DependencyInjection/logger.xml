@@ -34,7 +34,7 @@
         <!-- FingersCrossed handler-->
         <service id="monolog.handler.fingers_crossed" class="Monolog\Handler\FingersCrossedHandler" public="false">
             <argument type="service" id="monolog.handler.rotating_file" />
-            <argument>%monolog.logger.constant.error%</argument>
+            <argument>%monolog.logger.constant.info%</argument>
         </service>
 
         <!-- Core logger -->
