@@ -81,6 +81,7 @@ Ext.define('Shopware.apps.Customer.view.list.List', {
             company:'{s name=column/company}Company{/s}',
             zipCode:'{s name=column/zip_code}Zip code{/s}',
             city:'{s name=column/city}City{/s}',
+            accountMode:'{s name=column/accountMode}Account mode{/s}',
             orderCount:'{s name=column/orderCount}Number of orders{/s}',
             sales:'{s name=column/sales}Turnover{/s}',
             remove:'{s name=column/delete}Delete customer{/s}',
@@ -188,6 +189,11 @@ Ext.define('Shopware.apps.Customer.view.list.List', {
             header:me.snippets.columns.city,
             dataIndex:'city',
             flex: 1
+        }, {
+            header:me.snippets.columns.accountMode,
+            dataIndex:'accountMode',
+            flex: 1,
+            renderer:me.accountModeRenderer
         }, {
             header:me.snippets.columns.orderCount,
             dataIndex:'orderCount',
@@ -331,6 +337,20 @@ Ext.define('Shopware.apps.Customer.view.list.List', {
      */
     dateColumn:function (value) {
         return !value ? value : Ext.util.Format.date(value);
+    },
+
+    /**
+     * Formats the accountMode column
+     *
+     * @param [string] - accountMode
+     * @returns [string] - description
+     */
+    accountModeRenderer:function (value) {
+        if (value) {
+            return '{s name="accountModeGuest"}Guest Account{/s}';
+        } {
+            return '{s name="accountModeNormal"}Normal Account{/s}';
+        }
     },
 
     /**
