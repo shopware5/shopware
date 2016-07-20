@@ -38,21 +38,21 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
     /**
      * Object from Type Model\Order
      *
-     * @var object Model\Order
+     * @var \Shopware_Models_Document_Order
      */
     public $_order;
 
     /**
      * Shopware Template Object (Smarty)
      *
-     * @var Enlight_Template_Manager
+     * @var \Enlight_Template_Manager
      */
     public $_template;
 
     /**
      * Shopware View Object (Smarty)
      *
-     * @var object
+     * @var \Smarty_Data
      */
     public $_view;
 
