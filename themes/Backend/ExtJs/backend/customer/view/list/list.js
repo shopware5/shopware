@@ -348,9 +348,9 @@ Ext.define('Shopware.apps.Customer.view.list.List', {
     accountModeRenderer:function (value) {
         if (value) {
             return '{s name="accountModeGuest"}Guest Account{/s}';
-        } {
-            return '{s name="accountModeNormal"}Normal Account{/s}';
         }
+        
+        return '{s name="accountModeNormal"}Normal Account{/s}';
     },
 
     /**
