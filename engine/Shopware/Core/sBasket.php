@@ -2234,7 +2234,7 @@ class sBasket
                 }
             }
 
-            $getArticles[$key]["amount"] = $quantity * round($price, 2);
+            $getArticles[$key]["amount"] = round($quantity * $price, 2);
 
             //reset purchaseunit and save the original value in purchaseunitTemp
             if ($getArticles[$key]["purchaseunit"] > 0) {
