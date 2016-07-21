@@ -642,6 +642,7 @@ class sAdmin
 
         Shopware()->Session()->unsetAll();
         $this->regenerateSessionId();
+        Shopware()->Container()->get('shopware.csrftoken_validator')->invalidateToken($this->front->Response());
     }
 
     /**

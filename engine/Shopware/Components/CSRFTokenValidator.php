@@ -82,6 +82,16 @@ class CSRFTokenValidator implements SubscriberInterface
     }
 
     /**
+     * Send invalidate csrf token cookie
+     * @param \Enlight_Controller_Response_Response $response
+     */
+    public function invalidateToken(\Enlight_Controller_Response_Response $response)
+    {
+        $context = $this->container->get('shopware_storefront.context_service')->getShopContext();
+        $response->setCookie('invalidate-xcsrf-token', 1, 0, $context->getShop()->getPath());
+    }
+
+    /**
      * @param ActionEventArgs $args
      * @throws CSRFTokenValidationException
      */
@@ -137,7 +147,7 @@ class CSRFTokenValidator implements SubscriberInterface
         $token = $session->offsetGet('X-CSRF-Token');
 
         if (!$token) {
-            $token = $this->generateToken();
+            $token = $this->generateToken($controller->Response());
         }
 
         if ($this->isWhitelisted($controller)) {
@@ -147,20 +157,21 @@ class CSRFTokenValidator implements SubscriberInterface
         if ($request->isPost()) {
             $requestToken = $request->getParam('__csrf_token') ? : $request->getHeader('X-CSRF-Token');
             if (!hash_equals($token, $requestToken)) {
-                $this->generateToken();
+                $this->generateToken($controller->Response());
                 throw new CSRFTokenValidationException("The provided X-CSRF-Token is invalid. Please go back, reload the page and try again.");
             }
         }
     }
 
     /**
+     * @param \Enlight_Controller_Response_ResponseHttp $response
      * @return string
      */
-    private function generateToken()
+    private function generateToken(\Enlight_Controller_Response_ResponseHttp $response)
     {
         $token = Random::getAlphanumericString(30);
-        Shopware()->Session()->offsetSet('X-CSRF-Token', $token);
-        setcookie('invalidate-xcsrf-token', 1, 0, '/');
+        $this->container->get('session')->offsetSet('X-CSRF-Token', $token);
+        $this->invalidateToken($response);
 
         return $token;
     }

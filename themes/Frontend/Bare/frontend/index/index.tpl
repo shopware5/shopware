@@ -203,7 +203,7 @@
 
             var csrfConfig = csrfConfig || {ldelim}
                 'generateUrl': '{url controller="csrftoken" fullPath=false}',
-                'baseUrl': '{$Shop->getBaseUrl()}',
+                'basePath': '{$Shop->getBasePath()}',
                 'shopId': '{$Shop->getId()}'
             {rdelim};
         {/block}
