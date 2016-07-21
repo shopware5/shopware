@@ -11,6 +11,13 @@ This changelog references changes done in Shopware 5.2 patch versions.
 * Fix countries rest api response data and header
 * Added exception to Shopware updater if `php-curl` is missing
 * Add support for integer and array values to the `sw:plugin:config:set` cli command
+* Deprecated the `$strong` optional parameter from the following methods, as the component ensures a cryptographically secure pseudo-random number generator is always used since Shopware 5.2.0
+    * `Shopware\Components\Random::getBytes()`
+    * `Shopware\Components\Random::getBoolean()`
+    * `Shopware\Components\Random::getInteger()`
+    * `Shopware\Components\Random::getFloat()`
+    * `Shopware\Components\Random::getString()`
+    * `Shopware\Components\Random::getAlphanumericString()`
 
 ## 5.2.2 (2016-07-13)
 
