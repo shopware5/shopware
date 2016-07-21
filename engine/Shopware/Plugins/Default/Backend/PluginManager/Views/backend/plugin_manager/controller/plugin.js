@@ -153,17 +153,24 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
     },
 
     updatePlugin: function(plugin, callback) {
-        var me = this;
+        var me = this,
+            localListing = me.getLocalListing();
 
         me.authenticateForUpdate(plugin, function() {
             me.startPluginDownload(plugin, function() {
                 me.displayLoadingMask(plugin, '{s name=execute_update}Plugin is being updated{/s}', false);
-                me.executePluginUpdate(plugin, function() {
-
-                    Shopware.app.Application.fireEvent('load-update-listing', function() {
-                        me.hideLoadingMask();
-                        callback();
-                    })
+                localListing.getStore().load({
+                    callback: function(records, operation, success) {
+                        me.executePluginUpdate(plugin, function() {
+                            Shopware.app.Application.fireEvent('load-update-listing', function(records) {
+                                if (records.length === 0) {
+                                    me.subApplication.getController('Navigation').displayLocalPluginPage();
+                                }
+                                me.hideLoadingMask();
+                                callback();
+                            });
+                        });
+                    }
                 });
             });
         });
@@ -287,7 +294,6 @@ Ext.define('Shopware.apps.PluginManager.controller.Plugin', {
             });
         });
     },
-
 
     checkout: function(plugin, price, callback) {
         var me = this;

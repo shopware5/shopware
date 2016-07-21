@@ -121,9 +121,7 @@ Ext.define('Shopware.apps.PluginManager.view.PluginHelper', {
     },
 
     updatePluginEvent: function(record) {
-        this.firePluginEvent('update-plugin', record, function() {
-            Shopware.app.Application.fireEvent('load-update-listing');
-        });
+        this.firePluginEvent('update-plugin', record, Ext.emptyFn);
     },
 
     executePluginUpdateEvent: function(record, callback) {
