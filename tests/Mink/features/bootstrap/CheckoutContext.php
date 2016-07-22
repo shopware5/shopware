@@ -4,6 +4,7 @@ namespace Shopware\Tests\Mink;
 
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Exception\ResponseTextException;
+use Doctrine\DBAL\Connection;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Price\Group;
 use Shopware\Tests\Mink\Element\CartPosition;
@@ -534,7 +535,7 @@ class CheckoutContext extends SubContext
 
         /** @var MultipleElement $checkoutAddressBoxes */
         $checkoutAddressBoxes = $this->getMultipleElement($page, 'CheckoutAddressBox');
-        
+
         /** @var CheckoutAddressBox $box */
         foreach ($checkoutAddressBoxes as $box) {
             if ($box->hasTitle($title) && $box->containsAdress($testAddress)) {
@@ -633,5 +634,108 @@ class CheckoutContext extends SubContext
     public function iOpenTheCartPage()
     {
         $this->getPage('CheckoutCart')->open();
+    }
+
+    /**
+     * @Then /^I open the order confirmation page$/
+     */
+    public function iOpenTheOrderConfirmationPage()
+    {
+        $this->getPage('CheckoutConfirm')->open();
+    }
+
+    /**
+     * @BeforeScenario @taxation
+     */
+    public function addCustomTaxation()
+    {
+        /** @var Connection $dbal */
+        $dbal = $this->getService('dbal_connection');
+        $sql = <<<"EOD"
+            INSERT INTO s_core_tax_rules (areaID, countryID, stateID, groupID, customer_groupID, tax, name, active)
+            VALUES (3, 23, null, 1, 1, 33, 'Austria', 1)
+EOD;
+        $dbal->query($sql);
+    }
+
+    /**
+     * @AfterScenario @taxation
+     */
+    public function removeCustomTaxation()
+    {
+        /** @var Connection $dbal */
+        $dbal = $this->getService('dbal_connection');
+        $sql = <<<"EOD"
+            DELETE FROM s_core_tax_rules
+            WHERE name = 'Austria'
+EOD;
+        $dbal->query($sql);
+    }
+
+    /**
+     * @BeforeFeature @checkoutadressmanagement
+     */
+    public static function createUserForCheckoutAddressManagementTest()
+    {
+        /** @var Connection $dbal */
+        $dbal = Shopware()->Container()->get('dbal_connection');
+        $sql = <<<EOD
+INSERT INTO `s_user`
+(`password`, `encoder`, `email`, `active`, `accountmode`, `confirmationkey`, `paymentID`, `firstlogin`, `lastlogin`, `sessionID`, `newsletter`, `validation`, `affiliate`, `customergroup`, `paymentpreset`, `language`, `subshopID`, `referer`, `pricegroupID`, `internalcomment`, `failedlogins`, `lockeduntil`, `default_billing_address_id`, `default_shipping_address_id`, `title`, `salutation`, `firstname`, `lastname`, `birthday`, `customernumber`)
+VALUES
+('a256a310bc1e5db755fd392c524028a8','md5','checkout@adressmanagement.localhost','1','0','','5','2011-11-23','2012-01-04 14:12:05','','0','','0','EK','0','1','1','',NULL,'','0',NULL,'1','3',NULL,'mr','Max','Mustermann',NULL,'20001');
+EOD;
+        $dbal->query($sql);
+
+        $userIdQuery = $dbal->query('SELECT LAST_INSERT_ID() AS \'userId\'');
+        $userId = $userIdQuery->fetchColumn();
+
+        $sql = <<<EOD
+INSERT INTO `s_user_addresses`
+(`user_id`, `company`, `department`, `salutation`, `title`, `firstname`, `lastname`, `street`, `zipcode`, `city`, `country_id`, `state_id`, `ustid`, `phone`, `additional_address_line1`, `additional_address_line2`)
+VALUES
+('$userId','Muster GmbH',NULL,'mr',NULL,'Max','Mustermann','Musterstr. 55','55555','Musterhausen','2','3',NULL,'05555 / 555555',NULL,NULL);
+EOD;
+        $dbal->query($sql);
+
+        $shippingAddressIdQuery = $dbal->query('SELECT LAST_INSERT_ID() AS \'addressId\'');
+        $shippingAddressId = $shippingAddressIdQuery->fetchColumn();
+
+        $sql = <<<EOD
+INSERT INTO `s_user_addresses`
+(`user_id`, `company`, `department`, `salutation`, `title`, `firstname`, `lastname`, `street`, `zipcode`, `city`, `country_id`, `state_id`, `ustid`, `phone`, `additional_address_line1`, `additional_address_line2`)
+VALUES
+('$userId','shopware AG',NULL,'mr',NULL,'Max','Mustermann','Mustermannstraße 92','48624','Schöppingen','2',NULL,NULL,NULL,NULL,NULL);
+EOD;
+        $dbal->query($sql);
+
+        $billingAddressIdQuery = $dbal->query('SELECT LAST_INSERT_ID() AS \'addressId\'');
+        $billingAddressId = $billingAddressIdQuery->fetchColumn();
+
+        $sql = <<<EOD
+UPDATE `s_user`
+SET
+`default_billing_address_id` = $billingAddressId,
+`default_shipping_address_id` = $shippingAddressId
+WHERE
+`email` = 'checkout@adressmanagement.localhost';
+EOD;
+        $dbal->query($sql);
+
+        $sql = <<<EOD
+INSERT INTO `s_user_billingaddress`
+(`userID`, `company`, `department`, `salutation`, `firstname`, `lastname`, `street`, `zipcode`, `city`, `phone`, `countryID`, `stateID`, `ustid`, `additional_address_line1`, `additional_address_line2`, `title`)
+VALUES
+('$userId','Muster GmbH','','mr','Max','Mustermann','Musterstr. 55','55555','Musterhausen','05555 / 555555','2','3','',NULL,NULL,NULL);
+EOD;
+        $dbal->query($sql);
+        $sql = <<<EOD
+INSERT INTO `s_user_shippingaddress`
+(`userID`, `company`, `department`, `salutation`, `firstname`, `lastname`, `street`, `zipcode`, `city`, `countryID`, `stateID`, `additional_address_line1`, `additional_address_line2`, `title`)
+VALUES
+('$userId','shopware AG','','mr','Max','Mustermann','Mustermannstraße 92','48624','Schöppingen','2',NULL,'','',NULL);
+EOD;
+        $dbal->query($sql);
+
     }
 }

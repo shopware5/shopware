@@ -1,11 +1,27 @@
-@account @addressmanagement
+@account @accountaddressmanagement
 Feature: Using the address management system
 
   Background:
     Given I am on the page "Account"
 
+  Scenario: I can register a new Account
+    Given I register me:
+      | field         | register[personal]                 | register[billing] |
+      | customer_type | business                           |                   |
+      | salutation    | mr                                 |                   |
+      | firstname     | Max                                |                   |
+      | lastname      | Mustermann                         |                   |
+      | email         | account@adressmanagement.localhost |                   |
+      | password      | shopware                           |                   |
+      | company       |                                    | Muster GmbH       |
+      | street        |                                    | Musterstr. 55     |
+      | zipcode       |                                    | 55555             |
+      | city          |                                    | Musterhausen      |
+      | country       |                                    | Deutschland       |
+    Then  I should see "Willkommen, Max Mustermann"
+
   Scenario Outline: I can add a new address
-    Given I log in successful as "<user>" with email "test@example.com" and password "shopware"
+    Given I log in successful as "<user>" with email "account@adressmanagement.localhost" and password "shopware"
     When  I follow "Adressen"
     And  I follow "Neue Adresse hinzufügen"
     And I create a new address:
@@ -29,7 +45,7 @@ Feature: Using the address management system
       | Max Mustermann | business | ms         | luluax GmbH | Frauke    | Friemel  | Segelweg 2  | 11111   | Schöppingen | Deutschland |
 
   Scenario Outline: I can set a new billing address
-    Given I log in successful as "<user>" with email "test@example.com" and password "shopware"
+    Given I log in successful as "<user>" with email "account@adressmanagement.localhost" and password "shopware"
     When  I follow "Adressen"
     And I click "setDefaultShippingButton" on address "<company>, <firstname> <lastname>, <street>, <zipcode> <city>, <country>"
     Then I should see only "<company>, <firstname> <lastname>, <street>, <zipcode> <city>, <country>" with title "Standard-Lieferadresse"
@@ -40,7 +56,7 @@ Feature: Using the address management system
       | Max Mustermann |         | Julius    | Caesar   | Colloseum 1 | 00000   | Roma | Italien |
 
   Scenario Outline: I can set a new shipping address
-    Given I log in successful as "<user>" with email "test@example.com" and password "shopware"
+    Given I log in successful as "<user>" with email "account@adressmanagement.localhost" and password "shopware"
     When  I follow "Adressen"
     And I click "setDefaultBillingButton" on address "<company>, <firstname> <lastname>, <street>, <zipcode> <city>, <country>"
     Then I should see only "<company>, <firstname> <lastname>, <street>, <zipcode> <city>, <country>" with title "Standard-Rechnungsadresse"
@@ -51,7 +67,7 @@ Feature: Using the address management system
       | Max Mustermann | luluax GmbH | Frauke    | Friemel  | Segelweg 2 | 11111   | Schöppingen | Deutschland |
 
   Scenario Outline: I can change an address
-    Given I log in successful as "<user>" with email "test@example.com" and password "shopware"
+    Given I log in successful as "<user>" with email "account@adressmanagement.localhost" and password "shopware"
     When  I follow "Adressen"
     And I click "changeLink" on address "<old_company>, <old_firstname> <old_lastname>, <old_street>, <old_zipcode> <old_city>, <old_country>"
     And I change the current address to:
@@ -73,7 +89,7 @@ Feature: Using the address management system
       | Max Mustermann | ms         | luluax GmbH | luluax AG | Frauke        | Frauke               | Friemel      | Frommel  | Segelweg 2  | Siegerweg 42               | 11111       | 22301   | Schöppingen | Hamburg           | Deutschland | Deutschland | business      |
 
   Scenario Outline: I can delete adresses
-    Given I log in successful as "<user>" with email "test@example.com" and password "shopware"
+    Given I log in successful as "<user>" with email "account@adressmanagement.localhost" and password "shopware"
     When  I follow "Adressen"
     And I delete the address "<company>, <firstname> <lastname>, <street>, <zipcode> <city>, <country>"
     Then there must not be an address "<company>, <firstname> <lastname>, <street>, <zipcode> <city>, <country>"
@@ -83,7 +99,7 @@ Feature: Using the address management system
       | Max Mustermann | shopware AG | Max       | Mustermann | Mustermannstraße 92 | 48624   | Schöppingen  | Deutschland |
 
   Scenario Outline: I can add a new address and set it as billing address
-    Given I log in successful as "<user>" with email "test@example.com" and password "shopware"
+    Given I log in successful as "<user>" with email "account@adressmanagement.localhost" and password "shopware"
     When  I follow "Adressen"
     And  I follow "Neue Adresse hinzufügen"
     And I create a new address:
@@ -105,7 +121,7 @@ Feature: Using the address management system
       | Max Mustermann | business | mr         | Muster GmbH | Max       | Mustermann | Musterstr. 55 | 55555   | Musterhausen | Deutschland | 1                       |
 
   Scenario Outline: I can add a new address and set it as shipping address
-    Given I log in successful as "<user>" with email "test@example.com" and password "shopware"
+    Given I log in successful as "<user>" with email "account@adressmanagement.localhost" and password "shopware"
     When  I follow "Adressen"
     And  I follow "Neue Adresse hinzufügen"
     And I create a new address:
@@ -127,7 +143,7 @@ Feature: Using the address management system
       | Max Mustermann | business | mr         | shopware AG | Max       | Mustermann | Mustermannstraße 92 | 48624   | Schöppingen | Deutschland | 1                        |
 
   Scenario Outline: There is no delete button or unexpected action on default shipping and billing address
-    Given I log in successful as "<user>" with email "test@example.com" and password "shopware"
+    Given I log in successful as "<user>" with email "account@adressmanagement.localhost" and password "shopware"
     When  I follow "Adressen"
     Then I must not see "<deleteLink>" in box with "<addressTitle>" title
     And I must not see "<switchLink>" in box with "<addressTitle>" title
