@@ -629,8 +629,10 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
                 if (!empty($category) && $category != Shopware()->Shop()->getCategory()->getId()) {
                     $query['sCategory'] = $category;
                 }
-
-                $value["link"] = Shopware()->Router()->assemble($query);
+				// build manufacturer link only if no link already defined in backend
+				if(strlen($value["link"]) === 0) {
+					$value["link"] = Shopware()->Router()->assemble($query);
+                }
             }
         }
 
