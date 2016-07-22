@@ -159,7 +159,7 @@ class LegacySearchSubscriber implements SubscriberInterface
             'sSearch'        => $criteria->getCondition('search')->getTerm(),
             'sPage'          => $request->getParam('sPage', 1),
             'sSort'          => $request->getParam('sSort'),
-            'sPerPage'       => $request->getParam('sPage', 12),
+            'sPerPage'       => $request->getParam('sPerPage', 12),
             'sFilter'        => array(
                 'category'   => $request->getParam('sFilter_category', null),
                 'supplier'   => $request->getParam('sFilter_supplier', null),
