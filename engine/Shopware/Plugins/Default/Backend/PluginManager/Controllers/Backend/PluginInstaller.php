@@ -72,7 +72,7 @@ class Shopware_Controllers_Backend_PluginInstaller extends Shopware_Controllers_
 
         try {
             $result = $this->pluginManager->installPlugin($plugin);
-            $this->View()->assign(['result' => $result]);
+            $this->View()->assign(['success' => true, 'result' => $result]);
         } catch (Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
         }
@@ -111,7 +111,7 @@ class Shopware_Controllers_Backend_PluginInstaller extends Shopware_Controllers_
         $plugin->setActive($active);
         $this->get('models')->flush();
 
-        $this->View()->assign(['result' => $result]);
+        $this->View()->assign(['success' => true, 'result' => $result]);
     }
 
     public function uninstallPluginAction()
@@ -139,7 +139,7 @@ class Shopware_Controllers_Backend_PluginInstaller extends Shopware_Controllers_
                 $plugin,
                 !$plugin->hasCapabilitySecureUninstall()
             );
-            $this->View()->assign(['result' => $result]);
+            $this->View()->assign(['success' => true, 'result' => $result]);
         } catch (Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
         }
@@ -173,7 +173,7 @@ class Shopware_Controllers_Backend_PluginInstaller extends Shopware_Controllers_
 
         try {
             $result = $this->pluginManager->activatePlugin($plugin);
-            $this->View()->assign(['result' => $result]);
+            $this->View()->assign(['success' => true, 'result' => $result]);
         } catch (Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
         }
@@ -185,7 +185,7 @@ class Shopware_Controllers_Backend_PluginInstaller extends Shopware_Controllers_
 
         try {
             $result = $this->pluginManager->deactivatePlugin($plugin);
-            $this->View()->assign(['result' => $result]);
+            $this->View()->assign(['success' => true, 'result' => $result]);
         } catch (Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
         }
