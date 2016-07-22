@@ -2745,6 +2745,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $data['configuratorTemplate']['prices'] = $this->preparePricesAssociatedData($data['configuratorTemplate']['prices'], $article, $data['tax']);
         $data['configuratorTemplate']['article'] = $article;
 
+        $data['configuratorTemplate']['number'] = $data['mainDetail']['number'];
+
         return $data;
     }
 
