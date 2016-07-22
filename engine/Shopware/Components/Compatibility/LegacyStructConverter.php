@@ -24,10 +24,14 @@
 
 namespace Shopware\Components\Compatibility;
 
-use Shopware\Bundle\MediaBundle\MediaService;
-use Shopware\Bundle\SearchBundle;
+use Doctrine\DBAL\Connection;
+use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Bundle\StoreFrontBundle;
+use Shopware\Bundle\StoreFrontBundle\Service\CategoryServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
+use Shopware\Components\DependencyInjection\Container;
+use Shopware\Components\Model\ModelManager;
+use Shopware\Models\Emotion\Emotion;
 
 /**
  * @category  Shopware
@@ -52,26 +56,58 @@ class LegacyStructConverter
     private $eventManager;
 
     /**
-     * @var MediaService
+     * @var MediaServiceInterface
      */
     private $mediaService;
+
+    /**
+     * @var Connection
+     */
+    private $connection;
+
+    /**
+     * @var ModelManager
+     */
+    private $modelManager;
+
+    /**
+     * @var Container
+     */
+    private $container;
+
+    /**
+     * @var CategoryServiceInterface
+     */
+    private $categoryService;
 
     /**
      * @param \Shopware_Components_Config $config
      * @param ContextService $contextService
      * @param \Enlight_Event_EventManager $eventManager
-     * @param MediaService $mediaService
+     * @param MediaServiceInterface $mediaService
+     * @param Connection $connection
+     * @param ModelManager $modelManager
+     * @param CategoryServiceInterface $categoryService
+     * @param Container $container
      */
     public function __construct(
         \Shopware_Components_Config $config,
         ContextService $contextService,
         \Enlight_Event_EventManager $eventManager,
-        MediaService $mediaService
+        MediaServiceInterface $mediaService,
+        Connection $connection,
+        ModelManager $modelManager,
+        CategoryServiceInterface $categoryService,
+        Container $container
     ) {
         $this->config = $config;
         $this->contextService = $contextService;
         $this->eventManager = $eventManager;
         $this->mediaService = $mediaService;
+        $this->connection = $connection;
+        $this->modelManager = $modelManager;
+        $this->categoryService = $categoryService;
+        $this->container = $container;
     }
 
     /**
@@ -170,20 +206,44 @@ class LegacyStructConverter
             $attribute = $category->getAttribute('core')->toArray();
         }
 
+        $productStream = null;
+        if ($category->getProductStream()) {
+            $productStream = $this->convertRelatedProductStreamStruct($category->getProductStream());
+        }
+
+        $categoryPath = "|" . join("|", $category->getPath()) . "|";
+
+        $blogBaseUrl = $this->config->get('baseFile') . '?sViewport=blog&sCategory=';
+        $baseUrl = $this->config->get('baseFile') . '?sViewport=cat&sCategory=';
+        $detailUrl = ($category->isBlog() ? $blogBaseUrl : $baseUrl) . $category->getId();
+
+        /** @deprecated sSelfCanonical, use $canonicalParams instead */
+        $canonical = $detailUrl;
+        if ($this->config->get('forceCanonicalHttp')) {
+            $canonical = str_replace('https://', 'http://', $canonical);
+        }
+
+        $canonicalParams = $this->getCategoryCanonicalParams($category);
+
+        if ($media && !array_key_exists('path', $media)) {
+            $media['path'] = $media['source'];
+        }
+
         return [
             'id' => $category->getId(),
             'parentId' => $category->getParentId(),
             'name' => $category->getName(),
             'position' => $category->getPosition(),
+            'metaTitle' => $category->getMetaTitle(),
             'metaKeywords' => $category->getMetaKeywords(),
             'metaDescription' => $category->getMetaDescription(),
             'cmsHeadline' => $category->getCmsHeadline(),
             'cmsText' => $category->getCmsText(),
             'active' => true,
             'template' => $category->getTemplate(),
-            'productBoxLayout' => $category->getProductBoxLayout(),
+            'productBoxLayout' => $this->getProductBoxLayout($category),
             'blog' => $category->isBlog(),
-            'path' => $category->getPath(),
+            'path' => $categoryPath,
             'external' => $category->getExternalLink(),
             'hideFilter' => !$category->displayFacets(),
             'hideTop' => !$category->displayInNavigation(),
@@ -192,8 +252,34 @@ class LegacyStructConverter
             'attribute' => $attribute,
             'attributes' => $category->getAttributes(),
             'media' => $media,
-            'link' => $this->getCategoryLink($category)
+            'mediaId' => $category->getMedia() ? $category->getMedia()->getId() : null,
+            'link' => $this->getCategoryLink($category),
+            'streamId' => $productStream ? $productStream['id'] : null,
+            'productStream' => $productStream,
+            'childrenCount' => $this->getCategoryChildrenCount($category->getId()),
+            'description'     => $category->getName(),
+            'cmsheadline'     => $category->getCmsHeadline(),
+            'cmstext'         => $category->getCmsText(),
+            'sSelf'           => $detailUrl,
+            'sSelfCanonical'  => $canonical,
+            'canonicalParams' => $canonicalParams,
+            'rssFeed'         => $detailUrl . '&sRss=1',
+            'atomFeed'        => $detailUrl . '&sAtom=1'
         ];
+    }
+
+    /**
+     * Returns the count of children categories of the provided category
+     * @param int $id
+     * @return int
+     * @throws \Exception
+     */
+    private function getCategoryChildrenCount($id)
+    {
+        return (int) $this->connection->fetchColumn(
+            'SELECT count(category.id) FROM s_categories category WHERE parent = :id',
+            ['id' => $id]
+        );
     }
 
     /**
@@ -1085,5 +1171,48 @@ class LegacyStructConverter
         }
 
         return '';
+    }
+
+    /**
+     * @param StoreFrontBundle\Struct\Category|null $category
+     * @return string
+     */
+    private function getProductBoxLayout(StoreFrontBundle\Struct\Category $category = null)
+    {
+        if (!$category) {
+            return 'basic';
+        }
+
+        if ($category->getProductBoxLayout() !== 'extend' && $category->getProductBoxLayout() !== null) {
+            return $category->getProductBoxLayout();
+        }
+
+        $category = $this->categoryService->get($category->getParentId(), $this->contextService->getShopContext());
+
+        return $this->getProductBoxLayout($category);
+    }
+
+    /**
+     * @param StoreFrontBundle\Struct\Category $category
+     * @return string
+     */
+    private function getCategoryCanonicalParams(StoreFrontBundle\Struct\Category $category)
+    {
+        $page = $this->container->get('front')->Request()->getQuery('sPage');
+
+        $emotion = $this->modelManager->getRepository(Emotion::class)
+            ->getCategoryBaseEmotionsQuery($category->getId())
+            ->getArrayResult();
+
+        $canonicalParams = array(
+            'sViewport' => $category->isBlog() ? 'blog' : 'cat',
+            'sCategory' => $category->getId(),
+        );
+
+        if ($this->config->get('seoIndexPaginationLinks') && (!$emotion || $page)) {
+            $canonicalParams['sPage'] = $page ? : 1;
+        }
+
+        return $canonicalParams;
     }
 }

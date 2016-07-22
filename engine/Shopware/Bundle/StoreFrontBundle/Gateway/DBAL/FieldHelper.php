@@ -266,6 +266,7 @@ class FieldHelper
             'category.position as __category_position',
             'category.path as __category_path',
             'category.description as __category_description',
+            'category.meta_title as __category_metatitle',
             'category.metakeywords as __category_metakeywords',
             'category.metadescription as __category_metadescription',
             'category.cmsheadline as __category_cmsheadline',
@@ -276,6 +277,7 @@ class FieldHelper
             'category.external as __category_external',
             'category.hidefilter as __category_hidefilter',
             'category.hidetop as __category_hidetop',
+            'category.stream_id as __category_stream_id',
         ];
 
         $fields = array_merge(

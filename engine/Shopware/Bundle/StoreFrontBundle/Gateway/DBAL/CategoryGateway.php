@@ -128,6 +128,7 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
 
         $query->select($this->fieldHelper->getCategoryFields())
             ->addSelect($this->fieldHelper->getMediaFields())
+            ->addSelect($this->fieldHelper->getRelatedProductStreamFields())
             ->addSelect("GROUP_CONCAT(customerGroups.customergroupID) as __category_customer_groups")
         ;
 
@@ -137,6 +138,8 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
             ->leftJoin('category', 's_media', 'media', 'media.id = category.mediaID')
             ->leftJoin('media', 's_media_album_settings', 'mediaSettings', 'mediaSettings.albumID = media.albumID')
             ->leftJoin('media', 's_media_attributes', 'mediaAttribute', 'mediaAttribute.mediaID = media.id')
+            ->leftJoin('category', 's_product_streams', 'stream', 'category.stream_id = stream.id')
+            ->leftJoin('stream', 's_product_streams_attributes', 'productStreamAttribute', 'stream.id = productStreamAttribute.streamId')
             ->where('category.id IN (:categories)')
             ->andWhere('category.active = 1')
             ->addGroupBy('category.id')
@@ -145,6 +148,7 @@ class CategoryGateway implements Gateway\CategoryGatewayInterface
             ->setParameter(':categories', $ids, Connection::PARAM_INT_ARRAY);
 
         $this->fieldHelper->addMediaTranslation($query, $context);
+        $this->fieldHelper->addProductStreamTranslation($query, $context);
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();
