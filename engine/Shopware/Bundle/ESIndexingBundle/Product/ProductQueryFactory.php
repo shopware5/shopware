@@ -30,7 +30,7 @@ use Shopware\Bundle\ESIndexingBundle\LastIdQuery;
  * Class ProductQueryFactory
  * @package Shopware\Bundle\ESIndexingBundle\Product
  */
-class ProductQueryFactory
+class ProductQueryFactory implements ProductQueryFactoryInterface
 {
     /**
      * @var Connection

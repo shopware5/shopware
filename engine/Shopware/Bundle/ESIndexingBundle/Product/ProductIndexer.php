@@ -42,19 +42,19 @@ class ProductIndexer implements DataIndexerInterface
     private $provider;
 
     /**
-     * @var ProductQueryFactory
+     * @var ProductQueryFactoryInterface
      */
     private $queryFactory;
 
     /**
      * @param Client $client
      * @param ProductProviderInterface $provider
-     * @param ProductQueryFactory $queryFactory
+     * @param ProductQueryFactoryInterface $queryFactory
      */
     public function __construct(
         Client $client,
         ProductProviderInterface $provider,
-        ProductQueryFactory $queryFactory
+        ProductQueryFactoryInterface $queryFactory
     ) {
         $this->client = $client;
         $this->provider = $provider;
