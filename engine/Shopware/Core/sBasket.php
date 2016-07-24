@@ -1536,7 +1536,7 @@ class sBasket
                 $article["laststock"] == true
                 && $article["instock"] < ($chkBasketForArticle["quantity"] + $quantity)
             ) {
-                $quantity -= $chkBasketForArticle["quantity"];
+                $quantity = $article["instock"] - $chkBasketForArticle["quantity"];
             }
         } else {
             if ($article["laststock"] == true && $article["instock"] <= $quantity) {
