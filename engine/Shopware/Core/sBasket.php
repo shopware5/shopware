@@ -2198,7 +2198,7 @@ class sBasket
                         $discount += ($getArticles[$key]["amountWithTax"] / 100 * ($this->sSYSTEM->sUSERGROUPDATA["basketdiscount"]));
                     }
                 } elseif ($getArticles[$key]["modus"] == 4 || $getArticles[$key]["modus"] == 10) {
-                    $getArticles[$key]["amountWithTax"] = round(1 * ($price / 100 * (100 + $tax)), 2);
+                    $getArticles[$key]["amountWithTax"] = round($quantity * ($price / 100 * (100 + $tax)), 2);
                     if ($this->sSYSTEM->sUSERGROUPDATA["basketdiscount"] && $this->sCheckForDiscount()) {
                         $discount += ($getArticles[$key]["amountWithTax"] / 100 * $this->sSYSTEM->sUSERGROUPDATA["basketdiscount"]);
                     }
