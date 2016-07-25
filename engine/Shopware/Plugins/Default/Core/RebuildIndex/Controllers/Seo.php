@@ -232,7 +232,7 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
                 'string:' . Shopware()->Config()->get('sRouterArticleTemplate'),
                 $data
             );
-            $path = $this->RewriteTable()->sCleanupPath($path, false);
+            $path = $this->RewriteTable()->sCleanupPath($path);
 
             $org_path = 'sViewport=detail&sArticle=' . $article['id'];
             $this->RewriteTable()->sInsertUrl($org_path, $path);

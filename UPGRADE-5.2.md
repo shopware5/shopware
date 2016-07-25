@@ -2,6 +2,10 @@
 
 This changelog references changes done in Shopware 5.2 patch versions.
 
+## 5.2.4
+
+* SEO url generation now uses `cocur/slugify` to rewrite urls
+
 ## 5.2.3
 
 [View all changes from v5.2.2...v5.2.3](https://github.com/shopware/shopware/compare/v5.2.2...v5.2.3)
