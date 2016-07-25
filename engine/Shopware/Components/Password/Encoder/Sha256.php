@@ -24,6 +24,8 @@
 
 namespace Shopware\Components\Password\Encoder;
 
+use Shopware\Components\Random;
+
 /**
  * Provides a salted + streched sha256
  *
@@ -121,53 +123,11 @@ class Sha256 implements PasswordEncoderInterface
     }
 
     /**
-     * Generate a salt using the best number generator available
+     * Generate a salt using the number generator
      * @return string
      */
     public function getSalt()
     {
-        // todo@all replace with \Shopware\Componenents\Random::getBytes()
-        $required_salt_len = $this->options['salt_len'];
-
-        $buffer = '';
-        $raw_length = (int) ($required_salt_len * 3 / 4 + 1);
-        $buffer_valid = false;
-        if (function_exists('mcrypt_create_iv') && !defined('PHALANGER')) {
-            $buffer = mcrypt_create_iv($raw_length, MCRYPT_DEV_URANDOM);
-            if ($buffer) {
-                $buffer_valid = true;
-            }
-        }
-        if (!$buffer_valid && function_exists('openssl_random_pseudo_bytes')) {
-            $buffer = openssl_random_pseudo_bytes($raw_length);
-            if ($buffer) {
-                $buffer_valid = true;
-            }
-        }
-        if (!$buffer_valid && is_readable('/dev/urandom')) {
-            $f = fopen('/dev/urandom', 'r');
-            $read = strlen($buffer);
-            while ($read < $raw_length) {
-                $buffer .= fread($f, $raw_length - $read);
-                $read = strlen($buffer);
-            }
-            fclose($f);
-            if ($read >= $raw_length) {
-                $buffer_valid = true;
-            }
-        }
-        if (!$buffer_valid || strlen($buffer) < $raw_length) {
-            $bl = strlen($buffer);
-            for ($i = 0; $i < $raw_length; $i++) {
-                if ($i < $bl) {
-                    $buffer[$i] = $buffer[$i] ^ chr(mt_rand(0, 255));
-                } else {
-                    $buffer .= chr(mt_rand(0, 255));
-                }
-            }
-        }
-        $salt = str_replace('+', '.', base64_encode($buffer));
-
-        return substr($salt, 0, $required_salt_len);
+        return Random::getAlphanumericString($this->options['salt_len']);
     }
 }
