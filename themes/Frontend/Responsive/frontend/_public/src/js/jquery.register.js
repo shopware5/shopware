@@ -193,7 +193,15 @@
              * @property personalPasswordConfirmationSelector
              * @type {String}
              */
-            personalPasswordConfirmationSelector: '#register_personal_passwordConfirmation'
+            personalPasswordConfirmationSelector: '#register_personal_passwordConfirmation',
+
+            /**
+             * Selector for the guest checkbox.
+             *
+             * @property personalPasswordConfirmationSelector
+             * @type {String}
+             */
+            personalGuestSelector: '#register_personal_skipLogin',
         },
 
         /**
@@ -212,6 +220,7 @@
             me.$personalPassword = $el.find(opts.personalPasswordSelector);
             me.$personalEmailConfirmation = $el.find(opts.personalEmailConfirmationSelector);
             me.$personalPasswordConfirmation = $el.find(opts.personalPasswordConfirmationSelector);
+            me.$personalGuest = $el.find(opts.personalGuestSelector);
 
             me.$form = $el.find(opts.formSelector);
 
@@ -491,7 +500,6 @@
             me.$targetElement = $(relatedTarget);
 
             switch (id) {
-                case 'register_personal_skipLogin':
                 case 'register_personal_email':
                 case 'register_personal_emailConfirmation':
                     action = 'ajax_validate_email';
@@ -668,7 +676,7 @@
                     continue;
                 }
 
-                if ($input.attr('name') == me.$personalEmailConfirmation.attr('name')) {
+                if ($input.attr('name') == me.$personalEmailConfirmation.attr('name') || $input.attr('name') == me.$personalGuest.attr('name')) {
                     $input = me.$personalEmail;
                 } else if ($input.attr('name') == me.$personalPasswordConfirmation.attr('name')) {
                     $input = me.$personalPassword;
