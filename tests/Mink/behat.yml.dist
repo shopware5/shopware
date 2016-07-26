@@ -39,3 +39,4 @@ default:
                 - Shopware\Tests\Mink\SitemapContext
                 - Shopware\Tests\Mink\SpecialContext
                 - Shopware\Tests\Mink\TransformContext
+                - Shopware\Tests\Mink\SecurityContext
