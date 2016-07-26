@@ -2,7 +2,11 @@
 
 {* Breadcrumb *}
 {block name='frontend_index_start' prepend}
-	{$sBreadcrumb = [['name'=>"{s name="SearchResultsFor"}{/s}"]]}
+	{if $sRequests.sSearchOrginal}
+		{$sBreadcrumb = [['name' => "{s name="SearchResultsFor"}{/s}"]]}
+	{else}
+		{$sBreadcrumb = [['name' => "{s name="SearchResultsEmpty"}{/s}"]]}
+	{/if}
 {/block}
 
 {* Main content *}
