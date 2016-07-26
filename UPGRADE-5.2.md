@@ -4,7 +4,10 @@ This changelog references changes done in Shopware 5.2 patch versions.
 
 ## 5.2.4
 
-* SEO url generation now uses `cocur/slugify` to rewrite urls
+* Introduced new interface `Shopware\Components\Slug\SlugInterface` to generate URL safe versions of a string
+    * Service id `shopware.slug`
+    * The default implementation delegates to [`cocur/slugify`](https://github.com/cocur/slugify)
+    * SEO url generation now uses this new service to rewrite urls
 * Added new media file type for 3D model files. Supporting following files in the media manager: .dae, .obj, .fbx, .spx, .3ds, .3mf, .blend, .awd, .ply, .pcd, .stl, .skp
 
 ## 5.2.3
