@@ -124,9 +124,9 @@ class Order extends ModelEntity
     /**
      * @var string $partnerId
      *
-     * @ORM\Column(name="partnerID", type="string", length=255, nullable=false)
+     * @ORM\Column(name="partnerID", type="string", length=255, nullable=true)
      */
-    private $partnerId;
+    private $partnerId = null;
 
     /**
      * @var integer $shopId

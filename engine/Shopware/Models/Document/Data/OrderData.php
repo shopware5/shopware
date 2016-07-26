@@ -47,7 +47,7 @@ return array(
             'internalcomment' => '',
             'net' => '0',
             'taxfree' => '0',
-            'partnerID' => '',
+            'partnerID' => null,
             'temporaryID' => '',
             'referer' => '',
             'cleareddate' => null,
