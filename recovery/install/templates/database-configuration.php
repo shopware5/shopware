@@ -39,7 +39,7 @@
 
     <p>
         <label for="c_database_password"><?= $t->t("database-configuration_field_password") ?></label>
-        <input type="password" value="<?= isset($parameters["c_database_password"]) ? $parameters["c_database_password"] : '' ?>" name="c_database_password" id="c_database_password" required="required" />
+        <input type="password" value="<?= isset($parameters["c_database_password"]) ? $parameters["c_database_password"] : '' ?>" name="c_database_password" id="c_database_password" />
     </p>
 
     <p>
