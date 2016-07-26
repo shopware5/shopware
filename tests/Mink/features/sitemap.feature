@@ -23,7 +23,7 @@ Feature: View all categories on sitemap
         And   I should see the group "Sommerwelten" with link "/sommerwelten/":
             | value         | link                           |
             | Beachwear     | /sommerwelten/beachwear/       |
-            | Beauty & Care | /sommerwelten/beauty-und-care/ |
+            | Beauty & Care | /sommerwelten/beauty-care/ |
             | On World Tour | /sommerwelten/on-world-tour/   |
             | Accessoires   | /sommerwelten/accessoires/     |
         And   I should see the group "Beispiele" with link "/beispiele/":
@@ -31,7 +31,7 @@ Feature: View all categories on sitemap
             | In Kürze verfügbar         | /beispiele/in-kuerze-verfuegbar/         |
             | Konfiguratorartikel        | /beispiele/konfiguratorartikel/          |
             | Kundenbindung              | /beispiele/kundenbindung/                |
-            | Produktvergleiche & Filter | /beispiele/produktvergleiche-und-filter/ |
+            | Produktvergleiche & Filter | /beispiele/produktvergleiche-filter/ |
             | Darstellung                | /beispiele/darstellung/                  |
             | Crossselling               | /beispiele/crossselling/                 |
             | Kundengruppen / B2B        | /beispiele/kundengruppen-b2b/            |
@@ -92,14 +92,14 @@ Feature: View all categories on sitemap
             | /wohnwelten/kuechenzubehoer/                                                           |
             | /sommerwelten/                                                                         |
             | /sommerwelten/beachwear/                                                               |
-            | /sommerwelten/beauty-und-care/                                                         |
+            | /sommerwelten/beauty-care/                                                         |
             | /sommerwelten/on-world-tour/                                                           |
             | /sommerwelten/accessoires/                                                             |
             | /beispiele/                                                                            |
             | /beispiele/in-kuerze-verfuegbar/                                                       |
             | /beispiele/konfiguratorartikel/                                                        |
             | /beispiele/kundenbindung/                                                              |
-            | /beispiele/produktvergleiche-und-filter/                                               |
+            | /beispiele/produktvergleiche-filter/                                               |
             | /beispiele/darstellung/                                                                |
             | /beispiele/crossselling/                                                               |
             | /beispiele/kundengruppen-b2b/                                                          |
