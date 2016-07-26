@@ -1618,7 +1618,7 @@ class sBasket
             $price["netprice"],
             date("Y-m-d H:i:s"),
             $sEsd,
-            (string) $this->session->get('sPartner'),
+            $this->session->get('sPartner'),
             ''
         );
 

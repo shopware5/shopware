@@ -66,7 +66,7 @@ class Basket extends ModelEntity
     /**
      * @var string $partnerId
      *
-     * @ORM\Column(name="partnerID", type="string", length=45, nullable=true)
+     * @ORM\Column(name="partnerID", type="string", length=255, nullable=true)
      */
     private $partnerId = null;
 

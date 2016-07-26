@@ -41,13 +41,13 @@ class Shopware_Tests_Controllers_Backend_CanceledOrderTest extends Enlight_Compo
         // insert test order
         $sql = "
               INSERT INTO `s_order_basket` (`sessionID`, `userID`, `articlename`, `articleID`, `ordernumber`, `shippingfree`, `quantity`, `price`, `netprice`, `tax_rate`, `datum`, `modus`, `esdarticle`, `partnerID`, `lastviewport`, `useragent`, `config`, `currencyFactor`) VALUES
-                (:firstSession, 0, 'Sonnenbrille Red', 170, 'SW10170', 0, 4, 39.95, 33.571428571429, 19, '2101-09-11 11:49:54', 0, 0, '', 'index', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:22.0) Gecko/20100101 Firefox/22.0 FirePHP/0.7.2', '', 1),
-                (:firstSession, 0, 'Fliegenklatsche grün', 98, 'SW10101', 0, 1, 0.79, 0.66386554621849, 19, '2101-09-11 11:50:02', 0, 0, '', 'index', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:22.0) Gecko/20100101 Firefox/22.0 FirePHP/0.7.2', '', 1),
-                (:firstSession, 0, 'Bumerang', 245, 'SW10236', 0, 1, 20, 16.806722689076, 19, '2101-09-11 11:50:13', 0, 0, '', 'index', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:22.0) Gecko/20100101 Firefox/22.0 FirePHP/0.7.2', '', 1),
-                (:secondSession, 0, 'Dartscheibe Circle', 240, 'SW10231', 0, 1, 49.99, 42.008403361345, 19, '2101-09-11 11:50:17', 0, 0, '', '', '', '', 1),
-                (:secondSession, 0, 'Dartpfeil Steel Atomic', 241, 'SW10232', 0, 1, 14.99, 12.596638655462, 19, '2101-09-11 11:50:20', 0, 0, '', '', '', '', 1),
-                (:firstSession, 0, 'Dart Automat Standgerät', 239, 'SW10230', 0, 1, 2499, 2100, 19, '2101-09-10 11:50:22', 0, 0, '', 'index', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:22.0) Gecko/20100101 Firefox/22.0 FirePHP/0.7.2', '', 1),
-                (:firstSession, 0, 'Warenkorbrabatt', 0, 'SHIPPINGDISCOUNT', 0, 1, -2, -1.68, 19, '2101-09-10 11:50:22', 4, 0, '', 'index', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:22.0) Gecko/20100101 Firefox/22.0 FirePHP/0.7.2', '', 1);
+                (:firstSession, 0, 'Sonnenbrille Red', 170, 'SW10170', 0, 4, 39.95, 33.571428571429, 19, '2101-09-11 11:49:54', 0, 0, NULL, 'index', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:22.0) Gecko/20100101 Firefox/22.0 FirePHP/0.7.2', '', 1),
+                (:firstSession, 0, 'Fliegenklatsche grün', 98, 'SW10101', 0, 1, 0.79, 0.66386554621849, 19, '2101-09-11 11:50:02', 0, 0, NULL, 'index', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:22.0) Gecko/20100101 Firefox/22.0 FirePHP/0.7.2', '', 1),
+                (:firstSession, 0, 'Bumerang', 245, 'SW10236', 0, 1, 20, 16.806722689076, 19, '2101-09-11 11:50:13', 0, 0, NULL, 'index', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:22.0) Gecko/20100101 Firefox/22.0 FirePHP/0.7.2', '', 1),
+                (:secondSession, 0, 'Dartscheibe Circle', 240, 'SW10231', 0, 1, 49.99, 42.008403361345, 19, '2101-09-11 11:50:17', 0, 0, NULL, '', '', '', 1),
+                (:secondSession, 0, 'Dartpfeil Steel Atomic', 241, 'SW10232', 0, 1, 14.99, 12.596638655462, 19, '2101-09-11 11:50:20', 0, 0, NULL, '', '', '', 1),
+                (:firstSession, 0, 'Dart Automat Standgerät', 239, 'SW10230', 0, 1, 2499, 2100, 19, '2101-09-10 11:50:22', 0, 0, NULL, 'index', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:22.0) Gecko/20100101 Firefox/22.0 FirePHP/0.7.2', '', 1),
+                (:firstSession, 0, 'Warenkorbrabatt', 0, 'SHIPPINGDISCOUNT', 0, 1, -2, -1.68, 19, '2101-09-10 11:50:22', 4, 0, NULL, 'index', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:22.0) Gecko/20100101 Firefox/22.0 FirePHP/0.7.2', '', 1);
         ";
 
         Shopware()->Db()->query($sql, array("firstSession" => self::FIRST_DUMMY_SESSION_ID, "secondSession" => self::SECOND_DUMMY_SESSION_ID));

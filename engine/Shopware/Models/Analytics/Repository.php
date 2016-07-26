@@ -1429,7 +1429,7 @@ class Repository
             ->from('s_order', 'orders')
             ->leftJoin('orders', 's_emarketing_partner', 'partners', 'partners.idcode = orders.partnerID')
             ->where('orders.status NOT IN (-1, 4)')
-            ->andWhere("orders.partnerID != ''")
+            ->andWhere('orders.partnerID IS NOT NULL')
             ->groupBy('orders.partnerID')
             ->orderBy('turnover', 'DESC');
 
