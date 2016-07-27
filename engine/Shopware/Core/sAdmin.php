@@ -3283,7 +3283,6 @@ SQL;
             return $getOrders;
         }
 
-        $active = 1;
         $context = $this->contextService->getShopContext();
         $orderArticleOrderNumbers = array_column($getOrderDetails, 'articleordernumber');
         $listProducts = Shopware()->Container()->get('shopware_storefront.list_product_service')->getList($orderArticleOrderNumbers, $context);
@@ -3298,6 +3297,7 @@ SQL;
                 ->sFormatPrice(round($orderDetailsValue["price"] * $orderDetailsValue["quantity"], 2));
             $getOrderDetails[$orderDetailsKey]["price"] = $this->moduleManager->Articles()
                 ->sFormatPrice($orderDetailsValue["price"]);
+            $getOrderDetails[$orderDetailsKey]['active'] = 0;
 
             $tmpArticle = null;
             if (!empty($listProducts[$orderDetailsValue['articleordernumber']])) {
@@ -3334,15 +3334,6 @@ SQL;
                 }
 
                 $getOrderDetails[$orderDetailsKey]['currentHas_pseudoprice'] = $tmpArticle['has_pseudoprice'];
-
-                // Set article in deactivate state if it's an variant or configurator article
-                if ($tmpArticle['sVariantArticle'] === true || $tmpArticle['sConfigurator'] === true) {
-                    $getOrderDetails[$orderDetailsKey]['active'] = 0;
-                    $active = 0;
-                }
-            } else {
-                $getOrderDetails[$orderDetailsKey]['active'] = 0;
-                $active = 0;
             }
 
             // Check for serial
@@ -3370,7 +3361,7 @@ SQL;
                     . $orderDetailsValue['id'];
             }
         }
-        $getOrders[$orderKey]['activeBuyButton'] = $active;
+        $getOrders[$orderKey]['activeBuyButton'] = 1;
         $getOrders[$orderKey]["details"] = $getOrderDetails;
 
         return $getOrders;
