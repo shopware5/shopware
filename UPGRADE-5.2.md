@@ -9,6 +9,7 @@ This changelog references changes done in Shopware 5.2 patch versions.
     * The default implementation delegates to [`cocur/slugify`](https://github.com/cocur/slugify)
     * SEO url generation now uses this new service to rewrite urls
 * Added new media file type for 3D model files. Supporting following files in the media manager: .dae, .obj, .fbx, .spx, .3ds, .3mf, .blend, .awd, .ply, .pcd, .stl, .skp
+* `\Shopware\Bundle\AttributeBundle\CrudService::unifiedToSql()` now returns SQL type mapped to `string` if a given type is not mapped
 
 ## 5.2.3
 
