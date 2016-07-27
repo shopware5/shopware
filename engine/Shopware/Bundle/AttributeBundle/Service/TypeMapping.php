@@ -176,6 +176,8 @@ class TypeMapping
      *     'string'   => [
      *         'sql' => 'VARCHAR(500)',
      *         'dbal' => 'string',
+     *         'allowDefaultValue' => true,
+     *         'quoteDefaultValue' => true,
      *         'elastic' => ['type' => 'string']
      *     ]
      * ]
