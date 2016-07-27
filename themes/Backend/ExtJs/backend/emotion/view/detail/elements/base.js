@@ -665,7 +665,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.elements.Base', {
     },
 
     getLabel: function() {
-        return this.component.get('name');
+        return this.component.get('fieldLabel');
     },
 
     getIcon: function() {
