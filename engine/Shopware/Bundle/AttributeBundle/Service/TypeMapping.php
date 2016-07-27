@@ -228,7 +228,7 @@ class TypeMapping
     {
         $type = strtolower($type);
         if (!isset($this->types[$type])) {
-            return 'string';
+            return $this->types['string']['sql'];
         }
         $mapping = $this->types[$type];
         return $mapping['sql'];
