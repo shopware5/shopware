@@ -216,7 +216,10 @@ class CrudService
                 $item->setConfigured(true);
                 $item->setDbalType($column->getType()->getName());
                 $item->setSqlType($this->typeMapping->unifiedToSQL($item->getColumnType()));
-                $item->setEntity($config['entity']);
+                $item->setElasticSearchType(
+                    $this->typeMapping->unifiedToElasticSearch($configuration[$name]['columnType'])
+                );
+		$item->setEntity($config['entity']);
                 $item->setArrayStore($config['arrayStore']);
                 $item->setDefaultValue($config['defaultValue']);
             }
