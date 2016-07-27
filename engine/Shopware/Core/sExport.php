@@ -806,13 +806,24 @@ class sExport
                 AND p2.pricegroup='{$this->sCustomergroup["groupkey"]}'
                 AND p2.price!=0
             ";
+
+            $sql_add_join[] = "
+                LEFT JOIN s_articles_prices as pArbitrary
+                ON pArbitrary.articledetailsID = d.id AND pArbitrary.`to`='beliebig'
+                AND pArbitrary.pricegroup='{$this->sCustomergroup["groupkey"]}'
+                AND pArbitrary.price!=0
+            ";
+
             $pricefield = "IFNULL(p2.price, p.price)";
             $pseudoprice = "IFNULL(p2.pseudoprice, p.pseudoprice)";
             $baseprice = "IFNULL(p2.baseprice, p.baseprice)";
+            $arbitraryPriceField = "IFNULL(pArbitrary.price, p.price)";
+
         } else {
             $pricefield = "p.price";
             $pseudoprice = "p.pseudoprice";
             $baseprice = "p.baseprice";
+            $arbitraryPriceField = "pArbitrary.price";
         }
 
 
@@ -951,6 +962,9 @@ class sExport
 
                 a.configurator_set_id as configurator,
 
+                ROUND(CAST(IFNULL($grouppricefield, $arbitraryPriceField)*(100-IF(pd.discount,pd.discount,0)-{$this->sCustomergroup["discount"]})/100*{$this->sCurrency["factor"]} AS DECIMAL(10,3)),2) as arbitraryNetprice,
+                ROUND(CAST(IFNULL($grouppricefield, $arbitraryPriceField)*(100+t.tax)/100*(100-IF(pd.discount,pd.discount,0)-{$this->sCustomergroup["discount"]})/100*{$this->sCurrency["factor"]} AS DECIMAL(10,3)),2) as arbitraryPrice,
+
                 ROUND(CAST(IFNULL($grouppricefield, $pricefield)*(100-IF(pd.discount,pd.discount,0)-{$this->sCustomergroup["discount"]})/100*{$this->sCurrency["factor"]} AS DECIMAL(10,3)),2) as netprice,
                 ROUND(CAST(IFNULL($grouppricefield, $pricefield)*(100+t.tax)/100*(100-IF(pd.discount,pd.discount,0)-{$this->sCustomergroup["discount"]})/100*{$this->sCurrency["factor"]} AS DECIMAL(10,3)),2) as price,
                 pd.discount,
@@ -1004,6 +1018,11 @@ class sExport
             ON p.articledetailsID = d.id
             AND p.`from`=1
             AND p.pricegroup='EK'
+
+            LEFT JOIN s_articles_prices AS pArbitrary
+            ON pArbitrary.articledetailsID = d.id
+            AND pArbitrary.`to`='beliebig'
+            AND pArbitrary.pricegroup='EK'
 
             LEFT JOIN
             (
