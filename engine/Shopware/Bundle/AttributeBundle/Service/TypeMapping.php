@@ -169,6 +169,25 @@ class TypeMapping
     }
 
     /**
+     * Adds additional types
+     *
+     * Format:
+     * [
+     *     'string'   => [
+     *         'sql' => 'VARCHAR(500)',
+     *         'dbal' => 'string',
+     *         'elastic' => ['type' => 'string']
+     *     ]
+     * ]
+     * @param array $types
+     */
+    public function addTypes(array $types = [])
+    {
+        // $this->types second because base types should not be overwritten
+        $this->types = array_merge($types, $this->types);
+    }
+
+    /**
      * @return string[]
      */
     public function getEntities()
