@@ -219,7 +219,7 @@ class CrudService
                 $item->setElasticSearchType(
                     $this->typeMapping->unifiedToElasticSearch($configuration[$name]['columnType'])
                 );
-		$item->setEntity($config['entity']);
+		        $item->setEntity($config['entity']);
                 $item->setArrayStore($config['arrayStore']);
                 $item->setDefaultValue($config['defaultValue']);
             }
