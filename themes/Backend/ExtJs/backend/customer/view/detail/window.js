@@ -199,7 +199,12 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
 
         //set different titles for create and edit customers
         if ( me.record.get('id') ) {
-            me.setTitle(me.snippets.titleEdit + ' ' + me.record.getBilling().getAt(0).get('number'));
+            me.setTitle(Ext.String.format('[0] [1] [2] ([3])',
+                me.snippets.titleEdit,
+                me.record.get('firstname') || '',
+                me.record.get('lastname') || '',
+                me.record.get('number') || ' - '
+            ));
         } else {
             me.setTitle(me.snippets.titleCreate);
         }
