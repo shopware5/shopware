@@ -309,6 +309,9 @@ Ext.define('Shopware.apps.Order.view.list.Filter', {
                     type: 'string'
                 }
             ],
+            remoteSort: true,
+            remoteFilter: true,
+            pageSize: 10,
             proxy: {
                 type: 'ajax',
                 url: '{url action=getPartners}',

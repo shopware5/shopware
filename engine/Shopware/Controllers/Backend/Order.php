@@ -1161,7 +1161,23 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     public function getPartnersAction()
     {
         $this->View()->success = true;
-        $this->View()->data = Shopware()->Db()->fetchAll('SELECT IFNULL((SELECT company FROM s_emarketing_partner WHERE idcode = partnerID), partnerID) as name, partnerID as `value` FROM s_order WHERE partnerID IS NOT NULL AND partnerID != "" GROUP BY partnerID');
+        $limit = $this->Request()->getParam('limit', 20);
+        $offset = $this->Request()->getParam('start', 0);
+
+        $dbalBuilder = $this->get('dbal_connection')->createQueryBuilder();
+        $data = $dbalBuilder
+            ->addSelect('IFNULL((SELECT company FROM s_emarketing_partner WHERE idcode = partnerID), partnerID) as name')
+            ->addSelect('partnerID as `value`')
+            ->from('s_order')
+            ->where('partnerID IS NOT NULL')
+            ->andWhere('partnerID != ""')
+            ->groupBy('partnerID')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->execute()
+            ->fetchAll();
+
+        $this->View()->data = $data;
     }
 
     /**
