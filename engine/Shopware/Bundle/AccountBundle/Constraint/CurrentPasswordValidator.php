@@ -24,7 +24,9 @@
 
 namespace Shopware\Bundle\AccountBundle\Constraint;
 
+use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Password\Manager;
+use Shopware\Models\Customer\Customer;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
@@ -52,19 +54,27 @@ class CurrentPasswordValidator extends ConstraintValidator
     private $passwordManager;
 
     /**
+     * @var ModelManager
+     */
+    private $modelManager;
+
+    /**
      * CurrentPasswordValidator constructor.
      * @param \Enlight_Components_Session_Namespace $session
      * @param \Enlight_Components_Snippet_Manager $snippets
      * @param Manager $passwordManager
+     * @param ModelManager $modelManager
      */
     public function __construct(
         \Enlight_Components_Session_Namespace $session,
         \Enlight_Components_Snippet_Manager $snippets,
-        Manager $passwordManager
+        Manager $passwordManager,
+        ModelManager $modelManager
     ) {
         $this->session = $session;
         $this->snippets = $snippets;
         $this->passwordManager = $passwordManager;
+        $this->modelManager = $modelManager;
     }
 
     /**
@@ -80,13 +90,8 @@ class CurrentPasswordValidator extends ConstraintValidator
             return;
         }
 
-        $extraData = $this->context->getRoot()->getExtraData();
         $sessionPassword = $this->session->offsetGet('sUserPassword');
-        $encoderName = $extraData['encoderName'];
-
-        if (empty($encoderName)) {
-            $encoderName = $this->passwordManager->getDefaultPasswordEncoderName();
-        }
+        $encoderName = $this->getEncoder();
 
         if ($this->passwordManager->isPasswordValid($value, $sessionPassword, $encoderName) === false) {
             $errorMessage = $this->snippets
@@ -98,5 +103,17 @@ class CurrentPasswordValidator extends ConstraintValidator
                 ->atPath($this->context->getPropertyPath())
                 ->addViolation();
         }
+    }
+
+    /**
+     * Get users encoder based on his session user id or return the default
+     *
+     * @return string
+     */
+    private function getEncoder()
+    {
+        /** @var Customer $user */
+        $user = $this->modelManager->find(Customer::class, $this->session->offsetGet('sUserId'));
+        return $user->getEncoderName() ?: $this->passwordManager->getDefaultPasswordEncoderName();
     }
 }
