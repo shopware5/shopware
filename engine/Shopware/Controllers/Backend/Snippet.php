@@ -264,23 +264,27 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
         }
 
         foreach ($snippets as $params) {
-            $snippet = new Snippet();
-            $snippet->fromArray($params);
-            $snippet->setDirty(true);
+            if(!(empty($params['value'] and is_null($params['id'])))) {
 
-            if (!$this->isSnippetValid($snippet)) {
-                continue;
+                $snippet = new Snippet();
+                $snippet->fromArray($params);
+                $snippet->setDirty(true);
+
+                if (!$this->isSnippetValid($snippet)) {
+                    continue;
+                }
+
+                try {
+                    Shopware()->Models()->persist($snippet);
+                    Shopware()->Models()->flush();
+                } catch (Exception $e) {
+                    $this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
+
+                    return;
+                }
+
+                $result[$snippet->getId()] = Shopware()->Models()->toArray($snippet);
             }
-
-            try {
-                Shopware()->Models()->persist($snippet);
-                Shopware()->Models()->flush();
-            } catch (Exception $e) {
-                $this->View()->assign(array('success' => false, 'message' => $e->getMessage()));
-                return;
-            }
-
-            $result[$snippet->getId()] = Shopware()->Models()->toArray($snippet);
         }
 
         if ($isSingleSnippet) {
