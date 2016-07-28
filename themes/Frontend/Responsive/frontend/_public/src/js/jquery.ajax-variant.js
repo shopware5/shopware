@@ -33,7 +33,8 @@
             productDetailsSelector: '.product--detail-upper',
             configuratorFormSelector: '.configurator--form',
             orderNumberSelector: '.entry--sku .entry--content',
-            historyIdentifier: 'sw-ajax-variants'
+            historyIdentifier: 'sw-ajax-variants',
+            productDetailsDescriptionSelector: '.content--description'
         },
 
         /**
@@ -119,11 +120,16 @@
                 success: function(response) {
                     var $response = $($.parseHTML(response)),
                         $productDetails,
+                        $productDescription,
                         ordernumber;
 
                     // Replace the content
                     $productDetails = $response.find(me.opts.productDetailsSelector);
                     $(me.opts.productDetailsSelector).html($productDetails.html());
+
+                    // Replace the description box
+                    $productDescription = $response.find(me.opts.productDetailsDescriptionSelector);
+                    $(me.opts.productDetailsDescriptionSelector).html($productDescription.html());
 
                     // Get the ordernumber for the url
                     ordernumber = $.trim(me.$el.find(me.opts.orderNumberSelector).text());
@@ -134,8 +140,6 @@
                         .addPlugin('*[data-image-gallery="true"]', 'swImageGallery')
                         .addPlugin('*[data-add-article="true"]', 'swAddArticle')
                         .addPlugin('*[data-modalbox="true"]', 'swModalbox');
-
-                    $.loadingIndicator.close();
 
                     // Plugin developers should subscribe to this event to update their plugins accordingly
                     $.publish('plugin/swAjaxVariant/onRequestData', [ me, response, values, stateObj.location ]);
@@ -149,6 +153,9 @@
 
                         window.history.pushState(stateObj.state, stateObj.title, location);
                     }
+                },
+                complete: function() {
+                    $.loadingIndicator.close();
                 }
             });
         },
