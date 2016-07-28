@@ -212,13 +212,13 @@ class Group extends ModelEntity
     }
 
     /**
-     * Returns Array of associated Options
+     * Returns ArrayCollection of associated Options
      *
-     * @return \Shopware\Models\Property\Option[]
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getOptions()
     {
-        return $this->options->toArray();
+        return $this->options;
     }
 
     /**
