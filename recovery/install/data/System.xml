@@ -8,10 +8,6 @@
 		<notice>The ionCube Loader is only required if you wish to use encrypted third-party plugins.</notice>
     </requirement>
     <requirement>
-        <name>eAccelerator</name><group>core</group><required>0</required>
-        <notice>Using the eAccelerator is not recommended. Please use the APC cache instead.</notice>
-    </requirement>
-    <requirement>
         <name>mod_rewrite</name><group>core</group><required>1</required>
         <notice>The Apache Module "mod_rewrite" should be active when using Shopware with the Apache Server.</notice>
     </requirement>
