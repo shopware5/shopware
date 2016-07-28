@@ -91,6 +91,7 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action impl
                 case 404:
                     $this->forward('pageNotFoundError');
                     break;
+                case 400:
                 case 401:
                     $this->forward('genericError', null, null, array('code' => $code));
                     break;

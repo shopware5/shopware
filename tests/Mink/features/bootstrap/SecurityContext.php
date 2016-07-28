@@ -8,16 +8,23 @@ class SecurityContext extends SubContext
     public static $testConfig = [];
 
     /**
-     * @BeforeFeature
+     * @BeforeScenario @csrf
      */
     public static function setupFeature()
     {
-        self::$testConfig = require self::$configPath;
+        $config = require self::$configPath;
+
+        if (!array_key_exists('csrfProtection', $config)) {
+            $config['csrfProtection'] = ['frontend' => false, 'backend' => false];
+        }
+
+        self::$testConfig = $config;
+
         self::setCsrfStatus(true, true);
     }
 
     /**
-     * @AfterFeature
+     * @AfterScenario @csrf
      */
     public static function teardownFeature()
     {
@@ -34,5 +41,19 @@ class SecurityContext extends SubContext
 
         $configContent = '<?php return ' . var_export($config, true) . ';';
         file_put_contents(self::$configPath, $configContent);
+    }
+
+    /**
+     * @Then /^The http response code should be "([^"]*)"$/
+     * @param int $expectedCode
+     */
+    public function theHttpResponseCodeShouldBe($expectedCode)
+    {
+        $code = (int) $this->getSession()->getStatusCode();
+        if ($expectedCode == $this->getSession()->getStatusCode()) {
+            return;
+        }
+
+        Helper::throwException(sprintf('Expected http response code %d, got %d instead.', $expectedCode, $code));
     }
 }
