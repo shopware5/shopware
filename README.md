@@ -19,10 +19,27 @@ Visit the forum at <http://forum.shopware.com/>
 ### Shopware Server Requirements
 
 - PHP 5.6.4 or above
-- PHP extensions `curl`, `mbstring` and `gd`
-- An Apache web server
+- [Apache 2.2 or 2.4](https://httpd.apache.org/)
 - Apache's `mod_rewrite` module
 - MySQL 5.5.0 or above
+
+#### Required PHP extensions:
+
+-   <a href="http://php.net/manual/en/book.ctype.php" target="_blank">ctype</a>
+-   <a href="http://php.net/manual/en/book.curl.php" target="_blank">curl</a>
+-   <a href="http://php.net/manual/en/book.dom.php" target="_blank">dom</a>
+-   <a href="http://php.net/manual/en/book.hash.php" target="_blank">hash</a>
+-   <a href="http://php.net/manual/en/book.iconv.php" target="_blank">iconv</a>
+-   <a href="http://php.net/manual/en/book.image.php" target="_blank">gd</a> (with freetype and libjpeg)
+-   <a href="http://php.net/manual/en/book.json.php" target="_blank">json</a>
+-   <a href="http://php.net/manual/en/book.mbstring.php" target="_blank">mbstring</a>
+-   <a href="http://php.net/manual/en/book.openssl.php" target="_blank">mbstring</a>
+-   <a href="http://php.net/manual/en/book.session.php" target="_blank">session</a>
+-   <a href="http://php.net/manual/en/book.simplexml.php" target="_blank">SimpleXML</a>
+-   <a href="http://php.net/manual/en/book.xml.php" target="_blank">xml</a>
+-   <a href="http://php.net/manual/en/book.zip.php" target="_blank">zip</a>
+-   <a href="http://php.net/manual/en/book.zlib.php" target="_blank">zlib</a>
+-   <a href="http://php.net/manual/en/ref.pdo-mysql.php" target="_blank">PDO/MySQL</a>
 
 ### Installation via Git
 
