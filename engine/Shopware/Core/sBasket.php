@@ -652,7 +652,7 @@ class sBasket
             );
 
             $individualCode = false;
-            if( $voucherCodeDetails && $voucherCodeDetails['voucherID'] ) {
+            if ($voucherCodeDetails && $voucherCodeDetails['voucherID']) {
                 $voucherDetails = $this->db->fetchRow(
                     'SELECT description, numberofunits, customergroup, value, restrictarticles,
                     minimumcharge, shippingfree, bindtosupplier, taxconfig, valid_from,
@@ -2046,6 +2046,12 @@ class sBasket
         $details = [];
         foreach ($products as $product) {
             $promotion = $legacyStructConverter->convertListProductStruct($product);
+
+            if ($product->hasConfigurator()) {
+                /** @var StoreFrontBundle\Struct\Product\Price $variantPrice */
+                $variantPrice = $product->getVariantPrice();
+                $promotion['referenceprice'] = $variantPrice->getCalculatedReferencePrice();
+            }
 
             if (isset($covers[$product->getNumber()])) {
                 $promotion['image'] = $legacyStructConverter->convertMediaStruct($covers[$product->getNumber()]);
