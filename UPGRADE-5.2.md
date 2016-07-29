@@ -12,6 +12,7 @@ This changelog references changes done in Shopware 5.2 patch versions.
 * `\Shopware\Bundle\AttributeBundle\CrudService::unifiedToSql()` now returns SQL type mapped to `string` if a given type is not mapped
 * Changed http response code to `400` for CSRF exceptions
 * Added `is--active` class to wishlist entry in the account sidebar
+* Added interface `Shopware\Bundle\ESIndexingBundle\Product\ProductQueryFactoryInterface` and implemented it in its implementations
 
 ## 5.2.3
 
