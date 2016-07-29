@@ -13,6 +13,7 @@ This changelog references changes done in Shopware 5.2 patch versions.
 * Changed http response code to `400` for CSRF exceptions
 * Added `is--active` class to wishlist entry in the account sidebar
 * Added interface `Shopware\Bundle\ESIndexingBundle\Product\ProductQueryFactoryInterface` and implemented it in its implementations
+* Removed class `Shopware_Components_Check_System`. Use `Shopware\Components\Check\Requirements` instead (Service Id: `shopware.requirements`)
 
 ## 5.2.3
 
