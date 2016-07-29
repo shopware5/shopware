@@ -29,23 +29,12 @@ namespace Shopware\Recovery\Install;
  * @package   Shopware\Recovery\Update
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Requirements implements \IteratorAggregate, \Countable
+class Requirements
 {
-    /**
-     * @var
-     */
-    protected $list;
-
-    /**
-     * @var bool
-     */
-    protected $fatalError;
-
     /**
      * @var string
      */
     private $sourceFile;
-    private $containsWarnings;
 
     /**
      * @param string $sourceFile
@@ -56,14 +45,61 @@ class Requirements implements \IteratorAggregate, \Countable
     }
 
     /**
-     * Checks all requirements
+     *  Returns the check list
+     *
+     * @return array
      */
-    protected function checkAll()
+    public function toArray()
     {
-        foreach ($this->list as $requirement) {
+        $result = [
+            'hasErrors'   => false,
+            'hasWarnings' => false,
+            'checks'      => [],
+        ];
+
+        foreach ($this->runChecks() as $requirement) {
+            $check = [];
+            $check['name']     = (string) $requirement->name;
+            $check['group']    = (string) $requirement->group;
+            $check['notice']   = (string) $requirement->notice;
+            $check['required'] = (string) $requirement->required;
+            $check['version']  = (string) $requirement->version;
+            $check['check']   = (bool) (string) $requirement->result;
+            $check['error']    = (bool) $requirement->error;
+
+            if (!$check['check'] && $check['error']) {
+                $check['status'] = 'error';
+                $result['hasErrors'] = true;
+            } elseif (!$check['check']) {
+                $check['status'] = 'warning';
+                $result['hasWarnings'] = true;
+            } else {
+                $check['status'] = 'ok';
+            }
+            unset($check['check'], $check['error']);
+
+            $result['checks'][] = $check;
+        }
+
+        return $result;
+    }
+
+    /**
+     * Returns the check list
+     *
+     * @return \SimpleXMLElement[]
+     */
+    private function runChecks()
+    {
+        $xmlObject = simplexml_load_file($this->sourceFile);
+
+        if (!is_object($xmlObject->requirements)) {
+            throw new \RuntimeException('Requirements XML file is not valid.');
+        }
+
+        foreach ($xmlObject->requirement as $requirement) {
             $name = (string) $requirement->name;
             $value = $this->getRuntimeValue($name);
-
             $requirement->result = $this->compare(
                 $name,
                 $value,
@@ -71,25 +107,8 @@ class Requirements implements \IteratorAggregate, \Countable
             );
             $requirement->version = $value;
         }
-    }
 
-    /**
-     * Returns the check list
-     *
-     * @return \Iterator
-     */
-    public function getList()
-    {
-        if ($this->list === null) {
-            $xml_object = simplexml_load_file($this->sourceFile);
-            if (is_object($xml_object->requirements) == true) {
-                $this->list = $xml_object->requirement;
-            }
-
-            $this->checkAll();
-        }
-
-        return $this->list;
+        return $xmlObject->requirement;
     }
 
     /**
@@ -98,14 +117,13 @@ class Requirements implements \IteratorAggregate, \Countable
      * @param  string                   $name
      * @return bool|string|integer|null
      */
-    protected function getRuntimeValue($name)
+    private function getRuntimeValue($name)
     {
         $m = 'check' . str_replace(' ', '', ucwords(str_replace(['_', '.'], ' ', $name)));
         if (method_exists($this, $m)) {
             return $this->$m();
         } elseif (extension_loaded($name)) {
             return true;
-            //return phpversion($name) ? phpversion($name) : true;
         } elseif (function_exists($name)) {
             return true;
         } elseif (($value = ini_get($name)) !== null) {
@@ -129,7 +147,7 @@ class Requirements implements \IteratorAggregate, \Countable
      * @param  string $requiredValue
      * @return bool
      */
-    protected function compare($name, $value, $requiredValue)
+    private function compare($name, $value, $requiredValue)
     {
         $m = 'compare' . str_replace(' ', '', ucwords(str_replace(['_', '.'], ' ', $name)));
         if (method_exists($this, $m)) {
@@ -146,21 +164,11 @@ class Requirements implements \IteratorAggregate, \Countable
     }
 
     /**
-     * Returns the check list
-     *
-     * @return \Iterator
-     */
-    public function getIterator()
-    {
-        return $this->getList();
-    }
-
-    /**
      * Checks the ion cube loader
      *
      * @return bool|string
      */
-    public function checkIonCubeLoader()
+    private function checkIonCubeLoader()
     {
         if (!extension_loaded('ionCube Loader')) {
             return false;
@@ -178,7 +186,7 @@ class Requirements implements \IteratorAggregate, \Countable
      *
      * @return bool|string
      */
-    public function checkPhp()
+    private function checkPhp()
     {
         if (strpos(phpversion(), '-')) {
             return substr(phpversion(), 0, strpos(phpversion(), '-'));
@@ -192,7 +200,7 @@ class Requirements implements \IteratorAggregate, \Countable
      *
      * @return bool
      */
-    public function checkModRewrite()
+    private function checkModRewrite()
     {
         return isset($_SERVER['MOD_REWRITE']);
     }
@@ -202,7 +210,7 @@ class Requirements implements \IteratorAggregate, \Countable
      *
      * @return bool|string
      */
-    public function checkCurl()
+    private function checkCurl()
     {
         if (function_exists('curl_version')) {
             $curl = curl_version();
@@ -220,7 +228,7 @@ class Requirements implements \IteratorAggregate, \Countable
      *
      * @return bool|string
      */
-    public function checkLibXml()
+    private function checkLibXml()
     {
         if (defined('LIBXML_DOTTED_VERSION')) {
             return LIBXML_DOTTED_VERSION;
@@ -234,7 +242,7 @@ class Requirements implements \IteratorAggregate, \Countable
      *
      * @return bool|string
      */
-    public function checkGd()
+    private function checkGd()
     {
         if (function_exists('gd_info')) {
             $gd = gd_info();
@@ -257,7 +265,7 @@ class Requirements implements \IteratorAggregate, \Countable
      *
      * @return bool|string
      */
-    public function checkGdJpg()
+    private function checkGdJpg()
     {
         if (function_exists('gd_info')) {
             $gd = gd_info();
@@ -273,7 +281,7 @@ class Requirements implements \IteratorAggregate, \Countable
      *
      * @return bool|string
      */
-    public function checkFreetype()
+    private function checkFreetype()
     {
         if (function_exists('gd_info')) {
             $gd = gd_info();
@@ -289,7 +297,7 @@ class Requirements implements \IteratorAggregate, \Countable
      *
      * @return bool|string
      */
-    public function checkSessionSavePath()
+    private function checkSessionSavePath()
     {
         if (function_exists('session_save_path')) {
             return (bool) session_save_path();
@@ -305,7 +313,7 @@ class Requirements implements \IteratorAggregate, \Countable
      *
      * @return bool|string
      */
-    public function checkDiskFreeSpace()
+    private function checkDiskFreeSpace()
     {
         if (function_exists('disk_free_space')) {
             // Prevent Warning: disk_free_space() [function.disk-free-space]: Value too large for defined data type
@@ -322,7 +330,7 @@ class Requirements implements \IteratorAggregate, \Countable
      *
      * @return int
      */
-    public function checkSuhosinGetMaxValueLength()
+    private function checkSuhosinGetMaxValueLength()
     {
         $length = (int) ini_get('suhosin.get.max_value_length');
         if ($length === 0) {
@@ -337,7 +345,7 @@ class Requirements implements \IteratorAggregate, \Countable
      *
      * @return bool
      */
-    public function checkIncludePath()
+    private function checkIncludePath()
     {
         $old = set_include_path(get_include_path() . PATH_SEPARATOR . __DIR__ . DIRECTORY_SEPARATOR);
 
@@ -351,7 +359,7 @@ class Requirements implements \IteratorAggregate, \Countable
      * @param  string $required
      * @return bool
      */
-    public function compareMaxExecutionTime($version, $required)
+    private function compareMaxExecutionTime($version, $required)
     {
         if (!$version) {
             return true;
@@ -366,7 +374,7 @@ class Requirements implements \IteratorAggregate, \Countable
      * @param  string $val
      * @return float
      */
-    public static function decodePhpSize($val)
+    private function decodePhpSize($val)
     {
         $val = trim($val);
         $last = strtolower($val[strlen($val) - 1]);
@@ -391,7 +399,7 @@ class Requirements implements \IteratorAggregate, \Countable
      * @param  string $val
      * @return float
      */
-    public static function decodeSize($val)
+    private function decodeSize($val)
     {
         $val = trim($val);
         list($val, $last) = explode(' ', $val);
@@ -419,89 +427,11 @@ class Requirements implements \IteratorAggregate, \Countable
      * @param  float  $bytes
      * @return string
      */
-    public static function encodeSize($bytes)
+    private function encodeSize($bytes)
     {
         $types = ['B', 'KB', 'MB', 'GB', 'TB'];
         for ($i = 0; $bytes >= 1024 && $i < (count($types) - 1); $bytes /= 1024, $i++) ;
 
         return (round($bytes, 2) . ' ' . $types[$i]);
-    }
-
-    /**
-     *  Returns the check list
-     *
-     * @return array
-     */
-    public function toArray()
-    {
-        $list = [];
-
-        foreach ($this->getList() as $requirement) {
-            $result = [];
-            $result['name']     = (string) $requirement->name;
-            $result['group']     = (string) $requirement->group;
-            $result['notice']   = (string) $requirement->notice;
-            $result['required'] = (string) $requirement->required;
-            $result['version']  = (string) $requirement->version;
-            $result['result']   = (bool) (string) $requirement->result;
-            $result['error']    = (bool) $requirement->error;
-
-            if (!$result['result'] && $result['error']) {
-                $result['status'] = 'error';
-                $this->setFatalError(true);
-            } elseif (!$result['result']) {
-                $this->setContainsWarnings(true);
-                $result['status'] = 'warning';
-            } else {
-                $result['status'] = 'ok';
-            }
-
-            unset($result['result']);
-            unset($result['error']);
-
-            $list[] = $result;
-//            $list[$result['group']][] = $result;
-        }
-
-        return $list;
-    }
-
-    public function setContainsWarnings($containsWarnings)
-    {
-        $this->containsWarnings = $containsWarnings;
-    }
-
-    /**
-     * Counts the check list
-     *
-     * @return int
-     */
-    public function count()
-    {
-        return $this->getList()->count();
-    }
-
-    /**
-     * @param bool $fatalError
-     */
-    public function setFatalError($fatalError)
-    {
-        $this->fatalError = (bool) $fatalError;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getFatalError()
-    {
-        return $this->fatalError;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getContainsWarnings()
-    {
-        return $this->containsWarnings;
     }
 }
