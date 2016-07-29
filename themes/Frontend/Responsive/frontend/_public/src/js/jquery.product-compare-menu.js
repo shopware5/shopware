@@ -159,7 +159,7 @@
                 'url': deleteUrl,
                 'dataType': 'jsonp',
                 'success': function () {
-                    $menu.empty();
+                    $menu.empty().addClass(me.opts.hiddenCls);
 
                     $.publish('plugin/swProductCompareMenu/onDeleteCompareSuccess', [ me ]);
                 }
@@ -207,7 +207,7 @@
                     'url': deleteUrl,
                     'dataType': 'jsonp',
                     'success': function (response) {
-                        $(me.opts.compareMenuSelector).html(response);
+                        $(me.opts.compareMenuSelector).empty().addClass(me.opts.hiddenCls);
 
                         //Reload compare menu plugin
                         $('*[data-product-compare-menu="true"]').swProductCompareMenu();
