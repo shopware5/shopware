@@ -14,6 +14,19 @@ This changelog references changes done in Shopware 5.2 patch versions.
 * Added `is--active` class to wishlist entry in the account sidebar
 * Added interface `Shopware\Bundle\ESIndexingBundle\Product\ProductQueryFactoryInterface` and implemented it in its implementations
 * Removed class `Shopware_Components_Check_System`. Use `Shopware\Components\Check\Requirements` instead (Service Id: `shopware.requirements`)
+* Added mixin `.clear-form-button()` to remove the default browser styling of form buttons
+* Changed action links which modify data to use forms with HTTP `POST`. This affects the following templates and plugins:
+    * `themes/Frontend/Bare/frontend/checkout/items/premium-product.tpl`
+    * `themes/Frontend/Bare/frontend/checkout/items/product.tpl`
+    * `themes/Frontend/Bare/frontend/checkout/items/voucher.tpl`
+    * `themes/Frontend/Bare/frontend/checkout/ajax_cart_item.tpl`
+    * `themes/Frontend/Bare/frontend/compare/index.tpl`
+    * `themes/Frontend/Bare/frontend/detail/actions.tpl`
+    * `themes/Frontend/Bare/frontend/listing/product-box/product-actions.tpl`
+    * `themes/Frontend/Bare/frontend/note/item.tpl`
+    * `themes/Frontend/Responsive/frontend/_public/src/js/jquery.collapse-cart.js`
+    * `themes/Frontend/Responsive/frontend/_public/src/js/jquery.product-compare-add.js`
+    * `themes/Frontend/Responsive/frontend/_public/src/js/jquery.product-compare-menu.js`
 
 ## 5.2.3
 

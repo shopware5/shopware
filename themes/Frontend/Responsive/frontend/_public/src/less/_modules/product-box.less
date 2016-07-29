@@ -214,6 +214,10 @@ Shopware provides 3 product box types:<br/>
 		.unitize-margin(15, 0, 0, 0);
 		.unitize(font-size, 14);
 		.unitize(line-height, 24);
+
+		form {
+			display: inline-block;
+		}
 	}
 
 	.product--action {
@@ -236,10 +240,13 @@ Shopware provides 3 product box types:<br/>
 	}
 
 	.action--compare {
+		.clear-form-button();
 		display: none;
 	}
 
     .action--note {
+		.clear-form-button();
+
         &:focus {
             outline: none;
         }

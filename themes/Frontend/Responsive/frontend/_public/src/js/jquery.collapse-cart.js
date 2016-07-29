@@ -307,7 +307,8 @@
             var me = this,
                 $currentTarget = $(event.currentTarget),
                 $parent = $currentTarget.parent(),
-                url = $currentTarget.attr('href');
+                $form = $currentTarget.closest('form'),
+                url = $form.attr('action');
 
             $.publish('plugin/swCollapseCart/onRemoveArticle', [ me, event ]);
             $parent.html(me._$loadingIcon.clone());

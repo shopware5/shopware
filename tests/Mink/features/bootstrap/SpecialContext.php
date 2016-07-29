@@ -107,4 +107,30 @@ class SpecialContext extends SubContext
         $assert = new WebAssert($this->getSession());
         $assert->fieldValueEquals($field, $string->getRaw());
     }
+
+    /**
+     * @When /^I press the button "([^"]*)" of the element "([^"]*)" on position (\d+)$/
+     */
+    public function iPressTheButtonOfTheElementOnPosition($linkName, $elementClass, $position = 1)
+    {
+        /** @var HelperSelectorInterface $element */
+        $element = $this->getElement($elementClass);
+
+        if ($element instanceof MultipleElement) {
+            /** @var Homepage $page */
+            $page = $this->getPage('Homepage');
+
+            /** @var MultipleElement $element */
+            $element->setParent($page);
+
+            $element = $element->setInstance($position);
+        }
+
+        if (empty($linkName)) {
+            $element->press();
+            return;
+        }
+
+        Helper::pressNamedButton($element, $linkName);
+    }
 }

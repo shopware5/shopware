@@ -80,7 +80,7 @@
          * @returns {HTMLElement[]}
          */
         getFormElements: function() {
-            return $('form');
+            return $('form[method="post"]');
         },
 
         /**
