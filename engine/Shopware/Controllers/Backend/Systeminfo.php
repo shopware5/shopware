@@ -60,15 +60,15 @@ class Shopware_Controllers_Backend_Systeminfo extends Shopware_Controllers_Backe
      */
     public function getConfigListAction()
     {
-        $list = new Shopware_Components_Check_System();
-        $data = $list->toArray();
-        foreach ($data as $key => &$config) {
-            //Those configs mustn't be displayed in the grid
-            if ($config['name'] == 'ionCube Loader') {
-                unset($data[$key]);
+        $result = $this->get('shopware.requirements')->toArray();
+
+        foreach ($result['checks'] as $key => &$config) {
+            // Those configs mustn't be displayed in the grid
+            if ($config['name'] == 'ionCube Loader' || $config['name'] == 'mod_rewrite') {
+                unset($result['checks'][$key]);
             }
         }
-        $this->View()->assign(array('success' => true, 'data' => array_merge($data)));
+        $this->View()->assign(array('success' => true, 'data' => array_merge($result['checks'])));
     }
 
     /**
@@ -126,8 +126,9 @@ class Shopware_Controllers_Backend_Systeminfo extends Shopware_Controllers_Backe
      */
     public function getEncoderAction()
     {
-        $list = new Shopware_Components_Check_System();
-        $data = $list->toArray();
+        $result = $this->get('shopware.requirements')->toArray();
+        $data = $result['checks'];
+
         foreach ($data as $key => &$config) {
             if ($config['name'] != 'ionCube Loader') {
                 continue;

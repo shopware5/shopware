@@ -22,60 +22,115 @@
  * our trademarks remain entirely with us.
  */
 
+namespace Shopware\Components\Check;
+
 /**
- * Shopware Check System
- * <code>
- * $list = new Shopware_Components_Check_System();
- * $data = $list->toArray();
- * </code>
+ * @category  Shopware
+ * @package   Shopware\Recovery\Update
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Shopware_Components_Check_System implements IteratorAggregate, Countable
+class Requirements
 {
-    protected $list;
+    /**
+     * @var string
+     */
+    private $sourceFile;
 
     /**
-     * Checks all requirements
+     * @var \PDO
      */
-    protected function checkAll()
+    private $connection;
+
+    /**
+     * @param string $sourceFile
+     * @param \PDO $connection
+     */
+    public function __construct($sourceFile, $connection)
     {
-        foreach ($this->list as $requirement) {
-            $requirement->version = $this->check($requirement->name);
-            $requirement->result = $this->compare(
-                $requirement->name,
-                $requirement->version,
-                $requirement->required
-            );
+        if (!is_readable($sourceFile)) {
+            throw new \RuntimeException(sprintf('Cannot read requirements file in %s.', $sourceFile));
         }
+
+        $this->sourceFile = $sourceFile;
+        $this->connection = $connection;
+    }
+
+    /**
+     *  Returns the check list
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        $result = [
+            'hasErrors'   => false,
+            'hasWarnings' => false,
+            'checks'      => [],
+        ];
+
+        foreach ($this->runChecks() as $requirement) {
+            $check = [];
+            $check['name']     = (string) $requirement->name;
+            $check['group']    = (string) $requirement->group;
+            $check['notice']   = (string) $requirement->notice;
+            $check['required'] = (string) $requirement->required;
+            $check['version']  = (string) $requirement->version;
+            $check['check']   = (bool) (string) $requirement->result;
+            $check['error']    = (bool) $requirement->error;
+
+            if (!$check['check'] && $check['error']) {
+                $check['status'] = 'error';
+                $result['hasErrors'] = true;
+            } elseif (!$check['check']) {
+                $check['status'] = 'warning';
+                $result['hasWarnings'] = true;
+            } else {
+                $check['status'] = 'ok';
+            }
+            unset($check['check'], $check['error']);
+
+            $result['checks'][] = $check;
+        }
+
+        return $result;
     }
 
     /**
      * Returns the check list
      *
-     * @return Iterator
+     * @return \SimpleXMLElement[]
      */
-    public function getList()
+    private function runChecks()
     {
-        if ($this->list === null) {
-            $this->list = new Zend_Config_Xml(
-                dirname(__FILE__) . '/Data/System.xml',
-                'requirements',
-                true
-            );
-            $this->list = $this->list->requirement;
-            $this->checkAll();
+        $xmlObject = simplexml_load_file($this->sourceFile);
+
+        if (!is_object($xmlObject->requirements)) {
+            throw new \RuntimeException('Requirements XML file is not valid.');
         }
-        return $this->list;
+
+        foreach ($xmlObject->requirement as $requirement) {
+            $name = (string) $requirement->name;
+            $value = $this->getRuntimeValue($name);
+            $requirement->result = $this->compare(
+                $name,
+                $value,
+                (string) $requirement->required
+            );
+            $requirement->version = $value;
+        }
+
+        return $xmlObject->requirement;
     }
 
     /**
      * Checks a requirement
      *
-     * @param string $name
-     * @return bool|null
+     * @param  string                   $name
+     * @return bool|string|integer|null
      */
-    protected function check($name)
+    private function getRuntimeValue($name)
     {
-        $m = 'check'.str_replace(' ', '', ucwords(str_replace(array('_', '.'), ' ', $name)));
+        $m = 'check' . str_replace(' ', '', ucwords(str_replace(['_', '.'], ' ', $name)));
         if (method_exists($this, $m)) {
             return $this->$m();
         } elseif (extension_loaded($name)) {
@@ -96,54 +151,27 @@ class Shopware_Components_Check_System implements IteratorAggregate, Countable
     }
 
     /**
-     * Checks the suhosin.get.max_value_length which limits the max get parameter length.
-     *
-     * @return int
-     */
-    public function checkSuhosinGetMaxValueLength()
-    {
-        $length = (int) ini_get('suhosin.get.max_value_length');
-        if ($length === 0) {
-            return 2000;
-        } else {
-            return $length;
-        }
-    }
-
-
-
-    /**
      * Compares the requirement with the version
      *
-     * @param string $name
-     * @param string $version
-     * @param string $required
+     * @param  string $name
+     * @param  string $value
+     * @param  string $requiredValue
      * @return bool
      */
-    protected function compare($name, $version, $required)
+    private function compare($name, $value, $requiredValue)
     {
-        $m = 'compare'.str_replace(' ', '', ucwords(str_replace(array('_', '.'), ' ', $name)));
+        $m = 'compare' . str_replace(' ', '', ucwords(str_replace(['_', '.'], ' ', $name)));
         if (method_exists($this, $m)) {
-            return $this->$m($version, $required);
-        } elseif (preg_match('#^[0-9]+[A-Z]$#', $required)) {
-            return $this->decodePhpSize($required)<=$this->decodePhpSize($version);
-        } elseif (preg_match('#^[0-9]+ [A-Z]+$#i', $required)) {
-            return $this->decodeSize($required)<=$this->decodeSize($version);
-        } elseif (preg_match('#^[0-9][0-9\.]+$#', $required)) {
-            return version_compare($required, $version, '<=');
+            return $this->$m($value, $requiredValue);
+        } elseif (preg_match('#^[0-9]+[A-Z]$#', $requiredValue)) {
+            return $this->decodePhpSize($requiredValue) <= $this->decodePhpSize($value);
+        } elseif (preg_match('#^[0-9]+ [A-Z]+$#i', $requiredValue)) {
+            return $this->decodeSize($requiredValue) <= $this->decodeSize($value);
+        } elseif (preg_match('#^[0-9][0-9\.]+$#', $requiredValue)) {
+            return version_compare($requiredValue, $value, '<=');
         } else {
-            return $required==$version;
+            return $requiredValue == $value;
         }
-    }
-
-    /**
-     * Returns the check list
-     *
-     * @return Iterator
-     */
-    public function getIterator()
-    {
-        return $this->getList();
     }
 
     /**
@@ -151,7 +179,7 @@ class Shopware_Components_Check_System implements IteratorAggregate, Countable
      *
      * @return bool|string
      */
-    public function checkIonCubeLoader()
+    private function checkIonCubeLoader()
     {
         if (!extension_loaded('ionCube Loader')) {
             return false;
@@ -169,7 +197,7 @@ class Shopware_Components_Check_System implements IteratorAggregate, Countable
      *
      * @return bool|string
      */
-    public function checkPhp()
+    private function checkPhp()
     {
         if (strpos(phpversion(), '-')) {
             return substr(phpversion(), 0, strpos(phpversion(), '-'));
@@ -178,15 +206,15 @@ class Shopware_Components_Check_System implements IteratorAggregate, Countable
         }
     }
 
-    public function checkMysqlStrictMode()
+    private function checkMysqlStrictMode()
     {
         try {
-            $sql = "SELECT @@SESSION.sql_mode;";
-            $result = Shopware()->Db()->query($sql)->fetchColumn(0);
+            $sql = 'SELECT @@SESSION.sql_mode;';
+            $result = $this->connection->query($sql)->fetchColumn(0);
             if (strpos($result, 'STRICT_TRANS_TABLES') !== false || strpos($result, 'STRICT_ALL_TABLES') !== false) {
                 return true;
             }
-        } catch (PDOException $e) {
+        } catch (\PDOException $e) {
             return true;
         }
 
@@ -198,17 +226,14 @@ class Shopware_Components_Check_System implements IteratorAggregate, Countable
      *
      * @return bool|string
      */
-    public function checkMysql()
+    private function checkMysql()
     {
-        if (Shopware()->Db()) {
-            $v = Shopware()->Db()->getConnection()->getAttribute(Zend_Db::ATTR_SERVER_VERSION);
-            if (strpos($v, '-')) {
-                return substr($v, 0, strpos($v, '-'));
-            } else {
-                return $v;
-            }
+        $v = $this->connection->getAttribute(\PDO::ATTR_SERVER_VERSION);
+        if (strpos($v, '-')) {
+            return substr($v, 0, strpos($v, '-'));
+        } else {
+            return $v;
         }
-        return false;
     }
 
     /**
@@ -216,10 +241,11 @@ class Shopware_Components_Check_System implements IteratorAggregate, Countable
      *
      * @return bool|string
      */
-    public function checkCurl()
+    private function checkCurl()
     {
         if (function_exists('curl_version')) {
             $curl = curl_version();
+
             return $curl['version'];
         } elseif (function_exists('curl_init')) {
             return true;
@@ -233,7 +259,7 @@ class Shopware_Components_Check_System implements IteratorAggregate, Countable
      *
      * @return bool|string
      */
-    public function checkLibXml()
+    private function checkLibXml()
     {
         if (defined('LIBXML_DOTTED_VERSION')) {
             return LIBXML_DOTTED_VERSION;
@@ -247,16 +273,18 @@ class Shopware_Components_Check_System implements IteratorAggregate, Countable
      *
      * @return bool|string
      */
-    public function checkGd()
+    private function checkGd()
     {
         if (function_exists('gd_info')) {
             $gd = gd_info();
             if (preg_match('#[0-9.]+#', $gd['GD Version'], $match)) {
-                if (substr_count($match[0], '.')==1) {
-                    $match[0] .='.0';
+                if (substr_count($match[0], '.') == 1) {
+                    $match[0] .= '.0';
                 }
+
                 return $match[0];
             }
+
             return $gd['GD Version'];
         } else {
             return false;
@@ -268,11 +296,12 @@ class Shopware_Components_Check_System implements IteratorAggregate, Countable
      *
      * @return bool|string
      */
-    public function checkGdJpg()
+    private function checkGdJpg()
     {
         if (function_exists('gd_info')) {
             $gd = gd_info();
-            return !empty($gd['JPEG Support'])||!empty($gd['JPG Support']);
+
+            return !empty($gd['JPEG Support']) || !empty($gd['JPG Support']);
         } else {
             return false;
         }
@@ -283,10 +312,11 @@ class Shopware_Components_Check_System implements IteratorAggregate, Countable
      *
      * @return bool|string
      */
-    public function checkFreetype()
+    private function checkFreetype()
     {
         if (function_exists('gd_info')) {
             $gd = gd_info();
+
             return !empty($gd['FreeType Support']);
         } else {
             return false;
@@ -298,7 +328,7 @@ class Shopware_Components_Check_System implements IteratorAggregate, Countable
      *
      * @return bool|string
      */
-    public function checkSessionSavePath()
+    private function checkSessionSavePath()
     {
         if (function_exists('session_save_path')) {
             return (bool) session_save_path();
@@ -314,24 +344,42 @@ class Shopware_Components_Check_System implements IteratorAggregate, Countable
      *
      * @return bool|string
      */
-    public function checkDiskFreeSpace()
+    private function checkDiskFreeSpace()
     {
         if (function_exists('disk_free_space')) {
-            return $this->encodeSize(disk_free_space(dirname(__FILE__)));
+            // Prevent Warning: disk_free_space() [function.disk-free-space]: Value too large for defined data type
+            $freeSpace = @disk_free_space(__DIR__);
+
+            return $this->encodeSize($freeSpace);
         } else {
             return false;
         }
     }
 
     /**
+     * Checks the suhosin.get.max_value_length which limits the max get parameter length.
+     *
+     * @return int
+     */
+    private function checkSuhosinGetMaxValueLength()
+    {
+        $length = (int) ini_get('suhosin.get.max_value_length');
+        if ($length === 0) {
+            return 2000;
+        } else {
+            return $length;
+        }
+    }
+
+    /**
      * Checks the include path config
      *
-     * @return unknown
+     * @return bool
      */
-    public function checkIncludePath()
+    private function checkIncludePath()
     {
         if (function_exists('set_include_path')) {
-            $old = set_include_path(get_include_path().PATH_SEPARATOR.dirname(__FILE__).DIRECTORY_SEPARATOR);
+            $old = set_include_path(get_include_path().PATH_SEPARATOR. __DIR__ .DIRECTORY_SEPARATOR);
             return $old && get_include_path()!=$old;
         } else {
             return false;
@@ -341,52 +389,57 @@ class Shopware_Components_Check_System implements IteratorAggregate, Countable
     /**
      * Compare max execution time config
      *
-     * @param string $version
-     * @param string $required
+     * @param  string $version
+     * @param  string $required
      * @return bool
      */
-    public function compareMaxExecutionTime($version, $required)
+    private function compareMaxExecutionTime($version, $required)
     {
         if (!$version) {
             return true;
         }
+
         return version_compare($required, $version, '<=');
     }
 
     /**
      * Decode php size format
      *
-     * @param string $val
+     * @param  string $val
      * @return float
      */
-    public static function decodePhpSize($val)
+    private function decodePhpSize($val)
     {
         $val = trim($val);
-        $last = strtolower($val[strlen($val)-1]);
+        $last = strtolower($val[strlen($val) - 1]);
         $val = (float) $val;
         switch ($last) {
+            /** @noinspection PhpMissingBreakStatementInspection */
             case 'g':
                 $val *= 1024;
+            /** @noinspection PhpMissingBreakStatementInspection */
             case 'm':
                 $val *= 1024;
             case 'k':
                 $val *= 1024;
         }
+
         return $val;
     }
 
     /**
      * Decode byte size format
      *
-     * @param string $val
+     * @param  string $val
      * @return float
      */
-    public static function decodeSize($val)
+    private function decodeSize($val)
     {
         $val = trim($val);
         list($val, $last) = explode(' ', $val);
         $val = (float) $val;
         switch (strtoupper($last)) {
+            /** @noinspection PhpMissingBreakStatementInspection */
             case 'TB':
                 $val *= 1024;
             case 'GB':
@@ -398,39 +451,21 @@ class Shopware_Components_Check_System implements IteratorAggregate, Countable
             case 'B':
                 $val = (float) $val;
         }
+
         return $val;
     }
 
     /**
      * Encode byte size format
      *
-     * @param float $bytes
+     * @param  float  $bytes
      * @return string
      */
-    public static function encodeSize($bytes)
+    private function encodeSize($bytes)
     {
-        $types = array( 'B', 'KB', 'MB', 'GB', 'TB' );
-        for ($i = 0; $bytes >= 1024 && $i < (count($types) -1); $bytes /= 1024, $i++);
-        return(round($bytes, 2) . ' ' . $types[$i]);
-    }
+        $types = ['B', 'KB', 'MB', 'GB', 'TB'];
+        for ($i = 0; $bytes >= 1024 && $i < (count($types) - 1); $bytes /= 1024, $i++) ;
 
-    /**
-     *  Returns the check list
-     *
-     * @return array
-     */
-    public function toArray()
-    {
-        return $this->getList()->toArray();
-    }
-
-    /**
-     * Counts the check list
-     *
-     * @return int
-     */
-    public function count()
-    {
-        return $this->getList()->count();
+        return (round($bytes, 2) . ' ' . $types[$i]);
     }
 }
