@@ -56,7 +56,7 @@ class Shopware_Tests_Controllers_Backend_SysteminfoTest extends Enlight_Componen
         $this->assertArrayHasKey('group', $jsonBody['data'][0]);
         $this->assertArrayHasKey('required', $jsonBody['data'][0]);
         $this->assertArrayHasKey('version', $jsonBody['data'][0]);
-        $this->assertArrayHasKey('result', $jsonBody['data'][0]);
+        $this->assertArrayHasKey('status', $jsonBody['data'][0]);
     }
 
     public function testGetPathList()
