@@ -41,6 +41,10 @@ class Requirements
      */
     public function __construct($sourceFile)
     {
+        if (!is_readable($sourceFile)) {
+            throw new \RuntimeException(sprintf('Cannot read requirements file in %s.', $sourceFile));
+        }
+
         $this->sourceFile = $sourceFile;
     }
 
@@ -59,6 +63,12 @@ class Requirements
 
         foreach ($this->runChecks() as $requirement) {
             $check = [];
+
+            // Skip database checks because we don't have a db connection yet
+            if ((bool)$requirement->database) {
+                continue;
+            }
+
             $check['name']     = (string) $requirement->name;
             $check['group']    = (string) $requirement->group;
             $check['notice']   = (string) $requirement->notice;

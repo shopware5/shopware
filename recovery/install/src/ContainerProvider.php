@@ -146,7 +146,7 @@ class ContainerProvider implements ServiceProviderInterface
         };
 
         $container['install.requirements'] = function ($c) {
-            return new Requirements(__DIR__ . '/../data/System.xml');
+            return new Requirements(SW_PATH . '/engine/Shopware/Components/Check/Data/System.xml');
         };
 
         $container['install.requirementsPath'] = function ($c) {
@@ -157,7 +157,7 @@ class ContainerProvider implements ServiceProviderInterface
         };
 
         $container['db'] = function ($c) {
-            throw new \RuntimeException("Identifier DB not initialized yet");
+            throw new \RuntimeException('Identifier DB not initialized yet');
         };
 
         $container['config.writer'] = function ($c) {
