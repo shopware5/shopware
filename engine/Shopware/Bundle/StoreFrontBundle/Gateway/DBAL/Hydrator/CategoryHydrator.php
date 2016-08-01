@@ -83,7 +83,7 @@ class CategoryHydrator extends Hydrator
             $this->attributeHydrator->addAttribute($category, $data, 'categoryAttribute');
         }
 
-        if ($data['__stream_id']) {
+        if (isset($data['__stream_id']) && $data['__stream_id']) {
             $category->setProductStream(
                 $this->productStreamHydrator->hydrate($data)
             );
