@@ -182,14 +182,6 @@ class Shopware_Components_Modules extends Enlight_Class implements ArrayAccess
     }
 
     /**
-     * @return sConfigurator
-     */
-    public function Configurator()
-    {
-        return $this->getModule("Configurator");
-    }
-
-    /**
      * @return sAdmin
      */
     public function Admin()
