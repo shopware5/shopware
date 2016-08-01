@@ -29,7 +29,7 @@ class AccountOrder extends MultipleElement
             'number' => '.order--number > .column--value',
             'footerDate' => 'div + .order--details .column--info-data > p:nth-of-type(1)',
             'footerNumber' => 'div + .order--details .column--info-data > p:nth-of-type(2)',
-            'positions' => 'div + .order--details > .orders--table-header ~ .panel--tr:not(.is--odd)',
+            'positions' => 'div + .order--details > .orders--table-header ~ .panel--tr:not(.is--odd):not(.order--repeat)',
             'product' => '.order--name',
             'currentPrice' => '.order--current-price',
             'quantity' => '.order--quantity > .column--value',
