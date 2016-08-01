@@ -60,14 +60,16 @@ class MenuSynchronizer
     {
         $items = [];
         foreach ($menu as $menuItem) {
-            if (!isset($menuItem['parent'])) {
-                throw new \InvalidArgumentException("Root Menu Item must provide parent element");
-            }
-
-            $parent = $this->menuRepository->findOneBy($menuItem['parent']);
-
-            if (!$parent) {
-                throw new \InvalidArgumentException(sprintf("Unable to find parent for query %s", print_r($menuItem['parent'], true)));
+            if ($menuItem['isRootMenu']) {
+                $parent = null;
+            } else {
+                if (!isset($menuItem['parent'])) {
+                    throw new \InvalidArgumentException("Root Menu Item must provide parent element");
+                }
+                $parent = $this->menuRepository->findOneBy($menuItem['parent']);
+                if (!$parent) {
+                    throw new \InvalidArgumentException(sprintf("Unable to find parent for query %s", print_r($menuItem['parent'], true)));
+                }
             }
 
             $items[] = $this->createMenuItem($plugin, $parent, $menuItem);
@@ -101,11 +103,11 @@ class MenuSynchronizer
 
     /**
      * @param Plugin $plugin
-     * @param Menu $parent
+     * @param Menu|null $parent
      * @param array $menuItem
      * @return Menu
      */
-    private function createMenuItem(Plugin $plugin, Menu $parent, array $menuItem)
+    private function createMenuItem(Plugin $plugin, Menu $parent = null, array $menuItem)
     {
         $item = null;
 

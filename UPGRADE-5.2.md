@@ -39,6 +39,7 @@ This changelog references changes done in Shopware 5.2 patch versions.
     * `Theme_Compiler_Collect_Less_Definitions_FilterResult`
     * `Theme_Compiler_Collect_Javascript_Files_FilterResult`
 * Removed synchronizing of plugin information column `changes`
+* Allow root menu elements for plugins. Added attribute `isRootMenu` in `menu.xml` Example: `<entry isRootMenu="true">`
 
 ## 5.2.3
 
