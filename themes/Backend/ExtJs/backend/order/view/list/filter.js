@@ -328,6 +328,7 @@ Ext.define('Shopware.apps.Order.view.list.Filter', {
             displayField: 'name',
             valueField: 'value',
             queryMode: 'remote',
+            pageSize: 10,
             emptyText: me.snippets.empty,
             fieldLabel: me.snippets.partner
         });

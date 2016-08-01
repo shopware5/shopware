@@ -1173,24 +1173,27 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
      */
     public function getPartnersAction()
     {
-        $this->View()->success = true;
         $limit = $this->Request()->getParam('limit', 20);
         $offset = $this->Request()->getParam('start', 0);
 
+        /** @var \Doctrine\DBAL\Query\QueryBuilder $dbalBuilder */
         $dbalBuilder = $this->get('dbal_connection')->createQueryBuilder();
+
         $data = $dbalBuilder
-            ->addSelect('IFNULL((SELECT company FROM s_emarketing_partner WHERE idcode = partnerID), partnerID) as name')
-            ->addSelect('partnerID as `value`')
-            ->from('s_order')
-            ->where('partnerID IS NOT NULL')
-            ->andWhere('partnerID != ""')
-            ->groupBy('partnerID')
+            ->select(['SQL_CALC_FOUND_ROWS MAX(IFNULL(partner.company, orders.partnerID)) as name', 'orders.partnerID as `value`'])
+            ->from('s_order', 'orders')
+            ->leftJoin('orders', 's_emarketing_partner', 'partner', 'orders.partnerID = partner.idcode')
+            ->where('orders.partnerID IS NOT NULL')
+            ->andWhere('orders.partnerID != ""')
+            ->groupBy('orders.partnerID')
             ->setFirstResult($offset)
             ->setMaxResults($limit)
             ->execute()
             ->fetchAll();
 
-        $this->View()->data = $data;
+        $total = (int) $this->get('dbal_connection')->fetchColumn('SELECT FOUND_ROWS()');
+
+        $this->View()->assign(['success' => true, 'data' => $data, 'total' => $total]);
     }
 
     /**
