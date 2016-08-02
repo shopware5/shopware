@@ -1192,6 +1192,34 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     }
 
     /**
+     * Returns filterable partners
+     */
+    public function getPartnersAction()
+    {
+        $limit = $this->Request()->getParam('limit', 20);
+        $offset = $this->Request()->getParam('start', 0);
+
+        /** @var \Doctrine\DBAL\Query\QueryBuilder $dbalBuilder */
+        $dbalBuilder = $this->get('dbal_connection')->createQueryBuilder();
+
+        $data = $dbalBuilder
+            ->select(['SQL_CALC_FOUND_ROWS MAX(IFNULL(partner.company, orders.partnerID)) as name', 'orders.partnerID as `value`'])
+            ->from('s_order', 'orders')
+            ->leftJoin('orders', 's_emarketing_partner', 'partner', 'orders.partnerID = partner.idcode')
+            ->where('orders.partnerID IS NOT NULL')
+            ->andWhere('orders.partnerID != ""')
+            ->groupBy('orders.partnerID')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->execute()
+            ->fetchAll();
+
+        $total = (int) $this->get('dbal_connection')->fetchColumn('SELECT FOUND_ROWS()');
+
+        $this->View()->assign(['success' => true, 'data' => $data, 'total' => $total]);
+    }
+
+    /**
      * Internal helper function which insert the order detail association data into the passed data array
      * @param array $data
      * @return array
