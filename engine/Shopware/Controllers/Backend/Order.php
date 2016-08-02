@@ -70,6 +70,14 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     public static $paymentRepository = null;
 
     /**
+     * Dispatch repository. Declared for an fast access to the dispatch repository.
+     *
+     * @var \Shopware\Models\Dispatch\Repository
+     * @access private
+     */
+    public static $dispatchRepository = null;
+
+    /**
      * Contains the shopware model manager
      *
      * @var \Shopware\Components\Model\ModelManager
@@ -146,6 +154,19 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             self::$paymentRepository = Shopware()->Models()->getRepository('Shopware\Models\Payment\Payment');
         }
         return self::$paymentRepository;
+    }
+
+    /**
+     * Helper function to get access on the static declared repository
+     *
+     * @return null|Shopware\Models\Dispatch\Repository
+     */
+    protected function getDispatchRepository()
+    {
+        if (self::$dispatchRepository === null) {
+            self::$dispatchRepository = Shopware()->Models()->getRepository('Shopware\Models\Dispatch\Dispatch');
+        }
+        return self::$dispatchRepository;
     }
 
     /**
@@ -283,6 +304,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $shops = $this->getShopRepository()->getBaseListQuery()->getArrayResult();
         $countries = $this->getCountryRepository()->getCountriesQuery()->getArrayResult();
         $payments = $this->getPaymentRepository()->getAllPaymentsQuery()->getArrayResult();
+        $dispatches = $this->getDispatchRepository()->getDispatchesQuery()->getArrayResult();
         $documentTypes = $this->getRepository()->getDocumentTypesQuery()->getArrayResult();
 
         $this->View()->assign(array(
@@ -293,6 +315,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
                 'shops' => $shops,
                 'countries' => $countries,
                 'payments' => $payments,
+                'dispatches' => $dispatches,
                 'documentTypes' => $documentTypes,
             )
         ));
