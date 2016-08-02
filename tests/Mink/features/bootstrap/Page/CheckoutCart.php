@@ -29,7 +29,7 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
             'addVoucherSubmit' => 'div.add-voucher--panel button.add-voucher--button',
             'addArticleInput' => 'form.add-product--form > input.add-product--field',
             'addArticleSubmit' => 'form.add-product--form > button.add-product--button',
-            'removeVoucher' => 'div.row--voucher a.btn',
+            'removeVoucher' => 'div.row--voucher .column--actions-link',
             'aggregationLabels' => 'ul.aggregation--list .entry--label',
             'aggregationValues' => 'ul.aggregation--list .entry--value',
             'shippingPaymentForm' => 'form.payment',
@@ -172,7 +172,7 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
      */
     public function removeProduct(CartPosition $item)
     {
-        Helper::clickNamedLink($item, 'remove');
+        Helper::pressNamedButton($item, 'remove');
     }
 
     /**

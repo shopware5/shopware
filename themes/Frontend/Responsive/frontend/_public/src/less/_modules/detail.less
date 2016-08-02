@@ -304,9 +304,13 @@ It contains the product actions, the product information such as pictures and de
         }
     }
 
-    .action--compare { display: none }
+    .action--compare {
+        .clear-form-button();
+        display: none;
+    }
 
     .link--notepad {
+        .clear-form-button();
 
         &:focus {
             outline: none;

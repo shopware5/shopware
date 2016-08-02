@@ -14,7 +14,7 @@ class NoteContext extends SubContext
      */
     public function iRemoveTheArticleOnPositionOfMyNote($position = 1)
     {
-        $this->clickActionLink($position, 'remove');
+        $this->pressActionButton($position, 'remove');
     }
 
     /**
@@ -30,7 +30,7 @@ class NoteContext extends SubContext
      */
     public function iCompareTheArticleOnPositionOfMyNote($position)
     {
-        $this->clickActionLink($position, 'compare');
+        $this->pressActionButton($position, 'compare');
     }
 
     /**
@@ -75,5 +75,15 @@ class NoteContext extends SubContext
         $notePositions = $this->getMultipleElement($page, 'NotePosition');
 
         $page->checkNoteProducts($notePositions, $items->getHash());
+    }
+
+    private function pressActionButton($position, $name)
+    {
+        /** @var Note $page */
+        $page = $this->getPage('Note');
+
+        /** @var NotePosition $notePosition */
+        $notePosition = $this->getMultipleElement($page, 'NotePosition', $position);
+        Helper::pressNamedButton($notePosition, $name);
     }
 }
