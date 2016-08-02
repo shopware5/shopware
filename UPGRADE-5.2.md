@@ -29,6 +29,7 @@ This changelog references changes done in Shopware 5.2 patch versions.
     * `themes/Frontend/Responsive/frontend/_public/src/js/jquery.product-compare-menu.js`
 * Added event `Shopware_SearchBundle_Create_Base_Criteria` in `Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactory::createBaseCriteria()`
 * Changed visiblility of service `snippet_resource` to public in DI Container
+* Added JS and LESS directory path of new plugin system to gruntfile
 
 ## 5.2.3
 
