@@ -157,7 +157,7 @@
                 scope: this,
                 success: function(response) {
                     try {
-                        Ext.globalEval(response.responseText + "\n//@ sourceURL=" + path);
+                        Ext.globalEval(response.responseText + "\n//# sourceURL=" + path);
                     } catch(err) {
                         Shopware.app.Application.fireEvent('Ext.Loader:evalFailed', err, response, namespace, requestMethod);
                     }
