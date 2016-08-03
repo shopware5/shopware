@@ -25,6 +25,7 @@
 namespace Shopware\Components\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\Container as BaseContainer;
+use Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException;
 
 /**
  * @category  Shopware
@@ -160,6 +161,7 @@ class Container extends BaseContainer
      * @param string $id already normalized
      * @param int $invalidBehavior
      * @return mixed
+     * @throws ServiceCircularReferenceException
      */
     private function doLoad($id, $invalidBehavior = self::NULL_ON_INVALID_REFERENCE)
     {
@@ -171,16 +173,23 @@ class Container extends BaseContainer
             array('subject' => $this)
         );
 
+        $circularReference = false;
+
         try {
             if ($event) {
                 $this->services[$id] = $event->getReturn();
             } else {
                 $this->services[$id] = parent::get($id, $invalidBehavior);
             }
+        } catch (ServiceCircularReferenceException $e) {
+            $circularReference = true;
+            throw $e;
         } finally {
-            $eventManager->notify(
-                'Enlight_Bootstrap_AfterInitResource_' . $id, array('subject' => $this)
-            );
+            if ($circularReference === false) {
+                $eventManager->notify(
+                    'Enlight_Bootstrap_AfterInitResource_' . $id, array('subject' => $this)
+                );
+            }
         }
 
         return $this->services[$id];
