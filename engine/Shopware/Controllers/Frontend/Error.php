@@ -141,6 +141,10 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action impl
         $errorCode = $this->Request()->getParam('code', 503);
         $response->setHttpResponseCode($errorCode);
 
+        if ($this->Request()->getModuleName() === 'frontend') {
+            $this->View()->assign('Shop', Shopware()->Shop());
+        }
+
         $error = $this->Request()->getParam('error_handler');
 
         /**
@@ -164,12 +168,6 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action impl
                 'error_file' => $error_file,
                 'error_trace' => $error_trace
             ));
-        } else {
-            /**
-             * Prevent sending error code 503 because of an exception,
-             * if it's not configured that way
-             */
-            $response->unsetExceptions();
         }
 
         if ($this->View()->getAssign('success') !== null) {
