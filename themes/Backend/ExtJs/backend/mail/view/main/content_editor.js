@@ -97,7 +97,10 @@ Ext.define('Shopware.apps.Mail.view.main.ContentEditor', {
         if (this.isHtml) {
             me.editorField= Ext.create('Shopware.form.field.CodeMirror', {
                 xtype: 'codemirrorfield',
-                mode: 'smarty',
+                mode: {
+                    name: 'smarty',
+                    baseMode: 'text/html'
+                },
                 name: 'contentHtml',
                 translationLabel: '{s name=codemirrorHtml_translationLabel}Html-Content{/s}',
                 translatable: true // Indicates that this field is translatable

@@ -125,9 +125,9 @@ Ext.define('Shopware.form.field.CodeMirror',
     loadedModes: Ext.create('Ext.util.MixedCollection'),
 
     /**
-     * Property which holds the dependents of the CodeMirror modes
+     * Property which holds the dependencies of the CodeMirror modes
      */
-    dependentsModes: {
+    modeDependencies: {
         htmlmixed: [
             'xml',
             'css',
@@ -178,7 +178,7 @@ Ext.define('Shopware.form.field.CodeMirror',
 
         me.config = config;
 
-        if(typeof CodeMirror.loadedModes == 'undefined') {
+        if (!Ext.isDefined(CodeMirror.loadedModes)) {
             CodeMirror.loadedModes = {}
         }
 
@@ -230,11 +230,11 @@ Ext.define('Shopware.form.field.CodeMirror',
             Ext.Error.raise("The CodeMirror mode is not configured");
         }
 
-        // Check if the passed mode is available
-        var modeActive = me.isModeLoaded(me.config.mode);
+        var currentModeName = Ext.isObject(me.config.mode) ? me.config.mode.name : me.config.mode;
 
-        if(!modeActive) {
-            me.loadMode(me.config.mode, false);
+        // Check if the passed mode is available
+        if(!me.isModeLoaded(currentModeName)) {
+            me.loadMode(currentModeName, false);
         } else {
             if(!me.isEditorRendered) {
                 me.initEditor();
@@ -361,28 +361,28 @@ Ext.define('Shopware.form.field.CodeMirror',
     },
 
     /**
-     * Returns the mode dependents
+     * Returns the mode dependencies
      *
      * @param mode
      * @returns Array
      */
-    getModeDependents: function(mode) {
+    getModeDependencies: function(mode) {
         var me = this,
-            deps = me.dependentsModes[mode],
-            neededDeps = [];
+            deps = me.modeDependencies[mode],
+            neededDeps = [mode];
 
-        if(typeof deps != 'undefined') {
-            Ext.Array.each(deps, function(dep) {
-                if(!me.isModeLoaded(dep)) {
-                    var depDeps = me.getModeDependents(dep);
-                    Ext.Array.each(depDeps, function(depDep) {
-                        neededDeps.push(depDep);
-                    });
+        if (Ext.isDefined(deps)) {
+            Ext.Array.each(deps, function (dep) {
+                if (me.isModeLoaded(dep)) {
+                    return;
                 }
+
+                var depDeps = me.getModeDependencies(dep);
+                Ext.Array.each(depDeps, function (depDep) {
+                    neededDeps.push(depDep);
+                });
             });
         }
-
-        neededDeps.push(mode);
 
         return neededDeps;
     },
@@ -394,12 +394,12 @@ Ext.define('Shopware.form.field.CodeMirror',
      */
     loadMode: function(mode) {
         var me = this,
-            loadModes = me.getModeDependents(mode);
+            loadModes = me.getModeDependencies(mode);
 
         me.modeLoadCount = loadModes.length;
         me.loadedModeCount = 0;
 
-        Ext.Array.each(loadModes, function(mode) {
+        Ext.Array.each(loadModes, function (mode) {
             me.loadJSFile(me.modePath + '/' + mode + '/' + mode + '.js', mode);
         });
     },
@@ -458,7 +458,7 @@ Ext.define('Shopware.form.field.CodeMirror',
         CodeMirror.loadedModes[mode] = true;
         me.loadedModeCount++;
 
-        if(!me.isEditorRendered && me.loadedModeCount == me.modeLoadCount) {
+        if(!me.isEditorRendered && me.loadedModeCount === me.modeLoadCount) {
             me.initEditor();
         }
     },
