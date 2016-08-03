@@ -350,6 +350,7 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
             if (!empty($category->getExternalLink())) {
                 $data['link'] = $category->getExternalLink();
             }
+            $data['hidetop'] = $data['hideTop'];
             return $data;
         }, $categories);
     }
