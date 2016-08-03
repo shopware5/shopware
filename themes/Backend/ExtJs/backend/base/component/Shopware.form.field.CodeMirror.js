@@ -31,8 +31,7 @@
  * Shopware UI - CodeMirror editor component
  *
  * This component provides the CodeMirror editor
- * as a ExtJS 4 form field. The componets supports the
- * two themes "default" and "monokai".
+ * as a ExtJS 4 form field.
  *
  * The supported syntax modes are lazy loaded
  * during the initializing of the editor component.

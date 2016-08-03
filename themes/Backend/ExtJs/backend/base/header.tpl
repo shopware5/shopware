@@ -17,7 +17,6 @@
     <link rel="stylesheet" type="text/css" href="{link file='backend/_resources/resources/css/core-icon-set.css'}?{Shopware::REVISION}" />
     <link rel="stylesheet" type="text/css" href="{link file='backend/_resources/resources/css/core-icon-set-new.css'}?{Shopware::REVISION}" />
     <link rel="stylesheet" type="text/css" href="{link file='CodeMirror/lib/codemirror.css'}?{Shopware::REVISION}" />
-    <link rel="stylesheet" type="text/css" href="{link file='CodeMirror/theme/monokai.css'}?{Shopware::REVISION}" />
 {/block}
 {block name="backend/base/header/favicon"}
     <link rel="icon" href="{link file='backend/_resources/images/index/favicon.ico'}" type="image/x-icon" />
