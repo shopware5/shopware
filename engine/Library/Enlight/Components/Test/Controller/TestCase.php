@@ -102,18 +102,6 @@ abstract class Enlight_Components_Test_Controller_TestCase extends Enlight_Compo
         $viewRenderer = $front->Plugins()->get('ViewRenderer');
         $this->_view = $viewRenderer->Action()->View();
 
-        /*
-        if (!$front->getParam('noErrorHandler')) {
-            $front->Plugins()->load('ErrorHandler');
-        }
-        if (!$front->getParam('noViewRenderer')) {
-            $front->Plugins()->load('ViewRenderer');
-        }
-
-        $dispatcher = $front->Dispatcher();
-
-        $dispatcher->dispatch($request, $response);
-        */
         return $response;
     }
 
