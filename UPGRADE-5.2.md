@@ -34,6 +34,7 @@ This changelog references changes done in Shopware 5.2 patch versions.
 * Use the customized `Shopware\Components\Log\Formatter\LineFormatter` to log entries in `corelogger` and `pluginlogger`
 * Improved formatting of logged `Exception` and `Throwable` instances
 * Added `try/catch` in `Shopware\Kernel::handle()` to log all exceptions being thrown while dispatching the request
+* Added new service `log.file_reader` for parsing log files written by `Shopware\Components\Log\Formatter\LineFormatter`
 
 ## 5.2.3
 

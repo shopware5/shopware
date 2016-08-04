@@ -79,5 +79,13 @@
         <service id="debuglogger" class="Shopware\Components\Logger">
             <argument>debug</argument>
         </service>
+
+        <!-- Log file reader -->
+        <service id="log.line_format_parser" class="Shopware\Components\Log\Parser\LineFormatParser" public="false" />
+        <service id="log.file_reader" class="Shopware\Components\Log\Parser\FileReader">
+            <argument type="service" id="log.line_format_parser" />
+            <argument>%kernel.logs_dir%</argument>
+            <argument>%kernel.environment%</argument>
+        </service>
     </services>
  </container>
