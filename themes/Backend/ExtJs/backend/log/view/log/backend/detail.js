@@ -26,14 +26,14 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/log/main}
+//{namespace name=backend/log/backend}
 
-//{block name="backend/log/view/log/detail"}
-Ext.define('Shopware.apps.Log.view.log.Detail', {
+//{block name="backend/log/view/log/backend/detail"}
+Ext.define('Shopware.apps.Log.view.log.backend.Detail', {
     extend: 'Enlight.app.Window',
-    title: '{s name=window_title}Log{/s}',
-    cls: Ext.baseCSSPrefix + 'log-detail',
-    alias: 'widget.log-detail-window',
+    title: '{s name=title}Log{/s}',
+    cls: Ext.baseCSSPrefix + 'log-backend-detail',
+    alias: 'widget.log-backend-detail-window',
     border: false,
     autoShow: true,
     layout: 'fit',
@@ -90,7 +90,7 @@ Ext.define('Shopware.apps.Log.view.log.Detail', {
     },
 
     /**
-     * Returns the items of the log detail window.
+     * Returns the items of the backend log detail window.
      *
      * @param { Object } log
      * @returns { Array }

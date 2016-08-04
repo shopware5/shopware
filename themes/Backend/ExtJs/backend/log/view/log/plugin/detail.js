@@ -22,48 +22,34 @@
  *
  * @category   Shopware
  * @package    Log
- * @subpackage Store
- * @version    $Id$
- * @author shopware AG
+ * @subpackage View
+ * @author VIISON GmbH
  */
 
-/**
- * Shopware - Logs store
- *
- * This store contains all logs.
- */
-//{block name="backend/log/store/logs"}
-Ext.define('Shopware.apps.Log.store.Logs', {
+//{namespace name=backend/log/plugin}
+
+//{block name="backend/log/view/log/plugin/detail"}
+Ext.define('Shopware.apps.Log.view.log.plugin.Detail', {
+    extend: 'Shopware.apps.Log.view.log.shared.Detail',
+    alias: 'widget.log-plugin-detail-window',
+    cls: Ext.baseCSSPrefix + 'log-plugin-detail',
+    title: '{s name=title}Plugin{/s}',
 
     /**
-    * Extend for the standard ExtJS 4
-    * @string
-    */
-    extend: 'Ext.data.Store',
-    /**
-    * Auto load the store after the component
-    * is initialized
-    * @boolean
-    */
-    autoLoad: false,
-    /**
-    * Amount of data loaded at once
-    * @integer
-    */
-    pageSize: 20,
-    remoteFilter: true,
-    remoteSort: true,
-    /**
-    * Define the used model for this store
-    * @string
-    */
-    model : 'Shopware.apps.Log.model.Log',
+     * @inheritdoc
+     */
+    createMainFieldSetItems: function() {
+        var me = this;
 
-    // Default sorting for the store
-    sortOnLoad: true,
-    sorters: {
-        property: 'date',
-        direction: 'DESC'
+        var items = me.callParent(arguments);
+        items.splice(2, 0, {
+            xtype: 'displayfield',
+            fieldLabel: '{s name=model/field/plugin}Plugin{/s}',
+            value: me.record.get('plugin')
+        });
+        items[items.length - 1].anchor = '100% -145';
+
+        return items;
     }
 });
 //{/block}

@@ -22,65 +22,34 @@
  *
  * @category   Shopware
  * @package    Log
- * @subpackage Model
+ * @subpackage Store
  * @version    $Id$
- * @author shopware AG
+ * @author VIISON GmbH
  */
 
 /**
- * Shopware - Log model
- *
- * This model represents a single log of s_core_log.
+ * Shopware - Core logs store
  */
-//{block name="backend/log/model/log"}
-Ext.define('Shopware.apps.Log.model.Log', {
-    /**
-    * Extends the standard ExtJS 4
-    * @string
-    */
-    extend: 'Ext.data.Model',
-    /**
-    * The fields used for this model
-    * @array
-    */
-    fields: [
-		//{block name="backend/log/model/log/fields"}{/block}
-		'id',
-        'type',
-        'key',
-        'text',
-		{ 	name: 'date',
-			type: 'date',
-			dateFormat:'Y-m-d'
-		},
-        'user',
-        'ip_address',
-        'user_agent',
-        'value4'
-    ],
-    /**
-    * Configure the data communication
-    * @object
-    */
+//{block name="backend/log/store/logs/core"}
+Ext.define('Shopware.apps.Log.store.logs.Core', {
+    extend: 'Ext.data.Store',
+    model : 'Shopware.apps.Log.model.log.Core',
+    autoLoad: false,
+    pageSize: 20,
+    remoteFilter: true,
+    remoteSort: true,
+    sorters: {
+        property: 'timestamp',
+        direction: 'DESC'
+    },
     proxy: {
         type: 'ajax',
-        /**
-        * Configure the url mapping for the different
-        * @object
-        */
         api: {
-            //read out all articles
-            read: '{url controller="log" action="getLogs"}',
-          	destroy: '{url controller="log" action="deleteLogs"}'
+            read: '{url controller=log action=getCoreLogs}',
         },
-        /**
-        * Configure the data reader
-        * @object
-        */
         reader: {
             type: 'json',
             root: 'data',
-            //total values, used for paging
             totalProperty: 'total'
         }
     }

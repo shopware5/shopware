@@ -27,21 +27,22 @@
  * @author shopware AG
  */
 
-//{namespace name=backend/log/main}
+//{namespace name=backend/log/backend}
 
 /**
- * Shopware UI - Log view list
+ * Shopware UI - Backend log view list
  *
- * This grid contains all logs and its information.
+ * This grid contains all backend logs and its information.
  */
-//{block name="backend/log/view/log/list"}
-Ext.define('Shopware.apps.Log.view.log.List', {
+//{block name="backend/log/view/log/backend/list"}
+Ext.define('Shopware.apps.Log.view.log.backend.List', {
 
     /**
     * Extend from the standard ExtJS 4
     * @string
     */
     extend: 'Ext.grid.Panel',
+    title: '{s name=title}Backend{/s}',
     border: 0,
 
     ui: 'shopware-ui',
@@ -51,13 +52,7 @@ Ext.define('Shopware.apps.Log.view.log.List', {
     * of the view through Ext.widget('log-main-list')
     * @string
     */
-    alias: 'widget.log-main-list',
-    /**
-    * The window uses a border layout, so we need to set
-    * a region for the grid panel
-    * @string
-    */
-    region: 'center',
+    alias: 'widget.log-backend-main-list',
     /**
     * The view needs to be scrollable
     * @string
