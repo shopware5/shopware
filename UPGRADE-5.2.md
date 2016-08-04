@@ -31,6 +31,7 @@ This changelog references changes done in Shopware 5.2 patch versions.
 * Changed visiblility of service `snippet_resource` to public in DI Container
 * Added JS and LESS directory path of new plugin system to gruntfile
 * Deprecated css class `icon--brogress-1`, use `icon--progress-1` instead
+* Use the customized `Shopware\Components\Log\Formatter\LineFormatter` to log entries in `corelogger` and `pluginlogger`
 
 ## 5.2.3
 

@@ -13,12 +13,16 @@
     <services>
         <!-- RotatingFileHandler handler-->
         <service id="monolog.processor.uid" class="Monolog\Processor\UidProcessor" public="false" />
+        <service id="monolog.formatter.line" class="Shopware\Components\Log\Formatter\LineFormatter" />
 
         <service id="monolog.handler.rotating_file" class="Monolog\Handler\RotatingFileHandler" public="false">
             <argument>%kernel.logs_dir%/core_%kernel.environment%.log</argument>
             <argument>14</argument>
             <call method="pushProcessor">
                 <argument type="service" id="monolog.processor.uid" />
+            </call>
+            <call method="setFormatter">
+                <argument type="service" id="monolog.formatter.line" />
             </call>
         </service>
 
@@ -27,6 +31,9 @@
             <argument>14</argument>
             <call method="pushProcessor">
                 <argument type="service" id="monolog.processor.uid" />
+            </call>
+            <call method="setFormatter">
+                <argument type="service" id="monolog.formatter.line" />
             </call>
         </service>
 
