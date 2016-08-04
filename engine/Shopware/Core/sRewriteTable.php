@@ -852,7 +852,11 @@ class sRewriteTable
                 'description_long' => 'txtlangbeschreibung',
                 'description' => 'txtshortdescription',
                 'keywords' => 'keywords',
+                'metaTitle' => 'metaTitle',
             ]);
+
+            $article = $this->mapArticleObjectAttributeFields($article, $objectDataFallback);
+            $article = $this->mapArticleObjectAttributeFields($article, $objectData);
         }
 
         return $articles;
@@ -883,6 +887,28 @@ class sRewriteTable
                 $article[$articleFieldName] = $objectDataFallback[$objectDataFieldName];
             }
         }
+        return $article;
+    }
+
+    /**
+     * map article attribute translation including fallback fields for given article
+     *
+     * @param array $article
+     * @param array $translations
+     * @return array $article
+     */
+    private function mapArticleObjectAttributeFields($article, $translations)
+    {
+        foreach ($translations as $key => $value) {
+            if (strpos($key, '__attribute_') === false || empty($value)) {
+                continue;
+            }
+
+            $articleKey = str_replace('__attribute_', '', $key);
+
+            $article[$articleKey] = $value;
+        }
+
         return $article;
     }
 }
