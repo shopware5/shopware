@@ -270,7 +270,7 @@ class Shopware_Plugins_Core_ErrorHandler_Bootstrap extends Shopware_Components_P
 
         $logger = $this->get('corelogger');
         foreach ($exceptions as $exception) {
-            $logger->error((string) $exception);
+            $logger->error($exception);
         }
     }
 
