@@ -33,6 +33,7 @@ This changelog references changes done in Shopware 5.2 patch versions.
 * Deprecated css class `icon--brogress-1`, use `icon--progress-1` instead
 * Use the customized `Shopware\Components\Log\Formatter\LineFormatter` to log entries in `corelogger` and `pluginlogger`
 * Improved formatting of logged `Exception` and `Throwable` instances
+* Added `try/catch` in `Shopware\Kernel::handle()` to log all exceptions being thrown while dispatching the request
 
 ## 5.2.3
 
