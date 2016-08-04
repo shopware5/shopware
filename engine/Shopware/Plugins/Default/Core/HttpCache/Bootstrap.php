@@ -1022,7 +1022,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
                     );
                 }
             } catch (\Exception $e) {
-                $this->get('corelogger')->error($e->getMessage(), ['exception' => $e]);
+                $this->get('corelogger')->error($e);
                 $success = false;
             }
         }

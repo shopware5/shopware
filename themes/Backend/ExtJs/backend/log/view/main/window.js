@@ -40,7 +40,7 @@ Ext.define('Shopware.apps.Log.view.main.Window', {
     alias: 'widget.log-main-window',
     border: false,
     autoShow: true,
-    layout: 'border',
+    layout:'fit',
     height: '90%',
     width: 925,
 
@@ -55,12 +55,39 @@ Ext.define('Shopware.apps.Log.view.main.Window', {
     initComponent: function() {
         var me = this;
 
-        me.items = [{
-            xtype: 'log-main-list',
-            logStore: me.logStore
-        }];
+        me.tabPanel = Ext.create('Ext.tab.Panel', {
+            name: 'log-main-tab-panel',
+            items: me.createTabPanelItems()
+        });
+
+        me.items = [
+            me.tabPanel
+        ];
 
         me.callParent(arguments);
+    },
+
+    /**
+     * @return Ext.Component[]
+     */
+    createTabPanelItems: function() {
+        var me = this;
+
+        me.backendLogList = Ext.create('Shopware.apps.Log.view.log.backend.List', {
+            logStore: me.backendLogStore
+        });
+        me.coreLogList = Ext.create('Shopware.apps.Log.view.log.core.List', {
+            store: me.coreLogStore
+        });
+        me.pluginLogList = Ext.create('Shopware.apps.Log.view.log.plugin.List', {
+            store: me.pluginLogStore
+        });
+
+        return [
+            me.backendLogList,
+            me.coreLogList,
+            me.pluginLogList
+        ];
     }
 });
 //{/block}

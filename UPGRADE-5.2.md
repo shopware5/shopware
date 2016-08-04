@@ -31,6 +31,14 @@ This changelog references changes done in Shopware 5.2 patch versions.
 * Changed visiblility of service `snippet_resource` to public in DI Container
 * Added JS and LESS directory path of new plugin system to gruntfile
 * Deprecated css class `icon--brogress-1`, use `icon--progress-1` instead
+* Use the customized `Shopware\Components\Log\Formatter\LineFormatter` to log entries in `corelogger` and `pluginlogger`
+* Improved formatting of logged `Exception` and `Throwable` instances
+* Added `try/catch` in `Shopware\Kernel::handle()` to log all exceptions being thrown while dispatching the request
+* Added new service `log.file_reader` for parsing log files written by `Shopware\Components\Log\Formatter\LineFormatter`
+* Added tabs for viewing log entries written by `corelogger` and `pluginlogger` to the backend log app
+* Renamed actions of `Shopware_Controllers_Backend_Log`:
+    * `getLogsAction` -> `getBackendLogsAction`
+    * `deleteLogsAction` -> `deleteBackendLogsAction`
 
 ## 5.2.3
 

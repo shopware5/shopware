@@ -60,9 +60,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
         try {
             $data = $this->getCachedVersion();
         } catch (\Exception $e) {
-            /** @var LoggerInterface $logger */
-            $logger = $this->get('corelogger');
-            $logger->error($e);
+            $this->get('corelogger')->error($e);
 
             $this->View()->assign(array(
                 'success' => false,

@@ -22,6 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\Log\Parser\FileReader;
+
 /**
  * Shopware Log Controller
  *
@@ -56,7 +58,7 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
      * It reads the logs from s_core_log
      * Additionally it sets a filterValue
      */
-    public function getLogsAction()
+    public function getBackendLogsAction()
     {
         $start = $this->Request()->get('start');
         $limit = $this->Request()->get('limit');
@@ -104,7 +106,7 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
      * This function is called when the user wants to delete a log.
      * It only handles the deletion.
      */
-    public function deleteLogsAction()
+    public function deleteBackendLogsAction()
     {
         try {
             $params = $this->Request()->getParams();
@@ -164,5 +166,47 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
         } catch (Exception $e) {
             $this->View()->assign(array('success'=>false, 'errorMsg'=>$e->getMessage()));
         }
+    }
+
+    /**
+     * Responds the sorted and paginated entries from the 'core' log files.
+     */
+    public function getCoreLogsAction()
+    {
+        $start = $this->Request()->getParam('start', 0);
+        $limit = $this->Request()->getParam('limit', 1000);
+        $sort = $this->Request()->getParam('sort', []);
+
+        // Parse log files
+        $sortAscending = isset($sort[0]['direction']) && $sort[0]['direction'] === 'ASC';
+        $result = $this->get('log.file_reader')->readEntries('core', intval($start), intval($limit), $sortAscending);
+
+        $this->View()->assign($result);
+        $this->View()->success = true;
+    }
+
+    /**
+     * Responds the sorted and paginated entries from the 'plugin' log files.
+     */
+    public function getPluginLogsAction()
+    {
+        $start = $this->Request()->getParam('start', 0);
+        $limit = $this->Request()->getParam('limit', 1000);
+        $sort = $this->Request()->getParam('sort', []);
+
+        // Parse log files
+        $sortAscending = isset($sort[0]['direction']) && $sort[0]['direction'] === 'ASC';
+        $result = $this->get('log.file_reader')->readEntries('plugin', intval($start), intval($limit), $sortAscending);
+
+        // Check result entries' context for plugin name
+        foreach ($result['data'] as &$entry) {
+            if (isset($entry['context']['plugin'])) {
+                $entry['plugin'] = $entry['context']['plugin'];
+                unset($entry['context']['plugin']);
+            }
+        }
+
+        $this->View()->assign($result);
+        $this->View()->success = true;
     }
 }

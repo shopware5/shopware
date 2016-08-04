@@ -47,7 +47,7 @@ class Shopware_Tests_Controllers_Backend_LogTest extends Enlight_Components_Test
     public function testGetLogs()
     {
         /** @var Enlight_Controller_Response_ResponseTestCase */
-        $this->dispatch('backend/log/getLogs');
+        $this->dispatch('backend/log/getBackendLogs');
         $this->assertTrue($this->View()->success);
 
         $jsonBody = $this->View()->getAssign();
@@ -97,7 +97,7 @@ class Shopware_Tests_Controllers_Backend_LogTest extends Enlight_Components_Test
     {
         $this->Request()->setMethod('POST')->setPost(array('id'=>$lastId));
 
-        $this->dispatch('backend/log/deleteLogs');
+        $this->dispatch('backend/log/deleteBackendLogs');
 
         $jsonBody = $this->View()->getAssign();
 

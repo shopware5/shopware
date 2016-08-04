@@ -171,20 +171,32 @@ class Kernel implements HttpKernelInterface
 
         $request = $this->transformSymfonyRequestToEnlightRequest($request);
 
-        if ($front->Request() === null) {
-            $front->setRequest($request);
-            $response = $front->dispatch();
-        } else {
-            $dispatcher = clone $front->Dispatcher();
-            $response   = clone $front->Response();
+        try {
+            if ($front->Request() === null) {
+                $front->setRequest($request);
+                $response = $front->dispatch();
+            } else {
+                $dispatcher = clone $front->Dispatcher();
+                $response   = clone $front->Response();
 
-            $response->clearHeaders()
-                ->clearRawHeaders()
-                ->clearBody();
+                $response->clearHeaders()
+                    ->clearRawHeaders()
+                    ->clearBody();
 
-            $response->setHttpResponseCode(200);
-            $request->setDispatched(true);
-            $dispatcher->dispatch($request, $response);
+                $response->setHttpResponseCode(200);
+                $request->setDispatched(true);
+                $dispatcher->dispatch($request, $response);
+            }
+        } catch (\Exception $e) {
+            // Make sure any exceptions, which have not been catched so far, are logged
+            try {
+                $this->container->get('corelogger')->error($e);
+            } catch (\Exception $loggerException) {
+                // Just ignore the logger exception to make sure that the original exception
+                // is not swallowed
+            }
+
+            throw $e;
         }
 
         $response = $this->transformEnlightResponseToSymfonyResponse($response);

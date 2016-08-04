@@ -34,6 +34,23 @@ use Monolog\Logger as BaseLogger;
 class Logger extends BaseLogger
 {
     /**
+     * {@inheritdoc}
+     */
+    public function addRecord($level, $message, array $context = array())
+    {
+        // Make sure to log only the message of an exception and save the exception
+        // in the context instead
+        if ($message instanceof \Exception || $message instanceof \Throwable) {
+            if (!isset($context['exception'])) {
+                $context['exception'] = $message;
+            }
+            $message = $message->getMessage();
+        }
+
+        return parent::addRecord($level, $message, $context);
+    }
+
+    /**
      * @param string|array $label
      * @param null|array $data
      */
