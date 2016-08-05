@@ -283,7 +283,7 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
         $data = array(
             'namespace' => $this->getName(),
             'name' => $plugin->getName(),
-            'label' => isset($info['label']) ? $info['label'] : $plugin->getName(),
+            'label' => isset($info['label']) && is_string($info['label']) ? $info['label'] : $plugin->getName(),
             'version' => isset($info['version']) ? $info['version'] : '1.0.0',
             'author' => isset($info['author']) ? $info['author'] : 'shopware AG',
             'copyright' => isset($info['copyright']) ? $info['copyright'] : 'Copyright © 2012, shopware AG',
@@ -291,7 +291,6 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
             'license' => isset($info['license']) ? $info['license'] : null,
             'support' => isset($info['support']) ? $info['support'] : null,
             'link' => isset($info['link']) ? $info['link'] : null,
-            'changes' => isset($info['changes']) ? $info['changes'] : null,
             'source' => isset($info['source']) ? $info['source'] : 'Default',
             'update_date' => isset($info['updateDate']) ? $info['updateDate'] : null,
             'update_version' => isset($info['updateVersion']) ? $info['updateVersion'] : null,

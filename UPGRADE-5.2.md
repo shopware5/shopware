@@ -38,6 +38,7 @@ This changelog references changes done in Shopware 5.2 patch versions.
 * Added filter events for editing the collection of LESS and JS files before compiling
     * `Theme_Compiler_Collect_Less_Definitions_FilterResult`
     * `Theme_Compiler_Collect_Javascript_Files_FilterResult`
+* Removed synchronizing of plugin information column `changes`
 
 ## 5.2.3
 
