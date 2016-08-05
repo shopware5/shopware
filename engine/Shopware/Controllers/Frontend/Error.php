@@ -21,10 +21,9 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 use Shopware\Components\CSRFWhitelistAware;
 
-/**
- */
 class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action implements CSRFWhitelistAware
 {
     /**
@@ -42,25 +41,26 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action impl
      */
     public function preDispatch()
     {
-        if ($this->Request()->getActionName() !== 'service') {
-            $templateModule = 'frontend';
-            if ($this->Request()->getModuleName() == 'backend') {
-                $templateModule = 'backend';
-                $this->enableBackendTheme();
-            }
+        if ($this->Request()->getActionName() === 'service') {
+            return;
+        }
+        $templateModule = 'frontend';
+        if ($this->Request()->getModuleName() === 'backend') {
+            $templateModule = 'backend';
+            $this->enableBackendTheme();
+        }
 
-            if (strpos($this->Request()->getHeader('Content-Type'), 'application/json') === 0) {
-                $this->Front()->Plugins()->Json()->setRenderer();
-                $this->View()->assign('success', false);
-            } elseif ($this->Request()->isXmlHttpRequest() || !Shopware()->Container()->initialized('Db')) {
-                $this->View()->loadTemplate($templateModule . '/error/exception.tpl');
-            } elseif (isset($_ENV['SHELL']) || php_sapi_name() == 'cli') {
-                $this->View()->loadTemplate($templateModule . '/error/cli.tpl');
-            } elseif (empty($_SERVER['SERVER_NAME'])) {
-                $this->View()->loadTemplate($templateModule . '/error/ajax.tpl');
-            } else {
-                $this->View()->loadTemplate($templateModule . '/error/index.tpl');
-            }
+        if (strpos($this->Request()->getHeader('Content-Type'), 'application/json') === 0) {
+            $this->Front()->Plugins()->Json()->setRenderer();
+            $this->View()->assign('success', false);
+        } elseif ($this->Request()->isXmlHttpRequest() || !Shopware()->Container()->initialized('Db')) {
+            $this->View()->loadTemplate($templateModule . '/error/exception.tpl');
+        } elseif (isset($_ENV['SHELL']) || php_sapi_name() === 'cli') {
+            $this->View()->loadTemplate($templateModule . '/error/cli.tpl');
+        } elseif (empty($_SERVER['SERVER_NAME'])) {
+            $this->View()->loadTemplate($templateModule . '/error/ajax.tpl');
+        } else {
+            $this->View()->loadTemplate($templateModule . '/error/index.tpl');
         }
     }
 
@@ -81,24 +81,25 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action impl
     public function errorAction()
     {
         $error = $this->Request()->getParam('error_handler');
+        if (empty($error)) {
+            return;
+        }
 
-        if (!empty($error)) {
-            $code = $error->exception->getCode();
-            switch ($code) {
-                case Enlight_Controller_Exception::Controller_Dispatcher_Controller_Not_Found:
-                case Enlight_Controller_Exception::Controller_Dispatcher_Controller_No_Route:
-                case Enlight_Controller_Exception::ActionNotFound:
-                case 404:
-                    $this->forward('pageNotFoundError');
-                    break;
-                case 400:
-                case 401:
-                    $this->forward('genericError', null, null, array('code' => $code));
-                    break;
-                default:
-                    $this->forward('genericError', null, null, array('code' => 503));
-                    break;
-            }
+        $code = $error->exception->getCode();
+        switch ($code) {
+            case Enlight_Controller_Exception::Controller_Dispatcher_Controller_Not_Found:
+            case Enlight_Controller_Exception::Controller_Dispatcher_Controller_No_Route:
+            case Enlight_Controller_Exception::ActionNotFound:
+            case 404:
+                $this->forward('pageNotFoundError');
+                break;
+            case 400:
+            case 401:
+                $this->forward('genericError', null, null, ['code' => $code]);
+                break;
+            default:
+                $this->forward('genericError', null, null, ['code' => 503]);
+                break;
         }
     }
 
@@ -141,35 +142,33 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action impl
         $errorCode = $this->Request()->getParam('code', 503);
         $response->setHttpResponseCode($errorCode);
 
+        if ($this->Request()->getModuleName() === 'frontend') {
+            $this->View()->assign('Shop', Shopware()->Shop());
+        }
+
         $error = $this->Request()->getParam('error_handler');
 
         /**
          * If the system is configured to display the exception data, we need
          * to pass it to the template
         */
-        if ($this->Front()->getParam('showException') || $this->Request()->getModuleName() == 'backend') {
-            $paths = array(Shopware()->DocPath());
-            $replace = array('');
+        if ($this->Front()->getParam('showException') || $this->Request()->getModuleName() === 'backend') {
+            $path = Shopware()->Container()->getParameter('kernel.root_dir').'/';
 
+            /** @var \Exception $exception */
             $exception = $error->exception;
-            $error_file = $exception->getFile();
-            $error_file = str_replace($paths, $replace, $error_file);
+            $errorFile = $exception->getFile();
+            $errorFile = str_replace($path, '', $errorFile);
 
-            $error_trace = $error->exception->getTraceAsString();
-            $error_trace = str_replace($paths, $replace, $error_trace);
-            $this->View()->assign(array(
+            $errorTrace = $error->exception->getTraceAsString();
+            $errorTrace = str_replace($path, '', $errorTrace);
+            $this->View()->assign([
                 'exception' => $exception,
                 'error' => $exception->getMessage(),
                 'error_message' => $exception->getMessage(),
-                'error_file' => $error_file,
-                'error_trace' => $error_trace
-            ));
-        } else {
-            /**
-             * Prevent sending error code 503 because of an exception,
-             * if it's not configured that way
-             */
-            $response->unsetExceptions();
+                'error_file' => $errorFile,
+                'error_trace' => $errorTrace
+            ]);
         }
 
         if ($this->View()->getAssign('success') !== null) {
@@ -191,12 +190,10 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action impl
     private function enableBackendTheme()
     {
         $directory = Shopware()->Container()->get('theme_path_resolver')->getExtJsThemeDirectory();
-        Shopware()->Container()->get('template')->setTemplateDir(
-            array(
-                'backend' => $directory,
-                'include_dir' => '.'
-            )
-        );
+        Shopware()->Container()->get('template')->setTemplateDir([
+            'backend' => $directory,
+            'include_dir' => '.'
+        ]);
     }
 
     /**
