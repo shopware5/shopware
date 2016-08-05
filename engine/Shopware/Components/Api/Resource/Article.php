@@ -2086,23 +2086,29 @@ class Article extends Resource implements BatchInterface
             );
         }
 
-        $data['related'] = $this->translateAssociation(
-            $data['related'],
-            $shop,
-            'article'
-        );
+        if (isset($data['related'])) {
+            $data['related'] = $this->translateAssociation(
+                $data['related'],
+                $shop,
+                'article'
+            );
+        }
 
-        $data['similar'] = $this->translateAssociation(
-            $data['similar'],
-            $shop,
-            'article'
-        );
+        if (isset($data['similar'])) {
+            $data['similar'] = $this->translateAssociation(
+                $data['similar'],
+                $shop,
+                'article'
+            );
+        }
 
-        $data['images'] = $this->translateAssociation(
-            $data['images'],
-            $shop,
-            'articleimage'
-        );
+        if (isset($data['images'])) {
+            $data['images'] = $this->translateAssociation(
+                $data['images'],
+                $shop,
+                'articleimage'
+            );
+        }
 
         return $data;
     }

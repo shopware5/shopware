@@ -34,9 +34,7 @@
             <argument type="service" id="shopware.locale"/>
         </service>
 
-        <service id="snippet_resource"
-                 class="Enlight_Components_Snippet_Resource"
-                 public="false">
+        <service id="snippet_resource" class="Enlight_Components_Snippet_Resource">
             <argument type="service" id="snippets"/>
             <argument>%shopware.snippet.showSnippetPlaceholder%</argument>
         </service>
@@ -400,6 +398,10 @@
 
         <service id="AttributeSubscriber" class="Shopware\Components\AttributeSubscriber">
             <argument type="service" id="service_container" />
+            <tag name="shopware.event_subscriber" />
+        </service>
+
+        <service id="ErrorSubscriber" class="Shopware\Components\ErrorSubscriber">
             <tag name="shopware.event_subscriber" />
         </service>
 

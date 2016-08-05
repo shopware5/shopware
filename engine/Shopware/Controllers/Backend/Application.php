@@ -1089,7 +1089,7 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
                 $date = new DateTime($value);
                 $value = $date->format('Y-m-d');
                 //search values for date time should added the % wildcards to search for time values.
-                if ($field['datetime']) {
+                if ($field['type'] === 'datetime') {
                     $value = '%' . $value . '%';
                 }
                 break;

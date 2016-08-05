@@ -7,7 +7,7 @@
     <ul class="menu--list menu--level-{$level} columns--{$columnCount}"{if $level === 0} style="width: {$menuSizePercentage}%;"{/if}>
         {block name="frontend_plugins_advanced_menu_list"}
             {foreach $categories as $category}
-                {if $category.hidetop}
+                {if $category.hideTop}
                     {continue}
                 {/if}
 
@@ -33,7 +33,7 @@
 <div class="advanced-menu" data-advanced-menu="true" data-hoverDelay="{$hoverDelay}">
     {block name="frontend_plugins_advanced_menu"}
         {foreach $sAdvancedMenu as $mainCategory}
-            {if !$mainCategory.active || $mainCategory.hidetop}
+            {if !$mainCategory.active || $mainCategory.hideTop}
                 {continue}
             {/if}
 

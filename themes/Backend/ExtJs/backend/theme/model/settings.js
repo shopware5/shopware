@@ -44,6 +44,7 @@ Ext.define('Shopware.apps.Theme.model.Settings', {
                 type: 'ajax',
                 api: {
                     detail:  '{url controller="base" action="loadSettings"}',
+                    create:  '{url controller="base" action="saveSettings"}',
                     update:  '{url controller="base" action="saveSettings"}'
                 },
                 reader: {

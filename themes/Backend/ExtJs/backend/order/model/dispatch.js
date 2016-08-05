@@ -21,40 +21,33 @@
  * our trademarks remain entirely with us.
  *
  * @category   Shopware
- * @package    Shopware_Styling
- * @subpackage Widgets
+ * @package    Order
+ * @subpackage Model
  * @version    $Id$
  * @author shopware AG
  */
 
-/** General widgets */
-@import 'widgets/viewport';
-@import 'widgets/toolbar';
-@import 'widgets/panel';
-@import 'widgets/grid';
-@import 'widgets/window';
-@import 'widgets/button';
-@import 'widgets/menu';
-@import 'widgets/loadmask';
-@import 'widgets/mediadropzone';
-@import 'widgets/desktopswitcher';
-@import 'widgets/tree';
-@import 'widgets/widgets';
-@import 'widgets/headertooltip';
-@import 'widgets/accordion';
-@import 'widgets/tab';
-@import 'widgets/article-dd';
-@import 'widgets/keynav';
-@import 'widgets/notification';
-@import 'widgets/datepicker';
-@import 'widgets/progressbar';
-@import 'widgets/boundlist';
-@import 'widgets/tooltip';
-@import 'widgets/rowediting';
-@import 'widgets/codemirror';
+/**
+ * Shopware Model - Order list backend module.
+ *
+ * The dispatch model of the order model is an simple extension of the global standard dispatch model.
+ * The difference to standard model is the definition of the proxy. The standard model
+ * needs a proxy to load the model data for combo boxes or something else. The order
+ * dispatch model is only used for the order-dispatch association.
+ */
+//{block name="backend/order/model/dispatch"}
+Ext.define('Shopware.apps.Order.model.Dispatch', {
+    /**
+     * Extends the standard Ext Model
+     * @string
+     */
+    extend: 'Shopware.apps.Base.model.Dispatch',
 
-/** Include global form widgets */
-@import 'widgets/form/all';
-@import 'widgets/attribute/media_multi_selection';
-
+    /**
+     * One or more BelongsTo associations for this model.
+     * @string
+     */
+    belongsTo: 'Shopware.apps.Order.model.Order'
+});
+//{/block}
 

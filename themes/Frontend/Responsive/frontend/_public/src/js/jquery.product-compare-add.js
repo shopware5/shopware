@@ -40,7 +40,8 @@
         onAddArticleCompare: function (event) {
             var me = this,
                 $target = $(event.target),
-                addArticleUrl = $target.attr('href');
+                $form = $target.closest('form'),
+                addArticleUrl = $form.attr('action');
 
             event.preventDefault();
 

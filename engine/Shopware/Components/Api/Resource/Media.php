@@ -288,6 +288,8 @@ class Media extends Resource
     public function internalCreateMediaByFileLink($link, $albumId = -1)
     {
         $name = pathinfo($link, PATHINFO_FILENAME);
+        $ext = pathinfo($link, PATHINFO_EXTENSION);
+        $name = $name.'.'.$ext;
         $path = $this->load($link, $name);
         $name = pathinfo($path, PATHINFO_FILENAME);
         $file = new File($path);

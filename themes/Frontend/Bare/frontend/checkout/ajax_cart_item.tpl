@@ -88,9 +88,11 @@
             {/if}
 
             {if $basketItem.modus != 4}
-                <a href="{$deleteUrl}" class="btn is--small action--remove" title="{s name="AjaxCartRemoveArticle" namespace="frontend/checkout/ajax_cart"}{/s}">
-                    <i class="icon--cross"></i>
-                </a>
+                <form action="{$deleteUrl}" method="post">
+                    <button type="submit" class="btn is--small action--remove" title="{s name="AjaxCartRemoveArticle" namespace="frontend/checkout/ajax_cart"}{/s}">
+                        <i class="icon--cross"></i>
+                    </button>
+                </form>
             {/if}
         </div>
     {/block}
