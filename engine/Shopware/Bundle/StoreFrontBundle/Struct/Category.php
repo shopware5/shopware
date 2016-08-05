@@ -61,6 +61,11 @@ class Category extends Extendable implements \JsonSerializable
     /**
      * @var string
      */
+    protected $metaTitle;
+
+    /**
+     * @var string
+     */
     protected $metaKeywords;
 
     /**
@@ -117,6 +122,11 @@ class Category extends Extendable implements \JsonSerializable
      * @var null|string
      */
     protected $productBoxLayout = null;
+
+    /**
+     * @var null|ProductStream
+     */
+    protected $productStream;
 
     /**
      * @param CategoryEntity $category
@@ -222,6 +232,22 @@ class Category extends Extendable implements \JsonSerializable
     public function getCmsText()
     {
         return $this->cmsText;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMetaTitle()
+    {
+        return $this->metaTitle;
+    }
+
+    /**
+     * @param string $metaTitle
+     */
+    public function setMetaTitle($metaTitle)
+    {
+        $this->metaTitle = $metaTitle;
     }
 
     /**
@@ -422,5 +448,21 @@ class Category extends Extendable implements \JsonSerializable
     public function setProductBoxLayout($productBoxLayout)
     {
         $this->productBoxLayout = $productBoxLayout;
+    }
+
+    /**
+     * @return null|ProductStream
+     */
+    public function getProductStream()
+    {
+        return $this->productStream;
+    }
+
+    /**
+     * @param null|ProductStream $productStream
+     */
+    public function setProductStream(ProductStream $productStream = null)
+    {
+        $this->productStream = $productStream;
     }
 }

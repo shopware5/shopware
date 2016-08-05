@@ -119,13 +119,14 @@
                 {block name='frontend_note_item_actions_compare'}
                     {if {config name="compareShow"}}
                         <div class="note--compare">
-                            <a href="{url controller='compare' action='add_article' articleID=$sBasketItem.articleID}"
-                               data-product-compare-add="true"
-                               class="compare--link"
-                               title="{"{s name='ListingBoxLinkCompare'}{/s}"|escape}"
-                               rel="nofollow">
-                                <i class="icon--compare"></i> {s name='ListingBoxLinkCompare'}{/s}
-                            </a>
+							<form action="{url controller='compare' action='add_article' articleID=$sBasketItem.articleID}" method="post">
+								<button type="submit"
+								   data-product-compare-add="true"
+								   class="compare--link"
+								   title="{"{s name='ListingBoxLinkCompare'}{/s}"|escape}">
+									<i class="icon--compare"></i> {s name='ListingBoxLinkCompare'}{/s}
+								</button>
+							</form>
                         </div>
                     {/if}
                 {/block}
@@ -134,9 +135,11 @@
 
 		{* Remove article *}
 		{block name="frontend_note_item_delete"}
-			<a href="{url controller='note' action='delete' sDelete=$sBasketItem.id}" title="{"{s name='NoteLinkDelete'}{/s}"|escape}" class="note--delete">
-				<i class="icon--cross"></i>
-			</a>
+			<form action="{url controller='note' action='delete' sDelete=$sBasketItem.id}" method="post">
+				<button type="submit" title="{"{s name='NoteLinkDelete'}{/s}"|escape}" class="note--delete">
+					<i class="icon--cross"></i>
+				</button>
+			</form>
 		{/block}
 	</div>
 {/block}

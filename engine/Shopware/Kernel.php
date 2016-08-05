@@ -34,6 +34,7 @@ use Shopware\Bundle\SearchBundle\DependencyInjection\Compiler\CriteriaRequestHan
 use Shopware\Bundle\SearchBundleDBAL\DependencyInjection\Compiler\DBALCompilerPass;
 use Shopware\Bundle\SearchBundleES\DependencyInjection\CompilerPass\SearchHandlerCompilerPass;
 use Shopware\Bundle\FormBundle\DependencyInjection\CompilerPass\AddConstraintValidatorsPass;
+use Shopware\Components\DependencyInjection\Compiler\AddConsoleCommandPass;
 use Shopware\Components\DependencyInjection\Compiler\DoctrineEventSubscriberCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\EventListenerCompilerPass;
 use Shopware\Components\DependencyInjection\Compiler\EventSubscriberCompilerPass;
@@ -356,8 +357,13 @@ class Kernel implements HttpKernelInterface
         );
 
         // Set up mpdf cache dirs
-        define("_MPDF_TEMP_PATH", $this->getCacheDir() .'/mpdf/tmp/');
-        define("_MPDF_TTFONTDATAPATH", $this->getCacheDir() .'/mpdf/ttfontdata/');
+        if (!defined('_MPDF_TEMP_PATH')) {
+            define("_MPDF_TEMP_PATH", $this->getCacheDir() .'/mpdf/tmp/');
+        }
+
+        if (!defined('_MPDF_TTFONTDATAPATH')) {
+            define("_MPDF_TTFONTDATAPATH", $this->getCacheDir() .'/mpdf/ttfontdata/');
+        }
     }
 
     /**
@@ -610,6 +616,7 @@ class Kernel implements HttpKernelInterface
         $container->addCompilerPass(new FormPass());
         $container->addCompilerPass(new AddConstraintValidatorsPass());
         $container->addCompilerPass(new SearchRepositoryCompilerPass());
+        $container->addCompilerPass(new AddConsoleCommandPass());
 
         if ($this->isElasticSearchEnabled()) {
             $container->addCompilerPass(new SearchHandlerCompilerPass());

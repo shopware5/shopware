@@ -6,6 +6,8 @@
             {block name="widget_emotion_component_category_teaser_image"}
                 {if isset($Data.media)}
                     {$media = $Data.media}
+                {else}
+                    {$media = $Data.image}
                 {/if}
 
                 {$images = $media.thumbnails}

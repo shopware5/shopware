@@ -33,12 +33,18 @@ Ext.define('Shopware.attribute.ComboBoxFieldHandler', {
         return (attribute.get('columnType') == 'combobox');
     },
     create: function(field, attribute) {
+        var data = [];
         field.xtype = 'combobox';
         field.displayField = 'value';
         field.valueField = 'key';
+
+        if (attribute.get('arrayStore')) {
+            data = Ext.JSON.decode(attribute.get('arrayStore'))
+        }
+
         field.store = Ext.create('Ext.data.Store', {
             fields: ['key', 'value'],
-            data: Ext.JSON.decode(attribute.get('arrayStore'))
+            data: data
         });
         return field;
     }

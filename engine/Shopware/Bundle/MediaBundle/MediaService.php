@@ -112,7 +112,7 @@ class MediaService implements MediaServiceInterface
         }
 
         if ($this->strategy->isEncoded($path)) {
-            return $path;
+            return $this->mediaUrl . $path;
         }
 
         $this->migrateFile($path);

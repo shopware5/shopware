@@ -191,22 +191,7 @@ Ext.define('Shopware.apps.Article.view.detail.Properties', {
                 specialkey: function(field, event) {
                     if(event.getKey() === Ext.EventObject.ENTER && event.ctrlKey === true) {
                         event.stopEvent();
-
-                        var value = me.getValueByValue(field.getValue(), field.getStore());
-                        if (value) {
-                            me.addValue({
-                                id: value.get('id'),
-                                value: value.get('name')
-                            });
-                            return;
-                        }
-
-                        me.createValue(
-                            me.groupComboBox.getValue(),
-                            field.getValue()
-                        );
-                        field.setValue('');
-                        field.getStore().load();
+                        me.assignValuesToStore();
                     }
                 }
             }
@@ -253,6 +238,32 @@ Ext.define('Shopware.apps.Article.view.detail.Properties', {
         });
 
         return me.fieldset;
+    },
+
+    /**
+     * Helper method which sets a value form the combobox to the field set
+     */
+    assignValuesToStore: function() {
+        var me = this,
+            field = me.valueComboBox,
+            value = field.getValue(),
+            element = me.getValueByValue(value, field.getStore());
+        if (!value) {
+            return;
+        }
+        if (element) {
+            me.addValue({
+                id: element.get('id'),
+                value: element.get('name')
+            });
+            return;
+        }
+        me.createValue(
+            me.groupComboBox.getValue(),
+            value
+        );
+        field.setValue('');
+        field.getStore().load();
     },
 
     /**

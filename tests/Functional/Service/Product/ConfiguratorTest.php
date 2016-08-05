@@ -4,7 +4,7 @@ namespace Shopware\Tests\Service\Product;
 
 use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Set;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
-use Shopware\Bundle\StoreFrontBundle\Struct\ProductContext;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Service\TestCase;
 
@@ -12,7 +12,7 @@ class ConfiguratorTest extends TestCase
 {
     protected function getProduct(
         $number,
-        ProductContext $context,
+        ShopContext $context,
         Category $category = null,
         $additionally = null
     ) {

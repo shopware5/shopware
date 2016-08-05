@@ -65,12 +65,6 @@ Ext.define('Shopware.apps.Shipping.model.Dispatch', {
      */
     associations:[
         {
-            type: 'hasMany',
-            model: 'Shopware.apps.Shipping.model.Attribute',
-            name: 'getAttributes',
-            associationKey: 'attribute'
-        },
-        {
             type:'hasMany',
             model:'Shopware.apps.Base.model.Payment',
             name:'getPayments',

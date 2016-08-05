@@ -198,11 +198,19 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
 
         foreach ($form->getErrors(true) as $error) {
             $errorFlags[$error->getOrigin()->getName()] = true;
-            $errorMessages[] = $this->get('snippets')->getNamespace('frontend/account/internalMessages')
-                ->get('ErrorFillIn', 'Please fill in all red fields');
+            if ($error->getMessage()) {
+                $errorMessages[] = $error->getMessage();
+            }
         }
 
         $errorMessages = array_unique($errorMessages);
+
+        if (!empty($errorFlags)) {
+            $errorMessage = $this->get('snippets')
+                ->getNamespace('frontend/account/internalMessages')
+                ->get('ErrorFillIn', 'Please fill in all red fields');
+            array_unshift($errorMessages, $errorMessage);
+        }
 
         /** @var Address $address */
         $address = $form->getViewData();
@@ -392,6 +400,10 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
                     continue;
                 }
 
+                if ($key == 'checkoutShippingAddressId') {
+                    $this->refreshSession($address);
+                }
+
                 $this->get('session')->offsetSet($key, $address->getId());
             }
         }
@@ -403,5 +415,21 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
         if (!empty($extraData['setDefaultShippingAddress'])) {
             $this->addressService->setDefaultShippingAddress($address);
         }
+    }
+
+    /**
+     * @param Address $address
+     */
+    private function refreshSession(Address $address)
+    {
+        $countryId = $address->getCountry()->getId();
+        $stateId = $address->getState() ? $address->getState()->getId() : null;
+        $areaId = $address->getCountry()->getArea() ? $address->getCountry()->getArea()->getId() : null;
+
+        $this->get('session')->offsetSet('sCountry', $countryId);
+        $this->get('session')->offsetSet('sState', $stateId);
+        $this->get('session')->offsetSet('sArea', $areaId);
+
+        $this->get('shopware_storefront.context_service')->initializeShopContext();
     }
 }

@@ -32,9 +32,7 @@
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
-class Enlight_Controller_Request_RequestTestCase
-    extends Enlight_Controller_Request_RequestHttp
-    implements Enlight_Controller_Request_Request
+class Enlight_Controller_Request_RequestTestCase extends Enlight_Controller_Request_RequestHttp
 {
     /**
      * Request headers

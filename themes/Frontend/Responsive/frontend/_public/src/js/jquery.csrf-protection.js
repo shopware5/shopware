@@ -21,10 +21,16 @@
      * @param name
      */
     $.removeCookie = function(name) {
-        document.cookie = name + '=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+        var basePath = window.csrfConfig.basePath || "/";
+        document.cookie = name + '=; path=' + basePath + '; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
     };
 
     var CSRF = {
+
+        /**
+         * Key including subshop and -path
+         */
+        storageKey: '__csrf_token-' + window.csrfConfig.shopId,
 
         /**
          * Temporary request callback store
@@ -36,7 +42,7 @@
          * @returns {string}
          */
         getToken: function() {
-            return StorageManager.getItem('local', 'X-CSRF-Token');
+            return $.getCookie(this.storageKey);
         },
 
         /**
@@ -44,8 +50,7 @@
          * @returns {boolean}
          */
         checkToken: function() {
-            return $.getCookie('invalidate-xcsrf-token') === undefined
-                   && this.getToken() !== null;
+            return $.getCookie('invalidate-xcsrf-token') === undefined && this.getToken() !== undefined;
         },
 
         /**
@@ -75,7 +80,7 @@
          * @returns {HTMLElement[]}
          */
         getFormElements: function() {
-            return $('form');
+            return $('form[method="post"]');
         },
 
         /**
@@ -139,13 +144,24 @@
             var me = this;
 
             $.ajax({
-                url: window.controller['csrf_token_generate'],
+                url: window.csrfConfig.generateUrl,
                 success: function(response, status, xhr) {
-                    StorageManager.setItem('local', 'X-CSRF-Token', xhr.getResponseHeader('x-csrf-token'));
+                    me.saveToken(xhr.getResponseHeader('x-csrf-token'));
                     $.removeCookie('invalidate-xcsrf-token');
                     me.afterInit();
                 }
             });
+        },
+
+        /**
+         * Save token into a cookie
+         * @param token
+         */
+        saveToken: function(token) {
+            var me = this,
+                basePath = window.csrfConfig.basePath || "/";
+
+            document.cookie = me.storageKey + "=" + token + "; path=" + basePath;
         },
 
         /**

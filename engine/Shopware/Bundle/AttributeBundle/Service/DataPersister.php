@@ -149,11 +149,13 @@ class DataPersister
 
         unset($translation['id']);
         $translation['objectkey'] = $foreignKey;
-        foreach ($translation as $key => $value) {
-            $translation[$key] = $this->connection->quote($value);
-        }
+
         $query->insert('s_core_translations');
-        $query->values($translation);
+        foreach ($translation as $key => $value) {
+            $query->setValue($key, ':' . $key);
+            $query->setParameter(':' . $key, $value);
+        }
+        
         $query->execute();
     }
 
@@ -169,7 +171,10 @@ class DataPersister
 
         $data[$foreignKeyColumn] = $foreignKey;
         $query->insert($table);
-        $query->values($data);
+        foreach ($data as $key => $value) {
+            $query->setValue($key, ':' . $key);
+            $query->setParameter(':' . $key, $value);
+        }
         $query->execute();
     }
 
@@ -183,15 +188,14 @@ class DataPersister
     {
         $query = $this->connection->createQueryBuilder();
         $foreignKeyColumn = $this->mapping->getTableForeignKey($table);
-
         $query->update($table, 'alias');
         foreach ($data as $column => $value) {
-            $query->set('alias.' . $column, $value);
+            $query->set('alias.' . $column, ':_' . $column);
+            $query->setParameter(':_' . $column, $value);
         }
-
-        $query->where('alias.' . $foreignKeyColumn . ' = :_foreignKey')
-            ->setParameter(':_foreignKey', $foreignKey)
-            ->execute();
+        $query->where('alias.' . $foreignKeyColumn . ' = :_foreignKey');
+        $query->setParameter(':_foreignKey', $foreignKey);
+        $query->execute();
     }
 
     /**
@@ -218,7 +222,7 @@ class DataPersister
             if ($this->isDateColumn($column) && empty($value)) {
                 $result[$column->getName()] = 'NULL';
             } else {
-                $result[$column->getName()] = $this->connection->quote($value, $column->getType());
+                $result[$column->getName()] = $value;
             }
         }
 

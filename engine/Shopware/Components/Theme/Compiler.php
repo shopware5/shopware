@@ -76,6 +76,11 @@ class Compiler
     private $service;
 
     /**
+     * @var TimestampPersistor
+     */
+    private $timestampPersistor;
+
+    /**
      * @param $rootDir
      * @param LessCompiler $compiler
      * @param PathResolver $pathResolver
@@ -83,6 +88,7 @@ class Compiler
      * @param Service $service
      * @param Js $jsCompressor
      * @param \Enlight_Event_EventManager $eventManager
+     * @param TimestampPersistor $timestampPersistor
      */
     public function __construct(
         $rootDir,
@@ -91,7 +97,8 @@ class Compiler
         Inheritance $inheritance,
         Service $service,
         Js $jsCompressor,
-        \Enlight_Event_EventManager $eventManager
+        \Enlight_Event_EventManager $eventManager,
+        TimestampPersistor $timestampPersistor
     ) {
         $this->rootDir = $rootDir;
         $this->compiler = $compiler;
@@ -100,6 +107,7 @@ class Compiler
         $this->inheritance = $inheritance;
         $this->pathResolver = $pathResolver;
         $this->jsCompressor = $jsCompressor;
+        $this->timestampPersistor = $timestampPersistor;
     }
 
     /**
@@ -321,6 +329,15 @@ class Compiler
             $this->collectInheritanceCss($inheritances['custom'])
         );
 
+        $definitions = $this->eventManager->filter(
+            'Theme_Compiler_Collect_Less_Definitions_FilterResult',
+            $definitions,
+            array(
+                'shop' => $shop,
+                'template' => $template
+            )
+        );
+
         return $definitions;
     }
 
@@ -332,17 +349,7 @@ class Compiler
      */
     public function getThemeTimestamp(Shop\Shop $shop)
     {
-        /**@var $pathResolver \Shopware\Components\Theme\PathResolver */
-        $file = $this->pathResolver->getCacheDirectory() . DIRECTORY_SEPARATOR . 'timestamp' . $shop->getId() . '.txt';
-
-        if (file_exists($file)) {
-            $timestamp = file_get_contents($file);
-        } else {
-            $timestamp = time();
-            $this->createThemeTimestamp($shop, $timestamp);
-        }
-
-        return (int)$timestamp;
+        return $this->timestampPersistor->getCurrentTimestamp($shop->getId());
     }
 
     /**
@@ -351,8 +358,7 @@ class Compiler
      */
     public function createThemeTimestamp(Shop\Shop $shop, $timestamp)
     {
-        $file = $this->pathResolver->getCacheDirectory() . DIRECTORY_SEPARATOR . 'timestamp' . $shop->getId() . '.txt';
-        file_put_contents($file, $timestamp);
+        $this->timestampPersistor->updateTimestamp($shop->getId(), $timestamp);
     }
 
     /**
@@ -375,6 +381,15 @@ class Compiler
         $files = array_merge(
             $files,
             $this->collectInheritanceJavascript($inheritances['custom'])
+        );
+
+        $files = $this->eventManager->filter(
+            'Theme_Compiler_Collect_Javascript_Files_FilterResult',
+            $files,
+            array(
+                'shop' => $shop,
+                'template' => $template
+            )
         );
 
         return $files;

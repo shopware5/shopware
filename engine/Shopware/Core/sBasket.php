@@ -452,8 +452,15 @@ class sBasket
             $deletePremium = $this->db->fetchCol(
                 'SELECT basket.id
                 FROM s_order_basket basket
+                LEFT JOIN s_articles a
+                ON a.id = basket.articleID
+                LEFT JOIN s_articles_details d
+                ON d.id = a.main_detail_id
                 LEFT JOIN s_addon_premiums premium
-                ON premium.ordernumber_export = basket.ordernumber
+                ON IF(a.configurator_set_id IS NULL,
+                   premium.ordernumber_export = basket.ordernumber,
+                   premium.ordernumber = d.ordernumber
+                )
                 AND premium.startprice <= ?
                 WHERE basket.modus = 1
                 AND premium.id IS NULL
@@ -639,25 +646,29 @@ class sBasket
             ) ? : array();
         } else {
             // If we don't have voucher details yet, need to check if its a one-time code
-            $voucherDetails = $this->db->fetchRow(
-                'SELECT s_emarketing_voucher_codes.id AS id, s_emarketing_voucher_codes.code AS vouchercode,
-                    description, numberofunits, customergroup, value, restrictarticles,
-                    minimumcharge, shippingfree, bindtosupplier, taxconfig, valid_from,
-                    valid_to, ordercode, modus, percental, strict, subshopID
-                FROM s_emarketing_vouchers, s_emarketing_voucher_codes
-                WHERE modus = 1
-                AND s_emarketing_vouchers.id = s_emarketing_voucher_codes.voucherID
-                AND LOWER(code) = ?
-                AND cashed != 1
-                AND (
-                      (s_emarketing_vouchers.valid_to >= now()
-                          AND s_emarketing_vouchers.valid_from <= now()
-                      )
-                      OR s_emarketing_vouchers.valid_to is NULL
-                )',
+            $voucherCodeDetails = $this->db->fetchRow(
+                'SELECT id, voucherID, code as vouchercode FROM s_emarketing_voucher_codes c WHERE c.code = ? AND c.cashed != 1 LIMIT 1;',
                 array($voucherCode)
             );
-            $individualCode = ($voucherDetails && $voucherDetails["description"]);
+
+            $individualCode = false;
+            if ($voucherCodeDetails && $voucherCodeDetails['voucherID']) {
+                $voucherDetails = $this->db->fetchRow(
+                    'SELECT description, numberofunits, customergroup, value, restrictarticles,
+                    minimumcharge, shippingfree, bindtosupplier, taxconfig, valid_from,
+                    valid_to, ordercode, modus, percental, strict, subshopID
+                    FROM s_emarketing_vouchers WHERE modus = 1 AND id = ? AND (
+                      (valid_to >= now()
+                          AND valid_from <= now()
+                      )
+                      OR valid_to is NULL
+                ) LIMIT 1',
+                    array((int)$voucherCodeDetails['voucherID'])
+                );
+                unset($voucherCodeDetails['voucherID']);
+                $voucherDetails = array_merge($voucherCodeDetails, $voucherDetails);
+                $individualCode = ($voucherDetails && $voucherDetails["description"]);
+            }
         }
 
         // Interrupt the operation if one of the following occurs:
@@ -1060,6 +1071,9 @@ class sBasket
                 )
             );
         }
+        // Refresh voucher
+        $this->sUpdateVoucher();
+
         // Check for surcharges
         $this->sInsertSurcharge();
 
@@ -1068,9 +1082,6 @@ class sBasket
 
         // Calculate global basket discount
         $this->sInsertDiscount();
-
-        // Refresh voucher
-        $this->sUpdateVoucher();
 
         return $this->sGetBasketData();
     }
@@ -1190,7 +1201,7 @@ class sBasket
 
         if (!empty($cookieData) && empty($uniqueId)) {
             $uniqueId = md5(uniqid(rand()));
-            $this->front->Response()->setCookie('sUniqueID', $uniqueId, Time()+(86400*360), '/');
+            $this->front->Response()->setCookie('sUniqueID', $uniqueId, time()+(86400*360), '/');
         }
 
         // Check if this article is already noted
@@ -1234,7 +1245,7 @@ class sBasket
 
         $numbers = array_column($notes, 'ordernumber');
 
-        $context = Shopware()->Container()->get('shopware_storefront.context_service')->getProductContext();
+        $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
 
         $products = Shopware()->Container()->get('shopware_storefront.list_product_service')
             ->getList($numbers, $context);
@@ -1551,27 +1562,13 @@ class sBasket
             $sessionId
         );
 
-        // Shopware 3.5.0 / sth / laststock - instock check
-        if (!empty($chkBasketForArticle["id"])) {
-            if (
-                $article["laststock"] == true
-                && $article["instock"] < ($chkBasketForArticle["quantity"] + $quantity)
-            ) {
-                $quantity -= $chkBasketForArticle["quantity"];
-            }
-        } else {
-            if ($article["laststock"] == true && $article["instock"] <= $quantity) {
-                $quantity = $article["instock"];
-                if ($quantity <= 0) {
-                    return;
-                }
-            }
+        $quantity = $this->getBasketQuantity($quantity, $chkBasketForArticle, $article);
+
+        if ($quantity <= 0) {
+            return;
         }
 
         if ($chkBasketForArticle) {
-            // Article is already in basket, update quantity
-            $quantity += $chkBasketForArticle["quantity"];
-
             $this->sUpdateArticle($chkBasketForArticle["id"], $quantity);
             return $chkBasketForArticle["id"];
         }
@@ -2040,15 +2037,21 @@ class sBasket
         /** @var \Shopware\Components\Compatibility\LegacyStructConverter $legacyStructConverter */
         $legacyStructConverter = $container->get('legacy_struct_converter');
 
-        $products = $listProduct->getList($numbers, $context->getProductContext());
+        $products = $listProduct->getList($numbers, $context->getShopContext());
         $propertySets = $propertyService->getList($products, $context->getShopContext());
 
         $covers = $container->get('shopware_storefront.variant_cover_service')
-            ->getList($products, $context->getProductContext());
+            ->getList($products, $context->getShopContext());
 
         $details = [];
         foreach ($products as $product) {
             $promotion = $legacyStructConverter->convertListProductStruct($product);
+
+            if ($product->hasConfigurator()) {
+                /** @var StoreFrontBundle\Struct\Product\Price $variantPrice */
+                $variantPrice = $product->getVariantPrice();
+                $promotion['referenceprice'] = $variantPrice->getCalculatedReferencePrice();
+            }
 
             if (isset($covers[$product->getNumber()])) {
                 $promotion['image'] = $legacyStructConverter->convertMediaStruct($covers[$product->getNumber()]);
@@ -2075,23 +2078,24 @@ class sBasket
      */
     private function getBasketImage($image)
     {
-        return array(
-            'src' => array(array_merge(
-                array('original' => $image['source']),
-                array_map(function ($thumb) {
-                    return $thumb['source'];
-                }, $image['thumbnails']))
-            ),
-            'srchd' => array(array_map(function ($thumb) use ($image) {
-                return str_replace('.' . $image['extension'], '@2x.'. $image['extension'], $thumb['source']);
-            }, $image['thumbnails'])),
-            'res' => array('original' => array(
-                'width' => $image['height'],
-                'height' => $image['width']
-            )),
-            'description' => $image['description'],
-            'extension' => $image['extension'],
-            'attribute' => $image['attribute']
+        return array_merge(
+            $image,
+            [
+                'src' => array_merge(
+                    ['original' => $image['source']],
+                    array_column($image['thumbnails'], 'source')
+                ),
+                'srchd' => array_merge(
+                    ['original' => $image['source']],
+                    array_column($image['thumbnails'], 'retinaSource')
+                ),
+                'res' => [
+                    'original' => [
+                        'width' => $image['height'],
+                        'height' => $image['width']
+                    ]
+                ]
+            ]
         );
     }
 
@@ -2716,12 +2720,29 @@ class sBasket
         );
 
         if ($article['configurator_set_id'] > 0) {
-            $context = $this->contextService->getProductContext();
+            $context = $this->contextService->getShopContext();
             $product = Shopware()->Container()->get('shopware_storefront.list_product_service')->get($article['ordernumber'], $context);
             $product = $this->additionalTextService->buildAdditionalText($product, $context);
             $article['additionaltext'] = $product->getAdditional();
         }
 
         return $article;
+    }
+
+    /**
+     * @param int $quantity
+     * @param array $basketProduct
+     * @param array $article
+     * @return int
+     */
+    private function getBasketQuantity($quantity, $basketProduct, $article)
+    {
+        $newQuantity = $quantity + $basketProduct["quantity"] ?: 0;
+
+        if ($article['laststock'] && $newQuantity > $article['instock']) {
+            return (int) $article['instock'];
+        }
+
+        return $newQuantity;
     }
 }

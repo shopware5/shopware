@@ -69,14 +69,16 @@ module.exports = function (grunt) {
             less: {
                 files: [
                     '../engine/Shopware/Plugins/**/*.less',
-                    '../themes/Frontend/**/*.less'
+                    '../themes/Frontend/**/*.less',
+                    '../custom/plugins/**/*.less'
                 ],
                 tasks: ['less:development']
             },
             js: {
                 files: [
                     '../themes/Frontend/**/_public/src/js/*.js',
-                    '../engine/Shopware/Plugins/**/frontend/**/src/js/**/*.js'
+                    '../engine/Shopware/Plugins/**/frontend/**/src/js/**/*.js',
+                    '../custom/plugins/**/frontend/**/src/js/**/*.js'
                 ],
                 tasks: ['uglify:development']
             }

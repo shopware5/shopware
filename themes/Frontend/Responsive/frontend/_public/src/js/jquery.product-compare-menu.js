@@ -150,7 +150,8 @@
         onDeleteCompare: function (event) {
             var me = this,
                 deleteCompareBtn = me.$el.find(me.opts.deleteCompareSelector),
-                deleteUrl = deleteCompareBtn.attr('href'),
+                $form = deleteCompareBtn.closest('form'),
+                deleteUrl = $form.attr('action'),
                 $menu = $(me.opts.compareMenuSelector);
 
             event.preventDefault();
@@ -159,7 +160,7 @@
                 'url': deleteUrl,
                 'dataType': 'jsonp',
                 'success': function () {
-                    $menu.empty();
+                    $menu.empty().addClass(me.opts.hiddenCls);
 
                     $.publish('plugin/swProductCompareMenu/onDeleteCompareSuccess', [ me ]);
                 }
@@ -178,7 +179,8 @@
 
             var me = this,
                 $deleteBtn = $(event.currentTarget),
-                deleteUrl = $deleteBtn.attr('href'),
+                $form = $deleteBtn.closest('form'),
+                deleteUrl = $form.attr('action'),
                 rowElement = $deleteBtn.closest(me.opts.compareEntrySelector),
                 compareCount = $(me.opts.compareEntriesSelector).length;
 
@@ -207,7 +209,7 @@
                     'url': deleteUrl,
                     'dataType': 'jsonp',
                     'success': function (response) {
-                        $(me.opts.compareMenuSelector).html(response);
+                        $(me.opts.compareMenuSelector).empty().addClass(me.opts.hiddenCls);
 
                         //Reload compare menu plugin
                         $('*[data-product-compare-menu="true"]').swProductCompareMenu();

@@ -19,7 +19,7 @@ INSERT IGNORE INTO s_user_addresses_migration (original_type, original_id, user_
     's_user_shippingaddress' as original_type,
     s_user_shippingaddress.id as original_id,
     userID, company, department, s_user_shippingaddress.salutation, s_user_shippingaddress.firstname, s_user_shippingaddress.lastname, street, zipcode, city, additional_address_line1, additional_address_line2, countryID, IF(stateID = 0, NULL, stateID),
-    MD5(CONCAT_WS('', userID, company, department, s_user_shippingaddress.salutation, s_user_shippingaddress.firstname, s_user_shippingaddress.lastname, street, zipcode, city, additional_address_line1, additional_address_line2, countryID, stateID, null, null))
+    MD5(CONCAT_WS('', userID, company, department, s_user_shippingaddress.salutation, s_user_shippingaddress.firstname, s_user_shippingaddress.lastname, street, zipcode, city, additional_address_line1, additional_address_line2, countryID, IF(stateID = 0, NULL, stateID)))
   FROM s_user_shippingaddress
   INNER JOIN s_user ON s_user_shippingaddress.userID = s_user.id
   INNER JOIN s_core_countries ON s_user_shippingaddress.countryID = s_core_countries.id

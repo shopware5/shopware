@@ -50,7 +50,7 @@ To keep your master up to date:
     git pull --rebase
     php composer.phar self-update
     php composer.phar install
-    php build/ApplyDeltas.php
+    php bin/console sw:migrations:migrate
     php bin/console sw:snippets:to:db
 
 Checkout a new topic-branch and you're ready to start hacking and contributing to Shopware:

@@ -60,7 +60,7 @@ class PluginConfigSetCommand extends ShopwareCommand
             ->addArgument(
                 'value',
                 InputArgument::REQUIRED,
-                'Configuration value.'
+                'Configuration value. Can be true, false, null, an integer or an array specified with brackets: [value,anothervalue]. Everything else will be interpreted as string.'
             )
             ->addOption(
                 'shop',
@@ -100,18 +100,41 @@ class PluginConfigSetCommand extends ShopwareCommand
             $shop = $em->getRepository('Shopware\Models\Shop\Shop')->findOneBy(array('default' => true));
         }
 
-        $value = $input->getArgument('value');
-        if ($value === "null") {
-            $value = null;
-        }
-        if ($value === "false") {
-            $value = false;
-        }
-        if ($value === "true") {
-            $value = true;
+        $rawValue = $input->getArgument('value');
+        $value = $this->castValue($rawValue);
+
+        if (preg_match('/^\[(.+,?)*\]$/', $value, $matches) && count($matches) == 2) {
+            $value = explode(',', $matches[1]);
+            $value = array_map(function ($val) {
+                return $this->castValue($val);
+            }, $value);
         }
 
         $pluginManager->saveConfigElement($plugin, $input->getArgument('key'), $value, $shop);
         $output->writeln(sprintf("Plugin configuration for Plugin %s saved.", $pluginName));
+    }
+
+    /**
+     * Casts a given string into the proper type.
+     * Works only for some types, see return.
+     *
+     * @param $value
+     * @return bool|int|null|string
+     */
+    private function castValue($value)
+    {
+        if ($value === "null") {
+            return null;
+        }
+        if ($value === "false") {
+            return false;
+        }
+        if ($value === "true") {
+            return true;
+        }
+        if (preg_match('/^\d+$/', $value)) {
+            return intval($value);
+        }
+        return $value;
     }
 }

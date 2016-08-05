@@ -212,9 +212,6 @@ class Repository extends ModelRepository
             'billing',
             'shipping',
             'paymentData',
-            'attribute',
-            'billingAttribute',
-            'shippingAttribute',
             'locale.language',
             'shop.name as shopName',
             $builder->expr()->count('doneOrders.id') . ' as orderCount',
@@ -230,9 +227,6 @@ class Repository extends ModelRepository
                 ->leftJoin('subShop.locale', 'locale')
                 ->leftJoin('customer.paymentData', 'paymentData', \Doctrine\ORM\Query\Expr\Join::WITH, 'paymentData.paymentMean = customer.paymentId')
                 ->leftJoin('customer.orders', 'doneOrders', \Doctrine\ORM\Query\Expr\Join::WITH, 'doneOrders.status <> -1 AND doneOrders.status <> 4')
-                ->leftJoin('billing.attribute', 'billingAttribute')
-                ->leftJoin('shipping.attribute', 'shippingAttribute')
-                ->leftJoin('customer.attribute', 'attribute')
                 ->where($builder->expr()->eq('customer.id', $customerId));
 
         $builder->groupBy('customer.id');

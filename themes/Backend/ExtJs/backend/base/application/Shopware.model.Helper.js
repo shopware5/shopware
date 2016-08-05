@@ -421,7 +421,7 @@ Ext.define('Shopware.model.Helper', {
             proxy: {
                 type: 'ajax',
                 url: searchUrl,
-                reader: { type: 'json', root: 'data', totalProperty: 'total' },
+                reader: { type: 'application', root: 'data', totalProperty: 'total' },
                 extraParams: { association: associationKey }
             }
         });

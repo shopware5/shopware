@@ -28,24 +28,27 @@
             {/block}
 
             {block name="frontend_address_delete_content"}
-                <div class="panel has--border is--rounded block">
+                <div class="panel has--border is--rounded block address--box">
 
-                    <div class="panel--body is--wide">
+                    <div class="panel--body is--wide address--item-body">
                         {block name="frontend_address_delete_content_inner"}
                             {if $address.company}
-                                <p>{$address.company}{if $address.department} - {$address.department}{/if}</p>
+                                <p><span class="address--company">{$address.company}</span>{if $address.department} - <span class="address--department">{$address.department}</span>{/if}</p>
                             {/if}
-
-                            {$address.salutation|salutation}
+                            <span class="address--salutation">{$address.salutation|salutation}</span>
                             {if {config name="displayprofiletitle"}}
-                                {$address.title}<br/>
+                                <span class="address--title">{$address.title}</span><br/>
                             {/if}
-                            {$address.firstname} {$address.lastname}<br />
-                            {$address.street}<br />
-                            {if $address.additionalAddressLine1}{$address.additionalAddressLine1}<br />{/if}
-                            {if $address.additionalAddressLine2}{$address.additionalAddressLine2}<br />{/if}
-                            {if {config name=showZipBeforeCity}}{$address.zipCode} {$address.city}{else}{$address.city} {$address.zipCode}{/if}<br />
-                            {if $address.state.name}{$address.state.name}<br />{/if}
+                            <span class="address--firstname">{$address.firstname}</span> <span class="address--lastname">{$address.lastname}</span><br />
+                            <span class="address--street">{$address.street}</span><br />
+                            {if $address.additionalAddressLine1}<span class="address--additional-one">{$address.additionalAddressLine1}</span><br />{/if}
+                            {if $address.additionalAddressLine2}<span class="address--additional-two">{$address.additionalAddressLine2}</span><br />{/if}
+                            {if {config name=showZipBeforeCity}}
+                                <span class="address--zipcode">{$address.zipcode}</span> <span class="address--city">{$address.city}</span>
+                            {else}
+                                <span class="address--city">{$address.city}</span> <span class="address--zipcode">{$address.zipcode}</span>
+                            {/if}<br />
+                            {if $address.state.name}<span class="address--statename">{$address.state.name}</span><br />{/if}
                             {$address.country.name}
                         {/block}
                     </div>

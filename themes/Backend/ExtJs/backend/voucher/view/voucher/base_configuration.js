@@ -103,6 +103,7 @@ Ext.define('Shopware.apps.Voucher.view.voucher.BaseConfiguration', {
         if(me.record){
             me.loadRecord(me.record);
             me.attributeForm.loadAttribute(me.record.get('id'));
+            me.getForm().isValid();
         }
     },
 

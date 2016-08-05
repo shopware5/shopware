@@ -22,6 +22,10 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\Api\Exception as ApiException;
+use Symfony\Component\HttpFoundation\FileBag;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+
 class Shopware_Controllers_Api_Media extends Shopware_Controllers_Api_Rest
 {
     /**
@@ -74,7 +78,38 @@ class Shopware_Controllers_Api_Media extends Shopware_Controllers_Api_Rest
      */
     public function postAction()
     {
-        $media = $this->resource->create($this->Request()->getPost());
+        $params = $this->Request()->getPost();
+        $fileBag = new FileBag($_FILES);
+
+        // Check for a POSTed file
+        if ($fileBag->has('file')) {
+            /** @var UploadedFile $file */
+            $file = $fileBag->get('file');
+            $fileExtension = $file->getClientOriginalExtension();
+            $fileName = $file->getClientOriginalName();
+
+            if ($file->getError() !== UPLOAD_ERR_OK) {
+                throw new \Exception(sprintf('Could not upload file "%s"', $file->getClientOriginalName()));
+            }
+
+            // validate extension
+            if (in_array(strtolower($fileExtension), \Shopware_Controllers_Backend_MediaManager::$fileUploadBlacklist)) {
+                unlink($file->getPathname());
+                throw new ApiException\CustomValidationException(sprintf('The type of the uploaded file "%s" is not supported', $file->getClientOriginalName()));
+            }
+
+            // use custom name if provided
+            if (!empty($params['name'])) {
+                // Use the provided name to overwrite the file name, but keep the extensions to allow
+                // automatic detection of the file type
+                $fileName = $params['name'] . '.' . $fileExtension;
+            }
+
+            $params['name'] = $this->resource->getUniqueFileName($file->getPathname(), $fileName);
+            $params['file'] = new UploadedFile($file->getPathname(), $params['name'], $file->getClientMimeType(), $file->getClientSize(), $file->getError());
+        }
+
+        $media = $this->resource->create($params);
 
         $location = $this->apiBaseUrl . 'media/' . $media->getId();
         $data = array(

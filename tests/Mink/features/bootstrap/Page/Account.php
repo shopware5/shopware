@@ -8,6 +8,7 @@ use Shopware\Tests\Mink\Element\AccountPayment;
 use Shopware\Tests\Mink\Element\AddressBox;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
+use Shopware\Tests\Mink\Element\AddressManagementAddressBox;
 use Shopware\Tests\Mink\Helper;
 use Shopware\Tests\Mink\HelperSelectorInterface;
 
@@ -182,7 +183,7 @@ class Account extends Page implements HelperSelectorInterface
         $this->fillField('email', $email);
         $this->fillField('password', $password);
 
-        $this->pressButton('Anmelden');
+        Helper::pressNamedButton($this, 'loginButton');
     }
 
     /**
@@ -283,6 +284,16 @@ class Account extends Page implements HelperSelectorInterface
      * @param array $values
      */
     public function changeShippingAddress($values)
+    {
+        Helper::fillForm($this, 'addressForm', $values);
+        Helper::pressNamedButton($this, 'saveAddressButton');
+    }
+
+    /**
+     * Creates a new address used neither as billing nor as shipping address
+     * @param array $values
+     */
+    public function createArbitraryAddress($values)
     {
         Helper::fillForm($this, 'addressForm', $values);
         Helper::pressNamedButton($this, 'saveAddressButton');

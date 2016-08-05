@@ -9,6 +9,7 @@ Ext.define('Shopware.model.AttributeConfig', {
         { name: 'tableName', type: 'string' },
         { name: 'columnName', type: 'string' },
         { name: 'columnType', type: 'string' },
+        { name: 'defaultValue', type: 'string', useNull: true, defaultValue: null },
         { name: 'entity', type: 'string', useNull: true },
         { name: 'dbalType', type: 'string' },
         { name: 'sqlType', type: 'string' },

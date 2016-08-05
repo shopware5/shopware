@@ -300,6 +300,7 @@
         <service id="shopware_storefront.category_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\CategoryHydrator">
             <argument type="service" id="shopware_storefront.attribute_hydrator_dbal"/>
             <argument type="service" id="shopware_storefront.media_hydrator_dbal"/>
+            <argument type="service" id="shopware_storefront.product_stream_hydrator_dbal"/>
         </service>
 
         <service id="shopware_storefront.configurator_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\ConfiguratorHydrator">

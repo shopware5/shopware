@@ -3,7 +3,8 @@
 namespace Shopware\Tests\Service\Product;
 
 use Shopware\Bundle\StoreFrontBundle\Struct;
-use Shopware\Bundle\StoreFrontBundle\Struct\ProductContext;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
+use Shopware\Components\Routing\Context;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Service\TestCase;
 
@@ -11,7 +12,7 @@ class ProductMediaTest extends TestCase
 {
     protected function getProduct(
         $number,
-        ProductContext $context,
+        ShopContext $context,
         Category $category = null,
         $imageCount = null
     ) {
@@ -29,7 +30,7 @@ class ProductMediaTest extends TestCase
         return $data;
     }
 
-    private function getVariantImageProduct($number, Struct\ProductContext $context, $imageCount = 2)
+    private function getVariantImageProduct($number, Struct\ShopContext $context, $imageCount = 2)
     {
         $data = $this->getProduct(
             $number,
@@ -178,7 +179,7 @@ class ProductMediaTest extends TestCase
     {
         // correct router context for url building
         Shopware()->Container()->get('router')->setContext(
-            new \Shopware\Components\Routing\Context(
+            new Context(
                 'localhost',
                 Shopware()->Shop()->getBasePath(),
                 Shopware()->Shop()->getSecure()

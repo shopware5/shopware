@@ -109,7 +109,8 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
             label: '{s name=base/salutation}Salutation{/s}'
         },
         firstname: '{s name=base/firstname}Firstname{/s}',
-        lastname: '{s name=base/lastname}Lastname{/s}'
+        lastname: '{s name=base/lastname}Lastname{/s}',
+        birthday: '{s name=base/birthday}Birthday{/s}'
     },
 
     /**
@@ -198,7 +199,12 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
 
         //set different titles for create and edit customers
         if ( me.record.get('id') ) {
-            me.setTitle(me.snippets.titleEdit + ' ' + me.record.getBilling().getAt(0).get('number'));
+            me.setTitle(Ext.String.format('[0] [1] [2] ([3])',
+                me.snippets.titleEdit,
+                me.record.get('firstname') || '',
+                me.record.get('lastname') || '',
+                me.record.get('number') || ' - '
+            ));
         } else {
             me.setTitle(me.snippets.titleCreate);
         }
@@ -340,6 +346,13 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
             required: true
         });
 
+        me.customerBirthday = Ext.create('Ext.form.field.Date', {
+            fieldLabel: me.snippets.birthday,
+            labelWidth: 155,
+            submitFormat: 'd.m.Y',
+            name: 'birthday'
+        });
+
         return Ext.create('Ext.form.FieldSet', {
             layout: 'column',
             title: '{s name="personal_field_set"}{/s}',
@@ -357,8 +370,8 @@ Ext.define('Shopware.apps.Customer.view.detail.Window', {
                 }
             },
             items: [
-                { items: [me.customerSalutation,me.customerTitle] },
-                { items: [me.customerFirstname, me.customerLastname] }
+                { items: [me.customerSalutation, me.customerFirstname, me.customerBirthday] },
+                { items: [me.customerTitle, me.customerLastname] }
             ]
         });
     },

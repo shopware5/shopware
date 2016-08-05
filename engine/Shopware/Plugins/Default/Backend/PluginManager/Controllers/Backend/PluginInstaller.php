@@ -53,6 +53,8 @@ class Shopware_Controllers_Backend_PluginInstaller extends Shopware_Controllers_
 
     public function installPluginAction()
     {
+        @set_time_limit(300);
+
         $plugin = $this->getPluginModel($this->Request()->getParam('technicalName'));
 
         if (!$plugin instanceof Plugin) {
@@ -70,7 +72,7 @@ class Shopware_Controllers_Backend_PluginInstaller extends Shopware_Controllers_
 
         try {
             $result = $this->pluginManager->installPlugin($plugin);
-            $this->View()->assign(['result' => $result]);
+            $this->View()->assign(['success' => true, 'result' => $result]);
         } catch (Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
         }
@@ -78,6 +80,8 @@ class Shopware_Controllers_Backend_PluginInstaller extends Shopware_Controllers_
 
     public function updateAction()
     {
+        @set_time_limit(300);
+
         $technicalName = $this->Request()->getParam('technicalName');
 
         $plugin = $this->getPluginModel($technicalName);
@@ -107,11 +111,13 @@ class Shopware_Controllers_Backend_PluginInstaller extends Shopware_Controllers_
         $plugin->setActive($active);
         $this->get('models')->flush();
 
-        $this->View()->assign(['result' => $result]);
+        $this->View()->assign(['success' => true, 'result' => $result]);
     }
 
     public function uninstallPluginAction()
     {
+        @set_time_limit(300);
+
         $plugin = $this->getPluginModel($this->Request()->getParam('technicalName'));
 
         try {
@@ -124,6 +130,8 @@ class Shopware_Controllers_Backend_PluginInstaller extends Shopware_Controllers_
 
     public function secureUninstallPluginAction()
     {
+        @set_time_limit(300);
+
         $plugin = $this->getPluginModel($this->Request()->getParam('technicalName'));
 
         try {
@@ -131,7 +139,7 @@ class Shopware_Controllers_Backend_PluginInstaller extends Shopware_Controllers_
                 $plugin,
                 !$plugin->hasCapabilitySecureUninstall()
             );
-            $this->View()->assign(['result' => $result]);
+            $this->View()->assign(['success' => true, 'result' => $result]);
         } catch (Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
         }
@@ -165,7 +173,7 @@ class Shopware_Controllers_Backend_PluginInstaller extends Shopware_Controllers_
 
         try {
             $result = $this->pluginManager->activatePlugin($plugin);
-            $this->View()->assign(['result' => $result]);
+            $this->View()->assign(['success' => true, 'result' => $result]);
         } catch (Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
         }
@@ -177,7 +185,7 @@ class Shopware_Controllers_Backend_PluginInstaller extends Shopware_Controllers_
 
         try {
             $result = $this->pluginManager->deactivatePlugin($plugin);
-            $this->View()->assign(['result' => $result]);
+            $this->View()->assign(['success' => true, 'result' => $result]);
         } catch (Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
         }

@@ -27,6 +27,8 @@
 
         <service id="shopware_elastic_search.index_factory" class="Shopware\Bundle\ESIndexingBundle\IndexFactory" >
             <argument>%shopware.es.prefix%</argument>
+            <argument>%shopware.es.number_of_shards%</argument>
+            <argument>%shopware.es.number_of_replicas%</argument>
         </service>
 
         <service id="shopware_elastic_search.shop_analyzer" class="Shopware\Bundle\ESIndexingBundle\ShopAnalyzer" />

@@ -57,7 +57,7 @@ Ext.define('Shopware.store.Search', {
                     read: '{url controller="search" action="search"}'
                 },
                 reader: {
-                    type: 'json',
+                    type: 'application',
                     root: 'data',
                     totalProperty: 'total'
                 }

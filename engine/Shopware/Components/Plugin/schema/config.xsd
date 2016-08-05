@@ -54,7 +54,6 @@
             <xsd:enumeration value="number"/>
             <xsd:enumeration value="select"/>
             <xsd:enumeration value="combo"/>
-            <xsd:enumeration value="select"/>
         </xsd:restriction>
     </xsd:simpleType>
 

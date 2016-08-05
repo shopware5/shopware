@@ -94,7 +94,7 @@ class FormSynchronizer
                 $options['store'] = $element['store'];
             }
 
-            if (isset($element['description']) && isset($element['description']['en'])) {
+            if (isset($element['description']['en'])) {
                 $options['description'] = $element['description']['en'];
             }
 

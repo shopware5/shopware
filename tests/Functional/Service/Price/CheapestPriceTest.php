@@ -7,7 +7,7 @@ use Shopware\Tests\Service\TestCase;
 
 class CheapestPriceTest extends TestCase
 {
-    private function getConfiguratorProduct($number, ShopContextInterface $context) // ProductContext
+    private function getConfiguratorProduct($number, ShopContextInterface $context) // ShopContext
     {
         $product = $this->helper->getSimpleProduct(
             $number,

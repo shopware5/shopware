@@ -23,17 +23,21 @@
                         <div class="modal--container" data-panel-auto-resizer="true">
                             {foreach $addresses as $address}
                                 {block name='frontend_address_selection_modal_container_item'}
-                                    <div class="modal--container-item">
-                                        <div class="panel has--border is--rounded block">
+                                    <div class="modal--container-item address--box">
+                                        <div class="panel address--item-content has--border is--rounded block">
                                             {block name='frontend_address_selection_modal_container_item_body'}
-                                                <div class="panel--body is--wide">
-                                                    <span class="is--bold">{$address.firstname} {$address.lastname}</span><br />
-                                                    {if $address.company}<span class="is--bold">{$address.company}</span><br/>{/if}
-                                                    {$address.street}<br />
-                                                    {if $address.additionalAddressLine1}{$address.additionalAddressLine1}<br />{/if}
-                                                    {if $address.additionalAddressLine2}{$address.additionalAddressLine2}<br />{/if}
-                                                    {if {config name=showZipBeforeCity}}{$address.zipcode} {$address.city}{else}{$address.city} {$address.zipcode}{/if}<br />
-                                                    {$address.country.name}
+                                                <div class="address--item-body panel--body is--wide">
+                                                    <span class="address--firstname is--bold">{$address.firstname}</span> <span class="address--lastname is--bold">{$address.lastname}</span><br />
+                                                    {if $address.company}<span class="address--company">{$address.company}</span><br/>{/if}
+                                                    <span class="address--street">{$address.street}</span><br />
+                                                    {if $address.additionalAddressLine1}<span class="address--additional-one">{$address.additionalAddressLine1}</span><br />{/if}
+                                                    {if $address.additionalAddressLine2}<span class="address--additional-two">{$address.additionalAddressLine2}</span><br />{/if}
+                                                    {if {config name=showZipBeforeCity}}
+                                                        <span class="address--zipcode">{$address.zipcode}</span> <span class="address--city">{$address.city}</span>
+                                                    {else}
+                                                        <span class="address--city">{$address.city}</span> <span class="address--zipcode">{$address.zipcode}</span>
+                                                    {/if}<br />
+                                                    <span class="address--countryname">{$address.country.name}</span>
                                                 </div>
                                             {/block}
 

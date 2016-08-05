@@ -184,18 +184,15 @@ class DatabaseSetupCommand extends ShopwareCommand
             $connectionSettings[] = 'unix_socket=' . $dbConfig['socket'];
         }
 
-
-        if (!empty($dbConfig['socket'])) {
-            $connectionSettings[] = 'unix_socket=' . $dbConfig['socket'];
+        if (!empty($dbConfig['port'])) {
+            $connectionSettings[] = 'port=' . $dbConfig['port'];
         }
 
         if (!empty($dbConfig['charset'])) {
             $connectionSettings[] = 'charset=' . $dbConfig['charset'];
         }
 
-        $connectionString = implode(';', $connectionSettings);
-
-        return $connectionString;
+        return implode(';', $connectionSettings);
     }
 
     /**

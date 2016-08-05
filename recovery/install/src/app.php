@@ -186,28 +186,28 @@ $app->map('/requirements/', function () use ($app, $container, $menuHelper) {
     $shopwareSystemCheck = $container->offsetGet('install.requirements');
     $systemCheckResults  = $shopwareSystemCheck->toArray();
 
-    $app->view()->setData("warning", (bool) $shopwareSystemCheck->getContainsWarnings());
-    $app->view()->setData("error", (bool) $shopwareSystemCheck->getFatalError());
+    $app->view()->setData('warning', (bool) $systemCheckResults['hasWarnings']);
+    $app->view()->setData('error', (bool) $systemCheckResults['hasErrors']);
 
     // Check file & directory permissions
     /** @var $shopwareSystemCheckPath RequirementsPath */
-    $shopwareSystemCheckPath = $container->offsetGet("install.requirementsPath");
+    $shopwareSystemCheckPath = $container->offsetGet('install.requirementsPath');
     $shopwareSystemCheckPathResult = $shopwareSystemCheckPath->check();
 
     if ($shopwareSystemCheckPathResult->hasError()) {
         $app->view()->setData('error', true);
     }
 
-    if ($app->request()->isPost() && $app->view()->getData("error") == false) {
+    if ($app->request()->isPost() && $app->view()->getData('error') == false) {
         // No errors and submitted form - proceed with next-step
         $app->redirect($menuHelper->getNextUrl());
     }
 
-    $app->render("/requirements.php", [
-        "systemCheckResults"                 => $systemCheckResults,
-        "systemCheckResultsWritePermissions" => $shopwareSystemCheckPathResult->toArray()
+    $app->render('/requirements.php', [
+        'systemCheckResults' => $systemCheckResults['checks'],
+        'systemCheckResultsWritePermissions' => $shopwareSystemCheckPathResult->toArray()
     ]);
-})->name("requirements")->via('GET', 'POST');
+})->name('requirements')->via('GET', 'POST');
 
 $app->map('/database-configuration/', function () use ($app, $container, $menuHelper) {
     $menuHelper->setCurrent('database-configuration');

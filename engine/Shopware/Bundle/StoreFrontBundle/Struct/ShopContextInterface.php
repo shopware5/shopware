@@ -24,6 +24,11 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
+use Shopware\Bundle\StoreFrontBundle\Struct\Country\Area;
+use Shopware\Bundle\StoreFrontBundle\Struct\Country\State;
+use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceGroup;
+
 /**
  * @category  Shopware
  * @package   Shopware\Bundle\StoreFrontBundle\Struct
@@ -59,7 +64,7 @@ interface ShopContextInterface
      * is equal to the fallback customer group of the shop.
      *
      *
-     * @return Customer\Group
+     * @return Group
      */
     public function getCurrentCustomerGroup();
 
@@ -70,7 +75,7 @@ interface ShopContextInterface
      * own defined product prices, the prices of the fallback customer
      * group are displayed.
      *
-     * @return Customer\Group
+     * @return Group
      */
     public function getFallbackCustomerGroup();
 
@@ -78,4 +83,41 @@ interface ShopContextInterface
      * @return string
      */
     public function getBaseUrl();
+
+    /**
+     * Returns all tax rules
+     *
+     * @return Tax[]
+     */
+    public function getTaxRules();
+
+    /**
+     * Returns the active tax rule for the provided tax id.
+     *
+     * @param int $taxId
+     * @return Tax
+     */
+    public function getTaxRule($taxId);
+
+    /**
+     * Returns the active price groups
+     *
+     * @return PriceGroup[]
+     */
+    public function getPriceGroups();
+
+    /**
+     * @return Area|null
+     */
+    public function getArea();
+
+    /**
+     * @return Country|null
+     */
+    public function getCountry();
+
+    /**
+     * @return State|null
+     */
+    public function getState();
 }

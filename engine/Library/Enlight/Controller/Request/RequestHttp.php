@@ -45,6 +45,11 @@ class Enlight_Controller_Request_RequestHttp
     ];
 
     /**
+     * @var array
+     */
+    private $attributes = [];
+
+    /**
      * Set GET values method
      *
      * @param  string|array $spec
@@ -81,6 +86,42 @@ class Enlight_Controller_Request_RequestHttp
         }
 
         return parent::setPost($spec, $value);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAttributes()
+    {
+        return $this->attributes;
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function getAttribute($attribute, $default = null)
+    {
+        if (false === array_key_exists($attribute, $this->attributes)) {
+            return $default;
+        }
+
+        return $this->attributes[$attribute];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setAttribute($attribute, $value)
+    {
+        $this->attributes[$attribute] = $value;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function unsetAttribute($attribute)
+    {
+        unset($this->attributes[$attribute]);
     }
 
     /**

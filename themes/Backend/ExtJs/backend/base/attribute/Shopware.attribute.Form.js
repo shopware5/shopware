@@ -347,7 +347,8 @@ Ext.define('Shopware.attribute.Form', {
                 fieldLabel: attribute.get('label'),
                 supportText: attribute.get('supportText'),
                 helpText: attribute.get('helpText'),
-                labelWidth: 155
+                labelWidth: 155,
+                value: attribute.get('defaultValue')
             };
             var handler = me.getTypeHandler(attribute);
 

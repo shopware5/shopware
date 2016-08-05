@@ -57,18 +57,16 @@ class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components
      */
     public function testChangeCustomerPaymentMean()
     {
-        $dummyData = new \Shopware\Models\Customer\Customer();
-        $dummyData->setEmail('test@phpunit.org');
-        $this->manager->persist($dummyData);
-        $this->manager->flush();
-        $this->assertEquals(0, $dummyData->getPaymentId());
+        $customer = $this->createDummyCustomer();
+
+        $this->assertEquals(0, $customer->getPaymentId());
 
         $debit = $this->manager
             ->getRepository('Shopware\Models\Payment\Payment')
             ->findOneBy(array('name' => 'debit'));
 
         $params = array(
-            'id' => $dummyData->getId(),
+            'id' => $customer->getId(),
             'paymentId' => $debit->getId(),
         );
         $this->Request()->setMethod('POST')->setPost($params);
@@ -78,10 +76,10 @@ class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components
         $this->assertTrue($this->View()->success);
         $this->assertEquals($debit->getId(), $jsonBody['data']['paymentId']);
 
-        $this->manager->refresh($dummyData);
-        $this->assertEquals($debit->getId(), $dummyData->getPaymentId());
+        $this->manager->refresh($customer);
+        $this->assertEquals($debit->getId(), $customer->getPaymentId());
 
-        $this->manager->remove($dummyData);
+        $this->manager->remove($customer);
         $this->manager->flush();
     }
 
@@ -98,6 +96,15 @@ class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components
             'paymentId' => $debit->getId(),
             'email' => 'test@shopware.de',
             'newPassword' => '222',
+            'billing' => [
+                [
+                    'firstName' => 'test',
+                    'lastName' => 'test',
+                    'zipCode' => 'test',
+                    'city' => 'test',
+                    'countryId' => 2
+                ]
+            ],
             'paymentData' => array(array(
                 'accountHolder'  => 'Account Holder Name',
                 'accountNumber'  => '1234567890',
@@ -211,11 +218,9 @@ class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components
      */
     public function testPerformOrderAction()
     {
-        //set the user id
-        $params = array(
-            'id' => 1
-        );
-        $this->Request()->setParams($params);
+        $customer = $this->createDummyCustomer();
+
+        $this->Request()->setParams(['id' => $customer->getId()]);
 
         /** @var Enlight_Controller_Response_ResponseTestCase $response */
         $response = $this->dispatch('backend/Customer/performOrder');
@@ -236,9 +241,47 @@ class Shopware_Tests_Controllers_Backend_CustomerTest extends Enlight_Components
      */
     public function testCustomerId()
     {
-        $customer = Shopware()->Models()->find('Shopware\Models\Customer\Customer', 1);
+        $dummy = $this->createDummyCustomer();
+
+        $customer = Shopware()->Models()->find('Shopware\Models\Customer\Customer', $dummy->getId());
 
         $this->assertInstanceOf('\Shopware\Models\Customer\Customer', $customer);
         $this->assertEquals('1', $customer->getGroup()->getId());
+    }
+
+    /**
+     * @return \Shopware\Models\Customer\Customer
+     */
+    private function createDummyCustomer()
+    {
+        $dummyData = new \Shopware\Models\Customer\Customer();
+        $dummyData->setEmail('test@phpunit.org');
+        $dummyData->setGroup($this->manager->find('Shopware\Models\Customer\Group', 1));
+        $this->manager->persist($dummyData);
+        $this->manager->flush();
+
+        $address = new \Shopware\Models\Customer\Address();
+        $address->fromArray([
+            'firstname' => 'test',
+            'lastname' => 'test',
+            'zipcode' => 'test',
+            'city' => 'test',
+            'customer' => $dummyData,
+            'country' => $this->manager->find('Shopware\Models\Country\Country', 2)
+        ]);
+        $this->manager->persist($address);
+        $this->manager->flush();
+
+        $billing = new \Shopware\Models\Customer\Billing();
+        $billing->fromAddress($address);
+        $billing->setCustomer($dummyData);
+        $this->manager->persist($billing);
+        $this->manager->flush();
+
+        $dummyData->setDefaultBillingAddress($address);
+
+        $this->manager->persist($dummyData);
+        $this->manager->flush();
+        return $dummyData;
     }
 }

@@ -44,7 +44,7 @@ Ext.define('Shopware.apps.Systeminfo.model.Config', {
 
     fields: [
 		//{block name="backend/systeminfo/model/config/fields"}{/block}
-		'name', 'required', 'version', 'result', 'group'],
+		'name', 'required', 'version', 'status', 'group'],
     /**
     * Configure the data communication
     * @object

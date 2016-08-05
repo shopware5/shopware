@@ -10,14 +10,14 @@ Feature: Note
     @esd @variants
     Scenario: I can add several products to the note from their detail pages
         When  I am on the detail page for article 197
-        And   I follow "Auf den Merkzettel"
+        And   I press "Auf den Merkzettel"
         Then  I should be on the page "Note"
 
         When  I go to the detail page for article 122
         And   I choose the following article configuration:
             | groupId | value     |
             | 5       | 1,0 Liter |
-        And   I follow "Auf den Merkzettel"
+        And   I press "Auf den Merkzettel"
         Then  I should be on the page "Note"
         And   the note should contain the following products:
             | number      | name                           | supplier            | description                                                                                                                                                  | price   | image                           | link                                                          |
@@ -44,7 +44,7 @@ Feature: Note
             | Kwon-Tasche-Coach-schwarz       | Zahlungsarten & Riskmanagement | 0       | In Shopware haben Sie ein sehr umfangreiches Riskmanagement, in dem Sie gewünscht | 119,99 | /beispiele/zahlungsarten/228/zahlungsarten-und-riskmanagement |
             | Kwon-Fitness--Boxhandschuh-blau | Abschlag bei Zahlungsarten     | 0       | In Shopware können Sie bei gewünschten Zahlungsarten auch Abschläge definieren.   | 47,90  | /beispiele/zahlungsarten/230/abschlag-bei-zahlungsarten       |
         When  I go to the page "Note"
-        And   I follow "Vergleich löschen"
+        And   I press "Vergleich löschen"
         And   I go to the page "Note"
         Then  I should not see "Artikel vergleichen"
 
@@ -54,7 +54,7 @@ Feature: Note
         Then  I should see "Zahlungsarten & Riskmanagement"
         And   I should be on the page "Listing"
 
-        When  I follow the link "remember" of the element "ArticleBox" on position 2
+        When  I press the button "remember" of the element "ArticleBox" on position 2
         Then  I should be on the page "Note"
         And   I should see 2 element of type "NotePosition"
 
@@ -63,6 +63,6 @@ Feature: Note
         Then  I should see "Zahlungsarten & Riskmanagement"
         And   I should be on the page "Listing"
 
-        When  I follow the link "remember" of the element "ArticleBox" on position 1
+        When  I press the button "remember" of the element "ArticleBox" on position 1
         Then  I should be on the page "Note"
         And   I should see 3 element of type "NotePosition"
