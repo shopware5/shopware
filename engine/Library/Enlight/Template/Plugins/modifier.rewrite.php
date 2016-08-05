@@ -21,6 +21,10 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
+/**
+ * @deprecated since 5.2.3 will be removed in 5.3
+ */
 function smarty_modifier_rewrite($content, $title=null)
 {
     return $content;

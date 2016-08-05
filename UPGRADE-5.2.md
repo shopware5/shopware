@@ -2,6 +2,12 @@
 
 This changelog references changes done in Shopware 5.2 patch versions.
 
+## 5.2.17
+
+[View all changes from v5.2.16...v5.2.17](https://github.com/shopware/shopware/compare/v5.2.16...v5.2.17)
+
+* Deprecated Smarty modifier `rewrite`. Modifier will be removed in 5.3.0.
+
 ## 5.2.15
 
 [View all changes from v5.2.14...v5.2.15](https://github.com/shopware/shopware/compare/v5.2.14...v5.2.15)
