@@ -8,6 +8,7 @@ This changelog references changes done in Shopware 5.2 patch versions.
 
 * Fixed article api resource when creating a new article with new configurator options and an image mapping for this new options
 * Added cronjob registration via `Resources/cronjob.xml` file
+* Deprecated Smarty modifer `rewrite`
 
 ## 5.2.14
 
