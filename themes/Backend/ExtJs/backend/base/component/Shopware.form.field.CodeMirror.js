@@ -31,8 +31,7 @@
  * Shopware UI - CodeMirror editor component
  *
  * This component provides the CodeMirror editor
- * as a ExtJS 4 form field. The componets supports the
- * two themes "default" and "monokai".
+ * as a ExtJS 4 form field.
  *
  * The supported syntax modes are lazy loaded
  * during the initializing of the editor component.
@@ -126,6 +125,28 @@ Ext.define('Shopware.form.field.CodeMirror',
     loadedModes: Ext.create('Ext.util.MixedCollection'),
 
     /**
+     * Property which holds the dependencies of the CodeMirror modes
+     */
+    modeDependencies: {
+        htmlmixed: [
+            'xml',
+            'css',
+            'javascript'
+        ],
+        php: [
+            'htmlmixed',
+            'clike'
+        ],
+        smarty: [
+            'htmlmixed'
+        ],
+        htmlembedded: [
+            'htmlmixed',
+            'multiplex'
+        ]
+    },
+
+    /**
      * Init the component
      */
     initComponent : function() {
@@ -156,6 +177,10 @@ Ext.define('Shopware.form.field.CodeMirror',
         });
 
         me.config = config;
+
+        if (!Ext.isDefined(CodeMirror.loadedModes)) {
+            CodeMirror.loadedModes = {}
+        }
 
         me.callParent(arguments);
 
@@ -205,18 +230,11 @@ Ext.define('Shopware.form.field.CodeMirror',
             Ext.Error.raise("The CodeMirror mode is not configured");
         }
 
+        var currentModeName = Ext.isObject(me.config.mode) ? me.config.mode.name : me.config.mode;
+
         // Check if the passed mode is available
-        var availableModes = CodeMirror.modes,
-            modeActive = false;
-
-        Ext.Array.each(availableModes, function(value) {
-            if(value === me.config.mode) {
-                modeActive = true;
-            }
-        });
-
-        if(!modeActive) {
-            me.loadJSFile(me.modePath + '/' + me.config.mode + '/' + me.config.mode + '.js');
+        if(!me.isModeLoaded(currentModeName)) {
+            me.loadMode(currentModeName, false);
         } else {
             if(!me.isEditorRendered) {
                 me.initEditor();
@@ -343,6 +361,60 @@ Ext.define('Shopware.form.field.CodeMirror',
     },
 
     /**
+     * Returns the mode dependencies
+     *
+     * @param mode
+     * @returns Array
+     */
+    getModeDependencies: function(mode) {
+        var me = this,
+            deps = me.modeDependencies[mode],
+            neededDeps = [mode];
+
+        if (Ext.isDefined(deps)) {
+            Ext.Array.each(deps, function (dep) {
+                if (me.isModeLoaded(dep)) {
+                    return;
+                }
+
+                var depDeps = me.getModeDependencies(dep);
+                Ext.Array.each(depDeps, function (depDep) {
+                    neededDeps.push(depDep);
+                });
+            });
+        }
+
+        return neededDeps;
+    },
+
+    /**
+     * Mode loading
+     *
+     * @param mode
+     */
+    loadMode: function(mode) {
+        var me = this,
+            loadModes = me.getModeDependencies(mode);
+
+        me.modeLoadCount = loadModes.length;
+        me.loadedModeCount = 0;
+
+        Ext.Array.each(loadModes, function (mode) {
+            me.loadJSFile(me.modePath + '/' + mode + '/' + mode + '.js', mode);
+        });
+    },
+
+    /**
+     * Checks is a CodeMirror mode loaded
+     *
+     * @param mode
+     * @returns boolean
+     */
+    isModeLoaded: function(mode) {
+        return Object.keys(CodeMirror.loadedModes).indexOf(mode) != -1;
+    },
+
+    /**
      * Loads the passed javascript file. This is necessary
      * to lazy load the different syntax modes.
      *
@@ -350,7 +422,7 @@ Ext.define('Shopware.form.field.CodeMirror',
      * @param [string] file - absolute path to the mode source file
      * @return void
      */
-    loadJSFile: function(file) {
+    loadJSFile: function(file, mode) {
         var me     = this,
             head   = document.head,
             script = document.createElement('script');
@@ -358,10 +430,10 @@ Ext.define('Shopware.form.field.CodeMirror',
         Ext.apply(script, {
             src  : file,
             type : 'text/javascript',
-            onload : Ext.Function.createDelayed(me.handleFileLoad, 100, me, [script]),
+            onload : Ext.Function.createDelayed(me.handleFileLoad, 100, me, [script, mode]),
             onreadystatechange : function() {
                 if (this.readyState === 'loaded' || this.readyState === 'complete') {
-                    me.handleFileLoad(script);
+                    me.handleFileLoad(script, mode);
                 }
             }
         });
@@ -377,17 +449,16 @@ Ext.define('Shopware.form.field.CodeMirror',
      * @private
      * @param [object] script - DOM element of the injected "script"-tag
      */
-    handleFileLoad: function(script) {
+    handleFileLoad: function(script, mode) {
+        var me = this;
         script.onload = null;
         script.onreadystatechange = null;
         script.onerror = null;
 
-        var me = this,
-            loadedModes = me.loadedModes;
+        CodeMirror.loadedModes[mode] = true;
+        me.loadedModeCount++;
 
-        loadedModes.add(Ext.get(script));
-
-        if(!me.isEditorRendered) {
+        if(!me.isEditorRendered && me.loadedModeCount === me.modeLoadCount) {
             me.initEditor();
         }
     },
