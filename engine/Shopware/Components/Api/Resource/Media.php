@@ -39,7 +39,7 @@ use Symfony\Component\HttpFoundation\File\File;
  */
 class Media extends Resource
 {
-    const FILENAME_LENGTH = 50;
+    const FILENAME_LENGTH = 200;
 
     /**
      * @return \Shopware\Models\Category\Repository
@@ -444,7 +444,7 @@ class Media extends Resource
     public function getUniqueFileName($destPath, $baseFileName = null)
     {
         $mediaService = Shopware()->Container()->get('shopware_media.media_service');
-        if (!$mediaService->has("$destPath/$baseFileName") && $baseFileName !== null) {
+        if ($baseFileName !== null && !$mediaService->has("$destPath/$baseFileName")) {
             return substr($baseFileName, 0, self::FILENAME_LENGTH);
         }
 
