@@ -33,6 +33,8 @@ This changelog references changes done in Shopware 5.2 patch versions.
 * Deprecated css class `icon--brogress-1`, use `icon--progress-1` instead
 * Updated [CodeMirror](https://github.com/codemirror/CodeMirror) to version 5.17.0
 * Improved mode support for CodeMirror element
+* Allow uploading file when creating `media` using the REST API
+* Increased max length of `s_emarketing_banners.img` and `s_articles_supplier.img` to 255
 
 ## 5.2.3
 

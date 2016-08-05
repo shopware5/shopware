@@ -39,7 +39,7 @@ use Symfony\Component\HttpFoundation\File\File;
  */
 class Media extends Resource
 {
-    const FILENAME_LENGTH = 50;
+    const FILENAME_LENGTH = 200;
 
     /**
      * @return \Shopware\Models\Category\Repository
@@ -255,7 +255,7 @@ class Media extends Resource
             $params['album'] = $album;
         }
 
-        if (isset($params['file'])) {
+        if (isset($params['file']) && !($params['file'] instanceof \Symfony\Component\HttpFoundation\File\File)) {
             if (!isset($params['name'])) {
                 $params['name'] = pathinfo($params['file'], PATHINFO_FILENAME);
             }
@@ -441,10 +441,10 @@ class Media extends Resource
      * @param null $baseFileName
      * @return null|string
      */
-    private function getUniqueFileName($destPath, $baseFileName = null)
+    public function getUniqueFileName($destPath, $baseFileName = null)
     {
         $mediaService = Shopware()->Container()->get('shopware_media.media_service');
-        if (!$mediaService->has("$destPath/$baseFileName") && $baseFileName !== null) {
+        if ($baseFileName !== null && !$mediaService->has("$destPath/$baseFileName")) {
             return substr($baseFileName, 0, self::FILENAME_LENGTH);
         }
 
