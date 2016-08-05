@@ -35,6 +35,9 @@ This changelog references changes done in Shopware 5.2 patch versions.
 * Improved mode support for CodeMirror element
 * Allow uploading file when creating `media` using the REST API
 * Increased max length of `s_emarketing_banners.img` and `s_articles_supplier.img` to 255
+* Added filter events for editing the collection of LESS and JS files before compiling
+    * `Theme_Compiler_Collect_Less_Definitions_FilterResult`
+    * `Theme_Compiler_Collect_Javascript_Files_FilterResult`
 
 ## 5.2.3
 
