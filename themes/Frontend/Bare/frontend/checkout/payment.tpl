@@ -7,13 +7,10 @@
 {/block}
 
 {* Javascript *}
-{block name="frontend_index_header_javascript" append}
+{block name="frontend_index_header_javascript_jquery" append}
 <script type="text/javascript">
 //<![CDATA[
 	jQuery(document).ready(function($) {
-		
-		//$('#payment').removeClass('grid_18').removeClass('push_1');
-		//$('#payment').addClass('grid_14').addClass('push_3');
 		$('#payment_frame').css('display', 'none');
 		$('#payment_loader').css('display', 'block');
 		
