@@ -53,7 +53,6 @@ In case you wish to contribute to Shopware, fork the `5.2` branch rather than cl
 
 2.) Set the correct directory permissions:
 
-    chmod 755 config.php
     chmod -R 755 var
     chmod -R 755 web
     chmod -R 755 files
