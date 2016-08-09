@@ -89,6 +89,11 @@ class ProductProvider implements ProductProviderInterface
     private $propertyHydrator;
 
     /**
+     * @var ProductModifierInterface[]
+     */
+    private $productModifiers = [];
+
+    /**
      * @param ListProductGatewayInterface $productGateway
      * @param CheapestPriceServiceInterface $cheapestPriceService
      * @param VoteServiceInterface $voteService
@@ -119,6 +124,14 @@ class ProductProvider implements ProductProviderInterface
         $this->priceCalculationService = $priceCalculationService;
         $this->fieldHelper = $fieldHelper;
         $this->propertyHydrator = $propertyHydrator;
+    }
+
+    /**
+     * @param ProductModifierInterface $productModifier
+     */
+    public function addProductModifier(ProductModifierInterface $productModifier)
+    {
+        $this->productModifiers[] = $productModifier;
     }
 
     /**
@@ -181,6 +194,9 @@ class ProductProvider implements ProductProviderInterface
             if (!$this->isValid($shop, $product)) {
                 continue;
             }
+
+            $this->applyModifiersToProduct($product);
+
             $result[$number] = $product;
         }
 
@@ -381,5 +397,20 @@ class ProductProvider implements ProductProviderInterface
         }
 
         return true;
+    }
+
+    /**
+     * Applies given productModifiers to a single product, as far as supported by the modifier
+     *
+     * @param Product $product
+     * @return void
+     */
+    private function applyModifiersToProduct(Product $product)
+    {
+        foreach ($this->productModifiers as $modifier) {
+            if ($modifier->supports($product)) {
+                $modifier->modify($product);
+            }
+        }
     }
 }

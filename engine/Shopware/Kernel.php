@@ -612,6 +612,7 @@ class Kernel implements HttpKernelInterface
         $container->addCompilerPass(new MappingCompilerPass());
         $container->addCompilerPass(new SynchronizerCompilerPass());
         $container->addCompilerPass(new DataIndexerCompilerPass());
+        $container->addCompilerPass(new ProductModifierCompilerPass());
         $container->addCompilerPass(new SettingsCompilerPass());
         $container->addCompilerPass(new FormPass());
         $container->addCompilerPass(new AddConstraintValidatorsPass());
