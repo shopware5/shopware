@@ -24,11 +24,12 @@
 
 namespace Shopware\Commands;
 
+use Exception;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Media\Album;
 use Shopware\Models\Media\Media;
-use Symfony\Component\Console\Helper\ProgressHelper;
-use Symfony\Component\Console\Input\InputArgument;
+use Shopware\Models\Media\Repository;
+use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -106,11 +107,6 @@ EOF
         $albumId             = (int)$input->getOption('albumid');
 
         foreach ($this->getMediaAlbums($albumId) as $album) {
-            //no size configured or no media object? continue
-            if ($this->hasNoThumbnails($album)) {
-                continue;
-            }
-
             $this->createAlbumThumbnails($album);
         }
 
@@ -119,50 +115,68 @@ EOF
 
     /**
      * @param Album $album
-     * @throws \Exception
+     *
+     * @throws Exception
      */
     private function createAlbumThumbnails(Album $album)
     {
         $this->output->writeln("Generating Thumbnails for Album {$album->getName()} (ID: {$album->getId()})");
 
-        /** @var ProgressHelper $progress */
-        $progress = $this->getHelperSet()->get('progress');
-        $progress->start($this->output, $album->getMedia()->count());
+        /**
+         * @var ModelManager $em
+         */
+        $em = $this->getContainer()->get('models');
+        /**
+         * @var Repository $repository
+         */
+        $repository = $em->getRepository(Media::class);
 
-        /**@var $media Media */
-        foreach ($album->getMedia() as $media) {
-            if (!$this->imageExists($media)) {
-                $this->errors[] = 'Base image file does not exist: ' . $media->getPath();
-                $progress->advance();
+        $query = $repository->getAlbumMediaQuery($album->getId());
+        $paginator = $em->createPaginator($query);
 
-                continue;
-            }
+        $total = $paginator->count();
 
+        $progressBar = new ProgressBar($this->output, $total);
+        $progressBar->start();
+
+        /**
+         * @var $media Media
+         */
+        foreach ($paginator->getIterator() as $media) {
             try {
                 $this->createMediaThumbnails($media);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->errors[] = $e->getMessage();
             }
 
-            $progress->advance();
+            $progressBar->advance();
         }
-        $progress->finish();
-        $this->output->writeln("");
+
+        $progressBar->finish();
+
+        // force newline when processing the next album
+        $this->output->writeln('');
     }
 
     /**
      * Check each single thumbnail to skip already existing thumbnails
      *
      * @param Media $media
-     * @throws \Exception
+     *
+     * @throws Exception
      */
     private function createMediaThumbnails(Media $media)
     {
+        if (!$this->imageExists($media)) {
+            throw new Exception('Base image file does not exist: ' . $media->getPath());
+        }
+
         $thumbnails = $media->getThumbnailFilePaths();
         foreach ($thumbnails as $size => $path) {
-            if ($this->thumbnailExists($path) && !($this->force)) {
+            if (!$this->force && $this->thumbnailExists($path)) {
                 continue;
             }
+
             $this->generator->createMediaThumbnail($media, array($size), true);
         }
     }
@@ -198,10 +212,9 @@ EOF
 
         $builder = $em->createQueryBuilder();
         $builder
-            ->select(array('album', 'settings', 'media'))
+            ->select(array('album', 'settings'))
             ->from('Shopware\Models\Media\Album', 'album')
-            ->innerJoin('album.settings', 'settings', 'WITH', 'settings.createThumbnails = 1')
-            ->leftJoin('album.media', 'media');
+            ->innerJoin('album.settings', 'settings', 'WITH', 'settings.createThumbnails = 1');
 
         if (!empty($albumId)) {
             $builder
