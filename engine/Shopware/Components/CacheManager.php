@@ -399,26 +399,28 @@ class CacheManager
      */
     private function clearDirectory($dir)
     {
-        if (file_exists($dir)) {
-            $iterator = new \RecursiveIteratorIterator(
-                new \RecursiveDirectoryIterator($dir, \RecursiveDirectoryIterator::SKIP_DOTS),
-                \RecursiveIteratorIterator::CHILD_FIRST
-            );
+        if (!file_exists($dir)) {
+            return;
+        }
+        
+        $iterator = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($dir, \RecursiveDirectoryIterator::SKIP_DOTS),
+            \RecursiveIteratorIterator::CHILD_FIRST
+        );
 
-            /** @var \SplFileInfo $path */
-            foreach ($iterator as $path) {
-                if ($path->getFilename() === '.gitkeep') {
+        /** @var \SplFileInfo $path */
+        foreach ($iterator as $path) {
+            if ($path->getFilename() === '.gitkeep') {
+                continue;
+            }
+
+            if ($path->isDir()) {
+                rmdir($path->__toString());
+            } else {
+                if (!$path->isFile()) {
                     continue;
                 }
-
-                if ($path->isDir()) {
-                    rmdir($path->__toString());
-                } else {
-                    if (!$path->isFile()) {
-                        continue;
-                    }
-                    unlink($path->__toString());
-                }
+                unlink($path->__toString());
             }
         }
     }
