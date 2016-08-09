@@ -2,6 +2,7 @@
 
 namespace Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass;
 
+use Shopware\Bundle\ESIndexingBundle\Product\ProductModifierInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\Reference;
@@ -19,7 +20,7 @@ class ProductModifierCompilerPass implements CompilerPassInterface
 
         $productProviderDefinition = $container->getDefinition('shopware_elastic_search.product_provider');
 
-        $productModifiers = $container->findTaggedServiceIds('shopware_elastic_search.product_provider.modifier');
+        $productModifiers = $container->findTaggedServiceIds(ProductModifierInterface::SERVICE_TAG_ID);
 
         foreach (array_keys($productModifiers) as $productModifierId) {
             $productProviderDefinition->addMethodCall(

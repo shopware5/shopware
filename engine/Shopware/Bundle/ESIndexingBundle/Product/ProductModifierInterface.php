@@ -6,6 +6,8 @@ use Shopware\Bundle\ESIndexingBundle\Struct\Product;
 
 interface ProductModifierInterface
 {
+    const SERVICE_TAG_ID = 'shopware_elastic_search.product_provider.modifier';
+
     /**
      * Determine if requirements are given for applying the modifier to a product
      *
