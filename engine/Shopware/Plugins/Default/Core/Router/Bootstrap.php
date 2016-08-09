@@ -232,7 +232,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
 
             if (isset($newPath)) {
                 // reset the cookie so only one valid cookie will be set IE11 fix
-                $response->setCookie("session-" . $shop->getId(), '', -1);
+                $response->setCookie("session-" . $shop->getId(), '', 1);
                 $response->setRedirect($newPath, 301);
             } else {
                 $this->upgradeShop($request, $response);
