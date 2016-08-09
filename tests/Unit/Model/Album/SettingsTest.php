@@ -37,6 +37,5 @@ class Shopware_Tests_Models_Album_SettingsTest extends Enlight_Components_Test_T
         $size = $settings->getThumbnailSize();
 
         $this->assertEquals([], $size);
-        $this->assertNotEquals([0 => ''], $size);
     }
 }
