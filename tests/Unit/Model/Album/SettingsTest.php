@@ -27,7 +27,7 @@
  * @package   Shopware\Tests
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Shopware_Tests_Models_Album_SettingsTest extends Enlight_Components_Test_TestCase
+class Shopware_Tests_Models_Album_SettingsTest extends PHPUnit_Framework_TestCase
 {
     public function testGetThumbnailSizeReturnValue()
     {
