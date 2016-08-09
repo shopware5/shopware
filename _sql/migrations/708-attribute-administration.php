@@ -1,26 +1,29 @@
 <?php
 
+use Shopware\Components\Migrations\AbstractMigration;
 
-class Migrations_Migration708 extends Shopware\Components\Migrations\AbstractMigration
+class Migrations_Migration708 extends AbstractMigration
 {
     public function up($modus)
     {
-        $this->addSql("ALTER TABLE `s_articles_attributes` CHANGE `attr1` `attr1` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;");
-        $this->addSql("ALTER TABLE `s_articles_attributes` CHANGE `attr2` `attr2` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;");
-        $this->addSql("ALTER TABLE `s_articles_attributes` CHANGE `attr3` `attr3` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;");
-        $this->addSql("ALTER TABLE `s_articles_attributes` CHANGE `attr4` `attr4` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;");
-        $this->addSql("ALTER TABLE `s_articles_attributes` CHANGE `attr5` `attr5` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;");
-        $this->addSql("ALTER TABLE `s_articles_attributes` CHANGE `attr6` `attr6` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;");
-        $this->addSql("ALTER TABLE `s_articles_attributes` CHANGE `attr7` `attr7` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;");
-        $this->addSql("ALTER TABLE `s_articles_attributes` CHANGE `attr8` `attr8` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;");
-        $this->addSql("ALTER TABLE `s_articles_attributes` CHANGE `attr11` `attr11` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;");
-        $this->addSql("ALTER TABLE `s_articles_attributes` CHANGE `attr12` `attr12` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;");
-        $this->addSql("ALTER TABLE `s_articles_attributes` CHANGE `attr13` `attr13` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;");
-        $this->addSql("ALTER TABLE `s_articles_attributes` CHANGE `attr14` `attr14` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;");
-        $this->addSql("ALTER TABLE `s_articles_attributes` CHANGE `attr15` `attr15` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;");
-        $this->addSql("ALTER TABLE `s_articles_attributes` CHANGE `attr16` `attr16` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;");
-        $this->addSql("ALTER TABLE `s_articles_attributes` CHANGE `attr19` `attr19` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;");
-        $this->addSql("ALTER TABLE `s_articles_attributes` CHANGE `attr20` `attr20` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;");
+        if ($modus == AbstractMigration::MODUS_INSTALL) {
+            $this->addSql("ALTER TABLE `s_articles_attributes` CHANGE `attr1` `attr1` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;");
+            $this->addSql("ALTER TABLE `s_articles_attributes` CHANGE `attr2` `attr2` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;");
+            $this->addSql("ALTER TABLE `s_articles_attributes` CHANGE `attr3` `attr3` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;");
+            $this->addSql("ALTER TABLE `s_articles_attributes` CHANGE `attr4` `attr4` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;");
+            $this->addSql("ALTER TABLE `s_articles_attributes` CHANGE `attr5` `attr5` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;");
+            $this->addSql("ALTER TABLE `s_articles_attributes` CHANGE `attr6` `attr6` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;");
+            $this->addSql("ALTER TABLE `s_articles_attributes` CHANGE `attr7` `attr7` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;");
+            $this->addSql("ALTER TABLE `s_articles_attributes` CHANGE `attr8` `attr8` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;");
+            $this->addSql("ALTER TABLE `s_articles_attributes` CHANGE `attr11` `attr11` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;");
+            $this->addSql("ALTER TABLE `s_articles_attributes` CHANGE `attr12` `attr12` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;");
+            $this->addSql("ALTER TABLE `s_articles_attributes` CHANGE `attr13` `attr13` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;");
+            $this->addSql("ALTER TABLE `s_articles_attributes` CHANGE `attr14` `attr14` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;");
+            $this->addSql("ALTER TABLE `s_articles_attributes` CHANGE `attr15` `attr15` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;");
+            $this->addSql("ALTER TABLE `s_articles_attributes` CHANGE `attr16` `attr16` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;");
+            $this->addSql("ALTER TABLE `s_articles_attributes` CHANGE `attr19` `attr19` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;");
+            $this->addSql("ALTER TABLE `s_articles_attributes` CHANGE `attr20` `attr20` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;");
+        }
 
         $sql = <<<'SQL'
             SET @parentId = (SELECT id FROM s_core_menu WHERE name = 'Einstellungen');
