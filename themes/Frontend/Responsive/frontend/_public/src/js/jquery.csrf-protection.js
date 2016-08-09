@@ -73,6 +73,7 @@
          */
         addTokenField: function(formElement) {
             formElement.append(CSRF.createTokenField());
+            $.publish('plugin/swCsrfProtection/addTokenField', [ this, formElement ]);
         },
 
         /**
@@ -102,6 +103,8 @@
                     me.addTokenField(formElement);
                 }
             });
+
+            $.publish('plugin/swCsrfProtection/updateForms', [ this, formElements ]);
         },
 
         /**
@@ -109,32 +112,12 @@
          */
         setupAjax: function() {
             var me = this,
-                afterAjaxRequest = function() {
-                    if (me.pendingRequests[this.url]) {
-                        var request = me.pendingRequests[this.url];
-                        request.callback.apply(request.context, arguments);
-                    }
+                token = me.getToken();
 
-                    // to prevent timing issues, delay the update
-                    window.setTimeout(function() {
-                        me.updateForms();
-                    }, 1);
-                };
+            $.ajaxSettings.headers = $.ajaxSettings.headers || {};
+            $.ajaxSettings.headers['X-CSRF-Token'] = token;
 
-            $.ajaxSetup({
-                beforeSend: function(xhr) {
-                    xhr.setRequestHeader('X-CSRF-Token', me.getToken());
-
-                    if (typeof this.complete === 'function') {
-                        me.pendingRequests[this.url] = {
-                            context: this,
-                            callback: this.complete
-                        };
-                    }
-
-                    this.complete = afterAjaxRequest;
-                }
-            });
+            $.publish('plugin/swCsrfProtection/setupAjax', [ this, token ]);
         },
 
         /**
@@ -148,6 +131,7 @@
                 success: function(response, status, xhr) {
                     me.saveToken(xhr.getResponseHeader('x-csrf-token'));
                     $.removeCookie('invalidate-xcsrf-token');
+                    $.publish('plugin/swCsrfProtection/requestToken', [ me, me.getToken() ]);
                     me.afterInit();
                 }
             });
@@ -186,6 +170,8 @@
 
             me.updateForms();
             me.setupAjax();
+
+            $.publish('plugin/swCsrfProtection/init', [ me ]);
         }
 
     };
