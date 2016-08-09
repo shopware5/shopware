@@ -24,12 +24,13 @@
 
 namespace Shopware\Commands;
 
+use Exception;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Components\Thumbnail\Manager;
 use Shopware\Models\Media\Album;
 use Shopware\Models\Media\Media;
 use Shopware\Models\Media\Repository;
-use Symfony\Component\Console\Helper\ProgressHelper;
-use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -62,7 +63,7 @@ class ThumbnailGenerateCommand extends ShopwareCommand
     private $errors = array();
 
     /**
-     * @var \Shopware\Components\Thumbnail\Manager
+     * @var Manager
      */
     private $generator;
 
@@ -86,12 +87,7 @@ class ThumbnailGenerateCommand extends ShopwareCommand
                 InputOption::VALUE_NONE,
                 'Force complete thumbnail generation'
             )
-            ->setHelp(
-                <<<EOF
-The <info>%command.name%</info> generates a thumbnail.
-EOF
-            )
-        ;
+            ->setHelp('The <info>%command.name%</info> generates a thumbnail.');
     }
 
     /**
@@ -99,12 +95,12 @@ EOF
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->output         = $output;
-        $this->force          = (bool)$input->getOption('force');
-        $this->errors         = array();
-        $this->generator      = $this->getContainer()->get('thumbnail_manager');
+        $this->output = $output;
+        $this->force = (bool)$input->getOption('force');
+        $this->errors = array();
+        $this->generator = $this->getContainer()->get('thumbnail_manager');
 
-        $albumId             = (int)$input->getOption('albumid');
+        $albumId = (int)$input->getOption('albumid');
 
         foreach ($this->getMediaAlbums($albumId) as $album) {
             $this->createAlbumThumbnails($album);
@@ -115,16 +111,12 @@ EOF
 
     /**
      * @param Album $album
-     * @throws \Exception
+     *
+     * @throws Exception
      */
     private function createAlbumThumbnails(Album $album)
     {
         $this->output->writeln("Generating Thumbnails for Album {$album->getName()} (ID: {$album->getId()})");
-
-        /**
-         * @var ProgressHelper $progress
-         */
-        $progress = $this->getHelperSet()->get('progress');
 
         /**
          * @var ModelManager $em
@@ -135,47 +127,30 @@ EOF
          */
         $repository = $em->getRepository(Media::class);
 
-        $offset = 0;
-        $limit = 50;
-        $count = 0;
+        $query = $repository->getAlbumMediaQuery($album->getId());
+        $paginator = $em->createPaginator($query);
 
-        do {
-            $query = $repository->getAlbumMediaQuery($album->getId(), null, null, $offset, $limit);
+        $total = $paginator->count();
 
-            $paginator = $em->createPaginator($query);
+        $progressBar = new ProgressBar($this->output, $total);
+        $progressBar->start();
 
-            if ($count === 0) {
-                $total = $paginator->count();
-
-                $progress->start($this->output, $total);
+        /**
+         * @var $media Media
+         */
+        foreach ($paginator->getIterator() as $media) {
+            try {
+                $this->createMediaThumbnails($media);
+            } catch (Exception $e) {
+                $this->errors[] = $e->getMessage();
             }
 
-            /**
-             * @var $media Media
-             */
-            foreach ($paginator->getIterator() as $media) {
-                $count++;
+            $progressBar->advance();
+        }
 
-                if (!$this->imageExists($media)) {
-                    $this->errors[] = 'Base image file does not exist: ' . $media->getPath();
-                    $progress->advance();
+        $progressBar->finish();
 
-                    continue;
-                }
-
-                try {
-                    $this->createMediaThumbnails($media);
-                } catch (\Exception $e) {
-                    $this->errors[] = $e->getMessage();
-                }
-
-                $progress->advance();
-            }
-
-            $offset += $limit;
-        } while ($count < $total);
-
-        $progress->finish();
+        // force newline when processing the next album
         $this->output->writeln("");
     }
 
@@ -183,41 +158,56 @@ EOF
      * Check each single thumbnail to skip already existing thumbnails
      *
      * @param Media $media
-     * @throws \Exception
+     *
+     * @throws Exception
      */
     private function createMediaThumbnails(Media $media)
     {
+        if (!$this->imageExists($media)) {
+            throw new Exception('Base image file does not exist: ' . $media->getPath());
+        }
+
         $thumbnails = $media->getThumbnailFilePaths();
         foreach ($thumbnails as $size => $path) {
-            if ($this->thumbnailExists($path) && !($this->force)) {
+            if (!$this->force && $this->thumbnailExists($path)) {
                 continue;
             }
+
             $this->generator->createMediaThumbnail($media, array($size), true);
         }
     }
 
     /**
      * @param string $thumbnailPath
+     *
      * @return bool
+     *
+     * @throws Exception
      */
     private function thumbnailExists($thumbnailPath)
     {
         $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+
         return $mediaService->has(Shopware()->DocPath() . $thumbnailPath);
     }
 
     /**
      * @param Media $media
+     *
      * @return bool
+     *
+     * @throws Exception
      */
     private function imageExists(Media $media)
     {
         $mediaService = Shopware()->Container()->get('shopware_media.media_service');
+
         return $mediaService->has(Shopware()->DocPath() . DIRECTORY_SEPARATOR . $media->getPath());
     }
 
     /**
      * @param int $albumId
+     *
      * @return Album[]
      */
     protected function getMediaAlbums($albumId)
@@ -240,28 +230,18 @@ EOF
         return $builder->getQuery()->getResult();
     }
 
-    /**
-     * @param Album $album
-     * @return bool
-     */
-    private function hasNoThumbnails($album)
-    {
-        $sizes = $album->getSettings()->getThumbnailSize();
-
-        return empty($sizes) || empty($sizes[0]) || $album->getMedia()->count() === 0;
-    }
-
     protected function printExitMessage()
     {
-        if (empty($this->errors)) {
+        if (0 === count($this->errors)) {
             $this->output->writeln('<info>Thumbnail generation finished successfully</info>');
 
             return;
         }
 
         $this->output->writeln('<error>Thumbnail generation finished with errors</error>');
+
         foreach ($this->errors as $error) {
-            $this->output->writeln("<comment>" . $error . "</comment>");
+            $this->output->writeln('<comment>' . $error . '</comment>');
         }
     }
 }
