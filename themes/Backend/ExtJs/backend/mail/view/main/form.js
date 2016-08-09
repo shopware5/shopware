@@ -87,7 +87,8 @@ Ext.define('Shopware.apps.Mail.view.main.Form', {
 
     loadRecord: function(record) {
         var me   = this,
-            form = me.getForm();
+            form = me.getForm(),
+            contentTab = me.getComponent('tabpanel').getComponent('contentTab');
 
         form.findField('name').validationRequestParam = record.get('id');
         form.loadRecord(record);
@@ -105,6 +106,9 @@ Ext.define('Shopware.apps.Mail.view.main.Form', {
         me.setTitle(Ext.String.format('{s name=title_edit}Edit template - [0]{/s}', record.data.name));
 
         me.getComponent('tabpanel').setActiveTab(0);
+
+        // trigger resize event on the tab to fit the editor
+        contentTab.fireEvent('resize', contentTab, contentTab.getWidth(), contentTab.getHeight());
 
         /*{if !{acl_is_allowed privilege=create} && !{acl_is_allowed privilege=update}}*/
         form.findField('name').setReadOnly(true);
