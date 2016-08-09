@@ -13,7 +13,7 @@ interface ProductModifierInterface
      *
      * @return bool
      */
-    public function supports(Product $product): bool;
+    public function supports(Product $product);
 
     /**
      * Modifies a single product and returns the changed product
@@ -22,5 +22,5 @@ interface ProductModifierInterface
      *
      * @return Product
      */
-    public function modify(Product $product): Product;
+    public function modify(Product $product);
 }
