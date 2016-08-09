@@ -399,6 +399,10 @@ class CacheManager
      */
     private function clearDirectory($dir)
     {
+        if (!file_exists($dir)) {
+            return;
+        }
+        
         $iterator = new \RecursiveIteratorIterator(
             new \RecursiveDirectoryIterator($dir, \RecursiveDirectoryIterator::SKIP_DOTS),
             \RecursiveIteratorIterator::CHILD_FIRST
