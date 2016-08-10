@@ -24,7 +24,7 @@
 
 namespace Shopware\Tests\Modules\Category;
 
-use Shopware\Tests\Service\Helper;
+use Shopware\Tests\Bundle\StoreFrontBundle\Helper;
 
 /**
  * @category  Shopware
