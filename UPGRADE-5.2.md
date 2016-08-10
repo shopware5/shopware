@@ -4,6 +4,8 @@ This changelog references changes done in Shopware 5.2 patch versions.
 
 ## 5.2.4
 
+[View all changes from v5.2.3...v5.2.4](https://github.com/shopware/shopware/compare/v5.2.3...v5.2.4)
+
 * Introduced new interface `Shopware\Components\Slug\SlugInterface` to generate URL safe versions of a string
     * Service id `shopware.slug`
     * The default implementation delegates to [`cocur/slugify`](https://github.com/cocur/slugify)
