@@ -3,8 +3,6 @@
 namespace Shopware\Tests\Bundle\StoreFrontBundle;
 
 use Shopware\Bundle\StoreFrontBundle;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
-
 
 class PriceCalculationTest extends TestCase
 {
@@ -12,7 +10,7 @@ class PriceCalculationTest extends TestCase
      * @param bool $displayGross
      * @param int $discount
      * @param int $currencyFactor
-     * @return ShopContext
+     * @return TestContext
      */
     protected function getContext($displayGross = true, $discount = 20, $currencyFactor = 1)
     {

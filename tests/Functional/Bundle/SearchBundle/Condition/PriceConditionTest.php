@@ -20,24 +20,34 @@ class PriceConditionTest extends TestCase
         $number,
         ShopContext $context,
         Category $category = null,
-        $prices = array()
+        $prices = []
     ) {
         $product = parent::getProduct($number, $context, $category);
 
         $product['mainDetail']['prices'] = [];
-        foreach ($prices as $key => $price) {
+        $productPrices = $prices;
+        if (array_key_exists('prices', $prices)) {
+            $productPrices = $prices['prices'];
+        }
+
+        foreach ($productPrices as $key => $price) {
             if ($key === $context->getCurrentCustomerGroup()->getKey()) {
                 $customerGroup = $context->getCurrentCustomerGroup()->getKey();
             } else {
                 $customerGroup = $context->getFallbackCustomerGroup()->getKey();
             }
 
-            $product['mainDetail']['prices'][] = array(
+            $product['mainDetail']['prices'][] = [
                  'from' => 1,
                  'to' => 'beliebig',
                  'price' => $price,
                  'customerGroupKey' => $customerGroup
-             );
+            ];
+        }
+
+        if ($prices['priceGroup']) {
+            $product['priceGroupActive'] = true;
+            $product['priceGroupId'] = $prices['priceGroup']->getId();
         }
 
         return $product;
@@ -73,14 +83,14 @@ class PriceConditionTest extends TestCase
         $condition = new PriceCondition(10, 20);
 
         $this->search(
-            array(
-                'first'  => array('EK' => 9.99),
-                'second' => array('EK' => 10.01),
-                'third'  => array('EK' => 19.98)
-            ),
-            array('second', 'third'),
+            [
+                'first'  => ['EK' => 9.99],
+                'second' => ['EK' => 10.01],
+                'third'  => ['EK' => 19.98]
+            ],
+            ['second', 'third'],
             null,
-            array($condition),
+            [$condition],
             [],
             [],
             $context
@@ -101,17 +111,17 @@ class PriceConditionTest extends TestCase
         $condition = new PriceCondition(10, 20);
 
         $this->search(
-            array(
-                'first'  => array('EK' => 21),
-                'second' => array('EK' => 15),
-                'third'  => array('EK' => 15, 'CUST' => 5),
-                'fourth' => array('EK' => 3,  'CUST' => 15),
-            ),
-            array('second', 'fourth'),
+            [
+                'first'  => ['EK' => 21],
+                'second' => ['EK' => 15],
+                'third'  => ['EK' => 15, 'CUST' => 5],
+                'fourth' => ['EK' => 3,  'CUST' => 15],
+            ],
+            ['second', 'fourth'],
             null,
-            array($condition),
-            array(),
-            array(),
+            [$condition],
+            [],
+            [],
             $context
         );
     }
@@ -126,17 +136,76 @@ class PriceConditionTest extends TestCase
         $context->setFallbackCustomerGroup($this->getEkCustomerGroup());
 
         $this->search(
-            array(
-                'first'  => array('EK' => 10),
-                'second' => array('EK' => 20),
-                'third'  => array('EK' => 30)
-            ),
-            array('first', 'second'),
+            [
+                'first'  => ['EK' => 10],
+                'second' => ['EK' => 20],
+                'third'  => ['EK' => 30]
+            ],
+            ['first', 'second'],
             null,
-            array($condition),
-            array(),
-            array(),
+            [$condition],
+            [],
+            [],
             $context
+        );
+    }
+
+
+    public function testPriceGroup()
+    {
+        $condition = new PriceCondition(18, 18);
+        $context = $this->getContext();
+        $context->setFallbackCustomerGroup($this->getEkCustomerGroup());
+        $context->setCurrentCustomerGroup($this->getEkCustomerGroup());
+
+        $priceGroup = $this->helper->createPriceGroup([
+            ['key' => 'EK', 'quantity' => 1,  'discount' => 10],
+        ]);
+
+        $this->search(
+            [
+                'first' => ['EK' => 10],
+
+                //20,- € - 10% price group discount = 18,- €
+                'second' => ['prices' => ['EK' => 20], 'priceGroup' => $priceGroup],
+                'third' => ['EK' => 30]
+            ],
+            ['second'],
+            null,
+            [$condition],
+            [],
+            [],
+            $context,
+            ['useLastGraduationForCheapestPrice' => false]
+        );
+    }
+
+    public function testPriceGroupWithLastGraduation()
+    {
+        $condition = new PriceCondition(14, 14);
+        $context = $this->getContext();
+        $context->setFallbackCustomerGroup($this->getEkCustomerGroup());
+        $context->setCurrentCustomerGroup($this->getEkCustomerGroup());
+
+        $priceGroup = $this->helper->createPriceGroup([
+            ['key' => 'EK', 'quantity' => 1,  'discount' => 10],
+            ['key' => 'EK', 'quantity' => 10,  'discount' => 30]
+        ]);
+
+        $this->search(
+            [
+                'first' => ['EK' => 10],
+                //20,- € - 30% price group discount = 14,- €
+                'second' => ['prices' => ['EK' => 20], 'priceGroup' => $priceGroup],
+                'third' => ['EK' => 30]
+            ],
+            ['second'],
+            null,
+            [$condition],
+            [],
+            [],
+            $context,
+            ['useLastGraduationForCheapestPrice' => true]
         );
     }
 }

@@ -34,7 +34,7 @@ class Helper
     /**
      * @var Converter
      */
-    private $converter;
+    protected $converter;
 
     /**
      * @var \Shopware\Components\Api\Resource\Translation
@@ -125,114 +125,37 @@ class Helper
     }
 
     /**
-     * @param $number
-     * @param StoreFrontBundle\Struct\ShopContext $context
-     * @param null $productGateway
-     * @param null $graduatedPricesService
-     * @param null $cheapestPriceService
-     * @param null $priceCalculationService
-     * @param null $mediaService
-     * @param null $eventManager
-     * @param null $marketingService
-     * @param null $voteService
-     * @return StoreFrontBundle\Struct\ListProduct
+     * @param string $numbers
+     * @param TestContext $context
+     * @param array $configs
+     * @return \Shopware\Bundle\StoreFrontBundle\Struct\ListProduct[]
      */
-    public function getListProduct(
-        $number,
-        $context, // StoreFrontBundle\Struct\ShopContext
-        $productGateway = null,
-        $graduatedPricesService = null,
-        $cheapestPriceService = null,
-        $priceCalculationService = null,
-        $mediaService = null,
-        $eventManager = null,
-        $marketingService = null,
-        $voteService = null
-    ) {
-        $products = $this->getListProducts(
-            array($number),
-            $context,
-            $productGateway,
-            $graduatedPricesService,
-            $cheapestPriceService,
-            $priceCalculationService,
-            $mediaService,
-            $marketingService,
-            $eventManager,
-            $voteService
-        );
+    public function getListProducts($numbers, $context, array $configs = [])
+    {
+        $config = Shopware()->Container()->get('config');
+        $originals = [];
+        foreach ($configs as $key => $value) {
+            $originals[$key] = $config->get($key);
+            $config->offsetSet($key, $value);
+        }
 
-        return array_shift($products);
+        $service = Shopware()->Container()->get('shopware_storefront.list_product_service');
+        $result = $service->getList($numbers, $context);
+        foreach ($originals as $key => $value) {
+            $config->offsetSet($key, $value);
+        }
+        return $result;
     }
 
     /**
-     * @param $numbers
-     * @param $context
-     * @param null $productGateway
-     * @param null $graduatedPricesService
-     * @param null $cheapestPriceService
-     * @param null $priceCalculationService
-     * @param null $mediaService
-     * @param null $marketingService
-     * @param null $voteService
-     * @param null $categoryService
-     * @param null $config
-     * @return StoreFrontBundle\Struct\ListProduct[]
+     * @param string $number
+     * @param TestContext $context
+     * @param array $configs
+     * @return StoreFrontBundle\Struct\ListProduct
      */
-    public function getListProducts(
-        $numbers,
-        $context,
-        $productGateway = null,
-        $graduatedPricesService = null,
-        $cheapestPriceService = null,
-        $priceCalculationService = null,
-        $mediaService = null,
-        $marketingService = null,
-        $voteService = null,
-        $categoryService = null,
-        $config = null
-    ) {
-        if ($productGateway === null) {
-            $productGateway = Shopware()->Container()->get('shopware_storefront.list_product_gateway');
-        }
-        if ($graduatedPricesService === null) {
-            $graduatedPricesService = Shopware()->Container()->get('shopware_storefront.graduated_prices_service');
-        }
-        if ($cheapestPriceService === null) {
-            $cheapestPriceService = Shopware()->Container()->get('shopware_storefront.cheapest_price_service');
-        }
-        if ($priceCalculationService === null) {
-            $priceCalculationService = Shopware()->Container()->get('shopware_storefront.price_calculation_service');
-        }
-        if ($mediaService === null) {
-            $mediaService = Shopware()->Container()->get('shopware_storefront.media_service');
-        }
-        if ($marketingService === null) {
-            $marketingService = Shopware()->Container()->get('shopware_storefront.marketing_service');
-        }
-        if ($voteService === null) {
-            $voteService = Shopware()->Container()->get('shopware_storefront.vote_service');
-        }
-        if ($categoryService === null) {
-            $categoryService = Shopware()->Container()->get('shopware_storefront.category_service');
-        }
-        if ($config === null) {
-            $config = Shopware()->Config();
-        }
-
-        $service = new StoreFrontBundle\Service\Core\ListProductService(
-            $productGateway,
-            $graduatedPricesService,
-            $cheapestPriceService,
-            $priceCalculationService,
-            $mediaService,
-            $marketingService,
-            $voteService,
-            $categoryService,
-            $config
-        );
-
-        return $service->getList($numbers, $context);
+    public function getListProduct($number, TestContext $context, array $configs = [])
+    {
+        return array_shift($this->getListProducts([$number], $context, $configs));
     }
 
     /**
@@ -532,11 +455,11 @@ class Helper
     public function createPriceGroup($discounts = array())
     {
         if (empty($discounts)) {
-            $discounts = array(
-                array('key' => 'PHP', 'quantity' => 1,  'discount' => 10),
-                array('key' => 'PHP', 'quantity' => 5,  'discount' => 20),
-                array('key' => 'PHP', 'quantity' => 10, 'discount' => 30),
-            );
+            $discounts = [
+                ['key' => 'PHP', 'quantity' => 1,  'discount' => 10],
+                ['key' => 'PHP', 'quantity' => 5,  'discount' => 20],
+                ['key' => 'PHP', 'quantity' => 10, 'discount' => 30],
+            ];
         }
 
         $this->removePriceGroup();

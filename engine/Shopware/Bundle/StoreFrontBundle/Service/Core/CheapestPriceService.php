@@ -40,11 +40,20 @@ class CheapestPriceService implements Service\CheapestPriceServiceInterface
     private $cheapestPriceGateway;
 
     /**
-     * @param Gateway\CheapestPriceGatewayInterface $cheapestPriceGateway
+     * @var \Shopware_Components_Config
      */
-    public function __construct(Gateway\CheapestPriceGatewayInterface $cheapestPriceGateway)
-    {
+    private $config;
+
+    /**
+     * @param Gateway\CheapestPriceGatewayInterface $cheapestPriceGateway
+     * @param \Shopware_Components_Config $config
+     */
+    public function __construct(
+        Gateway\CheapestPriceGatewayInterface $cheapestPriceGateway,
+        \Shopware_Components_Config $config
+    ) {
         $this->cheapestPriceGateway = $cheapestPriceGateway;
+        $this->config = $config;
     }
 
     /**
@@ -192,7 +201,7 @@ class CheapestPriceService implements Service\CheapestPriceServiceInterface
         /**@var $highest Struct\Product\PriceDiscount*/
         $highest = null;
         foreach ($priceGroup->getDiscounts() as $discount) {
-            if ($discount->getQuantity() > $quantity) {
+            if ($discount->getQuantity() > $quantity && !$this->config->get('useLastGraduationForCheapestPrice')) {
                 continue;
             }
 
