@@ -108,16 +108,37 @@
         },
 
         /**
-         * Modify every ajax request to add the X-CSRF-Token header
+         * Registers handlers before sending an AJAX request & after it is completed.
          */
         setupAjax: function() {
-            var me = this,
-                token = me.getToken();
+            var me = this;
 
-            $.ajaxSettings.headers = $.ajaxSettings.headers || {};
-            $.ajaxSettings.headers['X-CSRF-Token'] = token;
+            $(document).ajaxSend($.proxy(me._ajaxBeforeSend, me));
+            $(document).ajaxComplete($.proxy(me._ajaxAfterSend, me));
 
-            $.publish('plugin/swCsrfProtection/setupAjax', [ this, token ]);
+            $.publish('plugin/swCsrfProtection/setupAjax', [ me, me.getToken() ]);
+        },
+
+        /**
+         * Update all forms in case a callback has replaced html parts and needs to be rebound
+         *
+         * @private
+         */
+        _ajaxAfterSend: function() {
+            window.setTimeout(function() {
+                this.updateForms();
+            }.bind(this), 1);
+        },
+
+        /**
+         * Append X-CSRF-Token header to every request
+         *
+         * @param event
+         * @param request
+         * @private
+         */
+        _ajaxBeforeSend: function(event, request) {
+            request.setRequestHeader('X-CSRF-Token', this.getToken());
         },
 
         /**
