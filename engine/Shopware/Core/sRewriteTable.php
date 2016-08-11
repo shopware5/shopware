@@ -854,6 +854,7 @@ class sRewriteTable
                 'description_long' => 'txtlangbeschreibung',
                 'description' => 'txtshortdescription',
                 'keywords' => 'keywords',
+                'metaTitle' => 'metaTitle',
             ]);
         }
 
