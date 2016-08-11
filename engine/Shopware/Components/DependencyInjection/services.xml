@@ -6,6 +6,7 @@
 
     <parameters>
         <parameter key="shopware.slug.config" type="collection">
+            <parameter key="regexp">/([^A-Za-z0-9\.]|-)+/</parameter>
             <parameter key="lowercase">false</parameter>
         </parameter>
     </parameters>
