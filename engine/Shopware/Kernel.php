@@ -25,6 +25,7 @@
 namespace Shopware;
 
 use Shopware\Bundle\AttributeBundle\DependencyInjection\Compiler\SearchRepositoryCompilerPass;
+use Shopware\Bundle\ControllerBundle\DependencyInjection\Compiler\RegisterControllerCompilerPass;
 use Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\SettingsCompilerPass;
 use Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\SynchronizerCompilerPass;
 use Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\DataIndexerCompilerPass;
@@ -764,7 +765,21 @@ class Kernel implements HttpKernelInterface
             }
 
             $container->addObjectResource($plugin);
+            $this->addControllerCompilerPass($plugin, $container);
             $plugin->build($container);
+        }
+    }
+
+    /**
+     * @param Plugin           $plugin
+     * @param ContainerBuilder $container
+     */
+    private function addControllerCompilerPass(Plugin $plugin, ContainerBuilder $container)
+    {
+        $path = $plugin->getPath() . '/Controllers';
+
+        if (is_dir($path)) {
+            $container->addCompilerPass(new RegisterControllerCompilerPass($path));
         }
     }
 }
