@@ -202,11 +202,13 @@ class Shopware_Plugins_Core_RebuildIndex_Bootstrap extends Shopware_Components_P
 
             $this->SeoIndex()->setCachedTime($currentTime->format('Y-m-d h:m:i'), $elementId, $shopId);
 
+            $context = $this->get('shopware_storefront.context_service')->createShopContext($shopId);
+
             $this->RewriteTable()->sCreateRewriteTableCategories();
             $this->RewriteTable()->sCreateRewriteTableCampaigns();
             $this->RewriteTable()->sCreateRewriteTableContent();
             $this->RewriteTable()->sCreateRewriteTableBlog();
-            $this->RewriteTable()->sCreateRewriteTableSuppliers();
+            $this->RewriteTable()->sCreateRewriteTableSuppliers(null, null, $context);
             $this->RewriteTable()->sCreateRewriteTableStatic();
         }
 
