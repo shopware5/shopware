@@ -2,6 +2,12 @@
 
 This changelog references changes done in Shopware 5.2 patch versions.
 
+## 5.2.6
+
+[View all changes from v5.2.5...v5.2.6](https://github.com/shopware/shopware/compare/v5.2.5...v5.2.6)
+
+* Changed visibility of sAdmin::loginUser to protected
+
 ## 5.2.5
 
 [View all changes from v5.2.4...v5.2.5](https://github.com/shopware/shopware/compare/v5.2.4...v5.2.5)
