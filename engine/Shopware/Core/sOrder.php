@@ -471,6 +471,18 @@ class sOrder
             throw new Enlight_Exception("##sOrder-sTemporaryOrder-#01: No rows affected or no order id saved", 0);
         }
 
+        // Create order attributes
+        $attributeData = [
+            'attribute1' => $this->o_attr_1,
+            'attribute2' => $this->o_attr_2,
+            'attribute3' => $this->o_attr_3,
+            'attribute4' => $this->o_attr_4,
+            'attribute5' => $this->o_attr_5,
+            'attribute6' => $this->o_attr_6,
+        ];
+        $attributeData = array_merge($attributeData, $this->orderAttributes);
+        $this->attributePersister->persist($attributeData, 's_order_attributes', $orderID);
+
         $position = 0;
         foreach ($this->sBasketData["content"] as $basketRow) {
             $position++;
@@ -515,9 +527,14 @@ class sOrder
 
             try {
                 $this->db->insert('s_order_details', $data);
+                $orderDetailId = $this->db->lastInsertId();
             } catch (Exception $e) {
                 throw new Enlight_Exception("##sOrder-sTemporaryOrder-Position-#02:" . $e->getMessage(), 0, $e);
             }
+
+            // Create order detail attributes
+            $attributeData = $this->attributeLoader->load('s_order_basket_attributes', $basketRow['id']);
+            $this->attributePersister->persist($attributeData, 's_order_details_attributes', $orderDetailId);
         } // For every article in basket
         return;
     }
