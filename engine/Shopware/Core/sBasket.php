@@ -399,22 +399,31 @@ class sBasket
                 ->getNamespace('backend/static/discounts_surcharges')
                 ->get('discount_name');
 
-        $this->db->insert(
-            's_order_basket',
-            array(
-                'sessionID' => $this->session->get('sessionId'),
-                'articlename' => $discountName,
-                'articleID' => 0,
-                'ordernumber' => $name,
-                'quantity' => 1,
-                'price' => $discount,
-                'netprice' => $discountNet,
-                'tax_rate' => $tax,
-                'datum' => date("Y-m-d H:i:s"),
-                'modus' => 3,
-                'currencyFactor' => $this->sSYSTEM->sCurrency["factor"]
-            )
+        $params = [
+            'sessionID' => $this->session->get('sessionId'),
+            'articlename' => $discountName,
+            'articleID' => 0,
+            'ordernumber' => $name,
+            'quantity' => 1,
+            'price' => $discount,
+            'netprice' => $discountNet,
+            'tax_rate' => $tax,
+            'datum' => date("Y-m-d H:i:s"),
+            'modus' => 3,
+            'currencyFactor' => $this->sSYSTEM->sCurrency["factor"]
+        ];
+
+        $notifyUntilBeforeAdd = $this->eventManager->notifyUntil(
+            'Shopware_Modules_Basket_BeforeAddOrderDiscount',
+            [
+                'subject'   => $this,
+                'discount' => $params
+            ]
         );
+
+        if (!$notifyUntilBeforeAdd) {
+            $this->db->insert('s_order_basket', $params);
+        }
     }
 
     /**
@@ -876,67 +885,72 @@ class sBasket
 
         $minimumOrder = $this->sSYSTEM->sUSERGROUPDATA['minimumorder'];
         $minimumOrderSurcharge = $this->sSYSTEM->sUSERGROUPDATA['minimumordersurcharge'];
-        if ($minimumOrder && $minimumOrderSurcharge) {
-            $amount = $this->sGetAmount();
-
-            if ($amount["totalAmount"] < $minimumOrder) {
-                $taxAutoMode = $this->config->get('sTAXAUTOMODE');
-                if (!empty($taxAutoMode)) {
-                    $tax = $this->getMaxTax();
-                } else {
-                    $tax = $this->config->get('sDISCOUNTTAX');
-                }
-
-                if (empty($tax)) {
-                    $tax = 19;
-                }
-
-                if ((!$this->sSYSTEM->sUSERGROUPDATA["tax"] && $this->sSYSTEM->sUSERGROUPDATA["id"])) {
-                    $discountNet = $minimumOrderSurcharge;
-                } else {
-                    $discountNet = round($minimumOrderSurcharge / (100+$tax) * 100, 3);
-                }
-
-                if ($this->sSYSTEM->sCurrency["factor"]) {
-                    $factor = $this->sSYSTEM->sCurrency["factor"];
-                    $discountNet *= $factor;
-                } else {
-                    $factor = 1;
-                }
-
-                $surcharge = $minimumOrderSurcharge * $factor;
-                $surchargeName = $this->snippetManager
-                    ->getNamespace('backend/static/discounts_surcharges')
-                    ->get('surcharge_name');
-
-                $params = array(
-                    'sessionID'      => $this->session->get('sessionId'),
-                    'articlename'    => $surchargeName,
-                    'articleID'      => 0,
-                    'ordernumber'    => $name,
-                    'quantity'       => 1,
-                    'price'          => $surcharge,
-                    'netprice'       => $discountNet,
-                    'tax_rate'       => $tax,
-                    'datum'          => new Zend_Date(),
-                    'modus'          => 4,
-                    'currencyFactor' => $this->sSYSTEM->sCurrency["factor"]
-                );
-
-                $notifyUntilBeforeAdd = $this->eventManager->notifyUntil(
-                    'Shopware_Modules_Basket_BeforeAddMinimumOrderSurcharge', array(
-                        'subject'   => $this,
-                        'surcharge' => $params
-                    )
-                );
-
-                if ($notifyUntilBeforeAdd) {
-                    return null;
-                }
-
-                $this->db->insert('s_order_basket', $params);
-            }
+        if (!$minimumOrder || !$minimumOrderSurcharge) {
+            return null;
         }
+
+        $amount = $this->sGetAmount();
+
+        if ($amount["totalAmount"] >= $minimumOrder) {
+            return null;
+        }
+
+        $taxAutoMode = $this->config->get('sTAXAUTOMODE');
+        if (!empty($taxAutoMode)) {
+            $tax = $this->getMaxTax();
+        } else {
+            $tax = $this->config->get('sDISCOUNTTAX');
+        }
+
+        if (empty($tax)) {
+            $tax = 19;
+        }
+
+        if ((!$this->sSYSTEM->sUSERGROUPDATA["tax"] && $this->sSYSTEM->sUSERGROUPDATA["id"])) {
+            $discountNet = $minimumOrderSurcharge;
+        } else {
+            $discountNet = round($minimumOrderSurcharge / (100+$tax) * 100, 3);
+        }
+
+        if ($this->sSYSTEM->sCurrency["factor"]) {
+            $factor = $this->sSYSTEM->sCurrency["factor"];
+            $discountNet *= $factor;
+        } else {
+            $factor = 1;
+        }
+
+        $surcharge = $minimumOrderSurcharge * $factor;
+        $surchargeName = $this->snippetManager
+            ->getNamespace('backend/static/discounts_surcharges')
+            ->get('surcharge_name');
+
+        $params = array(
+            'sessionID'      => $this->session->get('sessionId'),
+            'articlename'    => $surchargeName,
+            'articleID'      => 0,
+            'ordernumber'    => $name,
+            'quantity'       => 1,
+            'price'          => $surcharge,
+            'netprice'       => $discountNet,
+            'tax_rate'       => $tax,
+            'datum'          => new Zend_Date(),
+            'modus'          => 4,
+            'currencyFactor' => $this->sSYSTEM->sCurrency["factor"]
+        );
+
+        $notifyUntilBeforeAdd = $this->eventManager->notifyUntil(
+            'Shopware_Modules_Basket_BeforeAddMinimumOrderSurcharge',
+            [
+                'subject'   => $this,
+                'surcharge' => $params
+            ]
+        );
+
+        if (!$notifyUntilBeforeAdd) {
+            $this->db->insert('s_order_basket', $params);
+        }
+
+        return null;
     }
 
     /**
@@ -947,89 +961,94 @@ class sBasket
      */
     public function sInsertSurchargePercent()
     {
-        if (!$this->session->get('sUserId')) {
-            if (!$this->session->get('sPaymentID')) {
-                return false;
-            } else {
-                $paymentInfo = $this->db->fetchRow(
-                    'SELECT debit_percent
-                    FROM s_core_paymentmeans
-                    WHERE id = ?',
-                    array($this->session->get('sPaymentID'))
-                ) ? : array();
-            }
-        } else {
-            $userData =  $this->db->fetchRow(
-                'SELECT paymentID FROM s_user WHERE id = ?',
-                array(intval($this->session->get('sUserId')))
-            ) ? : array();
-            $paymentInfo = $this->db->fetchRow(
-                'SELECT debit_percent FROM s_core_paymentmeans WHERE id = ?',
-                array($userData["paymentID"])
-            ) ? : array();
+        $paymentId = (int) $this->session->get('sPaymentID');
+        $userId = (int) $this->session->get('sUserId');
+
+        if (!$userId && !$paymentId) {
+            return false;
         }
 
-        $name = $this->config->get('sPAYMENTSURCHARGENUMBER', 'PAYMENTSURCHARGE');
+        if ($userId && !$paymentId) {
+            $userData =  $this->db->fetchRow('SELECT paymentID FROM s_user WHERE id = ?', [$userId]);
+            $paymentId = $userData["paymentID"];
+        }
+
+        $paymentInfo = $this->db->fetchRow(
+            'SELECT debit_percent FROM s_core_paymentmeans WHERE id = ?',
+            [$paymentId]
+        );
+
+        if (!$paymentInfo || !$paymentInfo["debit_percent"]) {
+            return null;
+        }
+
         // Depends on payment mean
         $percent = $paymentInfo["debit_percent"];
+        $name = $this->config->get('sPAYMENTSURCHARGENUMBER', 'PAYMENTSURCHARGE');
 
         $this->db->query(
             'DELETE FROM s_order_basket WHERE sessionID = ? AND ordernumber = ?',
-            array($this->session->get('sessionId'), $name)
+            [$this->session->get('sessionId'), $name]
         );
 
         if (!$this->sCountBasket()) {
             return false;
         }
 
-        if (!empty($percent)) {
-            $amount = $this->sGetAmount();
+        $amount = $this->sGetAmount();
 
-            if ($percent >= 0) {
-                $surchargeName = $this->snippetManager
-                    ->getNamespace('backend/static/discounts_surcharges')
-                    ->get('payment_surcharge_add');
-            } else {
-                $surchargeName = $this->snippetManager
-                    ->getNamespace('backend/static/discounts_surcharges')
-                    ->get('payment_surcharge_dev');
-            }
+        if ($percent >= 0) {
+            $surchargeName = $this->snippetManager
+                ->getNamespace('backend/static/discounts_surcharges')
+                ->get('payment_surcharge_add');
+        } else {
+            $surchargeName = $this->snippetManager
+                ->getNamespace('backend/static/discounts_surcharges')
+                ->get('payment_surcharge_dev');
+        }
 
-            $surcharge = $amount["totalAmount"] / 100 * $percent;
+        $surcharge = $amount["totalAmount"] / 100 * $percent;
 
-            $taxAutoMode = $this->config->get('sTAXAUTOMODE');
-            if (!empty($taxAutoMode)) {
-                $tax = $this->getMaxTax();
-            } else {
-                $tax = $this->config->get('sDISCOUNTTAX');
-            }
+        $taxAutoMode = $this->config->get('sTAXAUTOMODE');
+        if (!empty($taxAutoMode)) {
+            $tax = $this->getMaxTax();
+        } else {
+            $tax = $this->config->get('sDISCOUNTTAX');
+        }
 
-            if (!$tax) {
-                $tax = 119;
-            }
+        if (!$tax) {
+            $tax = 119;
+        }
 
-            if ((!$this->sSYSTEM->sUSERGROUPDATA["tax"] && $this->sSYSTEM->sUSERGROUPDATA["id"])) {
-                $discountNet = $surcharge;
-            } else {
-                $discountNet = round($surcharge / (100+$tax) * 100, 3);
-            }
+        if ((!$this->sSYSTEM->sUSERGROUPDATA["tax"] && $this->sSYSTEM->sUSERGROUPDATA["id"])) {
+            $discountNet = $surcharge;
+        } else {
+            $discountNet = round($surcharge / (100+$tax) * 100, 3);
+        }
 
-            $this->db->insert(
-                's_order_basket',
-                array(
-                    'sessionID'      => $this->session->get('sessionId'),
-                    'articlename'    => $surchargeName,
-                    'articleID'      => 0,
-                    'ordernumber'    => $name,
-                    'quantity'       => 1,
-                    'price'          => $surcharge,
-                    'netprice'       => $discountNet,
-                    'tax_rate'       => $tax,
-                    'datum'          => new Zend_Date(),
-                    'modus'          => 4,
-                    'currencyFactor' => $this->sSYSTEM->sCurrency['factor']
-                )
-            );
+        $params = [
+            'sessionID'      => $this->session->get('sessionId'),
+            'articlename'    => $surchargeName,
+            'articleID'      => 0,
+            'ordernumber'    => $name,
+            'quantity'       => 1,
+            'price'          => $surcharge,
+            'netprice'       => $discountNet,
+            'tax_rate'       => $tax,
+            'datum'          => new Zend_Date(),
+            'modus'          => 4,
+            'currencyFactor' => $this->sSYSTEM->sCurrency['factor']
+        ];
+
+        $notifyUntilBeforeAdd = $this->eventManager->notifyUntil(
+            'Shopware_Modules_Basket_BeforeAddOrderSurchargePercent', array(
+                'subject'   => $this,
+                'surcharge' => $params
+            )
+        );
+
+        if (!$notifyUntilBeforeAdd) {
+            $this->db->insert('s_order_basket', $params);
         }
     }
 

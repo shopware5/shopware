@@ -15,6 +15,8 @@ This changelog references changes done in Shopware 5.2 patch versions.
 * Use user ID of the API key owner for media files if none is provided
 * Fixed image configurator html ids for radio boxes
 * Added notifyUntil event `Shopware_Modules_Basket_BeforeAddMinimumOrderSurcharge` to `sBasket::sInsertSurcharge` containing the surcharge.
+* Added notifyUntil event `Shopware_Modules_Basket_BeforeAddOrderSurchargePercent` to `sBasket::sInsertSurchargePercent` containing the surcharge.
+* Added notifyUntil event `Shopware_Modules_Basket_BeforeAddOrderDiscount` to `sBasket::sInsertDiscount` containing the discount.
 
 ## 5.2.5
 
