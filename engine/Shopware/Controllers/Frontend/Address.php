@@ -87,7 +87,7 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
     public function createAction()
     {
         $address = new Address();
-        $form = $this->createForm(AddressFormType::class, $address);
+        $form = $this->createForm(get_class($this->container->get('shopware_account.form.addressform')), $address);
         $form->handleRequest($this->Request());
 
         if ($form->isValid()) {
@@ -130,7 +130,7 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
         $addressId = $this->Request()->getParam('id', null);
         $address = $this->addressRepository->getOneByUser($addressId, $userId);
 
-        $form = $this->createForm(AddressFormType::class, $address);
+        $form = $this->createForm(get_class($this->container->get('shopware_account.form.addressform')), $address);
         $form->handleRequest($this->Request());
 
         if ($form->isValid()) {
@@ -310,7 +310,7 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
             $address = new Address();
         }
 
-        $form = $this->createForm(AddressFormType::class, $address);
+        $form = $this->createForm(get_class($this->container->get('shopware_account.form.addressform')), $address);
         $this->View()->assign($this->getFormViewData($form));
     }
 
@@ -335,7 +335,7 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
             $address = new Address();
         }
 
-        $form = $this->createForm(AddressFormType::class, $address);
+        $form = $this->createForm(get_class($this->container->get('shopware_account.form.addressform')), $address);
         $form->handleRequest($this->Request());
         
         if ($form->isValid()) {

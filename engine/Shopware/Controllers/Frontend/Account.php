@@ -496,7 +496,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
             return;
         }
 
-        $form = $this->createForm(ResetPasswordFormType::class, $customer);
+        $form = $this->createForm(get_class($this->container->get('shopware_account.form.resetpasswordform')), $customer);
         $form->handleRequest($this->Request());
 
         if (!$form->isValid()) {
@@ -606,7 +606,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         /** @var Customer $customer */
         $customer = $this->get('models')->find(Customer::class, $userId);
 
-        $form = $this->createForm(ProfileUpdateFormType::class, $customer);
+        $form = $this->createForm(get_class($this->container->get('shopware_account.form.profile_update_form')), $customer);
         $form->handleRequest($this->Request());
 
         if ($form->isValid()) {
@@ -628,7 +628,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         /** @var Customer $customer */
         $customer = $this->get('models')->find(Customer::class, $userId);
 
-        $form = $this->createForm(EmailUpdateFormType::class, $customer);
+        $form = $this->createForm(get_class($this->container->get('shopware_account.form.emailupdateform')), $customer);
         $form->handleRequest($this->Request());
 
         if ($form->isValid()) {
@@ -651,7 +651,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         /** @var Customer $customer */
         $customer = $this->get('models')->find(Customer::class, $userId);
 
-        $form = $this->createForm(PasswordUpdateFormType::class, $customer);
+        $form = $this->createForm(get_class($this->container->get('shopware_account.form.passwordupdateform')), $customer);
         $form->handleRequest($this->Request());
 
         if ($form->isValid()) {
