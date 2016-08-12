@@ -420,16 +420,16 @@ class Shopware_Controllers_Backend_ImportExport extends Shopware_Controllers_Bac
                 }
 
                 $joinStatements[] = "
-                    LEFT JOIN `s_articles_prices` p{$cg['id']}
-                    ON `p{$cg['id']}.articledetailsID`=d.id
-                    AND `p{$cg['id']}.pricegroup`='{$cg['groupkey']}'
-                    AND `p{$cg['id']}.from`=1
+                    LEFT JOIN `s_articles_prices` `p{$cg['id']}`
+                    ON `p{$cg['id']}`.articledetailsID = d.id
+                    AND `p{$cg['id']}`.pricegroup='{$cg['groupkey']}'
+                    AND `p{$cg['id']}`.from=1
                 ";
 
                 if (empty($cg['taxinput'])) {
-                    $sqlAddSelectP .= "REPLACE(ROUND(p{$cg['id']}.price,2),'.',',')";
+                    $sqlAddSelectP .= "REPLACE(ROUND(`p{$cg['id']}`.price,2),'.',',')";
                 } else {
-                    $sqlAddSelectP .= "REPLACE(ROUND(p{$cg['id']}.price*(100+t.tax)/100,2),'.',',')";
+                    $sqlAddSelectP .= "REPLACE(ROUND(`p{$cg['id']}`.price*(100+t.tax)/100,2),'.',',')";
                 }
 
                 if ($cg['groupkey']=='EK') {
