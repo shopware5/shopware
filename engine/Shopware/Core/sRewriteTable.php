@@ -129,7 +129,7 @@ class sRewriteTable
         Enlight_Template_Manager $template = null,
         Shopware_Components_Modules $moduleManager = null,
         SlugInterface $slug = null,
-        ContextServiceInterface $contextService
+        ContextServiceInterface $contextService = null
     ) {
         $this->db = $db ?: Shopware()->Db();
         $this->config = $config ?: Shopware()->Config();
