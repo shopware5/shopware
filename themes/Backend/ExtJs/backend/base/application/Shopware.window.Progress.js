@@ -604,20 +604,29 @@ Ext.define('Shopware.window.Progress', {
     createResultGrid: function() {
         var me = this;
 
-        me.resultStore = Ext.create('Ext.data.Store', {
-            model: 'Shopware.model.DataOperation'
-        });
+        me.resultStore = me.createResultStore();
 
         return Ext.create('Ext.grid.Panel', {
             border: false,
-            columns: [
-                { xtype: 'rownumberer', width: 30 },
-                { header: me.successHeader, dataIndex: 'success', width: 60, renderer: me.successRenderer },
-                { header: me.requestHeader, dataIndex: 'request', flex: 1, renderer: me.requestRenderer, scope: me },
-                { header: me.errorHeader, dataIndex: 'error', flex: 1 }
-            ],
+            columns: me.createResultGridColumns(),
             store: me.resultStore
         });
+    },
+
+    createResultStore: function() {
+        return Ext.create('Ext.data.Store', {
+            model: 'Shopware.model.DataOperation'
+        });
+    },
+
+    createResultGridColumns: function() {
+        var me = this;
+        return [
+            { xtype: 'rownumberer', width: 30 },
+            { header: me.successHeader, dataIndex: 'success', width: 60, renderer: me.successRenderer },
+            { header: me.requestHeader, dataIndex: 'request', flex: 1, renderer: me.requestRenderer, scope: me },
+            { header: me.errorHeader, dataIndex: 'error', flex: 1 }
+        ];
     },
 
 

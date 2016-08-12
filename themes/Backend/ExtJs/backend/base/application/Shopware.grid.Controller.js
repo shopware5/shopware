@@ -623,11 +623,32 @@ Ext.define('Shopware.grid.Controller', {
      * @param record { Shopware.data.Model }
      */
     onDeleteItem: function (grid, record) {
-        var me = this;
-        me.onDeleteItems(grid, [ record ], null);
+        var me = this,
+            text = me.deleteConfirmText,
+            title = me.deleteConfirmTitle;
+
+        if (grid.getConfig('displayProgressOnSingleDelete')) {
+            me.onDeleteItems(grid, [ record ], null);
+            return;
+        }
+
+        Ext.MessageBox.confirm(title, text, function (response) {
+            if (response !== 'yes') {
+                return false;
+            }
+
+            if (!me.hasModelAction(record, 'destroy')) {
+                grid.getStore().remove(record);
+                return true;
+            }
+
+            record.destroy({
+                success: function (result, operation) {
+                    grid.getStore().load();
+                }
+            });
+        });
     },
-
-
 
     /**
      * Event listener function of the { @link Shopware.window.Progress:sequentialProcess } function.

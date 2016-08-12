@@ -27,33 +27,29 @@
  * @author shopware AG
  */
 
-//{block name="backend/vote/app"}
-Ext.define('Shopware.apps.Vote', {
-    extend: 'Enlight.app.SubApplication',
+//{block name="backend/vote/view/point_helper"}
+Ext.define('Shopware.apps.Vote.view.PointHelper', {
+    renderPoints: function(points) {
+        var html = '';
+        var count = 0;
+        var i;
 
-    name:'Shopware.apps.Vote',
+        for(i=0; i<points; i++){
+            if((i-points) == -0.5) {
+                //create half-star
+                html = html + '<div style="height: 16px; width: 16px; display: inline-block;" class="sprite-star-half"></div>';
+            }else{
+                //create full stars
+                html = html + '<div style="height: 16px; width: 16px; display: inline-block;" class="sprite-star"></div>';
+            }
+            count++;
+        }
 
-    loadPath: '{url action=load}',
-    bulkLoad: true,
-
-    controllers: [ 'Main' ],
-
-    views: [
-        'PointHelper',
-        'list.Window',
-        'list.Vote',
-        'list.extensions.Info',
-        'list.extensions.Filter',
-        'list.Progress',
-        'detail.Vote',
-        'detail.Window'
-    ],
-
-    models: ['Vote', 'AcceptResponse'],
-    stores: ['Vote'],
-
-    launch: function() {
-        return this.getController('Main').mainWindow;
+        //add empty stars, so 5 stars are displayed
+        for(i=0; i<(5-count); i++){
+            html = html + '<div style="height: 16px; width: 16px; display: inline-block;" class="sprite-star-empty"></div>';
+        }
+        return html;
     }
 });
 //{/block}

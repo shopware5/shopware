@@ -22,61 +22,67 @@
  *
  * @category   Shopware
  * @package    Vote
- * @subpackage Model
+ * @subpackage App
  * @version    $Id$
  * @author shopware AG
  */
 
-/**
- * Shopware UI - Vote model
- *
- * This model contains a single vote.
- */
 //{block name="backend/vote/model/vote"}
 Ext.define('Shopware.apps.Vote.model.Vote', {
+    extend: 'Shopware.data.Model',
 
-    /**
-    * Extends the standard ExtJS 4
-    * @string
-    */
-    extend: 'Ext.data.Model',
-    /**
-    * The fields used for this model
-    * @array
-    */
+    configure: function() {
+        return {
+            controller: 'Vote',
+            detail: 'Shopware.apps.Vote.view.detail.Vote'
+        };
+    },
+
     fields: [
-		//{block name="backend/vote/model/vote/fields"}{/block}
-		'id', 'active',
-        { name : 'datum', type : 'date' },
-        'name', 'headline', 'points', 'articleName', 'comment', 'answer', 'answer_datum', 'email'],
-    /**
-    * Configure the data communication
-    * @object
-    */
-    proxy: {
-        type: 'ajax',
-        /**
-        * Configure the url mapping for the different
-        * @object
-        */
-        api: {
-            //read out all articles
-            read: '{url controller="vote" action="getVotes"}',
-            //edit articles
-            update: '{url controller="vote" action="editVote"}',
-            //funcion to delete articles
-            destroy: '{url controller="vote" action="deleteVote"}'
-        },
-        /**
-        * Configure the data reader
-        * @object
-        */
-        reader: {
-            type: 'json',
-            root: 'data',
-            //total values, used for paging
-            totalProperty: 'total'
+        //{block name="backend/vote/model/vote/fields"}{/block}
+        { name: 'id', type : 'int' },
+        { name: 'active', type : 'boolean' },
+        { name: 'shopId', type: 'int', useNull: true },
+        { name: 'articleId', type: 'int' },
+        { name: 'points', type: 'float' },
+
+        { name: 'name', type: 'string' },
+        { name: 'email', type: 'string' },
+        { name: 'headline', type: 'string' },
+        { name: 'comment', type: 'string' },
+        { name: 'answer', type: 'string' },
+        { name: 'answer_date', type : 'date', useNull: true },
+        { name: 'datum', type : 'date' },
+        {
+            name: 'articleName',
+            type: 'string',
+            convert: function(value, record) {
+                if (record && record.raw && record.raw.article) {
+                    return record.raw.article.name;
+                }
+                return value;
+            }
         }
-    }
+    ],
+
+    associations: [
+    //{block name="backend/vote/model/vote/associations"}{/block}
+    {
+        relation: 'ManyToOne',
+        field: 'shopId',
+
+        type: 'hasMany',
+        model: 'Shopware.apps.Base.model.Shop',
+        name: 'getShop',
+        associationKey: 'shop'
+    }, {
+        relation: 'ManyToOne',
+        field: 'articleId',
+
+        type: 'hasMany',
+        model: 'Shopware.apps.Base.model.Article',
+        name: 'getArticle',
+        associationKey: 'article'
+    }]
 });
 //{/block}

@@ -27,33 +27,26 @@
  * @author shopware AG
  */
 
-//{block name="backend/vote/app"}
-Ext.define('Shopware.apps.Vote', {
-    extend: 'Enlight.app.SubApplication',
+//{namespace name=backend/vote/main}
 
-    name:'Shopware.apps.Vote',
+//{block name="backend/vote/view/list/window"}
+Ext.define('Shopware.apps.Vote.view.list.Window', {
+    extend: 'Shopware.window.Listing',
+    alias: 'widget.vote-list-window',
+    height: '90%',
+    width: '80%',
+    title : '{s name=window_title}Vote listing{/s}',
 
-    loadPath: '{url action=load}',
-    bulkLoad: true,
+    configure: function() {
+        return {
+            listingGrid: 'Shopware.apps.Vote.view.list.Vote',
+            listingStore: 'Shopware.apps.Vote.store.Vote',
 
-    controllers: [ 'Main' ],
-
-    views: [
-        'PointHelper',
-        'list.Window',
-        'list.Vote',
-        'list.extensions.Info',
-        'list.extensions.Filter',
-        'list.Progress',
-        'detail.Vote',
-        'detail.Window'
-    ],
-
-    models: ['Vote', 'AcceptResponse'],
-    stores: ['Vote'],
-
-    launch: function() {
-        return this.getController('Main').mainWindow;
+            extensions: [
+                { xtype: 'vote-listing-info-panel' },
+                { xtype: 'vote-listing-filter-panel' }
+            ]
+        };
     }
 });
 //{/block}

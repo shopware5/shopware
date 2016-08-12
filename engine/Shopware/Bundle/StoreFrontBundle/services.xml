@@ -246,11 +246,13 @@
             <argument type="service" id="dbal_connection"/>
             <argument type="service" id="shopware_storefront.field_helper_dbal"/>
             <argument type="service" id="shopware_storefront.vote_hydrator_dbal"/>
+            <argument type="service" id="config"/>
         </service>
 
         <service id="shopware_storefront.vote_average_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\VoteAverageGateway">
             <argument type="service" id="dbal_connection"/>
             <argument type="service" id="shopware_storefront.vote_hydrator_dbal"/>
+            <argument type="service" id="config"/>
         </service>
 
         <service id="shopware_storefront.customer_group_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\CustomerGroupGateway">

@@ -46,13 +46,23 @@ class VoteAverageGateway implements Gateway\VoteAverageGatewayInterface
     private $connection;
 
     /**
+     * @var \Shopware_Components_Config
+     */
+    private $config;
+
+    /**
      * @param Connection $connection
      * @param Hydrator\VoteHydrator $voteHydrator
+     * @param \Shopware_Components_Config $config
      */
-    public function __construct(Connection $connection, Hydrator\VoteHydrator $voteHydrator)
-    {
+    public function __construct(
+        Connection $connection,
+        Hydrator\VoteHydrator $voteHydrator,
+        \Shopware_Components_Config $config
+    ) {
         $this->connection = $connection;
         $this->voteHydrator = $voteHydrator;
+        $this->config = $config;
     }
 
     /**
@@ -91,6 +101,11 @@ class VoteAverageGateway implements Gateway\VoteAverageGatewayInterface
             ->addGroupBy('vote.points')
             ->orderBy('vote.articleID', 'ASC')
             ->setParameter(':products', $ids, Connection::PARAM_INT_ARRAY);
+
+        if ($this->config->get('displayOnlySubShopVotes')) {
+            $query->andWhere('(vote.shop_id = :shopId OR vote.shop_id IS NULL)');
+            $query->setParameter(':shopId', $context->getShop()->getId());
+        }
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();

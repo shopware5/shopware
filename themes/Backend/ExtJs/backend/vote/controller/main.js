@@ -22,35 +22,18 @@
  *
  * @category   Shopware
  * @package    Vote
- * @subpackage Controller
+ * @subpackage App
  * @version    $Id$
  * @author shopware AG
  */
 
-/**
- * Shopware UI - Vote main controller
- *
- * This controller only creates the main-window and sets the voteStore
- */
 //{block name="backend/vote/controller/main"}
 Ext.define('Shopware.apps.Vote.controller.Main', {
-
-    /**
-    * Extend from the standard ExtJS 4
-    * @string
-    */
-    extend: 'Ext.app.Controller',
-    requires: [ 'Shopware.apps.Vote.controller.Vote' ],
+    extend: 'Enlight.app.Controller',
 
     init: function() {
         var me = this;
-        me.subApplication.voteStore = me.subApplication.getStore('Votes');
-        me.subApplication.voteStore.load();
-
-        me.mainWindow = me.getView('main.Window').create({
-            voteStore: me.subApplication.voteStore
-        });
-        this.callParent(arguments);
+        me.mainWindow = me.getView('list.Window').create({ }).show();
     }
 });
 //{/block}
