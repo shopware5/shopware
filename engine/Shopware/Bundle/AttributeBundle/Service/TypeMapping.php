@@ -103,7 +103,7 @@ class TypeMapping
             'dbal' => 'datetime',
             'allowDefaultValue' => true,
             'quoteDefaultValue' => true,
-            'elastic' => ['type' => 'date', 'format' => 'yyyy-MM-dd']
+            'elastic' => ['type' => 'date', 'format' => 'yyyy-MM-dd HH:mm:ss']
         ],
         self::TYPE_COMBOBOX => [
             'sql' => 'MEDIUMTEXT',
