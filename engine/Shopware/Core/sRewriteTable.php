@@ -184,10 +184,6 @@ class sRewriteTable
      */
     public function sCleanupPath($path, $remove_ds = true)
     {
-        // replace forward slash to dashes in strings like "Help / Support"
-        // to not create unnecessary directory levels
-        $path = preg_replace("#\s/\s#", '-', $path);
-
         $parts = explode('/', $path);
         $parts = array_map(function ($path) {
             return $this->slug->slugify($path);
