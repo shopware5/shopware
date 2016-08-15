@@ -148,12 +148,15 @@ Ext.define('Shopware.apps.Shipping.controller.Main', {
                 return false;
             }
             store.remove(record);
-                store.save();
-                Shopware.Msg.createGrowlMessage('', me.messages.deleteDialogSuccess, '{s name=title}{/s}');
-                Ext.Error.handle = function() {
-                    Shopware.Msg.createGrowlMessage('', me.messages.deleteDialogFailure + e.message, '{s name=title}{/s}');
+            store.sync({
+                callback: function() {
+                    Shopware.Msg.createGrowlMessage('', me.messages.deleteDialogSuccess, '{s name=title}{/s}');
+                    Ext.Error.handle = function() {
+                        Shopware.Msg.createGrowlMessage('', me.messages.deleteDialogFailure + e.message, '{s name=title}{/s}');
+                    }
+                    store.load();
                 }
-            store.load();
+            });
         });
 
     },
@@ -186,13 +189,15 @@ Ext.define('Shopware.apps.Shipping.controller.Main', {
                 }
                 if (selection.length > 0) {
                     store.remove(selection);
-                    try {
-                        Shopware.Msg.createGrowlMessage('', me.messages.deleteDialogSuccess, '{s name=title}{/s}');
-                        store.save();
-                        store.load();
-                    } catch (e) {
-                        Shopware.Msg.createGrowlMessage('', me.messages.deleteDialogFailure + e.message, '{s name=title}{/s}');
-                    }
+                    store.sync({
+                        callback: function() {
+                            Shopware.Msg.createGrowlMessage('', me.messages.deleteDialogSuccess, '{s name=title}{/s}');
+                            store.load();
+                        },
+                        failure: function() {
+                            Shopware.Msg.createGrowlMessage('', me.messages.deleteDialogFailure + e.message, '{s name=title}{/s}');
+                        }
+                    })
                 }
         });
     },
