@@ -80,6 +80,30 @@ class Enlight_Controller_Response_ResponseTestCase
     }
 
     /**
+     * Sends all cookies
+     *
+     * @return Enlight_Controller_Response_ResponseTestCase
+     */
+    public function sendCookies()
+    {
+        if (!empty($this->_cookies)) {
+            $this->canSendHeaders(true);
+            foreach ($this->_cookies as $name => $cookie) {
+                setcookie(
+                    $name,
+                    $cookie['value'],
+                    $cookie['expire'],
+                    $cookie['path'],
+                    $cookie['domain'],
+                    $cookie['secure'],
+                    $cookie['httpOnly']
+                );
+            }
+        }
+        return $this;
+    }
+
+    /**
      * Gets a cookie value
      *
      * @param string $name
