@@ -29,6 +29,8 @@ use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Bundle\StoreFrontBundle\Service\CategoryServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
+use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\Price;
 use Shopware\Components\DependencyInjection\Container;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Emotion\Emotion;
@@ -299,7 +301,7 @@ class LegacyStructConverter
     }
 
     /**
-     * @param StoreFrontBundle\Struct\ListProduct[] $products
+     * @param ListProduct[] $products
      * @return array
      */
     public function convertListProductStructList(array $products)
@@ -310,12 +312,12 @@ class LegacyStructConverter
     /**
      * Converts the passed ListProduct struct to a shopware 3-4 array structure.
      *
-     * @param StoreFrontBundle\Struct\ListProduct $product
+     * @param ListProduct $product
      * @return array
      */
-    public function convertListProductStruct(StoreFrontBundle\Struct\ListProduct $product)
+    public function convertListProductStruct(ListProduct $product)
     {
-        if (!$product instanceof StoreFrontBundle\Struct\ListProduct) {
+        if (!$product instanceof ListProduct) {
             return array();
         }
 
@@ -325,38 +327,8 @@ class LegacyStructConverter
             $cheapestPrice = $product->getCheapestUnitPrice();
         }
 
-        $unit = $cheapestPrice->getUnit();
-
-        $price = $this->sFormatPrice(
-            $cheapestPrice->getCalculatedPrice()
-        );
-
-        $pseudoPrice = $this->sFormatPrice(
-            $cheapestPrice->getCalculatedPseudoPrice()
-        );
-
-        $referencePrice = $this->sFormatPrice(
-            $cheapestPrice->getCalculatedReferencePrice()
-        );
-
         $promotion = $this->getListProductData($product);
-
-        $promotion = array_merge(
-            $promotion,
-            array(
-                'has_pseudoprice' => $cheapestPrice->getCalculatedPseudoPrice() > $cheapestPrice->getCalculatedPrice(),
-                'price' => $price,
-                'price_numeric' => $cheapestPrice->getCalculatedPrice(),
-                'pseudoprice' => $pseudoPrice,
-                'pseudoprice_numeric' => $cheapestPrice->getCalculatedPseudoPrice(),
-                'pricegroup' => $cheapestPrice->getCustomerGroup()->getKey(),
-                'price_attributes' => $cheapestPrice->getAttributes()
-            )
-        );
-
-        if ($referencePrice) {
-            $promotion['referenceprice'] = $referencePrice;
-        }
+        $promotion = array_merge($promotion, $this->convertProductPriceStruct($cheapestPrice));
 
         if ($product->getPriceGroup()) {
             $promotion['pricegroupActive'] = true;
@@ -364,33 +336,12 @@ class LegacyStructConverter
         }
 
         if (count($product->getPrices()) > 1 || $product->hasDifferentPrices()) {
-            $promotion['priceStartingFrom'] = $price;
-        }
-
-        if ($cheapestPrice->getCalculatedPseudoPrice()) {
-            $discPseudo = $cheapestPrice->getCalculatedPseudoPrice();
-            $discPrice = $cheapestPrice->getCalculatedPrice();
-
-            if ($discPseudo != 0) {
-                $discount = round(($discPrice / $discPseudo * 100) - 100, 2) * -1;
-            } else {
-                $discount = 0;
-            }
-
-            $promotion["pseudopricePercent"] = array(
-                "int" => round($discount, 0),
-                "float" => $discount
-            );
-        }
-
-        if ($unit) {
-            $promotion = array_merge($promotion, $this->convertUnitStruct($unit));
+            $promotion['priceStartingFrom'] = $promotion['price'];
         }
 
         if ($product->getCover()) {
             $promotion['image'] = $this->convertMediaStruct($product->getCover());
         }
-
 
         if ($product->getVoteAverage()) {
             $promotion['sVoteAverage'] = $this->convertVoteAverageStruct($product->getVoteAverage());
@@ -398,21 +349,7 @@ class LegacyStructConverter
 
         $promotion['prices'] = [];
         foreach ($product->getPrices() as $price) {
-            $priceData = $this->convertPriceStruct($price);
-
-            $priceData = array_merge($priceData, array(
-                'has_pseudoprice' => $price->getCalculatedPseudoPrice() > $price->getCalculatedPrice(),
-                'price' => $this->sFormatPrice($price->getCalculatedPrice()),
-                'price_numeric' => $price->getCalculatedPrice(),
-                'pseudoprice' => $this->sFormatPrice($price->getCalculatedPseudoPrice()),
-                'pseudoprice_numeric' => $price->getCalculatedPseudoPrice(),
-                'pricegroup' => $price->getCustomerGroup()->getKey(),
-                'purchaseunit' => $price->getUnit()->getPurchaseUnit(),
-                'maxpurchase' => $price->getUnit()->getMaxPurchase(),
-                'unit_attributes' => $price->getUnit()->getAttributes()
-            ));
-
-            $promotion['prices'][] = $priceData;
+            $promotion['prices'][] = $this->convertProductPriceStruct($price);
         }
 
         $promotion["linkBasket"] = $this->config->get('baseFile') .
@@ -422,6 +359,53 @@ class LegacyStructConverter
             "?sViewport=detail&sArticle=" . $promotion["articleID"];
 
         return $promotion;
+    }
+
+    /**
+     * @param Price $price
+     * @return array
+     */
+    public function convertProductPriceStruct(Price $price)
+    {
+        $data = $this->convertPriceStruct($price);
+        $data['pseudopricePercent'] = null;
+        $data['price'] = $this->sFormatPrice($price->getCalculatedPrice());
+        $data['pseudoprice'] = $this->sFormatPrice($price->getCalculatedPseudoPrice());
+        $data['referenceprice'] = $this->sFormatPrice($price->getCalculatedReferencePrice());
+        $data['has_pseudoprice'] = $price->getCalculatedPseudoPrice() > $price->getCalculatedPrice();
+        $data['price_numeric'] = $price->getCalculatedPrice();
+        $data['pseudoprice_numeric'] = $price->getCalculatedPseudoPrice();
+        $data['price_attributes'] = $price->getAttributes();
+        $data['pricegroup'] = $price->getCustomerGroup()->getKey();
+
+        if ($price->getCalculatedPseudoPrice()) {
+            $discount = 0;
+            if ($price->getCalculatedPseudoPrice() != 0) {
+                $discount = round(($price->getCalculatedPrice() / $price->getCalculatedPseudoPrice() * 100) - 100, 2) * -1;
+            }
+
+            $data["pseudopricePercent"] = [
+                "int" => round($discount, 0),
+                "float" => $discount
+            ];
+        }
+
+        //reset unit data
+        $data['minpurchase'] = null;
+        $data['maxpurchase'] = $this->config->get('maxPurchase');
+        $data['purchasesteps'] = 1;
+        $data['purchaseunit'] = null;
+        $data['referenceunit'] = null;
+        $data['packunit'] = null;
+        $data['unitID'] = null;
+        $data['sUnit'] = ['unit' => '', 'description' => ''];
+        $data['unit_attributes'] = [];
+
+        if ($price->getUnit()) {
+            $data = array_merge($data, $this->convertUnitStruct($price->getUnit()));
+        }
+
+        return $data;
     }
 
     /**
@@ -461,14 +445,6 @@ class LegacyStructConverter
             $data = array_merge($data, $this->convertUnitStruct($product->getUnit()));
         }
 
-        //set defaults for detail page combo box.
-        if (!$data['maxpurchase']) {
-            $data['maxpurchase'] = $this->config->get('maxPurchase');
-        }
-        if (!$data['purchasesteps']) {
-            $data['purchasesteps'] = 1;
-        }
-
         if ($product->getPriceGroup()) {
             $data = array_merge(
                 $data,
@@ -480,35 +456,11 @@ class LegacyStructConverter
             );
         }
 
-        /** @var $variantPrice StoreFrontBundle\Struct\Product\Price */
+        /** @var $variantPrice Price */
         $variantPrice = $product->getVariantPrice();
-
-        $data['price'] = $this->sFormatPrice($variantPrice->getCalculatedPrice());
-        $data['price_numeric'] = $variantPrice->getCalculatedPrice();
-        $data['pseudoprice'] = $this->sFormatPrice($variantPrice->getCalculatedPseudoPrice());
-        $data['pseudoprice_numeric'] = $variantPrice->getCalculatedPseudoPrice();
-        $data['has_pseudoprice'] = $variantPrice->getCalculatedPseudoPrice() > $variantPrice->getCalculatedPrice();
-        $data['price_attributes'] = $variantPrice->getAttributes();
-
-        if ($variantPrice->getCalculatedPseudoPrice()) {
-            $discPseudo = $variantPrice->getCalculatedPseudoPrice();
-            $discPrice = $variantPrice->getCalculatedPrice();
-
-            if ($discPseudo != 0) {
-                $discount = round(($discPrice / $discPseudo * 100) - 100, 2) * -1;
-            } else {
-                $discount = 0;
-            }
-
-            $data["pseudopricePercent"] = array(
-                "int" => round($discount, 0),
-                "float" => $discount
-            );
-        }
-
-        $data['pricegroup'] = $variantPrice->getCustomerGroup()->getKey();
-
+        $data = array_merge($data, $this->convertProductPriceStruct($variantPrice));
         $data['referenceprice'] = $variantPrice->getCalculatedReferencePrice();
+        $data['pricegroup'] = $variantPrice->getCustomerGroup()->getKey();
 
         if (count($product->getPrices()) > 1) {
             foreach ($product->getPrices() as $price) {
@@ -646,10 +598,10 @@ class LegacyStructConverter
     }
 
     /**
-     * @param StoreFrontBundle\Struct\Product\Price $price
+     * @param Price $price
      * @return array
      */
-    public function convertPriceStruct(StoreFrontBundle\Struct\Product\Price $price)
+    public function convertPriceStruct(Price $price)
     {
         return [
             'valFrom' => $price->getFrom(),
@@ -735,8 +687,8 @@ class LegacyStructConverter
     {
         return [
             'minpurchase' => $unit->getMinPurchase(),
-            'maxpurchase' => $unit->getMaxPurchase(),
-            'purchasesteps' => $unit->getPurchaseStep(),
+            'maxpurchase' => $unit->getMaxPurchase() ?: $this->config->get('maxPurchase'),
+            'purchasesteps' => $unit->getPurchaseStep() ?:1,
             'purchaseunit' => $unit->getPurchaseUnit(),
             'referenceunit' => $unit->getReferenceUnit(),
             'packunit' => $unit->getPackUnit(),
@@ -879,12 +831,12 @@ class LegacyStructConverter
     }
 
     /**
-     * @param StoreFrontBundle\Struct\ListProduct $product
+     * @param ListProduct $product
      * @param StoreFrontBundle\Struct\Configurator\Set $set
      * @return array
      */
     public function convertConfiguratorStruct(
-        StoreFrontBundle\Struct\ListProduct $product,
+        ListProduct $product,
         StoreFrontBundle\Struct\Configurator\Set $set
     ) {
         $groups = array();
@@ -919,12 +871,12 @@ class LegacyStructConverter
     }
 
     /**
-     * @param StoreFrontBundle\Struct\ListProduct $product
+     * @param ListProduct $product
      * @param StoreFrontBundle\Struct\Configurator\Set $set
      * @return array
      */
     public function convertConfiguratorPrice(
-        StoreFrontBundle\Struct\ListProduct $product,
+        ListProduct $product,
         StoreFrontBundle\Struct\Configurator\Set $set
     ) {
         if ($set->isSelectionSpecified()) {
@@ -934,23 +886,17 @@ class LegacyStructConverter
         $data = [];
 
         $variantPrice = $product->getVariantPrice();
-
+        $cheapestPrice = $product->getCheapestUnitPrice();
         if ($this->config->get('calculateCheapestPriceWithMinPurchase')) {
             $cheapestPrice = $product->getCheapestPrice();
-        } else {
-            $cheapestPrice = $product->getCheapestUnitPrice();
         }
 
         if (count($product->getPrices()) > 1 || $product->hasDifferentPrices()) {
-            $data['priceStartingFrom'] = $this->sFormatPrice(
-                $cheapestPrice->getCalculatedPrice()
-            );
+            $data['priceStartingFrom'] = $this->sFormatPrice($cheapestPrice->getCalculatedPrice());
         }
 
-        $data['price'] = $data['priceStartingFrom'] ? : $this->sFormatPrice(
-            $variantPrice->getCalculatedPrice()
-        );
-
+        $data = array_merge($data, $this->convertProductPriceStruct($cheapestPrice));
+        $data['price'] = $data['priceStartingFrom'] ? : $this->sFormatPrice($variantPrice->getCalculatedPrice());
         $data['sBlockPrices'] = [];
 
         return $data;
@@ -960,12 +906,12 @@ class LegacyStructConverter
      * Creates the settings array for the passed configurator set
      *
      * @param StoreFrontBundle\Struct\Configurator\Set $set
-     * @param StoreFrontBundle\Struct\ListProduct $product
+     * @param ListProduct $product
      * @return array
      */
     public function getConfiguratorSettings(
         StoreFrontBundle\Struct\Configurator\Set $set,
-        StoreFrontBundle\Struct\ListProduct $product
+        ListProduct $product
     ) {
         $settings = array(
             'instock' => $product->isCloseouts(),
@@ -1069,10 +1015,10 @@ class LegacyStructConverter
      * Internal function which converts only the data of a list product.
      * Associated data won't converted.
      *
-     * @param StoreFrontBundle\Struct\ListProduct $product
+     * @param ListProduct $product
      * @return array
      */
-    private function getListProductData(StoreFrontBundle\Struct\ListProduct $product)
+    private function getListProductData(ListProduct $product)
     {
         $createDate = null;
         if ($product->getCreatedAt()) {
