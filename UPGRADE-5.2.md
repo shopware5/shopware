@@ -7,6 +7,7 @@ This changelog references changes done in Shopware 5.2 patch versions.
 [View all changes from v5.2.5...v5.2.6](https://github.com/shopware/shopware/compare/v5.2.5...v5.2.6)
 
 * Changed visibility of sAdmin::loginUser to protected
+* Added filter events to all convert functions in `LegacyStructConverter`
 
 ## 5.2.5
 

@@ -149,7 +149,9 @@ class LegacyStructConverter
             $data['states'] = $this->convertStateStructList($country->getStates());
         }
 
-        return $data;
+        return $this->eventManager->filter('Legacy_Struct_Converter_Convert_Country', $data, [
+            'country' => $country
+        ]);
     }
 
     /**
@@ -169,7 +171,10 @@ class LegacyStructConverter
     {
         $data = json_decode(json_encode($state), true);
         $data += ['shortcode' => $state->getCode(), 'attributes' => $state->getAttributes()];
-        return $data;
+
+        return $this->eventManager->filter('Legacy_Struct_Converter_Convert_State', $data, [
+            'state' => $state
+        ]);
     }
 
     /**
@@ -180,7 +185,7 @@ class LegacyStructConverter
      */
     public function convertConfiguratorGroupStruct(StoreFrontBundle\Struct\Configurator\Group $group)
     {
-        return [
+        $data = [
             'groupID' => $group->getId(),
             'groupname' => $group->getName(),
             'groupdescription' => $group->getDescription(),
@@ -189,6 +194,10 @@ class LegacyStructConverter
             'user_selected' => $group->isSelected(),
             'attributes' => $group->getAttributes()
         ];
+
+        return $this->eventManager->filter('Legacy_Struct_Converter_Convert_Configurator_Group', $data, [
+            'configurator_group' => $group
+        ]);
     }
 
     /**
@@ -231,7 +240,7 @@ class LegacyStructConverter
             $media['path'] = $media['source'];
         }
 
-        return [
+        $data = [
             'id' => $category->getId(),
             'parentId' => $category->getParentId(),
             'name' => $category->getName(),
@@ -268,6 +277,10 @@ class LegacyStructConverter
             'rssFeed'         => $detailUrl . '&sRss=1',
             'atomFeed'        => $detailUrl . '&sAtom=1'
         ];
+
+        return $this->eventManager->filter('Legacy_Struct_Converter_Convert_Category', $data, [
+            'category' => $category
+        ]);
     }
 
     /**
@@ -358,7 +371,9 @@ class LegacyStructConverter
         $promotion["linkDetails"] = $this->config->get('baseFile') .
             "?sViewport=detail&sArticle=" . $promotion["articleID"];
 
-        return $promotion;
+        return $this->eventManager->filter('Legacy_Struct_Converter_Convert_List_Product', $promotion, [
+            'product' => $product
+        ]);
     }
 
     /**
@@ -420,13 +435,17 @@ class LegacyStructConverter
             return array();
         }
 
-        return [
+        $data = [
             'id' => $productStream->getId(),
             'name' => $productStream->getName(),
             'description' => $productStream->getDescription(),
             'type' => $productStream->getType(),
             'attributes' => $productStream->getAttributes()
         ];
+
+        return $this->eventManager->filter('Legacy_Struct_Converter_Convert_Related_Product_Stream', $data, [
+            'product_stream' => $productStream
+        ]);
     }
 
     /**
@@ -548,7 +567,9 @@ class LegacyStructConverter
             $data['relatedProductStreams'][] = $this->convertRelatedProductStreamStruct($relatedProductStream);
         }
 
-        return $data;
+        return $this->eventManager->filter('Legacy_Struct_Converter_Convert_Product', $data, [
+            'product' => $product
+        ]);
     }
 
     /**
@@ -557,12 +578,16 @@ class LegacyStructConverter
      */
     public function convertVoteAverageStruct(StoreFrontBundle\Struct\Product\VoteAverage $average)
     {
-        return [
+        $data = [
             'average' => round($average->getAverage()),
             'count' => $average->getCount(),
             'pointCount' => $average->getPointCount(),
             'attributes' => $average->getAttributes()
         ];
+
+        return $this->eventManager->filter('Legacy_Struct_Converter_Convert_Vote_Average', $data, [
+            'average' => $average
+        ]);
     }
 
     /**
@@ -594,7 +619,9 @@ class LegacyStructConverter
 
         $data['attributes'] = $vote->getAttributes();
 
-        return $data;
+        return $this->eventManager->filter('Legacy_Struct_Converter_Convert_Vote', $data, [
+            'vote' => $vote
+        ]);
     }
 
     /**
@@ -603,7 +630,7 @@ class LegacyStructConverter
      */
     public function convertPriceStruct(Price $price)
     {
-        return [
+        $data = [
             'valFrom' => $price->getFrom(),
             'valTo' => $price->getTo(),
             'from' => $price->getFrom(),
@@ -613,6 +640,10 @@ class LegacyStructConverter
             'referenceprice' => $price->getCalculatedReferencePrice(),
             'attributes' => $price->getAttributes()
         ];
+
+        return $this->eventManager->filter('Legacy_Struct_Converter_Convert_Price', $data, [
+            'price' => $price
+        ]);
     }
 
     /**
@@ -685,7 +716,7 @@ class LegacyStructConverter
      */
     public function convertUnitStruct(StoreFrontBundle\Struct\Product\Unit $unit)
     {
-        return [
+        $data = [
             'minpurchase' => $unit->getMinPurchase(),
             'maxpurchase' => $unit->getMaxPurchase() ?: $this->config->get('maxPurchase'),
             'purchasesteps' => $unit->getPurchaseStep() ?:1,
@@ -699,6 +730,10 @@ class LegacyStructConverter
             ],
             'unit_attributes' => $unit->getAttributes()
         ];
+
+        return $this->eventManager->filter('Legacy_Struct_Converter_Convert_Unit', $data, [
+            'unit' => $unit
+        ]);
     }
 
     /**
@@ -774,7 +809,9 @@ class LegacyStructConverter
             ];
         }
 
-        return $result;
+        return $this->eventManager->filter('Legacy_Struct_Converter_Convert_Property_Set', $result, [
+            'property_set' => $set
+        ]);
     }
 
     /**
@@ -795,7 +832,9 @@ class LegacyStructConverter
             $data['options'][] = $this->convertPropertyOptionStruct($option);
         }
 
-        return $data;
+        return $this->eventManager->filter('Legacy_Struct_Converter_Convert_Property_Group', $data, [
+            'property_group' => $group
+        ]);
     }
 
     /**
@@ -804,11 +843,15 @@ class LegacyStructConverter
      */
     public function convertPropertyOptionStruct(StoreFrontBundle\Struct\Property\Option $option)
     {
-        return [
+        $data = [
             'id' => $option->getId(),
             'name' => $option->getName(),
             'attributes' => $option->getAttributes()
         ];
+
+        return $this->eventManager->filter('Legacy_Struct_Converter_Convert_Property_Option', $data, [
+            'property_option' => $option
+        ]);
     }
 
     /**
@@ -817,7 +860,7 @@ class LegacyStructConverter
      */
     public function convertManufacturerStruct(StoreFrontBundle\Struct\Product\Manufacturer $manufacturer)
     {
-        return [
+        $data = [
             'id' => $manufacturer->getId(),
             'name' => $manufacturer->getName(),
             'description' => $manufacturer->getDescription(),
@@ -828,6 +871,10 @@ class LegacyStructConverter
             'image' => $manufacturer->getCoverFile(),
             'attributes' => $manufacturer->getAttributes()
         ];
+
+        return $this->eventManager->filter('Legacy_Struct_Converter_Convert_Manufacturer', $data, [
+            'manufacturer' => $manufacturer
+        ]);
     }
 
     /**
@@ -863,11 +910,16 @@ class LegacyStructConverter
 
         $settings = $this->getConfiguratorSettings($set, $product);
 
-        return [
+        $data = [
             'sConfigurator' => $groups,
             'sConfiguratorSettings' => $settings,
             'isSelectionSpecified' => $set->isSelectionSpecified()
         ];
+
+        return $this->eventManager->filter('Legacy_Struct_Converter_Convert_Configurator_Set', $data, [
+            'configurator_set' => $set,
+            'product' => $product
+        ]);
     }
 
     /**
@@ -899,7 +951,10 @@ class LegacyStructConverter
         $data['price'] = $data['priceStartingFrom'] ? : $this->sFormatPrice($variantPrice->getCalculatedPrice());
         $data['sBlockPrices'] = [];
 
-        return $data;
+        return $this->eventManager->filter('Legacy_Struct_Converter_Convert_Configurator_Price', $data, [
+            'configurator_set' => $set,
+            'product' => $product
+        ]);
     }
 
     /**
@@ -931,7 +986,10 @@ class LegacyStructConverter
             $settings["template"] = "article_config_upprice.tpl";
         }
 
-        return $settings;
+        return $this->eventManager->filter('Legacy_Struct_Converter_Convert_Configurator_Settings', $settings, [
+            'configurator_set' => $set,
+            'product' => $product
+        ]);
     }
 
     /**
@@ -959,7 +1017,10 @@ class LegacyStructConverter
             $data['media'] = $this->convertMediaStruct($option->getMedia());
         }
 
-        return $data;
+        return $this->eventManager->filter('Legacy_Struct_Converter_Convert_Configurator_Option', $data, [
+            'configurator_group' => $group,
+            'configurator_options' => $option
+        ]);
     }
 
     /**
@@ -1103,7 +1164,9 @@ class LegacyStructConverter
             $data['sReleasedate'] = $product->getReleaseDate()->format('Y-m-d');
         }
 
-        return $data;
+        return $this->eventManager->filter('Legacy_Struct_Converter_List_Product_data', $data, [
+            'product' => $product,
+        ]);
     }
 
     /**
