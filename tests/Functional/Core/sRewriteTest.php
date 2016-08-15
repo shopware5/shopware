@@ -63,7 +63,7 @@ class sRewriteTest extends PHPUnit_Framework_TestCase
             ['Hello World.html', 'Hello-World.html'],
             ['Hello World!', 'Hello-World'],
             ['Hello World!.html', 'Hello-World.html'],
-            ['Hello / World', 'Hello-World'],
+            ['Hello / World', 'Hello/World'],
             ['Hello/World', 'Hello/World'],
             ['H+e#l1l--o/W§o r.l:d)', 'H-e-l1l-o/W-o-r.l-d'],
             [': World', 'World'],
