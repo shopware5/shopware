@@ -11,6 +11,7 @@ This changelog references changes done in Shopware 5.2 patch versions.
 * Removed unused shipping free configuration in backend country form
 * Added new smarty blocks in `engine/Shopware/Plugins/Default/Frontend/AdvancedMenu/Views/frontend/advanced_menu/index.tpl`
 * Add order attribute select to \Shopware\Components\Api\Resource\Order::getList query
+* \Shopware\Bundle\StoreFrontBundle\Struct\ListProduct::isPriceGroupActive proofs additionally if a price group exists
 
 ## 5.2.5
 
