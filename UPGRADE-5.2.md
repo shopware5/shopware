@@ -8,6 +8,7 @@ This changelog references changes done in Shopware 5.2 patch versions.
 
 * Changed visibility of sAdmin::loginUser to protected
 * Added filter events to all convert functions in `LegacyStructConverter`
+* Removed unused shipping free configuration in backend country form
 
 ## 5.2.5
 
