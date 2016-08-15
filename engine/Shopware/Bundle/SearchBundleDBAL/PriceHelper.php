@@ -134,7 +134,7 @@ class PriceHelper implements PriceHelperInterface
 
         $graduation = 'customerPrice.from = 1';
         if ($this->config->get('useLastGraduationForCheapestPrice')) {
-            $graduation = "customerPrice.to = 'beliebig'";
+            $graduation = "IF(priceGroup.id IS NOT NULL, customerPrice.from = 1, customerPrice.to = 'beliebig')";
         }
 
         $query->leftJoin(
@@ -147,19 +147,7 @@ class PriceHelper implements PriceHelperInterface
              AND availableVariant.id = customerPrice.articledetailsID'
         );
 
-        $query->leftJoin(
-            'product',
-            's_core_pricegroups_discounts',
-            'priceGroup',
-            'priceGroup.groupID = product.pricegroupID
-             AND priceGroup.discountstart = 1
-             AND priceGroup.customergroupID = :priceGroupCustomerGroup
-             AND product.pricegroupActive = 1'
-        );
-
-        $query->setParameter(':currentCustomerGroup', $context->getCurrentCustomerGroup()->getKey())
-            ->setParameter(':priceGroupCustomerGroup', $context->getCurrentCustomerGroup()->getId());
-
+        $query->setParameter(':currentCustomerGroup', $context->getCurrentCustomerGroup()->getKey());
         $query->addState(self::STATE_INCLUDES_CHEAPEST_PRICE);
     }
 
@@ -175,9 +163,21 @@ class PriceHelper implements PriceHelperInterface
         $this->joinAvailableVariant($query);
 
         $graduation = 'defaultPrice.from = 1';
+        $discountStart = '1';
         if ($this->config->get('useLastGraduationForCheapestPrice')) {
-            $graduation = "defaultPrice.to = 'beliebig'";
+            $graduation = "IF(priceGroup.id IS NOT NULL, defaultPrice.from = 1, defaultPrice.to = 'beliebig')";
+            $discountStart = '(SELECT MAX(discountstart) FROM s_core_pricegroups_discounts subPriceGroup WHERE subPriceGroup.id = priceGroup.id AND subPriceGroup.customergroupID = :priceGroupCustomerGroup)';
         }
+
+        $query->leftJoin(
+            'product',
+            's_core_pricegroups_discounts',
+            'priceGroup',
+            'priceGroup.groupID = product.pricegroupID
+             AND priceGroup.discountstart = ' . $discountStart . '
+             AND priceGroup.customergroupID = :priceGroupCustomerGroup
+             AND product.pricegroupActive = 1'
+        );
 
         $query->innerJoin(
             'product',
@@ -188,11 +188,8 @@ class PriceHelper implements PriceHelperInterface
              AND ' . $graduation
         );
 
-        $query->setParameter(
-            ':fallbackCustomerGroup',
-            $context->getFallbackCustomerGroup()->getKey()
-        );
-
+        $query->setParameter(':fallbackCustomerGroup', $context->getFallbackCustomerGroup()->getKey());
+        $query->setParameter(':priceGroupCustomerGroup', $context->getCurrentCustomerGroup()->getId());
         $query->addState(self::STATE_INCLUDES_DEFAULT_PRICE);
     }
 

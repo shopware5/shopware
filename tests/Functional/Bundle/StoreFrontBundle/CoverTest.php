@@ -5,9 +5,7 @@ namespace Shopware\Tests\Bundle\StoreFrontBundle;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Components\Routing\Context;
 use Shopware\Models\Category\Category;
-use Shopware\Bundle\StoreFrontBundle\Service\Core\MediaService;
 use Shopware\Bundle\StoreFrontBundle\Struct;
-
 
 class CoverTest extends TestCase
 {
@@ -130,29 +128,10 @@ class CoverTest extends TestCase
         $data = $this->getVariantImageProduct($number, $context);
         $this->helper->createArticle($data);
 
-        /** @var \Shopware_Components_Config $config */
-        $config = $this->createMock(\Shopware_Components_Config::class);
-
-        $config->expects($this->once())
-            ->method('get')
-            ->will($this->returnValue(true));
-
-        $mediaService = new MediaService(
-            Shopware()->Container()->get('shopware_storefront.media_gateway'),
-            Shopware()->Container()->get('shopware_storefront.product_media_gateway'),
-            Shopware()->Container()->get('shopware_storefront.variant_media_gateway'),
-            $config,
-            Shopware()->Container()->get('shopware_storefront.variant_cover_service')
-        );
-
         $variants = $this->helper->getListProducts(
             array_column($data['variants'], 'number'),
             $context,
-            null,
-            null,
-            null,
-            null,
-            $mediaService
+            ['forceArticleMainImageInListing' => true]
         );
 
         foreach ($variants as $variant) {

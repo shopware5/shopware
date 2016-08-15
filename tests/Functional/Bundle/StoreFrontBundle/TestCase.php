@@ -40,13 +40,14 @@ class TestCase extends \Enlight_Components_Test_TestCase
     }
 
     /**
-     * @param Category $category
      * @param array $products
      * @param array $expectedNumbers
+     * @param Category $category
      * @param ConditionInterface[] $conditions
      * @param FacetInterface[] $facets
      * @param SortingInterface[] $sortings
      * @param null $context
+     * @param array $configs
      * @return ProductNumberSearchResult
      */
     protected function search(
@@ -56,7 +57,8 @@ class TestCase extends \Enlight_Components_Test_TestCase
         $conditions = array(),
         $facets = array(),
         $sortings = array(),
-        $context = null
+        $context = null,
+        array $configs = []
     ) {
         if ($context === null) {
             $context = $this->getContext();
@@ -64,6 +66,13 @@ class TestCase extends \Enlight_Components_Test_TestCase
 
         if ($category === null) {
             $category = $this->helper->createCategory();
+        }
+
+        $config = Shopware()->Container()->get('config');
+        $originals = [];
+        foreach ($configs as $key => $value) {
+            $originals[$key] = $config->get($key);
+            $config->offsetSet($key, $value);
         }
 
         $this->createProducts($products, $context, $category);
@@ -82,11 +91,15 @@ class TestCase extends \Enlight_Components_Test_TestCase
 
         $criteria->offset(0)->limit(4000);
 
-        $result = Shopware()->Container()->get('shopware_search.product_number_search')
-            ->search($criteria, $context);
+        $search = Shopware()->Container()->get('shopware_search.product_number_search');
+
+        $result = $search->search($criteria, $context);
+
+        foreach ($originals as $key => $value) {
+            $config->offsetSet($key, $value);
+        }
 
         $this->assertSearchResult($result, $expectedNumbers);
-
         return $result;
     }
 
@@ -192,15 +205,19 @@ class TestCase extends \Enlight_Components_Test_TestCase
         ProductNumberSearchResult $result,
         $expectedNumbers
     ) {
+        $numbers = array_map(function (BaseProduct $product) {
+            return $product->getNumber();
+        }, $result->getProducts());
+
+        foreach ($numbers as $number) {
+            $this->assertContains($number, $expectedNumbers, sprintf("Product with number: `%s` found but not expected", $number));
+        }
+        foreach ($expectedNumbers as $number) {
+            $this->assertContains($number, $numbers, sprintf("Expected product number: `%s` not found", $number));
+        }
+
         $this->assertCount(count($expectedNumbers), $result->getProducts());
         $this->assertEquals(count($expectedNumbers), $result->getTotalCount());
-
-        foreach ($result->getProducts() as $product) {
-            $this->assertContains(
-                $product->getNumber(),
-                $expectedNumbers
-            );
-        }
     }
 
     protected function assertSearchResultSorting(

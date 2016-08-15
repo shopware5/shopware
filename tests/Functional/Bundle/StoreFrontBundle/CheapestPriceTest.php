@@ -2,8 +2,8 @@
 
 namespace Shopware\Tests\Bundle\StoreFrontBundle;
 
+use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
-
 
 class CheapestPriceTest extends TestCase
 {
@@ -258,8 +258,6 @@ class CheapestPriceTest extends TestCase
 
         $data['priceGroupActive'] = true;
         $data['priceGroupId'] = $priceGroup->getId();
-
-
         $count = count($data['variants']) - 1;
         $data['lastStock'] = true;
 
@@ -281,5 +279,167 @@ class CheapestPriceTest extends TestCase
          */
         $this->assertEquals(72, $cheapestPrice->getCalculatedPrice());
         $this->assertEquals(144, $cheapestPrice->getCalculatedReferencePrice());
+    }
+
+    /**
+     * Simple product with graduated prices. (see \Shopware\Tests\Bundle\StoreFrontBundle\Helper::getGraduatedPrices)
+     * 'useLastGraduationForCheapestPrice' => false means that only the first discount of the price group has to be applied to the cheapest price
+     * If a price group is configured, graduated prices are based on the first product price and build over the percentage
+     * discounts of the price group.
+     *
+     * 100,- * 0.8 = 80,-
+     */
+    public function testCheapestPriceWithPriceGroupAndLastGraduation()
+    {
+        $number = __FUNCTION__;
+        $context = $this->getContext();
+
+        $data = $this->createPriceGroupProduct($number, $context, false, [
+            ['key' => $context->getCurrentCustomerGroup()->getKey(), 'quantity' => 1,  'discount' => 10],
+            ['key' => $context->getCurrentCustomerGroup()->getKey(), 'quantity' => 20,  'discount' => 20]
+        ]);
+        $this->helper->createArticle($data);
+
+        $listProduct = $this->helper->getListProduct($number, $context, [
+            'useLastGraduationForCheapestPrice' => true
+        ]);
+
+        $this->assertEquals(80, $listProduct->getCheapestPrice()->getCalculatedPrice());
+    }
+
+    /**
+     * Simple product with graduated prices. (see \Shopware\Tests\Bundle\StoreFrontBundle\Helper::getGraduatedPrices)
+     * 'useLastGraduationForCheapestPrice' => false means that only the first discount of the price group has to be applied to the cheapest price
+     * If a price group is configured, graduated prices are based on the first product price and build over the percentage
+     * discounts of the price group.
+     *
+     * 100,- * 0.9 = 90,-
+     */
+    public function testCheapestPriceWithPriceGroupAndFirstGraduation()
+    {
+        $number = __FUNCTION__;
+        $context = $this->getContext();
+
+        $data = $this->createPriceGroupProduct($number, $context, false);
+        $this->helper->createArticle($data);
+
+        $listProduct = $this->helper->getListProduct($number, $context, [
+            'useLastGraduationForCheapestPrice' => false
+        ]);
+
+        $this->assertEquals(90, $listProduct->getCheapestPrice()->getCalculatedPrice());
+    }
+
+    /**
+     * All variants has a price of 100,-
+     * Last variant (not main) has a price of 10,-
+     * `useLastGraduationForCheapestPrice` = true defines that the highest discount should be used (30%)
+     *
+     * 10,- * 0.7 = 7,-
+     */
+    public function testPriceGroupWithVariants()
+    {
+        $number = __FUNCTION__;
+        $context = $this->getContext();
+
+        $data = $this->createPriceGroupProduct($number, $context, true);
+
+        $this->helper->createArticle($data);
+
+        $listProduct = $this->helper->getListProduct($number, $context, [
+            'useLastGraduationForCheapestPrice' => true
+        ]);
+
+        /** @var ListProduct $listProduct */
+        $this->assertEquals(7, $listProduct->getCheapestPrice()->getCalculatedPrice());
+    }
+
+    /**
+     * All variants has a price of 100,-
+     * Last variant (not main) has a price of 10,-
+     * `useLastGraduationForCheapestPrice` = false defines that only the first discount of the
+     * price group should be used (10%)
+     *
+     * 10,- * 0.9 = 9,-
+     */
+    public function testPriceGroupWithVariantsAndFirstGraduation()
+    {
+        $number = __FUNCTION__;
+        $context = $this->getContext();
+
+        $data = $this->createPriceGroupProduct($number, $context, true);
+
+        $this->helper->createArticle($data);
+
+        $listProduct = $this->helper->getListProduct($number, $context, [
+            'useLastGraduationForCheapestPrice' => false
+        ]);
+
+        $this->assertEquals(9, $listProduct->getCheapestPrice()->getCalculatedPrice());
+    }
+
+    /**
+     * Creates a product with an activated price group.
+     * The price group contains as default the following discounts:
+     *  quantity 1 / discount 10%
+     *  quantity 5 / discount 20%,
+     *  quantity 10 / discount 30%
+     * Custom discounts can be provided over $discounts
+     *
+     * A none configurator product contains the following prices:
+     *  see \Shopware\Tests\Bundle\StoreFrontBundle\Helper::getGraduatedPrices
+     *
+     * A configurator product contains multiple variants.
+     * Each variant has a price of 100,-
+     * The price of the last variant (not the main variant) can be provided over $cheapestVariantPrice.
+     *
+     * @param $number
+     * @param TestContext $context
+     * @param bool $configurator
+     * @param array $discounts
+     * @param float|int $cheapestVariantPrice
+     * @return array
+     */
+    private function createPriceGroupProduct(
+        $number,
+        TestContext $context,
+        $configurator = false,
+        $discounts = [],
+        $cheapestVariantPrice = 10.00
+    ) {
+        $priceGroup = $this->helper->createPriceGroup($discounts);
+        $priceGroupStruct = $this->converter->convertPriceGroup($priceGroup);
+        $context->setPriceGroups([$priceGroupStruct->getId() => $priceGroupStruct]);
+
+        if ($configurator) {
+            $data = $this->getConfiguratorProduct($number, $context);
+
+            foreach ($data['variants'] as &$variant) {
+                $variant['prices'] = [[
+                    'from' => 1,
+                    'to' => 'beliebig',
+                    'price' => 100,
+                    'customerGroupKey' => $context->getCurrentCustomerGroup()->getKey(),
+                    'pseudoPrice' => 10
+                ]];
+            }
+            $last = array_pop($data['variants']);
+            $last['prices'] = [[
+                'from' => 1,
+                'to' => 'beliebig',
+                'price' => $cheapestVariantPrice,
+                'customerGroupKey' => $context->getCurrentCustomerGroup()->getKey(),
+                'pseudoPrice' => 10
+            ]];
+            $data['variants'][] = $last;
+        } else {
+            $data = $this->helper->getSimpleProduct($number, array_shift($context->getTaxRules()), $context->getCurrentCustomerGroup());
+        }
+
+        $data['lastStock'] = false;
+        $data['priceGroupActive'] = true;
+        $data['priceGroupId'] = $priceGroup->getId();
+        $data['categories'] = [['id' => $context->getShop()->getCategory()->getId()]];
+        return $data;
     }
 }
