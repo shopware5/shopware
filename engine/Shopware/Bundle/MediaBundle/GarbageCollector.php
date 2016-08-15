@@ -105,7 +105,14 @@ class GarbageCollector
      */
     private function moveToTrash()
     {
-        $sql = "UPDATE s_media m SET albumID=-13 WHERE m.id NOT IN (SELECT mediaId FROM s_media_used) AND albumID = -1";
+        $sql = "
+            UPDATE s_media m
+            LEFT JOIN s_media_used u
+            ON u.mediaId = m.id
+            SET albumID=-13
+            WHERE u.id IS NULL
+            AND albumID = -1
+        ";
         $this->connection->exec($sql);
     }
 
