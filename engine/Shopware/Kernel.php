@@ -331,6 +331,8 @@ class Kernel implements HttpKernelInterface
 
             /** @var Plugin $plugin */
             $plugin = new $className($isActive);
+            $plugin->initialize();
+
             $this->plugins[$plugin->getName()] = $plugin;
         }
 
