@@ -10,6 +10,7 @@ This changelog references changes done in Shopware 5.2 patch versions.
 * Added filter events to all convert functions in `LegacyStructConverter`
 * Removed unused shipping free configuration in backend country form
 * Added new smarty blocks in `engine/Shopware/Plugins/Default/Frontend/AdvancedMenu/Views/frontend/advanced_menu/index.tpl`
+* Add order attribute select to \Shopware\Components\Api\Resource\Order::getList query
 
 ## 5.2.5
 
