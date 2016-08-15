@@ -6,6 +6,8 @@ This changelog references changes done in Shopware 5.2 patch versions.
 
 [View all changes from v5.2.4...v5.2.5](https://github.com/shopware/shopware/compare/v5.2.4...v5.2.5)
 
+* Fixed SEO URL generation for URLs containing dots and forward slashes
+
 ## 5.2.4
 
 [View all changes from v5.2.3...v5.2.4](https://github.com/shopware/shopware/compare/v5.2.3...v5.2.4)
