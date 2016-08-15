@@ -13,6 +13,7 @@ This changelog references changes done in Shopware 5.2 patch versions.
 * Add order attribute select to \Shopware\Components\Api\Resource\Order::getList query
 * \Shopware\Bundle\StoreFrontBundle\Struct\ListProduct::isPriceGroupActive proofs additionally if a price group exists
 * Use user ID of the API key owner for media files if none is provided
+* Fixed image configurator html ids for radio boxes
 
 ## 5.2.5
 
