@@ -76,6 +76,7 @@ class Requirements
             $check['required'] = (string) $requirement->required;
             $check['version']  = (string) $requirement->version;
             $check['check']   = (bool) (string) $requirement->result;
+            $check['result']   = (bool) $requirement->result;
             $check['error']    = (bool) $requirement->error;
 
             if (!$check['check'] && $check['error']) {
