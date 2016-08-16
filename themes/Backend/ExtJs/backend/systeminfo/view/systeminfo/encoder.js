@@ -75,20 +75,19 @@ Ext.define('Shopware.apps.Systeminfo.view.systeminfo.Encoder', {
         Ext.Ajax.request({
             url:'{url controller="Systeminfo" action="getEncoder"}',
             scope: me,
-            success:function (record) {
-                if (!Ext.JSON.decode(record.responseText).data.name){
-					var msgData = {
-						text: '{s name=no_encoder_supported}No encoder or unsupported version installed{/s}'
-					};
-                    block.items.items[0].update(msgData);
-                } else {
-					var msgData = {
-						text: '{s name=using_encoder}You are using the IonCube Loader{/s}'
-					};
+            success: function (record) {
+                var decodedResponse = Ext.JSON.decode(record.responseText),
+                    snippet = '{s name=no_encoder_information}No information wether encoder is installed or not{/s}';
+                if (decodedResponse.data.name && decodedResponse.data.status == 'ok') {
+                    snippet = '{s name=using_encoder}You are using the IonCube Loader{/s}';
                     block.items.items[0].removeCls('notice');
                     block.items.items[0].addCls('success');
-					block.items.items[0].update(msgData);
+                } else if (!decodedResponse.data.name || decodedResponse.data.status == 'warning') {
+                    snippet = '{s name=no_encoder_supported}No encoder or unsupported version installed{/s}';
                 }
+                block.items.items[0].update({
+                    text: snippet
+                });
             }
         });
 
