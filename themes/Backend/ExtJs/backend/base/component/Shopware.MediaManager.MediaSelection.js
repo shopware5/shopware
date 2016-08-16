@@ -100,6 +100,13 @@ Ext.define('Shopware.MediaManager.MediaSelection',
     albumId: null,
 
     /**
+     * Return type
+     * @see Shopware.apps.MediaManager.model.Media for fields
+     * @string
+     */
+    returnValue: 'path',
+
+    /**
      * Initializes the component
      *
      * @private
@@ -267,7 +274,7 @@ Ext.define('Shopware.MediaManager.MediaSelection',
             // Multi selection
             var paths = [];
             Ext.each(me.selectedRecords, function(record) {
-                paths.push(record.get('path'));
+                paths.push(record.get(me.returnValue));
             });
 
             paths = paths.toString();
@@ -276,7 +283,7 @@ Ext.define('Shopware.MediaManager.MediaSelection',
 
             // Single selection
             selected = me.selectedRecords[0];
-            me.inputEl.dom.value = selected.get('path');
+            me.inputEl.dom.value = selected.get(me.returnValue);
         }
 
 //        me.window.setLoading(false);
