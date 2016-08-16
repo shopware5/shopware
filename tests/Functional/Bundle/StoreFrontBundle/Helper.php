@@ -8,6 +8,7 @@ use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ConfiguratorGateway;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ProductConfigurationGateway;
 use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\Api\Resource;
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Kernel;
@@ -126,11 +127,11 @@ class Helper
 
     /**
      * @param string $numbers
-     * @param TestContext $context
+     * @param ShopContextInterface $context
      * @param array $configs
      * @return \Shopware\Bundle\StoreFrontBundle\Struct\ListProduct[]
      */
-    public function getListProducts($numbers, $context, array $configs = [])
+    public function getListProducts($numbers, ShopContextInterface $context, array $configs = [])
     {
         $config = Shopware()->Container()->get('config');
         $originals = [];
@@ -144,16 +145,17 @@ class Helper
         foreach ($originals as $key => $value) {
             $config->offsetSet($key, $value);
         }
+
         return $result;
     }
 
     /**
      * @param string $number
-     * @param TestContext $context
+     * @param ShopContextInterface $context
      * @param array $configs
      * @return StoreFrontBundle\Struct\ListProduct
      */
-    public function getListProduct($number, TestContext $context, array $configs = [])
+    public function getListProduct($number, ShopContextInterface $context, array $configs = [])
     {
         return array_shift($this->getListProducts([$number], $context, $configs));
     }
