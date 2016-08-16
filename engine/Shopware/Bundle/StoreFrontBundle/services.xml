@@ -94,7 +94,7 @@
 
         <service id="shopware_storefront.cheapest_price_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\CheapestPriceService">
             <argument type="service" id="shopware_storefront.cheapest_price_gateway"/>
-            <argument type="service" id="shopware_storefront.graduated_prices_service"/>
+            <argument type="service" id="config" />
         </service>
 
         <service id="shopware_storefront.media_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\MediaService">

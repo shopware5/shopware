@@ -101,7 +101,7 @@ class Detail extends ModelEntity
      *
      * @ORM\Column(name="instock", type="integer", nullable=true)
      */
-    private $inStock = null;
+    private $inStock = 0;
 
     /**
      * @var integer $stockMin

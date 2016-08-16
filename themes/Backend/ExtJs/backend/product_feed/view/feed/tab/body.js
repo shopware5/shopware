@@ -65,7 +65,6 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.tab.Body', {
                 xtype: 'codemirrorfield',
                 mode: 'smarty',
                 anchor:'100%',
-                height: '240px',
                 name: me.fieldName
             }
         ];

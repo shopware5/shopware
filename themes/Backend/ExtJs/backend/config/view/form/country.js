@@ -118,11 +118,6 @@ Ext.define('Shopware.apps.Config.view.form.Country', {
             helpText: '{s name=country/detail/description_help}Notices to display in frontend.{/s}'
         },{
             xtype: 'config-element-boolean',
-            name: 'shippingFree',
-            fieldLabel: '{s name=country/detail/shipping_free_label}Shipping free{/s}',
-            helpText: '{s name=country/detail/shipping_free_help}If true all orders for this country are free of shipping costs.{/s}'
-        },{
-            xtype: 'config-element-boolean',
             name: 'taxFree',
             fieldLabel: '{s name=country/detail/tax_free_label}Tax free{/s}',
             helpText: '{s name=country/detail/tax_free_help}If true disable tax rules for this country.{/s}'

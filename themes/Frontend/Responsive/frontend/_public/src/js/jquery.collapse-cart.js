@@ -308,7 +308,14 @@
                 $currentTarget = $(event.currentTarget),
                 $parent = $currentTarget.parent(),
                 $form = $currentTarget.closest('form'),
+                url;
+
+            // @deprecated: Don't use anchors for action links. Use forms with method="post" instead.
+            if ($currentTarget.attr('href')) {
+                url = $currentTarget.attr('href');
+            } else {
                 url = $form.attr('action');
+            }
 
             $.publish('plugin/swCollapseCart/onRemoveArticle', [ me, event ]);
             $parent.html(me._$loadingIcon.clone());

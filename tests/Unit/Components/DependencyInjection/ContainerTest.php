@@ -28,6 +28,7 @@ use Prophecy\Argument;
 use Shopware\Components\ContainerAwareEventManager;
 use Shopware\Components\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException;
 
 /**
  * @category  Shopware
@@ -181,6 +182,44 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame($class, $this->container->get('bar'));
     }
+
+    public function testServiceCircularReferenceExceptionException()
+    {
+        $this->container = new ProjectServiceContainer();
+        $eventManager = new ContainerAwareEventManager($this->container);
+        $this->container->set('events', $eventManager);
+
+        $this->container->get('events')->addListener(
+            'Enlight_Bootstrap_InitResource_child',
+            function (\Enlight_Event_EventArgs $e) {
+                /** @var ProjectServiceContainer $container */
+                $container = $e->getSubject();
+
+                // Cause circular reference
+                $parent = $container->get('parent');
+            }
+        );
+
+        $this->container->get('events')->addListener(
+            'Enlight_Bootstrap_AfterInitResource_parent',
+            function (\Enlight_Event_EventArgs $e) {
+                /** @var ProjectServiceContainer $container */
+                $container = $e->getSubject();
+
+                $coreParent = $container->get('parent');
+
+                $decoratedParent = new \stdClass();
+                $decoratedParent->name = 'decorated_parent';
+                $decoratedParent->coreParent = $coreParent;
+
+                $container->set('parent', $decoratedParent);
+            }
+        );
+
+        $this->expectException(ServiceCircularReferenceException::class);
+
+        $this->container->get('parent');
+    }
 }
 
 class Service
@@ -204,16 +243,34 @@ class ProjectServiceContainer extends Container
 {
     public $__bar;
 
+    public $__parent;
+
+    public $__child;
+
     public function __construct()
     {
         parent::__construct();
 
         $this->__bar = new \stdClass();
         $this->aliases = array('alias' => 'bar');
+
+        $this->__parent = new \stdClass();
+        $this->__child = new \stdClass();
     }
 
     protected function getBarService()
     {
         return $this->__bar;
+    }
+
+    protected function getParentService()
+    {
+        $this->__parent->child = $this->get('child');
+        return $this->__parent;
+    }
+
+    protected function getChildService()
+    {
+        return $this->__child;
     }
 }

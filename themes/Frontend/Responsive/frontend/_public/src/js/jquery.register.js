@@ -645,8 +645,8 @@
             var me = this,
                 isError,
                 errorMessages = [],
-                skipEmailConfirmationError = me.$targetElement.attr('name') == me.$personalEmailConfirmation.attr('name') && me.$personalEmailConfirmation.val().length === 0,
-                skipPasswordConfirmationError = me.$targetElement.attr('name') == me.$personalPasswordConfirmation.attr('name') && me.$personalPasswordConfirmation.val().length === 0;
+                skipEmailConfirmationError = me.$targetElement.attr('name') == me.$personalEmailConfirmation.attr('name') && typeof me.$personalEmailConfirmation.val() === 'undefined',
+                skipPasswordConfirmationError = me.$targetElement.attr('name') == me.$personalPasswordConfirmation.attr('name') && typeof me.$personalPasswordConfirmation.val() === 'undefined';
 
             $('#' + action + '--message').remove();
 

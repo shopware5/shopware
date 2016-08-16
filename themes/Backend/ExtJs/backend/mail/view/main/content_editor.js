@@ -117,19 +117,6 @@ Ext.define('Shopware.apps.Mail.view.main.ContentEditor', {
             me.editorField.translationLabel = 'content';
         }
 
-        me.editorField.on('editorready', function(editorField, editor) {
-            var scroller, size;
-
-            if(!editor || !editor.hasOwnProperty('display')) {
-                return false;
-            }
-
-            scroller = editor.display.scroller;
-            size = editorField.getSize();
-            editor.setSize('100%', size.height);
-            Ext.get(scroller).setSize(size);
-        });
-
         me.on('resize', function(cmp, width, height) {
             var editorField = me.editorField,
                 editor = editorField.editor,

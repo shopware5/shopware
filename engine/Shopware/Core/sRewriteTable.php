@@ -24,7 +24,7 @@
 
 use Shopware\Components\MemoryLimit;
 use Shopware\Components\Model\ModelManager;
-use Shopware\Components\Routing\Slug\SlugInterface;
+use Shopware\Components\Slug\SlugInterface;
 
 /**
  * Deprecated Shopware Class that handles url rewrites
@@ -184,15 +184,13 @@ class sRewriteTable
      */
     public function sCleanupPath($path, $remove_ds = true)
     {
-        // replace forward slash to dashes in strings like "Help / Support"
-        // to not create unnecessary directory levels
-        $path = preg_replace("#\s/\s#", "-", $path);
-
-        $parts = explode("/", $path);
+        $parts = explode('/', $path);
         $parts = array_map(function ($path) {
             return $this->slug->slugify($path);
         }, $parts);
-        $path = implode("/", $parts);
+
+        $path = implode('/', $parts);
+        $path = strtr($path, ['-.' => '.']);
 
         return $path;
     }

@@ -2,7 +2,31 @@
 
 This changelog references changes done in Shopware 5.2 patch versions.
 
+## 5.2.6
+
+[View all changes from v5.2.5...v5.2.6](https://github.com/shopware/shopware/compare/v5.2.5...v5.2.6)
+
+* Changed visibility of sAdmin::loginUser to protected
+* Added filter events to all convert functions in `LegacyStructConverter`
+* Removed unused shipping free configuration in backend country form
+* Added new smarty blocks in `engine/Shopware/Plugins/Default/Frontend/AdvancedMenu/Views/frontend/advanced_menu/index.tpl`
+* Add order attribute select to \Shopware\Components\Api\Resource\Order::getList query
+* \Shopware\Bundle\StoreFrontBundle\Struct\ListProduct::isPriceGroupActive proofs additionally if a price group exists
+* Use user ID of the API key owner for media files if none is provided
+* Fixed image configurator html ids for radio boxes
+* Added notifyUntil event `Shopware_Modules_Basket_BeforeAddMinimumOrderSurcharge` to `sBasket::sInsertSurcharge` containing the surcharge.
+* Added notifyUntil event `Shopware_Modules_Basket_BeforeAddOrderSurchargePercent` to `sBasket::sInsertSurchargePercent` containing the surcharge.
+* Added notifyUntil event `Shopware_Modules_Basket_BeforeAddOrderDiscount` to `sBasket::sInsertDiscount` containing the discount.
+
+## 5.2.5
+
+[View all changes from v5.2.4...v5.2.5](https://github.com/shopware/shopware/compare/v5.2.4...v5.2.5)
+
+* Fixed SEO URL generation for URLs containing dots and forward slashes
+
 ## 5.2.4
+
+[View all changes from v5.2.3...v5.2.4](https://github.com/shopware/shopware/compare/v5.2.3...v5.2.4)
 
 * Introduced new interface `Shopware\Components\Slug\SlugInterface` to generate URL safe versions of a string
     * Service id `shopware.slug`
@@ -33,6 +57,13 @@ This changelog references changes done in Shopware 5.2 patch versions.
 * Deprecated css class `icon--brogress-1`, use `icon--progress-1` instead
 * Updated [CodeMirror](https://github.com/codemirror/CodeMirror) to version 5.17.0
 * Improved mode support for CodeMirror element
+* Allow uploading file when creating `media` using the REST API
+* Increased max length of `s_emarketing_banners.img` and `s_articles_supplier.img` to 255
+* Added filter events for editing the collection of LESS and JS files before compiling
+    * `Theme_Compiler_Collect_Less_Definitions_FilterResult`
+    * `Theme_Compiler_Collect_Javascript_Files_FilterResult`
+* Removed synchronizing of plugin information column `changes`
+* Allow root menu elements for plugins. Added attribute `isRootMenu` in `menu.xml` Example: `<entry isRootMenu="true">`
 
 ## 5.2.3
 

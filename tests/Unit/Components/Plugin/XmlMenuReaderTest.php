@@ -25,4 +25,11 @@ class XmlMenuReaderTest extends \PHPUnit_Framework_TestCase
         $result = $this->SUT->read(__DIR__.'/examples/menu.xml');
         $this->assertInternalType('array', $result);
     }
+
+    public function testCanReadMenuWithRootEntry()
+    {
+        $result = $this->SUT->read(__DIR__.'/examples/menu_root_entry.xml');
+        $this->assertInternalType('array', $result);
+        $this->assertTrue($result[0]['isRootMenu']);
+    }
 }

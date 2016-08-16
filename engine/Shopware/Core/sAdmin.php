@@ -3142,7 +3142,7 @@ SQL;
      * @param $plaintext
      * @param $hash
      */
-    private function loginUser($getUser, $email, $password, $isPreHashed, $encoderName, $plaintext, $hash)
+    protected function loginUser($getUser, $email, $password, $isPreHashed, $encoderName, $plaintext, $hash)
     {
         $this->regenerateSessionId();
 

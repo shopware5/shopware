@@ -182,9 +182,19 @@ class CheapestPriceGateway implements Gateway\CheapestPriceGatewayInterface
             'product.id = variant.articleID'
         );
 
+        $subQuery->leftJoin(
+            'product',
+            's_core_pricegroups_discounts',
+            'priceGroup',
+            'priceGroup.groupID = product.pricegroupID
+             AND priceGroup.discountstart = 1
+             AND priceGroup.customergroupID = :priceGroupCustomerGroup
+             AND product.pricegroupActive = 1'
+        );
+
         $graduation = 'prices.from = 1';
         if ($this->config->get('useLastGraduationForCheapestPrice')) {
-            $graduation = "prices.to = 'beliebig'";
+            $graduation = "IF(priceGroup.id IS NOT NULL, prices.from = 1, prices.to = 'beliebig')";
         }
 
         $subQuery->where('prices.pricegroup = :customerGroup')
@@ -231,6 +241,7 @@ class CheapestPriceGateway implements Gateway\CheapestPriceGatewayInterface
             ->from('s_articles_prices', 'outerPrices')
             ->where('outerPrices.articleID IN (:products)')
             ->setParameter(':products', $ids, Connection::PARAM_INT_ARRAY)
+            ->setParameter(':priceGroupCustomerGroup', $customerGroup->getId())
             ->groupBy('outerPrices.articleID')
             ->having('priceId IS NOT NULL');
 

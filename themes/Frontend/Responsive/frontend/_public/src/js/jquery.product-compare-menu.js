@@ -149,12 +149,20 @@
          */
         onDeleteCompare: function (event) {
             var me = this,
+                $target = $(event.currentTarget),
                 deleteCompareBtn = me.$el.find(me.opts.deleteCompareSelector),
                 $form = deleteCompareBtn.closest('form'),
-                deleteUrl = $form.attr('action'),
-                $menu = $(me.opts.compareMenuSelector);
+                $menu = $(me.opts.compareMenuSelector),
+                deleteUrl;
 
             event.preventDefault();
+
+            // @deprecated: Don't use anchors for action links. Use forms with method="post" instead.
+            if ($target.attr('href')) {
+                deleteUrl = $target.attr('href');
+            } else {
+                deleteUrl = $form.attr('action');
+            }
 
             $.ajax({
                 'url': deleteUrl,
@@ -180,9 +188,16 @@
             var me = this,
                 $deleteBtn = $(event.currentTarget),
                 $form = $deleteBtn.closest('form'),
-                deleteUrl = $form.attr('action'),
                 rowElement = $deleteBtn.closest(me.opts.compareEntrySelector),
-                compareCount = $(me.opts.compareEntriesSelector).length;
+                compareCount = $(me.opts.compareEntriesSelector).length,
+                deleteUrl;
+
+            // @deprecated: Don't use anchors for action links. Use forms with method="post" instead.
+            if ($deleteBtn.attr('href')) {
+                deleteUrl = $deleteBtn.attr('href');
+            } else {
+                deleteUrl = $form.attr('action');
+            }
 
             if(compareCount > 1) {
 

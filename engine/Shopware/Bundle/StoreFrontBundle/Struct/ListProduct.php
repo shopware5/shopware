@@ -981,7 +981,7 @@ class ListProduct extends BaseProduct implements \JsonSerializable
      */
     public function isPriceGroupActive()
     {
-        return $this->isPriceGroupActive;
+        return $this->isPriceGroupActive && $this->priceGroup;
     }
 
     /**

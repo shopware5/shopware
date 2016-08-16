@@ -144,7 +144,6 @@ Ext.define('Shopware.apps.Form.view.main.Formpanel', {
         }, {
             xtype: 'codemirrorfield',
             mode: 'smarty',
-            height: 180,
             fieldLabel:'{s name=label_emailtemplate}Email template{/s}',
             name: 'emailTemplate',
             supportText: variableHint

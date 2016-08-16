@@ -234,10 +234,10 @@ class CrudService
     }
 
     /**
-     * @param int $id
+     * @param int|null $id
      * @param array $data
      */
-    private function updateConfig($id, array $data)
+    private function updateConfig($id = null, array $data)
     {
         $model = null;
 
@@ -315,7 +315,12 @@ class CrudService
             'columnType' => $unifiedType
         ]);
 
-        $this->updateConfig($data['id'], $data);
+        $configId = null;
+        if (array_key_exists('id', $data)) {
+            $configId = $data['id'];
+        }
+
+        $this->updateConfig($configId, $data);
     }
 
     /**

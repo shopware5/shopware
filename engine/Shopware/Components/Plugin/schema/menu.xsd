@@ -29,6 +29,7 @@
             <xsd:element name="onclick" type="xsd:string" minOccurs="0"/>
             <xsd:element name="children" type="entriesType" minOccurs="0"/>
         </xsd:sequence>
+        <xsd:attribute name="isRootMenu" type="xsd:boolean" default="false"/>
     </xsd:complexType>
 
     <xsd:complexType name="parentType">
