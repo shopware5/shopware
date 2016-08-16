@@ -79,6 +79,7 @@ class Repository extends ModelRepository
                 'customer.firstname as firstname',
                 'customer.firstLogin as firstLogin',
                 'customer.lastname as lastname',
+                'customer.accountMode as accountMode',
                 'customergroups.name as customerGroup',
                 'billing.company as company',
                 'billing.zipCode as zipCode',
