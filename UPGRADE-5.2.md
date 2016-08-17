@@ -17,6 +17,7 @@ This changelog references changes done in Shopware 5.2 patch versions.
 * Added notifyUntil event `Shopware_Modules_Basket_BeforeAddMinimumOrderSurcharge` to `sBasket::sInsertSurcharge` containing the surcharge.
 * Added notifyUntil event `Shopware_Modules_Basket_BeforeAddOrderSurchargePercent` to `sBasket::sInsertSurchargePercent` containing the surcharge.
 * Added notifyUntil event `Shopware_Modules_Basket_BeforeAddOrderDiscount` to `sBasket::sInsertDiscount` containing the discount.
+* Deprecated "{$sShopname}" variable in Forms.php, please use "{sShopname}" in your mail form templates instead.
 
 ## 5.2.5
 
