@@ -25,6 +25,7 @@
 
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Snippet\DbAdapter;
+use Shopware\Models\Shop\Locale;
 
 /**
  * @category  Shopware
@@ -69,6 +70,11 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
     private $pluginDirectories;
 
     /**
+     * @var Locale
+     */
+    private $fallbackLocale;
+
+    /**
      * @param ModelManager $modelManager
      * @param array $pluginDirectories
      * @param array $snippetConfig
@@ -78,6 +84,9 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
         $this->snippetConfig = $snippetConfig;
         $this->modelManager  = $modelManager;
         $this->pluginDirectories = $pluginDirectories;
+
+        $repository = $this->modelManager->getRepository(Locale::class);
+        $this->fallbackLocale = $repository->findOneBy(['locale' => 'en_GB']);
 
         if ($this->snippetConfig['readFromIni']) {
             $configDir = $this->getConfigDirs();
@@ -117,59 +126,42 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
     {
         $key = $namespace === null ? '__ignore' : (string) $namespace;
 
-        if (!isset($this->namespaces[$key])) {
-            if ($this->snippetConfig['readFromDb']) {
-                $this->namespaces[$key] = new $this->defaultNamespaceClass(array(
-                    'adapter' => $this->adapter,
-                    'name' => $namespace,
-                    'section' => array(
-                        $this->shop ? $this->shop->getId() : 1,
-                        $this->locale ? $this->locale->getId() : $this->getDefaultLocale()->getId(),
-                    ),
-                    'extends' => $this->extends,
-                ));
-            }
+        if (isset($this->namespaces[$key])) {
+            return $this->namespaces[$key];
+        }
 
-            if ($this->snippetConfig['readFromIni'] && (!isset($this->namespaces[$key]) || count($this->namespaces[$key]) == 0) && isset($this->fileAdapter)) {
+        if ($this->readFromDb()) {
+            $this->namespaces[$key] = $this->createDbNamespace(
+                $namespace,
+                $this->shop ? $this->shop->getId() : 1,
+                $this->locale ? $this->locale->getId() : $this->getDefaultLocale()->getId()
+            );
+        }
 
-                /** @var \Enlight_Components_Snippet_Namespace $fullNamespace */
-                $fullNamespace = new $this->defaultNamespaceClass(array(
-                    'adapter' => $this->fileAdapter,
-                    'name' => $namespace,
-                    'section' => null
-                ));
-
-                $locale = $this->locale ? $this->locale->getLocale() : $this->getDefaultLocale()->getLocale();
-                if (
-                    !array_key_exists($locale, $fullNamespace->toArray())
-                    && in_array($locale, array('en_GB', 'default'))
-                    && count(array_keys($fullNamespace->toArray()))
-                ) {
-                    $locale = array_shift(array_diff(array('en_GB', 'default'), array($locale)));
-                }
-
-                $fullNamespace->setSection($locale);
-                $fullNamespace->setData($fullNamespace->get($locale));
-
-                $this->namespaces[$key] = $fullNamespace;
-            }
+        if ($this->readFromIni($key)) {
+            $this->namespaces[$key] = $this->createIniNamespace($namespace);
         }
 
         if (!isset($this->namespaces[$key])) {
-            $this->namespaces[$key] = new $this->defaultNamespaceClass(array(
-                'name' => $namespace,
-            ));
+            $this->namespaces[$key] = new $this->defaultNamespaceClass(['name' => $namespace]);
         }
+
+        /** @var Enlight_Components_Snippet_Namespace $instance */
+        $instance = $this->namespaces[$key];
+        if ($this->requiresFallback($instance)) {
+            $instance->setFallback($this->createDbNamespace($namespace, 1, $this->fallbackLocale->getId()));
+        }
+
         return $this->namespaces[$key];
     }
 
     /**
      * Set locale instance
      *
-     * @param   \Shopware\Models\Shop\Locale $locale
+     * @param   Locale $locale
      * @return  Shopware_Components_Snippet_Manager
      */
-    public function setLocale(\Shopware\Models\Shop\Locale $locale)
+    public function setLocale(Locale $locale)
     {
         $this->locale = $locale;
         $this->namespaces = array();
@@ -192,7 +184,7 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
     }
 
     /**
-     * @return \Shopware\Models\Shop\Locale
+     * @return Locale
      */
     protected function getDefaultLocale()
     {
@@ -310,5 +302,92 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
         }
 
         return $configDir;
+    }
+
+    /**
+     * @return boolean
+     */
+    private function readFromDb()
+    {
+        return $this->snippetConfig['readFromDb'];
+    }
+
+    /**
+     * @param string $key
+     * @return bool
+     */
+    private function readFromIni($key)
+    {
+        if (!$this->snippetConfig['readFromIni']) {
+            return false;
+        }
+        if (!isset($this->fileAdapter)) {
+            return false;
+        }
+        return (!isset($this->namespaces[$key]) || count($this->namespaces[$key]) == 0);
+    }
+
+    /**
+     * @param string $namespace
+     * @param int $shopId
+     * @param int $localeId
+     * @return Enlight_Components_Snippet_Namespace
+     */
+    private function createDbNamespace($namespace, $shopId, $localeId)
+    {
+        return new $this->defaultNamespaceClass([
+            'adapter' => $this->adapter,
+            'name' => $namespace,
+            'section' => [$shopId, $localeId],
+            'extends' => $this->extends
+        ]);
+    }
+
+    /**
+     * @param string $namespace
+     * @return Enlight_Components_Snippet_Namespace
+     */
+    private function createIniNamespace($namespace)
+    {
+        /** @var \Enlight_Components_Snippet_Namespace $fullNamespace */
+        $fullNamespace = new $this->defaultNamespaceClass(array(
+            'adapter' => $this->fileAdapter,
+            'name' => $namespace,
+            'section' => null
+        ));
+
+        $locale = $this->locale ? $this->locale->getLocale() : $this->getDefaultLocale()->getLocale();
+        if (
+            !array_key_exists($locale, $fullNamespace->toArray())
+            && in_array($locale, array('en_GB', 'default'))
+            && count(array_keys($fullNamespace->toArray()))
+        ) {
+            $locale = array_shift(array_diff(array('en_GB', 'default'), array($locale)));
+        }
+
+        $fullNamespace->setSection($locale);
+        $fullNamespace->setData($fullNamespace->get($locale));
+        return $fullNamespace;
+    }
+
+    /**
+     * @param Enlight_Components_Snippet_Namespace $instance
+     * @return bool
+     */
+    private function requiresFallback($instance)
+    {
+        if (!$instance instanceof  Enlight_Components_Snippet_Namespace) {
+            return false;
+        }
+        if ($instance->getFallback()) {
+            return false;
+        }
+        if (!$this->locale) {
+            return false;
+        }
+        if (array_key_exists('showSnippetPlaceholder', $this->snippetConfig) && $this->snippetConfig['showSnippetPlaceholder']) {
+            return false;
+        }
+        return $this->locale->getLocale() !== 'en_GB';
     }
 }
