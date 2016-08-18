@@ -87,7 +87,7 @@ class PathResolver
             return $this->pluginDirectories[$plugin->getSource()] . $plugin->getNamespace() . DIRECTORY_SEPARATOR . $plugin->getName();
         }
 
-        return $this->rootDir . '/custom/plugins/' . $plugin->getName() . '/resources';
+        return $this->rootDir . '/custom/plugins/' . $plugin->getName() . '/Resources';
     }
 
     /**
