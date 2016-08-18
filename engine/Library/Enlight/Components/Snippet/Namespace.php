@@ -41,6 +41,27 @@ class Enlight_Components_Snippet_Namespace extends Enlight_Config
     protected $_allowModifications = true;
 
     /**
+     * @var Enlight_Components_Snippet_Namespace
+     */
+    protected $fallback;
+
+    /**
+     * @return Enlight_Components_Snippet_Namespace
+     */
+    public function getFallback()
+    {
+        return $this->fallback;
+    }
+
+    /**
+     * @param Enlight_Components_Snippet_Namespace $fallback
+     */
+    public function setFallback($fallback)
+    {
+        $this->fallback = $fallback;
+    }
+
+    /**
      * Constructor method
      *
      * @param array|bool $options
@@ -68,6 +89,9 @@ class Enlight_Components_Snippet_Namespace extends Enlight_Config
         }
         if (array_key_exists($name, $this->_data)) {
             return $this->_data[$name];
+        }
+        if ($default == null && $this->fallback) {
+            $default = $this->fallback->get($name);
         }
         if ($save) {
             $this->set($name, $default);
