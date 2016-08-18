@@ -95,7 +95,7 @@ Ext.define('Shopware.apps.Snippet.view.main.TranslateForm', {
                     namespace: me.rootSnippet.get('namespace'),
                     shopId: locale.get('shopId'),
                     value: ""
-                })
+                });
 
                 translation = translations[0];
             }
@@ -103,7 +103,7 @@ Ext.define('Shopware.apps.Snippet.view.main.TranslateForm', {
             fieldSetItems.push({
                 fieldLabel: locale.get('displayName'),
                 name: translation.internalId,
-                emptyText: translation.get('defaultValue'),
+                emptyText: Ext.util.Format.stripTags(translation.get('defaultValue')),
                 value: translation.get('value')
             });
         });
