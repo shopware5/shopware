@@ -22,6 +22,7 @@
  * our trademarks remain entirely with us.
  */
 use Shopware\Bundle\SearchBundle\ProductSearchResult;
+use Shopware\Bundle\SearchBundle\SearchTermPreProcessorInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
 
 /**
@@ -137,14 +138,11 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
      */
     private function getSearchTerm()
     {
-        $term = $this->Request()->get('sSearch', '');
+        $term = $this->Request()->getParam('sSearch', '');
 
-        $term = trim(strip_tags(htmlspecialchars_decode(stripslashes($term))));
-
-        //we have to strip the / otherwise broken urls would be created e.g. wrong pager urls
-        $term = str_replace("/", " ", $term);
-
-        return $term;
+        /** @var SearchTermPreProcessorInterface $processor */
+        $processor = $this->get('shopware_search.search_term_pre_processor');
+        return $processor->process($term);
     }
 
     /**
