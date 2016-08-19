@@ -60,28 +60,25 @@ class ShopwareEnvironmentProcessor
             $record['extra']['request'] = 'Could not process request data';
         }
 
-        try {
+        if (Shopware()->Container()->has('shop')) {
             if ($session = Shopware()->Session()) {
                 $record['extra']['session'] = $session;
             }
-        } catch (\Exception $e) {
-            if (is_object($_SESSION['Shopware']['Auth'])) {
-                $record['extra']['session'] = array(
-                    'userId' => $_SESSION['Shopware']['Auth']->id,
-                    'roleId' => $_SESSION['Shopware']['Auth']->roleID
-                );
-            } else {
-                $record['extra']['session'] = 'No session data available';
-            }
-        }
-
-        try {
             if ($shop = Shopware()->Shop()) {
                 $record['extra']['shopId'] = Shopware()->Shop()->getId() ? : null;
                 $record['extra']['shopName'] = Shopware()->Shop()->getName() ? : null;
             }
-        } catch (\Exception $e) {
+        } else {
             $record['extra']['shop'] = 'No shop data available';
+        }
+
+        if (is_object($_SESSION['Shopware']['Auth'])) {
+            $record['extra']['session'] = array(
+                'userId' => $_SESSION['Shopware']['Auth']->id,
+                'roleId' => $_SESSION['Shopware']['Auth']->roleID
+            );
+        } else {
+            $record['extra']['session'] = 'No session data available';
         }
 
         return $record;
