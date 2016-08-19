@@ -682,12 +682,12 @@ class sMarketing
                         break;
                     case "ctArticles":
                         $sql = "
-                        SELECT articleordernumber FROM s_campaigns_articles
+                        SELECT articleordernumber, type FROM s_campaigns_articles
                         WHERE parentID={$campaignValue["id"]}
                         ORDER BY position
                         ";
 
-                        $getArticles = $this->db->fetchCol($sql);
+                        $getArticles = $this->db->fetchAll($sql);
                         $getCampaignContainers[$campaignKey]["data"] = $this->sGetMailCampaignsArticles($getArticles);
                         break;
                     case "ctText":
@@ -713,24 +713,23 @@ class sMarketing
     }
 
     /**
-     * Returns products by numbers
+     * Processes the newsletter articles and returns the corresponding data.
      *
-     * @param $numbers
+     * @param $articles
      * @return array
      */
-    private function sGetMailCampaignsArticles($numbers)
+    private function sGetMailCampaignsArticles($articles)
     {
-        /** @var \Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface $listProductService */
-        $listProductService = Shopware()->Container()->get('shopware_storefront.list_product_service');
-
         /** @var \Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface $contextService */
         $contextService = Shopware()->Container()->get('shopware_storefront.context_service');
+        $categoryId = $contextService->getShopContext()->getShop()->getCategory()->getId();
 
-        /** @var \Shopware\Components\Compatibility\LegacyStructConverter $converter */
-        $converter = Shopware()->Container()->get('legacy_struct_converter');
-        $products = $listProductService->getList($numbers, $contextService->getShopContext());
+        $articleData = [];
+        foreach ($articles as $article) {
+            $articleData[] = Shopware()->Modules()->Articles()->sGetPromotionById($article['type'], $categoryId, $article['articleordernumber']);
+        }
 
-        return $converter->convertListProductStructList($products);
+        return $articleData;
     }
 
     /**
