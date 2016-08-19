@@ -33,10 +33,12 @@ use Shopware\Bundle\StoreFrontBundle\Struct;
 interface ShopPageGatewayInterface
 {
     /**
-     * To get detailed information about the selection conditions, structure and content of the returned object,
-     * please refer to the linked classes.
+     * The \Shopware\Bundle\StoreFrontBundle\Struct\ShopPage requires the following data:
+     * - shop page data
+     * - Core attribute of the shop page
      *
-     * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ShopPageGatewayInterface::get()
+     * Required translation in the provided context language:
+     * - Shop page
      *
      * @param int[] $ids
      * @param Struct\ShopContextInterface $context
