@@ -19,6 +19,7 @@ This changelog references changes done in Shopware 5.2 patch versions.
 * Added notifyUntil event `Shopware_Modules_Basket_BeforeAddOrderDiscount` to `sBasket::sInsertDiscount` containing the discount.
 * Replaced `grunt-contrib-watch` with `grunt-chokidar` for the grunt watch task.
 * Deprecated "{$sShopname}" variable in Forms.php, please use "{sShopname}" in your mail form templates instead.
+* Added `\Shopware\Bundle\SearchBundle\SearchTermPreProcessorInterface` interface which pre filters provided search terms
 
 ## 5.2.5
 
