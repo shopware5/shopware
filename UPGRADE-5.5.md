@@ -106,6 +106,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 * Removed smarty block `frontend_index_categories_left_ul`
 * Removed smarty block `frontend_listing_box_article_actions_more`
 * Removed smarty block `frontend_listing_box_article_actions_inline`
+* Removed s_articles_attributes.articleID which was not set for new article variants anymore since Shopware 5.2.0
 
 ### Deprecations
 

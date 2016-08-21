@@ -1255,7 +1255,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         }
         $this->removePrices($article->getId());
         $this->removeArticleEsd($article->getId());
-        $this->removeAttributes($article->getId());
         $this->removeArticleDetails($article);
         $this->removeArticleTranslations($article);
 
@@ -2275,12 +2274,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                     ->setMaxResults(1)
                     ->getQuery()
                     ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
-
-            unset($mainData['attribute']['id']);
-            unset($mainData['attribute']['articleId']);
-            unset($mainData['attribute']['articleDetailId']);
-            unset($mainData['attribute']['articleDetail']);
-            $mainData['attribute']['article'] = $mainDetail->getArticle();
         }
         if ($mapping['prices']) {
             $builder = Shopware()->Models()->createQueryBuilder();
@@ -2659,10 +2652,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                 $data['unit'] = Shopware()->Models()->find(\Shopware\Models\Article\Unit::class, $data['unitId']);
             } else {
                 $data['unit'] = null;
-            }
-
-            if (!empty($data['attribute'])) {
-                $data['attribute']['article'] = $article;
             }
 
             $data['article'] = $article;
@@ -3960,11 +3949,11 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     /**
      * Internal helper function to remove the article attributes quickly.
      *
-     * @param $articleId
+     * @param $articleDetailId
      */
-    protected function removeAttributes($articleId)
+    protected function removeAttributes($articleDetailId)
     {
-        $query = $this->getRepository()->getRemoveAttributesQuery($articleId);
+        $query = $this->getRepository()->getRemoveAttributesQuery($articleDetailId);
         $query->execute();
     }
 
@@ -3988,6 +3977,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $details = Shopware()->Db()->fetchAll($sql, [$article->getId()]);
 
         foreach ($details as $detail) {
+            $this->removeAttributes($detail['id']);
+
             $query = $this->getRepository()->getRemoveImageQuery($detail['id']);
             $query->execute();
 
