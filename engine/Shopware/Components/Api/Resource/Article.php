@@ -663,8 +663,6 @@ class Article extends Resource implements BatchInterface
         // Delete associated data
         $query = $this->getRepository()->getRemovePricesQuery($article->getId());
         $query->execute();
-        $query = $this->getRepository()->getRemoveAttributesQuery($article->getId());
-        $query->execute();
         $query = $this->getRepository()->getRemoveESDQuery($article->getId());
         $query->execute();
         $query = $this->getRepository()->getRemoveArticleTranslationsQuery($article->getId());
@@ -692,6 +690,9 @@ class Article extends Resource implements BatchInterface
         $details = Shopware()->Db()->fetchAll($sql, array($article->getId()));
 
         foreach ($details as $detail) {
+            $query = $this->getRepository()->getRemoveAttributesQuery($detail['id']);
+            $query->execute();
+
             $query = $this->getRepository()->getRemoveImageQuery($detail['id']);
             $query->execute();
 
@@ -757,6 +758,10 @@ class Article extends Resource implements BatchInterface
             $detail->setKind(1);
             $detail->setArticle($article);
             $article->setMainDetail($detail);
+        }
+
+        if (!$data['mainDetail']) {
+            $data['mainDetail'] = [];
         }
 
         $data['mainDetail'] = $this->getVariantResource()->prepareMainVariantData($data['mainDetail'], $article, $detail);
@@ -1110,7 +1115,6 @@ class Article extends Resource implements BatchInterface
         if (isset($data['mainDetail']['attribute']['articleDetailId'])) {
             unset($data['mainDetail']['attribute']['articleDetailId']);
         }
-        $data['mainDetail']['attribute']['article'] = $article;
 
         return $data;
     }

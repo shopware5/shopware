@@ -2330,28 +2330,28 @@ class Repository extends ModelRepository
 
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which allows you to delete attributes
-     * associated with the given articleId
-     * @param $articleId
+     * associated with the given articleDetailId
+     * @param $articleDetailId
      * @return \Doctrine\ORM\Query
      */
-    public function getRemoveAttributesQuery($articleId)
+    public function getRemoveAttributesQuery($articleDetailId)
     {
-        $builder = $this->getRemoveAttributesQueryBuilder($articleId);
+        $builder = $this->getRemoveAttributesQueryBuilder($articleDetailId);
         return $builder->getQuery();
     }
 
     /**
      * Helper function to create the query builder for the "getRemoveAttributesQuery" function.
      * This function can be hooked to modify the query builder of the query object.
-     * @param $articleId
+     * @param $articleDetailId
      * @return \Doctrine\ORM\QueryBuilder
      */
-    public function getRemoveAttributesQueryBuilder($articleId)
+    public function getRemoveAttributesQueryBuilder($articleDetailId)
     {
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->delete('Shopware\Models\Attribute\Article', 'attribute')
-                ->where('attribute.articleId = :id')
-                ->setParameter('id', $articleId);
+                ->where('attribute.articleDetailId = :id')
+                ->setParameter('id', $articleDetailId);
 
         return $builder;
     }
