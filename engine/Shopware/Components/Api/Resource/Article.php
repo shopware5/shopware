@@ -471,7 +471,7 @@ class Article extends Resource implements BatchInterface
         $builder = $this->getRepository()->createQueryBuilder('article')
             ->addSelect(['attribute'])
             ->leftJoin('article.mainDetail', 'mainDetail')
-            ->leftJoin('article.attribute', 'attribute');
+            ->leftJoin('mainDetail.attribute', 'attribute');
 
         $builder->addFilter($criteria)
             ->addOrderBy($orderBy)
