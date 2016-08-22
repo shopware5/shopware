@@ -1187,6 +1187,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $response->setHeader('Content-Type', 'application/pdf');
         $response->setHeader('Content-Transfer-Encoding', 'binary');
         $response->setHeader('Content-Length', filesize($file));
+        $response->sendHeaders();
 
         echo readfile($file);
     }
