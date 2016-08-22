@@ -83,7 +83,7 @@ If you want to test a single component, add its path after the phpunit command, 
 # Documentation
 
 Developer documentation for Shopware is available [here](https://developers.shopware.com/). You can also contribute to the documentation project by submitting your pull requests to our [Devdocs Github project](https://github.com/shopware/devdocs)
- 
+
 # Translations
 
-Shopware translations are done by the community and can be installed from the plugin store. If you wish to improve Shopware's translations, you can do so in our [Crowdin project page](https://crowdin.com/project/shopware). 
+Shopware translations are done by the community and can be installed from the plugin store. If you wish to improve Shopware's translations, you can do so in our [Crowdin project page](https://crowdin.com/project/shopware).
