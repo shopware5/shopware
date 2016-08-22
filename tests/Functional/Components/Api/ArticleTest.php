@@ -188,6 +188,8 @@ class ArticleTest extends TestCase
         $this->assertEquals($article->getMetaTitle(), $testData['metaTitle']);
 
         $this->assertEquals($article->getDescriptionLong(), $testData['descriptionLong']);
+
+        // Check attributes of main variant
         $this->assertEquals(
             $article->getMainDetail()->getAttribute()->getAttr1(),
             $testData['mainDetail']['attribute']['attr1']
@@ -195,6 +197,19 @@ class ArticleTest extends TestCase
         $this->assertEquals(
             $article->getMainDetail()->getAttribute()->getAttr2(),
             $testData['mainDetail']['attribute']['attr2']
+        );
+
+        // Check attributes of non-main variant
+        $variant = $article->getDetails()->matching(\Doctrine\Common\Collections\Criteria::create()->where(
+            \Doctrine\Common\Collections\Criteria::expr()->eq('number', $testData['variants'][0]['number'])
+        ));
+        $this->assertEquals(
+            $variant->first()->getAttribute()->getAttr3(),
+            $testData['variants'][0]['attribute']['attr3']
+        );
+        $this->assertEquals(
+            $variant->first()->getAttribute()->getAttr4(),
+            $testData['variants'][0]['attribute']['attr4']
         );
 
         $propertyValues = $article->getPropertyValues()->getValues();
