@@ -71,13 +71,14 @@ For most tests a configured database connection is required.
 
 ## Running the tests
 The tests are located in the `tests/Shopware/` directory
+The tests are located in the `tests/` directory
 You can run the entire test suite with the following command:
 
-    vendor/bin/phpunit -c tests/Shopware
+    vendor/bin/phpunit -c tests
 
 If you want to test a single component, add its path after the phpunit command, e.g.:
 
-    vendor/bin/phpunit -c tests/Shopware tests/Shopware/Tests/Components/Api/
+    vendor/bin/phpunit -c tests tests/Functional/Components/Api/
 
 # Documentation
 
