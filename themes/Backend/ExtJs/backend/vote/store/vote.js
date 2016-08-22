@@ -27,33 +27,12 @@
  * @author shopware AG
  */
 
-//{block name="backend/vote/app"}
-Ext.define('Shopware.apps.Vote', {
-    extend: 'Enlight.app.SubApplication',
-
-    name:'Shopware.apps.Vote',
-
-    loadPath: '{url action=load}',
-    bulkLoad: true,
-
-    controllers: [ 'Main' ],
-
-    views: [
-        'PointHelper',
-        'list.Window',
-        'list.Vote',
-        'list.extensions.Info',
-        'list.extensions.Filter',
-        'list.Progress',
-        'detail.Vote',
-        'detail.Window'
-    ],
-
-    models: ['Vote', 'AcceptResponse'],
-    stores: ['Vote'],
-
-    launch: function() {
-        return this.getController('Main').mainWindow;
+//{block name="backend/vote/store/vote"}
+Ext.define('Shopware.apps.Vote.store.Vote', {
+    extend:'Shopware.store.Listing',
+    model: 'Shopware.apps.Vote.model.Vote',
+    configure: function() {
+        return { controller: 'Vote' };
     }
 });
 //{/block}

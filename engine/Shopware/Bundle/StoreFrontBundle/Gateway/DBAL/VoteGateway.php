@@ -61,18 +61,26 @@ class VoteGateway implements Gateway\VoteGatewayInterface
     private $connection;
 
     /**
+     * @var \Shopware_Components_Config
+     */
+    private $config;
+
+    /**
      * @param Connection $connection
      * @param FieldHelper $fieldHelper
      * @param Hydrator\VoteHydrator $voteHydrator
+     * @param \Shopware_Components_Config $config
      */
     public function __construct(
         Connection $connection,
         FieldHelper $fieldHelper,
-        Hydrator\VoteHydrator $voteHydrator
+        Hydrator\VoteHydrator $voteHydrator,
+        \Shopware_Components_Config $config
     ) {
         $this->voteHydrator = $voteHydrator;
         $this->connection = $connection;
         $this->fieldHelper = $fieldHelper;
+        $this->config = $config;
     }
 
     /**
@@ -106,6 +114,11 @@ class VoteGateway implements Gateway\VoteGatewayInterface
             ->orderBy('vote.articleID', 'DESC')
             ->addOrderBy('vote.datum', 'DESC')
             ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
+
+        if ($this->config->get('displayOnlySubShopVotes')) {
+            $query->andWhere('(vote.shop_id = :shopId OR vote.shop_id IS NULL)');
+            $query->setParameter(':shopId', $context->getShop()->getId());
+        }
 
         /**@var $statement \Doctrine\DBAL\Driver\ResultStatement */
         $statement = $query->execute();

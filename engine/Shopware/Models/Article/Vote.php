@@ -58,6 +58,12 @@ class Vote extends ModelEntity
     private $articleId;
 
     /**
+     * @var integer
+     * @ORM\Column(name="shop_id", type="integer", nullable=true)
+     */
+    private $shopId;
+
+    /**
      * @var string $name
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
@@ -95,7 +101,7 @@ class Vote extends ModelEntity
     /**
      * @var integer $active
      *
-     * @ORM\Column(name="active", type="integer", nullable=false)
+     * @ORM\Column(name="active", type="boolean", nullable=false)
      */
     private $active;
 
@@ -116,7 +122,7 @@ class Vote extends ModelEntity
     /**
      * @var \DateTime $answer_date
      *
-     * @ORM\Column(name="answer_date", type="datetime", nullable=false)
+     * @ORM\Column(name="answer_date", type="datetime", nullable=true)
      */
     private $answer_date;
 
@@ -127,6 +133,13 @@ class Vote extends ModelEntity
      * @ORM\JoinColumn(name="articleID", referencedColumnName="id")
      */
     protected $article;
+
+    /**
+     * @var \Shopware\Models\Shop\Shop
+     * @ORM\ManyToOne(targetEntity="Shopware\Models\Shop\Shop")
+     * @ORM\JoinColumn(name="shop_id", referencedColumnName="id")
+     */
+    protected $shop;
 
     /**
      * Gets the primaryKey id
@@ -360,5 +373,21 @@ class Vote extends ModelEntity
     {
         $this->article = $article;
         return $this;
+    }
+
+    /**
+     * @return \Shopware\Models\Shop\Shop|null
+     */
+    public function getShop()
+    {
+        return $this->shop;
+    }
+
+    /**
+     * @param \Shopware\Models\Shop\Shop|null $shop
+     */
+    public function setShop($shop)
+    {
+        $this->shop = $shop;
     }
 }

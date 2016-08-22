@@ -22,50 +22,22 @@
  *
  * @category   Shopware
  * @package    Vote
- * @subpackage Store
+ * @subpackage App
  * @version    $Id$
  * @author shopware AG
  */
 
-/**
- * Shopware UI - Vote store votes
- *
- * This store contains all votes.
- */
-//{block name="backend/vote/store/votes"}
-Ext.define('Shopware.apps.Vote.store.Votes', {
+//{block name="backend/vote/model/accept_response"}
+Ext.define('Shopware.apps.Vote.model.AcceptResponse', {
+    extend: 'Ext.data.Model',
 
-    /**
-    * Extend for the standard ExtJS 4
-    * @string
-    */
-    extend: 'Ext.data.Store',
-
-    /**
-    * Auto load the store after the component
-    * is initialized
-    * @boolean
-    */
-    autoLoad: false,
-
-    /**
-    * Amount of data loaded at once
-    * @integer
-    */
-    pageSize: 20,
-
-    /**
-     * We're using an remote filter to get a better
-     * performance on large data sets.
-     * @boolean
-     */
-    remoteFilter: true,
-    remoteSort: true,
-
-    /**
-    * Define the used model for this store
-    * @string
-    */
-    model : 'Shopware.apps.Vote.model.Vote'
+    fields: [
+        { name: 'success', type: 'boolean' },
+        { name: 'article', type: 'string' },
+        { name: 'author', type: 'string' },
+        { name: 'headline', type: 'string' },
+        { name: 'points', type: 'float' },
+        { name: 'error', type: 'string' }
+    ]
 });
 //{/block}

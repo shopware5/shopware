@@ -64,20 +64,28 @@ class VoteAverageFacetHandler implements FacetHandlerInterface
     private $fieldName;
 
     /**
+     * @var \Shopware_Components_Config
+     */
+    private $config;
+
+    /**
      * @param QueryBuilderFactory $queryBuilderFactory
      * @param \Doctrine\DBAL\Connection $connection
      * @param \Shopware_Components_Snippet_Manager $snippetManager
      * @param QueryAliasMapper $queryAliasMapper
+     * @param \Shopware_Components_Config $config
      */
     public function __construct(
         QueryBuilderFactory $queryBuilderFactory,
         Connection $connection,
         \Shopware_Components_Snippet_Manager $snippetManager,
-        QueryAliasMapper $queryAliasMapper
+        QueryAliasMapper $queryAliasMapper,
+        \Shopware_Components_Config $config
     ) {
         $this->queryBuilderFactory = $queryBuilderFactory;
         $this->connection = $connection;
         $this->snippetNamespace = $snippetManager->getNamespace('frontend/listing/facet_labels');
+        $this->config = $config;
 
         if (!$this->fieldName = $queryAliasMapper->getShortAlias('rating')) {
             $this->fieldName = 'rating';
@@ -107,11 +115,18 @@ class VoteAverageFacetHandler implements FacetHandlerInterface
         $query->resetQueryPart('groupBy');
 
         if (!$query->hasState(VoteAverageCondition::STATE_INCLUDES_VOTE_TABLE)) {
+            $shopCondition = '';
+
+            if ($this->config->get('displayOnlySubShopVotes')) {
+                $shopCondition = ' AND (vote.shop_id = :voteAverageShopId OR vote.shop_id IS NULL)';
+                $query->setParameter(':voteAverageShopId', $context->getShop()->getId());
+            }
+
             $query->innerJoin(
                 'product',
                 's_articles_vote',
                 'vote',
-                'vote.articleID = product.id'
+                'vote.articleID = product.id AND vote.active = 1 ' . $shopCondition
             );
         }
 

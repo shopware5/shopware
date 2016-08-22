@@ -8,3 +8,18 @@ This changelog references changes done in Shopware 5.3 patch versions.
 
 * The Forms.php variable {$sShopname} was removed, use {sShopname} in your form templates instead.
 * Fixed theme path for new plugins from `/resources` into `/Resources`
+* Added `Shopware.grid.Panel` configuration `displayProgressOnSingleDelete` to hide progress window on single delete action.
+* Added config flag `displayOnlySubShopVotes` to display only shop assigned article votes.
+* Fixed sorting of `Shopware.listing.FilterPanel` fields.
+* Add field `expression` parameter in `Shopware.listing.FilterPanel` to allow define own query expressions
+* Added `Shopware.model.Container` config `splitFields` to configure field set column layout.
+* Removed article vote module files
+    * `themes/Backend/ExtJs/backend/vote/view/vote/detail.js`
+    * `themes/Backend/ExtJs/backend/vote/view/vote/edit.js`
+    * `themes/Backend/ExtJs/backend/vote/view/vote/infopanel.js`
+    * `themes/Backend/ExtJs/backend/vote/view/vote/list.js`
+    * `themes/Backend/ExtJs/backend/vote/view/vote/toolbar.js`
+    * `themes/Backend/ExtJs/backend/vote/view/vote/window.js`
+    * `themes/Backend/ExtJs/backend/vote/controller/vote.js`
+    * `themes/Backend/ExtJs/backend/vote/controller/vote.js`
+* `s_articles_vote.answer_date` is now nullable

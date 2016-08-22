@@ -22,52 +22,19 @@
  *
  * @category   Shopware
  * @package    Vote
- * @subpackage View
+ * @subpackage App
  * @version    $Id$
  * @author shopware AG
  */
 
 //{namespace name=backend/vote/main}
 
-/**
- * Shopware UI - Vote view main window
- *
- * This is the main window, which is rendered first.
- * It contains all other components.
- */
-//{block name="backend/vote/view/main/window"}
-Ext.define('Shopware.apps.Vote.view.main.Window', {
-	extend: 'Enlight.app.Window',
-    title: '{s name=window_title}Votes{/s}',
-    cls: Ext.baseCSSPrefix + 'vote-window',
-    alias: 'widget.vote-main-window',
-    autoShow: true,
-    layout: 'border',
-    height: '90%',
-    width: 925,
-    autoScroll: true,
-    stateful:true,
-    stateId:'shopware-votes-window',
-
-    /**
-     * Initializes the component and builds up the main interface
-     *
-     * @return void
-     */
-    initComponent: function() {
-        var me = this;
-
-        me.items = [
-            {
-                xtype: 'vote-main-list',
-                voteStore: me.voteStore
-            },{
-                xtype: 'vote-main-toolbar'
-            },{
-                xtype: 'vote-main-infopanel'
-            }
-        ];
-        me.callParent(arguments);
-    }
+//{block name="backend/vote/view/detail/window"}
+Ext.define('Shopware.apps.Vote.view.detail.Window', {
+    extend: 'Shopware.window.Detail',
+    alias: 'widget.vote-detail-window',
+    title : '{s name=detail_window_title}Vote details{/s}',
+    width: 720,
+    minWidth: 400
 });
 //{/block}

@@ -480,6 +480,11 @@ Ext.define('Shopware.grid.Panel', {
             rowEditing: false,
 
             /**
+             * If enabled, shows progress window when delete column will be used to delete a single item
+             */
+            displayProgressOnSingleDelete: true,
+
+            /**
              * Column configuration object.
              * This object can contains different configuration for
              * the single grid columns.
