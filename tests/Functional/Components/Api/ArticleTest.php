@@ -222,6 +222,56 @@ class ArticleTest extends TestCase
         return $article->getId();
     }
 
+    /*
+     * Test that empty article attributes are created
+     */
+    public function testCreateWithoutAttributes()
+    {
+        $configurator = $this->getSimpleConfiguratorSet(2, 5);
+
+        $testData = array(
+            'name' => 'Testartikel',
+            'description' => 'Test description',
+            'descriptionLong' => 'Test descriptionLong',
+            'active' => true,
+            'taxId' => 1,
+            'supplierId' => 1,
+            'mainDetail' => array(
+                'number' => 'swAttr1' . uniqid(rand()),
+                'inStock' => 15,
+                'unitId' => 1,
+                'prices' => array(
+                    array('customerGroupKey' => 'EK', 'from' => 1, 'to' => '-', 'price' => 400)
+                ),
+                'configuratorOptions' => $this->getVariantOptionsOfSet($configurator)
+            ),
+            'variants' => array(
+                array(
+                    'number' => 'swAttr2' . uniqid(rand()),
+                    'inStock' => 15,
+                    'unitId' => 1,
+                    'prices' => array(
+                        array('customerGroupKey' => 'EK', 'from' => 1, 'to' => '-', 'price' => 400)
+                    ),
+                    'configuratorOptions' => $this->getVariantOptionsOfSet($configurator)
+                )
+            ),
+            'configuratorSet' => $configurator
+        );
+
+        $article = $this->resource->create($testData);
+
+        // Load actual database model
+        $this->resource->setResultMode(Article::HYDRATE_OBJECT);
+        $data = $this->resource->getOne($article->getId());
+
+        $this->assertEquals(2, $data->getDetails()->count());
+        foreach ($data->getDetails() as $variant) {
+            $this->assertNotNull($variant->getAttribute());
+            $this->assertNull($variant->getAttribute()->getAttr1());
+        }
+    }
+
     /**
      * Test that creating an article with images generates thumbnails
      *
