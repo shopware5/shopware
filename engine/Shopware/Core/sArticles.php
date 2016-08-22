@@ -1529,7 +1529,7 @@ class sArticles
             $imageData['attribute']['attribute2'] = $image['attribute2'];
         }
 
-        if (!empty($image['attribute1'])) {
+        if (!empty($image['attribute3'])) {
             $imageData['attribute']['attribute3'] = $image['attribute3'];
         }
 
