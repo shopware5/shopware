@@ -1046,13 +1046,4 @@ class FieldHelper
     {
         $this->addTranslation('stream', 'productStream', $query, $context);
     }
-
-    /**
-     * @param QueryBuilder $query
-     * @param ShopContextInterface $context
-     */
-    public function addShopPageAttributeTranslation(QueryBuilder $query, ShopContextInterface $context)
-    {
-        $this->addTranslation('pageAttribute', 's_cms_static_attributes', $query, $context, 'page.id');
-    }
 }
