@@ -20,6 +20,8 @@ This changelog references changes done in Shopware 5.2 patch versions.
 * Replaced `grunt-contrib-watch` with `grunt-chokidar` for the grunt watch task.
 * Deprecated "{$sShopname}" variable in Forms.php, please use "{sShopname}" in your mail form templates instead.
 * Added `\Shopware\Bundle\SearchBundle\SearchTermPreProcessorInterface` interface which pre filters provided search terms
+* Added `ShopPage` to Storefront Bundle
+* Attributes of `forms` and `shop pages` are not translatable anymore
 
 ## 5.2.5
 
