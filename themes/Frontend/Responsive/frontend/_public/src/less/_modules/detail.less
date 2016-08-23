@@ -272,10 +272,15 @@ It contains the product actions, the product information such as pictures and de
 		border-right: 1px solid @panel-border;
 	}
 
+    .action--form {
+        float: left;
+    }
+
     // Product action link
     .action--link {
+        .clear-form-button();
         .unitize(font-size, 14);
-        .unitize-margin(0, 10, 5, 0);
+        .unitize-margin(0, 35, 5, 0);
         color: @text-color;
         white-space: nowrap;
 
@@ -305,12 +310,10 @@ It contains the product actions, the product information such as pictures and de
     }
 
     .action--compare {
-        .clear-form-button();
         display: none;
     }
 
     .link--notepad {
-        .clear-form-button();
 
         &:focus {
             outline: none;
@@ -583,20 +586,6 @@ It contains the product actions, the product information such as pictures and de
     // Smartphone landscape - min-width: 480px
 @media screen and (min-width: @phoneLandscapeViewportWidth) {
     .product--details {
-        // Product action link
-        .action--link {
-            .unitize-margin(0, 35, 5, 0);
-
-            // Icon
-            *[class^="icon"] {
-                .unitize(font-size, 12);
-            }
-
-            // Icon
-            *[class="icon--star"] {
-                .unitize(font-size, 14);
-            }
-        }
 
         // Product configurator
         .configurator--form {
@@ -652,7 +641,7 @@ It contains the product actions, the product information such as pictures and de
         }
 
         .action--link.action--compare {
-            display: inline;
+            display: inline-block;
         }
 
         // Product review overview
@@ -765,8 +754,6 @@ It contains the product actions, the product information such as pictures and de
         // Product actions
         .action--link {
             .unitize(margin-right, 25);
-            display: inline-block;
-            float: left;
         }
 
         .review--form-container {
