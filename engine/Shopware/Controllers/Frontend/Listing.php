@@ -137,7 +137,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             /**@var $manufacturer Manufacturer*/
             $manufacturer = $this->get('shopware_storefront.manufacturer_service')->get(
                 $manufacturerId,
-                $context
+                $this->get('shopware_storefront.context_service')->getShopContext()
             );
 
             $manufacturerContent = $this->getSeoDataOfManufacturer($manufacturer);
