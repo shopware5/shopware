@@ -277,7 +277,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Grid', {
                     settings = Ext.clone(view.settings);
 
                     if (settings.sections !== null && (settings.rows % settings.sections) > 0) {
-                        settings.rows += settings.rows % settings.sections;
+                        settings.rows += settings.sections - (settings.rows % settings.sections);
                         view.emotion.set('rows', settings.rows);
                     }
 
@@ -762,7 +762,7 @@ Ext.define('Shopware.apps.Emotion.view.detail.Grid', {
         });
 
         if (me.settings.sections !== null && (rows % me.settings.sections) > 0) {
-            rows += rows % me.settings.sections;
+            rows += me.settings.sections - (rows % me.settings.sections);
         }
 
         me.emotion.set('rows', rows);
