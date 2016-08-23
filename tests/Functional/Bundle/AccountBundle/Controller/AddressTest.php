@@ -29,7 +29,7 @@ use Symfony\Component\DomCrawler\Crawler;
 /**
  * @category  Shopware
  * @package   Shopware\Tests
- * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class AddressTest extends \Enlight_Components_Test_Controller_TestCase
 {

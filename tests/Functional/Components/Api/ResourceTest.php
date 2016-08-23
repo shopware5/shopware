@@ -29,7 +29,7 @@ use Shopware\Components\Api\Resource\Resource;
 /**
  * @category  Shopware
  * @package   Shopware\Tests
- * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ResourceTest extends \Enlight_Components_Test_TestCase
 {

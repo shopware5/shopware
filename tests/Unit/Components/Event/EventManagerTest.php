@@ -29,7 +29,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * @category  Shopware
  * @package   Shopware\Tests
- * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Tests_Components_Event_ManagerTest extends \PHPUnit_Framework_TestCase
 {

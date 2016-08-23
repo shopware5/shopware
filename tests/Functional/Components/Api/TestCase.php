@@ -31,7 +31,7 @@ use Shopware\Components\Api\Resource\Resource as APIResource;
  *
  * @category  Shopware
  * @package   Shopware\Tests
- * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 abstract class TestCase extends \Enlight_Components_Test_TestCase
 {

@@ -31,7 +31,7 @@ use Symfony\Component\DependencyInjection\Container;
 /**
  * @category  Shopware
  * @package   Shopware\Tests
- * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class EventManagerTest extends \PHPUnit_Framework_TestCase
 {

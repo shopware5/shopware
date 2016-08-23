@@ -25,7 +25,7 @@
 /**
  * @category  Shopware
  * @package   Shopware\Tests
- * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Tests_Controllers_Frontend_ListingTest extends Enlight_Components_Test_Controller_TestCase
 {
@@ -38,7 +38,7 @@ class Shopware_Tests_Controllers_Frontend_ListingTest extends Enlight_Components
     public function testHomeRedirect()
     {
         $mainCategory = Shopware()->Shop()->getCategory()->getId();
-        
+
         $this->dispatch('/cat/index/sCategory/' . $mainCategory);
 
         $this->assertEquals(301, $this->Response()->getHttpResponseCode());
