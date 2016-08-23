@@ -22,6 +22,9 @@ This changelog references changes done in Shopware 5.2 patch versions.
 * Added `\Shopware\Bundle\SearchBundle\SearchTermPreProcessorInterface` interface which pre filters provided search terms
 * Added `ShopPage` to Storefront Bundle
 * Attributes of `forms` and `shop pages` are not translatable anymore
+* Added new Smarty blocks to `frontend/detail/image.tpl`
+    * `frontend_detail_image_default_image_slider_item`
+    * `frontend_detail_images_image_slider_item`
 
 ## 5.2.5
 
