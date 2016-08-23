@@ -115,12 +115,12 @@ class InheritanceTest extends Base
         $util->expects($this->exactly(2))
             ->method('getThemeByTemplate')
             ->with($template)
-            ->will($this->returnValue($bareTheme));
+            ->willReturn($bareTheme);
 
         $pathResolver = $this->getPathResolver();
         $pathResolver->expects($this->any())
             ->method('getPublicDirectory')
-            ->will($this->returnValue('public_directory'));
+            ->willReturn('public_directory');
 
         $inheritance = new \Shopware\Components\Theme\Inheritance(
             $this->getEntityManager(),

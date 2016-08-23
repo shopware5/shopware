@@ -235,7 +235,7 @@ class Shopware_Tests_Models_MailTest extends Enlight_Components_Test_TestCase
 
         $statusMock->expects($this->any())
                 ->method('getGroup')
-                ->will($this->returnValue(Status::GROUP_STATE));
+                ->willReturn(Status::GROUP_STATE);
 
         $mail = new Mail();
         $mail->setStatus($statusMock);
@@ -281,7 +281,7 @@ class Shopware_Tests_Models_MailTest extends Enlight_Components_Test_TestCase
 
         $statusMock->expects($this->any())
                    ->method('getGroup')
-                   ->will($this->returnValue(Status::GROUP_STATE));
+                   ->willReturn(Status::GROUP_STATE);
 
         $mail = new Mail();
         $mail->setMailtype(Mail::MAILTYPE_STATE);
@@ -302,7 +302,7 @@ class Shopware_Tests_Models_MailTest extends Enlight_Components_Test_TestCase
 
         $statusMock->expects($this->any())
                 ->method('getGroup')
-                ->will($this->returnValue(Status::GROUP_PAYMENT));
+                ->willReturn(Status::GROUP_PAYMENT);
 
         $mail = new Mail();
         $mail->setMailtype(Mail::MAILTYPE_STATE);

@@ -86,11 +86,11 @@ class ResourceTest extends \Enlight_Components_Test_TestCase
 
         $aclMock->expects($this->any())
                 ->method('has')
-                ->will($this->returnValue(true));
+                ->willReturn(true);
 
         $aclMock->expects($this->any())
                 ->method('isAllowed')
-                ->will($this->returnValue(false));
+                ->willReturn(false);
 
         $this->resource->setRole('dummy');
         $this->resource->setAcl($aclMock);
@@ -104,7 +104,7 @@ class ResourceTest extends \Enlight_Components_Test_TestCase
 
         $aclMock->expects($this->any())
                 ->method('isAllowed')
-                ->will($this->returnValue(true));
+                ->willReturn(true);
 
         $this->resource->setRole('dummy');
         $this->resource->setAcl($aclMock);
