@@ -3,7 +3,7 @@ language: php
 php:
   - 5.6
   - 7.0
-  - nightly
+  - 7.1
 
 sudo: false
 
@@ -23,4 +23,4 @@ notifications:
 
 matrix:
   allow_failures:
-    - php: nightly
+    - php: 7.1
