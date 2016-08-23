@@ -25,6 +25,7 @@ This changelog references changes done in Shopware 5.2 patch versions.
 * Added new Smarty blocks to `frontend/detail/image.tpl`
     * `frontend_detail_image_default_image_slider_item`
     * `frontend_detail_images_image_slider_item`
+* Update `ongr/elasticsearch-dsl` to version 2.0.2
 
 ## 5.2.5
 
