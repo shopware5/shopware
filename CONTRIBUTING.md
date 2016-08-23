@@ -70,7 +70,6 @@ If you're done hacking, filling bugs or building fancy new features, push your c
 For most tests a configured database connection is required.
 
 ## Running the tests
-The tests are located in the `tests/Shopware/` directory
 The tests are located in the `tests/` directory
 You can run the entire test suite with the following command:
 
