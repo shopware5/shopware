@@ -29,7 +29,7 @@ use Shopware\Components\Api\Resource\Cache;
 /**
  * @category  Shopware
  * @package   Shopware\Tests
- * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class CacheTest extends TestCase
 {

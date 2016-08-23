@@ -68,7 +68,7 @@ class QueryAliasMapperTest extends \PHPUnit_Framework_TestCase
 
         $mock->expects($this->any())
              ->method('get')
-             ->will($this->returnValue('foo=bar,omg=baz'));
+             ->willReturn('foo=bar,omg=baz');
 
         $mapper = QueryAliasMapper::createFromConfig($mock);
 

@@ -32,7 +32,7 @@ use Shopware\Models\Article\Configurator\Template\Template;
  *
  * @category  Shopware
  * @package   Shopware\Tests
- * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ModelEntityTest extends \PHPUnit_Framework_TestCase
 {

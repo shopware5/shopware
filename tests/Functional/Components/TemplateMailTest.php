@@ -25,7 +25,7 @@
 /**
  * @category  Shopware
  * @package   Shopware\Tests
- * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Tests_Components_TemplateMailTest extends Enlight_Components_Test_TestCase
 {
@@ -65,15 +65,16 @@ class Shopware_Tests_Components_TemplateMailTest extends Enlight_Components_Test
 
         $attachmentMock->expects($this->any())
                        ->method('getPath')
-                       ->will($this->returnValue(__FILE__));
+                       ->willReturn(__FILE__);
 
         $attachmentMock->expects($this->any())
                        ->method('getName')
-                       ->will($this->returnValue('foobar.pdf'));
+                       ->willReturn('foobar.pdf');
 
         $attachmentMock->expects($this->any())
                        ->method('getFileName')
-                       ->will($this->returnValue('foobar.pdf'));
+                       ->willReturn('foobar.pdf')
+                       ->willReturn('foobar.pdf');
 
         return $attachmentMock;
     }
@@ -87,31 +88,31 @@ class Shopware_Tests_Components_TemplateMailTest extends Enlight_Components_Test
 
         $templateMock->expects($this->any())
                      ->method('getFromMail')
-                     ->will($this->returnValue('info@demo.shopware.de'));
+                     ->willReturn('info@demo.shopware.de');
 
         $templateMock->expects($this->any())
                      ->method('getFromName')
-                     ->will($this->returnValue('Shopware 5 Demo'));
+                     ->willReturn('Shopware 5 Demo');
 
         $templateMock->expects($this->any())
                      ->method('getSubject')
-                     ->will($this->returnValue('Shopware 5 Testmail'));
+                     ->willReturn('Shopware 5 Testmail');
 
         $templateMock->expects($this->any())
                      ->method('getContent')
-                     ->will($this->returnValue('Testcontent'));
+                     ->willReturn('Testcontent');
 
         $templateMock->expects($this->any())
                      ->method('getContentHtml')
-                     ->will($this->returnValue('Testcontent HTML'));
+                     ->willReturn('Testcontent HTML');
 
         $templateMock->expects($this->any())
                      ->method('isHtml')
-                     ->will($this->returnValue(true));
+                     ->willReturn(true);
 
         $templateMock->expects($this->any())
                      ->method('getAttachments')
-                     ->will($this->returnValue(array($this->getAttachmentMockObject())));
+                     ->willReturn(array($this->getAttachmentMockObject()));
 
         return $templateMock;
     }
@@ -125,27 +126,27 @@ class Shopware_Tests_Components_TemplateMailTest extends Enlight_Components_Test
 
         $templateMock->expects($this->any())
                      ->method('getFromMail')
-                     ->will($this->returnValue('{$sConfig.sMAIL}'));
+                     ->willReturn('{$sConfig.sMAIL}');
 
         $templateMock->expects($this->any())
                      ->method('getFromName')
-                     ->will($this->returnValue('{$sConfig.sSHOPNAME}'));
+                     ->willReturn('{$sConfig.sSHOPNAME}');
 
         $templateMock->expects($this->any())
                      ->method('getSubject')
-                     ->will($this->returnValue('Ihr Bestellung bei {$sConfig.sSHOPNAME}'));
+                     ->willReturn('Ihr Bestellung bei {$sConfig.sSHOPNAME}');
 
         $templateMock->expects($this->any())
                      ->method('getContent')
-                     ->will($this->returnValue('Testbestellung bei {$sConfig.sSHOPNAME}'));
+                     ->willReturn('Testbestellung bei {$sConfig.sSHOPNAME}');
 
         $templateMock->expects($this->any())
                      ->method('getContentHtml')
-                     ->will($this->returnValue('Testbestellung HTML bei {$sConfig.sSHOPNAME}'));
+                     ->willReturn('Testbestellung HTML bei {$sConfig.sSHOPNAME}');
 
         $templateMock->expects($this->any())
                      ->method('isHtml')
-                     ->will($this->returnValue(true));
+                     ->willReturn(true);
 
         return $templateMock;
     }
@@ -157,7 +158,6 @@ class Shopware_Tests_Components_TemplateMailTest extends Enlight_Components_Test
     {
         $this->assertInstanceOf('\Shopware_Components_TemplateMail', $this->mail);
 
-        //$this->assertInstanceOf('\Shopware_Models_Shop', $this->mail->getShop());
         $this->assertInstanceOf('\Shopware_Components_StringCompiler', $this->mail->getStringCompiler());
         $this->assertInstanceOf('\Shopware\Components\Model\ModelManager', $this->mail->getModelManager());
     }

@@ -29,7 +29,7 @@ use Shopware\Tests\Plugins\Core\MarketingAggregate\AbstractMarketing;
 /**
  * @category  Shopware
  * @package   Shopware\Tests
- * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class SimilarShownTest extends AbstractMarketing
 {

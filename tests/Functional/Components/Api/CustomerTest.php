@@ -30,7 +30,7 @@ use Shopware\Components\Api\Resource\Resource;
 /**
  * @category  Shopware
  * @package   Shopware\Tests
- * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class CustomerTest extends TestCase
 {

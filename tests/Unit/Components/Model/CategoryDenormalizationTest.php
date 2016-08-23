@@ -32,7 +32,7 @@ class PDOMock extends \PDO
 /**
  * @category  Shopware
  * @package   Shopware\Tests
- * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Tests_Components_Model_CategoryDenormalizationTest extends PHPUnit_Extensions_Database_TestCase
 {
