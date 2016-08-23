@@ -473,7 +473,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         $this->View()->assign(array(
             'success' => true,
             'data' => $result,
-            'total' => $count
+            'total' => (int) $count
         ));
     }
 
