@@ -9,25 +9,25 @@
      * @returns {{}} Object with all extracted parameters
      */
     var parseQueryString = function(url) {
-	    var qparams = {},
-		    parts = (url || '').split('?'),
-		    qparts, qpart;
+        var qparams = {},
+            parts = (url || '').split('?'),
+            qparts, qpart;
 
-	    if (parts.length <= 1) {
-		    return qparams;
-	    }
+        if (parts.length <= 1) {
+            return qparams;
+        }
 
-	    qparts = parts[1].split('&');
-	    for (var i = 0, len = qparts.length; i < len; i++) {
-		    var key, value;
+        qparts = parts[1].split('&');
+        for (var i = 0, len = qparts.length; i < len; i++) {
+            var key, value;
 
-		    qpart = qparts[i].split('=');
-		    key = decodeURIComponent(qpart[0]);
-		    value = decodeURIComponent(qpart[1] || '');
-		    qparams[key] = ($.isNumeric(value) ? parseFloat(value, 10) : value);
-	    }
+            qpart = qparts[i].split('=');
+            key = decodeURIComponent(qpart[0]);
+            value = decodeURIComponent(qpart[1] || '');
+            qparams[key] = ($.isNumeric(value) ? parseFloat(value, 10) : value);
+        }
 
-	    return qparams;
+        return qparams;
     };
 
     $.plugin('swInfiniteScrolling', {
