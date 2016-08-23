@@ -138,6 +138,9 @@
     .menu--level-0 {
         .unitize-padding(10, 10, 0, 10);
         float: left;
+        -webkit-column-break-inside: avoid;
+        page-break-inside: avoid;
+        break-inside: avoid;
 
         &.columns--1 {
             .column-count(1);
@@ -163,8 +166,11 @@
 
     .item--level-0 {
         .unitize(padding-bottom, 40);
-        display: inline-block;
+        display: block;
         position: relative;
+        -webkit-column-break-inside: avoid;
+        page-break-inside: avoid;
+        break-inside: avoid;
 
         .menu--list-item-link {
             font-weight: bold;
