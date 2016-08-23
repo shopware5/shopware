@@ -28,6 +28,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Shopware\Components\Api\Exception as ApiException;
 use Shopware\Models\Article\Article as ArticleModel;
+use Shopware\Models\Attribute\Article as ArticleAttributeModel;
 use Shopware\Models\Article\Configurator\Group;
 use Shopware\Models\Article\Configurator\Option;
 use Shopware\Models\Article\Detail;
@@ -864,15 +865,11 @@ class Variant extends Resource implements BatchInterface
      */
     protected function prepareAttributeAssociation($data, ArticleModel $article, Detail $variant)
     {
-        if (!$variant->getAttribute()) {
-            $data['attribute']['article'] = $article;
+        if (!isset($data['attribute']) && !$variant->getAttribute()) {
+            // Create empty attributes if none provided
+            $data['attribute'] = new ArticleAttributeModel();
         }
 
-        if (!isset($data['attribute'])) {
-            return $data;
-        }
-
-        $data['attribute']['article'] = $article;
         return $data;
     }
 

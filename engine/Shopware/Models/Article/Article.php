@@ -439,17 +439,6 @@ class Article extends ModelEntity
     protected $votes;
 
     /**
-     * INVERSE SIDE
-     *
-     * @var \Shopware\Models\Attribute\Article
-     *
-     * @Assert\Valid
-     *
-     * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Article", mappedBy="article", cascade={"persist"})
-     */
-    protected $attribute;
-
-    /**
      * OWNING SIDE
      *
      * @var \Shopware\Models\Article\Configurator\Set
@@ -1144,23 +1133,6 @@ class Article extends ModelEntity
     public function setVotes($votes)
     {
         return $this->setOneToMany($votes, '\Shopware\Models\Article\Vote', 'votes', 'article');
-    }
-
-    /**
-     * @return \Shopware\Models\Attribute\Article
-     */
-    public function getAttribute()
-    {
-        return $this->attribute;
-    }
-
-    /**
-     * @param \Shopware\Models\Attribute\Article|array|null $attribute
-     * @return Article
-     */
-    public function setAttribute($attribute)
-    {
-        return $this->setOneToOne($attribute, '\Shopware\Models\Attribute\Article', 'attribute', 'article');
     }
 
     /**

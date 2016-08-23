@@ -22,6 +22,7 @@ This changelog references changes done in Shopware 5.2 patch versions.
 * Added `\Shopware\Bundle\SearchBundle\SearchTermPreProcessorInterface` interface which pre filters provided search terms
 * Added `ShopPage` to Storefront Bundle
 * Attributes of `forms` and `shop pages` are not translatable anymore
+* Removed s_articles_attributes.articleID which was not set for new article variants anymore since Shopware 5.2.0
 
 ## 5.2.5
 

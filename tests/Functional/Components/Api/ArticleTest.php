@@ -188,6 +188,8 @@ class ArticleTest extends TestCase
         $this->assertEquals($article->getMetaTitle(), $testData['metaTitle']);
 
         $this->assertEquals($article->getDescriptionLong(), $testData['descriptionLong']);
+
+        // Check attributes of main variant
         $this->assertEquals(
             $article->getMainDetail()->getAttribute()->getAttr1(),
             $testData['mainDetail']['attribute']['attr1']
@@ -195,6 +197,19 @@ class ArticleTest extends TestCase
         $this->assertEquals(
             $article->getMainDetail()->getAttribute()->getAttr2(),
             $testData['mainDetail']['attribute']['attr2']
+        );
+
+        // Check attributes of non-main variant
+        $variant = $article->getDetails()->matching(\Doctrine\Common\Collections\Criteria::create()->where(
+            \Doctrine\Common\Collections\Criteria::expr()->eq('number', $testData['variants'][0]['number'])
+        ));
+        $this->assertEquals(
+            $variant->first()->getAttribute()->getAttr3(),
+            $testData['variants'][0]['attribute']['attr3']
+        );
+        $this->assertEquals(
+            $variant->first()->getAttribute()->getAttr4(),
+            $testData['variants'][0]['attribute']['attr4']
         );
 
         $propertyValues = $article->getPropertyValues()->getValues();
@@ -220,6 +235,56 @@ class ArticleTest extends TestCase
         }
 
         return $article->getId();
+    }
+
+    /*
+     * Test that empty article attributes are created
+     */
+    public function testCreateWithoutAttributes()
+    {
+        $configurator = $this->getSimpleConfiguratorSet(2, 5);
+
+        $testData = array(
+            'name' => 'Testartikel',
+            'description' => 'Test description',
+            'descriptionLong' => 'Test descriptionLong',
+            'active' => true,
+            'taxId' => 1,
+            'supplierId' => 1,
+            'mainDetail' => array(
+                'number' => 'swAttr1' . uniqid(rand()),
+                'inStock' => 15,
+                'unitId' => 1,
+                'prices' => array(
+                    array('customerGroupKey' => 'EK', 'from' => 1, 'to' => '-', 'price' => 400)
+                ),
+                'configuratorOptions' => $this->getVariantOptionsOfSet($configurator)
+            ),
+            'variants' => array(
+                array(
+                    'number' => 'swAttr2' . uniqid(rand()),
+                    'inStock' => 15,
+                    'unitId' => 1,
+                    'prices' => array(
+                        array('customerGroupKey' => 'EK', 'from' => 1, 'to' => '-', 'price' => 400)
+                    ),
+                    'configuratorOptions' => $this->getVariantOptionsOfSet($configurator)
+                )
+            ),
+            'configuratorSet' => $configurator
+        );
+
+        $article = $this->resource->create($testData);
+
+        // Load actual database model
+        $this->resource->setResultMode(Article::HYDRATE_OBJECT);
+        $data = $this->resource->getOne($article->getId());
+
+        $this->assertEquals(2, $data->getDetails()->count());
+        foreach ($data->getDetails() as $variant) {
+            $this->assertNotNull($variant->getAttribute());
+            $this->assertNull($variant->getAttribute()->getAttr1());
+        }
     }
 
     /**
@@ -912,6 +977,32 @@ class ArticleTest extends TestCase
 
         $this->assertGreaterThanOrEqual(1, $result['total']);
         $this->assertGreaterThanOrEqual(1, $result['data']);
+    }
+
+    /**
+     * Tests that getList uses only the main variants attributes for filtering
+     *
+     * @depends testCreateShouldBeSuccessful
+     * @param int $id
+     */
+    public function testGetListShouldUseCorrectDetailsAttribute($id)
+    {
+        // Filter with attribute of main variant => article found
+        $result = $this->resource->getList(0, 1, [
+            'id' => $id,
+            'attribute.attr1' => 'Freitext1' // Belongs to main variant
+        ]);
+
+        $this->assertEquals(1, $result['total']);
+        $this->assertEquals($id, $result['data'][0]['id'], $id);
+
+         // Filter with attribute of other (non-main) variant => no result
+        $result = $this->resource->getList(0, 1, [
+            'id' => $id,
+            'attribute.attr3' => 'Freitext3'
+        ]);
+
+        $this->assertEquals(0, $result['total']);
     }
 
     /**
