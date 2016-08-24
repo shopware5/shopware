@@ -22,9 +22,14 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Components\Theme\PathResolver;
+namespace Shopware\Components\Test\Theme;
 
-class PathResolverTest extends \PHPUnit_Framework_TestCase
+use PHPUnit\Framework\TestCase;
+use Shopware\Components\Theme\PathResolver;
+use Shopware\Models\Shop\Shop;
+use Shopware\Models\Shop\Template;
+
+class PathResolverTest extends TestCase
 {
     /**
      * @var PathResolver
@@ -63,16 +68,16 @@ class PathResolverTest extends \PHPUnit_Framework_TestCase
      */
     private function createTemplateManagerMock()
     {
-        return $this->createMock(Enlight_Template_Manager::class);
+        return $this->createMock(\Enlight_Template_Manager::class);
     }
 
     /**
      * @param int $templateId
-     * @return \Shopware\Models\Shop\Template
+     * @return Template
      */
     private function createTemplateMock($templateId)
     {
-        $templateStub = $this->createMock(\Shopware\Models\Shop\Template::class);
+        $templateStub = $this->createMock(Template::class);
 
         $templateStub->method('getId')
                      ->willReturn($templateId);
@@ -82,12 +87,12 @@ class PathResolverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param int $shopId
-     * @param \Shopware\Models\Shop\Template $templateStub
-     * @return \Shopware\Models\Shop\Shop
+     * @param Template $templateStub
+     * @return Shop
      */
     private function createShopMock($shopId, $templateStub)
     {
-        $stub = $this->createMock(Shopware\Models\Shop\Shop::class);
+        $stub = $this->createMock(Shop::class);
 
         $stub->method('getMain')
             ->willReturn(null);

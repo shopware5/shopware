@@ -22,8 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Components;
+namespace Shopware\Tests\Unit\Components;
 
+use PHPUnit\Framework\TestCase;
 use Shopware\Components\QueryAliasMapper;
 
 /**
@@ -31,7 +32,7 @@ use Shopware\Components\QueryAliasMapper;
  * @package   Shopware\Tests\Components
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class QueryAliasMapperTest extends \PHPUnit_Framework_TestCase
+class QueryAliasMapperTest extends TestCase
 {
     public function testCanBeInitializedByArray()
     {
@@ -68,7 +69,7 @@ class QueryAliasMapperTest extends \PHPUnit_Framework_TestCase
 
         $mock->expects($this->any())
              ->method('get')
-             ->will($this->returnValue('foo=bar,omg=baz'));
+             ->willReturn('foo=bar,omg=baz');
 
         $mapper = QueryAliasMapper::createFromConfig($mock);
 

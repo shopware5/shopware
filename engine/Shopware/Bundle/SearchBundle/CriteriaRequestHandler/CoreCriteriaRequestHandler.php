@@ -43,6 +43,7 @@ use Shopware\Bundle\SearchBundle\Facet\ManufacturerFacet;
 use Shopware\Bundle\SearchBundle\Facet\PriceFacet;
 use Shopware\Bundle\SearchBundle\Facet\ShippingFreeFacet;
 use Shopware\Bundle\SearchBundle\Facet\VoteAverageFacet;
+use Shopware\Bundle\SearchBundle\SearchTermPreProcessorInterface;
 use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
 use Shopware\Bundle\SearchBundle\Sorting\PriceSorting;
 use Shopware\Bundle\SearchBundle\Sorting\ProductNameSorting;
@@ -76,15 +77,23 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
     private $connection;
 
     /**
+     * @var SearchTermPreProcessorInterface
+     */
+    private $searchTermPreProcessor;
+
+    /**
      * @param \Shopware_Components_Config $config
      * @param Connection $connection
+     * @param SearchTermPreProcessorInterface $searchTermPreProcessor
      */
     public function __construct(
         \Shopware_Components_Config $config,
-        Connection $connection
+        Connection $connection,
+        SearchTermPreProcessorInterface $searchTermPreProcessor
     ) {
         $this->config = $config;
         $this->connection = $connection;
+        $this->searchTermPreProcessor = $searchTermPreProcessor;
     }
 
     /**
@@ -242,17 +251,12 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
      */
     private function addSearchCondition(Request $request, Criteria $criteria)
     {
-        $search = $request->getParam('sSearch', null);
-        if ($search == null) {
+        $term = $request->getParam('sSearch', null);
+        if ($term == null) {
             return;
         }
-
-        $search = trim(strip_tags(htmlspecialchars_decode(stripslashes($search))));
-
-        //we have to strip the / otherwise broken urls would be created e.g. wrong pager urls
-        $search = str_replace("/", " ", $search);
-
-        $criteria->addBaseCondition(new SearchTermCondition($search));
+        $term = $this->searchTermPreProcessor->process($term);
+        $criteria->addBaseCondition(new SearchTermCondition($term));
     }
 
     /**

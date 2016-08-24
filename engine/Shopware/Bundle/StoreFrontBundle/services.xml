@@ -88,6 +88,11 @@
             <argument type="service" id="shopware_storefront.manufacturer_gateway"/>
         </service>
 
+        <service id="shopware_storefront.shop_page_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\ShopPageService">
+            <argument type="service" id="shopware_storefront.shop_page_gateway"/>
+            <argument type="service" id="shopware_storefront.shop_gateway_dbal"/>
+        </service>
+
         <service id="shopware_storefront.price_calculation_service" class="Shopware\Bundle\StoreFrontBundle\Service\Core\PriceCalculationService">
             <argument type="service" id="shopware_storefront.price_group_discount_gateway"/>
         </service>
@@ -168,6 +173,12 @@
             <argument type="service" id="dbal_connection"/>
             <argument type="service" id="shopware_storefront.field_helper_dbal"/>
             <argument type="service" id="shopware_storefront.manufacturer_hydrator_dbal"/>
+        </service>
+
+        <service id="shopware_storefront.shop_page_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ShopPageGateway">
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="shopware_storefront.field_helper_dbal"/>
+            <argument type="service" id="shopware_storefront.shop_page_hydrator_dbal"/>
         </service>
 
         <service id="shopware_storefront.tax_gateway" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\TaxGateway">
@@ -296,6 +307,10 @@
         </service>
 
         <service id="shopware_storefront.manufacturer_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\ManufacturerHydrator">
+            <argument type="service" id="shopware_storefront.attribute_hydrator_dbal"/>
+        </service>
+
+        <service id="shopware_storefront.shop_page_hydrator_dbal" class="Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\ShopPageHydrator">
             <argument type="service" id="shopware_storefront.attribute_hydrator_dbal"/>
         </service>
 

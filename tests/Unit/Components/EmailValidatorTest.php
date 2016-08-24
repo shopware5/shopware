@@ -1,6 +1,4 @@
 <?php
-use Shopware\Components\Validator\EmailValidator;
-
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,7 +22,12 @@ use Shopware\Components\Validator\EmailValidator;
  * our trademarks remain entirely with us.
  */
 
-class EmailValidatorTest extends \PHPUnit_Framework_TestCase
+namespace Shopware\Tests\Unit\Components;
+
+use PHPUnit\Framework\TestCase;
+use Shopware\Components\Validator\EmailValidator;
+
+class EmailValidatorTest extends TestCase
 {
     /**
      * @var EmailValidator

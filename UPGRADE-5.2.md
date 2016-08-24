@@ -17,6 +17,16 @@ This changelog references changes done in Shopware 5.2 patch versions.
 * Added notifyUntil event `Shopware_Modules_Basket_BeforeAddMinimumOrderSurcharge` to `sBasket::sInsertSurcharge` containing the surcharge.
 * Added notifyUntil event `Shopware_Modules_Basket_BeforeAddOrderSurchargePercent` to `sBasket::sInsertSurchargePercent` containing the surcharge.
 * Added notifyUntil event `Shopware_Modules_Basket_BeforeAddOrderDiscount` to `sBasket::sInsertDiscount` containing the discount.
+* Replaced `grunt-contrib-watch` with `grunt-chokidar` for the grunt watch task.
+* Deprecated "{$sShopname}" variable in Forms.php, please use "{sShopname}" in your mail form templates instead.
+* Added `\Shopware\Bundle\SearchBundle\SearchTermPreProcessorInterface` interface which pre filters provided search terms
+* Added `ShopPage` to Storefront Bundle
+* Attributes of `forms` and `shop pages` are not translatable anymore
+* Added new Smarty blocks to `frontend/detail/image.tpl`
+    * `frontend_detail_image_default_image_slider_item`
+    * `frontend_detail_images_image_slider_item`
+* Updated `ongr/elasticsearch-dsl` to version 2.0.2
+* Updated `phpunit/phpunit` to version 5.5
 
 ## 5.2.5
 

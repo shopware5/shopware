@@ -1,6 +1,6 @@
 <?php
 
-namespace Shopware\Tests\Bundle\StoreFrontBundle;
+namespace Shopware\Tests\Functional\Bundle\StoreFrontBundle;
 
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
@@ -282,7 +282,7 @@ class CheapestPriceTest extends TestCase
     }
 
     /**
-     * Simple product with graduated prices. (see \Shopware\Tests\Bundle\StoreFrontBundle\Helper::getGraduatedPrices)
+     * Simple product with graduated prices. (see \Shopware\Tests\Functional\Bundle\StoreFrontBundle\Helper::getGraduatedPrices)
      * 'useLastGraduationForCheapestPrice' => false means that only the first discount of the price group has to be applied to the cheapest price
      * If a price group is configured, graduated prices are based on the first product price and build over the percentage
      * discounts of the price group.
@@ -308,7 +308,7 @@ class CheapestPriceTest extends TestCase
     }
 
     /**
-     * Simple product with graduated prices. (see \Shopware\Tests\Bundle\StoreFrontBundle\Helper::getGraduatedPrices)
+     * Simple product with graduated prices. (see \Shopware\Tests\Functional\Bundle\StoreFrontBundle\Helper::getGraduatedPrices)
      * 'useLastGraduationForCheapestPrice' => false means that only the first discount of the price group has to be applied to the cheapest price
      * If a price group is configured, graduated prices are based on the first product price and build over the percentage
      * discounts of the price group.
@@ -387,7 +387,7 @@ class CheapestPriceTest extends TestCase
      * Custom discounts can be provided over $discounts
      *
      * A none configurator product contains the following prices:
-     *  see \Shopware\Tests\Bundle\StoreFrontBundle\Helper::getGraduatedPrices
+     *  see \Shopware\Tests\Functional\Bundle\StoreFrontBundle\Helper::getGraduatedPrices
      *
      * A configurator product contains multiple variants.
      * Each variant has a price of 100,-

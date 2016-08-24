@@ -3,7 +3,7 @@ language: php
 php:
   - 5.6
   - 7.0
-  - nightly
+  - 7.1
 
 sudo: false
 
@@ -12,7 +12,7 @@ cache:
      - $HOME/.composer/cache/files
 
 before_script:
-    - phpenv config-rm xdebug.ini
+    - if [[ "$(php --version | grep -cim1 xdebug)" -ge 1 ]]; then phpenv config-rm xdebug.ini; fi
 
 script:
     - ant -f build/build.xml -Dapp.host=localhost -Ddb.user=travis -Ddb.host=127.0.0.1 -Ddb.name=shopware build-continuous static-lint
@@ -23,4 +23,4 @@ notifications:
 
 matrix:
   allow_failures:
-    - php: nightly
+    - php: 7.1

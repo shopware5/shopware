@@ -22,18 +22,19 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Components\Event;
+namespace Shopware\Tests\Unit\Components\Event;
 
 use Enlight\Event\SubscriberInterface;
+use PHPUnit\Framework\TestCase;
 use Shopware\Components\ContainerAwareEventManager;
 use Symfony\Component\DependencyInjection\Container;
 
 /**
  * @category  Shopware
  * @package   Shopware\Tests
- * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class EventManagerTest extends \PHPUnit_Framework_TestCase
+class ContainerAwareEventManagerTest extends TestCase
 {
     /**
      * @var Container

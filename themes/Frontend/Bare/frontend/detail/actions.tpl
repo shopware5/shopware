@@ -1,6 +1,6 @@
 {block name='frontend_detail_actions_compare'}
     {if {config name="compareShow"}}
-        <form action="{url controller='compare' action='add_article' articleID=$sArticle.articleID}" method="post">
+        <form action="{url controller='compare' action='add_article' articleID=$sArticle.articleID}" method="post" class="action--form">
             <button type="submit" data-product-compare-add="true" title="{"{s name='DetailActionLinkCompare'}{/s}"|escape}" class="action--link action--compare">
                 <i class="icon--compare"></i> {s name="DetailActionLinkCompare"}{/s}
             </button>
@@ -9,7 +9,7 @@
 {/block}
 
 {block name='frontend_detail_actions_notepad'}
-    <form action="{url controller='note' action='add' ordernumber=$sArticle.ordernumber}" method="post">
+    <form action="{url controller='note' action='add' ordernumber=$sArticle.ordernumber}" method="post" class="action--form">
         <button type="submit"
            class="action--link link--notepad"
            title="{"{s name='DetailLinkNotepad'}{/s}"|escape}"

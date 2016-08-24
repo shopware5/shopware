@@ -1,12 +1,12 @@
 <?php
 
-namespace Shopware\Tests\Bundle\SearchBundle\Sorting;
+namespace Shopware\Tests\Functional\Bundle\SearchBundle\Sorting;
 
 use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
 use Shopware\Bundle\SearchBundle\SortingInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Models\Category\Category;
-use Shopware\Tests\Bundle\StoreFrontBundle\TestCase;
+use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
 
 class PopularitySortingTest extends TestCase
 {

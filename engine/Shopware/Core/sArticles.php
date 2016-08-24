@@ -1409,6 +1409,7 @@ class sArticles
                 $value = $this->getRandomArticle($mode, $category);
                 break;
             case "fix":
+            default:
                 break;
         }
 

@@ -25,7 +25,7 @@
 /**
  * @category  Shopware
  * @package   Shopware\Tests
- * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_RegressionTests_Ticket5219 extends Enlight_Components_Test_Controller_TestCase
 {

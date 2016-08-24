@@ -22,27 +22,29 @@
  * our trademarks remain entirely with us.
  */
 
+namespace Shopware\Tests\Unit\Components\Event;
+
 use Doctrine\Common\Collections\ArrayCollection;
 use Enlight\Event\SubscriberInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @category  Shopware
  * @package   Shopware\Tests
- * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Shopware_Tests_Components_Event_ManagerTest extends \PHPUnit_Framework_TestCase
+class EventManagerTest extends TestCase
 {
     private $eventManager;
 
     public function setUp()
     {
-        $this->eventManager = new Enlight_Event_EventManager();
+        $this->eventManager = new \Enlight_Event_EventManager();
     }
 
     public function testCanCreateInstance()
     {
-        $this->assertInstanceOf(Enlight_Event_EventManager::class, $this->eventManager);
+        $this->assertInstanceOf(\Enlight_Event_EventManager::class, $this->eventManager);
     }
 
     public function testAppendEventWithCallback()
@@ -51,7 +53,7 @@ class Shopware_Tests_Components_Event_ManagerTest extends \PHPUnit_Framework_Tes
             return 'foo';
         };
 
-        $event = new Enlight_Event_Handler_Default(
+        $event = new \Enlight_Event_Handler_Default(
             'Example',
             $callback
         );
@@ -71,7 +73,7 @@ class Shopware_Tests_Components_Event_ManagerTest extends \PHPUnit_Framework_Tes
 
     public function testEventHandlerWithHighPosition()
     {
-        $handler0 = new Enlight_Event_Handler_Default(
+        $handler0 = new \Enlight_Event_Handler_Default(
             'Example',
             function ($args) {
                 return 'foo';
@@ -80,7 +82,7 @@ class Shopware_Tests_Components_Event_ManagerTest extends \PHPUnit_Framework_Tes
         );
         $this->eventManager->registerListener($handler0);
 
-        $handler1 = new Enlight_Event_Handler_Default(
+        $handler1 = new \Enlight_Event_Handler_Default(
             'Example',
             function ($args) {
                 return 'bar';
@@ -102,7 +104,7 @@ class Shopware_Tests_Components_Event_ManagerTest extends \PHPUnit_Framework_Tes
 
     public function testEventHandlerWithEqualPosition()
     {
-        $handler0 = new Enlight_Event_Handler_Default(
+        $handler0 = new \Enlight_Event_Handler_Default(
             'Example',
             function ($args) {
                 return 'foo';
@@ -111,7 +113,7 @@ class Shopware_Tests_Components_Event_ManagerTest extends \PHPUnit_Framework_Tes
         );
         $this->eventManager->registerListener($handler0);
 
-        $handler1 = new Enlight_Event_Handler_Default(
+        $handler1 = new \Enlight_Event_Handler_Default(
             'Example',
             function ($args) {
                 return 'bar';
@@ -121,7 +123,7 @@ class Shopware_Tests_Components_Event_ManagerTest extends \PHPUnit_Framework_Tes
         $this->eventManager->registerListener($handler1);
 
 
-        $handler2 = new Enlight_Event_Handler_Default(
+        $handler2 = new \Enlight_Event_Handler_Default(
             'Example',
             function ($args) {
                 return 'baz';
@@ -143,7 +145,7 @@ class Shopware_Tests_Components_Event_ManagerTest extends \PHPUnit_Framework_Tes
 
     public function testExceptionIsThrownOnInvalidEventArgs()
     {
-        $event = new Enlight_Event_Handler_Default(
+        $event = new \Enlight_Event_Handler_Default(
             'Example',
             function ($args) {
             }
@@ -163,7 +165,7 @@ class Shopware_Tests_Components_Event_ManagerTest extends \PHPUnit_Framework_Tes
 
     public function testAppendEventWithArray()
     {
-        $event = new Enlight_Event_EventHandler(
+        $event = new \Enlight_Event_EventHandler(
             'Shopware_Tests_Components_Event_ManagerTest_Append_testAppendEventWithArray',
             array(
                 $this,
@@ -186,7 +188,7 @@ class Shopware_Tests_Components_Event_ManagerTest extends \PHPUnit_Framework_Tes
         $this->assertEquals('bar2', $values->get(3));
     }
 
-    public function appendEventWithArrayListener(Enlight_Event_EventArgs $args)
+    public function appendEventWithArrayListener(\Enlight_Event_EventArgs $args)
     {
         return new ArrayCollection(array(
             array('foo2'),
@@ -198,7 +200,7 @@ class Shopware_Tests_Components_Event_ManagerTest extends \PHPUnit_Framework_Tes
     {
         $values = new ArrayCollection(array('foo', 'bar'));
 
-        $event = new Enlight_Event_EventHandler(
+        $event = new \Enlight_Event_EventHandler(
             'Shopware_Tests_Components_Event_ManagerTest_Append_testAppendEventWithSingleValue',
             array(
                 $this,
@@ -219,7 +221,7 @@ class Shopware_Tests_Components_Event_ManagerTest extends \PHPUnit_Framework_Tes
         $this->assertEquals('foo2', $values->get(2));
     }
 
-    public function appendEventWithSingleValueListener(Enlight_Event_EventArgs $args)
+    public function appendEventWithSingleValueListener(\Enlight_Event_EventArgs $args)
     {
         return 'foo2';
     }
@@ -228,7 +230,7 @@ class Shopware_Tests_Components_Event_ManagerTest extends \PHPUnit_Framework_Tes
     {
         $values = new ArrayCollection(array('foo', 'bar'));
 
-        $event = new Enlight_Event_EventHandler(
+        $event = new \Enlight_Event_EventHandler(
             'Shopware_Tests_Components_Event_ManagerTest_Append_testAppendEventWithNullValue',
             array(
                 $this,
@@ -247,7 +249,7 @@ class Shopware_Tests_Components_Event_ManagerTest extends \PHPUnit_Framework_Tes
         $this->assertEquals('bar', $values->get(1));
     }
 
-    public function appendEventWithNullValueListener(Enlight_Event_EventArgs $args)
+    public function appendEventWithNullValueListener(\Enlight_Event_EventArgs $args)
     {
         return null;
     }
@@ -257,7 +259,7 @@ class Shopware_Tests_Components_Event_ManagerTest extends \PHPUnit_Framework_Tes
     {
         $values = new ArrayCollection(array('foo', 'bar'));
 
-        $event = new Enlight_Event_EventHandler(
+        $event = new \Enlight_Event_EventHandler(
             'Shopware_Tests_Components_Event_ManagerTest_Append_testAppendEventWithBooleanValue',
             array(
                 $this,
@@ -277,7 +279,7 @@ class Shopware_Tests_Components_Event_ManagerTest extends \PHPUnit_Framework_Tes
         $this->assertEquals(true, $values->get(2));
     }
 
-    public function appendEventWithBooleanValueListener(Enlight_Event_EventArgs $args)
+    public function appendEventWithBooleanValueListener(\Enlight_Event_EventArgs $args)
     {
         return new ArrayCollection(array(
             true
@@ -313,7 +315,7 @@ class Shopware_Tests_Components_Event_ManagerTest extends \PHPUnit_Framework_Tes
 
     public function testRemoveSubscriber()
     {
-        $handler0 = new Enlight_Event_Handler_Default(
+        $handler0 = new \Enlight_Event_Handler_Default(
             'Example',
             function ($args) {
                 return 'foo';
@@ -321,7 +323,7 @@ class Shopware_Tests_Components_Event_ManagerTest extends \PHPUnit_Framework_Tes
         );
         $this->eventManager->registerListener($handler0);
 
-        $handler1 = new Enlight_Event_Handler_Default(
+        $handler1 = new \Enlight_Event_Handler_Default(
             'Example',
             function ($args) {
                 return 'bar';

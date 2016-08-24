@@ -22,8 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Components\DependencyInjection;
+namespace Shopware\Tests\Unit\Components\DependencyInjection;
 
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Shopware\Components\ContainerAwareEventManager;
 use Shopware\Components\DependencyInjection\Container;
@@ -35,7 +36,7 @@ use Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceExce
  * @package   Components\DependencyInjection
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
-class ContainerTest extends \PHPUnit_Framework_TestCase
+class ContainerTest extends TestCase
 {
     /**
      * @var Container
@@ -84,8 +85,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetOnNonExistentWithNullBehaviour()
     {
-        $this->assertSame(
-            null,
+        $this->assertNull(
             $this->container->get('foo', ContainerInterface::NULL_ON_INVALID_REFERENCE)
         );
     }
@@ -93,8 +93,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetOnNonExistentWithIgnoreBehaviour()
     {
-        $this->assertSame(
-            null,
+        $this->assertNull(
             $this->container->get('foo', ContainerInterface::IGNORE_ON_INVALID_REFERENCE)
         );
     }
@@ -196,7 +195,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
                 $container = $e->getSubject();
 
                 // Cause circular reference
-                $parent = $container->get('parent');
+                $container->get('parent');
             }
         );
 

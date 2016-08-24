@@ -54,7 +54,7 @@
         "guzzlehttp/guzzle": "5.3.1",
         "egulias/email-validator": "1.2.12",
         "elasticsearch/elasticsearch": "2.2.0",
-        "ongr/elasticsearch-dsl": "2.0.1",
+        "ongr/elasticsearch-dsl": "2.0.2",
         "league/flysystem": "1.0.22",
         "paragonie/random_compat": "1.4.1",
         "cocur/slugify": "2.2"
@@ -100,7 +100,8 @@
         "psr-4": {
             "Shopware\\Behat\\ShopwareExtension\\": "tests/Mink/Extension/ShopwareExtension",
             "Shopware\\Tests\\Mink\\": "tests/Mink/features/bootstrap",
-            "Shopware\\Tests\\": "tests/Functional"
+            "Shopware\\Tests\\Unit\\": "tests/Unit",
+            "Shopware\\Tests\\Functional\\": "tests/Functional"
         }
     },
     "config": {

@@ -637,8 +637,7 @@ class LegacyStructConverter
             'to' => $price->getTo(),
             'price' => $price->getCalculatedPrice(),
             'pseudoprice' => $price->getCalculatedPseudoPrice(),
-            'referenceprice' => $price->getCalculatedReferencePrice(),
-            'attributes' => $price->getAttributes()
+            'referenceprice' => $price->getCalculatedReferencePrice()
         ];
 
         return $this->eventManager->filter('Legacy_Struct_Converter_Convert_Price', $data, [

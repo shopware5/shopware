@@ -1,9 +1,8 @@
 <?php
 
-namespace Shopware\Tests\Bundle\StoreFrontBundle;
+namespace Shopware\Tests\Functional\Bundle\StoreFrontBundle;
 
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer;
-
 
 class ManufacturerTest extends TestCase
 {

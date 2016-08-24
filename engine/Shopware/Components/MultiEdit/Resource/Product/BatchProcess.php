@@ -133,6 +133,7 @@ class BatchProcess
 
             switch ($type) {
                 case 'integer':
+                case 'bigint':
                 case 'decimal':
                 case 'float':
                     $attributes[$attribute] = array('set', 'add', 'subtract', 'devide', 'multiply');

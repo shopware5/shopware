@@ -87,7 +87,8 @@ Ext.define('Shopware.apps.Site.view.site.Form', {
         var me = this;
 
         me.attributeForm = Ext.create('Shopware.attribute.Form', {
-            table: 's_cms_static_attributes'
+            table: 's_cms_static_attributes',
+            allowTranslation: false
         });
 
         return [

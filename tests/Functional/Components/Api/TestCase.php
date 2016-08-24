@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Components\Api;
+namespace Shopware\Tests\Functional\Components\Api;
 
 use Shopware\Components\Api\Resource\Resource as APIResource;
 
@@ -31,7 +31,7 @@ use Shopware\Components\Api\Resource\Resource as APIResource;
  *
  * @category  Shopware
  * @package   Shopware\Tests
- * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 abstract class TestCase extends \Enlight_Components_Test_TestCase
 {
@@ -51,11 +51,11 @@ abstract class TestCase extends \Enlight_Components_Test_TestCase
 
         $aclMock->expects($this->any())
                 ->method('has')
-                ->will($this->returnValue(true));
+                ->willReturn(true);
 
         $aclMock->expects($this->any())
                 ->method('isAllowed')
-                ->will($this->returnValue(false));
+                ->willReturn(false);
 
         return $aclMock;
     }

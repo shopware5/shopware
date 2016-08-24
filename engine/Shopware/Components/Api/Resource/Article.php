@@ -675,7 +675,6 @@ class Article extends Resource implements BatchInterface
 
         $this->removeArticleDetails($article);
 
-
         $this->getManager()->remove($article);
         $this->flush();
 
@@ -723,7 +722,6 @@ class Article extends Resource implements BatchInterface
         $data = $this->preparePropertyValuesData($data, $article);
         $data = $this->prepareDownloadsAssociatedData($data, $article);
         $data = $this->prepareConfiguratorSet($data, $article);
-
 
         //need to set the tax data directly for following price calculations which use the tax object of the article
         if (isset($data['tax'])) {
@@ -786,7 +784,6 @@ class Article extends Resource implements BatchInterface
         if (isset($data['__options_variants']) && $data['__options_variants']['replace']) {
             $this->removeArticleDetails($article);
         }
-
 
         if ($oldMainDetail) {
             $mainDetailGetsConfigurator = false;

@@ -21,6 +21,9 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+namespace Shopware\Tests\Unit\Components\Model;
+
+use Shopware\Components\Model\CategoryDenormalization;
 
 class PDOMock extends \PDO
 {
@@ -32,12 +35,12 @@ class PDOMock extends \PDO
 /**
  * @category  Shopware
  * @package   Shopware\Tests
- * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Shopware_Tests_Components_Model_CategoryDenormalizationTest extends PHPUnit_Extensions_Database_TestCase
+class CategoryDenormalizationTest extends \PHPUnit_Extensions_Database_TestCase
 {
     /**
-     * @var \Shopware\Components\Model\CategoryDenormalization
+     * @var CategoryDenormalization
      */
     private $component;
 
@@ -60,10 +63,10 @@ class Shopware_Tests_Components_Model_CategoryDenormalizationTest extends PHPUni
 
 
         try {
-            $conn = new PDO('sqlite::memory:');
-            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $conn->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-        } catch (PDOException $e) {
+            $conn = new \PDO('sqlite::memory:');
+            $conn->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+            $conn->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC);
+        } catch (\PDOException $e) {
             $this->markTestSkipped(
               'Could not create sqlite connection, got error:  ' . $e->getMessage()
             );
@@ -73,13 +76,13 @@ class Shopware_Tests_Components_Model_CategoryDenormalizationTest extends PHPUni
         $conn->exec($schemaSql);
 
         $this->conn = $conn;
-        $this->component = new \Shopware\Components\Model\CategoryDenormalization($conn);
+        $this->component = new CategoryDenormalization($conn);
 
         parent::setUp();
     }
 
     /**
-     * @return PHPUnit_Extensions_Database_DB_IDatabaseConnection
+     * @return \PHPUnit_Extensions_Database_DB_IDatabaseConnection
      */
     public function getConnection()
     {
@@ -98,13 +101,13 @@ class Shopware_Tests_Components_Model_CategoryDenormalizationTest extends PHPUni
      *   6. World of food
      *     7. Spirits
      *
-     * @return PHPUnit_Extensions_Database_DataSet_IDataSet
+     * @return \PHPUnit_Extensions_Database_DataSet_IDataSet
      */
     public function getDataSet()
     {
         $dataset = $this->createFlatXMLDataSet(__DIR__ . '/_CategoryDenormalization/category-seed.xml');
 
-        $dataset = new PHPUnit_Extensions_Database_DataSet_ReplacementDataSet($dataset);
+        $dataset = new \PHPUnit_Extensions_Database_DataSet_ReplacementDataSet($dataset);
         $dataset->addFullReplacement('##NULL##', null);
 
         return $dataset;
@@ -210,7 +213,7 @@ class Shopware_Tests_Components_Model_CategoryDenormalizationTest extends PHPUni
             array('id' => '7', 'path' => '|6|3|'),
         );
 
-        $result = $this->conn->query("SELECT id, path FROM s_categories WHERE path IS NOT NULL")->fetchAll(\PDO::FETCH_ASSOC);
+        $result = $this->conn->query('SELECT id, path FROM s_categories WHERE path IS NOT NULL')->fetchAll(\PDO::FETCH_ASSOC);
 
         $this->assertEquals($expectedResult, $result);
     }
@@ -236,19 +239,19 @@ class Shopware_Tests_Components_Model_CategoryDenormalizationTest extends PHPUni
         $this->assertEquals(1, $result);
 
         $affectedRows = $this->component->rebuildCategoryPath(4);
-        $this->assertEquals(1, $affectedRows, "Genusswelten child-category Getränke has to be updated");
+        $this->assertEquals(1, $affectedRows, 'Genusswelten child-category Getränke has to be updated');
 
         $result = $this->component->removeOldAssignmentsCount(4);
-        $this->assertEquals(1, $result, "One Parent-Category has to be cleanen up");
+        $this->assertEquals(1, $result, 'One Parent-Category has to be cleanen up');
 
         $affectedRows = $this->component->removeOldAssignments(4);
-        $this->assertEquals(2, $affectedRows, "Two old assignment should be removed");
+        $this->assertEquals(2, $affectedRows, 'Two old assignment should be removed');
 
         $result = $this->component->rebuildAssignmentsCount(4);
-        $this->assertEquals(1, $result, "Affected Categories");
+        $this->assertEquals(1, $result, 'Affected Categories');
 
         $affectedRows = $this->component->rebuildAssignments(4);
-        $this->assertEquals(3, $affectedRows, "3 new assignments should be created");
+        $this->assertEquals(3, $affectedRows, '3 new assignments should be created');
 
         $this->assertEquals(7, $this->getConnection()->getRowCount('s_articles_categories_ro'));
     }
@@ -274,16 +277,16 @@ class Shopware_Tests_Components_Model_CategoryDenormalizationTest extends PHPUni
         $this->assertEquals(0, $affectedRows, 'Leaf category has no childs that have to be updated');
 
         $result = $this->component->removeOldAssignmentsCount(5);
-        $this->assertEquals(1, $result, "One category tree is affected");
+        $this->assertEquals(1, $result, 'One category tree is affected');
 
         $affectedRows = $this->component->removeOldAssignments(5);
-        $this->assertEquals(2, $affectedRows, "Two old assignment should be removed");
+        $this->assertEquals(2, $affectedRows, 'Two old assignment should be removed');
 
         $affectedRows = $this->component->rebuildAssignments(5);
-        $this->assertEquals(2, $affectedRows, "Two new assignments should be created");
+        $this->assertEquals(2, $affectedRows, 'Two new assignments should be created');
 
-        $rows = $this->conn->query("SELECT count(id) FROM s_articles_categories_ro WHERE parentCategoryID = 5")->fetchColumn();
-        $this->assertEquals(3, $rows, "3 Rows should be in database");
+        $rows = $this->conn->query('SELECT count(id) FROM s_articles_categories_ro WHERE parentCategoryID = 5')->fetchColumn();
+        $this->assertEquals(3, $rows, '3 Rows should be in database');
 
         $this->assertEquals(6, $this->getConnection()->getRowCount('s_articles_categories_ro'));
     }

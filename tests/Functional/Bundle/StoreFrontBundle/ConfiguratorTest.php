@@ -1,12 +1,11 @@
 <?php
 
-namespace Shopware\Tests\Bundle\StoreFrontBundle;
+namespace Shopware\Tests\Functional\Bundle\StoreFrontBundle;
 
 use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Set;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Models\Category\Category;
-
 
 class ConfiguratorTest extends TestCase
 {

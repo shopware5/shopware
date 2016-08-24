@@ -1,8 +1,10 @@
 <?php
+namespace Shopware\Tests\Unit\Components\Plugin;
 
+use PHPUnit\Framework\TestCase;
 use Shopware\Components\Plugin\XmlMenuReader;
 
-class XmlMenuReaderTest extends \PHPUnit_Framework_TestCase
+class XmlMenuReaderTest extends TestCase
 {
     /**
      * @var XmlMenuReader

@@ -1,12 +1,11 @@
 <?php
 
-namespace Shopware\Tests\Bundle\StoreFrontBundle;
+namespace Shopware\Tests\Functional\Bundle\StoreFrontBundle;
 
 use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Components\Routing\Context;
 use Shopware\Models\Category\Category;
-
 
 class ProductMediaTest extends TestCase
 {

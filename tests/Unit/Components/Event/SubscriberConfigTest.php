@@ -22,12 +22,16 @@
  * our trademarks remain entirely with us.
  */
 
+namespace Shopware\Tests\Unit\Components\Event;
+
+use PHPUnit\Framework\TestCase;
+
 /**
  * @category  Shopware
  * @package   Shopware\Tests
- * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Shopware_Tests_Components_Event_SubscriberConfigTest extends \PHPUnit_Framework_TestCase
+class SubscriberConfigTest extends TestCase
 {
     /**
      * @var \Enlight_Event_Subscriber_Config
@@ -36,19 +40,19 @@ class Shopware_Tests_Components_Event_SubscriberConfigTest extends \PHPUnit_Fram
 
     public function setUp()
     {
-        $this->eventManager = new Enlight_Event_Subscriber_Config('test');
+        $this->eventManager = new \Enlight_Event_Subscriber_Config('test');
     }
 
     public function testCanCreateInstance()
     {
-        $this->assertInstanceOf(Enlight_Event_Subscriber_Config::class, $this->eventManager);
-        $this->assertInstanceOf(Enlight_Event_Subscriber::class, $this->eventManager);
+        $this->assertInstanceOf(\Enlight_Event_Subscriber_Config::class, $this->eventManager);
+        $this->assertInstanceOf(\Enlight_Event_Subscriber::class, $this->eventManager);
     }
 
     public function testAddSubscriber()
     {
         // Add to subscribers
-        $handler0 = new Enlight_Event_Handler_Default(
+        $handler0 = new \Enlight_Event_Handler_Default(
             'Example',
             function ($args) {
                 return 'foo';
@@ -56,7 +60,7 @@ class Shopware_Tests_Components_Event_SubscriberConfigTest extends \PHPUnit_Fram
         );
         $this->eventManager->registerListener($handler0);
 
-        $handler1 = new Enlight_Event_Handler_Default(
+        $handler1 = new \Enlight_Event_Handler_Default(
             'Example',
             function ($args) {
                 return 'bar';
@@ -67,14 +71,14 @@ class Shopware_Tests_Components_Event_SubscriberConfigTest extends \PHPUnit_Fram
         $result = $this->eventManager->getListeners();
 
         $this->assertCount(2, $result);
-        $this->assertEquals('foo', $result[0]->execute(new Enlight_Event_EventArgs()));
-        $this->assertEquals('bar', $result[1]->execute(new Enlight_Event_EventArgs()));
+        $this->assertEquals('foo', $result[0]->execute(new \Enlight_Event_EventArgs()));
+        $this->assertEquals('bar', $result[1]->execute(new \Enlight_Event_EventArgs()));
     }
 
     public function testRemoveSubscriber()
     {
         // Add to subscribers
-        $handler0 = new Enlight_Event_Handler_Default(
+        $handler0 = new \Enlight_Event_Handler_Default(
             'Example',
             function ($args) {
                 return 'foo';
@@ -82,7 +86,7 @@ class Shopware_Tests_Components_Event_SubscriberConfigTest extends \PHPUnit_Fram
         );
         $this->eventManager->registerListener($handler0);
 
-        $handler1 = new Enlight_Event_Handler_Default(
+        $handler1 = new \Enlight_Event_Handler_Default(
             'Example',
             function ($args) {
                 return 'bar';
@@ -97,6 +101,6 @@ class Shopware_Tests_Components_Event_SubscriberConfigTest extends \PHPUnit_Fram
 
         // Only the second one should be left
         $this->assertCount(1, $result);
-        $this->assertEquals('bar', $result[0]->execute(new Enlight_Event_EventArgs()));
+        $this->assertEquals('bar', $result[0]->execute(new \Enlight_Event_EventArgs()));
     }
 }

@@ -22,11 +22,12 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Components\Escaper;
+namespace Shopware\Tests\Unit\Components\Escaper;
 
+use PHPUnit\Framework\TestCase;
 use Shopware\Components\Escaper\Escaper;
 
-class EscaperTest extends \PHPUnit_Framework_TestCase
+class EscaperTest extends TestCase
 {
     public function testItCastsNullToEmptyStrings()
     {

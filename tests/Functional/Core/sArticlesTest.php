@@ -26,7 +26,7 @@
  *
  * @category  Shopware
  * @package   Shopware\Plugins\SwagAboCommerce
- * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class sArticlesTest extends Enlight_Components_Test_Controller_TestCase
 {

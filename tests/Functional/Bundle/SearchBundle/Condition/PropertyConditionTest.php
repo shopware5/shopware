@@ -1,11 +1,11 @@
 <?php
 
-namespace Shopware\Tests\Bundle\SearchBundle\Condition;
+namespace Shopware\Tests\Functional\Bundle\SearchBundle\Condition;
 
 use Shopware\Bundle\SearchBundle\Condition\PropertyCondition;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Models\Category\Category;
-use Shopware\Tests\Bundle\StoreFrontBundle\TestCase;
+use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
 
 class PropertyConditionTest extends TestCase
 {

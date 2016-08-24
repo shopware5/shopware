@@ -11,10 +11,12 @@
             <argument type="service" id="shopware_search.product_number_search"/>
         </service>
 
+        <service id="shopware_search.search_term_pre_processor" class="Shopware\Bundle\SearchBundle\SearchTermPreProcessor" />
 
         <service id="shopware_search.core_criteria_request_handler" class="Shopware\Bundle\SearchBundle\CriteriaRequestHandler\CoreCriteriaRequestHandler">
             <argument type="service" id="config" />
             <argument type="service" id="dbal_connection" />
+            <argument type="service" id="shopware_search.search_term_pre_processor" />
 
             <tag name="criteria_request_handler"/>
         </service>

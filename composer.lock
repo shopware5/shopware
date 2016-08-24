@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "9d22a41d7ad67237428e0187e982c211",
-    "content-hash": "df51231312f9ab55942f7a107a73df4f",
+    "hash": "e87244c1d9a0b040c50f106ae7e8ce25",
+    "content-hash": "e59580beb7c25ab113a63ee5c1231fc5",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1145,21 +1145,20 @@
         },
         {
             "name": "ongr/elasticsearch-dsl",
-            "version": "v2.0.1",
+            "version": "v2.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ongr-io/ElasticsearchDSL.git",
-                "reference": "7cd0ab4b2a8b1d7c9f265954ce5d69feb4b19069"
+                "reference": "dc569d219a8fed08192cf8dacdb69c48c54f7b80"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ongr-io/ElasticsearchDSL/zipball/7cd0ab4b2a8b1d7c9f265954ce5d69feb4b19069",
-                "reference": "7cd0ab4b2a8b1d7c9f265954ce5d69feb4b19069",
+                "url": "https://api.github.com/repos/ongr-io/ElasticsearchDSL/zipball/dc569d219a8fed08192cf8dacdb69c48c54f7b80",
+                "reference": "dc569d219a8fed08192cf8dacdb69c48c54f7b80",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.4",
-                "symfony/options-resolver": "~2.7|~3.0",
                 "symfony/serializer": "~2.7|~3.0"
             },
             "require-dev": {
@@ -1190,7 +1189,7 @@
             ],
             "description": "Elasticsearch DSL library",
             "homepage": "http://ongr.io",
-            "time": "2016-05-03 01:24:48"
+            "time": "2016-07-11 08:15:59"
         },
         {
             "name": "oyejorge/less.php",
@@ -3843,16 +3842,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "5.4.8",
+            "version": "5.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "3132365e1430c091f208e120b8845d39c25f20e6"
+                "reference": "46ec2d1522ae8c9a12aca6b7650e0be78bbb0502"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/3132365e1430c091f208e120b8845d39c25f20e6",
-                "reference": "3132365e1430c091f208e120b8845d39c25f20e6",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/46ec2d1522ae8c9a12aca6b7650e0be78bbb0502",
+                "reference": "46ec2d1522ae8c9a12aca6b7650e0be78bbb0502",
                 "shasum": ""
             },
             "require": {
@@ -3891,7 +3890,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "5.4.x-dev"
+                    "dev-master": "5.5.x-dev"
                 }
             },
             "autoload": {
@@ -3917,7 +3916,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2016-07-26 14:48:00"
+            "time": "2016-08-18 11:10:44"
         },
         {
             "name": "phpunit/phpunit-mock-objects",

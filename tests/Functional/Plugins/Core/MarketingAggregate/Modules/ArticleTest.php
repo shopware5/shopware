@@ -22,9 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Plugins\Core\MarketingAggregate\Modules;
+namespace Shopware\Tests\Functional\Plugins\Core\MarketingAggregate\Modules;
 
-use Shopware\Tests\Plugins\Core\MarketingAggregate\AbstractMarketing;
+use Shopware\Tests\Functional\Plugins\Core\MarketingAggregate\AbstractMarketing;
 
 class ArticleTest extends AbstractMarketing
 {
