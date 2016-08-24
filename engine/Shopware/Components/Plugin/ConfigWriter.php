@@ -105,7 +105,7 @@ class ConfigWriter
         $valueModel = $this->valueRepository->findOneBy(['shop' => $shop, 'element' => $element]);
 
         if (!$valueModel) {
-            if ($value == $defaultValue || $value === null) {
+            if ($value === $defaultValue || $value === null) {
                 return;
             }
 
