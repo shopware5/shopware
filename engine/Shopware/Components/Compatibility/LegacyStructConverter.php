@@ -34,6 +34,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Product\Price;
 use Shopware\Components\DependencyInjection\Container;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Emotion\Emotion;
+use Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter;
 
 /**
  * @category  Shopware
@@ -215,6 +216,13 @@ class LegacyStructConverter
         $attribute = [];
         if ($category->hasAttribute('core')) {
             $attribute = $category->getAttribute('core')->toArray();
+            $converter = new CamelCaseToSnakeCaseNameConverter();
+
+            // Attribute names were in lowerCamelCase format in < 5.2
+            foreach ($attribute as $key => $value) {
+                $snakeKey = $converter->denormalize($key);
+                $attribute[$snakeKey] = $value;
+            }
         }
 
         $productStream = null;
