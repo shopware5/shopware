@@ -50,7 +50,8 @@ Ext.define('Shopware.apps.PluginManager.controller.Navigation', {
         accountPage: 4,
         licencePage: 5,
         premiumPluginsPage: 6,
-        expiredPluginsPage: 7
+        expiredPluginsPage: 7,
+        connectIntroductionPage: 8
     },
 
     animationSpeed: 150,
@@ -91,6 +92,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Navigation', {
             'plugin-manager-display-updates': me.displayPluginUpdatesPage,
             'display-premium-plugins': me.displayPremiumPluginsPage,
             'display-expired-plugins': me.displayExpiredPluginsPage,
+            'display-connect-introduction': me.displayConnectIntroductionPage,
             scope: me
         });
 
@@ -253,6 +255,14 @@ Ext.define('Shopware.apps.PluginManager.controller.Navigation', {
         Shopware.app.Application.fireEvent('enable-expired-plugins-mode');
 
         me.switchView(me.cards.expiredPluginsPage);
+    },
+
+    displayConnectIntroductionPage: function() {
+        var me = this;
+
+        Shopware.app.Application.fireEvent('enable-connect-introduction-mode');
+
+        me.switchView(me.cards.connectIntroductionPage);
     },
 
     displayPluginUpdatesPage: function () {

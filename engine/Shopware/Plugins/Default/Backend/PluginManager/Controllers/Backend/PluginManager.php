@@ -43,6 +43,7 @@ use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\BasketStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\PluginInformationResultStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\PluginInformationStruct;
+use Shopware\Models\Menu\Menu;
 use Shopware\Models\Plugin\Plugin;
 use ShopwarePlugins\PluginManager\Components\PluginCategoryService;
 use ShopwarePlugins\SwagUpdate\Components\Steps\FinishResult;
@@ -630,6 +631,24 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
 
         $this->View()->clearAssign();
         $this->View()->assign('success', true);
+    }
+
+    public function disableConnectMenuAction()
+    {
+        $em = $this->container->get('models');
+        $repo = $em->getRepository(Menu::class);
+
+        /** @var Menu $menuEntry */
+        $menuEntry = $repo->findOneBy(array('label' => 'Connect'));
+        if ($menuEntry) {
+            $menuEntry->setActive(false);
+            $em->persist($menuEntry);
+            $em->flush();
+        }
+
+        $this->View()->assign([
+            'success' => true
+        ]);
     }
 
     /**
