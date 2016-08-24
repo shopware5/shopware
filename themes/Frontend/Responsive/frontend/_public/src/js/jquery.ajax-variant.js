@@ -236,7 +236,7 @@
             $.each(urlParams, function(i, param) {
                 param = param.split('=');
 
-                if(param[0].length && param[1].length && !params.hasOwnProperty(param[0])) {
+                if(param.length > 1 && param[0].length && param[1].length && !params.hasOwnProperty(param[0])) {
                     params[param[0]] = param[1];
                 }
             });
