@@ -3,6 +3,7 @@
 namespace Shopware\Tests\Bundle\MediaBundle;
 
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
+use Shopware\Models\Shop\Shop;
 
 /**
  * Class FilesystemTest
@@ -74,7 +75,17 @@ class FilesystemTest extends \Enlight_Components_Test_TestCase
     {
         $file = current($this->testPaths);
 
-        $baseUrl = Shopware()->Container()->get('router')->assemble(['controller' => 'index', 'module' => 'frontend']);
+        /** @var Shop $shop */
+        $shop = Shopware()->Container()->get('models')->getRepository(Shop::class)->getActiveDefault();
+        if ($shop->getMain()) {
+            $shop = $shop->getMain();
+        }
+
+        if ($shop->getAlwaysSecure()) {
+            $baseUrl = 'https://' . $shop->getSecureHost() . $shop->getSecureBasePath() . '/';
+        } else {
+            $baseUrl = 'http://' . $shop->getHost() . $shop->getBasePath() . '/';
+        }
         $mediaUrl = $baseUrl . $this->mediaService->encode($file);
 
         $this->assertEquals($mediaUrl, $this->mediaService->getUrl($file));

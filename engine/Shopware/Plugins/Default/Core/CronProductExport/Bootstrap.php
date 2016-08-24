@@ -22,6 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Models\ProductFeed\ProductFeed;
+
 /**
  * Shopware Cron to generate the product export files
  */
@@ -63,15 +65,6 @@ class Shopware_Plugins_Core_CronProductExport_Bootstrap extends Shopware_Compone
      */
     public function exportProductFiles()
     {
-        $productFeedRepository = Shopware()->Models()->getRepository(
-            'Shopware\Models\ProductFeed\ProductFeed'
-        );
-        $activeFeeds = $productFeedRepository->getActiveListQuery()->getResult();
-
-        $export = Shopware()->Modules()->Export();
-        $export->sSYSTEM = Shopware()->System();
-        $sSmarty = Shopware()->Template();
-
         $cacheDir = Shopware()->Container()->getParameter('kernel.cache_dir');
         $cacheDir .= '/productexport/';
         if (!is_dir($cacheDir)) {
@@ -82,11 +75,18 @@ class Shopware_Plugins_Core_CronProductExport_Bootstrap extends Shopware_Compone
             throw new \RuntimeException(sprintf("Unable to write in the %s directory (%s)\n", "Productexport", $cacheDir));
         }
 
+        $export = Shopware()->Modules()->Export();
+        $export->sSYSTEM = Shopware()->System();
+        $sSmarty = Shopware()->Template();
+
+        $productFeedRepository = Shopware()->Models()->getRepository(ProductFeed::class);
+        $activeFeeds = $productFeedRepository->getActiveListQuery()->getResult();
         foreach ($activeFeeds as $feedModel) {
-            /** @var $feedModel Shopware\Models\ProductFeed\ProductFeed */
+            /** @var Shopware\Models\ProductFeed\ProductFeed $feedModel */
             if ($feedModel->getInterval() == 0) {
                 continue;
             }
+
             $export->sFeedID = $feedModel->getId();
             $export->sHash = $feedModel->getHash();
             $export->sInitSettings();
