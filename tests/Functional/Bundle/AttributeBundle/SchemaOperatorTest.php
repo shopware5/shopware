@@ -1,6 +1,6 @@
 <?php
 
-namespace Shopware\Tests\Bundle\AttributeBundle;
+namespace Shopware\Tests\Functional\Bundle\AttributeBundle;
 
 class SchemaOperatorTest extends \PHPUnit_Framework_TestCase
 {

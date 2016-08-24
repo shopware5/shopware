@@ -1,6 +1,6 @@
 <?php
 
-namespace Shopware\Tests\Bundle\SearchBundle;
+namespace Shopware\Tests\Functional\Bundle\SearchBundle;
 
 use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
 use Shopware\Bundle\SearchBundle\CriteriaRequestHandler\CoreCriteriaRequestHandler;

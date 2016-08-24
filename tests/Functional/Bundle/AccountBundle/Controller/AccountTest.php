@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Bundle\AccountBundle\Controller;
+namespace Shopware\Tests\Functional\Bundle\AccountBundle\Controller;
 
 /**
  * @category  Shopware

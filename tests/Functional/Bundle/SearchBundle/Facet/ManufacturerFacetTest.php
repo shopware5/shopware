@@ -1,13 +1,13 @@
 <?php
 
-namespace Shopware\Tests\Bundle\SearchBundle\Facet;
+namespace Shopware\Tests\Functional\Bundle\SearchBundle\Facet;
 
 use Shopware\Bundle\SearchBundle\Facet\ManufacturerFacet;
 use Shopware\Bundle\SearchBundle\FacetResult\ValueListFacetResult;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Models\Article\Supplier;
 use Shopware\Models\Category\Category;
-use Shopware\Tests\Bundle\StoreFrontBundle\TestCase;
+use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
 
 class ManufacturerFacetTest extends TestCase
 {

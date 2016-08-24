@@ -22,10 +22,14 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Components\Model;
+namespace Shopware\Tests\Unit\Components\Model;
 
+use PHPUnit\Framework\TestCase;
 use Shopware\Models\Article\Article;
 use Shopware\Models\Article\Configurator\Template\Template;
+use Shopware\Models\Article\Link;
+use Shopware\Models\Article\Supplier;
+use Shopware\Models\Tax\Tax;
 
 /**
  * @covers Shopware\Components\Model\ModelEntity
@@ -34,7 +38,7 @@ use Shopware\Models\Article\Configurator\Template\Template;
  * @package   Shopware\Tests
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class ModelEntityTest extends \PHPUnit_Framework_TestCase
+class ModelEntityTest extends TestCase
 {
     public function testCanAssignProperties()
     {
@@ -47,8 +51,8 @@ class ModelEntityTest extends \PHPUnit_Framework_TestCase
 
         $article->fromArray($data);
 
-        $this->assertEquals("foo", $article->getName());
-        $this->assertEquals("bar", $article->getDescription());
+        $this->assertEquals('foo', $article->getName());
+        $this->assertEquals('bar', $article->getDescription());
     }
 
     public function testCanReAssignProperties()
@@ -63,8 +67,8 @@ class ModelEntityTest extends \PHPUnit_Framework_TestCase
 
         $article->fromArray($data);
 
-        $this->assertEquals("foo", $article->getName());
-        $this->assertEquals("bar", $article->getDescription());
+        $this->assertEquals('foo', $article->getName());
+        $this->assertEquals('bar', $article->getDescription());
     }
 
     public function testCanAssignOneToOne()
@@ -81,7 +85,7 @@ class ModelEntityTest extends \PHPUnit_Framework_TestCase
         $article->fromArray($data);
 
         $this->assertEquals(true, $article->getConfiguratorTemplate()->getActive());
-        $this->assertEquals("baz", $article->getConfiguratorTemplate()->getEan());
+        $this->assertEquals('baz', $article->getConfiguratorTemplate()->getEan());
 
         // configuratorTemplate is the owning side of relation, so article has to be set
         $this->assertSame($article, $article->getConfiguratorTemplate()->getArticle());
@@ -110,7 +114,7 @@ class ModelEntityTest extends \PHPUnit_Framework_TestCase
     {
         $article = new Article();
 
-        $tax = new \Shopware\Models\Tax\Tax();
+        $tax = new Tax();
         $tax->setName('foobar');
 
         $template = new Template();
@@ -201,15 +205,15 @@ class ModelEntityTest extends \PHPUnit_Framework_TestCase
 
         $article->fromArray($data);
 
-        $this->assertEquals("foo", $article->getSupplier()->getName());
+        $this->assertEquals('foo', $article->getSupplier()->getName());
     }
 
     public function testCanAssignManyToOneByInstance()
     {
         $article = new Article();
 
-        $supplier = new \Shopware\Models\Article\Supplier();
-        $supplier->setName("test");
+        $supplier = new Supplier();
+        $supplier->setName('test');
 
         $data = array(
             'supplier' => $supplier,
@@ -224,8 +228,8 @@ class ModelEntityTest extends \PHPUnit_Framework_TestCase
     {
         $article = new Article();
 
-        $supplier = new \Shopware\Models\Article\Supplier();
-        $supplier->setName("test");
+        $supplier = new Supplier();
+        $supplier->setName('test');
         $supplier->setDescription('description');
 
         $article->setSupplier($supplier);
@@ -250,8 +254,8 @@ class ModelEntityTest extends \PHPUnit_Framework_TestCase
     {
         $article = new Article();
 
-        $supplier = new \Shopware\Models\Article\Supplier();
-        $supplier->setName("test");
+        $supplier = new Supplier();
+        $supplier->setName('test');
         $supplier->setDescription('description');
 
         $article->setSupplier($supplier);
@@ -264,16 +268,16 @@ class ModelEntityTest extends \PHPUnit_Framework_TestCase
 
         $article->fromArray($data);
 
-        $this->assertEquals("test", $article->getSupplier()->getName());
-        $this->assertEquals("description", $article->getSupplier()->getDescription());
+        $this->assertEquals('test', $article->getSupplier()->getName());
+        $this->assertEquals('description', $article->getSupplier()->getDescription());
     }
 
     public function testCanRemoveManyToOne()
     {
         $article = new Article();
 
-        $supplier = new \Shopware\Models\Article\Supplier();
-        $supplier->setName("test");
+        $supplier = new Supplier();
+        $supplier->setName('test');
         $supplier->setDescription('description');
 
         $article->setSupplier($supplier);
@@ -293,8 +297,8 @@ class ModelEntityTest extends \PHPUnit_Framework_TestCase
     {
         $article = new Article();
 
-        $supplier = new \Shopware\Models\Article\Supplier();
-        $supplier->setName("test");
+        $supplier = new Supplier();
+        $supplier->setName('test');
         $supplier->setDescription('description');
         $this->setProperty($supplier, 'id', 1);
 
@@ -338,7 +342,7 @@ class ModelEntityTest extends \PHPUnit_Framework_TestCase
     {
         $article = new Article();
 
-        $link0 = new \Shopware\Models\Article\Link();
+        $link0 = new Link();
         $link0->setName('dummy');
 
 
@@ -363,7 +367,7 @@ class ModelEntityTest extends \PHPUnit_Framework_TestCase
     {
         $article = new Article();
 
-        $link0 = new \Shopware\Models\Article\Link();
+        $link0 = new Link();
         $link0->setName('dummy');
         $link0->setLink('lorem');
 
@@ -391,7 +395,7 @@ class ModelEntityTest extends \PHPUnit_Framework_TestCase
     {
         $article = new Article();
 
-        $link0 = new \Shopware\Models\Article\Link();
+        $link0 = new Link();
         $link0->setName('dummy');
         $link0->setLink('lorem');
 
@@ -412,7 +416,7 @@ class ModelEntityTest extends \PHPUnit_Framework_TestCase
     {
         $article = new Article();
 
-        $link0 = new \Shopware\Models\Article\Link();
+        $link0 = new Link();
         $link0->setName('dummy');
         $link0->setLink('lorem');
         $this->setProperty($link0, 'id', 1);
@@ -447,7 +451,7 @@ class ModelEntityTest extends \PHPUnit_Framework_TestCase
     {
         $article = new Article();
 
-        $link0 = new \Shopware\Models\Article\Link();
+        $link0 = new Link();
         $link0->setName('dummy');
         $link0->setLink('lorem');
         $this->setProperty($link0, 'id', 1);

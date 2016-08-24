@@ -1,13 +1,13 @@
 <?php
 
-namespace Shopware\Tests\Bundle\MediaBundle;
+namespace Shopware\Tests\Functional\Bundle\MediaBundle;
 
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Models\Shop\Shop;
 
 /**
  * Class FilesystemTest
- * @package Shopware\Tests\Bundle\MediaBundle
+ * @package Shopware\Tests\Functional\Bundle\MediaBundle
  */
 class FilesystemTest extends \Enlight_Components_Test_TestCase
 {

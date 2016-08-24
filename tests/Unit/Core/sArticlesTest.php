@@ -22,12 +22,16 @@
  * our trademarks remain entirely with us.
  */
 
+namespace Shopware\Tests\Unit\Core;
+
+use PHPUnit\Framework\TestCase;
+
 /**
  * @category  Shopware
  * @package   Shopware\Tests
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class sArticlesTest extends PHPUnit_Framework_TestCase
+class sArticlesTest extends TestCase
 {
     public function provideData()
     {
@@ -60,8 +64,8 @@ class sArticlesTest extends PHPUnit_Framework_TestCase
      */
     public function testStrings($input, $expectedResult)
     {
-        /** @var sArticles $sArticles */
-        $sArticles = $this->createPartialMock(sArticles::class, []);
+        /** @var \sArticles $sArticles */
+        $sArticles = $this->createPartialMock(\sArticles::class, []);
 
         $this->assertSame($expectedResult, $sArticles->sOptimizeText($input));
     }
@@ -73,9 +77,9 @@ class sArticlesTest extends PHPUnit_Framework_TestCase
      * @param string $originalClassName
      * @param array  $methods
      *
-     * @return PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit_Framework_MockObject_MockObject
      *
-     * @throws PHPUnit_Framework_Exception
+     * @throws \PHPUnit_Framework_Exception
      *
      * @todo Remove once PHPUnit 5.5.3 is in use
      */

@@ -1,11 +1,14 @@
 <?php
 
+namespace Shopware\Tests\Unit\Components\Plugin;
+
+use PHPUnit\Framework\TestCase;
 use Shopware\Components\Plugin\Context\ActivateContext;
 use Shopware\Components\Plugin\Context\DeactivateContext;
 use Shopware\Components\Plugin\Context\InstallContext;
 use Shopware\Components\Plugin\Context\UninstallContext;
 
-class InstallContextTest extends \PHPUnit_Framework_TestCase
+class InstallContextTest extends TestCase
 {
     public function testFrontendCaches()
     {

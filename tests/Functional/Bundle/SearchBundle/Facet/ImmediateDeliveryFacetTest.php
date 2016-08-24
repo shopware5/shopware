@@ -1,11 +1,11 @@
 <?php
 
-namespace Shopware\Tests\Bundle\SearchBundle\Facet;
+namespace Shopware\Tests\Functional\Bundle\SearchBundle\Facet;
 
 use Shopware\Bundle\SearchBundle\Facet\ImmediateDeliveryFacet;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Models\Category\Category;
-use Shopware\Tests\Bundle\StoreFrontBundle\TestCase;
+use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
 
 class ImmediateDeliveryFacetTest extends TestCase
 {

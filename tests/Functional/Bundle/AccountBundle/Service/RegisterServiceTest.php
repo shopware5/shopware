@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Bundle\AccountBundle\Service;
+namespace Shopware\Tests\Functional\Bundle\AccountBundle\Service;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\AccountBundle\Service\CustomerServiceInterface;
@@ -37,7 +37,7 @@ use Shopware\Models\Customer\Customer;
 
 /**
  * Class AddressServiceTest
- * @package Shopware\Tests\Bundle\AccountBundle\Service
+ * @package Shopware\Tests\Functional\Bundle\AccountBundle\Service
  */
 class RegisterServiceTest extends \Enlight_Components_Test_TestCase
 {

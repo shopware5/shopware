@@ -22,9 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Modules\Category;
+namespace Shopware\Tests\Functional\Modules\Category;
 
-use Shopware\Tests\Bundle\StoreFrontBundle\Helper;
+use Shopware\Tests\Functional\Bundle\StoreFrontBundle\Helper;
 
 /**
  * @category  Shopware

@@ -1,6 +1,4 @@
 <?php
-use Shopware\Components\Password\Encoder\Bcrypt;
-
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,7 +22,12 @@ use Shopware\Components\Password\Encoder\Bcrypt;
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Tests_Components_Hash_HasherBcryptTest extends PHPUnit_Framework_TestCase
+namespace Shopware\Tests\Unit\Components\Password\Encoder;
+
+use PHPUnit\Framework\TestCase;
+use Shopware\Components\Password\Encoder\Bcrypt;
+
+class BcryptTest extends TestCase
 {
     /**
      * @var Bcrypt

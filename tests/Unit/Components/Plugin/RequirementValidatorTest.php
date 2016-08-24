@@ -1,17 +1,17 @@
 <?php
+namespace Shopware\Tests\Unit\Components\Plugin;
 
-namespace Shopware\Components\Test\Plugin;
-
+use PHPUnit\Framework\TestCase;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\ModelRepository;
-use Shopware\Components\Plugin;
 use Shopware\Components\Plugin\RequirementValidator;
 use Shopware\Components\Plugin\XmlPluginInfoReader;
+use Shopware\Models\Plugin\Plugin;
 
-class RequirementValidatorTest extends \PHPUnit_Framework_TestCase
+class RequirementValidatorTest extends TestCase
 {
     /**
-     * @var \Shopware\Models\Plugin\Plugin[]
+     * @var Plugin[]
      */
     private $plugins;
 
@@ -182,7 +182,7 @@ class RequirementValidatorTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($e);
     }
 
-    private function getValidator($plugins)
+    private function getValidator(array $plugins)
     {
         $em = $this->createMock(ModelManager::class);
 
@@ -192,7 +192,7 @@ class RequirementValidatorTest extends \PHPUnit_Framework_TestCase
         foreach ($plugins as $pluginInfo) {
             $pluginInfo = array_merge($defaults, $pluginInfo);
 
-            $plugin = $this->createMock(\Shopware\Models\Plugin\Plugin::class);
+            $plugin = $this->createMock(Plugin::class);
 
             $plugin->method('getVersion')
                 ->willReturn($pluginInfo['version']);
@@ -222,7 +222,7 @@ class RequirementValidatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param $args
-     * @return null|\Shopware\Models\Plugin\Plugin
+     * @return null|Plugin
      */
     public function findPluginByName($args)
     {

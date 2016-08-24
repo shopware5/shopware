@@ -22,19 +22,24 @@
  * our trademarks remain entirely with us.
  */
 
+namespace Shopware\Tests\Unit;
+
+use Enlight_Collection_ArrayCollection as ArrayCollection;
+use PHPUnit\Framework\TestCase;
+
 /**
  * @category  Shopware
  * @package   Shopware\Tests
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class ArrayCollectionTest extends PHPUnit_Framework_TestCase
+class ArrayCollectionTest extends TestCase
 {
     /**
      * Test case method
      */
     public function testArrayCollectionGet()
     {
-        $collection = new Enlight_Collection_ArrayCollection(array(
+        $collection = new ArrayCollection(array(
             'key_one'=>'wert1',
             'key_two'=>'wert2',
         ));
@@ -49,7 +54,7 @@ class ArrayCollectionTest extends PHPUnit_Framework_TestCase
      */
     public function testArrayCollectionSet()
     {
-        $collection = new Enlight_Collection_ArrayCollection();
+        $collection = new ArrayCollection();
 
         $collection->setKeyOne('wert123');
         $this->assertEquals('wert123', $collection->getKeyOne());

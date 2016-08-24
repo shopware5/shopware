@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Components\Theme;
+namespace Shopware\Tests\Functional\Components\Theme;
 
 class InheritanceTest extends Base
 {

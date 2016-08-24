@@ -22,20 +22,24 @@
  * our trademarks remain entirely with us.
  */
 
+namespace Shopware\Tests\Unit;
+
+use PHPUnit\Framework\TestCase;
+
 /**
  * @category  Shopware
  * @package   Shopware\Tests
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class EnlightLoaderTest extends PHPUnit_Framework_TestCase
+class EnlightLoaderTest extends TestCase
 {
     /**
      * Test enlight loader check file
      */
     public function testEnlightLoaderCheckFile()
     {
-        $this->assertTrue(Enlight_Loader::checkFile('H:\Apache Group\Apache\htdocs\shopware.php'));
-        $this->assertFalse(Enlight_Loader::checkFile('H:\Apache Group\Apache\htdocs\shopware.php'."\0"));
+        $this->assertTrue(\Enlight_Loader::checkFile('H:\Apache Group\Apache\htdocs\shopware.php'));
+        $this->assertFalse(\Enlight_Loader::checkFile('H:\Apache Group\Apache\htdocs\shopware.php'."\0"));
     }
 
     /**
@@ -43,11 +47,11 @@ class EnlightLoaderTest extends PHPUnit_Framework_TestCase
      */
     public function testAddIncludePath()
     {
-        $old = Enlight_Loader::addIncludePath('.');
-        $new = Enlight_Loader::explodeIncludePath();
+        $old = \Enlight_Loader::addIncludePath('.');
+        $new = \Enlight_Loader::explodeIncludePath();
         $last = array_pop($new);
 
-        Enlight_Loader::setIncludePath($old);
+        \Enlight_Loader::setIncludePath($old);
 
         $this->assertEquals('.', $last);
     }
@@ -57,11 +61,11 @@ class EnlightLoaderTest extends PHPUnit_Framework_TestCase
      */
     public function testAddIncludePath2()
     {
-        $old = Enlight_Loader::addIncludePath('.',  Enlight_Loader::POSITION_PREPEND);
-        $new = Enlight_Loader::explodeIncludePath();
+        $old = \Enlight_Loader::addIncludePath('.',  \Enlight_Loader::POSITION_PREPEND);
+        $new = \Enlight_Loader::explodeIncludePath();
         $first = array_shift($new);
 
-        Enlight_Loader::setIncludePath($old);
+        \Enlight_Loader::setIncludePath($old);
 
         $this->assertEquals('.', $first);
     }
@@ -71,11 +75,11 @@ class EnlightLoaderTest extends PHPUnit_Framework_TestCase
      */
     public function testAddIncludePath3()
     {
-        $old = Enlight_Loader::addIncludePath('.', Enlight_Loader::POSITION_REMOVE);
-        $new = Enlight_Loader::explodeIncludePath();
-        $found = array_search('.', $new);
+        $old = \Enlight_Loader::addIncludePath('.', \Enlight_Loader::POSITION_REMOVE);
+        $new = \Enlight_Loader::explodeIncludePath();
+        $found = array_search('.', $new, true);
 
-        Enlight_Loader::setIncludePath($old);
+        \Enlight_Loader::setIncludePath($old);
 
         $this->assertFalse($found);
     }

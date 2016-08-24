@@ -1,10 +1,11 @@
 <?php
 
-namespace Shopware\Tests\Bundle\MediaBundle\Strategy;
+namespace Shopware\Tests\Unit\Bundle\MediaBundle\Strategy;
 
+use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\MediaBundle\Strategy\Md5Strategy;
 
-class Md5StrategyTest extends \PHPUnit_Framework_TestCase
+class Md5StrategyTest extends TestCase
 {
     /**
      * @var Md5Strategy
@@ -27,6 +28,8 @@ class Md5StrategyTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getNormalizData
+     * @param string $path
+     * @param string $expected
      */
     public function testNormalizer($path, $expected)
     {

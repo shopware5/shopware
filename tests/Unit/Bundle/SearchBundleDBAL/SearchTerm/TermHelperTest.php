@@ -22,11 +22,12 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Bundle\SearchBundleDBAL\SearchTerm;
+namespace Shopware\Tests\Unit\Bundle\SearchBundleDBAL\SearchTerm;
 
+use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\SearchBundleDBAL\SearchTerm\TermHelper;
 
-class TermHelperTest extends \PHPUnit_Framework_TestCase
+class TermHelperTest extends TestCase
 {
     /**
      * @var TermHelper $termHelper

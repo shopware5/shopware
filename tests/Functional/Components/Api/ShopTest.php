@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Components\Api;
+namespace Shopware\Tests\Functional\Components\Api;
 
 use Shopware\Components\Api\Resource\Shop;
 

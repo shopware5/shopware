@@ -1,6 +1,4 @@
 <?php
-use Shopware\Components\Password\Encoder\Sha256;
-
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,7 +22,12 @@ use Shopware\Components\Password\Encoder\Sha256;
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Tests_Components_Hash_Hasher_Sha256Test extends PHPUnit_Framework_TestCase
+namespace Shopware\Tests\Unit\Components\Password\Encoder;
+
+use PHPUnit\Framework\TestCase;
+use Shopware\Components\Password\Encoder\Sha256;
+
+class Sha256Test extends TestCase
 {
     /**
      * @var Sha256
