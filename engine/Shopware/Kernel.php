@@ -120,7 +120,7 @@ class Kernel implements HttpKernelInterface
     /**
      * @var \PDO
      */
-    private $connection;
+    public $connection;
 
     const VERSION      = \Shopware::VERSION;
     const VERSION_TEXT = \Shopware::VERSION_TEXT;
