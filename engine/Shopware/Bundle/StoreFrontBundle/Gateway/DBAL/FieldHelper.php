@@ -266,6 +266,7 @@ class FieldHelper
             'category.position as __category_position',
             'category.path as __category_path',
             'category.description as __category_description',
+            'category.meta_title as __category_metatitle',
             'category.metakeywords as __category_metakeywords',
             'category.metadescription as __category_metadescription',
             'category.cmsheadline as __category_cmsheadline',
@@ -276,6 +277,7 @@ class FieldHelper
             'category.external as __category_external',
             'category.hidefilter as __category_hidefilter',
             'category.hidetop as __category_hidetop',
+            'category.stream_id as __category_stream_id',
         ];
 
         $fields = array_merge(
@@ -752,6 +754,44 @@ class FieldHelper
             $fields,
             $this->getTableFields('s_product_streams_attributes', 'productStreamAttribute')
         );
+        return $fields;
+    }
+
+    /**
+     * Returns an array with all required shop page fields.
+     * Requires that the s_cms_static table is included with table alias 'page'
+     *
+     * @return array
+     */
+    public function getShopPageFields()
+    {
+        $fields = [
+            'page.id as __page_id',
+            'page.tpl1variable as __page_tpl1variable',
+            'page.tpl1path as __page_tpl1path',
+            'page.tpl2variable as __page_tpl2variable',
+            'page.tpl2path as __page_tpl2path',
+            'page.tpl3variable as __page_tpl3variable',
+            'page.tpl3path as __page_tpl3path',
+            'page.description as __page_description',
+            'page.html as __page_html',
+            'page.grouping as __page_grouping',
+            'page.position as __page_position',
+            'page.link as __page_link',
+            'page.target as __page_target',
+            'page.parentID as __page_parent_id',
+            'page.page_title as __page_page_title',
+            'page.meta_keywords as __page_meta_keywords',
+            'page.meta_description as __page_meta_description',
+            'page.changed as __page_changed',
+            'page.shop_ids as __page_shop_ids',
+        ];
+
+        $fields = array_merge(
+            $fields,
+            $this->getTableFields('s_cms_static_attributes', 'pageAttribute')
+        );
+
         return $fields;
     }
 

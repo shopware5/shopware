@@ -22,14 +22,14 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Bundle\AccountBundle\Controller;
+namespace Shopware\Tests\Functional\Bundle\AccountBundle\Controller;
 
 use Shopware\Models\Customer\Customer;
 
 /**
  * @category  Shopware
  * @package   Shopware\Tests
- * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class RegisterTest extends \Enlight_Components_Test_Controller_TestCase
 {

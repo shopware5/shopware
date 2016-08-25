@@ -90,6 +90,7 @@
             <arg value="install" />
             <arg value="--no-interaction" />
             <arg value="--optimize-autoloader" />
+            <arg value="--no-suggest" />
         </exec>
     </target>
 

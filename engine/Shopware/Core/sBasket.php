@@ -399,22 +399,31 @@ class sBasket
                 ->getNamespace('backend/static/discounts_surcharges')
                 ->get('discount_name');
 
-        $this->db->insert(
-            's_order_basket',
-            array(
-                'sessionID' => $this->session->get('sessionId'),
-                'articlename' => $discountName,
-                'articleID' => 0,
-                'ordernumber' => $name,
-                'quantity' => 1,
-                'price' => $discount,
-                'netprice' => $discountNet,
-                'tax_rate' => $tax,
-                'datum' => date("Y-m-d H:i:s"),
-                'modus' => 3,
-                'currencyFactor' => $this->sSYSTEM->sCurrency["factor"]
-            )
+        $params = [
+            'sessionID' => $this->session->get('sessionId'),
+            'articlename' => $discountName,
+            'articleID' => 0,
+            'ordernumber' => $name,
+            'quantity' => 1,
+            'price' => $discount,
+            'netprice' => $discountNet,
+            'tax_rate' => $tax,
+            'datum' => date("Y-m-d H:i:s"),
+            'modus' => 3,
+            'currencyFactor' => $this->sSYSTEM->sCurrency["factor"]
+        ];
+
+        $notifyUntilBeforeAdd = $this->eventManager->notifyUntil(
+            'Shopware_Modules_Basket_BeforeAddOrderDiscount',
+            [
+                'subject'   => $this,
+                'discount' => $params
+            ]
         );
+
+        if (!$notifyUntilBeforeAdd) {
+            $this->db->insert('s_order_basket', $params);
+        }
     }
 
     /**
@@ -452,8 +461,15 @@ class sBasket
             $deletePremium = $this->db->fetchCol(
                 'SELECT basket.id
                 FROM s_order_basket basket
+                LEFT JOIN s_articles a
+                ON a.id = basket.articleID
+                LEFT JOIN s_articles_details d
+                ON d.id = a.main_detail_id
                 LEFT JOIN s_addon_premiums premium
-                ON premium.ordernumber_export = basket.ordernumber
+                ON IF(a.configurator_set_id IS NULL,
+                   premium.ordernumber_export = basket.ordernumber,
+                   premium.ordernumber = d.ordernumber
+                )
                 AND premium.startprice <= ?
                 WHERE basket.modus = 1
                 AND premium.id IS NULL
@@ -639,25 +655,29 @@ class sBasket
             ) ? : array();
         } else {
             // If we don't have voucher details yet, need to check if its a one-time code
-            $voucherDetails = $this->db->fetchRow(
-                'SELECT s_emarketing_voucher_codes.id AS id, s_emarketing_voucher_codes.code AS vouchercode,
-                    description, numberofunits, customergroup, value, restrictarticles,
-                    minimumcharge, shippingfree, bindtosupplier, taxconfig, valid_from,
-                    valid_to, ordercode, modus, percental, strict, subshopID
-                FROM s_emarketing_vouchers, s_emarketing_voucher_codes
-                WHERE modus = 1
-                AND s_emarketing_vouchers.id = s_emarketing_voucher_codes.voucherID
-                AND LOWER(code) = ?
-                AND cashed != 1
-                AND (
-                      (s_emarketing_vouchers.valid_to >= now()
-                          AND s_emarketing_vouchers.valid_from <= now()
-                      )
-                      OR s_emarketing_vouchers.valid_to is NULL
-                )',
+            $voucherCodeDetails = $this->db->fetchRow(
+                'SELECT id, voucherID, code as vouchercode FROM s_emarketing_voucher_codes c WHERE c.code = ? AND c.cashed != 1 LIMIT 1;',
                 array($voucherCode)
             );
-            $individualCode = ($voucherDetails && $voucherDetails["description"]);
+
+            $individualCode = false;
+            if ($voucherCodeDetails && $voucherCodeDetails['voucherID']) {
+                $voucherDetails = $this->db->fetchRow(
+                    'SELECT description, numberofunits, customergroup, value, restrictarticles,
+                    minimumcharge, shippingfree, bindtosupplier, taxconfig, valid_from,
+                    valid_to, ordercode, modus, percental, strict, subshopID
+                    FROM s_emarketing_vouchers WHERE modus = 1 AND id = ? AND (
+                      (valid_to >= now()
+                          AND valid_from <= now()
+                      )
+                      OR valid_to is NULL
+                ) LIMIT 1',
+                    array((int)$voucherCodeDetails['voucherID'])
+                );
+                unset($voucherCodeDetails['voucherID']);
+                $voucherDetails = array_merge($voucherCodeDetails, $voucherDetails);
+                $individualCode = ($voucherDetails && $voucherDetails["description"]);
+            }
         }
 
         // Interrupt the operation if one of the following occurs:
@@ -865,57 +885,72 @@ class sBasket
 
         $minimumOrder = $this->sSYSTEM->sUSERGROUPDATA['minimumorder'];
         $minimumOrderSurcharge = $this->sSYSTEM->sUSERGROUPDATA['minimumordersurcharge'];
-        if ($minimumOrder && $minimumOrderSurcharge) {
-            $amount = $this->sGetAmount();
-
-            if ($amount["totalAmount"] < $minimumOrder) {
-                $taxAutoMode = $this->config->get('sTAXAUTOMODE');
-                if (!empty($taxAutoMode)) {
-                    $tax = $this->getMaxTax();
-                } else {
-                    $tax = $this->config->get('sDISCOUNTTAX');
-                }
-
-                if (empty($tax)) {
-                    $tax = 19;
-                }
-
-                if ((!$this->sSYSTEM->sUSERGROUPDATA["tax"] && $this->sSYSTEM->sUSERGROUPDATA["id"])) {
-                    $discountNet = $minimumOrderSurcharge;
-                } else {
-                    $discountNet = round($minimumOrderSurcharge / (100+$tax) * 100, 3);
-                }
-
-                if ($this->sSYSTEM->sCurrency["factor"]) {
-                    $factor = $this->sSYSTEM->sCurrency["factor"];
-                    $discountNet *= $factor;
-                } else {
-                    $factor = 1;
-                }
-
-                $surcharge = $minimumOrderSurcharge * $factor;
-                $surchargeName = $this->snippetManager
-                    ->getNamespace('backend/static/discounts_surcharges')
-                    ->get('surcharge_name');
-
-                $this->db->insert(
-                    's_order_basket',
-                    $params = array(
-                        'sessionID'      => $this->session->get('sessionId'),
-                        'articlename'    => $surchargeName,
-                        'articleID'      => 0,
-                        'ordernumber'    => $name,
-                        'quantity'       => 1,
-                        'price'          => $surcharge,
-                        'netprice'       => $discountNet,
-                        'tax_rate'       => $tax,
-                        'datum'          => new Zend_Date(),
-                        'modus'          => 4,
-                        'currencyFactor' => $this->sSYSTEM->sCurrency["factor"]
-                    )
-                );
-            }
+        if (!$minimumOrder || !$minimumOrderSurcharge) {
+            return null;
         }
+
+        $amount = $this->sGetAmount();
+
+        if ($amount["totalAmount"] >= $minimumOrder) {
+            return null;
+        }
+
+        $taxAutoMode = $this->config->get('sTAXAUTOMODE');
+        if (!empty($taxAutoMode)) {
+            $tax = $this->getMaxTax();
+        } else {
+            $tax = $this->config->get('sDISCOUNTTAX');
+        }
+
+        if (empty($tax)) {
+            $tax = 19;
+        }
+
+        if ((!$this->sSYSTEM->sUSERGROUPDATA["tax"] && $this->sSYSTEM->sUSERGROUPDATA["id"])) {
+            $discountNet = $minimumOrderSurcharge;
+        } else {
+            $discountNet = round($minimumOrderSurcharge / (100+$tax) * 100, 3);
+        }
+
+        if ($this->sSYSTEM->sCurrency["factor"]) {
+            $factor = $this->sSYSTEM->sCurrency["factor"];
+            $discountNet *= $factor;
+        } else {
+            $factor = 1;
+        }
+
+        $surcharge = $minimumOrderSurcharge * $factor;
+        $surchargeName = $this->snippetManager
+            ->getNamespace('backend/static/discounts_surcharges')
+            ->get('surcharge_name');
+
+        $params = array(
+            'sessionID'      => $this->session->get('sessionId'),
+            'articlename'    => $surchargeName,
+            'articleID'      => 0,
+            'ordernumber'    => $name,
+            'quantity'       => 1,
+            'price'          => $surcharge,
+            'netprice'       => $discountNet,
+            'tax_rate'       => $tax,
+            'datum'          => new Zend_Date(),
+            'modus'          => 4,
+            'currencyFactor' => $this->sSYSTEM->sCurrency["factor"]
+        );
+
+        $notifyUntilBeforeAdd = $this->eventManager->notifyUntil(
+            'Shopware_Modules_Basket_BeforeAddMinimumOrderSurcharge',
+            [
+                'subject'   => $this,
+                'surcharge' => $params
+            ]
+        );
+
+        if (!$notifyUntilBeforeAdd) {
+            $this->db->insert('s_order_basket', $params);
+        }
+
+        return null;
     }
 
     /**
@@ -926,89 +961,94 @@ class sBasket
      */
     public function sInsertSurchargePercent()
     {
-        if (!$this->session->get('sUserId')) {
-            if (!$this->session->get('sPaymentID')) {
-                return false;
-            } else {
-                $paymentInfo = $this->db->fetchRow(
-                    'SELECT debit_percent
-                    FROM s_core_paymentmeans
-                    WHERE id = ?',
-                    array($this->session->get('sPaymentID'))
-                ) ? : array();
-            }
-        } else {
-            $userData =  $this->db->fetchRow(
-                'SELECT paymentID FROM s_user WHERE id = ?',
-                array(intval($this->session->get('sUserId')))
-            ) ? : array();
-            $paymentInfo = $this->db->fetchRow(
-                'SELECT debit_percent FROM s_core_paymentmeans WHERE id = ?',
-                array($userData["paymentID"])
-            ) ? : array();
+        $paymentId = (int) $this->session->get('sPaymentID');
+        $userId = (int) $this->session->get('sUserId');
+
+        if (!$userId && !$paymentId) {
+            return false;
         }
 
-        $name = $this->config->get('sPAYMENTSURCHARGENUMBER', 'PAYMENTSURCHARGE');
+        if ($userId && !$paymentId) {
+            $userData =  $this->db->fetchRow('SELECT paymentID FROM s_user WHERE id = ?', [$userId]);
+            $paymentId = $userData["paymentID"];
+        }
+
+        $paymentInfo = $this->db->fetchRow(
+            'SELECT debit_percent FROM s_core_paymentmeans WHERE id = ?',
+            [$paymentId]
+        );
+
+        if (!$paymentInfo || !$paymentInfo["debit_percent"]) {
+            return null;
+        }
+
         // Depends on payment mean
         $percent = $paymentInfo["debit_percent"];
+        $name = $this->config->get('sPAYMENTSURCHARGENUMBER', 'PAYMENTSURCHARGE');
 
         $this->db->query(
             'DELETE FROM s_order_basket WHERE sessionID = ? AND ordernumber = ?',
-            array($this->session->get('sessionId'), $name)
+            [$this->session->get('sessionId'), $name]
         );
 
         if (!$this->sCountBasket()) {
             return false;
         }
 
-        if (!empty($percent)) {
-            $amount = $this->sGetAmount();
+        $amount = $this->sGetAmount();
 
-            if ($percent >= 0) {
-                $surchargeName = $this->snippetManager
-                    ->getNamespace('backend/static/discounts_surcharges')
-                    ->get('payment_surcharge_add');
-            } else {
-                $surchargeName = $this->snippetManager
-                    ->getNamespace('backend/static/discounts_surcharges')
-                    ->get('payment_surcharge_dev');
-            }
+        if ($percent >= 0) {
+            $surchargeName = $this->snippetManager
+                ->getNamespace('backend/static/discounts_surcharges')
+                ->get('payment_surcharge_add');
+        } else {
+            $surchargeName = $this->snippetManager
+                ->getNamespace('backend/static/discounts_surcharges')
+                ->get('payment_surcharge_dev');
+        }
 
-            $surcharge = $amount["totalAmount"] / 100 * $percent;
+        $surcharge = $amount["totalAmount"] / 100 * $percent;
 
-            $taxAutoMode = $this->config->get('sTAXAUTOMODE');
-            if (!empty($taxAutoMode)) {
-                $tax = $this->getMaxTax();
-            } else {
-                $tax = $this->config->get('sDISCOUNTTAX');
-            }
+        $taxAutoMode = $this->config->get('sTAXAUTOMODE');
+        if (!empty($taxAutoMode)) {
+            $tax = $this->getMaxTax();
+        } else {
+            $tax = $this->config->get('sDISCOUNTTAX');
+        }
 
-            if (!$tax) {
-                $tax = 119;
-            }
+        if (!$tax) {
+            $tax = 119;
+        }
 
-            if ((!$this->sSYSTEM->sUSERGROUPDATA["tax"] && $this->sSYSTEM->sUSERGROUPDATA["id"])) {
-                $discountNet = $surcharge;
-            } else {
-                $discountNet = round($surcharge / (100+$tax) * 100, 3);
-            }
+        if ((!$this->sSYSTEM->sUSERGROUPDATA["tax"] && $this->sSYSTEM->sUSERGROUPDATA["id"])) {
+            $discountNet = $surcharge;
+        } else {
+            $discountNet = round($surcharge / (100+$tax) * 100, 3);
+        }
 
-            $this->db->insert(
-                's_order_basket',
-                array(
-                    'sessionID'      => $this->session->get('sessionId'),
-                    'articlename'    => $surchargeName,
-                    'articleID'      => 0,
-                    'ordernumber'    => $name,
-                    'quantity'       => 1,
-                    'price'          => $surcharge,
-                    'netprice'       => $discountNet,
-                    'tax_rate'       => $tax,
-                    'datum'          => new Zend_Date(),
-                    'modus'          => 4,
-                    'currencyFactor' => $this->sSYSTEM->sCurrency['factor']
-                )
-            );
+        $params = [
+            'sessionID'      => $this->session->get('sessionId'),
+            'articlename'    => $surchargeName,
+            'articleID'      => 0,
+            'ordernumber'    => $name,
+            'quantity'       => 1,
+            'price'          => $surcharge,
+            'netprice'       => $discountNet,
+            'tax_rate'       => $tax,
+            'datum'          => new Zend_Date(),
+            'modus'          => 4,
+            'currencyFactor' => $this->sSYSTEM->sCurrency['factor']
+        ];
+
+        $notifyUntilBeforeAdd = $this->eventManager->notifyUntil(
+            'Shopware_Modules_Basket_BeforeAddOrderSurchargePercent', array(
+                'subject'   => $this,
+                'surcharge' => $params
+            )
+        );
+
+        if (!$notifyUntilBeforeAdd) {
+            $this->db->insert('s_order_basket', $params);
         }
     }
 
@@ -1060,6 +1100,9 @@ class sBasket
                 )
             );
         }
+        // Refresh voucher
+        $this->sUpdateVoucher();
+
         // Check for surcharges
         $this->sInsertSurcharge();
 
@@ -1068,9 +1111,6 @@ class sBasket
 
         // Calculate global basket discount
         $this->sInsertDiscount();
-
-        // Refresh voucher
-        $this->sUpdateVoucher();
 
         return $this->sGetBasketData();
     }
@@ -1190,7 +1230,7 @@ class sBasket
 
         if (!empty($cookieData) && empty($uniqueId)) {
             $uniqueId = md5(uniqid(rand()));
-            $this->front->Response()->setCookie('sUniqueID', $uniqueId, Time()+(86400*360), '/');
+            $this->front->Response()->setCookie('sUniqueID', $uniqueId, time()+(86400*360), '/');
         }
 
         // Check if this article is already noted
@@ -1551,27 +1591,13 @@ class sBasket
             $sessionId
         );
 
-        // Shopware 3.5.0 / sth / laststock - instock check
-        if (!empty($chkBasketForArticle["id"])) {
-            if (
-                $article["laststock"] == true
-                && $article["instock"] < ($chkBasketForArticle["quantity"] + $quantity)
-            ) {
-                $quantity -= $chkBasketForArticle["quantity"];
-            }
-        } else {
-            if ($article["laststock"] == true && $article["instock"] <= $quantity) {
-                $quantity = $article["instock"];
-                if ($quantity <= 0) {
-                    return;
-                }
-            }
+        $quantity = $this->getBasketQuantity($quantity, $chkBasketForArticle, $article);
+
+        if ($quantity <= 0) {
+            return;
         }
 
         if ($chkBasketForArticle) {
-            // Article is already in basket, update quantity
-            $quantity += $chkBasketForArticle["quantity"];
-
             $this->sUpdateArticle($chkBasketForArticle["id"], $quantity);
             return $chkBasketForArticle["id"];
         }
@@ -2049,6 +2075,12 @@ class sBasket
         $details = [];
         foreach ($products as $product) {
             $promotion = $legacyStructConverter->convertListProductStruct($product);
+
+            if ($product->hasConfigurator()) {
+                /** @var StoreFrontBundle\Struct\Product\Price $variantPrice */
+                $variantPrice = $product->getVariantPrice();
+                $promotion['referenceprice'] = $variantPrice->getCalculatedReferencePrice();
+            }
 
             if (isset($covers[$product->getNumber()])) {
                 $promotion['image'] = $legacyStructConverter->convertMediaStruct($covers[$product->getNumber()]);
@@ -2724,5 +2756,22 @@ class sBasket
         }
 
         return $article;
+    }
+
+    /**
+     * @param int $quantity
+     * @param array $basketProduct
+     * @param array $article
+     * @return int
+     */
+    private function getBasketQuantity($quantity, $basketProduct, $article)
+    {
+        $newQuantity = $quantity + $basketProduct["quantity"] ?: 0;
+
+        if ($article['laststock'] && $newQuantity > $article['instock']) {
+            return (int) $article['instock'];
+        }
+
+        return $newQuantity;
     }
 }

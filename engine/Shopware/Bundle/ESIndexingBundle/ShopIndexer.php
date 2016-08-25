@@ -68,6 +68,11 @@ class ShopIndexer implements ShopIndexerInterface
     private $backlogProcessor;
 
     /**
+     * @var array
+     */
+    private $configuration;
+
+    /**
      * @param Client $client
      * @param BacklogReaderInterface $backlogReader
      * @param BacklogProcessorInterface $backlogProcessor
@@ -83,7 +88,8 @@ class ShopIndexer implements ShopIndexerInterface
         IndexFactoryInterface $indexFactory,
         array $indexer,
         array $mappings,
-        array $settings
+        array $settings,
+        array $configuration
     ) {
         $this->client = $client;
         $this->backlogReader = $backlogReader;
@@ -92,6 +98,7 @@ class ShopIndexer implements ShopIndexerInterface
         $this->indexer = $indexer;
         $this->mappings = $mappings;
         $this->settings = $settings;
+        $this->configuration = $configuration;
     }
 
     /**
@@ -137,7 +144,7 @@ class ShopIndexer implements ShopIndexerInterface
      */
     private function updateSettings(ShopIndex $index)
     {
-        $this->client->cluster()->health(['wait_for_status' => 'yellow']);
+        $this->client->cluster()->health(['index' => $index->getName(), 'wait_for_status' => $this->configuration['wait_for_status']]);
         $this->client->indices()->close(['index' => $index->getName()]);
 
         foreach ($this->settings as $setting) {
@@ -154,7 +161,7 @@ class ShopIndexer implements ShopIndexerInterface
 
         $this->client->indices()->open(['index' => $index->getName()]);
         $this->client->indices()->refresh(['index' => $index->getName()]);
-        $this->client->cluster()->health(['wait_for_status' => 'yellow']);
+        $this->client->cluster()->health(['index' => $index->getName(), 'wait_for_status' => $this->configuration['wait_for_status']]);
     }
 
     /**

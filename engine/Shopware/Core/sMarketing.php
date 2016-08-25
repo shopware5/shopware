@@ -688,20 +688,7 @@ class sMarketing
                         ";
 
                         $getArticles = $this->db->fetchAll($sql);
-                        unset($articleData);
-                        $context = $this->contextService->getShopContext();
-                        foreach ($getArticles as $article) {
-                            if ($article["type"]) {
-                                $category = $this->sSYSTEM->_GET["sCategory"] ? : $context->getShop()->getCategory()->getId();
-                                $tmpContainer = $this->sSYSTEM->sMODULES['sArticles']->sGetPromotionById($article["type"], $category, $article['articleordernumber']);
-
-                                if (count($tmpContainer) && isset($tmpContainer["articleName"])) {
-                                    $articleData[] = $tmpContainer;
-                                }
-                            }
-                        }
-
-                        $getCampaignContainers[$campaignKey]["data"] = $articleData;
+                        $getCampaignContainers[$campaignKey]["data"] = $this->sGetMailCampaignsArticles($getArticles);
                         break;
                     case "ctText":
                     case "ctVoucher":
@@ -725,9 +712,24 @@ class sMarketing
         }
     }
 
-    public function sCampaignsGetSuggestions($id, $userid = 0)
+    /**
+     * Processes the newsletter articles and returns the corresponding data.
+     *
+     * @param $articles
+     * @return array
+     */
+    private function sGetMailCampaignsArticles($articles)
     {
-        return array();
+        /** @var \Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface $contextService */
+        $contextService = Shopware()->Container()->get('shopware_storefront.context_service');
+        $categoryId = $contextService->getShopContext()->getShop()->getCategory()->getId();
+
+        $articleData = [];
+        foreach ($articles as $article) {
+            $articleData[] = Shopware()->Modules()->Articles()->sGetPromotionById($article['type'], $categoryId, $article['articleordernumber']);
+        }
+
+        return $articleData;
     }
 
     /**

@@ -22,14 +22,14 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Components\Api;
+namespace Shopware\Tests\Functional\Components\Api;
 
 use Shopware\Components\Api\Resource\Shop;
 
 /**
  * @category  Shopware
  * @package   Shopware\Tests
- * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ShopTest extends TestCase
 {

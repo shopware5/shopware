@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Components\Theme;
+namespace Shopware\Tests\Functional\Components\Theme;
 
 use Shopware\Models\Shop\Template;
 
@@ -104,10 +104,10 @@ class ConfiguratorTest extends Base
         $eventManager = $this->getEventManager();
         $eventManager->expects($this->once())
             ->method('filter')
-            ->will($this->returnValue(array(
+            ->willReturn(array(
                 'containers' => array('container1', 'container4'),
                 'fields' => array('field1', 'field3', 'field4')
-            )));
+            ));
 
 
         $configurator = $this->getMockBuilder('Shopware\Components\Theme\Configurator')
@@ -220,7 +220,7 @@ class ConfiguratorTest extends Base
 
         $template->expects($this->any())
             ->method('getConfigSets')
-            ->will($this->returnValue($existing));
+            ->willReturn($existing);
 
         $entityManager = $this->getEntityManager();
         $entityManager->expects($this->once())

@@ -150,12 +150,6 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             );
         }
 
-        // media fix
-        if (isset($categoryContent['media']['path'])) {
-            $mediaService = $this->get('shopware_media.media_service');
-            $categoryContent['media']['path'] = $mediaService->getUrl($categoryContent['media']['path']);
-        }
-
         $viewAssignments = array(
             'sBanner' => Shopware()->Modules()->Marketing()->sBanner($categoryId),
             'sBreadcrumb' => $this->getBreadcrumb($categoryId),

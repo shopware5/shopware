@@ -13,7 +13,7 @@
 
             {foreach $sMainCategories as $sCategory}
                 {block name='frontend_index_navigation_categories_top_entry'}
-                    {if !$sCategory.hidetop}
+                    {if !$sCategory.hideTop}
                         <li class="navigation--entry{if $sCategory.flag} is--active{/if}" role="menuitem">
                             <a class="navigation--link{if $sCategory.flag} is--active{/if}" href="{$sCategory.link}" title="{$sCategory.description}" itemprop="url">
                                 <span itemprop="name">{$sCategory.description}</span>

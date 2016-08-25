@@ -25,7 +25,7 @@
 /**
  * @category  Shopware
  * @package   Shopware\Tests
- * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Tests_Modules_Articles_getListingArrayKeyTest extends Enlight_Components_Test_TestCase
 {
@@ -35,7 +35,7 @@ class Shopware_Tests_Modules_Articles_getListingArrayKeyTest extends Enlight_Com
      * @var sArticles
      */
     protected $module;
-    
+
     /**
      * Test set up method
      */

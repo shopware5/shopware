@@ -54,20 +54,20 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
         successTitle:'{s name=message/save/success_title}Successful{/s}',
         failureTitle:'{s name=message/save/error_title}Error{/s}',
         internalComment: {
-            successMessage: '{s name=message/internal_comment/success}Internal comment has been saved successfully{/s}',
-            failureMessage: '{s name=message/internal_comment/failure}An error has occurred while saving the internal comment.{/s}'
+            successMessage: '{s name=message/internal_comment/success}Internal comment has been saved successfully for order [0]{/s}',
+            failureMessage: '{s name=message/internal_comment/failure}An error has occurred while saving the internal comment for order [0].{/s}'
         },
         externalComment: {
-            successMessage: '{s name=message/external_comment/success}External comment has been saved successfully{/s}',
-            failureMessage: '{s name=message/external_comment/failure}An error has occurred while saving the external comment.{/s}'
+            successMessage: '{s name=message/external_comment/success}External comment has been saved successfully for order [0]{/s}',
+            failureMessage: '{s name=message/external_comment/failure}An error has occurred while saving the external comment for order [0].{/s}'
         },
         overview: {
-            successMessage: '{s name=message/overview/success}The order has been saved successfully{/s}',
-            failureMessage: '{s name=message/overview/failure}An error has occurred while saving the order.{/s}'
+            successMessage: '{s name=message/overview/success}Order [0] has been saved successfully{/s}',
+            failureMessage: '{s name=message/overview/failure}An error has occurred while saving order [0].{/s}'
         },
         details: {
-            successMessage: '{s name=message/details/success}The order addresses and payment method have been saved successfully{/s}',
-            failureMessage: '{s name=message/details/failure}An error has occurred while saving the order details.{/s}'
+            successMessage: '{s name=message/details/success}The order addresses and payment method have been saved successfully for order [0]{/s}',
+            failureMessage: '{s name=message/details/failure}An error has occurred while saving the order details for order [0].{/s}'
         },
         positions: {
             successMessage: '{s name=message/positions/success}The order position has been saved successfully{/s}',
@@ -128,6 +128,9 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
             },
             'order-detail-window order-detail-panel order-debit-field-set': {
                 changePayment:me.onChangePayment
+            },
+            'order-detail-window order-detail-panel order-dispatch-field-set': {
+                changeDispatch: me.onChangeDispatch
             },
             'order-detail-window order-configuration-panel': {
                 resetConfiguration: me.onResetConfiguration,
@@ -456,6 +459,21 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
     },
 
     /**
+     * Updates the dispatch method of the edited order to correspond to the selection
+     * made in the 'dispatch' combobox.
+     *
+     * @param Shopware.apps.Order.view.detail.Dispatch panel
+     * @param int newValue
+     */
+    onChangeDispatch: function(panel, newValue) {
+        var orderDispatch = panel.record.getDispatch(),
+            newDispatch = panel.dispatchesStore.getById(newValue);
+
+        orderDispatch.removeAll();
+        orderDispatch.add(newDispatch);
+    },
+
+    /**
      * Called when the user changes the country combobox in the shipping or billing form
      *
      * @param countryCombo
@@ -639,6 +657,9 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
      */
     saveRecord: function(order, successMessage, errorMessage, options) {
         var me = this;
+
+        successMessage = Ext.String.format(successMessage, order.get('number'));
+        errorMessage = Ext.String.format(errorMessage, order.get('number'));
 
         order.save({
             callback:function (data, operation) {

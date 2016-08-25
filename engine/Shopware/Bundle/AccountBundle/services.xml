@@ -32,6 +32,7 @@
             <argument type="service" id="session" />
             <argument type="service" id="snippets" />
             <argument type="service" id="PasswordEncoder" />
+            <argument type="service" id="models" />
             <tag name="validator.constraint_validator" alias="CurrentPasswordValidator" />
         </service>
 

@@ -118,6 +118,7 @@ Ext.define('Shopware.apps.Form.view.main.Formpanel', {
 
         me.attributeForm = Ext.create('Shopware.attribute.Form', {
             table: 's_cms_support_attributes',
+            allowTranslation: false,
             margin: '20 0 0',
             disabled: false
         });
@@ -144,7 +145,6 @@ Ext.define('Shopware.apps.Form.view.main.Formpanel', {
         }, {
             xtype: 'codemirrorfield',
             mode: 'smarty',
-            height: 180,
             fieldLabel:'{s name=label_emailtemplate}Email template{/s}',
             name: 'emailTemplate',
             supportText: variableHint

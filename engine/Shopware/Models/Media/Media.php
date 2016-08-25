@@ -77,6 +77,11 @@ class Media extends ModelEntity
     const TYPE_PDF = 'PDF';
 
     /**
+     * Flag for a 3D model media
+     */
+    const TYPE_MODEL = 'MODEL';
+
+    /**
      * Flag for an unknown media
      */
     const TYPE_UNKNOWN = 'UNKNOWN';
@@ -361,7 +366,6 @@ class Media extends ModelEntity
         'sqz' => Media::TYPE_VIDEO,
         'srt' => Media::TYPE_VIDEO,
         'ssm' => Media::TYPE_VIDEO,
-        'stl' => Media::TYPE_VIDEO,
         'str' => Media::TYPE_VIDEO,
         'stx' => Media::TYPE_VIDEO,
         'svi' => Media::TYPE_VIDEO,
@@ -1109,7 +1113,19 @@ class Media extends ModelEntity
         'zoo' => Media::TYPE_ARCHIVE,
         'zpi' => Media::TYPE_ARCHIVE,
         'zz' => Media::TYPE_ARCHIVE,
-        'pdf' => Media::TYPE_PDF
+        'pdf' => Media::TYPE_PDF,
+        'dae' => Media::TYPE_MODEL,
+        'obj' => Media::TYPE_MODEL,
+        'fbx' => Media::TYPE_MODEL,
+        'spx' => Media::TYPE_MODEL,
+        '3ds' => Media::TYPE_MODEL,
+        '3mf' => Media::TYPE_MODEL,
+        'blend' => Media::TYPE_MODEL,
+        'awd' => Media::TYPE_MODEL,
+        'ply' => Media::TYPE_MODEL,
+        'pcd' => Media::TYPE_MODEL,
+        'stl' => Media::TYPE_MODEL,
+        'skp' => Media::TYPE_MODEL
     );
 
     /**

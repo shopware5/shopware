@@ -69,16 +69,24 @@ module.exports = function (grunt) {
             less: {
                 files: [
                     '../engine/Shopware/Plugins/**/*.less',
-                    '../themes/Frontend/**/*.less'
+                    '../themes/Frontend/**/*.less',
+                    '../custom/plugins/**/*.less'
                 ],
-                tasks: ['less:development']
+                tasks: ['less:development'],
+                options: {
+                    spawn: false
+                }
             },
             js: {
                 files: [
                     '../themes/Frontend/**/_public/src/js/*.js',
-                    '../engine/Shopware/Plugins/**/frontend/**/src/js/**/*.js'
+                    '../engine/Shopware/Plugins/**/frontend/**/src/js/**/*.js',
+                    '../custom/plugins/**/frontend/**/src/js/**/*.js'
                 ],
-                tasks: ['uglify:development']
+                tasks: ['uglify:development'],
+                options: {
+                    spawn: false
+                }
             }
         },
         jshint: {
@@ -99,10 +107,11 @@ module.exports = function (grunt) {
     });
 
     grunt.loadNpmTasks('grunt-contrib-less');
-    grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-chokidar');
 
+    grunt.renameTask('chokidar', 'watch');
     grunt.registerTask('production', [ 'jshint', 'less:production', 'uglify:production' ]);
     grunt.registerTask('default', [ 'less:development', 'uglify:development', 'watch' ]);
 };

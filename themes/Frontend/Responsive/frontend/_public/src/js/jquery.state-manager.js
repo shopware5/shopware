@@ -824,6 +824,11 @@
                 plugin = element.data('plugin_' + pluginName);
 
             if (!plugin) {
+                if (!element[pluginName]) {
+                    console.error('Plugin "' + pluginName + '" is not a valid jQuery-plugin!');
+                    return;
+                }
+
                 element[pluginName](currentConfig);
                 return;
             }

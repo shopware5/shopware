@@ -1,8 +1,10 @@
 <?php
+namespace Shopware\Tests\Unit\Components\Password\Encoder;
 
+use PHPUnit\Framework\TestCase;
 use Shopware\Components\Password\Encoder\PreHashed;
 
-class Shopware_Tests_Components_Hash_Hasher_PreHashedTest extends PHPUnit_Framework_TestCase
+class PreHashedTest extends TestCase
 {
     /**
      * @var PreHashed
@@ -24,21 +26,21 @@ class Shopware_Tests_Components_Hash_Hasher_PreHashedTest extends PHPUnit_Framew
 
     public function testEncodePasswordShouldNotModifyInput()
     {
-        $this->assertEquals("example", $this->hasher->encodePassword("example"));
+        $this->assertEquals('example', $this->hasher->encodePassword('example'));
     }
 
     public function testRehash()
     {
-        $this->assertFalse($this->hasher->isReencodeNeeded("example"));
+        $this->assertFalse($this->hasher->isReencodeNeeded('example'));
     }
 
     public function testValidatePasswordForSameHashes()
     {
-        $this->assertTrue($this->hasher->isPasswordValid("example", "example"));
+        $this->assertTrue($this->hasher->isPasswordValid('example', 'example'));
     }
 
     public function testValidatePasswordForDifferentHashes()
     {
-        $this->assertFalse($this->hasher->isPasswordValid("example", "alice"));
+        $this->assertFalse($this->hasher->isPasswordValid('example', 'alice'));
     }
 }

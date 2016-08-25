@@ -55,12 +55,22 @@ The user can open the tool inside the product detail section.
             border-width: 0 0 1px 1px;
             border-style: solid;
         }
+
+        .btn--compare-delete {
+            width: 100%;
+        }
     }
 
     .js--is--dropdown-active .compare--list {
         display: block;
 
-		.compare--entry { cursor: default; }
+		.compare--entry {
+            cursor: default;
+
+            form {
+                display: inline-block;
+            }
+        }
 
         .compare--link {
             .unitize(width, 230);

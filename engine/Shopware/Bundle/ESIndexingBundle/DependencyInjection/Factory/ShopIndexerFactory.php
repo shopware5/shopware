@@ -85,7 +85,8 @@ class ShopIndexerFactory
             $this->container->get('shopware_elastic_search.index_factory'),
             $indexer,
             $mappings,
-            $settings
+            $settings,
+            $this->container->getParameter('shopware.es')
         );
     }
 

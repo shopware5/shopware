@@ -70,6 +70,9 @@ class XmlMenuReader
     private function parseEntry(\DOMElement $entry)
     {
         $menuEntry = [];
+
+        $menuEntry['isRootMenu'] = ($entry->getAttribute('isRootMenu')) ? XmlUtils::phpize($entry->getAttribute('isRootMenu')) : false;
+
         foreach ($this->getChildren($entry, 'label') as $label) {
             $lang = ($label->getAttribute('lang')) ? $label->getAttribute('lang') : 'en';
             $menuEntry['label'][$lang] = $label->nodeValue;
@@ -83,8 +86,7 @@ class XmlMenuReader
 
         if ($value = $this->getChildren($entry, 'parent')) {
             $key = ($value[0]->getAttribute('identifiedBy')) ? $value[0]->getAttribute('identifiedBy') : 'controller';
-            $value = $value[0]->nodeValue;
-            $menuEntry['parent'] = [$key => $value];
+            $menuEntry['parent'] = [$key => $value[0]->nodeValue];
         }
 
         if ($active = $this->getChildren($entry, 'active')) {

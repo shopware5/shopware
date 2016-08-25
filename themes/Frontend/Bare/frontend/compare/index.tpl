@@ -12,9 +12,11 @@
                     {/block}
 
                     {block name='frontend_compare_product_dropdown_article_link'}
-                        <a class="btn btn--item-delete" href="{url controller='compare' action='delete_article' articleID=$compare.articleID}" rel="nofollow">
-                            <i class="icon--cross compare--icon-remove"></i>
-                        </a>
+                        <form action="{url controller='compare' action='delete_article' articleID=$compare.articleID}" method="post">
+                            <button type="submit" class="btn btn--item-delete">
+                                <i class="icon--cross compare--icon-remove"></i>
+                            </button>
+                        </form>
                     {/block}
                 </li>
                 {/block}
@@ -29,9 +31,11 @@
             {/block}
             {block name='frontend_compare_product_dropdown_action_delete'}
                 <li>
-                    <a href="{url controller='compare' action='delete_all' forceSecure}" rel="nofollow" class="btn--compare-delete btn--compare btn is--secondary is--small is--full">
-                        {s name="CompareActionDelete"}{/s}
-                    </a>
+                    <form action="{url controller='compare' action='delete_all' forceSecure}" method="post">
+                        <button type="submit" class="btn--compare-delete btn--compare btn is--secondary is--small is--full">
+                            {s name="CompareActionDelete"}{/s}
+                        </button>
+                    </form>
                 </li>
             {/block}
         </ul>

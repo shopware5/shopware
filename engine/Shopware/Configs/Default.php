@@ -74,6 +74,9 @@ return array_replace_recursive([
     'es' => [
         'prefix' => 'sw_shop',
         'enabled' => false,
+        'number_of_replicas' => null,
+        'number_of_shards' => null,
+        'wait_for_status' => 'green',
         'client' => [
             'hosts' => [
                 'localhost:9200'

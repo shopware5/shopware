@@ -43,6 +43,7 @@ class Detail extends Page implements HelperSelectorInterface
             'compareLink' => ['de' => 'Vergleichen', 'en' => 'Compare'],
             'rememberLink' => ['de' => 'Merken', 'en' => 'Remember'],
             'commentLink' => ['de' => 'Bewerten', 'en' => 'Comment'],
+            'addToCartButton' => ['de' => 'In den Warenkorb', 'en' => 'Add to shipping cart'],
         ];
     }
 
@@ -60,13 +61,23 @@ class Detail extends Page implements HelperSelectorInterface
      */
     public function verifyPage()
     {
-        $result = Helper::hasNamedLinks($this, ['compareLink', 'rememberLink', 'commentLink', 'inquiryLink']);
+        $links = Helper::hasNamedLinks($this, ['commentLink', 'inquiryLink']);
+        $buttons = Helper::hasNamedButtons($this, ['compareLink', 'rememberLink']);
 
-        if ($result === true) {
+        if ($links === true && $buttons === true) {
             return;
         }
 
+        $result = [];
         $message = ['You are not on a detail page:'];
+
+        if (is_array($links)) {
+            $result = array_merge($result, $links);
+        }
+
+        if (is_array($buttons)) {
+            $result = array_merge($result, $buttons);
+        }
 
         foreach ($result as $key => $value) {
             $message[] = "- Link '$key' ('$value') not found!";

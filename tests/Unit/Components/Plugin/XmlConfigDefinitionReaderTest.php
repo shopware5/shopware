@@ -1,8 +1,10 @@
 <?php
+namespace Shopware\Tests\Unit\Components\Plugin;
 
+use PHPUnit\Framework\TestCase;
 use Shopware\Components\Plugin\XmlConfigDefinitionReader;
 
-class XmlConfigDefinitionReaderTest extends \PHPUnit_Framework_TestCase
+class XmlConfigDefinitionReaderTest extends TestCase
 {
     /**
      * @var XmlConfigDefinitionReader

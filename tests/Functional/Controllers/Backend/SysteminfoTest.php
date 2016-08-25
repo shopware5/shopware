@@ -25,7 +25,7 @@
 /**
  * @category  Shopware
  * @package   Shopware\Tests
- * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class Shopware_Tests_Controllers_Backend_SysteminfoTest extends Enlight_Components_Test_Controller_TestCase
 {
@@ -56,7 +56,7 @@ class Shopware_Tests_Controllers_Backend_SysteminfoTest extends Enlight_Componen
         $this->assertArrayHasKey('group', $jsonBody['data'][0]);
         $this->assertArrayHasKey('required', $jsonBody['data'][0]);
         $this->assertArrayHasKey('version', $jsonBody['data'][0]);
-        $this->assertArrayHasKey('result', $jsonBody['data'][0]);
+        $this->assertArrayHasKey('status', $jsonBody['data'][0]);
     }
 
     public function testGetPathList()

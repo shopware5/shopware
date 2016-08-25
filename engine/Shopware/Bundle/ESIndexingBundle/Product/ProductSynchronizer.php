@@ -39,16 +39,16 @@ class ProductSynchronizer implements SynchronizerInterface
     private $productIndexer;
 
     /**
-     * @var ProductQueryFactory
+     * @var ProductQueryFactoryInterface
      */
     private $queryFactory;
 
     /**
-     * @param ProductQueryFactory $queryFactory
+     * @param ProductQueryFactoryInterface $queryFactory
      * @param ProductIndexer $productIndexer
      */
     public function __construct(
-        ProductQueryFactory $queryFactory,
+        ProductQueryFactoryInterface $queryFactory,
         ProductIndexer $productIndexer
     ) {
         $this->productIndexer = $productIndexer;

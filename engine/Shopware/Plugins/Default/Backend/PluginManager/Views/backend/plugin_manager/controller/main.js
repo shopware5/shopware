@@ -160,11 +160,9 @@ Ext.define('Shopware.apps.PluginManager.controller.Main', {
         Ext.Function.defer(function () {
             localListing.getStore().load({
                 callback: function(records) {
+                    Shopware.app.Application.fireEvent('load-update-listing');
                 }
             });
-
-            Shopware.app.Application.fireEvent('load-update-listing');
-
         }, 1000);
     }
 });

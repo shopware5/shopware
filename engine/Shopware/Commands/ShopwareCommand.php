@@ -92,6 +92,11 @@ abstract class ShopwareCommand extends Command implements ContainerAwareInterfac
                 return true;
             }
 
+            // Ignore suppressed errors/warnings
+            if (error_reporting() === 0) {
+                return true;
+            }
+
             if ($output->getVerbosity() === OutputInterface::VERBOSITY_VERBOSE) {
                 $errorName = isset($errorNameMap[$errno]) ? $errorNameMap[$errno] : $errno;
 

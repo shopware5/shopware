@@ -41,10 +41,10 @@ namespace Shopware\Components;
 abstract class Random
 {
     /**
-     * Generate random bytes using OpenSSL, Mcrypt, /dev/urandom and mt_rand() as fallback
+     * Generate random bytes
      *
      * @param  integer $length
-     * @param  bool $strong If true, an exception is thrown if no secure random generator is available
+     * @param  bool $strong @deprecated since 5.2.3, to be removed in 5.3.
      * @return string
      * @throws \Exception
      */
@@ -60,12 +60,12 @@ abstract class Random
     /**
      * Generate random boolean
      *
-     * @param  bool $strong true if you need a strong random generator (cryptography)
+     * @param  bool $strong @deprecated since 5.2.3, to be removed in 5.3.
      * @return bool
      */
     public static function getBoolean($strong = false)
     {
-        $byte = static::getBytes(1, $strong);
+        $byte = static::getBytes(1);
 
         return (bool) (ord($byte) % 2);
     }
@@ -75,7 +75,7 @@ abstract class Random
      *
      * @param  integer $min
      * @param  integer $max
-     * @param  bool $strong true if you need a strong random generator (cryptography)
+     * @param  bool $strong @deprecated since 5.2.3, to be removed in 5.3.
      * @return integer
      * @throws \DomainException
      */
@@ -99,12 +99,12 @@ abstract class Random
      * and we fix the exponent to the bias (1023). In this way we generate
      * a float of 1.mantissa.
      *
-     * @param  bool $strong  true if you need a strong random generator (cryptography)
+     * @param  bool $strong @deprecated since 5.2.3, to be removed in 5.3.
      * @return float
      */
     public static function getFloat($strong = false)
     {
-        $bytes    = static::getBytes(7, $strong);
+        $bytes    = static::getBytes(7);
         $bytes[6] = $bytes[6] | chr(0xF0);
         $bytes   .= chr(63); // exponent bias (1023)
         list(, $float) = unpack('d', $bytes);
@@ -114,15 +114,13 @@ abstract class Random
 
     /**
      * Generate a random string of specified length.
-     * Prioritizes secure random generators (OpenSSL/Mcrypt)
-     * and uses a non-secure random generator as fallback
      *
      * Uses supplied character list for generating the new string.
      * If no character list provided - uses Base 64 character set.
      *
      * @param  integer $length
      * @param  string|null $charlist
-     * @param  bool $strong If true, an exception is thrown if no secure random generator is available
+     * @param  bool $strong @deprecated since 5.2.3, to be removed in 5.3.
      * @return string
      * @throws \DomainException
      */
@@ -135,36 +133,31 @@ abstract class Random
         // charlist is empty or not provided
         if (empty($charlist)) {
             $numBytes = ceil($length * 0.75);
-            $bytes    = static::getBytes($numBytes, $strong);
-            return substr(rtrim(base64_encode($bytes), '='), 0, $length);
+            $bytes    = static::getBytes($numBytes);
+            return mb_substr(rtrim(base64_encode($bytes), '='), 0, $length, '8bit');
         }
 
-        $listLen = strlen($charlist);
+        $listLen = mb_strlen($charlist, '8bit');
 
         if ($listLen == 1) {
             return str_repeat($charlist, $length);
         }
 
-        $bytes  = static::getBytes($length, $strong);
-        $pos    = 0;
         $result = '';
         for ($i = 0; $i < $length; $i++) {
-            $pos     = ($pos + ord($bytes[$i])) % $listLen;
+            $pos     = static::getInteger(0, $listLen - 1);
             $result .= $charlist[$pos];
         }
-
         return $result;
     }
 
     /**
      * Generate a random alphanumeric string of specified length.
-     * Prioritizes secure random generators (OpenSSL/Mcrypt)
-     * and uses a non-secure random generator as fallback
      *
      * Charlist: a-zA-Z0-9
      *
      * @param  integer $length
-     * @param  bool $strong If true, an exception is thrown if no secure random generator is available
+     * @param  bool $strong @deprecated since 5.2.3, to be removed in 5.3.
      * @return string
      * @throws \DomainException
      */
@@ -176,6 +169,6 @@ abstract class Random
 
         $charlist = implode(range('a', 'z')) . implode(range('A', 'Z')) . implode(range(0, 9));
 
-        return static::getString($length, $charlist, $strong);
+        return static::getString($length, $charlist);
     }
 }

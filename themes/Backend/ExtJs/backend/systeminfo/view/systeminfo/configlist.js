@@ -121,7 +121,7 @@ Ext.define('Shopware.apps.Systeminfo.view.systeminfo.Configlist', {
                 renderer: me.renderVersion
             },{
                 header: '{s name=config_grid/column/status}Status{/s}',
-                dataIndex: 'result',
+                dataIndex: 'status',
                 flex: 1,
                 renderer: me.renderStatus
             }
@@ -134,7 +134,7 @@ Ext.define('Shopware.apps.Systeminfo.view.systeminfo.Configlist', {
      * @param value The value of the field
      */
     renderStatus: function(value){
-        if(value==1){
+        if(value=="ok"){
             return Ext.String.format('<div style="height: 16px; width: 16px" class="sprite-tick"></div>')
         }else{
             return Ext.String.format('<div style="height: 16px; width: 16px" class="sprite-cross"></div>')

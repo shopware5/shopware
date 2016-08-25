@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Plugins\Core\MarketingAggregate;
+namespace Shopware\Tests\Functional\Plugins\Core\MarketingAggregate;
 
 use Shopware\Models\Config\Element;
 use Shopware\Models\Config\Value;
@@ -32,7 +32,7 @@ use Shopware\Models\Shop\Shop;
 /**
  * @category  Shopware
  * @package   Shopware\Tests
- * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class AbstractMarketing extends \Enlight_Components_Test_Plugin_TestCase
 {

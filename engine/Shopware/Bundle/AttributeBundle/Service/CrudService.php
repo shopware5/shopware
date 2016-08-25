@@ -35,6 +35,7 @@ use Shopware\Models\Attribute\Configuration;
 class CrudService
 {
     const EXT_JS_PREFIX = '__attribute_';
+    const NULL_STRING = 'NULL';
 
     /**
      * @var ModelManager
@@ -83,6 +84,8 @@ class CrudService
      */
     public function delete($table, $column, $updateDependingTables = false)
     {
+        $column = $this->formatColumnName($column);
+
         if (!$this->tableMapping->isTableColumn($table, $column)) {
             throw new \Exception(sprintf('Table %s has no column with name %s', $table, $column));
         }
@@ -118,20 +121,31 @@ class CrudService
      * @param array $data
      * @param null $newColumnName
      * @param bool $updateDependingTables
+     * @param null|string|int|float $defaultValue
      * @throws \Exception
      */
-    public function update($table, $columnName, $unifiedType, array $data = [], $newColumnName = null, $updateDependingTables = false)
-    {
+    public function update(
+        $table,
+        $columnName,
+        $unifiedType,
+        array $data = [],
+        $newColumnName = null,
+        $updateDependingTables = false,
+        $defaultValue = null
+    ) {
+        $columnName = $this->formatColumnName($columnName);
+        $newColumnName = $this->formatColumnName($newColumnName);
+
         $config = $this->get($table, $columnName);
 
         if (!$config) {
-            $this->createAttribute($table, $columnName, $unifiedType, $data);
+            $this->createAttribute($table, $columnName, $unifiedType, $data, $defaultValue);
             return;
         }
 
         $newColumnName = $newColumnName?: $columnName;
 
-        $this->changeAttribute($table, $columnName, $newColumnName, $unifiedType, $data);
+        $this->changeAttribute($table, $columnName, $newColumnName, $unifiedType, $data, $defaultValue);
 
         if (!$updateDependingTables) {
             return;
@@ -150,6 +164,8 @@ class CrudService
      */
     public function get($table, $columnName)
     {
+        $columnName = $this->formatColumnName($columnName);
+
         $columns = $this->getList($table);
         foreach ($columns as $column) {
             if ($column->getColumnName() == $columnName) {
@@ -159,7 +175,6 @@ class CrudService
 
         return null;
     }
-
 
     /**
      * @param string $table
@@ -185,6 +200,7 @@ class CrudService
             $item->setCore($this->tableMapping->isCoreColumn($table, $column->getName()));
             $item->setColumnType($this->typeMapping->dbalToUnified($column->getType()));
             $item->setElasticSearchType($this->typeMapping->unifiedToElasticSearch($item->getColumnType()));
+            $item->setDefaultValue($column->getDefault());
 
             if (isset($configuration[$name])) {
                 $config = $configuration[$name];
@@ -202,6 +218,7 @@ class CrudService
                 $item->setSqlType($this->typeMapping->unifiedToSQL($item->getColumnType()));
                 $item->setEntity($config['entity']);
                 $item->setArrayStore($config['arrayStore']);
+                $item->setDefaultValue($config['defaultValue']);
             }
             $items[] = $item;
         }
@@ -217,10 +234,10 @@ class CrudService
     }
 
     /**
-     * @param int $id
+     * @param int|null $id
      * @param array $data
      */
-    private function updateConfig($id, array $data)
+    private function updateConfig($id = null, array $data)
     {
         $model = null;
 
@@ -245,14 +262,17 @@ class CrudService
      * @param ConfigurationStruct $config
      * @param string $name
      * @param string $type
+     * @param null|string|int|float $defaultValue
      * @return bool
      */
-    private function schemaChanged(ConfigurationStruct $config, $name, $type)
+    private function schemaChanged(ConfigurationStruct $config, $name, $type, $defaultValue = null)
     {
         return (
             $config->getColumnType() !== $type
             ||
             $config->getColumnName() !== $name
+            ||
+            $config->getDefaultValue() != $defaultValue
         );
     }
 
@@ -276,15 +296,17 @@ class CrudService
      * @param string $table
      * @param string $column
      * @param string $unifiedType
+     * @param null|string|int|float $defaultValue
      * @param array $data
      * @throws \Exception
      */
-    private function createAttribute($table, $column, $unifiedType, array $data = [])
+    private function createAttribute($table, $column, $unifiedType, array $data = [], $defaultValue = null)
     {
         $this->schemaOperator->createColumn(
             $table,
             $column,
-            $this->typeMapping->unifiedToSQL($unifiedType)
+            $this->typeMapping->unifiedToSQL($unifiedType),
+            $this->parseDefaultValue($unifiedType, $defaultValue)
         );
 
         $data = array_merge($data, [
@@ -293,7 +315,12 @@ class CrudService
             'columnType' => $unifiedType
         ]);
 
-        $this->updateConfig($data['id'], $data);
+        $configId = null;
+        if (array_key_exists('id', $data)) {
+            $configId = $data['id'];
+        }
+
+        $this->updateConfig($configId, $data);
     }
 
     /**
@@ -301,17 +328,19 @@ class CrudService
      * @param string $originalColumnName
      * @param string $newColumnName
      * @param string $unifiedType
+     * @param null|string|int|float $defaultValue
      * @param array $data
      * @throws \Exception
      */
-    private function changeAttribute($table, $originalColumnName, $newColumnName, $unifiedType, array $data = [])
+    private function changeAttribute($table, $originalColumnName, $newColumnName, $unifiedType, array $data = [], $defaultValue = null)
     {
         $config = $this->get($table, $originalColumnName);
 
         $data = array_merge($data, [
             'tableName' => $table,
             'columnName' => $newColumnName,
-            'columnType' => $unifiedType
+            'columnType' => $unifiedType,
+            'defaultValue' => $defaultValue
         ]);
 
         $this->updateConfig($config->getId(), $data);
@@ -319,7 +348,8 @@ class CrudService
         $schemaChanged = $this->schemaChanged(
             $config,
             $newColumnName,
-            $unifiedType
+            $unifiedType,
+            $defaultValue
         );
 
         if (!$schemaChanged) {
@@ -330,7 +360,42 @@ class CrudService
             $config->getTableName(),
             $originalColumnName,
             $newColumnName,
-            $this->typeMapping->unifiedToSQL($unifiedType)
+            $this->typeMapping->unifiedToSQL($unifiedType),
+            $this->parseDefaultValue($unifiedType, $defaultValue)
         );
+    }
+
+    /**
+     * @param string $type
+     * @param null|string|int|float $defaultValue
+     * @return null
+     */
+    private function parseDefaultValue($type, $defaultValue)
+    {
+        $types = $this->typeMapping->getTypes();
+        $type = $types[$type];
+
+        if (!$type['allowDefaultValue'] || $defaultValue === null) {
+            return self::NULL_STRING;
+        }
+        if ($defaultValue == self::NULL_STRING) {
+            return $defaultValue;
+        }
+        if ($type['quoteDefaultValue'] && $defaultValue !== null) {
+            return $this->entityManager->getConnection()->quote($defaultValue);
+        }
+
+        return $defaultValue;
+    }
+
+    /**
+     * Process the column name to handle edge cases
+     *
+     * @param string $column
+     * @return string
+     */
+    private function formatColumnName($column)
+    {
+        return strtolower($column);
     }
 }

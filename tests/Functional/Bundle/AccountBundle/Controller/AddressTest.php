@@ -22,14 +22,14 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Bundle\AccountBundle\Controller;
+namespace Shopware\Tests\Functional\Bundle\AccountBundle\Controller;
 
 use Symfony\Component\DomCrawler\Crawler;
 
 /**
  * @category  Shopware
  * @package   Shopware\Tests
- * @copyright Copyright (c) 2012, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class AddressTest extends \Enlight_Components_Test_Controller_TestCase
 {
@@ -65,7 +65,7 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
         $this->ensureLogin();
         $crawler = $this->doRequest('GET', '/address/');
 
-        $this->assertEquals(3, $crawler->filter('.address--content-item')->count());
+        $this->assertEquals(3, $crawler->filter('.address--item-content')->count());
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Standard-Rechnungsadresse")')->count());
         $this->assertGreaterThan(0, $crawler->filter('html:contains("Standard-Lieferadresse")')->count());
     }
@@ -93,10 +93,10 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
         );
 
         $this->assertEquals(1, $crawler->filter('html:contains("Die Adresse wurde erfolgreich erstellt")')->count());
-        $this->assertGreaterThan(0, $crawler->filter('.address--content-item:contains("Fasanenstrasse 99")')->count());
-        $this->assertEquals(4, $crawler->filter('.address--content-item')->count());
+        $this->assertGreaterThan(0, $crawler->filter('.address--item-content:contains("Fasanenstrasse 99")')->count());
+        $this->assertEquals(4, $crawler->filter('.address--item-content')->count());
 
-        return (int) $crawler->filter('.address--content-item:contains("Fasanenstrasse 99")')->filter('input[name=addressId]')->attr('value');
+        return (int) $crawler->filter('.address--item-content:contains("Fasanenstrasse 99")')->filter('input[name=addressId]')->attr('value');
     }
 
     /**
@@ -138,9 +138,9 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
         );
 
         $this->assertEquals(1, $crawler->filter('html:contains("Die Adresse wurde erfolgreich gespeichert")')->count());
-        $this->assertGreaterThan(0, $crawler->filter('.address--content-item:contains("Joe Doe")')->count());
-        $this->assertGreaterThan(0, $crawler->filter('.address--content-item:contains("Fasanenstrasse 99")')->count());
-        $this->assertEquals(4, $crawler->filter('.address--content-item')->count());
+        $this->assertGreaterThan(0, $crawler->filter('.address--item-content:contains("Joe Doe")')->count());
+        $this->assertGreaterThan(0, $crawler->filter('.address--item-content:contains("Fasanenstrasse 99")')->count());
+        $this->assertEquals(4, $crawler->filter('.address--item-content')->count());
     }
 
     /**
@@ -158,7 +158,7 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
         // delete operation
         $crawler = $this->doRequest('POST', '/address/delete/id/' . $addressId, ['id' => $addressId]);
         $this->assertEquals(1, $crawler->filter('html:contains("Die Adresse wurde erfolgreich gelöscht")')->count());
-        $this->assertEquals(3, $crawler->filter('.address--content-item')->count());
+        $this->assertEquals(3, $crawler->filter('.address--item-content')->count());
     }
 
     /**
@@ -181,7 +181,7 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
 
         $crawler = $this->doRequest('GET', '/address/');
 
-        $this->assertEquals(3, $crawler->filter('.address--content-item')->count());
+        $this->assertEquals(3, $crawler->filter('.address--item-content')->count());
     }
 
     public function testChangeOfBillingAddressReflectsInAccount()

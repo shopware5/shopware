@@ -27,6 +27,7 @@ use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Components\NumberRangeIncrementerInterface;
 use Shopware\Components\Validator\EmailValidatorInterface;
 use Shopware\Models\Customer\Address;
+use Shopware\Models\Customer\Customer;
 
 /**
  * Shopware Class that handles several
@@ -279,6 +280,12 @@ class sAdmin
         }
 
         if ($resetPayment && $user["additional"]["user"]["id"]) {
+            $this->eventManager->notify(
+                'Shopware_Modules_Admin_Payment_Fallback',
+                $data,
+                ['userId' => $user["additional"]["user"]["id"], 'paymentId' => $resetPayment]
+            );
+
             $this->db->update(
                 's_user',
                 array('paymentID' => $resetPayment),
@@ -635,6 +642,7 @@ class sAdmin
 
         Shopware()->Session()->unsetAll();
         $this->regenerateSessionId();
+        Shopware()->Container()->get('shopware.csrftoken_validator')->invalidateToken($this->front->Response());
     }
 
     /**
@@ -2993,7 +3001,7 @@ SQL;
         ));
 
         $basket = $this->sGetDispatchBasket(empty($country['id']) ? null : $country['id']);
-        if (empty($basket)) {
+        if (empty($basket) || $basket['count_article'] == 0) {
             return false;
         }
         $country = $this->sGetCountry($basket['countryID']);
@@ -3134,7 +3142,7 @@ SQL;
      * @param $plaintext
      * @param $hash
      */
-    private function loginUser($getUser, $email, $password, $isPreHashed, $encoderName, $plaintext, $hash)
+    protected function loginUser($getUser, $email, $password, $isPreHashed, $encoderName, $plaintext, $hash)
     {
         $this->regenerateSessionId();
 
@@ -3275,7 +3283,6 @@ SQL;
             return $getOrders;
         }
 
-        $active = 1;
         $context = $this->contextService->getShopContext();
         $orderArticleOrderNumbers = array_column($getOrderDetails, 'articleordernumber');
         $listProducts = Shopware()->Container()->get('shopware_storefront.list_product_service')->getList($orderArticleOrderNumbers, $context);
@@ -3290,6 +3297,7 @@ SQL;
                 ->sFormatPrice(round($orderDetailsValue["price"] * $orderDetailsValue["quantity"], 2));
             $getOrderDetails[$orderDetailsKey]["price"] = $this->moduleManager->Articles()
                 ->sFormatPrice($orderDetailsValue["price"]);
+            $getOrderDetails[$orderDetailsKey]['active'] = 0;
 
             $tmpArticle = null;
             if (!empty($listProducts[$orderDetailsValue['articleordernumber']])) {
@@ -3300,6 +3308,7 @@ SQL;
 
                 // Set article in activate state
                 $getOrderDetails[$orderDetailsKey]['active'] = 1;
+                $getOrderDetails[$orderDetailsKey]['article'] = $tmpArticle;
                 if (!empty($tmpArticle['purchaseunit'])) {
                     $getOrderDetails[$orderDetailsKey]['purchaseunit'] = $tmpArticle['purchaseunit'];
                 }
@@ -3325,15 +3334,6 @@ SQL;
                 }
 
                 $getOrderDetails[$orderDetailsKey]['currentHas_pseudoprice'] = $tmpArticle['has_pseudoprice'];
-
-                // Set article in deactivate state if it's an variant or configurator article
-                if ($tmpArticle['sVariantArticle'] === true || $tmpArticle['sConfigurator'] === true) {
-                    $getOrderDetails[$orderDetailsKey]['active'] = 0;
-                    $active = 0;
-                }
-            } else {
-                $getOrderDetails[$orderDetailsKey]['active'] = 0;
-                $active = 0;
             }
 
             // Check for serial
@@ -3361,7 +3361,7 @@ SQL;
                     . $orderDetailsValue['id'];
             }
         }
-        $getOrders[$orderKey]['activeBuyButton'] = $active;
+        $getOrders[$orderKey]['activeBuyButton'] = 1;
         $getOrders[$orderKey]["details"] = $getOrderDetails;
 
         return $getOrders;
@@ -3419,10 +3419,10 @@ SQL;
      */
     private function getUserShippingData($userId, $userData, $countryQuery)
     {
-        $shipping = $this->db->fetchRow("SELECT * FROM s_user_shippingaddress WHERE userID = ?", [$userId]);
-        $shipping['attributes'] = $this->attributeLoader->load('s_user_shippingaddress_attributes', $shipping['id']) ?: [];
-        unset($shipping['attributes']['shippingID'], $shipping['attributes']['id']);
-
+        $entityManager = Shopware()->Container()->get('models');
+        $customer = $entityManager->find(Shopware\Models\Customer\Customer::class, $userId);
+        $shipping = $this->convertToLegacyAddressArray($customer->getDefaultShippingAddress());
+        $shipping['attributes'] = $this->attributeLoader->load('s_user_addresses_attributes', $shipping['id']) ?: [];
         $userData["shippingaddress"] = $shipping;
 
         // If shipping address is not available, billing address is coeval the shipping address
@@ -3478,18 +3478,17 @@ SQL;
      * Helper function for sAdmin::sGetUserData()
      * Gets user billing data
      *
-     * @param $userId
-     * @param $userData
-     * @return mixed
+     * @param int $userId
+     * @param array $userData
+     * @return array
      */
     private function getUserBillingData($userId, $userData)
     {
-        $billing = $this->db->fetchRow('SELECT * FROM s_user_billingaddress WHERE userID = ?', [$userId]);
-        $billing['attributes'] = $this->attributeLoader->load('s_user_billingaddress_attributes', $billing['id']) ?: [];
-        unset($billing['attributes']['billingID'], $billing['attributes']['id']);
-
+        $entityManager = Shopware()->Container()->get('models');
+        $customer = $entityManager->find(Customer::class, $userId);
+        $billing = $this->convertToLegacyAddressArray($customer->getDefaultBillingAddress());
+        $billing['attributes'] = $this->attributeLoader->load('s_user_addresses_attributes', $billing['id']) ?: [];
         $userData["billingaddress"] = $billing;
-
         return $userData;
     }
 

@@ -186,10 +186,19 @@ class ListProductGateway implements Gateway\ListProductGatewayInterface
         }
 
         $query->from('s_articles_prices', 'prices')
-            ->innerJoin('prices', 's_articles_details', 'priceVariant', 'priceVariant.id = prices.articledetailsID')
+            ->innerJoin(
+                'prices',
+                's_articles_details',
+                'priceVariant',
+                'priceVariant.id = prices.articledetailsID and priceVariant.active = 1'
+            )
             ->andWhere('prices.from = 1')
             ->andWhere('prices.pricegroup = ' . $key)
             ->andWhere('prices.articleID = product.id');
+
+        if ($this->config->get('hideNoInstock')) {
+            $query->andWhere('(product.laststock * priceVariant.instock) >= (product.laststock * priceVariant.minpurchase)');
+        }
 
         return $query;
     }

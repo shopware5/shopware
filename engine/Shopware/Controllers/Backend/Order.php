@@ -70,6 +70,14 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
     public static $paymentRepository = null;
 
     /**
+     * Dispatch repository. Declared for an fast access to the dispatch repository.
+     *
+     * @var \Shopware\Models\Dispatch\Repository
+     * @access private
+     */
+    public static $dispatchRepository = null;
+
+    /**
      * Contains the shopware model manager
      *
      * @var \Shopware\Components\Model\ModelManager
@@ -146,6 +154,19 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             self::$paymentRepository = Shopware()->Models()->getRepository('Shopware\Models\Payment\Payment');
         }
         return self::$paymentRepository;
+    }
+
+    /**
+     * Helper function to get access on the static declared repository
+     *
+     * @return null|Shopware\Models\Dispatch\Repository
+     */
+    protected function getDispatchRepository()
+    {
+        if (self::$dispatchRepository === null) {
+            self::$dispatchRepository = Shopware()->Models()->getRepository('Shopware\Models\Dispatch\Dispatch');
+        }
+        return self::$dispatchRepository;
     }
 
     /**
@@ -283,6 +304,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $shops = $this->getShopRepository()->getBaseListQuery()->getArrayResult();
         $countries = $this->getCountryRepository()->getCountriesQuery()->getArrayResult();
         $payments = $this->getPaymentRepository()->getAllPaymentsQuery()->getArrayResult();
+        $dispatches = $this->getDispatchRepository()->getDispatchesQuery()->getArrayResult();
         $documentTypes = $this->getRepository()->getDocumentTypesQuery()->getArrayResult();
 
         $this->View()->assign(array(
@@ -293,6 +315,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
                 'shops' => $shops,
                 'countries' => $countries,
                 'payments' => $payments,
+                'dispatches' => $dispatches,
                 'documentTypes' => $documentTypes,
             )
         ));
@@ -337,7 +360,14 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         if (empty($sort)) {
             $sort = array(array('property' => 'orders.orderTime', 'direction' => 'DESC'));
         } else {
-            $sort[0]['property'] = 'orders.' . $sort[0]['property'];
+            switch ($sort[0]['property']) {
+                case 'customerEmail':
+                    $sort[0]['property'] = 'customer.email';
+                    break;
+                default:
+                    $sort[0]['property'] = 'orders.' . $sort[0]['property'];
+                    break;
+            }
         }
 
         $query = $this->getRepository()->getBackendOrdersQuery($filter, $sort, $offset, $limit);
@@ -1157,8 +1187,37 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $response->setHeader('Content-Type', 'application/pdf');
         $response->setHeader('Content-Transfer-Encoding', 'binary');
         $response->setHeader('Content-Length', filesize($file));
+        $response->sendHeaders();
 
         echo readfile($file);
+    }
+
+    /**
+     * Returns filterable partners
+     */
+    public function getPartnersAction()
+    {
+        $limit = $this->Request()->getParam('limit', 20);
+        $offset = $this->Request()->getParam('start', 0);
+
+        /** @var \Doctrine\DBAL\Query\QueryBuilder $dbalBuilder */
+        $dbalBuilder = $this->get('dbal_connection')->createQueryBuilder();
+
+        $data = $dbalBuilder
+            ->select(['SQL_CALC_FOUND_ROWS MAX(IFNULL(partner.company, orders.partnerID)) as name', 'orders.partnerID as `value`'])
+            ->from('s_order', 'orders')
+            ->leftJoin('orders', 's_emarketing_partner', 'partner', 'orders.partnerID = partner.idcode')
+            ->where('orders.partnerID IS NOT NULL')
+            ->andWhere('orders.partnerID != ""')
+            ->groupBy('orders.partnerID')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->execute()
+            ->fetchAll();
+
+        $total = (int) $this->get('dbal_connection')->fetchColumn('SELECT FOUND_ROWS()');
+
+        $this->View()->assign(['success' => true, 'data' => $data, 'total' => $total]);
     }
 
     /**

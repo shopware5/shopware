@@ -300,7 +300,10 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
 
         $mailBody = str_replace("{sIP}", $_SERVER['REMOTE_ADDR'], $mailBody);
         $mailBody = str_replace("{sDateTime}", date("d.m.Y h:i:s"), $mailBody);
+
+        // {$sShopname} is now deprecated and will be removed in 5.3, please use {sShopname} (without '$') instead
         $mailBody = str_replace('{$sShopname}', Shopware()->Config()->shopName, $mailBody);
+        $mailBody = str_replace("{sShopname}", Shopware()->Config()->shopName, $mailBody);
         $mailBody = strip_tags($mailBody);
 
         $mail->setFrom(Shopware()->Config()->Mail);

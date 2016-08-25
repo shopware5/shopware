@@ -24,8 +24,8 @@
 
 namespace Shopware\Commands;
 
-use Shopware\Components\Routing\Context;
 use Shopware\Models\ProductFeed\ProductFeed;
+use Shopware\Models\ProductFeed\Repository;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -48,24 +48,6 @@ class GenerateProductFeedCommand extends ShopwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $front = $this->container->get('front');
-        if (!$front->Router()) {
-            $front->setRouter('Enlight_Controller_Router_Default');
-        }
-        if (!$front->Request()) {
-            $request = new \Enlight_Controller_Request_RequestHttp();
-            $front->setRequest($request);
-        }
-
-        $shop = $this->container->get('models')->getRepository('Shopware\Models\Shop\Shop')->getActiveDefault();
-        $context = Context::createFromShop($shop, $this->container->get('config'));
-        $this->container->get('router')->setContext($context);
-
-        $productFeedRepository = $this->container->get('models')->getRepository(
-            'Shopware\Models\ProductFeed\ProductFeed'
-        );
-        $activeFeeds = $productFeedRepository->getActiveListQuery()->getResult();
-
         $cacheDir = $this->container->getParameter('kernel.cache_dir');
         $cacheDir .= '/productexport/';
 
@@ -80,13 +62,18 @@ class GenerateProductFeedCommand extends ShopwareCommand
         /** @var $export \sExport */
         $export = $this->container->get('modules')->Export();
         $export->sSYSTEM = $this->container->get('system');
+
         $sSmarty = $this->container->get('template');
 
         // prevent notices to clutter generated files
         $this->registerErrorHandler($output);
 
+        /** @var Repository $productFeedRepository */
+        $productFeedRepository = $this->container->get('models')->getRepository(ProductFeed::class);
+        $activeFeeds = $productFeedRepository->getActiveListQuery()->getResult();
+
+        /** @var $feedModel ProductFeed */
         foreach ($activeFeeds as $feedModel) {
-            /** @var $feedModel ProductFeed */
             if ($feedModel->getInterval() == 0) {
                 continue;
             }

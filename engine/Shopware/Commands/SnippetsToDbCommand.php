@@ -25,6 +25,7 @@
 namespace Shopware\Commands;
 
 use Shopware\Components\Snippet\DatabaseHandler;
+use Shopware\Kernel;
 use Shopware\Models\Plugin\Plugin;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -97,9 +98,29 @@ class SnippetsToDbCommand extends ShopwareCommand
                 $databaseLoader->loadToDatabase($pluginPath.'/Snippets/', $force);
                 $databaseLoader->loadToDatabase($pluginPath.'/snippets/', $force);
                 $databaseLoader->loadToDatabase($pluginPath.'/Resources/snippet/', $force);
-            }
 
+                if ($plugin = $this->getPlugin($plugin->getName())) {
+                    $databaseLoader->loadToDatabase($plugin->getPath() . '/Resources/snippets/', $force);
+                }
+            }
             $output->writeln('<info>Plugin snippets processed correctly</info>');
         }
+    }
+
+    /**
+     * @param $pluginName
+     * @return null|\Shopware\Components\Plugin
+     */
+    private function getPlugin($pluginName)
+    {
+        /** @var Kernel $kernel */
+        $kernel = $this->container->get('kernel');
+        $plugins = $kernel->getPlugins();
+
+        if (!array_key_exists($pluginName, $plugins)) {
+            return null;
+        }
+
+        return $plugins[$pluginName];
     }
 }

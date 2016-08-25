@@ -48,14 +48,19 @@ class Shopware_Controllers_Frontend_Campaign extends Enlight_Controller_Action
         }
 
         $translator = new Shopware_Components_Translation();
-
         $translation = $translator->readWithFallback($shopId, $fallbackId, 'emotion', $emotionId);
 
-        $translation['seo_title'] = $translation['seoTitle'];
-        $translation['seo_keywords'] = $translation['seoKeywords'];
-        $translation['seo_description'] = $translation['seoDescription'];
+        if (!empty($translation['seoTitle'])) {
+            $landingPage['seo_title'] = $translation['seoTitle'];
+        }
 
-        $landingPage = array_merge($landingPage, $translation);
+        if (!empty($translation['seoKeywords'])) {
+            $landingPage['seo_keywords'] = $translation['seoKeywords'];
+        }
+
+        if (!empty($translation['seoDescription'])) {
+            $landingPage['seo_description'] = $translation['seoDescription'];
+        }
 
         $this->View()->assign([
             'sBreadcrumb'          => [['name' => $landingPage['name']]],

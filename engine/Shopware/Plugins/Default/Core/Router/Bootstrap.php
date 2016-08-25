@@ -232,7 +232,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
 
             if (isset($newPath)) {
                 // reset the cookie so only one valid cookie will be set IE11 fix
-                $response->setCookie("session-" . $shop->getId(), '', -1);
+                $response->setCookie("session-" . $shop->getId(), '', 1);
                 $response->setRedirect($newPath, 301);
             } else {
                 $this->upgradeShop($request, $response);
@@ -411,6 +411,13 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
 
         if ($shop === null && $request->getCookie('shop') !== null) {
             $shop = $repository->getActiveById($request->getCookie('shop'));
+        }
+
+        if ($shop && $request->getCookie('shop') !== null && $request->getPost('__shop') == null) {
+            $requestShop = $repository->getActiveByRequest($request);
+            if ($shop->getId() !== $requestShop->getId() && $shop->getBaseUrl() !== $requestShop->getBaseUrl()) {
+                $shop = $requestShop;
+            }
         }
 
         if ($shop === null) {

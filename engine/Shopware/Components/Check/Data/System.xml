@@ -1,5 +1,4 @@
 <?xml version="1.0"?>
-<shopware>
 <requirements>
 	<requirement>
 		<name>php</name><group>core</group><required>5.6.4</required>
@@ -9,16 +8,20 @@
 		<notice>The ionCube Loader is only required if you wish to use encrypted third-party plugins.</notice>
 	</requirement>
 	<requirement>
-	 	<name>mysql</name><group>core</group><required>5.5.0</required>
+		<name>mod_rewrite</name><group>core</group><required>1</required>
+		<notice>The Apache Module "mod_rewrite" should be active when using Shopware with the Apache Server.</notice>
 	</requirement>
 	<requirement>
-	 	<name>pdo</name><group>core</group><required>1</required>
+	 	<name>mysql</name><group>core</group><required>5.5.0</required><database>1</database>
 	</requirement>
 	<requirement>
-	 	<name>pdo_mysql</name><group>core</group><required>1</required>
+	 	<name>pdo</name><group>extension</group><required>1</required>
+	</requirement>
+	<requirement>
+	 	<name>pdo_mysql</name><group>extension</group><required>1</required>
 	</requirement>
     <requirement>
-   	 	<name>mysql_strict_mode</name><group>core</group><required>0</required>
+   	 	<name>mysql_strict_mode</name><group>core</group><required>0</required><database>1</database>
    	</requirement>
 	<requirement>
 	 	<name>disk_free_space</name><group>core</group><required>5 GB</required><info>1</info>
@@ -94,10 +97,9 @@
         <notice>When the "suhosin" PHP extension is loaded and the "get.max_value_length" is less than 2000, the Ext JS files cannot be loaded via GET request in the Shopware backend. This means that the Shopware backend can be partially uncached.</notice>
     </requirement>
 	<requirement>
-	 	<name>zip</name><group>other</group><required>1</required>
+	 	<name>zip</name><group>extension</group><required>1</required>
 	</requirement>
 	<requirement>
-	 	<name>ftp</name><group>other</group><required>1</required>
+	 	<name>ftp</name><group>extension</group><required>1</required>
 	</requirement>
 </requirements>
-</shopware>

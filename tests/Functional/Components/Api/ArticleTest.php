@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Components\Api;
+namespace Shopware\Tests\Functional\Components\Api;
 
 use Shopware\Components\Api\Resource\Article;
 use Shopware\Components\Api\Resource\Resource;
@@ -30,7 +30,7 @@ use Shopware\Components\Api\Resource\Resource;
 /**
  * @category  Shopware
  * @package   Shopware\Tests
- * @copyright Copyright (c) 2013, shopware AG (http://www.shopware.de)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
 class ArticleTest extends TestCase
 {
@@ -1779,7 +1779,7 @@ class ArticleTest extends TestCase
         );
 
         for ($i = 1; $i <= 20; $i++) {
-            $definedTranslation[0]['attr' . $i] = 'English-Attr' . $i;
+            $definedTranslation[0]['__attribute_attr' . $i] = 'English-Attr' . $i;
         }
 
         $data['translations'] = $definedTranslation;
@@ -1797,7 +1797,7 @@ class ArticleTest extends TestCase
         $this->assertEquals($definedTranslation['packUnit'], $savedTranslation['packUnit']);
 
         for ($i = 1; $i <= 20; $i++) {
-            $attr = 'attr' . $i;
+            $attr = '__attribute_attr' . $i;
             $this->assertEquals($definedTranslation[$attr], $savedTranslation[$attr]);
         }
     }

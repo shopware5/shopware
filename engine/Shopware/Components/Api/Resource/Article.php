@@ -599,7 +599,6 @@ class Article extends Resource implements BatchInterface
         /** @var $article \Shopware\Models\Article\Article */
         $article = $builder->getQuery()->getOneOrNullResult(self::HYDRATE_OBJECT);
 
-
         if (!$article) {
             throw new ApiException\NotFoundException("Article by id $id not found");
         }
@@ -676,7 +675,6 @@ class Article extends Resource implements BatchInterface
 
         $this->removeArticleDetails($article);
 
-
         $this->getManager()->remove($article);
         $this->flush();
 
@@ -724,7 +722,6 @@ class Article extends Resource implements BatchInterface
         $data = $this->preparePropertyValuesData($data, $article);
         $data = $this->prepareDownloadsAssociatedData($data, $article);
         $data = $this->prepareConfiguratorSet($data, $article);
-
 
         //need to set the tax data directly for following price calculations which use the tax object of the article
         if (isset($data['tax'])) {
@@ -787,7 +784,6 @@ class Article extends Resource implements BatchInterface
         if (isset($data['__options_variants']) && $data['__options_variants']['replace']) {
             $this->removeArticleDetails($article);
         }
-
 
         if ($oldMainDetail) {
             $mainDetailGetsConfigurator = false;
@@ -1969,6 +1965,14 @@ class Article extends Resource implements BatchInterface
                 throw new ApiException\CustomValidationException(sprintf("Shop by id %s not found", $translation['shopId']));
             }
 
+            //backward compatibility for attribute translations
+            foreach ($translation as $key => $value) {
+                $attrKey = '__attribute_' . $key;
+                if (in_array($attrKey, $whitelist) && !isset($translation[$attrKey])) {
+                    $translation[$attrKey] = $value;
+                }
+            }
+
             $data = array_intersect_key($translation, array_flip($whitelist));
             $translationWriter->write($shop->getId(), 'article', $articleId, $data);
         }
@@ -2000,7 +2004,11 @@ class Article extends Resource implements BatchInterface
             unset($properties[$property]);
         }
 
-        return array_values($properties);
+        $fields = [];
+        foreach ($properties as $property) {
+            $fields[] = '__attribute_' . $property;
+        }
+        return $fields;
     }
 
     /**
@@ -2075,23 +2083,29 @@ class Article extends Resource implements BatchInterface
             );
         }
 
-        $data['related'] = $this->translateAssociation(
-            $data['related'],
-            $shop,
-            'article'
-        );
+        if (isset($data['related'])) {
+            $data['related'] = $this->translateAssociation(
+                $data['related'],
+                $shop,
+                'article'
+            );
+        }
 
-        $data['similar'] = $this->translateAssociation(
-            $data['similar'],
-            $shop,
-            'article'
-        );
+        if (isset($data['similar'])) {
+            $data['similar'] = $this->translateAssociation(
+                $data['similar'],
+                $shop,
+                'article'
+            );
+        }
 
-        $data['images'] = $this->translateAssociation(
-            $data['images'],
-            $shop,
-            'articleimage'
-        );
+        if (isset($data['images'])) {
+            $data['images'] = $this->translateAssociation(
+                $data['images'],
+                $shop,
+                'articleimage'
+            );
+        }
 
         return $data;
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Shopware 4
+ * Shopware 5
  * Copyright (c) shopware AG
  *
  * According to our dual licensing model, this program can be used either
@@ -48,37 +48,41 @@ class sRewriteTest extends PHPUnit_Framework_TestCase
 
     public function provider()
     {
-        return array(
-            array(' a  b ', 'a-b'),
-            array('hello', 'hello'),
-            array('Hello', 'Hello'),
-            array('Hello World', 'Hello-World'),
-            array('Hello-World', 'Hello-World'),
-            array('Hello:World', 'Hello-World'),
-            array('Hello,World', 'Hello-World'),
-            array('Hello;World', 'HelloWorld'),
-            array('Hello&World', 'HelloWorld'),
-            array('Hello & World', 'Hello-und-World'),
-            array('Nguyễn Đăng Khoa', 'Nguyen-Dang-Khoa'),
-            array('Ä ä Ö ö Ü ü ß', 'AE-ae-OE-oe-UE-ue-ss'),
-            array('Á À á à É È é è Ó Ò ó ò Ñ ñ Ú Ù ú ù', 'A-A-a-a-E-E-e-e-O-O-o-o-N-n-U-U-u-u'),
-            array('Â â Ê ê Ô ô Û û', 'A-a-E-e-O-o-U-u'),
-            array('Â â Ê ê Ô ô Û 1', 'A-a-E-e-O-o-U-1'),
-            array('Привет мир', 'Privet-mir'),
-            array('Привіт світ', 'Privit-svit'),
-            array('H+e#l1l--o/W§o r.l:d)', 'H-el1l-o-Wo-r.l-d'),
-            array(': World', 'World'),
-            array('Hello World!', 'Hello-World'),
-           array('°¹²³@', '0123at'),
-           array('Mórë thån wørds', 'More-than-words'),
-           array('Блоґ їжачка', 'Blog-jizhachka'),
-           array('фильм', 'film'),
-           array('драма', 'drama'),
-           array('ελληνικά', 'ellenika'),
-           array('C’est du français !', 'Cest-du-francais'),
-           array('Één jaar', 'Een-jaar'),
-           array('tiếng việt rất khó', 'tieng-viet-rat-kho'),
-           array('Nguyễn Đăng Khoa', 'Nguyen-Dang-Khoa')
-        );
+        return [
+            [' a  b ', 'a-b'],
+            ['hello', 'hello'],
+            ['Hello', 'Hello'],
+            ['Hello World', 'Hello-World'],
+            ['Hello-World', 'Hello-World'],
+            ['Hello:World', 'Hello-World'],
+            ['Hello,World', 'Hello-World'],
+            ['Hello;World', 'Hello-World'],
+            ['Hello&World', 'Hello-World'],
+            ['Hello & World', 'Hello-World'],
+            ['Hello.World.html', 'Hello.World.html'],
+            ['Hello World.html', 'Hello-World.html'],
+            ['Hello World!', 'Hello-World'],
+            ['Hello World!.html', 'Hello-World.html'],
+            ['Hello / World', 'Hello/World'],
+            ['Hello/World', 'Hello/World'],
+            ['H+e#l1l--o/W§o r.l:d)', 'H-e-l1l-o/W-o-r.l-d'],
+            [': World', 'World'],
+            ['Nguyễn Đăng Khoa', 'Nguyen-Dang-Khoa'],
+            ['Ä ä Ö ö Ü ü ß', 'AE-ae-OE-oe-UE-ue-ss'],
+            ['Á À á à É È é è Ó Ò ó ò Ñ ñ Ú Ù ú ù', 'A-A-a-a-E-E-e-e-O-O-o-o-N-n-U-U-u-u'],
+            ['Â â Ê ê Ô ô Û û', 'A-a-E-e-O-o-U-u'],
+            ['Â â Ê ê Ô ô Û 1', 'A-a-E-e-O-o-U-1'],
+            ['Привет мир', 'Privet-mir'],
+            ['Привіт світ', 'Privit-svit'],
+            ['°¹²³@', '0123at'],
+            ['Mórë thån wørds', 'More-thaan-woerds'],
+            ['Блоґ їжачка', 'Blog-jizhachka'],
+            ['фильм', 'film'],
+            ['драма', 'drama'],
+            ['ελληνικά', 'ellinika'],
+            ['C’est du français !', 'C-est-du-francais'],
+            ['Één jaar', 'Een-jaar'],
+            ['tiếng việt rất khó', 'tieng-viet-rat-kho'],
+        ];
     }
 }

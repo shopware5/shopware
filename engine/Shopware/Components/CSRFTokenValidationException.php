@@ -30,4 +30,5 @@ namespace Shopware\Components;
  */
 class CSRFTokenValidationException extends \Exception
 {
+    protected $code = 400;
 }

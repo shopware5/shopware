@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Plugins\Core\RestApi\Componets;
+namespace Shopware\Tests\Functional\Plugins\Core\RestApi\Componets;
 
 use ShopwarePlugins\RestApi\Components\Router;
 

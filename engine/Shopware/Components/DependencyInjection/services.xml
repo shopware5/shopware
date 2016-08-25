@@ -4,6 +4,13 @@
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
+    <parameters>
+        <parameter key="shopware.slug.config" type="collection">
+            <parameter key="regexp">/([^A-Za-z0-9\.]|-)+/</parameter>
+            <parameter key="lowercase">false</parameter>
+        </parameter>
+    </parameters>
+
     <services>
         <service id="application"     synthetic="true" />
         <service id="PasswordEncoder" synthetic="true" />
@@ -28,9 +35,7 @@
             <argument type="service" id="shopware.locale"/>
         </service>
 
-        <service id="snippet_resource"
-                 class="Enlight_Components_Snippet_Resource"
-                 public="false">
+        <service id="snippet_resource" class="Enlight_Components_Snippet_Resource">
             <argument type="service" id="snippets"/>
             <argument>%shopware.snippet.showSnippetPlaceholder%</argument>
         </service>
@@ -335,6 +340,10 @@
             <argument type="service" id="shopware_storefront.context_service" />
             <argument type="service" id="events" />
             <argument type="service" id="shopware_media.media_service" />
+            <argument type="service" id="dbal_connection" />
+            <argument type="service" id="models" />
+            <argument type="service" id="shopware_storefront.category_service" />
+            <argument type="service" id="service_container" />
         </service>
 
         <service id="legacy_event_manager" class="Shopware\Components\Compatibility\LegacyEventManager">
@@ -393,6 +402,10 @@
             <tag name="shopware.event_subscriber" />
         </service>
 
+        <service id="ErrorSubscriber" class="Shopware\Components\ErrorSubscriber">
+            <tag name="shopware.event_subscriber" />
+        </service>
+
         <service id="config_writer" class="Shopware\Components\ConfigWriter">
             <argument type="service" id="dbal_connection" />
         </service>
@@ -448,6 +461,19 @@
         <service id="shopware.plugin_requirement_validator" class="Shopware\Components\Plugin\RequirementValidator">
             <argument type="service" id="models" />
             <argument type="service" id="shopware.plugin_xml_plugin_info_reader" />
+        </service>
+
+        <service id="slugify" class="Cocur\Slugify\Slugify" public="false">
+            <argument>%shopware.slug.config%</argument>
+        </service>
+
+        <service id="shopware.slug" class="Shopware\Components\Slug\CocurSlugifyAdapter">
+            <argument type="service" id="slugify" />
+        </service>
+
+        <service id="shopware.requirements" class="Shopware\Components\Check\Requirements">
+            <argument>%kernel.root_dir%/engine/Shopware/Components/Check/Data/System.xml</argument>
+            <argument type="service" id="db_connection"/>
         </service>
     </services>
 </container>

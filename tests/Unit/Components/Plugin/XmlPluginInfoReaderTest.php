@@ -1,7 +1,11 @@
 <?php
+
+namespace Shopware\Tests\Unit\Components\Plugin;
+
+use PHPUnit\Framework\TestCase;
 use Shopware\Components\Plugin\XmlPluginInfoReader;
 
-class XmlPluginInfoReaderTest extends \PHPUnit_Framework_TestCase
+class XmlPluginInfoReaderTest extends TestCase
 {
     /**
      * @var XmlPluginInfoReader

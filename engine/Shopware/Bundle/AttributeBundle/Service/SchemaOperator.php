@@ -64,10 +64,11 @@ class SchemaOperator
      * @param string $table
      * @param string $column
      * @param string $type
+     * @param null|string|int|float $defaultValue
      * @throws \Doctrine\DBAL\DBALException
      * @throws \Exception
      */
-    public function createColumn($table, $column, $type)
+    public function createColumn($table, $column, $type, $defaultValue = null)
     {
         $this->validate($table, $column);
 
@@ -75,7 +76,7 @@ class SchemaOperator
             throw new \Exception("No column type provided");
         }
 
-        $sql = sprintf("ALTER TABLE `%s` ADD `%s` %s NULL DEFAULT NULL", $table, $column, $type);
+        $sql = sprintf("ALTER TABLE `%s` ADD `%s` %s NULL DEFAULT %s", $table, $column, $type, $defaultValue);
         $this->connection->executeQuery($sql);
     }
 
@@ -84,10 +85,11 @@ class SchemaOperator
      * @param string $originalName
      * @param string $newName
      * @param string $type
+     * @param null|string|int|float $defaultValue
      * @throws \Doctrine\DBAL\DBALException
      * @throws \Exception
      */
-    public function changeColumn($table, $originalName, $newName, $type)
+    public function changeColumn($table, $originalName, $newName, $type, $defaultValue = null)
     {
         $this->validate($table, $originalName);
 
@@ -98,7 +100,7 @@ class SchemaOperator
             throw new \Exception("No column type provided");
         }
 
-        $sql = sprintf("ALTER TABLE `%s` CHANGE `%s` `%s` %s NULL DEFAULT NULL;", $table, $originalName, $newName, $type);
+        $sql = sprintf("ALTER TABLE `%s` CHANGE `%s` `%s` %s NULL DEFAULT %s;", $table, $originalName, $newName, $type, $defaultValue);
 
         $this->connection->executeQuery($sql);
     }

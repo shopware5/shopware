@@ -98,7 +98,7 @@ class LegacyPluginExtractor
             $segments = array_filter(explode('/', $segments['name']));
         }
 
-        return implode('/', $segments);
+        return implode('/', [$segments[0], $segments[1]]);
     }
 
     /**

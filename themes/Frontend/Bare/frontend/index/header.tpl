@@ -53,17 +53,17 @@
 
 {* Internet Explorer 9 specific meta tags *}
 {block name='frontend_index_header_meta_tags_ie9'}
-	<meta name="msapplication-navbutton-color" content="{$theme['_brand-primary']}" />{* Navbutton color *}
+	<meta name="msapplication-navbutton-color" content="{$theme['brand-primary']}" />{* Navbutton color *}
 	<meta name="application-name" content="{{config name=shopName}|escapeHtml}" />{* Pinned name *}
 	<meta name="msapplication-starturl" content="{url controller='index'}" />{* Start url to launch from the shortcut *}
 	<meta name="msapplication-window" content="width=1024;height=768" />{* Size of the window to launch *}
     <meta name="msapplication-TileImage" content="{link file=$theme.win8TileImage}"> {* Image of the Windows 8 tile *}
-    <meta name="msapplication-TileColor" content="{$theme['_brand-primary']}"> {* Backgroud Color of the Windows 8 tile *}
+    <meta name="msapplication-TileColor" content="{$theme['brand-primary']}"> {* Backgroud Color of the Windows 8 tile *}
 {/block}
 
 {* Android specifc meta tags *}
 {block name='frontend_index_header_meta_tags_android'}
-    <meta name="theme-color" content="{$theme['_brand-primary']}" />
+    <meta name="theme-color" content="{$theme['brand-primary']}" />
 {/block}
 
 {* Canonical link *}

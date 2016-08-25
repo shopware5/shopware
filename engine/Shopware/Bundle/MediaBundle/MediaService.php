@@ -27,6 +27,7 @@ namespace Shopware\Bundle\MediaBundle;
 use League\Flysystem\FilesystemInterface;
 use Shopware\Bundle\MediaBundle\Strategy\StrategyInterface;
 use Shopware\Components\DependencyInjection\Container;
+use Shopware\Models\Shop\Shop;
 
 /**
  * Class MediaService
@@ -112,7 +113,7 @@ class MediaService implements MediaServiceInterface
         }
 
         if ($this->strategy->isEncoded($path)) {
-            return $path;
+            return $this->mediaUrl . $path;
         }
 
         $this->migrateFile($path);
@@ -213,9 +214,25 @@ class MediaService implements MediaServiceInterface
 
         if ($request && $request->getHttpHost()) {
             return ($request->isSecure() ? 'https' : 'http') . '://' . $request->getHttpHost() . $request->getBasePath() . "/";
-        } else {
-            return $this->container->get('front')->Router()->assemble(['controller' => 'index', 'module' => 'frontend']);
         }
+
+        if ($this->container->has('Shop')) {
+            /** @var Shop $shop */
+            $shop = $this->container->get('Shop');
+        } else {
+            /** @var Shop $shop */
+            $shop = $this->container->get('models')->getRepository(Shop::class)->getActiveDefault();
+        }
+
+        if ($shop->getMain()) {
+            $shop = $shop->getMain();
+        }
+
+        if ($shop->getAlwaysSecure()) {
+            return 'https://' . $shop->getSecureHost() . $shop->getSecureBasePath() . '/';
+        }
+
+        return 'http://' . $shop->getHost() . $shop->getBasePath() . '/';
     }
 
     /**

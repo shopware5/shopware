@@ -876,7 +876,6 @@ class Variant extends Resource implements BatchInterface
         return $data;
     }
 
-
     /**
      * Prepares the base variant data to save over doctrine.
      * Resolves the foreign keys for the passed unit data.

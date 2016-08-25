@@ -198,7 +198,7 @@
     }
 
     /** Icons */
-    .icon-pdf, .icon-video, .icon-music, .icon-archive, .icon-unknown {
+	.icon-pdf, .icon-video, .icon-music, .icon-archive, .icon-model, .icon-unknown {
 	    width: 70px;
 	    height: 70px;
 	}
@@ -206,6 +206,7 @@
 	.icon-video { background: theme-image($theme, 'media_manager_icon_video.png') no-repeat }
 	.icon-music { background: theme-image($theme, 'media_manager_icon_music.png') no-repeat }
 	.icon-archive { background: theme-image($theme, 'media_manager_icon_archive.png') no-repeat }
+	.icon-model { background: theme-image($theme, 'media_manager_icon_3d.png') no-repeat }
 	.icon-unknown { background: theme-image($theme, 'media_manager_icon_notdetected.png') no-repeat }
 
 	.thumb-wrap {

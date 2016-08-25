@@ -119,9 +119,6 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
      */
     public function dispatch()
     {
-        if (!$this->getParam('noErrorHandler')) {
-            $this->Plugins()->load('ErrorHandler');
-        }
         if (!$this->getParam('noViewRenderer')) {
             $this->Plugins()->load('ViewRenderer');
         }

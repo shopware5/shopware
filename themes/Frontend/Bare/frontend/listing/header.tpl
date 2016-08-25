@@ -23,8 +23,8 @@
     <meta name="twitter:description" content="{$description|escapeHtml}" />
 
     {* Images *}
-    {if $sCategoryContent.media.path}
-        {$metaImage = {$sCategoryContent.media.path}}
+    {if $sCategoryContent.media.source}
+        {$metaImage = {$sCategoryContent.media.source}}
     {else}
         {foreach $sArticles as $sArticle}
             {if $sArticle@first}

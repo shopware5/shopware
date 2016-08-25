@@ -140,10 +140,21 @@ Ext.define('Shopware.apps.SwagUpdate.controller.Progress', {
                 }
             },
             failure: function (response) {
-                Shopware.Msg.createStickyGrowlMessage({
-                    title: '{s name=progress/timeOutTitle}An error occured{/s}',
-                    text: "{s name=progress/timeOut}The server could not handle the request. Please choose a smaller batch size.{/s}"
-                });
+                var json = {};
+
+                try {
+                    json = JSON.parse(response.responseText)
+                    
+                    Shopware.Msg.createStickyGrowlMessage({
+                        title: '{s name=progress/timeOutTitle}An error occured{/s}',
+                        text: json.message
+                    });
+                } catch (err) {
+                    Shopware.Msg.createStickyGrowlMessage({
+                        title: '{s name=progress/timeOutTitle}An error occured{/s}',
+                        text: "{s name=progress/timeOut}The server could not handle the request. Please choose a smaller batch size.{/s}"
+                    });
+                }
 
                 me.onProcessFailure(win);
             }

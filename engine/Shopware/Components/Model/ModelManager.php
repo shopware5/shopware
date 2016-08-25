@@ -298,6 +298,7 @@ class ModelManager extends EntityManager
      * @param bool $nullable Allow null property
      * @param null $default Default value of the column
      * @throws \InvalidArgumentException
+     * @deprecated since version 5.2.2, to be removed in 5.3 - Use \Shopware\Bundle\AttributeBundle\Service\CrudService::update instead
      */
     public function addAttribute($table, $prefix, $column, $type, $nullable = true, $default = null)
     {
@@ -350,6 +351,7 @@ class ModelManager extends EntityManager
      * @param $prefix
      * @param $column
      * @throws \InvalidArgumentException
+     * @deprecated since version 5.2.2, to be removed in 5.3 - Use \Shopware\Bundle\AttributeBundle\Service\CrudService::delete instead
      */
     public function removeAttribute($table, $prefix, $column)
     {

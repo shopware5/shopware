@@ -25,7 +25,7 @@
 /**
  * @category  Shopware
  * @package   Shopware\Tests
- * @copyright Copyright (c) 2015, shopware AG (http://www.shopware.com)
+ * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
 class Shopware_Tests_Components_Snippet_SnippetStructureTest extends Enlight_Components_Test_TestCase
 {

@@ -36,12 +36,10 @@ Ext.define('Shopware.apps.Config.model.form.Country', {
 
     fields: [
 		//{block name="backend/config/model/form/country/fields"}{/block}
-        { name: 'shippingFree', type: 'boolean' },
         { name: 'taxFree', type: 'boolean' },
         { name: 'taxFreeUstId', type: 'boolean' },
         { name: 'forceStateInRegistration', type: 'boolean' },
         { name: 'displayStateInRegistration', type: 'boolean' },
-//        { name: 'taxFreeUstIdChecked', type: 'boolean' },
         { name: 'iso3', type: 'string' },
         { name: 'description', type: 'string' },
         { name: 'area', convert: function(v, record) {

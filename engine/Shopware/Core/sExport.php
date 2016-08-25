@@ -688,7 +688,8 @@ class sExport
         if (empty($objectData)) {
             return array();
         }
-        $objectData = unserialize($objectData);
+
+        $objectData = @unserialize($objectData);
         if (empty($objectData)) {
             return array();
         }

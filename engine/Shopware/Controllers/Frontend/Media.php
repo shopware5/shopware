@@ -46,7 +46,7 @@ class Shopware_Controllers_Frontend_Media extends Enlight_Controller_Action
 
         $url = $mediaService->getUrl($requestedImage);
         $logger = $this->get('corelogger');
-        $logger->error('Legacy media url detected.', ['requestedUrl' => $requestedImage, 'redirectedTo' => $url]);
+        $logger->info('Legacy media url detected.', ['requestedUrl' => $requestedImage, 'redirectedTo' => $url]);
 
         $this->redirect($url, ['code' => 301]);
     }

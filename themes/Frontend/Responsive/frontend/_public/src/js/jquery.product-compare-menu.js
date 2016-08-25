@@ -149,17 +149,26 @@
          */
         onDeleteCompare: function (event) {
             var me = this,
+                $target = $(event.currentTarget),
                 deleteCompareBtn = me.$el.find(me.opts.deleteCompareSelector),
-                deleteUrl = deleteCompareBtn.attr('href'),
-                $menu = $(me.opts.compareMenuSelector);
+                $form = deleteCompareBtn.closest('form'),
+                $menu = $(me.opts.compareMenuSelector),
+                deleteUrl;
 
             event.preventDefault();
+
+            // @deprecated: Don't use anchors for action links. Use forms with method="post" instead.
+            if ($target.attr('href')) {
+                deleteUrl = $target.attr('href');
+            } else {
+                deleteUrl = $form.attr('action');
+            }
 
             $.ajax({
                 'url': deleteUrl,
                 'dataType': 'jsonp',
                 'success': function () {
-                    $menu.empty();
+                    $menu.empty().addClass(me.opts.hiddenCls);
 
                     $.publish('plugin/swProductCompareMenu/onDeleteCompareSuccess', [ me ]);
                 }
@@ -178,9 +187,17 @@
 
             var me = this,
                 $deleteBtn = $(event.currentTarget),
-                deleteUrl = $deleteBtn.attr('href'),
+                $form = $deleteBtn.closest('form'),
                 rowElement = $deleteBtn.closest(me.opts.compareEntrySelector),
-                compareCount = $(me.opts.compareEntriesSelector).length;
+                compareCount = $(me.opts.compareEntriesSelector).length,
+                deleteUrl;
+
+            // @deprecated: Don't use anchors for action links. Use forms with method="post" instead.
+            if ($deleteBtn.attr('href')) {
+                deleteUrl = $deleteBtn.attr('href');
+            } else {
+                deleteUrl = $form.attr('action');
+            }
 
             if(compareCount > 1) {
 
@@ -207,7 +224,7 @@
                     'url': deleteUrl,
                     'dataType': 'jsonp',
                     'success': function (response) {
-                        $(me.opts.compareMenuSelector).html(response);
+                        $(me.opts.compareMenuSelector).empty().addClass(me.opts.hiddenCls);
 
                         //Reload compare menu plugin
                         $('*[data-product-compare-menu="true"]').swProductCompareMenu();

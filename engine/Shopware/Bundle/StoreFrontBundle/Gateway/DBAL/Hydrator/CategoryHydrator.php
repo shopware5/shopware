@@ -44,15 +44,23 @@ class CategoryHydrator extends Hydrator
     private $mediaHydrator;
 
     /**
+     * @var ProductStreamHydrator
+     */
+    private $productStreamHydrator;
+
+    /**
      * @param AttributeHydrator $attributeHydrator
      * @param MediaHydrator $mediaHydrator
+     * @param ProductStreamHydrator $productStreamHydrator
      */
     public function __construct(
         AttributeHydrator $attributeHydrator,
-        MediaHydrator $mediaHydrator
+        MediaHydrator $mediaHydrator,
+        ProductStreamHydrator $productStreamHydrator
     ) {
         $this->attributeHydrator = $attributeHydrator;
         $this->mediaHydrator = $mediaHydrator;
+        $this->productStreamHydrator = $productStreamHydrator;
     }
 
     /**
@@ -73,6 +81,12 @@ class CategoryHydrator extends Hydrator
 
         if ($data['__categoryAttribute_id']) {
             $this->attributeHydrator->addAttribute($category, $data, 'categoryAttribute');
+        }
+
+        if (isset($data['__stream_id']) && $data['__stream_id']) {
+            $category->setProductStream(
+                $this->productStreamHydrator->hydrate($data)
+            );
         }
 
         return $category;
@@ -106,6 +120,10 @@ class CategoryHydrator extends Hydrator
         $category->setPosition((int) $data['__category_position']);
 
         $category->setProductBoxLayout($data['__category_product_box_layout']);
+
+        if (isset($data['__category_metatitle'])) {
+            $category->setMetaTitle($data['__category_metatitle']);
+        }
 
         if (isset($data['__category_metakeywords'])) {
             $category->setMetaKeywords($data['__category_metakeywords']);

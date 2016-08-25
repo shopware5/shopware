@@ -1391,6 +1391,7 @@ class sArticles
                 $value = $this->getRandomArticle($mode, $category);
                 break;
             case "fix":
+            default:
                 break;
         }
 
@@ -1398,10 +1399,11 @@ class sArticles
             return false;
         }
 
-        $number = $this->getOrdernumberByArticleId($value);
-
-        if ($number) {
-            $value = $number;
+        if (is_numeric($value)) {
+            $number = $this->getOrdernumberByArticleId($value);
+            if ($number) {
+                $value = $number;
+            }
         }
 
         return $value;
@@ -1467,6 +1469,7 @@ class sArticles
     public function sOptimizeText($text)
     {
         $text = html_entity_decode($text, ENT_NOQUOTES, 'UTF-8');
+        $text = preg_replace('@<(script|style)[^>]*?>.*?</\\1>@si', '', $text);
         $text = preg_replace('!<[^>]*?>!u', ' ', $text);
         $text = preg_replace('/\s\s+/u', ' ', $text);
         $text = trim($text);
@@ -1494,16 +1497,12 @@ class sArticles
 
         $highDpiThumbnails = $articleAlbum->getSettings()->isThumbnailHighDpi();
 
-        //now we get the configured image and thumbnail dir.
-        $imageDir = $this->sSYSTEM->sPathArticleImg;
-        $thumbDir = $imageDir. 'thumbnail/';
-
         //if no extension is configured, shopware use jpg as default extension
         if (empty($image['extension'])) {
             $image['extension'] = 'jpg';
         }
 
-        $imageData['src']['original'] = $imageDir . $image["path"] . "." . $image["extension"];
+        $imageData['src']['original'] = $mediaService->getUrl('media/image/' . $image["path"] . "." . $image["extension"]);
         $imageData["res"]["original"]["width"] = $image["width"];
         $imageData["res"]["original"]["height"] = $image["height"];
         $imageData["res"]["description"] = $image["description"];
@@ -1539,9 +1538,9 @@ class sArticles
             if (strpos($size, 'x')===0) {
                 $size = $size.'x'.$size;
             }
-            $imageData["src"][$key] = $mediaService->getUrl($thumbDir . $image['path'] . '_'. $size .'.'. $image['extension']);
+            $imageData["src"][$key] = $mediaService->getUrl('media/image/thumbnail/' . $image['path'] . '_'. $size .'.'. $image['extension']);
             if ($highDpiThumbnails) {
-                $imageData["srchd"][$key] = $mediaService->getUrl($thumbDir . $image['path'] . '_'. $size .'@2x.'. $image['extension']);
+                $imageData["srchd"][$key] = $mediaService->getUrl('media/image/thumbnail/' . $image['path'] . '_'. $size .'@2x.'. $image['extension']);
             }
         }
 

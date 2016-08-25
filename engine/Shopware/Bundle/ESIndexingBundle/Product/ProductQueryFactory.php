@@ -30,7 +30,7 @@ use Shopware\Bundle\ESIndexingBundle\LastIdQuery;
  * Class ProductQueryFactory
  * @package Shopware\Bundle\ESIndexingBundle\Product
  */
-class ProductQueryFactory
+class ProductQueryFactory implements ProductQueryFactoryInterface
 {
     /**
      * @var Connection
@@ -68,9 +68,7 @@ class ProductQueryFactory
     }
 
     /**
-     * @param $categoryId
-     * @param null|int $limit
-     * @return LastIdQuery
+     * @inheritdoc
      */
     public function createCategoryQuery($categoryId, $limit = null)
     {
@@ -90,9 +88,7 @@ class ProductQueryFactory
     }
 
     /**
-     * @param int|null $limit
-     * @param int[] $priceIds
-     * @return LastIdQuery
+     * @inheritdoc
      */
     public function createPriceIdQuery($priceIds, $limit = null)
     {
@@ -106,9 +102,7 @@ class ProductQueryFactory
     }
 
     /**
-     * @param int|null $limit
-     * @param int[] $unitIds
-     * @return LastIdQuery
+     * @inheritdoc
      */
     public function createUnitIdQuery($unitIds, $limit = null)
     {
@@ -120,9 +114,7 @@ class ProductQueryFactory
     }
 
     /**
-     * @param int|null $limit
-     * @param int[] $voteIds
-     * @return LastIdQuery
+     * @inheritdoc
      */
     public function createVoteIdQuery($voteIds, $limit = null)
     {
@@ -135,9 +127,7 @@ class ProductQueryFactory
     }
 
     /**
-     * @param int[] $productIds
-     * @param null $limit
-     * @return LastIdQuery
+     * @inheritdoc
      */
     public function createProductIdQuery($productIds, $limit = null)
     {
@@ -149,9 +139,7 @@ class ProductQueryFactory
     }
 
     /**
-     * @param int|null $limit
-     * @param int[] $variantIds
-     * @return LastIdQuery
+     * @inheritdoc
      */
     public function createVariantIdQuery($variantIds, $limit = null)
     {
@@ -164,9 +152,7 @@ class ProductQueryFactory
     }
 
     /**
-     * @param int|null $limit
-     * @param int[] $taxIds
-     * @return LastIdQuery
+     * @inheritdoc
      */
     public function createTaxQuery($taxIds, $limit = null)
     {
@@ -178,9 +164,7 @@ class ProductQueryFactory
     }
 
     /**
-     * @param int|null $limit
-     * @param int[] $manufacturerIds
-     * @return LastIdQuery
+     * @inheritdoc
      */
     public function createManufacturerQuery($manufacturerIds, $limit = null)
     {
@@ -192,9 +176,7 @@ class ProductQueryFactory
     }
 
     /**
-     * @param int|null $limit
-     * @param int[] $categoryIds
-     * @return LastIdQuery
+     * @inheritdoc
      */
     public function createProductCategoryQuery($categoryIds, $limit = null)
     {
@@ -207,9 +189,7 @@ class ProductQueryFactory
     }
 
     /**
-     * @param int|null $limit
-     * @param int[] $groupIds
-     * @return LastIdQuery
+     * @inheritdoc
      */
     public function createPropertyGroupQuery($groupIds, $limit = null)
     {
@@ -223,9 +203,7 @@ class ProductQueryFactory
     }
 
     /**
-     * @param int|null $limit
-     * @param int[] $optionIds
-     * @return LastIdQuery
+     * @inheritdoc
      */
     public function createPropertyOptionQuery($optionIds, $limit = null)
     {

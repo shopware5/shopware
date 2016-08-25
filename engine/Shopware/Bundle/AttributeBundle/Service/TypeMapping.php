@@ -33,63 +33,97 @@ use Doctrine\DBAL\Types\Type;
  */
 class TypeMapping
 {
+    const TYPE_STRING = 'string';
+    const TYPE_TEXT = 'text';
+    const TYPE_HTML = 'html';
+    const TYPE_INTEGER = 'integer';
+    const TYPE_FLOAT = 'float';
+    const TYPE_BOOLEAN = 'boolean';
+    const TYPE_DATE = 'date';
+    const TYPE_DATETIME = 'datetime';
+    const TYPE_COMBOBOX = 'combobox';
+    const TYPE_SINGLE_SELECTION = 'single_selection';
+    const TYPE_MULTI_SELECTION = 'multi_selection';
+
     /**
      * @var array
      */
     private $types = [
-        'string'   => [
+        self::TYPE_STRING   => [
             'sql' => 'VARCHAR(500)',
             'dbal' => 'string',
+            'allowDefaultValue' => true,
+            'quoteDefaultValue' => true,
             'elastic' => ['type' => 'string']
         ],
-        'text'     => [
+        self::TYPE_TEXT     => [
             'sql' => 'TEXT',
             'dbal' => 'text',
+            'allowDefaultValue' => false,
+            'quoteDefaultValue' => false,
             'elastic' => ['type' => 'string']
         ],
-        'html'     => [
+        self::TYPE_HTML     => [
             'sql' => 'MEDIUMTEXT',
             'dbal' => 'text',
+            'allowDefaultValue' => false,
+            'quoteDefaultValue' => false,
             'elastic' => ['type' => 'string']
         ],
-        'integer'  => [
+        self::TYPE_INTEGER  => [
             'sql' => 'INT(11)',
             'dbal' => 'integer',
+            'allowDefaultValue' => true,
+            'quoteDefaultValue' => false,
             'elastic' => ['type' => 'long']
         ],
-        'float'    => [
+        self::TYPE_FLOAT    => [
             'sql' => 'DOUBLE',
             'dbal' => 'float',
+            'allowDefaultValue' => true,
+            'quoteDefaultValue' => false,
             'elastic' => ['type' => 'double']
         ],
-        'boolean'  => [
+        self::TYPE_BOOLEAN  => [
             'sql' => 'INT(1)',
             'dbal' => 'boolean',
+            'allowDefaultValue' => true,
+            'quoteDefaultValue' => false,
             'elastic' => ['type' => 'boolean']
         ],
-        'date'     => [
+        self::TYPE_DATE     => [
             'sql' => 'DATE',
             'dbal' => 'date',
+            'allowDefaultValue' => true,
+            'quoteDefaultValue' => true,
             'elastic' => ['type' => 'date', 'format' => 'yyyy-MM-dd']
         ],
-        'datetime' => [
+        self::TYPE_DATETIME => [
             'sql' => 'DATETIME',
             'dbal' => 'datetime',
-            'elastic' => ['type' => 'date', 'format' => 'yyyy-MM-dd']
+            'allowDefaultValue' => true,
+            'quoteDefaultValue' => true,
+            'elastic' => ['type' => 'date', 'format' => 'yyyy-MM-dd HH:mm:ss']
         ],
-        'combobox' => [
+        self::TYPE_COMBOBOX => [
             'sql' => 'MEDIUMTEXT',
             'dbal' => 'text',
+            'allowDefaultValue' => false,
+            'quoteDefaultValue' => false,
             'elastic' => ['type' => 'string']
         ],
-        'single_selection' => [
+        self::TYPE_SINGLE_SELECTION => [
             'sql' => 'VARCHAR(500)',
             'dbal' => 'text',
+            'allowDefaultValue' => true,
+            'quoteDefaultValue' => true,
             'elastic' => ['type' => 'string']
         ],
-        'multi_selection' => [
+        self::TYPE_MULTI_SELECTION => [
             'sql' => 'MEDIUMTEXT',
             'dbal' => 'text',
+            'allowDefaultValue' => false,
+            'quoteDefaultValue' => false,
             'elastic' => ['type' => 'string']
         ]
     ];
@@ -98,25 +132,25 @@ class TypeMapping
      * @var array
      */
     private $dbalTypes = [
-        'array' => 'text',
-        'simple_array' => 'text',
-        'json_array' => 'text',
-        'bigint' => 'integer',
-        'boolean' => 'boolean',
-        'datetime' => 'datetime',
-        'datetimetz' => 'date',
-        'date' => 'date',
-        'time' => 'string',
-        'decimal' => 'float',
-        'integer' => 'integer',
-        'object' => 'text',
-        'smallint' => 'integer',
-        'string' => 'string',
-        'text' => 'text',
-        'binary' => 'text',
-        'blob' => 'text',
-        'float' => 'float',
-        'guid' => 'text'
+        'array' => self::TYPE_TEXT,
+        'simple_array' => self::TYPE_TEXT,
+        'json_array' => self::TYPE_TEXT,
+        'bigint' => self::TYPE_INTEGER,
+        'boolean' => self::TYPE_BOOLEAN,
+        'datetime' => self::TYPE_DATETIME,
+        'datetimetz' => self::TYPE_DATE,
+        'date' => self::TYPE_DATE,
+        'time' => self::TYPE_STRING,
+        'decimal' => self::TYPE_FLOAT,
+        'integer' => self::TYPE_INTEGER,
+        'object' => self::TYPE_TEXT,
+        'smallint' => self::TYPE_INTEGER,
+        'string' => self::TYPE_STRING,
+        'text' => self::TYPE_TEXT,
+        'binary' => self::TYPE_TEXT,
+        'blob' => self::TYPE_TEXT,
+        'float' => self::TYPE_FLOAT,
+        'guid' => self::TYPE_TEXT
     ];
 
     /**
@@ -206,7 +240,7 @@ class TypeMapping
     {
         $type = strtolower($type);
         if (!isset($this->types[$type])) {
-            return 'string';
+            return $this->types['string']['sql'];
         }
         $mapping = $this->types[$type];
         return $mapping['sql'];

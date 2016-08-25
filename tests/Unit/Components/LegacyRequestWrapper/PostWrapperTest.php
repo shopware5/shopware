@@ -21,25 +21,30 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
+namespace Shopware\Tests\Unit\Components\LegacyRequestWrapper;
+
+use PHPUnit\Framework\TestCase;
+
 /**
  * @covers \Shopware\Components\LegacyRequestWrapper\PostWrapper
  */
-class PostWrapperTest extends \PHPUnit_Framework_TestCase
+class PostWrapperTest extends TestCase
 {
     /**
-     * @var Enlight_Controller_Request_RequestTestCase
+     * @var \Enlight_Controller_Request_RequestTestCase
      */
     private $request;
 
     /**
-     * @var sSystem
+     * @var \sSystem
      */
     private $system;
 
     public function setUp()
     {
-        $this->request = new Enlight_Controller_Request_RequestTestCase();
-        $this->system = new sSystem($this->request);
+        $this->request = new \Enlight_Controller_Request_RequestTestCase();
+        $this->system = new \sSystem($this->request);
     }
 
     public function tearDown()

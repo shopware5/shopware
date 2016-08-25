@@ -42,7 +42,7 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.tab.Filter', {
     border: 0,
     layout: 'anchor',
     padding: 10,
-    cls: 'shopware-toolbar',
+    cls: 'shopware-toolbar product-feed--tab-filter',
     defaults:{
         anchor:'100%',
         labelStyle:'font-weight: 700;',
@@ -104,9 +104,9 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.tab.Filter', {
             {
                 xtype: 'codemirrorfield',
                 fieldLabel:'{s name=tab/filter/field/own_filter}Own filters{/s}',
-                mode: 'mysql',
+                mode: 'sql',
                 anchor:'100%',
-                height: '40px',
+                height: '80px',
                 name: 'ownFilter'
             },
             {

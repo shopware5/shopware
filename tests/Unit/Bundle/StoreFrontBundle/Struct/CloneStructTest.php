@@ -1,7 +1,8 @@
 <?php
 
-namespace Shopware\Tests\StoreFrontBundle\Struct;
+namespace Shopware\Tests\Unit\StoreFrontBundle\Struct;
 
+use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\StoreFrontBundle\Struct\Struct as BaseStruct;
 
 class SimpleStruct extends BaseStruct
@@ -30,7 +31,7 @@ class SimpleStruct extends BaseStruct
     }
 }
 
-class CloneStructTest extends \PHPUnit_Framework_TestCase
+class CloneStructTest extends TestCase
 {
     public function testNestedStructCloning()
     {

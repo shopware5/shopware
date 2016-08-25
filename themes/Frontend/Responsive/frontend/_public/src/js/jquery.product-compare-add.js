@@ -40,9 +40,17 @@
         onAddArticleCompare: function (event) {
             var me = this,
                 $target = $(event.target),
-                addArticleUrl = $target.attr('href');
+                $form = $target.closest('form'),
+                addArticleUrl;
 
             event.preventDefault();
+
+            // @deprecated: Don't use anchors for action links. Use forms with method="post" instead.
+            if ($target.attr('href')) {
+                addArticleUrl = $target.attr('href');
+            } else {
+                addArticleUrl = $form.attr('action');
+            }
 
             if(!addArticleUrl) {
                 return;

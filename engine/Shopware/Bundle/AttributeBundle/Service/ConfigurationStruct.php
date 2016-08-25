@@ -87,6 +87,11 @@ class ConfigurationStruct implements \JsonSerializable
     private $columnName;
 
     /**
+     * @var null|string|int|float
+     */
+    private $defaultValue;
+
+    /**
      * @var boolean
      */
     private $identifier;
@@ -434,5 +439,21 @@ class ConfigurationStruct implements \JsonSerializable
     public function setElasticSearchType($elasticSearchType)
     {
         $this->elasticSearchType = $elasticSearchType;
+    }
+
+    /**
+     * @return null|string|int|float
+     */
+    public function getDefaultValue()
+    {
+        return $this->defaultValue;
+    }
+
+    /**
+     * @param null|string|int|float $defaultValue
+     */
+    public function setDefaultValue($defaultValue)
+    {
+        $this->defaultValue = $defaultValue;
     }
 }

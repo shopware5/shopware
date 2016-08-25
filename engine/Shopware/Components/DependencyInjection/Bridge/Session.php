@@ -59,6 +59,11 @@ class Session
         $name = 'session-' . $shop->getId();
         $sessionOptions['name'] = $name;
 
+        $mainShop = $shop->getMain() ?: $shop;
+        if ($mainShop->getAlwaysSecure()) {
+            $sessionOptions['cookie_secure'] = true;
+        }
+
         if (!isset($sessionOptions['save_handler']) || $sessionOptions['save_handler'] == 'db') {
             $config_save_handler = array(
                 'db'             => $container->get('Db'),

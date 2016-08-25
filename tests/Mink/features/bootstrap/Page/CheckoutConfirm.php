@@ -4,6 +4,7 @@ namespace  Shopware\Tests\Mink\Page;
 use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Mink\Exception\ResponseTextException;
 use Behat\Mink\WebAssert;
+use Shopware\Tests\Mink\Element\CheckoutModalAddressEditor;
 use Shopware\Tests\Mink\Element\CheckoutPayment;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use Shopware\Tests\Mink\Helper;
@@ -23,7 +24,21 @@ class CheckoutConfirm extends Page implements \Shopware\Tests\Mink\HelperSelecto
         return [
             'shippingPaymentForm' => 'form.payment',
             'proceedCheckoutForm' => 'form#confirm--form',
-            'orderNumber' => 'div.finish--details > div.panel--body'
+            'orderNumber' => 'div.finish--details > div.panel--body',
+            'addressForm' => 'form[name="frmAddresses"]',
+            'company' => '.address--company',
+            'address' => '.address--address',
+            'salutation' => '.address--salutation',
+            'customerTitle' => '.address--title',
+            'firstname' => '.address--firstname',
+            'lastname' => '.address--lastname',
+            'street' => '.address--street',
+            'addLineOne' => '.address--additional-one',
+            'addLineTwo' => '.address--additional-two',
+            'zipcode' => '.address--zipcode',
+            'city' => '.address--city',
+            'stateName' => '.address--statename',
+            'countryName' => '.address--countryname',
         ];
     }
 
@@ -35,7 +50,8 @@ class CheckoutConfirm extends Page implements \Shopware\Tests\Mink\HelperSelecto
         return [
             'gtc' => ['de' => 'AGB und Widerrufsbelehrung', 'en' => 'Terms, conditions and cancellation policy'],
             'confirmButton' => ['de' => 'Zahlungspflichtig bestellen', 'en' => 'Send order'],
-            'changePaymentButton' => ['de' => 'Weiter', 'en' => 'Next']
+            'changePaymentButton' => ['de' => 'Weiter', 'en' => 'Next'],
+            'saveAsNewAddressButton' => ['de' => 'Als neue Adresse speichern'],
         ];
     }
 
@@ -163,5 +179,27 @@ class CheckoutConfirm extends Page implements \Shopware\Tests\Mink\HelperSelecto
         );
 
         Helper::throwException($message);
+    }
+
+    /**
+     * Creates a new address and saves it
+     * @param $values
+     */
+    public function createArbitraryAddress($values)
+    {
+        Helper::fillForm($this, 'addressForm', $values);
+        $button = $this->find('css', '.address--form-actions > button');
+        $button->press();
+    }
+
+    /**
+     * Changes the values in a modal address form and saves the form
+     * @param $values
+     */
+    public function changeModalAddress($values)
+    {
+        Helper::fillForm($this, 'addressForm', $values);
+        $button = $this->find('named', ['button', 'Adresse speichern']);
+        $button->press();
     }
 }
