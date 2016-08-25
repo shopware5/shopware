@@ -1,3 +1,4 @@
+{block name="frontend_detail_index_similar_viewed"}
 {if $viewedArticles}
     {block name="frontend_detail_index_similar_viewed_slider"}
         <div class="viewed--content">
@@ -5,3 +6,4 @@
         </div>
     {/block}
 {/if}
+{/block}

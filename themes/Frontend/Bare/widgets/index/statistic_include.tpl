@@ -1,3 +1,4 @@
+{block name="widgets_index_statistic_include"}
 <script>
 (function($) {
     var cok = document.cookie.match(/session-{$Shop->getId()}=([^;])+/g),
@@ -27,3 +28,4 @@
 
 })(jQuery);
 </script>
+{/block}
