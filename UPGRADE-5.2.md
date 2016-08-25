@@ -28,7 +28,7 @@ This changelog references changes done in Shopware 5.2 patch versions.
 * Updated `ongr/elasticsearch-dsl` to version 2.0.2
 * Updated `phpunit/phpunit` to version 5.5
 * Removed unused smarty block `frontend_checkout_cart_item_small_quantites_tax_price` in `themes/Frontend/Bare/frontend/checkout/confirm_item.tpl`
-* Added method `Enlight_Controller_Response_ResponseTestCase::sendCookies` so it's consitent with `Enlight_Controller_Response_ResponseHttp`
+* Added method `Enlight_Controller_Response_ResponseTestCase::sendCookies` so it's consistent with `Enlight_Controller_Response_ResponseHttp`
 
 ## 5.2.5
 
