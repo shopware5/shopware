@@ -174,7 +174,8 @@ class PropertyFacetHandler implements FacetHandlerInterface
                             $option->getId(),
                             $actives
                         ),
-                        $option->getMedia()
+                        $option->getMedia(),
+                        $option->getAttributes()
                     );
 
                     $isActive = ($isActive || $listItem->isActive());
@@ -189,7 +190,8 @@ class PropertyFacetHandler implements FacetHandlerInterface
                         $isActive,
                         $group->getName(),
                         $items,
-                        $this->fieldName
+                        $this->fieldName,
+                        $group->getAttributes()
                     );
                 } else {
                     $results[] = new ValueListFacetResult(
@@ -197,7 +199,8 @@ class PropertyFacetHandler implements FacetHandlerInterface
                         $isActive,
                         $group->getName(),
                         $items,
-                        $this->fieldName
+                        $this->fieldName,
+                        $group->getAttributes()
                     );
                 }
             }
