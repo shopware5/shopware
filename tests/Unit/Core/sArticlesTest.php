@@ -51,8 +51,10 @@ class sArticlesTest extends TestCase
             ['foo&bar', 'foo&bar'],
             ['foo&amp;bar', 'foo&bar'],
             ['A \'quote\' is &lt;b&gt;bold&lt;/b&gt;', 'A \'quote\' is bold'],
-            ['<style>body: 1px solid red;</style>', 'body: 1px solid red;'],
-            ['<script>alert("foo");</script>', 'alert("foo");'],
+            ['<style>body: 1px solid red;</style>', ''],
+            ['<script>alert("foo");</script>', ''],
+            ['foo<script>alert("foo");</script>bar', 'foobar'],
+            ['foo<style>body: 1px solid red;</style>bar', 'foobar'],
         ];
     }
 
