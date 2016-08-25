@@ -41,13 +41,10 @@ class Manager
      */
     public static function getResource($name)
     {
-        $name = ucfirst($name);
-        $class = __NAMESPACE__ . '\\Resource\\' . $name;
+        $container = Shopware()->Container();
 
         /** @var $resource Resource\Resource */
-        $resource = new $class();
-
-        $container = Shopware()->Container();
+        $resource = $container->get('shopware.api.' . strtolower($name));
 
         if ($resource instanceof ContainerAwareInterface) {
             $resource->setContainer($container);
