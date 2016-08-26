@@ -1163,7 +1163,7 @@ class LegacyStructConverter
             $data['sReleasedate'] = $product->getReleaseDate()->format('Y-m-d');
         }
 
-        return $this->eventManager->filter('Legacy_Struct_Converter_List_Product_data', $data, [
+        return $this->eventManager->filter('Legacy_Struct_Converter_List_Product_Data', $data, [
             'product' => $product,
         ]);
     }
