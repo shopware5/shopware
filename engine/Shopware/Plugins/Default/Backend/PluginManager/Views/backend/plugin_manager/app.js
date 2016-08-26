@@ -59,8 +59,8 @@ Ext.define('Shopware.apps.PluginManager', {
         'list.LicencePage',
         'list.PremiumPluginsPage',
         'list.ExpiredPluginsPage',
+        'list.ConnectIntroductionPage',
         'list.Window',
-
 
         'detail.Window',
         'detail.Container',
