@@ -475,5 +475,11 @@
             <argument>%kernel.root_dir%/engine/Shopware/Components/Check/Data/System.xml</argument>
             <argument type="service" id="db_connection"/>
         </service>
+
+        <service class="Shopware\Components\Routing\Matchers\RewriteMatcher" id="shopware.routing.rewrite_matcher">
+            <argument type="service" id="dbal_connection"/>
+            <argument type="service" id="query_alias_mapper"/>
+        </service>
+
     </services>
 </container>
