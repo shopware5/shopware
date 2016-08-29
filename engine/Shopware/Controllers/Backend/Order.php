@@ -1190,6 +1190,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $response->sendHeaders();
 
         echo readfile($file);
+        exit;
     }
 
     /**
