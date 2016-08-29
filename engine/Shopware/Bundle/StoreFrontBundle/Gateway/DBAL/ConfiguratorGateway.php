@@ -90,7 +90,6 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
     public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context)
     {
         $query = $this->getQuery();
-
         $query->addSelect($this->fieldHelper->getConfiguratorSetFields())
             ->addSelect($this->fieldHelper->getConfiguratorGroupFields())
             ->addSelect($this->fieldHelper->getConfiguratorOptionFields())
@@ -203,6 +202,8 @@ class ConfiguratorGateway implements Gateway\ConfiguratorGatewayInterface
             ->innerJoin('groupRelation', 's_article_configurator_groups', 'configuratorGroup', 'configuratorGroup.id = groupRelation.group_id')
             ->innerJoin('configuratorSet', 's_article_configurator_set_option_relations', 'optionRelation', 'optionRelation.set_id = configuratorSet.id')
             ->innerJoin('optionRelation', 's_article_configurator_options', 'configuratorOption', 'configuratorOption.id = optionRelation.option_id AND configuratorOption.group_id = configuratorGroup.id')
+            ->leftJoin('configuratorGroup', 's_article_configurator_groups_attributes', 'configuratorGroupAttribute', 'configuratorGroupAttribute.groupID = configuratorGroup.id')
+            ->leftJoin('configuratorOption', 's_article_configurator_options_attributes', 'configuratorOptionAttribute', 'configuratorOptionAttribute.optionID = configuratorOption.id')
             ->addOrderBy('configuratorGroup.position')
             ->addOrderBy('configuratorGroup.name')
             ->addOrderBy('configuratorOption.position')

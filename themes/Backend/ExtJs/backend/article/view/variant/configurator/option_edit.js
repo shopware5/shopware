@@ -77,7 +77,7 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.OptionEdit', {
      * Define window height
      * @integer
      */
-    height:150,
+    height:450,
     /**
      * A flag which causes the object to attempt to restore the state of internal properties from a saved state on startup.
      */
@@ -102,6 +102,8 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.OptionEdit', {
         cancel: '{s name=variant/configurator/sets/cancel}Cancel{/s}',
         nameField: '{s name=variant/configurator/option_edit/name_field}Option name{/s}'
     },
+
+    attributeTable: 's_article_configurator_options_attributes',
 
     /**
      * The initComponent template method is an important initialization step for a Component.
@@ -167,6 +169,18 @@ Ext.define('Shopware.apps.Article.view.variant.configurator.OptionEdit', {
             },
             items: [ nameField ]
         });
+
+        me.attributeForm = Ext.create('Shopware.attribute.Form', {
+            table: me.attributeTable,
+            allowTranslation: false,
+            margin: '20 0 0'
+        });
+
+        if (me.record) {
+            me.attributeForm.loadAttribute(me.record.get('id'));
+        }
+
+        me.formPanel.add(me.attributeForm);
 
         return [ me.formPanel ];
     },

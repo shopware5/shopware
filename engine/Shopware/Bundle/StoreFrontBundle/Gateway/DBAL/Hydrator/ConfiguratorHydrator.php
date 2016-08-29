@@ -78,6 +78,10 @@ class ConfiguratorHydrator extends Hydrator
             $option = $this->createOption($row);
 
             $group->addOption($option);
+
+            if ($row['__configuratorGroupAttribute_id']) {
+                $this->attributeHydrator->addAttribute($group, $row, 'configuratorGroupAttribute');
+            }
         }
 
         return array_values($groups);
@@ -127,6 +131,11 @@ class ConfiguratorHydrator extends Hydrator
 
         $option->setId((int) $data['__configuratorOption_id']);
         $option->setName($data['__configuratorOption_name']);
+
+        if ($data['__configuratorOptionAttribute_id']) {
+            $this->attributeHydrator->addAttribute($option, $data, 'configuratorOptionAttribute');
+        }
+
         return $option;
     }
 }
