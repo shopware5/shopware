@@ -60,16 +60,14 @@ Ext.define('Shopware.apps.PluginManager.view.list.ConnectIntroductionPage', {
             padding: '20 0 0 0'
         });
 
-        me.pillarOne = Ext.create('Ext.container.Container', {
-            html: '<div style="float: left;"><div class="shopware-connect-pillar-one"></div></div><div style="margin-left: 120px; padding-top: 20px;">{s name="connect_introduction/pillar_one"}{/s}</div><div style="clear: both;"></div><br>'
-        });
-
-        me.pillarTwo = Ext.create('Ext.container.Container', {
-            html: '<div style="float: left;"><div class="shopware-connect-pillar-two"></div></div><div style="margin-left: 120px; padding-top: 20px;">{s name="connect_introduction/pillar_two"}{/s}</div><div style="clear: both;"></div><br>'
-        });
-
-        me.pillarThree = Ext.create('Ext.container.Container', {
-            html: '<div style="float: left;"><div class="shopware-connect-pillar-three"></div></div><div style="margin-left: 120px; padding-top: 20px;">{s name="connect_introduction/pillar_three"}{/s}</div><div style="clear: both;"></div>'
+        me.pillarContainer = Ext.create('Ext.container.Container', {
+            cls: 'shopware-connect-pillar-ct',
+            html: Ext.String.format(
+                '[0][1][2]',
+                '<div class="shopware-connect-pillar"><div class="shopware-connect-pillar-one"></div><div class="shopware-connect-pillar-text">{s name="connect_introduction/pillar_one"}{/s}</div></div>',
+                '<div class="shopware-connect-pillar"><div class="shopware-connect-pillar-two"></div><div class="shopware-connect-pillar-text">{s name="connect_introduction/pillar_two"}{/s}</div></div>',
+                '<div class="shopware-connect-pillar shopware-connect-pillar-no-margin"><div class="shopware-connect-pillar-three"></div><div class="shopware-connect-pillar-text"">{s name="connect_introduction/pillar_three"}{/s}</div></div>'
+            )
         });
 
         me.noteText = Ext.create('Ext.container.Container', {
@@ -91,9 +89,7 @@ Ext.define('Shopware.apps.PluginManager.view.list.ConnectIntroductionPage', {
         return [
             me.headLineText,
             me.descriptionText,
-            me.pillarOne,
-            me.pillarTwo,
-            me.pillarThree,
+            me.pillarContainer,
             me.noteText,
             me.linkText,
             me.installInfoText
