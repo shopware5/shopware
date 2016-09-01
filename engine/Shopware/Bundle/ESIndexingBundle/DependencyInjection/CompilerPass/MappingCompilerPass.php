@@ -24,10 +24,9 @@
 
 namespace Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass;
 
+use Shopware\Components\DependencyInjection\Compiler\TagReplaceTrait;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * @category  Shopware
@@ -36,34 +35,13 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class MappingCompilerPass implements CompilerPassInterface
 {
+    use TagReplaceTrait;
+
     /**
      * @param ContainerBuilder $container
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition('shopware_elastic_search.shop_indexer_factory')) {
-            return;
-        }
-
-        $definition = $container->getDefinition('shopware_elastic_search.shop_indexer_factory');
-        $this->replaceArgument($container, $definition, 'shopware_elastic_search.mapping', 1);
-    }
-
-    /**
-     * @param ContainerBuilder $container
-     * @param Definition       $definition
-     * @param string           $tag
-     * @param int              $argumentIndex
-     */
-    public function replaceArgument(ContainerBuilder $container, Definition $definition, $tag, $argumentIndex)
-    {
-        $transports = $definition->getArgument($argumentIndex);
-        $taggedServices = $container->findTaggedServiceIds($tag);
-
-        foreach ($taggedServices as $id => $attributes) {
-            $transports[] = new Reference($id);
-        }
-
-        $definition->replaceArgument($argumentIndex, $transports);
+        $this->replaceArgumentWithTaggedServices($container, 'shopware_elastic_search.shop_indexer_factory', 'shopware_elastic_search.mapping', 1);
     }
 }
