@@ -27,4 +27,19 @@ class XmlConfigDefinitionReaderTest extends TestCase
         $result = $this->SUT->read(__DIR__.'/examples/config.xml');
         $this->assertInternalType('array', $result);
     }
+
+    public function testCanReadStores()
+    {
+        $form = $this->SUT->read(__DIR__.'/examples/config_store.xml');
+        $this->assertInternalType('array', $form);
+
+        $expected = [
+            ['1', 'Test 1'],
+            ['2', 'Test 2'],
+            ['3', 'Test 3'],
+        ];
+
+        $this->assertEquals($expected, $form['elements'][0]['store']);
+        $this->assertEquals('Shopware.apps.Base.store.Category', $form['elements'][1]['store']);
+    }
 }
