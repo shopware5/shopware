@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../engine/Shopware/Components/Plugin/schema/config.xsd">
+    <elements>
+        <element type="select">
+            <name>selectArray</name>
+            <label>XML Store</label>
+            <store>
+                <option value="1">Test 1</option>
+                <option value="2">Test 2</option>
+                <option value="3">Test 3</option>
+            </store>
+        </element>
+        <element type="select">
+            <name>selectExtjsStore</name>
+            <label>Extjs Store</label>
+            <store>Shopware.apps.Base.store.Category</store>
+        </element>
+    </elements>
+</config>
