@@ -2,6 +2,12 @@
 
 This changelog references changes done in Shopware 5.2 patch versions.
 
+## 5.2.7
+
+[View all changes from v5.2.6...v5.2.7](https://github.com/shopware/shopware/compare/v5.2.6...v5.2.7)
+
+* added protected field `Shopware\Components\Plugin::$cachesToClear`, override this in your Plugin main class (YourPluginName.php) to more easily control Cache behavior across update, activate, deactivate, uninstall
+
 ## 5.2.6
 
 [View all changes from v5.2.5...v5.2.6](https://github.com/shopware/shopware/compare/v5.2.5...v5.2.6)

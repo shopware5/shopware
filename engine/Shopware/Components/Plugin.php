@@ -60,6 +60,14 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
     private $isActive;
 
     /**
+     * override this in your plugin to change the default cache clear behavior across update, activate, deactivate,
+     * uninstall
+     *
+     * @var array
+     */
+    protected $cachesToClear = InstallContext::CACHE_LIST_DEFAULT;
+
+    /**
      * @inheritdoc
      */
     public static function getSubscribedEvents()
@@ -106,7 +114,7 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
      */
     public function update(UpdateContext $context)
     {
-        $context->scheduleClearCache(InstallContext::CACHE_LIST_DEFAULT);
+        $context->scheduleClearCache($this->cachesToClear);
     }
 
     /**
@@ -115,7 +123,7 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
      */
     public function activate(ActivateContext $context)
     {
-        $context->scheduleClearCache(InstallContext::CACHE_LIST_DEFAULT);
+        $context->scheduleClearCache($this->cachesToClear);
     }
 
     /**
@@ -124,7 +132,7 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
      */
     public function deactivate(DeactivateContext $context)
     {
-        $context->scheduleClearCache(InstallContext::CACHE_LIST_DEFAULT);
+        $context->scheduleClearCache($this->cachesToClear);
     }
 
     /**
@@ -133,7 +141,7 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
      */
     public function uninstall(UninstallContext $context)
     {
-        $context->scheduleClearCache(InstallContext::CACHE_LIST_DEFAULT);
+        $context->scheduleClearCache($this->cachesToClear);
     }
 
     /**
