@@ -162,6 +162,20 @@ class Address extends ModelEntity
     protected $additionalAddressLine2 = null;
 
     /**
+     * Contains the id of the country.
+     * @var integer $country
+     * @ORM\Column(name="country_id", type="integer", nullable=false)
+     */
+    protected $countryId = null;
+
+    /**
+     * Contains the id of the state.
+     * @var integer $stateId
+     * @ORM\Column(name="state_id", type="integer", nullable=true)
+     */
+    protected $stateId = null;
+
+    /**
      * OWNING SIDE
      * The customer property is the owning side of the association between customer and address.
      * The association is joined over the address user_id and the customer id
