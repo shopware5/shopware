@@ -129,7 +129,16 @@ class XmlConfigDefinitionReader
         }
 
         if ($position = $this->getChildren($entry, 'store')) {
-            $element['store'] = $position[0]->nodeValue;
+            $options = $this->getChildren($position[0], 'option');
+
+            if (!empty($options)) {
+                $element['store'] = [];
+                foreach ($options as $item) {
+                    $element['store'][] = [$item->getAttribute('value'), $item->nodeValue];
+                }
+            } else {
+                $element['store'] = $position[0]->nodeValue;
+            }
         }
 
         if ($position = $this->getChildren($entry, 'value')) {
