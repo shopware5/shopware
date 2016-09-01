@@ -24,40 +24,19 @@
 
 namespace Shopware\Bundle\SearchBundleES\DependencyInjection\CompilerPass;
 
+use Shopware\Components\DependencyInjection\Compiler\TagReplaceTrait;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\DependencyInjection\Reference;
 
 class SearchHandlerCompilerPass implements CompilerPassInterface
 {
+    use TagReplaceTrait;
+
     /**
      * @param ContainerBuilder $container
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition('shopware_search_es.product_number_search_factory')) {
-            return;
-        }
-
-        $definition = $container->getDefinition('shopware_search_es.product_number_search_factory');
-        $this->replaceArgument($container, $definition, 'shopware_search_es.search_handler', 0);
-    }
-
-    /**
-     * @param ContainerBuilder $container
-     * @param Definition       $definition
-     * @param string           $tag
-     * @param int              $argumentIndex
-     */
-    public function replaceArgument(ContainerBuilder $container, Definition $definition, $tag, $argumentIndex)
-    {
-        $transports = $definition->getArgument($argumentIndex);
-        $taggedServices = $container->findTaggedServiceIds($tag);
-
-        foreach ($taggedServices as $id => $attributes) {
-            $transports[] = new Reference($id);
-        }
-        $definition->replaceArgument($argumentIndex, $transports);
+        $this->replaceArgumentWithTaggedServices($container, 'shopware_search_es.product_number_search_factory', 'shopware_search_es.search_handler', 0);
     }
 }
