@@ -40,6 +40,7 @@ Ext.define('Shopware.apps.Base.store.PaymentStatus', {
     model : 'Shopware.apps.Base.model.PaymentStatus',
     pageSize: 1000,
     autoLoad: false,
+    remoteFilter: true,
     proxy:{
         type:'ajax',
         url:'{url action="getPaymentStatus"}',

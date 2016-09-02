@@ -52,6 +52,7 @@ Ext.define('Shopware.apps.Base.store.PositionStatus', {
     alternateClassName: 'Shopware.store.PositionStatus',
     storeId: 'base.PositionStatus',
     pageSize: 1000,
+    remoteFilter: true,
     /**
      * Configure the data communication
      * @object
