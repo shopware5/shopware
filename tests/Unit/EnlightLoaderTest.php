@@ -61,7 +61,7 @@ class EnlightLoaderTest extends TestCase
      */
     public function testAddIncludePath2()
     {
-        $old = \Enlight_Loader::addIncludePath('.',  \Enlight_Loader::POSITION_PREPEND);
+        $old = \Enlight_Loader::addIncludePath('.', \Enlight_Loader::POSITION_PREPEND);
         $new = \Enlight_Loader::explodeIncludePath();
         $first = array_shift($new);
 

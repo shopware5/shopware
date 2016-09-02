@@ -32,7 +32,7 @@ use Shopware\Models\Article\Supplier;
 use Shopware\Models\Tax\Tax;
 
 /**
- * @covers Shopware\Components\Model\ModelEntity
+ * @covers \Shopware\Components\Model\ModelEntity
  *
  * @category  Shopware
  * @package   Shopware\Tests

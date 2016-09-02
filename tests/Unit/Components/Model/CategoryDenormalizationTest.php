@@ -53,7 +53,7 @@ class CategoryDenormalizationTest extends \PHPUnit_Extensions_Database_TestCase
     {
         if (!extension_loaded('sqlite3')) {
             $this->markTestSkipped(
-              'The Sqlite3 extension is not available.'
+                'The Sqlite3 extension is not available.'
             );
 
             parent::setUp();
@@ -68,7 +68,7 @@ class CategoryDenormalizationTest extends \PHPUnit_Extensions_Database_TestCase
             $conn->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_ASSOC);
         } catch (\PDOException $e) {
             $this->markTestSkipped(
-              'Could not create sqlite connection, got error:  ' . $e->getMessage()
+                'Could not create sqlite connection, got error:  ' . $e->getMessage()
             );
         }
 
