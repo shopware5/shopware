@@ -268,11 +268,9 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         //load shop repository
         $repository = Shopware()->Models()->getRepository('Shopware\Models\Dispatch\Dispatch');
 
-        $filters = $this->Request()->getParam('filter', array());
-        $filters[] = array('property' => 'dispatches.active', 'value' => 1);
         $query = $repository->getDispatchesQuery(
-            $filters,
-            $this->Request()->getParam('sort', array()),
+            $this->prefixKeys($this->Request()->getParam('filter', array()), 'dispatches'),
+            $this->prefixKeys($this->Request()->getParam('sort', array()), 'dispatches'),
             $this->Request()->getParam('start'),
             $this->Request()->getParam('limit')
         );
@@ -1097,5 +1095,21 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         }
         $value = array_unique(array_filter($value));
         return $value;
+    }
+
+    /**
+     * @param array $elements
+     * @param string $prefix
+     * @return array
+     */
+    private function prefixKeys(array $elements, $prefix)
+    {
+        return array_map(function ($element) use ($prefix) {
+            if (isset($element['property']) && strpos($element['property'], ($prefix . '.')) !== 0) {
+                $element['property'] = $prefix . '.' . $element['property'];
+            }
+
+            return $element;
+        }, $elements);
     }
 }

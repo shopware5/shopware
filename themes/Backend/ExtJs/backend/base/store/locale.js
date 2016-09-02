@@ -43,6 +43,7 @@ Ext.define('Shopware.apps.Base.store.Locale', {
     storeId: 'base.Locale',
     model : 'Shopware.apps.Base.model.Locale',
     pageSize: 1000,
+    remoteFilter: true,
 
     proxy: {
         type: 'ajax',

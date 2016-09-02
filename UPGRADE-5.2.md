@@ -2,6 +2,26 @@
 
 This changelog references changes done in Shopware 5.2 patch versions.
 
+## 5.2.7
+
+[View all changes from v5.2.6...v5.2.7](https://github.com/shopware/shopware/compare/v5.2.6...v5.2.7)
+
+* Added optional `filter` option to `Shopware.apps.Base.view.element.Select`
+* Set `remoteFilter` to `true` in several *base* stores:
+    * `Shopware.apps.Base.store.Country`
+    * `Shopware.apps.Base.store.CountryArea`
+    * `Shopware.apps.Base.store.CountryState`
+    * `Shopware.apps.Base.store.Currency`
+    * `Shopware.apps.Base.store.CustomerGroup`
+    * `Shopware.apps.Base.store.Dispatch`
+    * `Shopware.apps.Base.store.Locale`
+    * `Shopware.apps.Base.store.OrderStatus`
+    * `Shopware.apps.Base.store.Payment`
+    * `Shopware.apps.Base.store.PaymentStatus`
+    * `Shopware.apps.Base.store.PositionStatus`
+    * `Shopware.apps.Base.store.Tax`
+* Replaced the default filter on `dispatches.active` added in `Shopware_Controllers_Backend_Base::getDispatchesAction()` by a default filter on `active` added in `Shopware.apps.Base.store.Dispatch`
+
 ## 5.2.6
 
 [View all changes from v5.2.5...v5.2.6](https://github.com/shopware/shopware/compare/v5.2.5...v5.2.6)
