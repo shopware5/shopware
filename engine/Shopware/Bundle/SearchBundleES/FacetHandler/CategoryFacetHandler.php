@@ -216,7 +216,8 @@ class CategoryFacetHandler implements HandlerInterface, ResultHydratorInterface
             $category->getId(),
             $category->getName(),
             in_array($category->getId(), $active),
-            $values
+            $values,
+            $category->getAttributes()
         );
     }
 

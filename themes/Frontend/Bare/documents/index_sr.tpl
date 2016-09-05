@@ -29,7 +29,7 @@
 		  {foreach from=$Order._tax key=key item=tax}
 		  <tr>
 		  	<td align="right">{s name="DocumentIndexTax"}{/s}</td>
-		  	<td align="right">{$tax|currency}</td>
+		  	<td align="right">-{$tax|currency}</td>
 		  </tr>
 		  {/foreach}
 	  {/if}

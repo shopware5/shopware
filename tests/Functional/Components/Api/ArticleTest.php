@@ -222,6 +222,63 @@ class ArticleTest extends TestCase
         return $article->getId();
     }
 
+    public function testCreateWithNewUnitShouldBeSuccessful()
+    {
+        $testData = [
+            'name' => 'Testarticle',
+            'description' => 'testdescription',
+            'descriptionLong' => 'Test descriptionLong',
+            'active' => true,
+            'pseudoSales' => 999,
+            'highlight' => true,
+            'keywords' => 'test, testarticle',
+            'tax' => 19,
+            'categories' => [
+                array('id' => 15),
+                array('id' => 10),
+            ],
+            'mainDetail' => [
+                'number' => 'swTEST' . uniqid(rand()),
+                // create new unit
+                'unit' => array(
+                    'name' => 'newunit',
+                    'unit' => 'newunit'
+                ),
+                'prices' => [
+                    [
+                        'customerGroupKey' => 'EK',
+                        'price' => 999,
+                    ]
+                ]
+            ]
+        ];
+
+        $article = $this->resource->create($testData);
+        // change number for second article
+        $testData['mainDetail']['number'] = 'swTEST' . uniqid(rand());
+        $secondArticle = $this->resource->create($testData);
+
+        $this->assertInstanceOf('\Shopware\Models\Article\Article', $article);
+        $this->assertGreaterThan(0, $article->getId());
+
+        $this->assertEquals($article->getName(), $testData['name']);
+        $this->assertEquals($article->getDescription(), $testData['description']);
+        $this->assertEquals($article->getMetaTitle(), $testData['metaTitle']);
+
+        foreach ($article->getMainDetail()->getPrices() as $price) {
+            $this->assertGreaterThan(0, $price->getFrom());
+        }
+
+        $this->assertInstanceOf('\Shopware\Models\Article\Unit', $article->getMainDetail()->getUnit());
+        $this->assertGreaterThan(0, $article->getMainDetail()->getUnit()->getId());
+        $this->assertEquals($article->getMainDetail()->getUnit()->getName(), $testData['mainDetail']['unit']['name']);
+        $this->assertEquals($article->getMainDetail()->getUnit()->getUnit(), $testData['mainDetail']['unit']['unit']);
+
+        $this->assertEquals($article->getMainDetail()->getUnit()->getId(), $secondArticle->getMainDetail()->getUnit()->getId());
+
+        return $article->getId();
+    }
+
     /**
      * Test that creating an article with images generates thumbnails
      *

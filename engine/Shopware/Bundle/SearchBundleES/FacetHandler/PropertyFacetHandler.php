@@ -237,7 +237,8 @@ class PropertyFacetHandler implements HandlerInterface, ResultHydratorInterface
                     $option->getId(),
                     $option->getName(),
                     in_array($option->getId(), $actives),
-                    $option->getMedia()
+                    $option->getMedia(),
+                    $option->getAttributes()
                 );
 
                 $isActive = ($isActive || $listItem->isActive());
@@ -251,7 +252,8 @@ class PropertyFacetHandler implements HandlerInterface, ResultHydratorInterface
                     $isActive,
                     $group->getName(),
                     $items,
-                    $fieldName
+                    $fieldName,
+                    $group->getAttributes()
                 );
             } else {
                 $results[] = new ValueListFacetResult(
@@ -259,7 +261,8 @@ class PropertyFacetHandler implements HandlerInterface, ResultHydratorInterface
                     $isActive,
                     $group->getName(),
                     $items,
-                    $fieldName
+                    $fieldName,
+                    $group->getAttributes()
                 );
             }
         }

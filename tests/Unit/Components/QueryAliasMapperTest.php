@@ -147,7 +147,7 @@ class QueryAliasMapperTest extends TestCase
         $request = new \Enlight_Controller_Request_RequestTestCase();
         $request->setQuery('q', 'someValue');
         $request->setQuery('p', 'someOtherValue');
-        $request->setQuery('someParam',  'someValue');
+        $request->setQuery('someParam', 'someValue');
 
         $mapping = [
             'sSearch' => 'q',

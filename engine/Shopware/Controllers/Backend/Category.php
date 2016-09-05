@@ -467,8 +467,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         $builder->setParameters($params);
         $result = $builder->execute()->fetchAll();
 
-        $builder->select('FOUND_ROWS() as count');
-        $count = $builder->execute()->fetchColumn();
+        $count = $this->get('dbal_connection')->fetchColumn("SELECT FOUND_ROWS()");
 
         $this->View()->assign(array(
             'success' => true,

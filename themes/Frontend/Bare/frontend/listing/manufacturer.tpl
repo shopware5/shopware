@@ -2,6 +2,28 @@
 
 {namespace name="frontend/listing/listing"}
 
+{block name="frontend_listing_listing_content"}
+	<div class="listing"
+		 data-ajax-wishlist="true"
+		 data-compare-ajax="true"
+			{if $theme.infiniteScrolling}
+			data-infinite-scrolling="true"
+			data-ajaxUrl="{url module="widgets" controller="Listing" action="ajaxListing" sSupplier=$manufacturer->getId()}"
+			data-loadPreviousSnippet="{s name="ListingActionsLoadPrevious"}{/s}"
+			data-loadMoreSnippet="{s name="ListingActionsLoadMore"}{/s}"
+			data-categoryId="{$Shop->getCategory()->getId()}"
+			data-pages="{$pages}"
+			data-threshold="{$theme.infiniteThreshold}"{/if}>
+
+		{* Actual listing *}
+		{block name="frontend_listing_list_inline"}
+			{foreach $sArticles as $sArticle}
+				{include file="frontend/listing/box_article.tpl"}
+			{/foreach}
+		{/block}
+	</div>
+{/block}
+
 {block name="frontend_listing_text"}
     <div class="vendor--info panel has--border">
 

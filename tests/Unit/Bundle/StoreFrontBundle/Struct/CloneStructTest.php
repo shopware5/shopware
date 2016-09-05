@@ -49,10 +49,10 @@ class CloneStructTest extends TestCase
     public function testNestedArrayCloning()
     {
         $simple = new SimpleStruct(
-           [
+            [
                new SimpleStruct('struct 1'),
                new SimpleStruct('struct 2')
-           ]
+            ]
         );
 
         $clone = clone $simple;
@@ -103,7 +103,7 @@ class CloneStructTest extends TestCase
         $clone = clone $simple;
         $simple->setValue(null);
 
-        /**@var $value SimpleStruct[]*/
+        /**@var $value SimpleStruct[][]*/
         $value = $clone->getValue();
         $this->assertCount(2, $value[0]);
         $this->assertCount(2, $value[1]);

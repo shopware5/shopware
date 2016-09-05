@@ -274,7 +274,7 @@ class Shopware_Components_SeoIndex extends Enlight_Class
             Shopware()->Db()->fetchOne('SELECT COUNT(id) FROM `s_cms_static` WHERE link=\'\''),
         ];
 
-        return max($counts);
+        return array_sum($counts);
     }
 
     /**

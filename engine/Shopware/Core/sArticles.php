@@ -1487,6 +1487,7 @@ class sArticles
     public function sOptimizeText($text)
     {
         $text = html_entity_decode($text, ENT_NOQUOTES, 'UTF-8');
+        $text = preg_replace('@<(script|style)[^>]*?>.*?</\\1>@si', '', $text);
         $text = preg_replace('!<[^>]*?>!u', ' ', $text);
         $text = preg_replace('/\s\s+/u', ' ', $text);
         $text = trim($text);

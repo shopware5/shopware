@@ -51,8 +51,10 @@ class sArticlesTest extends TestCase
             ['foo&bar', 'foo&bar'],
             ['foo&amp;bar', 'foo&bar'],
             ['A \'quote\' is &lt;b&gt;bold&lt;/b&gt;', 'A \'quote\' is bold'],
-            ['<style>body: 1px solid red;</style>', 'body: 1px solid red;'],
-            ['<script>alert("foo");</script>', 'alert("foo");'],
+            ['<style>body: 1px solid red;</style>', ''],
+            ['<script>alert("foo");</script>', ''],
+            ['foo<script>alert("foo");</script>bar', 'foobar'],
+            ['foo<style>body: 1px solid red;</style>bar', 'foobar'],
         ];
     }
 
@@ -68,29 +70,5 @@ class sArticlesTest extends TestCase
         $sArticles = $this->createPartialMock(\sArticles::class, []);
 
         $this->assertSame($expectedResult, $sArticles->sOptimizeText($input));
-    }
-
-    /**
-     * Override method to backport a PHPUnit 5.5.3 feature.
-     * See: https://github.com/sebastianbergmann/phpunit/commit/3c423b889e4833b7dc5f77c1c20ce1aa29b2e48d
-     *
-     * @param string $originalClassName
-     * @param array  $methods
-     *
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     *
-     * @throws \PHPUnit_Framework_Exception
-     *
-     * @todo Remove once PHPUnit 5.5.3 is in use
-     */
-    protected function createPartialMock($originalClassName, array $methods)
-    {
-        return $this->getMockBuilder($originalClassName)
-            ->disableOriginalConstructor()
-            ->disableOriginalClone()
-            ->disableArgumentCloning()
-            ->disallowMockingUnknownTypes()
-            ->setMethods(empty($methods) ? null : $methods)
-            ->getMock();
     }
 }

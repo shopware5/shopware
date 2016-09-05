@@ -34,7 +34,7 @@ use PHPUnit\Framework\TestCase;
 class SubscriberArrayTest extends TestCase
 {
     /**
-     * @var \\Enlight_Event_Subscriber_Array
+     * @var \Enlight_Event_Subscriber_Array
      */
     protected $eventManager;
 
