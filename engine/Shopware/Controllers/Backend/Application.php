@@ -404,6 +404,9 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
 
         $paginator = $this->getQueryPaginator($builder);
         $data = $paginator->getIterator()->current();
+        if (!$data) {
+            $data = [];
+        }
         $data = $this->getAdditionalDetailData($data);
 
         return array('success' => true, 'data' => $data);
