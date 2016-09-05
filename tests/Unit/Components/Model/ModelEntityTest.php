@@ -33,6 +33,11 @@ use Shopware\Models\Tax\Tax;
 
 /**
  * @covers \Shopware\Components\Model\ModelEntity
+ * @uses \Shopware\Models\Article\Article
+ * @uses \Shopware\Models\Article\Link
+ * @uses \Shopware\Models\Article\Supplier
+ * @uses \Shopware\Models\Article\Configurator\Template\Template
+ * @uses \Shopware\Models\Tax\Tax
  *
  * @category  Shopware
  * @package   Shopware\Tests
