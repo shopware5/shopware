@@ -488,14 +488,14 @@
 
                 $resultItems.removeClass(activeClass);
 
-                $nextSibling = $selected[(keyCode === keyMap.DOWN) ? 'next' : 'prev']();
+                $nextSibling = $selected[(keyCode === keyMap.DOWN) ? 'next' : 'prev'](opts.resultItemSelector);
 
                 if ($nextSibling.length) {
                     $nextSibling.addClass(activeClass);
                     return;
                 }
 
-                $selected.siblings()[firstLast]().addClass(activeClass);
+                $resultItems[firstLast]().addClass(activeClass);
             }
 
             if (keyCode === keyMap.ENTER) {
