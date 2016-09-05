@@ -22,6 +22,20 @@
     <target name="build-unit" depends="build-composer-install, build-cache-dir, build-config, build-database, build-snippets-deploy, build-theme-initialize,build-create-admin-account, build-install-lock-file, build-disable-firstrunwizard, install-git-hooks" />
     <target name="test-unit" depends="unit-shopware"/>
 
+    <target name="write-properties" description="Write build-variables to file">
+        <propertyfile
+                file="${build.dir}/build.properties"
+                comment="Project properties">
+            <entry  key="db.host"     value="${db.host}"/>
+            <entry  key="db.name"     value="${db.name}"/>
+            <entry  key="db.user"     value="${db.user}"/>
+            <entry  key="db.password" value="${db.password}"/>
+            <entry  key="db.port"     value="${db.port}"/>
+            <entry  key="app.path"    value="${app.path}"/>
+            <entry  key="app.host"    value="${app.host}"/>
+        </propertyfile>
+    </target>
+
     <target name="configure" description="Set up build-variables">
         <input message="Please enter db-host:"
                addproperty="user.db.host"
@@ -52,17 +66,7 @@
                addproperty="user.app.path"
                defaultvalue="${app.path}" />
 
-        <propertyfile
-                file="${build.dir}/build.properties"
-                comment="Project properties">
-            <entry  key="db.host"     value="${user.db.host}"/>
-            <entry  key="db.name"     value="${user.db.name}"/>
-            <entry  key="db.user"     value="${user.db.user}"/>
-            <entry  key="db.password" value="${user.db.password}"/>
-            <entry  key="db.port"     value="${user.db.port}"/>
-            <entry  key="app.path"    value="${user.app.path}"/>
-            <entry  key="app.host"    value="${user.app.host}"/>
-        </propertyfile>
+        <antcall target="write-properties"/>
     </target>
 
     <target name="check-composer-binary">
