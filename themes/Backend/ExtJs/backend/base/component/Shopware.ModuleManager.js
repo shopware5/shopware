@@ -303,11 +303,19 @@ Ext.define('Shopware.ModuleManager', {
      */
     onPostMessage: function(event) {
         var me = this,
-            data = JSON.parse(event.data.substring(me.prefix.length)),
             error = null,
             result = null,
+            data,
             subModule,
             component;
+
+        // Check if our prefix is at the beginning of the string
+        if (event.data.indexOf(me.prefix) !== 0) {
+            return;
+        }
+
+        // Strip out the prefix and get the JSON data
+        data = JSON.parse(event.data.substring(me.prefix.length));
 
         // Do we trust the sender of this message?
         if (event.origin !== window.location.origin) {
