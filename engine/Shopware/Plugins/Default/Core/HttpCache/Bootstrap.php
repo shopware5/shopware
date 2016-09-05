@@ -120,6 +120,9 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
             'onClearHttpCache'
         );
 
+        $this->subscribeEvent('Shopware\Models\Article\Price::postUpdate', 'onPostPersist');
+        $this->subscribeEvent('Shopware\Models\Article\Price::postPersist', 'onPostPersist');
+
         $this->subscribeEvent('Shopware\Models\Article\Article::postUpdate', 'onPostPersist');
         $this->subscribeEvent('Shopware\Models\Article\Article::postPersist', 'onPostPersist');
 
@@ -926,6 +929,9 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
         $cacheIds = array();
 
         switch ($entityName) {
+            case 'Shopware\Models\Article\Price':
+                $cacheIds[] = 'a' . $entity->getArticle()->getId();
+                break;
             case 'Shopware\Models\Article\Article':
                 $cacheIds[] = 'a' . $entity->getId();
                 break;
