@@ -50,6 +50,24 @@ Feature: Checkout articles
         When  I proceed to checkout
         Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware Demo!"
 
+    @paymentsurcharge
+    Scenario:   I can switch to payment method with percentual surcharge and everything is calculated correctly
+        Given   I proceed to order confirmation
+        When    I change the payment method to 5
+        Then    the current payment method should be "Vorkasse"
+        And     I should see "Zuschlag für Zahlungsart"
+        And     the aggregations should look like this:
+            | label         | value   |
+            | sum           | 42,32 € |
+            | shipping      | 3,90 €  |
+            | total         | 46,22 € |
+            | sumWithoutVat | 38,84 € |
+            | 19 %          | 7,38 €  |
+        And   I should see "AGB und Widerrufsbelehrung"
+
+        When  I proceed to checkout
+        Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware Demo!"
+
     @shipping @payment
     Scenario: I can change the shipping-country to a non-EU-country and back and pay via bill
         Given I proceed to order confirmation
