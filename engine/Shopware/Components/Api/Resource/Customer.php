@@ -106,17 +106,33 @@ class Customer extends Resource
             throw new ApiException\ParameterMissingException();
         }
 
-        $builder = $this->getRepository()
-                ->createQueryBuilder('customer')
-                ->select('customer', 'attribute', 'billing', 'billingAttribute', 'shipping', 'shippingAttribute', 'paymentData')
-                ->leftJoin('customer.attribute', 'attribute')
-                ->leftJoin('customer.defaultBillingAddress', 'billing')
-                ->leftJoin('customer.paymentData', 'paymentData', Join::WITH, 'paymentData.paymentMean = customer.paymentId')
-                ->leftJoin('billing.attribute', 'billingAttribute')
-                ->leftJoin('customer.defaultShippingAddress', 'shipping')
-                ->leftJoin('shipping.attribute', 'shippingAttribute')
-                ->where('customer.id = ?1')
-                ->setParameter(1, $id);
+        $builder = $this->getRepository()->createQueryBuilder('customer');
+
+        $builder->select([
+            'customer',
+            'attribute',
+            'billing',
+            'billingAttribute',
+            'shipping',
+            'shippingAttribute',
+            'paymentData',
+            'billingCountry',
+            'shippingCountry',
+            'billingState',
+            'shippingState'
+        ]);
+        $builder->leftJoin('customer.attribute', 'attribute')
+            ->leftJoin('customer.defaultBillingAddress', 'billing')
+            ->leftJoin('customer.paymentData', 'paymentData', Join::WITH, 'paymentData.paymentMean = customer.paymentId')
+            ->leftJoin('billing.attribute', 'billingAttribute')
+            ->leftJoin('customer.defaultShippingAddress', 'shipping')
+            ->leftJoin('shipping.attribute', 'shippingAttribute')
+            ->leftJoin('billing.country', 'billingCountry')
+            ->leftJoin('shipping.country', 'shippingCountry')
+            ->leftJoin('billing.state', 'billingState')
+            ->leftJoin('shipping.state', 'shippingState')
+            ->where('customer.id = ?1')
+            ->setParameter(1, $id);
 
         /** @var $customer \Shopware\Models\Customer\Customer */
         $customer = $builder->getQuery()->getOneOrNullResult($this->getResultMode());
