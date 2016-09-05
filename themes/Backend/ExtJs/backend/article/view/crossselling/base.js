@@ -164,6 +164,7 @@ Ext.define('Shopware.apps.Article.view.crossselling.Base', {
             returnValue: 'name',
             hiddenReturnValue: 'number',
             articleStore: Ext.create('Shopware.store.Article'),
+            searchScope: ['articles','variants','configurator','active'],
             width: '100%',
             anchor: '100%',
             formFieldConfig: {

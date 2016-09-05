@@ -495,6 +495,14 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
             $builder->andWhere('articles.configuratorSetId IS NULL');
         }
 
+        // dont search for inactive articles
+        $activeArticles = (bool) $this->Request()->getParam('active', false);
+        if ($activeArticles) {
+            $builder
+                ->andWhere('articles.active = true')
+                ->andWhere('detail.active = true');
+        }
+
         $filters = $this->Request()->getParam('filter', array());
         foreach ($filters as $filter) {
             if ($filter['property'] === 'free') {
