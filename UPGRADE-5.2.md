@@ -2,6 +2,12 @@
 
 This changelog references changes done in Shopware 5.2 patch versions.
 
+## 5.2.7
+
+[View all changes from v5.2.6...v5.2.7](https://github.com/shopware/shopware/compare/v5.2.6...v5.2.7)
+
+* getOne function of customer api resource contains now the country and state data for billing and shipping address
+
 ## 5.2.6
 
 [View all changes from v5.2.5...v5.2.6](https://github.com/shopware/shopware/compare/v5.2.5...v5.2.6)
