@@ -158,10 +158,10 @@ class Shopware_Plugins_Core_RestApi_Bootstrap extends Shopware_Components_Plugin
             return;
         }
 
+        // Save the posted data directly in the $_POST global, because 'Enlight_Controller_Request_RequestHttp::setPost()'
+        // filters out NULL values, which is undesireable when working with JSON
         foreach ((array) $input as $key => $value) {
-            if ($value !== null) {
-                $request->setPost($key, $value);
-            }
+            $_POST[$key] = $value;
         }
     }
 
