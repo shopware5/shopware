@@ -163,14 +163,14 @@ class Address extends ModelEntity
 
     /**
      * Contains the id of the country.
-     * @var integer $country
+     * @var integer
      * @ORM\Column(name="country_id", type="integer", nullable=false)
      */
-    protected $countryId = null;
+    protected $countryId;
 
     /**
      * Contains the id of the state.
-     * @var integer $stateId
+     * @var integer
      * @ORM\Column(name="state_id", type="integer", nullable=true)
      */
     protected $stateId = null;
