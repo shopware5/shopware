@@ -523,4 +523,56 @@ class CustomerTest extends TestCase
 
         $this->testDeleteShouldBeSuccessful($identifier);
     }
+
+    public function testCreateWithDifferentCustomerGroup()
+    {
+        $data = [
+            'password' => 'fooobar',
+            'email'    => __FUNCTION__ . uniqid(rand()) . '@foobar.com',
+            'number'   => __FUNCTION__,
+            'salutation' => 'mr',
+            'firstname' => 'Max',
+            'lastname'  => 'Mustermann',
+            'groupKey' => 'H',
+            'billing' => array(
+                'salutation' => 'mr',
+                'zipcode' => '12345',
+                'city' => 'Musterhausen',
+                'firstname' => 'Max',
+                'lastname'  => 'Mustermann',
+                'street' => 'Musterstr. 123',
+                'country' => '2'
+            )
+        ];
+
+        $customer = $this->resource->create($data);
+        $this->assertEquals('H', $customer->getGroup()->getKey());
+    }
+
+
+    public function testCreateCustomerWithDefaultShopCustomerGroup()
+    {
+        $context = Shopware()->Container()->get('shopware_storefront.context_service')->createShopContext(1);
+        $data = [
+            'shopId' => 1,
+            'password' => 'fooobar',
+            'email'    => __FUNCTION__ . uniqid(rand()) . '@foobar.com',
+            'number'   => __FUNCTION__,
+            'salutation' => 'mr',
+            'firstname' => 'Max',
+            'lastname'  => 'Mustermann',
+            'billing' => array(
+                'salutation' => 'mr',
+                'zipcode' => '12345',
+                'city' => 'Musterhausen',
+                'firstname' => 'Max',
+                'lastname'  => 'Mustermann',
+                'street' => 'Musterstr. 123',
+                'country' => '2'
+            )
+        ];
+
+        $customer = $this->resource->create($data);
+        $this->assertEquals($context->getShop()->getCustomerGroup()->getKey(), $customer->getGroup()->getKey());
+    }
 }
