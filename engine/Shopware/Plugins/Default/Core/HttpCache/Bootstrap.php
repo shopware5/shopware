@@ -22,6 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
+use Doctrine\Common\EventArgs;
 use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
 use Shopware\Components\Model\ModelManager;
 use Enlight_Controller_Request_Request as Request;
@@ -58,6 +59,11 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
      * @var Response
      */
     protected $response;
+
+    /**
+     * @var array
+     */
+    private $cacheInvalidationBuffer = [];
 
     /**
      * @return string
@@ -909,6 +915,20 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
     }
 
     /**
+     * Execute cache invalidation after Doctrine flush
+     *
+     * @param EventArgs $eventArgs
+     */
+    public function postFlush(EventArgs $eventArgs)
+    {
+        $cacheIds = array_keys($this->cacheInvalidationBuffer);
+        foreach ($cacheIds as $cacheId) {
+            $this->invalidateCacheId($cacheId);
+        }
+        $this->cacheInvalidationBuffer = [];
+    }
+
+    /**
      * Cache invalidation based on model events
      *
      * @param Enlight_Event_EventArgs $eventArgs
@@ -953,8 +973,12 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
         }
 
         foreach ($cacheIds as $cacheId) {
-            $this->invalidateCacheId($cacheId);
+            $this->cacheInvalidationBuffer[$cacheId] = true;
         }
+
+        /** @var \Doctrine\ORM\EntityManager $entityManager */
+        $entityManager = Shopware()->Container()->get('models');
+        $entityManager->getEventManager()->addEventListener(['postFlush'], $this);
     }
 
     /**
