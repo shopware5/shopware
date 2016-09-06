@@ -472,39 +472,43 @@
                 activeClass = opts.activeCls,
                 $selected = $results.find('.' + activeClass),
                 $resultItems,
-                $nextSibling,
-                firstLast;
+                $nextSibling;
 
             $.publish('plugin/swSearch/onKeyboardNavigation', [ me, keyCode ]);
 
             if (keyCode === keyMap.UP || keyCode === keyMap.DOWN) {
                 $resultItems = $results.find(opts.resultItemSelector);
-                firstLast = (keyCode === keyMap.DOWN) ? 'first' : 'last';
 
-                if (!$selected.length) {
-                    $resultItems[firstLast]().addClass(activeClass);
+                //First time the user hits the navigation key "DOWN"
+                if (!$selected.length && keyCode == keyMap.DOWN) {
+                    me.selectFirstResultItem($resultItems);
+                    return;
+                }
+
+                //First time the user hits the navigation key "UP"
+                if (!$selected.length && keyCode == keyMap.UP) {
+                    me.selectLastResultItem($resultItems);
                     return;
                 }
 
                 $resultItems.removeClass(activeClass);
-
-                $nextSibling = $selected[(keyCode === keyMap.DOWN) ? 'next' : 'prev'](opts.resultItemSelector);
-
-                if ($nextSibling.length) {
-                    $nextSibling.addClass(activeClass);
+                if (me.selectResultItem(keyCode, $selected)) {
                     return;
                 }
 
-                $resultItems[firstLast]().addClass(activeClass);
             }
 
-            if (keyCode === keyMap.ENTER) {
-                if ($selected.length) {
-                    window.location.href = $selected.find(opts.resultLinkSelector).attr('href');
-                    return;
-                }
-
-                me.$parent.submit();
+            //Start on top or bottom if the user reached the end of the list
+            switch (keyCode) {
+                case keyMap.DOWN:
+                    me.selectFirstResultItem($resultItems);
+                    break;
+                case keyMap.UP:
+                    me.selectLastResultItem($resultItems);
+                    break;
+                case keyMap.ENTER:
+                    me.onPressEnter($selected);
+                    break;
             }
         },
 
@@ -577,6 +581,74 @@
             $.publish('plugin/swSearch/onCloseMobileSearch', [ me ]);
 
             me.closeResult();
+        },
+
+        /**
+         * @param {Object} resultItems
+         */
+        selectFirstResultItem: function (resultItems) {
+            var me = this,
+                opts = me.opts,
+                activeClass = opts.activeCls;
+
+            $.publish('plugin/swSearch/onSelectFirstResultItem', [ me, resultItems ]);
+
+            resultItems.first().addClass(activeClass);
+        },
+
+        /**
+         * @param {Object} resultItems
+         */
+        selectLastResultItem: function (resultItems) {
+            var me = this,
+                opts = me.opts,
+                activeClass = opts.activeCls;
+
+            $.publish('plugin/swSearch/onSelectLastResultItem', [ me, resultItems ]);
+
+            resultItems.last().addClass(activeClass);
+        },
+
+        /**
+         * Selects the next or previous result item based on the pressed navigation key.
+         *
+         * @param {Number} keyCode
+         * @param {Object} $selected
+         */
+        selectResultItem: function (keyCode, $selected) {
+            var me = this,
+                opts = me.opts,
+                keyMap = opts.keyMap,
+                activeClass = opts.activeCls,
+                $nextSibling;
+
+            $.publish('plugin/swSearch/onSelectNextResultItem', [ me, keyCode ]);
+
+            $nextSibling = $selected[(keyCode === keyMap.DOWN) ? 'next' : 'prev'](opts.resultItemSelector);
+            if ($nextSibling.length) {
+                $nextSibling.addClass(activeClass);
+                return true;
+            }
+            return false;
+        },
+
+        /**
+         * Redirects the user to the search result page on enter.
+         *
+         * @param {Object} $selected
+         */
+        onPressEnter: function ($selected) {
+            var me = this,
+                opts = me.opts;
+
+            $.publish('plugin/swSearch/onPressEnter', [ me, $selected ]);
+
+            if ($selected.length) {
+                window.location.href = $selected.find(opts.resultLinkSelector).attr('href');
+                return;
+            }
+
+            me.$parent.submit();
         },
 
         /**
