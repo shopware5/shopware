@@ -929,25 +929,25 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
         $cacheIds = array();
 
         switch ($entityName) {
-            case 'Shopware\Models\Article\Price':
+            case Shopware\Models\Article\Price::class:
                 $cacheIds[] = 'a' . $entity->getArticle()->getId();
                 break;
-            case 'Shopware\Models\Article\Article':
+            case Shopware\Models\Article\Article::class:
                 $cacheIds[] = 'a' . $entity->getId();
                 break;
-            case 'Shopware\Models\Article\Detail':
+            case Shopware\Models\Article\Detail::class:
                 $cacheIds[] = 'a' . $entity->getArticleId();
                 break;
-            case 'Shopware\Models\Category\Category':
+            case Shopware\Models\Category\Category::class:
                 $cacheIds[] = 'c' . $entity->getId();
                 break;
-            case 'Shopware\Models\Banner\Banner':
+            case Shopware\Models\Banner\Banner::class:
                 $cacheIds[] = 'c' . $entity->getCategoryId();
                 break;
-            case 'Shopware\Models\Blog\Blog':
+            case Shopware\Models\Blog\Blog::class:
                 $cacheIds[] = 'c' . $entity->getCategoryId();
                 break;
-            case 'Shopware\Models\Emotion\Emotion':
+            case Shopware\Models\Emotion\Emotion::class:
                 $cacheIds[] = 'e' . $entity->getId();
                 break;
         }
@@ -992,7 +992,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
      * @param null $cacheId    If set, only pages including these cacheIds will be invalidated
      * @return bool            True will be returned, if *all* operations succeeded
      */
-    private function invalidate($cacheId=null)
+    private function invalidate($cacheId = null)
     {
         $proxy = $this->getProxyUrl($this->request);
 
