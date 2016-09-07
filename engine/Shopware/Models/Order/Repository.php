@@ -288,7 +288,7 @@ class Repository extends ModelRepository
         $builder->andWhere('orders.number IS NOT NULL');
 
         if (!empty($orderBy)) {
-            //order by path of company, lastName and firstName instead of customerId 
+            //order by path of company, lastName and firstName instead of customerId
             if(isset($orderBy[0]['property']) && $orderBy[0]['property'] === 'orders.customerId'){
                 $orderBy[0] = [
                     'property' => 'billing.company',
