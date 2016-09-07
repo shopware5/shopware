@@ -145,6 +145,7 @@ class Kernel implements HttpKernelInterface
 
         /** @var $front \Enlight_Controller_Front **/
         $front = $this->container->get('front');
+        $this->container->set('request', $request);
 
         $request = $this->transformSymfonyRequestToEnlightRequest($request);
 
