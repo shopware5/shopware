@@ -43,7 +43,7 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
     /**
      * @param Enlight_Components_Cron_EventArgs $job
      *
-     * @return string|void
+     * @return void|string
      * @throws \Exception
      */
     public function onRun(Enlight_Components_Cron_EventArgs $job)
@@ -63,6 +63,10 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
         $positions = $this->getPositions($orderIds);
 
         foreach ($orders as $orderId => $order) {
+            if (empty($customers[$orderId]['email']) || count($positions[$orderId]) === 0) {
+                continue;
+            }
+
             /** @var Shopware\Models\Shop\Repository $repository  */
             $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop');
 
@@ -87,11 +91,9 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
                 'sArticles' => $positions[$orderId],
             );
 
-            if (!empty($customers[$orderId]['email'])) {
-                $mail = Shopware()->TemplateMail()->createMail('sARTICLECOMMENT', $context);
-                $mail->addTo($customers[$orderId]['email']);
-                $mail->send();
-            }
+            $mail = Shopware()->TemplateMail()->createMail('sARTICLECOMMENT', $context);
+            $mail->addTo($customers[$orderId]['email']);
+            $mail->send();
         }
 
         return count($order) . ' rating mails was sent.';
@@ -277,8 +279,12 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
                 d.esdarticle as esd
             FROM s_order_details as d
             LEFT JOIN s_core_tax as t
-            ON t.id = d.taxID
+            ON t.id = d.taxID                        
+            LEFT JOIN s_articles_details ad
+            ON d.articleordernumber = ad.ordernumber
             WHERE d.orderID IN ($orderIds)
+            AND ad.active = 1
+            AND d.modus = 0
             ORDER BY orderdetailsID ASC
         ";
         $result = Shopware()->Db()->fetchAll($sql);
