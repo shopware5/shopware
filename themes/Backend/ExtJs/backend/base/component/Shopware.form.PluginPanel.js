@@ -280,6 +280,10 @@ Ext.define('Shopware.form.PluginPanel',
                     field.value = new Date(field.value);
                     field.value = new Date((field.value.getTime() + (field.value.getTimezoneOffset() * 60 * 1000)));
                 }
+                else if ((field.xtype == "base-element-password")) {
+                    field.inputType = 'password';
+                    field.xtype = 'base-element-text';
+                }
 
                 fields.push(field);
 
