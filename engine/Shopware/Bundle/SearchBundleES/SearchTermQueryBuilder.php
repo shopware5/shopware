@@ -76,7 +76,7 @@ class SearchTermQueryBuilder implements SearchTermQueryBuilderInterface
         return new MultiMatchQuery(
             ['number', 'name'],
             $term,
-            ['type' => 'phrase_prefix', 'max_expansions' => 2]
+            ['fuzziness' => 2, 'type' => 'phrase_prefix', 'max_expansions' => 2]
         );
     }
 }
