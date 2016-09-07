@@ -137,6 +137,14 @@ abstract class Plugin implements ContainerAwareInterface, SubscriberInterface
     }
 
     /**
+     * This method is called during initialization of the plugin
+     */
+    public function initialize()
+    {
+
+    }
+
+    /**
      * Builds the Plugin.
      *
      * It is only ever called once when the cache is empty.
