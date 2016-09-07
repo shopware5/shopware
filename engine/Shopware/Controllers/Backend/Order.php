@@ -364,6 +364,19 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
                 case 'customerEmail':
                     $sort[0]['property'] = 'customer.email';
                     break;
+                case 'customerName':
+                    $sort[0]['property'] = 'billing.company';
+                    array_splice($sort, 1, 0, [
+                        [
+                            'property' => 'billing.lastName',
+                            'direction' => $sort[0]['direction']
+                        ],
+                        [
+                            'property' => 'billing.firstName',
+                            'direction' => $sort[0]['direction']
+                        ]
+                    ]);
+                    break;
                 default:
                     $sort[0]['property'] = 'orders.' . $sort[0]['property'];
                     break;

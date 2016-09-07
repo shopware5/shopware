@@ -319,7 +319,10 @@ Ext.define('Shopware.apps.Order.view.list.List', {
                 header: me.snippets.columns.customer,
                 dataIndex: 'customerId',
                 flex:2,
-                renderer: me.customerColumn
+                renderer: me.customerColumn,
+                getSortParam: function() {
+                    return 'customerName';
+                }
             },
             {
                 header: me.snippets.columns.customerEmail,
