@@ -397,15 +397,13 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         $query = Shopware()->Models()->createQuery('DELETE Shopware\Models\Emotion\Data u WHERE u.emotionId = ?1');
         $query->setParameter(1, $emotion->getId());
         $query->execute();
-
-        $query = Shopware()->Models()->createQuery('DELETE Shopware\Models\Emotion\Element u WHERE u.emotionId = ?1');
-        $query->setParameter(1, $emotion->getId());
-        $query->execute();
     }
 
     /**
      * Internal helper function which interpreted the passed emotion elements and save convert the data array
      * to an model array.
+     *
+     * Existing element entities will be updated.
      *
      * @param $emotion
      * @param $data
@@ -413,58 +411,106 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
      */
     private function fillElements($emotion, $data)
     {
-        $elements= array();
-        $mediaService = Shopware()->Container()->get('shopware_media.media_service');
-        $mediaFields = $this->getMediaXTypes();
+        /** @var \Shopware\Models\Emotion\Element $elementEntity */
+        foreach($emotion->getElements() as $elementEntity) {
+            $updated = false;
+            foreach($data['elements'] as $postedElement) {
+                // update existing elements
+                if($postedElement['id'] === $elementEntity->getId()) {
+                    $updated = true;
 
-        foreach ($data['elements'] as $elementData) {
-            $element = new \Shopware\Models\Emotion\Element();
-            $component = Shopware()->Models()->find('Shopware\Models\Emotion\Library\Component', $elementData['componentId']);
+                    // update moving on the canvas
+                    $elementEntity->setStartCol($postedElement['startCol']);
+                    $elementEntity->setStartRow($postedElement['startRow']);
+                    $elementEntity->setEndCol($postedElement['endCol']);
+                    $elementEntity->setEndRow($postedElement['endRow']);
 
-            foreach ($elementData['data'] as $item) {
-                $model = new \Shopware\Models\Emotion\Data();
-                $field = Shopware()->Models()->find('Shopware\Models\Emotion\Library\Field', $item['id']);
-                $model->setComponent($component);
-                $model->setComponentId($component->getId());
-                $model->setElement($element);
-                $model->setFieldId($item['id']);
+                    // update data
+                    $this->fillElementData($postedElement, $elementEntity);
+                    break; // exit $data['elements'] looping
+                }
+            }
+            // remove deleted elements
+            if($updated === false) {
+                $emotion->getElements()->removeElement($elementEntity);
+            }
+        }
 
-                /**@var $field \Shopware\Models\Emotion\Library\Field*/
-                $model->setField($field);
-                $value = '';
-                switch (strtolower($field->getValueType())) {
-                    case "json":
+        // add new elements
+        foreach($data['elements'] as $postedElement) {
+            if($postedElement['id'] === 0 && $postedElement['emotionId'] === 0) {
+                $element = new \Shopware\Models\Emotion\Element();
+                $this->get('models')->persist($element);
 
-                        if (is_array($item['value'])) {
-                            foreach ($item['value'] as &$val) {
-                                $val['path'] = $mediaService->normalize($val['path']);
-                            }
+                $component = $this->get('models')->find('Shopware\Models\Emotion\Library\Component', $postedElement['componentId']);
+
+                $postedElement['emotion'] = $emotion;
+                $postedElement['component'] = $component;
+                $postedData = $postedElement['data'];
+                unset($postedElement['data']);
+                $element->fromArray($postedElement);
+                $postedElement['data'] = $postedData;
+
+                $this->get('models')->flush(); // need element id
+
+                // update data
+                $this->fillElementData($postedElement, $element);
+
+                $emotion->getElements()->add($element);
+            }
+        }
+
+        return $emotion->getElements() ? $emotion->getElements()->toArray() : array();
+    }
+
+    /**
+     * Internal helper function to persist element data.
+     *
+     * This method creates new model entities for every data field.
+     *
+     * @param $postedElement
+     * @param \Shopware\Models\Emotion\Element $elementEntity
+     */
+    private function fillElementData($postedElement, \Shopware\Models\Emotion\Element $elementEntity)
+    {
+        $component = $this->get('models')->find('Shopware\Models\Emotion\Library\Component', $postedElement['componentId']);
+
+        foreach ($postedElement['data'] as $item) {
+            $model = new \Shopware\Models\Emotion\Data();
+            /** @var $field \Shopware\Models\Emotion\Library\Field */
+            $field = $this->get('models')->find('Shopware\Models\Emotion\Library\Field', $item['id']);
+            $model->setComponent($component);
+            $model->setComponentId($component->getId());
+            $model->setElement($elementEntity);
+            $model->setElementId($elementEntity->getId());
+            $model->setEmotion($elementEntity->getEmotion());
+            $model->setEmotionId($elementEntity->getEmotion()->getId());
+            $model->setField($field);
+            $model->setFieldId($item['id']);
+
+            switch (strtolower($field->getValueType())) {
+                case "json":
+                    if (is_array($item['value'])) {
+                        foreach ($item['value'] as &$val) {
+                            $val['path'] = $this->get('shopware_media.media_service')->normalize($val['path']);
                         }
+                    }
 
-                        $value = Zend_Json::encode($item['value']);
-                        break;
-                    case "string":
-                    default:
-                        $value = $item['value'];
-                        break;
-                }
-
-                if (in_array($field->getXType(), $mediaFields)) {
-                    $value = $mediaService->normalize($value);
-                }
-
-                $model->setValue($value);
-                $model->setEmotionId($emotion->getId());
-                Shopware()->Models()->persist($model);
+                    $value = \Zend_Json::encode($item['value']);
+                    break;
+                case "string":
+                default:
+                    $value = $item['value'];
+                    break;
             }
 
-            $elementData['emotion'] = $emotion;
-            $elementData['component'] = $component;
-            unset($elementData['data']);
-            $element->fromArray($elementData);
-            $elements[] = $element;
+            if (in_array($field->getXType(), $this->getMediaXTypes())) {
+                $value = $this->get('shopware_media.media_service')->normalize($value);
+            }
+
+            $model->setValue($value);
+            $this->get('models')->persist($model);
         }
-        return $elements;
     }
 
     /**
