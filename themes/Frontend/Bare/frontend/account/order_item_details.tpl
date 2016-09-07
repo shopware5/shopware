@@ -147,7 +147,11 @@
 							{block name='frontend_account_order_item_price_value'}
 								<div class="column--value">
 									{if $article.price}
-										{$article.price} {$offerPosition.currency_html} *
+                                        {if $offerPosition.currency_position == "32"}
+											{$offerPosition.currency_html} {$article.price} *
+										{else}
+											{$article.price} {$offerPosition.currency_html} *
+										{/if}
 									{else}
 										{s name="OrderItemInfoFree"}{/s}
 									{/if}
@@ -167,7 +171,11 @@
 							{block name='frontend_account_order_item_amount_value'}
 								<div class="column--value">
 									{if $article.amount}
-										{$article.amount} {$offerPosition.currency_html} *
+                                        {if $offerPosition.currency_position == "32"}
+                                            {$offerPosition.currency_html} {$article.amount}  *
+                                        {else}
+                                            {$article.amount} {$offerPosition.currency_html} *
+                                        {/if}
 									{else}
 										{s name="OrderItemInfoFree"}{/s}
 									{/if}
@@ -267,14 +275,32 @@
 
 				{* Shopping costs *}
 				{block name="frontend_account_order_item_shippingamount"}
-					<p class="is--strong">{$offerPosition.invoice_shipping} {$offerPosition.currency_html}</p>
+                    <p class="is--strong">
+                        {if $offerPosition.currency_position == "32"}
+                            {$offerPosition.currency_html} {$offerPosition.invoice_shipping}
+                        {else}
+                            {$offerPosition.invoice_shipping} {$offerPosition.currency_html}
+                        {/if}
+                    </p>
 				{/block}
 
 				{block name="frontend_acccount_order_item_amount"}
 					{if $offerPosition.taxfree}
-						<p class="is--bold">{$offerPosition.invoice_amount_net} {$offerPosition.currency_html}</p>
+                        <p class="is--bold">
+                            {if $offerPosition.currency_position == "32"}
+                                {$offerPosition.currency_html} {$offerPosition.invoice_amount_net}
+                            {else}
+                                {$offerPosition.invoice_amount_net} {$offerPosition.currency_html}
+                            {/if}
+                        </p>
 					{else}
-						<p class="is--bold">{$offerPosition.invoice_amount} {$offerPosition.currency_html}</p>
+                        <p class="is--bold">
+                            {if $offerPosition.currency_position == "32"}
+                                {$offerPosition.currency_html} {$offerPosition.invoice_amount}
+                            {else}
+                                {$offerPosition.invoice_amount} {$offerPosition.currency_html}
+                            {/if}
+                        </p>
 					{/if}
 				{/block}
 			</div>
