@@ -243,12 +243,10 @@ class sConfigurator
         if (!empty($selectedItems) && empty($selected)) {
             if ($settings['type'] == self::TYPE_STANDARD) {
                 unset($this->sSYSTEM->_POST["group"]);
-                return $this->getArticleConfigurator($id, $articleData, true);
-
             } elseif ($settings['type'] == self::TYPE_SELECTION) {
-                $group = $this->sSYSTEM->_POST["group"];
-                array_pop($group);
-                $this->sSYSTEM->_POST["group"] = $group;
+                array_pop($this->sSYSTEM->_POST["group"]);
+            }
+            if (count($this->sSYSTEM->_POST["group"])) {
                 return $this->getArticleConfigurator($id, $articleData, true);
             }
         }
