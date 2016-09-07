@@ -3849,32 +3849,59 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * Returns list of ESD-Files
      */
     public function getEsdFilesAction()
-    {
-        $filePath = Shopware()->DocPath('files_' . Shopware()->Config()->get('sESDKEY'));
+	{
+		$filePath = Shopware()->DocPath('files_' . Shopware()->Config()->get('sESDKEY'));
 
-        if (!file_exists($filePath)) {
-            $this->View()->assign(array(
-                'message' => 'noFolder',
-                'success' => false
-            ));
-            return;
-        }
-        $result = array();
-        foreach (new DirectoryIterator($filePath) as $file) {
-            if ($file->isDot() || strpos($file->getFilename(), '.') === 0) {
-                continue;
-            }
-            $result[] = array(
-                'filename' => $file->getFilename()
-            );
-        }
+		if (!file_exists($filePath)) {
+			$this->View()->assign(array(
+				'message' =>  'noFolder',
+				'success' => false
+			));
+			return;
+		}
+		$result = array();
+		foreach (new DirectoryIterator($filePath) as $file) {
+			if ($file->isDot() || strpos($file->getFilename(), '.') === 0) {
+				continue;
+			}
+			$result[] = array(
+				'filename' => $file->getFilename(),
+				'filetime' => $file->getMTime()
+			);
+		}
+		$oldResultCount = count($result);
+		if (isset($_GET['limit']) && $_GET['limit'] >= 1){
+			$c = 0;
+			$limit = preg_replace('/([^0-9]*)/', '', $_GET['limit']);
+			if (isset($limit) && count($result) >= $limit){
+				$resultSort = array();
+				foreach($result as $tmpval){
+					$resultSort[$tmpval['filetime']][] = $tmpval['filename'];
+				}
+				unset($result);
+				krsort($resultSort);
+				$result = array();
+				foreach($resultSort as $tmpkey => $tmpval){
+					foreach($tmpval as $tmpval2) {
+						if (isset($c) && isset($limit) && $c >= $limit) {
+							break;
+						}
+						$c++;
+						$result[] = array(
+							'filename' => $tmpval2,
+							'filetime' => $tmpkey
+						);
+					}
+				}
+			}
+		}
 
-        $this->View()->assign(array(
-            'data' => $result,
-            'total' => count($result),
-            'success' => true
-        ));
-    }
+		$this->View()->assign(array(
+			'data' =>  $result,
+			'total' =>  $oldResultCount,
+			'success' => true
+		));
+	}
 
     /**
      * Event listener function of the article backend module.
