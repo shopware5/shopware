@@ -364,7 +364,6 @@ EOD;
         );
 
         set_error_handler(function ($errno, $errstr, $errfile, $errline) use ($errorNameMap) {
-
             $filepath = $this->getService('kernel')->getRootdir() . '/build/logs/mink';
 
             // No effect in other environments.
