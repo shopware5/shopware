@@ -297,6 +297,7 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
         store.filters.clear();
         store.filter('filter', searchString);
     },
+    
      /**
      * Event listener method which will be fired when the user
      * clicks the "update"-button in the edit-window.
