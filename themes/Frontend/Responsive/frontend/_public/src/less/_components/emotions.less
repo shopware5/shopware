@@ -5,6 +5,11 @@ Contains the basic styles for the Shopware 5 shopping worlds and its elements.
 
 Shopware 5 provides 11 integrated elements inside the shopping worlds that can be chosen and modified inside the backend shopping world editor such as sliders, video elements and blog-articles.
 */
+
+@emotionsMasonryColumnsPhoneLandscape: 2;
+@emotionsMasonryColumnsTablet: 3;
+@emotionsMasonryColumnsTabletLandscape: 3;
+
 .createColumnSizes(@n, @i: 1) when (@i =< @n) {
 
     &.emotion--mode-resize {
@@ -20,7 +25,7 @@ Shopware 5 provides 11 integrated elements inside the shopping worlds that can b
     }
 
     @media screen and(min-width: @phoneLandscapeViewportWidth) {
-        @columns: 2;
+        @columns: @emotionsMasonryColumnsPhoneLandscape;
         &.emotion--mode-masonry {
             &.emotion--column-@{n} .column--@{i} when (@i <= @columns) {
                 width: (100% / @columns * @i);
@@ -29,7 +34,7 @@ Shopware 5 provides 11 integrated elements inside the shopping worlds that can b
     }
 
     @media screen and(min-width: @tabletViewportWidth) {
-        @columns: 3;
+        @columns: @emotionsMasonryColumnsTablet;
         &.emotion--mode-masonry {
             &.emotion--column-@{n} .column--@{i} when (@i <= @columns) {
                 width: (100% / @columns * @i);
@@ -38,7 +43,7 @@ Shopware 5 provides 11 integrated elements inside the shopping worlds that can b
     }
 
     @media screen and(min-width: @tabletLandscapeViewportWidth) {
-        @columns: 3;
+        @columns: @emotionsMasonryColumnsTabletLandscape;
         &.emotion--mode-masonry {
             &.emotion--column-@{n} .column--@{i} when (@i <= @columns) {
                 width: (100% / @columns * @i);
