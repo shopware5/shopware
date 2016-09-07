@@ -468,7 +468,12 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         if (!$target = $this->Request()->getParam('sTarget')) {
             $target = 'account';
         }
-        $this->redirect(array('controller'=>$target, 'action'=>'index', 'success'=>'billing'));
+        $targetAction = $this->Request()->getParam('sTargetAction', 'index');
+        $this->redirect(array(
+            'controller' => $target,
+            'action' => $targetAction,
+            'success' => 'billing'
+        ));
     }
 
     /**
