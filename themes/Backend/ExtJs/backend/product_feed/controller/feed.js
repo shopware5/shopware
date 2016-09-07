@@ -56,6 +56,7 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
     refs:[
         { ref:'productFeedWindow', selector:'product_feed-feed-window' },
         { ref:'productFeedSaveButton', selector:'product_feed-feed-window button[action=save]' },
+        { ref:'productFeedUpdateButton', selector:'product_feed-feed-window button[action=update]' },
         { ref:'categoryTree', selector : 'product_feed-feed-tab-category treepanel' },
         { ref:'attributeForm', selector: 'product_feed-feed-window shopware-attribute-form' }
     ],
@@ -102,6 +103,9 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
             },
             'product_feed-feed-window button[action=save]':{
                 click:me.onSave
+            },
+            'product_feed-feed-window button[action=update]':{
+                click:me.onUpdate
             },
             'product_feed-feed-window':{
                 scope:me,
@@ -293,7 +297,17 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
         store.filters.clear();
         store.filter('filter', searchString);
     },
-
+     /**
+     * Event listener method which will be fired when the user
+     * clicks the "update"-button in the edit-window.
+     *
+     * @event click
+     * @param [object] btn - pressed Ext.button.Button
+     * @return void
+     */
+    onUpdate: function (btn) {
+        this.onSave(btn, true);
+    },
 
     /**
      * Event listener method which will be fired when the user
@@ -303,7 +317,7 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
      * @param [object] btn - pressed Ext.button.Button
      * @return void
      */
-    onSave: function (btn) {
+    onSave: function (btn, keepOpened) {
         var me = this,
             formPanel = me.getProductFeedWindow().formPanel,
             form = formPanel.getForm(),
@@ -332,7 +346,9 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
                     var data = response.data;
                     attributeForm.saveAttribute(data.id);
                     Shopware.Notification.createGrowlMessage('',me.snippets.onSaveChangesSuccess, me.snippets.growlMessage);
-                    me.getProductFeedWindow().destroy();
+                    if(typeof(keepOpened) == 'undefined' || !keepOpened){
+                        me.getProductFeedWindow().destroy();
+                    }
                 } else {
                     Shopware.Notification.createGrowlMessage('',me.snippets.onSaveChangesError, me.snippets.growlMessage);
                 }
@@ -370,6 +386,7 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
                             if(selectedTreeItemCounter == resultCount) {
                                 //tree completely expanded
                                 me.getProductFeedSaveButton().enable();
+                                me.getProductFeedUpdateButton().enable();
                             }
                         }
                     );
