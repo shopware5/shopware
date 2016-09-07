@@ -4216,7 +4216,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             MONTH(ordertime) as month,
             DATE_FORMAT(ordertime, '%Y-%m-%d') as date
             FROM s_order_details, s_order
-            WHERE articleID = :articleId
+            WHERE s_order_details.articleID = :articleId
+            AND s_order_details.modus = 0
             AND s_order.id = s_order_details.orderID
             AND s_order.status != 4
             AND s_order.status != -1
