@@ -129,7 +129,7 @@ class Customer extends LazyFetchModelEntity
     /**
      * Contains the md5 encoded password
      * @var string
-     * @ORM\Column(name="password", type="string", length=100, nullable=false)
+     * @ORM\Column(name="password", type="string", length=1024, nullable=false)
      */
     private $hashPassword = '';
 
