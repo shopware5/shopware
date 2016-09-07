@@ -97,10 +97,14 @@ class SnippetsFindMissingCommand extends ShopwareCommand
             ->where(
                 $filteredQueryBuilder->expr()->notIn(
                     'CONCAT(s.namespace, s.name)',
-                    array_map(function ($item) {return "'".$item['hash']."'";}, $localeSnippets)
+                    array_map(function ($item) {
+                        return "'".$item['hash']."'";
+                    }, $localeSnippets)
                 )
             )
-            ->setParameter('snippets', array_map(function ($item) {return $item['hash'];}, $localeSnippets))
+            ->setParameter('snippets', array_map(function ($item) {
+                return $item['hash'];
+            }, $localeSnippets))
         ;
         
         if ($input->getOption('fallback')) {

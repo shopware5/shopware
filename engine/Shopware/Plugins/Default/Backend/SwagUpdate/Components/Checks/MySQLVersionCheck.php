@@ -78,7 +78,7 @@ class MySQLVersionCheck implements CheckInterface
 
         $validVersion = (version_compare($version, $minMySQLVersion) >= 0);
 
-        $successMessage = $this->namespace->get('controller/check_mysqlversion_success',  "Min MySQL Version: %s, your version %s");
+        $successMessage = $this->namespace->get('controller/check_mysqlversion_success', "Min MySQL Version: %s, your version %s");
         $failMessage = $this->namespace->get('controller/check_mysqlversion_failure', "Min MySQL Version %s, your version %s");
 
         if ($validVersion) {
