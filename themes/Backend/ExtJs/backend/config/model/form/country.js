@@ -71,6 +71,7 @@ Ext.define('Shopware.apps.Config.model.CountryAttribute', {
     extend: 'Ext.data.Model',
 
     fields : [
+        //{block name="backend/config/model/form/country_attribute/fields"}{/block}
         { name: 'id', type: 'int' }
     ]
 });
