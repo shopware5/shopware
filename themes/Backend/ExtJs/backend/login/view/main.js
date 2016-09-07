@@ -46,6 +46,7 @@ Ext.define('Shopware.apps.Login.view.Main', {
     maximizable: false,
     plain: true,
     header: false,
+    onEsc: Ext.emptyFn,
 
     /**
      * Initialize the component and bind an event listener to
