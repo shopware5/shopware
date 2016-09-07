@@ -65,10 +65,10 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
         $id = $this->Request()->getParam('sFid');
         $id = ($id) ? $id : $this->Request()->getParam('id');
 
-        $this->View()->forceMail = intval($this->Request()->getParam('forceMail'));
+        $this->View()->forceMail = (int)$this->Request()->getParam('forceMail');
         $this->View()->id        = $id;
         $this->View()->sSupport  = $this->getContent($id);
-        $this->View()->rand      = md5(uniqid(rand()));
+        $this->View()->rand      = md5(uniqid(mt_rand(), true));
 
         $success = $this->Request()->getParam('success');
         if ($success) {
@@ -374,7 +374,9 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
             case 'file':
                 if (empty($post) && !empty($element['value'])) {
                     $post = $element['value'];
-                } elseif (!empty($post)) {
+                } elseif (!empty($post) && $element['typ'] !== 'textarea') {
+                    $post = '{literal}' . str_replace(['{/literal}', '"'], '', $post) . '{/literal}';
+                } else {
                     $post = '{literal}' . str_replace('{/literal}', '', $post) . '{/literal}';
                 }
                 break;
@@ -382,12 +384,12 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
                 if (empty($post[0]) && !empty($element['value'][0])) {
                     $post[0] = $element['value'][0];
                 } elseif (!empty($post[0])) {
-                    $post[0] = "{literal}{$post[0]}{/literal}";
+                    $post[0] = '{literal}' . str_replace(['{/literal}', '"'], '', $post[0]) . '{/literal}';
                 }
                 if (empty($post[1]) && !empty($element['value'][1])) {
                     $post[1] = $element['value'][1];
                 } elseif (!empty($post[1])) {
-                    $post[1] = "{literal}{$post[1]}{/literal}";
+                    $post[1] = '{literal}' . str_replace(['{/literal}', '"'], '', $post[1]) . '{/literal}';
                 }
                 break;
             default:
