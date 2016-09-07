@@ -686,7 +686,7 @@ class sAdmin
                 (int) $postData['birthday'],
                 (int) $postData['birthyear']
             );
-            if ($postData['birthday'] > 0) {
+            if ($postData['birthday'] !== false) {
                 $postData['birthday'] = date('Y-m-d', $postData['birthday']);
             } else {
                 $postData['birthday'] = '0000-00-00';
@@ -5000,7 +5000,7 @@ class sAdmin
     /**
      * Convenience function to check if there is at least one order with the
      * provided cleared status.
-     * 
+     *
      * @param int $cleared
      * @return boolean
      */
