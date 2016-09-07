@@ -298,7 +298,7 @@ class Store extends BaseStore
     private function save($key, $data)
     {
         $path = $this->getPath($key);
-        if (!is_dir(dirname($path)) && false === @mkdir(dirname($path), 0777, true) && !is_dir(dirname($path))) {
+        if (!is_dir(dirname($path)) && false === @mkdir(dirname($path), 0777, true)) {
             return false;
         }
 
