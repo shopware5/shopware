@@ -40,6 +40,12 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
         return true;
     }
 
+    /**
+     * @param Enlight_Components_Cron_EventArgs $job
+     *
+     * @return string|void
+     * @throws \Exception
+     */
     public function onRun(Enlight_Components_Cron_EventArgs $job)
     {
         if (empty(Shopware()->Config()->voteSendCalling)) {
@@ -62,14 +68,16 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
 
             $shopId = is_numeric($order['language']) ? $order['language'] : $order['subshopID'];
             $shop = $repository->getActiveById($shopId);
+
+            /** @var Shopware\Models\Shop\Currency $repository */
             $repository = Shopware()->Models()->getRepository('Shopware\Models\Shop\Currency');
-            $shop->setCurrency($repository->find($order["currencyID"]));
+            $shop->setCurrency($repository->find($order['currencyID']));
             $shop->registerResources();
 
             foreach ($positions[$orderId] as &$position) {
-                $position["link"] = Shopware()->Container()->get('router')->assemble(array(
+                $position['link'] = Shopware()->Container()->get('router')->assemble(array(
                     'module' => 'frontend', 'sViewport' => 'detail',
-                    'sArticle' => $position["articleID"]
+                    'sArticle' => $position['articleID']
                 ));
             }
 
@@ -79,9 +87,9 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
                 'sArticles' => $positions[$orderId],
             );
 
-            if (!empty($customers[$orderId]["email"])) {
+            if (!empty($customers[$orderId]['email'])) {
                 $mail = Shopware()->TemplateMail()->createMail('sARTICLECOMMENT', $context);
-                $mail->addTo($customers[$orderId]["email"]);
+                $mail->addTo($customers[$orderId]['email']);
                 $mail->send();
             }
         }
@@ -89,6 +97,11 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
         return count($order) . ' rating mails was sent.';
     }
 
+    /**
+     * @param $sendTime
+     *
+     * @return array
+     */
     public function getOrders($sendTime)
     {
         $sql = "
@@ -150,6 +163,11 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
         return Shopware()->Db()->fetchAssoc($sql, array($sendTime));
     }
 
+    /**
+     * @param $orderIds
+     *
+     * @return array
+     */
     public function getCustomers($orderIds)
     {
         $orderIds = Shopware()->Db()->quote($orderIds);
@@ -229,6 +247,11 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
         return Shopware()->Db()->fetchAssoc($sql);
     }
 
+    /**
+     * @param $orderIds
+     *
+     * @return array
+     */
     public function getPositions($orderIds)
     {
         $orderIds = Shopware()->Db()->quote($orderIds);
