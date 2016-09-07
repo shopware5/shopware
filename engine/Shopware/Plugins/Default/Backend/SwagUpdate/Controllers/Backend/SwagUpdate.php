@@ -333,7 +333,6 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
             $this->View()->assign('message', $e->getMessage());
             $this->View()->assign('success', false);
         }
-
     }
 
     public function unpackAction()

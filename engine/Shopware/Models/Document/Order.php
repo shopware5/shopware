@@ -309,7 +309,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
             } else {
                 $this->_amountNetto =  $this->_amountNetto + ($this->_order["invoice_shipping"]/(100+$taxShipping)*100);
                 if (!empty($taxShipping) && !empty($this->_order["invoice_shipping"])) {
-                    $this->_tax[number_format($taxShipping,2)] += ($this->_order["invoice_shipping"]/(100+$taxShipping))*$taxShipping;
+                    $this->_tax[number_format($taxShipping, 2)] += ($this->_order["invoice_shipping"]/(100+$taxShipping))*$taxShipping;
                 }
             }
 
