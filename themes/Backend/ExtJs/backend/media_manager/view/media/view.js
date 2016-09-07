@@ -311,7 +311,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
                         '</tpl>',
                         '<p>',
                             '<strong>'+me.snippets.mediaInfo.adress+'</strong>',
-                            '<input type="text" disabled="disabled" value="{path}" />',
+                            '<a class="link" target="_blank" href="{path}" title="{name}">{path}</a>',
                         '</p>',
                     '</div>',
                 '</div>',
