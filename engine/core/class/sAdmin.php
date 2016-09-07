@@ -668,6 +668,37 @@ class sAdmin
     }
 
     /**
+     * Checks if date is valid
+     *
+     * @param string $day birth day
+     * @param string $month birth month
+     * @param string $year birth year
+     * @return bool true if the given birth date is valid false otherwise.
+     */
+    private function isValidDate($day, $month, $year) {
+        $day = $this->castInt($day);
+        $month = $this->castInt($month);
+        $year = $this->castInt($year);
+
+        return
+            ($day * $month * $year) > 0
+            && $day < 32
+            && $month < 13
+            && $year < (int)date('Y');
+    }
+
+    /**
+     * Casts numerical values into integer. returns false otherwise
+     *
+     * @param mixed $value
+     * @return bool|int
+     * @return bool|int, int value if $value is a numeric string false otherwise.
+     */
+    private function castInt($value) {
+        return is_numeric($value) ? (int)$value : false;
+    }
+
+    /**
      * Updates the billing address of the user
      *
      * @throws Enlight_Exception On database error
@@ -679,18 +710,9 @@ class sAdmin
         $userId = $this->session->offsetGet('sUserId');
 
         // Convert multiple birthday fields into a single value
-        if (!empty($postData['birthmonth']) && !empty($postData['birthday']) && !empty($postData['birthyear'])) {
-            $postData['birthday'] = mktime(
-                0,0,0,
-                (int) $postData['birthmonth'],
-                (int) $postData['birthday'],
-                (int) $postData['birthyear']
-            );
-            if ($postData['birthday'] > 0) {
-                $postData['birthday'] = date('Y-m-d', $postData['birthday']);
-            } else {
-                $postData['birthday'] = '0000-00-00';
-            }
+        if ($this->isValidDate($postData['birthday'], $postData['birthmonth'], $postData['birthyear'])) {
+            $birthdate = new DateTime();
+            $postData['birthday'] = $birthdate->setDate($postData['birthyear'], $postData['birthmonth'], $postData['birthday'])->format('Y-m-d');
         } else {
             unset($postData['birthday']);
         }
@@ -5000,7 +5022,7 @@ class sAdmin
     /**
      * Convenience function to check if there is at least one order with the
      * provided cleared status.
-     * 
+     *
      * @param int $cleared
      * @return boolean
      */
