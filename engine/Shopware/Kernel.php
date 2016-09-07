@@ -25,6 +25,7 @@
 namespace Shopware;
 
 use Shopware\Bundle\AttributeBundle\DependencyInjection\Compiler\SearchRepositoryCompilerPass;
+use Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\ProductModifierCompilerPass;
 use Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\SettingsCompilerPass;
 use Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\SynchronizerCompilerPass;
 use Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\DataIndexerCompilerPass;
@@ -612,6 +613,7 @@ class Kernel implements HttpKernelInterface
         $container->addCompilerPass(new MappingCompilerPass());
         $container->addCompilerPass(new SynchronizerCompilerPass());
         $container->addCompilerPass(new DataIndexerCompilerPass());
+        $container->addCompilerPass(new ProductModifierCompilerPass());
         $container->addCompilerPass(new SettingsCompilerPass());
         $container->addCompilerPass(new FormPass());
         $container->addCompilerPass(new AddConstraintValidatorsPass());
