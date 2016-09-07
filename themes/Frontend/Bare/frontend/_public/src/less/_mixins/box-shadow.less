@@ -15,7 +15,9 @@ Please refer to <http://caniuse.com/css-boxshadow> to see the browser support ta
 */
 
 .box-shadow(@shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2)) {
-	box-shadow: @shadow;
+	-webkit-box-shadow: @shadow;
+    -moz-box-shadow: @shadow;
+    box-shadow: @shadow;
 }
 
 .reset-box-shadow() {
