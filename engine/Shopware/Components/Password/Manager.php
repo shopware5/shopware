@@ -44,11 +44,21 @@ class Manager
     protected $config;
 
     /**
-     * @param \Shopware_Components_Config $config
+     * @var \Enlight_Event_EventManager $eventManager
      */
-    public function __construct(\Shopware_Components_Config $config)
+    protected $eventManager;
+
+    /**
+     * @param \Shopware_Components_Config $config
+     * @param \Enlight_Event_EventManager $eventManager
+     */
+    public function __construct(
+        \Shopware_Components_Config $config,
+        \Enlight_Event_EventManager $eventManager
+    )
     {
         $this->config = $config;
+        $this->eventManager = $eventManager;
     }
 
     /**
@@ -115,6 +125,14 @@ class Manager
                 $encoderName = 'sha256';
             }
         }
+
+        $encoderName = $this->eventManager->filter(
+            'Shopware_Components_Password_Manager_getDefaultPasswordEncoderName',
+            $encoderName,
+            array(
+                'subject'=> $this
+            )
+        );
 
         return $encoderName;
     }

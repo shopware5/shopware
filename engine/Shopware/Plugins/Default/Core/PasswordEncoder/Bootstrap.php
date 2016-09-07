@@ -167,7 +167,8 @@ class Shopware_Plugins_Core_PasswordEncoder_Bootstrap extends Shopware_Component
         );
 
         $passwordManager = new \Shopware\Components\Password\Manager(
-            $this->Application()->Config()
+            $this->Application()->Config(),
+            $this->Application()->Events()
         );
 
         foreach ($availableHasher as $encoder) {
