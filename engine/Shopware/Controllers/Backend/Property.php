@@ -287,6 +287,10 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
     {
         $params = $this->Request()->getPost();
 
+        if (isset($params['attribute'][0])) {
+            $params['attribute'] = $params['attribute'][0];
+        }
+
         $option = new Option();
         $option->fromArray($params);
 
@@ -319,7 +323,13 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
             return;
         }
 
-        $option->fromArray($this->Request()->getPost());
+        $params = $this->Request()->getPost();
+
+        if (isset($params['attribute'][0])) {
+            $params['attribute'] = $params['attribute'][0];
+        }
+
+        $option->fromArray($params);
 
         try {
             Shopware()->Models()->flush();

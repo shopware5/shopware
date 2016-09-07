@@ -83,6 +83,8 @@ Ext.define('Shopware.apps.Property.model.Group', {
             type: 'json',
             root: 'data'
         }
-    }
+    },
+
+    associations: [{ type: 'hasMany', model: 'Shopware.apps.Property.model.GroupAttribute', name: 'getAttributes', associationKey: 'attribute'}]
 });
 //{/block}
