@@ -14,7 +14,13 @@
     {* Sorting field *}
     {block name='frontend_listing_actions_sort_field'}
 		<select name="{$shortParameters.sSort}" class="sort--field action--field" data-auto-submit="true" data-class="sort--select">
-			{block name="frontend_listing_actions_sort_field_release"}
+            {block name="frontend_listing_actions_sort_field_relevance"}
+                {if $Controller == 'search'}
+                    <option value="7"{if $sSort eq 7} selected="selected"{/if}>{s name='ListingSortRelevance'}{/s}</option>
+                {/if}
+            {/block}
+
+            {block name="frontend_listing_actions_sort_field_release"}
 				<option value="1"{if $sSort eq 1} selected="selected"{/if}>{s name='ListingSortRelease'}{/s}</option>
 			{/block}
 
