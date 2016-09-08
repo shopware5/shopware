@@ -202,6 +202,9 @@ class Theme extends \Shopware\Components\Theme
         'font-size-h4' => '16',
         'font-size-h5' => '@font-size-base',
         'font-size-h6' => '12',
+        'panel-header-font-size' => '14',
+        'label-font-size' => '14',
+        'input-font-size' => '14',
         'btn-font-size' => '14',
         'btn-icon-size' => '10'
     ];
@@ -622,16 +625,9 @@ class Theme extends \Shopware\Components\Theme
 
         $fieldSetDefaultButtons->addElement(
             $this->createColorPickerField(
-                'btn-default-top-bg',
-                '@btn-default-top-bg',
-                $this->themeColorDefaults['btn-default-top-bg']
-            )
-        );
-        $fieldSetDefaultButtons->addElement(
-            $this->createColorPickerField(
-                'btn-default-bottom-bg',
-                '@btn-default-bottom-bg',
-                $this->themeColorDefaults['btn-default-bottom-bg']
+                'btn-default-bg',
+                '@btn-default-bg',
+                $this->themeColorDefaults['btn-default-bg']
             )
         );
         $fieldSetDefaultButtons->addElement(
@@ -652,7 +648,7 @@ class Theme extends \Shopware\Components\Theme
             $this->createColorPickerField(
                 'btn-default-hover-text-color',
                 '@btn-default-hover-text-color',
-                '@brand-primary'
+                $this->themeColorDefaults['btn-default-hover-text-color']
             )
         );
         $fieldSetDefaultButtons->addElement(
@@ -681,16 +677,9 @@ class Theme extends \Shopware\Components\Theme
 
         $fieldSetPrimaryButtons->addElement(
             $this->createColorPickerField(
-                'btn-primary-top-bg',
-                '@btn-primary-top-bg',
-                $this->themeColorDefaults['btn-primary-top-bg']
-            )
-        );
-        $fieldSetPrimaryButtons->addElement(
-            $this->createColorPickerField(
-                'btn-primary-bottom-bg',
-                '@btn-primary-bottom-bg',
-                $this->themeColorDefaults['btn-primary-bottom-bg']
+                'btn-primary-bg',
+                '@btn-primary-bg',
+                $this->themeColorDefaults['btn-primary-bg']
             )
         );
         $fieldSetPrimaryButtons->addElement(
@@ -726,16 +715,9 @@ class Theme extends \Shopware\Components\Theme
 
         $fieldSetSecondaryButtons->addElement(
             $this->createColorPickerField(
-                'btn-secondary-top-bg',
-                '@btn-secondary-top-bg',
-                $this->themeColorDefaults['btn-secondary-top-bg']
-            )
-        );
-        $fieldSetSecondaryButtons->addElement(
-            $this->createColorPickerField(
-                'btn-secondary-bottom-bg',
-                '@btn-secondary-bottom-bg',
-                $this->themeColorDefaults['btn-secondary-bottom-bg']
+                'btn-secondary-bg',
+                '@btn-secondary-bg',
+                $this->themeColorDefaults['btn-secondary-bg']
             )
         );
         $fieldSetSecondaryButtons->addElement(
@@ -780,7 +762,7 @@ class Theme extends \Shopware\Components\Theme
             $this->createTextField(
                 'panel-header-font-size',
                 '@panel-header-font-size',
-                '14'
+                $this->themeFontDefaults['panel-header-font-size']
             )
         );
         $fieldSetPanels->addElement(
@@ -838,7 +820,7 @@ class Theme extends \Shopware\Components\Theme
             $this->createTextField(
                 'label-font-size',
                 '@label-font-size',
-                '14'
+                $this->themeFontDefaults['label-font-size']
             )
         );
         $fieldSetLabels->addElement(
@@ -862,7 +844,7 @@ class Theme extends \Shopware\Components\Theme
             $this->createTextField(
                 'input-font-size',
                 '@input-font-size',
-                '14'
+                $this->themeFontDefaults['input-font-size']
             )
         );
         $fieldSetFormBase->addElement(
@@ -1113,205 +1095,6 @@ class Theme extends \Shopware\Components\Theme
         );
 
         $tab->addElement($fieldSetBadges);
-
-        return $tab;
-    }
-
-    /**
-     * Helper function to create the main tab ("Responsive configuration")
-     * @return Form\Container\Tab
-     */
-    private function createMainConfigTab()
-    {
-        $tab = $this->createTab(
-            'responsiveMain',
-            '__responsive_tab_header__',
-            [
-                'attributes' => [
-                    'layout' => 'anchor',
-                    'autoScroll' => true,
-                    'padding' => '0',
-                    'defaults' => ['anchor' => '100%']
-                ]
-            ]
-        );
-
-        $fieldSet = $this->createFieldSet(
-            'bareGlobal',
-            '__global_configuration__',
-            [
-                'attributes' => [
-                    'padding' => '10',
-                    'margin' => '5',
-                    'layout' => 'anchor',
-                    'defaults' => ['labelWidth' => 155, 'anchor' => '100%']
-                ]
-            ]
-        );
-
-        $fieldSet->addElement(
-            $this->createCheckboxField(
-                'offcanvasCart',
-                '__offcanvas_cart__',
-                true,
-                $this->getLabelAttribute(
-                    'offcanvas_cart_description'
-                )
-            )
-        );
-
-        $fieldSet->addElement(
-            $this->createCheckboxField(
-                'offcanvasOverlayPage',
-                '__offcanvas_move_method__',
-                true,
-                $this->getLabelAttribute(
-                    'offcanvas_move_method_description'
-                )
-            )
-        );
-
-        $fieldSet->addElement(
-            $this->createCheckboxField(
-                'focusSearch',
-                '__focus_search__',
-                false,
-                $this->getLabelAttribute(
-                    'focus_search_description'
-                )
-            )
-        );
-
-        $fieldSet->addElement(
-            $this->createCheckboxField(
-                'displaySidebar',
-                '__display_sidebar__',
-                true,
-                $this->getLabelAttribute(
-                    'display_sidebar_description'
-                )
-            )
-        );
-
-        $fieldSet->addElement(
-            $this->createCheckboxField(
-                'checkoutHeader',
-                '__checkout_header__',
-                true,
-                $this->getLabelAttribute(
-                    'checkout_header_description'
-                )
-            )
-        );
-
-        $fieldSet->addElement(
-            $this->createCheckboxField(
-                'checkoutFooter',
-                '__checkout_footer__',
-                true,
-                $this->getLabelAttribute(
-                    'checkout_footer_description'
-                )
-            )
-        );
-
-        $fieldSet->addElement(
-            $this->createCheckboxField(
-                'infiniteScrolling',
-                '__enable_infinite_scrolling__',
-                true,
-                $this->getLabelAttribute(
-                    'enable_infinite_scrolling_description'
-                )
-            )
-        );
-
-        $fieldSet->addElement(
-            $this->createNumberField(
-                'infiniteThreshold',
-                '__infinite_threshold__',
-                4,
-                $this->getLabelAttribute(
-                    'infinite_threshold_description',
-                    'supportText'
-                )
-            )
-        );
-
-        $fieldSet->addElement(
-            $this->createSelectField(
-                'lightboxZoomFactor',
-                '__lightbox_zoom_factor__',
-                0,
-                [
-                    ['value' => 0, 'text' => '__lightbox_zoom_factor_auto__'],
-                    ['value' => 1, 'text' => '__lightbox_zoom_factor_none__'],
-                    ['value' => 2, 'text' => '__lightbox_zoom_factor_2x__'],
-                    ['value' => 3, 'text' => '__lightbox_zoom_factor_3x__'],
-                    ['value' => 5, 'text' => '__lightbox_zoom_factor_5x__']
-                ],
-                $this->getLabelAttribute(
-                    'lightbox_zoom_factor_description',
-                    'supportText'
-                )
-            )
-        );
-
-        $fieldSet->addElement(
-            $this->createTextField(
-                'appleWebAppTitle',
-                '__apple_web_app_title__',
-                '',
-                ['attributes' => ['lessCompatible' => false]]
-            )
-        );
-
-        $fieldSet->addElement(
-            $this->createCheckboxField(
-                'ajaxVariantSwitch',
-                '__ajax_variant_switch__',
-                true,
-                ['attributes' => [
-                    'lessCompatible' => false,
-                    'boxLabel' => Shopware()->Snippets()->getNamespace('themes/bare/backend/config')->get('ajax_variant_switch_description')
-                ]]
-            )
-        );
-
-        $tab->addElement($fieldSet);
-
-        $fieldSet = $this->createFieldSet(
-            'responsiveGlobal',
-            '__advanced_settings__',
-            [
-                'attributes' => [
-                    'padding' => '10',
-                    'margin' => '5',
-                    'layout' => 'anchor',
-                    'defaults' => ['anchor' => '100%', 'labelWidth' => 155]
-                ]
-            ]
-        );
-
-        $fieldSet->addElement(
-            $this->createTextAreaField(
-                'additionalCssData',
-                '__additional_css_data__',
-                '',
-                ['attributes' => ['xtype' => 'textarea', 'lessCompatible' => false], 'help' => '__additional_css_data_description__']
-            )
-        );
-
-        $fieldSet->addElement(
-            $this->createTextAreaField(
-                'additionalJsLibraries',
-                '__additional_js_libraries__',
-                '',
-                ['attributes' => ['xtype' => 'textarea', 'lessCompatible' => false], 'help' => '__additional_js_libraries_description__']
-            )
-        );
-
-        $tab->addElement($fieldSet);
 
         return $tab;
     }
