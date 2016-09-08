@@ -58,12 +58,17 @@ Ext.define('Shopware.apps.Blog.store.Comment', {
      */
     remoteSort: true,
 
-    remoteFilter : true,
+    remoteFilter: true,
+
+    sorters: [{
+        property: 'creationDate',
+        direction: 'DESC'
+    }],
     /**
      * Amount of data loaded at once
      * @integer
      */
-    pageSize:30,
+    pageSize: 30,
     /**
      * Define the used model for this store
      * @string
