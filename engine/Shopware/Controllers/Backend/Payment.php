@@ -245,7 +245,7 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
                 }
                 $data['shops'] = $shops;
             }
-            $data = $this->filterSurchargeString($data['surcharge'], $data['countries']);
+            $data['surchargeString'] = $this->filterSurchargeString($data['surchargeString'], $data['countries']);
 
             $payment->fromArray($data);
 
