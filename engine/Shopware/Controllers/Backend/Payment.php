@@ -245,7 +245,7 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
                 }
                 $data['shops'] = $shops;
             }
-            $data = $this->checksurchargeString($data);
+            $data = $this->filterSurchargeString($data['surcharge'], $data['countries']);
 
             $payment->fromArray($data);
 
@@ -280,26 +280,29 @@ class Shopware_Controllers_Backend_Payment extends Shopware_Controllers_Backend_
         }
     }
 
-    public function checksurchargeString($data)
+    /**
+     * @param string $surchargeString
+     * @param \Shopware\Models\Country\Country[] $countries
+     * @return string
+     */
+    private function filterSurchargeString($surchargeString, $countries)
     {
-        $buffer = array();
-        $bool = false;
-        $surcharge = explode(";", $data['surchargeString']);
-        $counter = 0;
+        $buffer = [];
+        $surcharges = explode(";", $surchargeString);
+        $isoCodes = [];
 
+        foreach ($countries as $country) {
+            $isoCodes[] = $country->getIso();
+        }
 
-        for ($counter;$counter<=count($surcharge);$counter++) {
-            $iso = strstr($surcharge[$counter], ':', true);
-            foreach ($data['countries'] as $countries) {
-                if ($countries->getIso() == $iso) {
-                    $buffer[$counter] = $surcharge[$counter];
-                }
+        foreach ($surcharges as $surcharge) {
+            $keys = explode(':', $surcharge);
+            if (in_array($keys[0], $isoCodes)) {
+                $buffer[] = $surcharge;
             }
         }
 
-        $data['surchargeString'] = implode(";", array_filter($buffer));
-
-        return $data;
+        return implode(";", $buffer);
     }
 
     public function deletePaymentAction()
