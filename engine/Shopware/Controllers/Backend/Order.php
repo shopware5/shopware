@@ -369,11 +369,11 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
                     array_splice($sort, 1, 0, [
                         [
                             'property' => 'billing.lastName',
-                            'direction' => $orderBy[0]['direction']
+                            'direction' => $sort[0]['direction']
                         ],
                         [
                             'property' => 'billing.firstName',
-                            'direction' => $orderBy[0]['direction']
+                            'direction' => $sort[0]['direction']
                         ]
                     ]);
                     break;
