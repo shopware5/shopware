@@ -298,16 +298,18 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
         store.filter('filter', searchString);
     },
 
-     /**
+    /**
      * Event listener method which will be fired when the user
      * clicks the "update"-button in the edit-window.
      *
      * @event click
      * @param [object] btn - pressed Ext.button.Button
+     * @param [object] event
+     * @param [object] obj
      * @return void
      */
-    onUpdate: function (btn) {
-        this.onSave(btn, true);
+    onUpdate: function (btn, event, obj) {
+        this.onSave(btn, event, obj, true);
     },
 
     /**
@@ -316,9 +318,12 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
      *
      * @event click
      * @param [object] btn - pressed Ext.button.Button
+     * @param [object] event
+     * @param [object] obj
+     * @param [bool] keepOpened - flag indicating whether or not the window shall be kept open
      * @return void
      */
-    onSave: function (btn, keepOpened) {
+    onSave: function (btn, event, obj, keepOpened) {
         var me = this,
             formPanel = me.getProductFeedWindow().formPanel,
             form = formPanel.getForm(),
@@ -347,7 +352,7 @@ Ext.define('Shopware.apps.ProductFeed.controller.Feed', {
                     var data = response.data;
                     attributeForm.saveAttribute(data.id);
                     Shopware.Notification.createGrowlMessage('',me.snippets.onSaveChangesSuccess, me.snippets.growlMessage);
-                    if(typeof(keepOpened) == 'undefined' || !keepOpened){
+                    if(!Ext.isDefined(keepOpened) || !keepOpened){
                         me.getProductFeedWindow().destroy();
                     }
                 } else {
