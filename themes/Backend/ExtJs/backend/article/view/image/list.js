@@ -70,7 +70,7 @@ Ext.define('Shopware.apps.Article.view.image.List', {
         title: '{s name=image/list/title}Assigned images{/s}',
         comboBox: '{s name=image/list/combo_box}Images per page{/s}',
         previewButton: '{s name=image/list/preview_button}Mark as preview image{/s}',
-        removeButton: '{s name=image/list/remove_button}Remove image{/s}',
+        removeButton: '{s name=image/list/remove_button}Remove image(s)image/list/remove_button{/s}',
         configButton: '{s name=image/list/config_button}Open configuration{/s}',
         attributeButton: '{s name=image/list/attribute_button}Edit attributes{/s}',
         downloadButton: '{s name=image/list/download_button}Download image{/s}',
@@ -232,7 +232,7 @@ Ext.define('Shopware.apps.Article.view.image.List', {
             itemSelector: '.article-thumb-wrap',
             name: 'image-listing',
             emptyText: 'No Media found',
-            multiSelect: false,
+            multiSelect: true,
             padding: '10 10 20',
             store: me.mediaStore,
             tpl: me.createMediaViewTemplate()
