@@ -96,6 +96,18 @@ if ($kernel->isHttpCacheEnabled()) {
     $kernel = new AppCache($kernel, $kernel->getHttpCacheConfig());
 }
 
+// Set commandline args as request uri
+// This is used for legacy cronjob routing.
+// e.g: /usr/bin/php shopware.php /backend/cron
+if (PHP_SAPI === 'cli' && isset($_SERVER['argv'][1])) {
+    $_SERVER['REQUEST_URI'] = $_SERVER['argv'][1];
+    // We have to use a shutdown function to prevent "headers already sent" errors.
+    register_shutdown_function(function () {
+        echo PHP_EOL;
+        echo 'WARNING: Executing shopware.php via CLI is deprecated. Please use the command line tool in bin/console instead.'.PHP_EOL;
+    });
+}
+
 $request = Request::createFromGlobals();
 
 $kernel->handle($request)
