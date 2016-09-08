@@ -288,23 +288,6 @@ class Repository extends ModelRepository
         $builder->andWhere('orders.number IS NOT NULL');
 
         if (!empty($orderBy)) {
-            //order by path of company, lastName and firstName instead of customerId
-            if(isset($orderBy[0]['property']) && $orderBy[0]['property'] === 'orders.customerId'){
-                $orderBy[0] = [
-                    'property' => 'billing.company',
-                    'direction' => $orderBy[0]['direction']
-                ];
-                array_splice($orderBy, 1, 0, [
-                    [
-                        'property' => 'billing.lastName',
-                        'direction' => $orderBy[0]['direction']
-                    ],
-                    [
-                        'property' => 'billing.firstName',
-                        'direction' => $orderBy[0]['direction']
-                    ]
-                ]);
-            }
             //add order by path
             $builder->addOrderBy($orderBy);
         }
