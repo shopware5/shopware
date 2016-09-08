@@ -268,7 +268,6 @@ class Theme extends \Shopware\Components\Theme
 
     /**
      * Helper function to create the child-tabs of ("Responsive colors")
-     *
      * @return Form\Container\Tab
      */
     private function createBottomTabPanel()
@@ -293,7 +292,6 @@ class Theme extends \Shopware\Components\Theme
 
     /**
      * Helper function to create the tab ("General")
-     *
      * @return Form\Container\Tab
      */
     private function createGeneralTab()
@@ -457,7 +455,6 @@ class Theme extends \Shopware\Components\Theme
 
     /**
      * Helper function to create the tab ("Typography")
-     *
      * @return Form\Container\Tab
      */
     private function createTypographyTab()
@@ -577,7 +574,6 @@ class Theme extends \Shopware\Components\Theme
 
     /**
      * Helper function to create the tab ("Buttons & Panels")
-     *
      * @return Form\Container\Tab
      */
     private function createButtonsTab()
@@ -794,7 +790,6 @@ class Theme extends \Shopware\Components\Theme
 
     /**
      * Helper function to create the tab ("Forms")
-     *
      * @return Form\Container\Tab
      */
     private function createFormsTab()
@@ -956,7 +951,6 @@ class Theme extends \Shopware\Components\Theme
 
     /**
      * Helper function to create the tab ("Tables & Badges")
-     *
      * @return Form\Container\Tab
      */
     private function createTablesTab()
@@ -1095,6 +1089,213 @@ class Theme extends \Shopware\Components\Theme
         );
 
         $tab->addElement($fieldSetBadges);
+
+        return $tab;
+    }
+    
+    /**
+     * Helper function to create the main tab ("Responsive configuration")
+     * @return Form\Container\Tab
+     */
+    private function createMainConfigTab()
+    {
+        $tab = $this->createTab(
+            'responsiveMain',
+            '__responsive_tab_header__',
+            [
+                'attributes' => [
+                    'layout' => 'anchor',
+                    'autoScroll' => true,
+                    'padding' => '0',
+                    'defaults' => ['anchor' => '100%']
+                ]
+            ]
+        );
+
+        $fieldSet = $this->createFieldSet(
+            'bareGlobal',
+            '__global_configuration__',
+            [
+                'attributes' => [
+                    'padding' => '10',
+                    'margin' => '5',
+                    'layout' => 'anchor',
+                    'defaults' => ['labelWidth' => 155, 'anchor' => '100%']
+                ]
+            ]
+        );
+
+        $fieldSet->addElement(
+            $this->createCheckboxField(
+                'offcanvasCart',
+                '__offcanvas_cart__',
+                true,
+                $this->getLabelAttribute(
+                    'offcanvas_cart_description'
+                )
+            )
+        );
+
+        $fieldSet->addElement(
+            $this->createCheckboxField(
+                'offcanvasOverlayPage',
+                '__offcanvas_move_method__',
+                true,
+                $this->getLabelAttribute(
+                    'offcanvas_move_method_description'
+                )
+            )
+        );
+
+        $fieldSet->addElement(
+            $this->createCheckboxField(
+                'focusSearch',
+                '__focus_search__',
+                false,
+                $this->getLabelAttribute(
+                    'focus_search_description'
+                )
+            )
+        );
+
+        $fieldSet->addElement(
+            $this->createCheckboxField(
+                'displaySidebar',
+                '__display_sidebar__',
+                false,
+                $this->getLabelAttribute(
+                    'display_sidebar_description'
+                )
+            )
+        );
+
+        $fieldSet->addElement(
+            $this->createCheckboxField(
+                'checkoutHeader',
+                '__checkout_header__',
+                true,
+                $this->getLabelAttribute(
+                    'checkout_header_description'
+                )
+            )
+        );
+
+        $fieldSet->addElement(
+            $this->createCheckboxField(
+                'checkoutFooter',
+                '__checkout_footer__',
+                true,
+                $this->getLabelAttribute(
+                    'checkout_footer_description'
+                )
+            )
+        );
+
+        $fieldSet->addElement(
+            $this->createCheckboxField(
+                'infiniteScrolling',
+                '__enable_infinite_scrolling__',
+                true,
+                $this->getLabelAttribute(
+                    'enable_infinite_scrolling_description'
+                )
+            )
+        );
+
+        $fieldSet->addElement(
+            $this->createNumberField(
+                'infiniteThreshold',
+                '__infinite_threshold__',
+                4,
+                $this->getLabelAttribute(
+                    'infinite_threshold_description',
+                    'supportText'
+                )
+            )
+        );
+
+        $fieldSet->addElement(
+            $this->createSelectField(
+                'lightboxZoomFactor',
+                '__lightbox_zoom_factor__',
+                0,
+                [
+                    ['value' => 0, 'text' => '__lightbox_zoom_factor_auto__'],
+                    ['value' => 1, 'text' => '__lightbox_zoom_factor_none__'],
+                    ['value' => 2, 'text' => '__lightbox_zoom_factor_2x__'],
+                    ['value' => 3, 'text' => '__lightbox_zoom_factor_3x__'],
+                    ['value' => 5, 'text' => '__lightbox_zoom_factor_5x__']
+                ],
+                $this->getLabelAttribute(
+                    'lightbox_zoom_factor_description',
+                    'supportText'
+                )
+            )
+        );
+
+        $fieldSet->addElement(
+            $this->createTextField(
+                'appleWebAppTitle',
+                '__apple_web_app_title__',
+                '',
+                ['attributes' => ['lessCompatible' => false]]
+            )
+        );
+
+        $fieldSet->addElement(
+            $this->createCheckboxField(
+                'ajaxVariantSwitch',
+                '__ajax_variant_switch__',
+                true,
+                [
+                    'attributes' => [
+                        'lessCompatible' => false,
+                        'boxLabel' => Shopware()->Snippets()->getNamespace('themes/bare/backend/config')->get('ajax_variant_switch_description')
+                    ]
+                ]
+            )
+        );
+
+        $tab->addElement($fieldSet);
+
+        $fieldSet = $this->createFieldSet(
+            'responsiveGlobal',
+            '__advanced_settings__',
+            [
+                'attributes' => [
+                    'padding' => '10',
+                    'margin' => '5',
+                    'layout' => 'anchor',
+                    'defaults' => ['anchor' => '100%', 'labelWidth' => 155]
+                ]
+            ]
+        );
+
+        $fieldSet->addElement(
+            $this->createTextAreaField(
+                'additionalCssData',
+                '__additional_css_data__',
+                '',
+                [
+                    'attributes' => ['xtype' => 'textarea', 'lessCompatible' => false],
+                    'help' => '__additional_css_data_description__'
+                ]
+            )
+        );
+
+        $fieldSet->addElement(
+            $this->createTextAreaField(
+                'additionalJsLibraries',
+                '__additional_js_libraries__',
+                '',
+                [
+                    'attributes' => ['xtype' => 'textarea', 'lessCompatible' => false],
+                    'help' => '__additional_js_libraries_description__'
+                ]
+            )
+        );
+
+        $tab->addElement($fieldSet);
 
         return $tab;
     }
