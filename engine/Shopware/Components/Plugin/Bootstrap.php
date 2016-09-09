@@ -436,8 +436,9 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      * @param string $action
      * @param int $interval
      * @param int $active
+     * @param boolean $disableOnError
      */
-    public function createCronJob($name, $action, $interval = 86400, $active = 1)
+    public function createCronJob($name, $action, $interval = 86400, $active = 1, $disableOnError = true)
     {
         /** @var \Doctrine\DBAL\Connection $connection */
         $connection = $this->get('dbal_connection');
@@ -450,7 +451,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
                 'start'            => null,
                 '`interval`'       => $interval,
                 'active'           => $active,
-                'disable_on_error' => 1,
+                'disable_on_error' => $disableOnError ? 1 : 0,
                 'end'              => new \DateTime(),
                 'pluginID'         => $this->getId(),
             ],
