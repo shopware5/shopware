@@ -71,6 +71,7 @@ Ext.define('Shopware.apps.Index.controller.ThemeCacheWarmUp', {
                 me.shopStore.getProxy().extraParams.shopId = shopId;
 
                 me.window.setSingleShopId(shopId);
+                me.window.shopSelector.hide();
             }
 
             me.shopStore.load({
@@ -79,6 +80,9 @@ Ext.define('Shopware.apps.Index.controller.ThemeCacheWarmUp', {
                         me.window.close();
                     } else {
                         me.window.setShops(records);
+                        if (me.window.shopSelector.isVisible()) {
+                            me.window.shopSelector.bindStore(me.shopStore);
+                        }
                         me.window.show();
                     }
                 }
