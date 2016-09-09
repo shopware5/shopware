@@ -9,6 +9,7 @@ This changelog references changes done in Shopware 5.2 patch versions.
 * Add support for third party post messages in the backend
 * getOne function of customer api resource contains now the country and state data for billing and shipping address
 * Changed `jquery.search::onKeyboardNavigation()` method to provide more extension possibilities.
+* Add Hook for adding custom filters on getProductSliderData method
 
 ## 5.2.6
 
