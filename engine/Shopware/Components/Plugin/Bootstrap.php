@@ -444,14 +444,15 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
         $connection->insert(
             's_crontab',
             [
-                'name'       => $name,
-                'action'     => $action,
-                'next'       => new \DateTime(),
-                'start'      => null,
-                '`interval`' => $interval,
-                'active'     => $active,
-                'end'        => new \DateTime(),
-                'pluginID'   => $this->getId(),
+                'name'             => $name,
+                'action'           => $action,
+                'next'             => new \DateTime(),
+                'start'            => null,
+                '`interval`'       => $interval,
+                'active'           => $active,
+                'disable_on_error' => 1,
+                'end'              => new \DateTime(),
+                'pluginID'         => $this->getId(),
             ],
             [
                 'next' => 'datetime',

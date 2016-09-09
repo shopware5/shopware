@@ -110,6 +110,10 @@ Ext.define('Shopware.apps.Config.view.form.CronJob', {
             name: 'active',
             fieldLabel: '{s name=detail/active_label}Active{/s}'
         },{
+            xtype: 'config-element-boolean',
+            name: 'disableOnError',
+            fieldLabel: '{s name=detail/disable_on_error_label}Disable on error{/s}'
+        },{
             name: 'informMail',
             fieldLabel: '{s name=detail/inform_mail_label}Email recipient{/s}'
         },{
