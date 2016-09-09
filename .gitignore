@@ -7,7 +7,6 @@
 ./Icon?
 ehthumbs.db
 Thumbs.db
-
 # SASS/SCSS cache
 .sass-cache/
 
@@ -33,6 +32,7 @@ Thumbs.db
 /config_*.php
 
 # Caches/Proxies
+.php_cs.cache
 /tests/Shopware/TempFiles/*
 !/tests/Shopware/TempFiles/.gitkeep
 /var/cache/*
