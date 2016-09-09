@@ -1036,9 +1036,11 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             $em->remove($media);
             if ($key % 100 == 0) {
                 $em->flush();
+                $em->clear();
             }
         }
         $em->flush();
+        $em->clear();
 
         $this->View()->assign(array('success' => true));
     }

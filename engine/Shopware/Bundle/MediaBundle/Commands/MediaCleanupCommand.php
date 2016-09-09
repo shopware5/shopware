@@ -104,10 +104,12 @@ class MediaCleanupCommand extends ShopwareCommand
                 $em->remove($media);
                 if ($key % 100 == 0) {
                     $em->flush();
+                    $em->clear();
                 }
                 $progressBar->advance();
             }
             $em->flush();
+            $em->clear();
         } catch (ORMException $e) {
             $count = 0;
         }
