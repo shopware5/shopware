@@ -679,6 +679,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
             $params['template'] = null;
         }
 
+        $params['changed'] = new \DateTime();
         $categoryModel->fromArray($params);
         Shopware()->Models()->flush();
 
