@@ -773,6 +773,13 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $factory = Shopware()->Container()->get('shopware_search.store_front_criteria_factory');
         $criteria = $factory->createBaseCriteria([$category], $context);
 
+        $criteria = Shopware()->Events()->filter(
+            'Shopware_Controllers_Widgets_Emotion_GetProductSliderData',
+            $criteria,
+            array('subject' => $this, 'category' => $category, 'offset' => $offset, 'limit' => $limit, 'sort' => $sort)
+        );
+
+
         $criteria->offset($offset)
             ->limit($limit);
 
