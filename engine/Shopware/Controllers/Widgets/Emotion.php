@@ -774,7 +774,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $criteria = $factory->createBaseCriteria([$category], $context);
 
         $criteria->offset($offset)
-                 ->limit($limit);
+           ->limit($limit);
 
         switch ($sort) {
             case 'price_asc':
@@ -794,7 +794,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         $criteria = Shopware()->Events()->filter(
             'Shopware_Controllers_Widgets_Emotion_GetProductSliderData',
             $criteria,
-            array('subject' => $this, 'category' => $category, 'offset' => $offset, 'limit' => $limit, 'sort' => $sort)
+            array('categoryId' => $category, 'sort' => $sort)
         );
 
         /** @var $result ProductSearchResult */
