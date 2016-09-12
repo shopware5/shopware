@@ -887,7 +887,7 @@ Ext.define('Shopware.model.Container', {
         formField.xtype = 'displayfield';
         formField.anchor = '100%';
         formField.margin = '0 3 7 0';
-        formField.labelWidth = 130;
+        formField.labelWidth = 155;
         formField.name = field.name;
 
         //if an alias was passed, the form field name will be surround with square bracket
