@@ -279,8 +279,7 @@ Ext.define('Shopware.form.field.ArticleSearch',
             me.dropDownStore.getProxy().extraParams = {
                 articles: Ext.Array.contains(me.searchScope, 'articles'),
                 variants: Ext.Array.contains(me.searchScope, 'variants'),
-                configurator: Ext.Array.contains(me.searchScope, 'configurator'),
-                active: Ext.Array.contains(me.searchScope, 'active')
+                configurator: Ext.Array.contains(me.searchScope, 'configurator')
             };
         }
 
