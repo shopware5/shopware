@@ -674,8 +674,8 @@ class Customer extends LazyFetchModelEntity
 
     /**
      * Getter function of the newsletter column property, which is a flag whether the customer wants to receive the newsletter.
-     * 0 => Customer don't want to receive the newsletter
-     * 1 => Customer want to receive the newsletter
+     * 0 => Customer doesn't want to receive the newsletter
+     * 1 => Customer wants to receive the newsletter
      *
      * @return integer
      */
