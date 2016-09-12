@@ -787,12 +787,7 @@ class LegacyStructConverter
                 $values[$option->getId()] = $option->getName();
             }
             
-            $keyValues = array_map(
-                function (StoreFrontBundle\Struct\Property\Option $option) {
-                    return ['id' => $option->getId(), 'name' => $option->getName()];
-                },
-                $group->getOptions()
-            );
+            $propertyOptions = array_map([$this, 'convertPropertyOptionStruct'], $group->getOptions());
 
             $mediaValues = array();
             foreach ($group->getOptions() as $option) {
@@ -810,8 +805,8 @@ class LegacyStructConverter
                 'groupName' => $set->getName(),
                 'value'     => implode(', ', $values),
                 'values'    => $values,
-                'isFilter'  => $group->isFilterable(),
-                'keyValues' => $keyValues,
+                'isFilterable' => $group->isFilterable(),
+                'options'   => $propertyOptions,
                 'media'     => $mediaValues,
                 'attributes' => $group->getAttributes(),
             ];
