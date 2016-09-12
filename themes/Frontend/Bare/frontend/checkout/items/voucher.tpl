@@ -66,7 +66,8 @@
     {block name='frontend_checkout_cart_item_voucher_delete_article'}
         <div class="panel--td column--actions block">
             <form action="{url action='deleteArticle' sDelete=voucher sTargetAction=$sTargetAction}" method="post">
-                <button type="submit" class="btn is--small column--actions-link" title="{"{s name='CartItemLinkDelete '}{/s}"|escape}">
+                <button type="submit" class="btn is--small column--actions-link"
+                        title="{"{s name='CartItemLinkDelete'}{/s}"|escape}">
                     <i class="icon--cross"></i>
                 </button>
             </form>

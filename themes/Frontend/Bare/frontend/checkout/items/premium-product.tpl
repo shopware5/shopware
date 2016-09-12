@@ -95,8 +95,10 @@
     {* Remove product from basket *}
     {block name='frontend_checkout_cart_item_premium_delete_article'}
         <div class="panel--td column--actions block">
-            <form action="{url action='deleteArticle' sDelete=$sBasketItem.id sTargetAction=$sTargetAction}" method="post">
-                <button type="submit" class="btn is--small column--actions-link" title="{"{s name='CartItemLinkDelete '}{/s}"|escape}">
+            <form action="{url action='deleteArticle' sDelete=$sBasketItem.id sTargetAction=$sTargetAction}"
+                  method="post">
+                <button type="submit" class="btn is--small column--actions-link"
+                        title="{"{s name='CartItemLinkDelete'}{/s}"|escape}">
                     <i class="icon--cross"></i>
                 </button>
             </form>
