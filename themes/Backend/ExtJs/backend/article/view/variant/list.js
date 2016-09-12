@@ -472,10 +472,10 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
 
         if (prices.getCount() === 0 || prices.first().get('pseudoPrice') === 0) {
             return me.snippets.columns.pseudoPrice.undefined;
-        } else {
-            var firstPrice = prices.first();
-            return Ext.util.Format.currency(firstPrice.get('pseudoPrice'));
         }
+
+        var firstPrice = prices.first();
+        return Ext.util.Format.currency(firstPrice.get('pseudoPrice'));
     },
 
     /**
