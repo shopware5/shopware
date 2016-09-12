@@ -792,7 +792,7 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
         }
 
         $criteria = $this->get('events')->filter(
-            'Shopware_Controllers_Widgets_Emotion_GetProductSliderData',
+            'Shopware_Controllers_Widgets_Emotion_GetProductSliderData_Filter_Criteria',
             $criteria,
             ['categoryId' => $category, 'sort' => $sort]
         );
