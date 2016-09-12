@@ -1528,11 +1528,10 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
         }
 
         if (!record.getPrice()) {
-            record.getPriceStore = Ext.create('Ext.data.Store', { model: 'Shopware.apps.Article.model.Price' })
+            record.getPriceStore = Ext.create('Ext.data.Store', { model: 'Shopware.apps.Article.model.Price' });
         }
 
         var newPrice = Ext.create('Shopware.apps.Article.model.Price', {
-            pseudoPrice: 0,
             percent: 0,
             customerGroupKey: me.subApplication.firstCustomerGroup.get('key')
         });

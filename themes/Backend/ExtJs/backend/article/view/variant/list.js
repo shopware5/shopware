@@ -155,13 +155,13 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
                 newPseudoPrice = Ext.Number.toFixed(newPseudoPrice, 2);
 
                 var oldPseudoPrice = Ext.Number.from(e.originalValue);
-                if(undefined === e.originalValue) {
+                if (! Ext.isDefined(e.originalValue)) {
                     oldPseudoPrice = 0;
                 }
 
                 oldPseudoPrice = Ext.Number.toFixed(oldPseudoPrice, 2);
 
-                if (newPseudoPrice != oldPseudoPrice) {
+                if (newPseudoPrice !== oldPseudoPrice) {
                     me.fireEvent('editVariantPseudoPrice', e.record, newPseudoPrice);
                 }
 
