@@ -43,18 +43,7 @@
 
 							{* Property content *}
 							{block name='frontend_detail_description_properties_content'}
-								<td class="product--properties-value">
-                                    {if $sProperty.isFilter}
-                                        {$sBreadcrumbEnd = $sBreadcrumb|@end}
-                                        {foreach $sProperty.keyValues as $sPropertyValue}
-                                            <a href="{url controller='cat' sCategory=$sBreadcrumbEnd['id']}?n={$sProperty.groupID}&f={$sPropertyValue.id}" 
-                                               title="{s namespace='frontend/listing/filter_properties' name='FilterHeadlineCategory'}{/s}">
-                                                {$sPropertyValue.name|escape}</a>{if !$sPropertyValue@last}, {/if}
-                                        {/foreach}
-                                    {else}
-                                        {$sProperty.value|escape}
-                                    {/if}
-                                </td>
+								<td class="product--properties-value">{$sProperty.value|escape}</td>
 							{/block}
 						</tr>
 					{/foreach}
