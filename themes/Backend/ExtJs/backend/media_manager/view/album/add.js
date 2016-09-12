@@ -85,6 +85,11 @@ Ext.define('Shopware.apps.MediaManager.view.album.Add', {
            cls: 'shopware-toolbar',
            items: me.createActionButtons()
         }];
+
+        me.on('show', function() {
+            me.nameField.focus(false, 200);
+        });
+
         me.callParent(arguments);
     },
 
