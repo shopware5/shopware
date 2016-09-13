@@ -708,14 +708,14 @@ class sAdmin
 
         $addScopeSql = "";
         if ($this->scopedRegistration == true) {
-            $addScopeSql = $this->db->quoteInto(' AND subshopID = ? ',  $this->subshopId);
+            $addScopeSql = $this->db->quoteInto(' AND subshopID = ? ', $this->subshopId);
         }
 
         // When working with a prehashed password, we need to limit the getUser query by password,
         // as there might be multiple users with the same mail address (accountmode = 1).
         $preHashedSql = '';
         if ($isPreHashed) {
-            $preHashedSql = $this->db->quoteInto(' AND password = ? ',  $password);
+            $preHashedSql = $this->db->quoteInto(' AND password = ? ', $password);
         }
 
         if ($ignoreAccountMode) {
@@ -1963,7 +1963,7 @@ SQL;
     public function sRiskORDERPOSITIONSMORE($user, $order, $value)
     {
         return (
-            (is_array($order["content"]) ? count($order["content"]) : $order["content"] >= $value)
+            (is_array($order["content"]) ? count($order["content"]) : $order["content"] < $value)
         );
     }
 
