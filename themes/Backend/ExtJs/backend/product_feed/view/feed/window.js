@@ -168,13 +168,13 @@ Ext.define('Shopware.apps.ProductFeed.view.feed.Window', {
                 }
             },
             {
-                text:'{s name=detail_general/button/update}Update{/s}',
+                text:'{s name=detail_general/button/save}Save{/s}',
                 action:'update',
                 disabled:true,
                 cls:'primary'
             },
             {
-                text:'{s name=detail_general/button/save}Save{/s}',
+                text:'{s name=detail_general/button/save_and_close}Save and Close{/s}',
                 action:'save',
                 disabled:true,
                 cls:'primary'
