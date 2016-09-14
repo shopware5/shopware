@@ -139,7 +139,6 @@
                 {block name='frontend_checkout_cart_footer_field_labels_taxes'}
                     {if $sUserData.additional.charge_vat}
                         {foreach $sBasket.sTaxRates as $rate => $value}
-
                             {block name='frontend_checkout_cart_footer_field_labels_taxes_entry'}
                                 <li class="list--entry block-group entry--taxes">
 

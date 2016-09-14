@@ -256,7 +256,7 @@ td.head  {
 			  {if $Document.netto == false}
 				  {foreach from=$Order._tax key=key item=tax}
 				  <tr>
-				  	<td align="right">{s name="DocumentIndexTax"}zzgl. {$key}{/s}</td>
+					<td align="right">{s name="DocumentIndexTax"}zzgl. {$key|tax}{/s}</td>
 				  	<td align="right">{$tax|currency}</td>
 				  </tr>
 				  {/foreach}
