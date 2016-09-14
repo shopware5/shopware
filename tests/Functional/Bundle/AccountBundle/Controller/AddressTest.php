@@ -24,6 +24,14 @@
 
 namespace Shopware\Tests\Functional\Bundle\AccountBundle\Controller;
 
+use Shopware\Bundle\AccountBundle\Service\RegisterServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
+use Shopware\Components\Model\ModelManager;
+use Shopware\Models\Country\Country;
+use Shopware\Models\Country\State;
+use Shopware\Models\Customer\Address;
+use Shopware\Models\Customer\Customer;
+use Shopware\Models\Shop\Shop;
 use Symfony\Component\DomCrawler\Crawler;
 
 /**
@@ -33,6 +41,31 @@ use Symfony\Component\DomCrawler\Crawler;
  */
 class AddressTest extends \Enlight_Components_Test_Controller_TestCase
 {
+    /**
+     * @var ModelManager
+     */
+    private static $modelManager;
+
+    /**
+     * @var array
+     */
+    private static $_cleanup = [];
+
+    /**
+     * @var string
+     */
+    private static $loginEmail;
+
+    /**
+     * @var string
+     */
+    private static $loginPassword;
+
+    /**
+     * @var Customer
+     */
+    private static $customer;
+
     /**
      * @param string $method
      * @param string $url
@@ -58,6 +91,61 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
         }
 
         return new Crawler($this->Response()->getBody());
+    }
+
+    /**
+     * Create one customer to be used for these tests
+     */
+    public static function setUpBeforeClass()
+    {
+        parent::setUpBeforeClass();
+
+        self::$modelManager = Shopware()->Container()->get('models');
+        self::$modelManager->clear();
+
+        // Register customer
+        $demoData = self::getCustomerDemoData(true);
+        $billingDemoData = self::getBillingDemoData();
+        $shippingDemoData = self::getShippingDemoData();
+
+        $shop = Shopware()->Container()->get('shopware_storefront.context_service')->createShopContext(1)->getShop();
+
+        $customer = new Customer();
+        $customer->fromArray($demoData);
+
+        $billing = new Address();
+        $billing->fromArray($billingDemoData);
+
+        $shipping = new Address();
+        $shipping->fromArray($shippingDemoData);
+
+        $registerService = Shopware()->Container()->get('shopware_account.register_service');
+        $registerService->register($shop, $customer, $billing, $shipping);
+
+        self::$loginEmail = $demoData['email'];
+        self::$loginPassword = $demoData['password'];
+        self::$customer = $customer;
+
+        self::$_cleanup[Customer::class][] = $customer->getId();
+    }
+
+    /**
+     * Clean up created entities and database entries
+     */
+    public static function tearDownAfterClass()
+    {
+        parent::tearDownAfterClass();
+
+        foreach (self::$_cleanup as $entityName => $ids) {
+            foreach ($ids as $id) {
+                self::$modelManager->remove(self::$modelManager->find($entityName, $id));
+            }
+        }
+
+        self::$modelManager->flush();
+        self::$modelManager->clear();
+
+        Shopware()->Container()->reset('router');
     }
 
     public function testList()
@@ -162,14 +250,15 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
     }
 
     /**
-     * @expectedException RuntimeException
+     * @expectedException \RuntimeException
      * @expectedExceptionMessage The address is defined as default billing or shipping address and cannot be removed.
      */
     public function testDeletionOfDefaultAddressesShouldFail()
     {
         $this->ensureLogin();
+        $addressId = self::$customer->getDefaultBillingAddress()->getId();
 
-        $this->doRequest('POST', '/address/delete/id/1/', ['id' => 1]);
+        $this->doRequest('POST', '/address/delete/id/'.$addressId.'/', ['id' => $addressId]);
     }
 
     /**
@@ -196,7 +285,10 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
         $this->assertGreaterThan(0, $addressId);
 
         // edit the entry
-        $expectedText = str_replace('Max Mustermann', 'Shop Man', $originalText);
+        $expectedText = "Herr
+Shop ManMusterstr. 5555555 Musterhausen
+Nordrhein-WestfalenDeutschland";
+
         $this->doRequest(
             'POST',
             '/address/edit/id/' . $addressId,
@@ -219,25 +311,6 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
         $crawler = $this->doRequest('GET', '/account');
         $currentText = trim($crawler->filter('.account--billing .panel--body p')->last()->text());
 
-        // reset to original
-        $this->doRequest(
-            'POST',
-            '/address/edit/id/'.$addressId,
-            [
-                'address' => [
-                    'salutation' => 'mr',
-                    'company' => 'Muster GmbH',
-                    'firstname' => 'Max',
-                    'lastname' => 'Mustermann',
-                    'street' => 'Musterstr. 55',
-                    'zipcode' => '55555',
-                    'city' => 'Musterhausen',
-                    'state' => 3,
-                    'country' => 2
-                ]
-            ]
-        );
-
         $this->assertNotEquals($originalText, $currentText);
         $this->assertEquals($expectedText, $currentText);
     }
@@ -247,6 +320,101 @@ class AddressTest extends \Enlight_Components_Test_Controller_TestCase
      */
     private function ensureLogin()
     {
-        $this->doRequest('POST', '/account/login', ['email' => 'test@example.com', 'password' => 'shopware']);
+        $this->doRequest('POST', '/account/login', ['email' => self::$loginEmail, 'password' => self::$loginPassword]);
+    }
+
+    /**
+     * Helper method for creating a valid customer
+     *
+     * @param bool $randomEmail
+     * @return array
+     */
+    private static function getCustomerDemoData($randomEmail = false)
+    {
+        $emailPrefix = $randomEmail ? uniqid(rand()) : "";
+
+        $data = [
+            'salutation' => 'mr',
+            'firstname' => 'Albert',
+            'lastname' => 'McTaggart',
+            'email' => $emailPrefix . 'albert.mctaggart@shopware.test',
+            'password' => uniqid(rand())
+        ];
+
+        return $data;
+    }
+
+    private static function getBillingDemoData()
+    {
+        $country = self::createCountry();
+
+        $data = [
+            'salutation' => 'mr',
+            'firstname' => 'Sherman',
+            'lastname' => 'Horton',
+            'street' => '1117 Washington Street',
+            'zipcode' => '78372',
+            'city' => 'Orange Grove',
+            'country' => $country,
+            'state' => self::createState($country)
+        ];
+
+        return $data;
+    }
+
+    private static function getShippingDemoData()
+    {
+        $data = [
+            'salutation' => 'mr',
+            'firstname' => 'Nathaniel',
+            'lastname' => 'Fajardo',
+            'street' => '3844 Euclid Avenue',
+            'zipcode' => '93101',
+            'city' => 'Santa Barbara',
+            'country' => self::createCountry()
+        ];
+
+        return $data;
+    }
+
+    /**
+     * @return Country
+     */
+    private static function createCountry()
+    {
+        $country = new Country();
+
+        $country->setName('ShopwareLand '.uniqid(rand()));
+        $country->setActive(true);
+        $country->setDisplayStateInRegistration(1);
+        $country->setForceStateInRegistration(0);
+
+        self::$modelManager->persist($country);
+        self::$modelManager->flush($country);
+
+        self::$_cleanup[Country::class][] = $country->getId();
+
+        return self::$modelManager->merge($country);
+    }
+
+    /**
+     * @param Country $country
+     * @return State
+     */
+    private static function createState(Country $country)
+    {
+        $state = new State();
+
+        $state->setName('Shopware State '.uniqid(rand()));
+        $state->setActive(1);
+        $state->setCountry($country);
+        $state->setShortCode(uniqid(rand()));
+
+        self::$modelManager->persist($state);
+        self::$modelManager->flush($state);
+
+        self::$_cleanup[State::class][] = $state->getId();
+
+        return self::$modelManager->merge($state);
     }
 }
