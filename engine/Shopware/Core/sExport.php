@@ -951,7 +951,9 @@ class sExport
                 a.configurator_set_id as configurator,
 
                 ROUND(CAST(IFNULL($grouppricefield, $pricefield)*(100-IF(pd.discount,pd.discount,0)-{$this->sCustomergroup["discount"]})/100*{$this->sCurrency["factor"]} AS DECIMAL(10,3)),2) as netprice,
+                IFNULL($grouppricefield, $pricefield)*(100-IF(pd.discount,pd.discount,0)-{$this->sCustomergroup["discount"]})/100*{$this->sCurrency["factor"]} as netprice_numeric,
                 ROUND(CAST(IFNULL($grouppricefield, $pricefield)*(100+t.tax)/100*(100-IF(pd.discount,pd.discount,0)-{$this->sCustomergroup["discount"]})/100*{$this->sCurrency["factor"]} AS DECIMAL(10,3)),2) as price,
+                IFNULL($grouppricefield, $pricefield)*(100+t.tax)/100*(100-IF(pd.discount,pd.discount,0)-{$this->sCustomergroup["discount"]})/100*{$this->sCurrency["factor"]} as price_numeric,
                 pd.discount,
                 ROUND(CAST($pseudoprice*{$this->sCurrency["factor"]} AS DECIMAL(10,3)),2) as netpseudoprice,
                 ROUND(CAST($pseudoprice*(100+t.tax)*{$this->sCurrency["factor"]}/100 AS DECIMAL(10,3)),2) as pseudoprice,
