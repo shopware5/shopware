@@ -35,6 +35,7 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
      * Installation of plugin
      * Create-Events to include custom code on product detail page
      * Creates new cronjob "notification"
+     *
      * @return bool
      */
     public function install()
@@ -43,257 +44,283 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
             'Enlight_Controller_Action_PostDispatch_Frontend_Detail',
             'onPostDispatch'
         );
+
         $this->subscribeEvent(
             'Enlight_Controller_Action_Frontend_Detail_Notify',
             'onNotifyAction'
         );
+
         $this->subscribeEvent(
             'Enlight_Controller_Action_Frontend_Detail_NotifyConfirm',
             'onNotifyConfirmAction'
         );
+
         $this->subscribeEvent(
             'Shopware_CronJob_Notification',
             'onRunCronJob'
         );
+
         return true;
     }
+
 
     /**
      * Check if product is available (instock is greater then zero)
      * If not available display possibility to register for status updates
-     * @static
+     *
      * @param Enlight_Event_EventArgs $args
-     * @return
      */
-    public static function onPostDispatch(Enlight_Event_EventArgs $args)
+    public function onPostDispatch(Enlight_Event_EventArgs $args)
     {
-        $request = $args->getSubject()->Request();
-        $response = $args->getSubject()->Response();
+        /** @var Enlight_Controller_Action $controller */
+        $controller = $args->get('subject');
+        $request = $controller->Request();
 
-        if (!$request->isDispatched() || $response->isException() || $request->getModuleName() != 'frontend') {
+        if (!$request->isDispatched() || $controller->Response()->isException() || $request->getModuleName() != 'frontend') {
             return;
         }
 
-        $id = (int) $args->getSubject()->Request()->sArticle;
-        $view = $args->getSubject()->View();
+        $view = $controller->View();
+        $sArticle = $view->getAssign('sArticle');
 
         $notificationVariants = array();
 
-        if (!empty(Shopware()->Session()->sNotificatedArticles)) {
-            $sql = 'SELECT `ordernumber` FROM `s_articles_details` WHERE `articleID`=?';
-            $ordernumbers = Shopware()->Db()->fetchCol($sql, $id);
+        /** @var Enlight_Components_Session_Namespace $session */
+        $session = $this->get('session');
+        $sNotificatedArticles = $session->get('sNotificatedArticles');
 
-            if (!empty($ordernumbers)) {
-                foreach ($ordernumbers as $ordernumber) {
-                    if (in_array($ordernumber, Shopware()->Session()->sNotificatedArticles)) {
-                        $notificationVariants[] = $ordernumber;
-                        if ($ordernumber === $view->sArticle['ordernumber']) {
-                            $view->NotifyAlreadyRegistered = true;
-                        }
+        if (!empty($sNotificatedArticles)) {
+            $sql = 'SELECT `ordernumber`
+                    FROM `s_articles_details`
+                    WHERE `articleID` = ?';
+            $ordernumbers = Shopware()->Db()->fetchCol($sql, array($sArticle['articleID']));
+
+            foreach ($ordernumbers as $ordernumber) {
+                if (in_array($ordernumber, $sNotificatedArticles)) {
+                    $notificationVariants[] = $ordernumber;
+                    if ($ordernumber === $sArticle['ordernumber']) {
+                        $view->assign('NotifyAlreadyRegistered', true);
                     }
                 }
             }
         }
 
-        $view->NotifyHideBasket = Shopware()->Config()->sDEACTIVATEBASKETONNOTIFICATION;
-
-        $view->NotificationVariants = $notificationVariants;
-        $view->ShowNotification = true;
-        $view->WaitingForOptInApprovement = Shopware()->Session()->sNotifcationArticleWaitingForOptInApprovement[$view->sArticle['ordernumber']];
+        $view->assign('NotifyHideBasket', Shopware()->Config()->get('sDEACTIVATEBASKETONNOTIFICATION'));
+        $view->assign('NotificationVariants', $notificationVariants);
+        $view->assign('ShowNotification', true);
+        $view->assign('WaitingForOptInApprovement', $session->sNotifcationArticleWaitingForOptInApprovement[$sArticle['ordernumber']]);
     }
+
 
     /**
      * Called on register for status updates
      * Check user email address and send double optin to confirm the email
-     * @static
+     *
      * @param Enlight_Event_EventArgs $args
-     * @return
+     *
+     * @throws Enlight_Exception
      */
-    public static function onNotifyAction(Enlight_Event_EventArgs $args)
+    public function onNotifyAction(Enlight_Event_EventArgs $args)
     {
         $args->setProcessed(true);
 
-        $action = $args->getSubject();
+        /** @var Enlight_Controller_Action $controller */
+        $controller = $args->get('subject');
 
-        $id = (int) $action->Request()->sArticle;
-        $email = $action->Request()->sNotificationEmail;
+        $view = $controller->View();
+        $view->assign('NotifyEmailError', false);
 
         $sError = false;
-        $action->View()->NotifyEmailError = false;
-        $notifyOrderNumber = $action->Request()->notifyOrdernumber;
+
+        $request = $controller->Request();
+        $notifyOrderNumber = $request->getParam('notifyOrdernumber');
+
         if (!empty($notifyOrderNumber)) {
-            $validator = Shopware()->Container()->get('validator.email');
-            if (empty($email) || !$validator->isValid($email)) {
+            /** @var Enlight_Components_Session_Namespace $session */
+            $session = $this->get('session');
+            $email = $request->getParam('sNotificationEmail');
+
+            if (empty($email) || !$this->get('validator.email')->isValid($email)) {
                 $sError = true;
-                $action->View()->NotifyEmailError = true;
-            } elseif (!empty($notifyOrderNumber)) {
-                if (!empty(Shopware()->Session()->sNotificatedArticles)) {
-                    if (in_array($notifyOrderNumber, Shopware()->Session()->sNotificatedArticles)) {
-                        $sError = true;
-                        $action->View()->ShowNotification = false;
-                        $action->View()->NotifyAlreadyRegistered = true;
-                    } else {
-                        Shopware()->Session()->sNotificatedArticles[] = $notifyOrderNumber;
-                    }
-                } else {
-                    Shopware()->Session()->sNotificatedArticles = array($notifyOrderNumber);
-                }
+                $view->assign('NotifyEmailError', true);
             } else {
-                $sError = true;
+                $sNotificatedArticles = $session->get('sNotificatedArticles');
+                if (!empty($sNotificatedArticles) && in_array($notifyOrderNumber, $sNotificatedArticles)) {
+                    $sError = true;
+                    $view->assign('ShowNotification', false);
+                    $view->assign('NotifyAlreadyRegistered', true);
+                } else {
+                    $session->sNotificatedArticles[] = $notifyOrderNumber;
+                }
             }
 
             if (!$sError) {
-                $AlreadyNotified = Shopware()->Db()->fetchRow('
-                    SELECT *  FROM `s_articles_notification`
-                    WHERE `ordernumber`=?
-                    AND `mail` = ?
-                    AND send = 0
-                ', array($notifyOrderNumber, $email));
-
-                if (empty($AlreadyNotified)) {
-                    $action->View()->NotifyAlreadyRegistered = false;
+                $sql = 'SELECT id
+                        FROM `s_articles_notification`
+                        WHERE `ordernumber` = ?
+                        AND `mail` = ?
+                        AND send = 0';
+                if (!empty(Shopware()->Db()->fetchOne($sql, array($notifyOrderNumber, $email)))) {
+                    $view->assign('NotifyAlreadyRegistered', true);
+                } else {
+                    $view->assign('NotifyAlreadyRegistered', false);
 
                     $hash = \Shopware\Components\Random::getAlphanumericString(32);
-                    $link = $action->Front()->Router()->assemble(array(
+                    $router = Shopware()->Front()->Router();
+                    $articleID = (int)$request->getParam('sArticle');
+
+                    $link = $router->assemble(array(
                         'sViewport' => 'detail',
-                        'sArticle' => $id,
+                        'sArticle' => $articleID,
                         'sNotificationConfirmation' => $hash,
                         'sNotify' => '1',
                         'action' => 'notifyConfirm',
                         'number' => $notifyOrderNumber
                     ));
 
-                    $name = Shopware()->Modules()->Articles()->sGetArticleNameByOrderNumber($notifyOrderNumber);
+                    $request->setPost('sLanguage', Shopware()->Shop()->getId());
+                    $request->setPost('sShopPath', $router->assemble(array(
+                        'controller' => 'detail',
+                        'sArticle' => $articleID
+                    )));
 
-                    $basePath = $action->Front()->Router()->assemble(array('sViewport' => 'index'));
-                    Shopware()->System()->_POST['sLanguage'] = Shopware()->Shop()->getId();
-                    Shopware()->System()->_POST['sShopPath'] = $basePath . Shopware()->Config()->sBASEFILE;
-
-                    $sql = '
-                        INSERT INTO s_core_optin (datum, hash, data)
-                        VALUES (NOW(), ?, ?)
-                    ';
-                    Shopware()->Db()->query($sql, array($hash, serialize(Shopware()->System()->_POST->toArray())));
+                    $sql = 'INSERT INTO s_core_optin
+                            SET 
+                                datum = NOW(),
+                                hash = ?,
+                                `data` = ?';
+                    $request->getPost();
+                    Shopware()->Db()->query($sql, array($hash, serialize($request->getPost())));
 
                     $context = array(
                         'sConfirmLink' => $link,
-                        'sArticleName' => $name,
+                        'sArticleName' => Shopware()->Modules()->Articles()->sGetArticleNameByOrderNumber($notifyOrderNumber),
                     );
 
                     $mail = Shopware()->TemplateMail()->createMail('sACCEPTNOTIFICATION', $context);
                     $mail->addTo($email);
                     $mail->send();
-                    Shopware()->Session()->sNotifcationArticleWaitingForOptInApprovement[$notifyOrderNumber] = true;
-                } else {
-                    $action->View()->NotifyAlreadyRegistered = true;
+                    $session->sNotifcationArticleWaitingForOptInApprovement[$notifyOrderNumber] = true;
                 }
             }
         }
 
-        return $action->forward('index');
+        return $controller->forward('index');
     }
+
 
     /**
      * If confirmation link in email was clicked
      * Make entry in s_articles_notification table
-     * @static
+     *
      * @param Enlight_Event_EventArgs $args
-     * @return
      */
-    public static function onNotifyConfirmAction(Enlight_Event_EventArgs $args)
+    public function onNotifyConfirmAction(Enlight_Event_EventArgs $args)
     {
         $args->setProcessed(true);
 
-        $action = $args->getSubject();
+        /** @var Enlight_Controller_Action $controller */
+        $controller = $args->get('subject');
 
-        $action->View()->NotifyValid = false;
-        $action->View()->NotifyInvalid = false;
+        $view = $controller->View();
+        $view->assign('NotifyValid', false);
+        $view->assign('NotifyInvalid', false);
 
-        if (!empty($action->Request()->sNotificationConfirmation) && !empty($action->Request()->sNotify)) {
-            $getConfirmation = Shopware()->Db()->fetchRow('
-            SELECT * FROM s_core_optin WHERE hash = ?
-            ', array($action->Request()->sNotificationConfirmation));
+        $request = $controller->Request();
+        $sNotificationConfirmation = $request->getParam('sNotificationConfirmation');
 
-            $notificationConfirmed = false;
-            if (!empty($getConfirmation['hash'])) {
-                $notificationConfirmed = true;
-                $json_data = unserialize($getConfirmation['data']);
-                Shopware()->Db()->query('DELETE FROM s_core_optin WHERE hash=?', array($action->Request()->sNotificationConfirmation));
-            }
-            if ($notificationConfirmed) {
-                $sql = '
-                    INSERT INTO `s_articles_notification` (
-                        `ordernumber` ,
-                        `date` ,
-                        `mail` ,
-                        `language` ,
-                        `shopLink` ,
-                        `send`
-                    )
-                    VALUES (
-                        ?, NOW(), ?, ?, ?, 0
-                    );
-                ';
+        if (!empty($sNotificationConfirmation) && !empty($request->getParam('sNotify'))) {
+            $sql = 'SELECT `data`
+                    FROM s_core_optin
+                    WHERE hash = ?';
+            $getOptInData = Shopware()->Db()->fetchOne($sql, array($sNotificationConfirmation));
+
+            if (empty($getOptInData)) {
+                $view->assign('NotifyInvalid', true);
+            } else {
+                $view->assign('NotifyValid', true);
+
+                $sql = 'DELETE FROM s_core_optin
+                        WHERE hash = ?';
+                Shopware()->Db()->query($sql, array($sNotificationConfirmation));
+
+                $json_data = unserialize($getOptInData);
+
+                $sql = 'INSERT INTO s_articles_notification
+                        SET 
+                            ordernumber = ?,
+                            `date` = NOW(),
+                            mail = ?,
+                            `language` = ?,
+                            shopLink = ?,
+                            send = 0';
                 Shopware()->Db()->query($sql, array(
                     $json_data['notifyOrdernumber'],
                     $json_data['sNotificationEmail'],
                     $json_data['sLanguage'],
                     $json_data['sShopPath']
                 ));
-                $action->View()->NotifyValid = true;
+
                 Shopware()->Session()->sNotifcationArticleWaitingForOptInApprovement[$json_data['notifyOrdernumber']] = false;
-            } else {
-                $action->View()->NotifyInvalid = true;
             }
         }
-        return $action->forward('index');
+
+        return $controller->forward('index');
     }
+
 
     /**
      * Cronjob method
      * Check all products from s_articles_notification
      * Inform customer if any status update available
-     * @static
+     *
      * @param Shopware_Components_Cron_CronJob $job
+     *
      * @return void
      */
-    public static function onRunCronJob(Shopware_Components_Cron_CronJob $job)
+    public function onRunCronJob(Shopware_Components_Cron_CronJob $job)
     {
-        $sql = "SELECT * FROM `s_articles_notification` WHERE send = 0";
-
+        $sql = 'SELECT *
+                FROM `s_articles_notification`
+                WHERE send = 0';
         $getNotifications = Shopware()->Db()->fetchAll($sql);
 
         foreach ($getNotifications as $data) {
-            $ordernumber = $data["ordernumber"];
+            $sql = 'SELECT a.id
+                    FROM s_articles_details d
+                    INNER JOIN s_articles a
+                    ON 
+                        a.id = d.articleID
+                        AND
+                        a.active = 1
+                        AND
+                        a.notification = 1
+                    WHERE
+                        d.ordernumber = ?
+                        AND
+                        d.instock > 0
+                        AND 
+                        d.active = 1';
+            $articleID = (int)Shopware()->Db()->fetchOne($sql, array($data['ordernumber']));
 
-            $sArticle = Shopware()->Db()->fetchRow("SELECT a.id as articleID, d.ordernumber, d.instock, a.active FROM s_articles_details d, s_articles a WHERE d.articleID=a.id AND d.ordernumber=?", array($ordernumber));
-
-            $sArticleID = $sArticle["articleID"];
-            if (empty($sArticleID)) {
-                continue;
-            }
-
-            $instock = $sArticle["instock"];
-
-            $sql = "SELECT notification from s_articles WHERE ID = ?";
-
-            $notificationActive = Shopware()->Db()->fetchOne($sql, array($sArticleID));
-
-            if (intval($instock) > 0 && $notificationActive == true && !empty($sArticle["active"])) {
+            if ($articleID > 0) {
                 $context = array(
-                    'sArticleLink' => $data["shopLink"] . "?sViewport=detail&sArticle=$sArticleID",
-                    'sOrdernumber' => $ordernumber,
-                    'sData' => $job["data"],
+                    'sArticleLink' => $data['shopLink'],
+                    'sOrdernumber' => $data['ordernumber'],
+                    'sData' => $job['data'],
                 );
 
-                $mail = Shopware()->TemplateMail()->createMail('sARTICLEAVAILABLE', $context);
-                $mail->addTo($data["mail"]);
+
+                $shop = Shopware()->Models()->getRepository('Shopware\Models\Shop\Shop')->findOneBy(array('id' => $data['language']));
+
+                $mail = Shopware()->TemplateMail()->createMail('sARTICLEAVAILABLE', $context, $shop);
+                $mail->addTo($data['mail']);
                 $mail->send();
 
-                //set notification to already send
-                $sql = "UPDATE `s_articles_notification` SET `send` = '1' WHERE `ordernumber` =?";
-                Shopware()->Db()->query($sql, array($data["ordernumber"]));
-                // doing update on s_articles_notification
+                $sql = 'UPDATE `s_articles_notification`
+                        SET `send` = "1"
+                        WHERE `ordernumber` = ?';
+                Shopware()->Db()->query($sql, array($data['ordernumber']));
             }
         }
     }
