@@ -147,7 +147,7 @@
 							{block name='frontend_account_order_item_price_value'}
 								<div class="column--value">
 									{if $article.price}
-										{$article.price} {$offerPosition.currency_html} *
+										{$article.price|currency} *
 									{else}
 										{s name="OrderItemInfoFree"}{/s}
 									{/if}
@@ -167,7 +167,7 @@
 							{block name='frontend_account_order_item_amount_value'}
 								<div class="column--value">
 									{if $article.amount}
-										{$article.amount} {$offerPosition.currency_html} *
+										{$article.amount|currency} *
 									{else}
 										{s name="OrderItemInfoFree"}{/s}
 									{/if}
@@ -267,14 +267,14 @@
 
 				{* Shopping costs *}
 				{block name="frontend_account_order_item_shippingamount"}
-					<p class="is--strong">{$offerPosition.invoice_shipping} {$offerPosition.currency_html}</p>
+					<p class="is--strong">{$offerPosition.invoice_shipping|currency}</p>
 				{/block}
 
 				{block name="frontend_acccount_order_item_amount"}
 					{if $offerPosition.taxfree}
-						<p class="is--bold">{$offerPosition.invoice_amount_net} {$offerPosition.currency_html}</p>
+						<p class="is--bold">{$offerPosition.invoice_amount_net|currency}</p>
 					{else}
-						<p class="is--bold">{$offerPosition.invoice_amount} {$offerPosition.currency_html}</p>
+						<p class="is--bold">{$offerPosition.invoice_amount|currency}</p>
 					{/if}
 				{/block}
 			</div>
