@@ -749,27 +749,17 @@ class Kernel implements HttpKernelInterface
             return;
         }
 
+        $activePlugins = [];
         foreach ($this->plugins as $plugin) {
             if (!$plugin->isActive()) {
                 continue;
             }
 
             $container->addObjectResource($plugin);
-            $this->addControllerCompilerPass($plugin, $container);
             $plugin->build($container);
+            $activePlugins[] = $plugin;
         }
-    }
 
-    /**
-     * @param Plugin           $plugin
-     * @param ContainerBuilder $container
-     */
-    private function addControllerCompilerPass(Plugin $plugin, ContainerBuilder $container)
-    {
-        $path = $plugin->getPath() . '/Controllers';
-
-        if (is_dir($path)) {
-            $container->addCompilerPass(new RegisterControllerCompilerPass($path));
-        }
+        $container->addCompilerPass(new RegisterControllerCompilerPass($activePlugins));
     }
 }
