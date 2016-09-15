@@ -1587,8 +1587,8 @@ class Media extends ModelEntity
         //returns a change set for the model, which contains all changed properties with the old and new value.
         $changeSet = Shopware()->Models()->getUnitOfWork()->getEntityChangeSet($this);
 
-        $isNameChanged  = $changeSet['name'][0] !== $changeSet['name'][1];
-        $isAlbumChanged = $changeSet['albumId'][0] !== $changeSet['albumId'][1];
+        $isNameChanged  = isset($changeSet['name']) && $changeSet['name'][0] !== $changeSet['name'][1];
+        $isAlbumChanged = isset($changeSet['albumId']) && $changeSet['albumId'][0] !== $changeSet['albumId'][1];
 
         //name changed || album changed?
         if ($isNameChanged || $isAlbumChanged) {
