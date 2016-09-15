@@ -22,27 +22,28 @@
  * our trademarks remain entirely with us.
  */
 
+namespace Shopware\Components\DependencyInjection\Compiler;
+
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Symfony\Component\DependencyInjection\Definition;
+use Symfony\Component\DependencyInjection\Reference;
+
 /**
- * Shopware Captcha Controller
+ * @category  Shopware
+ * @package   Shopware\Bundle\SearchBundleDBAL\DependencyInjection\Compiler
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class Shopware_Controllers_Widgets_Captcha extends Enlight_Controller_Action
+class AddCaptchaCompilerPass implements CompilerPassInterface
 {
 
-    /**
-     * Index action method
-     *
-     * Creates the captcha images and delivers it as a PNG
-     * with the proper HTTP header.
-     */
-    public function indexAction()
-    {
-        /** @var \Shopware\Components\Captcha\CaptchaRepository $captchaRepository */
-        $captchaRepository = $this->container->get('shopware.captcha.repository');
-        /** @var \Shopware\Components\Captcha\CaptchaInterface $captcha */
-        $captcha = $captchaRepository->getConfiguredCaptcha();
+    use TagReplaceTrait;
 
-        $captchaName = $captcha->getName();
-        $this->View()->loadTemplate(sprintf('widgets/captcha/%s.tpl', $captchaName));
-        $this->View()->assign($captcha->getTemplateData());
+    /**
+     * @param ContainerBuilder $container
+     */
+    public function process(ContainerBuilder $container)
+    {
+        $this->replaceArgumentWithTaggedServices($container, 'shopware.captcha.repository', 'captcha', 0);
     }
 }

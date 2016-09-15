@@ -22,27 +22,36 @@
  * our trademarks remain entirely with us.
  */
 
-/**
- * Shopware Captcha Controller
- */
-class Shopware_Controllers_Widgets_Captcha extends Enlight_Controller_Action
+namespace Shopware\Components\Captcha;
+
+use Enlight_Controller_Request_Request;
+
+class CaptchaValidator
 {
 
     /**
-     * Index action method
-     *
-     * Creates the captcha images and delivers it as a PNG
-     * with the proper HTTP header.
+     * @var CaptchaRepository
      */
-    public function indexAction()
-    {
-        /** @var \Shopware\Components\Captcha\CaptchaRepository $captchaRepository */
-        $captchaRepository = $this->container->get('shopware.captcha.repository');
-        /** @var \Shopware\Components\Captcha\CaptchaInterface $captcha */
-        $captcha = $captchaRepository->getConfiguredCaptcha();
+    private $repository;
 
-        $captchaName = $captcha->getName();
-        $this->View()->loadTemplate(sprintf('widgets/captcha/%s.tpl', $captchaName));
-        $this->View()->assign($captcha->getTemplateData());
+
+    /**
+     * @param CaptchaRepository $repository
+     */
+    public function __construct(CaptchaRepository $repository)
+    {
+        $this->repository = $repository;
+    }
+
+    /**
+     * Validates a Request using the currently configured captcha
+     *
+     * @param Enlight_Controller_Request_Request $request
+     * @return bool
+     */
+    public function validate(Enlight_Controller_Request_Request $request)
+    {
+        $captcha = $this->repository->getConfiguredCaptcha();
+        return $captcha->validate($request);
     }
 }

@@ -236,13 +236,15 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
             $sErrorFlag['sVoteSummary'] = true;
         }
 
-        if (!empty(Shopware()->Config()->CaptchaColor) && !$voteConfirmed) {
-            $captcha = str_replace(' ', '', strtolower($this->Request()->sCaptcha));
-            $rand = $this->Request()->getPost('sRand');
-            if (empty($rand) || $captcha != substr(md5($rand), 0, 5)) {
+        if (!$voteConfirmed) {
+            /** @var \Shopware\Components\Captcha\CaptchaValidator $captchaValidator */
+            $captchaValidator = $this->container->get('shopware.captcha.validator');
+
+            if (!$captchaValidator->validate($this->Request())) {
                 $sErrorFlag['sCaptcha'] = true;
             }
         }
+
         $validator = $this->container->get('validator.email');
         if (!empty(Shopware()->Config()->sOPTINVOTE)
             && (empty(Shopware()->System()->_POST['sVoteMail'])

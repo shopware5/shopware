@@ -22,27 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
-/**
- * Shopware Captcha Controller
- */
-class Shopware_Controllers_Widgets_Captcha extends Enlight_Controller_Action
+namespace Shopware\Components\Captcha\Exception;
+
+class CaptchaNotFoundException extends \Exception
 {
-
-    /**
-     * Index action method
-     *
-     * Creates the captcha images and delivers it as a PNG
-     * with the proper HTTP header.
-     */
-    public function indexAction()
-    {
-        /** @var \Shopware\Components\Captcha\CaptchaRepository $captchaRepository */
-        $captchaRepository = $this->container->get('shopware.captcha.repository');
-        /** @var \Shopware\Components\Captcha\CaptchaInterface $captcha */
-        $captcha = $captchaRepository->getConfiguredCaptcha();
-
-        $captchaName = $captcha->getName();
-        $this->View()->loadTemplate(sprintf('widgets/captcha/%s.tpl', $captchaName));
-        $this->View()->assign($captcha->getTemplateData());
-    }
 }

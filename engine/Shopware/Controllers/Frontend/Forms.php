@@ -220,9 +220,10 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
         $this->_errors = $this->_validateInput($this->Request()->getPost(), $this->_elements);
 
         if (!empty(Shopware()->Config()->CaptchaColor)) {
-            $captcha = str_replace(' ', '', strtolower($this->Request()->sCaptcha));
-            $rand = $this->Request()->getPost('sRand');
-            if (empty($rand) || $captcha != substr(md5($rand), 0, 5)) {
+            /** @var \Shopware\Components\Captcha\CaptchaValidator $captchaValidator */
+            $captchaValidator = $this->container->get('shopware.captcha.validator');
+
+            if (!$captchaValidator->validate($this->Request())) {
                 $this->_elements['sCaptcha']['class'] = ' instyle_error has--error';
                 $this->_errors['e']['sCaptcha'] = true;
             }

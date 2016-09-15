@@ -76,14 +76,10 @@ class Form extends Page implements HelperSelectorInterface
 
         $element = Helper::findElements($this, ['captchaPlaceholder', 'captchaImage', 'captchaHidden']);
 
-        $captchaPlaceholder = $element['captchaPlaceholder']->getAttribute('data-src');
         $captchaImage = $element['captchaImage']->getAttribute('src');
         $captchaHidden = $element['captchaHidden']->getValue();
 
-        if ((strpos($captchaPlaceholder, '/widgets/Captcha/refreshCaptcha') === false)
-            || (strpos($captchaImage, 'data:image/png;base64') === false)
-            || (empty($captchaHidden))
-        ) {
+        if ((strpos($captchaImage, 'data:image/png;base64') === false) || (empty($captchaHidden))) {
             $message = 'The captcha was not loaded correctly!';
             Helper::throwException($message);
         }
