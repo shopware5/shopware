@@ -813,7 +813,7 @@ Ext.define('Shopware.grid.Panel', {
             /**
              * Event fired after the grid columns created. This event can be used
              * to add additional column over the Ext JS event system.
-             * 
+             *
              * @param { Shopware.grid.Panel } grid - Instance of this component.
              * @param { Array } columns - The filled columns array contains all generated columns.
              */
@@ -1119,7 +1119,7 @@ Ext.define('Shopware.grid.Panel', {
         }
 
         me.fireEvent(me.eventAlias + '-before-create-columns', me, columns);
-        
+
         if (me.getConfig('rowNumbers')) {
             columns.push(me.createRowNumberColumn());
         }
@@ -1397,7 +1397,12 @@ Ext.define('Shopware.grid.Panel', {
 
         if (me.getConfig('rowEditing')) {
             me.rowEditor = Ext.create('Ext.grid.plugin.RowEditing', {
-                clicksToEdit: 2
+                clicksToEdit: 2,
+                listeners: {
+                    edit: function (editor, e) {
+                        e.record.save();
+                    }
+                }
             });
             items.push(me.rowEditor)
         }
