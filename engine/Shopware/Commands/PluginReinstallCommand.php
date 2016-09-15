@@ -24,7 +24,7 @@
 
 namespace Shopware\Commands;
 
-use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
+use Shopware\Bundle\PluginInstallerBundle\Service\InstallerServiceInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
@@ -57,7 +57,7 @@ class PluginReinstallCommand extends ShopwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        /** @var InstallerService $pluginManager */
+        /** @var InstallerServiceInterface $pluginManager */
         $pluginManager  = $this->container->get('shopware_plugininstaller.plugin_manager');
         $pluginName = $input->getArgument('plugin');
 

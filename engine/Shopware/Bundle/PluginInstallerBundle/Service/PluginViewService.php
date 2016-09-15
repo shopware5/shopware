@@ -30,39 +30,39 @@ use Shopware\Bundle\PluginInstallerBundle\Context\PluginsByTechnicalNameRequest;
 use Shopware\Bundle\PluginInstallerBundle\Context\UpdateListingRequest;
 use Shopware\Bundle\PluginInstallerBundle\Struct\ListingResultStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\PluginStruct;
-use Shopware\Bundle\PluginInstallerBundle\Struct\StructHydrator;
+use Shopware\Bundle\PluginInstallerBundle\Struct\StructHydratorInterface;
 use Shopware\Bundle\PluginInstallerBundle\Struct\UpdateResultStruct;
 
 /**
  * Class PluginViewService
  * @package Shopware\Bundle\PluginInstallerBundle\Service
  */
-class PluginViewService
+class PluginViewService implements PluginViewServiceInterface
 {
     /**
-     * @var PluginLocalService
+     * @var PluginLocalServiceInterface
      */
     private $localPluginService;
 
     /**
-     * @var PluginStoreService
+     * @var PluginStoreServiceInterface
      */
     private $storePluginService;
 
     /**
-     * @var StructHydrator
+     * @var StructHydratorInterface
      */
     private $hydrator;
 
     /**
-     * @param PluginLocalService $localPluginService
-     * @param PluginStoreService $storePluginService
-     * @param StructHydrator $hydrator
+     * @param PluginLocalServiceInterface $localPluginService
+     * @param PluginStoreServiceInterface $storePluginService
+     * @param StructHydratorInterface     $hydrator
      */
     public function __construct(
-        PluginLocalService $localPluginService,
-        PluginStoreService $storePluginService,
-        StructHydrator $hydrator
+        PluginLocalServiceInterface $localPluginService,
+        PluginStoreServiceInterface $storePluginService,
+        StructHydratorInterface $hydrator
     ) {
         $this->localPluginService = $localPluginService;
         $this->storePluginService = $storePluginService;

@@ -23,6 +23,8 @@
  */
 
 use Shopware\Bundle\AccountBundle\Service\AddressServiceInterface;
+use Shopware\Bundle\AttributeBundle\Service\DataLoaderInterface;
+use Shopware\Bundle\AttributeBundle\Service\DataPersisterInterface;
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Components\NumberRangeIncrementerInterface;
 use Shopware\Components\Validator\EmailValidatorInterface;
@@ -141,12 +143,12 @@ class sAdmin
     private $numberRangeIncrementer;
 
     /**
-     * @var Shopware\Bundle\AttributeBundle\Service\DataLoader
+     * @var DataLoaderInterface
      */
     private $attributeLoader;
 
     /**
-     * @var Shopware\Bundle\AttributeBundle\Service\DataPersister
+     * @var DataPersisterInterface
      */
     private $attributePersister;
 

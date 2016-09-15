@@ -27,7 +27,7 @@ namespace Shopware\Commands;
 use Shopware\Bundle\PluginInstallerBundle\Context\DownloadRequest;
 use Shopware\Bundle\PluginInstallerBundle\Context\PluginLicenceRequest;
 use Shopware\Bundle\PluginInstallerBundle\Context\PluginsByTechnicalNameRequest;
-use Shopware\Bundle\PluginInstallerBundle\Service\PluginLicenceService;
+use Shopware\Bundle\PluginInstallerBundle\Service\PluginLicenceServiceInterface;
 use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\PluginStruct;
 use Shopware\Models\Plugin\Plugin;
@@ -218,7 +218,7 @@ class StoreDownloadCommand extends StoreCommand
 
         $request = new DownloadRequest($plugin->getTechnicalName(), $version, $domain, $token);
 
-        /**@var $service PluginLicenceService */
+        /**@var $service PluginLicenceServiceInterface */
         $this->container->get('shopware_plugininstaller.plugin_download_service')->download($request);
     }
 

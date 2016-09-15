@@ -24,7 +24,7 @@
 
 namespace Shopware\Components\Test\Plugin;
 
-use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
+use Shopware\Bundle\PluginInstallerBundle\Service\InstallerServiceInterface;
 
 /**
  * Ensures a given plugin is installed and sets configuration.
@@ -46,7 +46,7 @@ use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
 abstract class TestCase extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var InstallerService
+     * @var InstallerServiceInterface
      */
     private static $pluginManager;
 

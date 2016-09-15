@@ -29,37 +29,37 @@ use Shopware\Bundle\PluginInstallerBundle\Context\ListingRequest;
 use Shopware\Bundle\PluginInstallerBundle\Context\PluginLicenceRequest;
 use Shopware\Bundle\PluginInstallerBundle\Context\PluginsByTechnicalNameRequest;
 use Shopware\Bundle\PluginInstallerBundle\Context\UpdateListingRequest;
-use Shopware\Bundle\PluginInstallerBundle\StoreClient;
+use Shopware\Bundle\PluginInstallerBundle\StoreClientInterface;
 use Shopware\Bundle\PluginInstallerBundle\Struct\CategoryStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\LicenceStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\ListingResultStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\PluginStruct;
-use Shopware\Bundle\PluginInstallerBundle\Struct\StructHydrator;
+use Shopware\Bundle\PluginInstallerBundle\Struct\StructHydratorInterface;
 use Shopware\Bundle\PluginInstallerBundle\Struct\UpdateResultStruct;
 
 /**
  * Class PluginStoreService
  * @package Shopware\Bundle\PluginInstallerBundle\Service
  */
-class PluginStoreService
+class PluginStoreService implements PluginStoreServiceInterface
 {
     /**
-     * @var StoreClient
+     * @var StoreClientInterface
      */
     private $storeClient;
 
     /**
-     * @var StructHydrator
+     * @var StructHydratorInterface
      */
     private $hydrator;
 
     /**
-     * @param StoreClient $storeClient
-     * @param StructHydrator $hydrator
+     * @param StoreClientInterface    $storeClient
+     * @param StructHydratorInterface $hydrator
      */
     public function __construct(
-        StoreClient $storeClient,
-        StructHydrator $hydrator
+        StoreClientInterface $storeClient,
+        StructHydratorInterface $hydrator
     ) {
         $this->storeClient = $storeClient;
         $this->hydrator = $hydrator;
@@ -142,7 +142,7 @@ class PluginStoreService
                 'plugins' => $context->getPlugins()
             ]
         );
-        
+
         $plugins = $this->hydrator->hydrateStorePlugins($result['data']);
         $gtcAcceptanceRequired = isset($result['gtcAcceptanceRequired']) ? $result['gtcAcceptanceRequired'] : false;
         $result = new UpdateResultStruct($plugins, $gtcAcceptanceRequired);

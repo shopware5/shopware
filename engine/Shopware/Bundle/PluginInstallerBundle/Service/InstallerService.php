@@ -35,7 +35,7 @@ use Shopware\Components\Plugin\Context\UpdateContext;
 use Shopware\Models\Plugin\Plugin;
 use Shopware\Models\Shop\Shop;
 
-class InstallerService
+class InstallerService implements InstallerServiceInterface
 {
     /**
      * @var ModelManager
@@ -63,26 +63,26 @@ class InstallerService
     private $configWriter;
 
     /**
-     * @var LegacyPluginInstaller
+     * @var LegacyPluginInstallerInterface
      */
     private $legacyPluginInstaller;
 
     /**
-     * @var PluginInstaller
+     * @var PluginInstallerInterface
      */
     private $pluginInstaller;
 
     /**
-     * @param ModelManager $em
-     * @param PluginInstaller $pluginInstaller
-     * @param LegacyPluginInstaller $legacyPluginInstaller
-     * @param ConfigWriter $configWriter
-     * @param ConfigReader $configReader
+     * @param ModelManager                   $em
+     * @param PluginInstallerInterface       $pluginInstaller
+     * @param LegacyPluginInstallerInterface $legacyPluginInstaller
+     * @param ConfigWriter                   $configWriter
+     * @param ConfigReader                   $configReader
      */
     public function __construct(
         ModelManager $em,
-        PluginInstaller $pluginInstaller,
-        LegacyPluginInstaller $legacyPluginInstaller,
+        PluginInstallerInterface $pluginInstaller,
+        LegacyPluginInstallerInterface $legacyPluginInstaller,
         ConfigWriter $configWriter,
         ConfigReader $configReader
     ) {

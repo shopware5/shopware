@@ -14,6 +14,7 @@ use Behat\Testwork\Hook\Scope\BeforeSuiteScope;
 use Behat\Testwork\Suite\Suite;
 use Behat\Testwork\Tester\Result\TestResult;
 use Doctrine\DBAL\Connection;
+use Shopware\Bundle\PluginInstallerBundle\Service\InstallerServiceInterface;
 
 class FeatureContext extends SubContext implements SnippetAcceptingContext
 {
@@ -104,7 +105,7 @@ EOD;
 
         Helper::setCurrentLanguage('de');
 
-        /** @var \Shopware\Bundle\PluginInstallerBundle\Service\InstallerService $pluginManager */
+        /** @var InstallerServiceInterface $pluginManager */
         $pluginManager = $this->getService('shopware_plugininstaller.plugin_manager');
 
         // hack to prevent behat error handler kicking in.

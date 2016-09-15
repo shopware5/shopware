@@ -24,32 +24,32 @@
 namespace Shopware\Bundle\PluginInstallerBundle\Service;
 
 use Shopware\Bundle\PluginInstallerBundle\Context\PluginsByTechnicalNameRequest;
-use Shopware\Bundle\PluginInstallerBundle\StoreClient;
+use Shopware\Bundle\PluginInstallerBundle\StoreClientInterface;
 use Shopware\Bundle\PluginInstallerBundle\Struct\LocaleStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\PluginStruct;
-use Shopware\Bundle\PluginInstallerBundle\Struct\StructHydrator;
+use Shopware\Bundle\PluginInstallerBundle\Struct\StructHydratorInterface;
 
 class FirstRunWizardPluginStoreService
 {
     /**
-     * @var StoreClient
+     * @var StoreClientInterface
      */
     private $storeClient;
 
     /**
-     * @var StructHydrator
+     * @var StructHydratorInterface
      */
     private $hydrator;
 
     /**
-     * @var PluginLocalService
+     * @var PluginLocalServiceInterface
      */
     private $localPluginService;
 
     public function __construct(
-        StructHydrator $hydrator,
-        PluginLocalService $localPluginService,
-        StoreClient $storeClient
+        StructHydratorInterface $hydrator,
+        PluginLocalServiceInterface $localPluginService,
+        StoreClientInterface $storeClient
     ) {
         $this->hydrator = $hydrator;
         $this->localPluginService = $localPluginService;

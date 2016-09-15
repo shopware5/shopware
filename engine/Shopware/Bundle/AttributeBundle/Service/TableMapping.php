@@ -32,7 +32,7 @@ use Doctrine\DBAL\Schema\Column;
  * @package   Shopware\Bundle\AttributeBundle\Service
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
-class TableMapping
+class TableMapping implements TableMappingInterface
 {
     /**
      * @var Connection

@@ -26,11 +26,11 @@ namespace Shopware\Bundle\PluginInstallerBundle\Service;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\PluginInstallerBundle\Context\UpdateLicencesRequest;
-use Shopware\Bundle\PluginInstallerBundle\StoreClient;
+use Shopware\Bundle\PluginInstallerBundle\StoreClientInterface;
 use Shopware\Bundle\PluginInstallerBundle\Struct\PluginInformationStruct;
 use Shopware\Components\License\Service\LocalLicenseUnpackService;
 
-class PluginLicenceService
+class PluginLicenceService implements PluginLicenceServiceInterface
 {
     const TYPE_UNLICENSED = 99;
 
@@ -40,12 +40,12 @@ class PluginLicenceService
     private $connection;
 
     /**
-     * @var InstallerService
+     * @var InstallerServiceInterface
      */
     private $installer;
 
     /**
-     * @var StoreClient
+     * @var StoreClientInterface
      */
     private $storeClient;
 
@@ -55,15 +55,15 @@ class PluginLicenceService
     private $unpackService;
 
     /**
-     * @param Connection $connection
-     * @param InstallerService $installer
-     * @param StoreClient $storeClient
+     * @param Connection                $connection
+     * @param InstallerServiceInterface $installer
+     * @param StoreClientInterface      $storeClient
      * @param LocalLicenseUnpackService $unpackService
      */
     public function __construct(
         Connection $connection,
-        InstallerService $installer,
-        StoreClient $storeClient,
+        InstallerServiceInterface $installer,
+        StoreClientInterface $storeClient,
         LocalLicenseUnpackService $unpackService
     ) {
         $this->connection = $connection;

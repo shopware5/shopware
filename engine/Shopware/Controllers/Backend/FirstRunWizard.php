@@ -1,7 +1,7 @@
 <?php
 
+use Shopware\Bundle\PluginInstallerBundle\Service\AccountManagerServiceInterface;
 use Shopware\Bundle\StoreFrontBundle;
-use Shopware\Bundle\PluginInstallerBundle\Service\AccountManagerService;
 use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\LocaleStruct;
 
@@ -197,7 +197,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
      */
     public function pingServerAction()
     {
-        /** @var AccountManagerService $accountManagerService */
+        /** @var AccountManagerServiceInterface $accountManagerService */
         $accountManagerService = $this->container->get('shopware_plugininstaller.account_manager_service');
 
         try {
@@ -271,7 +271,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
         $password = $this->Request()->getParam('password');
         $email = $this->Request()->getParam('email');
 
-        /** @var AccountManagerService $accountManagerService */
+        /** @var AccountManagerServiceInterface $accountManagerService */
         $accountManagerService = $this->container->get('shopware_plugininstaller.account_manager_service');
 
         try {
@@ -356,7 +356,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
             ));
         }
 
-        /** @var AccountManagerService $accountManagerService */
+        /** @var AccountManagerServiceInterface $accountManagerService */
         $accountManagerService = $this->container->get('shopware_plugininstaller.account_manager_service');
 
         try {
@@ -441,7 +441,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
         static $locales;
 
         if (empty($locales)) {
-            /** @var AccountManagerService $accountManagerService */
+            /** @var AccountManagerServiceInterface $accountManagerService */
             $accountManagerService = $this->container->get('shopware_plugininstaller.account_manager_service');
 
             try {
@@ -477,7 +477,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
      */
     private function getDomains(AccessTokenStruct $token)
     {
-        /** @var AccountManagerService $accountManagerService */
+        /** @var AccountManagerServiceInterface $accountManagerService */
         $accountManagerService = $this->container->get('shopware_plugininstaller.account_manager_service');
 
         try {
@@ -516,7 +516,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
                 throw new \RuntimeException('Could not login - missing login data');
             }
 
-            /** @var AccountManagerService $accountManagerService */
+            /** @var AccountManagerServiceInterface $accountManagerService */
             $accountManagerService = $this->container->get('shopware_plugininstaller.account_manager_service');
 
             $token = $accountManagerService->getToken($shopwareId, $password);

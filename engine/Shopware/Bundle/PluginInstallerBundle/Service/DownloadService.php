@@ -28,7 +28,7 @@ use Doctrine\DBAL\Connection;
 use Shopware\Bundle\PluginInstallerBundle\Context\DownloadRequest;
 use Shopware\Bundle\PluginInstallerBundle\Context\RangeDownloadRequest;
 use Shopware\Bundle\PluginInstallerBundle\Context\MetaRequest;
-use Shopware\Bundle\PluginInstallerBundle\StoreClient;
+use Shopware\Bundle\PluginInstallerBundle\StoreClientInterface;
 use Shopware\Bundle\PluginInstallerBundle\Struct\MetaStruct;
 use ShopwarePlugins\SwagUpdate\Components\Steps\DownloadStep;
 use ShopwarePlugins\SwagUpdate\Components\Steps\FinishResult;
@@ -39,10 +39,10 @@ use Symfony\Component\Filesystem\Filesystem;
 /**
  * @package Shopware\Bundle\PluginInstallerBundle\Service
  */
-class DownloadService
+class DownloadService implements DownloadServiceInterface
 {
     /**
-     * @var StoreClient
+     * @var StoreClientInterface
      */
     private $storeClient;
 
@@ -62,15 +62,15 @@ class DownloadService
     private $rootDir;
 
     /**
-     * @param string $rootDir
-     * @param array $pluginDirectories
-     * @param StoreClient $storeClient
-     * @param Connection $connection
+     * @param string               $rootDir
+     * @param array                $pluginDirectories
+     * @param StoreClientInterface $storeClient
+     * @param Connection           $connection
      */
     public function __construct(
         $rootDir,
         array $pluginDirectories,
-        StoreClient $storeClient,
+        StoreClientInterface $storeClient,
         Connection $connection
     ) {
         $this->pluginDirectories = $pluginDirectories;

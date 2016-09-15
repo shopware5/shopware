@@ -31,7 +31,7 @@ use Doctrine\DBAL\Types\Type;
  * @package   Shopware\Bundle\AttributeBundle\Service
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
-class TypeMapping
+class TypeMapping implements TypeMappingInterface
 {
     const TYPE_STRING = 'string';
     const TYPE_TEXT = 'text';

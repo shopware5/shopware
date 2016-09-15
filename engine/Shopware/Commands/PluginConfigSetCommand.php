@@ -24,7 +24,7 @@
 
 namespace Shopware\Commands;
 
-use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
+use Shopware\Bundle\PluginInstallerBundle\Service\InstallerServiceInterface;
 use Shopware\Components\Model\ModelManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -76,7 +76,7 @@ class PluginConfigSetCommand extends ShopwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        /** @var InstallerService $pluginManager */
+        /** @var InstallerServiceInterface $pluginManager */
         $pluginManager  = $this->container->get('shopware_plugininstaller.plugin_manager');
         $pluginName = $input->getArgument('plugin');
 

@@ -34,7 +34,7 @@ use Shopware\Components\Model\DBAL\Types\DateTimeStringType;
  * @package   Shopware\Bundle\AttributeBundle\Service
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
-class DataPersister
+class DataPersister implements DataPersisterInterface
 {
     /**
      * @var Connection
@@ -42,22 +42,23 @@ class DataPersister
     private $connection;
 
     /**
-     * @var TableMapping
+     * @var TableMappingInterface
      */
     private $mapping;
 
     /**
-     * @var DataLoader
+     * @var DataLoaderInterface
      */
     private $dataLoader;
 
     /**
      * DataPersister constructor.
-     * @param Connection $connection
-     * @param TableMapping $mapping
-     * @param DataLoader $dataLoader
+     *
+     * @param Connection            $connection
+     * @param TableMappingInterface $mapping
+     * @param DataLoaderInterface   $dataLoader
      */
-    public function __construct(Connection $connection, TableMapping $mapping, DataLoader $dataLoader)
+    public function __construct(Connection $connection, TableMappingInterface $mapping, DataLoaderInterface $dataLoader)
     {
         $this->connection = $connection;
         $this->mapping = $mapping;
@@ -155,7 +156,7 @@ class DataPersister
             $query->setValue($key, ':' . $key);
             $query->setParameter(':' . $key, $value);
         }
-        
+
         $query->execute();
     }
 
@@ -206,7 +207,7 @@ class DataPersister
      */
     private function filter($table, $data)
     {
-        /** @var TableMapping $mapping */
+        /** @var TableMappingInterface $mapping */
         $columns = $this->mapping->getTableColumns($table);
 
         $result = [];

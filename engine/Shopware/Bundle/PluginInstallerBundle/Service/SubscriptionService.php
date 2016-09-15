@@ -28,7 +28,7 @@ use Doctrine\DBAL\Connection;
 use Enlight_Controller_Request_Request as Request;
 use Enlight_Controller_Response_ResponseHttp as Response;
 use Shopware\Bundle\PluginInstallerBundle\Exception\ShopSecretException;
-use Shopware\Bundle\PluginInstallerBundle\StoreClient;
+use Shopware\Bundle\PluginInstallerBundle\StoreClientInterface;
 use Shopware\Bundle\PluginInstallerBundle\Struct\PluginInformationResultStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\PluginInformationStruct;
 use Shopware\Components\Model\ModelManager;
@@ -37,7 +37,7 @@ use Shopware\Components\Model\ModelManager;
  * Class SubscriptionService
  * @package Shopware\Bundle\PluginInstallerBundle\Service
  */
-class SubscriptionService
+class SubscriptionService implements SubscriptionServiceInterface
 {
     /**
      * @var Connection
@@ -45,7 +45,7 @@ class SubscriptionService
     private $connection;
 
     /**
-     * @var StoreClient
+     * @var StoreClientInterface
      */
     private $storeClient;
 
@@ -55,17 +55,17 @@ class SubscriptionService
     private $models;
 
     /**
-     * @var PluginLicenceService
+     * @var PluginLicenceServiceInterface
      */
     private $pluginLicenceService;
 
     /**
-     * @param Connection $connection
-     * @param StoreClient $storeClient
-     * @param ModelManager $models
-     * @param PluginLicenceService $pluginLicenceService
+     * @param Connection                    $connection
+     * @param StoreClientInterface          $storeClient
+     * @param ModelManager                  $models
+     * @param PluginLicenceServiceInterface $pluginLicenceService
      */
-    public function __construct(Connection $connection, StoreClient $storeClient, ModelManager $models, PluginLicenceService $pluginLicenceService)
+    public function __construct(Connection $connection, StoreClientInterface $storeClient, ModelManager $models, PluginLicenceServiceInterface $pluginLicenceService)
     {
         $this->connection = $connection;
         $this->storeClient = $storeClient;
@@ -181,9 +181,9 @@ class SubscriptionService
             },
             $data['plugins']
         );
-        
+
         $this->pluginLicenceService->updateLocalLicenseInformation($pluginInformationStructs, $domain);
-        
+
         $informationResult = new PluginInformationResultStruct($pluginInformationStructs, $isShopUpgraded);
 
         return $informationResult;

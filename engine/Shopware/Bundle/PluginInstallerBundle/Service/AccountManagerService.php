@@ -26,25 +26,25 @@ namespace Shopware\Bundle\PluginInstallerBundle\Service;
 
 use GuzzleHttp\ClientInterface;
 use Shopware\Bundle\PluginInstallerBundle\Exception\StoreException;
-use Shopware\Bundle\PluginInstallerBundle\StoreClient;
+use Shopware\Bundle\PluginInstallerBundle\StoreClientInterface;
 use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\LocaleStruct;
-use Shopware\Bundle\PluginInstallerBundle\Struct\StructHydrator;
+use Shopware\Bundle\PluginInstallerBundle\Struct\StructHydratorInterface;
 use Shopware\Components\HttpClient\GuzzleFactory;
 use Shopware\Components\Model\ModelManager;
 
 /**
  * @package Shopware\Bundle\PluginInstallerBundle\Service
  */
-class AccountManagerService
+class AccountManagerService implements AccountManagerServiceInterface
 {
     /**
-     * @var StoreClient
+     * @var StoreClientInterface
      */
     private $storeClient;
 
     /**
-     * @var StructHydrator
+     * @var StructHydratorInterface
      */
     private $hydrator;
 
@@ -69,17 +69,18 @@ class AccountManagerService
     private $apiEndPoint;
 
     /**
-     * @param StoreClient $storeClient
-     * @param StructHydrator $structHydrator
+     * @param StoreClientInterface                 $storeClient
+     * @param StructHydratorInterface              $structHydrator
      * @param \Shopware_Components_Snippet_Manager $snippetManager
-     * @param ModelManager $entityManager
-     * @param GuzzleFactory $guzzleFactory
-     * @param String $apiEndPoint
+     * @param ModelManager                         $entityManager
+     * @param GuzzleFactory                        $guzzleFactory
+     * @param String                               $apiEndPoint
+     *
      * @internal param ClientInterface $guzzleHttpClient
      */
     public function __construct(
-        StoreClient $storeClient,
-        StructHydrator $structHydrator,
+        StoreClientInterface $storeClient,
+        StructHydratorInterface $structHydrator,
         \Shopware_Components_Snippet_Manager $snippetManager,
         ModelManager $entityManager,
         GuzzleFactory $guzzleFactory,

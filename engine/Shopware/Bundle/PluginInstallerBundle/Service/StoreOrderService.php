@@ -25,34 +25,35 @@
 namespace Shopware\Bundle\PluginInstallerBundle\Service;
 
 use Shopware\Bundle\PluginInstallerBundle\Context\OrderRequest;
-use Shopware\Bundle\PluginInstallerBundle\StoreClient;
+use Shopware\Bundle\PluginInstallerBundle\StoreClientInterface;
 use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\BasketStruct;
-use Shopware\Bundle\PluginInstallerBundle\Struct\StructHydrator;
+use Shopware\Bundle\PluginInstallerBundle\Struct\StructHydratorInterface;
 
 /**
  * Class StoreOrderService
+ *
  * @package Shopware\Bundle\PluginInstallerBundle\Service
  */
-class StoreOrderService
+class StoreOrderService implements StoreOrderServiceInterface
 {
     /**
-     * @var StoreClient
+     * @var StoreClientInterface
      */
     private $storeClient;
 
     /**
-     * @var StructHydrator
+     * @var StructHydratorInterface
      */
     private $hydrator;
 
     /**
-     * @param StoreClient $storeClient
-     * @param StructHydrator $hydrator
+     * @param StoreClientInterface    $storeClient
+     * @param StructHydratorInterface $hydrator
      */
     public function __construct(
-        StoreClient $storeClient,
-        StructHydrator $hydrator
+        StoreClientInterface $storeClient,
+        StructHydratorInterface $hydrator
     ) {
         $this->storeClient = $storeClient;
         $this->hydrator = $hydrator;

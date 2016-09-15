@@ -31,7 +31,7 @@ use Doctrine\DBAL\Connection;
  * @package   Shopware\Bundle\AttributeBundle\Service
  * @copyright Copyright (c) shopware AG (http://www.shopware.com)
  */
-class SchemaOperator
+class SchemaOperator implements SchemaOperatorInterface
 {
     /**
      * @var Connection
@@ -39,7 +39,7 @@ class SchemaOperator
     private $connection;
 
     /**
-     * @var TableMapping
+     * @var TableMappingInterface
      */
     private $tableMapping;
 
@@ -50,10 +50,11 @@ class SchemaOperator
 
     /**
      * SchemaOperator constructor.
-     * @param Connection $connection
-     * @param TableMapping $tableMapping
+     *
+     * @param Connection            $connection
+     * @param TableMappingInterface $tableMapping
      */
-    public function __construct(Connection $connection, TableMapping $tableMapping)
+    public function __construct(Connection $connection, TableMappingInterface $tableMapping)
     {
         $this->connection = $connection;
         $this->tableMapping = $tableMapping;
