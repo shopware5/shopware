@@ -604,7 +604,7 @@ class sOrder
             'currency'             => $this->sSYSTEM->sCurrency["currency"],
             'currencyFactor'       => $this->sSYSTEM->sCurrency["factor"],
             'subshopID'            => $mainShop->getId(),
-            'remote_addr'          => (string) $_SERVER['REMOTE_ADDR'],
+            'remote_addr'          => (string) Shopware()->Front()->Request()->getClientIp(true),
             'deviceType'           => $this->deviceType
         );
 
