@@ -60,7 +60,8 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
 			uploadedon: '{s name=mediaInfo/uploadedOn}Uploaded on:{/s}',
 			type: '{s name=mediaInfo/type}Type:{/s}',
 			resolution: '{s name=mediaInfo/resolution}Resolution:{/s}',
-			adress: '{s name=mediaInfo/adress}Adress:{/s}'
+			adress: '{s name=mediaInfo/adress}Adress:{/s}',
+            mediaLink: '{s name=mediaInfo/mediaLink}Link to media{/s}'
 		},
 		formatTypes: {
 			video: '{s name=formatTypes/video}-video{/s}',
@@ -311,7 +312,7 @@ Ext.define('Shopware.apps.MediaManager.view.media.View', {
                         '</tpl>',
                         '<p>',
                             '<strong>'+me.snippets.mediaInfo.adress+'</strong>',
-                            '<a class="link" target="_blank" href="{path}" title="{name}">{path}</a>',
+                            '<a class="link" target="_blank" href="{path}" title="{name}">'+ me.snippets.mediaInfo.mediaLink +'</a>',
                         '</p>',
                     '</div>',
                 '</div>',
