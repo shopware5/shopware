@@ -33,9 +33,7 @@
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
-class Enlight_Controller_Response_ResponseHttp
-    extends Zend_Controller_Response_Http
-    implements Enlight_Controller_Response_Response
+class Enlight_Controller_Response_ResponseHttp extends Zend_Controller_Response_Http implements Enlight_Controller_Response_Response
 {
     /**
      * @var array Contains all cookies which have been set over the "setCookie" function.

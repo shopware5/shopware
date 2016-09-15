@@ -31,8 +31,6 @@
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
  */
-class Enlight_Controller_Response_ResponseCli
-    extends Zend_Controller_Response_Cli
-    implements Enlight_Controller_Response_Response
+class Enlight_Controller_Response_ResponseCli extends Zend_Controller_Response_Cli implements Enlight_Controller_Response_Response
 {
 }

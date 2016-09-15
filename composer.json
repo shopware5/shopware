@@ -72,7 +72,8 @@
         "behat/mink-goutte-driver": "~1.2",
         "behat/mink-selenium2-driver": "~1.3",
         "sensiolabs/behat-page-object-extension": "~2.0.0-rc1",
-        "symfony/dom-crawler": "~2.8"
+        "symfony/dom-crawler": "~2.8",
+        "friendsofphp/php-cs-fixer": "^1.12"
     },
     "include-path": [
         "engine/Library/"
@@ -112,6 +113,8 @@
         }
     },
     "scripts": {
+        "cs-check": "php-cs-fixer fix --dry-run -v",
+        "cs-fix": "php-cs-fixer fix -v",
         "test": "phpunit -c tests/ --colors=always",
         "test-unit": "phpunit -c tests/phpunit_unit.xml.dist --colors=always"
     }
