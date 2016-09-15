@@ -14,7 +14,7 @@
                                     <select name="__shop" class="language--select" data-auto-submit="true">
                                         {foreach $languages as $language}
                                             <option value="{$language->getId()}" {if $language->getId() === $shop->getId()}selected="selected"{/if}>
-                                                {$language->getName()}
+                                                {"shopname"|snippet:"frontend_shopname_{$language->getId()}":"frontend"}
                                             </option>
                                         {/foreach}
                                     </select>
