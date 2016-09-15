@@ -629,7 +629,7 @@ class sBasket
               WHERE modus != 1
               AND LOWER(vouchercode) = ?
               AND (
-                (valid_to >= now() AND valid_from <= now())
+                (valid_to >= CURDATE() AND valid_from <= CURDATE())
                 OR valid_to IS NULL
               )',
             array($voucherCode)
@@ -667,8 +667,8 @@ class sBasket
                     minimumcharge, shippingfree, bindtosupplier, taxconfig, valid_from,
                     valid_to, ordercode, modus, percental, strict, subshopID
                     FROM s_emarketing_vouchers WHERE modus = 1 AND id = ? AND (
-                      (valid_to >= now()
-                          AND valid_from <= now()
+                      (valid_to >= CURDATE()
+                          AND valid_from <= CURDATE()
                       )
                       OR valid_to is NULL
                 ) LIMIT 1',
