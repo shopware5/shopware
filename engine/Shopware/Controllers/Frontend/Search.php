@@ -23,7 +23,7 @@
  */
 use Shopware\Bundle\SearchBundle\ProductSearchResult;
 use Shopware\Bundle\SearchBundle\SearchTermPreProcessorInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 /**
  * @category  Shopware
@@ -53,7 +53,7 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
 
         $term = $this->getSearchTerm();
 
-        // Check if we have a one to one match for ordernumber, then redirect
+        // Check if we have a one to one match for order number, then redirect
         $location = $this->searchFuzzyCheck($term);
         if (!empty($location)) {
             return $this->redirect($location);
@@ -66,14 +66,14 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
             return;
         }
 
-        /**@var $context ProductContextInterface*/
-        $context  = $this->get('shopware_storefront.context_service')->getShopContext();
+        /**@var $context ShopContextInterface */
+        $context = $this->get('shopware_storefront.context_service')->getShopContext();
 
         $criteria = Shopware()->Container()->get('shopware_search.store_front_criteria_factory')
             ->createSearchCriteria($this->Request(), $context);
 
-        /**@var $result ProductSearchResult*/
-        $result   = $this->get('shopware_search.product_search')->search($criteria, $context);
+        /**@var $result ProductSearchResult */
+        $result = $this->get('shopware_search.product_search')->search($criteria, $context);
         $articles = $this->convertProducts($result);
 
         if ($this->get('config')->get('traceSearch', true)) {
@@ -92,7 +92,7 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
         /** @var $mapper \Shopware\Components\QueryAliasMapper */
         $mapper = $this->get('query_alias_mapper');
 
-        $this->View()->assign(array(
+        $this->View()->assign([
             'term' => $term,
             'criteria' => $criteria,
             'facets' => $result->getFacets(),
@@ -104,12 +104,12 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
             'shortParameters' => $mapper->getQueryAliases(),
             'pageSizes' => array_values(explode("|", $pageCounts)),
             'ajaxCountUrlParams' => ['sCategory' => $context->getShop()->getCategory()->getId()],
-            'sSearchResults' => array(
+            'sSearchResults' => [
                 'sArticles' => $articles,
                 'sArticlesCount' => $result->getTotalCount()
-            ),
+            ],
             'productBoxLayout' => $this->get('config')->get('searchProductBoxLayout')
-        ));
+        ]);
     }
 
     /**
@@ -118,11 +118,9 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
      */
     private function convertProducts(ProductSearchResult $result)
     {
-        $articles = array();
+        $articles = [];
         foreach ($result->getProducts() as $product) {
-            $article = $this->get('legacy_struct_converter')->convertListProductStruct(
-                $product
-            );
+            $article = $this->get('legacy_struct_converter')->convertListProductStruct($product);
 
             $articles[] = $article;
         }
@@ -130,6 +128,7 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
         if (empty($articles)) {
             return null;
         }
+
         return $articles;
     }
 
@@ -142,6 +141,7 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
 
         /** @var SearchTermPreProcessorInterface $processor */
         $processor = $this->get('shopware_search.search_term_pre_processor');
+
         return $processor->process($term);
     }
 
@@ -171,7 +171,7 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
                 GROUP BY articleID
                 LIMIT 2
             ';
-            $articles = $this->get('db')->fetchAll($sql, array($search));
+            $articles = $this->get('db')->fetchAll($sql, [$search]);
             if ($articles[0]['configurator_set_id']) {
                 $number = $articles[0]['ordernumber'];
             }
@@ -187,7 +187,7 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
                     GROUP BY articleID
                     LIMIT 2
                 ";
-                $articles = $this->get('db')->fetchCol($sql, array($search, $search));
+                $articles = $this->get('db')->fetchCol($sql, [$search, $search]);
             }
         }
         if (!empty($articles) && count($articles) == 1) {
@@ -202,10 +202,10 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
                 LIMIT 1
             ';
 
-            $articles = $this->get('db')->fetchCol($sql, array(
+            $articles = $this->get('db')->fetchCol($sql, [
                 $this->get('shop')->get('parentID'),
                 $articles[0]
-            ));
+            ]);
         }
         if (!empty($articles) && count($articles) == 1) {
             $assembleParams = [
