@@ -81,11 +81,11 @@
 								{if isset($sArticle.media.thumbnails)}
 									<img srcset="{$sArticle.media.thumbnails[0].sourceSet}"
 										 alt="{$sArticle.title|escape}"
-										 title="{$sArticle.title|escape|truncate:25:""}" />
+										 title="{$sArticle.title|escape|truncate:160}" />
 								{else}
 									<img src="{link file='frontend/_public/src/img/no-picture.jpg'}"
 										 alt="{$sArticle.title|escape}"
-										 title="{$sArticle.title|escape|truncate:25:""}" />
+										 title="{$sArticle.title|escape|truncate:160}" />
 								{/if}
 							</a>
 						</div>
