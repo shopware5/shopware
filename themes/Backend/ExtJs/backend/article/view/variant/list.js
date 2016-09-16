@@ -150,18 +150,23 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
                     me.fireEvent('editVariantPrice', e.record, newPrice);
                 }
 
-            } else if (e.value && e.field === 'pseudoPrice') {
-                var newPseudoPrice = Ext.Number.from(e.value);
-                newPseudoPrice = Ext.Number.toFixed(newPseudoPrice, 2);
+            } else if (e.field === 'pseudoPrice') {
+                var newPseudoPrice = Ext.Number.toFixed(0, 2);
+                var oldPseudoPrice = null;
 
-                var oldPseudoPrice = Ext.Number.from(e.originalValue);
-                if (! Ext.isDefined(e.originalValue)) {
-                    oldPseudoPrice = 0;
+                if(e.value !== null) {
+                    newPseudoPrice = Ext.Number.from(e.value);
+                    newPseudoPrice = Ext.Number.toFixed(newPseudoPrice, 2);
+
+                    oldPseudoPrice = Ext.Number.from(e.originalValue);
+                    if(! Ext.isDefined(e.originalValue) || e.originalValue === null) {
+                        oldPseudoPrice = 0;
+                    }
+
+                    oldPseudoPrice = Ext.Number.toFixed(oldPseudoPrice, 2);
                 }
 
-                oldPseudoPrice = Ext.Number.toFixed(oldPseudoPrice, 2);
-
-                if (newPseudoPrice !== oldPseudoPrice) {
+                if (newPseudoPrice !== oldPseudoPrice || newPseudoPrice === 0.00) {
                     me.fireEvent('editVariantPseudoPrice', e.record, newPseudoPrice);
                 }
 
@@ -342,7 +347,7 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
                 renderer: me.pseudoPriceColumnRenderer,
                 editor: {
                     xtype: 'numberfield',
-                    allowBlank: false,
+                    allowBlank: true,
                     decimalPrecision: 2
                 }
             } , {
