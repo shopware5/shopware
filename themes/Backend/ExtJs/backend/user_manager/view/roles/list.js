@@ -70,14 +70,19 @@ Ext.define('Shopware.apps.UserManager.view.roles.List', {
                     }
                 },
                 beforeedit: function (editor, e) {
+                    var fields = me.getFieldsToLockForAdmin();
                     var form   = editor.getEditor().form;
-                    var field  = form.findField('name');
 
                     if (e.record.get('name') == 'local_admins') {
-                        field.disable();
-                    } else {
-                        field.enable();
+                        Ext.each(fields, function (field) {
+                            form.findField(field).disable();
+                        });
+                        return;
                     }
+
+                    Ext.each(fields, function(field) {
+                        form.findField(field).enable();
+                    });
                 }
             }
         });
@@ -163,6 +168,10 @@ Ext.define('Shopware.apps.UserManager.view.roles.List', {
 		this.dockedItems.push(this.toolbar);
 
 		this.callParent();
+    },
+
+    getFieldsToLockForAdmin: function() {
+        return ['name', 'admin', 'enabled'];
     },
 
     /**
