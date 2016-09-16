@@ -22,9 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\tests\Functional\Components\Api;
+namespace Shopware\Tests\Functional\Components\Api;
 
-use Doctrine\ORM\AbstractQuery;
 use Shopware\Components\Api\Resource\Manufacturer;
 use Shopware\Components\Api\Resource\Resource;
 use Shopware\Components\Model\ModelRepository;
