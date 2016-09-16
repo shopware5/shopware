@@ -139,7 +139,7 @@ Ext.define('Shopware.apps.Config.view.main.Form', {
                     allowBlank: !element.get('required') || !shop.get('default')
                 }, options);
 
-                if (field.xtype == "config-element-boolean" || field.xtype == "config-element-checkbox") {
+                if (field.xtype === "config-element-boolean" || field.xtype === "config-element-boolean-reverse" || field.xtype === "config-element-checkbox") {
                     field = me.convertCheckBoxToComboBox(field, shop, initialValue);
                 }
 
@@ -205,6 +205,7 @@ Ext.define('Shopware.apps.Config.view.main.Form', {
         Ext.apply(field, {
             xtype: "base-element-boolean-select",
             value: booleanSelectValue,
+            reverse: field.xtype === "config-element-boolean-reverse",
             emptyText: ""
         });
 
