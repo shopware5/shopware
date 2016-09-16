@@ -904,6 +904,7 @@ class sExport
                 a.filtergroupID,
                 a.supplierID,
                 d.unitID,
+                d.purchaseprice,
                 IF(a.changetime!='0000-00-00 00:00:00',a.changetime,'') as `changed`,
                 IF(a.datum!='0000-00-00',a.datum,'') as `added`,
                 IF(d.releasedate!='0000-00-00',d.releasedate,'') as `releasedate`,
