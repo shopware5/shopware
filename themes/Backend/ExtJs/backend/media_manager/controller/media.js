@@ -342,8 +342,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Media', {
                 mediaView.setLoading(false);
                 store.load({
                     callback: function() {
-                        rootNode.removeAll(false);
-                        treeStore.load();
+                        tree.fireEvent('refresh', tree);
                         mediaView.deleteBtn.setDisabled(true);
                     }
                 });
