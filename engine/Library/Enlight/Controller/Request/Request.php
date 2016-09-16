@@ -593,7 +593,7 @@ interface Enlight_Controller_Request_Request
     /**
      * Get the client's IP addres
      *
-     * @param  boolean $checkProxy
+     * @param  boolean $checkProxy @deprecated since 5.2.10, to be removed in 5.3
      * @return string
      */
     public function getClientIp($checkProxy = false);
