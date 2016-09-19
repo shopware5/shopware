@@ -330,6 +330,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                         'name' => $row['name'],
                         'action' => $row['action'],
                         'active' => !empty($row['active']) && !empty($row['end']),
+                        'disableOnError' => ($row['disable_on_error'] == 1),
                         'elementId' => $row['elementID'],
                         'data' => !empty($row['data']) ? unserialize($row['data']) : $row['data'],
                         'next' => isset($row['next']) ? new DateTime($row['next']) : $row['next'],
@@ -676,6 +677,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                 $data['pluginID'] = isset($data['pluginId']) ? $data['pluginId'] : null;
                 $data['inform_mail'] = isset($data['informMail']) ? $data['informMail'] : '';
                 $data['inform_template'] = isset($data['informTemplate']) ? $data['informTemplate'] : '';
+                $data['disable_on_error'] = isset($data['disableOnError']) ? $data['disableOnError'] : false;
                 if ($data['data'] !== '') {
                     unset($data['data']);
                 }
@@ -687,7 +689,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                 } else {
                     unset($data['end']);
                 }
-                unset($data['deletable'], $data['pluginId'], $data['informMail'], $data['informTemplate']);
+                unset($data['deletable'], $data['pluginId'], $data['informMail'], $data['informTemplate'], $data['disableOnError']);
                 break;
             default:
                 break;

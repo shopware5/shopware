@@ -44,6 +44,7 @@ Ext.define('Shopware.apps.Config.model.form.CronJob', {
         { name: 'end', type: 'date', useNull: true },
         { name: 'interval', type: 'int' },
         { name: 'active', type: 'boolean' },
+        { name: 'disableOnError', type: 'boolean' },
         { name: 'informTemplate', type: 'string' },
         { name: 'informMail', type: 'string' },
         { name: 'pluginId', type: 'int', useNull: true, defaultValue: 0 },
