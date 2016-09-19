@@ -50,6 +50,11 @@ class Media extends Extendable implements \JsonSerializable
     protected $description;
 
     /**
+     * @var int
+     */
+    protected $position;
+
+    /**
      * @var boolean
      */
     protected $preview;
@@ -163,6 +168,22 @@ class Media extends Extendable implements \JsonSerializable
     public function getDescription()
     {
         return $this->description;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPosition()
+    {
+        return $this->position;
+    }
+
+    /**
+     * @param int $position
+     */
+    public function setPosition($position)
+    {
+        $this->position = $position;
     }
 
     /**

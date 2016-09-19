@@ -94,6 +94,10 @@ class MediaHydrator extends Hydrator
             $media->setDescription($data['__media_description']);
         }
 
+        if (isset($data['__image_position'])) {
+            $media->setPosition($data['__image_position']);
+        }
+
         if (isset($data['__media_type'])) {
             $media->setType($data['__media_type']);
         }
