@@ -683,6 +683,7 @@ class LegacyStructConverter
 
         $data = array(
             'id' => $media->getId(),
+            'position' => null,
             'source' => $media->getFile(),
             'description' => $media->getName(),
             'extension' => $media->getExtension(),
