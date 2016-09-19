@@ -420,9 +420,9 @@ class sMarketing
     {
         $context = $this->contextService->getShopContext();
 
-        $sql = "SELECT id, ordernumber, additionaltext
+        $sql = "SELECT id, ordernumber, additionaltext, instock
             FROM s_articles_details
-            WHERE articleID = :articleId AND kind != 3";
+            WHERE articleID = :articleId AND kind != 3 AND active > 0 ";
 
         $variantsData = Shopware()->Db()->fetchAll(
             $sql,
@@ -451,6 +451,7 @@ class sMarketing
             }
 
             $product->setAdditional($variantData['additionaltext']);
+            $product->setStock($variantData['instock']);
             $products[$variantData['ordernumber']] = $product;
         }
 
@@ -460,7 +461,8 @@ class sMarketing
             function (StoreFrontBundle\Struct\ListProduct $elem) {
                 return array(
                     'ordernumber' => $elem->getNumber(),
-                    'additionaltext' => $elem->getAdditional()
+                    'additionaltext' => $elem->getAdditional(),
+                    'stock' => $elem->getStock()
                 );
             },
             $products
