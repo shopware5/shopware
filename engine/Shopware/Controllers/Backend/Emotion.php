@@ -596,7 +596,9 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         }
 
         if (in_array($xType, $mediaFields)) {
-            $value = $mediaService->normalize($value);
+            if ($mediaService->isEncoded($value)) {
+                $value = $mediaService->normalize($value);
+            }
         }
 
         return $value;
