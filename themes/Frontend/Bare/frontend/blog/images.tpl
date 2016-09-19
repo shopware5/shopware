@@ -20,7 +20,7 @@
                     <img srcset="{$sArticle.preview.thumbnails[1].sourceSet}"
                          class="blog--image panel has--border is--rounded"
                          alt="{$alt}"
-						 title="{$alt|truncate:25:""}" />
+						 title="{$alt|truncate:160}" />
 				</a>
 			</div>
 		{/block}
@@ -46,7 +46,7 @@
                                <img srcset="{$sArticleMedia.thumbnails[0].sourceSet}"
                                     class="blog--thumbnail-image"
                                     alt="{s name="BlogThumbnailText" namespace="frontend/blog/detail"}{/s}: {$alt}"
-                                    title="{s name="BlogThumbnailText" namespace="frontend/blog/detail"}{/s}: {$alt|truncate:25:""}" />
+                                    title="{s name="BlogThumbnailText" namespace="frontend/blog/detail"}{/s}: {$alt|truncate:160}" />
 							</a>
 						{/if}
 					{/foreach}
