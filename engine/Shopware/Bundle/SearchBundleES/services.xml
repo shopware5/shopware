@@ -100,10 +100,28 @@
             <tag name="shopware_search_es.search_handler" />
         </service>
 
+        <service id="shopware_search_es.immediate_delivery_facet_handler" class="Shopware\Bundle\SearchBundleES\FacetHandler\ImmediateDeliveryFacetHandler">
+            <argument type="service" id="snippets" />
+            <argument type="service" id="query_alias_mapper" />
+            <tag name="shopware_search_es.search_handler" />
+        </service>
+
+        <service id="shopware_search_es.shipping_free_facet_handler" class="Shopware\Bundle\SearchBundleES\FacetHandler\ShippingFreeFacetHandler">
+            <argument type="service" id="snippets" />
+            <argument type="service" id="query_alias_mapper" />
+            <tag name="shopware_search_es.search_handler" />
+        </service>
+
         <service id="shopware_search_es.price_facet_handler" class="Shopware\Bundle\SearchBundleES\FacetHandler\PriceFacetHandler">
             <argument type="service" id="snippets" />
             <argument type="service" id="query_alias_mapper" />
             <argument type="service" id="shopware_elastic_search.field_mapping" />
+            <tag name="shopware_search_es.search_handler" />
+        </service>
+
+        <service id="shopware_search_es.vote_average_facet_handler" class="Shopware\Bundle\SearchBundleES\FacetHandler\VoteAverageFacetHandler">
+            <argument type="service" id="snippets" />
+            <argument type="service" id="query_alias_mapper" />
             <tag name="shopware_search_es.search_handler" />
         </service>
 
@@ -120,24 +138,6 @@
             <argument type="service" id="dbal_connection" />
             <argument type="service" id="shopware_search_es.struct_hydrator" />
             <argument type="service" id="shopware_elastic_search.index_factory" />
-            <tag name="shopware_search_es.search_handler" />
-        </service>
-
-        <service id="shopware_search_es.shipping_free_facet_handler" class="Shopware\Bundle\SearchBundleES\FacetHandler\ShippingFreeFacetHandler">
-            <argument type="service" id="snippets" />
-            <argument type="service" id="query_alias_mapper" />
-            <tag name="shopware_search_es.search_handler" />
-        </service>
-
-        <service id="shopware_search_es.immediate_delivery_facet_handler" class="Shopware\Bundle\SearchBundleES\FacetHandler\ImmediateDeliveryFacetHandler">
-            <argument type="service" id="snippets" />
-            <argument type="service" id="query_alias_mapper" />
-            <tag name="shopware_search_es.search_handler" />
-        </service>
-
-        <service id="shopware_search_es.vote_average_facet_handler" class="Shopware\Bundle\SearchBundleES\FacetHandler\VoteAverageFacetHandler">
-            <argument type="service" id="snippets" />
-            <argument type="service" id="query_alias_mapper" />
             <tag name="shopware_search_es.search_handler" />
         </service>
 
