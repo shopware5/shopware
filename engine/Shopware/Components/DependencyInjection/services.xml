@@ -406,11 +406,6 @@
             <tag name="shopware.event_subscriber" />
         </service>
 
-        <service id="BccSubscriber" class="Shopware\Components\BccSubscriber">
-            <argument type="service" id="service_container" />
-            <tag name="shopware.event_subscriber" />
-        </service>
-
         <service id="config_writer" class="Shopware\Components\ConfigWriter">
             <argument type="service" id="dbal_connection" />
         </service>
