@@ -72,6 +72,7 @@ class RegisterControllerCompilerPass implements CompilerPassInterface
                     [
                         'event'  => $eventName,
                         'method' => 'getControllerPath',
+                        'priority' => 500
                     ]
                 )
                 ->addMethodCall('addController', [$eventName, $file]);
