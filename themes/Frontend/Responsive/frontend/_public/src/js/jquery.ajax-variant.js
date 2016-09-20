@@ -38,7 +38,8 @@
             productDetailsDescriptionSelector: '.content--description',
             noVariantSelector: '.variant--no-variant',
             isHiddenClass: 'is--hidden',
-            configuratorSelector: '.product--configurator'
+            configuratorSelector: '.product--configurator',
+            csrfTokenIdentifier: '__csrf_token'
         },
 
         /**
@@ -92,16 +93,41 @@
             var me = this,
                 $form = me.$el.find(me.opts.configuratorFormSelector),
                 formValues = $form.serialize(),
-                infoPanel = me.$el.find(me.opts.noVariantSelector);
+                infoPanel = me.$el.find(me.opts.noVariantSelector),
+                inputCount = me.getCountOfInputs($form),
+                matches = formValues.match(/group/g);
 
-            if (formValues.indexOf("group") < 0) {
+            if (!matches) {
                 infoPanel.removeClass(me.opts.isHiddenClass);
                 return;
             }
 
-            if (!infoPanel.hasClass(me.opts.isHiddenClass)) {
+            if (matches.length >= inputCount) {
                 infoPanel.addClass(me.opts.isHiddenClass);
+                return;
             }
+
+            infoPanel.removeClass(me.opts.isHiddenClass);
+        },
+
+        /**
+         * Counts the number of different variant groups and returns the count
+         *  
+         * @param {object} $form
+         * @returns {Number}
+         */
+        getCountOfInputs: function ($form) {
+            var me = this,
+                formInputs = $form.find(':input'),
+                inputNames = [];
+
+            $.each(formInputs, function (key, value) {
+                if (value.name != me.opts.csrfTokenIdentifier && $.inArray(value.name, inputNames) == -1) {
+                    inputNames.push(value.name);
+                }
+            });
+            
+            return inputNames.length;
         },
 
         /**
