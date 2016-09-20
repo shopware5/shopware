@@ -43,7 +43,7 @@
                 {if !$showListing}
                     {block name="frontend_listing_list_promotion_link_show_listing"}
                         <div class="emotion--show-listing{if $fullscreen} is--align-center{/if}">
-                            <a href="{url controller='cat' sPage=1 sCategory=$sCategoryContent.id}" title="{$sCategoryContent.name|escape}" class="link--show-listing{if $fullscreen} btn is--primary{/if}" rel="nofollow">
+                            <a href="{url controller='cat' sPage=1 sCategory=$sCategoryContent.id}" title="{$sCategoryContent.name|escape}" class="link--show-listing{if $fullscreen} btn is--primary{/if}">
                                 {s name="ListingActionsOffersLink"}Weitere Artikel in dieser Kategorie &raquo;{/s}
                             </a>
                         </div>
