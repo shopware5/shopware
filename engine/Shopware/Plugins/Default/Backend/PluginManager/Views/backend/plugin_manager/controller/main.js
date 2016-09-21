@@ -112,8 +112,8 @@ Ext.define('Shopware.apps.PluginManager.controller.Main', {
         var me = this,
             listingWindow = me.getListingWindow();
 
-        listingWindow.setWidth(800);
-        listingWindow.setHeight(660);
+        listingWindow.setWidth(1130);
+        listingWindow.setHeight(695);
         listingWindow.setTitle('{s name="connect_introduction/title"}{/s}');
         me.getNavigation().hide();
     },

@@ -2,6 +2,21 @@
 
 This changelog references changes done in Shopware 5.2 patch versions.
 
+## 5.2.8
+
+[View all changes from v5.2.7...v5.2.8](https://github.com/shopware/shopware/compare/v5.2.7...v5.2.8)
+
+* Fixed a PHP 7 fatal error in the SVG rendering of mPDF
+
+## 5.2.7
+
+[View all changes from v5.2.6...v5.2.7](https://github.com/shopware/shopware/compare/v5.2.6...v5.2.7)
+
+* Add support for third party post messages in the backend
+* getOne function of customer api resource contains now the country and state data for billing and shipping address
+* Changed `jquery.search::onKeyboardNavigation()` method to provide more extension possibilities.
+* Deprecated the execution shopware.php via CLI. Please use the command line tool in `bin/console` instead.
+
 ## 5.2.6
 
 [View all changes from v5.2.5...v5.2.6](https://github.com/shopware/shopware/compare/v5.2.5...v5.2.6)

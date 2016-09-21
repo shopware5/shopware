@@ -394,7 +394,7 @@ class Repository extends ModelRepository
             'history.paymentStatusId as currentPaymentStatusId'
         ));
         $builder->from('Shopware\Models\Order\History', 'history')
-                ->leftJoin('history.user',  'user')
+                ->leftJoin('history.user', 'user')
                 ->where($builder->expr()->eq('history.orderId', '?1'))
                 ->setParameter(1, $orderId);
 
@@ -457,7 +457,7 @@ class Repository extends ModelRepository
                                 $expr->like('orders.internalComment', '?3')
                             )
                         );
-                        $builder->setParameter(1,       $filter['value'] . '%');
+                        $builder->setParameter(1, $filter['value'] . '%');
                         $builder->setParameter(3, '%' . $filter['value'] . '%');
                         break;
                     case "from":
@@ -476,7 +476,7 @@ class Repository extends ModelRepository
                     case 'details.articleNumber':
                         $builder->leftJoin('orders.details', 'details');
                         $builder->andWhere('details.articleNumber LIKE :articleNumber');
-                        $builder->setParameter('articleNumber',  $filter['value']);
+                        $builder->setParameter('articleNumber', $filter['value']);
                         break;
                     default:
                         $builder->addFilter(array($filter));

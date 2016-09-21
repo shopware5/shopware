@@ -32,68 +32,21 @@
 Ext.define('Shopware.apps.PluginManager.view.list.ConnectIntroductionPage', {
     extend: 'Ext.panel.Panel',
     alias: 'widget.plugin-manager-connect-introduction-page',
-
+    layout: 'fit',
     border: false,
     bodyCls: 'plugin-manager-listing-page',
-    autoScroll: true,
-    bodyPadding: '20 40 10 40',
 
     initComponent: function() {
-        var me = this;
+        var me = this,
+            url = Ext.String.format('//cdn.shopware.de/connect_introducing/index_[0].html', Ext.userLanguage !== 'de' ? 'en' : Ext.userLanguage);
 
-        me.items = me.buildItems();
+        me.items = [{
+            xtype: 'container',
+            html: '<iframe src="' + url + '" width="100%" height="100%"></iframe>'
+        }];
         me.dockedItems = me.buildDockedItems();
 
         me.callParent(arguments);
-    },
-
-    buildItems: function() {
-        var me = this;
-
-        me.headLineText = Ext.create('Ext.container.Container', {
-            cls: 'headline',
-            html: '{s name="connect_introduction/headline"}{/s}'
-        });
-
-        me.descriptionText = Ext.create('Ext.container.Container', {
-            html: '{s name="connect_introduction/description_text"}{/s}',
-            padding: '20 0 0 0'
-        });
-
-        me.pillarContainer = Ext.create('Ext.container.Container', {
-            cls: 'shopware-connect-pillar-ct',
-            html: Ext.String.format(
-                '[0][1][2]',
-                '<div class="shopware-connect-pillar"><div class="shopware-connect-pillar-one"></div><div class="shopware-connect-pillar-text">{s name="connect_introduction/pillar_one"}{/s}</div></div>',
-                '<div class="shopware-connect-pillar"><div class="shopware-connect-pillar-two"></div><div class="shopware-connect-pillar-text">{s name="connect_introduction/pillar_two"}{/s}</div></div>',
-                '<div class="shopware-connect-pillar shopware-connect-pillar-no-margin"><div class="shopware-connect-pillar-three"></div><div class="shopware-connect-pillar-text"">{s name="connect_introduction/pillar_three"}{/s}</div></div>'
-            )
-        });
-
-        me.noteText = Ext.create('Ext.container.Container', {
-            cls: 'block-message',
-            html: '<div class="notice">{s name="connect_introduction/note"}{/s}</div>',
-            padding: '20 0 0 0'
-        });
-
-        me.linkText = Ext.create('Ext.container.Container', {
-            html: '{s name="connect_introduction/link"}{/s}',
-            padding: '5 0 0 0'
-        });
-
-        me.installInfoText = Ext.create('Ext.container.Container', {
-            padding: '54 0 0 0',
-            html: '{s name="connect_introduction/install_information"}{/s}'
-        });
-
-        return [
-            me.headLineText,
-            me.descriptionText,
-            me.pillarContainer,
-            me.noteText,
-            me.linkText,
-            me.installInfoText
-        ];
     },
 
     buildDockedItems: function() {
@@ -104,18 +57,11 @@ Ext.define('Shopware.apps.PluginManager.view.list.ConnectIntroductionPage', {
             items: [{
                 xtype: 'button',
                 cls: 'secondary',
-                text: '{s name="connect_introduction/cancel"}{/s}',
-                handler: function() {
-                    me.up('window').close();
-                }
-            }, '->', {
-                xtype: 'button',
-                cls: 'secondary',
                 text: '{s name="connect_introduction/remove_connect"}{/s}',
                 handler: function() {
                     me.fireEvent('connect-introduction-remove');
                 }
-            }, {
+            }, '->', {
                 xtype: 'button',
                 cls: 'primary',
                 text: '{s name="connect_introduction/connect_now"}{/s}',
@@ -125,7 +71,7 @@ Ext.define('Shopware.apps.PluginManager.view.list.ConnectIntroductionPage', {
             }]
         });
 
-        return [me.bottomToolbar];
+        return [ me.bottomToolbar ];
     }
 });
 //{/block}

@@ -33,9 +33,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
  * @package   Shopware\Bundle\SearchBundle\FacetResult
  * @copyright Copyright (c) shopware AG (http://www.shopware.de)
  */
-class MediaListFacetResult
-    extends Extendable
-    implements FacetResultInterface
+class MediaListFacetResult extends Extendable implements FacetResultInterface
 {
     /**
      * @var string

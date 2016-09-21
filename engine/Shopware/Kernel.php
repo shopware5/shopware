@@ -25,6 +25,7 @@
 namespace Shopware;
 
 use Shopware\Bundle\AttributeBundle\DependencyInjection\Compiler\SearchRepositoryCompilerPass;
+use Shopware\Bundle\ControllerBundle\DependencyInjection\Compiler\RegisterControllerCompilerPass;
 use Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\SettingsCompilerPass;
 use Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\SynchronizerCompilerPass;
 use Shopware\Bundle\ESIndexingBundle\DependencyInjection\CompilerPass\DataIndexerCompilerPass;
@@ -203,16 +204,6 @@ class Kernel implements HttpKernelInterface
 
         // Create englight request from global state
         $enlightRequest = new EnlightRequest();
-
-        // Set commandline args as request uri
-        // This is used for legacy cronjob routing.
-        // e.g: /usr/bin/php shopware.php /backend/cron
-        if (PHP_SAPI === 'cli'
-            && is_array($argv = $request->server->get('argv'))
-            && isset($argv[1])
-        ) {
-            $enlightRequest->setRequestUri($argv[1]);
-        }
 
         // Let the symfony request handle the trusted proxies
         $enlightRequest->setRemoteAddress($request->getClientIp());
@@ -758,6 +749,7 @@ class Kernel implements HttpKernelInterface
             return;
         }
 
+        $activePlugins = [];
         foreach ($this->plugins as $plugin) {
             if (!$plugin->isActive()) {
                 continue;
@@ -765,6 +757,9 @@ class Kernel implements HttpKernelInterface
 
             $container->addObjectResource($plugin);
             $plugin->build($container);
+            $activePlugins[] = $plugin;
         }
+
+        $container->addCompilerPass(new RegisterControllerCompilerPass($activePlugins));
     }
 }
