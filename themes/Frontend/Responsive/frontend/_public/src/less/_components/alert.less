@@ -56,6 +56,23 @@ Options: `is--success`, `is--info`, `is--warning`, `is--error`.
             background: @highlight-error;
         }
     }
+
+    &.no--cookies {
+        position: fixed;
+        z-index: 99999;
+        top: 0;
+        left: 0;
+        right: 0;
+        &:hover {
+            a.close--alert {
+                text-decoration: underline;
+            }
+        }
+        .close--alert {
+            float: right;
+        }
+    }
+
 /*
 ######With an Icon inside of the box.</h6>
 ```

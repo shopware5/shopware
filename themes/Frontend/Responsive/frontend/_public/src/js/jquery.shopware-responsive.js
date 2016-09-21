@@ -126,7 +126,7 @@
 
         // Create the no cookies notification message
         function createNoCookiesNoticeBox(message) {
-            $('<div/>', { 'class': 'alert is--warning' }).append(
+            $('<div/>', { 'class': 'alert is--warning no--cookies' }).append(
                 $('<div/>', {'class': 'alert--icon'}).append(
                     $('<i/>', {'class': 'icon--element icon--warning'})
                 )
@@ -134,8 +134,15 @@
                 $('<div/>', {
                     'class': 'alert--content',
                     'html': message
+                }).append(
+                    $('<a/>', {
+                        'class': 'close--alert',
+                        'html': '✕'
+                    })
+                ).on('click', function () {
+                    $(this).parent().hide();
                 })
-            ).prependTo('.page-wrap');
+            ).appendTo('.page-wrap');
         }
 
         // Lightbox auto trigger
