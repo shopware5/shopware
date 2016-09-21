@@ -271,6 +271,7 @@ Ext.define('Shopware.apps.Index.view.themeCache.ThemeCacheWarmUp', {
                 }
                 me.closeButton.disable();
                 me.filterThemes();
+                me.shopSelector.disable();
                 me.fireEvent('themeCacheWarmUpStartProcess');
             }
         });
@@ -307,6 +308,7 @@ Ext.define('Shopware.apps.Index.view.themeCache.ThemeCacheWarmUp', {
             hidden: true,
             handler: function() {
                 this.disable();
+                me.shopSelector.enable();
                 me.fireEvent('themeCacheWarmUpCancelProcess');
             }
         });
