@@ -170,6 +170,7 @@ Ext.define('Shopware.apps.Customer.view.address.detail.Address', {
                             fieldLabel: me.snippets.fields.country,
                             labelWidth: 155,
                             anchor: '95%',
+                            pageSize: 25,
                             listeners: {
                                 change: me.onCountryChanged,
                                 scope: me
@@ -179,7 +180,8 @@ Ext.define('Shopware.apps.Customer.view.address.detail.Address', {
                             store: me.countryStateStore,
                             fieldLabel: me.snippets.fields.state,
                             labelWidth: 155,
-                            anchor: '95%'
+                            anchor: '95%',
+                            pageSize: 25
                         },
                         phone: {
                             /*{if {config name=showphonenumberfield} && {config name=requirePhoneField}}*/
