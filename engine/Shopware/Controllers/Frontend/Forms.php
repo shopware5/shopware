@@ -290,30 +290,14 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
 
         $content = $this->View()->sSupport;
 
-        $mailBody = $content['email_template'];
-        foreach ($this->_postData as $key => $value) {
-            if ($this->_elements[$key]['typ'] == 'text2') {
-                $names = explode(';', $this->_elements[$key]['name']);
-                $mailBody = str_replace('{sVars.' . $names[0] . '}', $value[0], $mailBody);
-                $mailBody = str_replace('{sVars.' . $names[1] . '}', $value[1], $mailBody);
-            } else {
-                $mailBody = str_replace('{sVars.' . $this->_elements[$key]['name'] . '}', $value, $mailBody);
-            }
-        }
-
-        $mailBody = str_replace('{sIP}', $_SERVER['REMOTE_ADDR'], $mailBody);
-        $mailBody = str_replace('{sDateTime}', date('d.m.Y h:i:s'), $mailBody);
-
-        // {$sShopname} is now deprecated and will be removed in 5.3, please use {sShopname} (without '$') instead
-        $mailBody = str_replace('{$sShopname}', Shopware()->Config()->shopName, $mailBody);
-        $mailBody = str_replace('{sShopname}', Shopware()->Config()->shopName, $mailBody);
-        $mailBody = strip_tags($mailBody);
+        $mailBody = $this->replaceVariables($content["email_template"]);
+        $mailSubject = $this->replaceVariables($content["email_subject"]);
 
         $mail->setFrom(Shopware()->Config()->Mail);
         $mail->clearRecipients();
         $mail->addTo($content['email']);
         $mail->setBodyText($mailBody);
-        $mail->setSubject($content['email_subject']);
+        $mail->setSubject($mailSubject);
 
         $mail = Shopware()->Events()->filter('Shopware_Controllers_Frontend_Forms_commitForm_Mail', $mail, array('subject' => $this));
 
@@ -322,6 +306,28 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
         }
     }
 
+    /**
+     * replaces placeholder variables
+     * @param  string $content
+     * @return string
+     */
+    private function replaceVariables($content)
+    {
+        foreach ($this->_postData as $key => $value) {
+            if ($this->_elements[$key]['typ'] == "text2") {
+                $names = explode(";", $this->_elements[$key]['name']);
+                $content = str_replace("{sVars." . $names[0] . "}", $value[0], $content);
+                $content = str_replace("{sVars." . $names[1] . "}", $value[1], $content);
+            } else {
+                $content = str_replace("{sVars." . $this->_elements[$key]['name'] . "}", $value, $content);
+            }
+        }
+
+        $content = str_replace("{sIP}", $_SERVER['REMOTE_ADDR'], $content);
+        $content = str_replace("{sDateTime}", date("d.m.Y h:i:s"), $content);
+        $content = str_replace('{sShopname}', Shopware()->Config()->shopName, $content);
+        return strip_tags($content);
+    }
 
     /**
      * Create label element
