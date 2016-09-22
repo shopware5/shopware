@@ -334,7 +334,9 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
                 $this->Request()->getParam('association', null),
                 $this->Request()->getParam('start', 0),
                 $this->Request()->getParam('limit', 20),
-                $this->Request()->getParam('id', null)
+                $this->Request()->getParam('id', null),
+                $this->Request()->getParam('filter', []),
+                $this->Request()->getParam('sort', [])
             )
         );
     }
@@ -601,9 +603,12 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
      * @param string $association
      * @param int $offset
      * @param int $limit
+     * @param null|int $id
+     * @param array $filter
+     * @param array $sort
      * @return array
      */
-    public function searchAssociation($search, $association, $offset, $limit, $id = null)
+    public function searchAssociation($search, $association, $offset, $limit, $id = null, $filter = [], $sort = [])
     {
         $associationModel = $this->getAssociatedModelByProperty($this->model, $association);
 
@@ -612,6 +617,26 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
             $associationModel,
             $search
         );
+
+        $filter = $this->getFilterConditions(
+            $filter,
+            $associationModel,
+            $association
+        );
+
+        $sort = $this->getSortConditions(
+            $sort,
+            $associationModel,
+            $association
+        );
+
+        if (!empty($filter) && $id === null) {
+            $builder->addFilter($filter);
+        }
+
+        if (!empty($sort) && $id === null) {
+            $builder->addOrderBy($sort);
+        }
 
         $builder->setFirstResult($offset)
             ->setMaxResults($limit);
@@ -1095,6 +1120,9 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
                 if ($field['type'] === 'datetime') {
                     $value = '%' . $value . '%';
                 }
+                break;
+            case 'integer':
+            case 'float':
                 break;
             case 'string':
             case 'text':

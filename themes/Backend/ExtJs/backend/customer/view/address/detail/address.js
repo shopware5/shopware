@@ -74,8 +74,6 @@ Ext.define('Shopware.apps.Customer.view.address.detail.Address', {
     configure: function () {
         var me = this;
 
-        me.countryStateStore = Ext.create('Shopware.apps.Base.store.CountryState');
-
         return {
             controller: 'Address',
             fieldSets: [
@@ -172,12 +170,11 @@ Ext.define('Shopware.apps.Customer.view.address.detail.Address', {
                             anchor: '95%',
                             pageSize: 25,
                             listeners: {
-                                change: me.onCountryChanged,
+                                select: me.onCountrySelect,
                                 scope: me
                             }
                         },
                         state_id: {
-                            store: me.countryStateStore,
                             fieldLabel: me.snippets.fields.state,
                             labelWidth: 155,
                             anchor: '95%',
@@ -220,31 +217,51 @@ Ext.define('Shopware.apps.Customer.view.address.detail.Address', {
         };
     },
 
+    createAssociationSearchStore: function(model, associationKey) {
+        var me = this;
+        var store = me.callParent(arguments);
+        if (associationKey == 'state') {
+            me.addCountryIdFilter(store, me.record.get('country_id'));
+        }
+        return store;
+    },
+
+    addCountryIdFilter: function(store, countryId) {
+        store.remoteFilter = true;
+        store.filters.clear();
+        store.pageSize = 25;
+        store.filters.add({
+            property: 'countryId',
+            operator: '=',
+            value: countryId
+        });
+    },
+
     /**
      * Called when the user changes the country combobox in the shipping or billing form
      * @param countryCombo
-     * @param newValue
+     * @param records Ext.data.Model[]
      */
-    onCountryChanged: function(countryCombo, newValue) {
+    onCountrySelect: function(countryCombo, records) {
         var me = this,
             countryStateCombo = me.down('combobox[name=state_id]'),
             oldState = countryStateCombo.getValue(),
-            store = countryStateCombo.store,
-            country = countryCombo.findRecord('id', newValue);
+            store = countryStateCombo.store;
 
+        var country = records.shift();
         if (country) {
             countryStateCombo.allowBlank = !country.get('forceStateInRegistration');
         }
 
-        if (newValue === null) {
+        if (country === null) {
             countryStateCombo.setValue(null);
             countryStateCombo.hide();
             return;
         }
 
-        store.getProxy().extraParams.countryId = newValue;
+        me.addCountryIdFilter(store, country.get('id'));
 
-        store.load({
+        store.loadPage(1, {
             callback: function() {
                 var record = store.getById(oldState);
 
