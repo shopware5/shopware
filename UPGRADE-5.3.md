@@ -23,3 +23,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
     * `themes/Backend/ExtJs/backend/vote/controller/vote.js`
     * `themes/Backend/ExtJs/backend/vote/controller/vote.js`
 * `s_articles_vote.answer_date` is now nullable
+* Removed legacy import / export module
+* Deprecated `Shopware_Components_Convert_Csv`
+* Deprecated `Shopware_Components_Convert_Xml`
+* Deprecated `Shopware_Components_Convert_Excel`

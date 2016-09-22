@@ -22,6 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
+/**
+ * @deprecated since 5.3, to be removed in 5.4
+ */
 class Shopware_Components_Convert_Excel
 {
     private $header = "<?xml version=\"1.0\" encoding=\"UTF-8\"?\>
