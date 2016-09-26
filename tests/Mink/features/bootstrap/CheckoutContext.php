@@ -673,6 +673,70 @@ EOD;
     }
 
     /**
+     * @BeforeScenario @dispatchsurcharge
+     */
+    public function addCustomDispatchSurcharge()
+    {
+        /** @var Connection $dbal */
+        $dbal = $this->getService('dbal_connection');
+        $sql = <<<"EOD"
+            INSERT INTO `s_premium_dispatch` (`id`, `name`, `type`, `description`, `comment`, `active`, `position`, `calculation`, `surcharge_calculation`, `tax_calculation`, `shippingfree`, `multishopID`, `customergroupID`, `bind_shippingfree`, `bind_time_from`, `bind_time_to`, `bind_instock`, `bind_laststock`, `bind_weekday_from`, `bind_weekday_to`, `bind_weight_from`, `bind_weight_to`, `bind_price_from`, `bind_price_to`, `bind_sql`, `status_link`, `calculation_sql`)
+            VALUES
+	        (NULL, 'Sonderaufschlag', 2, '', '', 1, 0, 1, 0, 0, NULL, NULL, NULL, 0, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, 'IFNULL(us.zipcode,ub.zipcode) = \'48624\'', '', NULL);
+EOD;
+        $dbal->query($sql);
+
+        $sql = <<<"EOD"
+            SET @dispatchId = (SELECT id FROM `s_premium_dispatch` WHERE `name` = 'Sonderaufschlag');
+        
+            INSERT INTO `s_premium_dispatch_countries` (`dispatchID`, `countryID`)
+            VALUES (@dispatchId, 2);
+EOD;
+        $dbal->query($sql);
+
+        $sql = <<<"EOD"
+            INSERT INTO `s_premium_dispatch_paymentmeans` (`dispatchID`, `paymentID`)
+            VALUES (@dispatchId, 5);
+EOD;
+        $dbal->query($sql);
+
+        $sql = <<<"EOD"
+            INSERT INTO `s_premium_shippingcosts` (`id`, `from`, `value`, `factor`, `dispatchID`)
+            VALUES (null, '0.000', '150.00', '0.00', @dispatchId);
+EOD;
+        $dbal->query($sql);
+    }
+
+    /**
+     * @AfterScenario @dispatchsurcharge
+     */
+    public function removeCustomDispatchSurcharge()
+    {
+        /** @var Connection $dbal */
+        $dbal = $this->getService('dbal_connection');
+        $sql = <<<"EOD"
+            SET @dispatchId = (SELECT id FROM `s_premium_dispatch` WHERE `name` = 'Sonderaufschlag');
+            
+            DELETE FROM `s_premium_dispatch`
+            WHERE name = 'Sonderaufschlag'
+EOD;
+        $dbal->query($sql);
+
+        $sql = <<<"EOD"
+            DELETE FROM `s_premium_dispatch_countries`
+            WHERE dispatchID = '@dispatchId'
+EOD;
+        $dbal->query($sql);
+
+        $sql = <<<"EOD"
+            DELETE FROM `s_premium_dispatch_paymentmeans`
+            WHERE dispatchID = '@dispatchId'
+EOD;
+        $dbal->query($sql);
+    }
+
+
+    /**
      * @BeforeFeature @checkoutadressmanagement
      */
     public static function createUserForCheckoutAddressManagementTest()
