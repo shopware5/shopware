@@ -22,6 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\BasketSignature\BasketPersister;
+
 /**
  * Shopware Payment Controller
  *
@@ -119,6 +121,26 @@ abstract class Shopware_Controllers_Frontend_Payment extends Enlight_Controller_
         }
 
         return $orderNumber;
+    }
+
+    /**
+     * @param $signature
+     * @throws Exception
+     */
+    protected function loadBasketFromSignature($signature)
+    {
+        /** @var BasketPersister $persister */
+        $persister = $this->get('basket_persister');
+        $data = $persister->load($signature);
+
+        if (!$data) {
+            throw new Exception(sprintf('Basket for signature %s not found', $signature));
+        }
+
+        $persister->delete($signature);
+        /** @var Enlight_Components_Session_Namespace $session */
+        $session = $this->get('session');
+        $session->offsetSet('sOrderVariables', new ArrayObject($data, ArrayObject::ARRAY_AS_PROPS));
     }
 
     /**

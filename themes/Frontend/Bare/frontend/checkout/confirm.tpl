@@ -67,6 +67,7 @@
 
     {block name='frontend_checkout_confirm_form'}
         <form id="confirm--form" method="post" action="{if $sPayment.embediframe || $sPayment.action}{url action='payment'}{else}{url action='finish'}{/if}">
+            <input type="hidden" name="__basket_signature" value="{$__basket_signature}"/>
 
             {* AGB and Revocation *}
             {block name='frontend_checkout_confirm_tos_panel'}
