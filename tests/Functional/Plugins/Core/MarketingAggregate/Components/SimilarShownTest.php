@@ -45,8 +45,8 @@ class SimilarShownTest extends AbstractMarketing
     {
         $this->Db()->query("DELETE FROM s_emarketing_lastarticles");
         $statement = $this->Db()->prepare("
-            INSERT INTO s_emarketing_lastarticles (img, name, articleID, sessionID, time, userID, shopID)
-            VALUES(:img, :name, :articleID, :sessionID, :time, :userID, :shopID)"
+            INSERT INTO s_emarketing_lastarticles (articleID, sessionID, time, userID, shopID)
+            VALUES(:articleID, :sessionID, :time, :userID, :shopID)"
         );
         foreach ($this->getDemoData() as $data) {
             $statement->execute($data);
