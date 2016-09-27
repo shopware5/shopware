@@ -7,6 +7,7 @@ This changelog references changes done in Shopware 5.2 patch versions.
 [View all changes from v5.2.7...v5.2.8](https://github.com/shopware/shopware/compare/v5.2.7...v5.2.8)
 
 * Fixed a PHP 7 fatal error in the SVG rendering of mPDF
+* Added missing update of the order details' order number, when converting a cancelled order to a *normal* order in `Shopware_Controllers_Backend_CanceledOrder::convertOrderAction()`
 
 ## 5.2.7
 

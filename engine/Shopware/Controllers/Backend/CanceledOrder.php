@@ -97,9 +97,12 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         // Set new ordernumber
         $numberModel->setNumber($newOrderNumber);
 
-        // set new ordernumber to the order
+        // Set new ordernumber to the order and its details
         $orderModel = Shopware()->Models()->find('Shopware\Models\Order\Order', $orderId);
         $orderModel->setNumber($newOrderNumber);
+        foreach ($orderModel->getDetails() as $detailModel) {
+            $detailModel->setNumber($newOrderNumber);
+        }
 
         // refreshes the in stock correctly for this order if the user confirmed it
         if ((bool) $this->Request()->getParam('refreshInStock')) {
