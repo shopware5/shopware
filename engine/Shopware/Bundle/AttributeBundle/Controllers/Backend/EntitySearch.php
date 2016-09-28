@@ -67,6 +67,12 @@ class Shopware_Controllers_Backend_EntitySearch extends Shopware_Controllers_Bac
         $criteria->term = $request->getParam('query', null);
         $criteria->sortings = $request->getParam('sorts', []);
         $criteria->conditions = $request->getParam('filters', []);
+
+        $filters = $request->getParam('filter', []);
+        if (empty($criteria->conditions) && !empty($filters)) {
+            $criteria->conditions = $filters;
+        }
+
         $criteria->params = $request->getParams();
 
         if (!empty($criteria->ids)) {
