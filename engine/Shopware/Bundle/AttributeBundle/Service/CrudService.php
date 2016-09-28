@@ -140,7 +140,6 @@ class CrudService
 
         if (!$config) {
             $this->createAttribute($table, $columnName, $unifiedType, $data, $defaultValue);
-            return;
         }
 
         $newColumnName = $newColumnName?: $columnName;
