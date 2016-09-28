@@ -24,6 +24,7 @@
 namespace Shopware\Bundle\ESIndexingBundle\Product;
 
 use Shopware\Bundle\ESIndexingBundle\LastIdQuery;
+use Shopware\Bundle\ESIndexingBundle\ProductIndexerInterface;
 use Shopware\Bundle\ESIndexingBundle\Struct\Backlog;
 use Shopware\Bundle\ESIndexingBundle\Struct\ShopIndex;
 use Shopware\Bundle\ESIndexingBundle\Subscriber\ORMBacklogSubscriber;
@@ -45,11 +46,11 @@ class ProductSynchronizer implements SynchronizerInterface
 
     /**
      * @param ProductQueryFactoryInterface $queryFactory
-     * @param ProductIndexer $productIndexer
+     * @param ProductIndexerInterface $productIndexer
      */
     public function __construct(
         ProductQueryFactoryInterface $queryFactory,
-        ProductIndexer $productIndexer
+        ProductIndexerInterface $productIndexer
     ) {
         $this->productIndexer = $productIndexer;
         $this->queryFactory = $queryFactory;
