@@ -253,8 +253,8 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
 
         $sql = "SELECT s_emarketing_vouchers.id, s_emarketing_vouchers.description, s_emarketing_vouchers.value, s_emarketing_vouchers.percental
             FROM s_emarketing_vouchers
-            WHERE  s_emarketing_vouchers.modus = 1 AND (s_emarketing_vouchers.valid_to >= now() OR s_emarketing_vouchers.valid_to is NULL)
-            AND (s_emarketing_vouchers.valid_from <= now() OR s_emarketing_vouchers.valid_from is NULL)
+            WHERE  s_emarketing_vouchers.modus = 1 AND (s_emarketing_vouchers.valid_to >= CURDATE() OR s_emarketing_vouchers.valid_to is NULL)
+            AND (s_emarketing_vouchers.valid_from <= CURDATE() OR s_emarketing_vouchers.valid_from is NULL)
             AND (
                 SELECT s_emarketing_voucher_codes.id
                 FROM s_emarketing_voucher_codes
@@ -286,7 +286,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
                 ->leftJoin('voucher.codes', 'voucherCodes')
                 ->where('voucher.modus = ?1')
                 ->andWhere('voucher.id = :voucherId')
-                ->andWhere('voucher.validTo >= CURRENT_TIMESTAMP() OR voucher.validTo is NULL')
+                ->andWhere('voucher.validTo >= CURRENT_DATE() OR voucher.validTo is NULL')
                 ->andWhere('voucherCodes.customerId is NULL')
                 ->andWhere('voucherCodes.cashed = 0')
                 ->setParameter(1, 1)
