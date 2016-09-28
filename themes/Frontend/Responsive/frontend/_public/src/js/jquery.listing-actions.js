@@ -488,9 +488,9 @@
          *
          * @returns {*}
          */
-        setCategoryParamsFromTopLocation: function() {
+        setCategoryParamsFromTopLocation: function () {
             var me = this,
-                urlParams = decodeURI(window.location.search).substr(1),
+                urlParams = window.location.search.substr(1),
                 categoryParams = me.setCategoryParamsFromUrlParams(urlParams);
 
             $.publish('plugin/swListingActions/onSetCategoryParamsFromData', [ me, categoryParams ]);
@@ -504,7 +504,7 @@
          * @param urlParamString
          * @returns {{}|*}
          */
-        setCategoryParamsFromUrlParams: function(urlParamString) {
+        setCategoryParamsFromUrlParams: function (urlParamString) {
             var me = this,
                 categoryParams,
                 params;
@@ -520,10 +520,13 @@
             categoryParams = me.categoryParams;
             params = urlParamString.split('&');
 
-            $.each(params, function(index, item) {
+            $.each(params, function (index, item) {
                 var param = item.split('=');
 
-                param = $.map(param, function(val) { return decodeURIComponent(val); });
+                param = $.map(param, function (val) {
+                    val = val.replace(/\+/g, '%20');
+                    return decodeURIComponent(val);
+                });
 
                 if (param[1] == 'reset') {
                     delete categoryParams[param[0]];
@@ -531,7 +534,7 @@
                 } else if (me.propertyFieldNames.indexOf(param[0]) != -1) {
                     var properties = param[1].split('|');
 
-                    $.each(properties, function(index, property) {
+                    $.each(properties, function (index, property) {
                         categoryParams[me.opts.propertyPrefixChar + param[0] + me.opts.propertyPrefixChar + property] = property;
                     });
 
