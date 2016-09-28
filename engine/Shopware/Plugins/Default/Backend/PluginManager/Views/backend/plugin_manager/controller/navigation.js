@@ -51,7 +51,8 @@ Ext.define('Shopware.apps.PluginManager.controller.Navigation', {
         licencePage: 5,
         premiumPluginsPage: 6,
         expiredPluginsPage: 7,
-        connectIntroductionPage: 8
+        connectIntroductionPage: 8,
+        importExportTeaserPage: 9
     },
 
     animationSpeed: 150,
@@ -93,6 +94,7 @@ Ext.define('Shopware.apps.PluginManager.controller.Navigation', {
             'display-premium-plugins': me.displayPremiumPluginsPage,
             'display-expired-plugins': me.displayExpiredPluginsPage,
             'display-connect-introduction': me.displayConnectIntroductionPage,
+            'display-importexport-teaser': me.displayImportExportTeaserPage,
             scope: me
         });
 
@@ -263,6 +265,14 @@ Ext.define('Shopware.apps.PluginManager.controller.Navigation', {
         Shopware.app.Application.fireEvent('enable-connect-introduction-mode');
 
         me.switchView(me.cards.connectIntroductionPage);
+    },
+
+    displayImportExportTeaserPage: function() {
+        var me = this;
+
+        Shopware.app.Application.fireEvent('enable-importexport-teaser-mode');
+
+        me.switchView(me.cards.importExportTeaserPage);
     },
 
     displayPluginUpdatesPage: function () {
