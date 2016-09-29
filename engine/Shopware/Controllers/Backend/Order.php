@@ -710,6 +710,8 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         //check if the passed position data is a new position or an existing position.
         if (empty($id)) {
             $position = new Detail();
+            $attribute = new Shopware\Models\Attribute\OrderDetail();
+            $position->setAttribute($attribute);
             Shopware()->Models()->persist($position);
         } else {
             $detailRepository = Shopware()->Models()->getRepository('Shopware\Models\Order\Detail');
