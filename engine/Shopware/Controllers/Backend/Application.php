@@ -724,10 +724,13 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
         $builder->from($model, $association);
 
         if (strlen($search) > 0) {
+            $where = [];
+
             $fields = $this->getModelFields($model, $association);
             foreach ($fields as $field) {
-                $builder->orWhere($field['alias'] . ' LIKE :search');
+                $where[] = $field['alias'] . ' LIKE :search';
             }
+            $builder->andWhere(implode(' OR ', $where));
             $builder->setParameter('search', '%' . $search . '%');
         }
 
@@ -1062,13 +1065,12 @@ class Shopware_Controllers_Backend_Application extends Shopware_Controllers_Back
 
                 $conditions[] = array(
                     'property' => $field['alias'],
-                    'operator' => $condition['operator'],
+                    'operator' => $condition['operator']?: null,
                     'value' => $value,
                     'expression' => $condition['expression']
                 );
             }
         }
-
         return $conditions;
     }
 
