@@ -803,7 +803,6 @@ class sAdmin
         $sessions = array(
             's_order_basket'            => 'sessionID',
             's_user'                    => 'sessionID',
-            's_emarketing_lastarticles' => 'sessionID',
             's_order_comparisons'       => 'sessionID',
         );
 

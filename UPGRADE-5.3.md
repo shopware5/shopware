@@ -27,3 +27,10 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Deprecated `Shopware_Components_Convert_Csv`
 * Deprecated `Shopware_Components_Convert_Xml`
 * Deprecated `Shopware_Components_Convert_Excel`
+* Removed database columns `s_emarketing_lastarticles`.`articleName` and `s_emarketing_lastarticles`.`img`.
+* Removed plugin `LastArticle`, use `shopware.components.last_articles_subscriber` instead.
+* Changed `LastArticle` plugin config elements to be prefixed with `lastarticles_`. This includes `show`, `controller` and `time`.
+* Removed session key `sLastArticle`
+* Removed `sLastActiveArticle` from basket
+* Removed block `frontend_checkout_actions_link_last`
+* Removed snippet `frontend/checkout/actions/CheckoutActionsLinkLast`
