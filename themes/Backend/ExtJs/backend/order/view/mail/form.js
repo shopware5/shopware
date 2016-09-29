@@ -157,7 +157,7 @@ Ext.define('Shopware.apps.Order.view.mail.Form', {
     getFormItems: function() {
         var me = this;
 
-        return [
+        var fields = [
             {
                 xtype: 'textfield',
                 name: 'to',
@@ -167,14 +167,26 @@ Ext.define('Shopware.apps.Order.view.mail.Form', {
                 xtype: 'textfield',
                 name: 'subject',
                 fieldLabel: me.snippets.subject
-            },
-            {
+            }
+        ];
+
+        if (me.mail.get('isHtml')) {
+            fields.push({
+                xtype: 'tinymcefield',
+                name: 'contentHtml',
+                minHeight: 90,
+                flex: 1
+            });
+        } else {
+            fields.push({
                 xtype: 'textarea',
                 name: 'content',
                 minHeight: 90,
                 flex: 1
-            }
-        ];
+            });
+        }
+
+        return fields;
     }
 
 });

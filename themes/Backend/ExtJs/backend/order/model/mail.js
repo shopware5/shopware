@@ -49,11 +49,13 @@ Ext.define('Shopware.apps.Order.model.Mail', {
 		//{block name="backend/order/model/mail/fields"}{/block}
         { name: 'orderId', type:'int' },
         { name: 'content', type:'string' },
+        { name: 'contentHtml', type:'string' },
         { name: 'subject', type:'string' },
         { name: 'to', type:'string' },
         { name: 'fromMail', type:'string' },
         { name: 'fromName', type:'string' },
-        { name: 'sent', type:'boolean' }
+        { name: 'sent', type:'boolean' },
+        { name: 'isHtml', type:'boolean' }
     ],
 
     /**

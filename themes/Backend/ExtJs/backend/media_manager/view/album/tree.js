@@ -88,6 +88,7 @@ Ext.define('Shopware.apps.MediaManager.view.album.Tree', {
         // Set column model and selection model
         me.columns = me.createColumns();
         me.selModel = Ext.create('Ext.selection.RowModel', {
+            allowDeselect: true,
             listeners: {
                 scope: me,
                 select: me.onUnlockDeleteBtn
@@ -113,6 +114,7 @@ Ext.define('Shopware.apps.MediaManager.view.album.Tree', {
             'editSettings',
             'addAlbum',
             'reload',
+            'refresh',
             'emptyTrash'
         );
 

@@ -56,7 +56,7 @@
 
                     {* Link to the built-in search *}
                     {block name="search_ajax_all_results_link"}
-                        <a href="{url controller="search"}?sSearch={$sSearchRequest.sSearch}" class="search-result--link entry--all-results-link block">
+                        <a href="{url controller="search"}?sSearch={$sSearchRequest.sSearch|urlencode}" class="search-result--link entry--all-results-link block">
                             <i class="icon--arrow-right"></i>
                             {s name="SearchAjaxLinkAllResults"}{/s}
                         </a>

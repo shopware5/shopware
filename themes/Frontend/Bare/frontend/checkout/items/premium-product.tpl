@@ -28,7 +28,7 @@
                                             {if $sBasketItem.image.description}
                                                 {$desc = $sBasketItem.image.description|escape}
                                             {/if}
-                                            <img src="{$sBasketItem.image.src.2}" alt="{$desc}" title="{$desc|truncate:25:""}" />
+                                            <img src="{$sBasketItem.image.src.2}" alt="{$desc}" title="{$desc|truncate:160}" />
                                             <span class="cart--badge">
                                                 <span>{s name="CartItemInfoFree"}{/s}</span>
                                             </span>
@@ -95,8 +95,10 @@
     {* Remove product from basket *}
     {block name='frontend_checkout_cart_item_premium_delete_article'}
         <div class="panel--td column--actions block">
-            <form action="{url action='deleteArticle' sDelete=$sBasketItem.id sTargetAction=$sTargetAction}" method="post">
-                <button type="submit" class="btn is--small column--actions-link" title="{"{s name='CartItemLinkDelete '}{/s}"|escape}">
+            <form action="{url action='deleteArticle' sDelete=$sBasketItem.id sTargetAction=$sTargetAction}"
+                  method="post">
+                <button type="submit" class="btn is--small column--actions-link"
+                        title="{"{s name='CartItemLinkDelete'}{/s}"|escape}">
                     <i class="icon--cross"></i>
                 </button>
             </form>

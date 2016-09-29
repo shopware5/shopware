@@ -266,7 +266,18 @@ class Enlight_Components_Cron_Manager
             }
         } catch (Exception $e) {
             $job->setData((array('error' => $e->getMessage())));
-            $this->disableJob($job);
+
+            if($job->getDisableOnError()) {
+                $this->disableJob($job);
+            } else {
+                $this->endJob($job);
+            }
+
+            $this->eventManager->notify('Shopware_CronJob_Error_' . $action, array(
+                'subject' => $this,
+                'job'     => $job,
+            ));
+
             throw $e;
         }
     }

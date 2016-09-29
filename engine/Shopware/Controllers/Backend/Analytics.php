@@ -1133,6 +1133,6 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     {
         return array_slice($array, 0, $position, true) +
                 $insertValue +
-                array_slice($array, 3, count($array) - 1, true);
+                array_slice($array, $position , count($array) , true);
     }
 }

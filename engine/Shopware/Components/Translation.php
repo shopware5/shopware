@@ -460,10 +460,10 @@ class Shopware_Components_Translation
         }
 
         $data = array_merge($data, [
-            'name' => (string)$data['txtArtikel'],
-            'keywords' => (string)$data['txtkeywords'],
-            'description' => (string)$data['txtshortdescription'],
-            'description_long' => (string)$data['txtlangbeschreibung'],
+            'name' => (isset($data['txtArtikel'])) ? (string)$data['txtArtikel'] : '',
+            'keywords' => (isset($data['txtkeywords'])) ? (string)$data['txtkeywords'] : '',
+            'description' => (isset($data['txtshortdescription'])) ? (string)$data['txtshortdescription'] : '',
+            'description_long' => (isset($data['txtlangbeschreibung'])) ? (string)$data['txtlangbeschreibung'] : '',
         ]);
 
         $schemaManager = Shopware()->Container()->get('dbal_connection')->getSchemaManager();

@@ -333,12 +333,12 @@ Ext.onReady(function() {
      * and must be ported manually when ExtJs is updated
      */
     Ext.define('Ext.app.de.Application', {
-        override:'Ext.app.Application',
+        override: 'Ext.app.Application',
 
         loadingMessage: "[0] wird geladen ..."
     });
     Ext.define('Shopware.apps.Base.view.element.de.BooleanSelect', {
-        override:'Shopware.apps.Base.view.element.BooleanSelect',
+        override: 'Shopware.apps.Base.view.element.BooleanSelect',
 
         store: [
             ["", 'Vererbt'],
@@ -347,12 +347,12 @@ Ext.onReady(function() {
         ]
     });
     Ext.define('Shopware.MediaManager.de.MediaSelection', {
-        override:'Shopware.MediaManager.MediaSelection',
+        override: 'Shopware.MediaManager.MediaSelection',
 
         buttonText: 'Datei(en) auswählen...'
     });
     Ext.define('Shopware.container.de.Viewport', {
-        override:'Shopware.container.Viewport',
+        override: 'Shopware.container.Viewport',
 
         snippets: {
             title: 'Desktop erstellen',
@@ -360,12 +360,12 @@ Ext.onReady(function() {
         }
     });
     Ext.define('Shopware.DataView.de.GooglePreview', {
-        override:'Shopware.DataView.GooglePreview',
+        override: 'Shopware.DataView.GooglePreview',
 
         refreshButtonText: 'Aktualisieren'
     });
     Ext.define('Shopware.form.field.de.ArticleSearch', {
-        override:'Shopware.form.field.ArticleSearch',
+        override: 'Shopware.form.field.ArticleSearch',
 
         confirmButtonText: 'Zugeordneten Artikel speichern',
         cancelButtonText: 'Reset-Artikel',
@@ -400,12 +400,12 @@ Ext.onReady(function() {
         processCanceledText: 'Prozess wurde an Position [0] von [1] unterbrochen'
     });
     Ext.define('Shopware.form.field.de.TinyMCE', {
-        override:'Shopware.form.field.TinyMCE',
+        override: 'Shopware.form.field.TinyMCE',
 
         noSourceErrorText: "Die Quelldateien der TinyMCE-Editor sind nicht in das Projekt aufgenommen"
     });
     Ext.define('Shopware.form.de.PluginPanel', {
-        override:'Shopware.form.PluginPanel',
+        override: 'Shopware.form.PluginPanel',
 
         noFormIdConfiguredErrorText: 'Es wurde keine FormId an die Komponente übergeben',
         formNotLoadedErrorText: "Das Formular konnte nicht erfolgreich geladen werden",
@@ -420,7 +420,7 @@ Ext.onReady(function() {
         }
     });
     Ext.define('Shopware.global.de.ErrorReporter', {
-        override:'Shopware.global.ErrorReporter',
+        override: 'Shopware.global.ErrorReporter',
 
         snippets: {
             general: {
@@ -461,7 +461,7 @@ Ext.onReady(function() {
         }
     });
     Ext.define('Shopware.window.plugin.de.Hud', {
-        override:'Shopware.window.plugin.Hud',
+        override: 'Shopware.window.plugin.Hud',
 
         hudTitle: "Elemente-Bibliothek",
         hudStoreErrorMessage: function(className) {
@@ -469,20 +469,20 @@ Ext.onReady(function() {
         }
     });
     Ext.apply(Ext.form.VTypes, {
-        passwordText : "Das Feld Passwort ist nicht gültig"
+        passwordText: "Das Feld Passwort ist nicht gültig"
     });
     Ext.apply(Ext.form.field.VTypes, {
         missingValidationErrorText: 'Die vType Validierung braucht eine ValidationErrorMsg-Eigenschaft'
     });
     Ext.define('Ext.grid.de.RowEditor', {
-        override:'Ext.grid.RowEditor',
+        override: 'Ext.grid.RowEditor',
         saveBtnText: 'Aktualisieren',
         cancelBtnText: 'Abbrechen',
         errorsText: 'Fehler',
         dirtyText: 'Sie müssen die Änderungen übernehmen oder abbrechen'
     });
     Ext.define('Ext.util.de.FileUpload', {
-        override:'Ext.util.FileUpload',
+        override: 'Ext.util.FileUpload',
         snippets: {
             uploadReady: 'Dateien hochgeladen',
             filesFrom: 'von',
@@ -573,6 +573,10 @@ Ext.onReady(function() {
             displayImageLayout: {
                 label: 'Großes Bild',
                 description: 'Das Layout der Produkt-Box zeigt ein besonders großes Produkt-Bild.'
+            },
+            displayListLayout: {
+                label: 'Produktliste',
+                description: 'Das Layout der Produkt-Box zeigt detaillierte Informationen an, jedoch nur ein Produkt pro Zeile.'
             }
         }
     });
@@ -586,7 +590,7 @@ Ext.onReady(function() {
             expired_soon_subscription_warning: 'Es laufen [0] Plugin Subscription(s) aus. <a target="_blank" href="https://account.shopware.com">Account aufrufen</a><br /><br /><b>Bald abgelaufene Plugins:</b><br />[1]',
             expired_soon_subscription_days_warning: ' Tage',
             invalid_licence: 'Lizenz von [0] Plugin(s) sind ungültig. <a target="_blank" href="https://account.shopware.com">Account aufrufen</a><br /><br /><b>Ungültige Lizenzen:</b><br />[1]',
-            shop_license_upgrade : 'Das Lizenzupgrade für den Shop wurde noch nicht ausgeführt. <a target="_blank" href="https://account.shopware.com">Account aufrufen</a>',
+            shop_license_upgrade: 'Das Lizenzupgrade für den Shop wurde noch nicht ausgeführt. <a target="_blank" href="https://account.shopware.com">Account aufrufen</a>',
             no_license: 'Möglicherweise sind Sie Opfer einer Produktfälschung geworden. <a target="_blank" href="https://account.shopware.com">Account aufrufen</a><br /><br /><b>Für die folgenden Plugins liegt keine gültige Lizenz vor:</b><br />[1]',
             expiring_license: 'Ablaufende Lizenz(en)',
             expired_license: 'Abgelaufene Lizenz(en)',

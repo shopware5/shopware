@@ -86,7 +86,7 @@ class Shopware_Plugins_Core_CronBirthday_Bootstrap extends Shopware_Components_P
         $sql = '
             SELECT evc.voucherID
             FROM s_emarketing_vouchers ev, s_emarketing_voucher_codes evc
-            WHERE  modus = 1 AND (valid_to >= now() OR valid_to IS NULL)
+            WHERE  modus = 1 AND (valid_to >= CURDATE() OR valid_to IS NULL)
             AND evc.voucherID = ev.id
             AND evc.userID IS NULL
             AND evc.cashed = 0

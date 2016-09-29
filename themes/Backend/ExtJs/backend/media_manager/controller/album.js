@@ -89,7 +89,8 @@ Ext.define('Shopware.apps.MediaManager.controller.Album', {
                 reload: me.onReloadAlbums,
                 editSettings: me.onOpenSettingsWindow,
                 itemmove: me.onMoveAlbum,
-                emptyTrash: me.onEmptyTrash
+                emptyTrash: me.onEmptyTrash,
+                refresh: me.refreshAlbumTree
             },
             'mediamanager-media-view html5fileupload': {
                 uploadReady: me.onReload
@@ -106,6 +107,44 @@ Ext.define('Shopware.apps.MediaManager.controller.Album', {
         me.callParent(arguments);
     },
 
+    refreshAlbumTree: function(tree) {
+        var store = tree.getStore(),
+            rootNode = store.getRootNode(),
+            selectionModel = tree.getSelectionModel(),
+            depth = -1,
+            lastSelectedNode,
+            parentPath,
+            path = '';
+
+        if (selectionModel.hasSelection()) {
+            lastSelectedNode = selectionModel.getSelection()[0].get('id');
+        }
+        rootNode.cascadeBy(function(node) {
+            if (node.isExpanded() && node.getDepth() > depth) {
+                path = node.getPath();
+                parentPath = node.parentNode ? node.parentNode.getPath() : path;
+                depth = node.getDepth();
+            }
+        });
+
+        rootNode.removeAll(false);
+        tree.setLoading(true);
+        store.load({
+            callback: function() {
+                tree.setLoading(false);
+                tree.expandPath(path || parentPath, rootNode.idProperty, '/', function(success, lastNode) {
+                    var node = null;
+                    if (lastSelectedNode) {
+                        node = rootNode.findChild('id', lastSelectedNode, true);
+                    }
+                    if (node && !node.isRoot()) {
+                        tree.getSelectionModel().select(node);
+                    }
+                });
+            }
+        });
+    },
+
     /**
      * Event listener method which fired when the user uploads files
      * and the upload completed. Refreshs the tree and select the last
@@ -113,27 +152,26 @@ Ext.define('Shopware.apps.MediaManager.controller.Album', {
      */
     onReload: function () {
         var me = this,
-            tree = this.getAlbumTree(),
-            store = this.getStore('Album'),
-            selModel = tree.getSelectionModel(),
-            selected = tree.selModel.selected.items[0];
+            tree = me.getAlbumTree();
 
-        var rootNode = tree.getRootNode();
-        rootNode.removeAll(false);
+        me.refreshAlbumTree(tree);
+    },
 
-        tree.setLoading(true);
-        store.load({
-            callback: function () {
+    /**
+     * Event listener method which fires when the user
+     * clicks on the "reload albums"-button in the container
+     * context menu.
+     *
+     * Reloads the associated Ext.data.Tree.Store
+     *
+     * @event reload
+     * @return void
+     */
+    onReloadAlbums: function () {
+        var me = this,
+            tree = me.getAlbumTree();
 
-                if (selected) {
-                    var lastSelected = store.getNodeById(selected.data.id);
-                    me.expandParent(lastSelected);
-                    selModel.select(lastSelected);
-                }
-                tree.setLoading(false);
-
-            }
-        });
+        me.refreshAlbumTree(tree);
     },
 
     expandParent: function (node) {
@@ -146,39 +184,6 @@ Ext.define('Shopware.apps.MediaManager.controller.Album', {
             return;
         }
         me.expandParent(node.parentNode);
-    },
-
-    /**
-     * Event listener method which fires when the user
-     * clicks on the "remove album"-button below the tree.
-     *
-     * @return void
-     */
-    onDeleteAlbumButton: function () {
-        var me = this,
-            tree = me.getAlbumTree(),
-            store = tree.store,
-            selected = tree.selModel.selected.items[0];
-
-        if (!selected) {
-            return;
-        }
-
-        //delete only leaf albums
-        if (selected.data.leaf) {
-            selected.set('albumID', selected.get('id'));
-            tree.setLoading(true);
-            selected.destroy({
-                callback: function () {
-                    var rootNode = tree.getRootNode();
-                    rootNode.removeAll(false);
-
-                    store.load();
-                    tree.setLoading(false);
-                }
-            })
-
-        }
     },
 
     /**
@@ -213,18 +218,9 @@ Ext.define('Shopware.apps.MediaManager.controller.Album', {
             return;
         }
 
-        tree.setLoading(true);
         store.getProxy().extraParams = { albumFilter: searchString };
 
-        var rootNode = tree.getRootNode();
-        rootNode.removeAll(false);
-
-        //don't use store.clearFilter(), clearFilter() send an ajax request to reload the store.
-        store.load({
-            callback: function () {
-                tree.setLoading(false);
-            }
-        });
+        me.refreshAlbumTree(tree);
     },
 
     /**
@@ -280,7 +276,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Album', {
      * @event click
      * @param [object] btn - pressed Ext.button.Button
      */
-    onAddAlbum: function (btn) {
+    onAddAlbum: function(btn) {
         var win = btn.up('window'),
             form = win.down('form'),
             values = form.getForm().getValues(),
@@ -292,17 +288,13 @@ Ext.define('Shopware.apps.MediaManager.controller.Album', {
         tree.setLoading(true);
 
         model.save({
-            callback: function () {
-                var rootNode = tree.getRootNode();
-                rootNode.removeAll(false);
-
+            callback: function(record) {
                 if (win.closeAction == 'destroy') {
                     win.destroy();
                 } else {
                     win.close()
                 }
-                store.load();
-                tree.setLoading(false);
+                me.refreshAlbumTree(tree);
             }
         })
     },
@@ -339,20 +331,43 @@ Ext.define('Shopware.apps.MediaManager.controller.Album', {
      */
     onDeleteAlbum: function (scope, view, record) {
         var me = this,
-            tree = me.getAlbumTree(),
-            store = tree.store;
+            tree = me.getAlbumTree();
 
         record.set('albumID', record.get('id'));
+        me.deleteAlbum(record, tree);
+    },
+
+    /**
+     * Event listener method which fires when the user
+     * clicks on the "remove album"-button below the tree.
+     *
+     * @return void
+     */
+    onDeleteAlbumButton: function () {
+        var me = this,
+            tree = me.getAlbumTree(),
+            selected;
+
+        if (!tree.getSelectionModel().hasSelection()) {
+            return;
+        }
+        selected = tree.getSelectionModel().getSelection()[0];
+        //delete only leaf albums
+        if (selected.isLeaf()) {
+            selected.set('albumID', selected.get('id'));
+            me.deleteAlbum(selected, tree);
+        }
+    },
+
+    deleteAlbum: function(record, tree) {
+        var me = this;
+
         tree.setLoading(true);
         record.destroy({
-            callback: function () {
-                var rootNode = tree.getRootNode();
-                rootNode.removeAll(false);
-
-                store.load();
-                tree.setLoading(false);
+            callback: function() {
+                me.refreshAlbumTree(tree);
             }
-        })
+        });
     },
 
     /**
@@ -385,32 +400,6 @@ Ext.define('Shopware.apps.MediaManager.controller.Album', {
                     }
                 }
             });
-        });
-    },
-
-    /**
-     * Event listener method which fires when the user
-     * clicks on the "reload albums"-button in the container
-     * context menu.
-     *
-     * Reloads the associated Ext.data.Tree.Store
-     *
-     * @event reload
-     * @return void
-     */
-    onReloadAlbums: function () {
-        var me = this,
-            tree = me.getAlbumTree(),
-            store = tree.store;
-
-        var rootNode = tree.getRootNode();
-        rootNode.removeAll(false);
-
-        tree.setLoading(true);
-        store.load({
-            callback: function () {
-                tree.setLoading(false);
-            }
         });
     },
 
@@ -468,7 +457,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Album', {
                 }
 
                 win.close();
-                me.getAlbumTree().fireEvent('reload');
+                me.refreshAlbumTree(me.getAlbumTree());
             }
         });
     },

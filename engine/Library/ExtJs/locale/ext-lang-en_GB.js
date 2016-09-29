@@ -547,6 +547,10 @@ Ext.onReady(function() {
             displayImageLayout: {
                 label: 'Big image',
                 description: 'The layout of the product box is based on a big image of the product.'
+            },
+            displayListLayout: {
+                label: 'Product list',
+                description: 'The layout of the product box will show very detailed information but only one product in a row.'
             }
         }
     });
