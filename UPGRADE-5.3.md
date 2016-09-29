@@ -37,3 +37,12 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Captchas are now configurable via backend
 * You can now create own captcha modules. See `Shopware\Components\Captcha`.
 * Removed `<meta name="fragment" content="!">` and `hasEscapedFragment`
+* Refactored orders backend listing queries
+    * Added `\Shopware\Models\Order\Repository::getList`
+    * Added `\Shopware\Models\Order\Repository::search`
+    * Added `\Shopware\Models\Order\Repository::getDocuments`
+    * Added `\Shopware\Models\Order\Repository::getDetails`
+    * Added `\Shopware\Models\Order\Repository::getPayments`
+    * Removed `\Shopware\Models\Order\Repository::getBackendOrdersQueryBuilder`
+    * Removed `\Shopware\Models\Order\Repository::getBackendOrdersQuery`
+    * Removed `\Shopware\Models\Order\Repository::getBackendAdditionalOrderDataQuery`

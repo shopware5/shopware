@@ -78,6 +78,8 @@ Ext.define('Shopware.apps.Order.view.list.Filter', {
         empty: '{s name=filter/empty}Display all{/s}',
         article: '{s name=filter/article}Article{/s}',
         partner: '{s name=filter/partner}Partner{/s}',
+        shipping: '{s name=filter/shipping}Shipping country{/s}',
+        billing: '{s name=filter/billing}Billing country{/s}',
         document: {
             title: '{s name=document/title}Documents{/s}',
             date: '{s name=document/date}Date{/s}',
@@ -171,7 +173,9 @@ Ext.define('Shopware.apps.Order.view.list.Filter', {
                 me.createCustomerGroupField(),
                 me.createArticleSearch(),
                 me.createShopField(),
-                me.createPartnerField()
+                me.createPartnerField(),
+                me.createDeliveryCountrySelection(),
+                me.createBillingCountrySelection()
             ]
         });
         return me.filterForm;
@@ -333,6 +337,31 @@ Ext.define('Shopware.apps.Order.view.list.Filter', {
             fieldLabel: me.snippets.partner
         });
     },
+
+    createDeliveryCountrySelection: function() {
+        var selectionFactory = Ext.create('Shopware.attribute.SelectionFactory', {});
+        return Ext.create('Ext.form.field.ComboBox', {
+            name: 'shipping.countryId',
+            store: selectionFactory.createEntitySearchStore("Shopware\\Models\\Country\\Country"),
+            valueField: 'id',
+            queryMode: 'remote',
+            displayField: 'name',
+            fieldLabel: this.snippets.shipping
+        });
+    },
+
+    createBillingCountrySelection: function() {
+        var selectionFactory = Ext.create('Shopware.attribute.SelectionFactory', {});
+        return Ext.create('Ext.form.field.ComboBox', {
+            name: 'billing.countryId',
+            store: selectionFactory.createEntitySearchStore("Shopware\\Models\\Country\\Country"),
+            valueField: 'id',
+            queryMode: 'remote',
+            displayField: 'name',
+            fieldLabel: this.snippets.billing
+        });
+    },
+
 
     /**
      * Creates the "reset filters" and "perform filters" button
