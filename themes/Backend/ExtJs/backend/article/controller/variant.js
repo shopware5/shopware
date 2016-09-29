@@ -1546,6 +1546,7 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
 
         record.getPrice().removeAll();
         record.getPrice().add(newPrice);
+        record.set('pseudoPrice', pseudoPrice);
         record.save();
     },
 

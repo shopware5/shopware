@@ -87,6 +87,19 @@ Ext.define('Shopware.apps.Article.model.Detail', {
             }
         },
         {
+            name: 'pseudoPrice',
+            type: 'float',
+            convert: function(value, record) {
+                if (value) {
+                    return value;
+                }
+                if (record && record.raw && record.raw.prices && record.raw.prices[0]) {
+                    return Ext.Number.toFixed(record.raw.prices[0].pseudoPrice, 2);
+                }
+                return 0;
+            }
+        },
+        {
             name: 'standard',
             type: 'boolean',
             convert: function(value, record) {
