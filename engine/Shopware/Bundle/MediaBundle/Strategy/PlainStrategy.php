@@ -39,7 +39,7 @@ class PlainStrategy implements StrategyInterface
         $path = str_replace("//", "/", $path);
 
         // remove everything before /media/...
-        preg_match("/.*((media\/(?:archive|image|music|pdf|temp|unknown|video)(?:\/thumbnail)?).*\/(.*))/", $path, $matches);
+        preg_match("/.*((media\/(?:archive|image|music|pdf|temp|unknown|video)(?:\/thumbnail)?).*\/((.+)\.(.+))))/", $path, $matches);
 
         if (!empty($matches)) {
             return $matches[2] . "/" .$matches[3];
@@ -53,7 +53,7 @@ class PlainStrategy implements StrategyInterface
      */
     public function encode($path)
     {
-        preg_match("/.*((media\/(?:archive|image|music|pdf|temp|unknown|video)(?:\/thumbnail)?).*\/(.*))/", $path, $matches);
+        preg_match("/.*((media\/(?:archive|image|music|pdf|temp|unknown|video)(?:\/thumbnail)?).*\/((.+)\.(.+))))/", $path, $matches);
 
         if (!empty($matches)) {
             $path = $matches[2] . "/" .$matches[3];
