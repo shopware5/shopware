@@ -41,6 +41,7 @@ use Shopware\Components\DependencyInjection\Compiler\EventSubscriberCompilerPass
 use Shopware\Components\ConfigLoader;
 use Shopware\Components\DependencyInjection\Container;
 use Shopware\Components\Plugin;
+use Shopware\Components\Theme\Compiler;
 use Symfony\Component\ClassLoader\Psr4ClassLoader;
 use Symfony\Component\Config\ConfigCache;
 use Symfony\Component\Config\FileLocator;

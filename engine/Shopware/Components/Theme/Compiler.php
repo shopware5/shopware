@@ -24,9 +24,13 @@
 
 namespace Shopware\Components\Theme;
 
+use Symfony\Component\Finder\Finder;
+use Symfony\Component\Finder\SplFileInfo as File;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Components\Theme\Compressor\Js;
+use Shopware\Components\Plugin;
+use Shopware\Components\DependencyInjection\Container;
 use Shopware\Models\Shop as Shop;
 
 /**
@@ -81,6 +85,11 @@ class Compiler
     private $timestampPersistor;
 
     /**
+     * @var Container
+     */
+    private $container;
+
+    /**
      * @param $rootDir
      * @param LessCompiler $compiler
      * @param PathResolver $pathResolver
@@ -89,6 +98,7 @@ class Compiler
      * @param Js $jsCompressor
      * @param \Enlight_Event_EventManager $eventManager
      * @param TimestampPersistor $timestampPersistor
+     * @param Container $container
      */
     public function __construct(
         $rootDir,
@@ -98,7 +108,8 @@ class Compiler
         Service $service,
         Js $jsCompressor,
         \Enlight_Event_EventManager $eventManager,
-        TimestampPersistor $timestampPersistor
+        TimestampPersistor $timestampPersistor,
+        Container $container
     ) {
         $this->rootDir = $rootDir;
         $this->compiler = $compiler;
@@ -108,6 +119,7 @@ class Compiler
         $this->pathResolver = $pathResolver;
         $this->jsCompressor = $jsCompressor;
         $this->timestampPersistor = $timestampPersistor;
+        $this->container = $container;
     }
 
     /**
@@ -255,6 +267,37 @@ class Compiler
 
         $file->fwrite($content);
         $file->flock(LOCK_UN);   // release the lock
+    }
+
+    /**
+     * @param string $directory
+     * @param string $type
+     * @return ArrayCollection
+     */
+    private function collectResourceFiles($directory, $type)
+    {
+        $files = new ArrayCollection();
+
+        if (empty($directory)|| empty($type)) {
+            return $files;
+        }
+
+        $type = strtolower(trim($type));
+        $directory = implode(DIRECTORY_SEPARATOR, [rtrim($directory, '\\/'), 'Resources', 'frontend', $type]);
+
+        if (!is_dir($directory)) {
+            return $files;
+        }
+
+        $finder = new Finder();
+        $finder->files()->name('*.' . $type)->in($directory);
+
+        /** @var File $file */
+        foreach ($finder as $file) {
+            $files->add($file->getRealPath());
+        }
+
+        return $files;
     }
 
     /**
@@ -422,6 +465,18 @@ class Compiler
     private function collectPluginJavascript(Shop\Shop $shop, Shop\Template $template)
     {
         $collection = new ArrayCollection();
+
+        foreach ($this->container->get('kernel')->getPlugins() as $plugin) {
+            if ($plugin instanceof Plugin && $plugin->isActive()) {
+                $files = $this->collectResourceFiles($plugin->getPath(), 'js');
+                if (is_array($files) || $files instanceof ArrayCollection) {
+                    foreach ($files as $filename) {
+                        $collection->add($filename);
+                    }
+                }
+            }
+        }
+
         $this->eventManager->collect(
             'Theme_Compiler_Collect_Plugin_Javascript',
             $collection,
@@ -496,6 +551,14 @@ class Compiler
     private function collectPluginLess(Shop\Template $template, Shop\Shop $shop)
     {
         $collection = new ArrayCollection();
+
+        foreach ($this->container->get('kernel')->getPlugins() as $plugin) {
+            if ($plugin instanceof Plugin && $plugin->isActive()) {
+                $files = $this->collectResourceFiles($plugin->getPath(), 'less');
+                $collection->add(new LessDefinition([], $files->toArray()));
+            }
+        }
+
         $this->eventManager->collect(
             'Theme_Compiler_Collect_Plugin_Less',
             $collection,
@@ -517,6 +580,18 @@ class Compiler
     private function collectPluginCss(Shop\Template $template, Shop\Shop $shop)
     {
         $collection = new ArrayCollection();
+
+        foreach ($this->container->get('kernel')->getPlugins() as $plugin) {
+            if ($plugin instanceof Plugin && $plugin->isActive()) {
+                $files = $this->collectResourceFiles($plugin->getPath(), 'css');
+                if (is_array($files) || $files instanceof ArrayCollection) {
+                    foreach ($files as $filename) {
+                        $collection->add($filename);
+                    }
+                }
+            }
+        }
+
         $this->eventManager->collect(
             'Theme_Compiler_Collect_Plugin_Css',
             $collection,
