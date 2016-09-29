@@ -132,7 +132,7 @@ Ext.define('Shopware.apps.Attributes.controller.Main', {
         var me = this;
         var window = me.getWindow();
 
-        window.setLoading('Überprüft ob Freitextfeldname schon vorhanden');
+        window.setLoading(true);
 
         newColumnName = record.get('columnName');
         me.getListing().getStore().remove(record);
@@ -142,6 +142,8 @@ Ext.define('Shopware.apps.Attributes.controller.Main', {
             return true;
         }
 
+        Shopware.Notification.createGrowlMessage('{s name="error_namecheck_title"}The name already exists{/s}',
+            '{s name="error_namecheck_message"}The Name already exists. Use an other name.{/s}');
         me.getListing().getStore().reload();
         window.setLoading(false);
         return false;
