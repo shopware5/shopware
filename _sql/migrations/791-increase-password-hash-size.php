@@ -1,6 +1,6 @@
 <?php
 
-class Migrations_Migration786 extends Shopware\Components\Migrations\AbstractMigration
+class Migrations_Migration791 extends Shopware\Components\Migrations\AbstractMigration
 {
     public function up($modus)
     {
