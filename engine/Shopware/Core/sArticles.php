@@ -762,16 +762,10 @@ class sArticles
             $context,
             $categoryId
         );
-
-        $searchResult = $this->productNumberSearch->search(
-            $criteria,
-            $context
-        );
-
+        
         $streamId = $this->checkProductStream($categoryId);
         if ($streamId !== null) {
 
-            //searchResult erweitern fehlt
             /** @var \Shopware\Components\ProductStream\CriteriaFactoryInterface $factory */
             $factory = Shopware()->Container()->get('shopware_product_stream.criteria_factory');
             $criteriaProductStream = $factory->createCriteria($request, $context);
@@ -783,6 +777,11 @@ class sArticles
 
             $searchResult = $this->productNumberSearch->search(
                 $criteriaProductStream,
+                $context
+            );
+        } else {
+            $searchResult = $this->productNumberSearch->search(
+                $criteria,
                 $context
             );
         }
