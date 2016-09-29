@@ -96,7 +96,7 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
             $mail->send();
         }
 
-        return count($order) . ' rating mails was sent.';
+        return count($orders) . ' rating mails were sent.';
     }
 
     /**
