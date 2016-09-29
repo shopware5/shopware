@@ -765,7 +765,7 @@ class sArticles
         
         $streamId = $this->checkProductStream($categoryId);
         if ($streamId !== null) {
-
+            
             /** @var \Shopware\Components\ProductStream\CriteriaFactoryInterface $factory */
             $factory = Shopware()->Container()->get('shopware_product_stream.criteria_factory');
             $criteriaProductStream = $factory->createCriteria($request, $context);
