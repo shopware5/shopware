@@ -267,7 +267,7 @@ class Enlight_Components_Cron_Manager
         } catch (Exception $e) {
             $job->setData((array('error' => $e->getMessage())));
 
-            if($job->getDisableOnError()) {
+            if ($job->getDisableOnError()) {
                 $this->disableJob($job);
             } else {
                 $this->endJob($job);
