@@ -768,6 +768,25 @@ class sArticles
             $context
         );
 
+        $streamId = $this->checkProductStream($categoryId);
+        if ($streamId !== null) {
+
+            //searchResult erweitern fehlt
+            /** @var \Shopware\Components\ProductStream\CriteriaFactoryInterface $factory */
+            $factory = Shopware()->Container()->get('shopware_product_stream.criteria_factory');
+            $criteriaProductStream = $factory->createCriteria($request, $context);
+            $criteriaProductStream->limit(null);
+
+            /** @var \Shopware\Components\ProductStream\RepositoryInterface $streamRepository */
+            $streamRepository = Shopware()->Container()->get('shopware_product_stream.repository');
+            $streamRepository->prepareCriteria($criteriaProductStream, $streamId);
+
+            $searchResult = $this->productNumberSearch->search(
+                $criteriaProductStream,
+                $context
+            );
+        }
+
         $navigation = $this->buildNavigation(
             $searchResult,
             $orderNumber,
@@ -778,6 +797,18 @@ class sArticles
         $navigation["currentListing"]["link"] = $this->buildCategoryLink($categoryId, $request);
 
         return $navigation;
+    }
+
+    /**
+     * @param int $categoryId
+     * @return boolean
+     */
+    private function checkProductStream($categoryId)
+    {
+        $streamId = $this->db->fetchRow("
+          SELECT stream_id FROM s_categories WHERE id=?
+        ", array($categoryId));
+        return $streamId['stream_id'];
     }
 
     /**
