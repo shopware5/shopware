@@ -357,31 +357,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
      */
     protected function getList($filter, $sort, $offset, $limit)
     {
-        if (empty($sort)) {
-            $sort = array(array('property' => 'orders.orderTime', 'direction' => 'DESC'));
-        } else {
-            switch ($sort[0]['property']) {
-                case 'customerEmail':
-                    $sort[0]['property'] = 'customer.email';
-                    break;
-                case 'customerName':
-                    $sort[0]['property'] = 'billing.company';
-                    array_splice($sort, 1, 0, [
-                        [
-                            'property' => 'billing.lastName',
-                            'direction' => $sort[0]['direction']
-                        ],
-                        [
-                            'property' => 'billing.firstName',
-                            'direction' => $sort[0]['direction']
-                        ]
-                    ]);
-                    break;
-                default:
-                    $sort[0]['property'] = 'orders.' . $sort[0]['property'];
-                    break;
-            }
-        }
+        $sort = $this->resolveSortParameter($sort);
 
         $query = $this->getRepository()->getBackendOrdersQuery($filter, $sort, $offset, $limit);
 
@@ -429,6 +405,46 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             'data' => $orders,
             'total' => $total
         );
+    }
+
+    /**
+     * @param array[] $sorts
+     * @return array[]
+     */
+    private function resolveSortParameter($sorts)
+    {
+        if (empty($sorts)) {
+            return [
+                ['property' => 'orders.orderTime', 'direction' => 'DESC']
+            ];
+        }
+
+        $resolved = [];
+        foreach ($sorts as $sort) {
+            $direction = $sort['direction']?: 'ASC';
+            switch (true) {
+                //custom sort field for customer email
+                case $sort['property'] == 'customerEmail':
+                    $resolved[] = ['property' => 'customer.email', 'direction' => $direction];
+                    break;
+
+                //custom sort field for customer name
+                case $sort['property'] == 'customerName':
+                    $resolved[] = ['property' => 'billing.lastName', 'direction' => $direction];
+                    $resolved[] = ['property' => 'billing.firstName', 'direction' => $direction];
+                    break;
+
+                //contains no sql prefix? add orders as default prefix
+                case strpos($sort['property'], '.') === false;
+                    $resolved[] = ['property' => 'orders.' . $sort['property'], 'direction' => $direction];
+                    break;
+
+                //already prefixed with an alias?
+                default:
+                    $resolved[] = $sort;
+            }
+        }
+        return $resolved;
     }
 
     /**
