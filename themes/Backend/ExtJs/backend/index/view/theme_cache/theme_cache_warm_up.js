@@ -61,16 +61,16 @@ Ext.define('Shopware.apps.Index.view.themeCache.ThemeCacheWarmUp', {
      * Define window height
      * @integer
      */
-    height: 360,
+    height: 390,
 
     /**
-     * Set vbox layout and stretch align to display the toolbar on top and the button container
-     * under the toolbar.
+     * Set anchor layout
      * @object
      */
-    layout: {
-        type: 'vbox',
-        align: 'stretch'
+    layout: 'anchor',
+
+    defaults: {
+        anchor: '100%'
     },
 
     /**
@@ -157,6 +157,7 @@ Ext.define('Shopware.apps.Index.view.themeCache.ThemeCacheWarmUp', {
         return [
             {
                 xtype: 'fieldset',
+                height: 230,
                 defaults: me.defaults,
                 title: me.snippets.infoTitle,
                 items: [
