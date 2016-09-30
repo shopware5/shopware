@@ -232,7 +232,7 @@ Ext.define('Shopware.apps.Customer.view.address.detail.Address', {
         store.pageSize = 25;
         store.filters.add({
             property: 'countryId',
-            operator: '=',
+            expression: '=',
             value: countryId
         });
     },
