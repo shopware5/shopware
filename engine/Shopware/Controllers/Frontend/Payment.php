@@ -22,7 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\BasketSignature\Basket;
 use Shopware\Components\BasketSignature\BasketPersister;
+use Shopware\Components\BasketSignature\BasketSignatureGeneratorInterface;
 
 /**
  * Shopware Payment Controller
@@ -124,8 +126,12 @@ abstract class Shopware_Controllers_Frontend_Payment extends Enlight_Controller_
     }
 
     /**
-     * @param $signature
-     * @throws Exception
+     * Loads the persisted basket identified by the given signature.
+     * Persisted basket will be removed from storage after loading.
+     * Converted ArrayObject for shopware session is already created and stored in session for following checkout processes.
+     *
+     * @param string $signature
+     * @return ArrayObject
      */
     protected function loadBasketFromSignature($signature)
     {
@@ -134,13 +140,78 @@ abstract class Shopware_Controllers_Frontend_Payment extends Enlight_Controller_
         $data = $persister->load($signature);
 
         if (!$data) {
-            throw new Exception(sprintf('Basket for signature %s not found', $signature));
+            throw new RuntimeException(sprintf('Basket for signature %s not found', $signature));
         }
 
         $persister->delete($signature);
-        /** @var Enlight_Components_Session_Namespace $session */
-        $session = $this->get('session');
-        $session->offsetSet('sOrderVariables', new ArrayObject($data, ArrayObject::ARRAY_AS_PROPS));
+
+        $basket = new ArrayObject($data, ArrayObject::ARRAY_AS_PROPS);
+        $this->get('session')->offsetSet('sOrderVariables', $basket);
+
+        return $basket;
+    }
+
+    /**
+     * @param string $signature
+     * @param ArrayObject $basket
+     * @throws RuntimeException if signature does not match with provided basket
+     */
+    protected function verifyBasketSignature($signature, ArrayObject $basket)
+    {
+        /** @var BasketSignatureGeneratorInterface $generator */
+        $generator = $this->get('basket_signature_generator');
+
+        $data = $basket->getArrayCopy();
+
+        $newSignature = $generator->generateSignature(
+            Basket::createFromSBasket($data['sBasket']),
+            $this->get('session')->get('sUserId')
+        );
+
+        if ($newSignature !== $signature) {
+            throw new RuntimeException('The given signature is not equal to the generated signature of the saved basket');
+        }
+    }
+
+    /**
+     * @param int $paymentId
+     * @param string $signature
+     * @param string $orderNumber
+     * @param string $transactionNumber
+     */
+    protected function sendSignatureIsInvalidNotificationMail($paymentId, $signature, $orderNumber, $transactionNumber)
+    {
+        /** @var Enlight_Components_Snippet_Namespace $snippets */
+        $snippets = $this->get('snippets')->getNamespace('frontend/payment/error_mail');
+
+        $subject = $snippets->get('InvalidBasketSignatureSubject');
+
+        /** @var \Doctrine\DBAL\Connection $dbalConnection */
+        $dbalConnection = $this->get('dbal_connection');
+        $query = $dbalConnection->createQueryBuilder();
+
+        $query->select('payment.name, payment.description')
+            ->from('s_core_paymentmeans', 'payment')
+            ->where('payment.id = :paymentId')
+            ->setParameter('paymentId', $paymentId);
+
+        $payment = $query->execute()->fetch();
+
+        $content = [];
+        $content[] = $snippets->get('InvalidBasketSignatureContent');
+        $content[] = sprintf($snippets->get('InvalidBasketSignaturePaymentMethod'), $payment['name'], $paymentId, $payment['description']);
+        $content[] = $snippets->get('InvalidBasketSignature') . $signature;
+        $content[] = $snippets->get('InvalidBasketSignatureOrderNumber'). $orderNumber;
+        $content[] = $snippets->get('InvalidBasketSignatureTransactionNumber'). $transactionNumber;
+
+        $content = implode("<br>", $content);
+
+        /** @var Enlight_Components_Mail $mail */
+        $mail = $this->get('mail');
+        $mail->addTo($this->get('config')->get('mail'));
+        $mail->setSubject($subject);
+        $mail->setBodyHtml($content);
+        $mail->send();
     }
 
     /**
