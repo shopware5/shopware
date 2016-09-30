@@ -1439,6 +1439,14 @@ class sBasket
             return false;
         }
 
+        /**
+         * Remove article from basket, if article is blocked for this customergroup
+         */
+        if ($this->isProductBlockedByCustomerGroup($queryAdditionalInfo['articleID'])) {
+            $this->sDeleteArticle($id);
+            return false;
+        }
+
         list($taxRate, $netPrice, $grossPrice) = $this->getTaxesForUpdateArticle($quantity, $queryNewPrice, $queryAdditionalInfo);
 
         $sql = "
@@ -1582,6 +1590,10 @@ class sBasket
         $article = $this->getArticleForAddArticle($id);
 
         if (!$article) {
+            return false;
+        }
+
+        if ($this->isProductBlockedByCustomerGroup($article['articleID'])) {
             return false;
         }
 
@@ -2773,5 +2785,13 @@ class sBasket
         }
 
         return $newQuantity;
+    }
+
+    private function isProductBlockedByCustomerGroup($articleId)
+    {
+        return $this->db->fetchOne('SELECT 1 FROM s_articles_avoid_customergroups WHERE customergroupId = ? AND articleID = ?', [
+            $this->contextService->getShopContext()->getCurrentCustomerGroup()->getId(),
+            $articleId
+        ]);
     }
 }
