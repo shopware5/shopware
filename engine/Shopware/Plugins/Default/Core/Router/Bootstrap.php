@@ -452,7 +452,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
         }
 
         $baseUrl = $request->getBaseUrl();
-        if (strpos($url, $baseUrl) === 0) {
+        if (strpos($url, $baseUrl.'/') === 0) {
             $url = substr($url, strlen($baseUrl));
         }
 
