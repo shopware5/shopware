@@ -3,6 +3,10 @@
 {block name='frontend_detail_configurator_variant'}
 	<div class="configurator--variant">
 
+        {block name='frontend_detail_configurator_no_variant_info'}
+            {include file="frontend/_includes/messages.tpl" type="info" content="{s name='noVariantInfo' namespace="frontend/detail/data"}{/s}" icon="icon--info" class="variant--no-variant" visible=false}
+        {/block}
+
 		{block name='frontend_detail_configurator_variant_form'}
 			<form method="post" action="{url sArticle=$sArticle.articleID sCategory=$sArticle.categoryID}" class="configurator--form">
 

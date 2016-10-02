@@ -1,5 +1,6 @@
 ;(function($, window) {
-    var emptyFn = function() {};
+    var emptyFn = function() {
+    };
 
     /**
      * Shopware AJAX variant
@@ -34,7 +35,11 @@
             configuratorFormSelector: '.configurator--form',
             orderNumberSelector: '.entry--sku .entry--content',
             historyIdentifier: 'sw-ajax-variants',
-            productDetailsDescriptionSelector: '.content--description'
+            productDetailsDescriptionSelector: '.content--description',
+            noVariantSelector: '.variant--no-variant',
+            isHiddenClass: 'is--hidden',
+            configuratorSelector: '.product--configurator',
+            csrfTokenIdentifier: '__csrf_token'
         },
 
         /**
@@ -45,14 +50,14 @@
                 ie;
 
             // Check if we have a variant configurator
-            if (!me.$el.find('.product--configurator').length) {
+            if (!me.$el.find(me.opts.configuratorSelector).length) {
                 return;
             }
 
             me.applyDataAttributes();
 
             // Detecting IE version using feature detection (IE7+, browsers prior to IE7 are detected as 7)
-            ie = (function (){
+            ie = (function() {
                 if (window.ActiveXObject === undefined) return null;
                 if (!document.querySelector) return 7;
                 if (!document.addEventListener) return 8;
@@ -72,9 +77,57 @@
 
             $(window).on("popstate", $.proxy(me.onPopState, me));
 
-            if(me.hasHistorySupport) {
+            if (me.hasHistorySupport) {
                 me.publishInitialState();
             }
+
+            me.checkSelection();
+        },
+
+        /**
+         * Shows or hide a info panel, to tell the user that he has to choose a variant
+         *
+         * @returns void
+         */
+        checkSelection: function() {
+            var me = this,
+                $form = me.$el.find(me.opts.configuratorFormSelector),
+                formValues = $form.serialize(),
+                infoPanel = me.$el.find(me.opts.noVariantSelector),
+                inputCount = me.getCountOfInputs($form),
+                matches = formValues.match(/group/g);
+
+            if (!matches) {
+                infoPanel.removeClass(me.opts.isHiddenClass);
+                return;
+            }
+
+            if (matches.length >= inputCount) {
+                infoPanel.addClass(me.opts.isHiddenClass);
+                return;
+            }
+
+            infoPanel.removeClass(me.opts.isHiddenClass);
+        },
+
+        /**
+         * Counts the number of different variant groups and returns the count
+         *  
+         * @param {object} $form
+         * @returns {Number}
+         */
+        getCountOfInputs: function ($form) {
+            var me = this,
+                formInputs = $form.find(':input'),
+                inputNames = [];
+
+            $.each(formInputs, function (key, value) {
+                if (value.name != me.opts.csrfTokenIdentifier && $.inArray(value.name, inputNames) == -1) {
+                    inputNames.push(value.name);
+                }
+            });
+            
+            return inputNames.length;
         },
 
         /**
@@ -109,7 +162,7 @@
 
             values += '&template=ajax';
 
-            if(stateObj.params.hasOwnProperty('c')) {
+            if (stateObj.params.hasOwnProperty('c')) {
                 values += '&c=' + stateObj.params.c;
             }
 
@@ -144,15 +197,17 @@
                     // Plugin developers should subscribe to this event to update their plugins accordingly
                     $.publish('plugin/swAjaxVariant/onRequestData', [ me, response, values, stateObj.location ]);
 
-                    if(pushState && me.hasHistorySupport) {
+                    if (pushState && me.hasHistorySupport) {
                         var location = stateObj.location + '?number=' + ordernumber;
 
-                        if(stateObj.params.hasOwnProperty('c')) {
+                        if (stateObj.params.hasOwnProperty('c')) {
                             location += '&c=' + stateObj.params.c;
                         }
 
                         window.history.pushState(stateObj.state, stateObj.title, location);
                     }
+
+                    me.checkSelection();
                 },
                 complete: function() {
                     $.loadingIndicator.close();
@@ -185,7 +240,7 @@
             }
 
             // Prevents the scrolling to top in webkit based browsers
-            if(state && state.scrollPos) {
+            if (state && state.scrollPos) {
                 window.setTimeout(function() {
                     $(window).scrollTop(state.scrollPos);
                 }, 10);
@@ -236,7 +291,7 @@
             $.each(urlParams, function(i, param) {
                 param = param.split('=');
 
-                if(param[0].length && param[1].length && !params.hasOwnProperty(param[0])) {
+                if (param[0].length && param[1].length && !params.hasOwnProperty(param[0])) {
                     params[param[0]] = param[1];
                 }
             });

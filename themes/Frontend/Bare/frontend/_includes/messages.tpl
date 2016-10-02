@@ -48,6 +48,7 @@
 {* Icon classes *}
 {block name="frontend_global_messages_icon_class"}
 	{$iconCls = 'icon--check'}
+
 	{if $type == 'error'}
 		{$iconCls = 'icon--cross'}
 	{elseif $type == 'success'}
@@ -88,9 +89,17 @@
 	{/if}
 {/block}
 
+{* Add your custom class to the main div *}
+{block name="frontend_global_messages_add_class"}
+	{$addClass = false}
+	{if isset($class)}
+		{$addClass = true}
+	{/if}
+{/block}
+
 {* Messages container *}
 {block name="frontend_global_messages_container"}
-	<div class="alert is--{$type}{if $hasBorderRadius && $hasBorderRadius === true} is--rounded{/if}{if $isVisible === false} is--hidden{/if}">
+	<div class="alert is--{$type}{if $hasBorderRadius && $hasBorderRadius === true} is--rounded{/if}{if $isVisible === false} is--hidden{/if}{if $addClass} {$class}{/if}">
 
 		{* Icon column *}
 		{block name="frontend_global_messages_icon"}
