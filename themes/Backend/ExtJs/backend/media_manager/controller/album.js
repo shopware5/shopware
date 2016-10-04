@@ -120,7 +120,7 @@ Ext.define('Shopware.apps.MediaManager.controller.Album', {
             lastSelectedNode = selectionModel.getSelection()[0].get('id');
         }
         rootNode.cascadeBy(function(node) {
-            if (node.isExpanded() && node.getDepth() > depth) {
+            if (node.isExpanded() && node.isVisible() && node.getDepth() > depth) {
                 path = node.getPath();
                 parentPath = node.parentNode ? node.parentNode.getPath() : path;
                 depth = node.getDepth();
