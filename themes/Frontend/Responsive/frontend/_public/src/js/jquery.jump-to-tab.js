@@ -45,7 +45,7 @@
                 me.$tabMenuCrossSelling.find('.tab--container').each(function (i, el) {
                     $container = $(el);
 
-                    if ($container.find('.tab--content').html().length) {
+                    if ($container.find('.tab--content').html().trim().length) {
                         $container.addClass('has--content');
                     }
                 });
