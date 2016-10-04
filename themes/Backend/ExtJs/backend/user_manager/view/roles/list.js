@@ -62,7 +62,29 @@ Ext.define('Shopware.apps.UserManager.view.roles.List', {
         me.store = this.roleStore;
         me.dockedItems = this.createDockedToolBar();
         me.plugins = Ext.create('Ext.grid.plugin.RowEditing', {
-            clicksToEdit: 1
+            clicksToEdit: 1,
+            listeners: {
+                canceledit: function (editor, opts) {
+                    if (typeof opts.record.get('id') == 'undefined') {
+                        opts.store.remove(opts.record);
+                    }
+                },
+                beforeedit: function (editor, e) {
+                    var fields = me.getFieldsToLockForAdmin();
+                    var form   = editor.getEditor().form;
+
+                    if (e.record.get('name') == 'local_admins') {
+                        Ext.each(fields, function (field) {
+                            form.findField(field).disable();
+                        });
+                        return;
+                    }
+
+                    Ext.each(fields, function(field) {
+                        form.findField(field).enable();
+                    });
+                }
+            }
         });
         me.rowEditing = me.plugins;
 
@@ -116,6 +138,11 @@ Ext.define('Shopware.apps.UserManager.view.roles.List', {
 				tooltip: '{s name=roleslist/colactiondelete}Delete this role{/s}',
                 handler:function (view, rowIndex, colIndex, item) {
                     me.fireEvent('deleteRole', view, rowIndex, colIndex, item);
+                },
+                getClass: function(value, metaData, record) {
+                    if (record.get('name') === 'local_admins') {
+                        return 'x-hidden';
+                    }
                 }
 			}]
 		}
@@ -141,6 +168,10 @@ Ext.define('Shopware.apps.UserManager.view.roles.List', {
 		this.dockedItems.push(this.toolbar);
 
 		this.callParent();
+    },
+
+    getFieldsToLockForAdmin: function() {
+        return ['name', 'admin', 'enabled'];
     },
 
     /**

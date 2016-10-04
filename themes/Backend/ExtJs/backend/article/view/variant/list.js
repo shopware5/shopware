@@ -73,6 +73,10 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
                 undefined: '{s name=variant/list/column/price_undefined}Undefined{/s}',
                 from: '{s name=variant/list/column/price_from}From{/s}'
             },
+            pseudoPrice: {
+                header: '{s name=variant/list/column/pseudoprice}Pseudoprice{/s}',
+                undefined: '{s name=variant/list/column/pseudoprice_undefined}Undefined{/s}',
+            },
             standard: '{s name=variant/list/column/standard}Preselection{/s}',
             active: '{s name=variant/list/column/active}Active{/s}',
             remove: '{s name=variant/list/column/remove}Remove variant{/s}',
@@ -144,6 +148,26 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
 
                 if (newPrice != oldPrice) {
                     me.fireEvent('editVariantPrice', e.record, newPrice);
+                }
+
+            } else if (e.field === 'pseudoPrice') {
+                var newPseudoPrice = Ext.Number.toFixed(0, 2);
+                var oldPseudoPrice = null;
+
+                if(e.value !== null) {
+                    newPseudoPrice = Ext.Number.from(e.value);
+                    newPseudoPrice = Ext.Number.toFixed(newPseudoPrice, 2);
+
+                    oldPseudoPrice = Ext.Number.from(e.originalValue);
+                    if(! Ext.isDefined(e.originalValue) || e.originalValue === null) {
+                        oldPseudoPrice = 0;
+                    }
+
+                    oldPseudoPrice = Ext.Number.toFixed(oldPseudoPrice, 2);
+                }
+
+                if (newPseudoPrice !== oldPseudoPrice || newPseudoPrice === 0.00) {
+                    me.fireEvent('editVariantPseudoPrice', e.record, newPseudoPrice);
                 }
 
             } else {
@@ -261,6 +285,12 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
             'editVariantPrice',
 
             /**
+             * Event will be fired over the row editor update button.
+             * @event saveVariants
+             */
+            'editVariantPseudoPrice',
+
+            /**
              * Event will be fired over the save button if the user is on the configurator tab.
              * Fired from the detail.window component
              * @event createVariants
@@ -307,6 +337,17 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
                 editor: {
                     xtype: 'numberfield',
                     allowBlank: false,
+                    decimalPrecision: 2
+                }
+            } ,{
+                header: me.snippets.columns.pseudoPrice.header,
+                dataIndex: 'pseudoPrice',
+                sortable: false,
+                flex: 1,
+                renderer: me.pseudoPriceColumnRenderer,
+                editor: {
+                    xtype: 'numberfield',
+                    allowBlank: true,
                     decimalPrecision: 2
                 }
             } , {
@@ -422,6 +463,24 @@ Ext.define('Shopware.apps.Article.view.variant.List', {
                 return me.snippets.columns.price.from + ' ' + Ext.util.Format.currency(firstPrice.get('price'));
             }
         }
+    },
+
+    /**
+     * Renderer function of the pseudoPrice column.
+     * @param value
+     * @param metaData
+     * @param record
+     */
+    pseudoPriceColumnRenderer: function(value, metaData, record) {
+        var me = this,
+            prices = record.getPrice();
+
+        if (prices.getCount() === 0 || prices.first().get('pseudoPrice') === 0) {
+            return me.snippets.columns.pseudoPrice.undefined;
+        }
+
+        var firstPrice = prices.first();
+        return Ext.util.Format.currency(firstPrice.get('pseudoPrice'));
     },
 
     /**

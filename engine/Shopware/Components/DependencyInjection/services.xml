@@ -434,6 +434,10 @@
             <argument type="service" id="config" />
         </service>
 
+        <service id="shopware.upload_max_size_validator" class="Shopware\Components\UploadMaxSizeValidator">
+            <tag name="shopware.event_subscriber" />
+        </service>
+
         <service id="shopware.csrftoken_validator" class="Shopware\Components\CSRFTokenValidator">
             <argument type="service" id="service_container" />
             <argument>%shopware.csrfProtection.frontend%</argument>

@@ -32,7 +32,8 @@ Ext.define('Shopware.apps.Config.view.element.ProductBoxLayoutSelect', {
             displayExtendLayout: false,
             displayBasicLayout: true,
             displayMinimalLayout: true,
-            displayImageLayout: true
+            displayImageLayout: true,
+            displayListLayout: true
         });
     }
 

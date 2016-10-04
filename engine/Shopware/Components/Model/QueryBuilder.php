@@ -159,8 +159,15 @@ class QueryBuilder extends BaseQueryBuilder
 
             if (is_array($where) && isset($where['property'])) {
                 $exprKey = $where['property'];
-                $expression = isset($where['expression']) ? $where['expression'] : null;
-                $operator = isset($where['operator']) ? $where['operator'] : null;
+
+                if (isset($where['expression']) && !empty($where['expression'])) {
+                    $expression = $where['expression'];
+                }
+
+                if (isset($where['operator']) && !empty($where['operator'])) {
+                    $operator = $where['operator'];
+                }
+
                 $where = $where['value'];
             }
 

@@ -48,7 +48,7 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
             'shipping' => ['de' => 'Versandkosten:', 'en' => 'Proceed to checkout'],
             'total' => ['de' => 'Gesamtsumme:', 'en' => 'Proceed to checkout'],
             'sumWithoutVat' => ['de' => 'Gesamtsumme ohne MwSt.:', 'en' => 'Proceed to checkout'],
-            'tax' => ['de' => 'zzgl. %d.00'. html_entity_decode('&nbsp;') . '%% MwSt.:', 'en' => 'Proceed to checkout'],
+            'tax' => ['de' => 'zzgl. %d'. html_entity_decode('&nbsp;') . '%% MwSt.:', 'en' => 'Proceed to checkout'],
             'changePaymentButton'   => ['de' => 'Weiter', 'en' => 'Next'],
         ];
     }

@@ -95,6 +95,7 @@ class Shopware_Controllers_Frontend_Error extends Enlight_Controller_Action impl
                 break;
             case 400:
             case 401:
+            case 413:
                 $this->forward('genericError', null, null, ['code' => $code]);
                 break;
             default:
