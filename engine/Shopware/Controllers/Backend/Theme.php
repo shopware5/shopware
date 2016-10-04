@@ -254,7 +254,8 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
                 $name
             ));
         }
-        $targetDirectory = $this->container->get('theme_path_resolver')->getFrontendThemeDirectory();
+
+        $targetDirectory = $this->container->get('theme_path_resolver')->getUserFrontendThemeDirectory();
 
         if (!is_writable($targetDirectory)) {
             return $this->View()->assign([

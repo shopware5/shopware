@@ -25,6 +25,7 @@
 /**
  * @param $params
  * @param $template
+ *
  * @return bool|mixed|string
  */
 function smarty_function_flink($params, $template)
@@ -62,6 +63,8 @@ function smarty_function_flink($params, $template)
             $docPath = getcwd() . DIRECTORY_SEPARATOR;
         }
 
+        $fullFile = $file;
+
         // some clean up code
         if (strpos($file, $docPath) === 0) {
             $file = substr($file, strlen($docPath));
@@ -89,9 +92,29 @@ function smarty_function_flink($params, $template)
         $file = $request->getBasePath() . '/';
     }
 
+    $filePath = $file;
+
     if ($request !== null && strpos($file, '/') === 0 && !empty($params['fullPath'])) {
         $file = $request->getScheme() . '://' . $request->getHttpHost() . $file;
     }
+
+//
+//    if ($fullFile) {
+//        $link = PUBLICDIR . $filePath;
+//        $dir = dirname($link);
+//
+//
+//        if (!is_dir($dir)) {
+//            if (false === @mkdir($dir, 0777, true) && !is_dir($dir)) {
+//                throw new \RuntimeException(sprintf("Unable to create the %s directory (%s)\n", 'web', $dir));
+//            }
+//        } elseif (!is_writable($dir)) {
+//            throw new \RuntimeException(sprintf("Unable to write in the %s directory (%s)\n", 'web', $dir));
+//        }
+//
+//
+//        symlink($fullFile, $link);
+//    }
 
     return $file;
 }

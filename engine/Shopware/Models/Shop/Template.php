@@ -165,6 +165,12 @@ class Template extends ModelEntity
     private $version = 1;
 
     /**
+     * @var string
+     * @ORM\Column(name="source", type="string")
+     */
+    private $source;
+
+    /**
      * @var int
      * @ORM\Column(name="plugin_id", type="integer", nullable=true)
      */
@@ -493,5 +499,21 @@ class Template extends ModelEntity
     public function setConfigSets($configSets)
     {
         $this->configSets = $configSets;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSource()
+    {
+        return $this->source;
+    }
+
+    /**
+     * @param string $source
+     */
+    public function setSource($source)
+    {
+        $this->source = $source;
     }
 }

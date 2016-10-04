@@ -203,7 +203,7 @@ EOD;
      */
     public function generateTheme(array $data, Template $parent = null)
     {
-        if (!is_writable($this->pathResolver->getFrontendThemeDirectory())) {
+        if (!is_writable($this->pathResolver->getUserFrontendThemeDirectory())) {
             throw new \Exception(
                 "Theme directory isn't writable"
             );

@@ -198,7 +198,7 @@ class DownloadService
     {
         $name = 'plugin_' . md5(uniqid()) . '.zip';
 
-        $file = $this->rootDir . '/files/downloads/' . $name;
+        $file = PROJECTDIR . '/files/downloads/' . $name;
 
         file_put_contents($file, $content);
 

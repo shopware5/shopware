@@ -22,19 +22,17 @@
  * our trademarks remain entirely with us.
  */
 
-use Composer\Autoload\ClassLoader;
-use Doctrine\Common\Annotations\AnnotationRegistry;
-
-/**
- * @var ClassLoader
- */
-$loader = require __DIR__ . '/vendor/autoload.php';
-
-AnnotationRegistry::registerLoader([$loader, 'loadClass']);
-
-define('PUBLICDIR', __DIR__ . '/web/');
-define('PUBLICPATH', '/web');
-define('PROJECTDIR', __DIR__);
-define('FRONTENDTHEMEDIR', PROJECTDIR . '/custom/themes');
-
-return $loader;
+class Migrations_Migration999 extends Shopware\Components\Migrations\AbstractMigration
+{
+    /**
+     * @param string $modus
+     */
+    public function up($modus)
+    {
+        $sql = <<<'EOD'
+ALTER TABLE `s_core_templates`
+ADD `source` varchar(255) NULL;
+EOD;
+        $this->addSql($sql);
+    }
+}

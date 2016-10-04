@@ -93,7 +93,7 @@ class Shopware_Controllers_Backend_PluginManager extends Shopware_Controllers_Ba
         $sha1 = $this->Request()->getParam('sha1');
         $name = $this->Request()->getParam('fileName', 'download.zip');
 
-        $destination = Shopware()->Container()->getParameter('kernel.root_dir') . '/files/downloads/' . $name;
+        $destination = PROJECTDIR . '/files/downloads/' . $name;
         if ($offset == 0) {
             unlink($destination);
         }

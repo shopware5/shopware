@@ -149,9 +149,7 @@ class PathResolver
      */
     public function getBackendThemeDirectory()
     {
-        return $this->getBaseThemeDirectory() .
-        DIRECTORY_SEPARATOR .
-        'Backend';
+        return $this->getBaseThemeDirectory() . DIRECTORY_SEPARATOR . 'Backend';
     }
 
     /**
@@ -267,18 +265,29 @@ class PathResolver
      */
     public function getCacheDirectory()
     {
+        return PUBLICDIR . '/cache';
+
         return $this->rootDir . '/web/cache';
     }
 
     /**
      * @param string    $path
      * @param Shop\Shop $shop
+     * @param bool      $isSecureRequest
      *
      * @return string
      */
     public function formatPathToUrl($path, Shop\Shop $shop)
     {
-        return str_replace($this->rootDir, $shop->getBasePath(), $path);
+        $targetPath = $shop->getBasePath();
+
+        if (PUBLICPATH) {
+            $targetPath .= PUBLICPATH;
+        }
+
+        $path = str_replace(PUBLICDIR, $targetPath, $path);
+
+        return $path;
     }
 
     /**
