@@ -30,6 +30,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class DefaultCaptcha implements CaptchaInterface
 {
+    const SESSION_KEY = __CLASS__.'_sRandom';
 
     /**
      * @var ContainerInterface
@@ -67,21 +68,19 @@ class DefaultCaptcha implements CaptchaInterface
      */
     public function validate(Enlight_Controller_Request_Request $request)
     {
-        $captchaArray = $this->container->get('session')->get('sRand');
+        $captchaArray = $this->container->get('session')->get(self::SESSION_KEY, []);
 
-        if (!is_array($captchaArray)) {
-            $this->container->get('session')->offsetSet('sRand', []);
+        if (count($captchaArray) === 0) {
             return false;
         }
 
-        $keys = array_keys($captchaArray, $request->get('sCaptcha'), true);
-
-        if (count($keys) === 0) {
+        if (!array_key_exists($request->get('sCaptcha'), $captchaArray)) {
             return false;
         }
 
-        unset($captchaArray[$keys[0]]);
-        $this->container->get('session')->offsetSet('sRand', $captchaArray);
+        unset($captchaArray[$request->get('sCaptcha')]);
+
+        $this->container->get('session')->offsetSet(self::SESSION_KEY, $captchaArray);
 
         return true;
     }
@@ -91,19 +90,7 @@ class DefaultCaptcha implements CaptchaInterface
      */
     public function getTemplateData()
     {
-        $alphabetRangeLow = range('a', 'z');
-        $alphabetRangeUpp = range('A', 'Z');
-
-        $exclude = ['C', 'c', 'I', 'l', 'O', 'o', 's', 'S', 'U', 'u', 'v', 'V', 'W', 'w', 'X', 'x', 'Z', 'z',];
-
-        $alphabet = array_merge($alphabetRangeLow, $alphabetRangeUpp);
-        $alphabet = array_diff($alphabet, $exclude);
-
-        $numericRange = range(1, 9);
-
-        $charlist = implode($alphabet) . implode($numericRange);
-
-        $string = Random::getString(5, $charlist);
+        $string = $this->createCaptchaString();
 
         $imgResource = $this->getImageResource($string);
 
@@ -113,22 +100,19 @@ class DefaultCaptcha implements CaptchaInterface
         imagedestroy($imgResource);
         $img = base64_encode($img);
 
-        $sRandArray = $this->container->get('session')->get('sRand');
-        if (!is_array($sRandArray)) {
-            $sRandArray = [];
-        }
+        /** @var string[] $sRandArray */
+        $sRandArray = $this->container->get('session')->get(self::SESSION_KEY, []);
 
-        // make array fixed size & rolling
         $threshold = 51;
         if (count($sRandArray) > $threshold) {
             $sRandArray = array_slice($sRandArray, -$threshold);
         }
 
-        $sRandArray[] = $string;
+        $sRandArray[$string] = true;
 
-        $this->container->get('session')->offsetSet('sRand', $sRandArray);
+        $this->container->get('session')->offsetSet(self::SESSION_KEY, $sRandArray);
 
-        return ["img" => $img];
+        return ['img' => $img];
     }
 
     /**
@@ -155,7 +139,6 @@ class DefaultCaptcha implements CaptchaInterface
         } else {
             $im = imagecreatetruecolor(162, 87);
         }
-
         if (!empty($this->config->get('CaptchaColor'))) {
             $colors = explode(',', $this->config->get('CaptchaColor'));
         } else {
@@ -163,17 +146,15 @@ class DefaultCaptcha implements CaptchaInterface
         }
 
         $black = imagecolorallocate($im, $colors[0], $colors[1], $colors[2]);
-
         $string = implode(' ', str_split($string));
 
         if (!empty($font)) {
             for ($i = 0; $i <= strlen($string); $i++) {
-                $rand1 = rand(35, 40);
-                $rand2 = rand(15, 20);
-                $rand3 = rand(60, 70);
+                $rand1 = mt_rand(35, 40);
+                $rand2 = mt_rand(15, 20);
+                $rand3 = mt_rand(60, 70);
                 imagettftext($im, $rand1, $rand2, ($i + 1) * 15, $rand3, $black, $font, substr($string, $i, 1));
-                imagettftext($im, $rand1, $rand2, (($i + 1) * 15) + 2, $rand3 + 2, $black, $font,
-                    substr($string, $i, 1));
+                imagettftext($im, $rand1, $rand2, (($i + 1) * 15) + 2, $rand3 + 2, $black, $font, substr($string, $i, 1));
             }
             for ($i = 0; $i < 8; $i++) {
                 imageline($im, mt_rand(30, 70), mt_rand(0, 50), mt_rand(100, 150), mt_rand(20, 100), $black);
@@ -192,7 +173,7 @@ class DefaultCaptcha implements CaptchaInterface
      * Helper function that checks if a given file exists in any template directory.
      * If the file exists, the full file path will be returned, otherwise null.
      *
-     * @param $fileName
+     * @param string $fileName
      * @return null|string
      */
     private function getCaptchaFile($fileName)
@@ -214,5 +195,25 @@ class DefaultCaptcha implements CaptchaInterface
     public function getName()
     {
         return 'default';
+    }
+
+    /**
+     * @return string
+     */
+    private function createCaptchaString()
+    {
+        $alphabetRangeLow = range('a', 'z');
+        $alphabetRangeUpp = range('A', 'Z');
+
+        $exclude = ['C', 'c', 'I', 'l', 'O', 'o', 's', 'S', 'U', 'u', 'v', 'V', 'W', 'w', 'X', 'x', 'Z', 'z',];
+
+        $alphabet = array_merge($alphabetRangeLow, $alphabetRangeUpp);
+        $alphabet = array_diff($alphabet, $exclude);
+
+        $numericRange = range(1, 9);
+
+        $charlist = implode($alphabet) . implode($numericRange);
+
+        return Random::getString(5, $charlist);
     }
 }
