@@ -1543,9 +1543,11 @@ Ext.define('Shopware.apps.Article.controller.Variant', {
         newPrice.set('to', 'beliebig');
         newPrice.set('from', 1);
         newPrice.set('cloned', false);
+        newPrice.commit();
 
         record.getPrice().removeAll();
         record.getPrice().add(newPrice);
+        record.set('pseudoPrice', pseudoPrice);
         record.save();
     },
 
