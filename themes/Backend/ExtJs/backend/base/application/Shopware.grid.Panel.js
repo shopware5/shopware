@@ -1416,18 +1416,12 @@ Ext.define('Shopware.grid.Panel', {
      * @param record Ext.data.Model
      */
     saveRecord: function(record) {
-        var me = this;
-
         if (!record) {
             return;
         }
-        if (!me.hasModelAction(record, 'update') && !me.hasModelAction(record, 'create')) {
-            return;
-        }
-        try {
-            record.save();
-        } catch (e) { }
+        record.save();
     },
+    
 
     /**
      * Creates all required grid features for a default shopware listing.
