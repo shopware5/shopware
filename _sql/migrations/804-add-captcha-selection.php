@@ -30,6 +30,11 @@ EOD;
         $this->addSql($sql);
 
         $sql = <<<'EOD'
+UPDATE s_core_config_elements SET form_id=@parent WHERE name='captchaColor';
+EOD;
+        $this->addSql($sql);
+
+        $sql = <<<'EOD'
 SET @captchaMethod = (SELECT id FROM s_core_config_elements WHERE name = 'captchaMethod' LIMIT 1);
 EOD;
         $this->addSql($sql);
