@@ -94,6 +94,9 @@ Ext.define('Shopware.apps.Article.model.Detail', {
                 if (value) {
                     return value;
                 }
+                if (record && record.getPrice() && record.getPrice().count() > 0) {
+                    return Ext.Number.toFixed(record.getPrice().first().get('pseudoPrice'), 2);
+                }
                 if (record && record.raw && record.raw.prices && record.raw.prices[0]) {
                     return Ext.Number.toFixed(record.raw.prices[0].pseudoPrice, 2);
                 }
