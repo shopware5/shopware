@@ -1129,6 +1129,10 @@ class sAdmin
             return false;
         }
 
+        if (!$this->config->get('sendRegisterConfirmation')) {
+            return false;
+        }
+
         $context = array(
             'sMAIL'     => $email,
             'sShop'     => $this->config->get('ShopName'),
