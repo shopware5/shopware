@@ -484,5 +484,30 @@
             <argument type="service" id="service_container" />
             <tag name="shopware.event_subscriber" />
         </service>
+
+        <service id="shopware.captcha.validator" class="Shopware\Components\Captcha\CaptchaValidator">
+            <argument type="service" id="shopware.captcha.repository" />
+        </service>
+
+        <service id="shopware.captcha.default_captcha" class="Shopware\Components\Captcha\DefaultCaptcha">
+            <argument type="service" id="service_container" />
+            <argument type="service" id="config" />
+            <argument type="service" id="template" />
+            <tag name="captcha" />
+        </service>
+
+        <service id="shopware.captcha.honeypot_captcha" class="Shopware\Components\Captcha\HoneypotCaptcha">
+            <tag name="captcha" />
+        </service>
+
+        <service id="shopware.captcha.no_captcha" class="Shopware\Components\Captcha\NoCaptcha">
+            <tag name="captcha" />
+        </service>
+
+        <service id="shopware.captcha.repository" class="Shopware\Components\Captcha\CaptchaRepository">
+            <argument type="collection" />
+            <argument type="service" id="config" />
+            <argument type="service" id="service_container" />
+        </service>
     </services>
 </container>

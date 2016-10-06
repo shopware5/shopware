@@ -18,7 +18,11 @@
 	{if $sAction == "ratingAction"}
 		{block name='frontend_detail_comment_error_messages'}
 			{if $sErrorFlag}
-				{include file="frontend/_includes/messages.tpl" type="error" content="{s name='DetailCommentInfoFillOutFields'}{/s}"}
+				{if $sErrorFlag['sCaptcha']}
+					{include file="frontend/_includes/messages.tpl" type="error" content="{s name='DetailCommentInfoFillOutCaptcha'}{/s}"}
+				{else}
+					{include file="frontend/_includes/messages.tpl" type="error" content="{s name='DetailCommentInfoFillOutFields'}{/s}"}
+				{/if}
 			{else}
 				{if {config name="OptinVote"} && !{$smarty.get.sConfirmation} && !{$userLoggedIn}}
 					{include file="frontend/_includes/messages.tpl" type="success" content="{s name='DetailCommentInfoSuccessOptin'}{/s}"}

@@ -34,7 +34,11 @@
 					{/if}
 
 					{if $sSupport.sErrors.e}
-						{$errorContent="{$errorContent}{s name='SupportInfoFillRedFields' namespace="frontend/forms/elements"}{/s}"}
+						{if $sSupport.sErrors.e['sCaptcha'] == true}
+							{$errorContent="{$errorContent}{s name='SupportInfoFillCaptcha' namespace="frontend/forms/elements"}{/s}"}
+						{else}
+							{$errorContent="{$errorContent}{s name='SupportInfoFillRedFields' namespace="frontend/forms/elements"}{/s}"}
+						{/if}
 					{/if}
 
 					{block name='frontend_forms_elements_error_messages'}

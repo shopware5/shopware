@@ -1,4 +1,3 @@
-<?php
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -20,29 +19,29 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
+ *
+ * @category   Shopware
+ * @package    Base
+ * @subpackage Store
+ * @version    $Id$
+ * @author shopware AG
  */
 
-/**
- * Shopware Captcha Controller
- */
-class Shopware_Controllers_Widgets_Captcha extends Enlight_Controller_Action
-{
 
-    /**
-     * Index action method
-     *
-     * Creates the captcha images and delivers it as a PNG
-     * with the proper HTTP header.
-     */
-    public function indexAction()
-    {
-        /** @var \Shopware\Components\Captcha\CaptchaRepository $captchaRepository */
-        $captchaRepository = $this->container->get('shopware.captcha.repository');
-        /** @var \Shopware\Components\Captcha\CaptchaInterface $captcha */
-        $captcha = $captchaRepository->getConfiguredCaptcha();
+Ext.define('Shopware.apps.Base.store.Captcha', {
+    extend: 'Ext.data.Store',
 
-        $captchaName = $captcha->getName();
-        $this->View()->loadTemplate(sprintf('widgets/captcha/%s.tpl', $captchaName));
-        $this->View()->assign($captcha->getTemplateData());
+    alternateClassName: 'Shopware.store.Captcha',
+    storeId: 'base.Captcha',
+    model: 'Shopware.apps.Base.model.Captcha',
+
+    proxy:{
+        type: 'ajax',
+        url: '{url action="getAvailableCaptchas"}',
+        reader: {
+            type: 'json',
+            root: 'data',
+            totalProperty: 'total'
+        }
     }
-}
+}).create();

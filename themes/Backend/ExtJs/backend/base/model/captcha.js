@@ -1,4 +1,3 @@
-<?php
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -20,29 +19,44 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
+ *
+ * @category   Shopware
+ * @package    Base
+ * @subpackage Model
+ * @version    $Id$
+ * @author shopware AG
  */
 
 /**
- * Shopware Captcha Controller
+ * Shopware Model - Global Stores and Models
+ *
+ * The captcha model contains all fields for a single captcha.
  */
-class Shopware_Controllers_Widgets_Captcha extends Enlight_Controller_Action
-{
+//{block name="backend/base/model/captcha"}
+Ext.define('Shopware.apps.Base.model.Captcha', {
 
     /**
-     * Index action method
-     *
-     * Creates the captcha images and delivers it as a PNG
-     * with the proper HTTP header.
+     * Defines an alternate name for this class.
      */
-    public function indexAction()
-    {
-        /** @var \Shopware\Components\Captcha\CaptchaRepository $captchaRepository */
-        $captchaRepository = $this->container->get('shopware.captcha.repository');
-        /** @var \Shopware\Components\Captcha\CaptchaInterface $captcha */
-        $captcha = $captchaRepository->getConfiguredCaptcha();
+    alternateClassName: 'Shopware.model.Captcha',
 
-        $captchaName = $captcha->getName();
-        $this->View()->loadTemplate(sprintf('widgets/captcha/%s.tpl', $captchaName));
-        $this->View()->assign($captcha->getTemplateData());
-    }
-}
+    /**
+     * Extends the standard Ext Model
+     * @string
+     */
+    extend:'Ext.data.Model',
+
+    /**
+     * The fields used for this model
+     * @array
+     */
+    fields:[
+		//{block name="backend/base/model/captcha/fields"}{/block}
+        { name: 'id', type: 'string' },
+        { name: 'displayname', type: 'string' }
+    ]
+
+});
+//{/block}
+
+

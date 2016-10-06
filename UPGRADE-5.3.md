@@ -34,3 +34,5 @@ This changelog references changes done in Shopware 5.3 patch versions.
 * Removed `sLastActiveArticle` from basket
 * Removed block `frontend_checkout_actions_link_last`
 * Removed snippet `frontend/checkout/actions/CheckoutActionsLinkLast`
+* Captchas are now configurable via backend
+* You can now create own captcha modules. See `Shopware\Components\Captcha`.
