@@ -139,9 +139,10 @@
                         'class': 'close--alert',
                         'html': '✕'
                     })
-                ).on('click', function () {
-                    $(this).parent().hide();
-                })
+                    .on('click', function () {
+                        $(this).closest('.no--cookies').hide();
+                    })
+                )
             ).appendTo('.page-wrap');
         }
 

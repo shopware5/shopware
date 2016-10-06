@@ -63,13 +63,14 @@ Options: `is--success`, `is--info`, `is--warning`, `is--error`.
         top: 0;
         left: 0;
         right: 0;
-        &:hover {
-            a.close--alert {
+
+        a.close--alert {
+            float: right;
+
+            &:hover {
+                cursor: pointer;
                 text-decoration: underline;
             }
-        }
-        .close--alert {
-            float: right;
         }
     }
 
