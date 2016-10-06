@@ -50,7 +50,6 @@ Feature: Blog
             | points   | 9               |
             | headline | Neue Bewertung  |
             | comment  | Hallo Welt      |
-            | sCaptcha | 123456          |
 
         Then I should see "Vielen Dank für die Abgabe Ihrer Bewertung! Sie erhalten in wenigen Minuten eine Bestätigungs-E-Mail"
 

@@ -1,6 +1,7 @@
 <?php
 namespace Shopware\Tests\Mink\Page;
 
+use Behat\Mink\Element\NodeElement;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use Shopware\Tests\Mink\Helper;
 use Shopware\Tests\Mink\HelperSelectorInterface;
@@ -68,6 +69,11 @@ class Form extends Page implements HelperSelectorInterface
     public function checkCaptcha()
     {
         $placeholderSelector = Helper::getRequiredSelector($this, 'captchaPlaceholder');
+        /** @var NodeElement $placeholder */
+        $placeholder = $this->find('css', $placeholderSelector);
+
+        $parentFormInput = $placeholder->find('xpath', "/ancestor::form[1]/descendant::input[@type='text']");
+        $parentFormInput->focus();
 
         if (!$this->getSession()->wait(5000, "$('$placeholderSelector').children().length > 0")) {
             $message = 'The captcha was not loaded or does not exist!';
