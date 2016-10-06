@@ -430,12 +430,13 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
 
                 //custom sort field for customer name
                 case $sort['property'] == 'customerName':
+                    $resolved[] = ['property' => 'billing.company', 'direction' => $direction];
                     $resolved[] = ['property' => 'billing.lastName', 'direction' => $direction];
                     $resolved[] = ['property' => 'billing.firstName', 'direction' => $direction];
                     break;
 
                 //contains no sql prefix? add orders as default prefix
-                case strpos($sort['property'], '.') === false;
+                case strpos($sort['property'], '.') === false:
                     $resolved[] = ['property' => 'orders.' . $sort['property'], 'direction' => $direction];
                     break;
 
