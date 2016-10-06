@@ -11,13 +11,6 @@
     {/if}
 {/strip}{/block}
 
-{* Google optimized crawling *}
-{block name='frontend_index_header_meta_tags' append}
-    {if $hasEmotion && !$hasEscapedFragment}
-        <meta name="fragment" content="!">
-    {/if}
-{/block}
-
 {* Canonical URL *}
 {block name='frontend_index_header_canonical'}
     <link rel="canonical" href="{url controller='index'}" />
@@ -44,18 +37,10 @@
         {if $hasEmotion}
             <div class="content--emotions">
                 {foreach $emotions as $emotion}
-                    {if $hasEscapedFragment}
-                        {if 0|in_array:$emotion.devicesArray}
-                            <div class="emotion--fragment">
-                                {action module=widgets controller=emotion action=index emotionId=$emotion.id controllerName=$Controller}
-                            </div>
-                        {/if}
-                    {else}
-                        <div class="emotion--wrapper"
-                             data-controllerUrl="{url module=widgets controller=emotion action=index emotionId=$emotion.id controllerName=$Controller}"
-                             data-availableDevices="{$emotion.devices}">
-                        </div>
-                    {/if}
+                    <div class="emotion--wrapper"
+                         data-controllerUrl="{url module=widgets controller=emotion action=index emotionId=$emotion.id controllerName=$Controller}"
+                         data-availableDevices="{$emotion.devices}">
+                    </div>
                 {/foreach}
             </div>
         {/if}

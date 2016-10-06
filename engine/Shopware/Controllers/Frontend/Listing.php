@@ -155,7 +155,6 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             'sBreadcrumb' => $this->getBreadcrumb($categoryId),
             'sCategoryContent' => $categoryContent,
             'activeFilterGroup' => $this->request->getQuery('sFilterGroup'),
-            'hasEscapedFragment' => $this->Request()->has('_escaped_fragment_'),
             'ajaxCountUrlParams' => ['sCategory' => $categoryContent['id']]
         );
 
