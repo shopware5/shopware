@@ -58,13 +58,7 @@ class Blog extends Page implements HelperSelectorInterface
      */
     public function writeComment(array $data)
     {
-        $writeCommentLink = $this->getSession()
-            ->getPage()
-            ->find("css", ".blog--comments-form a.btn--create-entry");
-
-        if ($writeCommentLink) {
-            $writeCommentLink->click();
-        }
+        $this->openCommentSection();
 
         Helper::fillForm($this, 'commentForm', $data);
 
@@ -124,6 +118,17 @@ class Blog extends Page implements HelperSelectorInterface
         if ($result !== true) {
             $message = sprintf('There was a different value of the rating! (%s: "%s" instead of "%s")', $result, $check[$result][0], $check[$result][1]);
             Helper::throwException($message);
+        }
+    }
+
+    public function openCommentSection()
+    {
+        $writeCommentLink = $this->getSession()
+            ->getPage()
+            ->find("css", ".blog--comments-form a.btn--create-entry");
+
+        if ($writeCommentLink) {
+            $writeCommentLink->click();
         }
     }
 }

@@ -1,4 +1,4 @@
-@javascript
+@javascript @knownFailing
 Feature: Backend Modules should open
 	Background:
 		Given I am logged in to the backend as an admin user

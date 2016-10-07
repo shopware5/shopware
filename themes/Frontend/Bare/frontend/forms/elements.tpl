@@ -33,7 +33,7 @@
 				{* Captcha *}
 				{block name='frontend_forms_elements_form_captcha'}
 					<div class="forms--captcha">
-                        <div class="captcha--placeholder" data-src="{url module=widgets controller=Captcha action=index}"></div>
+                        <div class="captcha--placeholder" data-src="{url module=widgets controller=Captcha action=index}"{if $sSupport.sErrors.e || $sSupport.sErrors.v} data-has-error="true"{/if}></div>
 					</div>
 				{/block}
 

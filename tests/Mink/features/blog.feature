@@ -31,7 +31,8 @@ Feature: Blog
         Given I follow "<title>"
         Then  I should see "<title>"
         And   I should see "Kommentar schreiben"
-        And   I should see a captcha
+        When  I open the comment form
+        Then  I should see a captcha
 
         Examples:
             | title                                               |
@@ -50,7 +51,6 @@ Feature: Blog
             | points   | 9               |
             | headline | Neue Bewertung  |
             | comment  | Hallo Welt      |
-            | sCaptcha | 123456          |
 
         Then I should see "Vielen Dank für die Abgabe Ihrer Bewertung! Sie erhalten in wenigen Minuten eine Bestätigungs-E-Mail"
 

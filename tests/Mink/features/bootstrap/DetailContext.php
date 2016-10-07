@@ -4,6 +4,7 @@ namespace Shopware\Tests\Mink;
 
 use Behat\Gherkin\Node\TableNode;
 use Shopware\Tests\Mink\Element\ArticleEvaluation;
+use Shopware\Tests\Mink\Page\Detail;
 
 class DetailContext extends SubContext
 {
@@ -100,5 +101,15 @@ class DetailContext extends SubContext
     public function iSubmitTheNotificationFormWith($email)
     {
         $this->getPage('Detail')->submitNotification($email);
+    }
+
+    /**
+     * @When /^I open the evaluation form$/
+     */
+    public function iOpenTheEvaluationForm()
+    {
+        /** @var Detail $page */
+        $page = $this->getPage('Detail');
+        $page->openEvaluationSection();
     }
 }
