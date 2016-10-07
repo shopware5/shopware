@@ -31,13 +31,18 @@
             var me = this,
                 $el = me.$el;
             me.url = $el.attr('data-src');
+            me.hasError = $el.attr('data-has-error');
 
             if (!me.url || !me.url.length) {
                 return;
             }
 
+            if (typeof me.hasError !== 'undefined') {
+                window.setTimeout($.proxy(me.sendRequest, me), 1000);
+            }
+
             me.$form = $el.closest('form');
-            me.$formInputs = me.$form.find(':input:not([name="__csrf_token"])');
+            me.$formInputs = me.$form.find(':input:not([name="__csrf_token"], select)');
             me._on(me.$formInputs, 'focus', $.proxy(me.onInputFocus, me));
         },
 

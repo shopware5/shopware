@@ -69,7 +69,7 @@
 						{* Captcha *}
 						{block name='frontend_tellafriend_captcha'}
 							<div class="tellafriend--captcha">
-								<div class="captcha--placeholder" data-src="{url module=widgets controller=Captcha action=index}"></div>
+								<div class="captcha--placeholder" data-src="{url module=widgets controller=Captcha action=index}"{if $sError} data-has-error="true"{/if}></div>
 							</div>
 						{/block}
 

@@ -61,4 +61,14 @@ class BlogContext extends SubContext
 
         $page->checkComments($blogComments, $average, $comments->getHash());
     }
+
+    /**
+     * @When /^I open the comment form$/
+     */
+    public function iOpenTheCommentForm()
+    {
+        /** @var Blog $page */
+        $page = $this->getPage('Blog');
+        $page->openCommentSection();
+    }
 }

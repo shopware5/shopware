@@ -135,6 +135,7 @@ Feature: Detail page
     Scenario: The customer evaluation form has a captcha
         Given I am on the detail page for article 167
         Then  I should see "Sonnenbrille Speed Eyes"
+        When  I open the evaluation form
         And   I should see a captcha
 
     @basePrice

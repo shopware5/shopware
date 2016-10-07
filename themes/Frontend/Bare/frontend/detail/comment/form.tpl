@@ -63,7 +63,7 @@
 
 		{* Captcha *}
 		{block name='frontend_detail_comment_input_captcha'}
-			<div class="captcha--placeholder" data-src="{url module=widgets controller=Captcha action=index}"></div>
+			<div class="captcha--placeholder" data-src="{url module=widgets controller=Captcha action=index}"{if isset($sErrorFlag) && count($sErrorFlag) > 0} data-has-error="true"{/if}></div>
 		{/block}
 
 		{* Notice that all fields which contains a star symbole needs to be filled out *}

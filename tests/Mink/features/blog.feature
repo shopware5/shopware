@@ -31,7 +31,8 @@ Feature: Blog
         Given I follow "<title>"
         Then  I should see "<title>"
         And   I should see "Kommentar schreiben"
-        And   I should see a captcha
+        When  I open the comment form
+        Then  I should see a captcha
 
         Examples:
             | title                                               |

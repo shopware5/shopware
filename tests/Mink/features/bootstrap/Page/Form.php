@@ -44,10 +44,6 @@ class Form extends Page implements HelperSelectorInterface
     {
         $errors = [];
 
-        if (!$this->hasField("sCaptcha")) {
-            $errors[] = "- captcha input field not found!";
-        }
-
         if (!Helper::hasNamedButton($this, 'submitButton')) {
             $errors[] = "- submit button not found!";
         }
@@ -80,12 +76,9 @@ class Form extends Page implements HelperSelectorInterface
             Helper::throwException($message);
         }
 
-        $element = Helper::findElements($this, ['captchaPlaceholder', 'captchaImage', 'captchaHidden']);
-
-        $captchaImage = $element['captchaImage']->getAttribute('src');
-        $captchaHidden = $element['captchaHidden']->getValue();
-
-        if ((strpos($captchaImage, 'data:image/png;base64') === false) || (empty($captchaHidden))) {
+        /** @var NodeElement[] $elements */
+        $elements = Helper::findElements($this, ['captchaPlaceholder']);
+        if (empty($elements['captchaPlaceholder']->getText())) {
             $message = 'The captcha was not loaded correctly!';
             Helper::throwException($message);
         }

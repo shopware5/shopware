@@ -105,7 +105,7 @@
 
                 {* Captcha *}
                 {block name='frontend_blog_comments_input_captcha'}
-                    <div class="captcha--placeholder" data-src="{url module=widgets controller=Captcha action=index}"></div>
+                    <div class="captcha--placeholder" data-src="{url module=widgets controller=Captcha action=index}"{if isset($sErrorFlag) && count($sErrorFlag) > 0} data-has-error="true"{/if}></div>
                 {/block}
 
                 {block name='frontend_blog_comments_input_notice'}
